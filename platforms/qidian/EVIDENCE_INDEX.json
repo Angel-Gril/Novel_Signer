@@ -1,0 +1,7 @@
+{
+  "platform": "qidian",
+  "evidence_level": "unverified",
+  "verified_live_requests": [],
+  "verified_algorithms": [],
+  "note": "No Qidian-specific APK, signature sample, endpoint matrix, or chapter decryption vector was present in the isolated workspace."
+}

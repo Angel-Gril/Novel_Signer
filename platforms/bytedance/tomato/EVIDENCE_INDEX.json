@@ -1,0 +1,39 @@
+{
+  "platform": "bytedance.tomato",
+  "generated_from": "ONLINE_VALIDATION_20260929.md and fresh trial summaries in the isolated workspace",
+  "redaction": "No raw URLs, request headers, device identifiers, UUIDs, tokens, per-session keys, or response bodies are included.",
+  "live_chain": [
+    {"step": "registerkey", "status": 200, "key_version": 598113575, "secret_material": "omitted"},
+    {"step": "directory", "status": 200, "response_length": 201904, "chapter_count": 611},
+    {"step": "reader/full", "status": 200, "response_length": 23953, "crypt_status": 0, "decoded_length": 6496, "decoded_sha256": "13e2415e7bef414a197a62aca08ccb11bf9cf436bc3f955b676fa03fac2fa2f7"}
+  ],
+  "header_matrix": {
+    "detail": {
+      "strong": {"status": 200, "length": 24353, "sha256": "ea6e0d6588fc22253879ed8f9366916a0d0cfb25a9d4ab5cf7bcd1f2fe6dcf08"},
+      "drop_perseus": {"status": 200, "length": 24351, "sha256": "6191295d6e1ae53884e33e914c7f13cab32beea6d2815da5b9ccbf66129f7ed1"},
+      "drop_medusa": {"status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    },
+    "directory": {
+      "strong": {"status": 200, "length": 201908, "sha256": "c615bc2009ec77875826e0e10fcc1c4ccef48e67f423b082b965a509ff540130"},
+      "drop_perseus": {"status": 200, "length": 201908, "sha256": "2fbcc537794283f7b6d44eb900e9a570fcea5f99c966c1802a88de9f3edc2927"},
+      "drop_medusa": {"status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    },
+    "reader_full": {
+      "strong": {"status": 200, "length": 23953, "sha256": "594991c7ee65b16f1979f0d7daf4f2b16eae5635850a2ce5da6ead9a08203769"},
+      "drop_perseus": {"status": 200, "length": 23953, "sha256": "4a77143145040b4d1c79d848a82f4504c722f65f0bceb34a0f02a558e227b40d"},
+      "drop_medusa": {"status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    }
+  },
+  "search": [
+    {"path": "/reading/bookapi/search/tab/v", "status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    {"path": "/reading/bookapi/search/page/v1/", "status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+  ],
+  "medusa": {
+    "current_bridge": "sample-verified",
+    "raw_branch_lengths": [228, 803, 804],
+    "old_python_snapshot_body_length": 225,
+    "independent_current_parameterization": false,
+    "selector_evidence": "state & 0x0f (16 selector values)",
+    "24_variant_evidence": false
+  }
+}

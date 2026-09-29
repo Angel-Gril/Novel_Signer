@@ -1,0 +1,10 @@
+{
+  "platform": "bytedance.douyin",
+  "evidence_level": "static_community",
+  "source_material": "local douyin-algorithm README and source files",
+  "verified_live_requests": [],
+  "generations": {
+    "23.2.0": {"headers": ["X-Khronos", "X-Gorgon", "X-Argus", "X-Ladon"], "status": "static/community implementation"},
+    "23.3.0_plus": {"headers": ["X-Khronos", "X-Gorgon", "X-Argus", "X-Ladon", "X-Helios", "X-Medusa"], "status": "Helios/Medusa not completed in available material"}
+  }
+}
