@@ -32,6 +32,14 @@ The native callback therefore selects a different allocator/free-list branch.
 The divergence is before callback 9's real-page injection and is not fixed by
 adding Perseus, changing the timestamp, or replaying the same callback pages.
 
+The follow-up allocator audit narrowed the branch further. For callback 8 the
+requested size maps to size class `3` and bin `0x12282060`. The historical
+checkpoint has count `0` and returns `0x1296b940` through the refill path; the
+new checkpoint has count `4` and returns `0x1296ba60` from free-list index `2`.
+Forcing only the count to zero, or copying the complete `0x12282000` bin page,
+still returned `0x1296b9a0`. The refill cursor/slab/bitmap state therefore
+also differs. See [ALLOCATOR_AUDIT.md](ALLOCATOR_AUDIT.md).
+
 ## Meaning for the deliverables
 
 - Seg2 has a complete diagnostic run (`90161/90161` events), but it is not an

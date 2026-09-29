@@ -41,7 +41,7 @@ There are two materially different claims:
 
 The latest checkpoint audit separates two results that must not be merged: the historical Seg3 replay still reaches `1057/1057` events with 87 callbacks when the captured `event0_cb66_vm9_*` image and callback 9/64/66 pages are used, while the newer full-Seg2 checkpoint diverges at trace 758 after callback 8 (`0x1296b940` versus `0x1296ba60`). The former is a reproducible diagnostic replay; it is not evidence that the latter has become a general parameterized signer. See [VM9_PROGRESS.md](VM9_PROGRESS.md) for the exact matrix.
 
-Consequently, this repository does not call current Medusa “pure Python parameterized” and does not enable it in the default Rust build. The exact next proof is an independent constructor/allocator implementation followed by fresh current-version vectors and the same live endpoint matrix.
+Consequently, this repository does not call current Medusa “pure Python parameterized” and does not enable it in the default Rust build. The exact next proof is an independent constructor/allocator implementation followed by fresh current-version vectors and the same live endpoint matrix. The callback-8 allocator branch is documented in [ALLOCATOR_AUDIT.md](ALLOCATOR_AUDIT.md).
 
 ## Six/seven gods and “16/24 gods”
 

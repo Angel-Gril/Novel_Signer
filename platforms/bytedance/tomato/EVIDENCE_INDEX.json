@@ -46,6 +46,15 @@
         "new_checkpoint_allocator_result": "0x1296ba60"
       },
       "interpretation": "trace-assisted replay is reproducible for one captured sample; current independent parameterization remains open"
+    },
+    "allocator_audit": {
+      "callback": 8,
+      "size_class": 3,
+      "bin": "0x12282060",
+      "historical": {"count": 0, "branch": "refill", "result": "0x1296b940", "writes": 80},
+      "current": {"count": 4, "branch": "free-list index 2", "result": "0x1296ba60", "writes": 33},
+      "single_field_freeze_result": "0x1296b9a0",
+      "status": "allocator/refill state remains unparameterized"
     }
   }
 }
