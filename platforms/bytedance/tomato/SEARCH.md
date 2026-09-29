@@ -26,6 +26,13 @@ GET /reading/bookapi/search/page/v/?query=...&offset=0&aid=1967
 
 The tab request used by the same feed is `/reading/bookapi/search/tab/v`.
 
+The APK's first page request was also observed in the native request hook as
+`api5-normal-sinfonlineb.fqnovel.com/reading/bookapi/search/page/v/` with only
+the serialized query, `offset=0`, and `aid=1967` visible at that boundary. This
+is evidence against assuming that the earlier `sinfonlinec` host and a large
+hand-written query are the app's first request. The app's request layer can
+still add headers, context, and serialized defaults before the network call.
+
 ## Live probes
 
 Freshly signed probes used the current Helios/Medusa bridge and a current
@@ -61,6 +68,13 @@ application returned no JSON object or book list. The endpoint model remains
 runtime-confirmed while the non-empty search response remains unverified. The
 redacted machine-readable record is
 `evidence/search_current_probe_20260929.json`.
+
+A separate exact-shape replay used the APK-observed `sinfonlineb` host and
+`query=三体&offset=0&aid=1967`. The current bridge generated a complete
+`X-Medusa` sample and the server returned HTTP 200 with a zero-byte body. The
+redacted result is `evidence/search_exact_app_probe_20260929.json`; it is a
+negative result, so request reachability is separated from the remaining
+search-context or server-gating problem.
 
 ## Rust implication
 

@@ -78,7 +78,16 @@
     "timestamp_ms": 1790684200000,
     "all_routes_http_200": true,
     "all_routes_nonempty": false,
-    "interpretation": "Current signer and transport are verified for four search route shapes; no non-empty application response was reproduced."
+    "interpretation": "Current signer and transport are verified for four search route shapes; no non-empty application response was reproduced.",
+    "exact_app_shape": {
+      "evidence_file": "evidence/search_exact_app_probe_20260929.json",
+      "host_family": "api5-normal-sinfonlineb.fqnovel.com",
+      "path": "/reading/bookapi/search/page/v/",
+      "request_fields": ["query", "offset", "aid"],
+      "status": 200,
+      "length": 0,
+      "non_empty_json": false
+    }
   },
   "medusa": {
     "current_bridge": "sample-verified",
@@ -91,6 +100,7 @@
       "seg2_full_diag_events": "90161/90161",
       "seg3_historical_replay_events": "1057/1057",
       "seg3_historical_replay_callbacks": 87,
+      "seg1_correct_frame": {"events": "4592/4592", "callbacks": 85, "seg2_callbacks_matched": 10, "evidence_file": "evidence/vm9_seg1_frame_probe_20260930.json", "fresh_input": false},
       "seg2_controlled_transplant": {
         "callback": 8,
         "events": "90161/90161",

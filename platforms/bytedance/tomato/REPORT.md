@@ -43,6 +43,20 @@ The latest checkpoint audit separates three results that must not be merged: the
 
 Consequently, this repository does not call current Medusa “pure Python parameterized” and does not enable it in the default Rust build. The exact next proof is an independent constructor/allocator implementation followed by fresh current-version vectors and the same live endpoint matrix. The callback-8 allocator branch is documented in [ALLOCATOR_AUDIT.md](ALLOCATOR_AUDIT.md).
 
+The independent VM9 notes corrected two Seg1 runner mistakes. The actual entry
+base `0x1235a6f0` removed a false trace-120 branch; using Seg1's own native
+stack frame then removed a false callback-20 libc abort caused by applying the
+Seg2 frame. The corrected ARM64 replay completed all `4592/4592` Seg1 events
+and 85 callbacks on the captured sample, and its checkpoint matched the first
+10 Seg2 callbacks. This narrows the state handoff work but does not change the
+current Medusa parameterization status. See [VM9_PROGRESS.md](VM9_PROGRESS.md)
+and the [sanitized frame probe](evidence/vm9_seg1_frame_probe_20260930.json).
+The first full Seg2 continuation from that checkpoint reached callback 45; it
+then stopped at trace `12085` on a single host-state word (`[0xe4ffcd00]`,
+`0x2f8` versus the historical `0x2f6`). That field has not yet been assigned
+an independent semantic owner, so the current result remains a captured-state
+handoff diagnostic.
+
 The bridge-level parameter and time checks are now separated from that open proof. Repeating the same URL, frozen timestamp, and emulated PID produced the same Medusa digest. Changing the URL, timestamp, or emulated PID changed the Medusa digest or branch length, so those values are real bridge inputs rather than ignored placeholders. Five frozen timestamp trials signed successfully and returned HTTP 200 from the detail endpoint. This closes the timestamp-freeze question for the Java/Unidbg bridge; it does not make the current VM a pure-Python signer. The sanitized matrix is in [EVIDENCE_INDEX.json](EVIDENCE_INDEX.json).
 
 The local bridge performance sweep measured 23.165 seconds before the current optimization and 10.546 seconds after it for the same input, with the same Medusa digest. This is a bridge runtime result only. It does not change the no-JVM capability boundary.

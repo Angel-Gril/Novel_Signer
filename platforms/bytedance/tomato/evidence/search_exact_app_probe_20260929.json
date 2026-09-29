@@ -1,0 +1,26 @@
+{
+  "platform": "bytedance.tomato",
+  "date": "2026-09-29",
+  "source": "APK native request hook plus current Java/Unidbg signer replay",
+  "redaction": "No request headers, device identifiers, tickets, tokens, or response bytes are included.",
+  "request_shape": {
+    "host_family": "api5-normal-sinfonlineb.fqnovel.com",
+    "path": "/reading/bookapi/search/page/v/",
+    "query_fields": ["query", "offset", "aid"],
+    "query_values": "omitted",
+    "aid": 1967,
+    "user_agent_family": "okhttp/3.10.0.1"
+  },
+  "signing": {
+    "current_bridge_generated_medusa": true,
+    "timestamp_policy": "fresh millisecond timestamp",
+    "headers": "omitted"
+  },
+  "response": {
+    "status": 200,
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "json": false
+  },
+  "interpretation": "The APK-observed host and minimal first-request shape are reachable with a current signed request, but no non-empty search payload was returned. Search remains unverified."
+}

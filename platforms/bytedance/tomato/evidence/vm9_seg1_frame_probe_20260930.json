@@ -1,0 +1,54 @@
+{
+  "platform": "bytedance.tomato",
+  "scope": "one captured VM9 sample; local diagnostic replay, not a parameterized signer",
+  "trace_sha256": "82a50de1ec14b68e0980e02adcb5f3c0475572e802e9bb3152d18659c1cf1e15",
+  "entry_base": "0x1235a6f0",
+  "observed_seg1_native_frame": {
+    "source": "VM9TRANS EXIT#1 in the captured native PC flow",
+    "sp": "0xe4ffb320",
+    "x29": "0xe4ffb440",
+    "x19": "0xe4ffbb60",
+    "x28": "0xe4ffbb68",
+    "x1": "0xe4ffb340"
+  },
+  "wrong_seg2_frame_applied_to_seg1": {
+    "sp": "0xe4ffbd70",
+    "x29": "0xe4ffbe90",
+    "first_corrupted_callback": 19,
+    "libc_abort_at_callback": 20,
+    "libc_message": "Invalid address 0xe4ffb848 passed to free: value not allocated",
+    "exit_group_status": 1,
+    "diagnostic_log_sha256": "858cefa919f0f9c27f54688d1373e3deca47d86e7e17fa24ec851b5687e80677"
+  },
+  "corrected_seg1_replay": {
+    "vm_events": "4592/4592",
+    "native_callbacks": 85,
+    "syscalls": [
+      {
+        "number": 233,
+        "name": "madvise",
+        "count": 1
+      }
+    ],
+    "callback_page_injections": 0,
+    "uses_captured_native_image": true,
+    "uses_captured_initial_memory": true,
+    "runner_x22_frame_value": "inferred from the frame offset, not directly observed",
+    "checkpoint_sha256": "538858977e4c1ae16aee423f3a7f0ad946b3a3e519b6fffee175b66f54b9a1d4",
+    "diagnostic_log_sha256": "5d810782bd7072fb809b91e08c2475d56e945c221023758b9c7e6f59029789fc"
+  },
+  "seg2_followup": {
+    "callbacks_matched_from_corrected_checkpoint": 10,
+    "controlled_allocator_transplants": 0,
+    "diagnostic_log_sha256": "a36a883d9c0a2e99e2ba60f45a87d0eb244da4cf91a1200d6713874c44daa693",
+    "full_attempt_callbacks": 45,
+    "divergence_trace": 12085,
+    "divergence_register": "x2",
+    "divergence_value_corrected_checkpoint": "0x2f8",
+    "divergence_value_historical_checkpoint": "0x2f6",
+    "interpretation": "corrected Seg1 checkpoint reaches the Seg2 callback-45 boundary; one host-state word remains unexplained",
+    "full_attempt_log_sha256": "10699816867d599b722d56b1ad4ac93c43749980c0a6bc01c21558052b8deb18"
+  },
+  "interpretation": "Correcting the Seg1 native frame removes the false libc abort and allows a full captured Seg1 execution. Fresh-input parameterization, independent native behavior, and the no-JVM Rust download chain remain unverified.",
+  "runner_sha256": "a669487396c7a873b8228dc1be9d54acb748a9a35c2e245c40a56551b9ddf6b7"
+}

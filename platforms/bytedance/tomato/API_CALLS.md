@@ -79,3 +79,10 @@ confirms the current signer can reach all four route shapes; it does not prove
 that the search query is accepted or that a result payload is available. See
 `evidence/search_current_probe_20260929.json` for the redacted per-route
 summary.
+
+The APK native request hook separately exposed the first page shape as the
+`sinfonlineb` host with `query`, `offset=0`, and `aid=1967`. A fresh replay of
+that exact visible shape also returned HTTP 200 with zero bytes. Its redacted
+record is `evidence/search_exact_app_probe_20260929.json`; the result keeps
+search availability open while confirming that the app-observed host is
+reachable with a current signed request.
