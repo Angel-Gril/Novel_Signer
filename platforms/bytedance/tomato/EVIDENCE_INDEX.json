@@ -34,6 +34,18 @@
     "old_python_snapshot_body_length": 225,
     "independent_current_parameterization": false,
     "selector_evidence": "state & 0x0f (16 selector values)",
-    "24_variant_evidence": false
+    "24_variant_evidence": false,
+    "vm9_checkpoint": {
+      "seg2_full_diag_events": "90161/90161",
+      "seg3_historical_replay_events": "1057/1057",
+      "seg3_historical_replay_callbacks": 87,
+      "seg3_new_checkpoint_divergence": {
+        "trace": 758,
+        "callback": 8,
+        "historical_allocator_result": "0x1296b940",
+        "new_checkpoint_allocator_result": "0x1296ba60"
+      },
+      "interpretation": "trace-assisted replay is reproducible for one captured sample; current independent parameterization remains open"
+    }
   }
 }

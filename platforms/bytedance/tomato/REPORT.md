@@ -39,6 +39,8 @@ There are two materially different claims:
 1. The old 12a2a000 snapshot has a pure-Python body interpreter. It can accept a query string and reproduce its 225-byte body vectors. This is useful for studying field layout and VM semantics.
 2. The current `v04.09.09.01-bugfixS` VM9 path can be run by the Java/Unidbg bridge. It produces short (228-byte raw) and long (803–804-byte raw) branches that were accepted by the live reading endpoints. The current VM9 body has also been reconstructed from A/B traces (777/779 bytes), but the reconstruction is trace-assisted. Independent execution still reaches native target `0x125081ac`, whose constructor calls allocator target `0x12607fd0`; after that boundary the standalone comparator lacks the returned object and diverges.
 
+The latest checkpoint audit separates two results that must not be merged: the historical Seg3 replay still reaches `1057/1057` events with 87 callbacks when the captured `event0_cb66_vm9_*` image and callback 9/64/66 pages are used, while the newer full-Seg2 checkpoint diverges at trace 758 after callback 8 (`0x1296b940` versus `0x1296ba60`). The former is a reproducible diagnostic replay; it is not evidence that the latter has become a general parameterized signer. See [VM9_PROGRESS.md](VM9_PROGRESS.md) for the exact matrix.
+
 Consequently, this repository does not call current Medusa “pure Python parameterized” and does not enable it in the default Rust build. The exact next proof is an independent constructor/allocator implementation followed by fresh current-version vectors and the same live endpoint matrix.
 
 ## Six/seven gods and “16/24 gods”
