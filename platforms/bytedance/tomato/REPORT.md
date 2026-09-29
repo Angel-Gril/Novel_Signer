@@ -59,10 +59,12 @@ value belongs to a different checkpoint.
 A fresh same-run capture was then replayed with full host handoff snapshots.
 Seg1 reached `4592/4592` events and 85 callbacks, Seg2 reached
 `90153/90153` events and 121 callbacks without callback-page injection or an
-allocator-field transplant, and Seg3 reached callback 86 before the replay's
-clock syscall model diverged. These snapshots prove the segment and host
-handoff boundary for that capture; they are still captured state and do not
-establish a fresh-input pure-Python signer. See
+allocator-field transplant, and Seg3 reached callback 86 before the first
+unexplained clock-result slot. Setting the trace-observed zero at
+`0xe4ffe630` as an explicit diagnostic override completes Seg3 at
+`1057/1057` events and 87 callbacks. These snapshots and the override prove
+the segment and host handoff boundary for that capture; they are still
+captured state and do not establish a fresh-input pure-Python signer. See
 [evidence/vm9_handoff_probe_20260930.json](evidence/vm9_handoff_probe_20260930.json).
 
 The bridge-level parameter and time checks are now separated from that open proof. Repeating the same URL, frozen timestamp, and emulated PID produced the same Medusa digest. Changing the URL, timestamp, or emulated PID changed the Medusa digest or branch length, so those values are real bridge inputs rather than ignored placeholders. Five frozen timestamp trials signed successfully and returned HTTP 200 from the detail endpoint. This closes the timestamp-freeze question for the Java/Unidbg bridge; it does not make the current VM a pure-Python signer. The sanitized matrix is in [EVIDENCE_INDEX.json](EVIDENCE_INDEX.json).

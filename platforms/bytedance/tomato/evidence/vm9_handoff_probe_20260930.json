@@ -3,7 +3,7 @@
   "scope": "one fresh VM9 capture with same-run host handoff snapshots; diagnostic replay, not a pure-Python parameterized signer",
   "capture_date": "2026-09-30",
   "trace_sha256": "cc6a7386813b59bbdd591ee11ed6d282d4b207d18e6e998728827ffbedc39ce1",
-  "runner_sha256": "7a883c5f37bb39a6edbf5662621dd8598b75d66846d0eaf1d42c907fdd35cfc0",
+  "runner_sha256": "885ee8a65f2b2a9af036978f44b42d558307054b4422dae83ed05cd411ff036e",
   "fresh_capture": {
     "segment_lengths": {
       "seg1_events": 4592,
@@ -25,11 +25,20 @@
       "captured_page_transplants": 0
     },
     "seg3": {
-      "events_before_clock_boundary": "1028/1057",
-      "native_callbacks": 86,
+      "events_without_clock_override": "1028/1057",
+      "events_with_diagnostic_clock_override": "1057/1057",
+      "native_callbacks": 87,
+      "syscalls": {
+        "clock_gettime": 2
+      },
       "real_handoff_snapshot": "next_2",
       "captured_page_injections": 0,
-      "boundary": "callback 86 clock_gettime result/VM state"
+      "diagnostic_override": {
+        "address": "0xe4ffe630",
+        "value": "0x0",
+        "reason": "the callback-86 result slot read by the following VM load; without this host-return model the trace stops at event 1028"
+      },
+      "interpretation": "complete same-run trace-assisted replay after one explicit host-return override; not independent parameterization"
     }
   },
   "same_run_handoff": {
@@ -50,7 +59,7 @@
   "logs": {
     "seg1_sha256": "4233bff553245377e2befadef486ba58a2e67fb49ae62e5ae9bf3dfb5a878e47",
     "seg2_sha256": "ecb956583afb2167ba43330421351d6008937e4de59db816bbe35188f0a91859",
-    "seg3_clock_boundary_sha256": "d3a6760462ba4e6f3aace066c734edebe2900386928673d17842fe3eb628195a"
+    "seg3_clock_boundary_sha256": "62D67F5AAA2C371C49E10A28269B01BA3EDA6D0D25B2BF24A59A47EDB92FF56D"
   },
-  "interpretation": "The corrected Seg1 runner and same-run full host handoffs reproduce Seg1 and Seg2 without callback-page injection. Seg3 reaches callback 86 and then stops at the clock-dependent handoff; the current signer remains unavailable in no-JVM Rust."
+  "interpretation": "The corrected Seg1 runner and same-run full host handoffs reproduce Seg1 and Seg2 without callback-page injection. Seg3 reproduces all 1057 events only after one explicit callback-86 clock-result-slot override; without it the first unexplained boundary is event 1028. This remains trace-assisted diagnostic evidence, not a fresh-input pure-Python Medusa proof."
 }

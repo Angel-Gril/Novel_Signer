@@ -91,10 +91,11 @@ then supplied to the offline runner:
 
 - Seg2 reached `90153/90153` events and 121 callbacks from the real `NEXT#1`
   handoff, with no callback-page injection or allocator-field transplant.
-- Seg3 reached 1,028 of 1,057 events and callback 86 from the real `NEXT#2`
-  handoff. It stopped at the clock-dependent callback boundary; the current
-  syscall model does not yet reproduce the VM state that follows that native
-  clock wrapper.
+- Seg3 reached callback 86 and event 1,028 from the real `NEXT#2` handoff. The
+  first unexplained host-return boundary is the callback result slot at
+  `0xe4ffe630`; setting that slot to the trace-observed zero as an explicit
+  diagnostic override lets the replay complete at `1057/1057` events and 87
+  callbacks.
 
 This is stronger evidence about the segment and host handoff boundaries, but it
 still consumes captured full-memory handoffs from one run. It is therefore a
@@ -108,8 +109,9 @@ sanitized record is
   transplant and `90153/90153` from a fresh same-run host handoff), but it is
   not an independent pure-Python parameterization.
 - Seg3 now reaches the clock boundary at callback 86 for a fresh same-run
-  handoff, while the older page-assisted replay remains complete only for its
-  captured sample. Neither is a general current-version signer.
+  handoff after one explicit clock-result-slot override, while the older
+  page-assisted replay remains complete only for its captured sample. Neither
+  is a general current-version signer.
 - The old 225-byte Python Medusa implementation remains valid only for its old
   snapshot vectors.
 - The no-JVM Rust crate must continue to return an explicit unavailable error
