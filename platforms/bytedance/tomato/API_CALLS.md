@@ -52,3 +52,21 @@ The fresh single-variable matrix was repeated for detail, directory, and reader/
 | remove Medusa | HTTP 200, zero-length response |
 
 The zero-length body is an application failure even though the transport status is 200. The matrix is valid only while the timestamp is inside the server acceptance window.
+
+## 6. Search
+
+The decompiled search feed calls `u15.c.i0(GetSearchPageRequest)` after building
+the request in `uf3.c`. The observed paths are:
+
+```text
+GET /reading/bookapi/search/tab/v
+GET /reading/bookapi/search/page/v/
+```
+
+The page request always sets `bookshelfSearchPlan=4` in the feed path. It carries
+`query`, `searchId`, `passback`, `correctedQuery`, `useCorrect`, `offset`,
+`searchSource`, `tabType`, `tabName`, and `targetMainId`; an optional context
+adds login, bookstore, click, source-book, source-id, and client-ab fields.
+`PlaceUtils.addPlaceColumnParams` may add further fields. A current signed probe
+to the page path returned HTTP 200 with an empty body, so the endpoint shape is
+static/runtime verified but a usable search response is not yet live verified.

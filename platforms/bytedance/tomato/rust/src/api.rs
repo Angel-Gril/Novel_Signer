@@ -4,6 +4,7 @@ pub const DIRECTORY_PATH: &str = "/reading/directory/detail";
 pub const READER_FULL_PATH: &str = "/reading/reader/full/v1/";
 pub const REGISTERKEY_PATH: &str = "/reading/crypt/registerkey";
 pub const SEARCH_TAB_PATH: &str = "/reading/bookapi/search/tab/v";
+pub const SEARCH_PAGE_PATH: &str = "/reading/bookapi/search/page/v/";
 
 /// Static model extracted from `GetSearchPageRequest`.
 ///
@@ -32,5 +33,6 @@ mod tests {
         let p = search_params("三体", 0);
         assert_eq!(p.get("bookshelf_search_plan"), Some(&"4".to_string()));
         assert_eq!(p.get("query"), Some(&"三体".to_string()));
+        assert_eq!(SEARCH_PAGE_PATH, "/reading/bookapi/search/page/v/");
     }
 }
