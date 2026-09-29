@@ -70,3 +70,12 @@ adds login, bookstore, click, source-book, source-id, and client-ab fields.
 `PlaceUtils.addPlaceColumnParams` may add further fields. A current signed probe
 to the page path returned HTTP 200 with an empty body, so the endpoint shape is
 static/runtime verified but a usable search response is not yet live verified.
+
+The fresh 2026-09-29 probe repeated this against `tab/v`, `tab/v/`, `page/v1/`,
+and `page/v/` with synchronized request timestamp fields. Every request was
+HTTP 200 with a zero-byte body and the empty-stream SHA-256
+`e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`. This
+confirms the current signer can reach all four route shapes; it does not prove
+that the search query is accepted or that a result payload is available. See
+`evidence/search_current_probe_20260929.json` for the redacted per-route
+summary.

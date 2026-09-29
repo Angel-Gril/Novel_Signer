@@ -43,6 +43,25 @@ The empty-body SHA-256 is the standard empty stream hash
 complete parameter combination caused the current signer to time out in one
 probe, so it was not promoted to a success claim.
 
+## Fresh online probe (2026-09-29)
+
+The current Java/Unidbg bridge was rerun with a synchronized `_rticket` and
+frozen timestamp grid (`1790684200000`) before each request. Four endpoint
+shapes were signed and sent with the application-style query model:
+
+| Path | HTTP | Body | SHA-256 |
+| --- | ---: | ---: | --- |
+| `/reading/bookapi/search/tab/v` | 200 | 0 bytes | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `/reading/bookapi/search/tab/v/` | 200 | 0 bytes | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `/reading/bookapi/search/page/v1/` | 200 | 0 bytes | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `/reading/bookapi/search/page/v/` | 200 | 0 bytes | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+
+These are fresh negative results: signing and transport succeeded, but the
+application returned no JSON object or book list. The endpoint model remains
+runtime-confirmed while the non-empty search response remains unverified. The
+redacted machine-readable record is
+`evidence/search_current_probe_20260929.json`.
+
 ## Rust implication
 
 `search.rs` remains a parameter-model scaffold. The downloader should report

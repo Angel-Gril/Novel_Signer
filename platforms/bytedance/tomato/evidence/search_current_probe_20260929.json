@@ -1,0 +1,49 @@
+{
+  "evidence": "fresh online search probe",
+  "platform": "bytedance.tomato",
+  "query": "三体",
+  "timestamp_ms": 1790684200000,
+  "redaction": "Only endpoint paths and response summaries; no URL values, request headers, device identifiers, tokens, or response bodies.",
+  "variants": [
+    {
+      "name": "tab_v",
+      "path": "/reading/bookapi/search/tab/v",
+      "status": 200,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "elapsed": 0.478,
+      "json_code": null,
+      "json_message": null
+    },
+    {
+      "name": "tab_v_slash",
+      "path": "/reading/bookapi/search/tab/v/",
+      "status": 200,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "elapsed": 0.427,
+      "json_code": null,
+      "json_message": null
+    },
+    {
+      "name": "page_v1",
+      "path": "/reading/bookapi/search/page/v1/",
+      "status": 200,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "elapsed": 0.615,
+      "json_code": null,
+      "json_message": null
+    },
+    {
+      "name": "page_v",
+      "path": "/reading/bookapi/search/page/v/",
+      "status": 200,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "elapsed": 0.885,
+      "json_code": null,
+      "json_message": null
+    }
+  ]
+}

@@ -73,6 +73,13 @@
     {"path": "/reading/bookapi/search/tab/v", "status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
     {"path": "/reading/bookapi/search/page/v/", "status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "static_request_builder": "uf3.c -> u15.c.i0(GetSearchPageRequest)"}
   ],
+  "fresh_search_probe_20260929": {
+    "evidence_file": "evidence/search_current_probe_20260929.json",
+    "timestamp_ms": 1790684200000,
+    "all_routes_http_200": true,
+    "all_routes_nonempty": false,
+    "interpretation": "Current signer and transport are verified for four search route shapes; no non-empty application response was reproduced."
+  },
   "medusa": {
     "current_bridge": "sample-verified",
     "raw_branch_lengths": [228, 803, 804],
