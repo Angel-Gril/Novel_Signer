@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Novel Signer research</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 4rem; font: 16px/1.6 system-ui, sans-serif; }
+    a { color: #0969da; }
+    @media (prefers-color-scheme: dark) { a { color: #58a6ff; } }
+    code { padding: .1rem .3rem; border-radius: .25rem; background: #8882; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: .55rem; text-align: left; vertical-align: top; border-bottom: 1px solid #8885; }
+    .card { margin: 1rem 0; padding: 1rem 1.2rem; border: 1px solid #8885; border-radius: .6rem; }
+  </style>
+</head>
+<body>
+  <h1>Novel Signer research</h1>
+  <p>This is the reviewable index for the platform-separated reverse-engineering reports.</p>
+
+  <h2>Current findings</h2>
+  <table>
+    <thead><tr><th>Platform</th><th>Evidence</th><th>Current result</th></tr></thead>
+    <tbody>
+      <tr><td>Tomato / ByteDance</td><td>Live chain verified</td><td><code>device_register → registerkey → directory → reader/full → AES-CBC</code> succeeds with the Java/Unidbg bridge. Current Medusa parameterization remains explicitly incomplete.</td></tr>
+      <tr><td>Douyin / ByteDance</td><td>Static/community analysis</td><td>Four-god algorithms are documented; Helios/Medusa for 23.3.0+ were not independently verified here.</td></tr>
+      <tr><td>Qidian</td><td>No usable sample in this workspace</td><td>No claim is made about Qidian endpoints or signatures.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <h2>Reports</h2>
+    <p><a href="https://github.com/Angel-Gril/Novel_Signer/tree/main/platforms/bytedance/tomato">Tomato reports and implementations</a></p>
+    <p><a href="https://github.com/Angel-Gril/Novel_Signer/tree/main/platforms/bytedance/douyin">Douyin reports</a></p>
+    <p><a href="https://github.com/Angel-Gril/Novel_Signer/tree/main/platforms/qidian">Qidian boundary report</a></p>
+    <p><a href="https://github.com/Angel-Gril/Novel_Signer/blob/main/docs/architecture.md">Evidence and implementation boundaries</a></p>
+  </div>
+
+  <div class="card">
+    <h2>Important limits</h2>
+    <p>An HTTP 200 with a zero-length body is recorded as an unsuccessful application result. Published hashes identify trial output without publishing raw responses, tokens, device identifiers, or authentication headers.</p>
+  </div>
+</body>
+</html>
