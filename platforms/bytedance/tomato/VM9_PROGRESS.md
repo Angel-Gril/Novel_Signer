@@ -63,12 +63,12 @@ checkpoint advanced into Seg2 and matched its first 10 native callbacks. The
 sanitized diagnostic record is
 [evidence/vm9_seg1_frame_probe_20260930.json](evidence/vm9_seg1_frame_probe_20260930.json).
 
-The next full Seg2 attempt reached callback 45 and then diverged at VM trace
-`12085` because `[0xe4ffcd00]` remained `0x2f8` in the corrected checkpoint
-while the historical Seg1 checkpoint expected `0x2f6`. This field is part of
-the captured input/host state rather than a proven allocator rule; the run is
-therefore recorded as a new handoff boundary, not as a failure of the Seg1
-frame correction.
+An earlier continuation reached callback 45 and appeared to diverge at VM
+trace `12085` (`[0xe4ffcd00]` was `0x2f8` while the older checkpoint expected
+`0x2f6`). Pairing the trace with its same-capture memory files showed that this
+was a mixed-capture artifact: the paired trace also expects `0x2f8`. The old
+`0x2f6` value came from a different capture/checkpoint and must not be copied
+into the corrected run.
 
 This is a diagnostic correction, not a completion claim. The runner still
 executes captured ARM64 native code against captured memory, and its Seg1
@@ -82,12 +82,34 @@ captured Seg2 replay to complete at `90161/90161` events with `121` callbacks.
 This closes the captured branch diagnostic, not the independent parameterization
 requirement. See [ALLOCATOR_AUDIT.md](ALLOCATOR_AUDIT.md).
 
+## Same-run full handoff capture (2026-09-30)
+
+A fresh Unidbg capture was taken with a frozen clock and deterministic emulated
+random source. Seg1 was replayed from that capture at `4592/4592` events and
+85 callbacks. Full memory snapshots taken at the real host transitions were
+then supplied to the offline runner:
+
+- Seg2 reached `90153/90153` events and 121 callbacks from the real `NEXT#1`
+  handoff, with no callback-page injection or allocator-field transplant.
+- Seg3 reached 1,028 of 1,057 events and callback 86 from the real `NEXT#2`
+  handoff. It stopped at the clock-dependent callback boundary; the current
+  syscall model does not yet reproduce the VM state that follows that native
+  clock wrapper.
+
+This is stronger evidence about the segment and host handoff boundaries, but it
+still consumes captured full-memory handoffs from one run. It is therefore a
+trace-assisted diagnostic and not a fresh-input, pure-Python Medusa proof. The
+sanitized record is
+[evidence/vm9_handoff_probe_20260930.json](evidence/vm9_handoff_probe_20260930.json).
+
 ## Meaning for the deliverables
 
-- Seg2 has a complete diagnostic run (`90161/90161` events), but it is not an
-  independent pure-Python parameterization.
-- Seg3 has a complete trace-assisted replay for one captured sample, but it is
-  not a general current-version signer.
+- Seg2 has complete diagnostic runs (`90161/90161` with the historical branch
+  transplant and `90153/90153` from a fresh same-run host handoff), but it is
+  not an independent pure-Python parameterization.
+- Seg3 now reaches the clock boundary at callback 86 for a fresh same-run
+  handoff, while the older page-assisted replay remains complete only for its
+  captured sample. Neither is a general current-version signer.
 - The old 225-byte Python Medusa implementation remains valid only for its old
   snapshot vectors.
 - The no-JVM Rust crate must continue to return an explicit unavailable error

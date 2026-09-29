@@ -3,25 +3,78 @@
   "generated_from": "ONLINE_VALIDATION_20260929.md, fresh trial summaries, and the callback-8 allocator audit in the isolated workspace",
   "redaction": "No raw URLs, request headers, device identifiers, UUIDs, tokens, per-session keys, or response bodies are included.",
   "live_chain": [
-    {"step": "registerkey", "status": 200, "key_version": 598113575, "secret_material": "omitted"},
-    {"step": "directory", "status": 200, "response_length": 201904, "chapter_count": 611},
-    {"step": "reader/full", "status": 200, "response_length": 23953, "crypt_status": 0, "decoded_length": 6496, "decoded_sha256": "13e2415e7bef414a197a62aca08ccb11bf9cf436bc3f955b676fa03fac2fa2f7"}
+    {
+      "step": "registerkey",
+      "status": 200,
+      "key_version": 598113575,
+      "secret_material": "omitted"
+    },
+    {
+      "step": "directory",
+      "status": 200,
+      "response_length": 201904,
+      "chapter_count": 611
+    },
+    {
+      "step": "reader/full",
+      "status": 200,
+      "response_length": 23953,
+      "crypt_status": 0,
+      "decoded_length": 6496,
+      "decoded_sha256": "13e2415e7bef414a197a62aca08ccb11bf9cf436bc3f955b676fa03fac2fa2f7"
+    }
   ],
   "header_matrix": {
     "detail": {
-      "strong": {"status": 200, "length": 24353, "sha256": "ea6e0d6588fc22253879ed8f9366916a0d0cfb25a9d4ab5cf7bcd1f2fe6dcf08"},
-      "drop_perseus": {"status": 200, "length": 24351, "sha256": "6191295d6e1ae53884e33e914c7f13cab32beea6d2815da5b9ccbf66129f7ed1"},
-      "drop_medusa": {"status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+      "strong": {
+        "status": 200,
+        "length": 24353,
+        "sha256": "ea6e0d6588fc22253879ed8f9366916a0d0cfb25a9d4ab5cf7bcd1f2fe6dcf08"
+      },
+      "drop_perseus": {
+        "status": 200,
+        "length": 24351,
+        "sha256": "6191295d6e1ae53884e33e914c7f13cab32beea6d2815da5b9ccbf66129f7ed1"
+      },
+      "drop_medusa": {
+        "status": 200,
+        "length": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
     },
     "directory": {
-      "strong": {"status": 200, "length": 201908, "sha256": "c615bc2009ec77875826e0e10fcc1c4ccef48e67f423b082b965a509ff540130"},
-      "drop_perseus": {"status": 200, "length": 201908, "sha256": "2fbcc537794283f7b6d44eb900e9a570fcea5f99c966c1802a88de9f3edc2927"},
-      "drop_medusa": {"status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+      "strong": {
+        "status": 200,
+        "length": 201908,
+        "sha256": "c615bc2009ec77875826e0e10fcc1c4ccef48e67f423b082b965a509ff540130"
+      },
+      "drop_perseus": {
+        "status": 200,
+        "length": 201908,
+        "sha256": "2fbcc537794283f7b6d44eb900e9a570fcea5f99c966c1802a88de9f3edc2927"
+      },
+      "drop_medusa": {
+        "status": 200,
+        "length": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
     },
     "reader_full": {
-      "strong": {"status": 200, "length": 23953, "sha256": "594991c7ee65b16f1979f0d7daf4f2b16eae5635850a2ce5da6ead9a08203769"},
-      "drop_perseus": {"status": 200, "length": 23953, "sha256": "4a77143145040b4d1c79d848a82f4504c722f65f0bceb34a0f02a558e227b40d"},
-      "drop_medusa": {"status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+      "strong": {
+        "status": 200,
+        "length": 23953,
+        "sha256": "594991c7ee65b16f1979f0d7daf4f2b16eae5635850a2ce5da6ead9a08203769"
+      },
+      "drop_perseus": {
+        "status": 200,
+        "length": 23953,
+        "sha256": "4a77143145040b4d1c79d848a82f4504c722f65f0bceb34a0f02a558e227b40d"
+      },
+      "drop_medusa": {
+        "status": 200,
+        "length": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
     }
   },
   "current_bridge_parameter_matrix": {
@@ -31,9 +84,21 @@
       "raw_length": 1072
     },
     "url_sensitivity": [
-      {"path": "/api/novel/channel/homepage", "raw_length": 1072, "medusa_sha256": "cc041067ecbe2128084943fc8bf8c78c28b1007ca6e90b22e67f6be7191686b4"},
-      {"path": "/reading/bookapi/detail/v1/", "raw_length": 1072, "medusa_sha256": "530dd3a64fcc490620cfacaac849dc037be8273cb529a7ce46dbc43a9ca98a77"},
-      {"path": "/reading/bookapi/search/page/v/", "raw_length": 1072, "medusa_sha256": "2fbc3fb100a6c3aa8b10402e48b39af480f3b0781f26ff1026b31d7ab58a8854"}
+      {
+        "path": "/api/novel/channel/homepage",
+        "raw_length": 1072,
+        "medusa_sha256": "cc041067ecbe2128084943fc8bf8c78c28b1007ca6e90b22e67f6be7191686b4"
+      },
+      {
+        "path": "/reading/bookapi/detail/v1/",
+        "raw_length": 1072,
+        "medusa_sha256": "530dd3a64fcc490620cfacaac849dc037be8273cb529a7ce46dbc43a9ca98a77"
+      },
+      {
+        "path": "/reading/bookapi/search/page/v/",
+        "raw_length": 1072,
+        "medusa_sha256": "2fbc3fb100a6c3aa8b10402e48b39af480f3b0781f26ff1026b31d7ab58a8854"
+      }
     ],
     "emupid_sensitivity": {
       "same_emupid_repeated": true,
@@ -41,22 +106,78 @@
       "raw_length": 1072
     },
     "timestamp_sensitivity": [
-      {"frozen_ms": 1790261111111, "raw_length": 1072, "has_medusa": true},
-      {"frozen_ms": 1790400000000, "raw_length": 1072, "has_medusa": true},
-      {"frozen_ms": 1790500000000, "raw_length": 1072, "has_medusa": true},
-      {"frozen_ms": 1790600000000, "raw_length": 304, "has_medusa": true, "has_perseus": true},
-      {"frozen_ms": 1790649000000, "raw_length": 1072, "has_medusa": true}
+      {
+        "frozen_ms": 1790261111111,
+        "raw_length": 1072,
+        "has_medusa": true
+      },
+      {
+        "frozen_ms": 1790400000000,
+        "raw_length": 1072,
+        "has_medusa": true
+      },
+      {
+        "frozen_ms": 1790500000000,
+        "raw_length": 1072,
+        "has_medusa": true
+      },
+      {
+        "frozen_ms": 1790600000000,
+        "raw_length": 304,
+        "has_medusa": true,
+        "has_perseus": true
+      },
+      {
+        "frozen_ms": 1790649000000,
+        "raw_length": 1072,
+        "has_medusa": true
+      }
     ],
     "interpretation": "URL, timestamp, and emulated PID are confirmed bridge inputs; this is black-box Java/Unidbg evidence and does not establish a no-JVM implementation."
   },
   "timestamp_freeze_server_trials": {
     "endpoint": "/reading/bookapi/detail/v1/",
     "trials": [
-      {"frozen_ms": 1790261111111, "rticket_relation": "fixed", "sign_ok": true, "status": 200, "length": 24349, "sha256": "640e399c0042794ce8b15814b34819872be81967da9288d7fcec87dcce913f57"},
-      {"frozen_ms": 1790600000000, "rticket_relation": "fixed", "sign_ok": true, "status": 200, "length": 24343, "sha256": "761da41cafb853a2fb7ca33b867b8c393465c5e366fd7322f04d568541f3d008"},
-      {"frozen_ms": 1790649439624, "rticket_relation": "fixed", "sign_ok": true, "status": 200, "length": 24347, "sha256": "4d72ded51534720d4079de296954053b8d092e5fd0952454cedc2f5148fe185e"},
-      {"frozen_ms": 1790650698191, "rticket_relation": "fixed", "sign_ok": true, "status": 200, "length": 24343, "sha256": "6bd98e58363669908f80b10c72d0506b2bc711c26540a0c5015c8f30e06a9f40"},
-      {"frozen_ms": 1790650698191, "rticket_relation": "same_value", "sign_ok": true, "status": 200, "length": 24359, "sha256": "98f76258dcc7e64af4588b4706a3bda893bcd3044c8bad895ae7bed5219d4f94"}
+      {
+        "frozen_ms": 1790261111111,
+        "rticket_relation": "fixed",
+        "sign_ok": true,
+        "status": 200,
+        "length": 24349,
+        "sha256": "640e399c0042794ce8b15814b34819872be81967da9288d7fcec87dcce913f57"
+      },
+      {
+        "frozen_ms": 1790600000000,
+        "rticket_relation": "fixed",
+        "sign_ok": true,
+        "status": 200,
+        "length": 24343,
+        "sha256": "761da41cafb853a2fb7ca33b867b8c393465c5e366fd7322f04d568541f3d008"
+      },
+      {
+        "frozen_ms": 1790649439624,
+        "rticket_relation": "fixed",
+        "sign_ok": true,
+        "status": 200,
+        "length": 24347,
+        "sha256": "4d72ded51534720d4079de296954053b8d092e5fd0952454cedc2f5148fe185e"
+      },
+      {
+        "frozen_ms": 1790650698191,
+        "rticket_relation": "fixed",
+        "sign_ok": true,
+        "status": 200,
+        "length": 24343,
+        "sha256": "6bd98e58363669908f80b10c72d0506b2bc711c26540a0c5015c8f30e06a9f40"
+      },
+      {
+        "frozen_ms": 1790650698191,
+        "rticket_relation": "same_value",
+        "sign_ok": true,
+        "status": 200,
+        "length": 24359,
+        "sha256": "98f76258dcc7e64af4588b4706a3bda893bcd3044c8bad895ae7bed5219d4f94"
+      }
     ],
     "interpretation": "the bridge timestamp can be frozen for server requests; this closes the bridge-level freeze question, not the independent current-Medusa question"
   },
@@ -70,8 +191,19 @@
     "interpretation": "runtime optimization only; no claim about a pure-Python or no-JVM implementation"
   },
   "search": [
-    {"path": "/reading/bookapi/search/tab/v", "status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
-    {"path": "/reading/bookapi/search/page/v/", "status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "static_request_builder": "uf3.c -> u15.c.i0(GetSearchPageRequest)"}
+    {
+      "path": "/reading/bookapi/search/tab/v",
+      "status": 200,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/reading/bookapi/search/page/v/",
+      "status": 200,
+      "length": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "static_request_builder": "uf3.c -> u15.c.i0(GetSearchPageRequest)"
+    }
   ],
   "fresh_search_probe_20260929": {
     "evidence_file": "evidence/search_current_probe_20260929.json",
@@ -83,7 +215,11 @@
       "evidence_file": "evidence/search_exact_app_probe_20260929.json",
       "host_family": "api5-normal-sinfonlineb.fqnovel.com",
       "path": "/reading/bookapi/search/page/v/",
-      "request_fields": ["query", "offset", "aid"],
+      "request_fields": [
+        "query",
+        "offset",
+        "aid"
+      ],
       "status": 200,
       "length": 0,
       "non_empty_json": false
@@ -91,7 +227,11 @@
   },
   "medusa": {
     "current_bridge": "sample-verified",
-    "raw_branch_lengths": [228, 803, 804],
+    "raw_branch_lengths": [
+      228,
+      803,
+      804
+    ],
     "old_python_snapshot_body_length": 225,
     "independent_current_parameterization": false,
     "selector_evidence": "state & 0x0f (16 selector values)",
@@ -100,12 +240,23 @@
       "seg2_full_diag_events": "90161/90161",
       "seg3_historical_replay_events": "1057/1057",
       "seg3_historical_replay_callbacks": 87,
-      "seg1_correct_frame": {"events": "4592/4592", "callbacks": 85, "seg2_callbacks_matched": 10, "evidence_file": "evidence/vm9_seg1_frame_probe_20260930.json", "fresh_input": false},
+      "seg1_correct_frame": {
+        "events": "4592/4592",
+        "callbacks": 85,
+        "seg2_callbacks_matched": 10,
+        "evidence_file": "evidence/vm9_seg1_frame_probe_20260930.json",
+        "fresh_input": false,
+        "mixed_capture_followup": "0x2f8 vs 0x2f6 was a mixed-capture artifact; paired trace/memory use 0x2f8"
+      },
       "seg2_controlled_transplant": {
         "callback": 8,
         "events": "90161/90161",
         "callbacks": 121,
-        "fields": ["0x12282090", "0x1294110c", "0x12941128"],
+        "fields": [
+          "0x12282090",
+          "0x1294110c",
+          "0x12941128"
+        ],
         "interpretation": "captured-state diagnostic replay only"
       },
       "seg3_new_checkpoint_divergence": {
@@ -114,14 +265,37 @@
         "historical_allocator_result": "0x1296b940",
         "new_checkpoint_allocator_result": "0x1296ba60"
       },
-      "interpretation": "trace-assisted replay is reproducible for one captured sample; current independent parameterization remains open"
+      "interpretation": "trace-assisted replay is reproducible for one captured sample; current independent parameterization remains open",
+      "same_run_handoff_probe": {
+        "evidence_file": "evidence/vm9_handoff_probe_20260930.json",
+        "seg1_events": "4592/4592",
+        "seg1_callbacks": 85,
+        "seg2_events": "90153/90153",
+        "seg2_callbacks": 121,
+        "seg3_boundary_events": "1028/1057",
+        "seg3_boundary_callback": 86,
+        "uses_full_captured_host_handoffs": true,
+        "callback_page_injections": 0,
+        "allocator_field_transplants": 0,
+        "interpretation": "same-run diagnostic handoff replay; independent current Medusa parameterization remains false"
+      }
     },
     "allocator_audit": {
       "callback": 8,
       "size_class": 3,
       "bin": "0x12282060",
-      "historical": {"count": 0, "branch": "refill", "result": "0x1296b940", "writes": 80},
-      "current": {"count": 4, "branch": "free-list index 2", "result": "0x1296ba60", "writes": 33},
+      "historical": {
+        "count": 0,
+        "branch": "refill",
+        "result": "0x1296b940",
+        "writes": 80
+      },
+      "current": {
+        "count": 4,
+        "branch": "free-list index 2",
+        "result": "0x1296ba60",
+        "writes": 33
+      },
       "single_field_freeze_result": "0x1296b9a0",
       "controlled_transplant_result": {
         "count_field": "0x12282090=0",
@@ -133,5 +307,61 @@
       },
       "status": "captured allocator/refill branch replayed; fresh-input parameterization remains open"
     }
+  },
+  "vm9_handoff_probe_20260930": {
+    "platform": "bytedance.tomato",
+    "scope": "one fresh VM9 capture with same-run host handoff snapshots; diagnostic replay, not a pure-Python parameterized signer",
+    "capture_date": "2026-09-30",
+    "trace_sha256": "cc6a7386813b59bbdd591ee11ed6d282d4b207d18e6e998728827ffbedc39ce1",
+    "runner_sha256": "7a883c5f37bb39a6edbf5662621dd8598b75d66846d0eaf1d42c907fdd35cfc0",
+    "fresh_capture": {
+      "segment_lengths": {
+        "seg1_events": 4592,
+        "seg2_events": 90153,
+        "seg3_events": 1057
+      },
+      "seg1": {
+        "events": "4592/4592",
+        "native_callbacks": 85,
+        "syscalls": {
+          "madvise": 1
+        },
+        "callback_page_injections": 0
+      },
+      "seg2": {
+        "events": "90153/90153",
+        "native_callbacks": 121,
+        "real_handoff_snapshot": "next_1",
+        "captured_page_transplants": 0
+      },
+      "seg3": {
+        "events_before_clock_boundary": "1028/1057",
+        "native_callbacks": 86,
+        "real_handoff_snapshot": "next_2",
+        "captured_page_injections": 0,
+        "boundary": "callback 86 clock_gettime result/VM state"
+      }
+    },
+    "same_run_handoff": {
+      "next_1": {
+        "allocator_bin_count": "0x8",
+        "slab_counter": "0x18",
+        "slab_bitmap": "0xffffff0000000000",
+        "vm9_m0_sha256": "cca9050adb0901de1a63ac1c35fba0b1d12eba64d32b92061244125ee54387e9"
+      },
+      "next_2": {
+        "allocator_bin_count": "0x6",
+        "slab_counter": "0x1c",
+        "slab_bitmap": "0xffffffc180000000",
+        "vm9_m0_sha256": "628eb78908fa996b3674896fd9a40b6da1878bb04eed9b6cdff556501b168bb7"
+      },
+      "interpretation": "full memory handoff snapshots remove the synthetic transition mismatch for this capture; they are captured host state and therefore do not prove fresh-input parameterization."
+    },
+    "logs": {
+      "seg1_sha256": "4233bff553245377e2befadef486ba58a2e67fb49ae62e5ae9bf3dfb5a878e47",
+      "seg2_sha256": "ecb956583afb2167ba43330421351d6008937e4de59db816bbe35188f0a91859",
+      "seg3_clock_boundary_sha256": "d3a6760462ba4e6f3aace066c734edebe2900386928673d17842fe3eb628195a"
+    },
+    "interpretation": "The corrected Seg1 runner and same-run full host handoffs reproduce Seg1 and Seg2 without callback-page injection. Seg3 reaches callback 86 and then stops at the clock-dependent handoff; the current signer remains unavailable in no-JVM Rust."
   }
 }

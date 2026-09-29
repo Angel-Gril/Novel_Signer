@@ -1,0 +1,56 @@
+{
+  "platform": "bytedance.tomato",
+  "scope": "one fresh VM9 capture with same-run host handoff snapshots; diagnostic replay, not a pure-Python parameterized signer",
+  "capture_date": "2026-09-30",
+  "trace_sha256": "cc6a7386813b59bbdd591ee11ed6d282d4b207d18e6e998728827ffbedc39ce1",
+  "runner_sha256": "7a883c5f37bb39a6edbf5662621dd8598b75d66846d0eaf1d42c907fdd35cfc0",
+  "fresh_capture": {
+    "segment_lengths": {
+      "seg1_events": 4592,
+      "seg2_events": 90153,
+      "seg3_events": 1057
+    },
+    "seg1": {
+      "events": "4592/4592",
+      "native_callbacks": 85,
+      "syscalls": {
+        "madvise": 1
+      },
+      "callback_page_injections": 0
+    },
+    "seg2": {
+      "events": "90153/90153",
+      "native_callbacks": 121,
+      "real_handoff_snapshot": "next_1",
+      "captured_page_transplants": 0
+    },
+    "seg3": {
+      "events_before_clock_boundary": "1028/1057",
+      "native_callbacks": 86,
+      "real_handoff_snapshot": "next_2",
+      "captured_page_injections": 0,
+      "boundary": "callback 86 clock_gettime result/VM state"
+    }
+  },
+  "same_run_handoff": {
+    "next_1": {
+      "allocator_bin_count": "0x8",
+      "slab_counter": "0x18",
+      "slab_bitmap": "0xffffff0000000000",
+      "vm9_m0_sha256": "cca9050adb0901de1a63ac1c35fba0b1d12eba64d32b92061244125ee54387e9"
+    },
+    "next_2": {
+      "allocator_bin_count": "0x6",
+      "slab_counter": "0x1c",
+      "slab_bitmap": "0xffffffc180000000",
+      "vm9_m0_sha256": "628eb78908fa996b3674896fd9a40b6da1878bb04eed9b6cdff556501b168bb7"
+    },
+    "interpretation": "full memory handoff snapshots remove the synthetic transition mismatch for this capture; they are captured host state and therefore do not prove fresh-input parameterization."
+  },
+  "logs": {
+    "seg1_sha256": "4233bff553245377e2befadef486ba58a2e67fb49ae62e5ae9bf3dfb5a878e47",
+    "seg2_sha256": "ecb956583afb2167ba43330421351d6008937e4de59db816bbe35188f0a91859",
+    "seg3_clock_boundary_sha256": "d3a6760462ba4e6f3aace066c734edebe2900386928673d17842fe3eb628195a"
+  },
+  "interpretation": "The corrected Seg1 runner and same-run full host handoffs reproduce Seg1 and Seg2 without callback-page injection. Seg3 reaches callback 86 and then stops at the clock-dependent handoff; the current signer remains unavailable in no-JVM Rust."
+}
