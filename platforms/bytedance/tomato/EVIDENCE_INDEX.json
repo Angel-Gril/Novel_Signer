@@ -24,6 +24,51 @@
       "drop_medusa": {"status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
     }
   },
+  "current_bridge_parameter_matrix": {
+    "repeatability": {
+      "same_url_timestamp_emupid_runs": 2,
+      "same_medusa_digest": true,
+      "raw_length": 1072
+    },
+    "url_sensitivity": [
+      {"path": "/api/novel/channel/homepage", "raw_length": 1072, "medusa_sha256": "cc041067ecbe2128084943fc8bf8c78c28b1007ca6e90b22e67f6be7191686b4"},
+      {"path": "/reading/bookapi/detail/v1/", "raw_length": 1072, "medusa_sha256": "530dd3a64fcc490620cfacaac849dc037be8273cb529a7ce46dbc43a9ca98a77"},
+      {"path": "/reading/bookapi/search/page/v/", "raw_length": 1072, "medusa_sha256": "2fbc3fb100a6c3aa8b10402e48b39af480f3b0781f26ff1026b31d7ab58a8854"}
+    ],
+    "emupid_sensitivity": {
+      "same_emupid_repeated": true,
+      "different_emupids_produce_different_medusa": true,
+      "raw_length": 1072
+    },
+    "timestamp_sensitivity": [
+      {"frozen_ms": 1790261111111, "raw_length": 1072, "has_medusa": true},
+      {"frozen_ms": 1790400000000, "raw_length": 1072, "has_medusa": true},
+      {"frozen_ms": 1790500000000, "raw_length": 1072, "has_medusa": true},
+      {"frozen_ms": 1790600000000, "raw_length": 304, "has_medusa": true, "has_perseus": true},
+      {"frozen_ms": 1790649000000, "raw_length": 1072, "has_medusa": true}
+    ],
+    "interpretation": "URL, timestamp, and emulated PID are confirmed bridge inputs; this is black-box Java/Unidbg evidence and does not establish a no-JVM implementation."
+  },
+  "timestamp_freeze_server_trials": {
+    "endpoint": "/reading/bookapi/detail/v1/",
+    "trials": [
+      {"frozen_ms": 1790261111111, "rticket_relation": "fixed", "sign_ok": true, "status": 200, "length": 24349, "sha256": "640e399c0042794ce8b15814b34819872be81967da9288d7fcec87dcce913f57"},
+      {"frozen_ms": 1790600000000, "rticket_relation": "fixed", "sign_ok": true, "status": 200, "length": 24343, "sha256": "761da41cafb853a2fb7ca33b867b8c393465c5e366fd7322f04d568541f3d008"},
+      {"frozen_ms": 1790649439624, "rticket_relation": "fixed", "sign_ok": true, "status": 200, "length": 24347, "sha256": "4d72ded51534720d4079de296954053b8d092e5fd0952454cedc2f5148fe185e"},
+      {"frozen_ms": 1790650698191, "rticket_relation": "fixed", "sign_ok": true, "status": 200, "length": 24343, "sha256": "6bd98e58363669908f80b10c72d0506b2bc711c26540a0c5015c8f30e06a9f40"},
+      {"frozen_ms": 1790650698191, "rticket_relation": "same_value", "sign_ok": true, "status": 200, "length": 24359, "sha256": "98f76258dcc7e64af4588b4706a3bda893bcd3044c8bad895ae7bed5219d4f94"}
+    ],
+    "interpretation": "the bridge timestamp can be frozen for server requests; this closes the bridge-level freeze question, not the independent current-Medusa question"
+  },
+  "bridge_performance": {
+    "scope": "one local Java/Unidbg signer round with identical input",
+    "baseline_seconds": 23.165,
+    "optimized_seconds": 10.546,
+    "speedup_ratio": 2.196,
+    "medusa_base64_length": 304,
+    "medusa_sha256_same": true,
+    "interpretation": "runtime optimization only; no claim about a pure-Python or no-JVM implementation"
+  },
   "search": [
     {"path": "/reading/bookapi/search/tab/v", "status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
     {"path": "/reading/bookapi/search/page/v/", "status": 200, "length": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "static_request_builder": "uf3.c -> u15.c.i0(GetSearchPageRequest)"}
