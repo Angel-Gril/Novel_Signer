@@ -1,6 +1,6 @@
 {
   "platform": "bytedance.tomato",
-  "generated_from": "ONLINE_VALIDATION_20260929.md and fresh trial summaries in the isolated workspace",
+  "generated_from": "ONLINE_VALIDATION_20260929.md, fresh trial summaries, and the callback-8 allocator audit in the isolated workspace",
   "redaction": "No raw URLs, request headers, device identifiers, UUIDs, tokens, per-session keys, or response bodies are included.",
   "live_chain": [
     {"step": "registerkey", "status": 200, "key_version": 598113575, "secret_material": "omitted"},
@@ -39,6 +39,13 @@
       "seg2_full_diag_events": "90161/90161",
       "seg3_historical_replay_events": "1057/1057",
       "seg3_historical_replay_callbacks": 87,
+      "seg2_controlled_transplant": {
+        "callback": 8,
+        "events": "90161/90161",
+        "callbacks": 121,
+        "fields": ["0x12282090", "0x1294110c", "0x12941128"],
+        "interpretation": "captured-state diagnostic replay only"
+      },
       "seg3_new_checkpoint_divergence": {
         "trace": 758,
         "callback": 8,
@@ -54,7 +61,15 @@
       "historical": {"count": 0, "branch": "refill", "result": "0x1296b940", "writes": 80},
       "current": {"count": 4, "branch": "free-list index 2", "result": "0x1296ba60", "writes": 33},
       "single_field_freeze_result": "0x1296b9a0",
-      "status": "allocator/refill state remains unparameterized"
+      "controlled_transplant_result": {
+        "count_field": "0x12282090=0",
+        "slab_counter": "0x1294110c=0x24",
+        "slab_bitmap": "0x12941128=0xfffffffff0000000",
+        "result": "0x1296b940",
+        "writes": 80,
+        "fresh_input": false
+      },
+      "status": "captured allocator/refill branch replayed; fresh-input parameterization remains open"
     }
   }
 }

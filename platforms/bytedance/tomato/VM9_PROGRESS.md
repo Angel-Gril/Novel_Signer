@@ -37,8 +37,15 @@ requested size maps to size class `3` and bin `0x12282060`. The historical
 checkpoint has count `0` and returns `0x1296b940` through the refill path; the
 new checkpoint has count `4` and returns `0x1296ba60` from free-list index `2`.
 Forcing only the count to zero, or copying the complete `0x12282000` bin page,
-still returned `0x1296b9a0`. The refill cursor/slab/bitmap state therefore
-also differs. See [ALLOCATOR_AUDIT.md](ALLOCATOR_AUDIT.md).
+still returned `0x1296b9a0`. Native disassembly and a controlled transplant
+then isolated the missing state to the slab counter `[0x1294110c]` and bitmap
+word `[0x12941128]`; with those two fields plus the count corrected, callback 8
+returned `0x1296b940`.
+
+Applying that fixed checkpoint transplant at callback 8 allowed the full
+captured Seg2 replay to complete at `90161/90161` events with `121` callbacks.
+This closes the captured branch diagnostic, not the independent parameterization
+requirement. See [ALLOCATOR_AUDIT.md](ALLOCATOR_AUDIT.md).
 
 ## Meaning for the deliverables
 
@@ -54,7 +61,8 @@ also differs. See [ALLOCATOR_AUDIT.md](ALLOCATOR_AUDIT.md).
 
 ## Next experiment
 
-The next useful experiment is to model the callback-8 allocator state from the
-new full-Seg2 checkpoint and rerun the full 1057-event trace with a fresh input
-vector. A successful replay must then be checked against a new live
-directory/reader matrix; matching the old captured body alone is insufficient.
+The next useful experiment is to model the allocator's slab acquisition and
+bitmap updates from a fresh chain, then rerun Seg2 and Seg3 with a new input
+vector without transplanting captured fields. A successful replay must then be
+checked against a new live directory/reader matrix; matching the old captured
+body alone is insufficient.
