@@ -1,0 +1,49 @@
+{
+  "evidence_id": "vm9_clock_model_replay_20261001",
+  "platform": "bytedance.tomato",
+  "scope": "same-capture VM9 Seg3 native clock callback replay",
+  "capture_date": "2026-10-01",
+  "source_hashes": {
+    "python_runner_sha256": "361c69e65184f5cd107136bf4e09512b068bf87c7c037e15acb470f7edb3cb52",
+    "unidbg_hook_sha256": "f0439b97a23ec552ff57d1c3c2584a373ee543898221a183eb5916b64d5343cd",
+    "trace_sha256": "cc6a7386813b59bbdd591ee11ed6d282d4b207d18e6e998728827ffbedc39ce1"
+  },
+  "private_log_hashes": {
+    "wrong_clock_model_sha256": "d19f33ee67aab7cd6aed2828e419e879bbc105e52b6e812c08ba86403efadde3",
+    "fixed_clock_model_sha256": "f0242fba7dd7e1031f2b4d00586d3c56d6317722cc2e4d7a113a30c2e3595dfd"
+  },
+  "callback": {
+    "ordinal": 86,
+    "wrapper": "0x12545f60",
+    "clock_function": "0x125514d0",
+    "elapsed_function": "0x12551488",
+    "timespec_function": "0x125e94b0",
+    "clock_plt": "0x12608450",
+    "clock_id": 1,
+    "timespec_pointer": "0xe4ffd878",
+    "saved_start_ns": 123456789000000,
+    "result_slot": "0xe4ffe630"
+  },
+  "native_arithmetic": [
+    "0x125e9508: current_ns = tv_sec * 1000000000 + tv_nsec",
+    "0x125514a4: elapsed_ns = current_ns - saved_start_ns",
+    "0x125514e0: result = signed_divide(elapsed_ns, 1000)",
+    "0x12545f70: store result in callback result slot"
+  ],
+  "wrong_model": {
+    "clock_1_timespec": [1790261111, 111000000],
+    "callback_result": "0x65c1ee6fc2350",
+    "first_divergence_event": 1028
+  },
+  "matching_model": {
+    "clock_1_timespec": [123456, 789000000],
+    "callback_result": 0,
+    "slot_override_used": false,
+    "seg3_events": "1057/1057",
+    "native_callbacks": 87,
+    "clock_gettime_syscalls": 2,
+    "callback_page_injections": 0
+  },
+  "redaction": "Raw logs, memory snapshots, URLs, request headers, identifiers, tokens, and response bodies are omitted.",
+  "boundary": "The frozen monotonic-clock model closes callback 86 for one captured input. Full host-memory handoffs and captured native ARM64 images remain dependencies; this is not a fresh-input pure-Python Medusa signer."
+}

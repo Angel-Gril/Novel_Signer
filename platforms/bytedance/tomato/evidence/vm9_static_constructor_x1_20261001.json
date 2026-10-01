@@ -1,0 +1,67 @@
+{
+  "evidence_id": "vm9_static_constructor_x1_20261001",
+  "platform": "bytedance.tomato",
+  "scope": "current VM9 constructor x1 parameter replay for the second captured URL",
+  "capture_date": "2026-10-01",
+  "source_hashes": {
+    "runner_sha256": "8e1f2b031091d0588dcab46368c2f6b6ca8b1151bf2e890bfeb418b4bc2aa741",
+    "trace_sha256": "39e135db4d16da856b2095f445e899e565f523c390df6d986cfac1cdcfefa6ce",
+    "dynamic_pointer_failure_log_sha256": "aeaadcf68a2fe274ee8e9c8b1f0a85dc3b37f72432c15416cb67dc0ccaa3d7ef",
+    "static_seg2_log_sha256": "64e2850a6bbb1e69f87b6c340508e75ed57f0f018544ed42e715b7545101f5cf",
+    "static_seg2_checkpoint_log_sha256": "5b237e8d7aa0b9f5e775da9f3646ee4bf5e13aca4ec3e739eb9c967bf442de2e",
+    "static_seg2_checkpoint_sha256": "86a379cca5c8f98cd5c47ac79d001e3a82de3ff2db2263eaaf9a814f027dd3cd",
+    "static_seg3_with_next2_m0_log_sha256": "3b818545cae95fad485552bac5fc2bdfc5c6446a57b361e8adef05718c4b960e",
+    "static_seg3_without_handoff_log_sha256": "5128878e29cc35b78c03a966d3627d935e00bf401994137a121a49a81ecedf8f",
+    "next2_m0_sha256": "e6d09c23061ab0b449a7e971dc99cdde65acc898f6fa02b52f25fbda61434d16"
+  },
+  "constructor_static_analysis": {
+    "function": "0x12508344",
+    "observed_sequence": [
+      "when x1 is nonzero, call the native strlen helper at 0x12607f40",
+      "allocate strlen(x1) + 1 bytes through 0x12607fd0",
+      "copy the string through 0x12607f60"
+    ],
+    "historical_dynamic_x1": "0x1296ba90",
+    "static_x1": "0x1232fe64",
+    "interpretation": "0x1296ba90 is an allocator dynamic-area address from the captured run, not a stable constructor string argument. The static replay uses the same-capture trace pointer instead."
+  },
+  "replay_matrix": {
+    "historical_dynamic_pointer": {
+      "first_divergence": {
+        "trace_event": 13,
+        "register": "r2",
+        "actual": "0x0",
+        "expected": "0x122a0d00"
+      },
+      "status": "failed diagnostic replay"
+    },
+    "static_pointer_seg2": {
+      "handoff": "next_1",
+      "events": "90385/90385",
+      "native_callbacks": 121,
+      "syscalls": 0,
+      "status": "passed trace-assisted diagnostic replay"
+    },
+    "static_checkpoint_page_comparison": {
+      "compared_pages": 10,
+      "different_pages": 2,
+      "different_bytes": 153,
+      "different_page_ranges": ["0xe4ffb000", "0xe4ffd000"],
+      "interpretation": "allocator, object, string, and VM data pages matched the next-2 handoff sample; the remaining differences were confined to synthetic/native stack pages in this comparison"
+    },
+    "static_checkpoint_seg3_without_handoff": {
+      "first_failure": "callback 9 native fetch at pc=0x1d",
+      "status": "failed; full host handoff not removed"
+    },
+    "static_checkpoint_seg3_with_next2_m0": {
+      "handoff": "next_2/vm9_m0.bin",
+      "events": "1057/1057",
+      "native_callbacks": 87,
+      "clock_gettime_syscalls": 2,
+      "clock_slot_override": false,
+      "callback_page_injections": 0,
+      "status": "passed trace-assisted diagnostic replay"
+    }
+  },
+  "boundary": "The static constructor argument removes the known early divergence for this second captured input and carries the VM through Seg2. Seg3 still depends on captured next-2 native state in this runner. This is not a fresh-input pure-Python current-Medusa signer and does not enable the no-JVM Rust path."
+}

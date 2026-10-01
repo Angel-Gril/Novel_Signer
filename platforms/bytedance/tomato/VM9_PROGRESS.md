@@ -103,15 +103,83 @@ trace-assisted diagnostic and not a fresh-input, pure-Python Medusa proof. The
 sanitized record is
 [evidence/vm9_handoff_probe_20260930.json](evidence/vm9_handoff_probe_20260930.json).
 
+## Callback 86 clock-slot provenance (2026-09-30)
+
+The earlier `0xe4ffe630` boundary was then watched in a real Unidbg run. At
+entry to callback function `0x12545f60`, the slot contained `0x67e0c91`. The
+native callback returned `x0=0`, and the write hook observed an 8-byte zero
+store at `0xe4ffe630` from PC `0x12545f70`. The captured code at that PC is:
+
+```text
+0x12545f60: stp x30, x19, [sp, #-0x10]!
+0x12545f64: mov x19, x0
+0x12545f68: ldp x8, x0, [x0]
+0x12545f6c: blr x8
+0x12545f70: str x0, [x19, #0x10]
+```
+
+This identifies the zero as the ordinary result store performed by the native
+callback wrapper after the indirect clock function returns. It is not an
+unexplained Java-side or host-memory transplant. The sanitized record is
+[evidence/vm9_clockslot_native_write_20260930.json](evidence/vm9_clockslot_native_write_20260930.json).
+
+The offline `--clock-slot-zero` replay therefore modeled a real native store,
+but it remains a diagnostic replay.
+
+## Native clock model replay (2026-10-01)
+
+The callback-86 path was traced through `0x125514d0 -> 0x12551488 ->
+0x125e94b0 -> clock_gettime(1)`. The native helper converts the timespec to
+nanoseconds, subtracts the saved start value `123456789000000` ns, then divides
+the signed difference by 1000. The offline runner had supplied its wall-clock
+timespec to clock ID 1. A same-input failure run returned a nonzero callback
+result and diverged at VM event 1,028.
+
+The runner now matches the real Unidbg handler: clock ID 0 uses the frozen wall
+clock; nonzero IDs use the frozen monotonic value `123456789000000` ns. With
+`--clock-slot-zero` disabled and no callback-page injection, the same Seg3
+snapshot reached `1057/1057` events and 87 callbacks. Callback 86 naturally
+returned zero and the native wrapper wrote it to `0xe4ffe630`. The sanitized
+paired evidence is
+[evidence/vm9_clock_model_replay_20261001.json](evidence/vm9_clock_model_replay_20261001.json).
+
+This closes the clock-model discrepancy for one captured input. The runner
+still depends on full memory handoffs and native ARM64 images from that run;
+it is not yet a fresh-input pure-Python signer.
+
+## Static constructor argument replay (2026-10-01)
+
+The second captured URL exposed a concrete constructor-argument error in the
+independent runner. Native constructor `0x12508344` treats nonzero `x1` as a
+string pointer: it calls the length helper at `0x12607f40`, allocates
+`strlen(x1)+1` through `0x12607fd0`, and copies through `0x12607f60`. The old
+diagnostic used `0x1296ba90`, an allocator dynamic-area address. The same-capture
+trace supplies `0x1232fe64` as the static argument for this replay.
+
+The old dynamic pointer failed at trace event 13 with `r2=0` instead of
+`0x122a0d00`. Re-running with `x1=0x1232fe64` completed Seg2 at
+`90385/90385` events and 121 native callbacks. The resulting checkpoint matched
+the ten captured `NEXT#2` handoff pages except for 153 bytes in two synthetic
+native-stack pages. Starting Seg3 directly from that checkpoint still failed at
+callback 9, so the full host handoff has not been removed. Supplying the
+captured `NEXT#2/vm9_m0.bin` image allowed Seg3 to complete at `1057/1057`
+events and 87 callbacks, with two clock syscalls and no clock-slot override or
+callback-page injection.
+
+This is a constructor-boundary improvement for one captured input, not a
+parameterized signer. It still depends on captured native state for Seg3 and
+does not change the pure-Python current-Medusa or no-JVM Rust status. The
+sanitized evidence record is
+[evidence/vm9_static_constructor_x1_20261001.json](evidence/vm9_static_constructor_x1_20261001.json).
+
 ## Meaning for the deliverables
 
 - Seg2 has complete diagnostic runs (`90161/90161` with the historical branch
   transplant and `90153/90153` from a fresh same-run host handoff), but it is
   not an independent pure-Python parameterization.
-- Seg3 now reaches the clock boundary at callback 86 for a fresh same-run
-  handoff after one explicit clock-result-slot override, while the older
-  page-assisted replay remains complete only for its captured sample. Neither
-  is a general current-version signer.
+- Seg3 now completes `1057/1057` from the same-run handoff without a clock-slot
+  override. The older page-assisted replay remains complete only for its
+  captured sample. Neither is a general current-version signer.
 - The old 225-byte Python Medusa implementation remains valid only for its old
   snapshot vectors.
 - The no-JVM Rust crate must continue to return an explicit unavailable error
@@ -120,8 +188,7 @@ sanitized record is
 
 ## Next experiment
 
-The next useful experiment is to model the allocator's slab acquisition and
-bitmap updates from a fresh chain, then rerun Seg2 and Seg3 with a new input
-vector without transplanting captured fields. A successful replay must then be
+Take a second fresh URL/input capture and rerun Seg1 through Seg3 with paired
+host handoffs and no callback-page or field transplants. A successful replay must then be
 checked against a new live directory/reader matrix; matching the old captured
 body alone is insufficient.

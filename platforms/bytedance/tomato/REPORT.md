@@ -60,12 +60,43 @@ A fresh same-run capture was then replayed with full host handoff snapshots.
 Seg1 reached `4592/4592` events and 85 callbacks, Seg2 reached
 `90153/90153` events and 121 callbacks without callback-page injection or an
 allocator-field transplant, and Seg3 reached callback 86 before the first
-unexplained clock-result slot. Setting the trace-observed zero at
-`0xe4ffe630` as an explicit diagnostic override completes Seg3 at
-`1057/1057` events and 87 callbacks. These snapshots and the override prove
-the segment and host handoff boundary for that capture; they are still
-captured state and do not establish a fresh-input pure-Python signer. See
-[evidence/vm9_handoff_probe_20260930.json](evidence/vm9_handoff_probe_20260930.json).
+unexplained clock-result slot. A real Unidbg write watch then observed callback
+function `0x12545f60` store `x0=0` to `0xe4ffe630` at PC `0x12545f70`; the
+captured instruction is `str x0, [x19, #0x10]`. The slot is therefore the
+native callback result field, rather than an unexplained host transplant. The
+earlier explicit-slot-zero replay models this real store and completes Seg3 at
+`1057/1057` events and 87 callbacks. These are still captured-state
+diagnostics and do not establish a fresh-input pure-Python signer. See
+[evidence/vm9_handoff_probe_20260930.json](evidence/vm9_handoff_probe_20260930.json)
+and [evidence/vm9_clockslot_native_write_20260930.json](evidence/vm9_clockslot_native_write_20260930.json).
+
+Instruction-level tracing then identified the offline mismatch: callback 86
+calls `clock_gettime(1)` and computes `(current_ns - saved_start_ns) / 1000`,
+while the offline runner had supplied a wall-clock timespec to clock ID 1.
+Matching the bridge's frozen monotonic value (`123456789000000` ns) let Seg3
+complete `1057/1057` events and 87 callbacks without any clock-result-slot
+override or callback-page injection. This closes the clock discrepancy for
+one captured request, but the replay still uses captured full-memory handoffs
+and native ARM64 images. See
+[evidence/vm9_clock_model_replay_20261001.json](evidence/vm9_clock_model_replay_20261001.json).
+
+The second captured URL then closed a separate constructor-input mistake in
+the diagnostic runner. Native constructor `0x12508344` uses nonzero `x1` as a
+string pointer, calling the length helper at `0x12607f40`, allocating through
+`0x12607fd0`, and copying through `0x12607f60`. The previous replay supplied
+`0x1296ba90`, which is an allocator dynamic-area address. Replaying with the
+same-capture static pointer `0x1232fe64` removed the old trace-13 divergence
+and completed Seg2 at `90385/90385` events with 121 native callbacks.
+
+The resulting checkpoint matched the captured `NEXT#2` page set except for
+153 bytes in two synthetic stack pages. Seg3 still failed when started with
+no handoff, at callback 9; loading the captured `NEXT#2/vm9_m0.bin` state let
+the same checkpoint complete Seg3 at `1057/1057` events and 87 callbacks,
+without a clock-slot override or callback-page injection. This narrows the
+remaining dependency to the host/native handoff boundary for this sample, but
+it is still trace-assisted evidence. It does not establish a fresh-input
+pure-Python current-Medusa signer or enable the no-JVM Rust implementation.
+See [evidence/vm9_static_constructor_x1_20261001.json](evidence/vm9_static_constructor_x1_20261001.json).
 
 The bridge-level parameter and time checks are now separated from that open proof. Repeating the same URL, frozen timestamp, and emulated PID produced the same Medusa digest. Changing the URL, timestamp, or emulated PID changed the Medusa digest or branch length, so those values are real bridge inputs rather than ignored placeholders. Five frozen timestamp trials signed successfully and returned HTTP 200 from the detail endpoint. This closes the timestamp-freeze question for the Java/Unidbg bridge; it does not make the current VM a pure-Python signer. The sanitized matrix is in [EVIDENCE_INDEX.json](EVIDENCE_INDEX.json).
 

@@ -280,6 +280,33 @@
         "interpretation": "same-run trace-assisted replay; Seg3 completes only with one explicit host-return slot override; independent current Medusa parameterization remains false",
         "seg3_callbacks_with_override": 87,
         "clock_result_slot_override": "0xe4ffe630=0"
+      },
+      "static_constructor_x1": {
+        "evidence_file": "evidence/vm9_static_constructor_x1_20261001.json",
+        "runner_sha256": "8e1f2b031091d0588dcab46368c2f6b6ca8b1151bf2e890bfeb418b4bc2aa741",
+        "dynamic_pointer": "0x1296ba90",
+        "static_pointer": "0x1232fe64",
+        "dynamic_first_divergence": {
+          "trace_event": 13,
+          "register": "r2",
+          "actual": "0x0",
+          "expected": "0x122a0d00"
+        },
+        "seg2": {
+          "events": "90385/90385",
+          "callbacks": 121,
+          "handoff": "next_1"
+        },
+        "seg3": {
+          "without_handoff": "callback 9 native fetch at pc=0x1d",
+          "with_next2_m0": {
+            "events": "1057/1057",
+            "callbacks": 87,
+            "clock_slot_override": false,
+            "callback_page_injections": 0
+          }
+        },
+        "interpretation": "constructor boundary narrowed for one captured input; current pure-Python Medusa remains incomplete"
       }
     },
     "allocator_audit": {
@@ -374,5 +401,61 @@
       "seg3_clock_boundary_sha256": "62D67F5AAA2C371C49E10A28269B01BA3EDA6D0D25B2BF24A59A47EDB92FF56D"
     },
     "interpretation": "The corrected Seg1 runner and same-run full host handoffs reproduce Seg1 and Seg2 without callback-page injection. Seg3 reproduces all 1057 events only after one explicit callback-86 clock-result-slot override; without it the first unexplained boundary is event 1028. This remains trace-assisted diagnostic evidence, not a fresh-input pure-Python Medusa proof."
+  },
+  "vm9_clockslot_provenance": {
+    "evidence": "evidence/vm9_clockslot_native_write_20260930.json",
+    "callback": "0x12545f60",
+    "slot": "0xe4ffe630",
+    "entry_value": "0x67e0c91",
+    "native_store": {
+      "pc": "0x12545f70",
+      "instruction": "str x0, [x19, #0x10]",
+      "x0": "0x0",
+      "size": 8,
+      "value": "0x0"
+    },
+    "interpretation": "A real Unidbg write watch proves the zero slot is the native callback result store after the indirect clock function returns. The prior offline slot-zero override models this store; it is not evidence of a general current-version pure-Python Medusa implementation."
+  },
+  "vm9_clock_model_replay": {
+    "evidence": "evidence/vm9_clock_model_replay_20261001.json",
+    "clock_id": 1,
+    "saved_start_ns": 123456789000000,
+    "matching_timespec": [
+      123456,
+      789000000
+    ],
+    "callback_86_result": 0,
+    "slot_override_used": false,
+    "seg3_events": "1057/1057",
+    "native_callbacks": 87,
+    "uses_captured_full_memory_handoffs": true,
+    "independent_current_parameterization": false
+  },
+  "vm9_static_constructor_x1": {
+    "evidence_file": "evidence/vm9_static_constructor_x1_20261001.json",
+    "runner_sha256": "8e1f2b031091d0588dcab46368c2f6b6ca8b1151bf2e890bfeb418b4bc2aa741",
+    "dynamic_pointer": "0x1296ba90",
+    "static_pointer": "0x1232fe64",
+    "dynamic_first_divergence": {
+      "trace_event": 13,
+      "register": "r2",
+      "actual": "0x0",
+      "expected": "0x122a0d00"
+    },
+    "seg2": {
+      "events": "90385/90385",
+      "callbacks": 121,
+      "handoff": "next_1"
+    },
+    "seg3": {
+      "without_handoff": "callback 9 native fetch at pc=0x1d",
+      "with_next2_m0": {
+        "events": "1057/1057",
+        "callbacks": 87,
+        "clock_slot_override": false,
+        "callback_page_injections": 0
+      }
+    },
+    "interpretation": "constructor boundary narrowed for one captured input; current pure-Python Medusa remains incomplete"
   }
 }

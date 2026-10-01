@@ -1,0 +1,48 @@
+{
+  "evidence_id": "vm9_clockslot_native_write_20260930",
+  "platform": "bytedance.tomato",
+  "scope": "same-run VM9 Seg3 callback 86 clock-result slot provenance",
+  "capture": {
+    "date": "2026-09-30",
+    "runner_log_sha256": "dcfb071c455becada8a6e1b1b30d64bb297fa5a14b9880d857723f8edcaead91",
+    "hook_source_sha256": "f0439b97a23ec552ff57d1c3c2584a373ee543898221a183eb5916b64d5343cd",
+    "offline_runner_source_sha256": "2027ab4b501126ad55ffc008e90838b68231c7ad8b4a686caaae9e827b5582e7",
+    "redaction": "Raw run output, URLs, request headers, identifiers, tokens, and response bodies are omitted."
+  },
+  "real_unidbg_observation": {
+    "callback_function": "0x12545f60",
+    "callback_argument": "0xe4ffe620",
+    "callback_entry_slot_before": {
+      "address": "0xe4ffe630",
+      "value": "0x67e0c91"
+    },
+    "clock_timespec_pointer": "0xe4ffd878",
+    "clock_wrapper_object": "0xe4ffe620",
+    "write": {
+      "address": "0xe4ffe630",
+      "size": 8,
+      "value": "0x0",
+      "pc": "0x12545f70",
+      "lr": "0x12545f70",
+      "sp": "0xe4ffd8e0",
+      "x0_at_store": "0x0"
+    }
+  },
+  "disassembly": {
+    "address": "0x12545f70",
+    "instruction": "str x0, [x19, #0x10]",
+    "preceding_sequence": [
+      "0x12545f60: stp x30, x19, [sp, #-0x10]!",
+      "0x12545f64: mov x19, x0",
+      "0x12545f68: ldp x8, x0, [x0]",
+      "0x12545f6c: blr x8",
+      "0x12545f70: str x0, [x19, #0x10]"
+    ],
+    "code_image": "fresh_vm9_fullhandoffs_20260930/vm9_m0.bin"
+  },
+  "conclusion": {
+    "slot_provenance": "The zero at 0xe4ffe630 is written by the native callback wrapper after the indirect clock function returns zero; it is not a host-side field transplant.",
+    "offline_replay_implication": "The prior --clock-slot-zero run modeled a real native store. The remaining offline mismatch came from the synthetic clock source returning a nonzero elapsed value, not from an unknown host write.",
+    "boundary": "This closes the provenance question for this captured run. It does not prove current-version Medusa parameterization or a fresh-input pure-Python signer."
+  }
+}
