@@ -295,7 +295,8 @@
         "seg2": {
           "events": "90385/90385",
           "callbacks": 121,
-          "handoff": "next_1"
+          "handoff": "next_1",
+          "paired_recheck_evidence": "evidence/vm9_dispatcher_slot_refutation_20261001.json"
         },
         "seg3": {
           "without_handoff": "callback 9 native fetch at pc=0x1d",
@@ -303,7 +304,8 @@
             "events": "1057/1057",
             "callbacks": 87,
             "clock_slot_override": false,
-            "callback_page_injections": 0
+            "callback_page_injections": 0,
+            "paired_recheck_evidence": "evidence/vm9_dispatcher_slot_refutation_20261001.json"
           }
         },
         "interpretation": "constructor boundary narrowed for one captured input; current pure-Python Medusa remains incomplete"
@@ -457,5 +459,17 @@
       }
     },
     "interpretation": "constructor boundary narrowed for one captured input; current pure-Python Medusa remains incomplete"
+  },
+  "vm9_dispatcher_slot_refutation": {
+    "evidence_file": "evidence/vm9_dispatcher_slot_refutation_20261001.json",
+    "clean_runner_sha256": "8e1f2b031091d0588dcab46368c2f6b6ca8b1151bf2e890bfeb418b4bc2aa741",
+    "paired_seg2": {
+      "events": "90385/90385",
+      "callbacks": 121,
+      "handoff": "next_1",
+      "checkpoint_sha256": "86a379cca5c8f98cd5c47ac79d001e3a82de3ff2db2263eaaf9a814f027dd3cd"
+    },
+    "refuted_model": "e4ffc9a0 is not a directly readable Python R2 backing slot; the continuation/backing-readback branch created the mismatch.",
+    "independent_current_parameterization": false
   }
 }

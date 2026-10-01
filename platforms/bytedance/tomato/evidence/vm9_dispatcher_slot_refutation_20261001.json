@@ -1,0 +1,54 @@
+{
+  "evidence_id": "vm9_dispatcher_slot_refutation_20261001",
+  "platform": "bytedance.tomato",
+  "scope": "VM9 Seg2 input-pairing and dispatcher-continuation diagnostic",
+  "capture_date": "2026-10-01",
+  "source_hashes": {
+    "clean_runner_sha256": "8e1f2b031091d0588dcab46368c2f6b6ca8b1151bf2e890bfeb418b4bc2aa741",
+    "experimental_runner_sha256": "8ac744490e44d8c15a482a5b9018fc98cf5bbfe54b48b79d48f09a8894443bb2",
+    "trace_sha256": "39e135db4d16da856b2095f445e899e565f523c390df6d986cfac1cdcfefa6ce",
+    "input_checkpoint_sha256": "95a45408a76f4e861de9ea17e05d2d51253b6188e7ef3a0726e11811940d1cd3",
+    "next1_m0_sha256": "26f2b80e05dd54a87523b8bc3f35b72d12046adfd0551e7b71f2ff60c8ae70cd",
+    "historical_log_sha256": "64e2850a6bbb1e69f87b6c340508e75ed57f0f018544ed42e715b7545101f5cf",
+    "recheck_log_sha256": "b0ff8905c747160ba2e13c6443cac08afc7ff602ad010710a5ad3d6691b58bc6",
+    "experimental_failure_log_sha256": "818376d30540f69940234c7ea797af7d938b6c720270afc244f693b5207004e1"
+  },
+  "paired_replay": {
+    "segment": 2,
+    "input_checkpoint": "mem_after_seg1_offline.pkl",
+    "host_handoff": "next_1",
+    "register_backing_sync": "none",
+    "events": "90385/90385",
+    "native_callbacks": 121,
+    "checkpoint_sha256": "86a379cca5c8f98cd5c47ac79d001e3a82de3ff2db2263eaaf9a814f027dd3cd",
+    "log_comparison": "The recheck and historical logs are identical through the summary; the recheck only adds its checkpoint line.",
+    "seg3_recheck": {
+      "input_checkpoint_sha256": "86a379cca5c8f98cd5c47ac79d001e3a82de3ff2db2263eaaf9a814f027dd3cd",
+      "host_handoff": "next_2",
+      "next2_m0_sha256": "e6d09c23061ab0b449a7e971dc99cdde65acc898f6fa02b52f25fbda61434d16",
+      "events": "1057/1057",
+      "native_callbacks": 87,
+      "clock_gettime_syscalls": 2,
+      "callback_page_injections": 0,
+      "clock_slot_override": false,
+      "log_sha256": "36f54fedf064eb54e57f3beec498c475583015b6bf954337533c8764391512b6"
+    }
+  },
+  "dispatcher_diagnostic": {
+    "experimental_changes": [
+      "callback 0x12548a4c returned to 0x1242aa4c instead of the isolated sentinel",
+      "dispatcher scratch registers were injected",
+      "all native register backing slots were read back into the Python VM",
+      "execution was stopped before 0x125083e0"
+    ],
+    "observed_failure": {
+      "callback": 1,
+      "trace_event": 13,
+      "e4ffc9a0": "0x0",
+      "actual_r2": "0x0",
+      "expected_r2": "0x122a0d00"
+    },
+    "interpretation": "The continuation experiment does not prove that e4ffc9a0 is the R2 backing slot. The stable paired replay completes without that continuation injection; e4ffc9a0 is a native/host boundary object slot whose value is materialized by the captured handoff path."
+  },
+  "status": "paired captured-state diagnostic; no fresh-input pure-Python current-Medusa claim"
+}

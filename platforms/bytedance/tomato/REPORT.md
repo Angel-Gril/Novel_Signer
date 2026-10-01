@@ -98,6 +98,15 @@ it is still trace-assisted evidence. It does not establish a fresh-input
 pure-Python current-Medusa signer or enable the no-JVM Rust implementation.
 See [evidence/vm9_static_constructor_x1_20261001.json](evidence/vm9_static_constructor_x1_20261001.json).
 
+The `90385/90385` result is reproducible only with its paired Seg1 checkpoint
+and `NEXT#1` handoff. A later continuation experiment that returned callback
+`0x12548a4c` through the native dispatcher and copied all register backing
+slots into the Python VM produced `R2=0` at the first boundary; the trace
+expects `0x122a0d00`. That experiment is refuted as a register model. The
+stable replay completes without it, and the boundary slot `e4ffc9a0` must be
+treated as native/host state. See
+[evidence/vm9_dispatcher_slot_refutation_20261001.json](evidence/vm9_dispatcher_slot_refutation_20261001.json).
+
 The bridge-level parameter and time checks are now separated from that open proof. Repeating the same URL, frozen timestamp, and emulated PID produced the same Medusa digest. Changing the URL, timestamp, or emulated PID changed the Medusa digest or branch length, so those values are real bridge inputs rather than ignored placeholders. Five frozen timestamp trials signed successfully and returned HTTP 200 from the detail endpoint. This closes the timestamp-freeze question for the Java/Unidbg bridge; it does not make the current VM a pure-Python signer. The sanitized matrix is in [EVIDENCE_INDEX.json](EVIDENCE_INDEX.json).
 
 The local bridge performance sweep measured 23.165 seconds before the current optimization and 10.546 seconds after it for the same input, with the same Medusa digest. This is a bridge runtime result only. It does not change the no-JVM capability boundary.

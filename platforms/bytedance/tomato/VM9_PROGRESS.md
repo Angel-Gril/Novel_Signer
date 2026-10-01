@@ -172,10 +172,40 @@ does not change the pure-Python current-Medusa or no-JVM Rust status. The
 sanitized evidence record is
 [evidence/vm9_static_constructor_x1_20261001.json](evidence/vm9_static_constructor_x1_20261001.json).
 
+## Dispatcher continuation and input-pairing correction (2026-10-01)
+
+The successful `90385/90385` Seg2 result requires the paired input set used by
+the evidence record: the corrected Seg1 checkpoint, the same-capture `NEXT#1`
+handoff, and the clean runner whose SHA256 is
+`8e1f2b031091d0588dcab46368c2f6b6ca8b1151bf2e890bfeb418b4bc2aa741`. A fresh
+recheck with that tuple reproduced 121 callbacks and the existing checkpoint
+SHA256 `86a379cca5c8f98cd5c47ac79d001e3a82de3ff2db2263eaaf9a814f027dd3cd`.
+Running the raw trial memory files as if they were the same input is invalid:
+their allocator state is different and the transition cleanup fails before
+Seg2.
+
+Starting that rechecked checkpoint with the paired `NEXT#2` handoff also
+reached `1057/1057` Seg3 events and 87 callbacks, with two `clock_gettime`
+syscalls, no callback-page injection, and no clock-slot override. This is the
+same captured-state boundary proof as the existing static-constructor record,
+not a fresh-input signer.
+
+The later continuation experiment was a diagnostic branch, not a replacement
+runner. It changed callback `0x12548a4c` to return through `0x1242aa4c`, injected
+dispatcher scratch registers, copied native backing slots into the Python VM,
+and stopped before `0x125083e0`. That branch observed
+`e4ffc9a0=0` and `R2=0` while the trace expected `R2=0x122a0d00`; the full
+backing readback therefore created a false register interpretation. The
+paired clean replay completes without that injection. `e4ffc9a0` is a native
+boundary object slot, not a directly readable Python R2 backing slot. The
+sanitized diagnostic record is
+[evidence/vm9_dispatcher_slot_refutation_20261001.json](evidence/vm9_dispatcher_slot_refutation_20261001.json).
+
 ## Meaning for the deliverables
 
-- Seg2 has complete diagnostic runs (`90161/90161` with the historical branch
-  transplant and `90153/90153` from a fresh same-run host handoff), but it is
+- Seg2 has complete captured diagnostic runs (`90161/90161` with the
+  historical branch transplant, `90153/90153` from a fresh same-run host
+  handoff, and `90385/90385` for the static-constructor second URL), but it is
   not an independent pure-Python parameterization.
 - Seg3 now completes `1057/1057` from the same-run handoff without a clock-slot
   override. The older page-assisted replay remains complete only for its
