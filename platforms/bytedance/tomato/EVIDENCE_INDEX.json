@@ -471,5 +471,44 @@
     },
     "refuted_model": "e4ffc9a0 is not a directly readable Python R2 backing slot; the continuation/backing-readback branch created the mismatch.",
     "independent_current_parameterization": false
+  },
+  "vm9_op29_generic_20261001": {
+    "evidence_file": "evidence/vm9_op29_generic_20261001.json",
+    "interpreter_sha256": "c37d89d47cf6c3318d6a70075c855b945e1cda65c48b5a0215d4ee4d961abc76",
+    "handler_offset": "0x16e8f0",
+    "opcode": 29,
+    "subopcode": 34,
+    "mnemonic": "BLEZ",
+    "branch_rule": "signed(R[source]) <= 0: BCP += 4 + imm * 4; otherwise BCP += 4",
+    "trace_specific_override_removed": "0x1800811d",
+    "second_input": {
+      "trace_key": "9a6f0#3",
+      "trace_event": 119035,
+      "instruction": "0x1800811d",
+      "source_register": "R2",
+      "immediate": 208,
+      "bcp_before": "0x123ceadc",
+      "bcp_after": "0x123cee20",
+      "equation": "0x123ceadc + 4 + 208 * 4 = 0x123cee20",
+      "frozen_timestamp_ms": 1790261112000,
+      "emulated_pid": "0x2c4c"
+    },
+    "seg2": {
+      "events": "90385/90385",
+      "native_callbacks": 121,
+      "handoff": "next_1",
+      "callback_page_injections": 0,
+      "allocator_field_transplants": 0
+    },
+    "seg3": {
+      "events": "1057/1057",
+      "native_callbacks": 87,
+      "clock_gettime_syscalls": 2,
+      "handoff": "next_2",
+      "clock_slot_override": false,
+      "callback_page_injections": 0,
+      "allocator_field_transplants": 0
+    },
+    "independent_current_parameterization": false
   }
 }

@@ -201,6 +201,33 @@ boundary object slot, not a directly readable Python R2 backing slot. The
 sanitized diagnostic record is
 [evidence/vm9_dispatcher_slot_refutation_20261001.json](evidence/vm9_dispatcher_slot_refutation_20261001.json).
 
+## OP29 generic rule and second-input recheck (2026-10-01)
+
+The native handler at `libmetasec_ml_71332.so + 0x16e8f0` was disassembled as
+OP29/sub34, a signed `BLEZ` branch. Its source register is
+`((dw >> 27) & 0x10) | ((dw >> 7) & 0x0f)` and its 16-bit branch immediate is
+assembled from the five encoded fields. The VM advances by `4 + imm * 4` only
+when the signed source value is non-positive; otherwise it advances by four.
+The old `dw == 0x1800811d` fixed-jump special case was removed.
+
+A second URL capture then exercised that exact encoding at trace event 119035:
+the source was `R2`, the decoded immediate was `208`, and the native write at
+`+0x16eaa4` changed BCP from `0x123ceadc` to `0x123cee20`:
+
+```text
+0x123ceadc + 4 + 208 * 4 = 0x123cee20
+```
+
+With the generic rule, the paired second-input replay reached `90385/90385`
+Seg2 events and 121 native callbacks from `NEXT#1`, then `1057/1057` Seg3
+events and 87 callbacks from `NEXT#2`. The clean recheck used no callback-page
+injection, allocator-field transplant, clock-slot override, or dispatcher
+backing-slot injection. This closes the OP29 decoder/branch assumption for the
+captured pair. It still consumes captured host handoffs and native ARM64
+images, so it does not close current pure-Python Medusa parameterization.
+The sanitized record is
+[evidence/vm9_op29_generic_20261001.json](evidence/vm9_op29_generic_20261001.json).
+
 ## Meaning for the deliverables
 
 - Seg2 has complete captured diagnostic runs (`90161/90161` with the
@@ -218,7 +245,7 @@ sanitized diagnostic record is
 
 ## Next experiment
 
-Take a second fresh URL/input capture and rerun Seg1 through Seg3 with paired
-host handoffs and no callback-page or field transplants. A successful replay must then be
-checked against a new live directory/reader matrix; matching the old captured
-body alone is insufficient.
+Use a new fresh URL/input capture to carry the native constructor, allocator,
+and host handoff state through Seg1–Seg3 without loading captured `NEXT#1` or
+`NEXT#2` memory. The resulting body must then be checked against a new live
+directory/reader matrix; matching a captured body alone is insufficient.

@@ -107,6 +107,26 @@ stable replay completes without it, and the boundary slot `e4ffc9a0` must be
 treated as native/host state. See
 [evidence/vm9_dispatcher_slot_refutation_20261001.json](evidence/vm9_dispatcher_slot_refutation_20261001.json).
 
+The opcode assumption that caused the second-input failure is now closed. The
+handler at `+0x16e8f0` is OP29/sub34, a signed `BLEZ` branch. For an encoded
+instruction, the source register is selected from the high and low register
+fields, the branch immediate is assembled from the five VM bit fields, and the
+next BCP is `BCP + 4 + imm*4` only when the signed source value is non-positive.
+There is no instruction-specific fixed jump. In the second independent capture,
+`0x1800811d` decoded to source `R2` and immediate `208`; native execution moved
+BCP from `0x123ceadc` to `0x123cee20`, exactly matching
+`0x123ceadc + 4 + 208*4`.
+
+The clean paired recheck reached `90385/90385` Seg2 events and 121 callbacks,
+then `1057/1057` Seg3 events and 87 callbacks, with `NEXT#1`/`NEXT#2` handoffs
+and no callback-page injection, allocator-field transplant, clock-slot override,
+or dispatcher backing-slot injection. This is strong evidence that OP29 is now
+generic across the two captured inputs. It remains trace-assisted: the replay
+still consumes captured host handoffs and native ARM64 images, so current
+pure-Python Medusa parameterization and the no-JVM Rust signer remain open. The
+sanitized details are in
+[evidence/vm9_op29_generic_20261001.json](evidence/vm9_op29_generic_20261001.json).
+
 The bridge-level parameter and time checks are now separated from that open proof. Repeating the same URL, frozen timestamp, and emulated PID produced the same Medusa digest. Changing the URL, timestamp, or emulated PID changed the Medusa digest or branch length, so those values are real bridge inputs rather than ignored placeholders. Five frozen timestamp trials signed successfully and returned HTTP 200 from the detail endpoint. This closes the timestamp-freeze question for the Java/Unidbg bridge; it does not make the current VM a pure-Python signer. The sanitized matrix is in [EVIDENCE_INDEX.json](EVIDENCE_INDEX.json).
 
 The local bridge performance sweep measured 23.165 seconds before the current optimization and 10.546 seconds after it for the same input, with the same Medusa digest. This is a bridge runtime result only. It does not change the no-JVM capability boundary.

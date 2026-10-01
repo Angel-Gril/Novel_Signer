@@ -1,0 +1,59 @@
+{
+  "evidence_id": "vm9_op29_generic_20261001",
+  "platform": "bytedance.tomato",
+  "scope": "current VM9 OP29 handler identification and second-input generic replay",
+  "capture_date": "2026-10-01",
+  "source_hashes": {
+    "interpreter_sha256": "C37D89D47CF6C3318D6A70075C855B945E1CDA65C48B5A0215D4EE4D961ABC76",
+    "trace_sha256": "39E135DB4D16DA856B2095F445E899E565F523C390DF6D986CFAC1CDCFEFA6CE",
+    "seg2_log_sha256": "DA8E4A8B634B700394BD0FECDFC6B5AC9FAAC9E418C0975AE60CAF018AFC788E",
+    "seg3_log_sha256": "646C6E9EDF2E2DE8D5ABABC822E17026B012C490854AF4090C4FB426CEBE92C0",
+    "seg1_checkpoint_sha256": "95A45408A76F4E861DE9EA17E05D2D51253B6188E7EF3A0726E11811940D1CD3",
+    "seg2_checkpoint_sha256": "86A379CCA5C8F98CD5C47AC79D001E3A82DE3FF2DB2263EAAF9A814F027DD3CD",
+    "seg3_checkpoint_sha256": "9E39CD24FE70A547210CBE911EE8661385A1D9270A826C911F817CA05B0BBE94",
+    "next1_m0_sha256": "26F2B80E05DD54A87523B8BC3F35B72D12046ADFD0551E7B71F2FF60C8AE70CD",
+    "next2_m0_sha256": "E6D09C23061AB0B449A7E971DC99CDDE65ACC898F6FA02B52F25FBDA61434D16"
+  },
+  "handler": {
+    "opcode": 29,
+    "subopcode": 34,
+    "handler_offset": "0x16e8f0",
+    "mnemonic": "BLEZ",
+    "source_register": "((dw >> 27) & 0x10) | ((dw >> 7) & 0x0f)",
+    "immediate": "((dw >> 11) & 0x1f) | (((dw >> 26) & 0x1f) << 5) | (((dw >> 21) & 1) << 10) | (((dw >> 22) & 0x0f) << 11) | (((dw >> 16) & 1) << 15)",
+    "branch_rule": "signed(R[source]) <= 0: BCP += 4 + imm * 4; otherwise BCP += 4",
+    "trace_specific_override_removed": "0x1800811d no longer receives a fixed jump"
+  },
+  "second_input_replay": {
+    "input_descriptor": "second independent URL capture; raw URL and headers withheld",
+    "frozen_timestamp_ms": 1790261112000,
+    "emulated_pid": "0x2c4c",
+    "trace_key": "9a6f0#3",
+    "observed_instruction": "0x1800811d",
+    "observed_trace_index": 119035,
+    "observed_source_register": "R2",
+    "observed_immediate": 208,
+    "native_bcp_before": "0x123ceadc",
+    "native_bcp_after": "0x123cee20",
+    "native_write_pc": "+0x16eaa4",
+    "equation": "0x123ceadc + 4 + 208 * 4 = 0x123cee20",
+    "seg2": {
+      "handoff": "next_1",
+      "events": "90385/90385",
+      "native_callbacks": 121,
+      "syscalls": 0,
+      "callback_page_injections": 0,
+      "allocator_field_transplants": 0
+    },
+    "seg3": {
+      "handoff": "next_2",
+      "events": "1057/1057",
+      "native_callbacks": 87,
+      "clock_gettime_syscalls": 2,
+      "clock_slot_override": false,
+      "callback_page_injections": 0,
+      "allocator_field_transplants": 0
+    }
+  },
+  "interpretation": "The generic OP29 rule is reproduced on a second independent captured input and removes the prior trace-specific branch assumption. The replay still consumes paired captured host handoffs and native ARM64 images; it is not a fresh-input pure-Python current-Medusa signer."
+}
