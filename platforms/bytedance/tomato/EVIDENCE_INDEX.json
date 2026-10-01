@@ -510,5 +510,27 @@
       "allocator_field_transplants": 0
     },
     "independent_current_parameterization": false
+  },
+  "vm9_minimal_handoff_pair_20261001": {
+    "evidence_file": "evidence/vm9_minimal_handoff_pair_20261001.json",
+    "trace_key": "9a6f0#3",
+    "seg1_to_seg2": {
+      "source_checkpoint_sha256": "95a45408a76f4e861de9ea17e05d2d51253b6188e7ef3a0726e11811940d1cd3",
+      "diff_pages": 14,
+      "diff_bytes": 560,
+      "replay_events": "90385/90385",
+      "native_callbacks": 121,
+      "full_next1_loaded": false
+    },
+    "seg2_to_seg3": {
+      "source_checkpoint_sha256": "86a379cca5c8f98cd5c47ac79d001e3a82de3ff2db2263eaaf9a814f027dd3cd",
+      "patch": "0x12641b28: 0x1d -> 0x1250c59c (4 bytes)",
+      "replay_events": "1057/1057",
+      "native_callbacks": 87,
+      "clock_gettime_syscalls": 2,
+      "full_next2_loaded": false
+    },
+    "independent_current_parameterization": false,
+    "interpretation": "Captured-state handoff reduction only; pure-Python current Medusa and no-JVM Rust implementation remain open."
   }
 }

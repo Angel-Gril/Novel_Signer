@@ -131,6 +131,27 @@ The bridge-level parameter and time checks are now separated from that open proo
 
 The local bridge performance sweep measured 23.165 seconds before the current optimization and 10.546 seconds after it for the same input, with the same Medusa digest. This is a bridge runtime result only. It does not change the no-JVM capability boundary.
 
+## Captured handoff reduction
+
+The paired second-input VM9 replay was reduced without mixing capture files. The
+Seg1 checkpoint to `NEXT#1` comparison contains 14 changed pages but only 560
+changed bytes. Applying those deltas, and removing the stale synthetic
+`0xe4ffcaa0=0x122a0c20` write from the diagnostic runner, completes Seg2 at
+`90385/90385` events and 121 callbacks without loading the full `NEXT#1` image.
+
+For the following boundary, the paired Seg2 checkpoint differs from `NEXT#2` on
+four pages. Seg3 nevertheless completes with one four-byte patch at
+`0x12641b28` (`0x1d` to `0x1250c59c`) and no other `NEXT#2` pages. The result is
+`1057/1057` events, 87 callbacks, and two clock syscalls with no callback-page
+injection, allocator-field transplant, or clock-slot override.
+
+This is a useful boundary proof: the full handoff images are not semantically
+required for this captured request. It remains a captured-state diagnostic,
+because the Seg1 checkpoint, native ARM64 images, and native callback execution
+are still supplied from the capture. It does not close current pure-Python
+Medusa parameterization or the no-JVM Rust implementation. See
+[evidence/vm9_minimal_handoff_pair_20261001.json](evidence/vm9_minimal_handoff_pair_20261001.json).
+
 ## Six/seven gods and “16/24 gods”
 
 “God” in the historical notes means a request header, not a VM layer. The six hard historical names are Gorgon, Ladon, Argus, Khronos, Helios, and Medusa; Neptune is an additional soft field in seven-header descriptions. Perseus is a separate VM header and is tracked independently.

@@ -1,0 +1,80 @@
+{
+  "evidence_id": "vm9_minimal_handoff_pair_20261001",
+  "platform": "bytedance.tomato",
+  "scope": "paired second-input VM9 handoff reduction; captured-state diagnostic only",
+  "capture_date": "2026-10-01",
+  "redaction": "Only addresses, counts, hashes, and replay outcomes are recorded; raw URLs, headers, device identifiers, tokens, native bodies, and per-session secrets are omitted.",
+  "paired_input": {
+    "trace_key": "9a6f0#3",
+    "trace_sha256": "39e135db4d16da856b2095f445e899e565f523c390df6d986cfac1cdcfefa6ce",
+    "trace_events": "Seg1 4592, Seg2 90385, Seg3 1057",
+    "source_checkpoint": "mem_after_seg1_offline.pkl",
+    "source_checkpoint_sha256": "95a45408a76f4e861de9ea17e05d2d51253b6188e7ef3a0726e11811940d1cd3"
+  },
+  "seg1_to_seg2": {
+    "reference_handoff": "NEXT#1",
+    "full_handoff_not_loaded": true,
+    "minimal_diff_pages": 14,
+    "minimal_diff_bytes": 560,
+    "pages": [
+      "0x12240000",
+      "0x12280000",
+      "0x12282000",
+      "0x12296000",
+      "0x12297000",
+      "0x1229e000",
+      "0x1229f000",
+      "0x122a0000",
+      "0x122ac000",
+      "0x128a3000",
+      "0x1296b000",
+      "0xe4ffb000",
+      "0xe4ffc000",
+      "0xe4ffd000"
+    ],
+    "minimal_checkpoint": "mem_after_seg1_minimal_next1_pair.pkl",
+    "minimal_checkpoint_sha256": "954207308eb45ce4a86cb41234b49f27e1877370a6913b54b2c3b553c6127bf5",
+    "runner_sha256": "c30193f995fadf88e6e619d196fac3ceb7bd668a42078dc3f757366a13dc24f0",
+    "log_sha256": "d0384098b10fe734cad7d75247db88ae64d0bc9ceb956e9cb060773f619a4bc1",
+    "replay": {
+      "events": "90385/90385",
+      "native_callbacks": 121,
+      "syscalls": 0,
+      "callback_page_injections": 0,
+      "allocator_field_transplants": 0,
+      "synthetic_seg2_slot_override": false
+    }
+  },
+  "seg2_to_seg3": {
+    "source_checkpoint": "mem_after_seg2_minimal_next1_pair.pkl",
+    "source_checkpoint_sha256": "86a379cca5c8f98cd5c47ac79d001e3a82de3ff2db2263eaaf9a814f027dd3cd",
+    "full_next2_diff_pages": 4,
+    "full_next2_diff_page_addresses": [
+      "0x12641000",
+      "0xe4ffb000",
+      "0xe4ffd000",
+      "0xe4fff000"
+    ],
+    "minimal_state_patch": {
+      "address": "0x12641b28",
+      "width_bytes": 4,
+      "before": "0x0000001d",
+      "after": "0x1250c59c",
+      "meaning": "native indirect-call target used by callback 9; replacing the captured stale sentinel with the paired target is sufficient for this replay"
+    },
+    "no_other_next2_pages_loaded": true,
+    "final_checkpoint": "mem_after_seg2_patch_12641b28_4_pair.pkl",
+    "final_checkpoint_sha256": "978313b70510ecc67178e7ae257c6af8b7eeb82e037e255bc1515e9f43000bec",
+    "runner_sha256": "8e1f2b031091d0588dcab46368c2f6b6ca8b1151bf2e890bfeb418b4bc2aa741",
+    "log_sha256": "36f54fedf064eb54e57f3beec498c475583015b6bf954337533c8764391512b6",
+    "replay": {
+      "events": "1057/1057",
+      "native_callbacks": 87,
+      "clock_gettime_syscalls": 2,
+      "callback_page_injections": 0,
+      "allocator_field_transplants": 0,
+      "clock_slot_override": false
+    }
+  },
+  "interpretation": "For this paired captured input, the full NEXT#1/NEXT#2 memory images can be reduced to a 560-byte Seg1-to-Seg2 state delta plus one 4-byte native target correction before Seg3. This removes full handoff loading for the diagnostic replay, but the baseline checkpoint, native ARM64 images, callback execution, and the target correction are still captured-state artifacts. It is not a fresh-input pure-Python Medusa implementation and does not close the no-JVM Rust signer boundary."
+}

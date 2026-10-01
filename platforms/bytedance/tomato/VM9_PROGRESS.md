@@ -228,6 +228,36 @@ images, so it does not close current pure-Python Medusa parameterization.
 The sanitized record is
 [evidence/vm9_op29_generic_20261001.json](evidence/vm9_op29_generic_20261001.json).
 
+## Minimal paired handoff reduction (2026-10-01)
+
+The second-input capture was rechecked with its paired trace, native images, and
+`mem_after_seg1_offline.pkl`; mixed trial memory files were excluded. Comparing
+the Seg1 checkpoint with the real `NEXT#1` handoff found only 14 changed pages
+and 560 changed bytes:
+
+```text
+0x12240000 0x12280000 0x12282000 0x12296000 0x12297000 0x1229e000
+0x1229f000 0x122a0000 0x122ac000 0x128a3000 0x1296b000
+0xe4ffb000 0xe4ffc000 0xe4ffd000
+```
+
+Applying only those byte deltas, without loading the full `NEXT#1` directory and
+without the old synthetic `0xe4ffcaa0=0x122a0c20` overwrite, completed Seg2 at
+`90385/90385` events with 121 callbacks and zero syscalls. The clean paired
+record is [evidence/vm9_minimal_handoff_pair_20261001.json](evidence/vm9_minimal_handoff_pair_20261001.json).
+
+The resulting Seg2 checkpoint differs from the real `NEXT#2` handoff on four
+pages, but Seg3 does not need those full pages. A single four-byte state patch at
+`0x12641b28`, changing `0x0000001d` to `0x1250c59c`, supplies the indirect native
+call target used at callback 9. Starting from the paired Seg2 checkpoint with
+that patch and no other `NEXT#2` pages completed Seg3 at `1057/1057` events, 87
+callbacks, and two `clock_gettime` syscalls, with no callback-page injection,
+allocator-field transplant, or clock-slot override.
+
+This reduces the captured handoff surface, but it does not make the current VM a
+fresh-input pure-Python signer: the baseline checkpoint, native ARM64 images,
+and callback execution are still captured-state inputs.
+
 ## Meaning for the deliverables
 
 - Seg2 has complete captured diagnostic runs (`90161/90161` with the
