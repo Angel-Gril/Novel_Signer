@@ -1,0 +1,82 @@
+{
+  "evidence_id": "vm9_callback_descriptor_writer_20261003",
+  "platform": "bytedance.tomato",
+  "scope": "fresh current VM9 descriptor writer watch for the active callback trampoline",
+  "trial_pair": [
+    "vm9_x8detail5_20261003",
+    "vm9_x8detail6_20261003"
+  ],
+  "redaction": "Only instruction offsets, descriptor fields, and log hashes are retained; request URLs, headers, device data, tokens, and raw traces remain local.",
+  "inputs": {
+    "variation": "same detail endpoint shape and frozen runtime setup; the book-id input was changed by one digit",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "trial_log_sha256": {
+      "vm9_x8detail5_20261003": "f67e9055c1fdc419cd533cb8daa98d5ca8ab32860786b0d77c5ed4a88987ceeb",
+      "vm9_x8detail6_20261003": "1eb3450f5215d1b5614cdf8b7a39fe84f6c888f72198d7875d83db6c7015458b"
+    }
+  },
+  "active_path": {
+    "trampoline_offsets": [
+      "0x2584ac",
+      "0x2584b0",
+      "0x2584b4",
+      "0x2584b8",
+      "0x2584bc",
+      "0x2584c0"
+    ],
+    "semantics": "ldp x1, x8, [x0]; mov x0, x8; br x1",
+    "descriptor": {
+      "address": "0xe4ffe290",
+      "field0": "0x125ea444 then 0x125ea4fc",
+      "field8": "0x1284a288",
+      "field10": "0xe4ffe2f0",
+      "field18": "0x12169844"
+    }
+  },
+  "writer": {
+    "runtime_pc": "0x12431268",
+    "so_offset": "0x171268",
+    "instruction": "str x15, [x17, x16]",
+    "observed_descriptor_stores": [
+      {
+        "destination": "0xe4ffe290",
+        "value": "0x125ea444",
+        "before": "first trampoline entry"
+      },
+      {
+        "destination": "0xe4ffe298",
+        "value": "0x1284a288",
+        "before": "first trampoline entry"
+      },
+      {
+        "destination": "0xe4ffe290",
+        "value": "0x125ea4fc",
+        "before": "second trampoline entry"
+      }
+    ],
+    "writer_is_vm_store": true,
+    "writer_before_trampoline": true
+  },
+  "cross_input_observation": {
+    "descriptor_writer_values_same": true,
+    "allocator_or_later_state_difference_observed": true,
+    "interpretation": "The active descriptor writer is stable across this two-input probe, while later native/allocator execution diverges. This writer is therefore a real boundary fact but not the missing input parameterization by itself."
+  },
+  "conclusion": {
+    "established": [
+      "The active current path reaches the +0x2584ac descriptor trampoline; the older +0x2887f0 candidate is not needed for this path.",
+      "Descriptor field writes are directly observed before the trampoline and originate from the VM store at +0x171268.",
+      "The trampoline's field8 is the object passed as x0 to the branch target; it is not proof of the previously observed packed entry-x8 composition."
+    ],
+    "remaining_unknown": "The callback-object writer/composition for the packed entry x8 pair (0x440132f775952fa9 / 0x1dc9821c75952fa9) is still uncaptured. Allocator refill and host handoff state are also not independently initialized.",
+    "use_as_evidence": "Use this record to place the active descriptor writer at the VM/native boundary and to reject the claim that the old +0x2887f0 helper is the current call site. It does not justify a pure-Python Medusa implementation or a no-JVM Rust signer."
+  },
+  "limitations": [
+    "Both runs are local Unidbg probes; neither produced a new server request.",
+    "The probe run ended in an existing native emulation fetch/read fault after the descriptor observation; the observation itself occurred before that fault.",
+    "No fresh-input body or independent allocator implementation was produced."
+  ],
+  "independent_current_parameterization": false,
+  "no_jvm_rust_signer_complete": false,
+  "new_server_validation_performed": false
+}

@@ -442,9 +442,32 @@ therefore the object passed to the branch target, not proof that this helper
 constructs the packed entry `x8` pair from the prior liveness capture.
 
 The descriptor fields were already populated before the trampoline was
-entered. The final field writer and the instruction that combines the two
-32-bit words remain outside this run's captured path. The redacted record is
-[evidence/vm9_callback_trampoline_path_20261003.json](evidence/vm9_callback_trampoline_path_20261003.json).
+entered. The earlier probe did not retain the writer because its narrow watch
+counter was exhausted by unrelated descriptor-pool traffic.
+
+## Active descriptor writer (2026-10-03)
+
+The corrected probe was rerun twice with the same frozen runtime setup and a
+one-digit input change. Both runs reached the same active descriptor at
+`0xe4ffe290`. Immediately before the trampoline, the VM store at `+0x171268`
+(`str x15, [x17, x16]`) wrote the descriptor fields:
+
+```text
+[0xe4ffe290] = 0x125ea444, then 0x125ea4fc
+[0xe4ffe298] = 0x1284a288
+```
+
+The trampoline then executed `ldp x1, x8, [x0]; mov x0, x8; br x1`. This
+directly closes the active descriptor-writer location and confirms that it is
+a VM/native boundary store. It does not capture the separate composition that
+produces the packed entry values `0x440132f775952fa9` and
+`0x1dc9821c75952fa9`; later allocator/native state still diverged after the
+observation. The sanitized record is
+[evidence/vm9_callback_descriptor_writer_20261003.json](evidence/vm9_callback_descriptor_writer_20261003.json).
+
+The older `+0x2887f0` static helper remains unexecuted in both fresh probes.
+The writer result is evidence for the active descriptor path only and is not a
+parameterized Medusa implementation.
 
 ## Meaning for the deliverables
 

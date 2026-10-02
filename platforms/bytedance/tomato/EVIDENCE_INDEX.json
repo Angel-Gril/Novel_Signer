@@ -712,7 +712,30 @@
       "observed_before_trampoline": true,
       "final_packed_x8_composition": false
     },
-    "interpretation": "Fresh run reaches +0x2584ac descriptor trampoline; +0x2887f0 is not executed. The active descriptor path is not proof of packed entry-x8 composition; the final writer remains uncaptured.",
+    "interpretation": "Fresh run reaches +0x2584ac descriptor trampoline; +0x2887f0 is not executed. The active descriptor path is not proof of packed entry-x8 composition; the earlier narrow probe did not capture the writer.",
+    "independent_current_parameterization": false,
+    "new_server_validation_performed": false
+  },
+  "vm9_callback_descriptor_writer_20261003": {
+    "evidence_file": "evidence/vm9_callback_descriptor_writer_20261003.json",
+    "trial_pair": [
+      "vm9_x8detail5_20261003",
+      "vm9_x8detail6_20261003"
+    ],
+    "active_descriptor": "0xe4ffe290",
+    "writer": {
+      "so_offset": "0x171268",
+      "instruction": "str x15, [x17, x16]",
+      "before_trampoline": true,
+      "field0_values": [
+        "0x125ea444",
+        "0x125ea4fc"
+      ],
+      "field8_value": "0x1284a288"
+    },
+    "old_static_candidate_executed": false,
+    "packed_x8_composition_captured": false,
+    "interpretation": "The active descriptor writer is directly observed at the VM store boundary; allocator/refill and packed entry-x8 composition remain open.",
     "independent_current_parameterization": false,
     "new_server_validation_performed": false
   }
