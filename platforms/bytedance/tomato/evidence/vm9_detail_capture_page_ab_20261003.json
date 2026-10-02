@@ -1,0 +1,28 @@
+{
+  "trial": "vm9_detail_20261002_g",
+  "scope": "sanitized diagnostic A/B replay",
+  "baseline": {
+    "input_checkpoint": "seg1_detail.ckpt",
+    "diagnostic_boundary_repairs": true,
+    "first_post_repair_mismatch": {
+      "relative_event": 747,
+      "register": "R1",
+      "observed": "0x32357c32",
+      "expected": "0x78c1d3ab"
+    }
+  },
+  "captured_page_variant": {
+    "installed_page": "0x12296000",
+    "source": "captured callback page, not published",
+    "first_post_repair_mismatch": {
+      "relative_event": 788,
+      "register": "R1",
+      "observed": "0x1dc9821c",
+      "expected": "0x440132f7"
+    }
+  },
+  "interpretation": "The captured page supplies the first missing word and advances the replay, but the next word is still produced by later host/native initialization. A callback-page transplant therefore cannot stand in for allocator refill, constructor state, or host handoff initialization.",
+  "public_artifact_policy": "Only this redacted result is published; callback pages, traces, native images, and device state remain local.",
+  "independent_current_parameterization": false,
+  "new_server_validation_performed": false
+}

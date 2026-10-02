@@ -635,5 +635,23 @@
     "interpretation": "Direct native slot attribution is now available. Seg1 is independently trace-aligned; Seg2 still requires allocator and host-handoff state that is not initialized from a fresh request.",
     "independent_current_parameterization": false,
     "new_server_validation_performed": false
+  },
+  "vm9_detail_capture_page_ab_20261003": {
+    "evidence_file": "evidence/vm9_detail_capture_page_ab_20261003.json",
+    "baseline_first_mismatch": {
+      "relative_event": 747,
+      "register": "R1",
+      "observed": "0x32357c32",
+      "expected": "0x78c1d3ab"
+    },
+    "captured_page_variant": {
+      "installed_page": "0x12296000",
+      "relative_event": 788,
+      "observed": "0x1dc9821c",
+      "expected": "0x440132f7"
+    },
+    "interpretation": "A captured callback page advances the replay but does not replace allocator/refill or host/native initialization.",
+    "independent_current_parameterization": false,
+    "new_server_validation_performed": false
   }
 }

@@ -217,6 +217,16 @@ allocator/refill and host-handoff page initialization. It does not establish a
 fresh-input signer. See
 [evidence/vm9_detail_native_transition_watch_20261003.json](evidence/vm9_detail_native_transition_watch_20261003.json).
 
+The capture-page A/B probe confirms that the remaining boundary is larger than
+one missing page. Starting from the same Seg1 checkpoint, the baseline reaches
+relative event 747 after the explicit diagnostic repairs; installing the local
+`0x12296000` callback page advances it to event 788, then the next register
+word still differs (`0x1dc9821c` versus `0x440132f7`). The page is therefore
+evidence of a later host/native initialization result, not a reusable signer
+input. Only the redacted comparison is published; the captured page remains
+outside the repository. See
+[evidence/vm9_detail_capture_page_ab_20261003.json](evidence/vm9_detail_capture_page_ab_20261003.json).
+
 ## Six/seven gods and “16/24 gods”
 
 “God” in the historical notes means a request header, not a VM layer. The six hard historical names are Gorgon, Ladon, Argus, Khronos, Helios, and Medusa; Neptune is an additional soft field in seven-header descriptions. Perseus is a separate VM header and is tracked independently.

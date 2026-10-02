@@ -371,6 +371,22 @@ The direct-write and boundary log is
 [evidence/vm9_detail_native_transition_watch_20261003.json](evidence/vm9_detail_native_transition_watch_20261003.json).
 The interventions are diagnostic only and are not part of the public signer.
 
+## Capture-page A/B boundary (2026-10-03)
+
+The next diagnostic separated a page transplant from the state it represents.
+Starting from the same Seg1 checkpoint and the existing boundary repairs, the
+clean baseline diverged at relative event 747 when `R1` read `0x32357c32`
+instead of `0x78c1d3ab`. Installing the local captured page at `0x12296000`
+supplied that first word and advanced the replay to relative event 788.
+
+The replay then read `0x1dc9821c` where the trace requires `0x440132f7`.
+That adjacent value is not supplied by the page transplant, so the page alone
+is not the missing constructor. The remaining state is produced by later
+allocator/refill and host/native initialization. This closes the callback-page
+copy shortcut while leaving fresh-input parameterization open. The redacted
+comparison is in
+[evidence/vm9_detail_capture_page_ab_20261003.json](evidence/vm9_detail_capture_page_ab_20261003.json).
+
 ## Meaning for the deliverables
 
 - Seg2 has complete captured diagnostic runs, including the new detail holdout
