@@ -852,5 +852,16 @@
       },
       "segment_completed": false
     }
+  },
+  "control_comparison": {
+    "control_log_sha256": "292c345c34a257a29c43d38c035838bb16ea5ea4bfc6048706a5345df204a5c3",
+    "target_bin": "0x12282060",
+    "free_count": "0x3",
+    "list_address": "0x12282680",
+    "selected_index": 2,
+    "selected_object": "0x1296ba60",
+    "branch": "non-empty free-list path",
+    "native_writes": 204,
+    "interpretation": "The control run selects the trace-required 0x1296ba60 from the current free list; the forced run selects the newly created 0x12a479b0. The pointer difference explains the first forced replay mismatch."
   }
 }

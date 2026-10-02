@@ -176,3 +176,9 @@ This is a useful boundary: the missing behavior is now the allocator's object
 selection and allocation/free history after the new slab transition, rather
 than failure to execute the empty-bin primitive itself. The full run still
 does not establish a fresh-input allocator or a current online Medusa body.
+
+The paired control run keeps the class-3 bin non-empty: count `3`, list
+`0x12282680`, selected index `2`, and returned object `0x1296ba60`. The forced
+run instead returns the new object `0x12a479b0`. This A/B pair directly ties
+the first VM mismatch to allocator object identity and records the control
+branch's 204 native writes versus 273 writes on the new-slab branch.

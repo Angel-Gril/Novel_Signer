@@ -559,3 +559,9 @@ the free-list object `0x1296ba60`. This separates successful execution of the
 new-slab branch from the later object-selection state that the full trace
 expects. It is a narrower allocator-history boundary, not a fresh-input
 parameterization result.
+
+The paired control callback confirms the selection rule: class-3 count `3`
+uses list `0x12282680`, index `2`, and returns `0x1296ba60`. The forced branch
+returns `0x12a479b0` instead. This A/B result ties the first divergence to
+allocator object identity and leaves the allocation/free history as the next
+state to reconstruct.
