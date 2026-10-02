@@ -1,0 +1,87 @@
+{
+  "evidence_id": "vm9_native_entry_x8_liveness_20261003",
+  "platform": "bytedance.tomato",
+  "scope": "sanitized static/native liveness analysis for the VM9 native callback boundary",
+  "trial_pair": [
+    "vm9_detail_20261002_g",
+    "vm9_second_url_20261001"
+  ],
+  "redaction": "Only instruction semantics, derived addresses, event coordinates, packed register values, and hashes are retained; raw traces, native images, checkpoints, device data, and request material remain local.",
+  "inputs": {
+    "detail_trace_sha256": "f7ffa8b815632c8da77ecf4d51eb1bfd17e0cd72f6cbd077848d1c4bd8aa763f",
+    "detail_run_log_sha256": "cb84edcabe08c177c29f90517ac1df8d5459611c079444ff79c95724335f829b",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c"
+  },
+  "static_boundary": {
+    "callee": {
+      "runtime_pc": "0x12506ba0",
+      "entry_bytes": "fd7bbba9f90b00f9fd030091f85f02a9",
+      "first_semantic_reload": {
+        "runtime_pc": "0x12506bcc",
+        "instruction": "ldr x8, [x20, #8]",
+        "bytes": "880640f9480400b4"
+      },
+      "interpretation": "The entry x8 value is not consumed by this callee before x8 is overwritten from the object selected by x20."
+    },
+    "indirect_caller": {
+      "runtime_pc_range": [
+        "0x125487f0",
+        "0x12548804"
+      ],
+      "instructions": [
+        "0x125487f4: ldp x9, x1, [x0, #0x10]",
+        "0x125487f8: ldp x10, x8, [x0]",
+        "0x125487fc: mov x0, x9",
+        "0x12548800: blr x10"
+      ],
+      "interpretation": "The packed entry x8 is loaded in the caller-side callback object path and is caller-saved across an indirect call; it is not a constant produced by 0x12506ba0."
+    },
+    "low_word_writer": {
+      "runtime_pc": "0x125692dc",
+      "instruction": "str w8, [x0]",
+      "bytes": "060000b9",
+      "observed_destination": "0xe4ffc9c8",
+      "observed_value": "0x75952fa9",
+      "interpretation": "The common low 32 bits have a separate native scratch-store provenance in both compared captures."
+    }
+  },
+  "cross_capture_correlation": [
+    {
+      "capture": "vm9_detail_20261002_g",
+      "native_entry_pc": "0x12506ba0",
+      "lr": "0x12548804",
+      "entry_x8": "0x440132f775952fa9",
+      "upper32": "0x440132f7",
+      "lower32": "0x75952fa9",
+      "trace_event": 132740,
+      "trace_r1_after_op1": "0x440132f7"
+    },
+    {
+      "capture": "vm9_second_url_20261001",
+      "native_entry_pc": "0x12506ba0",
+      "lr": "0x12548804",
+      "entry_x8": "0x1dc9821c75952fa9",
+      "upper32": "0x1dc9821c",
+      "lower32": "0x75952fa9",
+      "trace_event": 132740,
+      "trace_r1_after_op1": "0x1dc9821c"
+    }
+  ],
+  "conclusion": {
+    "established": [
+      "The upper 32 bits of the observed entry x8 track the input-dependent VM value produced by OP1 in the paired captures.",
+      "The lower 32 bits are common across the pair and are also written by the native scratch path at 0x125692dc.",
+      "0x12506ba0 itself does not read the incoming x8 before overwriting it."
+    ],
+    "remaining_unknown": "The exact callback-object field writer and the native composition step that places the two 32-bit words into entry x8 were not directly captured.",
+    "use_as_evidence": "Use this record to reject a callback-page-constant interpretation of 0x440132f7/0x1dc9821c. The correct boundary is caller-side callback-object/native-handoff state followed by a VM OP1 load; reproducing it requires modeling that state, not copying the callback page."
+  },
+  "limitations": [
+    "This is a paired captured-state analysis, not a fresh-input execution.",
+    "No new server request was made.",
+    "Current pure-Python Medusa parameterization, constructor/allocator initialization, and no-JVM Rust signer remain open."
+  ],
+  "independent_current_parameterization": false,
+  "no_jvm_rust_signer_complete": false,
+  "new_server_validation_performed": false
+}

@@ -239,6 +239,19 @@ evidence; constructor, allocator refill, callback registration, and fresh-input
 current-Medusa generation are still open. See
 [evidence/vm9_native_dynamic_load_20261003.json](evidence/vm9_native_dynamic_load_20261003.json).
 
+The paired native-entry liveness probe shows that the later callback value is
+not produced directly by the callee at `0x12506ba0`. That function reloads
+`x8` from `[x20, #8]` at `0x12506bcc`, overwriting its incoming value. The
+caller-side path at `0x125487f4`/`0x125487f8` loads the callback-object fields
+and enters the indirect target at `0x12548800`. The two captures contain
+`0x440132f775952fa9` and `0x1dc9821c75952fa9`: the upper 32 bits follow the
+paired OP1 outputs, while the common lower `0x75952fa9` has a separate native
+scratch-store provenance at `0x125692dc`. This is evidence for modeling the
+caller-side callback-object/native handoff and its word composition; copying a
+callback page cannot reproduce it. The exact field writer and composition
+instruction remain open. See
+[evidence/vm9_native_entry_x8_liveness_20261003.json](evidence/vm9_native_entry_x8_liveness_20261003.json).
+
 ## Six/seven gods and “16/24 gods”
 
 “God” in the historical notes means a request header, not a VM layer. The six hard historical names are Gorgon, Ladon, Argus, Khronos, Helios, and Medusa; Neptune is an additional soft field in seven-header descriptions. Perseus is a separate VM header and is tracked independently.
