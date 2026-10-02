@@ -22,14 +22,16 @@ Seg3, retaining one unexplained stack byte. The
 [sanitized evidence](../evidence/vm9_handoff_holdouts_20261002.json) records the
 control, holdout, hashes, and remaining dependencies.
 
-`vm9_allocator.py` exposes the small allocator branch that is directly supported
-by the captured evidence: a non-empty size-class free-list pop reads
-`[bin+0x30]`, decrements the count, and selects
-`[read64(bin+0x38) + count_after * 8]`. Empty bins raise `RefillUnsupported`
-because the slab counter, bitmap, and refill cursor are not yet modeled from a
-fresh input. The module accepts only trusted local checkpoint pages and is not a
-general heap or current Medusa implementation. The branch and its controlled
-transplants are documented in [ALLOCATOR_AUDIT.md](../ALLOCATOR_AUDIT.md).
+`vm9_allocator.py` exposes the allocator branches directly supported by the
+captured evidence: a non-empty size-class free-list pop reads `[bin+0x30]`,
+decrements the count, and selects `[read64(bin+0x38) + count_after * 8]`;
+`refill_existing_slab_and_pop` replays an already selected slab record, fills a
+known target list backwards, publishes the batch count, and performs the
+wrapper's first pop. Slab/node discovery, region allocation, constructor
+history, and fresh-input cursor derivation remain unsupported. The module
+accepts only trusted local checkpoint pages and is not a general heap or
+current Medusa implementation. The branch and its controlled transplants are
+documented in [ALLOCATOR_AUDIT.md](../ALLOCATOR_AUDIT.md).
 
 The `pop_bitmap_slot` helper records one more directly observed refill step:
 `RBIT/CLZ` selects the lowest set bit of a slab bitmap, the native path clears

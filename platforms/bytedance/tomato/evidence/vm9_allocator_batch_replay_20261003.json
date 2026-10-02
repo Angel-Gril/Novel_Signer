@@ -1,0 +1,63 @@
+{
+  "evidence_id": "vm9_allocator_batch_replay_20261003",
+  "platform": "bytedance_tomato",
+  "scope": "class-3 existing-slab refill plus wrapper pop",
+  "status": "captured_checkpoint_verified",
+  "source_boundaries": {
+    "native_path": [
+      "0x1216970c batch refill",
+      "0x12187ecc wrapper pop"
+    ],
+    "raw_inputs_published": false,
+    "online_request_performed": false
+  },
+  "observed_inputs": {
+    "arena": "0x12240180",
+    "target_bin": "0x12282080",
+    "class_id": 3,
+    "slab_record": "0x12941108",
+    "batch_size": 8,
+    "object_stride": "0x30"
+  },
+  "native_semantics": {
+    "list_address_field": "[bin+0x18]",
+    "fill_order": "list[batch_size - 1 - iteration]",
+    "published_count_field": "[bin+0x10]",
+    "wrapper_consumption": "count -= 1; return list[count]"
+  },
+  "replay_result": {
+    "returned_object": "0x1296b940",
+    "count_after_pop": 7,
+    "object_addresses": [
+      "0x1296b940",
+      "0x1296b970",
+      "0x1296b9a0",
+      "0x1296b9d0",
+      "0x1296ba00",
+      "0x1296ba30",
+      "0x1296ba60",
+      "0x1296ba90"
+    ],
+    "slab_counter": {
+      "before": "0x24",
+      "after": "0x1c"
+    },
+    "slab_bitmap": {
+      "first_before": "0xfffffffff0000000",
+      "first_selected_bit": 28,
+      "after": "0xfffffff000000000"
+    }
+  },
+  "verification": {
+    "python_model": "refill_existing_slab_and_pop",
+    "batch_order_verified": true,
+    "bitmap_and_counter_verified": true,
+    "fresh_input_parameterization": false,
+    "current_online_signer": false
+  },
+  "remaining_work": [
+    "model slab/node discovery and region initialization",
+    "derive the allocator state from a fresh allocation/free sequence",
+    "rerun VM9 with a new input before online header validation"
+  ]
+}

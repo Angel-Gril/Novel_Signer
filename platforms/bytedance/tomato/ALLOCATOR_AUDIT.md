@@ -80,8 +80,11 @@ The class-3 checkpoint values make the bit operation independently checkable:
 | historical success | `0x24` | `0xfffffffff0000000` | `28` | `0xffffffffe0000000` | `0x23` |
 | current full-Seg2 | `0x20` | `0xffffffcfc0000000` | `30` | `0xffffffcf80000000` | `0x1f` |
 
-This is a static and checkpoint-backed primitive. It does not yet model the
-slab base calculation, higher-level bitmap propagation, node allocation, or
+This is a static and checkpoint-backed primitive. The public model now also
+replays the observed existing-slab batch: it consumes the selected slab slots,
+writes the returned object pointers into the target list in reverse order,
+publishes the batch count, and applies the wrapper's first pop. It still does
+not model slab base discovery, new-node allocation, region initialization, or
 the preceding allocation/free sequence, so it cannot produce a fresh-input
 Medusa body by itself.
 
@@ -113,3 +116,18 @@ The next proof is to model the allocator's size-class table, slab cursor,
 bitmap/free-list words, and allocation/free sequence from a fresh chain, then
 rerun the full VM9 trace with a new input vector. A historical replay that
 injects captured pages remains diagnostic evidence only.
+
+## Existing-slab batch replay
+
+For the historical class-3 checkpoint, the observed batch width is eight. The
+native helper stores the selected objects at list indexes `7..0`; the wrapper
+decrements the published count to seven and returns list index seven. The
+public replay produces the captured sequence:
+
+```text
+0x1296b940, 0x1296b970, 0x1296b9a0, 0x1296b9d0,
+0x1296ba00, 0x1296ba30, 0x1296ba60, 0x1296ba90
+```
+
+This verifies the batch ordering and the counter/bitmap transition for the
+existing slab. It remains a checkpoint replay and is not a fresh allocator.

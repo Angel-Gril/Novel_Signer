@@ -766,5 +766,26 @@
     "bitmap_primitive_published": true,
     "fresh_input_parameterization": false,
     "new_server_validation_performed": false
+  },
+  "vm9_allocator_batch_replay_20261003": {
+    "evidence_file": "evidence/vm9_allocator_batch_replay_20261003.json",
+    "status": "captured_checkpoint_verified",
+    "native_pair": [
+      "0x1216970c",
+      "0x12187ecc"
+    ],
+    "class3": {
+      "arena": "0x12240180",
+      "target_bin": "0x12282080",
+      "slab_record": "0x12941108",
+      "batch_size": 8,
+      "returned_object": "0x1296b940",
+      "count_after_pop": 7,
+      "first_bitmap_bit": 28,
+      "slab_counter_after": "0x1c"
+    },
+    "batch_order_verified": true,
+    "fresh_input_parameterization": false,
+    "new_server_validation_performed": false
   }
 }

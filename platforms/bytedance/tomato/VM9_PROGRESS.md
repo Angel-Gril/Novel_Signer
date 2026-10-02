@@ -489,6 +489,22 @@ does not claim the slab address formula or a fresh-input allocator.
 The sanitized evidence is
 [evidence/vm9_allocator_refill_static_20261003.json](evidence/vm9_allocator_refill_static_20261003.json).
 
+## Existing-slab batch replay (2026-10-03)
+
+The public allocator model now covers the captured non-node branch through the
+wrapper boundary. `refill_existing_slab_and_pop` replays the eight-slot class-3
+batch, stores the pointers at target-list indexes `7..0`, publishes the count,
+and consumes the first entry as `0x12187ecc` does. On the historical checkpoint
+it returns `0x1296b940`, leaves the bin count at `7`, decrements the slab
+counter from `0x24` to `0x1c`, and consumes bitmap bits `28..35` in order.
+
+This is a stronger captured-state allocator checkpoint, not a fresh-input
+implementation. The model still requires the caller to provide the selected
+slab record, target list, batch width, and initialized arena pages.
+
+The sanitized evidence is
+[evidence/vm9_allocator_batch_replay_20261003.json](evidence/vm9_allocator_batch_replay_20261003.json).
+
 ## Meaning for the deliverables
 
 - Seg2 has complete captured diagnostic runs, including the new detail holdout

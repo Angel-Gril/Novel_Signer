@@ -1,9 +1,10 @@
 """Small, fail-closed VM9 allocator primitives.
 
-This module models only the observed free-list pop.  It intentionally refuses
-the zero-count slab/refill branch until that branch is independently modeled.
-The input page map is a trusted local checkpoint (the same shape used by
-``vm9_handoff_rule.py``), not an online request or a general heap.
+This module models the observed free-list pop and the existing-slab batch
+refill when the caller supplies a trusted local checkpoint.  It intentionally
+refuses slab/node discovery and fresh allocator initialization.  The input page
+map has the same shape used by ``vm9_handoff_rule.py``; it is not an online
+request or a general heap.
 """
 from __future__ import annotations
 
@@ -12,7 +13,7 @@ from typing import Mapping, MutableMapping
 
 
 class RefillUnsupported(RuntimeError):
-    """The requested bin is empty and the slab/refill model is not complete."""
+    """The requested refill needs state outside the supported checkpoint model."""
 
 
 class BitmapExhausted(RefillUnsupported):
@@ -99,6 +100,29 @@ class SlabSlotPop:
     object_stride: int
     object_address: int
     propagated_bitmap_updates: tuple[tuple[int, int, int], ...]
+
+
+@dataclass(frozen=True)
+class SlabRefillPop:
+    """A captured empty-bin refill followed by the wrapper's first pop.
+
+    The native pair is split between ``0x1216970c`` (publish a batch) and
+    ``0x12187ecc`` (decrement the published count and return the last list
+    entry).  This result keeps both counts so a checkpoint replay can be
+    compared with the native write trace without confusing the two stages.
+    """
+
+    arena_address: int
+    bin_address: int
+    class_id: int
+    slab_address: int
+    list_address: int
+    batch_size: int
+    published_count: int
+    count_after_pop: int
+    returned_object: int
+    object_addresses: tuple[int, ...]
+    slab_pops: tuple[SlabSlotPop, ...]
 
 
 @dataclass(frozen=True)
@@ -291,6 +315,90 @@ def pop_slab_slot(
         object_stride=object_stride,
         object_address=object_address,
         propagated_bitmap_updates=tuple(propagated),
+    )
+
+
+def refill_existing_slab_and_pop(
+    pages: MutableMapping[int, bytearray],
+    *,
+    arena_address: int,
+    bin_address: int,
+    class_id: int,
+    slab_address: int,
+    batch_size: int,
+    constants: AllocatorConstants = AllocatorConstants(),
+) -> SlabRefillPop:
+    """Replay the observed existing-slab batch refill and wrapper pop.
+
+    This is the captured ``0x1216970c`` + ``0x12187ecc`` pair.  The caller
+    must provide an already selected slab record and a zero-count target bin;
+    slab/node discovery, region allocation, constructor history, and fresh
+    input state remain intentionally unsupported.
+    """
+
+    if batch_size <= 0:
+        raise ValueError("batch_size must be positive")
+    published_before = read_u32(pages, bin_address + 0x10)
+    if published_before != 0:
+        raise RefillUnsupported(
+            f"target bin {bin_address:#x} already has published count "
+            f"{published_before}; append/refill merge is not modeled"
+        )
+    list_address = read_u64(pages, bin_address + 0x18)
+    if list_address == 0 or list_address & 7:
+        raise ValueError(f"invalid refill list address {list_address:#x}")
+
+    slab_pops: list[SlabSlotPop] = []
+    # The native helper fills the list backwards.  The wrapper then decrements
+    # the count and reads list[count-1], returning the first selected object.
+    for index in range(batch_size):
+        slab_pop = pop_slab_slot(
+            pages,
+            arena_address=arena_address,
+            bin_address=bin_address,
+            class_id=class_id,
+            slab_address=slab_address,
+            constants=constants,
+        )
+        write_u64(pages, list_address + (batch_size - 1 - index) * 8, slab_pop.object_address)
+        slab_pops.append(slab_pop)
+
+    active_bin_head = read_u64(pages, bin_address)
+    # 0x1216983c clears the active-bin head and 0x12169844 publishes the
+    # helper's batch count.  The wrapper at 0x12187ef0 then consumes one item.
+    write_u64(pages, bin_address, 0)
+    write_u32(pages, bin_address + 0x10, batch_size)
+
+    class_state = arena_address + class_id * 0xE0
+    write_u64(pages, class_state + 0x5A0, read_u64(pages, class_state + 0x5A0) + batch_size)
+    write_u64(pages, class_state + 0x5B8, read_u64(pages, class_state + 0x5B8) + batch_size)
+    write_u64(
+        pages,
+        class_state + 0x5B0,
+        active_bin_head + read_u64(pages, class_state + 0x5B0),
+    )
+    write_u64(pages, class_state + 0x5C0, read_u64(pages, class_state + 0x5C0) + 1)
+
+    count_after_pop = batch_size - 1
+    write_u32(pages, bin_address + 0x10, count_after_pop)
+    floor = read_u32(pages, bin_address + 0x8)
+    floor_signed = floor if floor < 0x8000_0000 else floor - 0x1_0000_0000
+    if count_after_pop < floor_signed:
+        write_u32(pages, bin_address + 0x8, count_after_pop)
+    returned_object = read_u64(pages, list_address + count_after_pop * 8)
+
+    return SlabRefillPop(
+        arena_address=arena_address,
+        bin_address=bin_address,
+        class_id=class_id,
+        slab_address=slab_address,
+        list_address=list_address,
+        batch_size=batch_size,
+        published_count=batch_size,
+        count_after_pop=count_after_pop,
+        returned_object=returned_object,
+        object_addresses=tuple(item.object_address for item in slab_pops),
+        slab_pops=tuple(slab_pops),
     )
 
 
