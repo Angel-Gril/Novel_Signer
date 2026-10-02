@@ -551,3 +551,11 @@ record. Evidence:
 The next implementation step remains allocator state generation from a fresh
 chain. Until that is available, the Python and Rust public paths must retain
 their explicit unsupported status for current Medusa.
+
+The same controlled replay was then allowed to continue. It completed 13
+native callbacks before the first VM mismatch at relative Seg2 event `146`:
+`R1` held the new-slab object `0x12a479b0`, while the captured trace required
+the free-list object `0x1296ba60`. This separates successful execution of the
+new-slab branch from the later object-selection state that the full trace
+expects. It is a narrower allocator-history boundary, not a fresh-input
+parameterization result.

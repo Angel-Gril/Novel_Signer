@@ -53,7 +53,22 @@
     "writes_sha256": "4a9c75353e89971974d89ea4e2a0e12d6eab1573e9ef11c42d5fcdd4b05b9229",
     "completed_segment": false
   },
-  "interpretation": "The captured native allocator reaches the empty-bin path and creates a new slab record and object without copying the historical slab page. This establishes a checkpoint-level new-slab transition and records the region/metadata writes. It does not recover generic slab discovery, region initialization, allocation/free history, fresh-input Medusa generation, or online validity.",
+  "interpretation": "The captured native allocator reaches the empty-bin path and creates a new slab record and object without copying the historical slab page. The full controlled replay completes 13 callbacks and then diverges at relative Seg2 event 146 because the new object identity (0x12a479b0) differs from the trace-required free-list object (0x1296ba60). This establishes a real new-slab transition and narrows the next gap to allocator object selection/state history. It does not recover generic slab discovery, region initialization, allocation/free history, fresh-input Medusa generation, or online validity.",
   "fresh_input_parameterization": false,
-  "new_server_validation_performed": false
+  "new_server_validation_performed": false,
+  "follow_up_full_run": {
+    "runner_same_as_initial_probe": true,
+    "full_run_log_sha256": "42b7159a6e10fee3535991084f47ae3f98d4e90b61dcb92c1f27864104cf5d1b",
+    "callbacks_completed_before_stop": 13,
+    "last_completed_callback": 13,
+    "last_completed_global_trace_event": 4736,
+    "first_divergence": {
+      "relative_segment_event": 146,
+      "register": "R1",
+      "actual": "0x12a479b0",
+      "expected": "0x1296ba60",
+      "interpretation": "the new-slab object remains live, but the held-out trace expects the current free-list object"
+    },
+    "segment_completed": false
+  }
 }

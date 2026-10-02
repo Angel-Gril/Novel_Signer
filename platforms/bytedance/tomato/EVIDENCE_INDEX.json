@@ -838,8 +838,19 @@
       "checkpoint_sha256": "53c9fbe09872c784a1a1af9b0b31bc3f2031ca189ea4c6bc4db5626e928de8bc",
       "writes_sha256": "4a9c75353e89971974d89ea4e2a0e12d6eab1573e9ef11c42d5fcdd4b05b9229"
     },
-    "interpretation": "The captured native allocator reaches the empty-bin path and creates a new slab record and object without copying the historical slab page. This is checkpoint-level evidence only; generic slab discovery, region initialization, allocation/free history, fresh-input Medusa generation, and online validity remain open.",
+    "interpretation": "The captured empty-bin path creates a new slab record and object, then advances 13 callbacks before the first VM mismatch at relative Seg2 event 146: R1 is 0x12a479b0 while the trace requires 0x1296ba60. This narrows the missing state to allocator object selection/history; generic fresh-input Medusa generation and online validity remain open.",
     "fresh_input_parameterization": false,
-    "new_server_validation_performed": false
+    "new_server_validation_performed": false,
+    "follow_up_full_run": {
+      "full_run_log_sha256": "42b7159a6e10fee3535991084f47ae3f98d4e90b61dcb92c1f27864104cf5d1b",
+      "callbacks_completed_before_stop": 13,
+      "first_divergence": {
+        "relative_segment_event": 146,
+        "register": "R1",
+        "actual": "0x12a479b0",
+        "expected": "0x1296ba60"
+      },
+      "segment_completed": false
+    }
   }
 }

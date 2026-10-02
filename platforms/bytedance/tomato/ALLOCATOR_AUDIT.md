@@ -162,3 +162,17 @@ The sanitized evidence is
 This result remains a controlled checkpoint replay. The public allocator model
 must continue to reject fresh empty-bin allocation until those missing inputs
 are independently generated.
+
+## Full controlled replay boundary
+
+Repeating the same probe without stopping after callback 1 completed 13 native
+callbacks. The first VM mismatch then occurred at relative Seg2 event `146`:
+`R1=0x12a479b0` from the new slab, while the trace requires
+`R1=0x1296ba60` from the current free-list state. The run therefore proves
+that the new slab object remains live across later callbacks, but it cannot
+stand in for the object identity selected by this captured trace.
+
+This is a useful boundary: the missing behavior is now the allocator's object
+selection and allocation/free history after the new slab transition, rather
+than failure to execute the empty-bin primitive itself. The full run still
+does not establish a fresh-input allocator or a current online Medusa body.
