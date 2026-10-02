@@ -199,6 +199,23 @@ No new server test was performed.
 See [VM9_PROGRESS.md](VM9_PROGRESS.md) and
 [evidence/vm9_handoff_holdouts_20261002.json](evidence/vm9_handoff_holdouts_20261002.json).
 
+The follow-up native transition watch now provides direct attribution for the
+same slot in the detail capture. After correcting the Seg1 native frame, the
+independent runner completed Seg1 at `4592/4592` events, 85 callbacks, and one
+syscall. During the transition it observed `0x125150d0 -> 0x125151b0` four
+times, `0x1218199c -> 0xe4ffbde0`, and on Seg2 callback 1
+`0x1217f00c -> 0x1210bb20` at `0xe4ffbb78`.
+
+The first unassisted Seg2 boundary is the transition object slot
+`0xe4ffc9a0`: the native path leaves zero while the paired trace requires
+`0x122a0ce0`. Explicit diagnostic repairs for this slot, the constructor
+pointer, the string reference/refcount, object field, and slab-derived fields
+advance the replay to event 747 and 33 callbacks; the next difference is still
+a native-derived data word. This is direct evidence that the remaining work is
+allocator/refill and host-handoff initialization. It does not establish a
+fresh-input signer. See
+[evidence/vm9_detail_native_transition_watch_20261003.json](evidence/vm9_detail_native_transition_watch_20261003.json).
+
 ## Six/seven gods and “16/24 gods”
 
 “God” in the historical notes means a request header, not a VM layer. The six hard historical names are Gorgon, Ladon, Argus, Khronos, Helios, and Medusa; Neptune is an additional soft field in seven-header descriptions. Perseus is a separate VM header and is tracked independently.

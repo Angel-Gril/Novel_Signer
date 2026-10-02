@@ -607,5 +607,32 @@
     "interpretation": "Trace-assisted body assembly is independently checked against the same captured output; fresh-input current Medusa remains open.",
     "independent_current_parameterization": false,
     "new_server_validation_performed": false
+  },
+  "vm9_detail_native_transition_watch_20261003": {
+    "evidence_file": "evidence/vm9_detail_native_transition_watch_20261003.json",
+    "trial": "vm9_detail_20261002_g",
+    "seg1_baseline": {
+      "events": "4592/4592",
+      "native_callbacks": 85,
+      "syscalls": 1
+    },
+    "dispatcher_slot": {
+      "address": "0xe4ffbb78",
+      "direct_writer_pcs": [
+        "0x125150d0",
+        "0x1218199c",
+        "0x1217f00c"
+      ],
+      "current_detail_exact_writer_observed": true
+    },
+    "seg2_diagnostic": {
+      "first_unassisted_divergence": "relative event 13, R2, source 0xe4ffc9a0",
+      "last_controlled_alignment": "747 events / 33 callbacks",
+      "remaining_mismatch": "native-derived allocator/data value",
+      "diagnostic_patches": 5
+    },
+    "interpretation": "Direct native slot attribution is now available. Seg1 is independently trace-aligned; Seg2 still requires allocator and host-handoff state that is not initialized from a fresh request.",
+    "independent_current_parameterization": false,
+    "new_server_validation_performed": false
   }
 }

@@ -1,0 +1,93 @@
+{
+  "evidence_id": "vm9_detail_native_transition_watch_20261003",
+  "platform": "bytedance.tomato",
+  "scope": "native transition and allocator watch for the held-out detail VM9 capture",
+  "trial": "vm9_detail_20261002_g",
+  "redaction": "Addresses, instruction semantics, event counts, allocator observations, and hashes only; no URLs, headers, device data, native images, traces, pickle data, or output bodies.",
+  "inputs": {
+    "seg1_checkpoint_log_sha256": "1b27280d465886d482dcbcc4ce46a39690bdd7b16b74d272e590b4a8b4151948",
+    "seg2_diagnostic_log_sha256": "e2ff5f5602c56ee2cd378cffe5f58392cfaa11bcdae2e3df655d85ee8360c827"
+  },
+  "seg1_baseline": {
+    "events": 4592,
+    "native_callbacks": 85,
+    "syscalls": 1,
+    "result": "full trace alignment with the capture paired to vm9_detail_20261002_g",
+    "native_frame": "Seg1 frame (SP=0xe4ffb320, X29=0xe4ffb440); Seg2 frame was not reused"
+  },
+  "dispatcher_slot_watch": {
+    "address": "0xe4ffbb78",
+    "direct_writes": [
+      {
+        "pc": "0x125150d0",
+        "size": 8,
+        "value": "0x125151b0",
+        "count": 4,
+        "phase": "recursive host cleanup"
+      },
+      {
+        "pc": "0x1218199c",
+        "size": 8,
+        "value": "0xe4ffbde0",
+        "count": 1,
+        "phase": "transition cleanup"
+      },
+      {
+        "pc": "0x1217f00c",
+        "size": 8,
+        "value": "0x1210bb20",
+        "count": 1,
+        "phase": "Seg2 callback #1 native path"
+      }
+    ],
+    "interpretation": "The native transition watch directly attributes writes to 0xe4ffbb78. These are native dispatcher/allocator state writes, separate from VM9 bytecode STORE operations. The values are evidence of the slot's live role, not a proof that one writer is universal across all requests."
+  },
+  "seg2_boundary": {
+    "trace_events": 90330,
+    "first_unassisted_divergence": {
+      "relative_event": 13,
+      "register": "R2",
+      "actual": "0x0",
+      "expected": "0x122a0ce0",
+      "source_slot": "0xe4ffc9a0",
+      "interpretation": "The native callback leaves the transition object slot empty under the current allocator state."
+    },
+    "controlled_progression": [
+      {
+        "patch": "0xe4ffc9a0=0x122a0ce0",
+        "next_divergence": "relative event 146, R1 at 0xe4ffd598"
+      },
+      {
+        "patch": "0xe4ffd598=0x1296ba90",
+        "next_divergence": "relative event 186, R2 at 0xe4ffcaa8"
+      },
+      {
+        "patch": "0xe4ffcaa8=0x12297468 and [0x12297468]=1",
+        "next_divergence": "relative event 205, object field [0x122a0ce0]"
+      },
+      {
+        "patch": "[0x122a0ce0]=0x1260f5f8",
+        "next_divergence": "relative event 386, R5 allocation result"
+      },
+      {
+        "patch": "0xe4ffd5e0=0x1296baf0, 0xe4ffd474=0x44, 0xe4ffd478=0x12296380",
+        "next_divergence": "relative event 747, R1 data value"
+      }
+    ],
+    "last_controlled_run": {
+      "aligned_events": 747,
+      "native_callbacks": 33,
+      "actual": "0x32357c32",
+      "expected": "0x78c1d3ab",
+      "result": "allocator/native data state remains unmatched; VM bytecode alignment continues until a native-derived value differs"
+    }
+  },
+  "limitations": [
+    "The transition and slot writes are from captured native ARM64 execution with a captured Seg1 checkpoint.",
+    "The controlled slot patches are diagnostic interventions and are not part of the public signer implementation.",
+    "This does not establish fresh-input pure-Python Medusa parameterization, online validation, or a no-JVM Rust signer."
+  ],
+  "independent_current_parameterization": false,
+  "no_jvm_rust_signer_complete": false,
+  "new_server_validation_performed": false
+}

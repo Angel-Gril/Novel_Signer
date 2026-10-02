@@ -342,6 +342,33 @@ body; the result is exact (`0` differing bytes). That validates body assembly
 for this capture while leaving fresh-input Medusa generation open. Full trace
 completion is not a general pure-Python current-Medusa proof.
 
+## Direct native transition watch (2026-10-03)
+
+The temporary independent runner was corrected to use the detail capture's
+Seg1 native frame (`SP=0xe4ffb320`, `X29=0xe4ffb440`) and the VM entry base.
+With that correction, Seg1 completed `4592/4592` events, 85 callbacks, and one
+syscall without callback-page injection. The transition then ran the captured
+allocator/constructor, recursive cleanup, and final reference free while
+watching the dispatcher slot at `0xe4ffbb78`.
+
+The slot now has direct native attribution in this run: `0x125150d0` wrote
+`0x125151b0` four times during recursive cleanup, `0x1218199c` wrote
+`0xe4ffbde0` during transition cleanup, and `0x1217f00c` wrote `0x1210bb20`
+on Seg2 callback 1. These are native state writes, not VM9 bytecode stores.
+
+The first unassisted Seg2 divergence is relative event 13: the native callback
+leaves `0xe4ffc9a0` as zero while the trace requires the transition object
+`0x122a0ce0`. Controlled diagnostic slot repairs then moved the boundary to
+event 747 (33 callbacks), where a native-derived data word still differed
+(`0x32357c32` versus `0x78c1d3ab`). The repaired values included the object
+slot, constructor pointer, string reference slot/refcount, object field, and
+slab-derived addresses. This sequence demonstrates that the remaining gap is
+allocator and host-handoff state, not a missing VM opcode.
+
+The direct-write and boundary log is
+[evidence/vm9_detail_native_transition_watch_20261003.json](evidence/vm9_detail_native_transition_watch_20261003.json).
+The interventions are diagnostic only and are not part of the public signer.
+
 ## Meaning for the deliverables
 
 - Seg2 has complete captured diagnostic runs, including the new detail holdout
