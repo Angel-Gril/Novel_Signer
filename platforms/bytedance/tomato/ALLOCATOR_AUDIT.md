@@ -182,3 +182,9 @@ The paired control run keeps the class-3 bin non-empty: count `3`, list
 run instead returns the new object `0x12a479b0`. This A/B pair directly ties
 the first VM mismatch to allocator object identity and records the control
 branch's 204 native writes versus 273 writes on the new-slab branch.
+
+The allocator entry trace also captures the relevant history: the transition
+frees `0x1296ba60`, then callback 1 performs `malloc(0x2c)` and reclaims that
+same slot. The forced run bypasses this reuse by zeroing the bin count and
+slab slot. This is the concrete state sequence that a fresh allocator model
+must reproduce before the VM body can be compared.

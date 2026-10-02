@@ -565,3 +565,9 @@ uses list `0x12282680`, index `2`, and returns `0x1296ba60`. The forced branch
 returns `0x12a479b0` instead. This A/B result ties the first divergence to
 allocator object identity and leaves the allocation/free history as the next
 state to reconstruct.
+
+The entry trace supplies that history for this checkpoint: transition
+`free(0x1296ba60)` is followed by callback-1 `malloc(0x2c) -> 0x1296ba60`.
+The forced path skips this reuse and allocates `0x12a479b0` from a new slab.
+Fresh-input work therefore needs to reproduce the free-list transition and
+its bin publication before attempting body generation.

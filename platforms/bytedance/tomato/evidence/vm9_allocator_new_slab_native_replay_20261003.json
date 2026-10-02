@@ -81,5 +81,74 @@
     "branch": "non-empty free-list path",
     "native_writes": 204,
     "interpretation": "The control run selects the trace-required 0x1296ba60 from the current free list; the forced run selects the newly created 0x12a479b0. The pointer difference explains the first forced replay mismatch."
+  },
+  "control_alloc_free_sequence": {
+    "log_sha256": "6b2aba19df42fbc09d14104de2d6b0aaf207725e72606fbc2a6b983de5220add",
+    "events": [
+      {
+        "phase": "transition",
+        "op": "malloc",
+        "request": "0x18",
+        "result": "0x122a0c20",
+        "caller": "0x125ea210"
+      },
+      {
+        "phase": "transition",
+        "op": "malloc",
+        "request": "0x2d",
+        "result": "0x1296baf0",
+        "caller": "0x12508388"
+      },
+      {
+        "phase": "transition",
+        "op": "free",
+        "pointer": "0x122974a8",
+        "free_return": "0x122825c0",
+        "caller": "0x70000000"
+      },
+      {
+        "phase": "transition",
+        "op": "free",
+        "pointer": "0x1296ba60",
+        "free_return": "0x12282680",
+        "caller": "0x70000000"
+      },
+      {
+        "phase": "callback_1",
+        "op": "malloc",
+        "request": "0x2c",
+        "result": "0x1296ba60",
+        "caller": "0x12518eb8"
+      },
+      {
+        "phase": "callback_1",
+        "op": "malloc",
+        "request": "0x18",
+        "result": "0x122a0ce0",
+        "caller": "0x125ea210"
+      },
+      {
+        "phase": "callback_1",
+        "op": "malloc",
+        "request": "0x21",
+        "result": "0x1296bb20",
+        "caller": "0x12508238"
+      },
+      {
+        "phase": "callback_1",
+        "op": "free",
+        "pointer": "0x1296ba60",
+        "free_return": "0x12282680",
+        "caller": "0x12518f00"
+      },
+      {
+        "phase": "callback_1",
+        "op": "malloc",
+        "request": "0x4",
+        "result": "0x122974a8",
+        "caller": "0x125ea210"
+      }
+    ],
+    "interpretation": "The transition frees 0x1296ba60 before callback 1; the control callback malloc(0x2c) reclaims that same slot. The forced empty-bin replay bypasses this free-list reuse and therefore creates 0x12a479b0."
   }
 }
