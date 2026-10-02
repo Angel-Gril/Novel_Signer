@@ -685,5 +685,35 @@
     "interpretation": "Entry x8 is caller-side packed state; the callee reloads x8 before using it. Upper words track input-dependent OP1 output; lower word has common native scratch provenance.",
     "independent_current_parameterization": false,
     "new_server_validation_performed": false
+  },
+  "vm9_callback_trampoline_path_20261003": {
+    "evidence_file": "evidence/vm9_callback_trampoline_path_20261003.json",
+    "trial": "vm9_x8detail4_20261003",
+    "sign_rounds_completed": 1,
+    "candidate_static_site": {
+      "so_offset": "0x2887f0",
+      "execution_markers": 0,
+      "marker": "X8-CALL"
+    },
+    "observed_trampoline": {
+      "so_offsets": [
+        "0x2584ac",
+        "0x2584b0",
+        "0x2584b4",
+        "0x2584b8",
+        "0x2584bc",
+        "0x2584c0"
+      ],
+      "descriptor_load": "ldp x1, x8, [x0]",
+      "handoff": "mov x0, x8; br x1",
+      "observed_entry_pairs": 4
+    },
+    "field_writer": {
+      "observed_before_trampoline": true,
+      "final_packed_x8_composition": false
+    },
+    "interpretation": "Fresh run reaches +0x2584ac descriptor trampoline; +0x2887f0 is not executed. The active descriptor path is not proof of packed entry-x8 composition; the final writer remains uncaptured.",
+    "independent_current_parameterization": false,
+    "new_server_validation_performed": false
   }
 }

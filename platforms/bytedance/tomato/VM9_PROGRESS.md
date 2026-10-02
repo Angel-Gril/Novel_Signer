@@ -432,6 +432,20 @@ The exact callback-object field writer and the native composition instruction
 that combines the two words remain uncaptured. The sanitized record is
 [evidence/vm9_native_entry_x8_liveness_20261003.json](evidence/vm9_native_entry_x8_liveness_20261003.json).
 
+## Callback trampoline path check (2026-10-03)
+
+A fresh current detail run with callback and descriptor watches reached the
+`+0x2584ac..+0x2584c0` trampoline. The older static candidate at `+0x2887f0`
+was not executed in that run (`X8-CALL` count zero). The active path performs
+`ldp x1, x8, [x0]`, then `mov x0, x8; br x1`; the observed `[obj+8]` value is
+therefore the object passed to the branch target, not proof that this helper
+constructs the packed entry `x8` pair from the prior liveness capture.
+
+The descriptor fields were already populated before the trampoline was
+entered. The final field writer and the instruction that combines the two
+32-bit words remain outside this run's captured path. The redacted record is
+[evidence/vm9_callback_trampoline_path_20261003.json](evidence/vm9_callback_trampoline_path_20261003.json).
+
 ## Meaning for the deliverables
 
 - Seg2 has complete captured diagnostic runs, including the new detail holdout
