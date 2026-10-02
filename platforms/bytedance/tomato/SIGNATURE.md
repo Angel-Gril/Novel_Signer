@@ -18,9 +18,13 @@
 The current signer produced both of these raw sizes under frozen timestamps:
 
 - 228 bytes (304 base64 characters);
-- 803–804 bytes (1,072 base64 characters).
+- 802–804 bytes (1,072 base64 characters).
 
 Both branch families were accepted by the tested detail/directory/reader endpoints when their timestamp and `_rticket` were fresh. Some adjacent frozen millisecond values crash the local Unidbg harness before an HTTP request is sent; a 200-second grid was stable in the recorded sweep. This is a local VM execution issue, not evidence of server rejection.
+
+The 802-byte size was added by the 2026-10-01 diagnostic capture. That new
+sample was not submitted to the server; the earlier accepted long samples were
+803–804 bytes. Captured branch sizes and live acceptance are separate evidence.
 
 The current bridge matrix also confirms that the URL, frozen timestamp, and emulated PID affect the Medusa result, while repeating the same triple is deterministic. Five frozen timestamp trials reached the detail endpoint with HTTP 200. These observations describe the bridge's input surface; they do not replace the independent no-JVM implementation proof.
 

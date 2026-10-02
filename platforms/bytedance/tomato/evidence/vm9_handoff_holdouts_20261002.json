@@ -1,0 +1,445 @@
+{
+  "evidence_id": "vm9_handoff_holdouts_20261002",
+  "platform": "bytedance.tomato",
+  "scope": "same-family byte-rule holdout and allocator-derived cross-interface diagnostic holdout",
+  "capture_dates": [
+    "2026-10-01",
+    "2026-10-02"
+  ],
+  "redaction": "Only trial labels, structural addresses, counts, hashes, and outcomes; no request URLs, headers, device data, native images, traces, pickle data, or output bodies.",
+  "homepage_byte_rule": {
+    "training_a": {
+      "trial": "vm9_second_url_20261001",
+      "trace_sha256": "39e135db4d16da856b2095f445e899e565f523c390df6d986cfac1cdcfefa6ce",
+      "snapshot_m0_sha256": "a99af357d2040e77787df0a3d6b1d738f7c91cf801526814d1d78e32abbe995a",
+      "segments": [
+        4592,
+        90385,
+        1057
+      ],
+      "medusa_raw_bytes": 804,
+      "medusa_raw_sha256": "b389ff442fe5021fe5c844eed2aa5e4215b2c6dc8282a3cbdb7ea5511abc4f15"
+    },
+    "training_b": {
+      "trial": "vm9_fresh_url_20261001_d",
+      "trace_sha256": "3142bb4b29df5945c490590c6a4ba2937a896160cd4422d1caed040234dc38b8",
+      "snapshot_m0_sha256": "829c8dcf2bb03e0ccbcfd0c5aa77bd00fa3d8a09aa940469b4b40b391c1e00ca",
+      "segments": [
+        4592,
+        90152,
+        1057
+      ],
+      "medusa_raw_bytes": 802,
+      "medusa_raw_sha256": "0d784a2b3ecf38002ef80a69750e684c689c5c6f45049bfe79f57b9342a66fa5"
+    },
+    "rule": {
+      "pages": 14,
+      "changed_locations": 560,
+      "fixed_target_bytes": 558,
+      "dynamic_bytes": [
+        {
+          "address": "0x12282018",
+          "add_modulo_256": 31
+        },
+        {
+          "address": "0x12296019",
+          "add_modulo_256": 1
+        }
+      ]
+    },
+    "heldout": {
+      "trial": "vm9_fresh_url_20261001_e",
+      "trace_sha256": "2540da5ec713c30e0e2d661a36afd361778b8cfdb4201832ac6c91c467586c19",
+      "snapshot_m0_sha256": "3d148742c73510dc2d14b0704b993b0fb0873f7f1ddbd4fd17cca7f4ddc6ef63",
+      "segments": [
+        4592,
+        90332,
+        1057
+      ],
+      "medusa_raw_bytes": 804,
+      "medusa_raw_sha256": "8cf0bc47478144da592f45a531aff3a306715cb7b3a77e935d21b7c9bbbd49e1",
+      "prediction": {
+        "rule_pages": 14,
+        "fixed_target_bytes": 558,
+        "arithmetic_bytes": 2,
+        "dynamic_locations": [
+          {
+            "address": "0x12282018",
+            "delta": "0x1f"
+          },
+          {
+            "address": "0x12296019",
+            "delta": "0x01"
+          }
+        ],
+        "source_checkpoint_sha256": "6b886017c501f738ca978492ce08fa8c721c08781e5b71c05a792906092de6e4",
+        "patched_checkpoint_sha256": "c44d9a482006ef1879d1895e452bafbefb7463643247c5ff962293c8b2592df0",
+        "heldout_handoff_read": false
+      },
+      "next1_comparison": {
+        "checkpoint_sha256": "c44d9a482006ef1879d1895e452bafbefb7463643247c5ff962293c8b2592df0",
+        "pages": 0,
+        "bytes": 0,
+        "page_details": []
+      },
+      "allocator_model_regression": {
+        "checkpoint_sha256": "c44d9a482006ef1879d1895e452bafbefb7463643247c5ff962293c8b2592df0",
+        "pages": 0,
+        "bytes": 0,
+        "page_details": []
+      },
+      "seg1": {
+        "events": "4592/4592",
+        "native_callbacks": 85,
+        "syscalls": 1,
+        "log_sha256": "74a518e4c9aa046af7c6c013fa1fc51416240516750b6e0770af3d30eaee67a3",
+        "checkpoint_sha256": "6b886017c501f738ca978492ce08fa8c721c08781e5b71c05a792906092de6e4"
+      },
+      "seg2": {
+        "events": "90332/90332",
+        "native_callbacks": 121,
+        "syscalls": 0,
+        "log_sha256": "6d6a6b028d6c5e161bd7b592b947b1aac213a95b1470d54e442e4759e80f285e",
+        "checkpoint_sha256": "d525c937dbb66490d2ae1d5790944fe800a74f648d9dd400d767d4a6d252a966"
+      },
+      "seg3": {
+        "events": "1057/1057",
+        "native_callbacks": 87,
+        "syscalls": 2,
+        "log_sha256": "64a44cb0f8650be2a29acfe81b56aa0f5466f376b569443f2336295d354fa694",
+        "checkpoint_sha256": "bfe3ac6d203c0bbba39eedaf6082b134de82d25da573efd01f0d74bc21cc1ea3"
+      }
+    }
+  },
+  "allocator_rule": {
+    "object_size_bytes": 24,
+    "count_address": "0x12282070",
+    "freelist_address": "0x12282078",
+    "object_rule": "read64(read64(0x12282078) + (read64(0x12282070) - 1) * 8)",
+    "relocation_slots": [
+      "0xe4ffbc80",
+      "0xe4ffbca0",
+      "0xe4ffbd08",
+      "0xe4ffcaa0"
+    ],
+    "word_deltas": [
+      {
+        "address": "0x12240730",
+        "delta": 12
+      },
+      {
+        "address": "0x12282060",
+        "delta": 1
+      },
+      {
+        "address": "0x12282070",
+        "delta": -1
+      },
+      {
+        "address": "0x12296018",
+        "delta": 120
+      },
+      {
+        "address": "0x12296020",
+        "delta": 744
+      }
+    ],
+    "scratch_word": "0xe4ffb9e0 is stored as the shared training target 0x500",
+    "limitations": "Uses the trained byte rule, observed string-object state, and captured baseline; size-class refill is unsupported. One scratch byte is not modeled. This is not an independent allocator/host implementation."
+  },
+  "detail_trials": [
+    {
+      "trial": "vm9_detail_20261001_f",
+      "role": "diagnosis input; structural model developed using its differences",
+      "trace_sha256": "f4e4514cae5861527efc66abd66045a7435e25974c74a68f60e903827b4f77f2",
+      "captured_medusa_raw_bytes": 804,
+      "captured_medusa_raw_sha256": "4db99bf4370747c338f7da0da6f013c4c80553f274848f3d7f9bda001dd5985c",
+      "prediction": {
+        "rule_pages": 14,
+        "fixed_target_bytes": 558,
+        "arithmetic_bytes": 2,
+        "dynamic_locations": [
+          {
+            "address": "0x12282018",
+            "delta": "0x1f"
+          },
+          {
+            "address": "0x12296019",
+            "delta": "0x01"
+          }
+        ],
+        "source_checkpoint_sha256": "f9537065d3de22ef4a5e6e44a6d3dab6b398b9f424b76b1c451fb104512ce0ae",
+        "patched_checkpoint_sha256": "b809e79356530658f5332d772ef2ba2ca634b1178cf820ca298e72dd1081eaa0",
+        "heldout_handoff_read": false,
+        "allocator_model": {
+          "trained_object": "0x122a0c40",
+          "object_pointer": "0x122a0c20",
+          "source_bin_count": 7,
+          "word_deltas": [
+            {
+              "address": "0x12240730",
+              "delta": 12
+            },
+            {
+              "address": "0x12282060",
+              "delta": 1
+            },
+            {
+              "address": "0x12282070",
+              "delta": -1
+            },
+            {
+              "address": "0x12296018",
+              "delta": 120
+            },
+            {
+              "address": "0x12296020",
+              "delta": 744
+            }
+          ],
+          "still_uses_training_target_bytes": true,
+          "scratch_byte_0xe4ffbb78": "unmodeled; do not substitute a trace value"
+        }
+      },
+      "next1_comparison": {
+        "checkpoint_sha256": "b809e79356530658f5332d772ef2ba2ca634b1178cf820ca298e72dd1081eaa0",
+        "pages": 1,
+        "bytes": 1,
+        "page_details": [
+          {
+            "address": "0xe4ffb000",
+            "changed_bytes": 1
+          }
+        ]
+      },
+      "remaining_scratch_difference": {
+        "address": "0xe4ffbb78",
+        "predicted_byte": "0xc4",
+        "actual_byte": "0xb4",
+        "patched_from_trace": false
+      },
+      "seg1": {
+        "events": "4592/4592",
+        "native_callbacks": 85,
+        "syscalls": 1,
+        "log_sha256": "a2ad722f9a7e5ff1277e00df3e83a0a7a176dab4dc1510eb1392e827d790e9e4",
+        "checkpoint_sha256": "f9537065d3de22ef4a5e6e44a6d3dab6b398b9f424b76b1c451fb104512ce0ae"
+      },
+      "seg2": {
+        "events": "90352/90352",
+        "native_callbacks": 121,
+        "syscalls": 0,
+        "log_sha256": "96811c5f559d7494f43a60b56be4e655bff6c44683a53f88b201a6b3f8e086e3",
+        "checkpoint_sha256": "63b86d751d3ad5d8c8dcadf3941f0bbea349ed0b397a5ec1f9b86c5bd152787f"
+      },
+      "seg3": {
+        "events": "1057/1057",
+        "native_callbacks": 87,
+        "syscalls": 2,
+        "log_sha256": "1b89d80028ba8913eaa472afeb3bc7a31e00bb0a498d933ee554cc711a6d78cf",
+        "checkpoint_sha256": "68382cac4591cbb9a0b59de1ae27fbb345ef56e28d5bfcb5fb020f571a94aff5"
+      },
+      "seg3_target_rule": {
+        "address": "0x12641b28",
+        "before": "0x1d",
+        "after": "0x1250c59c",
+        "width_bytes": 4,
+        "full_next2_loaded": false,
+        "checkpoint_sha256": "19977fedef61e3a8c4fe28d2ca9d00261b607f1234527c19288d7fa5e9d332a7"
+      },
+      "byte_rule_control": {
+        "first_divergence_event": 3,
+        "register": "R2",
+        "actual": "0x122a0c40",
+        "expected": "0x122a0c20",
+        "next1_comparison": {
+          "checkpoint_sha256": "9aed37001ad737d03b806e7d78d6296ee1072c1995da01d1d51e09fb2b65e790",
+          "pages": 6,
+          "bytes": 34,
+          "page_details": [
+            {
+              "address": "0x12240000",
+              "changed_bytes": 1
+            },
+            {
+              "address": "0x12282000",
+              "changed_bytes": 2
+            },
+            {
+              "address": "0x12296000",
+              "changed_bytes": 4
+            },
+            {
+              "address": "0x122a0000",
+              "changed_bytes": 18
+            },
+            {
+              "address": "0xe4ffb000",
+              "changed_bytes": 5
+            },
+            {
+              "address": "0xe4ffc000",
+              "changed_bytes": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "trial": "vm9_detail_20261002_g",
+      "role": "held out from structural model development; new detail query input",
+      "trace_sha256": "f7ffa8b815632c8da77ecf4d51eb1bfd17e0cd72f6cbd077848d1c4bd8aa763f",
+      "captured_medusa_raw_bytes": 804,
+      "captured_medusa_raw_sha256": "5a6dfacd4132e2cf5742ca19cd058cd794132e220450ec81772a101a04caf3a0",
+      "prediction": {
+        "rule_pages": 14,
+        "fixed_target_bytes": 558,
+        "arithmetic_bytes": 2,
+        "dynamic_locations": [
+          {
+            "address": "0x12282018",
+            "delta": "0x1f"
+          },
+          {
+            "address": "0x12296019",
+            "delta": "0x01"
+          }
+        ],
+        "source_checkpoint_sha256": "28eb0430c131c3cfe6e622c8657ceab2ba33bc63c4c25b93c34855f88bec9e18",
+        "patched_checkpoint_sha256": "674c7941b9b445d7f167ff0b8140a87fac526459156f5abecd760b7cd449b1bf",
+        "heldout_handoff_read": false,
+        "allocator_model": {
+          "trained_object": "0x122a0c40",
+          "object_pointer": "0x122a0c20",
+          "source_bin_count": 7,
+          "word_deltas": [
+            {
+              "address": "0x12240730",
+              "delta": 12
+            },
+            {
+              "address": "0x12282060",
+              "delta": 1
+            },
+            {
+              "address": "0x12282070",
+              "delta": -1
+            },
+            {
+              "address": "0x12296018",
+              "delta": 120
+            },
+            {
+              "address": "0x12296020",
+              "delta": 744
+            }
+          ],
+          "still_uses_training_target_bytes": true,
+          "scratch_byte_0xe4ffbb78": "unmodeled; do not substitute a trace value"
+        }
+      },
+      "next1_comparison": {
+        "checkpoint_sha256": "674c7941b9b445d7f167ff0b8140a87fac526459156f5abecd760b7cd449b1bf",
+        "pages": 1,
+        "bytes": 1,
+        "page_details": [
+          {
+            "address": "0xe4ffb000",
+            "changed_bytes": 1
+          }
+        ]
+      },
+      "remaining_scratch_difference": {
+        "address": "0xe4ffbb78",
+        "predicted_byte": "0xc4",
+        "actual_byte": "0xb4",
+        "patched_from_trace": false
+      },
+      "seg1": {
+        "events": "4592/4592",
+        "native_callbacks": 85,
+        "syscalls": 1,
+        "log_sha256": "7aeded303c6f5ea5e08b66dec9f233551e0e4377d1e539bb68519df4e456d980",
+        "checkpoint_sha256": "28eb0430c131c3cfe6e622c8657ceab2ba33bc63c4c25b93c34855f88bec9e18"
+      },
+      "seg2": {
+        "events": "90330/90330",
+        "native_callbacks": 121,
+        "syscalls": 0,
+        "log_sha256": "68699ca2163c9e585112bbc244a661e34423f0e459feafe17ac56c49253bae51",
+        "checkpoint_sha256": "3c2ac355a4d3e0c1801429c93de307f3fad99dc6a57806d36a1b86fa61348c36"
+      },
+      "seg3": {
+        "events": "1057/1057",
+        "native_callbacks": 87,
+        "syscalls": 2,
+        "log_sha256": "e44a7c0ec8af20352bdd9a24e5566dd87c353556dbff84a99a7c2c59dd53e556",
+        "checkpoint_sha256": "e67120089b9f0785c35af5d0a958a270c67b4022e196635ba3ba71f76e912509"
+      },
+      "seg3_target_rule": {
+        "address": "0x12641b28",
+        "before": "0x1d",
+        "after": "0x1250c59c",
+        "width_bytes": 4,
+        "full_next2_loaded": false,
+        "checkpoint_sha256": "750513755b8d14e7c40d70c8a5ee6af4615684e245da7aaa233a8af2cec73541"
+      },
+      "byte_rule_control": {
+        "first_divergence_event": 3,
+        "register": "R2",
+        "actual": "0x122a0c40",
+        "expected": "0x122a0c20",
+        "next1_comparison": {
+          "checkpoint_sha256": "7bb095467a8ee801cc2618ebc0fdd5c88a9725f741069ce9ee145816a94efd3b",
+          "pages": 6,
+          "bytes": 34,
+          "page_details": [
+            {
+              "address": "0x12240000",
+              "changed_bytes": 1
+            },
+            {
+              "address": "0x12282000",
+              "changed_bytes": 2
+            },
+            {
+              "address": "0x12296000",
+              "changed_bytes": 4
+            },
+            {
+              "address": "0x122a0000",
+              "changed_bytes": 18
+            },
+            {
+              "address": "0xe4ffb000",
+              "changed_bytes": 5
+            },
+            {
+              "address": "0xe4ffc000",
+              "changed_bytes": 1
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "public_rule": "python/vm9_handoff_rule.py",
+    "public_rule_sha256": "f0de5a5f74a990bb8167082e861e6fc54102164c84151edcaed5645096ccf7cf",
+    "private_runner_sha256": "60002e9748b9602f15d79f4824cb0063e06b028cd27c37482e057d1b31b0a8e9",
+    "public_cli_predictions_equal_private_predictions": true,
+    "heldout_next1_read_during_prediction": false,
+    "full_next1_or_next2_loaded_during_detail_replay": false,
+    "callback_page_injections": 0,
+    "clock_slot_override": false,
+    "captured_baseline_images_used": true,
+    "native_arm64_callbacks_used": true,
+    "trace_entry_registers_and_assertions_used": true,
+    "independent_generated_medusa_body_comparison": false,
+    "new_server_validation_performed": false
+  },
+  "refuted_assumption": "0xe4ffbb78 is not the final Python VM R2 backing slot: the interpreter's final R2 is 0x122974b8 for both diagnosis inputs, while the real handoff scratch byte differs. No final-register substitution is used.",
+  "independent_current_parameterization": false,
+  "no_jvm_rust_signer_complete": false,
+  "interpretation": "The byte rule predicts one new homepage handoff exactly, but fails on detail. The structural correction derives the detail object pointer from Seg1 allocator state and carries a new detail input through all three VM segments, retaining one unexplained scratch byte. Captured native code, initial state, entry registers, trained target bytes, and one Seg3 call-target correction remain dependencies. This narrows the host boundary without completing pure-Python current Medusa."
+}

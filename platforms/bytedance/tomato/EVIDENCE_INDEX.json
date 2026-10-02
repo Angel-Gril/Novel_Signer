@@ -229,6 +229,7 @@
     "current_bridge": "sample-verified",
     "raw_branch_lengths": [
       228,
+      802,
       803,
       804
     ],
@@ -337,7 +338,8 @@
         "fresh_input": false
       },
       "status": "captured allocator/refill branch replayed; fresh-input parameterization remains open"
-    }
+    },
+    "branch_length_scope": "captured bridge outputs; new 802-byte diagnostic sample was not server-tested"
   },
   "vm9_handoff_probe_20260930": {
     "platform": "bytedance.tomato",
@@ -532,5 +534,78 @@
     },
     "independent_current_parameterization": false,
     "interpretation": "Captured-state handoff reduction only; pure-Python current Medusa and no-JVM Rust implementation remain open."
+  },
+  "vm9_handoff_holdouts_20261002": {
+    "evidence_file": "evidence/vm9_handoff_holdouts_20261002.json",
+    "homepage_heldout": {
+      "next1_diff_pages": 0,
+      "next1_diff_bytes": 0,
+      "seg2_events": "90332/90332",
+      "seg3_events": "1057/1057"
+    },
+    "detail_byte_rule_failure": {
+      "diff_pages": 6,
+      "diff_bytes": 34,
+      "first_divergence_event": 3
+    },
+    "detail_structural_holdout": {
+      "trial": "vm9_detail_20261002_g",
+      "next1_diff_pages": 1,
+      "next1_diff_bytes": 1,
+      "object_pointer": "0x122a0c20",
+      "seg1_events": "4592/4592",
+      "seg2_events": "90330/90330",
+      "seg3_events": "1057/1057",
+      "callbacks": [
+        85,
+        121,
+        87
+      ]
+    },
+    "still_uses_captured_baseline_and_native_callbacks": true,
+    "still_uses_trained_target_bytes": true,
+    "independent_current_parameterization": false,
+    "new_server_validation_performed": false
+  },
+  "vm9_detail_body_compare_20261002": {
+    "evidence_file": "evidence/vm9_detail_body_compare_20261002.json",
+    "trial": "vm9_detail_20261002_g",
+    "trace_reconstruction": {
+      "v_bytes": 768,
+      "p_bytes": 248,
+      "body_bytes": 779,
+      "body_sha256": "1cf99c1513819043bb7c8e0a21891274005907d3219cc12445bb5c514b1ee6a9"
+    },
+    "captured_live_body": {
+      "source": "same-run final MEDCOPY len=779",
+      "body_bytes": 779,
+      "body_sha256": "1cf99c1513819043bb7c8e0a21891274005907d3219cc12445bb5c514b1ee6a9"
+    },
+    "different_bytes": 0,
+    "scratch_provenance": {
+      "address": "0xe4ffbb78",
+      "predicted_byte": "0xc4",
+      "captured_next1_byte": "0xb4",
+      "dispatch_base_register": "x28",
+      "dispatch_base_value": "0xe4ffbb60",
+      "slot_index": 3,
+      "writer_candidates": [
+        {
+          "pc": "0x1242d8a4",
+          "instruction": "str x15, [x28, x10, lsl #3]",
+          "observed_in_transition_watch": true,
+          "observed_final_value_in_that_watch": "0xb4"
+        },
+        {
+          "pc": "0x1242f974",
+          "instruction": "str x9, [x28, x14, lsl #3]",
+          "observed_in_transition_watch": true
+        }
+      ],
+      "current_detail_exact_writer_observed": false
+    },
+    "interpretation": "Trace-assisted body assembly is independently checked against the same captured output; fresh-input current Medusa remains open.",
+    "independent_current_parameterization": false,
+    "new_server_validation_performed": false
   }
 }

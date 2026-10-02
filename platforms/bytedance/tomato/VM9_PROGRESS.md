@@ -258,24 +258,111 @@ This reduces the captured handoff surface, but it does not make the current VM a
 fresh-input pure-Python signer: the baseline checkpoint, native ARM64 images,
 and callback execution are still captured-state inputs.
 
+## Byte-rule holdout and cross-interface counterexample (2026-10-01)
+
+The paired second URL and a new homepage capture have identical 560-byte change
+masks across 14 pages. Of their target bytes, 558 are identical; the other two
+are source-byte increments modulo 256: `0x12282018 += 0x1f` and
+`0x12296019 += 1`. The public `python/vm9_handoff_rule.py` learned those rules
+from the two captures and predicted a third homepage input using only its Seg1
+checkpoint. A later comparison with that held-out `NEXT#1` found zero changed
+pages or bytes. Seg2 then completed `90332/90332` events and 121 callbacks;
+Seg3 completed `1057/1057` events and 87 callbacks with the previously observed
+four-byte target correction, two clock syscalls, and no full handoff images,
+callback-page injection, or clock-slot override.
+
+The same byte rule fails on the captured detail input: six pages differ by 34
+bytes and Seg2 diverges at event 3 (`R2=0x122a0c40`, expected `0x122a0c20`).
+This is a counterexample to a general handoff rule, even though the homepage
+holdout passed. The initialization-failure capture with the adjacent frozen
+timestamp is excluded from the successful evidence set.
+
+## Allocator-derived detail holdout (2026-10-02)
+
+The detail mismatch was narrowed to structural fields. The next 24-byte object
+can be derived from the Seg1 size-class state:
+
+```text
+count  = read64(0x12282070)
+list   = read64(0x12282078)
+object = read64(list + (count - 1) * 8)
+```
+
+The homepage state has count 6 and selects `0x122a0c40`; the detail state has
+count 7 and selects `0x122a0c20`. The optional `--allocator-model` relocates
+the trained object to that computed address and writes it into the four
+boundary slots. It also applies the shared whole-word training deltas:
+
+| Address | Seg1-to-Seg2 delta |
+| --- | ---: |
+| `0x12240730` | `+12` |
+| `0x12282060` | `+1` |
+| `0x12282070` | `-1` |
+| `0x12296018` | `+0x78` |
+| `0x12296020` | `+0x2e8` |
+
+The scratch word at `0xe4ffb9e0` receives the shared target `0x500` as a full
+word. The remaining byte at `0xe4ffbb78` is left unpatched. Static disassembly
+shows that this location is a native VM dispatcher slot, slot index 3 when
+`x28=0xe4ffbb60`. The available transition write watch shows two store sites
+in this dispatcher family: `0x1242d8a4` uses
+`str x15, [x28, x10, lsl #3]`, while `0x1242f974` uses
+`str x9, [x28, x14, lsl #3]`. The current detail run was not instrumented to
+attribute its final store to one site.
+The new detail capture predicts `0xc4` and the captured `NEXT#1` contains
+`0xb4`; this is a native dispatch-state difference, not a final Python R2
+value. The sanitized provenance and body comparison are in
+[evidence/vm9_detail_body_compare_20261002.json](evidence/vm9_detail_body_compare_20261002.json).
+Substituting the final Python R2 is refuted: that value is `0x122974b8` in
+both diagnosis runs and is not the handoff scratch value.
+
+| Capture | Role | NEXT#1 difference after model | Seg1 | Seg2 | Seg3 |
+| --- | --- | --- | --- | --- | --- |
+| homepage third input | earlier holdout / regression | 0 pages, 0 bytes | `4592/4592` | `90332/90332` | `1057/1057` |
+| detail first input | diagnosis; used to develop the correction | 1 page, 1 byte | `4592/4592` | `90352/90352` | `1057/1057` |
+| detail new query | held out from correction development | 1 page, 1 byte | `4592/4592` | `90330/90330` | `1057/1057` |
+
+The new detail query's uncorrected control still fails at event 3; only the
+structural correction changes that result. Its prediction reads no held-out
+`NEXT#1`, and the public CLI produces the same checkpoint hash as the private
+prototype. Both detail replays use 85/121/87 native callbacks across the three
+segments. Seg3 still uses `0x12641b28: 0x1d -> 0x1250c59c` as a four-byte
+target rule. No full handoff image, callback-page injection, or clock-slot
+override is supplied. These are offline captures of signed input variations;
+the new detail query was not sent to the online endpoint.
+
+The evidence is
+[evidence/vm9_handoff_holdouts_20261002.json](evidence/vm9_handoff_holdouts_20261002.json).
+This narrows the allocator/object boundary, while captured baseline images,
+native ARM64 callbacks, trace entry registers, training target bytes, and the
+Seg3 call-target rule remain inputs. Size-class refill is unsupported. The
+held-out detail trace's 779-byte body was independently reconstructed from its
+STORE8/STORE64 trace regions and compared with the final captured `MEDCOPY`
+body; the result is exact (`0` differing bytes). That validates body assembly
+for this capture while leaving fresh-input Medusa generation open. Full trace
+completion is not a general pure-Python current-Medusa proof.
+
 ## Meaning for the deliverables
 
-- Seg2 has complete captured diagnostic runs (`90161/90161` with the
-  historical branch transplant, `90153/90153` from a fresh same-run host
-  handoff, and `90385/90385` for the static-constructor second URL), but it is
-  not an independent pure-Python parameterization.
+- Seg2 has complete captured diagnostic runs, including the new detail holdout
+  at `90330/90330` without full host handoff loading. It still uses captured
+  baseline/native state and trained target bytes.
 - Seg3 now completes `1057/1057` from the same-run handoff without a clock-slot
   override. The older page-assisted replay remains complete only for its
   captured sample. Neither is a general current-version signer.
 - The old 225-byte Python Medusa implementation remains valid only for its old
   snapshot vectors.
 - The no-JVM Rust crate must continue to return an explicit unavailable error
-  for current Medusa until the allocator/constructor boundary is reproduced
-  from fresh inputs.
+  for current Medusa until state initialization, constructor/allocator behavior,
+  and native callbacks are reproduced independently from fresh inputs.
 
 ## Next experiment
 
-Use a new fresh URL/input capture to carry the native constructor, allocator,
-and host handoff state through Seg1–Seg3 without loading captured `NEXT#1` or
-`NEXT#2` memory. The resulting body must then be checked against a new live
-directory/reader matrix; matching a captured body alone is insufficient.
+Replace the learned target-byte state and the Seg3 target correction with the
+actual constructor/cleanup/callback-registration semantics. Establish the
+provenance of `0xe4ffbb78`, cover allocator refill, and repeat with a new input
+and time branch. Then remove captured initialization/native callbacks and
+compare an independently generated body before running a fresh live
+directory/reader matrix. The current all-segment diagnostic is a component
+checkpoint; the pure-Python signer, no-JVM Rust chain, non-empty search, and
+later usable search/download webpage remain open.

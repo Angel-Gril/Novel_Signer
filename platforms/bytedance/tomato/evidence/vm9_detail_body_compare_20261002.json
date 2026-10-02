@@ -1,0 +1,64 @@
+{
+  "evidence_id": "vm9_detail_body_compare_20261002",
+  "platform": "bytedance.tomato",
+  "scope": "independent byte comparison of the held-out detail VM9 output body",
+  "trial": "vm9_detail_20261002_g",
+  "redaction": "Only trial labels, hashes, addresses, instruction semantics, and byte counts; no request URLs, headers, device data, native images, traces, pickle data, or output bodies.",
+  "inputs": {
+    "trace_sha256": "f7ffa8b815632c8da77ecf4d51eb1bfd17e0cd72f6cbd077848d1c4bd8aa763f",
+    "run_log_sha256": "cb84edcabe08c177c29f90517ac1df8d5459611c079444ff79c95724335f829b",
+    "captured_next1_m2_sha256": "26e57d95e072ead8ec7bc57fb186e8903a8f79d03c11276e5ec6f034fcee6e65"
+  },
+  "reconstruction": {
+    "trace_replay": "vm9_trace_replay.py replayed STORE8/STORE64 regions and the first native two-byte tail",
+    "v_bytes": 768,
+    "p_bytes": 248,
+    "body_bytes": 779,
+    "v_sha256": "c874904022cf6bb2f195bfb5cbbfc6c4bd8c6dbe478160ab064fea2fb07efb08",
+    "p_sha256": "14df04d4776a7a6198119bd1eb55d8e105396ccd8919b7dcc14e1b73a7b7aa21",
+    "body_sha256": "1cf99c1513819043bb7c8e0a21891274005907d3219cc12445bb5c514b1ee6a9"
+  },
+  "live_output": {
+    "source": "final MEDCOPY len=779 in the same captured run log",
+    "body_bytes": 779,
+    "body_sha256": "1cf99c1513819043bb7c8e0a21891274005907d3219cc12445bb5c514b1ee6a9"
+  },
+  "comparison": {
+    "length_equal": true,
+    "different_bytes": 0,
+    "result": "exact byte equality"
+  },
+  "scratch_provenance": {
+    "address": "0xe4ffbb78",
+    "predicted_byte": "0xc4",
+    "captured_next1_byte": "0xb4",
+    "residual_bytes": 1,
+    "interpretation": "The residual is a native VM dispatcher slot. Two dispatch-store sites in the same native code family write this slot in the available transition watch; the current detail run was not instrumented to attribute its final store to one site. It is not a VM9 bytecode STORE and is not substituted from final Python R2.",
+    "dispatch_base_register": "x28",
+    "dispatch_base_value": "0xe4ffbb60",
+    "slot_index": 3,
+    "writer_candidates": [
+      {
+        "pc": "0x1242d8a4",
+        "instruction": "str x15, [x28, x10, lsl #3]",
+        "observed_in_transition_watch": true,
+        "transition_log_sha256": "aa6c560c3bbb79116dda05fd910eed999b67160c167faa42e292cb6543c20bcb",
+        "observed_final_value_in_that_watch": "0xb4"
+      },
+      {
+        "pc": "0x1242f974",
+        "instruction": "str x9, [x28, x14, lsl #3]",
+        "observed_in_transition_watch": true,
+        "transition_log_sha256": "aa6c560c3bbb79116dda05fd910eed999b67160c167faa42e292cb6543c20bcb"
+      }
+    ],
+    "current_detail_exact_writer_observed": false
+  },
+  "limitations": [
+    "The byte comparison validates trace-assisted reconstruction against the same captured run; it does not prove fresh-input Medusa parameterization.",
+    "The constructor, allocator refill, native callback registration, and host handoff are still not independently initialized from a new request."
+  ],
+  "independent_current_parameterization": false,
+  "no_jvm_rust_signer_complete": false,
+  "new_server_validation_performed": false
+}

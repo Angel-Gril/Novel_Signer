@@ -37,9 +37,9 @@ The following are implemented and have sample-level or vector-level checks:
 There are two materially different claims:
 
 1. The old 12a2a000 snapshot has a pure-Python body interpreter. It can accept a query string and reproduce its 225-byte body vectors. This is useful for studying field layout and VM semantics.
-2. The current `v04.09.09.01-bugfixS` VM9 path can be run by the Java/Unidbg bridge. It produces short (228-byte raw) and long (803–804-byte raw) branches that were accepted by the live reading endpoints. The current VM9 body has also been reconstructed from A/B traces (777/779 bytes), but the reconstruction is trace-assisted. Independent execution still reaches native target `0x125081ac`, whose constructor calls allocator target `0x12607fd0`; after that boundary the standalone comparator lacks the returned object and diverges.
+2. The current `v04.09.09.01-bugfixS` VM9 path can be run by the Java/Unidbg bridge. Observed branches include 228-byte raw short outputs and 802–804-byte raw long outputs. Live reading endpoints accepted bridge-generated short and long samples; the new 802-byte diagnostic capture itself was not server-tested. The current VM9 body has also been reconstructed from A/B traces (777/779 bytes), but the reconstruction is trace-assisted. The fresh-input implementation still lacks an independently initialized constructor/allocator/host model; later state-rule replays described below retain captured native inputs.
 
-The latest checkpoint audit separates three results that must not be merged: the historical Seg3 replay still reaches `1057/1057` events with 87 callbacks when the captured `event0_cb66_vm9_*` image and callback 9/64/66 pages are used; the unmodified newer full-Seg2 checkpoint diverges at trace 758 after callback 8 (`0x1296b940` versus `0x1296ba60`); and a controlled transplant of the callback-8 slab fields lets that captured Seg2 trace complete at `90161/90161` events with 121 callbacks. These are reproducible diagnostic replays, not evidence of a general current-version parameterized signer. See [VM9_PROGRESS.md](VM9_PROGRESS.md) for the exact matrix.
+An earlier checkpoint audit separates three results that must not be merged: the historical Seg3 replay still reaches `1057/1057` events with 87 callbacks when the captured `event0_cb66_vm9_*` image and callback 9/64/66 pages are used; the unmodified newer full-Seg2 checkpoint diverges at trace 758 after callback 8 (`0x1296b940` versus `0x1296ba60`); and a controlled transplant of the callback-8 slab fields lets that captured Seg2 trace complete at `90161/90161` events with 121 callbacks. These are reproducible diagnostic replays, not evidence of a general current-version parameterized signer. See [VM9_PROGRESS.md](VM9_PROGRESS.md) for the exact matrix.
 
 Consequently, this repository does not call current Medusa “pure Python parameterized” and does not enable it in the default Rust build. The exact next proof is an independent constructor/allocator implementation followed by fresh current-version vectors and the same live endpoint matrix. The callback-8 allocator branch is documented in [ALLOCATOR_AUDIT.md](ALLOCATOR_AUDIT.md).
 
@@ -151,6 +151,53 @@ because the Seg1 checkpoint, native ARM64 images, and native callback execution
 are still supplied from the capture. It does not close current pure-Python
 Medusa parameterization or the no-JVM Rust implementation. See
 [evidence/vm9_minimal_handoff_pair_20261001.json](evidence/vm9_minimal_handoff_pair_20261001.json).
+
+## Handoff holdouts and allocator-derived object state
+
+Two homepage captures share the same 560 changed positions across 14 handoff
+pages: 558 target bytes are identical, and two bytes follow shared increments.
+The public rule predicts a third homepage capture's `NEXT#1` with zero page or
+byte differences, without reading that held-out handoff during prediction. Its
+paired replay reaches Seg2 `90332/90332` and Seg3 `1057/1057` events.
+
+That byte rule fails on a detail input: six pages contain 34 different bytes,
+and Seg2 diverges at event 3 because `R2=0x122a0c40` instead of `0x122a0c20`.
+The distinction follows the Seg1 size-class free list. With count at
+`0x12282070` and list pointer at `0x12282078`, the next 24-byte object is
+`read64(list + (count - 1) * 8)`. It selects `0x122a0c40` for the homepage
+state and `0x122a0c20` for the detail state. Relocating the trained object and
+using shared whole-word deltas reduces the detail handoff difference to one
+byte at `0xe4ffbb78`; that byte is left unpatched.
+
+A new detail query captured on 2026-10-02 validates this structural correction.
+The uncorrected control still fails at event 3. The corrected input completes
+Seg1 `4592/4592`, Seg2 `90330/90330`, and Seg3 `1057/1057`, with 85/121/87
+native callbacks. Seg3 uses the established four-byte native-call-target
+correction at `0x12641b28`; neither full `NEXT#1` nor full `NEXT#2` images,
+callback-page injections, nor a clock-slot override are loaded for these
+detail replays.
+
+This establishes a reproducible cross-interface diagnostic boundary for the
+documented captures. It still uses captured baseline/native images, native
+ARM64 callback execution, trace entry registers/assertions, and trained target
+bytes. The 24-byte object's general constructor, allocator refill, host state
+initialization, and call-target registration are not independently implemented.
+
+The held-out detail trace was also replayed through the public STORE8/STORE64
+body reconstruction. Its 779-byte result is byte-for-byte equal to the final
+779-byte `MEDCOPY` body from the same captured run (`different_bytes=0`). This
+validates the output assembly and trace interpretation for that capture; it
+does not turn the replay into a fresh-input signer. The remaining one-byte
+handoff mismatch is a native dispatcher slot at `0xe4ffbb78` (slot index 3 of
+`x28=0xe4ffbb60`). The available transition write watch shows two native store
+sites in this dispatcher family writing that slot, `0x1242d8a4`
+(`str x15, [x28, x10, lsl #3]`) and `0x1242f974`
+(`str x9, [x28, x14, lsl #3]`); the current detail run was not instrumented to
+attribute its final store to one site. See
+[evidence/vm9_detail_body_compare_20261002.json](evidence/vm9_detail_body_compare_20261002.json).
+No new server test was performed.
+See [VM9_PROGRESS.md](VM9_PROGRESS.md) and
+[evidence/vm9_handoff_holdouts_20261002.json](evidence/vm9_handoff_holdouts_20261002.json).
 
 ## Six/seven gods and “16/24 gods”
 

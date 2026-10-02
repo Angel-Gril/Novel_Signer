@@ -11,3 +11,33 @@ memory/trace inputs. It is not a current online signer: the constructor,
 allocator, and host handoff path still depend on captured state.
 
 The Python files are research fixtures. They do not contain the private device configuration or raw online trial material.
+
+`vm9_handoff_rule.py` learns a diagnostic Seg1-to-Seg2 state rule from two paired
+captures. Its default byte rule predicted a third homepage capture's `NEXT#1`
+exactly, but failed on detail with 34 different bytes and a trace-3 register
+divergence. The optional `--allocator-model` derives the object address from the
+Seg1 free list, relocates the trained 24-byte constructor state, and applies
+shared whole-word counter deltas. A new detail input then completed Seg2 and
+Seg3, retaining one unexplained stack byte. The
+[sanitized evidence](../evidence/vm9_handoff_holdouts_20261002.json) records the
+control, holdout, hashes, and remaining dependencies.
+
+For trusted local captures only:
+
+```text
+python vm9_handoff_rule.py training_a training_b heldout_seg1.pkl predicted_next1.pkl --allocator-model --summary prediction.json
+```
+
+Each training directory supplies `mem_after_seg1_offline.pkl` and its captured
+`handoff/next_1/` region files. The held-out input is only a Seg1 checkpoint;
+this command does not read its `NEXT#1`. Compare with the real handoff afterwards.
+The size-class refill path is unsupported and raises an error. Pickle inputs
+must be trusted. The predicted checkpoint still contains captured baseline and
+trained target bytes; this utility does not generate current Medusa headers.
+
+The held-out detail capture's trace was separately replayed with
+`vm9_trace_replay.py`; its 779-byte body matched the final captured
+`MEDCOPY` body at every byte. This is an output assembly check for one capture,
+not a fresh-input current Medusa implementation. The remaining one-byte
+handoff difference is documented in
+`evidence/vm9_detail_body_compare_20261002.json`.
