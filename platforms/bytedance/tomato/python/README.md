@@ -31,6 +31,12 @@ fresh input. The module accepts only trusted local checkpoint pages and is not a
 general heap or current Medusa implementation. The branch and its controlled
 transplants are documented in [ALLOCATOR_AUDIT.md](../ALLOCATOR_AUDIT.md).
 
+The `pop_bitmap_slot` helper records one more directly observed refill step:
+`RBIT/CLZ` selects the lowest set bit of a slab bitmap, the native path clears
+that bit with XOR, and the slab counter decreases by one. It deliberately does
+not turn that bit into an object address; the slab base, higher-level bitmap
+updates, and allocation history are still required for that calculation.
+
 For trusted local captures only:
 
 ```text

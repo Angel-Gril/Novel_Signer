@@ -56,6 +56,35 @@ The refill code scans the bitmap with `RBIT/CLZ`, clears the selected bit, and
 derives the returned slab address. This explains why changing only the bin
 count or copying the bin page cannot reproduce the historical pointer.
 
+## Static refill control flow
+
+The empty-bin branch at `0x1217f450` stores `-1` at `[bin+0x28]` and calls
+`0x12187ecc` with the arena, the bin table, the next size-class bin, and the
+class id. The wrapper calls `0x1216970c`. That routine first computes the batch
+size from the class-count table and the next-bin shift, then either allocates a
+new slab node or consumes an existing slab record. In the existing-slab path:
+
+1. the slab record is loaded from the class state at `+0x530`;
+2. `[slab+4]` is the remaining-slot counter;
+3. the bitmap word is selected through `[slab+8 + word_index*8]`;
+4. `RBIT` followed by `CLZ` finds the lowest set bit, and an XOR store clears
+   it;
+5. the counter is decremented and the selected object is returned;
+6. the refill wrapper writes the batch of returned objects to the bin free list
+   and publishes the new count at `[bin+0x10]`.
+
+The class-3 checkpoint values make the bit operation independently checkable:
+
+| state | counter before | bitmap before | selected bit | bitmap after | counter after |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| historical success | `0x24` | `0xfffffffff0000000` | `28` | `0xffffffffe0000000` | `0x23` |
+| current full-Seg2 | `0x20` | `0xffffffcfc0000000` | `30` | `0xffffffcf80000000` | `0x1f` |
+
+This is a static and checkpoint-backed primitive. It does not yet model the
+slab base calculation, higher-level bitmap propagation, node allocation, or
+the preceding allocation/free sequence, so it cannot produce a fresh-input
+Medusa body by itself.
+
 ## Controlled intervention
 
 For the current checkpoint, forcing only `[0x12282060 + 0x30]` to zero did

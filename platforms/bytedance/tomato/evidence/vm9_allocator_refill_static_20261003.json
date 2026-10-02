@@ -1,0 +1,74 @@
+{
+  "evidence_id": "vm9_allocator_refill_static_20261003",
+  "platform": "bytedance_tomato",
+  "scope": "class-3 VM9 allocator refill primitive",
+  "status": "partial_static_checkpoint_verified",
+  "source_boundaries": {
+    "native_image": "private local new_vm9_libc.bin, mapped at 0x12100000",
+    "runtime_trace": "private local ARM64 callback trace and allocator watch",
+    "raw_inputs_published": false
+  },
+  "native_path": {
+    "fast_path": {
+      "count_read": "0x1217f0e8: ldr w2, [x18, #0x30]",
+      "count_decrement": "0x1217f0f4: sub w3, w2, #1",
+      "free_list_select": "0x1217f10c: ldr x28, [x21, w3, uxtw #3]"
+    },
+    "empty_bin_branch": {
+      "entry": "0x1217f450",
+      "sentinel_store": "[bin+0x28] = -1",
+      "refill_wrapper": "0x12187ecc",
+      "bitmap_refill_helper": "0x1216970c"
+    },
+    "bitmap_operations": {
+      "counter_field": "[slab+0x4]",
+      "bitmap_base": "[slab+0x8 + word_index*8]",
+      "select": "RBIT/CLZ -> ctz(bitmap)",
+      "consume": "bitmap ^= (1 << bit_index)",
+      "counter_update": "counter -= 1"
+    }
+  },
+  "class3_checkpoint_comparison": [
+    {
+      "name": "historical_success",
+      "control_record": "0x12240950",
+      "slab_record": "0x12941108",
+      "counter_before": "0x24",
+      "bitmap_before": "0xfffffffff0000000",
+      "selected_bit": 28,
+      "bitmap_after": "0xffffffffe0000000",
+      "counter_after": "0x23",
+      "returned_buffer": "0x1296b940"
+    },
+    {
+      "name": "current_full_seg2",
+      "control_record": "0x12240950",
+      "slab_record": "0x12941108",
+      "counter_before": "0x20",
+      "bitmap_before": "0xffffffcfc0000000",
+      "selected_bit": 30,
+      "bitmap_after": "0xffffffcf80000000",
+      "counter_after": "0x1f",
+      "returned_buffer": "0x1296ba60"
+    }
+  ],
+  "runtime_argument_observation": {
+    "arena": "0x12240180",
+    "class3_bin": "0x12282060",
+    "next_bin": "0x12282080",
+    "class_id": 3,
+    "observation": "The live callback enters the refill helper with the class id and next-bin pointer shown above."
+  },
+  "verification": {
+    "python_primitive": "pop_bitmap_slot reproduces both selected bits and post-XOR bitmap words",
+    "server_request_performed": false,
+    "fresh_input_parameterization": false,
+    "online_signer_claim": false
+  },
+  "remaining_work": [
+    "derive slab base and object-address formula from runtime metadata",
+    "model higher-level bitmap propagation and node allocation",
+    "reconstruct the allocation/free sequence for a fresh input",
+    "rerun VM9 with a fresh input before online header validation"
+  ]
+}

@@ -469,6 +469,26 @@ The older `+0x2887f0` static helper remains unexecuted in both fresh probes.
 The writer result is evidence for the active descriptor path only and is not a
 parameterized Medusa implementation.
 
+## Static class-3 refill primitive (2026-10-03)
+
+The empty-bin branch is now mapped through the native allocator image:
+`0x1217f450` writes `-1` to `[bin+0x28]`, calls `0x12187ecc`, and that wrapper
+delegates the slab/free-list work to `0x1216970c`. The existing-slab branch
+uses `[slab+4]` as a remaining-slot counter, selects a set bit from the slab
+bitmap with `RBIT/CLZ`, clears it by XOR, and decrements the counter. The
+wrapper then publishes the returned batch in the bin list.
+
+For class 3, the checkpoint record is `0x12240950 -> 0x12941108`. The
+historical state (`counter=0x24`, `bitmap=0xfffffffff0000000`) selects bit 28
+and the current full-Seg2 state (`counter=0x20`,
+`bitmap=0xffffffcfc0000000`) selects bit 30. The corresponding observed
+buffers are `0x1296b940` and `0x1296ba60`. The public
+`python/vm9_allocator.py` now exposes only this bitmap-word transition; it
+does not claim the slab address formula or a fresh-input allocator.
+
+The sanitized evidence is
+[evidence/vm9_allocator_refill_static_20261003.json](evidence/vm9_allocator_refill_static_20261003.json).
+
 ## Meaning for the deliverables
 
 - Seg2 has complete captured diagnostic runs, including the new detail holdout

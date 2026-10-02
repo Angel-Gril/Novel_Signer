@@ -15,6 +15,10 @@ class RefillUnsupported(RuntimeError):
     """The requested bin is empty and the slab/refill model is not complete."""
 
 
+class BitmapExhausted(RefillUnsupported):
+    """The captured slab bitmap has no set bit available for allocation."""
+
+
 def _read(pages: Mapping[int, bytes | bytearray], address: int, size: int) -> bytes:
     page, offset = address >> 12, address & 0xFFF
     if offset + size > 0x1000:
@@ -59,6 +63,42 @@ class FreeListPop:
     list_address: int
     list_index: int
     object_address: int
+
+
+@dataclass(frozen=True)
+class BitmapSlotPop:
+    """The directly observed one-word slab bitmap allocation step."""
+
+    bitmap_before: int
+    bitmap_after: int
+    bit_index: int
+    counter_before: int
+    counter_after: int
+
+
+def pop_bitmap_slot(bitmap: int, counter: int) -> BitmapSlotPop:
+    """Consume the lowest set bit used by the native refill path.
+
+    The native code uses ``RBIT``/``CLZ`` to find ``ctz(bitmap)`` and then
+    XORs that bit out.  It maintains the separate slab counter in parallel.
+    This helper intentionally stops at the bitmap-word boundary: the slab
+    address calculation and higher-level bitmap propagation remain unmodeled.
+    """
+
+    bitmap &= 0xFFFF_FFFF_FFFF_FFFF
+    if bitmap == 0:
+        raise BitmapExhausted("slab bitmap has no set bit")
+    if counter <= 0:
+        raise ValueError(f"invalid slab counter {counter}")
+    bit_index = (bitmap & -bitmap).bit_length() - 1
+    bitmap_after = bitmap ^ (1 << bit_index)
+    return BitmapSlotPop(
+        bitmap_before=bitmap,
+        bitmap_after=bitmap_after,
+        bit_index=bit_index,
+        counter_before=counter,
+        counter_after=counter - 1,
+    )
 
 
 def pop_free_list(

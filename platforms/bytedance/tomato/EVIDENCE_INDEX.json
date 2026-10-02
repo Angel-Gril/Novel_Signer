@@ -738,5 +738,33 @@
     "interpretation": "The active descriptor writer is directly observed at the VM store boundary; allocator/refill and packed entry-x8 composition remain open.",
     "independent_current_parameterization": false,
     "new_server_validation_performed": false
+  },
+  "vm9_allocator_refill_static_20261003": {
+    "evidence_file": "evidence/vm9_allocator_refill_static_20261003.json",
+    "status": "partial_static_checkpoint_verified",
+    "empty_bin_path": [
+      "0x1217f450",
+      "0x12187ecc",
+      "0x1216970c"
+    ],
+    "class3": {
+      "control_record": "0x12240950",
+      "slab_record": "0x12941108",
+      "historical": {
+        "counter": "0x24",
+        "bitmap": "0xfffffffff0000000",
+        "selected_bit": 28,
+        "result": "0x1296b940"
+      },
+      "current": {
+        "counter": "0x20",
+        "bitmap": "0xffffffcfc0000000",
+        "selected_bit": 30,
+        "result": "0x1296ba60"
+      }
+    },
+    "bitmap_primitive_published": true,
+    "fresh_input_parameterization": false,
+    "new_server_validation_performed": false
   }
 }
