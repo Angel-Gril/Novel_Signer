@@ -246,7 +246,7 @@ caller-side path at `0x125487f4`/`0x125487f8` loads the callback-object fields
 and enters the indirect target at `0x12548800`. The two captures contain
 `0x440132f775952fa9` and `0x1dc9821c75952fa9`: the upper 32 bits follow the
 paired OP1 outputs, while the common lower `0x75952fa9` has a separate native
-scratch-store provenance at `0x125692dc`. This is evidence for modeling the
+copy-helper store at `0x125692dc` (`str w6, [x0]`). This is evidence for modeling the
 caller-side callback-object/native handoff and its word composition; copying a
 callback page cannot reproduce it. The exact field writer and composition
 instruction remain open. See

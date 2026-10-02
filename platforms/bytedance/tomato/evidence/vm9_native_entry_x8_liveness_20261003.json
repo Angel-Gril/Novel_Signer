@@ -38,11 +38,11 @@
     },
     "low_word_writer": {
       "runtime_pc": "0x125692dc",
-      "instruction": "str w8, [x0]",
+      "instruction": "str w6, [x0]",
       "bytes": "060000b9",
       "observed_destination": "0xe4ffc9c8",
       "observed_value": "0x75952fa9",
-      "interpretation": "The common low 32 bits have a separate native scratch-store provenance in both compared captures."
+      "interpretation": "The common low 32 bits have a separate native scratch-store provenance in both compared captures; w6 is the source register loaded by this copy helper."
     }
   },
   "cross_capture_correlation": [
