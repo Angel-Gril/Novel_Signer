@@ -787,5 +787,59 @@
     "batch_order_verified": true,
     "fresh_input_parameterization": false,
     "new_server_validation_performed": false
+  },
+  "vm9_allocator_new_slab_native_replay_20261003": {
+    "evidence_file": "evidence/vm9_allocator_new_slab_native_replay_20261003.json",
+    "trial": "force_refill_class3_probe_20261003",
+    "trace_key": "9a6f0#3",
+    "scope": "controlled checkpoint native replay at Seg2 callback 1; not fresh-input parameterization",
+    "runner_sha256": "d61342c2b28a7db4dec8d51aa0c9387a87aef066c5b61f51fa4e7b5343e8a845",
+    "input_checkpoint_sha256": "538858977e4c1ae16aee423f3a7f0ad946b3a3e519b6fffee175b66f54b9a1d4",
+    "intervention": {
+      "class_id": 3,
+      "target_bin": "0x12282060",
+      "free_count_field": "0x12282090",
+      "free_count_before": "0x3",
+      "free_count_forced": "0x0",
+      "class_state": "0x12240928",
+      "class_slab_slot": "0x12240950",
+      "class_slab_slot_forced": "0x0"
+    },
+    "native_path": [
+      "0x1217f450",
+      "0x12187ecc",
+      "0x1216970c",
+      "0x121687dc"
+    ],
+    "new_slab": {
+      "record": "0x12a403e8",
+      "record_header_word": "0x3000000003",
+      "record_bitmap_word": "0x3fffffffffefe000",
+      "returned_object": "0x12a479b0",
+      "object_constructor_write_bytes": 32,
+      "object_first_word": "0xad396da478c1d3ab"
+    },
+    "allocator_state_after_callback": {
+      "class_slab_slot": "0x12a403e8",
+      "target_bin_head": "0x2",
+      "target_bin_free_count": "0x3",
+      "region_cursor": "0x640570",
+      "region_limit": "0x262a60",
+      "old_slab_counter": "0x18",
+      "old_slab_bitmap": "0xffffff0000000000"
+    },
+    "execution": {
+      "segment": 2,
+      "callback": 1,
+      "native_writes": 273,
+      "touched_pages": 10,
+      "diagnostic_stop": true,
+      "completed_segment": false,
+      "checkpoint_sha256": "53c9fbe09872c784a1a1af9b0b31bc3f2031ca189ea4c6bc4db5626e928de8bc",
+      "writes_sha256": "4a9c75353e89971974d89ea4e2a0e12d6eab1573e9ef11c42d5fcdd4b05b9229"
+    },
+    "interpretation": "The captured native allocator reaches the empty-bin path and creates a new slab record and object without copying the historical slab page. This is checkpoint-level evidence only; generic slab discovery, region initialization, allocation/free history, fresh-input Medusa generation, and online validity remain open.",
+    "fresh_input_parameterization": false,
+    "new_server_validation_performed": false
   }
 }

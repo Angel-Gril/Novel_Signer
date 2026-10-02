@@ -529,3 +529,25 @@ compare an independently generated body before running a fresh live
 directory/reader matrix. The current all-segment diagnostic is a component
 checkpoint; the pure-Python signer, no-JVM Rust chain, non-empty search, and
 later usable search/download webpage remain open.
+
+## New-slab branch replay (2026-10-03)
+
+The controlled class-3 probe forced the callback-1 bin count at
+`0x12282090` from `3` to `0` and cleared the slab pointer slot at
+`0x12240950`. The real native path then entered
+`0x1217f450 -> 0x12187ecc -> 0x1216970c -> 0x121687dc` and created a new
+captured slab record at `0x12a403e8`; its constructor returned object
+`0x12a479b0` and wrote 32 bytes. The run produced 273 native writes over 10
+pages and stopped after callback 1.
+
+This closes one checkpoint-level observation: the empty-bin path creates a new
+slab record without transplanting the historical slab page. It does not close
+slab discovery, region initialization, allocation/free history, callback
+registration, or fresh-input Medusa generation. The old slab counter and
+bitmap remained unchanged, which is consistent with a separate new-slab
+record. Evidence:
+[evidence/vm9_allocator_new_slab_native_replay_20261003.json](evidence/vm9_allocator_new_slab_native_replay_20261003.json).
+
+The next implementation step remains allocator state generation from a fresh
+chain. Until that is available, the Python and Rust public paths must retain
+their explicit unsupported status for current Medusa.

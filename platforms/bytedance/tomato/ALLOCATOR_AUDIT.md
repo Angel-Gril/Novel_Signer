@@ -131,3 +131,34 @@ public replay produces the captured sequence:
 
 This verifies the batch ordering and the counter/bitmap transition for the
 existing slab. It remains a checkpoint replay and is not a fresh allocator.
+
+## Controlled new-slab native replay (2026-10-03)
+
+The next probe forced the class-3 free-list count at `0x12282090` from `3`
+to `0` and cleared the class-3 slab pointer slot at `0x12240950` immediately
+before Seg2 callback 1. The native code then took the empty-bin path:
+
+```text
+0x1217f450 -> 0x12187ecc -> 0x1216970c -> 0x121687dc
+```
+
+This run did not copy the historical slab page. The allocator created a new
+captured record at `0x12a403e8`, with the post-call header word
+`0x3000000003` and bitmap word `0x3fffffffffefe000`, and returned the object
+`0x12a479b0`. The native constructor wrote 32 bytes to that object. The run
+recorded 273 native writes across 10 pages and stopped after the first callback
+for inspection.
+
+The old slab remained at counter `0x18` and bitmap
+`0xffffff0000000000`; the class slot was repointed to `0x12a403e8`, while the
+target bin ended with head `0x2` and count `0x3`. This is direct evidence that
+the empty-bin branch can allocate a new slab record in the captured heap.
+It still does not identify a generic slab base formula, region initialization,
+allocation/free history, callback registration, or fresh-input body state.
+
+The sanitized evidence is
+[evidence/vm9_allocator_new_slab_native_replay_20261003.json](evidence/vm9_allocator_new_slab_native_replay_20261003.json).
+
+This result remains a controlled checkpoint replay. The public allocator model
+must continue to reject fresh empty-bin allocation until those missing inputs
+are independently generated.
