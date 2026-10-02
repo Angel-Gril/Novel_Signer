@@ -358,12 +358,14 @@ on Seg2 callback 1. These are native state writes, not VM9 bytecode stores.
 
 The first unassisted Seg2 divergence is relative event 13: the native callback
 leaves `0xe4ffc9a0` as zero while the trace requires the transition object
-`0x122a0ce0`. Controlled diagnostic slot repairs then moved the boundary to
-event 747 (33 callbacks), where a native-derived data word still differed
-(`0x32357c32` versus `0x78c1d3ab`). The repaired values included the object
-slot, constructor pointer, string reference slot/refcount, object field, and
-slab-derived addresses. This sequence demonstrates that the remaining gap is
-allocator and host-handoff state, not a missing VM opcode.
+`0x122a0ce0`. Controlled diagnostic slot repairs moved the boundary to event
+747 (33 callbacks), where the native-derived word at `0x12296380` differed
+(`0x32357c32` versus `0x78c1d3ab`). Supplying that one captured page word moved
+the boundary to event 752, where an adjacent unaligned word still differed
+(`0x30333830` versus `0xffffffffad396da4`). The repaired values included the
+object slot, constructor pointer, string reference slot/refcount, object field,
+and slab-derived addresses. This sequence demonstrates that the remaining gap
+is allocator and host-handoff page state, not a missing VM opcode.
 
 The direct-write and boundary log is
 [evidence/vm9_detail_native_transition_watch_20261003.json](evidence/vm9_detail_native_transition_watch_20261003.json).

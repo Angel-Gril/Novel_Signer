@@ -210,9 +210,10 @@ The first unassisted Seg2 boundary is the transition object slot
 `0xe4ffc9a0`: the native path leaves zero while the paired trace requires
 `0x122a0ce0`. Explicit diagnostic repairs for this slot, the constructor
 pointer, the string reference/refcount, object field, and slab-derived fields
-advance the replay to event 747 and 33 callbacks; the next difference is still
-a native-derived data word. This is direct evidence that the remaining work is
-allocator/refill and host-handoff initialization. It does not establish a
+advance the replay to event 747 and 33 callbacks. Supplying the captured word
+at `0x12296380` advances it to event 752, where an adjacent unaligned word
+still differs. This is direct evidence that the remaining work is
+allocator/refill and host-handoff page initialization. It does not establish a
 fresh-input signer. See
 [evidence/vm9_detail_native_transition_watch_20261003.json](evidence/vm9_detail_native_transition_watch_20261003.json).
 

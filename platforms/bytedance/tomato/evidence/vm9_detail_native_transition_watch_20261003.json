@@ -75,11 +75,23 @@
       }
     ],
     "last_controlled_run": {
-      "aligned_events": 747,
+      "aligned_events": 752,
       "native_callbacks": 33,
-      "actual": "0x32357c32",
-      "expected": "0x78c1d3ab",
-      "result": "allocator/native data state remains unmatched; VM bytecode alignment continues until a native-derived value differs"
+      "actual": "0x30333830",
+      "expected": "0xffffffffad396da4",
+      "result": "after one captured page word was supplied, the next adjacent native-derived word still differs"
+    },
+    "native_data_holdout": {
+      "first_data_divergence": {
+        "relative_event": 747,
+        "source_address": "0x12296380",
+        "actual": "0x32357c32",
+        "expected": "0x78c1d3ab",
+        "instruction_pair": ["LWL", "LWR"]
+      },
+      "captured_callback_page_sha256": "7c71ca5c4a78a1c24c1edc5c6ca674fb3d3bd3c03d7e6bfdbb57fc2ea0e19637",
+      "captured_word_bytes": "abd3c178a46d39ad4fb312d3d23941c3",
+      "interpretation": "The expected word is already present in the captured callback page, while the independent transition leaves the page in a different native-derived state. Supplying that one word only moves the first mismatch to relative event 752, where an adjacent unaligned word still differs. This is page/host-state provenance, not a missing VM opcode."
     }
   },
   "limitations": [

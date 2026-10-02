@@ -627,9 +627,10 @@
     },
     "seg2_diagnostic": {
       "first_unassisted_divergence": "relative event 13, R2, source 0xe4ffc9a0",
-      "last_controlled_alignment": "747 events / 33 callbacks",
+      "last_controlled_alignment": "752 events / 33 callbacks",
       "remaining_mismatch": "native-derived allocator/data value",
-      "diagnostic_patches": 5
+      "diagnostic_patches": 6,
+      "native_data_source": "0x12296380; captured callback page word 0x78c1d3ab"
     },
     "interpretation": "Direct native slot attribution is now available. Seg1 is independently trace-aligned; Seg2 still requires allocator and host-handoff state that is not initialized from a fresh request.",
     "independent_current_parameterization": false,
