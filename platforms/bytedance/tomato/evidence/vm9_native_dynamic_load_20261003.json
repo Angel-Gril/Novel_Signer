@@ -1,0 +1,86 @@
+{
+  "evidence_id": "vm9_native_dynamic_load_20261003",
+  "platform": "bytedance.tomato",
+  "scope": "sanitized static/native correlation for the held-out detail VM9 capture",
+  "trial": "vm9_detail_20261002_g",
+  "redaction": "Only instruction semantics, VM register values, derived addresses, event coordinates, and hashes are retained; raw traces, native images, checkpoints, device data, and request material remain local.",
+  "inputs": {
+    "trace_sha256": "f7ffa8b815632c8da77ecf4d51eb1bfd17e0cd72f6cbd077848d1c4bd8aa763f",
+    "seg1_checkpoint_sha256": "28eb0430c131c3cfe6e622c8657ceab2ba33bc63c4c25b93c34855f88bec9e18",
+    "native_state_region_sha256": "d6535c337070077721d8cb22a63311aba9fdf3f9f1695c9119f76a56f18e2ce9",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c"
+  },
+  "static_handlers": {
+    "op1_handler": {
+      "link_offset": "0x170270",
+      "runtime_pc_base": "0x12170270",
+      "result_load": "ldrsw x9, [x10, x11]",
+      "result_store": "str x9, [x28, x14, lsl #3]",
+      "result_load_bytes": "897b2ef8",
+      "result_store_bytes": "094d40b8"
+    },
+    "dynamic_table_handler": {
+      "link_offset": "0x168eb0",
+      "runtime_pc_base": "0x12168eb0",
+      "result_store": "str x9, [x28, w13, uxtw #3]",
+      "result_store_bytes": "895b2df8",
+      "interpretation": "The VM writes a sign-extended value derived from a register-table load/shift into a VM register slot; this is another dynamic-state path, not a callback-page constant."
+    }
+  },
+  "trace_correlations": [
+    {
+      "trace_key": "8a040#3",
+      "trace_event": 131392,
+      "instruction_word": "0x8d08d7c1",
+      "operation": "op1",
+      "source_register": "R29",
+      "source_pointer": "0xe4ffc0b0",
+      "load_address": "0xe4ffa7b8",
+      "loaded_word": "0x8ef8fc19",
+      "vm_result": "R4=0xffffffff8ef8fc19",
+      "interpretation": "The first OP1 load after the Seg2 handoff reads from the handoff-backed R29 object."
+    },
+    {
+      "trace_key": "8a040#3",
+      "trace_event": 132739,
+      "instruction_word": "0x8d02d7c1",
+      "operation": "op1",
+      "source_register": "R29",
+      "source_pointer": "0xe4ffc0b0",
+      "load_address": "0xe4ffd098",
+      "loaded_word": "0x440132f7",
+      "vm_result": "R1=0x440132f7",
+      "interpretation": "The value later observed as the next callback's x1 is loaded from native handoff-backed memory and then stored into the VM register file."
+    }
+  ],
+  "handoff_boundary": {
+    "before": {
+      "last_event": 298,
+      "r29": "0xe4ffbc00"
+    },
+    "after": {
+      "first_event": 131387,
+      "r29": "0xe4ffc0b0",
+      "first_instruction_word": "0x890e0018"
+    },
+    "interpretation": "R29 changes at the segment/native transition boundary, before the OP1 loads that produce R4 and R1. This places the remaining dependency in host/native handoff state rather than in a fixed VM callback page."
+  },
+  "callback_boundary": {
+    "next_input": {
+      "x0": "0x1252cc8c",
+      "x1": "0x440132f7",
+      "x2": "0x125085a4",
+      "x3": "0xe4ffd5e8",
+      "x4": "0xe4ffd618"
+    },
+    "interpretation": "The callback input preserves the dynamically loaded R1 value; copying the callback page alone cannot explain or generalize this result."
+  },
+  "limitations": [
+    "The correlation uses a captured trace and private native-state snapshot; it is not a fresh-input execution.",
+    "The exact native writer that initializes every handoff-backed field remains unimplemented.",
+    "This does not establish current pure-Python Medusa parameterization, online validation, or a no-JVM Rust signer."
+  ],
+  "independent_current_parameterization": false,
+  "no_jvm_rust_signer_complete": false,
+  "new_server_validation_performed": false
+}

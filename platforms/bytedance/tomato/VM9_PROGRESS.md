@@ -387,6 +387,30 @@ copy shortcut while leaving fresh-input parameterization open. The redacted
 comparison is in
 [evidence/vm9_detail_capture_page_ab_20261003.json](evidence/vm9_detail_capture_page_ab_20261003.json).
 
+## Dynamic native load provenance (2026-10-03)
+
+Static disassembly and the same trace identify how the later `0x440132f7` value
+enters the VM. The OP1 handler at `+0x170270` performs
+`ldrsw x9, [x10, x11]` followed by `str x9, [x28, x14, lsl #3]`. In the
+held-out detail trace, instruction `0x8d08d7c1` at event `131392` reads from
+`0xe4ffa7b8` through `R29=0xe4ffc0b0` and produces
+`R4=0xffffffff8ef8fc19`. The later instruction `0x8d02d7c1` at event
+`132739` reads `0x440132f7` from `0xe4ffd098` through the same `R29` object
+and stores it into `R1`.
+
+`R29` changes from `0xe4ffbc00` at the previous exit marker to `0xe4ffc0b0`
+at the first event after the native/host transition. The next callback receives
+that loaded value as `x1=0x440132f7`, alongside the recorded `x0`, `x2`, `x3`,
+and `x4` inputs. A second handler at `+0x168eb0` also writes a sign-extended
+register-table result into a VM slot, confirming that these values are dynamic
+VM/native state rather than fixed callback-page bytes.
+
+This closes the narrow provenance question for `0x440132f7`: the value is a
+handoff-backed memory load followed by a VM register store. It does not close
+the constructor, allocator refill, callback-registration, or fresh-input
+parameterization requirements. The sanitized record is
+[evidence/vm9_native_dynamic_load_20261003.json](evidence/vm9_native_dynamic_load_20261003.json).
+
 ## Meaning for the deliverables
 
 - Seg2 has complete captured diagnostic runs, including the new detail holdout

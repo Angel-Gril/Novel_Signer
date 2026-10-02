@@ -227,6 +227,18 @@ input. Only the redacted comparison is published; the captured page remains
 outside the repository. See
 [evidence/vm9_detail_capture_page_ab_20261003.json](evidence/vm9_detail_capture_page_ab_20261003.json).
 
+Static/native correlation now explains that later value. The OP1 handler at
+`+0x170270` loads a signed 32-bit word with `ldrsw x9, [x10, x11]` and stores
+it into a VM register slot. In the held-out detail trace, event `131392`
+produces `R4=0xffffffff8ef8fc19` from the handoff-backed `R29=0xe4ffc0b0`;
+event `132739` produces `R1=0x440132f7` from `0xe4ffd098` through the same
+object. `R29` changes at the native/host boundary, and the next callback carries
+the loaded value as `x1`. This is direct provenance for the mismatch and rules
+out treating the callback page as a reusable constant. It remains captured-state
+evidence; constructor, allocator refill, callback registration, and fresh-input
+current-Medusa generation are still open. See
+[evidence/vm9_native_dynamic_load_20261003.json](evidence/vm9_native_dynamic_load_20261003.json).
+
 ## Six/seven gods and “16/24 gods”
 
 “God” in the historical notes means a request header, not a VM layer. The six hard historical names are Gorgon, Ladon, Argus, Khronos, Helios, and Medusa; Neptune is an additional soft field in seven-header descriptions. Perseus is a separate VM header and is tracked independently.
