@@ -1,0 +1,100 @@
+{
+  "evidence_id": "search_legacy_pagination_20261003",
+  "platform": "bytedance.tomato",
+  "request_profile_version": "6.8.1.32",
+  "version_code": "68132",
+  "scope": "Two local responses from an external Java service using its configured older request profile; not current 7.1.3.32 search or an independent signer.",
+  "redaction": "Only version/artifact hashes, endpoint paths, aggregate response metrics, guest addresses and instruction offsets are published. URLs, signature values, device/session identifiers, request headers, response bodies, APKs and snapshots remain private.",
+  "query": "三体",
+  "local_endpoint": "/search",
+  "upstream_endpoint_from_source": "/reading/bookapi/search/tab/v",
+  "configured_base_host": "api5-normal-sinfonlineb.fqnovel.com",
+  "effective_search_host_from_source": "api5-normal-sinfonlinec.fqnovel.com",
+  "provenance": {
+    "jar_sha256": "0127876d9e871657a0b7cbafb17e99a8e1730a2dec4628a4665e047cfe6cea4e",
+    "embedded_native_library_sha256": "20d3f8dd8d0d47e4e3c0da0f377eaf69e72a72c8d214ca56e6e7493c65a8fc2d",
+    "native_artifact_app_version_independently_verified": false,
+    "configuration_source": "application.yml embedded in the measured jar",
+    "on_wire_profile_independently_captured": false,
+    "cache_bypass_verified": false,
+    "raw_upstream_response_captured": false
+  },
+  "pages": [
+    {
+      "page": 1,
+      "offset": 0,
+      "count": 10,
+      "http_status": 200,
+      "body_length": 9900,
+      "body_sha256": "a207c9802ef65f445a1a02d19533ce3f9c6ef946598e78f1f491dfe3768a6a1d",
+      "elapsed_seconds": 18.438,
+      "json_code": 0,
+      "json_keys": [
+        "code",
+        "data",
+        "message",
+        "serverTime",
+        "success"
+      ],
+      "data_type": "dict",
+      "data_keys": [
+        "books",
+        "hasMore",
+        "searchId",
+        "total"
+      ],
+      "book_count": 9,
+      "has_more": true,
+      "search_id_present": true,
+      "search_id_sha256": "8e25a82d72fafcfcbca3ca404ff65f34ed1a82ecee202c7c891cc9fb7f5f87c2",
+      "input_search_id_sha256": null
+    },
+    {
+      "page": 2,
+      "offset": 10,
+      "count": 10,
+      "http_status": 200,
+      "body_length": 12663,
+      "body_sha256": "0e3ff22b9ac49d4bcc5eeb828716e3b27f5749fc282755846d40865bd1a030f1",
+      "elapsed_seconds": 9.664,
+      "json_code": 0,
+      "json_keys": [
+        "code",
+        "data",
+        "message",
+        "serverTime",
+        "success"
+      ],
+      "data_type": "dict",
+      "data_keys": [
+        "books",
+        "hasMore",
+        "searchId",
+        "total"
+      ],
+      "book_count": 10,
+      "has_more": true,
+      "search_id_present": true,
+      "search_id_sha256": "8e25a82d72fafcfcbca3ca404ff65f34ed1a82ecee202c7c891cc9fb7f5f87c2",
+      "input_search_id_sha256": "8e25a82d72fafcfcbca3ca404ff65f34ed1a82ecee202c7c891cc9fb7f5f87c2"
+    }
+  ],
+  "pagination_checks": {
+    "same_search_id": true,
+    "all_book_ids_present": true,
+    "page1_unique_books": 9,
+    "page2_unique_books": 10,
+    "overlapping_books": 0,
+    "page2_new_books": 10
+  },
+  "source_flow": {
+    "first_enter": "1",
+    "continuation_first_enter": "0",
+    "page_offset": "(page - 1) * size",
+    "passback": "offset",
+    "phase2_reuses_search_id_and_sessions": true,
+    "response_is_service_normalized": true,
+    "includes_cache_retry_and_device_pool": true
+  },
+  "current_version_search_verified": false
+}

@@ -71,6 +71,15 @@ adds login, bookstore, click, source-book, source-id, and client-ab fields.
 to the page path returned HTTP 200 with an empty body, so the endpoint shape is
 static/runtime verified but a usable search response is not yet live verified.
 
+For the current `7.1.3.32` profile, the 2026-10-03 first-stage probes with
+numeric `is_first_enter_search=1`, one session pair, offset/passback 0 and
+`tab_type=3` still return an empty body on b/c hosts. No current search ID or
+page 2 is verified. A separate external Java service configured with
+`6.8.1.32` returned 9/10 books across two pages, reusing its search ID. Its
+controller maps `offset=(page-1)*size`; the source first obtains an ID, then
+continues with `is_first_enter_search=0`. Its cache and normalized responses
+are not raw upstream evidence. Versioned details are in [SEARCH.md](SEARCH.md).
+
 The fresh 2026-09-29 probe repeated this against `tab/v`, `tab/v/`, `page/v1/`,
 and `page/v/` with synchronized request timestamp fields. Every request was
 HTTP 200 with a zero-byte body and the empty-stream SHA-256

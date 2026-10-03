@@ -1,6 +1,6 @@
 {
   "platform": "bytedance.tomato",
-  "generated_from": "ONLINE_VALIDATION_20260929.md, fresh trial summaries, and the callback-8 allocator audit in the isolated workspace",
+  "generated_from": "ONLINE_VALIDATION_20260929.md, fresh trial summaries, allocator/callback audits, and the 2026-10-03 initialization and version-separated search controls in the isolated workspace",
   "redaction": "No raw URLs, request headers, device identifiers, UUIDs, tokens, per-session keys, or response bodies are included.",
   "live_chain": [
     {
@@ -1053,5 +1053,45 @@
     "remaining_native_object_graph": true,
     "fresh_input_parameterization": false,
     "new_server_validation_performed": false
+  },
+  "search_legacy_pagination_20261003": {
+    "evidence_file": "evidence/search_legacy_pagination_20261003.json",
+    "request_profile_version": "6.8.1.32",
+    "page_book_counts": [
+      9,
+      10
+    ],
+    "page2_new_books": 10,
+    "same_search_id": true,
+    "current_version_search_verified": false,
+    "uses_external_java_service": true,
+    "cache_bypass_verified": false,
+    "native_artifact_app_version_independently_verified": false
+  },
+  "search_current_phase1_20261003": {
+    "evidence_file": "evidence/search_current_phase1_20261003.json",
+    "request_profile_version": "7.1.3.32",
+    "http_statuses": [
+      200,
+      200
+    ],
+    "response_lengths": [
+      0,
+      0
+    ],
+    "search_id_present": false,
+    "phase2_executed": false,
+    "current_version_search_verified": false
+  },
+  "vm9_handle_initialization_20261003": {
+    "evidence_file": "evidence/vm9_handle_initialization_20261003.json",
+    "same_url_uninitialized_handle_failure_reproduced": true,
+    "private_bridge_fail_closed_regression": true,
+    "time_inputs": 11,
+    "fresh_detail_status": 200,
+    "fresh_detail_json_code": 0,
+    "fresh_detail_response_length": 24335,
+    "independent_current_python_signer": false,
+    "no_jvm_rust_chain": false
   }
 }

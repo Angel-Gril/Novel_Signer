@@ -1,0 +1,84 @@
+{
+  "evidence_id": "search_current_phase1_20261003",
+  "platform": "bytedance.tomato",
+  "request_profile_version": "7.1.3.32",
+  "native_revision": "v04.09.09.01-bugfixS",
+  "redaction": "Only version/artifact hashes, endpoint paths, aggregate response metrics, guest addresses and instruction offsets are published. URLs, signature values, device/session identifiers, request headers, response bodies, APKs and snapshots remain private.",
+  "scope": "Current bridge first-stage search probes; phase2 cannot run without a genuine search ID.",
+  "input_policy": {
+    "device_matches_successful_detail_control": true,
+    "same_session_pair_between_hosts": true,
+    "query": "三体",
+    "count": 10,
+    "offset": 0,
+    "passback": 0,
+    "tab_type": 3,
+    "first_enter_numeric": "1",
+    "book_shelf_search_plan": 4,
+    "request_context": "source-derived behavior and runtime fields",
+    "profile_and_native_artifact_preserved": true,
+    "timestamp_round_ms": 200000,
+    "request_headers": "same basic current bridge HTTP headers; full APK header equivalence unverified"
+  },
+  "cases": [
+    {
+      "case": "phase1_c",
+      "host": "api5-normal-sinfonlinec.fqnovel.com",
+      "timestamp_ms": 1791026800000,
+      "input_sha256": "cc615131b2da73969c85505e1872c7dfc6c0014c89ac9181251b0ff7bae55d98",
+      "endpoint": "/reading/bookapi/search/tab/v",
+      "exit_code": 0,
+      "elapsed_seconds": 20.832,
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "medusa_raw_length": 801,
+      "medusa_sha256": "54676c77e8eb7a437ab48df10ce13e46353a2d2c2aaeef5f9e2f1f1f36b0ae88",
+      "invalid_memory_read": false,
+      "phase2_run": false,
+      "online": {
+        "http_status": 200,
+        "body_length": 0,
+        "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "elapsed_seconds": 0.214
+      },
+      "search_id_present": false
+    },
+    {
+      "case": "phase1_b",
+      "host": "api5-normal-sinfonlineb.fqnovel.com",
+      "timestamp_ms": 1791026800000,
+      "input_sha256": "a465bcdfdba26774ed1834c87ac7a479480c8293532557391b816bfea8e37100",
+      "endpoint": "/reading/bookapi/search/tab/v",
+      "exit_code": 0,
+      "elapsed_seconds": 18.708,
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "medusa_raw_length": 801,
+      "medusa_sha256": "54676c77e8eb7a437ab48df10ce13e46353a2d2c2aaeef5f9e2f1f1f36b0ae88",
+      "invalid_memory_read": false,
+      "phase2_run": false,
+      "online": {
+        "http_status": 200,
+        "body_length": 0,
+        "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "elapsed_seconds": 0.163
+      },
+      "search_id_present": false
+    }
+  ],
+  "current_version_nonempty_search_verified": false,
+  "pagination_verified": false,
+  "interpretation": "Both current first-stage requests are signed and transported, but return an empty body and no search ID. Older service pagination success does not close this boundary."
+}

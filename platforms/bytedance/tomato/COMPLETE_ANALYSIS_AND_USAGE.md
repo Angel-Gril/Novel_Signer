@@ -19,7 +19,7 @@
 | 当前 Medusa VM9 | Java/Unidbg 桥接通过；捕获状态回放通过 | 当前样本可以被桥接器签出并被阅读接口接受；仍未完成独立 fresh-input 参数化 |
 | Perseus | 当前时间窗内可加可不加 | 只能说明本次矩阵未发现硬依赖，不等于永久可省略 |
 | Gorgon/Ladon/Argus | 有算法/向量或矩阵证据 | 在已测阅读矩阵中可移除；不要把该结论外推到其他产品或接口 |
-| 搜索 | 静态接口模型已恢复；线上返回空 body | 还没有可用的非空书籍列表和分页闭环 |
+| 搜索 | 当前 `7.1.3.32` 首阶段仍为空；旧 `6.8.1.32` 配置的外部 Java 服务已返回两页 | 旧服务分别返回 9/10 本书、同一 searchId；不代表当前版本搜索或独立 signer 完成 |
 | Python allocator/runtime | TLS、arena、tcache、OS region、空 bin、清理、部分 callback 已独立建模 | 是 VM9 研究组件，不是完整 Medusa signer |
 | Rust | scaffold 可编译；明确返回 current Medusa unavailable | 可承载已验证纯 Rust 边界和参数模型，不能独立访问当前阅读接口 |
 | 抖音 | 仅静态/社区材料 | 没有当前版本线上签名和正文闭环 |
@@ -135,6 +135,10 @@ GET /reading/bookapi/search/page/v1/
 2026-09-29 的同步时间戳探针对四种路径均得到 HTTP 200、0 字节 body，body SHA-256 是空流摘要 `e3b0...2b855`。APK hook 观察到的 `sinfonlineb`、`query=三体&offset=0&aid=1967` 形状也返回空 body。
 
 这证明了签名和传输可以到达路径，不证明搜索被业务接受，更不证明有书籍列表。Rust 的 `search_params` 只是参数模型；调用者必须把搜索状态显示为“未验证”。
+
+2026-10-03 补充了两个分开的结论：旧 `6.8.1.32` 请求配置的外部 Java 服务返回第一页 9 本、第二页 10 本，第二页沿用同一 `searchId`，两页无重复书籍；服务包含缓存、重试和设备池，尚未捕获原始上游请求。当前 `7.1.3.32` 使用成功详情请求的设备配置、同一 session 对和数字首进入标志，在 b/c 两个域名上仍返回 HTTP 200、空 body，没有取得可进入第二阶段的 `searchId`。详见 [SEARCH.md](SEARCH.md)，不能混用版本或 session 来宣称当前搜索完成。
+
+初始化也获得了新证据：相同 URL 下，某些时间输入未发布 signer handle，原桥接器错误回退到 app manager，随后发生虚表读取错误。私有桥接器已修正为明确失败、保留日志、清空旧签名；新鲜详情请求仍被服务器接受。11 个时间输入只证明这一边界，尚未恢复任意时间下的 native 初始化。详见 [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md)。
 
 ## 5. Python 研究 API
 
@@ -325,7 +329,7 @@ platforms/qidian/            # 起点：独立 APK、接口和解密证据
 - 当前版本 Medusa 的独立 fresh-input Python 参数化。
 - packed callback x8、lookup cache、callback tables、mutex/ctl boot 和剩余 native object graph。
 - 无 JVM Rust signer/download 完整链路及线上复测。
-- 非空搜索响应和分页行为。
+- 当前 `7.1.3.32` 非空搜索响应和分页行为；旧配置外部服务已有两页证据。
 - 全头服务器矩阵的更多时间窗/版本复测，特别是 Perseus 的风控变化。
 - 抖音当前版本、起点平台完整接口/签名/正文实测。
 - GitHub Pages 小说搜索下载网页和最终 Actions 发布流程。

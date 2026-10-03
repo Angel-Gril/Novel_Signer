@@ -18,13 +18,30 @@
 The current signer produced both of these raw sizes under frozen timestamps:
 
 - 228 bytes (304 base64 characters);
-- 802–804 bytes (1,072 base64 characters).
+- 801–804 bytes (1,068–1,072 base64 characters).
 
 Both branch families were accepted by the tested detail/directory/reader endpoints when their timestamp and `_rticket` were fresh. Some adjacent frozen millisecond values crash the local Unidbg harness before an HTTP request is sent; a 200-second grid was stable in the recorded sweep. This is a local VM execution issue, not evidence of server rejection.
 
 The 802-byte size was added by the 2026-10-01 diagnostic capture. That new
 sample was not submitted to the server; the earlier accepted long samples were
 803–804 bytes. Captured branch sizes and live acceptance are separate evidence.
+
+Fresh 2026-10-03 detail requests separately accepted 801-byte and 802-byte
+Medusa samples with code 0. Their response metrics and hashes are in
+`evidence/vm9_handle_initialization_20261003.json`; the original 2026-10-01
+sample retains its untested status.
+
+The new same-URL controls locate the local crash after missing signer-handle
+publication and the old app-manager fallback. The private bridge now stops at
+initialization instead. Offsets 0/1/15/16 ms share one output, while +999 ms
+already fails inside the same seconds timestamp. No general timestamp-grid
+or all-selector rule is established; see `BRIDGE_INITIALIZATION.md`.
+
+The measured fresh bridge also emits short native forms: four decoded bytes
+for Argus (equal to the Khronos seconds as u32 little-endian), and four for
+Ladon. Their presence does not prove the separate long-form algorithms are
+validated by current search. Reading-header removability remains scoped to
+the paired reading matrix.
 
 The current bridge matrix also confirms that the URL, frozen timestamp, and emulated PID affect the Medusa result, while repeating the same triple is deterministic. Five frozen timestamp trials reached the detail endpoint with HTTP 200. These observations describe the bridge's input surface; they do not replace the independent no-JVM implementation proof.
 

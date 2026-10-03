@@ -2,7 +2,7 @@
 
 ## Scope and version
 
-The live checks used the Tomato Android client profile `v7.1.3.32` (`aid=1967`) and the current `libmetasec_ml` VM bridge available in the isolated workspace. The original development directory was not used for these trials.
+The current reading checks used the Tomato Android client profile `v7.1.3.32` (`aid=1967`) and the current `libmetasec_ml` VM bridge available in the isolated workspace. A separately identified older-profile Java search service is documented in `SEARCH.md`; its pagination results do not establish current-version search. The original development directory was not used for these trials.
 
 ## What is established
 
@@ -16,7 +16,7 @@ device_register
   → AES-CBC chapter decode
 ```
 
-The directory response contained 611 chapter entries. The reader response was HTTP 200 with `crypt_status=0`; decrypting it with the key returned by the registerkey exchange produced 6,496 bytes of HTML. The decoded chapter hash is recorded in `evidence/EVIDENCE_INDEX.json`.
+The directory response contained 611 chapter entries. The reader response was HTTP 200 with `crypt_status=0`; decrypting it with the key returned by the registerkey exchange produced 6,496 bytes of HTML. The decoded chapter hash is recorded in [EVIDENCE_INDEX.json](EVIDENCE_INDEX.json).
 
 The registerkey request uses a fixed application content-encryption constant and returns a per-session chapter key. The published report records only the key version and output hashes; the per-session key, device identifiers, UUIDs, tickets, and complete headers remain private trial data.
 
@@ -261,3 +261,17 @@ The current material proves a Medusa selector of `state & 0x0f`, so there are 16
 ## Evidence use
 
 Use the paired matrix entries when arguing about a required header. A single successful request only proves that one complete request worked. The `drop_medusa` versus `drop_perseus` pairs prove that Medusa is a hard dependency for these reading endpoints while Perseus was optional in this time window. Use the registerkey key-version, `crypt_status`, decoded length, and decoded hash together to prove that the response was decrypted rather than served as a plaintext cache.
+
+The 2026-10-03 initialization controls locate a separate pre-signing failure:
+the callback-1 signer handle is absent, and the old bridge dispatches through
+its app-manager fallback. The private bridge now fails explicitly and clears
+stale output. Fresh 801-byte and 802-byte Medusa detail samples both received
+HTTP 200 with code 0; this does not make the older 2026-10-01 captured sample
+server-tested. Eleven controlled time inputs remain a bounded observation,
+not all-selector parameterization. See [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md).
+
+The older configured `6.8.1.32` external search service returned 9 and 10 unique
+books across two pages using one search ID, with no overlap. Current
+`7.1.3.32` session-aware first-stage probes still return an empty body on both
+b/c hosts. The three new redacted records are indexed in `EVIDENCE_INDEX.json`;
+current Python Medusa, no-JVM Rust and current nonempty search remain open.

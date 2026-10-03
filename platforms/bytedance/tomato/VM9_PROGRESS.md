@@ -3,6 +3,30 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Latest bridge initialization evidence (2026-10-03)
+
+Same-URL controls reproduce an initialization failure before the bridge
+publishes the callback-1 network signer handle. The old fallback then passes
+the app-manager pointer to signing and dereferences a non-vtable word at
+`+0x2a6604`. The private bridge now stops with `SIGNER_INIT_UNAVAILABLE`,
+retains failed-run logs, and clears a previous consumable signature. The
+positive/negative/positive regression preserves successful signing and a
+fresh accepted detail response (HTTP 200, code 0, 24,335 bytes).
+
+Eleven time-input cases return seven signatures and four initialization
+failures. Small offsets 0/1/15/16 ms share one output, but +999 ms already
+fails within the same seconds timestamp; +2 seconds succeeds while +4
+seconds fails. This is a bounded initialization observation, not a general
+time-grid rule or recovery of all 16 dispatch branches. Native initialization
+from arbitrary fresh inputs is still missing.
+
+Details: [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) and
+[vm9_handle_initialization_20261003.json](evidence/vm9_handle_initialization_20261003.json).
+The older external Java search service now has measured nonempty two-page
+responses, while the current session-aware first-stage search is still
+empty; see [SEARCH.md](SEARCH.md). Independent Python Medusa and no-JVM Rust
+remain unfinished.
+
 ## Latest verified checkpoint: generated thread state and constructor (2026-10-03)
 
 Python now implements generation-checked pthread TLS, mapped base allocation,

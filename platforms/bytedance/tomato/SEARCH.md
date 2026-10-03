@@ -76,9 +76,58 @@ redacted result is `evidence/search_exact_app_probe_20260929.json`; it is a
 negative result, so request reachability is separated from the remaining
 search-context or server-gating problem.
 
+## Older-profile service pagination (2026-10-03)
+
+An external Java service configured with request profile `6.8.1.32`
+(`version_code=68132`, oversea package UA) returned two non-empty responses
+from its local `/search` endpoint. The measured jar and its embedded native
+library are pinned by SHA-256; the native artifact's app-version association
+and the exact on-wire profile were not independently captured.
+
+| Local request | HTTP / code | Books | Pagination |
+| --- | --- | ---: | --- |
+| `key=三体&page=1&size=10&tabType=3` | 200 / 0 | 9 | `hasMore=true`, search ID present |
+| page 2, same keyword/size/tab and returned search ID | 200 / 0 | 10 | same search ID, `hasMore=true` |
+
+All returned book IDs are present and unique within each page. The second
+page contains ten new books with no overlap with page 1. Search ID values,
+device data, headers and raw responses remain private. The sanitized record
+is [search_legacy_pagination_20261003.json](evidence/search_legacy_pagination_20261003.json).
+
+The service uses cache, retries, a device pool and response normalization;
+cache bypass and a raw upstream capture are unverified. This proves the
+measured service returned a usable two-page result under its older configured
+profile. It does not prove current `7.1.3.32` search or no-JVM operation.
+
+The source-derived flow uses `/reading/bookapi/search/tab/v`. Its configured
+base host is `sinfonlineb`, but `getSearchApiBaseUrl()` rewrites search requests
+to `sinfonlinec`. Without a search ID it first requests
+`is_first_enter_search=1`, then reuses the returned ID and session pair with
+`is_first_enter_search=0` and a page interval. Page numbers start at 1;
+`offset=(page-1)*size` and `passback=offset`. This source serializes booleans
+as `1/0`.
+
+## Current first-stage session probe (2026-10-03)
+
+The current bridge was tested with the registered device/profile used by a
+successful detail control, one session pair, numeric first-enter flags,
+`tab_type=3`, count 10, offset/passback 0, and source-derived behavior/runtime
+fields. The two requests changed only the b/c host, used the same frozen
+timestamp, and both generated 801-byte Medusa outputs.
+
+Both returned HTTP 200 with **zero bytes** and no search ID in the body or
+checked search-ID headers. Phase 2 and pagination therefore did not run;
+a search ID from the older service was not substituted. Full APK request-header
+equivalence remains unverified. See
+[search_current_phase1_20261003.json](evidence/search_current_phase1_20261003.json).
+
+These results leave current native/profile and request-context differences
+open; two-stage pagination is a verified older-service flow, not a current
+search fix.
+
 ## Rust implication
 
-`search.rs` remains a parameter-model scaffold. The downloader should report
-“search unverified” and allow a caller to supply a known book ID until a
+`api.rs::search_params` remains a parameter-model scaffold. The downloader should report
+“current search unverified” and allow a caller to supply a known book ID until a
 non-empty live search response is reproduced with the same evidence standard as
 directory and reader/full.

@@ -1,0 +1,448 @@
+{
+  "evidence_id": "vm9_handle_initialization_20261003",
+  "platform": "bytedance.tomato",
+  "request_profile_version": "7.1.3.32",
+  "native_revision": "v04.09.09.01-bugfixS",
+  "redaction": "Only version/artifact hashes, endpoint paths, aggregate response metrics, guest addresses and instruction offsets are published. URLs, signature values, device/session identifiers, request headers, response bodies, APKs and snapshots remain private.",
+  "scope": "Native bridge initialization, handle provenance and a bounded time-input sweep; not independent Python Medusa.",
+  "artifact_sha256": {
+    "native_library": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "apk": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "apk_classes16_dex": "c0820f523bc429160614f3f056f1829fe68c173d715db4db3b05e3600d3557ea"
+  },
+  "apk_dex_matches_analyzed_dex": true,
+  "runtime_policy": {
+    "frozen_clock": true,
+    "deterministic_urandom": true,
+    "emulated_pid": "0x2c4c",
+    "broad_scans": false,
+    "native_object_overrides": 0,
+    "execution": "serial; harness rebuilds its isolated rootfs before each run"
+  },
+  "original_control_matrix": [
+    {
+      "case": "historical_time_control",
+      "timestamp_ms": 1790261112000,
+      "vmtrace": false,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "elapsed_seconds": 37.267,
+      "exit_code": 0,
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "medusa_raw_length": 804,
+      "medusa_sha256": "f502fc353968934fbe414f639dcd8d5c43228693491b5b8dd7a58266d2c612b8",
+      "invalid_memory_read": false,
+      "handle_callback_observed": true
+    },
+    {
+      "case": "historical_time_vmtrace",
+      "timestamp_ms": 1790261112000,
+      "vmtrace": true,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "elapsed_seconds": 44.369,
+      "exit_code": 0,
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "medusa_raw_length": 804,
+      "medusa_sha256": "f502fc353968934fbe414f639dcd8d5c43228693491b5b8dd7a58266d2c612b8",
+      "invalid_memory_read": false,
+      "handle_callback_observed": true
+    },
+    {
+      "case": "current_time_same_url",
+      "timestamp_ms": 1791026000000,
+      "vmtrace": false,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "elapsed_seconds": 13.871,
+      "exit_code": 0,
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "medusa_raw_length": 801,
+      "medusa_sha256": "b975e14b950955f544fb2808b960e356621bb28cd09d30f2df248b256a40fd4c",
+      "invalid_memory_read": false,
+      "handle_callback_observed": true
+    },
+    {
+      "case": "current_time_fresh_url",
+      "timestamp_ms": 1791026000000,
+      "vmtrace": false,
+      "input_sha256": "28c3c77292bcb7cd0a02d642e8f33bb60c385fff52d61920284abdc8cf03d8d9",
+      "elapsed_seconds": 15.026,
+      "exit_code": 0,
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "medusa_raw_length": 801,
+      "medusa_sha256": "67a6f4b16a1b02cfccd2080cf1414d2ccd5b89014ec07dfa6a85ed1cca2aff40",
+      "invalid_memory_read": false,
+      "handle_callback_observed": true
+    }
+  ],
+  "handle_control_matrix": [
+    {
+      "case": "historical_control",
+      "timestamp_ms": 1790261112000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 47.273,
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "medusa_raw_length": 804,
+      "medusa_sha256": "f502fc353968934fbe414f639dcd8d5c43228693491b5b8dd7a58266d2c612b8",
+      "invalid_memory_read": false
+    },
+    {
+      "case": "previous_failure_time_same_url",
+      "timestamp_ms": 1791023999535,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 18.371,
+      "header_names": [],
+      "medusa_raw_length": 0,
+      "medusa_sha256": null,
+      "invalid_memory_read": true
+    },
+    {
+      "case": "previous_failure_time_grid_same_url",
+      "timestamp_ms": 1791023800000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 10.876,
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa",
+        "X-Perseus"
+      ],
+      "medusa_raw_length": 228,
+      "medusa_sha256": "62d3a2ca1326bdce41e1576b5573106321b79c0a03352dec080335d7a48a93db",
+      "invalid_memory_read": false
+    },
+    {
+      "case": "live_fresh_detail",
+      "timestamp_ms": 1791026600000,
+      "input_sha256": "654c5a79ae9476f3c15993ed3be59d323aefe11812db20d06ea3469747bab499",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 17.301,
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "medusa_raw_length": 801,
+      "medusa_sha256": "f2a2106c6f09e671b171702d2cedc8f80652212113ed1f2a34eef464fb9a3cfc",
+      "invalid_memory_read": false,
+      "online": {
+        "http_status": 200,
+        "body_length": 24363,
+        "body_sha256": "f42bbb30c8e02d618592caf3ca395ca30c0159f28d35055794043fa40eff6d15",
+        "elapsed_seconds": 0.593,
+        "json_code": 0,
+        "json_keys": [
+          "code",
+          "data",
+          "message"
+        ],
+        "data_type": "dict"
+      }
+    }
+  ],
+  "pre_fix_failure": {
+    "timestamp_ms": 1791023999535,
+    "same_url_as_successful_control": true,
+    "callback1_handle_published": false,
+    "ready_polls": 20,
+    "fallback_app_manager": "0x128a3000",
+    "field10_pointer": "0x12297248",
+    "field10_writer_so_offset": "0x15dd50",
+    "writer_width_bytes": 8,
+    "receiver_first_word": "0xffff006b00000001",
+    "virtual_call_loads": [
+      "+0x2a6600: ldr x8, [x0]",
+      "+0x2a6604: ldr x9, [x8, #0x60]"
+    ],
+    "failure": "UC_ERR_READ_UNMAPPED",
+    "process_exit_code": 0,
+    "interpretation": "The old harness continues after JNI failure and exits zero; process exit alone cannot prove signing success."
+  },
+  "dex_boundary_support": {
+    "callback_method": "Lms/bd/c/s4;->a(J)V",
+    "method_idx": 56076,
+    "store_file_offset": "0x682d40",
+    "store_raw_hex": "5a01524a",
+    "store_semantics": "iput-wide v1, v0, s4.a:J",
+    "network_callback_file_offset": "0x682d50",
+    "network_callback_raw_hex": "71101d0a0100",
+    "consumer": "r4 uses s4.a for native request signing tag 0x3000001",
+    "ready_method": "Lms/bd/c/d0;->run()V",
+    "ready_tag": "0x4000004",
+    "ready_tag_constant_file_offset": "0x67098a",
+    "ready_tag_constant_raw_hex": "140204000004",
+    "evidence_limit": "Only the named field store, constant and invocation bytes are used; no whole-method decoder correctness claim."
+  },
+  "private_bridge_fix": {
+    "requires_callback1_signer_handle": true,
+    "fallback_manager_as_signer_removed": true,
+    "guest_object_or_vtable_replacement": false,
+    "independent_native_initialization_fixed": false,
+    "per_invocation_log_and_rounds_paths": true,
+    "failure_logs_preserved": true,
+    "failed_repeat_clears_consumable_signature": true,
+    "output_url_and_khronos_checked": true,
+    "shared_harness_rootfs_still_requires_serial_execution": true
+  },
+  "fix_regression": [
+    {
+      "case": "positive_historical",
+      "timestamp_ms": 1790261112000,
+      "success": true,
+      "medusa_raw_length": 804,
+      "elapsed_seconds": 44.046,
+      "process_exit_code": 0,
+      "saved_rounds_empty": false,
+      "init_unavailable_reported": false,
+      "invalid_memory_read": false,
+      "logs_preserved": true
+    },
+    {
+      "case": "negative_uninitialized",
+      "timestamp_ms": 1791023999535,
+      "success": false,
+      "error_type": "RuntimeError",
+      "elapsed_seconds": 17.63,
+      "process_exit_code": 1,
+      "saved_rounds_empty": true,
+      "init_unavailable_reported": true,
+      "invalid_memory_read": false,
+      "logs_preserved": true
+    },
+    {
+      "case": "positive_fresh_after_failure",
+      "success": true,
+      "timestamp_ms": 1791027400000,
+      "medusa_raw_length": 802,
+      "online": {
+        "http_status": 200,
+        "body_length": 24335,
+        "body_sha256": "efb42687109fe32524a1bb866a720910e57eafa2dd5f8e8857843bda69b890c9",
+        "elapsed_seconds": 0.327,
+        "json_code": 0,
+        "json_keys": [
+          "code",
+          "data",
+          "message"
+        ],
+        "data_type": "dict"
+      }
+    }
+  ],
+  "time_sweep": [
+    {
+      "offset_ms": 0,
+      "timestamp_ms": 1791023800000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": true,
+      "process_exit_code": 0,
+      "elapsed_seconds": 10.545,
+      "medusa_raw_length": 228,
+      "medusa_sha256": "62d3a2ca1326bdce41e1576b5573106321b79c0a03352dec080335d7a48a93db",
+      "callback1_handle": "0x126a2498",
+      "ready_poll_count": 0,
+      "init_unavailable_reported": false,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 1,
+      "timestamp_ms": 1791023800001,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": true,
+      "process_exit_code": 0,
+      "elapsed_seconds": 10.273,
+      "medusa_raw_length": 228,
+      "medusa_sha256": "62d3a2ca1326bdce41e1576b5573106321b79c0a03352dec080335d7a48a93db",
+      "callback1_handle": "0x126a2498",
+      "ready_poll_count": 0,
+      "init_unavailable_reported": false,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 15,
+      "timestamp_ms": 1791023800015,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": true,
+      "process_exit_code": 0,
+      "elapsed_seconds": 7.696,
+      "medusa_raw_length": 228,
+      "medusa_sha256": "62d3a2ca1326bdce41e1576b5573106321b79c0a03352dec080335d7a48a93db",
+      "callback1_handle": "0x126a2498",
+      "ready_poll_count": 0,
+      "init_unavailable_reported": false,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 16,
+      "timestamp_ms": 1791023800016,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": true,
+      "process_exit_code": 0,
+      "elapsed_seconds": 7.697,
+      "medusa_raw_length": 228,
+      "medusa_sha256": "62d3a2ca1326bdce41e1576b5573106321b79c0a03352dec080335d7a48a93db",
+      "callback1_handle": "0x126a2498",
+      "ready_poll_count": 0,
+      "init_unavailable_reported": false,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 999,
+      "timestamp_ms": 1791023800999,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": false,
+      "process_exit_code": 1,
+      "elapsed_seconds": 18.347,
+      "medusa_raw_length": 0,
+      "medusa_sha256": null,
+      "callback1_handle": null,
+      "ready_poll_count": 20,
+      "init_unavailable_reported": true,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 1000,
+      "timestamp_ms": 1791023801000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": false,
+      "process_exit_code": 1,
+      "elapsed_seconds": 16.597,
+      "medusa_raw_length": 0,
+      "medusa_sha256": null,
+      "callback1_handle": null,
+      "ready_poll_count": 20,
+      "init_unavailable_reported": true,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 2000,
+      "timestamp_ms": 1791023802000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": true,
+      "process_exit_code": 0,
+      "elapsed_seconds": 9.518,
+      "medusa_raw_length": 228,
+      "medusa_sha256": "12b321c9d922dedc3f4bf6b2ecfe0279150b045b6a6dba0431a42179d82647a1",
+      "callback1_handle": "0x126a2498",
+      "ready_poll_count": 0,
+      "init_unavailable_reported": false,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 4000,
+      "timestamp_ms": 1791023804000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": false,
+      "process_exit_code": 1,
+      "elapsed_seconds": 16.835,
+      "medusa_raw_length": 0,
+      "medusa_sha256": null,
+      "callback1_handle": null,
+      "ready_poll_count": 20,
+      "init_unavailable_reported": true,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 8000,
+      "timestamp_ms": 1791023808000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": true,
+      "process_exit_code": 0,
+      "elapsed_seconds": 8.259,
+      "medusa_raw_length": 228,
+      "medusa_sha256": "6579d3b2173a184b4bd03eb9626c95b6ccc835f9ac9d9d899703ce7204d111a4",
+      "callback1_handle": "0x126a2498",
+      "ready_poll_count": 0,
+      "init_unavailable_reported": false,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 16000,
+      "timestamp_ms": 1791023816000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": true,
+      "process_exit_code": 0,
+      "elapsed_seconds": 13.342,
+      "medusa_raw_length": 801,
+      "medusa_sha256": "1cd0c998cdba342f538e55bac93c11c6c5016283582417bf7b85dcabcbea8048",
+      "callback1_handle": "0x1296a4a0",
+      "ready_poll_count": 0,
+      "init_unavailable_reported": false,
+      "invalid_memory_read": false
+    },
+    {
+      "offset_ms": 199535,
+      "timestamp_ms": 1791023999535,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "success": false,
+      "process_exit_code": 1,
+      "elapsed_seconds": 17.617,
+      "medusa_raw_length": 0,
+      "medusa_sha256": null,
+      "callback1_handle": null,
+      "ready_poll_count": 20,
+      "init_unavailable_reported": true,
+      "invalid_memory_read": false
+    }
+  ],
+  "time_sweep_limit": "11 bounded time inputs, not all 16 selector branches and not a general clock selection rule. Offset +999 ms also fails within the same seconds timestamp; +2000 ms succeeds while +4000 ms fails.",
+  "measured_fresh_header_shapes": {
+    "argus_raw_length": 4,
+    "argus_equals_khronos_u32_le": true,
+    "ladon_raw_length": 4,
+    "interpretation": "These are the measured short native forms; header-name presence does not validate a general long-form Argus/Ladon implementation."
+  },
+  "independent_current_python_signer": false,
+  "no_jvm_rust_chain": false,
+  "remaining": [
+    "Native initializer branch and callback publication from fresh inputs",
+    "remaining callback/object graph and packed x8",
+    "current nonempty search and pagination"
+  ]
+}
