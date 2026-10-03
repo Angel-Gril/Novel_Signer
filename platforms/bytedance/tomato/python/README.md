@@ -12,6 +12,14 @@ allocator, and host handoff path still depend on captured state.
 
 The Python files are research fixtures. They do not contain the private device configuration or raw online trial material.
 
+`vm9_callbacks.py` also initializes the A/B global from an explicit
+`MSC.GetABSwitch()` value (APK default `2`) and evaluates the bit-5 initialization
+gate. `verify_vm9_startup_switch.py --library <matching-private-so> --output <local-json>`
+compares 18 fresh-page cases against actual bytecode in the existing VM.
+It loads no captured memory and invokes no JVM. Full signer construction and
+callback publication remain open; the old bridge's timestamp-valued A/B
+callback is not a valid source of default startup state.
+
 `vm9_handoff_rule.py` learns a diagnostic Seg1-to-Seg2 state rule from two paired
 captures. Its default byte rule predicted a third homepage capture's `NEXT#1`
 exactly, but failed on detail with 34 different bytes and a trace-3 register

@@ -262,13 +262,17 @@ The current material proves a Medusa selector of `state & 0x0f`, so there are 16
 
 Use the paired matrix entries when arguing about a required header. A single successful request only proves that one complete request worked. The `drop_medusa` versus `drop_perseus` pairs prove that Medusa is a hard dependency for these reading endpoints while Perseus was optional in this time window. Use the registerkey key-version, `crypt_status`, decoded length, and decoded hash together to prove that the response was decrypted rather than served as a plaintext cache.
 
-The 2026-10-03 initialization controls locate a separate pre-signing failure:
-the callback-1 signer handle is absent, and the old bridge dispatches through
-its app-manager fallback. The private bridge now fails explicitly and clears
-stale output. Fresh 801-byte and 802-byte Medusa detail samples both received
-HTTP 200 with code 0; this does not make the older 2026-10-01 captured sample
-server-tested. Eleven controlled time inputs remain a bounded observation,
-not all-selector parameterization. See [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md).
+The 2026-10-03 controls identify the pre-signing failure's cause:
+`MS.b(0x1000000e)` returns `MSC.GetABSwitch()`, not a timestamp. The old
+bridge put frozen time into this A/B field, affecting its bit-5 gate.
+Restoring APK default `2` fixes three former failing time inputs; changing
+only A/B to `34` recreates the failure. Fail-closed handling and stale-output
+clearing still pass. An unrounded fresh 802-byte Medusa detail request received
+HTTP 200, code 0 and 24,341 bytes. Python models this one global/gate in 18
+bytecode differential cases; complete current Medusa initialization remains
+open. Historical accepted samples keep their original scope, and old
+time-grid observations are not native requirements. See
+[BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md).
 
 The older configured `6.8.1.32` external search service returned 9 and 10 unique
 books across two pages using one search ID, with no overlap. Current

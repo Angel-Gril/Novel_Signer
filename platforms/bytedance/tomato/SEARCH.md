@@ -127,6 +127,13 @@ search fix.
 
 ## Rust implication
 
+The A/B-corrected bridge was retested on both hosts with the same current
+profile/session flow and APK-default switch `2`. Each produced 801-byte
+Medusa and HTTP 200 with zero body bytes; neither supplied a search ID.
+Phase 2 and pagination remain untested. Fixing initialization alone has not
+fixed search. See
+[search_current_ab_corrected_20261003.json](evidence/search_current_ab_corrected_20261003.json).
+
 `api.rs::search_params` remains a parameter-model scaffold. The downloader should report
 “current search unverified” and allow a caller to supply a known book ID until a
 non-empty live search response is reproduced with the same evidence standard as

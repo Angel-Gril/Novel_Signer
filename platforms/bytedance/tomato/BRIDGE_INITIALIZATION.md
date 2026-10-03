@@ -1,8 +1,38 @@
-# 当前桥接器初始化、handle 与时间输入对照
+# 当前桥接器初始化、A/B 配置与 handle 发布
 
-本轮确认了一个初始化失败边界，并修正私有研究桥接器的错误 handle 回退。**没有完成当前 Medusa 的独立 Python 初始化。** 证据见 [vm9_handle_initialization_20261003.json](evidence/vm9_handle_initialization_20261003.json)。
+已找到并修正初始化失败的来源：`MS.b(0x1000000e)` 应返回 `MSC.GetABSwitch()`，旧桥接器错误地返回冻结毫秒时间。APK 默认 A/B 值是 `2`。此前时间取整只是在错误配置输入下避开 bit 5，不能解释为 native 对时间的要求。**当前 Medusa 的完整独立 Python 初始化仍未完成。** 新证据见 [vm9_ab_switch_initialization_20261003.json](evidence/vm9_ab_switch_initialization_20261003.json)；下方历史对照保留用于追溯。
 
-## 1. 失败发生在哪里
+## 0. A/B 回调纠正与最新验证
+
+同一 APK 的 `classes16.dex` 在文件偏移 `0x684a56` 调用 `MSC.GetABSwitch()J`；`classes24.dex` 的 getter 在 `0x68e0cc` 读取 `MSC.a:J`。class 的 encoded static value 位于 `0x34f820`，字节 `01 06 02` 表示 long 初值为 `2`。两个本地 DEX 与 APK 对应条目的 SHA-256 一致。这是默认值证据，真实 App 对 `SetABSwitch` 的运行时覆盖尚未捕获。
+
+JNI 启动将回调结果保存到 native 全局 `base+0x3d1578`。真实 store 是 `+0x1656c0: str x0,[x8,#0x578]`；WriteHook 报告的 `+0x1656b8` 是邻近执行位置，不能当成 store 指令地址。初始化 VM `+0x706c0` 的 indices 311–313 执行：
+
+```text
++0x70b9c: R1 = u8[global]
++0x70ba0: R1 = R1 & 0x20
++0x70ba4: if R1 == 0, goto +0x70cb4; else +0x70ba8
+```
+
+旧桥接器成功、失败采样的初始化基本块有 46,802 条相同前缀，首次控制流分歧位于此条件之后。只读探针没有改变旧控制组的 Medusa 摘要。恢复回调语义后：
+
+| A/B 输入 | 冻结时间 | callback-1 | Medusa 原始长度 |
+| ---: | ---: | --- | ---: |
+| 2 | 1791023800000 | 发布 | 802 |
+| 2 | 1791023800999 | 发布 | 800 |
+| 2 | 1791023801000 | 发布 | 800 |
+| 2 | 1791023999535 | 发布 | 801 |
+| 1791023999535（重现旧误配） | 1791023999535 | 不发布 | 0 |
+| 34（相对 2 仅设置 bit 5） | 1791023999535 | 不发布 | 0 |
+| 0 | 1791023999535 | 发布 | 801 |
+
+未取整的新时间详情请求生成 802 字节 Medusa，HTTP 200、`code=0`，响应 24,341 字节，SHA-256 为 `41ca4dfee2a329e67bf8fa9546052f16595be9b3eb840dfe0f3839ff375a0e69`。这是修正桥接器的线上证据。
+
+发布 helper 位于 `+0x2a8760`，通过 `+0x28c308` 先后调用 `0x2000001` 和 `0x2000002`，两次使用同一已构造 handle。定位 helper 不等于恢复对象的全部 constructor 状态。真实 Python 桥接入口在同一输出目录完成“配置 2 成功 → 配置 34 失败 → 配置 2 再成功”：失败清空旧签名，两次成功摘要相同，URL 和 Khronos 对应本次输入。
+
+Python `initialize_ab_switch` 和 `evaluate_ab_switch_gate` 用新建内存页恢复这个全局及三指令分支，在两种加载地址下通过 18 个与实际 bytecode 的对照、3 个异常拒绝。它们不复制捕获状态，也不构造完整 signer。见 [vm9_startup_switch_python_20261003.json](evidence/vm9_startup_switch_python_20261003.json)。
+
+## 1. 历史误配下的失败位置
 
 保持同一个详情 URL、native artifact、固定 PID 和随机源，改变冻结时间：历史时间 `1790261112000` 能签出 804 字节 Medusa，`1791023999535` 则未发布 callback-1 signer handle。桥接器轮询 20 次仍未就绪，原代码把 `0x4000002` 返回的 app manager 当作 signer handle。
 
@@ -35,9 +65,9 @@ Python 桥接调用也改为每次使用独立日志和 rounds 路径；失败�
 
 另一个修正前的新时间控制也被详情接口接受：801 字节 Medusa，HTTP 200、`code=0`、24,363 字节 JSON。原始响应及签名留在私有采样中，公开记录只包含长度和 SHA-256。
 
-## 3. 时间输入对照
+## 3. 历史时间输入对照（A/B 回调误配）
 
-以下全部保持同一 URL、PID、随机源和 native revision，每次从桥接器重新创建的 rootfs 启动。基准时间为 `1791023800000` 毫秒。
+以下保持同一 URL、PID、随机源和 native revision，每次从重新创建的 rootfs 启动。基准时间为 `1791023800000` 毫秒。**旧桥接器也把每个时间值传给 A/B 回调，所以并非 native wall-clock 的单变量实验。** 原始数据见 [vm9_handle_initialization_20261003.json](evidence/vm9_handle_initialization_20261003.json)。
 
 | 偏移（毫秒） | 是否发布 signer handle | Medusa 原始长度 |
 | ---: | --- | ---: |
@@ -59,7 +89,7 @@ Python 桥接调用也改为每次使用独立日志和 rounds 路径；失败�
 
 追加的单变量对照保留失败 wall-clock 输入 `1791023999535`，只在就绪轮询期间推进 guest 单调时钟：控制组不推进，实验组每轮推进 550 毫秒，共 20 轮、11 秒。两组都未发布 callback-1 handle，并返回 `SIGNER_INIT_UNAVAILABLE`。这排除了“单独推进轮询期间的单调时钟即可修复”这一具体假设，不能外推为所有启动时钟策略都无关。
 
-首先恢复 native initializer 的时间相关分支和 callback 发布，生成真正的 signer 对象，再验证后续 constructor、allocator 和 callback。签名 VM 入口必须接收该对象，不能拿 app manager 或捕获地址充当 fresh-input 状态。
+最新对照把“时间相关”解释修正为 A/B bitmask 回调误配，并定位 callback 发布 helper。下一步需在正确 A/B 输入下恢复完整 signer constructor、allocator 全局启动和剩余 callback，再用同次采样验证。签名 VM 必须接收真正构造的对象，不能拿 app manager 或捕获地址充当 fresh-input 状态。
 
 本轮新鲜输出的 `X-Argus` 是 4 字节秒时间戳的小端编码，`X-Ladon` 也解码为 4 字节。这是实测短形态，不能用“返回了六个头名称”证明通用长形态 Argus/Ladon 算法已被当前接口验证。阅读接口接受也不能替代搜索接口验收。
 

@@ -485,5 +485,12 @@
     "monotonic_total_advance_ns": 11000000000,
     "handle_restored": false,
     "interpretation": "Both runs stop after 20 polls with SIGNER_INIT_UNAVAILABLE. Advancing only monotonic time during polling is not sufficient; this does not exclude all startup clock policies or explain the initializer branch."
+  },
+  "interpretation_correction": {
+    "evidence_id": "vm9_ab_switch_initialization_20261003",
+    "old_bridge_callback_0x1000000e_was_timestamp_instead_of_ABSwitch": true,
+    "measurements_retained_as_legacy_bridge_controls": true,
+    "native_time_gate_claim_supported": false,
+    "old_failure_at_timestamp_now_succeeds_with_APK_default_ABSwitch": true
   }
 }

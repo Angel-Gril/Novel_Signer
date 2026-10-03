@@ -15,12 +15,12 @@
 
 ## Current Medusa branches
 
-The current signer produced both of these raw sizes under frozen timestamps:
+Historical bridge captures produced both of these raw sizes under frozen timestamps:
 
 - 228 bytes (304 base64 characters);
 - 801–804 bytes (1,068–1,072 base64 characters).
 
-Both branch families were accepted by the tested detail/directory/reader endpoints when their timestamp and `_rticket` were fresh. Some adjacent frozen millisecond values crash the local Unidbg harness before an HTTP request is sent; a 200-second grid was stable in the recorded sweep. This is a local VM execution issue, not evidence of server rejection.
+Both captured families were accepted by the tested detail/directory/reader endpoints when their timestamp and `_rticket` were fresh. The old bridge accidentally passed that timestamp to `MSC.GetABSwitch()` as well. Its adjacent-time failures and observed 200-second grid are misconfigured bridge controls, not native time constraints or server rejection.
 
 The 802-byte size was added by the 2026-10-01 diagnostic capture. That new
 sample was not submitted to the server; the earlier accepted long samples were
@@ -32,10 +32,11 @@ Medusa samples with code 0. Their response metrics and hashes are in
 sample retains its untested status.
 
 The new same-URL controls locate the local crash after missing signer-handle
-publication and the old app-manager fallback. The private bridge now stops at
-initialization instead. Offsets 0/1/15/16 ms share one output, while +999 ms
-already fails inside the same seconds timestamp. No general timestamp-grid
-or all-selector rule is established; see `BRIDGE_INITIALIZATION.md`.
+publication and the old app-manager fallback. The bridge still fails explicitly
+when no signer is published. The A/B correction restores APK default `2`
+independently of clocks; former +999/+1000 ms and old failing inputs now
+succeed. Corrected controls produce 800–802-byte Medusa, and an unrounded
+fresh 802-byte detail sample is accepted. See `BRIDGE_INITIALIZATION.md`.
 
 The measured fresh bridge also emits short native forms: four decoded bytes
 for Argus (equal to the Khronos seconds as u32 little-endian), and four for
@@ -43,7 +44,7 @@ Ladon. Their presence does not prove the separate long-form algorithms are
 validated by current search. Reading-header removability remains scoped to
 the paired reading matrix.
 
-The current bridge matrix also confirms that the URL, frozen timestamp, and emulated PID affect the Medusa result, while repeating the same triple is deterministic. Five frozen timestamp trials reached the detail endpoint with HTTP 200. These observations describe the bridge's input surface; they do not replace the independent no-JVM implementation proof.
+Historical accepted requests remain transport evidence, but their A/B input was coupled to the timestamp. New controls keep A/B at `2` while varying time, and a repeated URL/time/PID/A-B tuple produces the same digest. These describe the bridge input surface and do not replace independent no-JVM implementation proof.
 
 ## VM selector count
 

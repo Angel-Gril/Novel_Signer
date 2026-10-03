@@ -1094,6 +1094,31 @@
     "independent_current_python_signer": false,
     "no_jvm_rust_chain": false,
     "monotonic_poll_controls": 2,
-    "monotonic_advance_alone_restores_handle": false
+    "monotonic_advance_alone_restores_handle": false,
+    "interpretation_correction": "vm9_ab_switch_initialization_20261003"
+  },
+  "vm9_ab_switch_initialization_20261003": {
+    "evidence_file": "evidence/vm9_ab_switch_initialization_20261003.json",
+    "apk_default_ab_switch": 2,
+    "corrected_matrix_cases": 8,
+    "unrounded_live_detail_accepted": true,
+    "complete_python_medusa": false
+  },
+  "vm9_startup_switch_python_20261003": {
+    "evidence_file": "evidence/vm9_startup_switch_python_20261003.json",
+    "fresh_pages": true,
+    "differential_cases": 18,
+    "negative_cases": 3,
+    "complete_signer_initialization": false
+  },
+  "search_current_ab_corrected_20261003": {
+    "evidence_file": "evidence/search_current_ab_corrected_20261003.json",
+    "ab_switch": 2,
+    "response_lengths": [
+      0,
+      0
+    ],
+    "nonempty_current_search_verified": false,
+    "pagination_verified": false
   }
 }

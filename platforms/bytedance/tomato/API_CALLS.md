@@ -80,6 +80,13 @@ controller maps `offset=(page-1)*size`; the source first obtains an ID, then
 continues with `is_first_enter_search=0`. Its cache and normalized responses
 are not raw upstream evidence. Versioned details are in [SEARCH.md](SEARCH.md).
 
+After correcting `MSC.GetABSwitch()` to APK default `2`, an unrounded fresh
+detail request returned HTTP 200, code 0 and 24,341 bytes. Retesting current
+first-stage search on both hosts still returned zero bytes and no search ID.
+The correction fixes the observed bridge initialization failure and does
+not establish current search availability. See `BRIDGE_INITIALIZATION.md`
+and `evidence/search_current_ab_corrected_20261003.json`.
+
 The fresh 2026-09-29 probe repeated this against `tab/v`, `tab/v/`, `page/v1/`,
 and `page/v/` with synchronized request timestamp fields. Every request was
 HTTP 200 with a zero-byte body and the empty-stream SHA-256

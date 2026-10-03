@@ -28,6 +28,50 @@ class CallbackDescriptorWrite:
     object_address: int
 
 
+@dataclass(frozen=True)
+class ABSwitchGateResult:
+    global_address: int
+    ab_switch: int
+    masked_bit: int
+    branch_taken: bool
+    next_bytecode_offset: int
+
+
+def initialize_ab_switch(pages, *, image_base: int, ab_switch: int = 2) -> int:
+    """Store MSC.GetABSwitch() at the observed build's global +0x3d1578.
+
+    classes24.dex encodes MSC.a:J's initial value as 2. A caller can supply
+    the application's configured value. This field is independent of clocks.
+    Only this proven global is initialized; allocator and signer construction
+    remain the caller's responsibility.
+    """
+    if image_base <= 0 or image_base > 0xFFFF_FFFF_FFFF_FFFF - 0x3D1580:
+        raise RefillUnsupported("invalid native image base")
+    encoded = _signed(ab_switch, 8)
+    address = image_base + 0x3D1578
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, address, 8)
+    _write_span(transaction, address, encoded)
+    transaction.commit()
+    return address
+
+
+def evaluate_ab_switch_gate(pages, *, image_base: int) -> ABSwitchGateResult:
+    """Evaluate BC+0x706c0 indices 311..313 without executing native code.
+
+    LOAD8U, ANDI 0x20 and BEQ with zero select +0x70cb4 or +0x70ba8.
+    This is one initialization gate, not proof of a constructed signer.
+    """
+    if image_base <= 0 or image_base > 0xFFFF_FFFF_FFFF_FFFF - 0x3D1580:
+        raise RefillUnsupported("invalid native image base")
+    address = image_base + 0x3D1578
+    word = _read_span(pages, address, 8)
+    masked = word[0] & 0x20
+    taken = masked == 0
+    return ABSwitchGateResult(address, int.from_bytes(word, "little", signed=True),
+                              masked, taken, 0x70CB4 if taken else 0x70BA8)
+
+
 def _signed(value: int, width: int) -> bytes:
     try:
         return int(value).to_bytes(width, "little", signed=True)

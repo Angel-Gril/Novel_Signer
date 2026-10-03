@@ -1,0 +1,171 @@
+{
+  "evidence_id": "vm9_startup_switch_python_20261003",
+  "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "differential_cases": [
+    {
+      "image_base": "0x122c0000",
+      "ab_switch": 0,
+      "branch_taken": true,
+      "next_bytecode_offset": "0x70cb4",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "ab_switch": 2,
+      "branch_taken": true,
+      "next_bytecode_offset": "0x70cb4",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "ab_switch": 34,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "ab_switch": 1791023800000,
+      "branch_taken": true,
+      "next_bytecode_offset": "0x70cb4",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "ab_switch": 1791023801000,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "ab_switch": 1791023999535,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "ab_switch": -1,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "ab_switch": -9223372036854775808,
+      "branch_taken": true,
+      "next_bytecode_offset": "0x70cb4",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "ab_switch": 9223372036854775807,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "ab_switch": 0,
+      "branch_taken": true,
+      "next_bytecode_offset": "0x70cb4",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "ab_switch": 2,
+      "branch_taken": true,
+      "next_bytecode_offset": "0x70cb4",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "ab_switch": 34,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "ab_switch": 1791023800000,
+      "branch_taken": true,
+      "next_bytecode_offset": "0x70cb4",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "ab_switch": 1791023801000,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "ab_switch": 1791023999535,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "ab_switch": -1,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "ab_switch": -9223372036854775808,
+      "branch_taken": true,
+      "next_bytecode_offset": "0x70cb4",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "ab_switch": 9223372036854775807,
+      "branch_taken": false,
+      "next_bytecode_offset": "0x70ba8",
+      "outside_global_unchanged": true,
+      "generic_vm_matches": true
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "long_underflow",
+      "unchanged": true
+    },
+    {
+      "case": "long_overflow",
+      "unchanged": true
+    },
+    {
+      "case": "unmapped_global",
+      "unchanged": true
+    }
+  ],
+  "fresh_pages": true,
+  "captured_memory_required": false,
+  "native_execution_required": false,
+  "jvm_required": false,
+  "complete_signer_initialization": false,
+  "independent_current_medusa": false,
+  "redaction": "Only artifact hashes, method/instruction offsets, input configuration values, guest addresses and aggregate results are published. URLs, device/session identifiers, signature values, raw responses, private images and block traces remain local."
+}

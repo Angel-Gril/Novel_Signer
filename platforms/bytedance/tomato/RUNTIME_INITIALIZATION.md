@@ -1,5 +1,23 @@
 # VM9 TLS, arena, cache and string initialization
 
+The startup A/B global is now modeled independently of clocks:
+`initialize_ab_switch(pages, image_base=..., ab_switch=2)` writes the verified
+`MSC.GetABSwitch()` field at image offset `0x3d1578`;
+`evaluate_ab_switch_gate` evaluates BC indices 311–313 at `+0x706c0`.
+Eighteen fresh-page cases match actual bytecode execution, with three invalid
+cases rejected. The old bridge's timestamp-valued A/B callback was a setup
+error; its time-grid observations are not initialization requirements.
+See [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md).
+
+To reproduce the bounded component check with the matching private library:
+
+```text
+python python/verify_vm9_startup_switch.py --library /private/libmetasec_ml_71332.so --output /private/startup-switch.json
+```
+
+This check uses no captured checkpoint or JVM. It initializes one global and
+one gate; it does not build the network signer or produce current Medusa.
+
 Python now generates a fresh allocator thread state, arena and thread cache
 from the observed build's global configuration. The string constructor at
 `0x12508344` generates its object and payload from the supplied source.

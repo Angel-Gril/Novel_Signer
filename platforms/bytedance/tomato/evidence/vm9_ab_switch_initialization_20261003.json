@@ -1,0 +1,277 @@
+{
+  "evidence_id": "vm9_ab_switch_initialization_20261003",
+  "platform": "bytedance.tomato",
+  "request_profile_version": "7.1.3.32",
+  "redaction": "Only artifact hashes, method/instruction offsets, input configuration values, guest addresses and aggregate results are published. URLs, device/session identifiers, signature values, raw responses, private images and block traces remain local.",
+  "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "classes16_sha256": "c0820f523bc429160614f3f056f1829fe68c173d715db4db3b05e3600d3557ea",
+  "classes24_sha256": "6e7311b1ef778b57bc649a496cc5a0bfa0df9cd343854d40f885ede3526cf6de",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "finding": "MS.b(0x1000000e) returns MSC.GetABSwitch(), not wall-clock time. The old bridge accidentally populated a configuration bitmask with its frozen timestamp.",
+  "dex_provenance": {
+    "callback_invoke": {
+      "offset": "0x684a56",
+      "bytes": "7100450a0000",
+      "target": "MSC.GetABSwitch()J"
+    },
+    "getter": {
+      "offset": "0x68e0cc",
+      "bytes": "61005340",
+      "operation": "sget-wide MSC.a:J"
+    },
+    "getter_return": {
+      "offset": "0x68e0d0",
+      "bytes": "1000",
+      "operation": "return-wide"
+    },
+    "msc_class_def_offset": "0x1530f8",
+    "encoded_static_values": {
+      "offset": "0x34f820",
+      "bytes": "010602",
+      "meaning": "one encoded VALUE_LONG; MSC.a:J = 2"
+    },
+    "delay_callback": "0x1000000f returns MSC.GetDelayTime(); MSC.b:J defaults to 0",
+    "apk_entry_hashes_match_local_dex": true,
+    "runtime_SetABSwitch_overrides_independently_captured": false,
+    "decoder_scope": "Local invoke/sget/return bytes and class encoded values verified; full-method mnemonic/width labels are not trusted."
+  },
+  "native_provenance": {
+    "global_offset": "0x3d1578",
+    "writer_instruction_offset": "0x1656c0",
+    "writer_instruction": "str x0,[x8,#0x578] after adrp x8,+0x3d1000",
+    "write_hook_reported_pc": "0x1656b8",
+    "write_hook_pc_is_not_exact_store_site": true,
+    "gate_instructions": [
+      {
+        "offset": "0x70b9c",
+        "word": "0x00401028",
+        "meaning": "R1 = LOAD8U [R1]"
+      },
+      {
+        "offset": "0x70ba0",
+        "word": "0x04401035",
+        "meaning": "R1 = R1 & 0x20"
+      },
+      {
+        "offset": "0x70ba4",
+        "word": "0x0843002d",
+        "meaning": "if R1 == R0 (0), branch +67 instructions"
+      }
+    ],
+    "gate_taken_target": "0x70cb4",
+    "gate_fallthrough": "0x70ba8",
+    "publisher_entry": "0x2a8760",
+    "publisher_calls": [
+      {
+        "offset": "0x2a87a8",
+        "tag": "0x2000001"
+      },
+      {
+        "offset": "0x2a87bc",
+        "tag": "0x2000002"
+      }
+    ],
+    "publisher_wrapper": "0x28c308 moves handle from X1 to X2, zeros type/string/object, branches to +0x26e70c",
+    "same_constructed_handle_supplied_to_both_callbacks": true,
+    "constructor_state_fully_recovered": false
+  },
+  "trace_comparison": {
+    "scope": "Old misbound callback control versus +1000ms; module basic blocks only during tag 0x4000001",
+    "control_records": 98483,
+    "failure_records": 47951,
+    "dropped_records": 0,
+    "common_block_prefix_length": 46802,
+    "first_divergence_is_VM_conditional": true,
+    "probe_control_signature_matches_old_uninstrumented_control": true,
+    "raw_trace_published": false
+  },
+  "corrected_bridge_matrix": [
+    {
+      "case": "default2_base",
+      "ab_switch": 2,
+      "timestamp_ms": 1791023800000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 24.968,
+      "medusa_raw_length": 802,
+      "medusa_sha256": "702962e4698909566b6901e4af4407fc0ce28560b5b7461ffaf09e7e50f94ebd",
+      "callback1_published": true,
+      "ready_poll_count": 0,
+      "initialization_failed": false,
+      "invalid_memory_read": false,
+      "native_argus_length": 4,
+      "native_ladon_length": 4
+    },
+    {
+      "case": "default2_plus999",
+      "ab_switch": 2,
+      "timestamp_ms": 1791023800999,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 27.075,
+      "medusa_raw_length": 800,
+      "medusa_sha256": "aeac6e266bc459987ebb0782ded86f98f182fa76e40c2a8416aa67ae09e22a0d",
+      "callback1_published": true,
+      "ready_poll_count": 0,
+      "initialization_failed": false,
+      "invalid_memory_read": false,
+      "native_argus_length": 4,
+      "native_ladon_length": 4
+    },
+    {
+      "case": "default2_plus1000",
+      "ab_switch": 2,
+      "timestamp_ms": 1791023801000,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 27.691,
+      "medusa_raw_length": 800,
+      "medusa_sha256": "a99567e6dd8162b69bedfe8e4423c29748e01669ea9e0a2cdf2199f1cd6956c0",
+      "callback1_published": true,
+      "ready_poll_count": 0,
+      "initialization_failed": false,
+      "invalid_memory_read": false,
+      "native_argus_length": 4,
+      "native_ladon_length": 4
+    },
+    {
+      "case": "default2_old_failure",
+      "ab_switch": 2,
+      "timestamp_ms": 1791023999535,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 14.14,
+      "medusa_raw_length": 801,
+      "medusa_sha256": "27da47e4f1e73812c87cc905f68e9ca5f674e6d4866d0b74388c6231e302b393",
+      "callback1_published": true,
+      "ready_poll_count": 0,
+      "initialization_failed": false,
+      "invalid_memory_read": false,
+      "native_argus_length": 4,
+      "native_ladon_length": 4
+    },
+    {
+      "case": "legacy_misbound_failure",
+      "ab_switch": 1791023999535,
+      "timestamp_ms": 1791023999535,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 1,
+      "elapsed_seconds": 17.384,
+      "medusa_raw_length": 0,
+      "medusa_sha256": null,
+      "callback1_published": false,
+      "ready_poll_count": 20,
+      "initialization_failed": true,
+      "invalid_memory_read": false,
+      "native_argus_length": null,
+      "native_ladon_length": null
+    },
+    {
+      "case": "bit5_set_same_time",
+      "ab_switch": 34,
+      "timestamp_ms": 1791023999535,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 1,
+      "elapsed_seconds": 18.368,
+      "medusa_raw_length": 0,
+      "medusa_sha256": null,
+      "callback1_published": false,
+      "ready_poll_count": 20,
+      "initialization_failed": true,
+      "invalid_memory_read": false,
+      "native_argus_length": null,
+      "native_ladon_length": null
+    },
+    {
+      "case": "bit5_clear_same_time",
+      "ab_switch": 0,
+      "timestamp_ms": 1791023999535,
+      "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 13.866,
+      "medusa_raw_length": 801,
+      "medusa_sha256": "27da47e4f1e73812c87cc905f68e9ca5f674e6d4866d0b74388c6231e302b393",
+      "callback1_published": true,
+      "ready_poll_count": 0,
+      "initialization_failed": false,
+      "invalid_memory_read": false,
+      "native_argus_length": 4,
+      "native_ladon_length": 4
+    },
+    {
+      "case": "live_fresh_detail",
+      "ab_switch": 2,
+      "timestamp_ms": 1791031597776,
+      "input_sha256": "23a5fdc9e7673da9cb349117a9329acba03370fd0b3d3d2bf634ad65ea31ab67",
+      "endpoint": "/reading/bookapi/detail/v1/",
+      "exit_code": 0,
+      "elapsed_seconds": 14.399,
+      "medusa_raw_length": 802,
+      "medusa_sha256": "aeff4b20266c7e68de05f786239161b8c1c4e8e3acee81cf0a998392d21e5ba1",
+      "invalid_memory_read": false,
+      "rounded_timestamp": false,
+      "online": {
+        "http_status": 200,
+        "body_length": 24341,
+        "body_sha256": "41ca4dfee2a329e67bf8fa9546052f16595be9b3eb840dfe0f3839ff375a0e69",
+        "elapsed_seconds": 0.511,
+        "json_code": 0
+      }
+    }
+  ],
+  "bridge_reused_output_regression": [
+    {
+      "case": "success_before",
+      "ab_switch": 2,
+      "success": true,
+      "exit_code": 0,
+      "medusa_raw_length": 801,
+      "medusa_sha256": "27da47e4f1e73812c87cc905f68e9ca5f674e6d4866d0b74388c6231e302b393",
+      "stale_output_absent_after_failure": null,
+      "url_matches": true,
+      "timestamp_matches": true
+    },
+    {
+      "case": "negative_bit5",
+      "ab_switch": 34,
+      "success": false,
+      "exit_code": 1,
+      "medusa_raw_length": 0,
+      "medusa_sha256": null,
+      "stale_output_absent_after_failure": true,
+      "url_matches": null,
+      "timestamp_matches": null
+    },
+    {
+      "case": "success_after",
+      "ab_switch": 2,
+      "success": true,
+      "exit_code": 0,
+      "medusa_raw_length": 801,
+      "medusa_sha256": "27da47e4f1e73812c87cc905f68e9ca5f674e6d4866d0b74388c6231e302b393",
+      "stale_output_absent_after_failure": null,
+      "url_matches": true,
+      "timestamp_matches": true
+    }
+  ],
+  "interpretation": {
+    "old_time_failure_caused_by_callback_misbinding": true,
+    "bit5_change_2_to_34_reproduces_initialization_failure_at_same_timestamp": true,
+    "old_timestamp_grid_is_not_a_native_requirement": true,
+    "corrected_unrounded_live_detail_accepted": true,
+    "arbitrary_times_and_all_switch_values_exhaustively_verified": false,
+    "short_and_long_old_samples_are_not_all_selector_proof": true,
+    "complete_python_medusa": false,
+    "no_jvm_rust_download": false
+  },
+  "supersedes_interpretation_of": [
+    "vm9_handle_initialization_20261003"
+  ]
+}

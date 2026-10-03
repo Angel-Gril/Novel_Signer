@@ -5,6 +5,27 @@ checkpoint, not a completion claim.
 
 ## Latest bridge initialization evidence (2026-10-03)
 
+**Correction:** `MS.b(0x1000000e)` returns `MSC.GetABSwitch()` (APK default
+`2`), not time. The old bridge populated global `base+0x3d1578` with its frozen
+timestamp, coupling two inputs. BC `+0x706c0` tests bit `0x20` before the
+publication path. Restoring A/B `2` fixes the +999/+1000 ms and prior failing
+inputs; changing only A/B to `34` recreates the failure. Old time sweeps and
+monotonic-poll controls below are historical misbound-bridge measurements,
+not evidence of native time constraints.
+
+The corrected Python bridge passes success/failure/success with stale output
+cleared. An unrounded fresh detail request returns HTTP 200, code 0 and 24,341
+bytes. Python independently initializes this A/B global and evaluates its
+three-instruction gate: 18 cases on fresh pages at two image bases match actual
+bytecode execution, and three invalid cases reject. The publication helper at
+`+0x2a8760` sends a constructed handle to `0x2000001` then `0x2000002`;
+upstream signer construction/global boot and other callbacks remain open.
+Future same-capture work must carry corrected A/B provenance. See
+[vm9_ab_switch_initialization_20261003.json](evidence/vm9_ab_switch_initialization_20261003.json)
+and [vm9_startup_switch_python_20261003.json](evidence/vm9_startup_switch_python_20261003.json).
+
+### Earlier controls under the misbound A/B callback
+
 Same-URL controls reproduce an initialization failure before the bridge
 publishes the callback-1 network signer handle. The old fallback then passes
 the app-manager pointer to signing and dereferences a non-vtable word at
