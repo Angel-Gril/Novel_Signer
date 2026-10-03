@@ -207,6 +207,18 @@
       "memory_match": true
     },
     {
+      "case": "root_dependency_assembly",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "memory_match": true
+    },
+    {
+      "case": "root_dependency_assembly",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "memory_match": true
+    },
+    {
       "case": "handler_embedded_state",
       "image_base": "0x122c0000",
       "cross_page": false,
@@ -541,6 +553,18 @@
       "memory_match": true
     },
     {
+      "case": "root_dependency_assembly",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "memory_match": true
+    },
+    {
+      "case": "root_dependency_assembly",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "memory_match": true
+    },
+    {
       "case": "handler_embedded_state",
       "image_base": "0x775c205000",
       "cross_page": false,
@@ -726,6 +750,21 @@
       "case": "unmapped_callback_pair",
       "rejected": true,
       "pages_unchanged": true
+    },
+    {
+      "case": "null_configuration",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "null_child",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "unmapped_root",
+      "rejected": true,
+      "pages_unchanged": true
     }
   ],
   "oracle_boundaries": [
@@ -736,6 +775,7 @@
     "thread attachment",
     "Java callback and JNI reference methods"
   ],
+  "root_dependency_assembly": true,
   "complete_root_constructor": false,
   "complete_python_medusa": false,
   "redaction": "Only offsets, object relationships, aggregate counts and hashes are public. Guest object contents, raw snapshots/traces, complete URLs, signatures, device/session values, secrets and native artifacts remain local."

@@ -242,6 +242,20 @@ def main():
             cases.append({"case": label + "_self_alias", "image_base": hex(base),
                           "memory_match": True})
 
+        for cross_page in (False, True):
+            pages = fresh_pages()
+            root = GUEST + (0x1FE0 if cross_page else 0x1000)
+            config_a, config_b = GUEST + 0xA100, GUEST + 0xA108
+            child_a, child_b = GUEST + 0xA200, GUEST + 0xA208
+            result = objects.construct_signer_root(pages, object_address=root,
+                configuration_a=config_a, configuration_b=config_b,
+                child_a=child_a, child_b=child_b)
+            assert result.object_address == root
+            assert int.from_bytes(_read_span(pages, root + 8, 8), "little") == config_a
+            assert int.from_bytes(_read_span(pages, root + 0x20, 8), "little") == child_b
+            cases.append({"case": "root_dependency_assembly", "image_base": hex(base),
+                          "cross_page": cross_page, "memory_match": True})
+
         for kind, offset in (("embedded_state", 0x288E98), ("service_refs", 0x263FB8)):
             for object_offset in (0x1000, 0x1FE8):
                 pages = fresh_pages()
@@ -365,6 +379,22 @@ def main():
         else:
             raise AssertionError(label)
         negatives.append({"case": label, "rejected": True, "pages_unchanged": True})
+    for label, kwargs in (("null_configuration", {"configuration_a": 0}),
+                          ("null_child", {"child_b": 0}),
+                          ("unmapped_root", {"object_address": GUEST + 0x60000000})):
+        pages = fresh_pages()
+        before = flatten(pages)
+        values = {"object_address": GUEST + 0x1000, "configuration_a": GUEST + 0xA100,
+                  "configuration_b": GUEST + 0xA108, "child_a": GUEST + 0xA200,
+                  "child_b": GUEST + 0xA208}
+        values.update(kwargs)
+        try:
+            objects.construct_signer_root(pages, **values)
+        except (ValueError, RefillUnsupported):
+            assert flatten(pages) == before
+        else:
+            raise AssertionError(label)
+        negatives.append({"case": label, "rejected": True, "pages_unchanged": True})
     result = {"evidence_id": "vm9_signer_objects_python_20261003",
         "native_library_sha256": LIBRARY_SHA256,
         "libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
@@ -374,7 +404,8 @@ def main():
         "oracle_boundaries": ["malloc", "memset", "diagnostic scope entry/exit",
                               "service and flag singleton getters (explicit fresh references)",
                               "thread attachment", "Java callback and JNI reference methods"],
-        "complete_root_constructor": False, "complete_python_medusa": False}
+        "root_dependency_assembly": True, "complete_root_constructor": False,
+        "complete_python_medusa": False}
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"differential_cases": len(cases), "negative_cases": len(negatives),
                       "complete_root_constructor": False}))

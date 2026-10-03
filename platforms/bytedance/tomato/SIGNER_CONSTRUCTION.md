@@ -1,6 +1,6 @@
 # 默认配置下的 signer 构造和 callback 发布
 
-当前已恢复两个 child、两类 handler、引用计数 wrapper、空 callback 容器和最终 callback pair 绑定的 Python 模型。**完整 root constructor 与独立 fresh-input Medusa 仍未完成。** 本页只适用于已测番茄 `7.1.3.32` native artifact，不外推到抖音或其他平台。
+当前已恢复两个 child、两类 handler、引用计数 wrapper、root 已观测字段装配、空 callback 容器和最终 callback pair 绑定的 Python 模型。**完整 root constructor 与独立 fresh-input Medusa 仍未完成。** 本页只适用于已测番茄 `7.1.3.32` native artifact，不外推到抖音或其他平台。
 
 两类证据分别是 [同次构造采样](evidence/vm9_signer_constructor_graph_20261003.json) 和 [新建内存对照](evidence/vm9_signer_objects_python_20261003.json)。前者说明实际桥接器走了哪条路径；后者说明哪些对象字段可以由输入生成。
 
@@ -28,7 +28,7 @@ flowchart TD
     R --> P["+0x28c268 发布两个 callback"]
 ```
 
-root 的 `+0x00` 在当前对象写入记录中没有被 constructor 写入。快照中恰好为零，不能据此把清零这个字段当成构造规则。`+0x08/+0x10` 的配置对象、服务 singleton 和全局副作用仍需独立恢复。
+root 的 `+0x00` 在当前对象写入记录中没有被 constructor 写入。快照中恰好为零，不能据此把清零这个字段当成构造规则。`construct_signer_root` 现在只装配调用者显式提供的 `+0x08/+0x10/+0x18/+0x20` 四个依赖；配置对象本身、服务 singleton 和全局副作用仍需独立恢复。
 
 | 组件 | 可生成的布局与边界 |
 | --- | --- |
@@ -39,6 +39,7 @@ root 的 `+0x00` 在当前对象写入记录中没有被 constructor 写入。�
 | 232 字节 handler | 生成两组 NULL reference/count 和 mutex holder；清 `+0x30..+0x4f`；在 `+0x50` 构造 state，末尾三字节 padding 保留 |
 | 128 字节 handler | 同样生成基类字段；在 `+0x50/+0x60` 复制调用者提供的服务/flag references。服务本身尚未独立生成 |
 | callback pair | child constructor 只分配，不写内容；root 随后写入入口地址与 handler 指针 |
+| 40 字节 root | 保留 `+0x00`，写入两个 configuration/reference 指针和两个 child 指针；不创建 singleton 或 lazy string |
 
 pair 的入口由真实虚表方法返回：128 字节 handler 的虚表 `+0x35dc50`、slot `+0x68` 经 `+0x28509c` 返回 `+0x2830c4`；232 字节 handler 的虚表 `+0x35f7e0`、slot `+0x60` 经 `+0x28aee0` 返回 `+0x289190`。同次快照确认这两种绑定，不需要假设两个 pair 可以互换。
 
@@ -79,7 +80,7 @@ bind_signer_child_callback(
 python python/verify_vm9_signer_objects.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/signer-objects.json
 ```
 
-验证器加载 ELF 代码和 relative relocations，在两种 image base 下新建有非零填充的 guest 内存。88 个对照验证对象布局、分配顺序、跨页、保留 padding、count 溢出/自别名、pair 绑定和 JNI 调用清理顺序。pthread mutex 初始化执行真实 libc 指令。另有 10 个拒绝/回滚案例。
+验证器加载 ELF 代码和 relative relocations，在两种 image base 下新建有非零填充的 guest 内存。92 个对照验证对象布局、分配顺序、root 依赖装配、跨页、保留 padding、count 溢出/自别名、pair 绑定和 JNI 调用清理顺序。pthread mutex 初始化执行真实 libc 指令。另有 13 个拒绝/回滚案例。
 
 分配、memset、diagnostic scope、两个服务 getter、线程 attachment 和 JNI 回调是显式 oracle 边界。服务 getter 返回本次新建的 reference 输入；不执行真实 singleton constructor。验证运行需要 Unicorn/pyelftools，Python 模型本身不调用 native 或 JVM。
 

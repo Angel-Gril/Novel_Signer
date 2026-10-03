@@ -1129,8 +1129,8 @@
   },
   "vm9_signer_objects_python_20261003": {
     "evidence_file": "evidence/vm9_signer_objects_python_20261003.json",
-    "differential_cases": 88,
-    "negative_cases": 10,
+    "differential_cases": 92,
+    "negative_cases": 13,
     "fresh_memory": true,
     "complete_python_medusa": false
   }

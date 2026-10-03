@@ -76,6 +76,15 @@ class SignerChild:
     callback_pair_address: int
 
 
+@dataclass(frozen=True)
+class SignerRoot:
+    object_address: int
+    configuration_a: int
+    configuration_b: int
+    child_a: int
+    child_b: int
+
+
 def _word(value):
     if not isinstance(value, int) or not 0 <= value <= 0xFFFF_FFFF_FFFF_FFFF:
         raise RefillUnsupported("pointer is outside the guest ABI")
@@ -123,6 +132,31 @@ def construct_reference_wrapper(
     counter = _reference_wrapper(transaction, object_address, referenced_address, allocate)
     transaction.commit()
     return counter
+
+
+def construct_signer_root(
+    pages, *, object_address: int, configuration_a: int, configuration_b: int,
+    child_a: int, child_b: int,
+) -> SignerRoot:
+    """Assemble the measured 40-byte root from explicit object dependencies.
+
+    The native +0x27c930 trace clears root+0x08/+0x10, later stores the two
+    configuration/reference addresses there, then stores constructed child
+    addresses at +0x18/+0x20. Root+0x00 is not written by this constructor;
+    its observed zero value is therefore not synthesized here. Singleton
+    construction, lazy strings, diagnostic flags, and publication are caller
+    responsibilities.
+    """
+    pointers = (configuration_a, configuration_b, child_a, child_b)
+    if any(not isinstance(value, int) or value <= 0 for value in pointers):
+        raise RefillUnsupported("root dependencies must be non-null guest pointers")
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, object_address, 0x28)
+    _write_span(transaction, object_address + 8, bytes(16))
+    _write_span(transaction, object_address + 8, _word(configuration_a) + _word(configuration_b))
+    _write_span(transaction, object_address + 0x18, _word(child_a) + _word(child_b))
+    transaction.commit()
+    return SignerRoot(object_address, configuration_a, configuration_b, child_a, child_b)
 
 
 def _mutex_state(pages, object_address, image_base):
