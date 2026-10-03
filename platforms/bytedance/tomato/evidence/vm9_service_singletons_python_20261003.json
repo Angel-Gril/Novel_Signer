@@ -1,0 +1,77 @@
+{
+  "evidence_id": "vm9_service_singletons_python_20261003",
+  "image_base": "0x122c0000",
+  "fresh_memory": true,
+  "jvm_required": false,
+  "native_execution_used_for_verification_only": false,
+  "guards_and_slots": {
+    "service": [
+      "0x3d1568",
+      "0x3d1560"
+    ],
+    "flag": [
+      "0x3debc0",
+      "0x3debb8"
+    ]
+  },
+  "cases": [
+    {
+      "case": "service_payload_explicit_initializer",
+      "payload_size": 720,
+      "allocation_sequence": [
+        [
+          16,
+          1879064576
+        ],
+        [
+          720,
+          1879064592
+        ],
+        [
+          4,
+          1879065312
+        ]
+      ],
+      "published": true
+    },
+    {
+      "case": "service_guarded_second_getter",
+      "allocation_skipped": true
+    },
+    {
+      "case": "flag_zero_payload",
+      "payload_size": 2,
+      "allocation_sequence": [
+        [
+          16,
+          1879064576
+        ],
+        [
+          2,
+          1879064592
+        ],
+        [
+          4,
+          1879064608
+        ]
+      ]
+    },
+    {
+      "case": "prepublished_slot",
+      "allocation_skipped": true
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "missing_service_initializer",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "initializer_failure",
+      "rejected": true,
+      "pages_unchanged": true
+    }
+  ],
+  "service_payload_constructor_complete": false
+}

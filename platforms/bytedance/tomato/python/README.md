@@ -50,6 +50,15 @@ The module accepts trusted local checkpoint pages. See
 [ALLOCATOR_LIFECYCLE.md](../ALLOCATOR_LIFECYCLE.md) for usage, 83 native
 differential cases, 360 sequential operations and the same-capture chain.
 
+`vm9_objects.py` also exposes `construct_lazy_reference` and
+`construct_service_reference`. They parameterize the measured singleton
+guard/slot publication and exact allocation order. The `flag` kind creates
+the native 2-byte zero payload; the larger `service` kind requires an
+explicit 0x2d0-byte initializer because its nested configuration graph is
+not yet independently recovered. Run
+`verify_vm9_service_singletons.py --output <sanitized-output.json>` for the
+fresh-memory checks and rollback cases.
+
 `verify_vm9_allocator_lifecycle.py` requires Unicorn and the trusted primary
 initialized checkpoint. `verify_vm9_divmod_backing.py` additionally requires
 the paired private memory image and `TOMATO_LIBMETASEC`. Both write sanitized

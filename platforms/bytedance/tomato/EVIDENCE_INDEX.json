@@ -1133,5 +1133,14 @@
     "negative_cases": 13,
     "fresh_memory": true,
     "complete_python_medusa": false
+  },
+  "vm9_service_singletons_python_20261003": {
+    "evidence_file": "evidence/vm9_service_singletons_python_20261003.json",
+    "service_cases": 4,
+    "negative_cases": 2,
+    "guards_and_slots_parameterized": true,
+    "flag_payload_constructor": true,
+    "service_payload_constructor_complete": false,
+    "complete_python_medusa": false
   }
 }

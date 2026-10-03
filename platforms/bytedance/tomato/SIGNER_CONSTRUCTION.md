@@ -37,7 +37,7 @@ root 的 `+0x00` 在当前对象写入记录中没有被 constructor 写入。�
 | 40 字节 child | 虚表、152 字节 state 指针、callback 容器引用/count、16 字节 pair 指针 |
 | callback 容器 | 从三个 descriptor 输入字生成对象，另分配 40 字节 controller 和 40 字节 sentinel；sentinel 的未写 padding 保留 |
 | 232 字节 handler | 生成两组 NULL reference/count 和 mutex holder；清 `+0x30..+0x4f`；在 `+0x50` 构造 state，末尾三字节 padding 保留 |
-| 128 字节 handler | 同样生成基类字段；在 `+0x50/+0x60` 复制调用者提供的服务/flag references。服务本身尚未独立生成 |
+| 128 字节 handler | 同样生成基类字段；在 `+0x50/+0x60` 复制调用者提供的服务/flag references。两个 getter 的 guard/slot 和 flag 的 2 字节 payload 已独立建模；服务的 0x2d0 字节配置图仍要求显式 initializer |
 | callback pair | child constructor 只分配，不写内容；root 随后写入入口地址与 handler 指针 |
 | 40 字节 root | 保留 `+0x00`，写入两个 configuration/reference 指针和两个 child 指针；不创建 singleton 或 lazy string |
 
@@ -70,7 +70,9 @@ bind_signer_child_callback(
     image_base=image_base, kind="embedded_state")
 ```
 
-另一类 handler 的 `kind="service_refs"` 还需要 `service_reference_address` 与 `flag_reference_address`，这两个地址必须指向真实初始化的 16 字节 reference wrappers。这里没有为其提供捕获状态默认值。
+另一类 handler 的 `kind="service_refs"` 还需要 `service_reference_address` 与 `flag_reference_address`，这两个地址必须指向真实初始化的 16 字节 reference wrappers。`construct_service_reference(kind="flag")` 可直接生成 flag wrapper；`kind="service"` 要求调用者提供 0x2d0-byte payload initializer，不能用捕获状态或猜测常量替代。
+
+`construct_lazy_reference` 实现了两个 getter 已证实的单线程语义：guard 已置位时返回 slot，不重复分配；首次调用按 wrapper、payload、四字节 count 的顺序分配，初始化 payload 后发布 slot 并置 guard；异常时 page map 回滚。对应的公开复核记录在 [vm9_service_singletons_python_20261003.json](evidence/vm9_service_singletons_python_20261003.json)，包含 4 个正例和 2 个回滚/拒绝例。两个 getter 的 image-relative guard/slot 分别为 `0x3d1568/0x3d1560` 和 `0x3debc0/0x3debb8`。
 
 [python/vm9_callbacks.py](python/vm9_callbacks.py) 的 `publish_signer_handle` 接收 root、env、invoke、get_reference_type 和 delete_reference。它实现已测发布和清理顺序，返回首个引用是否非空；宿主异常直接传播。
 
@@ -82,7 +84,7 @@ python python/verify_vm9_signer_objects.py --library /private/libmetasec_ml_7133
 
 验证器加载 ELF 代码和 relative relocations，在两种 image base 下新建有非零填充的 guest 内存。92 个对照验证对象布局、分配顺序、root 依赖装配、跨页、保留 padding、count 溢出/自别名、pair 绑定和 JNI 调用清理顺序。pthread mutex 初始化执行真实 libc 指令。另有 13 个拒绝/回滚案例。
 
-分配、memset、diagnostic scope、两个服务 getter、线程 attachment 和 JNI 回调是显式 oracle 边界。服务 getter 返回本次新建的 reference 输入；不执行真实 singleton constructor。验证运行需要 Unicorn/pyelftools，Python 模型本身不调用 native 或 JVM。
+分配、memset、diagnostic scope、线程 attachment 和 JNI 回调是显式 oracle 边界。flag getter 的 2 字节 payload 已由 fresh-input 模型覆盖；服务 getter 的嵌套字符串/configuration constructor 仍是显式 initializer 边界。验证运行需要 Unicorn/pyelftools（native 对照）或直接运行 `verify_vm9_service_singletons.py`（纯 Python）；模型本身不调用 JVM。
 
 ## 证据用途与剩余工作
 

@@ -85,6 +85,28 @@ class SignerRoot:
     child_b: int
 
 
+@dataclass(frozen=True)
+class LazyReference:
+    """A guarded singleton wrapper and the payload it owns."""
+
+    guard_address: int
+    slot_address: int
+    wrapper_address: int
+    payload_address: int
+    payload_size: int
+    counter_address: int
+
+
+# The two service getters used by the measured ``service_refs`` handler.
+# Offsets are image-relative and come from the A/B=2 native artifact.
+SERVICE_A_GUARD_OFFSET = 0x3D1568
+SERVICE_A_SLOT_OFFSET = 0x3D1560
+SERVICE_A_PAYLOAD_SIZE = 0x2D0
+SERVICE_B_GUARD_OFFSET = 0x3DEBC0
+SERVICE_B_SLOT_OFFSET = 0x3DEBB8
+SERVICE_B_PAYLOAD_SIZE = 2
+
+
 def _word(value):
     if not isinstance(value, int) or not 0 <= value <= 0xFFFF_FFFF_FFFF_FFFF:
         raise RefillUnsupported("pointer is outside the guest ABI")
@@ -132,6 +154,71 @@ def construct_reference_wrapper(
     counter = _reference_wrapper(transaction, object_address, referenced_address, allocate)
     transaction.commit()
     return counter
+
+
+def construct_lazy_reference(
+    pages, *, guard_address: int, slot_address: int, payload_size: int,
+    allocate: Callable, initialize_payload: Callable,
+) -> LazyReference:
+    """Construct one measured guard/slot singleton from fresh input.
+
+    The native getters use an acquire guard, allocate a 16-byte wrapper and
+    the payload, initialize the payload, then construct the wrapper and
+    publish the wrapper pointer before releasing the guard.  This model is
+    single-threaded, so an already-set guard returns the published slot
+    without allocating.  ``initialize_payload(staged_pages, address)`` must
+    write the complete payload or raise; all page writes are transactional.
+    """
+    if not isinstance(payload_size, int) or payload_size <= 0:
+        raise RefillUnsupported("singleton payload size must be positive")
+    transaction = _PageTransaction(pages)
+    guard = _read_span(transaction, guard_address, 1)[0]
+    slot = int.from_bytes(_read_span(transaction, slot_address, 8), "little")
+    if guard:
+        return LazyReference(guard_address, slot_address, slot, 0, 0, 0)
+    wrapper = _allocate(transaction, allocate, 16)
+    payload = _allocate(transaction, allocate, payload_size)
+    initialize_payload(transaction, payload)
+    _reference_wrapper(transaction, wrapper, payload, allocate)
+    _write_span(transaction, slot_address, _word(wrapper))
+    _write_span(transaction, guard_address, bytes((1,)))
+    counter = int.from_bytes(_read_span(transaction, wrapper + 8, 8), "little")
+    transaction.commit()
+    return LazyReference(guard_address, slot_address, wrapper, payload,
+                         payload_size, counter)
+
+
+def construct_service_reference(
+    pages, *, image_base: int, kind: str, allocate: Callable,
+    initialize_payload: Callable | None = None,
+) -> LazyReference:
+    """Construct one of the two service singleton references.
+
+    ``kind='flag'`` is the small native 2-byte, zero-initialized payload from
+    ``+0x264158``.  ``kind='service'`` is the 0x2d0-byte object from
+    ``+0x15f094``; its string/configuration graph is intentionally an explicit
+    caller input until that constructor is independently recovered.
+    """
+    if image_base <= 0:
+        raise RefillUnsupported("invalid native image base")
+    if kind == "service":
+        guard = image_base + SERVICE_A_GUARD_OFFSET
+        slot = image_base + SERVICE_A_SLOT_OFFSET
+        size = SERVICE_A_PAYLOAD_SIZE
+        if initialize_payload is None:
+            raise RefillUnsupported("service payload initializer is required")
+    elif kind == "flag":
+        guard = image_base + SERVICE_B_GUARD_OFFSET
+        slot = image_base + SERVICE_B_SLOT_OFFSET
+        size = SERVICE_B_PAYLOAD_SIZE
+
+        def initialize_payload(pages, address):
+            _write_span(pages, address, bytes(size))
+    else:
+        raise RefillUnsupported("unsupported service singleton kind")
+    return construct_lazy_reference(
+        pages, guard_address=guard, slot_address=slot, payload_size=size,
+        allocate=allocate, initialize_payload=initialize_payload)
 
 
 def construct_signer_root(
