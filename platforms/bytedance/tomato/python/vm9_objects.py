@@ -105,6 +105,10 @@ SERVICE_A_PAYLOAD_SIZE = 0x2D0
 SERVICE_B_GUARD_OFFSET = 0x3DEBC0
 SERVICE_B_SLOT_OFFSET = 0x3DEBB8
 SERVICE_B_PAYLOAD_SIZE = 2
+CONFIG_GUARD_OFFSET = 0x3D15D0
+CONFIG_SLOT_OFFSET = 0x3D15C8
+CONFIG_PAYLOAD_SIZE = 8
+CONFIG_VTABLE_OFFSET = 0x34C798
 
 
 def _word(value):
@@ -219,6 +223,29 @@ def construct_service_reference(
     return construct_lazy_reference(
         pages, guard_address=guard, slot_address=slot, payload_size=size,
         allocate=allocate, initialize_payload=initialize_payload)
+
+
+def construct_configuration_reference(
+    pages, *, image_base: int, allocate: Callable,
+) -> LazyReference:
+    """Construct the measured 8-byte root configuration singleton.
+
+    Native ``+0x15f608`` allocates a 16-byte wrapper and an 8-byte payload,
+    writes only the image-relative vtable at payload+0, then publishes the
+    wrapper through its guard/slot.  No configuration strings are implied by
+    this object; those belong to the separate service payload constructor.
+    """
+    if image_base <= 0:
+        raise RefillUnsupported("invalid native image base")
+
+    def initialize_payload(pages, address):
+        _write_span(pages, address, _word(image_base + CONFIG_VTABLE_OFFSET))
+
+    return construct_lazy_reference(
+        pages, guard_address=image_base + CONFIG_GUARD_OFFSET,
+        slot_address=image_base + CONFIG_SLOT_OFFSET,
+        payload_size=CONFIG_PAYLOAD_SIZE, allocate=allocate,
+        initialize_payload=initialize_payload)
 
 
 def construct_signer_root(

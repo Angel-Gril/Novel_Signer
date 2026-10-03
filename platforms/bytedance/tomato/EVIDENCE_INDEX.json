@@ -1136,7 +1136,7 @@
   },
   "vm9_service_singletons_python_20261003": {
     "evidence_file": "evidence/vm9_service_singletons_python_20261003.json",
-    "service_cases": 4,
+    "service_cases": 5,
     "negative_cases": 2,
     "guards_and_slots_parameterized": true,
     "flag_payload_constructor": true,

@@ -43,16 +43,20 @@ def fresh_pages():
     for offset in (
         objects.SERVICE_A_GUARD_OFFSET, objects.SERVICE_A_SLOT_OFFSET,
         objects.SERVICE_B_GUARD_OFFSET, objects.SERVICE_B_SLOT_OFFSET,
+        objects.CONFIG_GUARD_OFFSET, objects.CONFIG_SLOT_OFFSET,
     ):
         address = IMAGE_BASE + offset
         pages[address >> 12] = bytearray(b"\xa5" * 4096)
     for offset in (objects.SERVICE_A_GUARD_OFFSET,
                    objects.SERVICE_A_SLOT_OFFSET,
                    objects.SERVICE_B_GUARD_OFFSET,
-                   objects.SERVICE_B_SLOT_OFFSET):
+                   objects.SERVICE_B_SLOT_OFFSET,
+                   objects.CONFIG_GUARD_OFFSET,
+                   objects.CONFIG_SLOT_OFFSET):
         address = IMAGE_BASE + offset
         width = 1 if offset in (objects.SERVICE_A_GUARD_OFFSET,
-                                objects.SERVICE_B_GUARD_OFFSET) else 8
+                                objects.SERVICE_B_GUARD_OFFSET,
+                                objects.CONFIG_GUARD_OFFSET) else 8
         _write_span(pages, address, bytes(width))
     return pages
 
@@ -105,6 +109,20 @@ def main():
     cases.append({"case": "flag_zero_payload", "payload_size": 2,
                   "allocation_sequence": flag_alloc.calls})
 
+    config_pages = fresh_pages()
+    config_alloc = Allocator()
+    config = objects.construct_configuration_reference(
+        config_pages, image_base=IMAGE_BASE, allocate=config_alloc.take)
+    assert config.payload_size == objects.CONFIG_PAYLOAD_SIZE
+    assert _read_span(config_pages, config.payload_address, 8) == (
+        IMAGE_BASE + objects.CONFIG_VTABLE_OFFSET).to_bytes(8, "little")
+    assert config_alloc.calls == [[16, GUEST + 0x4000],
+                                  [objects.CONFIG_PAYLOAD_SIZE, GUEST + 0x4010],
+                                  [4, GUEST + 0x4020]]
+    cases.append({"case": "configuration_vtable_payload",
+                  "payload_size": config.payload_size,
+                  "allocation_sequence": config_alloc.calls})
+
     ready_pages = fresh_pages()
     ready_slot = IMAGE_BASE + objects.SERVICE_B_SLOT_OFFSET
     _write_span(ready_pages, ready_slot, (GUEST + 0x3F00).to_bytes(8, "little"))
@@ -145,6 +163,8 @@ def main():
                         hex(objects.SERVICE_A_SLOT_OFFSET)],
             "flag": [hex(objects.SERVICE_B_GUARD_OFFSET),
                      hex(objects.SERVICE_B_SLOT_OFFSET)],
+            "configuration": [hex(objects.CONFIG_GUARD_OFFSET),
+                              hex(objects.CONFIG_SLOT_OFFSET)],
         },
         "cases": cases,
         "negative_cases": negatives,

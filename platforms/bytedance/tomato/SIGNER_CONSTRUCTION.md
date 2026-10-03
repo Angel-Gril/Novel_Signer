@@ -72,7 +72,7 @@ bind_signer_child_callback(
 
 另一类 handler 的 `kind="service_refs"` 还需要 `service_reference_address` 与 `flag_reference_address`，这两个地址必须指向真实初始化的 16 字节 reference wrappers。`construct_service_reference(kind="flag")` 可直接生成 flag wrapper；`kind="service"` 要求调用者提供 0x2d0-byte payload initializer，不能用捕获状态或猜测常量替代。
 
-`construct_lazy_reference` 实现了两个 getter 已证实的单线程语义：guard 已置位时返回 slot，不重复分配；首次调用按 wrapper、payload、四字节 count 的顺序分配，初始化 payload 后发布 slot 并置 guard；异常时 page map 回滚。对应的公开复核记录在 [vm9_service_singletons_python_20261003.json](evidence/vm9_service_singletons_python_20261003.json)，包含 4 个正例和 2 个回滚/拒绝例。两个 getter 的 image-relative guard/slot 分别为 `0x3d1568/0x3d1560` 和 `0x3debc0/0x3debb8`。
+`construct_lazy_reference` 实现了这些 getter 已证实的单线程语义：guard 已置位时返回 slot，不重复分配；首次调用按 wrapper、payload、四字节 count 的顺序分配，初始化 payload 后发布 slot 并置 guard；异常时 page map 回滚。对应的公开复核记录在 [vm9_service_singletons_python_20261003.json](evidence/vm9_service_singletons_python_20261003.json)，包含 5 个正例和 2 个回滚/拒绝例。configuration、service、flag 的 image-relative guard/slot 分别为 `0x3d15d0/0x3d15c8`、`0x3d1568/0x3d1560` 和 `0x3debc0/0x3debb8`。
 
 [python/vm9_callbacks.py](python/vm9_callbacks.py) 的 `publish_signer_handle` 接收 root、env、invoke、get_reference_type 和 delete_reference。它实现已测发布和清理顺序，返回首个引用是否非空；宿主异常直接传播。
 

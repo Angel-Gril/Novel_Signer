@@ -5,7 +5,7 @@
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-最新纠正：初始化回调 `0x1000000e` 返回 `MSC.GetABSwitch()`，旧桥接器误传冻结时间。恢复 APK 默认值 `2` 后，三个旧失败时间输入成功，未取整时间的详情请求也被线上接受。Python 已独立恢复这一全局和 bit-5 分支，18 个字节码对照通过；默认 A/B=2 的 publisher 是 `+0x28c268`，两个 child/handler、root 已观测字段装配、callback pair 绑定、引用计数和 JNI 清理已有 92 个新建内存对照。两个 service getter 的 guard/slot 和 flag 的 2-byte payload 也已按 fresh input 独立建模（4 个正例、2 个回滚例），但 root 配置对象和 0x2d0-byte service 配置图仍未完成。此前“时间取整稳定”的结论只适用于旧误配桥接器，不能作为 native 时间约束。详见 [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) 与 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。修正后当前搜索在 b/c 两个主机仍为空。
+最新纠正：初始化回调 `0x1000000e` 返回 `MSC.GetABSwitch()`，旧桥接器误传冻结时间。恢复 APK 默认值 `2` 后，三个旧失败时间输入成功，未取整时间的详情请求也被线上接受。Python 已独立恢复这一全局和 bit-5 分支，18 个字节码对照通过；默认 A/B=2 的 publisher 是 `+0x28c268`，两个 child/handler、root 已观测字段装配、callback pair 绑定、引用计数和 JNI 清理已有 92 个新建内存对照。两个 service getter 的 guard/slot、root configuration singleton 和 flag 的 2-byte payload 也已按 fresh input 独立建模（5 个正例、2 个回滚例），但 0x2d0-byte service 配置图仍未完成。此前“时间取整稳定”的结论只适用于旧误配桥接器，不能作为 native 时间约束。详见 [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) 与 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。修正后当前搜索在 b/c 两个主机仍为空。
 
 ## 1. 完成度结论
 

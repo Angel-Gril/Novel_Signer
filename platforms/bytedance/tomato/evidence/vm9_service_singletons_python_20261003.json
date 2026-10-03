@@ -12,6 +12,10 @@
     "flag": [
       "0x3debc0",
       "0x3debb8"
+    ],
+    "configuration": [
+      "0x3d15d0",
+      "0x3d15c8"
     ]
   },
   "cases": [
@@ -48,6 +52,24 @@
         ],
         [
           2,
+          1879064592
+        ],
+        [
+          4,
+          1879064608
+        ]
+      ]
+    },
+    {
+      "case": "configuration_vtable_payload",
+      "payload_size": 8,
+      "allocation_sequence": [
+        [
+          16,
+          1879064576
+        ],
+        [
+          8,
           1879064592
         ],
         [
