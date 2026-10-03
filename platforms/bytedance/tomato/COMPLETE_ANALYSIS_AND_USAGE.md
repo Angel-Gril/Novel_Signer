@@ -175,22 +175,26 @@ from vm9_allocator import (
     prepare_thread_allocator, allocate_small_object,
 )
 
-constants = AllocatorConstants()
-boot_config = GlobalBootConfig(
-    arena_zero=arena_zero,
-    arena_table=arena_table,
-)
-initialize_global_boot(pages, config=boot_config)
-thread = prepare_thread_allocator(
-    pages, thread_pointer=thread_pointer, constants=constants
-)
-allocation = allocate_small_object(
-    pages,
-    thread_state_address=thread,
-    request_size=24,
-    guest_os=guest_os,
-    constants=constants,
-)
+def run_allocator_step(
+    pages, *, arena_zero, arena_table, thread_pointer, guest_os
+):
+    # These inputs must come from the same trusted guest initialization.
+    constants = AllocatorConstants()
+    boot_config = GlobalBootConfig(
+        arena_zero=arena_zero,
+        arena_table=arena_table,
+    )
+    initialize_global_boot(pages, config=boot_config)
+    thread = prepare_thread_allocator(
+        pages, thread_pointer=thread_pointer, constants=constants
+    )
+    return allocate_small_object(
+        pages,
+        thread_state_address=thread,
+        request_size=24,
+        guest_os=guest_os,
+        constants=constants,
+    )
 ```
 
 已验证组件包括 pthread TLS generation 检查、stale TLS 清理、base allocation、arena/tcache/thread state 创建、arena 选择、空 bin refill、slab bitmap、free list/tree、清理和 purge。`GLOBAL_BOOT_COMPONENTS` 会明确哪些 boot 仍是 `captured-input` 或 `partial`，不能被误读为完整 `je_*_boot` 重建。
