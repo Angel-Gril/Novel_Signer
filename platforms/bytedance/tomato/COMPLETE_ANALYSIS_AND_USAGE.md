@@ -5,7 +5,7 @@
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-最新纠正：初始化回调 `0x1000000e` 返回 `MSC.GetABSwitch()`，旧桥接器误传冻结时间。恢复 APK 默认值 `2` 后，三个旧失败时间输入成功，未取整时间的详情请求也被线上接受。Python 已独立恢复这一全局和 bit-5 分支，18 个字节码对照通过；默认 A/B=2 的 publisher 是 `+0x28c268`，两个 child/handler、root 已观测字段装配、callback pair 绑定、引用计数和 JNI 清理已有 92 个新建内存对照。两个 service getter 的 guard/slot、root configuration singleton 和 flag 的 2-byte payload 也已按 fresh input 独立建模（5 个正例、2 个回滚例），但 0x2d0-byte service 配置图仍未完成。此前“时间取整稳定”的结论只适用于旧误配桥接器，不能作为 native 时间约束。详见 [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) 与 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。修正后当前搜索在 b/c 两个主机仍为空。
+最新纠正：初始化回调 `0x1000000e` 返回 `MSC.GetABSwitch()`，旧桥接器误传冻结时间。恢复 APK 默认值 `2` 后，三个旧失败时间输入成功，未取整时间的详情请求也被线上接受。Python 已独立恢复这一全局和 bit-5 分支，18 个字节码对照通过；默认 A/B=2 的 publisher 是 `+0x28c268`，两个 child/handler、root 已观测字段装配、callback pair 绑定、引用计数和 JNI 清理已有 92 个新建内存对照。2026-10-04 又恢复了 0x2d0-byte service 配置图、完整无竞争 guard 状态和真实 getter → handler 构造，72 个 native 对照、15 个拒绝/回滚例通过；root 前段的 264-byte 配置及全局启动仍未完成。此前“时间取整稳定”的结论只适用于旧误配桥接器，不能作为 native 时间约束。详见 [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) 与 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。修正后当前搜索在 b/c 两个主机仍为空。
 
 ## 1. 完成度结论
 
@@ -228,7 +228,7 @@ descriptor = publish_callback_descriptor(
 
 `compose_packed_callback_x8` 会显式抛出 `RefillUnsupported`，因为 packed callback x8 的组合写入者尚未被独立参数化。这个拒绝是设计的一部分，不能用一个捕获常量替代。
 
-服务引用型 handler 依赖两个 guarded singleton。`construct_service_reference(kind="flag")` 已生成 2-byte zero payload；`kind="service"` 必须传入完整 0x2d0-byte initializer。`verify_vm9_service_singletons.py` 验证 guard/slot 发布、重复 getter 和异常回滚，但不把未恢复的 service 配置 graph 计入完整 signer。
+服务引用型 handler 依赖两个 guarded singleton。`construct_service_reference(kind="flag")` 生成 2-byte zero payload；`kind="service"` 默认用 Python 构造完整已测 0x2d0-byte 图，读取 fresh ELF/GOT 输入。冷 getter 要求显式 `thread_id`，会生成 guard 的 acquire/release 状态与线程 ID；已发布 getter 不重复分配。handler 可以用 `initialize_services=True` 连续构造并复制这两个引用。`verify_vm9_service_singletons.py` 用 72 个真实 native 对照和 15 个拒绝/回滚例验证这些局部组件；完整 root、诊断全局副作用和独立 signer 仍未完成。
 
 ### 5.4 验证命令
 

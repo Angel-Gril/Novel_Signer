@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+import struct
 from vm9_allocator import (
     RefillUnsupported, _PageTransaction, _read_span, _write_span,
 )
@@ -97,6 +98,16 @@ class LazyReference:
     counter_address: int
 
 
+@dataclass(frozen=True)
+class ServicePayload:
+    object_address: int
+    controller_address: int
+    string_address: int
+    reference_count_address: int
+    mutex_address: int
+    state_address: int
+
+
 # The two service getters used by the measured ``service_refs`` handler.
 # Offsets are image-relative and come from the A/B=2 native artifact.
 SERVICE_A_GUARD_OFFSET = 0x3D1568
@@ -162,30 +173,45 @@ def construct_reference_wrapper(
 
 def construct_lazy_reference(
     pages, *, guard_address: int, slot_address: int, payload_size: int,
-    allocate: Callable, initialize_payload: Callable,
+    allocate: Callable, initialize_payload: Callable | None = None,
+    thread_id: int | None = None,
 ) -> LazyReference:
     """Construct one measured guard/slot singleton from fresh input.
 
     The native getters use an acquire guard, allocate a 16-byte wrapper and
     the payload, initialize the payload, then construct the wrapper and
     publish the wrapper pointer before releasing the guard.  This model is
-    single-threaded, so an already-set guard returns the published slot
-    without allocating.  ``initialize_payload(staged_pages, address)`` must
-    write the complete payload or raise; all page writes are transactional.
+    single-threaded with successful host mutex calls. Any nonzero byte0 or
+    byte1==1 returns the slot; byte1 bit1 (recursive/contended initialization)
+    is unsupported. Cold acquisition records explicit gettid at guard+4 and
+    byte1=2; release sets byte0=byte1=1. Other guard bytes are preserved.
+    ``initialize_payload(staged_pages, address)`` is needed only on the cold
+    path. All page writes are transactional; no host mutex is invoked here.
     """
     if not isinstance(payload_size, int) or payload_size <= 0:
         raise RefillUnsupported("singleton payload size must be positive")
     transaction = _PageTransaction(pages)
-    guard = _read_span(transaction, guard_address, 1)[0]
+    guard = _read_span(transaction, guard_address, 8)
     slot = int.from_bytes(_read_span(transaction, slot_address, 8), "little")
-    if guard:
+    if guard[0]:
         return LazyReference(guard_address, slot_address, slot, 0, 0, 0)
+    if guard[1] & 2:
+        raise RefillUnsupported("recursive/contended singleton guard is unsupported")
+    if guard[1] == 1:
+        return LazyReference(guard_address, slot_address, slot, 0, 0, 0)
+    if not isinstance(thread_id, int) or not 0 <= thread_id <= 0xFFFF_FFFF:
+        raise RefillUnsupported("cold singleton requires an explicit uint32 thread id")
+    if initialize_payload is None:
+        raise RefillUnsupported("cold singleton requires a payload initializer")
+    _write_span(transaction, guard_address + 4, thread_id.to_bytes(4, "little"))
+    _write_span(transaction, guard_address + 1, bytes((2,)))
     wrapper = _allocate(transaction, allocate, 16)
     payload = _allocate(transaction, allocate, payload_size)
     initialize_payload(transaction, payload)
     _reference_wrapper(transaction, wrapper, payload, allocate)
     _write_span(transaction, slot_address, _word(wrapper))
     _write_span(transaction, guard_address, bytes((1,)))
+    _write_span(transaction, guard_address + 1, bytes((1,)))
     counter = int.from_bytes(_read_span(transaction, wrapper + 8, 8), "little")
     transaction.commit()
     return LazyReference(guard_address, slot_address, wrapper, payload,
@@ -194,14 +220,15 @@ def construct_lazy_reference(
 
 def construct_service_reference(
     pages, *, image_base: int, kind: str, allocate: Callable,
-    initialize_payload: Callable | None = None,
+    initialize_payload: Callable | None = None, thread_id: int | None = None,
 ) -> LazyReference:
     """Construct one of the two service singleton references.
 
     ``kind='flag'`` is the small native 2-byte, zero-initialized payload from
     ``+0x264158``.  ``kind='service'`` is the 0x2d0-byte object from
-    ``+0x15f094``; its string/configuration graph is intentionally an explicit
-    caller input until that constructor is independently recovered.
+    ``+0x15f094``. Its default initializer generates the measured service
+    graph from loaded ELF constants/GOT and caller memory. Cold getters need
+    explicit gettid; warm getters neither allocate nor require an initializer.
     """
     if image_base <= 0:
         raise RefillUnsupported("invalid native image base")
@@ -210,7 +237,9 @@ def construct_service_reference(
         slot = image_base + SERVICE_A_SLOT_OFFSET
         size = SERVICE_A_PAYLOAD_SIZE
         if initialize_payload is None:
-            raise RefillUnsupported("service payload initializer is required")
+            def initialize_payload(staged, address):
+                construct_service_payload(staged, object_address=address,
+                    image_base=image_base, allocate=allocate)
     elif kind == "flag":
         guard = image_base + SERVICE_B_GUARD_OFFSET
         slot = image_base + SERVICE_B_SLOT_OFFSET
@@ -222,11 +251,11 @@ def construct_service_reference(
         raise RefillUnsupported("unsupported service singleton kind")
     return construct_lazy_reference(
         pages, guard_address=guard, slot_address=slot, payload_size=size,
-        allocate=allocate, initialize_payload=initialize_payload)
+        allocate=allocate, initialize_payload=initialize_payload, thread_id=thread_id)
 
 
 def construct_configuration_reference(
-    pages, *, image_base: int, allocate: Callable,
+    pages, *, image_base: int, allocate: Callable, thread_id: int | None = None,
 ) -> LazyReference:
     """Construct the measured 8-byte root configuration singleton.
 
@@ -245,7 +274,7 @@ def construct_configuration_reference(
         pages, guard_address=image_base + CONFIG_GUARD_OFFSET,
         slot_address=image_base + CONFIG_SLOT_OFFSET,
         payload_size=CONFIG_PAYLOAD_SIZE, allocate=allocate,
-        initialize_payload=initialize_payload)
+        initialize_payload=initialize_payload, thread_id=thread_id)
 
 
 def construct_signer_root(
@@ -288,11 +317,12 @@ def construct_mutex_state(pages, *, object_address: int, image_base: int) -> Non
     transaction.commit()
 
 
-def _callback_container(pages, object_address, descriptor, image_base, allocate):
+def _callback_container(pages, object_address, descriptor, image_base, allocate,
+                        *, vtable_offset=0x35B828, hook_offset=0x24B548):
     _read_span(pages, object_address, 0x28)
     callback, context, comparator = descriptor
     _write_span(pages, object_address,
-                _word(_image_address(image_base, 0x35B828))
+                _word(_image_address(image_base, vtable_offset))
                 + _word(callback) + _word(context) + _word(comparator))
     controller = _allocate(pages, allocate, 0x28)
     sentinel = _allocate(pages, allocate, 0x28)
@@ -302,7 +332,7 @@ def _callback_container(pages, object_address, descriptor, image_base, allocate)
     _write_span(pages, sentinel + 8, bytes(0x20))
     _write_span(pages, sentinel + 0x10, _word(sentinel) + _word(sentinel))
     _write_span(pages, controller, _word(sentinel) + bytes(8)
-                + _word(comparator) + _word(_image_address(image_base, 0x24B548)) + bytes(8))
+                + _word(comparator) + _word(_image_address(image_base, hook_offset)) + bytes(8))
     _write_span(pages, object_address + 0x20, _word(controller))
     return controller
 
@@ -322,6 +352,92 @@ def construct_callback_container(
     result = _callback_container(transaction, object_address, descriptor, image_base, allocate)
     transaction.commit()
     return result
+
+
+def construct_service_payload(
+    pages, *, object_address: int, image_base: int, allocate: Callable,
+) -> ServicePayload:
+    """Model +0x281700 from fresh memory, including strings and nested state.
+
+    Image inputs are readonly constants and relocated GOT pointers, not a
+    captured service object. The shared string pointer is dereferenced anew
+    for every string, while the numeric inputs are latched at native's read
+    points. Unwritten padding remains unchanged. NULL-attribute bionic mutex
+    initialization is modeled; logging/allocator global effects are separate.
+    """
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, object_address, SERVICE_A_PAYLOAD_SIZE)
+
+    def address(offset):
+        return _image_address(image_base, offset)
+
+    def read_word(pointer):
+        return int.from_bytes(_read_span(transaction, pointer, 8), "little")
+
+    def string(target, source):
+        construct_string_object(transaction, object_address=target,
+            source_address=source, allocate=allocate,
+            vtable_address=address(0x34F5F8), empty_descriptor_address=address(0x6E168))
+
+    _write_span(transaction, object_address + 8, bytes(8))
+    _write_span(transaction, object_address + 0x10, bytes(1))
+    descriptor = (address(0x25686C), address(0x165334), address(0x281958))
+    controller = _callback_container(transaction, object_address + 0x18,
+        descriptor, image_base, allocate, vtable_offset=0x35B7C0, hook_offset=0x24B560)
+    for offset, width in ((0x40, 16), (0xA0, 16), (0x68, 48)):
+        _write_span(transaction, object_address + offset, bytes(width))
+    _write_span(transaction, object_address + 0x50, (0x10000).to_bytes(4, "little"))
+    _write_span(transaction, object_address + 0xB0, bytes(4))
+    _write_span(transaction, object_address + 0x58, _read_span(transaction, address(0x6E500), 16))
+    string_address = _allocate(transaction, allocate, 24)
+    string(string_address, address(0x6FE64))
+    count = _reference_wrapper(transaction, object_address + 0xB8, string_address, allocate)
+
+    string_slot = read_word(address(0x374FC0))
+    _write_span(transaction, object_address + 0xC8, bytes(8))
+    _write_span(transaction, object_address + 0xD0, bytes(4))
+    for offset in (0xD8, 0xF0):
+        string(object_address + offset, read_word(string_slot))
+    integer_pointer = read_word(address(0x375020))
+    # Native reads the source pointer before latching the integer.
+    source = read_word(string_slot)
+    integer = _read_span(transaction, integer_pointer, 4)
+    _write_span(transaction, object_address + 0x108, integer * 4)
+    string(object_address + 0x118, source)
+    for offset in (0x130, 0x148):
+        string(object_address + offset, read_word(string_slot))
+    source = read_word(string_slot)
+    _write_span(transaction, object_address + 0x160, integer)
+    string(object_address + 0x168, source)
+    floating = struct.pack("<f", int.from_bytes(integer, "little", signed=True))
+    source = read_word(string_slot)
+    _write_span(transaction, object_address + 0x190, floating * 2)
+    _write_span(transaction, object_address + 0x180, floating * 4)
+    string(object_address + 0x198, source)
+    wide_pointer = read_word(address(0x375030))
+    _write_span(transaction, object_address + 0x1B0, integer * 2)
+    source = read_word(string_slot)
+    _write_span(transaction, object_address + 0x1C8, integer)
+    wide = _read_span(transaction, wide_pointer, 8)
+    _write_span(transaction, object_address + 0x1B8, wide * 2)
+    string(object_address + 0x1D0, source)
+    for offset in (0x1E8, 0x200, 0x218, 0x230, 0x248, 0x260, 0x278):
+        string(object_address + offset, read_word(string_slot))
+    _write_span(transaction, object_address + 0x290, wide)
+    string(object_address + 0x298, address(0x6FE64))
+    source = read_word(string_slot)
+    _write_span(transaction, object_address + 0x2B0, _read_span(transaction, address(0x3E0B58), 8))
+    string(object_address + 0x2B8, source)
+
+    mutex = _allocate(transaction, allocate, 0x30)
+    _write_span(transaction, mutex, _word(address(0x34C738)) + bytes(40))
+    _write_span(transaction, object_address + 0x98, _word(mutex))
+    state = _allocate(transaction, allocate, 0x98)
+    _write_span(transaction, state, bytes(0x98))
+    _mutex_state(transaction, state, image_base)
+    _write_span(transaction, object_address, _word(state))
+    transaction.commit()
+    return ServicePayload(object_address, controller, string_address, count, mutex, state)
 
 
 def construct_signer_child(
@@ -378,18 +494,24 @@ def copy_reference_wrapper(pages, *, object_address: int, source_address: int) -
 def construct_signer_handler(
     pages, *, object_address: int, image_base: int, allocate: Callable,
     kind: str, service_reference_address: int = 0, flag_reference_address: int = 0,
+    initialize_services: bool = False, thread_id: int | None = None,
 ) -> None:
     """Construct +0x288e98 or +0x263fb8 with explicit service dependencies.
 
     ``embedded_state`` is the 0xe8-byte object with a generated 0x98-byte
     state at +0x50. ``service_refs`` is the 0x80-byte object, copying the
-    two supplied singleton references at +0x50 and +0x60. This does not
-    initialize either singleton. Fresh NULL wrappers each allocate a count,
+    two supplied singleton references at +0x50 and +0x60. Alternatively,
+    ``initialize_services=True`` calls the recovered getters in native order
+    before each reference copy. Cold getters require explicit gettid.
+    Fresh NULL wrappers each allocate a count,
     and the 0x30-byte mutex holder gets the verified NULL-attribute bionic
     pthread_mutex_init layout. This is an uncontended initialization model.
     """
     if kind not in ("embedded_state", "service_refs"):
         raise RefillUnsupported("unsupported signer handler constructor")
+    if initialize_services and (kind != "service_refs" or
+                                service_reference_address or flag_reference_address):
+        raise RefillUnsupported("automatic getters require unsupplied service_refs dependencies")
     transaction = _PageTransaction(pages)
     width = 0xE8 if kind == "embedded_state" else 0x80
     _read_span(transaction, object_address, width)
@@ -408,7 +530,15 @@ def construct_signer_handler(
         # ELF R_AARCH64_RELATIVE at +0x375050 contains +0x35dc40;
         # +0x263fe0 adds the vtable header width of 0x10.
         _write_span(transaction, object_address, _word(_image_address(image_base, 0x35DC50)))
+        if initialize_services:
+            service_reference_address = construct_service_reference(transaction,
+                image_base=image_base, kind="service", allocate=allocate,
+                thread_id=thread_id).wrapper_address
         _copy_reference_wrapper(transaction, object_address + 0x50, service_reference_address)
+        if initialize_services:
+            flag_reference_address = construct_service_reference(transaction,
+                image_base=image_base, kind="flag", allocate=allocate,
+                thread_id=thread_id).wrapper_address
         _copy_reference_wrapper(transaction, object_address + 0x60, flag_reference_address)
         _write_span(transaction, object_address + 0x70, bytes(0x10))
     transaction.commit()

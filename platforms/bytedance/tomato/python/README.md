@@ -50,14 +50,24 @@ The module accepts trusted local checkpoint pages. See
 [ALLOCATOR_LIFECYCLE.md](../ALLOCATOR_LIFECYCLE.md) for usage, 83 native
 differential cases, 360 sequential operations and the same-capture chain.
 
-`vm9_objects.py` also exposes `construct_lazy_reference` and
+`vm9_objects.py` also exposes `construct_lazy_reference`,
+`construct_configuration_reference`, and
 `construct_service_reference`. They parameterize the measured singleton
 guard/slot publication and exact allocation order. The `flag` kind creates
-the native 2-byte zero payload; the larger `service` kind requires an
-explicit 0x2d0-byte initializer because its nested configuration graph is
-not yet independently recovered. Run
-`verify_vm9_service_singletons.py --output <sanitized-output.json>` for the
-fresh-memory checks and rollback cases.
+the native 2-byte zero payload; the larger `service` kind now defaults to
+`construct_service_payload`, generating its 0x2d0-byte graph from loaded ELF
+constants/GOT inputs. The configuration helper creates the measured 8-byte
+vtable-only payload used by the root constructor. Cold getters require an
+explicit `thread_id`; acquired/released guard state and thread ID are modeled,
+while recursive/contended guards are rejected. Warm getters allocate nothing.
+`construct_signer_handler(kind="service_refs", initialize_services=True)`
+initializes both services in native order before copying their references.
+Run `verify_vm9_service_singletons.py --library <matching-private-so>
+--libc <matching-private-libc> --output <sanitized-output.json>` for 72 native
+fresh-memory comparisons and 15 rejection/rollback cases. Native code is used
+only by the verifier; the model invokes neither native constructors nor JVM.
+Full root configuration, diagnostic/global boot and standalone current Medusa
+remain open. See [SIGNER_CONSTRUCTION.md](../SIGNER_CONSTRUCTION.md).
 
 `verify_vm9_allocator_lifecycle.py` requires Unicorn and the trusted primary
 initialized checkpoint. `verify_vm9_divmod_backing.py` additionally requires

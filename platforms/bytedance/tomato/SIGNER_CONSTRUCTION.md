@@ -28,7 +28,7 @@ flowchart TD
     R --> P["+0x28c268 发布两个 callback"]
 ```
 
-root 的 `+0x00` 在当前对象写入记录中没有被 constructor 写入。快照中恰好为零，不能据此把清零这个字段当成构造规则。`construct_signer_root` 现在只装配调用者显式提供的 `+0x08/+0x10/+0x18/+0x20` 四个依赖；配置对象本身、服务 singleton 和全局副作用仍需独立恢复。
+root 的 `+0x00` 在当前对象写入记录中没有被 constructor 写入。快照中恰好为零，不能据此把清零这个字段当成构造规则。`construct_signer_root` 现在只装配调用者显式提供的 `+0x08/+0x10/+0x18/+0x20` 四个依赖；服务 singleton 的已测构造分支已恢复，但 root 前段配置对象和全局副作用仍需独立恢复。
 
 | 组件 | 可生成的布局与边界 |
 | --- | --- |
@@ -37,7 +37,7 @@ root 的 `+0x00` 在当前对象写入记录中没有被 constructor 写入。�
 | 40 字节 child | 虚表、152 字节 state 指针、callback 容器引用/count、16 字节 pair 指针 |
 | callback 容器 | 从三个 descriptor 输入字生成对象，另分配 40 字节 controller 和 40 字节 sentinel；sentinel 的未写 padding 保留 |
 | 232 字节 handler | 生成两组 NULL reference/count 和 mutex holder；清 `+0x30..+0x4f`；在 `+0x50` 构造 state，末尾三字节 padding 保留 |
-| 128 字节 handler | 同样生成基类字段；在 `+0x50/+0x60` 复制调用者提供的服务/flag references。两个 getter 的 guard/slot 和 flag 的 2 字节 payload 已独立建模；服务的 0x2d0 字节配置图仍要求显式 initializer |
+| 128 字节 handler | 同样生成基类字段；在 `+0x50/+0x60` 复制服务/flag references。可由显式依赖装配，也可按 native 顺序调用两个已恢复的 getter，生成服务的 0x2d0 字节配置图和 flag 的 2 字节 payload |
 | callback pair | child constructor 只分配，不写内容；root 随后写入入口地址与 handler 指针 |
 | 40 字节 root | 保留 `+0x00`，写入两个 configuration/reference 指针和两个 child 指针；不创建 singleton 或 lazy string |
 
@@ -70,9 +70,42 @@ bind_signer_child_callback(
     image_base=image_base, kind="embedded_state")
 ```
 
-另一类 handler 的 `kind="service_refs"` 还需要 `service_reference_address` 与 `flag_reference_address`，这两个地址必须指向真实初始化的 16 字节 reference wrappers。`construct_service_reference(kind="flag")` 可直接生成 flag wrapper；`kind="service"` 要求调用者提供 0x2d0-byte payload initializer，不能用捕获状态或猜测常量替代。
+另一类 handler 的 `kind="service_refs"` 可以传入真实初始化的 `service_reference_address` 与 `flag_reference_address`，或设置 `initialize_services=True`，由 Python 在对应 reference copy 前依次调用真实布局的服务/flag getter。首次调用需显式提供 `thread_id`，已发布的 getter 不需要它。`construct_service_reference(kind="service")` 默认调用已恢复的 `construct_service_payload`，不再要求外部 initializer。
 
-`construct_lazy_reference` 实现了这些 getter 已证实的单线程语义：guard 已置位时返回 slot，不重复分配；首次调用按 wrapper、payload、四字节 count 的顺序分配，初始化 payload 后发布 slot 并置 guard；异常时 page map 回滚。对应的公开复核记录在 [vm9_service_singletons_python_20261003.json](evidence/vm9_service_singletons_python_20261003.json)，包含 5 个正例和 2 个回滚/拒绝例。configuration、service、flag 的 image-relative guard/slot 分别为 `0x3d15d0/0x3d15c8`、`0x3d1568/0x3d1560` 和 `0x3debc0/0x3debb8`。
+`construct_lazy_reference` 支持无竞争的单线程 guard：byte0 非零时返回 slot；byte0 为零时，byte1 的 bit1 表示正在初始化，模型拒绝递归/等待；byte1 等于 1 时 acquire 返回 0，仍返回 slot。冷启动把显式线程 ID 写入 guard+4，把 byte1 写为 2；发布 wrapper 后 release 将 byte0/byte1 都写为 1，保留 +2/+3 padding。异常时 page map 回滚，外部 allocator 账本不在回滚保证内。configuration、service、flag 的 image-relative guard/slot 分别为 `0x3d15d0/0x3d15c8`、`0x3d1568/0x3d1560` 和 `0x3debc0/0x3debb8`。
+
+旧 [vm9_service_singletons_python_20261003.json](evidence/vm9_service_singletons_python_20261003.json) 的 5/2 是 Python 自检，不能当作完整 native 等价证明。2026-10-04 的真实 guard 指令对照纠正了旧模型只写 byte0、遗漏 byte1/线程 ID 的差异。新增 [vm9_service_singletons_native_20261004.json](evidence/vm9_service_singletons_native_20261004.json) 有 72 个 native 差分案例和 15 个拒绝/回滚案例。
+
+## 已恢复的服务 payload
+
+`+0x281700` 的 0x2d0-byte 对象由输入生成，不复制捕获对象。模型分别读取 readonly ELF 常量、relocated GOT 和调用者提供的 guest 字符串/数值。服务 getter 冷启动共进行 27 次分配；其中 payload constructor 本身为 24 次，另有外层 wrapper、payload 和 count 三次。
+
+| payload 字段 | 构造规则 |
+| --- | --- |
+| `+0x00` | 新分配 152-byte state 指针；先整体清零，再构造虚表和 mutex state |
+| `+0x08/+0x10` | 清 u64 和一个字节；其余 padding 保留 |
+| `+0x18..+0x3f` | callback 容器，虚表 `+0x35b7c0`；descriptor 为 `+0x25686c/+0x165334/+0x281958`；40-byte controller 的 hook 为 `+0x24b560`，另有 40-byte sentinel |
+| `+0x40/+0xa0/+0x68` | 分别清 16/16/48 字节 |
+| `+0x50/+0xb0/+0x58` | u32 `0x10000`、u32 零、image+`0x6e500` 的 16-byte 常量 |
+| `+0x98` | 新分配 48-byte mutex holder，NULL attributes 的 bionic mutex 布局 |
+| `+0xb8` | 新分配的 24-byte empty string 对象及四字节引用计数 |
+| `+0xc8/+0xd0` | 清 u64/u32 |
+| 17 个 inline string 对象 | 逐次构造，虚表 `+0x34f5f8`。`+0x298` 使用 ELF 空字符串；其余从 GOT `+0x374fc0` 指向的 pointer slot 每次重新解引用 |
+| `+0x108/+0x160/+0x180/+0x190/+0x1b0/+0x1c8` | 在 native 读点保存 GOT `+0x375020` 的有符号 u32，生成重复整数和 float32；后续分配改变输入不会改写已保存值 |
+| `+0x1b8/+0x1c0/+0x290` | 在 native 读点保存 GOT `+0x375030` 指向的 u64 |
+| `+0x2b0` | 在最后一个字符串构造前读取 image+`0x3e0b58` |
+
+新 verifier 比较整个 guest 对象/分配区和所有加载的 image pages，包括 guard/slot 全局状态。覆盖两个 image base、跨页、ELF 默认值、NULL/空/UTF-8/长字符串、正负整数和 int32 边界、冷热 guard、服务到 handler 的连续构造，以及 allocator 在分配中修改字符串源和数值的输入时序。真实 ELF guard helpers 和匹配 libc 的 `pthread_mutex_init` 指令均参与执行。
+
+```python
+construct_signer_handler(
+    pages, object_address=handler_address, image_base=image_base,
+    allocate=allocate, kind="service_refs", initialize_services=True,
+    thread_id=guest_thread_id,
+)
+```
+
+模型只保证测得的成功、无竞争构造分支；operator-new 重试/抛异常和诊断全局副作用仍不在模型内。caller 必须提供合法 image/GOT 输入和可写分配区。
 
 [python/vm9_callbacks.py](python/vm9_callbacks.py) 的 `publish_signer_handle` 接收 root、env、invoke、get_reference_type 和 delete_reference。它实现已测发布和清理顺序，返回首个引用是否非空；宿主异常直接传播。
 
@@ -84,10 +117,14 @@ python python/verify_vm9_signer_objects.py --library /private/libmetasec_ml_7133
 
 验证器加载 ELF 代码和 relative relocations，在两种 image base 下新建有非零填充的 guest 内存。92 个对照验证对象布局、分配顺序、root 依赖装配、跨页、保留 padding、count 溢出/自别名、pair 绑定和 JNI 调用清理顺序。pthread mutex 初始化执行真实 libc 指令。另有 13 个拒绝/回滚案例。
 
-分配、memset、diagnostic scope、线程 attachment 和 JNI 回调是显式 oracle 边界。flag getter 的 2 字节 payload 已由 fresh-input 模型覆盖；服务 getter 的嵌套字符串/configuration constructor 仍是显式 initializer 边界。验证运行需要 Unicorn/pyelftools（native 对照）或直接运行 `verify_vm9_service_singletons.py`（纯 Python）；模型本身不调用 JVM。
+上述 92 个组件对照仍把服务 getter 作为显式 reference 输入边界。新的 72 个服务对照则真实执行三个 singleton getter 和 `+0x281700`；malloc、strlen、memcpy、memset、gettid 和成功的 guard mutex 是显式宿主边界，diagnostic scope effects 仍被排除。验证运行需要 Unicorn/pyelftools；模型本身不调用 JVM。
+
+```text
+python python/verify_vm9_service_singletons.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/service-singletons.json
+```
 
 ## 证据用途与剩余工作
 
 同次采样把 root → child → handler → pair → 两次发布连接起来，可用于排除错误 handle/对象类型和错误 publisher 分支。新建内存对照证明这些局部对象可以参数化生成，不能据此声称完整初始化已经独立完成。
 
-下一步仍需恢复 root 前段的配置/reference 构造、两个服务 singleton、diagnostic/global 启动副作用及剩余 native callbacks，再把这些组件接入 VM9 fresh-input 签名并贯穿同次采样验证。当前搜索仍无非空响应与分页证据；无 JVM Rust 下载器、抖音/起点闭环及最终 Pages 搜索下载网页也尚未完成。
+两个服务 singleton 的已测构造分支现已恢复。下一步仍需恢复 root 前段 `+0x257578 → +0x257084 → +0x257308` 的 264-byte 配置对象和初始化方法、diagnostic/global 启动副作用及剩余 native callbacks，再接入 VM9 fresh-input 签名并贯穿同次采样验证。该 264-byte 对象与 `construct_configuration_reference` 的 8-byte vtable-only payload 是不同对象，不能混用。当前搜索仍无非空响应与分页证据；无 JVM Rust 下载器、抖音/起点闭环及最终 Pages 搜索下载网页也尚未完成。

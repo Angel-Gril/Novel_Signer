@@ -1141,6 +1141,21 @@
     "guards_and_slots_parameterized": true,
     "flag_payload_constructor": true,
     "service_payload_constructor_complete": false,
+    "verification_kind": "historical_python_self_check_only",
+    "guard_side_effects_corrected_by": "vm9_service_singletons_native_20261004",
+    "complete_python_medusa": false
+  },
+  "vm9_service_singletons_native_20261004": {
+    "evidence_file": "evidence/vm9_service_singletons_native_20261004.json",
+    "differential_cases": 72,
+    "negative_cases": 15,
+    "fresh_memory": true,
+    "captured_pages_used": false,
+    "service_payload_constructor_complete_for_measured_branch": true,
+    "native_guard_helpers_executed": true,
+    "real_getter_to_handler_verified": true,
+    "all_image_pages_compared": true,
+    "complete_root_constructor": false,
     "complete_python_medusa": false
   }
 }

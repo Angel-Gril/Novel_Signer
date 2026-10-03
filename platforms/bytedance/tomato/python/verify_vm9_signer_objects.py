@@ -55,12 +55,35 @@ def fresh_pages():
 
 
 def flatten(pages):
-    return b"".join(bytes(pages[key]) for key in sorted(pages))
+    return _read_span(pages, GUEST, GUEST_SIZE)
+
+
+def image_pages(library, base):
+    """Fresh ELF load/relative relocation inputs, never captured process pages."""
+    pages = {}
+    with library.open("rb") as stream:
+        elf = ELFFile(stream)
+        for segment in elf.iter_segments():
+            if segment["p_type"] != "PT_LOAD":
+                continue
+            start = base + segment["p_vaddr"]
+            end = (start + segment["p_memsz"] + 4095) & ~4095
+            for address in range(start & ~4095, end, 4096):
+                pages.setdefault(address >> 12, bytearray(4096))
+            _write_span(pages, start, segment.data())
+        for section in elf.iter_sections():
+            if section["sh_type"] == "SHT_RELA":
+                for relocation in section.iter_relocations():
+                    if relocation["r_info_type"] == 1027:
+                        _write_span(pages, base + relocation["r_offset"],
+                                    (base + relocation["r_addend"]).to_bytes(8, "little"))
+    return pages
 
 
 def native(library, base, function, arguments, pages, *, references=(), env=0,
            ref_types=None, libc=None, service_references=(),
-           extra_registers=None, stop_offset=None):
+           extra_registers=None, stop_offset=None, real_singletons=False,
+           thread_id=None, observed_memory=None, allocation_effect=None):
     cpu = Uc(UC_ARCH_ARM64, UC_MODE_ARM)
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -99,6 +122,9 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
         assert mutex_entry
     cpu.mem_map(GUEST, GUEST_SIZE)
     cpu.mem_write(GUEST, flatten(pages))
+    for page, data in pages.items():
+        if not GUEST <= page << 12 < GUEST + GUEST_SIZE:
+            cpu.mem_write(page << 12, bytes(data))
     cpu.reg_write(UC_ARM64_REG_SP, GUEST + 0xEF00)
     cpu.reg_write(UC_ARM64_REG_X30, STOP)
     cpu.reg_write(UC_ARM64_REG_TPIDR_EL0, GUEST + 0xD000)
@@ -117,7 +143,10 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
     def hook(cpu, address, size, user):
         offset = address - base
         if offset == 0x347FD0:  # malloc PLT; operator new executes normally
-            result = allocation.take(cpu.reg_read(UC_ARM64_REG_X0))
+            requested = cpu.reg_read(UC_ARM64_REG_X0)
+            result = allocation.take(requested)
+            if allocation_effect:
+                allocation_effect(cpu, requested, result)
         elif offset == 0x347F20:  # memset PLT
             target, fill, width = [cpu.reg_read(reg) for reg in REGS[:3]]
             cpu.mem_write(target, bytes([fill & 255]) * width)
@@ -126,7 +155,28 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             assert mutex_entry and cpu.reg_read(UC_ARM64_REG_X1) == 0
             cpu.reg_write(UC_ARM64_REG_PC, mutex_entry)
             return
-        elif offset in (0x15F094, 0x264158):
+        elif offset == 0x347F40:  # strlen PLT
+            source = cpu.reg_read(UC_ARM64_REG_X0)
+            result = 0
+            while result < 0x100000 and cpu.mem_read(source + result, 1) != b"\0":
+                result += 1
+            assert result < 0x100000, "unterminated oracle string"
+        elif offset == 0x347F60:  # memcpy PLT
+            target, source, width = [cpu.reg_read(reg) for reg in REGS[:3]]
+            cpu.mem_write(target, bytes(cpu.mem_read(source, width)))
+            result = target
+        elif offset in (0x347F00, 0x347F10) and real_singletons:
+            assert cpu.reg_read(UC_ARM64_REG_X0) == base + 0x3E2F40
+            ledger.append(["guard_lock" if offset == 0x347F00 else "guard_unlock"])
+            result = 0  # Explicit successful single-thread mutex boundary.
+        elif offset == 0x348310 and real_singletons:
+            assert cpu.reg_read(UC_ARM64_REG_X0) == 0xB2
+            assert isinstance(thread_id, int) and 0 <= thread_id <= 0xFFFF_FFFF
+            ledger.append(["gettid", thread_id])
+            result = thread_id
+        elif offset in (0x3485A0, 0x3485B0, 0x32D64C) and real_singletons:
+            raise RefillUnsupported("contended/recursive native guard is outside the oracle")
+        elif offset in (0x15F094, 0x264158) and not real_singletons:
             result = service_references[0 if offset == 0x15F094 else 1]
         elif offset in (0x26C858, 0x26C9D0):
             # Logging scope effects are outside the object-memory contract.
@@ -158,6 +208,9 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
     # Ignore the native stack and synthetic thread pointer area. All object
     # and allocator payload pages are compared, including untouched padding.
     memory = bytes(cpu.mem_read(GUEST, 0xA000))
+    if observed_memory is not None:
+        for address, width in observed_memory:
+            observed_memory[address, width] = bytes(cpu.mem_read(address, width))
     return cpu.reg_read(UC_ARM64_REG_X0), memory, allocation.calls, ledger
 
 
