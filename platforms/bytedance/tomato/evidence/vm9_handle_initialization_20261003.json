@@ -444,5 +444,46 @@
     "Native initializer branch and callback publication from fresh inputs",
     "remaining callback/object graph and packed x8",
     "current nonempty search and pagination"
-  ]
+  ],
+  "monotonic_poll_control": {
+    "hypothesis": "Advancing guest monotonic time during readiness polls alone restores the missing signer handle.",
+    "cases": [
+      {
+        "timestamp_ms": 1791023999535,
+        "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+        "endpoint": "/reading/bookapi/detail/v1/",
+        "exit_code": 1,
+        "elapsed_seconds": 19.662,
+        "header_names": [],
+        "medusa_raw_length": 0,
+        "medusa_sha256": null,
+        "invalid_memory_read": false,
+        "boot_clock_step_ns": 0,
+        "boot_clock_steps": 0,
+        "ready_poll_count": 20,
+        "callback1_handle_published": false,
+        "init_unavailable_reported": true
+      },
+      {
+        "timestamp_ms": 1791023999535,
+        "input_sha256": "8ab5c0172c2728c739c56117578d31b73164d87499506963af5400522a5d3dfd",
+        "endpoint": "/reading/bookapi/detail/v1/",
+        "exit_code": 1,
+        "elapsed_seconds": 19.24,
+        "header_names": [],
+        "medusa_raw_length": 0,
+        "medusa_sha256": null,
+        "invalid_memory_read": false,
+        "boot_clock_step_ns": 550000000,
+        "boot_clock_steps": 20,
+        "ready_poll_count": 20,
+        "callback1_handle_published": false,
+        "init_unavailable_reported": true
+      }
+    ],
+    "wall_clock_timestamp_ms": 1791023999535,
+    "monotonic_total_advance_ns": 11000000000,
+    "handle_restored": false,
+    "interpretation": "Both runs stop after 20 polls with SIGNER_INIT_UNAVAILABLE. Advancing only monotonic time during polling is not sufficient; this does not exclude all startup clock policies or explain the initializer branch."
+  }
 }

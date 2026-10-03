@@ -1092,6 +1092,8 @@
     "fresh_detail_json_code": 0,
     "fresh_detail_response_length": 24335,
     "independent_current_python_signer": false,
-    "no_jvm_rust_chain": false
+    "no_jvm_rust_chain": false,
+    "monotonic_poll_controls": 2,
+    "monotonic_advance_alone_restores_handle": false
   }
 }

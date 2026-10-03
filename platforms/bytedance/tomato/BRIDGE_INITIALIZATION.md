@@ -57,6 +57,8 @@ Python 桥接调用也改为每次使用独立日志和 rounds 路径；失败�
 
 ## 4. 对下一步实现的意义
 
+追加的单变量对照保留失败 wall-clock 输入 `1791023999535`，只在就绪轮询期间推进 guest 单调时钟：控制组不推进，实验组每轮推进 550 毫秒，共 20 轮、11 秒。两组都未发布 callback-1 handle，并返回 `SIGNER_INIT_UNAVAILABLE`。这排除了“单独推进轮询期间的单调时钟即可修复”这一具体假设，不能外推为所有启动时钟策略都无关。
+
 首先恢复 native initializer 的时间相关分支和 callback 发布，生成真正的 signer 对象，再验证后续 constructor、allocator 和 callback。签名 VM 入口必须接收该对象，不能拿 app manager 或捕获地址充当 fresh-input 状态。
 
 本轮新鲜输出的 `X-Argus` 是 4 字节秒时间戳的小端编码，`X-Ladon` 也解码为 4 字节。这是实测短形态，不能用“返回了六个头名称”证明通用长形态 Argus/Ladon 算法已被当前接口验证。阅读接口接受也不能替代搜索接口验收。

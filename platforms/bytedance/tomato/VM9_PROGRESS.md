@@ -20,6 +20,11 @@ seconds fails. This is a bounded initialization observation, not a general
 time-grid rule or recovery of all 16 dispatch branches. Native initialization
 from arbitrary fresh inputs is still missing.
 
+A subsequent control advances guest monotonic time by 550 ms in each of 20
+readiness polls while keeping the failing wall-clock input. Both this run and
+the unchanged clock control still lack the callback-1 handle. Advancing only
+poll-time monotonic time is not sufficient; initialization remains open.
+
 Details: [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) and
 [vm9_handle_initialization_20261003.json](evidence/vm9_handle_initialization_20261003.json).
 The older external Java search service now has measured nonempty two-page
