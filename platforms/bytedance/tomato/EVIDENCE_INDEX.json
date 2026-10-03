@@ -811,14 +811,6 @@
       "0x1216970c",
       "0x121687dc"
     ],
-    "new_slab": {
-      "record": "0x12a403e8",
-      "record_header_word": "0x3000000003",
-      "record_bitmap_word": "0x3fffffffffefe000",
-      "returned_object": "0x12a479b0",
-      "object_constructor_write_bytes": 32,
-      "object_first_word": "0xad396da478c1d3ab"
-    },
     "allocator_state_after_callback": {
       "class_slab_slot": "0x12a403e8",
       "target_bin_head": "0x2",
@@ -838,7 +830,7 @@
       "checkpoint_sha256": "53c9fbe09872c784a1a1af9b0b31bc3f2031ca189ea4c6bc4db5626e928de8bc",
       "writes_sha256": "4a9c75353e89971974d89ea4e2a0e12d6eab1573e9ef11c42d5fcdd4b05b9229"
     },
-    "interpretation": "The captured empty-bin path creates a new slab record and object, then advances 13 callbacks before the first VM mismatch at relative Seg2 event 146: R1 is 0x12a479b0 while the trace requires 0x1296ba60. This narrows the missing state to allocator object selection/history; generic fresh-input Medusa generation and online validity remain open.",
+    "interpretation": "The forced empty-bin path acquires an already initialized available slab at 0x12a403e8 and returns 0x12a479b0. Direct baseline inspection and native 0x12165d44 execution refute the earlier claim that this probe created a new slab. The forced run completes 13 callbacks and then differs from the unmodified trace at event 146 because the intervention changes object identity. That mismatch alone is not evidence of missing VM semantics. Fresh allocator initialization and current Medusa remain open.",
     "fresh_input_parameterization": false,
     "new_server_validation_performed": false,
     "follow_up_full_run": {
@@ -848,89 +840,134 @@
         "relative_segment_event": 146,
         "register": "R1",
         "actual": "0x12a479b0",
-        "expected": "0x1296ba60"
+        "expected": "0x1296ba60",
+        "interpretation": "The object acquired from the available slab remains live; the unmodified reference trace expects another pointer. This is an expected possible consequence of the intervention, not proof of a missing VM operation."
       },
       "segment_completed": false
+    },
+    "selected_existing_slab": {
+      "record": "0x12a403e8",
+      "record_header_word": "0x3000000003",
+      "record_bitmap_word": "0x3fffffffffefe000",
+      "returned_object": "0x12a479b0",
+      "object_constructor_write_bytes": 32,
+      "object_first_word": "0xad396da478c1d3ab"
+    },
+    "historical_label": "The filename and trial name retain the earlier new-slab label; fresh slab creation was refuted by baseline inspection and direct native selection.",
+    "correction": {
+      "evidence_file": "evidence/vm9_allocator_available_slab_20261003.json",
+      "refuted_claim": "The forced callback creates a new slab record.",
+      "baseline_record_class": 3,
+      "baseline_record_counter": "0x34",
+      "baseline_record_bitmap": "0x3fffffffffeffe00",
+      "available_node": "0x12a403d8",
+      "selector_return": "0x12a403e8",
+      "new_slab_creation_observed": false
+    },
+    "control_comparison": {
+      "control_log_sha256": "292c345c34a257a29c43d38c035838bb16ea5ea4bfc6048706a5345df204a5c3",
+      "target_bin": "0x12282060",
+      "free_count": "0x3",
+      "list_address": "0x12282680",
+      "selected_index": 2,
+      "selected_object": "0x1296ba60",
+      "branch": "non-empty free-list path",
+      "native_writes": 204,
+      "interpretation": "The control selects 0x1296ba60 from the current free list; the forced run acquires 0x12a479b0 from an existing available slab. The intervention accounts for the pointer difference."
+    },
+    "control_alloc_free_sequence": {
+      "log_sha256": "6b2aba19df42fbc09d14104de2d6b0aaf207725e72606fbc2a6b983de5220add",
+      "events": [
+        {
+          "phase": "transition",
+          "op": "malloc",
+          "request": "0x18",
+          "result": "0x122a0c20",
+          "caller": "0x125ea210"
+        },
+        {
+          "phase": "transition",
+          "op": "malloc",
+          "request": "0x2d",
+          "result": "0x1296baf0",
+          "caller": "0x12508388"
+        },
+        {
+          "phase": "transition",
+          "op": "free",
+          "pointer": "0x122974a8",
+          "caller": "0x70000000",
+          "observed_x0_after_void_free": "0x122825c0",
+          "origin": "diagnostic_explicit_native_free"
+        },
+        {
+          "phase": "transition",
+          "op": "free",
+          "pointer": "0x1296ba60",
+          "caller": "0x70000000",
+          "observed_x0_after_void_free": "0x12282680",
+          "origin": "diagnostic_explicit_native_free"
+        },
+        {
+          "phase": "callback_1",
+          "op": "malloc",
+          "request": "0x2c",
+          "result": "0x1296ba60",
+          "caller": "0x12518eb8"
+        },
+        {
+          "phase": "callback_1",
+          "op": "malloc",
+          "request": "0x18",
+          "result": "0x122a0ce0",
+          "caller": "0x125ea210"
+        },
+        {
+          "phase": "callback_1",
+          "op": "malloc",
+          "request": "0x21",
+          "result": "0x1296bb20",
+          "caller": "0x12508238"
+        },
+        {
+          "phase": "callback_1",
+          "op": "free",
+          "pointer": "0x1296ba60",
+          "caller": "0x12518f00",
+          "observed_x0_after_void_free": "0x12282680",
+          "origin": "native_callback"
+        },
+        {
+          "phase": "callback_1",
+          "op": "malloc",
+          "request": "0x4",
+          "result": "0x122974a8",
+          "caller": "0x125ea210"
+        }
+      ],
+      "interpretation": "The diagnostic runner explicitly frees 0x1296ba60 before callback 1; the native callback malloc(0x2c) reclaims it. This demonstrates checkpoint reuse, not an independently derived fresh allocation/free history.",
+      "void_free_note": "free has no return value. Any retained x0 value is an ABI register observation only."
     }
   },
-  "control_comparison": {
-    "control_log_sha256": "292c345c34a257a29c43d38c035838bb16ea5ea4bfc6048706a5345df204a5c3",
-    "target_bin": "0x12282060",
-    "free_count": "0x3",
-    "list_address": "0x12282680",
-    "selected_index": 2,
-    "selected_object": "0x1296ba60",
-    "branch": "non-empty free-list path",
-    "native_writes": 204,
-    "interpretation": "The control run selects the trace-required 0x1296ba60 from the current free list; the forced run selects the newly created 0x12a479b0. The pointer difference explains the first forced replay mismatch."
-  },
-  "control_alloc_free_sequence": {
-    "log_sha256": "6b2aba19df42fbc09d14104de2d6b0aaf207725e72606fbc2a6b983de5220add",
-    "events": [
-      {
-        "phase": "transition",
-        "op": "malloc",
-        "request": "0x18",
-        "result": "0x122a0c20",
-        "caller": "0x125ea210"
-      },
-      {
-        "phase": "transition",
-        "op": "malloc",
-        "request": "0x2d",
-        "result": "0x1296baf0",
-        "caller": "0x12508388"
-      },
-      {
-        "phase": "transition",
-        "op": "free",
-        "pointer": "0x122974a8",
-        "free_return": "0x122825c0",
-        "caller": "0x70000000"
-      },
-      {
-        "phase": "transition",
-        "op": "free",
-        "pointer": "0x1296ba60",
-        "free_return": "0x12282680",
-        "caller": "0x70000000"
-      },
-      {
-        "phase": "callback_1",
-        "op": "malloc",
-        "request": "0x2c",
-        "result": "0x1296ba60",
-        "caller": "0x12518eb8"
-      },
-      {
-        "phase": "callback_1",
-        "op": "malloc",
-        "request": "0x18",
-        "result": "0x122a0ce0",
-        "caller": "0x125ea210"
-      },
-      {
-        "phase": "callback_1",
-        "op": "malloc",
-        "request": "0x21",
-        "result": "0x1296bb20",
-        "caller": "0x12508238"
-      },
-      {
-        "phase": "callback_1",
-        "op": "free",
-        "pointer": "0x1296ba60",
-        "free_return": "0x12282680",
-        "caller": "0x12518f00"
-      },
-      {
-        "phase": "callback_1",
-        "op": "malloc",
-        "request": "0x4",
-        "result": "0x122974a8",
-        "caller": "0x125ea210"
-      }
+  "vm9_allocator_available_slab_20261003": {
+    "evidence_file": "evidence/vm9_allocator_available_slab_20261003.json",
+    "status": "captured_checkpoint_native_differential_verified",
+    "scope": "Singleton available-node selection and class-3 four-slot refill/pop, from a trusted initialized checkpoint.",
+    "correction": {
+      "prior_evidence_file": "evidence/vm9_allocator_new_slab_native_replay_20261003.json",
+      "claim": "The forced callback creates a new slab record.",
+      "result": "refuted",
+      "reason": "The slab class, counter, bitmap, and node links are already populated in the input checkpoint. Native 0x12165d44 removes that existing node and returns node+0x10; no slab initialization helper executes in these probes."
+    },
+    "python_primitives": [
+      "select_singleton_available_slab",
+      "refill_singleton_available_slab_and_pop"
     ],
-    "interpretation": "The transition frees 0x1296ba60 before callback 1; the control callback malloc(0x2c) reclaims that same slot. The forced empty-bin replay bypasses this free-list reuse and therefore creates 0x12a479b0."
+    "native_selection_return": "0x12a403e8",
+    "native_refill_return": "0x12a479b0",
+    "checkpoint_pages_compared": 4256,
+    "metadata_base_offset_width_bits": 32,
+    "fresh_input_parameterization": false,
+    "new_server_validation_performed": false
   }
 }

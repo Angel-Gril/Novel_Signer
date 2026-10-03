@@ -1,8 +1,8 @@
 """Small, fail-closed VM9 allocator primitives.
 
-This module models the observed free-list pop and the existing-slab batch
-refill when the caller supplies a trusted local checkpoint.  It intentionally
-refuses slab/node discovery and fresh allocator initialization.  The input page
+This module models the observed free-list pop, existing-slab batch refill,
+and selection of an initialized slab from a singleton available-node tree.
+It refuses general tree balancing and fresh allocator initialization. The input page
 map has the same shape used by ``vm9_handoff_rule.py``; it is not an online
 request or a general heap.
 """
@@ -123,6 +123,27 @@ class SlabRefillPop:
     returned_object: int
     object_addresses: tuple[int, ...]
     slab_pops: tuple[SlabSlotPop, ...]
+
+
+@dataclass(frozen=True)
+class AvailableSlabSelection:
+    """Removal of the sole initialized node by native ``0x12165d44``."""
+
+    class_control_address: int
+    root_field_address: int
+    sentinel_address: int
+    node_address: int
+    slab_address: int
+    selection_count_before: int
+    selection_count_after: int
+
+
+@dataclass(frozen=True)
+class AvailableSlabRefillPop:
+    """Singleton-node selection followed by a captured batch refill/pop."""
+
+    selection: AvailableSlabSelection
+    refill: SlabRefillPop
 
 
 @dataclass(frozen=True)
@@ -296,7 +317,8 @@ def pop_slab_slot(
     delta = (slab_header - region_offset) - aligned_base
     page_index = page_bias + (_umulh64(delta, constants.reciprocal) >> 6)
     object_stride = read_u64(pages, metadata_address + 0x10)
-    base_offset = read_u64(pages, metadata_address + 0x58)
+    # LDR W8 zero-extends the 32-bit field; +0x5c is not part of it.
+    base_offset = read_u32(pages, metadata_address + 0x58)
     object_address = aligned_base + base_offset + (page_index << 12) + selected_index * object_stride
 
     return SlabSlotPop(
@@ -316,6 +338,107 @@ def pop_slab_slot(
         object_address=object_address,
         propagated_bitmap_updates=tuple(propagated),
     )
+
+
+def _singleton_available_slab(
+    pages: Mapping[int, bytes | bytearray], class_control_address: int
+) -> AvailableSlabSelection:
+    """Validate the observed tree shape before changing checkpoint memory."""
+
+    root_field = class_control_address + 0x30
+    sentinel = class_control_address + 0x38
+    node = read_u64(pages, root_field)
+    if node == sentinel:
+        raise RefillUnsupported("available-node tree is empty; fresh slab creation is unsupported")
+    if node < 0x10000 or node & 7:
+        raise ValueError(f"invalid available-node pointer {node:#x}")
+    # +8 also carries the red/black bit. Only the exact captured singleton
+    # shape is supported: two sentinel children and no tagged right link.
+    if read_u64(pages, node) != sentinel or read_u64(pages, node + 8) != sentinel:
+        raise RefillUnsupported("available-node tree is not the captured singleton shape")
+    if read_u64(pages, sentinel) != sentinel or read_u64(pages, sentinel + 8) != sentinel:
+        raise RefillUnsupported("available-node sentinel differs from the captured shape")
+    count = read_u64(pages, class_control_address + 0xD0)
+    return AvailableSlabSelection(
+        class_control_address=class_control_address,
+        root_field_address=root_field,
+        sentinel_address=sentinel,
+        node_address=node,
+        slab_address=node + 0x10,
+        selection_count_before=count,
+        selection_count_after=(count + 1) & 0xFFFF_FFFF_FFFF_FFFF,
+    )
+
+
+def select_singleton_available_slab(
+    pages: MutableMapping[int, bytearray], *, class_control_address: int
+) -> AvailableSlabSelection:
+    """Replay the observed singleton branch of native ``0x12165d44``.
+
+    The native helper follows left links to the lowest node, removes it with
+    ``0x121657f4``, increments ``[control+0xd0]``, and returns ``node+0x10``.
+    This implementation accepts only the verified singleton tree. It does
+    not allocate or initialize the returned slab, or publish it as current.
+    Empty and larger trees are rejected before any writes.
+    """
+
+    result = _singleton_available_slab(pages, class_control_address)
+    write_u64(pages, result.root_field_address, result.sentinel_address)
+    write_u64(pages, class_control_address + 0xD0, result.selection_count_after)
+    return result
+
+
+def refill_singleton_available_slab_and_pop(
+    pages: MutableMapping[int, bytearray],
+    *,
+    arena_address: int,
+    bin_address: int,
+    class_id: int,
+    batch_size: int,
+    constants: AllocatorConstants = AllocatorConstants(),
+) -> AvailableSlabRefillPop:
+    """Replay the available-node branch, without creating a fresh slab.
+
+    The current slab must be absent/exhausted, the target bin empty, and the
+    available tree a captured singleton containing enough initialized slots
+    for the entire batch. The caller still supplies the arena, bin, class,
+    batch width, and trusted checkpoint. Tree rotations, slab creation, and
+    refills crossing into another slab remain unsupported.
+    """
+
+    if class_id < 0 or batch_size <= 0:
+        raise ValueError("class_id must be non-negative and batch_size positive")
+    control = arena_address + class_id * 0xE0 + 0x508
+    slab_slot = control + 0x28
+    current_slab = read_u64(pages, slab_slot)
+    if current_slab and read_u32(pages, current_slab + 4):
+        raise RefillUnsupported("current slab still has slots; use the existing-slab path")
+    if read_u32(pages, bin_address + 0x10):
+        raise RefillUnsupported("target bin already has published entries")
+    list_address = read_u64(pages, bin_address + 0x18)
+    if list_address == 0 or list_address & 7:
+        raise ValueError(f"invalid refill list address {list_address:#x}")
+    selection = _singleton_available_slab(pages, control)
+    slab = selection.slab_address
+    if read_u32(pages, slab) != class_id:
+        raise RefillUnsupported("available slab belongs to a different size class")
+    if read_u32(pages, slab + 4) < batch_size:
+        raise RefillUnsupported("batch would require another slab")
+    # The native acquire helper clears the old current slot, selects an
+    # already initialized node, then publishes its record before slot use.
+    write_u64(pages, slab_slot, 0)
+    selection = select_singleton_available_slab(pages, class_control_address=control)
+    write_u64(pages, slab_slot, slab)
+    refill = refill_existing_slab_and_pop(
+        pages,
+        arena_address=arena_address,
+        bin_address=bin_address,
+        class_id=class_id,
+        slab_address=slab,
+        batch_size=batch_size,
+        constants=constants,
+    )
+    return AvailableSlabRefillPop(selection=selection, refill=refill)
 
 
 def refill_existing_slab_and_pop(

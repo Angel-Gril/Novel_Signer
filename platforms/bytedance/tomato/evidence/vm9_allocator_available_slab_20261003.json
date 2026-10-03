@@ -1,0 +1,209 @@
+{
+  "evidence_id": "vm9_allocator_available_slab_20261003",
+  "platform": "bytedance_tomato",
+  "status": "captured_checkpoint_native_differential_verified",
+  "scope": "Singleton available-node selection and class-3 four-slot refill/pop, from a trusted initialized checkpoint.",
+  "provenance": {
+    "input_checkpoint_sha256": "538858977e4c1ae16aee423f3a7f0ad946b3a3e519b6fffee175b66f54b9a1d4",
+    "libc_image_sha256": "3b76a7d1da32e3844dee1a2bbe4fbedd8023fa8eb8b27e3ae9ade8d35a9f0fbd",
+    "native_probe_sha256": "f6c8c82d2923f8a49c7c7db9e22696d5dcfe71882ada678d8577bdacea13bf6d",
+    "differential_runner_sha256": "7572bbb7ae10f4da6ebbf3e0bc001fe9885032ed567d73a64f25544c66e847b1",
+    "differential_results_sha256": "b27755ab5edbc63ee3277938f61fcfa97a580f987e76aba4701ea7b1d96be9e5",
+    "python_model_sha256": "0293741f0b0546737ecfa5b64ada976aeb2f332246d54d0be08b28f0a55f8ba8",
+    "private_snapshots_and_native_images_published": false
+  },
+  "prior_claim_correction": {
+    "prior_evidence_file": "evidence/vm9_allocator_new_slab_native_replay_20261003.json",
+    "claim": "The forced callback creates a new slab record.",
+    "result": "refuted",
+    "reason": "The slab class, counter, bitmap, and node links are already populated in the input checkpoint. Native 0x12165d44 removes that existing node and returns node+0x10; no slab initialization helper executes in these probes."
+  },
+  "baseline": {
+    "arena": "0x12240180",
+    "class_id": 3,
+    "class_control": "0x12240928",
+    "current_slab_slot": "0x12240950",
+    "tree_root_field": "0x12240958",
+    "tree_root": "0x12a403d8",
+    "sentinel": "0x12240960",
+    "node_left": "0x12240960",
+    "node_right": "0x12240960",
+    "slab_record": "0x12a403e8",
+    "slab_class": 3,
+    "slab_counter": "0x34",
+    "leaf_bitmap_address": "0x12a40400",
+    "leaf_bitmap": "0x3fffffffffeffe00",
+    "node_selection_count": 4
+  },
+  "native_selection": {
+    "entry": "0x12165d44",
+    "x0": "0x12240928",
+    "return": "0x12a403e8",
+    "observed_path": [
+      "0x12165d44",
+      "0x121657f4",
+      "0x12165a0c",
+      "0x121659c4"
+    ],
+    "nonstack_writes": [
+      {
+        "pc": "0x121659c4",
+        "address": "0x12240958",
+        "size": 8,
+        "value": "0x12240960"
+      },
+      {
+        "pc": "0x12165d98",
+        "address": "0x122409f8",
+        "size": 8,
+        "value": "0x5"
+      }
+    ]
+  },
+  "native_acquire": {
+    "entry": "0x121687dc",
+    "arguments": {
+      "x0": "0x12240180",
+      "x1": "0x12240928"
+    },
+    "return": "0x12a479b0",
+    "nonstack_writes": 6,
+    "first_leaf_bit": 9,
+    "first_slot_index": 137,
+    "slab_counter_after": "0x33",
+    "leaf_bitmap_after": "0x3fffffffffeffc00",
+    "initialization_helpers_observed": []
+  },
+  "native_refill": {
+    "entry": "0x12187ecc",
+    "arguments": {
+      "x1": "0x12240180",
+      "x3": "0x12282080",
+      "w4": 3
+    },
+    "intervention": {
+      "current_slab_slot": "0",
+      "target_bin_count": "0",
+      "target_bin_floor_signed": -1
+    },
+    "batch_size": 4,
+    "selection_count_after": 5,
+    "objects_in_allocation_order": [
+      "0x12a479b0",
+      "0x12a479e0",
+      "0x12a47a10",
+      "0x12a47a40"
+    ],
+    "list_write_indexes": [
+      3,
+      2,
+      1,
+      0
+    ],
+    "return": "0x12a479b0",
+    "bin_count_after": 3,
+    "slab_counter_after": "0x30",
+    "leaf_bitmap_after": "0x3fffffffffefe000",
+    "nonstack_writes": 25
+  },
+  "metadata_width_correction": {
+    "class3_metadata": "0x121d9240",
+    "field_offset": "0x58",
+    "native_instruction": "LDR W8, [X30, #0x58]",
+    "width_bits": 32,
+    "challenge": {
+      "field_upper_word_address": "0x121d929c",
+      "upper_word": "0xaabbccdd",
+      "old_python_object": "0xaabbccdd12a479b0",
+      "native_and_corrected_python_object": "0x12a479b0"
+    }
+  },
+  "verification": {
+    "method": "Run the real captured ARM64 entry in Unicorn on a separate checkpoint copy, record all nonstack writes without a cap, confirm their final bytes against native mapped memory, replay the Python primitive, and compare return value and all 4256 checkpoint pages. Reject unsupported shapes without mutation.",
+    "synthetic_native_stack": true,
+    "single_threaded_checkpoint_only": true,
+    "native_lock_transient_writes_modeled": false,
+    "native_final_lock_bytes_match": true,
+    "cases": [
+      {
+        "case": "singleton_selection",
+        "return": "0x12a403e8",
+        "native_nonstack_writes": 2,
+        "all_checkpoint_pages_compared": 4256,
+        "memory_match": true
+      },
+      {
+        "case": "existing_slab_refill_regression",
+        "return": "0x1296bb80",
+        "native_nonstack_writes": 21,
+        "all_checkpoint_pages_compared": 4256,
+        "memory_match": true
+      },
+      {
+        "case": "available_refill",
+        "return": "0x12a479b0",
+        "native_nonstack_writes": 25,
+        "all_checkpoint_pages_compared": 4256,
+        "memory_match": true
+      },
+      {
+        "case": "available_refill_metadata_upper_word",
+        "return": "0x12a479b0",
+        "native_nonstack_writes": 25,
+        "all_checkpoint_pages_compared": 4256,
+        "memory_match": true
+      },
+      {
+        "case": "metadata_field_width_regression",
+        "old_model_matches_native": false,
+        "new_model_matches_native": true,
+        "native_object": "0x12a479b0"
+      },
+      {
+        "case": "empty_tree",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "multiple_nodes",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "tagged_singleton",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "active_current_slab",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "nonempty_target_bin",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "wrong_slab_class",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "batch_exceeds_slab",
+        "rejected": true,
+        "unchanged": true
+      }
+    ],
+    "old_model_source_revision": "c2148be"
+  },
+  "limitations": [
+    "The available slab and allocator constants still originate from the initialized private checkpoint.",
+    "Only the exact singleton tree shape is modeled; empty trees, larger trees, tagged singleton links and cross-slab batches are rejected.",
+    "Batch width, arena, bin and class are supplied by the caller; no fresh allocator initialization is claimed.",
+    "Allocation/free history and concurrent allocator behavior are not independently reproduced.",
+    "This is no new input vector or live server validation."
+  ],
+  "fresh_input_parameterization": false,
+  "new_server_validation_performed": false
+}

@@ -61,8 +61,9 @@ count or copying the bin page cannot reproduce the historical pointer.
 The empty-bin branch at `0x1217f450` stores `-1` at `[bin+0x28]` and calls
 `0x12187ecc` with the arena, the bin table, the next size-class bin, and the
 class id. The wrapper calls `0x1216970c`. That routine first computes the batch
-size from the class-count table and the next-bin shift, then either allocates a
-new slab node or consumes an existing slab record. In the existing-slab path:
+size from the class-count table and the next-bin shift. It consumes the current
+slab when that record still has slots; otherwise it tries the available-node
+tree before entering the unmodeled initialization path. In the current-slab path:
 
 1. the slab record is loaded from the class state at `+0x530`;
 2. `[slab+4]` is the remaining-slot counter;
@@ -132,59 +133,96 @@ public replay produces the captured sequence:
 This verifies the batch ordering and the counter/bitmap transition for the
 existing slab. It remains a checkpoint replay and is not a fresh allocator.
 
-## Controlled new-slab native replay (2026-10-03)
+## Controlled available-slab native replay (2026-10-03, corrected)
 
-The next probe forced the class-3 free-list count at `0x12282090` from `3`
-to `0` and cleared the class-3 slab pointer slot at `0x12240950` immediately
-before Seg2 callback 1. The native code then took the empty-bin path:
+The probe forced the class-3 free-list count at `0x12282090` from `3` to
+`0` and cleared the current slab pointer at `0x12240950` immediately before
+Seg2 callback 1. It observed:
 
 ```text
 0x1217f450 -> 0x12187ecc -> 0x1216970c -> 0x121687dc
 ```
 
-This run did not copy the historical slab page. The allocator created a new
-captured record at `0x12a403e8`, with the post-call header word
-`0x3000000003` and bitmap word `0x3fffffffffefe000`, and returned the object
-`0x12a479b0`. The native constructor wrote 32 bytes to that object. The run
-recorded 273 native writes across 10 pages and stopped after the first callback
-for inspection.
+The callback returned `0x12a479b0`, recorded 273 native writes over 10 pages,
+and left the selected slab counter at `0x30`. The earlier report called this
+fresh slab creation. **That interpretation was refuted**: the input checkpoint
+already contains slab `0x12a403e8`, class `3`, counter `0x34`, leaf bitmap
+`0x3fffffffffeffe00`, and a linked available-tree node at `0x12a403d8`.
 
-The old slab remained at counter `0x18` and bitmap
-`0xffffff0000000000`; the class slot was repointed to `0x12a403e8`, while the
-target bin ended with head `0x2` and count `0x3`. This is direct evidence that
-the empty-bin branch can allocate a new slab record in the captured heap.
-It still does not identify a generic slab base formula, region initialization,
-allocation/free history, callback registration, or fresh-input body state.
-
-The sanitized evidence is
+The original filename remains for provenance:
 [evidence/vm9_allocator_new_slab_native_replay_20261003.json](evidence/vm9_allocator_new_slab_native_replay_20261003.json).
+Its correction points to the direct native differential evidence below.
 
-This result remains a controlled checkpoint replay. The public allocator model
-must continue to reject fresh empty-bin allocation until those missing inputs
-are independently generated.
+## Available-node selection and Python reproduction
 
-## Full controlled replay boundary
+Native `0x12165d44(control)` follows left links to the lowest available node,
+removes it with `0x121657f4`, increments `[control+0xd0]`, and returns
+`node+0x10`, the already initialized slab record. For the captured singleton:
 
-Repeating the same probe without stopping after callback 1 completed 13 native
-callbacks. The first VM mismatch then occurred at relative Seg2 event `146`:
-`R1=0x12a479b0` from the new slab, while the trace requires
-`R1=0x1296ba60` from the current free-list state. The run therefore proves
-that the new slab object remains live across later callbacks, but it cannot
-stand in for the object identity selected by this captured trace.
+| field | before | after native selection |
+| --- | --- | --- |
+| root `[0x12240958]` | `0x12a403d8` | sentinel `0x12240960` |
+| selection count `[0x122409f8]` | `4` | `5` |
+| selected record | already initialized `0x12a403e8` | returned `0x12a403e8` |
 
-This is a useful boundary: the missing behavior is now the allocator's object
-selection and allocation/free history after the new slab transition, rather
-than failure to execute the empty-bin primitive itself. The full run still
-does not establish a fresh-input allocator or a current online Medusa body.
+The native selector has exactly two nonstack writes in this case. The acquire
+helper `0x121687dc` clears the old current slot, selects and publishes this
+record, consumes its first bitmap slot, and returns `0x12a479b0`. No fresh slab
+initialization helper executes in these probes.
 
-The paired control run keeps the class-3 bin non-empty: count `3`, list
-`0x12282680`, selected index `2`, and returned object `0x1296ba60`. The forced
-run instead returns the new object `0x12a479b0`. This A/B pair directly ties
-the first VM mismatch to allocator object identity and records the control
-branch's 204 native writes versus 273 writes on the new-slab branch.
+The public model adds `select_singleton_available_slab` and
+`refill_singleton_available_slab_and_pop`. The latter reproduces the observed
+four-slot batch and wrapper pop:
 
-The allocator entry trace also captures the relevant history: the transition
-frees `0x1296ba60`, then callback 1 performs `malloc(0x2c)` and reclaims that
-same slot. The forced run bypasses this reuse by zeroing the bin count and
-slab slot. This is the concrete state sequence that a fresh allocator model
-must reproduce before the VM body can be compared.
+```text
+allocation order: 0x12a479b0, 0x12a479e0, 0x12a47a10, 0x12a47a40
+list write indexes: 3, 2, 1, 0
+return: 0x12a479b0; published count after pop: 3
+slab counter: 0x34 -> 0x30
+leaf bitmap: 0x3fffffffffeffe00 -> 0x3fffffffffefe000
+```
+
+Direct Unicorn execution of `0x12165d44` and `0x12187ecc` is compared with the
+Python primitives on separate copies of the trusted checkpoint. Return values
+and final bytes across all 4,256 checkpoint pages match. The native refill has
+25 nonstack writes, including the transient lock acquire/release; the Python
+model matches final memory and does not model concurrency or those transient
+lock writes. An existing-current-slab regression also matches native execution
+and returns `0x1296bb80`.
+
+Empty trees, larger trees, tagged singleton links, an active current slab,
+nonempty target bins, wrong-class records, and batches requiring another slab
+are rejected without checkpoint mutation. This is deliberately limited to the
+verified initialized tree shape, not a fresh allocator.
+
+The new evidence is
+[evidence/vm9_allocator_available_slab_20261003.json](evidence/vm9_allocator_available_slab_20261003.json).
+
+## Metadata field width
+
+Native `LDR W8, [X30, #0x58]` reads the base offset as 32 bits. The earlier
+Python implementation read 64 bits. A one-variable test writes `0xaabbccdd`
+to the adjacent upper word at `0x121d929c`: native still returns
+`0x12a479b0`, while the old model returns `0xaabbccdd12a479b0`. Reading the
+field with `read_u32` repairs that discrepancy; the corrected refill still
+matches every checkpoint page.
+
+## Object identity and history boundary
+
+The full forced callback replay completed 13 callbacks before the reference
+trace differed at relative Seg2 event `146`: actual `R1=0x12a479b0`, expected
+`R1=0x1296ba60`. The intervention deliberately changes allocator state, so
+this pointer difference alone does not prove a missing VM operation.
+
+The paired control uses count `3`, list `0x12282680`, index `2`, and returns
+`0x1296ba60`. Its 204 writes versus the forced callback's 273 demonstrate the
+different allocation paths. The diagnostic runner explicitly frees
+`0x1296ba60` before callback 1, whose `malloc(0x2c)` then reclaims it. Those
+explicit transition frees are probe setup, not independently recovered fresh
+history. Native `free` is void; residual `x0` observations carry no return-value
+semantics.
+
+Fresh arena/slab initialization, general tree removal, the true constructor and
+cleanup history, callback registration, and fresh-input Medusa generation
+remain open. Current Python signing and the no-JVM Rust download chain are
+still unavailable; this batch performs no new online request.

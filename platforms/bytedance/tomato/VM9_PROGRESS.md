@@ -530,44 +530,45 @@ directory/reader matrix. The current all-segment diagnostic is a component
 checkpoint; the pure-Python signer, no-JVM Rust chain, non-empty search, and
 later usable search/download webpage remain open.
 
-## New-slab branch replay (2026-10-03)
+## Available-slab branch replay (2026-10-03, corrected)
 
-The controlled class-3 probe forced the callback-1 bin count at
-`0x12282090` from `3` to `0` and cleared the slab pointer slot at
-`0x12240950`. The real native path then entered
-`0x1217f450 -> 0x12187ecc -> 0x1216970c -> 0x121687dc` and created a new
-captured slab record at `0x12a403e8`; its constructor returned object
-`0x12a479b0` and wrote 32 bytes. The run produced 273 native writes over 10
-pages and stopped after callback 1.
+The forced callback-1 probe clears class-3 bin count `0x12282090` and current
+slab slot `0x12240950`, enters the empty-bin acquire path, and returns
+`0x12a479b0`. The earlier claim that it created a new slab was refuted by
+input-checkpoint inspection: record `0x12a403e8` was already class `3`, with
+counter `0x34` and leaf bitmap `0x3fffffffffeffe00`.
 
-This closes one checkpoint-level observation: the empty-bin path creates a new
-slab record without transplanting the historical slab page. It does not close
-slab discovery, region initialization, allocation/free history, callback
-registration, or fresh-input Medusa generation. The old slab counter and
-bitmap remained unchanged, which is consistent with a separate new-slab
-record. Evidence:
+Direct native `0x12165d44` selects the available node `0x12a403d8`, changes the
+tree root to sentinel `0x12240960`, increments the selection count from `4`
+to `5`, and returns `node+0x10 = 0x12a403e8`. It does not create that record.
+Native `0x121687dc` publishes it as current and consumes the first object slot.
+
+The Python owner now reproduces this singleton-node selection and the
+four-slot refill/wrapper pop. Native and Python return `0x12a479b0`, leave
+count `3`, decrement the slab counter to `0x30`, and leave bitmap
+`0x3fffffffffefe000`. All 4,256 checkpoint pages match for selection, available
+refill, an existing-slab regression, and an adjacent metadata-word challenge.
+The native transient lock writes remain outside this single-threaded model.
+
+The metadata challenge also exposed and fixed a field-width bug: native reads
+`metadata+0x58` with `LDR W8`; the Python model now uses `read_u32` instead of
+`read_u64`. Unsupported tree shapes and batches are rejected before writes in
+the seven tested negative cases.
+
+The corrected original evidence retains its filename for provenance:
 [evidence/vm9_allocator_new_slab_native_replay_20261003.json](evidence/vm9_allocator_new_slab_native_replay_20261003.json).
+The native differential result is
+[evidence/vm9_allocator_available_slab_20261003.json](evidence/vm9_allocator_available_slab_20261003.json).
 
-The next implementation step remains allocator state generation from a fresh
-chain. Until that is available, the Python and Rust public paths must retain
-their explicit unsupported status for current Medusa.
+The forced full run's event-146 pointer mismatch remains an observation against
+an unmodified trace, not proof of missing VM behavior. The paired control
+reclaims `0x1296ba60` after the runner explicitly frees it. The diagnostic free
+setup does not independently derive live transition history, and native free
+has no return value.
 
-The same controlled replay was then allowed to continue. It completed 13
-native callbacks before the first VM mismatch at relative Seg2 event `146`:
-`R1` held the new-slab object `0x12a479b0`, while the captured trace required
-the free-list object `0x1296ba60`. This separates successful execution of the
-new-slab branch from the later object-selection state that the full trace
-expects. It is a narrower allocator-history boundary, not a fresh-input
-parameterization result.
-
-The paired control callback confirms the selection rule: class-3 count `3`
-uses list `0x12282680`, index `2`, and returns `0x1296ba60`. The forced branch
-returns `0x12a479b0` instead. This A/B result ties the first divergence to
-allocator object identity and leaves the allocation/free history as the next
-state to reconstruct.
-
-The entry trace supplies that history for this checkpoint: transition
-`free(0x1296ba60)` is followed by callback-1 `malloc(0x2c) -> 0x1296ba60`.
-The forced path skips this reuse and allocates `0x12a479b0` from a new slab.
-Fresh-input work therefore needs to reproduce the free-list transition and
-its bin publication before attempting body generation.
+This closes a bounded checkpoint branch. Fresh slab/arena initialization,
+general tree operations, constructor/cleanup and callback registration remain
+open. Current parameterized Python Medusa, the no-JVM Rust download chain,
+nonempty search, the other platforms, and the usable webpage remain unfinished.
+The next allocator work must reconstruct free publication and its actual
+caller history, then exercise a new input without captured initialization.
