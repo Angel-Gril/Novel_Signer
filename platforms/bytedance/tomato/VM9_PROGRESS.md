@@ -17,12 +17,15 @@ The corrected Python bridge passes success/failure/success with stale output
 cleared. An unrounded fresh detail request returns HTTP 200, code 0 and 24,341
 bytes. Python independently initializes this A/B global and evaluates its
 three-instruction gate: 18 cases on fresh pages at two image bases match actual
-bytecode execution, and three invalid cases reject. The publication helper at
-`+0x2a8760` sends a constructed handle to `0x2000001` then `0x2000002`;
-upstream signer construction/global boot and other callbacks remain open.
-Future same-capture work must carry corrected A/B provenance. See
+bytecode execution, and three invalid cases reject. The default-A/B=2
+publication helper at `+0x28c268` sends the constructed root to `0x2000001`
+then `0x2000002`; `+0x2a8760` is retained only as a historical misbound
+configuration branch. Child/handler construction, callback pair binding,
+reference-count wrappers and JNI cleanup are now independently modeled from
+fresh pages, while root configuration/global boot and other callbacks remain
+open. Future same-capture work must carry corrected A/B provenance. See
 [vm9_ab_switch_initialization_20261003.json](evidence/vm9_ab_switch_initialization_20261003.json)
-and [vm9_startup_switch_python_20261003.json](evidence/vm9_startup_switch_python_20261003.json).
+and [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md).
 
 ### Earlier controls under the misbound A/B callback
 

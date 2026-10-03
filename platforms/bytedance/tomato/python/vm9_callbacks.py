@@ -7,6 +7,7 @@ unsupported instead of being filled from one capture.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections.abc import Callable
 
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
 
@@ -168,3 +169,43 @@ def compose_packed_callback_x8(*, upper_word: int, lower_word: int) -> int:
     synthetic upper/lower-word composition would overstate the evidence.
     """
     raise RefillUnsupported("packed callback x8 composition is not parameterized")
+
+
+def cleanup_jni_reference(
+    *, environment: int, reference: int,
+    get_reference_type: Callable, delete_reference: Callable,
+) -> None:
+    """Model +0x26f1d0's GetObjectRefType and matching JNI deletion.
+
+    get_reference_type(env, ref) returns JNI's integer enum. Deletion calls
+    delete_reference(kind, env, ref). Null env/ref skip even the type query;
+    invalid or unknown reference types are queried but not deleted.
+    """
+    if not environment or not reference:
+        return
+    reference_type = get_reference_type(environment, reference) & 0xFFFF_FFFF
+    kind = {1: "local", 2: "global", 3: "weak_global"}.get(reference_type)
+    if kind:
+        delete_reference(kind, environment, reference)
+
+
+def publish_signer_handle(
+    *, root_address: int, environment: int, invoke: Callable,
+    get_reference_type: Callable, delete_reference: Callable,
+) -> bool:
+    """Model the default-configuration publisher +0x28c268/+0x28c308.
+
+    invoke(tag, int_argument, long_argument, string_argument, object_argument)
+    returns an opaque JNI reference integer. It is called twice with the same
+    root before either result is cleaned. The return value tests the first
+    reference for NULL; it never unboxes or reads a Java Boolean. The caller
+    owns construction, thread attachment, Java dispatch and reference storage.
+    Host exceptions propagate; this API promises no rollback of host effects.
+    """
+    first = invoke(0x2000001, 0, root_address, 0, 0)
+    second = invoke(0x2000002, 0, root_address, 0, 0)
+    cleanup_jni_reference(environment=environment, reference=first,
+        get_reference_type=get_reference_type, delete_reference=delete_reference)
+    cleanup_jni_reference(environment=environment, reference=second,
+        get_reference_type=get_reference_type, delete_reference=delete_reference)
+    return first != 0

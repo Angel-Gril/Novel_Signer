@@ -1120,5 +1120,18 @@
     ],
     "nonempty_current_search_verified": false,
     "pagination_verified": false
+  },
+  "vm9_signer_constructor_graph_20261003": {
+    "evidence_file": "evidence/vm9_signer_constructor_graph_20261003.json",
+    "default_ab_publisher": "0x28c268",
+    "read_only_probe_matches_control": true,
+    "complete_root_constructor": false
+  },
+  "vm9_signer_objects_python_20261003": {
+    "evidence_file": "evidence/vm9_signer_objects_python_20261003.json",
+    "differential_cases": 88,
+    "negative_cases": 10,
+    "fresh_memory": true,
+    "complete_python_medusa": false
   }
 }

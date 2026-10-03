@@ -28,7 +28,7 @@ JNI 启动将回调结果保存到 native 全局 `base+0x3d1578`。真实 store 
 
 未取整的新时间详情请求生成 802 字节 Medusa，HTTP 200、`code=0`，响应 24,341 字节，SHA-256 为 `41ca4dfee2a329e67bf8fa9546052f16595be9b3eb840dfe0f3839ff375a0e69`。这是修正桥接器的线上证据。
 
-发布 helper 位于 `+0x2a8760`，通过 `+0x28c308` 先后调用 `0x2000001` 和 `0x2000002`，两次使用同一已构造 handle。定位 helper 不等于恢复对象的全部 constructor 状态。真实 Python 桥接入口在同一输出目录完成“配置 2 成功 → 配置 34 失败 → 配置 2 再成功”：失败清空旧签名，两次成功摘要相同，URL 和 Khronos 对应本次输入。
+默认 A/B=2 的发布 helper 位于 `+0x28c268`，通过 `+0x28c308` 先后调用 `0x2000001` 和 `0x2000002`，两次使用同一已构造 root。旧误配时间值的历史控制才走 `+0x2a8760`，不能把它当成默认路径。定位 helper 不等于恢复对象的全部 constructor 状态。真实 Python 桥接入口在同一输出目录完成“配置 2 成功 → 配置 34 失败 → 配置 2 再成功”：失败清空旧签名，两次成功摘要相同，URL 和 Khronos 对应本次输入。对象关系和新建内存对照见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。
 
 Python `initialize_ab_switch` 和 `evaluate_ab_switch_gate` 用新建内存页恢复这个全局及三指令分支，在两种加载地址下通过 18 个与实际 bytecode 的对照、3 个异常拒绝。它们不复制捕获状态，也不构造完整 signer。见 [vm9_startup_switch_python_20261003.json](evidence/vm9_startup_switch_python_20261003.json)。
 

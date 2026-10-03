@@ -7,6 +7,7 @@ loaded guest image. Unsupported memory/allocator branches leave pages intact.
 from __future__ import annotations
 
 from collections.abc import Callable
+from dataclasses import dataclass
 from vm9_allocator import (
     RefillUnsupported, _PageTransaction, _read_span, _write_span,
 )
@@ -64,3 +65,229 @@ def construct_string_object(
             _write_span(transaction, object_address + 8, bytes(4))
     transaction.commit()
     return pointer
+
+
+@dataclass(frozen=True)
+class SignerChild:
+    object_address: int
+    state_address: int
+    container_address: int
+    reference_count_address: int
+    callback_pair_address: int
+
+
+def _word(value):
+    if not isinstance(value, int) or not 0 <= value <= 0xFFFF_FFFF_FFFF_FFFF:
+        raise RefillUnsupported("pointer is outside the guest ABI")
+    return value.to_bytes(8, "little")
+
+
+def _image_address(image_base, offset):
+    if image_base <= 0:
+        raise RefillUnsupported("invalid native image base")
+    value = image_base + offset
+    _word(value)
+    return value
+
+
+def _allocate(pages, allocate, size):
+    pointer = allocate(pages, size)
+    _word(pointer)
+    if not pointer:
+        # The native operator-new path retries or throws. Those C++ runtime
+        # effects are unsupported; leave the caller's page map intact.
+        raise RefillUnsupported("native constructor allocation did not succeed")
+    _read_span(pages, pointer, size)
+    return pointer
+
+
+def _reference_wrapper(pages, object_address, referenced_address, allocate):
+    _read_span(pages, object_address, 16)
+    _write_span(pages, object_address, _word(referenced_address) + bytes(8))
+    counter = _allocate(pages, allocate, 4)
+    _write_span(pages, object_address + 8, _word(counter))
+    _write_span(pages, counter, (1).to_bytes(4, "little"))
+    return counter
+
+
+def construct_reference_wrapper(
+    pages, *, object_address: int, referenced_address: int, allocate: Callable,
+) -> int:
+    """Construct the shared 16-byte reference/count layout; return count pointer.
+
+    Measured at +0x165968, +0x27d188 and +0x1a4494. Diagnostic scope entry
+    and exit are outside this object-memory model. The allocated count is a
+    four-byte integer set to 1, including when the referenced pointer is NULL.
+    """
+    transaction = _PageTransaction(pages)
+    counter = _reference_wrapper(transaction, object_address, referenced_address, allocate)
+    transaction.commit()
+    return counter
+
+
+def _mutex_state(pages, object_address, image_base):
+    _read_span(pages, object_address, 0x98)
+    vtable = _image_address(image_base, 0x34D838)
+    _write_span(pages, object_address, _word(vtable))
+    _write_span(pages, object_address + 8, bytes(0x8C))
+    _write_span(pages, object_address + 0x94, bytes(1))
+
+
+def construct_mutex_state(pages, *, object_address: int, image_base: int) -> None:
+    """Model +0x17d7e0 and +0x32a330; preserve the last three padding bytes."""
+    transaction = _PageTransaction(pages)
+    _mutex_state(transaction, object_address, image_base)
+    transaction.commit()
+
+
+def _callback_container(pages, object_address, descriptor, image_base, allocate):
+    _read_span(pages, object_address, 0x28)
+    callback, context, comparator = descriptor
+    _write_span(pages, object_address,
+                _word(_image_address(image_base, 0x35B828))
+                + _word(callback) + _word(context) + _word(comparator))
+    controller = _allocate(pages, allocate, 0x28)
+    sentinel = _allocate(pages, allocate, 0x28)
+    # +0x24bcec writes u32 at +0 and two 16-byte vectors from +8. It
+    # preserves padding +4..+7 even on a newly allocated poisoned page.
+    _write_span(pages, sentinel, bytes(4))
+    _write_span(pages, sentinel + 8, bytes(0x20))
+    _write_span(pages, sentinel + 0x10, _word(sentinel) + _word(sentinel))
+    _write_span(pages, controller, _word(sentinel) + bytes(8)
+                + _word(comparator) + _word(_image_address(image_base, 0x24B548)) + bytes(8))
+    _write_span(pages, object_address + 0x20, _word(controller))
+    return controller
+
+
+def construct_callback_container(
+    pages, *, object_address: int, descriptor_address: int,
+    image_base: int, allocate: Callable,
+) -> int:
+    """Model +0x25cad4 and its empty controller/sentinel constructors.
+
+    Three input descriptor words are copied from fresh caller memory. Both
+    nested allocations are 40 bytes. Returns the generated controller address.
+    """
+    transaction = _PageTransaction(pages)
+    data = _read_span(transaction, descriptor_address, 24)
+    descriptor = tuple(int.from_bytes(data[i:i+8], "little") for i in range(0, 24, 8))
+    result = _callback_container(transaction, object_address, descriptor, image_base, allocate)
+    transaction.commit()
+    return result
+
+
+def construct_signer_child(
+    pages, *, object_address: int, image_base: int, allocate: Callable,
+) -> SignerChild:
+    """Construct +0x27d0c4's child and nested empty state from explicit inputs.
+
+    The final 16-byte callback pair is allocated but left untouched, as native
+    does. Root construction later binds the pair to a generated handler.
+    Allocator and diagnostic global side effects are separate dependencies.
+    """
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, object_address, 0x28)
+    _write_span(transaction, object_address, _word(_image_address(image_base, 0x35D5F0)))
+    state = _allocate(transaction, allocate, 0x98)
+    _write_span(transaction, state, bytes(0x98))
+    _mutex_state(transaction, state, image_base)
+    _write_span(transaction, object_address + 8, _word(state))
+    container = _allocate(transaction, allocate, 0x28)
+    descriptor = (_image_address(image_base, 0x27EC20), 0,
+                  _image_address(image_base, 0x17CD3C))
+    _callback_container(transaction, container, descriptor, image_base, allocate)
+    count = _reference_wrapper(transaction, object_address + 0x10, container, allocate)
+    pair = _allocate(transaction, allocate, 0x10)
+    _write_span(transaction, object_address + 0x20, _word(pair))
+    transaction.commit()
+    return SignerChild(object_address, state, container, count, pair)
+
+
+def _copy_reference_wrapper(pages, object_address, source_address):
+    _read_span(pages, object_address, 16)
+    _read_span(pages, source_address, 16)
+    # Preserve native load/store order, including destination/source aliases.
+    _write_span(pages, object_address, bytes(16))
+    _write_span(pages, object_address, _read_span(pages, source_address, 8))
+    count = int.from_bytes(_read_span(pages, source_address + 8, 8), "little")
+    _write_span(pages, object_address + 8, _word(count))
+    if count:
+        value = int.from_bytes(_read_span(pages, count, 4), "little")
+        _write_span(pages, count, ((value + 1) & 0xFFFF_FFFF).to_bytes(4, "little"))
+
+
+def copy_reference_wrapper(pages, *, object_address: int, source_address: int) -> None:
+    """Model +0x264404/+0x2641d8/+0x15f690's copy and u32 count increment.
+
+    Diagnostic scope effects are excluded. NULL count skips increment; the
+    native count addition wraps at 32 bits. The source and object may alias.
+    """
+    transaction = _PageTransaction(pages)
+    _copy_reference_wrapper(transaction, object_address, source_address)
+    transaction.commit()
+
+
+def construct_signer_handler(
+    pages, *, object_address: int, image_base: int, allocate: Callable,
+    kind: str, service_reference_address: int = 0, flag_reference_address: int = 0,
+) -> None:
+    """Construct +0x288e98 or +0x263fb8 with explicit service dependencies.
+
+    ``embedded_state`` is the 0xe8-byte object with a generated 0x98-byte
+    state at +0x50. ``service_refs`` is the 0x80-byte object, copying the
+    two supplied singleton references at +0x50 and +0x60. This does not
+    initialize either singleton. Fresh NULL wrappers each allocate a count,
+    and the 0x30-byte mutex holder gets the verified NULL-attribute bionic
+    pthread_mutex_init layout. This is an uncontended initialization model.
+    """
+    if kind not in ("embedded_state", "service_refs"):
+        raise RefillUnsupported("unsupported signer handler constructor")
+    transaction = _PageTransaction(pages)
+    width = 0xE8 if kind == "embedded_state" else 0x80
+    _read_span(transaction, object_address, width)
+    # The temporary base vtable is overwritten by the final derived vtable.
+    _reference_wrapper(transaction, object_address + 8, 0, allocate)
+    _reference_wrapper(transaction, object_address + 0x18, 0, allocate)
+    mutex = _allocate(transaction, allocate, 0x30)
+    _write_span(transaction, mutex,
+                _word(_image_address(image_base, 0x34C738)) + bytes(40))
+    _write_span(transaction, object_address + 0x28, _word(mutex))
+    _write_span(transaction, object_address + 0x30, bytes(0x20))
+    if kind == "embedded_state":
+        _write_span(transaction, object_address, _word(_image_address(image_base, 0x35F7E0)))
+        _mutex_state(transaction, object_address + 0x50, image_base)
+    else:
+        # ELF R_AARCH64_RELATIVE at +0x375050 contains +0x35dc40;
+        # +0x263fe0 adds the vtable header width of 0x10.
+        _write_span(transaction, object_address, _word(_image_address(image_base, 0x35DC50)))
+        _copy_reference_wrapper(transaction, object_address + 0x50, service_reference_address)
+        _copy_reference_wrapper(transaction, object_address + 0x60, flag_reference_address)
+        _write_span(transaction, object_address + 0x70, bytes(0x10))
+    transaction.commit()
+
+
+def bind_signer_child_callback(
+    pages, *, child_address: int, handler_address: int, image_base: int, kind: str,
+) -> int:
+    """Bind the constructor-generated child pair to the measured handler.
+
+    Root+0x18's 0x80-byte handler exposes +0x2830c4 via vtable+0x68;
+    root+0x20's 0xe8-byte handler exposes +0x289190 via vtable+0x60.
+    This only implements those two measured derived types. Return pair address.
+    """
+    variants = {"embedded_state": (0x35F7E0, 0x289190),
+                "service_refs": (0x35DC50, 0x2830C4)}
+    if kind not in variants:
+        raise RefillUnsupported("unsupported signer handler binding")
+    vtable, entry = variants[kind]
+    transaction = _PageTransaction(pages)
+    actual_vtable = int.from_bytes(_read_span(transaction, handler_address, 8), "little")
+    if actual_vtable != _image_address(image_base, vtable):
+        raise RefillUnsupported("handler does not match the measured derived type")
+    pair = int.from_bytes(_read_span(transaction, child_address + 0x20, 8), "little")
+    if not pair:
+        raise RefillUnsupported("child has no allocated callback pair")
+    _read_span(transaction, pair, 16)
+    _write_span(transaction, pair, _word(_image_address(image_base, entry)) + _word(handler_address))
+    transaction.commit()
+    return pair

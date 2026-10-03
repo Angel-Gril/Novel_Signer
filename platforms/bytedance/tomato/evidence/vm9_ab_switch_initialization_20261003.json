@@ -60,20 +60,24 @@
     ],
     "gate_taken_target": "0x70cb4",
     "gate_fallthrough": "0x70ba8",
-    "publisher_entry": "0x2a8760",
+    "publisher_entry": "0x28c268",
     "publisher_calls": [
       {
-        "offset": "0x2a87a8",
+        "offset": "0x28c2a8",
         "tag": "0x2000001"
       },
       {
-        "offset": "0x2a87bc",
+        "offset": "0x28c2b8",
         "tag": "0x2000002"
       }
     ],
     "publisher_wrapper": "0x28c308 moves handle from X1 to X2, zeros type/string/object, branches to +0x26e70c",
     "same_constructed_handle_supplied_to_both_callbacks": true,
-    "constructor_state_fully_recovered": false
+    "constructor_state_fully_recovered": false,
+    "publisher_configuration": "Corrected APK default A/B=2",
+    "alternate_publisher_entry": "0x2a8760",
+    "alternate_publisher_scope": "Historical misbound timestamp-valued A/B control; not the default-A/B=2 path",
+    "publisher_path_correction_evidence": "vm9_signer_constructor_graph_20261003"
   },
   "trace_comparison": {
     "scope": "Old misbound callback control versus +1000ms; module basic blocks only during tag 0x4000001",
