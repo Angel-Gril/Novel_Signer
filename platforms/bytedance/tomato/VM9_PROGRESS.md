@@ -37,6 +37,18 @@ and the still-uncaptured packed callback-object composition reject atomically.
 The remaining constructor/destructor object graph still executes natively in
 the same-capture chain.
 
+The 2026-10-03 callback writer probe separates the trampoline from the missing
+data flow. Static code at `+0x2584ac` is only `ldr/blr/ldp/br`: descriptor+0
+is the branch target and descriptor+8 is passed as `x0`. In the paired native
+capture, VM writer `+0x171268` executes `str x15,[x17,x16]`; the observed
+descriptor object fields are reached from the writer frame at `x17+0x140` and
+`x17+0x148` (equivalent to descriptor `+0x00` and `+0x08`) directly from
+`x15`. No independent upper/lower-word packed-x8 formula was observed. The
+sanitized record is
+[evidence/vm9_callback_writer_20261003.json](evidence/vm9_callback_writer_20261003.json).
+This explains the callback boundary but does not parameterize the VM values
+that feed `x15`, so the public Python rejection remains intentional.
+
 Details and reproducible boundaries:
 [RUNTIME_INITIALIZATION.md](RUNTIME_INITIALIZATION.md),
 [component and integration evidence](evidence/vm9_runtime_initialization_20261003.json).

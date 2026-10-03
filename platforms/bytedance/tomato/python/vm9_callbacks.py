@@ -116,5 +116,11 @@ def publish_callback_descriptor(
 
 
 def compose_packed_callback_x8(*, upper_word: int, lower_word: int) -> int:
-    """Reject the still-uncaptured callback-object composition explicitly."""
+    """Reject the unproven packed form explicitly.
+
+    The latest native probe explains the active trampoline as a direct
+    ``descriptor+0x140/+0x148`` store from VM ``x15``.  It does not provide an
+    input-driven rule for the values feeding that register, so accepting a
+    synthetic upper/lower-word composition would overstate the evidence.
+    """
     raise RefillUnsupported("packed callback x8 composition is not parameterized")

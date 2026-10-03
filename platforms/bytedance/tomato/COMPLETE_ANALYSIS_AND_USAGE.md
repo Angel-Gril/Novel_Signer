@@ -159,6 +159,10 @@ registration = register_os_region(
 
 ### 5.2 TLS、arena、tcache 和 small allocation
 
+下面是边界 API 的示意调用。`pages`、`arena_zero`、`arena_table`、`arena` 和
+`thread_pointer` 必须由调用者从同一次受信采样或自己的 guest 初始化中提供；
+它不是一个可以独立启动当前线上 Medusa 的完整脚本。
+
 ```python
 from vm9_allocator import (
     AllocatorConstants, GlobalBootConfig, initialize_global_boot,

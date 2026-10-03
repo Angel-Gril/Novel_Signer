@@ -1,0 +1,59 @@
+{
+  "evidence_id": "vm9_callback_writer_20261003",
+  "status": "callback_trampoline_explained_writer_not_parameterized",
+  "source": {
+    "private_trial": "vm9_x8detail6_20261003",
+    "input_count": 1,
+    "raw_headers_and_payloads": "omitted"
+  },
+  "static_control_flow": {
+    "descriptor_trampoline_offset": "0x2584ac",
+    "instructions": [
+      "str x30, [sp, #-0x10]!",
+      "ldr x8, [x0]",
+      "blr x8",
+      "ldp x1, x8, [x0]",
+      "mov x0, x8",
+      "br x1"
+    ],
+    "interpretation": "the active trampoline treats descriptor+0 as the branch target and descriptor+8 as the x0 argument; it does not compose a packed value"
+  },
+  "dynamic_writer": {
+    "writer_offset": "0x171268",
+    "instruction": "str x15, [x17, x16]",
+    "observed_writer_frame_offsets": {
+      "branch_target": "0x140 (equivalent to descriptor+0x00)",
+      "second_field": "0x148 (equivalent to descriptor+0x08)"
+    },
+    "same_capture_observations": [
+      {
+        "field": "writer_frame+0x140 / descriptor+0x00",
+        "source_register": "x15",
+        "index_register": "x16",
+        "base_register": "x17",
+        "index": "0x140",
+        "value_class": "native_code_pointer"
+      },
+      {
+        "field": "writer_frame+0x148 / descriptor+0x08",
+        "source_register": "x15",
+        "index_register": "x16",
+        "base_register": "x17",
+        "index": "0x148",
+        "value_class": "guest_pointer"
+      }
+    ],
+    "rule": "the two fields are direct VM register stores in this capture; no upper_word/lower_word composition rule was observed"
+  },
+  "parameterization_boundary": {
+    "callback_boundary": true,
+    "packed_callback_x8": false,
+    "missing": [
+      "the VM data flow that produces x15 before each descriptor store",
+      "input-driven object construction and lifetime graph",
+      "a second fresh-input run starting without captured VM state"
+    ],
+    "public_python_behavior": "compose_packed_callback_x8 continues to reject with RefillUnsupported"
+  },
+  "redaction": "No raw URL, header, token, device identifier, native page, or response body is included."
+}
