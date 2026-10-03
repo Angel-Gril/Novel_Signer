@@ -1,0 +1,694 @@
+{
+  "schema": "vm9-runtime-initialization-evidence/v1",
+  "date": "2026-10-03",
+  "component_differential": {
+    "capture_files_sha256": {
+      "vm9_libc.bin": "aee9a140a619355e30e22f4e49de55b37ae8972df9fe62eb08d2de178ef78fc9",
+      "vm9_m0.bin": "6c7410c211d068937d61f843b187acc6d866c877f54c9112cc64156a76419612",
+      "vm9_m1.bin": "f45d88dd8b5addfe526760ff4e10c5abb79812c81612f62f036256c329e77c21",
+      "vm9_m2.bin": "d6535c337070077721d8cb22a63311aba9fdf3f9f1695c9119f76a56f18e2ce9",
+      "vm9_copy2.bin": "a566477bdfc7abe95a506ee906e62264c30fcd5dc42fc495e2ba05baa7644ef7"
+    },
+    "model_sha256": "dcc81741aacde83ca30d9a8002819b813c29368a4d9051ca9da6a43bda547404",
+    "objects_sha256": "0035fedfb1215806d09f414aa3e92faa1f553397ac5a16882ec59f4ef915fbfd",
+    "verifier_sha256": "12a9c16293ed368c5f49eef59229d1ec1ea9dfc5e5cfb133c4d6e69ad5464e70",
+    "cases": [
+      {
+        "case": "get_current",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "get_stale",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "get_inactive",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "get_null",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "get_invalid_positive",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "get_invalid_boundary",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "get_upper_bits",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "set_current",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "set_null",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "set_stale",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "set_inactive",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "set_invalid",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "get_cross_page",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "set_cross_page",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_size_1",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_size_64",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_size_65",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_size_4096",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_size_4097",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_size_26304",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "arena_index_0_prefill_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "arena_index_2_prefill_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "arena_index_31_prefill_True",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_arena_small_8",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_arena_small_44",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_arena_small_7168",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_0",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_1",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_2",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_3",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_4",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_5",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_6",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_7",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_8",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_9",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_10",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_11",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_12",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_13",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_14",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_15",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_16",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_17",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_18",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_19",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_20",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_21",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_22",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_23",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_24",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_25",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_26",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_27",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_28",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_29",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_30",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_31",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_32",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_33",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_34",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "direct_new_slab_zero_class_35",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "tcache_empty_chain_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "tcache_empty_chain_True",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "tsd_initial_stale_False_prefill_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256,
+        "native_boundary": "Before state 0 to 1 transition in malloc"
+      },
+      {
+        "case": "tsd_initial_stale_True_prefill_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256,
+        "native_boundary": "Before state 0 to 1 transition in malloc"
+      },
+      {
+        "case": "tsd_initial_stale_False_prefill_True",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256,
+        "native_boundary": "Before state 0 to 1 transition in malloc"
+      },
+      {
+        "case": "arena_choose_single_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "arena_choose_single_True",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "fresh_tls_to_tcache_publication",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256,
+        "native_boundary": "After tcache publication, before malloc refill"
+      },
+      {
+        "case": "base_consume_node",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_keep_payload",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_tree_order_0123",
+        "operations": 3,
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_tree_order_3210",
+        "operations": 3,
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "base_tree_order_1302",
+        "operations": 3,
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_null_allocation_failure_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_null_allocation_failure_True",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_empty_allocation_failure_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_empty_allocation_failure_True",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_ascii_allocation_failure_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_ascii_allocation_failure_True",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_utf8_allocation_failure_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_utf8_allocation_failure_True",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_cross_page_allocation_failure_False",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      },
+      {
+        "case": "constructor_cross_page_allocation_failure_True",
+        "return_match": true,
+        "final_memory_match": true,
+        "pages_compared": 4256
+      }
+    ],
+    "negative_cases": [
+      {
+        "case": "tls_missing_page",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "base_empty_tree",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "base_contended",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "arena_late_lock",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "tcache_overflow",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "tsd_recursion",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "tsd_inactive_key",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "cache_disabled",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "fresh_thread_first_refill_requires_os_region",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "constructor_unterminated",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "constructor_missing_payload_page",
+        "rejected": true,
+        "unchanged": true
+      }
+    ],
+    "scope": "Initialized global configuration; no independent global boot or online signing claim."
+  },
+  "lifecycle_regression": {
+    "cases": 83,
+    "all_final_memory_match": true,
+    "checkpoint_pages": 4256,
+    "checkpoint_sha256": "538858977e4c1ae16aee423f3a7f0ad946b3a3e519b6fffee175b66f54b9a1d4"
+  },
+  "same_capture_integration": {
+    "segments": [
+      {
+        "segment": 1,
+        "events": 4592,
+        "callbacks": 85,
+        "python_allocator_operations": 95,
+        "python_constructor_operations": 1,
+        "native_allocator_fallback": 0,
+        "native_target_constructor_fallback": 0,
+        "pages_compared": 4256,
+        "nonstack_different_pages": 0,
+        "nonstack_different_bytes": 0,
+        "native_checkpoint_sha256": "41c602fdbfc1aea8dcb56b7bb10b100a781f2a8b4d470327f39a1f4d0e5802dd",
+        "python_checkpoint_sha256": "99531b6168a20aabfe6ce513ecb8eb1524fa1500355de3b40c73f47c3bf6af6c"
+      },
+      {
+        "segment": 2,
+        "events": 90330,
+        "callbacks": 121,
+        "python_allocator_operations": 118,
+        "python_constructor_operations": 3,
+        "native_allocator_fallback": 0,
+        "native_target_constructor_fallback": 0,
+        "pages_compared": 4256,
+        "nonstack_different_pages": 0,
+        "nonstack_different_bytes": 0,
+        "native_checkpoint_sha256": "63cc4318d1b5c658be8a7d18077f4b628d1f3cda335e1e660c69f6beb28e5e28",
+        "python_checkpoint_sha256": "d33d0971ed1b60ac4812fb62dd80fd63f4f7ed3c27bc13ca163f4285cd2aeaea"
+      },
+      {
+        "segment": 3,
+        "events": 1057,
+        "callbacks": 87,
+        "python_allocator_operations": 90,
+        "python_constructor_operations": 3,
+        "native_allocator_fallback": 0,
+        "native_target_constructor_fallback": 0,
+        "pages_compared": 4256,
+        "nonstack_different_pages": 5,
+        "nonstack_different_bytes": 15,
+        "native_checkpoint_sha256": "d0131d57a0383d155b7bff67a7ad108d2c6daf34e8b586f15a3eb8d4da2d2aca",
+        "python_checkpoint_sha256": "d3c2397c69f9bb7671337e8db789e13a100c564aba629280789d33d2cdf6a2c8"
+      }
+    ],
+    "body": {
+      "bytes": 779,
+      "native_match": true,
+      "capture_match": true,
+      "sha256": "1cf99c1513819043bb7c8e0a21891274005907d3219cc12445bb5c514b1ee6a9"
+    },
+    "boundary": "Captured global boot and existing TLS/slab state; native host continuation and other callbacks remain."
+  },
+  "native_os_region_oracles": [
+    {
+      "request_size": 44,
+      "native_full_malloc_returned": true,
+      "mapped_bytes": 262144,
+      "new_mapping_final_sha256": "1bc119e4358a699d42175a0c0d312e91b050062e97c72caecb2724cf8a0ce997",
+      "guest_syscalls": [
+        "anonymous_private_mmap",
+        "anonymous_vma_name"
+      ],
+      "native_function_entries": 305,
+      "native_nonstack_write_events": 13887,
+      "unmapped_accesses": 0,
+      "python_full_fresh_malloc_implemented": false
+    },
+    {
+      "request_size": 7168,
+      "native_full_malloc_returned": true,
+      "mapped_bytes": 262144,
+      "new_mapping_final_sha256": "514b9ce3c623752374c9f8d84e656f5e6659924750f42de887bef89a88675fbd",
+      "guest_syscalls": [
+        "anonymous_private_mmap",
+        "anonymous_vma_name"
+      ],
+      "native_function_entries": 343,
+      "native_nonstack_write_events": 13958,
+      "unmapped_accesses": 0,
+      "python_full_fresh_malloc_implemented": false
+    }
+  ],
+  "private_runner_sha256": "7638b93884b008aafce93c67b6cbc3fcbce5ff8ddfde685bff12f109c35a139e",
+  "native_os_probe_sha256": "c01e5d185354ad20dc648a2369bb657a2c36feb36545fe4784e4b0ad79e084e8",
+  "limitations": [
+    "Global boot configuration, key generations, arena-zero storage and loaded vtables are captured inputs.",
+    "Empty-TLS Python proof stops after cache publication; first new-arena OS-region refill still rejects.",
+    "OS-region full malloc proofs execute native code under an explicit isolated mapping/VMA naming policy.",
+    "Integration uses captured initial thread/regions; other native callbacks/constructors and host continuation remain.",
+    "Trace entry registers, native frames and two-byte Seg1 pointer-tag normalization remain.",
+    "Seg3 retains 15 non-output different bytes on five pages; whole-memory equivalence is not claimed.",
+    "No current standalone Medusa or online server acceptance claim."
+  ],
+  "privacy": "Only counts, booleans, code/image identities and hashes; no pages, pickle, native images, raw requests or signature bytes."
+}

@@ -3,7 +3,34 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Latest verified checkpoint: lifecycle and paired chain (2026-10-03)
+## Latest verified checkpoint: generated thread state and constructor (2026-10-03)
+
+Python now implements generation-checked pthread TLS, mapped base allocation,
+fresh TSD/arena/tcache creation and the input-driven string constructor at
+`0x12508344`. The 85-case native differential checks all 4,256 pages, including
+nonzero arena/TSD prefills and the entire empty-TLS path through tcache
+publication. Eleven rejected cases preserve caller memory. The earlier
+83-case allocator lifecycle regression still passes.
+
+The same-capture chain completes again with 303 Python malloc/free calls and
+seven Python target constructor calls, with zero native fallback for both.
+Its 779-byte output equals the native control and captured MEDCOPY. Seg1 and
+Seg2 retain identical nonstack memory; the earlier 15 differing Seg3 bytes
+outside the body remain. Other callbacks and host continuation still run
+native ARM64, and the integration retains captured thread/region state.
+
+A separate native empty-TLS malloc now returns under an explicit guest policy
+for an actual zero-filled anonymous mapping and VMA naming. This establishes
+the next oracle. Python fresh OS-region mapping, region registration, arena
+lookup-cache generation, global boot and the remaining callback/object graph
+are still unfinished. This does not complete parameterized current Medusa or
+prove live server acceptance.
+
+Details and reproducible boundaries:
+[RUNTIME_INITIALIZATION.md](RUNTIME_INITIALIZATION.md),
+[component and integration evidence](evidence/vm9_runtime_initialization_20261003.json).
+
+## Previous checkpoint: lifecycle and paired chain (2026-10-03)
 
 Empty-bin refill, mapped new-slab initialization across 36 classes, compact
 trees, full-bin flush, periodic cleanup and slab release/purge are now modeled
@@ -35,7 +62,7 @@ transition limitations are superseded only for this verified sampled path.
 
 Current Python Medusa parameterization, independent fresh initialization,
 no-JVM Rust signing/download and live nonempty search remain unfinished. The
-next step is fresh TLS/arena and callback/constructor initialization, followed
+next step is Python OS-region/global-boot and remaining callback/object initialization, followed
 by a new-input run without captured state and then the live server matrix.
 
 ## Reproduced diagnostic path

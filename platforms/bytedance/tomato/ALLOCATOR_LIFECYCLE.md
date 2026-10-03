@@ -11,6 +11,11 @@ TLS/arena, trace entry registers, and other native ARM64 callbacks are still
 required. It does not establish a standalone current Medusa signer or live
 server acceptance.
 
+Later work adds generated TLS/TSD/arena/tcache state and an input-driven string
+constructor. Its separate empty-TLS oracle and the repeated integration are
+documented in [RUNTIME_INITIALIZATION.md](RUNTIME_INITIALIZATION.md). The chain
+in this lifecycle report retains its original captured-initialization boundary.
+
 ## Implemented call boundary
 
 The owner is [python/vm9_allocator.py](python/vm9_allocator.py). Page maps contain
@@ -67,9 +72,10 @@ classes, through size `0x3800`.
 Purge requires `AllocatorConstants.purge_madvise_result`. The default `None`
 rejects it. The isolated success oracle uses `0`; the failure oracle uses `-22`
 and the guest TLS errno address. These explicit advisory syscall outcomes do
-not prove Linux page zeroing semantics. Fresh OS region mapping, fresh TLS/arena
-setup, whole OS region release, large cached-extent purge and custom purge
-hooks remain unsupported. Concurrency and transient lock writes are not
+not prove Linux page zeroing semantics. Fresh OS region mapping, whole OS
+region release, large cached-extent purge and custom purge
+hooks remain unsupported. Generated thread/arena setup is verified separately
+in the initialization report. Concurrency and transient lock writes are not
 modeled. The direct release helper is tested with its required class lock held.
 
 ## Native differential evidence
@@ -133,7 +139,7 @@ See [python/verify_vm9_divmod_backing.py](python/verify_vm9_divmod_backing.py) a
 
 ## Remaining boundary
 
-Next work must derive fresh TLS/arena and callback/constructor state, remove
+Next work must generate fresh OS regions, global boot and remaining callback/object state, remove
 native/frame dependencies, and validate a new request without captured
 initialization. Current Python Medusa, the no-JVM Rust download chain, live
 nonempty search, full-header server matrix and timestamp experiments remain

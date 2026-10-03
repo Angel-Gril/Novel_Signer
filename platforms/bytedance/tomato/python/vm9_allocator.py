@@ -3,7 +3,9 @@
 This module models normal small-object allocation/free, empty-bin refill,
 compact allocator trees, new slab initialization from mapped free extents,
 periodic bin cleanup, and slab release/purge with an explicit guest OS result.
-Fresh OS region/TLS/arena initialization is not implemented. The input page map has the same shape used by
+TLS generation checks, mapped base allocation, fresh TSD/arena/tcache creation
+are also modeled. Global boot and fresh OS region mapping are not implemented.
+The input page map has the same shape used by
 ``vm9_handoff_rule.py``; it is not an online request or a general heap.
 """
 from __future__ import annotations
@@ -62,6 +64,65 @@ def write_u32(pages: MutableMapping[int, bytearray], address: int, value: int) -
 
 def write_u64(pages: MutableMapping[int, bytearray], address: int, value: int) -> None:
     _write(pages, address, int(value & 0xFFFF_FFFF_FFFF_FFFF).to_bytes(8, "little"))
+
+
+def _read_span(pages, address, length):
+    """Read an explicitly bounded guest byte range, including page crossings."""
+    if address < 0 or length < 0 or address + length > 1 << 64:
+        raise ValueError("invalid guest byte range")
+    result = bytearray()
+    while length:
+        width = min(length, 4096 - (address & 4095))
+        result.extend(_read(pages, address, width))
+        address += width
+        length -= width
+    return bytes(result)
+
+
+def _write_span(pages, address, data):
+    if address < 0 or address + len(data) > 1 << 64:
+        raise ValueError("invalid guest byte range")
+    offset = 0
+    while offset < len(data):
+        width = min(len(data) - offset, 4096 - (address & 4095))
+        _write(pages, address, data[offset:offset + width])
+        address += width
+        offset += width
+
+
+def pthread_getspecific(pages, *, key, thread_pointer, generation_table=0x121D0200):
+    """Bionic's generation-checked lookup, including stale-value clearing."""
+    key &= 0xFFFF_FFFF
+    if _signed32(key) >= _signed32(0x8000008D):
+        return 0
+    transaction = _PageTransaction(pages)
+    offset = (key & 0x7FFF_FFFF) * 16
+    generation = int.from_bytes(_read_span(transaction, generation_table + offset, 8), 'little')
+    pthread = int.from_bytes(_read_span(transaction, thread_pointer + 8, 8), 'little')
+    slot = pthread + 0xE8 + offset
+    if generation & 1 and int.from_bytes(_read_span(transaction, slot, 8), 'little') == generation:
+        return int.from_bytes(_read_span(transaction, slot + 8, 8), 'little')
+    _write_span(transaction, slot + 8, bytes(8))
+    transaction.commit()
+    return 0
+
+
+def pthread_setspecific(pages, *, key, value, thread_pointer, generation_table=0x121D0200):
+    """Publish generation/value atomically in the checkpoint model."""
+    key &= 0xFFFF_FFFF
+    if _signed32(key) >= _signed32(0x8000008D):
+        return 22
+    transaction = _PageTransaction(pages)
+    offset = (key & 0x7FFF_FFFF) * 16
+    generation = int.from_bytes(_read_span(transaction, generation_table + offset, 8), 'little')
+    if not generation & 1:
+        return 22
+    pthread = int.from_bytes(_read_span(transaction, thread_pointer + 8, 8), 'little')
+    slot = pthread + 0xE8 + offset
+    _write_span(transaction, slot, generation.to_bytes(8, 'little'))
+    _write_span(transaction, slot + 8, (value & ((1 << 64) - 1)).to_bytes(8, 'little'))
+    transaction.commit()
+    return 0
 
 
 @dataclass(frozen=True)
@@ -259,29 +320,30 @@ class _AllocatorTree:
     The right link's bit zero is the node color; the sentinel is root+8.
     """
 
-    def __init__(self, pages, root: int, key: Callable[[int], object]):
+    def __init__(self, pages, root: int, key: Callable[[int], object], *, link_offset: int = 0):
         self.pages, self.root, self.key = pages, root, key
+        self.link_offset = link_offset
         self.nil = root + 8
         if self.left(self.nil) != self.nil or self.right(self.nil) != self.nil or self.red(self.nil):
             raise RefillUnsupported("invalid allocator tree sentinel")
 
     def left(self, node):
-        return read_u64(self.pages, node)
+        return read_u64(self.pages, node + self.link_offset)
 
     def right(self, node):
-        return read_u64(self.pages, node + 8) & ~1
+        return read_u64(self.pages, node + self.link_offset + 8) & ~1
 
     def red(self, node):
-        return bool(read_u64(self.pages, node + 8) & 1)
+        return bool(read_u64(self.pages, node + self.link_offset + 8) & 1)
 
     def set_left(self, node, left):
-        write_u64(self.pages, node, left)
+        write_u64(self.pages, node + self.link_offset, left)
 
     def set_right(self, node, right):
-        write_u64(self.pages, node + 8, right | int(self.red(node)))
+        write_u64(self.pages, node + self.link_offset + 8, right | int(self.red(node)))
 
     def color(self, node, red):
-        write_u64(self.pages, node + 8, self.right(node) | int(red))
+        write_u64(self.pages, node + self.link_offset + 8, self.right(node) | int(red))
 
     def rotate_left(self, node):
         other = self.right(node)
@@ -332,7 +394,7 @@ class _AllocatorTree:
             path.append((current, left))
             current = self.left(current) if left else self.right(current)
         self.set_left(node, self.nil)
-        write_u64(self.pages, node + 8, self.nil | 1)
+        write_u64(self.pages, node + self.link_offset + 8, self.nil | 1)
         child = node
         for current, left in reversed(path):
             if left:
@@ -476,6 +538,335 @@ class _AllocatorTree:
             self.set_left(path[index - 1], node)
         else:
             self.set_right(path[index - 1], node)
+
+
+def _new_allocator_tree(pages, root, link_offset=0):
+    nil = root + 8
+    write_u64(pages, root, nil)
+    write_u64(pages, nil + link_offset, nil)
+    write_u64(pages, nil + link_offset + 8, nil & ~1)
+
+
+def _require_unlocked_mutex(pages, address):
+    if int.from_bytes(_read_span(pages, address, 2), 'little'):
+        raise RefillUnsupported("contended or non-normal mutex is not modeled")
+
+
+def _round_small_size(pages, size, constants):
+    if not 1 <= size <= 0x3800:
+        raise RefillUnsupported("only normal small size classes are modeled")
+    if size <= 4096:
+        class_id = _read(pages, constants.class_table + ((size - 1) >> 3), 1)[0]
+    else:
+        quantum = 1 << ((2 * size - 1).bit_length() - 4)
+        width = (size + quantum - 1) & -quantum
+        widths = [read_u64(pages, constants.class_width_table + i * 8) for i in range(36)]
+        try:
+            class_id = widths.index(width)
+        except ValueError as exc:
+            raise RefillUnsupported("unsupported small class table") from exc
+    return class_id, read_u64(pages, constants.class_width_table + class_id * 8)
+
+
+def _base_allocate(pages, request_size, constants):
+    if not 1 <= request_size <= (1 << 63) - 64:
+        raise RefillUnsupported("invalid or oversized base allocation")
+    length = (request_size + 63) & ~63
+    if length <= 4096:
+        _, normalized = _round_small_size(pages, length, constants)
+    else:
+        quantum = 1 << ((2 * length - 1).bit_length() - 4)
+        normalized = (length + quantum - 1) & -quantum
+    _require_unlocked_mutex(pages, 0x121D6860)
+    tree = _AllocatorTree(pages, 0x121D67E8,
+                          lambda node: (read_u64(pages, node + 0x10), read_u64(pages, node + 8)),
+                          link_offset=0x48)
+    node = tree.lower_bound((normalized, 0))
+    if not node:
+        raise RefillUnsupported("base allocation needs a new OS mapping")
+    pointer = read_u64(pages, node + 8)
+    size = read_u64(pages, node + 0x10)
+    # Prove the result exists in guest memory before mutating its owner tree.
+    _read_span(pages, pointer, length)
+    tree.remove(node)
+    if size > length:
+        write_u64(pages, node + 8, pointer + length)
+        write_u64(pages, node + 0x10, size - length)
+        tree.insert(node)
+    else:
+        write_u64(pages, node, read_u64(pages, 0x121D6858))
+        write_u64(pages, 0x121D6858, node)
+    write_u64(pages, 0x121D67D0, read_u64(pages, 0x121D67D0) + length)
+    resident = ((pointer + length + 4095) & ~4095) - ((pointer + 4095) & ~4095)
+    write_u64(pages, 0x121D67D8, read_u64(pages, 0x121D67D8) + resident)
+    return pointer
+
+
+def base_allocate(pages, *, request_size, constants=AllocatorConstants()):
+    """Allocate from mapped base extents; preserve payload and padding bytes."""
+    transaction = _PageTransaction(pages)
+    result = _base_allocate(transaction, request_size, constants)
+    transaction.commit()
+    return result
+
+
+def _create_arena(pages, arena_index, constants):
+    large_count = read_u32(pages, 0x121D9EB8)
+    huge_count = read_u32(pages, 0x121D9110)
+    length = 0x24C0 + ((huge_count + 15 + large_count * 32) & ~15) * 24
+    if length > 0x100000:
+        raise RefillUnsupported("arena configuration exceeds the supported bound")
+    arena = _base_allocate(pages, length, constants)
+    write_u32(pages, arena, arena_index)
+    write_u32(pages, arena + 4, 0)
+    for offset in (8, 0x1D0, 0x498, 0x4C8):
+        _write_span(pages, arena + offset, bytes(40))
+    _write_span(pages, arena + 0x30, bytes(0x78))
+    large_stats = arena + 0x24C0
+    huge_stats = large_stats + large_count * 32
+    write_u64(pages, arena + 0x98, large_stats)
+    write_u64(pages, arena + 0xA0, huge_stats)
+    _write_span(pages, large_stats, bytes(large_count * 32))
+    _write_span(pages, huge_stats, bytes(huge_count * 24))
+    write_u64(pages, arena + 0xA8, 0)
+    _require_unlocked_mutex(pages, 0x121D6898)
+    write_u32(pages, arena + 0xC0, read_u32(pages, 0x121CB690))
+    write_u64(pages, arena + 0xC8, 0)
+    write_u64(pages, arena + 0xD0, read_u64(pages, 0x121D67C8))
+    write_u64(pages, arena + 0xD8, 0)
+    write_u64(pages, arena + 0xE0, 0)
+    _new_allocator_tree(pages, arena + 0xE8)
+    for offset in (0x150,):
+        write_u64(pages, arena + offset, arena + offset)
+        write_u64(pages, arena + offset + 8, arena + offset)
+    write_u64(pages, arena + 0x198, arena + 0x160)
+    write_u64(pages, arena + 0x1A0, arena + 0x160)
+    write_u64(pages, arena + 0x1C8, 0)
+    for offset in (0x1F8, 0x2D8, 0x3B8):
+        _new_allocator_tree(pages, arena + offset, 0x48)
+    for offset in (0x268, 0x348, 0x428):
+        _new_allocator_tree(pages, arena + offset, 0x58)
+    write_u64(pages, arena + 0x4C0, 0)
+    for destination, source in ((0x4F0, 0x121C8F30), (0x4F8, 0x121C8F90), (0x500, 0x121C8E98)):
+        write_u64(pages, arena + destination, read_u64(pages, source))
+    for class_id in range(36):
+        control = arena + 0x508 + class_id * 0xE0
+        _write_span(pages, control, bytes(40))
+        write_u64(pages, control + 0x28, 0)
+        _new_allocator_tree(pages, control + 0x30)
+        _write_span(pages, control + 0x98, bytes(0x48))
+    return arena
+
+
+def create_arena(pages, *, arena_index, constants=AllocatorConstants()):
+    """Construct a new arena from boot configuration, without copying an arena."""
+    transaction = _PageTransaction(pages)
+    result = _create_arena(transaction, arena_index & 0xFFFF_FFFF, constants)
+    transaction.commit()
+    return result
+
+
+def _allocate_arena_small(pages, arena, request_size, zero, constants):
+    class_id, width = _round_small_size(pages, request_size, constants)
+    control = arena + 0x508 + class_id * 0xE0
+    _require_unlocked_mutex(pages, control)
+    junk_flag = read_u64(pages, 0x121C8ED8)
+    if _read(pages, junk_flag, 1)[0]:
+        raise RefillUnsupported("arena junk-fill allocation is not modeled")
+    slab = read_u64(pages, control + 0x28)
+    if not slab or not read_u32(pages, slab + 4):
+        slab = _acquire_slab(pages, arena, class_id, constants)
+    if read_u32(pages, slab) != class_id:
+        raise RefillUnsupported("current arena slab class mismatch")
+    result = pop_slab_slot(pages, arena_address=arena, bin_address=control,
+                           class_id=class_id, slab_address=slab, constants=constants)
+    pointer = result.object_address
+    _read_span(pages, pointer, width)
+    for offset in (0x98, 0xA8, 0xB0):
+        write_u64(pages, control + offset, read_u64(pages, control + offset) + 1)
+    fill_zero = _read(pages, read_u64(pages, 0x121C8EF0), 1)[0]
+    if zero or fill_zero:
+        _write_span(pages, pointer, bytes(width))
+    return pointer, width
+
+
+def allocate_arena_small(pages, *, arena_address, request_size, zero=False, constants=AllocatorConstants()):
+    """Direct small allocation, without an already initialized thread cache."""
+    transaction = _PageTransaction(pages)
+    result, _ = _allocate_arena_small(transaction, arena_address, request_size, bool(zero), constants)
+    transaction.commit()
+    return result
+
+
+def _associate_tcache(pages, tcache, arena):
+    _require_unlocked_mutex(pages, arena + 8)
+    write_u64(pages, tcache, tcache)
+    write_u64(pages, tcache + 8, tcache)
+    head = read_u64(pages, arena + 0xA8)
+    if head:
+        tail = read_u64(pages, head + 8)
+        if not tail or read_u64(pages, tail) != head:
+            raise RefillUnsupported("invalid arena tcache list")
+        write_u64(pages, tcache + 8, tail)
+        write_u64(pages, tcache, head)
+        write_u64(pages, tail, tcache)
+        write_u64(pages, head + 8, tcache)
+    write_u64(pages, arena + 0xA8, head or tcache)
+
+
+def _create_tcache(pages, arena, constants):
+    count = read_u64(pages, constants.class_count_address)
+    slots = read_u32(pages, 0x121D6A9C)
+    if not 1 <= count <= 45 or slots > 0x10000:
+        raise RefillUnsupported("unsupported tcache configuration")
+    list_offset = (count * 32 + 0x27) & 0xFFFF_FFF8
+    capacity_table = read_u64(pages, constants.free_capacity_table_pointer_address)
+    capacities = [read_u32(pages, capacity_table + i * 4) for i in range(count)]
+    if sum(capacities) > slots:
+        raise RefillUnsupported("tcache lists exceed configured storage")
+    length = (list_offset + slots * 8 + 63) & ~63
+    allocation_arena = read_u64(pages, 0x121D6968)
+    if not allocation_arena:
+        raise RefillUnsupported("arena zero is not initialized")
+    pointer, width = _allocate_arena_small(pages, allocation_arena, length, True, constants)
+    write_u64(pages, allocation_arena + 0x58, read_u64(pages, allocation_arena + 0x58) + width)
+    _associate_tcache(pages, pointer, arena)
+    for i, capacity in enumerate(capacities):
+        write_u32(pages, pointer + i * 32 + 0x2C, 1)
+        write_u64(pages, pointer + i * 32 + 0x38, pointer + list_offset)
+        list_offset += capacity * 8
+    return pointer
+
+
+def create_tcache(pages, *, arena_address, constants=AllocatorConstants()):
+    """Generate cache storage and all configured bins, including large bins.
+
+    Creating their empty lists does not add support for large malloc/free.
+    The backing allocation uses arena zero; association uses arena_address.
+    """
+    transaction = _PageTransaction(pages)
+    result = _create_tcache(transaction, arena_address, constants)
+    transaction.commit()
+    return result
+
+
+def _malloc_tls_key(pages):
+    return read_u32(pages, read_u64(pages, 0x121C8F98))
+
+
+def _initialize_thread_state(pages, thread_pointer, constants):
+    key = _malloc_tls_key(pages)
+    current = pthread_getspecific(pages, key=key, thread_pointer=thread_pointer)
+    if current:
+        return current
+    guard = read_u64(pages, 0x121C8DF8)
+    _require_unlocked_mutex(pages, guard + 8)
+    if read_u64(pages, guard):
+        raise RefillUnsupported("recursive or concurrent TSD initialization is not modeled")
+    if read_u32(pages, constants.malloc_initialization_flag_address) != 0:
+        raise RefillUnsupported("malloc global boot is not initialized")
+    arena = read_u64(pages, 0x121D6968)
+    if not arena:
+        raise RefillUnsupported("arena zero is not initialized")
+    pointer, width = _allocate_arena_small(pages, arena, 0x80, False, constants)
+    write_u64(pages, arena + 0x58, read_u64(pages, arena + 0x58) + width)
+    _write_span(pages, pointer, bytes(1))
+    write_u32(pages, pointer + 8, 0)
+    for offset in (0x10, 0x18, 0x20, 0x28, 0x30, 0x38, 0x50):
+        write_u64(pages, pointer + offset, 0)
+    write_u32(pages, pointer + 0x40, 0)
+    _write_span(pages, pointer + 0x44, bytes(1))
+    write_u32(pages, pointer + 0x48, 2)
+    if pthread_setspecific(pages, key=key, value=pointer, thread_pointer=thread_pointer):
+        raise RefillUnsupported("malloc TLS key is inactive")
+    return pointer
+
+
+def initialize_thread_state(pages, *, thread_pointer, constants=AllocatorConstants()):
+    """Generate and publish a fresh state-0 TSD; preserve native padding.
+
+    This boundary precedes the state-0 to state-1 transition, arena selection
+    and tcache creation. It requires an initialized global boot and arena zero.
+    """
+    transaction = _PageTransaction(pages)
+    result = _initialize_thread_state(transaction, thread_pointer, constants)
+    transaction.commit()
+    return result
+
+
+def _choose_thread_arena(pages, thread, constants):
+    _require_unlocked_mutex(pages, 0x121D6980)
+    count = read_u32(pages, 0x121D6970)
+    capacity = read_u32(pages, 0x121D6960)
+    table = read_u64(pages, 0x121D69D0)
+    if not 1 <= count <= 4095 or count > capacity:
+        raise RefillUnsupported("unsupported arena table configuration")
+    first = read_u64(pages, table)
+    if not first:
+        raise RefillUnsupported("arena zero is absent from its table")
+    selected = first
+    threads = read_u32(pages, first + 4)
+    first_empty = count
+    if count > 1:
+        for index in range(1, count):
+            arena = read_u64(pages, table + index * 8)
+            if not arena:
+                if first_empty == count:
+                    first_empty = index
+            else:
+                other = read_u32(pages, arena + 4)
+                if other < threads:
+                    selected, threads = arena, other
+        if threads and first_empty < count:
+            selected = _create_arena(pages, first_empty, constants)
+            write_u64(pages, table + first_empty * 8, selected)
+            threads = read_u32(pages, selected + 4)
+    write_u32(pages, selected + 4, threads + 1)
+    if read_u32(pages, thread + 8) == 1:
+        write_u64(pages, thread + 0x30, selected)
+    # The single-arena branch returns a0 independently from table[0].
+    return read_u64(pages, 0x121D6968) if count <= 1 else selected
+
+
+def choose_thread_arena(pages, *, thread_state_address, constants=AllocatorConstants()):
+    """Choose the least occupied arena, constructing the first empty slot."""
+    transaction = _PageTransaction(pages)
+    result = _choose_thread_arena(transaction, thread_state_address, constants)
+    transaction.commit()
+    return result
+
+
+def prepare_thread_allocator(pages, *, thread_pointer, constants=AllocatorConstants()):
+    """Fresh TLS -> TSD -> arena -> cache, stopping before user allocation.
+
+    Global boot tables and mapped arena-zero extents remain inputs. A fresh
+    arena has no OS region yet; its first refill can still reject without
+    writes. Recursive TSD states, disabled caches and OS mappings are rejected.
+    """
+    transaction = _PageTransaction(pages)
+    thread = _initialize_thread_state(transaction, thread_pointer, constants)
+    state = read_u32(transaction, thread + 8)
+    if state not in (0, 1):
+        raise RefillUnsupported("recursive TSD state transition is not modeled")
+    if state == 0:
+        write_u32(transaction, thread + 8, 1)
+        if read_u64(transaction, 0x121C8F38) != read_u64(transaction, 0x121C8E30):
+            _write_span(transaction, thread, bytes([1]))
+    cache = read_u64(transaction, thread + 0x10)
+    if not cache:
+        enabled = read_u32(transaction, thread + 0x48)
+        if enabled == 2:
+            enabled = _read(transaction, 0x121CB6B0, 1)[0]
+            write_u32(transaction, thread + 0x48, enabled)
+        if not enabled:
+            raise RefillUnsupported("disabled thread cache is not modeled")
+        arena = read_u64(transaction, thread + 0x30)
+        if not arena:
+            arena = _choose_thread_arena(transaction, thread, constants)
+        cache = _create_tcache(transaction, arena, constants)
+        write_u64(transaction, thread + 0x10, cache)
+    transaction.commit()
+    return thread
 
 
 def initialize_slab_bitmap(pages, *, bitmap_address: int, descriptor_address: int) -> int:
