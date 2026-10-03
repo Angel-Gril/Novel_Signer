@@ -12,11 +12,12 @@ import json
 from pathlib import Path
 
 from elftools.elf.elffile import ELFFile
-from unicorn import Uc, UC_ARCH_ARM64, UC_MODE_ARM, UC_HOOK_CODE
+from unicorn import Uc, UC_ARCH_ARM64, UC_MODE_ARM, UC_HOOK_CODE, UC_HOOK_INTR
 from unicorn.arm64_const import (
     UC_ARM64_REG_PC, UC_ARM64_REG_SP, UC_ARM64_REG_X0, UC_ARM64_REG_X1,
     UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X30,
     UC_ARM64_REG_TPIDR_EL0, UC_ARM64_REG_X19, UC_ARM64_REG_X28,
+    UC_ARM64_REG_X8,
 )
 
 import vm9_callbacks as callbacks
@@ -83,7 +84,9 @@ def image_pages(library, base):
 def native(library, base, function, arguments, pages, *, references=(), env=0,
            ref_types=None, libc=None, service_references=(),
            extra_registers=None, stop_offset=None, real_singletons=False,
-           thread_id=None, observed_memory=None, allocation_effect=None):
+           thread_id=None, observed_memory=None, allocation_effect=None,
+           real_mutexes=False, host_imports=None, instruction_limit=10000,
+           instruction_observer=None, syscall_handler=None):
     cpu = Uc(UC_ARCH_ARM64, UC_MODE_ARM)
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -102,7 +105,7 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
                         cpu.mem_write(base + relocation["r_offset"],
                                       (base + relocation["r_addend"]).to_bytes(8, "little"))
     libc_base = 0x51000000
-    mutex_entry = None
+    mutex_entries = {}
     if libc:
         with libc.open("rb") as stream:
             elf = ELFFile(stream)
@@ -117,9 +120,24 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             for section in elf.iter_sections():
                 if section["sh_type"] in ("SHT_SYMTAB", "SHT_DYNSYM"):
                     for symbol in section.iter_symbols():
-                        if symbol.name == "pthread_mutex_init":
-                            mutex_entry = libc_base + symbol["st_value"]
-        assert mutex_entry
+                        if symbol.name in ("pthread_mutex_init", "pthread_mutex_lock", "pthread_mutex_unlock"):
+                            mutex_entries[symbol.name] = libc_base + symbol["st_value"]
+                elif section["sh_type"] == "SHT_RELA":
+                    symbols = elf.get_section(section["sh_link"])
+                    for relocation in section.iter_relocations():
+                        kind = relocation["r_info_type"]
+                        if kind == 1027:
+                            target = libc_base + relocation["r_addend"]
+                        elif kind in (257, 1025, 1026):
+                            symbol = symbols.get_symbol(relocation["r_info_sym"])
+                            if symbol["st_shndx"] == "SHN_UNDEF":
+                                continue
+                            target = libc_base + symbol["st_value"] + relocation["r_addend"]
+                        else:
+                            continue
+                        cpu.mem_write(libc_base + relocation["r_offset"],
+                                      target.to_bytes(8, "little"))
+        assert "pthread_mutex_init" in mutex_entries
     cpu.mem_map(GUEST, GUEST_SIZE)
     cpu.mem_write(GUEST, flatten(pages))
     for page, data in pages.items():
@@ -141,6 +159,8 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
                     GUEST + 0xF130: "weak_global"}
 
     def hook(cpu, address, size, user):
+        if instruction_observer:
+            instruction_observer(cpu, address)
         offset = address - base
         if offset == 0x347FD0:  # malloc PLT; operator new executes normally
             requested = cpu.reg_read(UC_ARM64_REG_X0)
@@ -152,8 +172,8 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             cpu.mem_write(target, bytes([fill & 255]) * width)
             result = target
         elif offset == 0x347EE0:
-            assert mutex_entry and cpu.reg_read(UC_ARM64_REG_X1) == 0
-            cpu.reg_write(UC_ARM64_REG_PC, mutex_entry)
+            assert "pthread_mutex_init" in mutex_entries and cpu.reg_read(UC_ARM64_REG_X1) == 0
+            cpu.reg_write(UC_ARM64_REG_PC, mutex_entries["pthread_mutex_init"])
             return
         elif offset == 0x347F40:  # strlen PLT
             source = cpu.reg_read(UC_ARM64_REG_X0)
@@ -161,21 +181,32 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             while result < 0x100000 and cpu.mem_read(source + result, 1) != b"\0":
                 result += 1
             assert result < 0x100000, "unterminated oracle string"
-        elif offset == 0x347F60:  # memcpy PLT
+        elif offset in (0x347F60, 0x348410):  # memcpy / memmove PLT
             target, source, width = [cpu.reg_read(reg) for reg in REGS[:3]]
             cpu.mem_write(target, bytes(cpu.mem_read(source, width)))
             result = target
-        elif offset in (0x347F00, 0x347F10) and real_singletons:
+        elif offset in (0x347F00, 0x347F10) and (real_singletons or real_mutexes):
+            lock = offset == 0x347F00
+            if real_mutexes:
+                target = cpu.reg_read(UC_ARM64_REG_X0)
+                state = int.from_bytes(cpu.mem_read(target, 2), "little")
+                if state & ~0x2000 != (0 if lock else 1):
+                    raise RefillUnsupported("oracle supports only uncontended normal bionic mutexes")
+                name = "pthread_mutex_lock" if lock else "pthread_mutex_unlock"
+                assert name in mutex_entries
+                ledger.append([name, target])
+                cpu.reg_write(UC_ARM64_REG_PC, mutex_entries[name])
+                return
             assert cpu.reg_read(UC_ARM64_REG_X0) == base + 0x3E2F40
-            ledger.append(["guard_lock" if offset == 0x347F00 else "guard_unlock"])
+            ledger.append(["guard_lock" if lock else "guard_unlock"])
             result = 0  # Explicit successful single-thread mutex boundary.
         elif offset == 0x348310 and real_singletons:
             assert cpu.reg_read(UC_ARM64_REG_X0) == 0xB2
             assert isinstance(thread_id, int) and 0 <= thread_id <= 0xFFFF_FFFF
             ledger.append(["gettid", thread_id])
             result = thread_id
-        elif offset in (0x3485A0, 0x3485B0, 0x32D64C) and real_singletons:
-            raise RefillUnsupported("contended/recursive native guard is outside the oracle")
+        elif offset in (0x3485A0, 0x3485B0, 0x32D64C) and real_singletons and offset not in (host_imports or {}):
+            raise RefillUnsupported("condition broadcast/wait or runtime abort is outside the oracle")
         elif offset in (0x15F094, 0x264158) and not real_singletons:
             result = service_references[0 if offset == 0x15F094 else 1]
         elif offset in (0x26C858, 0x26C9D0):
@@ -196,14 +227,26 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             ledger.append(["delete", host_deletes[address],
                            cpu.reg_read(UC_ARM64_REG_X0), cpu.reg_read(UC_ARM64_REG_X1)])
             result = 0
+        elif offset in (host_imports or {}):
+            result = host_imports[offset](cpu)
+            if result is None:
+                assert cpu.reg_read(UC_ARM64_REG_PC) != address, "oracle import did not redirect"
+                return
         else:
             return
         cpu.reg_write(UC_ARM64_REG_X0, result)
         cpu.reg_write(UC_ARM64_REG_PC, cpu.reg_read(UC_ARM64_REG_X30))
 
     cpu.hook_add(UC_HOOK_CODE, hook)
+    if syscall_handler:
+        def interrupt(cpu, number, user):
+            if number != 2:
+                raise RefillUnsupported("unsupported native interrupt")
+            result = syscall_handler(cpu, cpu.reg_read(UC_ARM64_REG_X8))
+            cpu.reg_write(UC_ARM64_REG_X0, result & 0xFFFF_FFFF_FFFF_FFFF)
+        cpu.hook_add(UC_HOOK_INTR, interrupt)
     end = base + stop_offset if stop_offset is not None else STOP
-    cpu.emu_start(base + function, end, count=10000)
+    cpu.emu_start(base + function, end, count=instruction_limit)
     assert cpu.reg_read(UC_ARM64_REG_PC) == end, "native did not return"
     # Ignore the native stack and synthetic thread pointer area. All object
     # and allocator payload pages are compared, including untouched padding.

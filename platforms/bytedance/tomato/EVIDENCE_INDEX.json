@@ -1157,5 +1157,27 @@
     "all_image_pages_compared": true,
     "complete_root_constructor": false,
     "complete_python_medusa": false
+  },
+  "vm9_configuration_primitives_native_20261004": {
+    "evidence_file": "evidence/vm9_configuration_primitives_native_20261004.json",
+    "differential_cases": 72,
+    "negative_cases": 25,
+    "root_configuration_prefix_cases": 16,
+    "root_configuration_prefix_allocations": 30,
+    "fresh_memory": true,
+    "captured_pages_used": false,
+    "complete_root_constructor": false,
+    "complete_python_medusa": false
+  },
+  "vm9_root_configuration_native_20261004": {
+    "evidence_file": "evidence/vm9_root_configuration_native_20261004.json",
+    "native_cases": 16,
+    "allocations_per_case": 206,
+    "fresh_memory": true,
+    "captured_pages_used": false,
+    "jvm_used": false,
+    "verification_kind": "native_constructor_with_explicit_virtual_environment",
+    "python_initializer_implemented": false,
+    "complete_python_medusa": false
   }
 }

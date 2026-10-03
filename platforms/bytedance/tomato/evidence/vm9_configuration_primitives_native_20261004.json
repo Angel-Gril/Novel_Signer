@@ -1,0 +1,638 @@
+{
+  "fresh_memory": true,
+  "captured_pages_used": false,
+  "jvm_used": false,
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "differential_cases": 72,
+  "negative_cases": 25,
+  "cases": [
+    {
+      "case": "synthetic_length_0_1000",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 0
+    },
+    {
+      "case": "synthetic_length_0_1ff8",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 0
+    },
+    {
+      "case": "synthetic_length_1_1000",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 1
+    },
+    {
+      "case": "synthetic_length_1_1ff8",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 1
+    },
+    {
+      "case": "synthetic_length_4_1000",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 4
+    },
+    {
+      "case": "synthetic_length_4_1ff8",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 4
+    },
+    {
+      "case": "synthetic_length_31_1000",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 31
+    },
+    {
+      "case": "synthetic_length_31_1ff8",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 31
+    },
+    {
+      "case": "synthetic_length_255_1000",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 255
+    },
+    {
+      "case": "synthetic_length_255_1ff8",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 255
+    },
+    {
+      "case": "alias_source_-1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_source_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_source_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_mask_-1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_mask_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_mask_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 9
+    },
+    {
+      "case": "zero_mask_unmapped_source_and_output",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 0
+    },
+    {
+      "case": "elf_constants_a62c8",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 4
+    },
+    {
+      "case": "elf_constants_a62d0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 240
+    },
+    {
+      "case": "elf_constants_a5a60",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "written_bytes": 20
+    },
+    {
+      "case": "normal_mutex_lock",
+      "image_base": "0x122c0000",
+      "shared_bit": false,
+      "at_page_end": false,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_unlock",
+      "image_base": "0x122c0000",
+      "shared_bit": false,
+      "at_page_end": false,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_lock",
+      "image_base": "0x122c0000",
+      "shared_bit": false,
+      "at_page_end": true,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_unlock",
+      "image_base": "0x122c0000",
+      "shared_bit": false,
+      "at_page_end": true,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_lock",
+      "image_base": "0x122c0000",
+      "shared_bit": true,
+      "at_page_end": false,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_unlock",
+      "image_base": "0x122c0000",
+      "shared_bit": true,
+      "at_page_end": false,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_lock",
+      "image_base": "0x122c0000",
+      "shared_bit": true,
+      "at_page_end": true,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_unlock",
+      "image_base": "0x122c0000",
+      "shared_bit": true,
+      "at_page_end": true,
+      "memory_match": true
+    },
+    {
+      "case": "root_configuration_prefix_independent",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_null_counts",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_count_overflow",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_shared_reference",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_independent",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_null_counts",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_count_overflow",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_shared_reference",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "synthetic_length_0_1000",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 0
+    },
+    {
+      "case": "synthetic_length_0_1ff8",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 0
+    },
+    {
+      "case": "synthetic_length_1_1000",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 1
+    },
+    {
+      "case": "synthetic_length_1_1ff8",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 1
+    },
+    {
+      "case": "synthetic_length_4_1000",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 4
+    },
+    {
+      "case": "synthetic_length_4_1ff8",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 4
+    },
+    {
+      "case": "synthetic_length_31_1000",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 31
+    },
+    {
+      "case": "synthetic_length_31_1ff8",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 31
+    },
+    {
+      "case": "synthetic_length_255_1000",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 255
+    },
+    {
+      "case": "synthetic_length_255_1ff8",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 255
+    },
+    {
+      "case": "alias_source_-1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_source_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_source_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_mask_-1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_mask_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 3
+    },
+    {
+      "case": "alias_mask_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 9
+    },
+    {
+      "case": "zero_mask_unmapped_source_and_output",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 0
+    },
+    {
+      "case": "elf_constants_a62c8",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 4
+    },
+    {
+      "case": "elf_constants_a62d0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 240
+    },
+    {
+      "case": "elf_constants_a5a60",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "written_bytes": 20
+    },
+    {
+      "case": "normal_mutex_lock",
+      "image_base": "0x775c205000",
+      "shared_bit": false,
+      "at_page_end": false,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_unlock",
+      "image_base": "0x775c205000",
+      "shared_bit": false,
+      "at_page_end": false,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_lock",
+      "image_base": "0x775c205000",
+      "shared_bit": false,
+      "at_page_end": true,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_unlock",
+      "image_base": "0x775c205000",
+      "shared_bit": false,
+      "at_page_end": true,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_lock",
+      "image_base": "0x775c205000",
+      "shared_bit": true,
+      "at_page_end": false,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_unlock",
+      "image_base": "0x775c205000",
+      "shared_bit": true,
+      "at_page_end": false,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_lock",
+      "image_base": "0x775c205000",
+      "shared_bit": true,
+      "at_page_end": true,
+      "memory_match": true
+    },
+    {
+      "case": "normal_mutex_unlock",
+      "image_base": "0x775c205000",
+      "shared_bit": true,
+      "at_page_end": true,
+      "memory_match": true
+    },
+    {
+      "case": "root_configuration_prefix_independent",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_null_counts",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_count_overflow",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_shared_reference",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_independent",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_null_counts",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_count_overflow",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    },
+    {
+      "case": "root_configuration_prefix_shared_reference",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "memory_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 30,
+      "initializer_executed": false
+    }
+  ],
+  "negatives": [
+    {
+      "case": "decoder_invalid_bound_-1",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoder_invalid_bound_1048577",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoder_bound_after_partial_write",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoder_missing_source",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoder_missing_destination",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoder_missing_mask",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_lock_state_1",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_lock_state_2",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_lock_state_3",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_lock_state_4000",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_lock_state_8000",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_lock_state_ffff",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_unlock_state_0",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_unlock_state_2",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_unlock_state_3",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_unlock_state_4001",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_unlock_state_8001",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_unlock_state_ffff",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_invalid_address_1",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "mutex_invalid_address_10000",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "configuration_prefix_allocation_0",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "configuration_prefix_allocation_15",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "configuration_prefix_allocation_29",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "configuration_invalid_flag_-1",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "configuration_invalid_flag_4294967296",
+      "rejected": true,
+      "pages_unchanged": true
+    }
+  ],
+  "scope": "masked_bytes_uncontended_mutex_and_root_configuration_prefix",
+  "complete_root_constructor": false,
+  "complete_python_medusa": false,
+  "evidence_id": "vm9_configuration_primitives_native_20261004"
+}

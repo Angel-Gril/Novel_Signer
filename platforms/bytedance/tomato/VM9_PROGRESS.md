@@ -3,6 +3,25 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Root configuration components and native baseline (2026-10-04)
+
+The 264-byte configuration prefix now has an input-driven Python model with
+30 nested allocations, separate from the 8-byte configuration singleton.
+Masked-byte decoding and serialized normal mutex transitions are also modeled.
+The component verifier passes 72 native differences and 25 rejection/rollback
+cases. A separate fresh-ELF oracle returns from the full native configuration
+generator in 16 cases at two image bases, including present/absent SDK values
+and integer truncation/overflow. Each case has 206 allocations and 31 paired
+mutex locks/unlocks. The old verifier's TLS/stack overlap has been isolated
+and corrected by a single-variable control.
+
+The VM initializer still executes native code in this oracle. Python VM/root
+initialization, the 136-byte singleton and global effects remain open; this
+does not complete independent Medusa or a no-JVM Rust download chain. See
+[SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md),
+[component evidence](evidence/vm9_configuration_primitives_native_20261004.json),
+and [native initialization evidence](evidence/vm9_root_configuration_native_20261004.json).
+
 ## Latest bridge initialization evidence (2026-10-03)
 
 **Correction:** `MS.b(0x1000000e)` returns `MSC.GetABSwitch()` (APK default

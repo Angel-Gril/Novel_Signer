@@ -28,6 +28,58 @@ def _cstring(pages, address, limit):
     raise RefillUnsupported("source string exceeds the explicit constructor bound")
 
 
+def decode_masked_bytes(
+    pages, *, source_address: int, destination_address: int, mask_address: int,
+    max_bytes: int = 4096,
+) -> int:
+    """Model +0x167e54; return the number of bytes written.
+
+    Read mask and source one byte at a time, including when output aliases
+    either input. A zero mask stops without writing a terminator. The explicit
+    output bound and mapped-memory checks reject with page rollback.
+    """
+    if not isinstance(max_bytes, int) or not 0 <= max_bytes <= 0x100000:
+        raise ValueError("invalid masked decoder output bound")
+    transaction = _PageTransaction(pages)
+    for index in range(max_bytes + 1):
+        mask = _read_span(transaction, mask_address + index, 1)[0]
+        if not mask:
+            transaction.commit()
+            return index
+        if index == max_bytes:
+            raise RefillUnsupported("masked decoder exceeds the explicit output bound")
+        value = _read_span(transaction, source_address + index, 1)[0] ^ mask
+        _write_span(transaction, destination_address + index, bytes([value]))
+    raise AssertionError("unreachable masked decoder state")
+
+
+def _normal_mutex_transition(pages, mutex_address, *, lock):
+    if not isinstance(mutex_address, int) or mutex_address < 0 or mutex_address & 1:
+        raise RefillUnsupported("normal mutex requires an aligned guest halfword")
+    transaction = _PageTransaction(pages)
+    state = int.from_bytes(_read_span(transaction, mutex_address, 2), "little")
+    if state & ~0x2000 != (0 if lock else 1):
+        raise RefillUnsupported("only uncontended normal mutex transitions are modeled")
+    next_state = (state & 0x2000) | (1 if lock else 0)
+    _write_span(transaction, mutex_address, next_state.to_bytes(2, "little"))
+    transaction.commit()
+    return 0
+
+
+def lock_uncontended_mutex(pages, *, mutex_address: int) -> int:
+    """Measured bionic normal mutex 0/0x2000 -> 1/0x2001 fast path.
+
+    This models one serialized transition, not atomicity or host concurrency.
+    Recursive, error-checking, destroyed and contended states are rejected.
+    """
+    return _normal_mutex_transition(pages, mutex_address, lock=True)
+
+
+def unlock_uncontended_mutex(pages, *, mutex_address: int) -> int:
+    """Measured bionic normal mutex 1/0x2001 -> 0/0x2000 fast path."""
+    return _normal_mutex_transition(pages, mutex_address, lock=False)
+
+
 def construct_string_object(
     pages, *, object_address: int, source_address: int,
     allocate: Callable, vtable_address: int = 0x1260F5F8,
@@ -105,6 +157,16 @@ class ServicePayload:
     string_address: int
     reference_count_address: int
     mutex_address: int
+    state_address: int
+
+
+@dataclass(frozen=True)
+class RootConfigurationLayout:
+    """264-byte configuration prefix before the +0x257308 initializer."""
+
+    object_address: int
+    container_addresses: tuple[int, int]
+    string_addresses: tuple[int, ...]
     state_address: int
 
 
@@ -438,6 +500,64 @@ def construct_service_payload(
     _write_span(transaction, object_address, _word(state))
     transaction.commit()
     return ServicePayload(object_address, controller, string_address, count, mutex, state)
+
+
+def construct_root_configuration_layout(
+    pages, *, object_address: int, initial_reference_address: int,
+    first_reference_address: int, second_reference_address: int, flag: int,
+    image_base: int, allocate: Callable,
+) -> RootConfigurationLayout:
+    """Model +0x257084 up to +0x257240, before initializer input copying.
+
+    Generate the 264-byte layout and 30 nested allocations from fresh inputs.
+    The third configuration string, +0x257308 VM initialization and its global
+    effects are not executed. This prefix is not a usable complete root.
+    """
+    if not isinstance(flag, int) or not 0 <= flag <= 0xFFFF_FFFF:
+        raise RefillUnsupported("configuration flag is outside the native u32 ABI")
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, object_address, 264)
+    _write_span(transaction, object_address, _word(_image_address(image_base, 0x35B688)))
+    _copy_reference_wrapper(transaction, object_address + 8, initial_reference_address)
+    containers, strings = [], []
+
+    def container(offset):
+        pointer = _allocate(transaction, allocate, 40)
+        _callback_container(transaction, pointer,
+            (_image_address(image_base, 0x182D6C), _image_address(image_base, 0x182D6C),
+             _image_address(image_base, 0x188A94)), image_base, allocate,
+            vtable_offset=0x35B7C0, hook_offset=0x24B560)
+        _reference_wrapper(transaction, object_address + offset, pointer, allocate)
+        containers.append(pointer)
+
+    def string(offset):
+        pointer = _allocate(transaction, allocate, 24)
+        construct_string_object(transaction, object_address=pointer,
+            source_address=_image_address(image_base, 0x6FE64), allocate=allocate,
+            vtable_address=_image_address(image_base, 0x34F5F8), max_source_bytes=0x100000)
+        _reference_wrapper(transaction, object_address + offset, pointer, allocate)
+        strings.append(pointer)
+
+    container(0x18)
+    for offset in (0x28, 0x38, 0x48, 0x58):
+        string(offset)
+    _write_span(transaction, object_address + 0x68, b"\xff" * 8)
+    string(0x70)
+    _copy_reference_wrapper(transaction, object_address + 0x80, first_reference_address)
+    _copy_reference_wrapper(transaction, object_address + 0x90, second_reference_address)
+    _reference_wrapper(transaction, object_address + 0xA0, 0, allocate)
+    string(0xB0)
+    container(0xC0)
+    _write_span(transaction, object_address + 0xD0, flag.to_bytes(4, "little"))
+    _reference_wrapper(transaction, object_address + 0xD8, 0, allocate)
+    _write_span(transaction, object_address + 0xE8, bytes(4))
+    _reference_wrapper(transaction, object_address + 0xF0, 0, allocate)
+    state = _allocate(transaction, allocate, 152)
+    _write_span(transaction, state, bytes(152))
+    _mutex_state(transaction, state, image_base)
+    _write_span(transaction, object_address + 0x100, _word(state))
+    transaction.commit()
+    return RootConfigurationLayout(object_address, tuple(containers), tuple(strings), state)
 
 
 def construct_signer_child(

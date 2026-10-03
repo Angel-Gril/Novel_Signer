@@ -1,0 +1,997 @@
+{
+  "fresh_memory": true,
+  "captured_pages_used": false,
+  "jvm_used": false,
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "verification_kind": "native_constructor_with_explicit_virtual_environment",
+  "native_cases": 16,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "absent"
+    },
+    {
+      "image_base": "0x122c0000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 30,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 1,
+        "syscall:198": 1,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_30"
+    },
+    {
+      "image_base": "0x122c0000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_zero"
+    },
+    {
+      "image_base": "0x122c0000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_negative"
+    },
+    {
+      "image_base": "0x122c0000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 31,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 1,
+        "syscall:198": 1,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_signed_suffix"
+    },
+    {
+      "image_base": "0x122c0000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 30,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 1,
+        "syscall:198": 1,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_u32_wrap"
+    },
+    {
+      "image_base": "0x122c0000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_i32_negative_wrap"
+    },
+    {
+      "image_base": "0x122c0000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_i64_overflow"
+    },
+    {
+      "image_base": "0x775c205000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "absent"
+    },
+    {
+      "image_base": "0x775c205000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 30,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 1,
+        "syscall:198": 1,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_30"
+    },
+    {
+      "image_base": "0x775c205000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_zero"
+    },
+    {
+      "image_base": "0x775c205000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_negative"
+    },
+    {
+      "image_base": "0x775c205000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 31,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 1,
+        "syscall:198": 1,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_signed_suffix"
+    },
+    {
+      "image_base": "0x775c205000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 30,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 1,
+        "syscall:198": 1,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_u32_wrap"
+    },
+    {
+      "image_base": "0x775c205000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_i32_negative_wrap"
+    },
+    {
+      "image_base": "0x775c205000",
+      "returned": true,
+      "input_string_lengths": [
+        4,
+        4,
+        240
+      ],
+      "first_two_inputs_share_reference": true,
+      "allocations": 206,
+      "sdk_cache_after": 0,
+      "initializer_changed_byte_offsets": [
+        "0xa0",
+        "0xa1",
+        "0xa3",
+        "0xa8",
+        "0xa9",
+        "0xf0",
+        "0xf1",
+        "0xf3",
+        "0xf8",
+        "0xf9"
+      ],
+      "mutex_lock_count": 31,
+      "mutex_unlock_count": 31,
+      "minimum_stack_offset": "0xd180",
+      "destructor_registrations": [
+        [
+          "0x3427c8",
+          "0x3e2fa0",
+          "0x34c700"
+        ],
+        [
+          "0x15e1a8",
+          "0x3dee28",
+          "0x34c700"
+        ]
+      ],
+      "host_call_counts": {
+        "strtol:matching_libc": 1,
+        "free:nonreusing_allocator": 93,
+        "clock_gettime:0": 1,
+        "pthread_once:matching_libc": 4,
+        "pthread_key_create:matching_libc": 2,
+        "syscall:98": 9,
+        "pthread_getspecific:matching_libc": 103,
+        "pthread_setspecific:matching_libc": 2,
+        "__cxa_atexit:register_only": 2,
+        "pthread_cond_broadcast:matching_libc": 7,
+        "memcmp:matching_libc": 1,
+        "property_find": 1,
+        "property_read": 1,
+        "syscall:56": 4,
+        "syscall:57": 3,
+        "vsnprintf:matching_libc": 6,
+        "syscall:48": 2,
+        "syscall:79": 2,
+        "mkdir:EEXIST": 1
+      },
+      "case": "sdk_i64_overflow"
+    }
+  ],
+  "complete_python_root_configuration": false,
+  "complete_python_medusa": false,
+  "host_boundaries": [
+    "bounded_nonreusing_malloc/free",
+    "virtual_property_find/read",
+    "virtual_clock/errno",
+    "missing_files/EEXIST_directory/unsupported_socket_family",
+    "futex_wake_no_waiters",
+    "destructor_registration_without_execution",
+    "diagnostic_scope/thread_attachment/JNI_from_component_oracle"
+  ],
+  "evidence_id": "vm9_root_configuration_native_20261004"
+}

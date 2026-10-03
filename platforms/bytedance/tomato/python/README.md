@@ -69,6 +69,21 @@ only by the verifier; the model invokes neither native constructors nor JVM.
 Full root configuration, diagnostic/global boot and standalone current Medusa
 remain open. See [SIGNER_CONSTRUCTION.md](../SIGNER_CONSTRUCTION.md).
 
+`construct_root_configuration_layout` generates the 264-byte configuration
+prefix and 30 nested allocations before the VM initializer. It is separate
+from the 8-byte configuration singleton. `decode_masked_bytes` preserves
+source/mask aliasing and stops at a zero mask without adding a terminator.
+The two uncontended mutex helpers model serialized normal bionic transitions,
+including the shared bit, and reject unsupported states. Run
+`verify_vm9_configuration_primitives.py` with the same library/libc/output
+arguments for 72 native differences and 25 rejection/rollback cases.
+
+`verify_vm9_root_configuration.py` runs 16 native initialization cases in an
+explicit virtual environment, with fresh ELF strings and isolated TLS/stack.
+Its output contains counts and offsets only. This is a native oracle for
+future Python differences; it does not implement the initializer in Python
+or establish current online Medusa.
+
 `verify_vm9_allocator_lifecycle.py` requires Unicorn and the trusted primary
 initialized checkpoint. `verify_vm9_divmod_backing.py` additionally requires
 the paired private memory image and `TOMATO_LIBMETASEC`. Both write sanitized
