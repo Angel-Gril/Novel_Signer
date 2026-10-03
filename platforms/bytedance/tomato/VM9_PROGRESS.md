@@ -3,6 +3,41 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Latest verified checkpoint: lifecycle and paired chain (2026-10-03)
+
+Empty-bin refill, mapped new-slab initialization across 36 classes, compact
+trees, full-bin flush, periodic cleanup and slab release/purge are now modeled
+in Python. The 83-case native differential compares all 4,256 checkpoint pages;
+360 continuous malloc/free operations also match after every step. Purge needs
+an explicit guest OS outcome; fresh OS region/TLS/arena initialization remains
+unsupported.
+
+The same detail capture now runs from initial memory through Seg1, the actual
+native host continuation, Seg2 and Seg3. It matches 95,979 VM events and 293
+callbacks, replacing 303 malloc/free calls with Python and no native allocator
+fallback. No trained handoff, transition free list, callback-page injection or
+target-pointer patch is used. Captured entry registers/native frames and the
+existing two-byte Seg1 pointer-tag normalization still remain.
+
+An interpreter correction separates native x28 register backing from virtual
+R28. Twelve native divmod/commit pairs validate it, including zero divisors.
+Seg1 and Seg2 have identical nonstack memory between allocator controls. Seg3
+retains 15 differing bytes at native copy sites outside the final body, plus
+call-stack differences. The 779-byte body exactly matches both native control
+and captured output. Whole-memory equivalence is not claimed.
+
+Implementation, reproducible checks and limitations:
+[ALLOCATOR_LIFECYCLE.md](ALLOCATOR_LIFECYCLE.md),
+[lifecycle evidence](evidence/vm9_allocator_lifecycle_20261003.json), and
+[paired-chain evidence](evidence/vm9_allocator_same_capture_20261003.json).
+Earlier checkpoints below are historical; their refill/cleanup and artificial
+transition limitations are superseded only for this verified sampled path.
+
+Current Python Medusa parameterization, independent fresh initialization,
+no-JVM Rust signing/download and live nonempty search remain unfinished. The
+next step is fresh TLS/arena and callback/constructor initialization, followed
+by a new-input run without captured state and then the live server matrix.
+
 ## Reproduced diagnostic path
 
 The historical `seg3_verified_final_20260929.txt` path can be reproduced with

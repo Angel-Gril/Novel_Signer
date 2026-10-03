@@ -1,6 +1,12 @@
 # VM9 callback-8 allocator audit
 
-This note records the current blocker in the independent VM9 path. It is
+The latest implementation and same-capture result are recorded in
+[ALLOCATOR_LIFECYCLE.md](ALLOCATOR_LIFECYCLE.md). Empty-bin dispatch, mapped
+new-slab initialization, trees, flush and cleanup are now implemented; fresh
+OS/TLS/arena setup remains open. The sections below retain the earlier branch
+evidence and its corrections.
+
+This note records the original blocker in the independent VM9 path. It is
 separate from the online header matrix: the observation is made inside the
 native constructor callback that builds the `X-Medusa` body.
 

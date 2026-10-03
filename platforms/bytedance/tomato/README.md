@@ -10,6 +10,7 @@ Read in this order:
 4. [SEARCH.md](SEARCH.md) — static search model and the still-empty live responses;
 5. [VM9_PROGRESS.md](VM9_PROGRESS.md) — the current independent-execution checkpoint and blocker;
 6. [ALLOCATOR_AUDIT.md](ALLOCATOR_AUDIT.md) — callback-8 allocator/refill evidence;
-7. [rust/README.md](rust/README.md) — what the no-JVM Rust crate can and cannot do today.
+7. [ALLOCATOR_LIFECYCLE.md](ALLOCATOR_LIFECYCLE.md) — empty bins, real mapped-slab initialization, cleanup and same-capture validation;
+8. [rust/README.md](rust/README.md) — what the no-JVM Rust crate can and cannot do today.
 
 The Python folder contains the verified primitives and the old Medusa snapshot interpreter. It is labelled carefully because a successful old snapshot replay is not proof of current online compatibility.

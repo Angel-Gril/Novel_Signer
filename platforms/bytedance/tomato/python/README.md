@@ -22,16 +22,23 @@ Seg3, retaining one unexplained stack byte. The
 [sanitized evidence](../evidence/vm9_handoff_holdouts_20261002.json) records the
 control, holdout, hashes, and remaining dependencies.
 
-`vm9_allocator.py` exposes the allocator branches directly supported by the
-captured evidence: a non-empty size-class free-list pop reads `[bin+0x30]`,
-decrements the count, and selects `[read64(bin+0x38) + count_after * 8]`;
-`refill_existing_slab_and_pop` replays an already selected slab record, fills a
-known target list backwards, publishes the batch count, and performs the
-wrapper's first pop. Slab/node discovery, region allocation, constructor
-history, and fresh-input cursor derivation remain unsupported. The module
-accepts only trusted local checkpoint pages and is not a general heap or
-current Medusa implementation. The branch and its controlled transplants are
-documented in [ALLOCATOR_AUDIT.md](../ALLOCATOR_AUDIT.md).
+`vm9_allocator.py` now exposes `allocate_small_object`, `free_small_object`
+and `cleanup_small_object_bins`, covering empty-bin batches, mapped new slabs,
+compact trees, flush, cleanup and slab release. `initialize_slab_bitmap`
+generates bitmap words from the class descriptor. Lifecycle failures are
+atomic; purge requires an explicit guest madvise result. The earlier fast
+APIs and existing-slab primitives keep their narrower contracts. Fresh OS
+regions/TLS/arena and standalone Medusa initialization remain unsupported.
+The module accepts trusted local checkpoint pages. See
+[ALLOCATOR_LIFECYCLE.md](../ALLOCATOR_LIFECYCLE.md) for usage, 83 native
+differential cases, 360 sequential operations and the same-capture chain.
+
+`verify_vm9_allocator_lifecycle.py` requires Unicorn and the trusted primary
+initialized checkpoint. `verify_vm9_divmod_backing.py` additionally requires
+the paired private memory image and `TOMATO_LIBMETASEC`. Both write sanitized
+JSON results and load no online device configuration. The latter checks the
+explicit native register-backing address, which must never be inferred from
+virtual R28.
 
 The `pop_bitmap_slot` helper records one more directly observed refill step:
 `RBIT/CLZ` selects the lowest set bit of a slab bitmap, the native path clears

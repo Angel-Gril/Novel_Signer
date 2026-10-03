@@ -1,15 +1,16 @@
 """Small, fail-closed VM9 allocator primitives.
 
-This module models the observed small-object allocation/free fast paths,
-existing-slab batch refill, and selection of an initialized slab from a
-singleton available-node tree. It refuses general tree balancing and fresh
-allocator initialization. The input page map has the same shape used by
+This module models normal small-object allocation/free, empty-bin refill,
+compact allocator trees, new slab initialization from mapped free extents,
+periodic bin cleanup, and slab release/purge with an explicit guest OS result.
+Fresh OS region/TLS/arena initialization is not implemented. The input page map has the same shape used by
 ``vm9_handoff_rule.py``; it is not an online request or a general heap.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Mapping, MutableMapping
+from typing import Callable, Mapping, MutableMapping
+from collections.abc import MutableMapping as MutableMappingABC
 
 
 class RefillUnsupported(RuntimeError):
@@ -28,7 +29,10 @@ def _read(pages: Mapping[int, bytes | bytearray], address: int, size: int) -> by
         data = pages[page]
     except KeyError as exc:
         raise ValueError(f"missing checkpoint page {page:#x}") from exc
-    return bytes(data[offset:offset + size])
+    result = bytes(data[offset:offset + size])
+    if len(result) != size:
+        raise ValueError("truncated allocator checkpoint page")
+    return result
 
 
 def read_u32(pages: Mapping[int, bytes | bytearray], address: int) -> int:
@@ -47,6 +51,8 @@ def _write(pages: MutableMapping[int, bytearray], address: int, value: bytes) ->
         target = pages[page]
     except KeyError as exc:
         raise ValueError(f"missing checkpoint page {page:#x}") from exc
+    if len(target) != 0x1000:
+        raise ValueError("truncated allocator checkpoint page")
     target[offset:offset + len(value)] = value
 
 
@@ -207,6 +213,742 @@ class AllocatorConstants:
     malloc_initialization_flag_address: int = 0x121CB6A0
     malloc_debug_flag_address: int = 0x121D69A8
     malloc_fill_flag_address: int = 0x121D69C9
+    class_count_address: int = 0x121D9F48
+    # Explicit guest OS outcome, not a default fake success. None rejects any
+    # slab release which reaches madvise; native differential probes supply
+    # the observed result for their isolated guest runtime.
+    purge_madvise_result: int | None = None
+    guest_errno_address: int | None = None
+
+
+class _PageTransaction(MutableMappingABC):
+    """Stage touched pages so unsupported lifecycle branches leave no writes."""
+
+    def __init__(self, pages):
+        self.original = pages
+        self.staged = {}
+
+    def __getitem__(self, key):
+        if key not in self.staged:
+            self.staged[key] = bytearray(self.original[key])
+        return self.staged[key]
+
+    def __setitem__(self, key, value):
+        if key not in self.original:
+            raise RefillUnsupported("OS page mapping is not modeled")
+        self.staged[key] = bytearray(value)
+
+    def __delitem__(self, key):
+        raise RefillUnsupported("OS page unmapping is not modeled")
+
+    def __iter__(self):
+        return iter(self.original)
+
+    def __len__(self):
+        return len(self.original)
+
+    def commit(self):
+        self.original.update(self.staged)
+
+
+class _AllocatorTree:
+    """Compact 2-3 LLRB links used by the observed allocator.
+
+    Balance operations follow jemalloc 3.6.0 rb.h (BSD-2-Clause; see
+    jemalloc-BSD-2-Clause.txt), checked against native trees.
+    The right link's bit zero is the node color; the sentinel is root+8.
+    """
+
+    def __init__(self, pages, root: int, key: Callable[[int], object]):
+        self.pages, self.root, self.key = pages, root, key
+        self.nil = root + 8
+        if self.left(self.nil) != self.nil or self.right(self.nil) != self.nil or self.red(self.nil):
+            raise RefillUnsupported("invalid allocator tree sentinel")
+
+    def left(self, node):
+        return read_u64(self.pages, node)
+
+    def right(self, node):
+        return read_u64(self.pages, node + 8) & ~1
+
+    def red(self, node):
+        return bool(read_u64(self.pages, node + 8) & 1)
+
+    def set_left(self, node, left):
+        write_u64(self.pages, node, left)
+
+    def set_right(self, node, right):
+        write_u64(self.pages, node + 8, right | int(self.red(node)))
+
+    def color(self, node, red):
+        write_u64(self.pages, node + 8, self.right(node) | int(red))
+
+    def rotate_left(self, node):
+        other = self.right(node)
+        self.set_right(node, self.left(other))
+        self.set_left(other, node)
+        return other
+
+    def rotate_right(self, node):
+        other = self.left(node)
+        self.set_left(node, self.right(other))
+        self.set_right(other, node)
+        return other
+
+    def first(self):
+        node = read_u64(self.pages, self.root)
+        for _ in range(128):
+            if node == self.nil:
+                return 0
+            left = self.left(node)
+            if left == self.nil:
+                return node
+            node = left
+        raise RefillUnsupported("allocator tree is cyclic or too deep")
+
+    def lower_bound(self, key):
+        node = read_u64(self.pages, self.root)
+        found = 0
+        for _ in range(128):
+            if node == self.nil:
+                return found
+            if self.key(node) < key:
+                node = self.right(node)
+            else:
+                found, node = node, self.left(node)
+        raise RefillUnsupported("allocator tree is cyclic or too deep")
+
+    def insert(self, node):
+        path = []
+        current = read_u64(self.pages, self.root)
+        key = self.key(node)
+        while current != self.nil:
+            if len(path) >= 128:
+                raise RefillUnsupported("allocator tree is cyclic or too deep")
+            other = self.key(current)
+            if key == other:
+                raise RefillUnsupported("duplicate allocator tree key")
+            left = key < other
+            path.append((current, left))
+            current = self.left(current) if left else self.right(current)
+        self.set_left(node, self.nil)
+        write_u64(self.pages, node + 8, self.nil | 1)
+        child = node
+        for current, left in reversed(path):
+            if left:
+                self.set_left(current, child)
+                if not self.red(child):
+                    return
+                ll = self.left(child)
+                if self.red(ll):
+                    self.color(ll, False)
+                    current = self.rotate_right(current)
+            else:
+                self.set_right(current, child)
+                if not self.red(child):
+                    return
+                other = self.left(current)
+                if self.red(other):
+                    self.color(other, False)
+                    self.color(child, False)
+                    self.color(current, True)
+                else:
+                    red = self.red(current)
+                    other = self.rotate_left(current)
+                    self.color(other, red)
+                    self.color(current, True)
+                    current = other
+            child = current
+        write_u64(self.pages, self.root, child)
+        self.color(child, False)
+
+    def remove(self, node):
+        # Keep the exact removed node's stale links: rebuilding an equivalent
+        # tree would lose memory effects used by subsequent native operations.
+        path, directions = [], []
+        current = read_u64(self.pages, self.root)
+        key = self.key(node)
+        while current != self.nil:
+            if len(path) >= 128:
+                raise RefillUnsupported("allocator tree is cyclic or too deep")
+            path.append(current)
+            other = self.key(current)
+            if key == other:
+                if current != node:
+                    raise RefillUnsupported("allocator tree key aliases another node")
+                node_index = len(path) - 1
+                directions.append(False)
+                current = self.right(current)
+                while current != self.nil:
+                    if len(path) >= 128:
+                        raise RefillUnsupported("allocator tree is cyclic or too deep")
+                    path.append(current)
+                    directions.append(True)
+                    current = self.left(current)
+                break
+            left = key < other
+            directions.append(left)
+            current = self.left(current) if left else self.right(current)
+        else:
+            raise RefillUnsupported("allocator tree does not contain requested node")
+        index = len(path) - 1
+        if path[index] != node:
+            successor = path[index]
+            red = self.red(successor)
+            self.color(successor, self.red(node))
+            self.set_left(successor, self.left(node))
+            self.set_right(successor, self.right(node))
+            self.color(node, red)
+            path[node_index], path[index] = successor, node
+            self._replace(path, directions, node_index, successor)
+        else:
+            left = self.left(node)
+            if left != self.nil:
+                self.color(left, False)
+                self._replace(path, directions, index, left)
+                return
+            if index == 0:
+                write_u64(self.pages, self.root, self.nil)
+                return
+        if self.red(path[index]):
+            self.set_left(path[index - 1], self.nil)
+            return
+        path[index] = self.nil
+        for i in range(index - 1, -1, -1):
+            current = path[i]
+            if directions[i]:
+                self.set_left(current, path[i + 1])
+                right = self.right(current)
+                rl = self.left(right)
+                if self.red(current):
+                    if self.red(rl):
+                        self.color(current, False)
+                        self.set_right(current, self.rotate_right(right))
+                    other = self.rotate_left(current)
+                    self._replace(path, directions, i, other)
+                    return
+                if self.red(rl):
+                    self.color(rl, False)
+                    self.set_right(current, self.rotate_right(right))
+                    other = self.rotate_left(current)
+                    self._replace(path, directions, i, other)
+                    return
+                self.color(current, True)
+                path[i] = self.rotate_left(current)
+            else:
+                self.set_right(current, path[i + 1])
+                left = self.left(current)
+                if self.red(left):
+                    lr = self.right(left)
+                    lrl = self.left(lr)
+                    if self.red(lrl):
+                        self.color(lrl, False)
+                        other = self.rotate_right(current)
+                        self.set_right(other, self.rotate_right(current))
+                        other = self.rotate_left(other)
+                    else:
+                        self.color(lr, True)
+                        other = self.rotate_right(current)
+                        self.color(other, False)
+                    self._replace(path, directions, i, other)
+                    return
+                ll = self.left(left)
+                if self.red(current):
+                    self.color(left, True)
+                    self.color(current, False)
+                    if self.red(ll):
+                        self.color(ll, False)
+                        other = self.rotate_right(current)
+                        self._replace(path, directions, i, other)
+                    return
+                if self.red(ll):
+                    self.color(ll, False)
+                    other = self.rotate_right(current)
+                    self._replace(path, directions, i, other)
+                    return
+                self.color(left, True)
+        write_u64(self.pages, self.root, path[0])
+
+    def _replace(self, path, directions, index, node):
+        if index == 0:
+            write_u64(self.pages, self.root, node)
+        elif directions[index - 1]:
+            self.set_left(path[index - 1], node)
+        else:
+            self.set_right(path[index - 1], node)
+
+
+def initialize_slab_bitmap(pages, *, bitmap_address: int, descriptor_address: int) -> int:
+    """Execute the descriptor-derived initialization of native 0x1216dd70."""
+
+    bits = read_u64(pages, descriptor_address)
+    levels = read_u32(pages, descriptor_address + 8)
+    if not 1 <= levels <= 4 or bits == 0:
+        raise RefillUnsupported("unsupported bitmap initialization descriptor")
+    offsets = [read_u64(pages, descriptor_address + (i + 2) * 8) for i in range(levels + 1)]
+    if offsets[0] != 0 or offsets[1] != (bits + 63) // 64:
+        raise RefillUnsupported("invalid bitmap leaf descriptor")
+    for i in range(1, levels):
+        child_words = offsets[i] - offsets[i - 1]
+        if offsets[i + 1] - offsets[i] != (child_words + 63) // 64:
+            raise RefillUnsupported("invalid bitmap summary descriptor")
+    # Validate every target before the first write.
+    for i in range(offsets[-1]):
+        _read(pages, bitmap_address + i * 8, 8)
+    for i in range(offsets[-1]):
+        write_u64(pages, bitmap_address + i * 8, 0xFFFF_FFFF_FFFF_FFFF)
+    shift = (-bits) & 63
+    if shift:
+        write_u64(pages, bitmap_address + (offsets[1] - 1) * 8, (1 << (64 - shift)) - 1)
+    for i in range(2, levels + 1):
+        shift = (offsets[i - 2] - offsets[i - 1]) & 63
+        if shift:
+            write_u64(pages, bitmap_address + (offsets[i] - 1) * 8, (1 << (64 - shift)) - 1)
+    return offsets[-1]
+
+
+def _slab_page(pages, slab, constants):
+    node = slab - 0x10
+    region = node & ~read_u64(pages, constants.bitmap_mask_address)
+    delta = node - region - read_u64(pages, constants.region_offset_address)
+    if delta < 0 or delta % 0x60:
+        raise RefillUnsupported("invalid slab record placement")
+    return region, read_u64(pages, constants.page_bias_address) + delta // 0x60
+
+
+def _extent_size(pages, node, constants):
+    region, page = _slab_page(pages, node + 0x10, constants)
+    bias = read_u64(pages, constants.page_bias_address)
+    return read_u64(pages, region + 0x68 + (page - bias) * 8) & ~0xFFF
+
+
+def _normalize_extent(pages, size):
+    """Native 0x121661e0 for observed page-aligned region extents."""
+    limit = read_u64(pages, 0x121D67C0)
+    table = read_u64(pages, 0x121D67B8)
+    if size <= limit and _read(pages, table + (size >> 12), 1)[0]:
+        return size
+    if size < 0x1000 or size & 0xFFF or size >= 1 << 62:
+        raise RefillUnsupported("extent normalization outside the mapped page domain")
+    # 0x12166290..b8 computes the preceding size-class table index.
+    lg = ((size + 1) * 2 - 1).bit_length() - 1
+    index = ((lg - 6) << 2) + ((size >> (lg - 3)) & 3)
+    widths = read_u64(pages, 0x121C8EE0)
+    value = read_u64(pages, widths + index * 8)
+    if value <= 0x3800:
+        raise RefillUnsupported("unobserved small extent normalization loop")
+    return value
+
+
+def _free_extent_tree(pages, arena, constants):
+    return _AllocatorTree(pages, arena + 0xE8,
+                          lambda node: (_normalize_extent(pages, _extent_size(pages, node, constants)), node))
+
+
+def _initialize_slab_from_extent(pages, arena, class_id, constants):
+    metadata = _class_metadata_address(class_id, constants)
+    size = read_u64(pages, metadata + 0x18)
+    if size == 0 or size & 0xFFF:
+        raise RefillUnsupported("unsupported slab extent size")
+    normalized = _normalize_extent(pages, size)
+    if normalized < size:
+        # 0x1216779c rounds its search to the next supported page class.
+        normalized = 0xFFFF_FFFF_FFFF_FFFF
+        if size > 0x3800:
+            lg = (size * 2 - 1).bit_length() - 1
+            index = 4 * lg - 0x17 + (((size - 1) >> (lg - 3)) & 3)
+            widths = read_u64(pages, 0x121C8EE0)
+            normalized = (read_u64(pages, widths + (index + 1) * 8) + 4095) & ~4095
+        if size < read_u64(pages, 0x121D67C0):
+            table = read_u64(pages, 0x121D67B8)
+            for page in range(size // 4096 + 1, read_u64(pages, constants.region_page_limit_address) + 1):
+                if _read(pages, table + page, 1)[0]:
+                    normalized = min(normalized, page << 12)
+                    break
+    tree = _free_extent_tree(pages, arena, constants)
+    node = tree.lower_bound((normalized, 0))
+    if not node:
+        raise RefillUnsupported("fresh region mapping / arena initialization is not modeled")
+    extent_size = _extent_size(pages, node, constants)
+    if extent_size < size:
+        raise RefillUnsupported("selected extent is shorter than slab")
+    slab = node + 0x10
+    region, page = _slab_page(pages, slab, constants)
+    if read_u64(pages, region) != arena:
+        raise RefillUnsupported("extent belongs to another arena")
+    bias = read_u64(pages, constants.page_bias_address)
+    entry = region + 0x68 + (page - bias) * 8
+    if read_u64(pages, entry) & 8:
+        raise RefillUnsupported("dirty extent cleanup is not modeled")
+    tree.remove(node)
+    used_pages = read_u64(pages, arena + 0xD8)
+    mask = read_u64(pages, constants.bitmap_mask_address)
+    region_delta = ((mask + ((used_pages + size // 4096) << 12)) & ~mask) - ((mask + (used_pages << 12)) & ~mask)
+    if region_delta:
+        global_bytes = read_u64(pages, 0x121C8E38)
+        write_u64(pages, global_bytes, read_u64(pages, global_bytes) + region_delta)
+    write_u64(pages, arena + 0xD8, used_pages + size // 4096)
+    remaining = extent_size - size
+    if remaining:
+        remainder_page = page + size // 4096
+        tail_page = page + extent_size // 4096 - 1
+        for index in (remainder_page, tail_page):
+            address = region + 0x68 + (index - bias) * 8
+            write_u64(pages, address, (read_u64(pages, address) & 4) | 0xFF0 | remaining)
+        remainder_node = region + read_u64(pages, constants.region_offset_address) + (remainder_page - bias) * 0x60
+        tree.insert(remainder_node)
+    for offset in range(size // 4096):
+        address = entry + offset * 8
+        write_u64(pages, address, (read_u64(pages, address) & 4) | 1 | (class_id << 4) | (offset << 12))
+    write_u32(pages, slab, class_id)
+    write_u32(pages, slab + 4, read_u32(pages, metadata + 0x20))
+    initialize_slab_bitmap(pages, bitmap_address=slab + 8, descriptor_address=metadata + 0x28)
+    control = arena + class_id * 0xE0 + 0x508
+    for offset in (0xC8, 0xD8):
+        write_u64(pages, control + offset, read_u64(pages, control + offset) + 1)
+    return slab
+
+
+def _acquire_slab(pages, arena, class_id, constants):
+    control = arena + class_id * 0xE0 + 0x508
+    write_u64(pages, control + 0x28, 0)
+    tree = _AllocatorTree(pages, control + 0x30, lambda node: node)
+    node = tree.first()
+    if node:
+        tree.remove(node)
+        write_u64(pages, control + 0xD0, read_u64(pages, control + 0xD0) + 1)
+        slab = node + 0x10
+        if read_u32(pages, slab) != class_id:
+            raise RefillUnsupported("available slab class mismatch")
+    else:
+        slab = _initialize_slab_from_extent(pages, arena, class_id, constants)
+    write_u64(pages, control + 0x28, slab)
+    return slab
+
+
+def _refill_empty_bin(pages, arena, caller_bin, class_id, constants):
+    target = caller_bin + 0x20
+    table = read_u64(pages, constants.free_capacity_table_pointer_address)
+    batch = read_u32(pages, table + class_id * 4) >> (read_u32(pages, target + 0xC) & 31)
+    if batch == 0:
+        raise RefillUnsupported("zero refill batch is outside supported normal bins")
+    list_address = read_u64(pages, target + 0x18)
+    control = arena + class_id * 0xE0 + 0x508
+    for i in range(batch):
+        _read(pages, list_address + i * 8, 8)
+    for i in range(batch):
+        slab = read_u64(pages, control + 0x28)
+        if not slab or not read_u32(pages, slab + 4):
+            slab = _acquire_slab(pages, arena, class_id, constants)
+        result = pop_slab_slot(pages, arena_address=arena, bin_address=target,
+                               class_id=class_id, slab_address=slab, constants=constants)
+        write_u64(pages, list_address + (batch - i - 1) * 8, result.object_address)
+    state = arena + class_id * 0xE0
+    write_u64(pages, state + 0x5A0, read_u64(pages, state + 0x5A0) + batch)
+    write_u64(pages, state + 0x5B8, read_u64(pages, state + 0x5B8) + batch)
+    write_u64(pages, state + 0x5B0, read_u64(pages, state + 0x5B0) + read_u64(pages, target))
+    write_u64(pages, state + 0x5C0, read_u64(pages, state + 0x5C0) + 1)
+    write_u64(pages, target, 0)
+    write_u32(pages, target + 0x10, batch)
+    result = pop_free_list(pages, caller_bin)
+    write_u32(pages, caller_bin + 0x30, result.count_after)
+    floor = _signed32(read_u32(pages, caller_bin + 0x28))
+    if result.count_after < floor:
+        write_u32(pages, caller_bin + 0x28, result.count_after)
+    return result
+
+
+def _signed32(value):
+    return value if value < 0x8000_0000 else value - 0x1_0000_0000
+
+
+def _region_node(pages, region, page, constants):
+    return region + read_u64(pages, constants.region_offset_address) + (page - read_u64(pages, constants.page_bias_address)) * 0x60
+
+
+def _account_extent_pages(pages, arena, delta, constants):
+    before = read_u64(pages, arena + 0xD8)
+    after = before + delta
+    if after < 0:
+        raise RefillUnsupported("invalid arena page accounting")
+    mask = read_u64(pages, constants.bitmap_mask_address)
+    region_delta = ((mask + (after << 12)) & ~mask) - ((mask + (before << 12)) & ~mask)
+    if region_delta:
+        address = read_u64(pages, 0x121C8E38)
+        write_u64(pages, address, read_u64(pages, address) + region_delta)
+    write_u64(pages, arena + 0xD8, after)
+
+
+def _unlink_dirty_extent(pages, arena, node, count):
+    pointer = node + 0x10
+    following = read_u64(pages, pointer)
+    previous = read_u64(pages, pointer + 8)
+    write_u64(pages, previous, following)
+    write_u64(pages, following + 8, previous)
+    write_u64(pages, pointer, pointer)
+    write_u64(pages, pointer + 8, pointer)
+    dirty = read_u64(pages, arena + 0xE0)
+    if dirty < count:
+        raise RefillUnsupported("invalid dirty extent accounting")
+    write_u64(pages, arena + 0xE0, dirty - count)
+
+
+def _release_extent(pages, arena, slab, mark_dirty, force_clean, constants):
+    region, page = _slab_page(pages, slab, constants)
+    bias = read_u64(pages, constants.page_bias_address)
+    def address(index):
+        return region + 0x68 + (index - bias) * 8
+    entry = read_u64(pages, address(page))
+    if entry & 2:
+        size = entry & ~0xFFF
+    else:
+        size = read_u64(pages, _class_metadata_address(read_u32(pages, slab), constants) + 0x18)
+    count = size >> 12
+    if not count:
+        raise RefillUnsupported("zero extent release")
+    _account_extent_pages(pages, arena, -count, constants)
+    dirty = mark_dirty or (not force_clean and bool(entry & 8))
+    flags = 0xFF8 if dirty else 0xFF0
+    for index in (page, page + count - 1):
+        a = address(index)
+        write_u64(pages, a, (read_u64(pages, a) & 4) | flags | size)
+    tree = _free_extent_tree(pages, arena, constants)
+    end = page + count
+    if end < read_u64(pages, constants.region_page_limit_address):
+        neighbor = read_u64(pages, address(end))
+        if not neighbor & 1 and bool(neighbor & 8) == dirty:
+            neighbor_count = neighbor >> 12
+            node = _region_node(pages, region, end, constants)
+            tree.remove(node)
+            if dirty:
+                _unlink_dirty_extent(pages, arena, node, neighbor_count)
+            count += neighbor_count
+            size = count << 12
+            for index in (page, page + count - 1):
+                a = address(index)
+                write_u64(pages, a, (read_u64(pages, a) & 0xFFF) | size)
+    if page > bias:
+        neighbor = read_u64(pages, address(page - 1))
+        if not neighbor & 1 and bool(neighbor & 8) == dirty:
+            neighbor_count = neighbor >> 12
+            page -= neighbor_count
+            node = _region_node(pages, region, page, constants)
+            tree.remove(node)
+            if dirty:
+                _unlink_dirty_extent(pages, arena, node, neighbor_count)
+            count += neighbor_count
+            size = count << 12
+            for index in (page, page + count - 1):
+                a = address(index)
+                write_u64(pages, a, (read_u64(pages, a) & 0xFFF) | size)
+    if size == read_u64(pages, 0x121D9EA8):
+        raise RefillUnsupported("release of an entire OS region is not modeled")
+    node = _region_node(pages, region, page, constants)
+    tree.insert(node)
+    if dirty:
+        pointer = node + 0x10
+        sentinel = arena + 0x150
+        previous = read_u64(pages, sentinel + 8)
+        write_u64(pages, pointer, pointer)
+        write_u64(pages, pointer + 8, pointer)
+        write_u64(pages, previous, pointer)
+        write_u64(pages, pointer, sentinel)
+        write_u64(pages, sentinel + 8, pointer)
+        write_u64(pages, pointer + 8, previous)
+        write_u64(pages, arena + 0xE0, read_u64(pages, arena + 0xE0) + count)
+        _purge_dirty_extents(pages, arena, constants)
+
+
+def _purge_dirty_extents(pages, arena, constants):
+    if constants.purge_madvise_result is None:
+        raise RefillUnsupported("slab purge needs an explicit guest madvise outcome")
+    if not -4095 <= constants.purge_madvise_result <= 0:
+        raise RefillUnsupported("invalid guest madvise result")
+    if constants.purge_madvise_result < 0 and constants.guest_errno_address is None:
+        raise RefillUnsupported("failed guest madvise requires its TLS errno address")
+    if read_u64(pages, arena + 0x500) != 0x1216F0B0:
+        raise RefillUnsupported("custom extent purge hook is not modeled")
+    write_u64(pages, arena + 0x38, read_u64(pages, arena + 0x38) + 1)
+    used = read_u64(pages, arena + 0xD8)
+    dirty = read_u64(pages, arena + 0xE0)
+    shift = read_u64(pages, arena + 0xD0) & 63
+    target = (dirty - max(used >> shift, read_u64(pages, constants.region_page_limit_address))) & 0xFFFF_FFFF_FFFF_FFFF
+    sentinel = arena + 0x150
+    pointer = read_u64(pages, sentinel)
+    tree = _free_extent_tree(pages, arena, constants)
+    selected, total = [], 0
+    while pointer != sentinel:
+        if len(selected) >= 128:
+            raise RefillUnsupported("dirty extent queue is cyclic or too long")
+        if pointer == read_u64(pages, arena + 0x198) + 0x28:
+            raise RefillUnsupported("purge of a large cached extent is not modeled")
+        following = read_u64(pages, pointer)
+        region, page = _slab_page(pages, pointer, constants)
+        if region == read_u64(pages, arena + 0xC8):
+            raise RefillUnsupported("purge needs another OS region")
+        bias = read_u64(pages, constants.page_bias_address)
+        start = region + 0x68 + (page - bias) * 8
+        size = read_u64(pages, start) & ~0xFFF
+        count = size >> 12
+        tree.remove(pointer - 0x10)
+        _unlink_dirty_extent(pages, arena, pointer - 0x10, count)
+        _account_extent_pages(pages, arena, count, constants)
+        for index, value in ((count - 1, 0xFFB), (0, size | 0xFFB)):
+            address = start + index * 8
+            write_u64(pages, address, (read_u64(pages, address) & 4) | value)
+        selected.append((pointer, start, count))
+        total += count
+        if total >= target:
+            break
+        pointer = following
+    # The isolated native oracle models madvise as an advisory syscall. Its
+    # outcome changes metadata bit 2; no captured post-call pages are copied.
+    # This models that guest runtime, not Linux's physical page contents.
+    for pointer, start, count in selected:
+        if constants.purge_madvise_result < 0:
+            write_u32(pages, constants.guest_errno_address, -constants.purge_madvise_result)
+        for index in range(count):
+            address = start + index * 8
+            flag = 0 if constants.purge_madvise_result == 0 else 4
+            write_u64(pages, address, (read_u64(pages, address) & ~4) | flag)
+    write_u64(pages, arena + 0x40, read_u64(pages, arena + 0x40) + len(selected))
+    write_u64(pages, arena + 0x48, read_u64(pages, arena + 0x48) + total)
+    for pointer, _, _ in selected:
+        write_u64(pages, pointer, pointer)
+        write_u64(pages, pointer + 8, pointer)
+        _release_extent(pages, arena, pointer, False, True, constants)
+
+
+def _return_slab_slot(pages, arena, pointer, class_id, constants):
+    region = pointer & ~read_u64(pages, constants.bitmap_mask_address)
+    bias = read_u64(pages, constants.page_bias_address)
+    entry_address = region + 0x68 + (((pointer - region) >> 12) - bias) * 8
+    entry = read_u64(pages, entry_address)
+    if (entry & 3) != 1 or ((entry >> 4) & 0xFF) != class_id:
+        raise RefillUnsupported("flush object is not in the requested slab class")
+    page = ((pointer - region) >> 12) - (entry >> 12)
+    slab = region + read_u64(pages, constants.region_offset_address) + (page - bias) * 0x60 + 0x10
+    if read_u32(pages, slab) != class_id:
+        raise RefillUnsupported("flush slab class mismatch")
+    metadata = _class_metadata_address(class_id, constants)
+    stride = read_u64(pages, metadata + 0x10)
+    delta = pointer - region - (page << 12) - read_u32(pages, metadata + 0x58)
+    if stride == 0 or delta < 0 or delta % stride:
+        raise RefillUnsupported("flush pointer is not a slab slot boundary")
+    index = delta // stride
+    total = read_u32(pages, metadata + 0x20)
+    if index >= total:
+        raise RefillUnsupported("flush pointer is outside the slab")
+    count = read_u32(pages, slab + 4)
+    bitmap_address = slab + 8 + (index >> 6) * 8
+    before = read_u64(pages, bitmap_address)
+    bit = 1 << (index & 63)
+    if before & bit:
+        raise RefillUnsupported("flush attempts to return an already free slab slot")
+    write_u64(pages, bitmap_address, before ^ bit)
+    levels = read_u32(pages, metadata + 0x30)
+    if before == 0:
+        for level in range(1, levels):
+            parent_address = slab + 8 + (read_u64(pages, metadata + 0x38 + level * 8) + (index >> (6 * (level + 1)))) * 8
+            parent = read_u64(pages, parent_address)
+            write_u64(pages, parent_address, parent ^ (1 << ((index >> (6 * level)) & 63)))
+            if parent:
+                break
+    write_u32(pages, slab + 4, count + 1)
+    state = arena + class_id * 0xE0
+    if count + 1 == total:
+        if slab == read_u64(pages, state + 0x530):
+            write_u64(pages, state + 0x530, 0)
+        elif total != 1:
+            tree = _AllocatorTree(pages, state + 0x538, lambda node: node)
+            tree.remove(slab - 0x10)
+        _release_extent(pages, arena, slab, True, False, constants)
+        write_u64(pages, state + 0x5E0, read_u64(pages, state + 0x5E0) - 1)
+    elif count == 0:
+        current = read_u64(pages, state + 0x530)
+        if slab != current:
+            tree = _AllocatorTree(pages, state + 0x538, lambda node: node)
+            if slab < current:
+                if read_u32(pages, current + 4):
+                    tree.insert(current - 0x10)
+                write_u64(pages, state + 0x530, slab)
+                write_u64(pages, state + 0x5D8, read_u64(pages, state + 0x5D8) + 1)
+            else:
+                tree.insert(slab - 0x10)
+    write_u64(pages, state + 0x5A8, read_u64(pages, state + 0x5A8) + 1)
+    write_u64(pages, state + 0x5B8, read_u64(pages, state + 0x5B8) - 1)
+
+
+def _flush_small_bin(pages, arena, bins, class_id, retain, constants):
+    if class_id > 0x23:
+        raise RefillUnsupported("large-bin flush is not modeled")
+    target = bins + (class_id + 1) * 0x20
+    count = read_u32(pages, target + 0x10)
+    if not 0 <= retain <= count:
+        raise RefillUnsupported("flush retention exceeds bin count")
+    list_address = read_u64(pages, target + 0x18)
+    state = arena + class_id * 0xE0
+    pointers = [read_u64(pages, list_address + i * 8) for i in range(count)]
+    # Native groups by arena. The supported thread has one live arena.
+    mask = read_u64(pages, constants.bitmap_mask_address)
+    if any(read_u64(pages, pointer & ~mask) != arena for pointer in pointers[:count - retain]):
+        raise RefillUnsupported("flush spans another arena")
+    write_u64(pages, state + 0x5C8, read_u64(pages, state + 0x5C8) + 1)
+    write_u64(pages, state + 0x5B0, read_u64(pages, state + 0x5B0) + read_u64(pages, target))
+    write_u64(pages, target, 0)
+    for pointer in pointers[:count - retain]:
+        _return_slab_slot(pages, arena, pointer, class_id, constants)
+    # memmove preserves trailing list cells, including those now inactive.
+    for i, pointer in enumerate(pointers[count - retain:]):
+        write_u64(pages, list_address + i * 8, pointer)
+    write_u32(pages, target + 0x10, retain)
+    if retain < _signed32(read_u32(pages, target + 8)):
+        write_u32(pages, target + 8, retain)
+
+
+def _cleanup_bins(pages, thread, constants):
+    bins = read_u64(pages, thread + 0x10)
+    arena = read_u64(pages, thread + 0x30)
+    class_id = read_u32(pages, bins + 0x1C)
+    class_count = read_u64(pages, constants.class_count_address)
+    if class_id >= class_count:
+        raise RefillUnsupported("cleanup cursor exceeds class table")
+    caller = bins + class_id * 0x20
+    floor = _signed32(read_u32(pages, caller + 0x28))
+    shift = read_u32(pages, caller + 0x2C)
+    if floor > 0:
+        count = read_u32(pages, caller + 0x30)
+        _flush_small_bin(pages, arena, bins, class_id, count + (floor >> 2) - floor, constants)
+        capacity = read_u32(pages, read_u64(pages, constants.free_capacity_table_pointer_address) + class_id * 4)
+        if capacity >> ((shift + 1) & 31):
+            write_u32(pages, caller + 0x2C, shift + 1)
+    elif floor < 0 and shift > 1:
+        write_u32(pages, caller + 0x2C, shift - 1)
+    write_u32(pages, caller + 0x28, read_u32(pages, caller + 0x30))
+    write_u32(pages, bins + 0x1C, (class_id + 1) % class_count)
+    write_u32(pages, bins + 0x18, 0)
+
+
+def cleanup_small_object_bins(pages, *, thread_state_address, constants=AllocatorConstants()):
+    """One native periodic sweep; unsupported branches are atomic failures."""
+    staged = _PageTransaction(pages)
+    _cleanup_bins(staged, thread_state_address, constants)
+    staged.commit()
+
+
+def allocate_small_object(pages, *, thread_state_address, request_size, constants=AllocatorConstants()):
+    """Normal malloc including empty-bin refill, new slab setup and cleanup.
+
+    Requires initialized TLS/arena and mapped free extents. No native code,
+    expected pointers, supplied batch widths or captured post-call bytes are
+    used. Fresh OS regions and large objects fail atomically; purge requires
+    an explicit guest madvise result in constants.
+    """
+    staged = _PageTransaction(pages)
+    result = _allocate_small_object(staged, thread_state_address=thread_state_address,
+                                    request_size=request_size, constants=constants, lifecycle=True)
+    staged.commit()
+    return result
 
 
 def allocate_small_object_fast(
@@ -225,10 +967,15 @@ def allocate_small_object_fast(
     It neither discovers TLS nor generates a fresh allocator.
     """
 
+    return _allocate_small_object(pages, thread_state_address=thread_state_address,
+                                 request_size=request_size, constants=constants, lifecycle=False)
+
+
+def _allocate_small_object(pages, *, thread_state_address, request_size, constants, lifecycle):
     if request_size < 0:
         raise ValueError("request_size must be non-negative")
     size = request_size or 1
-    if size > 0x1000:
+    if size > (0x3800 if lifecycle else 0x1000):
         raise RefillUnsupported("large-object allocation is not modeled")
     if read_u32(pages, constants.malloc_initialization_flag_address):
         raise RefillUnsupported("allocator initialization is pending")
@@ -243,31 +990,44 @@ def allocate_small_object_fast(
     if _read(pages, constants.malloc_fill_flag_address, 1) != b"\x00":
         raise RefillUnsupported("allocator fill path is active")
 
-    class_id = _read(pages, constants.class_table + ((size - 1) >> 3), 1)[0]
+    if size <= 0x1000:
+        class_id = _read(pages, constants.class_table + ((size - 1) >> 3), 1)[0]
+    else:
+        lg = (size * 2 - 1).bit_length() - 1
+        class_id = 4 * lg - 0x17 + (((size - 1) >> (lg - 3)) & 3)
     width = read_u64(pages, constants.class_width_table + class_id * 8)
     bins = read_u64(pages, thread_state_address + 0x10)
     if bins < 0x10000 or bins & 7:
         raise RefillUnsupported("thread state has no captured bin table")
     bin_address = bins + class_id * 0x20
-    if read_u32(pages, bin_address + 0x30) == 0:
-        raise RefillUnsupported("empty malloc bin requires a separate refill path")
-    result = pop_free_list(pages, bin_address)
     sweep_count = read_u32(pages, bins + 0x18)
-    if sweep_count >= constants.free_sweep_period - 1:
+    if sweep_count >= constants.free_sweep_period:
+        raise RefillUnsupported("invalid cleanup counter")
+    if not lifecycle and sweep_count >= constants.free_sweep_period - 1:
         raise RefillUnsupported("malloc needs unmodeled periodic cleanup")
     floor_word = read_u32(pages, bin_address + 0x28)
     floor = floor_word if floor_word < 0x8000_0000 else floor_word - 0x1_0000_0000
-    floor_after = min(result.count_after, floor)
+    if read_u32(pages, bin_address + 0x30) == 0:
+        if not lifecycle:
+            raise RefillUnsupported("empty malloc bin requires a separate refill path")
+        write_u32(pages, bin_address + 0x28, -1)
+        result = _refill_empty_bin(pages, read_u64(pages, thread_state_address + 0x30),
+                                   bin_address, class_id, constants)
+    else:
+        result = pop_free_list(pages, bin_address)
+        write_u32(pages, bin_address + 0x30, result.count_after)
+        if result.count_after < floor:
+            write_u32(pages, bin_address + 0x28, result.count_after)
+    floor_after = _signed32(read_u32(pages, bin_address + 0x28))
     allocation_count = read_u64(pages, bin_address + 0x20)
     allocation_count_after = (allocation_count + 1) & 0xFFFF_FFFF_FFFF_FFFF
     allocated_bytes = read_u64(pages, thread_state_address + 0x18)
     allocated_bytes_after = (allocated_bytes + width) & 0xFFFF_FFFF_FFFF_FFFF
 
-    write_u32(pages, bin_address + 0x30, result.count_after)
-    if floor_after != floor:
-        write_u32(pages, bin_address + 0x28, floor_after)
     write_u64(pages, bin_address + 0x20, allocation_count_after)
     write_u32(pages, bins + 0x18, sweep_count + 1)
+    if lifecycle and sweep_count + 1 == constants.free_sweep_period:
+        _cleanup_bins(pages, thread_state_address, constants)
     write_u64(pages, thread_state_address + 0x18, allocated_bytes_after)
     return SmallObjectAllocation(
         request_size=request_size,
@@ -281,9 +1041,9 @@ def allocate_small_object_fast(
         allocation_count_before=allocation_count,
         allocation_count_after=allocation_count_after,
         sweep_count_before=sweep_count,
-        sweep_count_after=sweep_count + 1,
+        sweep_count_after=read_u32(pages, bins + 0x18),
         floor_before=floor,
-        floor_after=floor_after,
+        floor_after=_signed32(read_u32(pages, bin_address + 0x28)),
     )
 
 
@@ -304,6 +1064,22 @@ def publish_small_object_free(
     void; this result describes state changes rather than an ABI return value.
     """
 
+    return _publish_small_object_free(pages, thread_state_address=thread_state_address,
+                                      object_address=object_address, constants=constants, lifecycle=False)
+
+
+def free_small_object(pages, *, thread_state_address, object_address, constants=AllocatorConstants()):
+    """Normal void free with full-bin flush and periodic cleanup, atomically."""
+    if object_address == 0:
+        return None
+    staged = _PageTransaction(pages)
+    result = _publish_small_object_free(staged, thread_state_address=thread_state_address,
+                                       object_address=object_address, constants=constants, lifecycle=True)
+    staged.commit()
+    return result
+
+
+def _publish_small_object_free(pages, *, thread_state_address, object_address, constants, lifecycle):
     if object_address < 0x10000 or object_address & 7:
         raise ValueError(f"invalid small-object pointer {object_address:#x}")
     if read_u32(pages, thread_state_address + 8) != 1:
@@ -327,18 +1103,25 @@ def publish_small_object_free(
     class_id = (entry >> 4) & 0xFF
     if (entry & 3) != 1 or class_id == 0xFF:
         raise RefillUnsupported("region page is not a normal small-object slab")
+    if class_id > 0x23:
+        raise RefillUnsupported("small-object class exceeds slab metadata table")
 
     bins = read_u64(pages, thread_state_address + 0x10)
     if bins < 0x10000 or bins & 7:
         raise RefillUnsupported("thread state has no captured bin table")
     bin_address = bins + class_id * 0x20
     count = read_u32(pages, bin_address + 0x30)
+    count_before = count
     capacity_table = read_u64(pages, constants.free_capacity_table_pointer_address)
     capacity = read_u32(pages, capacity_table + class_id * 4)
-    if count >= capacity:
+    if count > capacity:
+        raise RefillUnsupported("free-list count exceeds capacity")
+    if not lifecycle and count == capacity:
         raise RefillUnsupported("free-list bin needs an unmodeled flush")
     sweep_count = read_u32(pages, bins + 0x18)
-    if sweep_count >= constants.free_sweep_period - 1:
+    if sweep_count >= constants.free_sweep_period:
+        raise RefillUnsupported("invalid cleanup counter")
+    if not lifecycle and sweep_count >= constants.free_sweep_period - 1:
         raise RefillUnsupported("free publication needs unmodeled periodic cleanup")
     list_address = read_u64(pages, bin_address + 0x38)
     if list_address < 0x10000 or list_address & 7:
@@ -350,9 +1133,15 @@ def publish_small_object_free(
 
     # Exactly the four ordinary nonstack writes at 0x12181a38/ae0/aec/af8.
     write_u64(pages, thread_state_address + 0x20, freed_bytes_after)
+    if lifecycle and count == capacity:
+        _flush_small_bin(pages, read_u64(pages, thread_state_address + 0x30),
+                         bins, class_id, capacity >> 1, constants)
+        count = read_u32(pages, bin_address + 0x30)
     write_u64(pages, list_address + count * 8, object_address)
     write_u32(pages, bin_address + 0x30, count + 1)
     write_u32(pages, bins + 0x18, sweep_count + 1)
+    if lifecycle and sweep_count + 1 == constants.free_sweep_period:
+        _cleanup_bins(pages, thread_state_address, constants)
     return FreeListPush(
         thread_state_address=thread_state_address,
         object_address=object_address,
@@ -362,13 +1151,13 @@ def publish_small_object_free(
         class_id=class_id,
         bin_address=bin_address,
         list_address=list_address,
-        count_before=count,
+        count_before=count_before,
         count_after=count + 1,
         capacity=capacity,
         freed_bytes_before=freed_bytes,
         freed_bytes_after=freed_bytes_after,
         sweep_count_before=sweep_count,
-        sweep_count_after=sweep_count + 1,
+        sweep_count_after=read_u32(pages, bins + 0x18),
     )
 
 

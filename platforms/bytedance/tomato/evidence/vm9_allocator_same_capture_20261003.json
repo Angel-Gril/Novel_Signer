@@ -1,0 +1,320 @@
+{
+  "evidence_id": "vm9_allocator_same_capture_20261003",
+  "platform": "bytedance.tomato",
+  "trial": "vm9_detail_20261002_g",
+  "status": "captured_state_all_segments_and_output_verified",
+  "provenance": {
+    "trace_sha256": "f7ffa8b815632c8da77ecf4d51eb1bfd17e0cd72f6cbd077848d1c4bd8aa763f",
+    "initial_images_sha256": {
+      "vm9_libc.bin": "aee9a140a619355e30e22f4e49de55b37ae8972df9fe62eb08d2de178ef78fc9",
+      "vm9_m0.bin": "6c7410c211d068937d61f843b187acc6d866c877f54c9112cc64156a76419612",
+      "vm9_m1.bin": "f45d88dd8b5addfe526760ff4e10c5abb79812c81612f62f036256c329e77c21",
+      "vm9_m2.bin": "d6535c337070077721d8cb22a63311aba9fdf3f9f1695c9119f76a56f18e2ce9",
+      "vm9_copy2.bin": "a566477bdfc7abe95a506ee906e62264c30fcd5dc42fc495e2ba05baa7644ef7"
+    },
+    "vm_interpreter_sha256": "ce8ad51ab5b3afcf3533624b526b9ff875a56c6f14878a75d9b10b8c9a9b32ed",
+    "allocator_model_sha256": "0ce553b20fcea35ad61bbd7582159a97ebfa1e3f697415b6a5e95dfd39ede774",
+    "integration_runner_sha256": "864952cd39a786215d404fee545e1fad6d806c17a55cf9447aa9d9ffae9766cc",
+    "comparison_runner_sha256": "77185a267b43537e08f9cdd0a8ea8e8748c6a7a7fa1c25e5938d29e936071421",
+    "comparison_results_sha256": "2ddd8e4530821b91ab1e57948ff3c6234b5f070279b647a4ed3c6bfb5102a713",
+    "public_divmod_verifier_sha256": "30418bf872b0f0904afeb2adef7303748b223688af1a8e413a9fe50465256dc7",
+    "divmod_results_sha256": "d171749cb820a9cb3c3755ef2c383fb331141e6a8e2145500d310ec1d2cffa43"
+  },
+  "stages": [
+    {
+      "segment": 1,
+      "events": 4592,
+      "callbacks": 85,
+      "python_malloc_free_operations": 95,
+      "native_syscalls": 1,
+      "native_log_sha256": "cc24892fb6342eec0f4ff7b0a206dff618a1e5a1a877041f2a129e1f43b25a9a",
+      "python_syscalls": 0,
+      "python_log_sha256": "badc5082cb6d45e2bbaef45c2d354610eec90ce7b22796d5e35eb8ca18979752",
+      "pages_compared": 4256,
+      "nonstack_different_pages": 0,
+      "differences": [
+        {
+          "page": "0xe4ffa000",
+          "bytes": 591,
+          "stack": true
+        },
+        {
+          "page": "0xe4ffb000",
+          "bytes": 150,
+          "stack": true
+        }
+      ],
+      "native_checkpoint_sha256": "41c602fdbfc1aea8dcb56b7bb10b100a781f2a8b4d470327f39a1f4d0e5802dd",
+      "python_checkpoint_sha256": "99531b6168a20aabfe6ce513ecb8eb1524fa1500355de3b40c73f47c3bf6af6c"
+    },
+    {
+      "segment": 2,
+      "events": 90330,
+      "callbacks": 121,
+      "python_malloc_free_operations": 118,
+      "native_syscalls": 0,
+      "native_log_sha256": "5b4ac367eeb812761103e9bcd1740a7e3315fe0781e10191ba88dfe90464989a",
+      "python_syscalls": 0,
+      "python_log_sha256": "7e431e2497e33486ea3c7dccd32a08f66b1ff623aae5d5604b39a6a219feefa1",
+      "pages_compared": 4256,
+      "nonstack_different_pages": 0,
+      "differences": [
+        {
+          "page": "0xe4ffa000",
+          "bytes": 591,
+          "stack": true
+        },
+        {
+          "page": "0xe4ffb000",
+          "bytes": 304,
+          "stack": true
+        }
+      ],
+      "native_checkpoint_sha256": "63cc4318d1b5c658be8a7d18077f4b628d1f3cda335e1e660c69f6beb28e5e28",
+      "python_checkpoint_sha256": "7701e5456340432c0b5ae364ea3a038ad8be479ba4729193bb2a43213a3593cd"
+    },
+    {
+      "segment": 3,
+      "events": 1057,
+      "callbacks": 87,
+      "python_malloc_free_operations": 90,
+      "native_syscalls": 2,
+      "native_log_sha256": "0ad20e1076fb38602869fb76e18a3ae0894f6958325e7f6de1fa235f3ce54891",
+      "python_syscalls": 2,
+      "python_log_sha256": "dd87f089c7a655ca95ad2e0e448c913267b982982ac306a09c1adbdee15798c9",
+      "pages_compared": 4256,
+      "nonstack_different_pages": 5,
+      "differences": [
+        {
+          "page": "0x122a1000",
+          "bytes": 2,
+          "stack": false
+        },
+        {
+          "page": "0x122a2000",
+          "bytes": 2,
+          "stack": false
+        },
+        {
+          "page": "0x122a4000",
+          "bytes": 2,
+          "stack": false
+        },
+        {
+          "page": "0x12859000",
+          "bytes": 6,
+          "stack": false
+        },
+        {
+          "page": "0x1296b000",
+          "bytes": 3,
+          "stack": false
+        },
+        {
+          "page": "0xe4ffa000",
+          "bytes": 591,
+          "stack": true
+        },
+        {
+          "page": "0xe4ffb000",
+          "bytes": 304,
+          "stack": true
+        },
+        {
+          "page": "0xe4ffd000",
+          "bytes": 238,
+          "stack": true
+        }
+      ],
+      "native_checkpoint_sha256": "d0131d57a0383d155b7bff67a7ad108d2c6daf34e8b586f15a3eb8d4da2d2aca",
+      "python_checkpoint_sha256": "d3c2397c69f9bb7671337e8db789e13a100c564aba629280789d33d2cdf6a2c8"
+    }
+  ],
+  "total_matched_events": 95979,
+  "total_callbacks": 293,
+  "total_python_malloc_free_operations": 303,
+  "native_allocator_fallback": false,
+  "host_continuation": {
+    "native_entry": "0x1252266c",
+    "native_stop": "0x1252339c",
+    "dynamic_string_constructor": true,
+    "actual_recursive_cleanup": true,
+    "trained_handoff_used": false,
+    "manual_transition_free_list_used": false
+  },
+  "captured_callback_page_injection": false,
+  "callback_target_patch": false,
+  "seg3_frame_patch": false,
+  "clock_slot_override": false,
+  "seg1_stack_pointer_tag_normalization": {
+    "retained": true,
+    "address": "0xe4ffbcde",
+    "bytes": 2
+  },
+  "guest_os_models": {
+    "wall_clock_seconds": 1790261112,
+    "wall_clock_nanoseconds": 0,
+    "monotonic_clock_nanoseconds": 123456789000000,
+    "madvise": "Explicit advisory success model; guest bytes retained.",
+    "futex": "Observed FUTEX_WAKE_PRIVATE wake-all only; zero waiting threads in isolated single-thread oracle.",
+    "unknown_syscall_success_fallback": false
+  },
+  "body_comparison": {
+    "bytes": 779,
+    "capture_different_bytes": 0,
+    "native_different_bytes": 0,
+    "body_sha256": "1cf99c1513819043bb7c8e0a21891274005907d3219cc12445bb5c514b1ee6a9"
+  },
+  "whole_memory_equivalence": false,
+  "residual": {
+    "segment": 3,
+    "nonstack_pages": 5,
+    "nonstack_different_bytes": 15,
+    "native_copy_writer_pcs": [
+      "0x12529190",
+      "0x12556dd8",
+      "0x1210c2a4",
+      "0x1255020c",
+      "0x12550210"
+    ],
+    "callbacks": [
+      9,
+      87
+    ],
+    "output_affected": false,
+    "residual_bytes_patched": false,
+    "native_watch_log_sha256": "2a2f97d95415ecc72fbcc888db97a09f597bf433682254218ca7322d0ede833d",
+    "python_watch_log_sha256": "cf409778cfa37c69720e4cd56398af944dba141237d6450bb7e1c9236dbf10cc"
+  },
+  "interpreter_correction": {
+    "problem": "Virtual R28 was incorrectly used as physical x28 slot-array base.",
+    "overwritten_callback_pointer": "0x12641b28",
+    "incorrect_final_value": "0x1d",
+    "fix": "Optional explicit register_backing_base; abstract mode has no implicit guest backing writes.",
+    "native_divmod_handler": "0x1242b97c",
+    "native_remainder_commit_path": "0x1242ad08",
+    "native_handler_pairs": 12,
+    "cases": [
+      {
+        "lhs": "0x1",
+        "rhs": "0x20",
+        "backing_supplied": false,
+        "quotient": "0x0",
+        "remainder": "0x1",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0x1",
+        "rhs": "0x20",
+        "backing_supplied": true,
+        "quotient": "0x0",
+        "remainder": "0x1",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0xffffffff",
+        "rhs": "0x1",
+        "backing_supplied": false,
+        "quotient": "0xffffffffffffffff",
+        "remainder": "0x0",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0xffffffff",
+        "rhs": "0x1",
+        "backing_supplied": true,
+        "quotient": "0xffffffffffffffff",
+        "remainder": "0x0",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0x80000000",
+        "rhs": "0x3",
+        "backing_supplied": false,
+        "quotient": "0x2aaaaaaa",
+        "remainder": "0x2",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0x80000000",
+        "rhs": "0x3",
+        "backing_supplied": true,
+        "quotient": "0x2aaaaaaa",
+        "remainder": "0x2",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0x123456789abcdef0",
+        "rhs": "0x20",
+        "backing_supplied": false,
+        "quotient": "0x4d5e6f7",
+        "remainder": "0x10",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0x123456789abcdef0",
+        "rhs": "0x20",
+        "backing_supplied": true,
+        "quotient": "0x4d5e6f7",
+        "remainder": "0x10",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0xffffffff",
+        "rhs": "0x0",
+        "backing_supplied": false,
+        "quotient": "0x0",
+        "remainder": "0xffffffffffffffff",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0xffffffff",
+        "rhs": "0x0",
+        "backing_supplied": true,
+        "quotient": "0x0",
+        "remainder": "0xffffffffffffffff",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0x0",
+        "rhs": "0x0",
+        "backing_supplied": false,
+        "quotient": "0x0",
+        "remainder": "0x0",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      },
+      {
+        "lhs": "0x0",
+        "rhs": "0x0",
+        "backing_supplied": true,
+        "quotient": "0x0",
+        "remainder": "0x0",
+        "native_match": true,
+        "unrelated_callback_pointer_preserved": true
+      }
+    ]
+  },
+  "remaining_dependencies": [
+    "captured initialized memory",
+    "trace segment entry registers",
+    "captured native frame context",
+    "native ARM64 constructors/callbacks",
+    "Seg1 stack pointer-tag normalization",
+    "explicit guest OS models"
+  ],
+  "fresh_input_parameterization": false,
+  "no_jvm_rust_signer_complete": false,
+  "new_server_validation_performed": false,
+  "raw_inputs_native_images_logs_and_bodies_published": false
+}

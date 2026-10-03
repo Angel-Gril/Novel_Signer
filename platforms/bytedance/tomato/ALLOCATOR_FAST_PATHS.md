@@ -1,5 +1,10 @@
 # VM9 Python allocator fast paths
 
+This records the earlier bounded APIs. The broader lifecycle APIs and latest
+same-capture result are in [ALLOCATOR_LIFECYCLE.md](ALLOCATOR_LIFECYCLE.md).
+The old fast APIs keep their original rejection boundaries; empty-bin refill,
+new slabs and cleanup are available through the lifecycle APIs.
+
 The public Python checkpoint model reproduces the normal initialized-thread
 small-object malloc/free paths, including their accounting. This is a component
 of current Medusa research; it does not initialize a fresh allocator or generate

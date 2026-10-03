@@ -1,0 +1,608 @@
+{
+  "evidence_id": "vm9_allocator_lifecycle_20261003",
+  "platform": "bytedance.tomato",
+  "status": "initialized_checkpoint_native_differential_verified",
+  "scope": "Empty-bin refill, mapped free-extent slab creation, bitmap initialization, trees, flush, cleanup and release/purge.",
+  "public_model": "python/vm9_allocator.py",
+  "public_verifier": "python/verify_vm9_allocator_lifecycle.py",
+  "provenance": {
+    "primary_checkpoint_sha256": "538858977e4c1ae16aee423f3a7f0ad946b3a3e519b6fffee175b66f54b9a1d4",
+    "model_sha256": "0ce553b20fcea35ad61bbd7582159a97ebfa1e3f697415b6a5e95dfd39ede774",
+    "native_libc_sha256": "3b76a7d1da32e3844dee1a2bbe4fbedd8023fa8eb8b27e3ae9ade8d35a9f0fbd",
+    "public_verifier_sha256": "dfefcecaf963b5ced67a9e00ef47affce4dbc3e342c7292d318e66e9d465cd3e",
+    "direct_results_sha256": "f0bafddfdf8fdc80cb420a2eeb0dcd0f29738d05b78f67e56ca614fae66ce023",
+    "stress_runner_sha256": "8a03f7da347f49a76e3eed6c5ab5e6be5f44451ba6b65608dc7f9937a6bff9c1",
+    "stress_results_sha256": "e80f83f98156e02e7109b0182495b41440154f64770f100ce08b229cf3d0b11f"
+  },
+  "direct_native_cases": 83,
+  "new_slab_classes": 36,
+  "bitmap_classes": 36,
+  "checkpoint_pages_compared_per_case": 4256,
+  "cases": [
+    {
+      "case": "empty_current",
+      "return": "0x1296bb80",
+      "native_nonstack_writes": 25,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "empty_available",
+      "return": "0x12a479b0",
+      "native_nonstack_writes": 29,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "empty_real_new_slab",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 79,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "cleanup_zero",
+      "return": null,
+      "native_nonstack_writes": 3,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "cleanup_negative",
+      "return": null,
+      "native_nonstack_writes": 4,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "cleanup_positive",
+      "return": null,
+      "native_nonstack_writes": 20,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "malloc_cleanup",
+      "return": "0x1296baf0",
+      "native_nonstack_writes": 23,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "free_cleanup",
+      "return": null,
+      "native_nonstack_writes": 24,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "cleanup_cursor_wrap",
+      "return": null,
+      "native_nonstack_writes": 4,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_0",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 49,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_1",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 45,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_2",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 43,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_3",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 79,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_4",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 39,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_5",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 61,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_6",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 77,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_7",
+      "return": "0x12cb2000",
+      "native_nonstack_writes": 60,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_8",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 40,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_9",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 59,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_10",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 73,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_11",
+      "return": "0x12cb2000",
+      "native_nonstack_writes": 64,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_12",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 40,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_13",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 55,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_14",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 74,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_15",
+      "return": "0x12cb2000",
+      "native_nonstack_writes": 60,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_16",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 43,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_17",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 56,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_18",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 74,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_19",
+      "return": "0x12cb2000",
+      "native_nonstack_writes": 61,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_20",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 91,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_21",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 56,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_22",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 132,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_23",
+      "return": "0x12cb2000",
+      "native_nonstack_writes": 61,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_24",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 134,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_25",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 116,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_26",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 150,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_27",
+      "return": "0x12cb2000",
+      "native_nonstack_writes": 101,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_28",
+      "return": "0x122a3000",
+      "native_nonstack_writes": 262,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_29",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 150,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_30",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 210,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_31",
+      "return": "0x12cb2000",
+      "native_nonstack_writes": 152,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_32",
+      "return": "0x1287e000",
+      "native_nonstack_writes": 321,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_33",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 228,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_34",
+      "return": "0x12bfb000",
+      "native_nonstack_writes": 345,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "new_slab_class_35",
+      "return": "0x12cb2000",
+      "native_nonstack_writes": 215,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "bitmap_class_0",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_1",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_2",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_3",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_4",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_5",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_6",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_7",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_8",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_9",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_10",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_11",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_12",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_13",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_14",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_15",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_16",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_17",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_18",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_19",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_20",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_21",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_22",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_23",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_24",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_25",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_26",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_27",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_28",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_29",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_30",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_31",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_32",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_33",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_34",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "bitmap_class_35",
+      "final_memory_match": true,
+      "checkpoint_pages_compared": 4256
+    },
+    {
+      "case": "release_purge_success_True",
+      "native_nonstack_writes": 74,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    },
+    {
+      "case": "release_purge_success_False",
+      "native_nonstack_writes": 75,
+      "checkpoint_pages_compared": 4256,
+      "final_memory_match": true
+    }
+  ],
+  "unsupported_atomic_rejections": [
+    {
+      "case": "pending_tls",
+      "rejected": true,
+      "unchanged": true,
+      "reason": "thread state is outside the captured normal malloc path"
+    },
+    {
+      "case": "missing_arena",
+      "rejected": true,
+      "unchanged": true,
+      "reason": "thread arena initialization is not modeled"
+    },
+    {
+      "case": "fresh_region_required",
+      "rejected": true,
+      "unchanged": true,
+      "reason": "fresh region mapping / arena initialization is not modeled"
+    },
+    {
+      "case": "dirty_region_required",
+      "rejected": true,
+      "unchanged": true,
+      "reason": "dirty extent cleanup is not modeled"
+    },
+    {
+      "case": "entire_slab_release",
+      "rejected": true,
+      "unchanged": true,
+      "reason": "slab purge needs an explicit guest madvise outcome"
+    },
+    {
+      "case": "large_allocation",
+      "rejected": true,
+      "unchanged": true,
+      "reason": "large-object allocation is not modeled"
+    },
+    {
+      "case": "fill_flag",
+      "rejected": true,
+      "unchanged": true,
+      "reason": "allocator fill path is active"
+    },
+    {
+      "case": "bad_cursor",
+      "rejected": true,
+      "unchanged": true,
+      "reason": "cleanup cursor exceeds class table"
+    }
+  ],
+  "free_null_unchanged": true,
+  "continuous_stress": {
+    "operations": 360,
+    "allocations": 240,
+    "frees": 120,
+    "checkpoint_pages_compared_per_operation": 4256,
+    "native_returns_and_final_memory_match_after_each_operation": true
+  },
+  "os_boundary": {
+    "default_purge_madvise_result": null,
+    "success_oracle_result": 0,
+    "failure_oracle_result": -22,
+    "failure_errno_written": 22,
+    "linux_physical_page_zeroing_verified": false
+  },
+  "direct_release_helper_contract": "Class lock held on entry and reacquired on return; outer caller unlocks.",
+  "transient_write_order_equivalence_claimed": false,
+  "unsupported": [
+    "fresh OS region mapping",
+    "fresh TLS/arena",
+    "whole OS region release",
+    "large cached-extent purge",
+    "custom purge hooks",
+    "concurrent execution"
+  ],
+  "fresh_input_parameterization": false,
+  "new_server_validation_performed": false,
+  "raw_inputs_native_images_logs_and_bodies_published": false
+}

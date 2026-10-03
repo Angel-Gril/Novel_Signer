@@ -138,6 +138,9 @@ class VM:
         self.native_any = False           # optionally treat non-VM CALL targets as native and return
         self.step_hook = None             # optional callable(vm, dw, op, sub)
         self.branch_hook = None           # optional callable(vm, dw) -> absolute next PC
+        # Physical x28 belongs to the native VM frame, not virtual R28.
+        # A native bridge may supply the guest slot-array address explicitly.
+        self.register_backing_base = None
         self.opaque_hook = None            # optional callable(vm, dw, op, sub)
         self.trace = False
         # Native op17/sub26 and sub52 use two hidden VM slots immediately
@@ -264,7 +267,7 @@ class VM:
                     return "R%d = sext32((u32)R%d >> (R%d & 31))" % (fC, src, fB)
                 if sub == 46: return "R%d = sext32((u32)R%d - (u32)R%d) ; %x-%x" % (fC, fB, fA, R[fB]&0xFFFFFFFF, R[fA]&0xFFFFFFFF)
                 if sub == 26:
-                    return "u32div [R28+8*%d] / [R28+8*%d] -> [R17], *[R29-0x18]" % (
+                    return "u32div R%d / R%d -> hidden quotient, remainder" % (
                         fB, fD
                     )
                 if sub == 48: return "R%d = ~(R%d | R%d)" % (fC, fA, fD)
@@ -535,14 +538,15 @@ class VM:
                     # view of that same array in this runner.
                     lhs = self.R[fB] & 0xFFFFFFFF
                     rhs = self.R[fD] & 0xFFFFFFFF
-                    if rhs == 0:
-                        raise ZeroDivisionError("VM op17/sub26 unsigned divide by zero")
-                    quotient, remainder = divmod(lhs, rhs)
+                    # ARM64 UDIV returns zero for a zero divisor; MSUB then
+                    # retains the unsigned dividend as the remainder.
+                    quotient, remainder = divmod(lhs, rhs) if rhs else (0, lhs)
                     self._vm_tmp32 = sx32(quotient) & M64
                     self._vm_tmp33 = sx32(remainder) & M64
-                    reg_base = self.R[28] & M64
-                    m.w64((reg_base + 0x100) & M64, self._vm_tmp32)
-                    m.w64((reg_base + 0x108) & M64, self._vm_tmp33)
+                    if self.register_backing_base is not None:
+                        reg_base = self.register_backing_base & M64
+                        m.w64((reg_base + 0x100) & M64, self._vm_tmp32)
+                        m.w64((reg_base + 0x108) & M64, self._vm_tmp33)
                 elif sub == 52:   # commit the divmod remainder into a VM slot
                     # The normal arm64 path copies the temporary remainder
                     # held at *[x29-0x18] into slot fB.  The alternate opaque
@@ -552,7 +556,8 @@ class VM:
                     value = self._vm_tmp33
                     dst = fB
                     self.R[dst] = value
-                    m.w64((self.R[28] + 8 * dst) & M64, value)
+                    if self.register_backing_base is not None:
+                        m.w64((self.register_backing_base + 8 * dst) & M64, value)
                 elif sub == 12:   # logical left shift by 32 + fA
                     # Native handler 0x16882c loads slot fD and writes the
                     # 64-bit shifted value to slot fC.

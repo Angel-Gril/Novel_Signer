@@ -992,5 +992,25 @@
     "new_server_validation_performed": false,
     "captured_states_verified": 2,
     "second_capture_malloc_class2_return": "0x122a0c40"
+  },
+  "vm9_allocator_lifecycle_20261003": {
+    "evidence_file": "evidence/vm9_allocator_lifecycle_20261003.json",
+    "status": "initialized_checkpoint_native_differential_verified",
+    "direct_native_cases": 83,
+    "continuous_operations": 360,
+    "checkpoint_pages_compared": 4256,
+    "fresh_OS_TLS_arena_initialization": false
+  },
+  "vm9_allocator_same_capture_20261003": {
+    "evidence_file": "evidence/vm9_allocator_same_capture_20261003.json",
+    "status": "captured_state_all_segments_and_output_verified",
+    "matched_VM_events": 95979,
+    "callbacks": 293,
+    "python_malloc_free_operations": 303,
+    "body_bytes": 779,
+    "body_different_bytes": 0,
+    "whole_memory_equivalence": false,
+    "fresh_input_parameterization": false,
+    "new_server_validation_performed": false
   }
 }
