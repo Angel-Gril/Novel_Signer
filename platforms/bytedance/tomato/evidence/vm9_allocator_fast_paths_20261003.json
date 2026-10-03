@@ -1,0 +1,723 @@
+{
+  "evidence_id": "vm9_allocator_fast_paths_20261003",
+  "platform": "bytedance_tomato",
+  "status": "captured_checkpoint_native_differential_verified",
+  "scope": "Initialized-thread normal small-object malloc/free paths, including accounting and immediate slot reuse; not fresh allocator initialization.",
+  "provenance": {
+    "input_checkpoint_sha256": "538858977e4c1ae16aee423f3a7f0ad946b3a3e519b6fffee175b66f54b9a1d4",
+    "libc_image_sha256": "3b76a7d1da32e3844dee1a2bbe4fbedd8023fa8eb8b27e3ae9ade8d35a9f0fbd",
+    "python_model_sha256": "0919d5975c81733c1ef85bf3b07e415fad165927a05ebed2089b2fbae8138e94",
+    "direct_native_probe_sha256": "f041304d6d06c4701c4cfb1200f9a87c37a17e1318c3ec10bfa8234c3375fb79",
+    "differential_runner_sha256": "24765fb71c6bddcff4a3e97201151286a61849356890cf7d352e0152ab00bdda",
+    "differential_results_sha256": "14acee7a142cbb737fffdb2d03d69cfff689e42e8253e1b238e3cdab5189987a",
+    "integration_runner_sha256": "07ddc09f4211b29e1d8f8b5bb7bb610b400ed4172bde3d46e0c78c622402a237",
+    "native_control_runner_sha256": "68cf79c9948e2383ce4c74f468ff2ba170067a02a4b1b90625403228d843025a",
+    "integration_log_sha256": "3e5a11d6177284cfd386ae90b92fdb33b4b9b915bda2bf66c35087fc06d09600",
+    "native_control_log_sha256": "046b07bec480502f44678600bf5e8b17004c877302756fe1bb0ddcde89f4f911",
+    "sequence_comparison_sha256": "27cc56a6e9f176db52b1aeff8b70fb06bab918d3b8deedd8fb2f3e80549ede07",
+    "raw_snapshots_native_images_and_logs_published": false
+  },
+  "native_entries": {
+    "malloc_wrapper": "0x1210bb08",
+    "malloc_function": "0x1217f00c",
+    "malloc_nonempty_branch": "0x1217f0e8",
+    "free_wrapper": "0x1210bac0",
+    "free_function": "0x12181990",
+    "free_publication_branch": "0x12181ad8"
+  },
+  "context": {
+    "thread_state": "0x12296000",
+    "bin_table": "0x12282000",
+    "region_mask": "0x3ffff",
+    "page_bias": 2,
+    "region_page_limit": "0x40",
+    "class_table": "0x12196a80",
+    "class_width_table": "0x12196c80",
+    "free_capacity_table_pointer": "0x121d9f50",
+    "free_capacity_table": "0x122400c0",
+    "periodic_cleanup_count": "0xe4"
+  },
+  "derived_free_class3": {
+    "object": "0x1296ba60",
+    "region_base": "0x12940000",
+    "page_index": "0x2b",
+    "page_metadata_address": "0x129401b0",
+    "page_metadata": "0x2031",
+    "class_rule": "(entry >> 4) & 0xff",
+    "class_id": 3,
+    "bin": "0x12282060",
+    "list": "0x12282680",
+    "count_before": 3,
+    "count_after": 4,
+    "capacity": 8,
+    "class_width": "0x30",
+    "writes": [
+      {
+        "pc": "0x12181a38",
+        "field": "thread+0x20",
+        "effect": "freed-byte accounting += class width (u64)"
+      },
+      {
+        "pc": "0x12181ae0",
+        "field": "list[count]",
+        "effect": "publish the object pointer (u64)"
+      },
+      {
+        "pc": "0x12181aec",
+        "field": "bin+0x30",
+        "effect": "free-list count += 1 (u32)"
+      },
+      {
+        "pc": "0x12181af8",
+        "field": "bins+0x18",
+        "effect": "shared cleanup counter += 1 (u32)"
+      }
+    ],
+    "void_return": true
+  },
+  "malloc_rule": {
+    "zero_size_effective_size": 1,
+    "class_rule": "class_table[(effective_size - 1) >> 3]",
+    "count_rule": "count -= 1; result = list[count]",
+    "floor_rule": "update signed [bin+0x28] if count_after < floor",
+    "accounting": [
+      "[bin+0x20] += 1 (u64)",
+      "[bins+0x18] += 1 (u32)",
+      "[thread+0x18] += class_width (u64)"
+    ],
+    "object_payload_filled": false
+  },
+  "width_correction": {
+    "prior_report": "ALLOCATOR_AUDIT.md previously stated class-3 block width 0x60.",
+    "correct_value": "0x30",
+    "verification": "Both the raw native image at 0x12196c98 and the initialized checkpoint contain 0x30; native free credits 0x30. This matches the slab object stride."
+  },
+  "verification": {
+    "method": "Run captured ARM64 malloc/free wrappers on an isolated copy. Compare Python return pointers for malloc, exact ordered nonstack write address/size/value triples, and all 4256 checkpoint pages. Synthetic native stack is outside the checkpoint. Unsupported branches are rejected without mutation.",
+    "cases": [
+      {
+        "case": "class3_free_reallocate",
+        "stages": [
+          {
+            "operation": "free",
+            "argument": "0x1296ba60",
+            "class_id": 3,
+            "return": null,
+            "native_nonstack_writes": 4,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x12181a38",
+                "0x12296020",
+                8,
+                "0x262a28"
+              ],
+              [
+                "0x12181ae0",
+                "0x12282698",
+                8,
+                "0x1296ba60"
+              ],
+              [
+                "0x12181aec",
+                "0x12282090",
+                4,
+                "0x4"
+              ],
+              [
+                "0x12181af8",
+                "0x12282018",
+                4,
+                "0x38"
+              ]
+            ]
+          },
+          {
+            "operation": "malloc",
+            "argument": "0x2c",
+            "class_id": 3,
+            "return": "0x1296ba60",
+            "native_nonstack_writes": 4,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x1217f0f8",
+                "0x12282090",
+                4,
+                "0x3"
+              ],
+              [
+                "0x1217f138",
+                "0x12282080",
+                8,
+                "0x2"
+              ],
+              [
+                "0x1217f144",
+                "0x12282018",
+                4,
+                "0x39"
+              ],
+              [
+                "0x1217f15c",
+                "0x12296018",
+                8,
+                "0x6404c8"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "case": "class0_free_reallocate",
+        "stages": [
+          {
+            "operation": "free",
+            "argument": "0x122974a8",
+            "class_id": 0,
+            "return": null,
+            "native_nonstack_writes": 4,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x12181a38",
+                "0x12296020",
+                8,
+                "0x262a00"
+              ],
+              [
+                "0x12181ae0",
+                "0x122825e0",
+                8,
+                "0x122974a8"
+              ],
+              [
+                "0x12181aec",
+                "0x12282030",
+                4,
+                "0x5"
+              ],
+              [
+                "0x12181af8",
+                "0x12282018",
+                4,
+                "0x38"
+              ]
+            ]
+          },
+          {
+            "operation": "malloc",
+            "argument": "0x4",
+            "class_id": 0,
+            "return": "0x122974a8",
+            "native_nonstack_writes": 4,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x1217f0f8",
+                "0x12282030",
+                4,
+                "0x4"
+              ],
+              [
+                "0x1217f138",
+                "0x12282020",
+                8,
+                "0xc"
+              ],
+              [
+                "0x1217f144",
+                "0x12282018",
+                4,
+                "0x39"
+              ],
+              [
+                "0x1217f15c",
+                "0x12296018",
+                8,
+                "0x6404a0"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "case": "class1_free_reallocate",
+        "stages": [
+          {
+            "operation": "free",
+            "argument": "0x1229f520",
+            "class_id": 1,
+            "return": null,
+            "native_nonstack_writes": 4,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x12181a38",
+                "0x12296020",
+                8,
+                "0x262a08"
+              ],
+              [
+                "0x12181ae0",
+                "0x12282600",
+                8,
+                "0x1229f520"
+              ],
+              [
+                "0x12181aec",
+                "0x12282050",
+                4,
+                "0x1"
+              ],
+              [
+                "0x12181af8",
+                "0x12282018",
+                4,
+                "0x38"
+              ]
+            ]
+          },
+          {
+            "operation": "malloc",
+            "argument": "0x10",
+            "class_id": 1,
+            "return": "0x1229f520",
+            "native_nonstack_writes": 4,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x1217f0f8",
+                "0x12282050",
+                4,
+                "0x0"
+              ],
+              [
+                "0x1217f138",
+                "0x12282040",
+                8,
+                "0x5"
+              ],
+              [
+                "0x1217f144",
+                "0x12282018",
+                4,
+                "0x39"
+              ],
+              [
+                "0x1217f15c",
+                "0x12296018",
+                8,
+                "0x6404a8"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "case": "malloc_zero_size",
+        "stages": [
+          {
+            "operation": "malloc",
+            "argument": "0x0",
+            "class_id": 0,
+            "return": "0x122974b8",
+            "native_nonstack_writes": 4,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x1217f0f8",
+                "0x12282030",
+                4,
+                "0x3"
+              ],
+              [
+                "0x1217f138",
+                "0x12282020",
+                8,
+                "0xc"
+              ],
+              [
+                "0x1217f144",
+                "0x12282018",
+                4,
+                "0x38"
+              ],
+              [
+                "0x1217f15c",
+                "0x12296018",
+                8,
+                "0x6404a0"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "case": "malloc_class2",
+        "stages": [
+          {
+            "operation": "malloc",
+            "argument": "0x18",
+            "class_id": 2,
+            "return": "0x122a0c20",
+            "native_nonstack_writes": 4,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x1217f0f8",
+                "0x12282070",
+                4,
+                "0x6"
+              ],
+              [
+                "0x1217f138",
+                "0x12282060",
+                8,
+                "0x7"
+              ],
+              [
+                "0x1217f144",
+                "0x12282018",
+                4,
+                "0x38"
+              ],
+              [
+                "0x1217f15c",
+                "0x12296018",
+                8,
+                "0x6404b8"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "case": "malloc_class3",
+        "stages": [
+          {
+            "operation": "malloc",
+            "argument": "0x2d",
+            "class_id": 3,
+            "return": "0x1296baf0",
+            "native_nonstack_writes": 4,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x1217f0f8",
+                "0x12282090",
+                4,
+                "0x2"
+              ],
+              [
+                "0x1217f138",
+                "0x12282080",
+                8,
+                "0x2"
+              ],
+              [
+                "0x1217f144",
+                "0x12282018",
+                4,
+                "0x38"
+              ],
+              [
+                "0x1217f15c",
+                "0x12296018",
+                8,
+                "0x6404c8"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "case": "malloc_floor_update",
+        "stages": [
+          {
+            "operation": "malloc",
+            "argument": "0x2c",
+            "class_id": 3,
+            "return": "0x1296baf0",
+            "native_nonstack_writes": 5,
+            "write_sequence_matches": true,
+            "checkpoint_pages_compared": 4256,
+            "final_memory_match": true,
+            "native_writes": [
+              [
+                "0x1217f0f8",
+                "0x12282090",
+                4,
+                "0x2"
+              ],
+              [
+                "0x1217f4e8",
+                "0x12282088",
+                4,
+                "0x2"
+              ],
+              [
+                "0x1217f138",
+                "0x12282080",
+                8,
+                "0x2"
+              ],
+              [
+                "0x1217f144",
+                "0x12282018",
+                4,
+                "0x38"
+              ],
+              [
+                "0x1217f15c",
+                "0x12296018",
+                8,
+                "0x6404c8"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "case": "full_free_bin",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "free_periodic_cleanup",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "free_non_slab_page",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "free_large_page",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "free_hook",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "free_debug",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "empty_malloc_bin",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "malloc_periodic_cleanup",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "malloc_pending_initialization",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "malloc_debug",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "malloc_fill",
+        "rejected": true,
+        "unchanged": true
+      },
+      {
+        "case": "malloc_missing_arena",
+        "rejected": true,
+        "unchanged": true
+      }
+    ],
+    "differential_native_stages": 10,
+    "unsupported_branch_rejections": 12,
+    "free_returns_not_compared": true,
+    "total_native_stages_across_two_captured_states": 19
+  },
+  "captured_seg2_integration": {
+    "control_operations": 44,
+    "python_operations": 44,
+    "ordered_malloc_free_sequence_match": true,
+    "transition_model_operations": 4,
+    "callback_model_operations": 40,
+    "callbacks_completed": 45,
+    "segment2_events_verified_before_mismatch": 12085,
+    "first_mismatch": {
+      "relative_event": 12085,
+      "global_event": 16678,
+      "register": "R2",
+      "actual": "0x2f8",
+      "expected": "0x2f6",
+      "same_in_native_control": true,
+      "classification": "Known mixed-capture artifact, not a new allocator/VM failure.",
+      "current_truth_reference": "VM9_PROGRESS.md: Seg1 entry-base and native-frame corrections"
+    },
+    "trace_sha256": "82a50de1ec14b68e0980e02adcb5f3c0475572e802e9bb3152d18659c1cf1e15",
+    "full_segment_completed": false,
+    "native_allocator_fallback": false,
+    "callbacks_still_use_native_arm64": true,
+    "transition_free_setup": "Diagnostic explicit frees remain supplied by the runner; caller history is not independently derived."
+  },
+  "limitations": [
+    "Thread/TLS state, bin lists, region metadata, class tables and all baseline pages remain captured initialization.",
+    "Full bins, periodic cleanup, allocator initialization, hooks/debug/fill paths, large objects and automatic empty-bin malloc refill remain unsupported.",
+    "The integration prefix still executes native constructors and callbacks; physical scratch registers and dead native call-frame bytes are not reproduced by the Python interception.",
+    "The 0x2f8/0x2f6 stop belongs to a known mixed-capture trace comparison; it is not fresh-input validation or a new independent failure diagnosis.",
+    "The actual host cleanup/constructor history and current Medusa body remain unproved."
+  ],
+  "fresh_input_parameterization": false,
+  "new_server_validation_performed": false,
+  "second_captured_state_validation": {
+    "input_checkpoint_sha256": "95a45408a76f4e861de9ea17e05d2d51253b6188e7ef3a0726e11811940d1cd3",
+    "python_model_sha256": "0919d5975c81733c1ef85bf3b07e415fad165927a05ebed2089b2fbae8138e94",
+    "runner_sha256": "8c5c892924b76eb07fc92585990fc90b913934691d250cca35b9c0e5e8e6d512",
+    "results_sha256": "f4887e93f159e053702a2602e00ea74c07f640ce2a0b4dce47223a2ceae9709f",
+    "native_stages": 9,
+    "cases": [
+      {
+        "request_size": "0x4",
+        "allocation_free_reallocation": [
+          {
+            "operation": "malloc",
+            "argument": "0x4",
+            "class_id": 0,
+            "return": "0x122974b8",
+            "native_nonstack_writes": 4,
+            "write_sequence_match": true,
+            "final_memory_match": true,
+            "checkpoint_pages_compared": 4256
+          },
+          {
+            "operation": "free",
+            "argument": "0x122974b8",
+            "class_id": 0,
+            "return": null,
+            "native_nonstack_writes": 4,
+            "write_sequence_match": true,
+            "final_memory_match": true,
+            "checkpoint_pages_compared": 4256
+          },
+          {
+            "operation": "malloc",
+            "argument": "0x4",
+            "class_id": 0,
+            "return": "0x122974b8",
+            "native_nonstack_writes": 4,
+            "write_sequence_match": true,
+            "final_memory_match": true,
+            "checkpoint_pages_compared": 4256
+          }
+        ],
+        "same_slot_reclaimed": true
+      },
+      {
+        "request_size": "0x18",
+        "allocation_free_reallocation": [
+          {
+            "operation": "malloc",
+            "argument": "0x18",
+            "class_id": 2,
+            "return": "0x122a0c40",
+            "native_nonstack_writes": 4,
+            "write_sequence_match": true,
+            "final_memory_match": true,
+            "checkpoint_pages_compared": 4256
+          },
+          {
+            "operation": "free",
+            "argument": "0x122a0c40",
+            "class_id": 2,
+            "return": null,
+            "native_nonstack_writes": 4,
+            "write_sequence_match": true,
+            "final_memory_match": true,
+            "checkpoint_pages_compared": 4256
+          },
+          {
+            "operation": "malloc",
+            "argument": "0x18",
+            "class_id": 2,
+            "return": "0x122a0c40",
+            "native_nonstack_writes": 4,
+            "write_sequence_match": true,
+            "final_memory_match": true,
+            "checkpoint_pages_compared": 4256
+          }
+        ],
+        "same_slot_reclaimed": true
+      },
+      {
+        "request_size": "0x2c",
+        "allocation_free_reallocation": [
+          {
+            "operation": "malloc",
+            "argument": "0x2c",
+            "class_id": 3,
+            "return": "0x1296baf0",
+            "native_nonstack_writes": 4,
+            "write_sequence_match": true,
+            "final_memory_match": true,
+            "checkpoint_pages_compared": 4256
+          },
+          {
+            "operation": "free",
+            "argument": "0x1296baf0",
+            "class_id": 3,
+            "return": null,
+            "native_nonstack_writes": 4,
+            "write_sequence_match": true,
+            "final_memory_match": true,
+            "checkpoint_pages_compared": 4256
+          },
+          {
+            "operation": "malloc",
+            "argument": "0x2c",
+            "class_id": 3,
+            "return": "0x1296baf0",
+            "native_nonstack_writes": 4,
+            "write_sequence_match": true,
+            "final_memory_match": true,
+            "checkpoint_pages_compared": 4256
+          }
+        ],
+        "same_slot_reclaimed": true
+      }
+    ],
+    "difference_from_primary_checkpoint": {
+      "request_size": "0x18",
+      "primary_return": "0x122a0c20",
+      "second_return": "0x122a0c40",
+      "meaning": "The model derives the returned slot from the captured allocator state rather than requiring a fixed expected address."
+    },
+    "fresh_allocator_initialization": false,
+    "new_online_request": false
+  }
+}

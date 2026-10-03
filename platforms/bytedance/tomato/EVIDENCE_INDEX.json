@@ -969,5 +969,28 @@
     "metadata_base_offset_width_bits": 32,
     "fresh_input_parameterization": false,
     "new_server_validation_performed": false
+  },
+  "vm9_allocator_fast_paths_20261003": {
+    "evidence_file": "evidence/vm9_allocator_fast_paths_20261003.json",
+    "status": "captured_checkpoint_native_differential_verified",
+    "python_primitives": [
+      "allocate_small_object_fast",
+      "publish_small_object_free"
+    ],
+    "direct_native_stages": 19,
+    "checkpoint_pages_compared": 4256,
+    "nonstack_write_sequence_match": true,
+    "unsupported_branch_rejections": 12,
+    "captured_seg2_prefix": {
+      "native_callbacks_completed": 45,
+      "malloc_free_operations_replaced": 44,
+      "ordered_object_sequence_matches_native_control": true,
+      "full_segment_completed": false,
+      "stop_classification": "Known mixed-capture 0x2f8 vs 0x2f6 at relative event 12085."
+    },
+    "fresh_input_parameterization": false,
+    "new_server_validation_performed": false,
+    "captured_states_verified": 2,
+    "second_capture_malloc_class2_return": "0x122a0c40"
   }
 }

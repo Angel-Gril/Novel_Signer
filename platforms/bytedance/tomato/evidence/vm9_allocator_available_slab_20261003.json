@@ -10,7 +10,8 @@
     "differential_runner_sha256": "7572bbb7ae10f4da6ebbf3e0bc001fe9885032ed567d73a64f25544c66e847b1",
     "differential_results_sha256": "b27755ab5edbc63ee3277938f61fcfa97a580f987e76aba4701ea7b1d96be9e5",
     "python_model_sha256": "0293741f0b0546737ecfa5b64ada976aeb2f332246d54d0be08b28f0a55f8ba8",
-    "private_snapshots_and_native_images_published": false
+    "private_snapshots_and_native_images_published": false,
+    "python_model_source_revision": "91d9bdfcdb092e6b353740b015be44f7490d9f0f"
   },
   "prior_claim_correction": {
     "prior_evidence_file": "evidence/vm9_allocator_new_slab_native_replay_20261003.json",

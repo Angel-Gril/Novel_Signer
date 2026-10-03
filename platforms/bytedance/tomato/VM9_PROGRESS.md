@@ -572,3 +572,40 @@ open. Current parameterized Python Medusa, the no-JVM Rust download chain,
 nonempty search, the other platforms, and the usable webpage remain unfinished.
 The next allocator work must reconstruct free publication and its actual
 caller history, then exercise a new input without captured initialization.
+
+## Python malloc/free fast paths (2026-10-03)
+
+`allocate_small_object_fast` and `publish_small_object_free` now replace the
+normal initialized-thread small-object native paths, with request/region class
+selection, free-list publication/pop, count-floor updates, byte accounting,
+class allocation counts, and the shared periodic-cleanup counter.
+
+Ten direct native stages across classes 0, 1, 2 and 3 match return pointers,
+ordered nonstack writes, and every one of the 4,256 checkpoint pages. The
+class-0, class-1 and class-3 free/reallocate pairs return the same freed slots;
+zero-size malloc and the signed floor update also match. Twelve unsupported
+branches are rejected without writes. A second captured input's initialized
+checkpoint adds nine matching malloc/free/malloc stages for classes 0, 2 and 3,
+bringing the total to 19. Its `malloc(0x18)` returns `0x122a0c40` versus the
+primary checkpoint's `0x122a0c20`; slot identity follows the allocator state.
+Both tests still depend on captured initialization.
+
+In a Seg2 diagnostic, Python intercepts all 44 malloc/free wrapper calls before
+the existing mixed-capture event `12085`, while other callbacks still execute
+native ARM64. It completes 45 callbacks and matches the native control's
+ordered object sequence (four transition setup operations and 40 callback
+operations). Both have `R2=0x2f8` where the old reference expects `0x2f6`.
+The earlier mixed-capture correction in this file already explains that stop;
+it must not be reported as a new model failure or repaired with a trace-value
+injection.
+
+Details: [ALLOCATOR_FAST_PATHS.md](ALLOCATOR_FAST_PATHS.md), with sanitized
+[evidence/vm9_allocator_fast_paths_20261003.json](evidence/vm9_allocator_fast_paths_20261003.json).
+
+This removes two native allocator fast paths from one captured diagnostic
+prefix. It still does not derive fresh allocator initialization, TLS discovery,
+the true transition cleanup history, empty-bin malloc dispatch, full-bin flush,
+periodic cleanup, native constructor/callback state, or an independent Medusa
+body. The next run must use a trace and memory from the same capture before
+extending interception across the refill/cleanup boundaries. The current
+Python signer, no-JVM Rust chain and live search/download remain unfinished.

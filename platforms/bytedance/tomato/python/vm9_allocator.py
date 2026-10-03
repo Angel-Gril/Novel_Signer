@@ -1,10 +1,10 @@
 """Small, fail-closed VM9 allocator primitives.
 
-This module models the observed free-list pop, existing-slab batch refill,
-and selection of an initialized slab from a singleton available-node tree.
-It refuses general tree balancing and fresh allocator initialization. The input page
-map has the same shape used by ``vm9_handoff_rule.py``; it is not an online
-request or a general heap.
+This module models the observed small-object allocation/free fast paths,
+existing-slab batch refill, and selection of an initialized slab from a
+singleton available-node tree. It refuses general tree balancing and fresh
+allocator initialization. The input page map has the same shape used by
+``vm9_handoff_rule.py``; it is not an online request or a general heap.
 """
 from __future__ import annotations
 
@@ -68,6 +68,47 @@ class FreeListPop:
     list_address: int
     list_index: int
     object_address: int
+
+
+@dataclass(frozen=True)
+class FreeListPush:
+    """The ordinary small-object branch of native void ``free``."""
+
+    thread_state_address: int
+    object_address: int
+    region_base: int
+    region_entry_address: int
+    region_entry: int
+    class_id: int
+    bin_address: int
+    list_address: int
+    count_before: int
+    count_after: int
+    capacity: int
+    freed_bytes_before: int
+    freed_bytes_after: int
+    sweep_count_before: int
+    sweep_count_after: int
+
+
+@dataclass(frozen=True)
+class SmallObjectAllocation:
+    """A normal nonempty-bin allocation including native accounting."""
+
+    request_size: int
+    effective_size: int
+    class_id: int
+    class_width: int
+    thread_state_address: int
+    free_list: FreeListPop
+    allocated_bytes_before: int
+    allocated_bytes_after: int
+    allocation_count_before: int
+    allocation_count_after: int
+    sweep_count_before: int
+    sweep_count_after: int
+    floor_before: int
+    floor_after: int
 
 
 @dataclass(frozen=True)
@@ -148,7 +189,7 @@ class AvailableSlabRefillPop:
 
 @dataclass(frozen=True)
 class AllocatorConstants:
-    """Runtime constants read by the observed ``0x1216970c`` helper."""
+    """Captured runtime constants used by the observed allocator branches."""
 
     metadata_table: int = 0x121D9120
     metadata_entry_stride: int = 0x60
@@ -156,6 +197,179 @@ class AllocatorConstants:
     region_offset_address: int = 0x121D9EA0
     page_bias_address: int = 0x121D9EB0
     reciprocal: int = 0xAAAA_AAAA_AAAA_AAAB
+    region_page_limit_address: int = 0x121D9EC8
+    class_table: int = 0x12196A80
+    class_width_table: int = 0x12196C80
+    free_capacity_table_pointer_address: int = 0x121D9F50
+    free_hook_address: int = 0x121D69C0
+    free_debug_flag_address: int = 0x121D69CA
+    free_sweep_period: int = 0xE4
+    malloc_initialization_flag_address: int = 0x121CB6A0
+    malloc_debug_flag_address: int = 0x121D69A8
+    malloc_fill_flag_address: int = 0x121D69C9
+
+
+def allocate_small_object_fast(
+    pages: MutableMapping[int, bytearray],
+    *,
+    thread_state_address: int,
+    request_size: int,
+    constants: AllocatorConstants = AllocatorConstants(),
+) -> SmallObjectAllocation:
+    """Replay the verified nonempty-bin malloc branch and its accounting.
+
+    Native ``0x1217f00c`` treats zero size as one, looks up the class at
+    ``class_table[(size-1)>>3]``, and enters ``0x1217f0e8``. This primitive
+    requires an initialized normal thread state and a nonempty bin; refill,
+    hooks, debug/fill flags, large objects, and periodic cleanup are rejected.
+    It neither discovers TLS nor generates a fresh allocator.
+    """
+
+    if request_size < 0:
+        raise ValueError("request_size must be non-negative")
+    size = request_size or 1
+    if size > 0x1000:
+        raise RefillUnsupported("large-object allocation is not modeled")
+    if read_u32(pages, constants.malloc_initialization_flag_address):
+        raise RefillUnsupported("allocator initialization is pending")
+    if read_u64(pages, constants.free_hook_address):
+        raise RefillUnsupported("allocator hook is active")
+    if read_u32(pages, thread_state_address + 8) != 1:
+        raise RefillUnsupported("thread state is outside the captured normal malloc path")
+    if read_u64(pages, thread_state_address + 0x30) == 0:
+        raise RefillUnsupported("thread arena initialization is not modeled")
+    if _read(pages, constants.malloc_debug_flag_address, 1) != b"\x00":
+        raise RefillUnsupported("allocator debug malloc path is active")
+    if _read(pages, constants.malloc_fill_flag_address, 1) != b"\x00":
+        raise RefillUnsupported("allocator fill path is active")
+
+    class_id = _read(pages, constants.class_table + ((size - 1) >> 3), 1)[0]
+    width = read_u64(pages, constants.class_width_table + class_id * 8)
+    bins = read_u64(pages, thread_state_address + 0x10)
+    if bins < 0x10000 or bins & 7:
+        raise RefillUnsupported("thread state has no captured bin table")
+    bin_address = bins + class_id * 0x20
+    if read_u32(pages, bin_address + 0x30) == 0:
+        raise RefillUnsupported("empty malloc bin requires a separate refill path")
+    result = pop_free_list(pages, bin_address)
+    sweep_count = read_u32(pages, bins + 0x18)
+    if sweep_count >= constants.free_sweep_period - 1:
+        raise RefillUnsupported("malloc needs unmodeled periodic cleanup")
+    floor_word = read_u32(pages, bin_address + 0x28)
+    floor = floor_word if floor_word < 0x8000_0000 else floor_word - 0x1_0000_0000
+    floor_after = min(result.count_after, floor)
+    allocation_count = read_u64(pages, bin_address + 0x20)
+    allocation_count_after = (allocation_count + 1) & 0xFFFF_FFFF_FFFF_FFFF
+    allocated_bytes = read_u64(pages, thread_state_address + 0x18)
+    allocated_bytes_after = (allocated_bytes + width) & 0xFFFF_FFFF_FFFF_FFFF
+
+    write_u32(pages, bin_address + 0x30, result.count_after)
+    if floor_after != floor:
+        write_u32(pages, bin_address + 0x28, floor_after)
+    write_u64(pages, bin_address + 0x20, allocation_count_after)
+    write_u32(pages, bins + 0x18, sweep_count + 1)
+    write_u64(pages, thread_state_address + 0x18, allocated_bytes_after)
+    return SmallObjectAllocation(
+        request_size=request_size,
+        effective_size=size,
+        class_id=class_id,
+        class_width=width,
+        thread_state_address=thread_state_address,
+        free_list=result,
+        allocated_bytes_before=allocated_bytes,
+        allocated_bytes_after=allocated_bytes_after,
+        allocation_count_before=allocation_count,
+        allocation_count_after=allocation_count_after,
+        sweep_count_before=sweep_count,
+        sweep_count_after=sweep_count + 1,
+        floor_before=floor,
+        floor_after=floor_after,
+    )
+
+
+def publish_small_object_free(
+    pages: MutableMapping[int, bytearray],
+    *,
+    thread_state_address: int,
+    object_address: int,
+    constants: AllocatorConstants = AllocatorConstants(),
+) -> FreeListPush:
+    """Replay the verified normal small-object free-list publication.
+
+    The caller supplies a trusted initialized checkpoint and its thread state;
+    TLS discovery and ownership of the object are outside this primitive. The
+    class is derived from the object's region page metadata, not from an
+    expected pointer or a supplied class. Hooks, debug paths, large objects,
+    full bins, and periodic cleanup are rejected before writes. Native free is
+    void; this result describes state changes rather than an ABI return value.
+    """
+
+    if object_address < 0x10000 or object_address & 7:
+        raise ValueError(f"invalid small-object pointer {object_address:#x}")
+    if read_u32(pages, thread_state_address + 8) != 1:
+        raise RefillUnsupported("thread state is outside the captured normal free path")
+    if read_u64(pages, constants.free_hook_address):
+        raise RefillUnsupported("allocator free hook is active")
+    if _read(pages, constants.free_debug_flag_address, 1) != b"\x00":
+        raise RefillUnsupported("allocator debug free path is active")
+
+    mask = read_u64(pages, constants.bitmap_mask_address)
+    region_base = object_address & ~mask
+    if object_address == region_base:
+        raise RefillUnsupported("region-base objects do not use the small-object path")
+    page_index = (object_address - region_base) >> 12
+    page_bias = read_u64(pages, constants.page_bias_address)
+    page_limit = read_u64(pages, constants.region_page_limit_address)
+    if not page_bias <= page_index < page_limit:
+        raise RefillUnsupported("object page is outside the captured small-object region")
+    entry_address = region_base + (page_index - page_bias) * 8 + 0x68
+    entry = read_u64(pages, entry_address)
+    class_id = (entry >> 4) & 0xFF
+    if (entry & 3) != 1 or class_id == 0xFF:
+        raise RefillUnsupported("region page is not a normal small-object slab")
+
+    bins = read_u64(pages, thread_state_address + 0x10)
+    if bins < 0x10000 or bins & 7:
+        raise RefillUnsupported("thread state has no captured bin table")
+    bin_address = bins + class_id * 0x20
+    count = read_u32(pages, bin_address + 0x30)
+    capacity_table = read_u64(pages, constants.free_capacity_table_pointer_address)
+    capacity = read_u32(pages, capacity_table + class_id * 4)
+    if count >= capacity:
+        raise RefillUnsupported("free-list bin needs an unmodeled flush")
+    sweep_count = read_u32(pages, bins + 0x18)
+    if sweep_count >= constants.free_sweep_period - 1:
+        raise RefillUnsupported("free publication needs unmodeled periodic cleanup")
+    list_address = read_u64(pages, bin_address + 0x38)
+    if list_address < 0x10000 or list_address & 7:
+        raise ValueError(f"invalid free list address {list_address:#x}")
+    _read(pages, list_address + count * 8, 8)
+    freed_bytes = read_u64(pages, thread_state_address + 0x20)
+    width = read_u64(pages, constants.class_width_table + class_id * 8)
+    freed_bytes_after = (freed_bytes + width) & 0xFFFF_FFFF_FFFF_FFFF
+
+    # Exactly the four ordinary nonstack writes at 0x12181a38/ae0/aec/af8.
+    write_u64(pages, thread_state_address + 0x20, freed_bytes_after)
+    write_u64(pages, list_address + count * 8, object_address)
+    write_u32(pages, bin_address + 0x30, count + 1)
+    write_u32(pages, bins + 0x18, sweep_count + 1)
+    return FreeListPush(
+        thread_state_address=thread_state_address,
+        object_address=object_address,
+        region_base=region_base,
+        region_entry_address=entry_address,
+        region_entry=entry,
+        class_id=class_id,
+        bin_address=bin_address,
+        list_address=list_address,
+        count_before=count,
+        count_after=count + 1,
+        capacity=capacity,
+        freed_bytes_before=freed_bytes,
+        freed_bytes_after=freed_bytes_after,
+        sweep_count_before=sweep_count,
+        sweep_count_after=sweep_count + 1,
+    )
 
 
 def pop_bitmap_slot(bitmap: int, counter: int) -> BitmapSlotPop:

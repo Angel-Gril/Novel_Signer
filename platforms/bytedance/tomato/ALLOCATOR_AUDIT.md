@@ -38,7 +38,7 @@ else:
 The allocator code is present in the captured `new_vm9_libc.bin` image. The
 callback reads the class byte from `0x12196a80 + ((size - 1) >> 3)` and the
 class-width table from `0x12196c80 + class * 8`; for this request the values
-are class `3` and block width `0x60`. The arena object points at the bin table
+are class `3` and block width `0x30` (corrected by the direct malloc/free probe). The arena object points at the bin table
 through `[0x12296000 + 0x10] = 0x12282000`, so the count field is
 `0x12282060 + 0x30 = 0x12282090`.
 
@@ -226,3 +226,27 @@ Fresh arena/slab initialization, general tree removal, the true constructor and
 cleanup history, callback registration, and fresh-input Medusa generation
 remain open. Current Python signing and the no-JVM Rust download chain are
 still unavailable; this batch performs no new online request.
+
+## Normal malloc/free publication (2026-10-03)
+
+The Python owner now models the normal initialized-thread small-object paths,
+including all allocation/free accounting. Class selection for malloc comes
+from the request-size byte table. Free derives the object's class from region
+page metadata, then publishes it to `list[count]` and increments the count.
+The following nonempty-bin malloc reclaims that same address.
+
+Native differential verification covers classes 0, 1, 2 and 3, zero-size
+malloc, and the signed count-floor update. Ten native stages match the exact
+nonstack write sequence and all 4,256 checkpoint pages. Twelve unsupported
+branches are rejected without mutation. A second captured checkpoint adds nine
+matching allocation/free/reallocation stages, for 19 stages across two states.
+The raw class-width table and native
+accounting also correct this note's earlier class-3 width from `0x60` to `0x30`.
+
+A captured Seg2 interception replaces 44 malloc/free calls, including four
+transition setup operations, and matches the native control's ordered pointer
+sequence through 45 callbacks. Both executions stop at the already recorded
+mixed-capture event `12085` (`R2=0x2f8`, old trace `0x2f6`); this is not a new
+allocator defect. Diagnostic transition frees and native constructors remain.
+See [ALLOCATOR_FAST_PATHS.md](ALLOCATOR_FAST_PATHS.md) and
+[evidence/vm9_allocator_fast_paths_20261003.json](evidence/vm9_allocator_fast_paths_20261003.json).
