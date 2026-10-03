@@ -4,7 +4,9 @@ This module models normal small-object allocation/free, empty-bin refill,
 compact allocator trees, new slab initialization from mapped free extents,
 periodic bin cleanup, and slab release/purge with an explicit guest OS result.
 TLS generation checks, mapped base allocation, fresh TSD/arena/tcache creation
-are also modeled. Global boot and fresh OS region mapping are not implemented.
+and an explicit guest OS region owner are also modeled. Global boot is split
+into a state report and a bounded initialization contract; unknown boot fields
+remain unsupported.
 The input page map has the same shape used by
 ``vm9_handoff_rule.py``; it is not an online request or a general heap.
 """
@@ -280,6 +282,248 @@ class AllocatorConstants:
     # the observed result for their isolated guest runtime.
     purge_madvise_result: int | None = None
     guest_errno_address: int | None = None
+
+
+@dataclass(frozen=True)
+class GuestMapping:
+    """One guest mapping owned by :class:`GuestOS`."""
+
+    base: int
+    length: int
+    prot: int
+    flags: int
+    fd: int
+    offset: int
+    anonymous_name: bytes = b""
+
+    @property
+    def end(self) -> int:
+        return self.base + self.length
+
+
+class GuestOS:
+    """Deterministic owner for the two observed guest mapping requests.
+
+    New pages are created only through this owner. Unsupported requests are
+    rejected before the caller's page map or mapping list is changed.
+    """
+
+    def __init__(
+        self,
+        pages: MutableMapping[int, bytearray],
+        *,
+        next_address: int = 0x1360_0000,
+        address_limit: int = 0x1400_0000,
+    ):
+        self.pages = pages
+        self.next_address = next_address
+        self.address_limit = address_limit
+        self.mappings: list[GuestMapping] = []
+
+    def begin(self):
+        return _GuestOSTransaction(self)
+
+    def map_anonymous(
+        self,
+        length: int,
+        *,
+        address: int | None = None,
+        prot: int = 3,
+        flags: int = 0x22,
+        fd: int = -1,
+        offset: int = 0,
+        anonymous_name: bytes = b"vm9-region",
+    ) -> GuestMapping:
+        transaction = self.begin()
+        result = transaction.map_anonymous(
+            length,
+            address=address,
+            prot=prot,
+            flags=flags,
+            fd=fd,
+            offset=offset,
+            anonymous_name=anonymous_name,
+        )
+        transaction.commit()
+        return result
+
+    def mapping_for(self, address: int) -> GuestMapping | None:
+        return next((item for item in self.mappings if item.base <= address < item.end), None)
+
+
+class _GuestOSTransaction:
+    """Copy-on-write mapping transaction for atomic OS/allocator setup."""
+
+    def __init__(self, owner: GuestOS):
+        self.owner = owner
+        self.pages = {key: bytearray(value) for key, value in owner.pages.items()}
+        self.mappings = list(owner.mappings)
+        self.next_address = owner.next_address
+
+    @staticmethod
+    def _validate_name(value: bytes) -> bytes:
+        if not isinstance(value, (bytes, bytearray)) or len(value) > 255:
+            raise RefillUnsupported("anonymous VMA name is not supported")
+        if b"\x00" in value:
+            raise RefillUnsupported("anonymous VMA name must be NUL-free")
+        return bytes(value)
+
+    def map_anonymous(
+        self,
+        length: int,
+        *,
+        address: int | None,
+        prot: int,
+        flags: int,
+        fd: int,
+        offset: int,
+        anonymous_name: bytes,
+    ) -> GuestMapping:
+        if length <= 0 or length & 0xFFF or length > 0x100000:
+            raise RefillUnsupported("unsupported guest mmap length")
+        if prot != 3 or flags != 0x22 or fd not in (-1, 0xFFFF_FFFF, 0xFFFF_FFFF_FFFF_FFFF) or offset:
+            raise RefillUnsupported("unsupported guest mmap request")
+        name = self._validate_name(anonymous_name)
+        base = self.next_address if address is None else address
+        if base & 0xFFF or base < 0x1360_0000 or base + length > self.owner.address_limit:
+            raise RefillUnsupported("guest mapping is outside the isolated address policy")
+        if any(base < item.end and item.base < base + length for item in self.mappings):
+            raise RefillUnsupported("guest mapping overlaps an existing region")
+        page_keys = range(base >> 12, (base + length) >> 12)
+        if any(key in self.pages for key in page_keys):
+            raise RefillUnsupported("guest mapping would overwrite an existing page")
+        for key in page_keys:
+            self.pages[key] = bytearray(0x1000)
+        result = GuestMapping(base, length, prot, flags, fd, offset, name)
+        self.mappings.append(result)
+        self.next_address = base + length
+        return result
+
+    def commit(self) -> None:
+        original = self.owner.pages
+        for key in list(original):
+            if key not in self.pages:
+                del original[key]
+        for key, value in self.pages.items():
+            if key in original:
+                original[key][:] = value
+            else:
+                original[key] = bytearray(value)
+        self.owner.mappings = list(self.mappings)
+        self.owner.next_address = self.next_address
+
+
+@dataclass(frozen=True)
+class GlobalBootState:
+    """Observed global allocator state, kept separate from captured bytes."""
+
+    initialization_flag: int
+    arena_count: int
+    arena_capacity: int
+    arena_zero: int
+    arena_table: int
+    tls_key: int
+    tls_generation: int
+    base_tree_root: int
+    base_tree_sentinel: int
+    cache_enabled: int
+
+    @property
+    def ready(self) -> bool:
+        return (
+            self.initialization_flag == 0
+            and self.arena_count > 0
+            and self.arena_count <= self.arena_capacity
+            and self.arena_zero != 0
+            and self.arena_table != 0
+            and self.tls_generation & 1 == 1
+        )
+
+
+@dataclass(frozen=True)
+class GlobalBootConfig:
+    """Only globals whose initialization contract is independently known."""
+
+    arena_zero: int
+    arena_table: int
+    arena_count: int = 1
+    arena_capacity: int = 1
+    cache_enabled: int = 1
+    generation_table: int = 0x121D0200
+    tls_key: int | None = None
+
+
+@dataclass(frozen=True)
+class GlobalBootComponent:
+    symbol: str
+    status: str
+    owner: str
+    boundary: str
+
+
+GLOBAL_BOOT_COMPONENTS = (
+    GlobalBootComponent("je_base_boot", "captured-input", "base_allocate", "base tree/table boot"),
+    GlobalBootComponent("je_chunk_boot", "partial", "GuestOS/register_os_region", "chunk hooks and lookup cache"),
+    GlobalBootComponent("je_tcache_boot", "captured-input", "create_tcache", "capacity table boot"),
+    GlobalBootComponent("je_arena_boot", "partial", "create_arena", "global arena table publication"),
+    GlobalBootComponent("je_malloc_tsd_boot0", "partial", "initialize_thread_state", "TLS key generation"),
+    GlobalBootComponent("je_malloc_tsd_boot1", "partial", "prepare_thread_allocator", "state transition and cache"),
+    GlobalBootComponent("je_mutex_boot", "captured-input", "_require_unlocked_mutex", "mutex attributes/init"),
+    GlobalBootComponent("je_ctl_boot", "captured-input", "read_global_boot_state", "control tree/config tables"),
+)
+
+
+def global_boot_inventory() -> tuple[GlobalBootComponent, ...]:
+    """Return the explicit boot ownership boundary used by this module."""
+    return GLOBAL_BOOT_COMPONENTS
+
+
+def read_global_boot_state(pages, *, generation_table: int = 0x121D0200) -> GlobalBootState:
+    """Read global boot without inferring missing native initialization."""
+    key_pointer = read_u64(pages, 0x121C8F98)
+    key = read_u32(pages, key_pointer)
+    generation = read_u64(pages, generation_table + (key & 0x7FFF_FFFF) * 16)
+    root = 0x121D67E8
+    return GlobalBootState(
+        initialization_flag=read_u32(pages, 0x121CB6A0),
+        arena_count=read_u32(pages, 0x121D6970),
+        arena_capacity=read_u32(pages, 0x121D6960),
+        arena_zero=read_u64(pages, 0x121D6968),
+        arena_table=read_u64(pages, 0x121D69D0),
+        tls_key=key,
+        tls_generation=generation,
+        base_tree_root=read_u64(pages, root),
+        base_tree_sentinel=read_u64(pages, root + 8),
+        cache_enabled=read_u32(pages, 0x121CB6B0),
+    )
+
+
+def initialize_global_boot(pages, *, config: GlobalBootConfig) -> GlobalBootState:
+    """Publish the bounded global fields required by fresh TLS.
+
+    Arena construction, mutex boot, lookup-cache generation and callback
+    tables remain outside this contract and must be supplied separately.
+    """
+    transaction = _PageTransaction(pages)
+    if not 1 <= config.arena_count <= config.arena_capacity <= 4095:
+        raise RefillUnsupported("unsupported global arena count")
+    if config.arena_zero == 0 or config.arena_table < 0x10000 or config.arena_table & 7:
+        raise RefillUnsupported("global boot requires an explicit arena table")
+    key_pointer = read_u64(transaction, 0x121C8F98)
+    key = read_u32(transaction, key_pointer) if config.tls_key is None else config.tls_key
+    generation = read_u64(transaction, config.generation_table + (key & 0x7FFF_FFFF) * 16)
+    if not generation & 1:
+        raise RefillUnsupported("global boot TLS key is inactive")
+    _read_span(transaction, config.arena_table, 8 * config.arena_count)
+    write_u64(transaction, config.arena_table, config.arena_zero)
+    write_u64(transaction, 0x121D6968, config.arena_zero)
+    write_u32(transaction, 0x121D6960, config.arena_capacity)
+    write_u32(transaction, 0x121D6970, config.arena_count)
+    write_u64(transaction, 0x121D69D0, config.arena_table)
+    write_u32(transaction, 0x121CB6B0, config.cache_enabled)
+    write_u32(transaction, 0x121CB6A0, 0)
+    transaction.commit()
+    return read_global_boot_state(pages, generation_table=config.generation_table)
 
 
 class _PageTransaction(MutableMappingABC):
@@ -869,6 +1113,118 @@ def prepare_thread_allocator(pages, *, thread_pointer, constants=AllocatorConsta
     return thread
 
 
+@dataclass(frozen=True)
+class RegionRegistration:
+    """Fresh anonymous region registered in an arena available tree."""
+
+    arena_address: int
+    region_base: int
+    region_length: int
+    first_free_page: int
+    free_page_count: int
+    free_node: int
+    mapping: GuestMapping
+
+
+def _register_os_region(
+    pages,
+    os_transaction: _GuestOSTransaction,
+    *,
+    arena_address: int,
+    base: int | None,
+    length: int,
+    constants: AllocatorConstants,
+    anonymous_name: bytes,
+):
+    """Implement chunk registration after the guest mapping is staged."""
+    page_limit = read_u64(pages, constants.region_page_limit_address)
+    page_bias = read_u64(pages, constants.page_bias_address)
+    region_offset = read_u64(pages, constants.region_offset_address)
+    bitmap_mask = read_u64(pages, constants.bitmap_mask_address)
+    if page_limit < 4 or page_bias >= page_limit or region_offset < 0x20:
+        raise RefillUnsupported("invalid region geometry")
+    if length != page_limit * 0x1000 or length & 0xFFF:
+        raise RefillUnsupported("guest region length does not match allocator geometry")
+    if bitmap_mask != length - 1:
+        raise RefillUnsupported("region mask does not match guest mapping length")
+    if arena_address < 0x10000 or arena_address & 7:
+        raise RefillUnsupported("invalid arena address")
+    _require_unlocked_mutex(pages, arena_address + 8)
+
+    mapping = os_transaction.map_anonymous(
+        length,
+        address=base,
+        prot=3,
+        flags=0x22,
+        fd=-1,
+        offset=0,
+        anonymous_name=anonymous_name,
+    )
+    region = mapping.base
+    # The native chunk header is four scalar fields; the remaining bytes are
+    # zero from mmap and must stay zero until a slab consumes pages.
+    write_u64(pages, region, arena_address)
+    write_u64(pages, region + 8, region)
+    write_u64(pages, region + 0x10, length)
+    _write(pages, region + 0x18, b"\x01")
+    _write(pages, region + 0x19, b"\x01")
+
+    first_page = page_bias
+    free_pages = page_limit - page_bias
+    free_size = free_pages * 0x1000
+    first_entry = region + 0x68
+    last_entry = first_entry + (free_pages - 1) * 8
+    # 0xff0 is the clean free-extent marker. The region reserves the pages
+    # before ``page_bias`` for its header and slab metadata.
+    write_u64(pages, first_entry, free_size | 0xFF0)
+    write_u64(pages, last_entry, free_size | 0xFF0)
+
+    root = arena_address + 0xE8
+    # The extent node occupies the first 0x10 bytes of the descriptor at
+    # ``region + region_offset``; the slab payload starts at ``node + 0x10``.
+    node = region + region_offset
+    tree = _AllocatorTree(pages, root, lambda item: (free_size, item))
+    tree.insert(node)
+    write_u64(pages, arena_address + 0x30, length)
+    write_u64(pages, arena_address + 0x50, 0x2000)
+    return RegionRegistration(
+        arena_address=arena_address,
+        region_base=region,
+        region_length=length,
+        first_free_page=first_page,
+        free_page_count=free_pages,
+        free_node=node,
+        mapping=mapping,
+    )
+
+
+def register_os_region(
+    pages: MutableMapping[int, bytearray],
+    *,
+    arena_address: int,
+    guest_os: GuestOS,
+    base: int | None = None,
+    length: int = 0x40000,
+    anonymous_name: bytes = b"vm9-region",
+    constants: AllocatorConstants = AllocatorConstants(),
+) -> RegionRegistration:
+    """Map and register one fresh anonymous allocator region atomically."""
+    if guest_os.pages is not pages:
+        raise ValueError("guest_os must own the supplied page map")
+    transaction = guest_os.begin()
+    result = _register_os_region(
+        transaction.pages,
+        transaction,
+        arena_address=arena_address,
+        base=base,
+        length=length,
+        constants=constants,
+        anonymous_name=anonymous_name,
+    )
+    transaction.commit()
+    return result
+
+
 def initialize_slab_bitmap(pages, *, bitmap_address: int, descriptor_address: int) -> int:
     """Execute the descriptor-derived initialization of native 0x1216dd70."""
 
@@ -1327,18 +1683,60 @@ def cleanup_small_object_bins(pages, *, thread_state_address, constants=Allocato
     staged.commit()
 
 
-def allocate_small_object(pages, *, thread_state_address, request_size, constants=AllocatorConstants()):
+def allocate_small_object(
+    pages,
+    *,
+    thread_state_address,
+    request_size,
+    guest_os: GuestOS | None = None,
+    constants=AllocatorConstants(),
+):
     """Normal malloc including empty-bin refill, new slab setup and cleanup.
 
-    Requires initialized TLS/arena and mapped free extents. No native code,
-    expected pointers, supplied batch widths or captured post-call bytes are
-    used. Fresh OS regions and large objects fail atomically; purge requires
-    an explicit guest madvise result in constants.
+    Requires initialized TLS/arena. Pass ``guest_os`` to let the first refill
+    register one fresh region in the same transaction; without it, a fresh
+    arena rejects instead of invoking an implicit host syscall. No native
+    code, expected pointers, supplied batch widths or captured post-call bytes
+    are used. Large objects fail atomically; purge requires an explicit guest
+    madvise result in constants.
     """
-    staged = _PageTransaction(pages)
-    result = _allocate_small_object(staged, thread_state_address=thread_state_address,
-                                    request_size=request_size, constants=constants, lifecycle=True)
-    staged.commit()
+    if guest_os is not None:
+        if guest_os.pages is not pages:
+            raise ValueError("guest_os must own the supplied page map")
+        staged = guest_os.begin()
+        arena = read_u64(staged.pages, thread_state_address + 0x30)
+        if not arena:
+            raise RefillUnsupported("thread arena initialization is not modeled")
+        # A fresh arena has an empty available tree. Registration is part of
+        # this same transaction so allocation failure cannot leak a mapping.
+        if read_u64(staged.pages, arena + 0xE8) == arena + 0xF0:
+            _register_os_region(
+                staged.pages,
+                staged,
+                arena_address=arena,
+                base=None,
+                length=0x40000,
+                constants=constants,
+                anonymous_name=b"vm9-region",
+            )
+        result = _allocate_small_object(
+            staged.pages,
+            thread_state_address=thread_state_address,
+            request_size=request_size,
+            constants=constants,
+            lifecycle=True,
+        )
+        staged.commit()
+    else:
+        staged = _PageTransaction(pages)
+        result = _allocate_small_object(
+            staged,
+            thread_state_address=thread_state_address,
+            request_size=request_size,
+            constants=constants,
+            lifecycle=True,
+        )
+        staged.commit()
     return result
 
 

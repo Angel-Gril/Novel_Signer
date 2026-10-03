@@ -1012,5 +1012,46 @@
     "whole_memory_equivalence": false,
     "fresh_input_parameterization": false,
     "new_server_validation_performed": false
+  },
+  "vm9_os_region_register_20261003": {
+    "evidence_file": "evidence/vm9_os_region_register_20261003.json",
+    "status": "guest_os_owner_and_region_registration_verified",
+    "checkpoint_pages": 4256,
+    "mapping_base": "0x13600000",
+    "mapping_length": "0x40000",
+    "first_free_page": 2,
+    "free_page_count": 62,
+    "free_node": "0x13600258",
+    "first_allocation": "0x13602000",
+    "atomic_negative_cases": 6,
+    "global_boot_contract": "bounded_arena_tls_cache_fields",
+    "fresh_input_parameterization": false,
+    "new_server_validation_performed": false
+  },
+  "vm9_callbacks_parameterized_20261003": {
+    "evidence_file": "evidence/vm9_callbacks_parameterized_20261003.json",
+    "status": "proven_callback_boundaries_parameterized",
+    "boundaries": [
+      "clock_wrapper_timespec_and_result_slot",
+      "active_descriptor_two_field_publication"
+    ],
+    "atomic_negative_cases": 3,
+    "packed_callback_x8_composition": false,
+    "remaining_native_object_graph": true,
+    "fresh_input_parameterization": false,
+    "new_server_validation_performed": false
+  },
+  "vm9_runtime_region_callbacks_20261003": {
+    "evidence_file": "evidence/vm9_runtime_region_callbacks_20261003.json",
+    "status": "bounded_fresh_region_and_callback_boundaries_verified",
+    "initialization_cases": 85,
+    "lifecycle_cases": 83,
+    "region_first_malloc": "0x13602000",
+    "region_free_node": "0x13600258",
+    "callback_boundaries": 2,
+    "packed_callback_x8_composition": false,
+    "remaining_native_object_graph": true,
+    "fresh_input_parameterization": false,
+    "new_server_validation_performed": false
   }
 }

@@ -1,0 +1,41 @@
+{
+  "evidence_id": "vm9_callbacks_parameterized_20261003",
+  "status": "proven_callback_boundaries_parameterized",
+  "clock_wrapper": {
+    "timespec_pointer_field": "+0x08",
+    "result_slot": "+0x10",
+    "clock_id": 1,
+    "return_code": 0
+  },
+  "descriptor_writer": {
+    "writes": [
+      "descriptor+0x00",
+      "descriptor+0x08"
+    ],
+    "branch_target": "0x125ea444",
+    "object_address": "0x1284a288",
+    "trampoline": "ldp x1,x8,[x0]; mov x0,x8; br x1"
+  },
+  "negative_cases": [
+    {
+      "case": "clock_id",
+      "rejected": true,
+      "unchanged": true
+    },
+    {
+      "case": "nanoseconds",
+      "rejected": true,
+      "unchanged": true
+    },
+    {
+      "case": "packed_callback_x8",
+      "rejected": true,
+      "unchanged": true
+    }
+  ],
+  "unsupported": [
+    "packed callback-object x8 composition",
+    "remaining native constructor/destructor object graph"
+  ],
+  "fresh_input_signer": false
+}

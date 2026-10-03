@@ -1,0 +1,49 @@
+{
+  "evidence_id": "vm9_runtime_region_callbacks_20261003",
+  "platform": "bytedance.tomato",
+  "status": "bounded_fresh_region_and_callback_boundaries_verified",
+  "source_hashes": {
+    "python/vm9_allocator.py": "cb0ce41dcf55a5dcefc275f5ac3a033bc1f08d3377936a7c854993d9c299c8d3",
+    "python/vm9_callbacks.py": "c03a8216097b7bbc7faf3c2340ba5c78aaa6f3a31681b4faf301085548e11007",
+    "python/verify_vm9_os_region.py": "6bcde4521b8cdbf2d9fac111727eb64ff3a1d6e4d2bef775040de83528e34003",
+    "python/verify_vm9_callbacks.py": "87ca0701c535855a8da11fb078933117858b5684ec4214c7dee7c787e92014eb"
+  },
+  "initialization_regression": {
+    "cases": 85,
+    "negative_cases": 11,
+    "all_final_memory_match": true,
+    "all_rejections_unchanged": true,
+    "allocator_sha256": "cb0ce41dcf55a5dcefc275f5ac3a033bc1f08d3377936a7c854993d9c299c8d3"
+  },
+  "lifecycle_regression": {
+    "cases": 83,
+    "negative_cases": 8,
+    "all_final_memory_match": true,
+    "checkpoint_pages": 4256
+  },
+  "fresh_region": {
+    "mapping": "anonymous_private",
+    "base": "0x13600000",
+    "length": "0x40000",
+    "zero_initialized_pages": 64,
+    "first_free_page": 2,
+    "free_page_count": 62,
+    "free_node": "0x13600258",
+    "integrated_first_malloc": "0x13602000",
+    "atomic_negative_cases": 6
+  },
+  "callbacks": {
+    "clock_wrapper": "timespec at wrapper+0x08; result at wrapper+0x10",
+    "descriptor_writer": "descriptor+0x00 and descriptor+0x08",
+    "atomic_negative_cases": 3,
+    "packed_callback_x8_composition": false,
+    "remaining_native_object_graph": true
+  },
+  "limitations": [
+    "arena lookup-cache generation is not independently parameterized",
+    "mutex/global callback-table boot remains bounded to explicit inputs",
+    "remaining native constructor/destructor callback graph remains captured",
+    "current Medusa, no-JVM Rust signing and live server acceptance are not proven"
+  ],
+  "privacy": "No raw pages, native images, requests, headers, tokens or signature bytes are published."
+}

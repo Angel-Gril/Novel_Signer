@@ -27,6 +27,7 @@ trusted mutable 4,096-byte pages keyed by `address >> 12`.
 | `free_small_object` | Derive class from region metadata; flush full bins; publish pointer; trigger cleanup; NULL is a no-op |
 | `cleanup_small_object_bins` | Sweep one class; adjust retention/shift; reset counter and advance/wrap cursor |
 | `initialize_slab_bitmap` | Generate leaf/summary bitmap words from the native class descriptor |
+| `GuestOS` / `register_os_region` | Own zero-filled anonymous pages and register one fresh region in the arena tree |
 
 The first three APIs stage changes in a page transaction. Unsupported paths
 leave the original map unchanged. `initialize_slab_bitmap` is a direct helper;
@@ -72,9 +73,11 @@ classes, through size `0x3800`.
 Purge requires `AllocatorConstants.purge_madvise_result`. The default `None`
 rejects it. The isolated success oracle uses `0`; the failure oracle uses `-22`
 and the guest TLS errno address. These explicit advisory syscall outcomes do
-not prove Linux page zeroing semantics. Fresh OS region mapping, whole OS
+not prove Linux page zeroing semantics. Whole OS
 region release, large cached-extent purge and custom purge
-hooks remain unsupported. Generated thread/arena setup is verified separately
+hooks remain unsupported. `GuestOS` and `register_os_region` cover one fresh
+anonymous `0x40000` region and the first refill with an explicit owner.
+Generated thread/arena setup is verified separately
 in the initialization report. Concurrency and transient lock writes are not
 modeled. The direct release helper is tested with its required class lock held.
 

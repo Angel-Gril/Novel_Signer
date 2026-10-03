@@ -1,0 +1,105 @@
+{
+  "evidence_id": "vm9_os_region_register_20261003",
+  "status": "guest_os_owner_and_region_registration_verified",
+  "checkpoint_pages": 4256,
+  "checkpoint_sha256": "ce2d487a348bac17d233aa0738d51bf2f1642a5099869546cc9992cd6210e55c",
+  "global_boot": {
+    "ready_before": true,
+    "ready_after": true,
+    "arena_count": 2,
+    "arena_capacity": 2,
+    "tls_generation_odd": true,
+    "component_inventory": [
+      {
+        "symbol": "je_base_boot",
+        "status": "captured-input"
+      },
+      {
+        "symbol": "je_chunk_boot",
+        "status": "partial"
+      },
+      {
+        "symbol": "je_tcache_boot",
+        "status": "captured-input"
+      },
+      {
+        "symbol": "je_arena_boot",
+        "status": "partial"
+      },
+      {
+        "symbol": "je_malloc_tsd_boot0",
+        "status": "partial"
+      },
+      {
+        "symbol": "je_malloc_tsd_boot1",
+        "status": "partial"
+      },
+      {
+        "symbol": "je_mutex_boot",
+        "status": "captured-input"
+      },
+      {
+        "symbol": "je_ctl_boot",
+        "status": "captured-input"
+      }
+    ]
+  },
+  "mapping": {
+    "base": "0x13600000",
+    "length": "0x40000",
+    "prot": 3,
+    "flags": "0x22",
+    "zero_initialized_pages": 64,
+    "first_free_page": 2,
+    "free_page_count": 62,
+    "free_node": "0x13600258",
+    "first_allocation": "0x13602000",
+    "integrated_first_malloc": "0x13602000",
+    "metadata_after_first_allocation": [
+      "0x31",
+      "0x1031",
+      "0x2031",
+      "0x3bff0",
+      "0x3bff0"
+    ]
+  },
+  "negative_cases": [
+    {
+      "case": "inactive_global_tls",
+      "rejected": true,
+      "unchanged": true
+    },
+    {
+      "case": "bad_prot",
+      "rejected": true,
+      "unchanged": true
+    },
+    {
+      "case": "bad_flags",
+      "rejected": true,
+      "unchanged": true
+    },
+    {
+      "case": "bad_length",
+      "rejected": true,
+      "unchanged": true
+    },
+    {
+      "case": "overlap",
+      "rejected": true,
+      "unchanged": true
+    },
+    {
+      "case": "allocation_failure_rollback",
+      "rejected": true,
+      "unchanged": true
+    }
+  ],
+  "unsupported": [
+    "arbitrary syscalls",
+    "mapping outside 0x13600000..0x14000000",
+    "whole-region unmap/release",
+    "lookup-cache generation and callback-table boot"
+  ],
+  "fresh_input_signer": false
+}

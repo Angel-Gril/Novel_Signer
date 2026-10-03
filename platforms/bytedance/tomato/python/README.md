@@ -25,10 +25,19 @@ control, holdout, hashes, and remaining dependencies.
 `vm9_allocator.py` now exposes `allocate_small_object`, `free_small_object`
 and `cleanup_small_object_bins`, covering empty-bin batches, mapped new slabs,
 compact trees, flush, cleanup and slab release. `initialize_slab_bitmap`
-generates bitmap words from the class descriptor. Lifecycle failures are
-atomic; purge requires an explicit guest madvise result. The earlier fast
-APIs and existing-slab primitives keep their narrower contracts. Fresh OS
-regions/TLS/arena and standalone Medusa initialization remain unsupported.
+generates bitmap words from the class descriptor. `GuestOS` owns explicit
+zero-filled anonymous mappings, and `register_os_region` registers the native
+`0x40000` region layout before the first fresh slab split. Lifecycle failures
+are atomic; purge requires an explicit guest madvise result. The bounded
+global boot reader/publisher still requires explicit captured arena/key inputs;
+lookup-cache generation, callback tables and standalone current Medusa remain
+unsupported.
+
+`vm9_callbacks.py` contains only directly attributed callback effects:
+`clock_callback` writes a supplied guest timespec and wrapper result, while
+`publish_callback_descriptor` writes the two fields consumed by the active
+descriptor trampoline. The packed callback-object composition and remaining
+native object graph are explicit unsupported boundaries.
 The module accepts trusted local checkpoint pages. See
 [ALLOCATOR_LIFECYCLE.md](../ALLOCATOR_LIFECYCLE.md) for usage, 83 native
 differential cases, 360 sequential operations and the same-capture chain.

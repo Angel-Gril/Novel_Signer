@@ -20,15 +20,34 @@ outside the body remain. Other callbacks and host continuation still run
 native ARM64, and the integration retains captured thread/region state.
 
 A separate native empty-TLS malloc now returns under an explicit guest policy
-for an actual zero-filled anonymous mapping and VMA naming. This establishes
-the next oracle. Python fresh OS-region mapping, region registration, arena
-lookup-cache generation, global boot and the remaining callback/object graph
-are still unfinished. This does not complete parameterized current Medusa or
+for an actual zero-filled anonymous mapping and VMA naming. Python now owns
+the corresponding zero-filled mapping transaction and region registration:
+from a new arena, `0x13600000..0x13640000` registers a 62-page free extent and
+the first class-3 allocation returns `0x13602000`, with native metadata values.
+A failed first allocation rolls back the staged mapping and allocator pages.
+The global boot reader/publisher covers only the explicit arena/TLS/cache
+fields; lookup-cache generation and the remaining callback/object graph are
+still unfinished. This does not complete parameterized current Medusa or
 prove live server acceptance.
+
+Two native callback boundaries are now input-driven in
+`python/vm9_callbacks.py`: the clock wrapper's timespec/result writes and the
+active descriptor trampoline's two-field publication. Invalid clock inputs
+and the still-uncaptured packed callback-object composition reject atomically.
+The remaining constructor/destructor object graph still executes natively in
+the same-capture chain.
 
 Details and reproducible boundaries:
 [RUNTIME_INITIALIZATION.md](RUNTIME_INITIALIZATION.md),
 [component and integration evidence](evidence/vm9_runtime_initialization_20261003.json).
+
+The bounded region/global component is independently checked by
+[python/verify_vm9_os_region.py](python/verify_vm9_os_region.py). It compares
+the new-arena path on 4,256 trusted checkpoint pages, verifies zero-filled
+guest pages, the available-tree node at `region+0x258`, first allocation
+`0x13602000`, and four rejected mapping requests with no mutation. Its
+sanitized result is
+[evidence/vm9_os_region_register_20261003.json](evidence/vm9_os_region_register_20261003.json).
 
 ## Previous checkpoint: lifecycle and paired chain (2026-10-03)
 
@@ -584,9 +603,9 @@ The sanitized evidence is
 ## Next experiment
 
 Replace the learned target-byte state and the Seg3 target correction with the
-actual constructor/cleanup/callback-registration semantics. Establish the
-provenance of `0xe4ffbb78`, cover allocator refill, and repeat with a new input
-and time branch. Then remove captured initialization/native callbacks and
+actual constructor/cleanup/callback-registration semantics. Generate the
+arena lookup cache and complete global boot fields, then repeat with a new
+input and time branch. Remove captured initialization/native callbacks and
 compare an independently generated body before running a fresh live
 directory/reader matrix. The current all-segment diagnostic is a component
 checkpoint; the pure-Python signer, no-JVM Rust chain, non-empty search, and
