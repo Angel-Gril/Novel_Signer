@@ -1,0 +1,55 @@
+{
+  "evidence_kind": "native-only bounded startup/default-task prefix probe",
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "instruction_budget": 2000000,
+  "guest_worker_entered": true,
+  "allocation_count": 17,
+  "worker_allocation_sizes": [
+    16384
+  ],
+  "default_caller_entry_offsets": [
+    "0x280590"
+  ],
+  "completed_default_caller_offsets": [],
+  "vm_entry_offsets": [
+    "0xa7050",
+    "0xedcf0",
+    "0xee3b0"
+  ],
+  "native_callback_count": 10,
+  "native_callback_wrapper_offsets": [
+    "0x2813e8",
+    "0x2813e8",
+    "0x2813fc",
+    "0x281408",
+    "0x281598",
+    "0x281610",
+    "0x281610",
+    "0x281610",
+    "0x281624",
+    "0x281624"
+  ],
+  "native_callback_target_offsets": [
+    "0x347f60",
+    "0x347f60",
+    "0x32565c",
+    "0x28054c",
+    "0x32a0a0",
+    "0x347f20",
+    "0x347f20",
+    "0x347f20",
+    "0x347f60",
+    "0x347f60"
+  ],
+  "memset_strlen_got_bound": true,
+  "instruction_budget_exhausted": true,
+  "default_task_returned": false,
+  "native_input_snapshot_used_by_python_model": false,
+  "python_default_task_executed": false,
+  "host_threads_created": false,
+  "host_wait_executed": false,
+  "infinite_loop_proven": false,
+  "complete_worker_runtime": false,
+  "complete_allocator_boot": false,
+  "complete_python_medusa": false
+}

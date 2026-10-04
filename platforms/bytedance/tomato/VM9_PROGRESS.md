@@ -22,7 +22,14 @@ TLS after argument cleanup. Complete worker runtime, fresh Medusa, live header
 matrix/f13 checks, no-JVM Rust, nonempty search/pagination, Douyin/Qidian and the
 final Pages/Actions products remain open.
 
-Next: restore +0x280554's six initialization callers and actual VM callbacks,
+A new native-only bounded probe reaches only the first +0x280590 caller and
+its +0xedcf0/+0xee3b0 nested VM entries within two million instructions, with
+one additional 16384-byte allocation and no caller return observed. Multiple
+VM entries are not evidence that successive default callers completed; budget
+exhaustion does not prove an infinite loop.
+
+Next: restore +0x280554's first initialization caller/nested VM and then the
+remaining five callers and actual VM callbacks,
 then OS exit cleanup and the real allocator/signing chain. Detailed scope,
 evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
 

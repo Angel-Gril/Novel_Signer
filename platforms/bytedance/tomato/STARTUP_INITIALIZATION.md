@@ -71,6 +71,8 @@ python -B python/verify_vm9_startup_worker_loop.py --library /private/libmetasec
 
 此前另有一个明确标注为 **native-only** 的 [guest 调度探针](evidence/vm9_executor_native_wait_boundary_20261005.json)：在同一 fresh native 运行中，主线程发布三个 worker 后，显式调度第一个 executor worker、提供独立 guest TLS 和虚拟 clock，贯通 support、context 和 poll，停在 `+0x3485c0` 的 `pthread_cond_timedwait` 前。额外分配为128／23字节。它没有运行 wait、创建 host thread或完成 Python worker；clock 是调度探针的显式输入，不是 f13 冻结或线上签名证据。
 
+最新 [native-only 默认任务前段探针](evidence/vm9_default_task_prefix_boundary.json) 在绑定 memset／strlen GOT 后，以 2,000,000 条原生指令预算继续同次启动生成的非空 queue worker。只观察到第一个 caller `+0x280590` 进入，尚未观察到任何默认 caller 的 VM 返回位置；其嵌套 VM entry 为 `+0xedcf0/+0xee3b0`，新增一次 16384 字节分配。多个 VM entry 不等于多个默认 caller 已完成。该探针因指令预算耗尽结束，不证明无限循环，也没有验证 Python 默认任务。下一处恢复应从第一个 caller 的嵌套初始化 VM 与回调开始。
+
 ## 继续顺序
 
 先恢复非空 queue 的默认 invoke `+0x280554` 及六个 caller `+0x280590/+0x280610/+0x280690/+0x280710/+0x280790/+0x280810` 的实际初始化 VM 和回调。补齐其 fresh fixture 的 memset／strlen GOT 绑定，继续定位尚未返回的 native 默认任务；不能将它的输出变成 Python 输入。随后恢复 OS thread-exit support/emulated-TLS 析构，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
