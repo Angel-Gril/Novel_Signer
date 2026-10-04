@@ -1615,6 +1615,43 @@ def construct_configuration_object_layout(
                                        (first_count, null_count, container_count))
 
 
+@dataclass
+class MutexBackedStringOwnerPrefix:
+    object_address: int
+    string_address: int
+    counter_address: int
+    mutex_address: int
+
+
+def construct_mutex_backed_string_owner_prefix(
+    pages, *, object_address: int, source_object_address: int, flag: int,
+    image_base: int, allocate: Callable, max_payload_bytes: int = 0x100000,
+) -> MutexBackedStringOwnerPrefix:
+    """+0x2698f0 through +0x269988, before its VM body.
+
+    Construct the observed 48-byte owner, cloned string reference and zeroed
+    152-byte mutex state. Only the low byte of native W2 is stored; the last
+    seven owner bytes remain caller input. This is not the +0xa46a0 VM body.
+    """
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, object_address, 48)
+    _write_span(transaction, object_address, _word(_image_address(image_base, 0x35D2C0)))
+    string = _allocate(transaction, allocate, 24)
+    clone_string_object(transaction, object_address=string,
+                        source_object_address=source_object_address, image_base=image_base,
+                        allocate=allocate, max_payload_bytes=max_payload_bytes)
+    counter = _reference_wrapper(transaction, object_address + 8, string, allocate)
+    _write_span(transaction, object_address + 0x18, bytes(8))
+    mutex = _allocate(transaction, allocate, 152)
+    # Native memset precedes +0x17d7e0, so even its trailing padding is zero.
+    _write_span(transaction, mutex, bytes(152))
+    construct_mutex_state(transaction, object_address=mutex, image_base=image_base)
+    _write_span(transaction, object_address + 0x20, _word(mutex))
+    _write_span(transaction, object_address + 0x28, bytes([flag & 255]))
+    transaction.commit()
+    return MutexBackedStringOwnerPrefix(object_address, string, counter, mutex)
+
+
 def construct_service_payload(
     pages, *, object_address: int, image_base: int, allocate: Callable,
 ) -> ServicePayload:

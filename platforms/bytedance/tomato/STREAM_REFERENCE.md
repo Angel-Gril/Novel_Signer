@@ -34,7 +34,7 @@ allocator 在第三次分配时改变原 key/source 的案例证实：运算使�
 
 初次单字节包装验证失败的原因已定位：旧 oracle 的通用 `REGS` 只含 X0–X4，而此 helper 的长度参数在 **X5**。新 verifier 明确加载 X5；复测上述向量与独立 ARC4 输出一致。这是 oracle 参数装载修正，不是对 native 算法添加特殊例外。
 
-此前 stream checkpoint 为 4 次 fresh native controls、8 段 VM、36 条子树比较；[当前组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 现为12段VM / 56条子树，parser 在3318步退出；root 已推进到605步，详见配置初始化报告。下面的 725 步记录描述 stream 组件刚接入时的边界。parser 贯通 AES mode-0 解密、两次 checked copy、RC4 reference、结果 clone 及删除分支后，到第 **725 步**，在 `+0x2635ac → +0x248dd8` 之前停止。100 次分配、26 次显式 free、全部主 image、guest、隔离 TLS、2256-byte generation 表及有序副作用一致。单独的 stream reference 子树每次有 3 次分配，无显式 free；temporary count 2→1 保留 payload。
+此前 stream checkpoint 为 4 次 fresh native controls、8 段 VM、36 条子树比较；[当前组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 现为16段VM / 60条子树，parser 在3318步退出；root 已推进到605步，详见配置初始化报告。下面的 725 步记录描述 stream 组件刚接入时的边界。parser 贯通 AES mode-0 解密、两次 checked copy、RC4 reference、结果 clone 及删除分支后，到第 **725 步**，在 `+0x2635ac → +0x248dd8` 之前停止。100 次分配、26 次显式 free、全部主 image、guest、隔离 TLS、2256-byte generation 表及有序副作用一致。单独的 stream reference 子树每次有 3 次分配，无显式 free；temporary count 2→1 保留 payload。
 
 ```text
 python python/verify_vm9_stream_cipher.py --library /private/libmetasec_ml_71332.so --output /private/stream.json

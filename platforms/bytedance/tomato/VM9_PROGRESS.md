@@ -3,7 +3,28 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Configuration initialization and root step605 (2026-10-04)
+## State owner prefix and VM +0xa46a0 step173 (2026-10-04)
+
++0x2698f0 now has a Python constructor prefix before +0x269988: a48-byte
+string owner and152-byte mutex state, four allocations, W2 low-byte storage
+and preserved owner padding. Fresh differences pass **52 / 6**, including
+payload malloc NULL producing the native empty-clone result. The mutex region
+is memset before its existing constructor; its last3 padding bytes are zero.
+
+Four controls pass **16 VM comparisons / 60 complete subtrees**. The new
+VM +0xa46a0 models two lazy decodes and the existing scoped writer/TLS node
+publication, stopping at **step173 / +0xa4950**, before +0x25ee84. One allocation,
+no frees; guest/image/TLS/generation and ordered effects match. These VM
+component comparisons still use native VM input prelude snapshots; their
+caller prelude/body and root integration are not complete. Root remains605.
+
+Next: +0x25ee84 -> +0x26cd0c's cold shared reference -> +0x26cdc4,
+environment getters and +0x248908 formatting; then remaining callbacks and
++0x269988 caller generation. Do not replace this non-NULL reference path with
+a NULL shortcut or captured formatted output. See
+[STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md).
+
+## Earlier configuration initialization and root step605 (2026-10-04)
 
 `vm9_configuration_init.py` composes the observed +0x26194c -> +0x261c54
 -> +0x261cb0 -> +0x262608 path. Fresh helper differences pass **166 / 5**;

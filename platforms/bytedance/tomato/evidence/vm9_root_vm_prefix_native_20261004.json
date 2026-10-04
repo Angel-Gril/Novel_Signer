@@ -663,6 +663,43 @@
           "all_ordered_effects_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
+        },
+        {
+          "phase": "state_vm",
+          "vm_entry_offset": "0xa46a0",
+          "steps": 173,
+          "stop_bytecode_offset": "0xa4950",
+          "boundary_offset": "0x26a4ec",
+          "pending_target_offset": "0x25ee84",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 1,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x26a4c8",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x26a4c8",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x26a4dc",
+              "target_offset": "0x268eb0"
+            }
+          ],
+          "explicit_free_calls": 0,
+          "free_sequence_match": true,
+          "tls_and_generation_state_match": true,
+          "registration_and_wake_order_match": true,
+          "all_ordered_effects_match": true,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
         }
       ],
       "constructor_prefixes": [
@@ -1153,6 +1190,33 @@
           "native_parser_caller_entry_snapshot_used": false,
           "initializer_frame_words_compared": false,
           "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "state_owner_prefix",
+          "entry_offset": "0x2698f0",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 4,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": false,
+          "vm_entry_prelude_snapshot_used": true,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1845,6 +1909,43 @@
           "all_ordered_effects_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
+        },
+        {
+          "phase": "state_vm",
+          "vm_entry_offset": "0xa46a0",
+          "steps": 173,
+          "stop_bytecode_offset": "0xa4950",
+          "boundary_offset": "0x26a4ec",
+          "pending_target_offset": "0x25ee84",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 1,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x26a4c8",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x26a4c8",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x26a4dc",
+              "target_offset": "0x268eb0"
+            }
+          ],
+          "explicit_free_calls": 0,
+          "free_sequence_match": true,
+          "tls_and_generation_state_match": true,
+          "registration_and_wake_order_match": true,
+          "all_ordered_effects_match": true,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
         }
       ],
       "constructor_prefixes": [
@@ -2335,6 +2436,33 @@
           "native_parser_caller_entry_snapshot_used": false,
           "initializer_frame_words_compared": false,
           "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "state_owner_prefix",
+          "entry_offset": "0x2698f0",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 4,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": false,
+          "vm_entry_prelude_snapshot_used": true,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -3027,6 +3155,43 @@
           "all_ordered_effects_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
+        },
+        {
+          "phase": "state_vm",
+          "vm_entry_offset": "0xa46a0",
+          "steps": 173,
+          "stop_bytecode_offset": "0xa4950",
+          "boundary_offset": "0x26a4ec",
+          "pending_target_offset": "0x25ee84",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 1,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x26a4c8",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x26a4c8",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x26a4dc",
+              "target_offset": "0x268eb0"
+            }
+          ],
+          "explicit_free_calls": 0,
+          "free_sequence_match": true,
+          "tls_and_generation_state_match": true,
+          "registration_and_wake_order_match": true,
+          "all_ordered_effects_match": true,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
         }
       ],
       "constructor_prefixes": [
@@ -3517,6 +3682,33 @@
           "native_parser_caller_entry_snapshot_used": false,
           "initializer_frame_words_compared": false,
           "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "state_owner_prefix",
+          "entry_offset": "0x2698f0",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 4,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": false,
+          "vm_entry_prelude_snapshot_used": true,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -4209,6 +4401,43 @@
           "all_ordered_effects_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
+        },
+        {
+          "phase": "state_vm",
+          "vm_entry_offset": "0xa46a0",
+          "steps": 173,
+          "stop_bytecode_offset": "0xa4950",
+          "boundary_offset": "0x26a4ec",
+          "pending_target_offset": "0x25ee84",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 1,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x26a4c8",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x26a4c8",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x26a4dc",
+              "target_offset": "0x268eb0"
+            }
+          ],
+          "explicit_free_calls": 0,
+          "free_sequence_match": true,
+          "tls_and_generation_state_match": true,
+          "registration_and_wake_order_match": true,
+          "all_ordered_effects_match": true,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
         }
       ],
       "constructor_prefixes": [
@@ -4703,6 +4932,33 @@
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
           "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "state_owner_prefix",
+          "entry_offset": "0x2698f0",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 4,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": false,
+          "vm_entry_prelude_snapshot_used": true,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
         }
       ],
       "native_stack_writer_counts": {
@@ -4730,12 +4986,12 @@
     }
   ],
   "native_runs": 4,
-  "vm_phase_comparisons": 12,
+  "vm_phase_comparisons": 16,
   "constructor_prefix_comparisons": 8,
   "emulated_tls_comparisons": 8,
   "tls_registry_comparisons": 4,
   "scoped_lock_comparisons": 8,
-  "registry_and_cipher_comparisons": 56,
+  "registry_and_cipher_comparisons": 60,
   "parser_caller_comparisons": 4,
   "parser_caller_negative_count": 7,
   "parser_caller_negative_cases": [

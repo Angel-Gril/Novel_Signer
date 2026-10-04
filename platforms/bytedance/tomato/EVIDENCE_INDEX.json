@@ -1203,7 +1203,7 @@
   "vm9_root_vm_prefix_native_20261004": {
     "evidence_file": "evidence/vm9_root_vm_prefix_native_20261004.json",
     "native_runs": 4,
-    "vm_phase_comparisons": 12,
+    "vm_phase_comparisons": 16,
     "root_steps": 605,
     "parser_steps": 3318,
     "root_allocations_since_vm_entry": 138,
@@ -1237,7 +1237,7 @@
     "observable_stack_frame_effects_derived_from_caller_sp": true,
     "guard_boundary": "serialized_successful_single_thread_guard",
     "configuration_decrypt_callback_python_implemented": true,
-    "registry_and_cipher_comparisons": 56,
+    "registry_and_cipher_comparisons": 60,
     "parser_cold_tls_and_ordered_effects_compared": true,
     "explicit_stack_result_reference_and_context_bytes_compared": true,
     "configuration_stream_callback_python_implemented": true,
@@ -1267,7 +1267,16 @@
     "root_advanced_parser_entry_snapshot_used": false,
     "configuration_initializer_stack_delta": "-0x340",
     "saved_frame_getter_is_tls": false,
-    "full_physical_stack_spills_compared": false
+    "full_physical_stack_spills_compared": false,
+    "state_vm_steps": 173,
+    "state_vm_bytecode_offset": "0xa4950",
+    "state_vm_pending_target_offset": "0x25ee84",
+    "state_vm_allocations_since_vm_entry": 1,
+    "state_vm_free_calls": 0,
+    "state_vm_entry_prelude_snapshot_used": true,
+    "state_owner_prefix_comparisons": 4,
+    "state_owner_prefix_allocations": 4,
+    "vm_0xa46a0_body_implemented": false
   },
   "vm9_strings_native_20261004": {
     "evidence_file": "evidence/vm9_strings_native_20261004.json",
@@ -1482,6 +1491,24 @@
     "saved_frame_getter_is_tls": false,
     "physical_stack_spills_compared": false,
     "decoded_identifiers_and_payloads_exported": false,
+    "jvm_used": false,
+    "complete_python_medusa": false
+  },
+  "vm9_state_owner_native_20261004": {
+    "evidence_file": "evidence/vm9_state_owner_native_20261004.json",
+    "differential_cases": 52,
+    "negative_cases": 6,
+    "fresh_synthetic_inputs": true,
+    "native_outputs_used_as_model_input": false,
+    "entry_offset": "0x2698f0",
+    "boundary_offset": "0x269988",
+    "owner_bytes": 48,
+    "mutex_bytes": 152,
+    "allocator_state_and_order_compared": true,
+    "owner_padding_preserved": true,
+    "mutex_padding_zeroed_before_constructor": true,
+    "payload_malloc_failure_empty_clone_verified": true,
+    "vm_0xa46a0_body_implemented": false,
     "jvm_used": false,
     "complete_python_medusa": false
   }

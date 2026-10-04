@@ -37,7 +37,7 @@ native verifier 为该解包路径设置 200000 条指令上限；旧通用 help
 
 ## 同次组合对照
 
-[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 包含两个 image bases × SDK 缺失/30，**4 次 fresh controls、12 段 VM 对照、56 条完整子树对照**（含本报告之后恢复的配置初始化）。
+[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 包含两个 image bases × SDK 缺失/30，**4 次 fresh controls、16 段 VM 对照、60 条完整子树对照**（含本报告之后恢复的配置初始化）。
 
 | 检查点 | parser steps | allocations | explicit frees | 状态 |
 | --- | ---: | ---: | ---: | --- |

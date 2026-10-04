@@ -43,7 +43,7 @@
 
 [helper 证据](evidence/vm9_configuration_init_native_20261004.json)：**166 组 fresh native 差分 / 5 个拒绝与页面回滚案例**。覆盖两个 image bases、copy alias、自复制、u32/signed count 边界、二进制内部 NUL、长度/内容不等、nullable payload、parsed graph cleanup、iterator distance、identifier cold/ready 及保存 frame getter。所有适用案例比较 guest、全部主 image pages、allocator 状态、有序副作用与释放前 bytes；scalar/pointer 返回值按对应 ABI 比较。
 
-[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json)：两个 bases × SDK 缺失/30，**4 次 fresh controls / 12 段 VM 对照 / 56 条完整子树对照**；原先第513步前缀也保留为回归检查。
+[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json)：两个 bases × SDK 缺失/30，**4 次 fresh controls / 16 段 VM 对照 / 60 条完整子树对照**；原先第513步前缀也保留为回归检查。
 
 | 对照路径 | allocations | explicit frees | 已验证结果 |
 | --- | --- | --- | --- |
@@ -76,3 +76,5 @@ python -B python/verify_vm9_stream_cipher.py --library /private/libmetasec_ml_71
 下一段已定位到 `+0x2698f0`：其构造分配152-byte mutex state，现有 `construct_mutex_state` 已覆盖 `+0x17d7e0 / +0x32a330`；之后 `+0x269988` 进入 **VM +0xa46a0**，需恢复 caller/VM/callback 并接回 root。较早的 root/全局/TLS/OS 初始化输入仍要独立生成。
 
 完整当前线上 fresh-input Medusa、无 JVM Rust signer/download、搜索非空与分页、抖音/起点闭环，以及最终 Pages 小说搜索下载网页和 Actions 工具包，均仍未完成。该报告不包含新增线上成功结论或最终产品发布声明。
+
+后续 [owner/state初始化报告](STATE_OWNER_INITIALIZATION.md) 恢复了 +0x2698f0 的构造前缀（52 / 6），新增VM +0xa46a0已到173步 / +0xa4950，待恢复+0x25ee84；该VM组件尚使用native入口输入前导快照，未接回root。
