@@ -33,3 +33,10 @@ cargo check --manifest-path platforms/bytedance/tomato/rust/Cargo.toml
 GitHub Actions runs the same checks, a public-data secret scan, and publishes `docs/` with GitHub Pages.
 
 The `build-rust` workflow also produces Linux and Windows artifacts on manual dispatch or version tags. Those artifacts are the current Rust integration scaffold; they do not contain a current online Medusa implementation until the independent VM work is completed.
+
+
+The latest independent initialization checkpoint returns the observed state
+VM at363steps and root VM at716steps, including all32 terminal slots and
+ordered effects. The earlier native root input prelude still needs independent
+generation. See the [owner/state report](platforms/bytedance/tomato/STATE_OWNER_INITIALIZATION.md)
+for the106/15 helper matrix and the exact remaining boundary.

@@ -279,3 +279,23 @@ books across two pages using one search ID, with no overlap. Current
 `7.1.3.32` session-aware first-stage probes still return an empty body on both
 b/c hosts. The three new redacted records are indexed in `EVIDENCE_INDEX.json`;
 current Python Medusa, no-JVM Rust and current nonempty search remain open.
+
+
+## Independent initialization checkpoint (2026-10-04)
+
+The default cold shared reference, environment getters, unavailable log sinks,
+%s/%% formatting and directory behavior pass106 fresh native differences and
+15 rejection/page-rollback cases. Python-generated state caller and the
+48-byte owner now compose through state VM exit at363steps. Reconnecting
+that component returns the observed root VM at716steps, with171allocations,
+93frees and all32 terminal virtual slots matching. Four controls compare
+16VM phases and68complete subtrees, including TLS/pthread generation and
+ordered allocator/clock/registration/wake effects. State caller adds7preflight
+rollback cases.
+
+This root composition still starts from its earlier same-run native VM input
+prelude. It does not use later constructor/parser/state input snapshots,
+but independent early caller/global/TLS/arena/OS startup and fresh complete
+Medusa signing remain open. No new online interface or final product success
+is claimed. See [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md)
+for the APIs, evidence, exact boundaries and reproduction commands.

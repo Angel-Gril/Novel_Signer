@@ -9,9 +9,11 @@
 
 2026-10-04 的后续恢复包括 guest-table cipher（256 组 native 差分 / 11 个回滚例）及完整 mode-0 配置解密 callback（200 / 12）。后续又恢复了流状态和 reference 生命周期（174 / 9）。四次 fresh 控制中的 parser 已在 3318 步 / `+0x9c95c` 退出，165 字节消息成功解包，119 次分配、47 次 free、TLS/generation/有序副作用及 32 个虚拟槽均一致。新增字符串重填为 190 / 5，消息解包/清理为 208 / 6；60 条完整子树对照包括四次 `+0x262608` caller 验证：所需 parser 前导由 Python 生成，7 个拒绝/回滚案例通过；caller 之前的 root/堆/TLS 状态仍由同次 native 输入提供，完整 Python 冷启动和88-byte其它初始化分支仍未完成。接口、用法与证据用途见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) 、[STREAM_REFERENCE.md](STREAM_REFERENCE.md) 与 [PARSER_UNPACK.md](PARSER_UNPACK.md)。
 
-本轮又完成已观察的 `+0x26194c → +0x261c54 → +0x261cb0` 默认配置构造路径（helper **166 / 5**、流组件回归 **174 / 9**）。root 不读取后续 constructor/parser 入口快照，已从同次较早的 native VM 输入推进至 **605步 / +0x99cd8**，**138次分配 / 70次free**及guest/image/TLS/generation/有序副作用一致；组合证据为 **16段VM / 60条子树**。下一处为 `+0x2698f0 → VM +0xa46a0`。修正了 -0x340 工作栈、iterator length 与 saved-frame getter 的归属，详见 [CONFIGURATION_INITIALIZATION.md](CONFIGURATION_INITIALIZATION.md)。这些是组件与初始化证据，当前线上搜索、下载和最终产品的完成状态没有变化。
+较早的恢复完成已观察的 `+0x26194c → +0x261c54 → +0x261cb0` 默认配置构造路径（helper **166 / 5**、流组件回归 **174 / 9**），并将 root 推进到第605步；修正了 -0x340 工作栈、iterator length 与 saved-frame getter 的归属，详见 [CONFIGURATION_INITIALIZATION.md](CONFIGURATION_INITIALIZATION.md)。
 
-后续又恢复 +0x2698f0 的48-byte owner/152-byte mutex前缀（**52 / 6**），副VM +0xa46a0从native输入前导推进到**173步 / +0xa4950**，下一处**+0x25ee84**；组合现为**16段VM / 60条子树**。副VM尚未接回root，详见 [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md)。
+最新检查点恢复了 `+0x25ee84 → +0x26cd0c → +0x26cdc4` 冷启动共享引用、日志／SDK／环境 getter、格式化和目录依赖（**106 组 native 差分 / 15 个拒绝回滚案例**）。Python 生成的 state caller 和完整48-byte owner 已接回 root：state VM **363步 / +0xa54bc退出，28次分配 / 21次free**；root **716步 / +0x99f04退出，171 / 93**，二者全部32个终止虚拟槽与guest/image/TLS/generation/有序副作用一致。组合为 **4个controls / 16段VM / 68条子树**，另有7个state caller前置拒绝案例。详见 [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md)。
+
+该组合仍从更早的同次 native root VM 输入前导开始，未完成完整fresh-input Medusa；它不消费之后的constructor/parser/state入口快照。下一步是独立生成 `+0x257084 → +0x257308` root caller与全局/TLS/arena/OS输入，再验证fresh signer输出及线上矩阵。无JVM Rust、当前非空搜索与分页、其它平台和最终Pages/Actions产品的完成状态没有变化。
 
 ## 1. 完成度结论
 

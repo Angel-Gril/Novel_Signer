@@ -2,7 +2,7 @@
 
 截止：2026-10-04。恢复了匹配 ELF 的已观察默认配置路径，**完整独立 Medusa 尚未完成**。
 
-本轮将 `+0x26194c → +0x261c54 → +0x261cb0 → +0x262608` 连接为 Python 模型。root 的较早 native 输入前导仍保留，但该组合不再读取 native 构造器入口或 parser 入口快照来生成其内部状态。四次控制中，root 从第 513 步推进至 **第 605 步 / `+0x99cd8`**，下一处待恢复是 `+0x258500 → +0x2698f0`。
+本报告的早期检查点将 `+0x26194c → +0x261c54 → +0x261cb0 → +0x262608` 连接为 Python 模型。root 的较早 native 输入前导仍保留，但该组合不再读取 native 构造器入口或 parser 入口快照来生成其内部状态。四次控制中，root 从第 513 步推进至 **第 605 步 / `+0x99cd8`**，下一处待恢复是 `+0x258500 → +0x2698f0`。
 
 ## 代码与调用边界
 
@@ -43,7 +43,7 @@
 
 [helper 证据](evidence/vm9_configuration_init_native_20261004.json)：**166 组 fresh native 差分 / 5 个拒绝与页面回滚案例**。覆盖两个 image bases、copy alias、自复制、u32/signed count 边界、二进制内部 NUL、长度/内容不等、nullable payload、parsed graph cleanup、iterator distance、identifier cold/ready 及保存 frame getter。所有适用案例比较 guest、全部主 image pages、allocator 状态、有序副作用与释放前 bytes；scalar/pointer 返回值按对应 ABI 比较。
 
-[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json)：两个 bases × SDK 缺失/30，**4 次 fresh controls / 16 段 VM 对照 / 60 条完整子树对照**；原先第513步前缀也保留为回归检查。
+[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json)：两个 bases × SDK 缺失/30，**4 次 fresh controls / 16 段 VM 对照 / 68 条完整子树对照**；原先第513步前缀也保留为回归检查。
 
 | 对照路径 | allocations | explicit frees | 已验证结果 |
 | --- | --- | --- | --- |
@@ -51,9 +51,9 @@
 | `configuration_context` | 125 | 69 | status6；包括结果赋值、selector 与 recursive cleanup |
 | `configuration_wrapper` | 125 | 69 | status6、两个派生 frame words 与实际 continuation |
 | `configuration_constructor` | 134 | 69 | 已观察的88-byte构造路径、参数块与初始化返回 |
-| `root_advanced` | 138 | 70 | 第605步 / +0x99cd8，停在 +0x2698f0 前 |
+| `root_advanced` | 171 | 93 | 后续组合第716步 / +0x99f04退出，全部32个终止虚拟槽匹配 |
 
-上述组合路径均核对 guest、全部主 image pages、TLS、2256-byte generation table，以及 allocations/frees/clock/registration/wake 有序副作用。root 未声称全部32个 terminal slots 匹配：它还没退出。修改后的流组件另外回归通过原有 **174 / 9**，详见 [STREAM_REFERENCE.md](STREAM_REFERENCE.md)。
+上述组合路径均核对 guest、全部主 image pages、TLS、2256-byte generation table，以及 allocations/frees/clock/registration/wake 有序副作用。后续 owner/state 组合已使 root 退出并比较全部32个 terminal slots，详见 [owner/state报告](STATE_OWNER_INITIALIZATION.md)。修改后的流组件另外回归通过原有 **174 / 9**，详见 [STREAM_REFERENCE.md](STREAM_REFERENCE.md)。
 
 可用这些证据排除错误的 stack ABI、identity/configuration 参数、container 布局、reference 释放条件和 callback 返回点。数据来源被分层记录：合成组件从 fresh ELF 和测试内存开始；constructor 子树从同次更早的 native 输入入口开始；root 组合从 native VM 输入前导开始，但自行生成后续 constructor/parser 所需状态。任何一层都不能升级为当前线上独立 signer 的证明。
 
@@ -73,8 +73,6 @@ python -B python/verify_vm9_stream_cipher.py --library /private/libmetasec_ml_71
 
 这是已观察的默认模式、空 publication 容器和 selector0 控制。file-provider、非空配置树的 publication、diagnostic 失败路径、其它 selector 的完整组合验证、其它 dispatch 分支仍未覆盖。未知模式拒绝并回滚 guest pages；allocator/free 是外部副作用，页面事务不能撤销这些账本。运行使用共享 VM image base、串行 guard 与无竞争 mutex 边界，未提供宿主并发原子性或通用 OS 运行时。
 
-下一段已定位到 `+0x2698f0`：其构造分配152-byte mutex state，现有 `construct_mutex_state` 已覆盖 `+0x17d7e0 / +0x32a330`；之后 `+0x269988` 进入 **VM +0xa46a0**，需恢复 caller/VM/callback 并接回 root。较早的 root/全局/TLS/OS 初始化输入仍要独立生成。
+后续 [owner/state初始化报告](STATE_OWNER_INITIALIZATION.md) 已恢复共享引用、环境 getter、格式化、完整48-byte owner及其Python caller。State VM第363步退出并接回root；root第716步退出。该组合仍从更早的同次native root VM输入前导开始。下一步是独立生成 `+0x257084 → +0x257308` caller及较早的root/全局/TLS/arena/OS输入。
 
 完整当前线上 fresh-input Medusa、无 JVM Rust signer/download、搜索非空与分页、抖音/起点闭环，以及最终 Pages 小说搜索下载网页和 Actions 工具包，均仍未完成。该报告不包含新增线上成功结论或最终产品发布声明。
-
-后续 [owner/state初始化报告](STATE_OWNER_INITIALIZATION.md) 恢复了 +0x2698f0 的构造前缀（52 / 6），新增VM +0xa46a0已到173步 / +0xa4950，待恢复+0x25ee84；该VM组件尚使用native入口输入前导快照，未接回root。

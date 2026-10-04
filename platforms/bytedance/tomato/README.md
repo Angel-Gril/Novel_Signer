@@ -35,3 +35,11 @@ current-interface signing and a usable search/download webpage remain open.
 The separate stream/reference path is also restored and verified. Read
 [STREAM_REFERENCE.md](STREAM_REFERENCE.md) for RC4 state, X5 call convention,
 reference ownership and the next fill/resize boundary.
+
+
+The observed owner/state/root VM path now returns with matching heap, image,
+TLS/generation, ordered effects and terminal virtual slots. State caller
+prelude is Python-generated; the earlier root VM input prelude remains native.
+Read [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md) for the
+106/15 fresh helper matrix and4-control combined evidence. Complete current
+Medusa and the final search/download product remain open.
