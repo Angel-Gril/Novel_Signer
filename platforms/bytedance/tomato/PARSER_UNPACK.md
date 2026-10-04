@@ -37,7 +37,7 @@ native verifier 为该解包路径设置 200000 条指令上限；旧通用 help
 
 ## 同次组合对照
 
-[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 包含两个 image bases × SDK 缺失/30，**4 次 fresh controls、8 段 VM 对照、44 条完整子树对照**。
+[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 包含两个 image bases × SDK 缺失/30，**4 次 fresh controls、12 段 VM 对照、56 条完整子树对照**（含本报告之后恢复的配置初始化）。
 
 | 检查点 | parser steps | allocations | explicit frees | 状态 |
 | --- | ---: | ---: | ---: | --- |
@@ -91,4 +91,4 @@ if message:
 
 这些证据证明重填容量策略、source alias 处理、分配后的实际读取点、unpack ABI、descriptor-driven message 布局、重复值/unknown fields 处理、清理次序，以及当前 parser 路径的退出。可用于定位 ABI、schema、ownership 或初始化状态错误；不能据此把下载失败归因于服务器，也不能证明所有配置输入、所有 native 环境或其他平台已经等价。
 
-下一段是 `+0x261c54 → +0x261cb0` 的完整初始化及 parser 前导。已静态定位 `+0x262608` 会在调用 VM 前生成 caller 工作区、四项输入和 callback/exit descriptor；这些所需前导状态已由 `vm9_parser.py` 生成并通过 caller 对照；下一步须生成该 caller 之前的 root 状态。完整 root/88-byte 初始化、独立当前 Medusa、无 JVM Rust signer/download、搜索非空/分页、抖音/起点及最终 Pages 搜索下载网页与 Actions 工具仍未完成。
+后续已贯通 `+0x26194c → +0x261c54 → +0x261cb0` 的已观察初始化及 Python parser 前导，详见 [CONFIGURATION_INITIALIZATION.md](CONFIGURATION_INITIALIZATION.md)。root 已从513推进到605步 / `+0x99cd8`，下一处为 `+0x2698f0 → VM +0xa46a0`。已静态定位 `+0x262608` 会在调用 VM 前生成 caller 工作区、四项输入和 callback/exit descriptor；这些所需前导状态已由 `vm9_parser.py` 生成并通过 caller 对照；下一步须生成该 caller 之前的 root 状态。完整 root/88-byte 初始化、独立当前 Medusa、无 JVM Rust signer/download、搜索非空/分页、抖音/起点及最终 Pages 搜索下载网页与 Actions 工具仍未完成。

@@ -100,16 +100,18 @@ def release_string_reference(pages, *, reference_address: int, image_base: int,
                              free: Callable) -> None:
     """Model +0x166e74's retained/string-deleting reference cleanup.
 
-    Positive signed decremented counts retain both wrapper words; NULL count
+    Counts greater than one in signed comparison retain both wrapper words; NULL count
     is a no-op. Otherwise free count first, then dispatch the guest deleting
     string destructor. Other destructor targets reject rather than guessing.
     """
     transaction = _PageTransaction(pages)
     counter = _pointer(transaction, reference_address + 8)
     if counter:
-        count = (_u32(transaction, counter) - 1) & 0xFFFFFFFF
+        original_count = _u32(transaction, counter)
+        count = (original_count - 1) & 0xFFFFFFFF
         _write_span(transaction, counter, count.to_bytes(4, "little"))
-        if count == 0 or count & 0x80000000:
+        # Native SUBS/B.GT includes signed overflow, notably INT_MIN - 1.
+        if objects._s32(original_count) <= 1:
             free(transaction, counter)
             pointer = _pointer(transaction, reference_address)
             _write_span(transaction, reference_address + 8, bytes(8))

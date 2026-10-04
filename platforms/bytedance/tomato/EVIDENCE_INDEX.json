@@ -1203,10 +1203,10 @@
   "vm9_root_vm_prefix_native_20261004": {
     "evidence_file": "evidence/vm9_root_vm_prefix_native_20261004.json",
     "native_runs": 4,
-    "vm_phase_comparisons": 8,
-    "root_steps": 513,
+    "vm_phase_comparisons": 12,
+    "root_steps": 605,
     "parser_steps": 3318,
-    "root_allocations_since_vm_entry": 11,
+    "root_allocations_since_vm_entry": 138,
     "parser_allocations_since_vm_entry": 119,
     "all_main_image_pages_compared": true,
     "external_captured_pages_used": false,
@@ -1237,7 +1237,7 @@
     "observable_stack_frame_effects_derived_from_caller_sp": true,
     "guard_boundary": "serialized_successful_single_thread_guard",
     "configuration_decrypt_callback_python_implemented": true,
-    "registry_and_cipher_comparisons": 44,
+    "registry_and_cipher_comparisons": 56,
     "parser_cold_tls_and_ordered_effects_compared": true,
     "explicit_stack_result_reference_and_context_bytes_compared": true,
     "configuration_stream_callback_python_implemented": true,
@@ -1253,7 +1253,21 @@
     "parser_caller_negative_count": 7,
     "parser_caller_entry_snapshot_used": true,
     "parser_caller_uses_native_vm_entry_snapshot": false,
-    "complete_python_root_prelude": false
+    "complete_python_root_prelude": false,
+    "current_root_phase": "root_advanced",
+    "retained_root_prefix_steps": 513,
+    "root_bytecode_offset": "0x99cd8",
+    "root_pending_target_offset": "0x2698f0",
+    "root_free_calls": 70,
+    "configuration_initializer_comparisons": 4,
+    "configuration_wrapper_comparisons": 4,
+    "configuration_constructor_comparisons": 4,
+    "observed_88_byte_constructor_path_python_implemented": true,
+    "root_advanced_constructor_entry_snapshot_used": false,
+    "root_advanced_parser_entry_snapshot_used": false,
+    "configuration_initializer_stack_delta": "-0x340",
+    "saved_frame_getter_is_tls": false,
+    "full_physical_stack_spills_compared": false
   },
   "vm9_strings_native_20261004": {
     "evidence_file": "evidence/vm9_strings_native_20261004.json",
@@ -1454,5 +1468,21 @@
     "custom_allocator": false,
     "cleanup_model_uses_own_unpack_output": true,
     "field_names_defaults_and_wire_bytes_exported": false
+  },
+  "vm9_configuration_init_native_20261004": {
+    "evidence_file": "evidence/vm9_configuration_init_native_20261004.json",
+    "differential_cases": 166,
+    "negative_cases": 5,
+    "fresh_synthetic_inputs": true,
+    "native_outputs_used_as_model_input": false,
+    "pre_free_bytes_compared": true,
+    "allocation_and_free_order_compared": true,
+    "signed_subs_overflow_case_verified": true,
+    "publication_getter_uses_iterator_distance": true,
+    "saved_frame_getter_is_tls": false,
+    "physical_stack_spills_compared": false,
+    "decoded_identifiers_and_payloads_exported": false,
+    "jvm_used": false,
+    "complete_python_medusa": false
   }
 }

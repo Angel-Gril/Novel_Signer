@@ -24,7 +24,7 @@ raw helper 的 W2 key size 为零时 ARM UDIV 返回零，remainder 变成 i，�
 
 `+0x2592b8` 的第一条指令直接跳到 `+0x258fd8`。X0/X1 是 data/key string object，隐藏 X8 是 output reference。非空输入依次分配 24-byte string、length+1-byte 零填充 payload、4-byte count。构造 temporary shared reference 后，重新读取原 key/data 的 pointer 与 length，执行 drop=0 的流运算，再 copy reference，将 count 从 1 加到 2，清理 temporary reference 后回到 1。原生最终 X0 不是这里的语义结果。
 
-empty key/data 只生成 NULL string reference 与 count=1。释放流程先做 u32 count 减一，再按有符号值判断：正数保留两个 wrapper words；零或负数先 free count，然后经 guest vtable 的 deleting destructor 清理 string payload 与对象。NULL count 不处理 object。释放前 bytes 与 poisoned free 顺序都有 native 对照。普通 guest bytes 之外，同次组合测试还显式比较可能在 native 栈中的 output reference。
+empty key/data 只生成 NULL string reference 与 count=1。释放流程先做 u32 count 减一，再按 `subs; b.gt` 的有符号条件判断：原始 signed count 大于1才保留两个 wrapper words，其余先 free count，然后经 guest vtable 的 deleting destructor 清理 string payload 与对象。特别是原始 `0x80000000` 虽回绕为 `0x7fffffff`，仍因 signed overflow 进入释放路径。该边界已由后续 [配置初始化 helper 差分](CONFIGURATION_INITIALIZATION.md) 验证并修正，原有174 / 9的 stream 对照已重新通过。NULL count 不处理 object。释放前 bytes 与 poisoned free 顺序都有 native 对照。普通 guest bytes 之外，同次组合测试还显式比较可能在 native 栈中的 output reference。
 
 allocator 在第三次分配时改变原 key/source 的案例证实：运算使用分配后的源内容。页面事务不能回滚调用方外部 allocator 账本；未知 target、超界/unmapped 输入及未恢复的分配失败路径按明确异常拒绝。
 
@@ -34,7 +34,7 @@ allocator 在第三次分配时改变原 key/source 的案例证实：运算使�
 
 初次单字节包装验证失败的原因已定位：旧 oracle 的通用 `REGS` 只含 X0–X4，而此 helper 的长度参数在 **X5**。新 verifier 明确加载 X5；复测上述向量与独立 ARC4 输出一致。这是 oracle 参数装载修正，不是对 native 算法添加特殊例外。
 
-此前 stream checkpoint 为 4 次 fresh native controls、8 段 VM、36 条子树比较；[当前组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 已为 44 条子树，parser 在 3318 步退出。下面的 725 步记录描述 stream 组件刚接入时的边界。parser 贯通 AES mode-0 解密、两次 checked copy、RC4 reference、结果 clone 及删除分支后，到第 **725 步**，在 `+0x2635ac → +0x248dd8` 之前停止。100 次分配、26 次显式 free、全部主 image、guest、隔离 TLS、2256-byte generation 表及有序副作用一致。单独的 stream reference 子树每次有 3 次分配，无显式 free；temporary count 2→1 保留 payload。
+此前 stream checkpoint 为 4 次 fresh native controls、8 段 VM、36 条子树比较；[当前组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 现为12段VM / 56条子树，parser 在3318步退出；root 已推进到605步，详见配置初始化报告。下面的 725 步记录描述 stream 组件刚接入时的边界。parser 贯通 AES mode-0 解密、两次 checked copy、RC4 reference、结果 clone 及删除分支后，到第 **725 步**，在 `+0x2635ac → +0x248dd8` 之前停止。100 次分配、26 次显式 free、全部主 image、guest、隔离 TLS、2256-byte generation 表及有序副作用一致。单独的 stream reference 子树每次有 3 次分配，无显式 free；temporary count 2→1 保留 payload。
 
 ```text
 python python/verify_vm9_stream_cipher.py --library /private/libmetasec_ml_71332.so --output /private/stream.json

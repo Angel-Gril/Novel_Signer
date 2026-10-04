@@ -7,7 +7,9 @@
 
 最新纠正：初始化回调 `0x1000000e` 返回 `MSC.GetABSwitch()`，旧桥接器误传冻结时间。恢复 APK 默认值 `2` 后，三个旧失败时间输入成功，未取整时间的详情请求也被线上接受。Python 已独立恢复这一全局和 bit-5 分支，18 个字节码对照通过；默认 A/B=2 的 publisher 是 `+0x28c268`，两个 child/handler、root 已观测字段装配、callback pair 绑定、引用计数和 JNI 清理已有 92 个新建内存对照。2026-10-04 又恢复了 0x2d0-byte service 配置图、完整无竞争 guard 状态和真实 getter → handler 构造，72 个 native 对照、15 个拒绝/回滚例通过；root 前段的 264-byte 配置及全局启动仍未完成。此前“时间取整稳定”的结论只适用于旧误配桥接器，不能作为 native 时间约束。详见 [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) 与 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。修正后当前搜索在 b/c 两个主机仍为空。
 
-2026-10-04 的后续恢复包括 guest-table cipher（256 组 native 差分 / 11 个回滚例）及完整 mode-0 配置解密 callback（200 / 12）。后续又恢复了流状态和 reference 生命周期（174 / 9）。四次 fresh 控制中的 parser 已在 3318 步 / `+0x9c95c` 退出，165 字节消息成功解包，119 次分配、47 次 free、TLS/generation/有序副作用及 32 个虚拟槽均一致。新增字符串重填为 190 / 5，消息解包/清理为 208 / 6；44 条完整子树对照包括四次 `+0x262608` caller 验证：所需 parser 前导由 Python 生成，7 个拒绝/回滚案例通过；caller 之前的 root/堆/TLS 状态仍由同次 native 输入提供，完整 Python 冷启动和 88-byte 初始化仍未完成。接口、用法与证据用途见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) 、[STREAM_REFERENCE.md](STREAM_REFERENCE.md) 与 [PARSER_UNPACK.md](PARSER_UNPACK.md)。
+2026-10-04 的后续恢复包括 guest-table cipher（256 组 native 差分 / 11 个回滚例）及完整 mode-0 配置解密 callback（200 / 12）。后续又恢复了流状态和 reference 生命周期（174 / 9）。四次 fresh 控制中的 parser 已在 3318 步 / `+0x9c95c` 退出，165 字节消息成功解包，119 次分配、47 次 free、TLS/generation/有序副作用及 32 个虚拟槽均一致。新增字符串重填为 190 / 5，消息解包/清理为 208 / 6；56 条完整子树对照包括四次 `+0x262608` caller 验证：所需 parser 前导由 Python 生成，7 个拒绝/回滚案例通过；caller 之前的 root/堆/TLS 状态仍由同次 native 输入提供，完整 Python 冷启动和88-byte其它初始化分支仍未完成。接口、用法与证据用途见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) 、[STREAM_REFERENCE.md](STREAM_REFERENCE.md) 与 [PARSER_UNPACK.md](PARSER_UNPACK.md)。
+
+本轮又完成已观察的 `+0x26194c → +0x261c54 → +0x261cb0` 默认配置构造路径（helper **166 / 5**、流组件回归 **174 / 9**）。root 不读取后续 constructor/parser 入口快照，已从同次较早的 native VM 输入推进至 **605步 / +0x99cd8**，**138次分配 / 70次free**及guest/image/TLS/generation/有序副作用一致；组合证据为 **12段VM / 56条子树**。下一处为 `+0x2698f0 → VM +0xa46a0`。修正了 -0x340 工作栈、iterator length 与 saved-frame getter 的归属，详见 [CONFIGURATION_INITIALIZATION.md](CONFIGURATION_INITIALIZATION.md)。这些是组件与初始化证据，当前线上搜索、下载和最终产品的完成状态没有变化。
 
 ## 1. 完成度结论
 

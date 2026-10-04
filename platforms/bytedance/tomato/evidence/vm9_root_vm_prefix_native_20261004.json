@@ -134,6 +134,167 @@
           "complete_initializer": false
         },
         {
+          "phase": "root_advanced",
+          "vm_entry_offset": "0x991c0",
+          "steps": 605,
+          "stop_bytecode_offset": "0x99cd8",
+          "boundary_offset": "0x258500",
+          "pending_target_offset": "0x2698f0",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 138,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a444"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a4fc"
+            },
+            {
+              "wrapper_offset": "0x258478",
+              "target_offset": "0x248344"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x2584e0",
+              "target_offset": "0x26194c"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258460",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            }
+          ],
+          "explicit_free_calls": 70,
+          "free_sequence_match": true,
+          "tls_and_generation_state_match": true,
+          "registration_and_wake_order_match": true,
+          "all_ordered_effects_match": true,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
           "steps": 3318,
@@ -639,6 +800,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -664,6 +827,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -689,6 +854,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -714,6 +881,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -739,6 +908,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -764,6 +935,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -789,6 +962,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -814,6 +989,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -839,6 +1016,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -864,6 +1043,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "not_used",
           "lazy_publication_compared": false,
@@ -889,6 +1070,89 @@
           "caller_prelude_python_generated": true,
           "vm_entry_prelude_snapshot_used": false,
           "native_parser_caller_entry_snapshot_used": true,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_context",
+          "entry_offset": "0x261cb0",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 125,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_wrapper",
+          "entry_offset": "0x261c54",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 125,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": true,
+          "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_constructor",
+          "entry_offset": "0x26194c",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 134,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -913,6 +1177,8 @@
       "configuration_unpack_callback_python_implemented": true,
       "parser_observed_path_python_implemented": true,
       "parser_vm_entry_prelude_python_generated": true,
+      "root_advanced_constructor_entry_snapshot_used": false,
+      "root_advanced_parser_entry_snapshot_used": false,
       "complete_python_root_prelude": false,
       "property_profile": "absent"
     },
@@ -1050,6 +1316,167 @@
           "complete_initializer": false
         },
         {
+          "phase": "root_advanced",
+          "vm_entry_offset": "0x991c0",
+          "steps": 605,
+          "stop_bytecode_offset": "0x99cd8",
+          "boundary_offset": "0x258500",
+          "pending_target_offset": "0x2698f0",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 138,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a444"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a4fc"
+            },
+            {
+              "wrapper_offset": "0x258478",
+              "target_offset": "0x248344"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x2584e0",
+              "target_offset": "0x26194c"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258460",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            }
+          ],
+          "explicit_free_calls": 70,
+          "free_sequence_match": true,
+          "tls_and_generation_state_match": true,
+          "registration_and_wake_order_match": true,
+          "all_ordered_effects_match": true,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
           "steps": 3318,
@@ -1555,6 +1982,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1580,6 +2009,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1605,6 +2036,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -1630,6 +2063,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -1655,6 +2090,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -1680,6 +2117,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1705,6 +2144,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1730,6 +2171,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1755,6 +2198,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1780,6 +2225,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "not_used",
           "lazy_publication_compared": false,
@@ -1805,6 +2252,89 @@
           "caller_prelude_python_generated": true,
           "vm_entry_prelude_snapshot_used": false,
           "native_parser_caller_entry_snapshot_used": true,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_context",
+          "entry_offset": "0x261cb0",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 125,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_wrapper",
+          "entry_offset": "0x261c54",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 125,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": true,
+          "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_constructor",
+          "entry_offset": "0x26194c",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 134,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1829,6 +2359,8 @@
       "configuration_unpack_callback_python_implemented": true,
       "parser_observed_path_python_implemented": true,
       "parser_vm_entry_prelude_python_generated": true,
+      "root_advanced_constructor_entry_snapshot_used": false,
+      "root_advanced_parser_entry_snapshot_used": false,
       "complete_python_root_prelude": false,
       "property_profile": "sdk_30"
     },
@@ -1966,6 +2498,167 @@
           "complete_initializer": false
         },
         {
+          "phase": "root_advanced",
+          "vm_entry_offset": "0x991c0",
+          "steps": 605,
+          "stop_bytecode_offset": "0x99cd8",
+          "boundary_offset": "0x258500",
+          "pending_target_offset": "0x2698f0",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 138,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a444"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a4fc"
+            },
+            {
+              "wrapper_offset": "0x258478",
+              "target_offset": "0x248344"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x2584e0",
+              "target_offset": "0x26194c"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258460",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            }
+          ],
+          "explicit_free_calls": 70,
+          "free_sequence_match": true,
+          "tls_and_generation_state_match": true,
+          "registration_and_wake_order_match": true,
+          "all_ordered_effects_match": true,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
           "steps": 3318,
@@ -2471,6 +3164,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2496,6 +3191,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2521,6 +3218,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -2546,6 +3245,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -2571,6 +3272,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -2596,6 +3299,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2621,6 +3326,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2646,6 +3353,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2671,6 +3380,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2696,6 +3407,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "not_used",
           "lazy_publication_compared": false,
@@ -2721,6 +3434,89 @@
           "caller_prelude_python_generated": true,
           "vm_entry_prelude_snapshot_used": false,
           "native_parser_caller_entry_snapshot_used": true,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_context",
+          "entry_offset": "0x261cb0",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 125,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_wrapper",
+          "entry_offset": "0x261c54",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 125,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": true,
+          "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_constructor",
+          "entry_offset": "0x26194c",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 134,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2745,6 +3541,8 @@
       "configuration_unpack_callback_python_implemented": true,
       "parser_observed_path_python_implemented": true,
       "parser_vm_entry_prelude_python_generated": true,
+      "root_advanced_constructor_entry_snapshot_used": false,
+      "root_advanced_parser_entry_snapshot_used": false,
       "complete_python_root_prelude": false,
       "property_profile": "absent"
     },
@@ -2882,6 +3680,167 @@
           "complete_initializer": false
         },
         {
+          "phase": "root_advanced",
+          "vm_entry_offset": "0x991c0",
+          "steps": 605,
+          "stop_bytecode_offset": "0x99cd8",
+          "boundary_offset": "0x258500",
+          "pending_target_offset": "0x2698f0",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 138,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a444"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a4fc"
+            },
+            {
+              "wrapper_offset": "0x258478",
+              "target_offset": "0x248344"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x2584e0",
+              "target_offset": "0x26194c"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258460",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            }
+          ],
+          "explicit_free_calls": 70,
+          "free_sequence_match": true,
+          "tls_and_generation_state_match": true,
+          "registration_and_wake_order_match": true,
+          "all_ordered_effects_match": true,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
           "steps": 3318,
@@ -3387,6 +4346,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -3412,6 +4373,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -3437,6 +4400,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -3462,6 +4427,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -3487,6 +4454,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -3512,6 +4481,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -3537,6 +4508,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -3562,6 +4535,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -3587,6 +4562,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -3612,6 +4589,8 @@
           "caller_prelude_python_generated": false,
           "vm_entry_prelude_snapshot_used": true,
           "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "not_used",
           "lazy_publication_compared": false,
@@ -3637,6 +4616,89 @@
           "caller_prelude_python_generated": true,
           "vm_entry_prelude_snapshot_used": false,
           "native_parser_caller_entry_snapshot_used": true,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_context",
+          "entry_offset": "0x261cb0",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 125,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_wrapper",
+          "entry_offset": "0x261c54",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 125,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": true,
+          "configuration_initializer_entry_snapshot_used": true,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
+        },
+        {
+          "phase": "configuration_constructor",
+          "entry_offset": "0x26194c",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 134,
+          "explicit_free_calls": 69,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": null,
+          "recovered_python_tls_path_used": true,
+          "caller_prelude_python_generated": true,
+          "vm_entry_prelude_snapshot_used": false,
+          "native_parser_caller_entry_snapshot_used": false,
+          "initializer_frame_words_compared": false,
+          "configuration_initializer_entry_snapshot_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -3661,17 +4723,19 @@
       "configuration_unpack_callback_python_implemented": true,
       "parser_observed_path_python_implemented": true,
       "parser_vm_entry_prelude_python_generated": true,
+      "root_advanced_constructor_entry_snapshot_used": false,
+      "root_advanced_parser_entry_snapshot_used": false,
       "complete_python_root_prelude": false,
       "property_profile": "sdk_30"
     }
   ],
   "native_runs": 4,
-  "vm_phase_comparisons": 8,
+  "vm_phase_comparisons": 12,
   "constructor_prefix_comparisons": 8,
   "emulated_tls_comparisons": 8,
   "tls_registry_comparisons": 4,
   "scoped_lock_comparisons": 8,
-  "registry_and_cipher_comparisons": 44,
+  "registry_and_cipher_comparisons": 56,
   "parser_caller_comparisons": 4,
   "parser_caller_negative_count": 7,
   "parser_caller_negative_cases": [
@@ -3727,6 +4791,7 @@
   "native_prelude_snapshot_used": true,
   "trace_branch_opaque_hooks_used": false,
   "jvm_used": false,
+  "observed_88_byte_constructor_path_python_implemented": true,
   "complete_python_prelude": false,
   "complete_88_byte_initializer": false,
   "complete_python_medusa": false

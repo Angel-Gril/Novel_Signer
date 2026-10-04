@@ -3,7 +3,33 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Padding, descriptor unpack and parser return (2026-10-04)
+## Configuration initialization and root step605 (2026-10-04)
+
+`vm9_configuration_init.py` composes the observed +0x26194c -> +0x261c54
+-> +0x261cb0 -> +0x262608 path. Fresh helper differences pass **166 / 5**;
+the SUBS signed-overflow cleanup correction also passes existing stream
+regression **174 / 9**. The initializer working SP is entrySP-0x340.
++0x25c71c computes linked iterator distance; the controller's second word
+is not a count. +0x26ecb4 returns saved caller X29, not TLS. The wrapper
+rewrites two saved frame words and its continuation; native comparisons use
+actual epilogues, avoiding shared nested callback return-address collisions.
+
+Four fresh controls pass **12 VM comparisons / 56 complete subtrees**.
+Context/wrapper: **125 allocations / 69 frees**, status6. Observed 88-byte
+constructor: **134 / 69**, status6. Root now advances to **step605 / +0x99cd8**
+before **+0x258500 -> +0x2698f0**, comparing **138 allocations / 70 frees**,
+all guest/main-image/TLS/generation state and ordered effects. The earlier
+step513 prefix remains an explicit regression phase. Parser stays returned
+at step3318, with 119/47 and all32 terminal slots matching.
+
+The root continuation uses its earlier same-run native VM input snapshot;
+it does not consume constructor/parser entry snapshots for that composition.
+Full independent initialization is still open. Next: +0x2698f0's caller,
+VM +0xa46a0 and callbacks, then remaining root/global/OS input generation.
+See [CONFIGURATION_INITIALIZATION.md](CONFIGURATION_INITIALIZATION.md).
+No current online signer/download success or final product completion is claimed.
+
+## Earlier padding, descriptor unpack and parser return (2026-10-04)
 
 `vm9_objects.py` restores +0x248dd8 -> +0x247a08 padding/reserve/alias
 cleanup, verified by **190 native groups / 5 rollback cases**.
