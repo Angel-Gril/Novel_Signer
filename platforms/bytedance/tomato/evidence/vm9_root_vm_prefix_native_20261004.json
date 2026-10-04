@@ -1,0 +1,748 @@
+{
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "native_control_returned": true,
+      "phases": [
+        {
+          "phase": "root",
+          "vm_entry_offset": "0x991c0",
+          "steps": 513,
+          "stop_bytecode_offset": "0x99b40",
+          "boundary_offset": "0x261a1c",
+          "pending_target_offset": "0x261c54",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 11,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a444"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a4fc"
+            },
+            {
+              "wrapper_offset": "0x258478",
+              "target_offset": "0x248344"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            }
+          ],
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
+          "phase": "parser",
+          "vm_entry_offset": "0x9a6f0",
+          "steps": 220,
+          "stop_bytecode_offset": "0x9ab00",
+          "boundary_offset": "0x2634d0",
+          "pending_target_offset": "0x248684",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 6,
+          "descriptor_match": true,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634a4",
+              "target_offset": "0x258e7c"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2481ac"
+            }
+          ],
+          "explicit_free_calls": 1,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        }
+      ],
+      "property_profile": "absent"
+    },
+    {
+      "image_base": "0x122c0000",
+      "native_control_returned": true,
+      "phases": [
+        {
+          "phase": "root",
+          "vm_entry_offset": "0x991c0",
+          "steps": 513,
+          "stop_bytecode_offset": "0x99b40",
+          "boundary_offset": "0x261a1c",
+          "pending_target_offset": "0x261c54",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 11,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a444"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a4fc"
+            },
+            {
+              "wrapper_offset": "0x258478",
+              "target_offset": "0x248344"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            }
+          ],
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
+          "phase": "parser",
+          "vm_entry_offset": "0x9a6f0",
+          "steps": 220,
+          "stop_bytecode_offset": "0x9ab00",
+          "boundary_offset": "0x2634d0",
+          "pending_target_offset": "0x248684",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 6,
+          "descriptor_match": true,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634a4",
+              "target_offset": "0x258e7c"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2481ac"
+            }
+          ],
+          "explicit_free_calls": 1,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        }
+      ],
+      "property_profile": "sdk_30"
+    },
+    {
+      "image_base": "0x775c205000",
+      "native_control_returned": true,
+      "phases": [
+        {
+          "phase": "root",
+          "vm_entry_offset": "0x991c0",
+          "steps": 513,
+          "stop_bytecode_offset": "0x99b40",
+          "boundary_offset": "0x261a1c",
+          "pending_target_offset": "0x261c54",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 11,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a444"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a4fc"
+            },
+            {
+              "wrapper_offset": "0x258478",
+              "target_offset": "0x248344"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            }
+          ],
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
+          "phase": "parser",
+          "vm_entry_offset": "0x9a6f0",
+          "steps": 220,
+          "stop_bytecode_offset": "0x9ab00",
+          "boundary_offset": "0x2634d0",
+          "pending_target_offset": "0x248684",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 6,
+          "descriptor_match": true,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634a4",
+              "target_offset": "0x258e7c"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2481ac"
+            }
+          ],
+          "explicit_free_calls": 1,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        }
+      ],
+      "property_profile": "absent"
+    },
+    {
+      "image_base": "0x775c205000",
+      "native_control_returned": true,
+      "phases": [
+        {
+          "phase": "root",
+          "vm_entry_offset": "0x991c0",
+          "steps": 513,
+          "stop_bytecode_offset": "0x99b40",
+          "boundary_offset": "0x261a1c",
+          "pending_target_offset": "0x261c54",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 11,
+          "descriptor_match": null,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258430",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a444"
+            },
+            {
+              "wrapper_offset": "0x258444",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x258454",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2584b8",
+              "target_offset": "0x32a4fc"
+            },
+            {
+              "wrapper_offset": "0x258478",
+              "target_offset": "0x248344"
+            },
+            {
+              "wrapper_offset": "0x2584c4",
+              "target_offset": "0x32a1f0"
+            }
+          ],
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
+          "phase": "parser",
+          "vm_entry_offset": "0x9a6f0",
+          "steps": 220,
+          "stop_bytecode_offset": "0x9ab00",
+          "boundary_offset": "0x2634d0",
+          "pending_target_offset": "0x248684",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 6,
+          "descriptor_match": true,
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634a4",
+              "target_offset": "0x258e7c"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2481ac"
+            }
+          ],
+          "explicit_free_calls": 1,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        }
+      ],
+      "property_profile": "sdk_30"
+    }
+  ],
+  "native_runs": 4,
+  "vm_phase_comparisons": 8,
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "fresh_elf": true,
+  "external_captured_pages_used": false,
+  "native_prelude_snapshot_used": true,
+  "trace_branch_opaque_hooks_used": false,
+  "jvm_used": false,
+  "complete_python_prelude": false,
+  "complete_88_byte_initializer": false,
+  "complete_python_medusa": false
+}

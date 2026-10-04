@@ -1,0 +1,1716 @@
+{
+  "fresh_memory": true,
+  "captured_pages_used": false,
+  "jvm_used": false,
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "differential_cases": 200,
+  "negative_cases": 11,
+  "cases": [
+    {
+      "case": "base64_empty_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_empty_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_empty_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_spaces_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_spaces_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_spaces_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_linebreaks_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_linebreaks_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_linebreaks_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_groups_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_groups_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_groups_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_partial_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_partial_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_partial_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_partial_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_partial_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_partial_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_partial_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_partial_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_partial_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_padding_only_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_padding_only_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_padding_only_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_leading_space_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_leading_space_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_leading_space_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_trailing_space_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_trailing_space_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_trailing_space_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_space_before_newline_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_space_before_newline_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_space_before_newline_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_newline_inside_group_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_newline_inside_group_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_newline_inside_group_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_bare_cr_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_bare_cr_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_bare_cr_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_tab_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_tab_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_tab_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_internal_space_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_internal_space_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_internal_space_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_too_much_padding_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_too_much_padding_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_too_much_padding_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_digit_after_padding_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_digit_after_padding_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_digit_after_padding_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_invalid_ascii_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_invalid_ascii_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_invalid_ascii_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_high_bit_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_high_bit_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_high_bit_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_binary_buffer",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_binary_query",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_binary_small",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_alias_-2",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_alias_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_alias_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "sized_string_0x0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1
+    },
+    {
+      "case": "sized_string_0x3",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1
+    },
+    {
+      "case": "sized_string_0xf0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1
+    },
+    {
+      "case": "sized_string_0x80000000",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "sized_string_0xffffffff",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "decoded_reference_empty",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_spaces",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_linebreaks",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_one",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_two",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_three",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_two_groups",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_one_partial",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_two_partial",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_three_partial",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_padding_only",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_leading_space",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_trailing_space",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_space_before_newline",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_newline_inside_group",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_bare_cr",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_tab",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_internal_space",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_too_much_padding",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_digit_after_padding",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_invalid_ascii",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_high_bit",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_binary",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "base64_empty_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_empty_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_empty_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_spaces_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_spaces_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_spaces_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_linebreaks_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_linebreaks_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_linebreaks_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_groups_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_groups_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_groups_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_partial_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_partial_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_one_partial_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_partial_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_partial_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_two_partial_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_partial_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_partial_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_three_partial_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_padding_only_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_padding_only_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_padding_only_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_leading_space_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_leading_space_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_leading_space_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_trailing_space_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_trailing_space_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_trailing_space_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_space_before_newline_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_space_before_newline_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_space_before_newline_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_newline_inside_group_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_newline_inside_group_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_newline_inside_group_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_bare_cr_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_bare_cr_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_bare_cr_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_tab_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_tab_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_tab_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_internal_space_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_internal_space_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_internal_space_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_too_much_padding_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_too_much_padding_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_too_much_padding_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_digit_after_padding_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_digit_after_padding_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_digit_after_padding_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_invalid_ascii_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_invalid_ascii_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_invalid_ascii_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_high_bit_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_high_bit_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_high_bit_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_binary_buffer",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_binary_query",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_binary_small",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_alias_-2",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_alias_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "base64_alias_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "sized_string_0x0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1
+    },
+    {
+      "case": "sized_string_0x3",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1
+    },
+    {
+      "case": "sized_string_0xf0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1
+    },
+    {
+      "case": "sized_string_0x80000000",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "sized_string_0xffffffff",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0
+    },
+    {
+      "case": "decoded_reference_empty",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_spaces",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_linebreaks",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_one",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_two",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_three",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_two_groups",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_one_partial",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_two_partial",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_three_partial",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_padding_only",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_leading_space",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_trailing_space",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_space_before_newline",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_newline_inside_group",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_bare_cr",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_tab",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_internal_space",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_too_much_padding",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_digit_after_padding",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_invalid_ascii",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_high_bit",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 2,
+      "free_sequence_match": true
+    },
+    {
+      "case": "decoded_reference_binary",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "free_sequence_match": true
+    }
+  ],
+  "negatives": [
+    {
+      "case": "base64_missing_table",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "base64_missing_source",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "base64_missing_destination",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "base64_missing_length",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "base64_bound_-1",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "base64_bound_1048577",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoded_reference_allocation_0",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoded_reference_allocation_1",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoded_reference_allocation_2",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoded_reference_allocation_3",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "decoded_reference_free",
+      "rejected": true,
+      "pages_unchanged": true
+    }
+  ],
+  "free_boundary": "explicit_nonreusing_allocator",
+  "complete_88_byte_initializer": false,
+  "complete_python_medusa": false
+}

@@ -162,8 +162,48 @@ python python/verify_vm9_configuration_primitives.py --library /private/libmetas
 python python/verify_vm9_root_configuration.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/root-configuration.json
 ```
 
+## 88-byte 对象构造及内部解析器（2026-10-04）
+
+`construct_configuration_object_layout` 已恢复 `+0x26194c → +0x261a1c` 的构造前缀。在两个输入长度均为非负、分配成功时，共进行九次嵌套分配。它在后续初始化前停止；其返回的 `ConfigurationObjectLayout88` 不能当作已初始化对象使用。
+
+| 字段/全局 | 恢复规则 |
+| --- | --- |
+| image `+0x3deb60/+0x3deb68` | u32 flag 为零时，从 source/mask `+0x9a68c/+0x9a6dc` 解码，再发布 flag=1；任意非零 flag 均保留原内容 |
+| object `+0x00` | 虚表 `+0x35ba78` |
+| `+0x08` | 新建 24-byte string，从第一个输入 string 克隆，另建初值为 1 的四字节 count |
+| `+0x18` | NULL reference，另建初值为 1 的四字节 count |
+| `+0x28` | 从第二个输入 string 克隆的 inline 24-byte string |
+| `+0x40..+0x47` | 未写 padding 保留 |
+| `+0x48` | 新建 48-byte container/reference/count，容器虚表 `+0x35b808`，callback/context/comparator 为 `+0x182d6c/0/+0x188a94` |
+| container `+0x20/+0x28` | inline comparator 和新建 8-byte holder；holder 指向新建 24-byte sentinel，sentinel 前两个指针自引用、第三个指针为 NULL |
+
+这里的 48-byte container 与之前的 40-byte callback 容器具有不同的内部布局，分别建模。`clone_string_object` 对照 `+0x2483e0`：先保存 source object 的 u32 length，再写目标，分配后才读 source payload pointer；按声明长度复制，保留内部 NUL，并补一个终止字节。负 int32 length 不分配，但保存原 length 与回绕后的 capacity；malloc NULL 保留长度和 NULL payload。`construct_sized_string_object` 对照 `+0x2481fc`，其负长度或 malloc NULL 会清空两个长度字段，与 clone 的失败语义不同。
+
+`acquire_uncontended_shared_reader` / `release_uncontended_shared_reader` 对照 `+0x32a444/+0x32a4fc`：锁 normal mutex，改变 `mutex+0x88` reader count，再解锁。已验证共享 bit、跨页和 `0x7ffffffe` 边界。writer bit、饱和 count、release 零 count、等待和 signal 分支拒绝并回滚。它们只提供串行 guest 内存转换，不提供宿主线程原子性。
+
+[对象组件证据](evidence/vm9_configuration_objects_native_20261004.json) 有 **140 个 native 差分和 23 个拒绝/回滚案例**，覆盖上述对象前缀、全局 flag、声明长度克隆、allocator 改变源输入的读点、self alias、reader count 与未映射页。clone 的 malloc NULL 另有 Python 自检，未将它计入 native 差分数。
+
+后续 native 路线已实测为 `+0x261c54 → +0x261cb0 → VM +0x9a6f0`。其中 `+0x258e7c` 的 Base64 解码/reference 依赖已恢复为 `construct_decoded_configuration_reference`：先按输入长度分配临时缓冲区，执行 `decode_configuration_base64`，有效非空结果生成 sized string，随后调用显式 free，最后构造 reference/count。无效或空结果生成 NULL reference，而非伪造成功字符串。
+
+`decode_configuration_base64` 对照 `+0x245814`，从私有 ELF `+0x95cc0` 读取 lookup table，保留 native 的换行、行尾空格、padding、缓冲区查询和未满组丢弃规则。返回 0、-42 或 -44；无效输入不写输出长度。查询/容量不足使用 native 的向上取整长度，实际成功长度按完整解码组计算。不要以标准 Base64 库的行为替代这些规则。[解码组件证据](evidence/vm9_configuration_decode_native_20261004.json) 有 **200 个 native 差分和 11 个拒绝/回滚案例**，包含空输入、二进制、内部 NUL、非标准残组、重叠输出、跨页和分配/free 拒绝。free 在此 verifier 中为明确的不复用分配边界；真实 allocator 的 free 状态仍需接入实际宿主。
+
+```text
+python python/verify_vm9_configuration_objects.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/configuration-objects.json
+python python/verify_vm9_configuration_decode.py --library /private/libmetasec_ml_71332.so --output /private/configuration-decode.json
+python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/root-vm-prefix.json
+```
+
+新的 [同次 fresh native VM 对照](evidence/vm9_root_vm_prefix_native_20261004.json) 使用两个 image base、SDK 缺失/30 两种输入，共四次 native 控制运行和八段 Python VM 对照：
+
+| VM 子阶段 | 已验证边界 | 结果 |
+| --- | --- | --- |
+| root `+0x991c0` | 第 513 步 `+0x99b40` 的 `+0x26194c` callback 内，Python 生成至 `+0x261a1c` 的前缀；包括此前两次和本构造九次分配 | 整个 guest 对象/分配区、11 次分配顺序、全部主 image pages 与同次 native 一致 |
+| parser `+0x9a6f0` | 第 220 步 `+0x9ab00`，wrapper `+0x2634d0` 调用 `+0x248684` 前 | guest 对象/分配区、六次分配顺序、全部主 image pages、32-byte descriptor 与同次 native 一致 |
+
+两段 VM 的初始状态均来自**这次 native 运行的构造前导快照**，用于差分验证；没有外部签名捕获页，也没有 trace/branch/opaque 注入。但构造前导尚未全部由 Python 生成，所以这不是从完整 Python 启动到解析结束的证明。主 image 对照也不包含 libc、TLS 和 native 调用栈的全部副作用。当前首个未恢复 parser callback 为 `+0x248684 → +0x246ba0` 的字符串追加及容量处理。
+
 ## 证据用途与剩余工作
 
 同次采样把 root → child → handler → pair → 两次发布连接起来，可用于排除错误 handle/对象类型和错误 publisher 分支。新建内存对照证明这些局部对象可以参数化生成，不能据此声称完整初始化已经独立完成。
 
-两个服务 singleton 与 264-byte root 配置布局的已测构造分支现已恢复。下一步需移植 `+0x257308` 的 VM 初始化、136-byte singleton、属性解析所依赖的启动状态、诊断与全局副作用及剩余 native callbacks，再接入 VM9 fresh-input 签名并贯穿同次采样验证。新的 native 基线可用于逐字段、逐分配和全局写入差分，避免把验证环境的 TLS 重叠或未解析 import 当作目标行为。当前搜索仍无非空响应与分页证据；无 JVM Rust 下载器、抖音/起点闭环及最终 Pages 搜索下载网页也尚未完成。
+两个服务 singleton、264-byte root 配置布局、88-byte 对象前缀和内部解析器的 Base64/reference 依赖已恢复。下一步从 `+0x248684` 字符串追加及容量处理继续，补齐内部解析器和 88-byte 对象初始化；然后继续 `+0x257308` 的 root VM 初始化、136-byte singleton、属性解析所依赖的启动状态、诊断与全局副作用及剩余 native callbacks，再接入 VM9 fresh-input 签名并贯穿同次采样验证。新的 native 基线可用于逐字段、逐分配和全局写入差分，避免把验证环境的 TLS 重叠或未解析 import 当作目标行为。当前搜索仍无非空响应与分页证据；无 JVM Rust 下载器、抖音/起点闭环及最终 Pages 搜索下载网页也尚未完成。

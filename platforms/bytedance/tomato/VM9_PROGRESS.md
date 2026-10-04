@@ -3,6 +3,35 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## 88-byte configuration prefix and parser dependencies (2026-10-04)
+
+The +0x26194c constructor prefix through +0x261a1c is now input-driven Python:
+88-byte layout, two string clones, three counts and a distinct 48-byte empty
+container graph, with nine successful allocations. Serialized shared-reader
+transitions and declared-length clone behavior have independent native checks:
+140 differences and 23 rejection/rollback cases.
+
+The later initializer enters +0x261c54 -> +0x261cb0 -> VM +0x9a6f0.
+Its +0x258e7c base64/reference dependency, +0x245814 decoder and sized string
+constructor pass 200 native differences and 11 rejection/rollback cases.
+Explicit nonreusing free, diagnostic and allocation boundaries remain visible.
+
+Four same-fresh-native runs at two bases and absent/SDK 30 give eight VM phase
+comparisons. Root step 513 generates the 88-byte prefix (11 total allocations
+since that VM entry). Parser step 220 stops before +0x248684 string append
+(six allocations). Guest object/allocator bytes, allocation order and all main
+image pages match; parser's 32-byte descriptor also matches. Both starts use
+their own native prelude snapshots for differential testing: no external
+captured pages or trace/branch/opaque hooks, but no fully Python prelude claim.
+
+Next: +0x248684 -> +0x246ba0 append, capacity growth and alias handling, then
+remaining parser callbacks and 88-byte initialization. Full independent
+Medusa, no-JVM Rust, nonempty search, other platforms and the final web tool
+remain incomplete. See [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md),
+[object evidence](evidence/vm9_configuration_objects_native_20261004.json),
+[decoder evidence](evidence/vm9_configuration_decode_native_20261004.json),
+and [VM phase evidence](evidence/vm9_root_vm_prefix_native_20261004.json).
+
 ## Root configuration components and native baseline (2026-10-04)
 
 The 264-byte configuration prefix now has an input-driven Python model with

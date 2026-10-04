@@ -1179,5 +1179,41 @@
     "verification_kind": "native_constructor_with_explicit_virtual_environment",
     "python_initializer_implemented": false,
     "complete_python_medusa": false
+  },
+  "vm9_configuration_objects_native_20261004": {
+    "evidence_file": "evidence/vm9_configuration_objects_native_20261004.json",
+    "differential_cases": 140,
+    "negative_cases": 23,
+    "object88_prefix_allocations": 9,
+    "fresh_memory": true,
+    "captured_pages_used": false,
+    "complete_88_byte_initializer": false,
+    "complete_python_medusa": false
+  },
+  "vm9_configuration_decode_native_20261004": {
+    "evidence_file": "evidence/vm9_configuration_decode_native_20261004.json",
+    "differential_cases": 200,
+    "negative_cases": 11,
+    "fresh_memory": true,
+    "captured_pages_used": false,
+    "free_boundary": "explicit_nonreusing_allocator",
+    "complete_88_byte_initializer": false,
+    "complete_python_medusa": false
+  },
+  "vm9_root_vm_prefix_native_20261004": {
+    "evidence_file": "evidence/vm9_root_vm_prefix_native_20261004.json",
+    "native_runs": 4,
+    "vm_phase_comparisons": 8,
+    "root_steps": 513,
+    "parser_steps": 220,
+    "root_allocations_since_vm_entry": 11,
+    "parser_allocations_since_vm_entry": 6,
+    "all_main_image_pages_compared": true,
+    "external_captured_pages_used": false,
+    "native_prelude_snapshot_used": true,
+    "trace_branch_opaque_hooks_used": false,
+    "complete_python_prelude": false,
+    "complete_88_byte_initializer": false,
+    "complete_python_medusa": false
   }
 }

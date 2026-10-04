@@ -84,6 +84,29 @@ Its output contains counts and offsets only. This is a native oracle for
 future Python differences; it does not implement the initializer in Python
 or establish current online Medusa.
 
+`construct_configuration_object_layout` models the separate 88-byte
++0x26194c prefix through +0x261a1c, with nine allocations, declared-length
+string clones and a 48-byte empty container reference. It does not execute
+the later parser initializer. `clone_string_object` and the serialized
+shared-reader acquire/release helpers are independently native-tested.
+Run `verify_vm9_configuration_objects.py` with library/libc/output arguments:
+140 differences and 23 rejection/rollback cases.
+
+`decode_configuration_base64`, `construct_sized_string_object` and
+`construct_decoded_configuration_reference` recover the parser's +0x258e7c
+dependency. Caller supplies explicit allocate/free effects; native whitespace,
+padding, buffer queries and partial groups are preserved. Run
+`verify_vm9_configuration_decode.py --library <matching-private-so>
+--output <sanitized-output.json>`: 200 differences and 11 rollback cases.
+
+`verify_vm9_root_vm_prefix.py` (library/libc/output arguments) compares eight
+VM phases from four same-fresh-native runs at two image bases. Root step 513
+matches through the 88-byte prefix; parser step 220 matches before +0x248684
+string append. Guest object bytes, allocation sequence and main image pages
+match. These are native-prelude snapshots for differential testing, not a
+fully Python startup. No trace/branch/opaque hooks or external captured pages
+are used. Complete parser, root initialization and current Medusa remain open.
+
 `verify_vm9_allocator_lifecycle.py` requires Unicorn and the trusted primary
 initialized checkpoint. `verify_vm9_divmod_backing.py` additionally requires
 the paired private memory image and `TOMATO_LIBMETASEC`. Both write sanitized

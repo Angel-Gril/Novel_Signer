@@ -1,0 +1,1428 @@
+{
+  "fresh_memory": true,
+  "captured_pages_used": false,
+  "jvm_used": false,
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "differential_cases": 140,
+  "negative_cases": 23,
+  "cases": [
+    {
+      "case": "clone_empty",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_embedded_zero",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_utf8",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_long",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_negative_min",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_negative_minus_one",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_length_saved_pointer_read_after_allocation",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_self_alias_0x0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_self_alias_0xffffffff",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "container_reference_48",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_0_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_3_5",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_240_4",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_0_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_3_5",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_240_4",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_0_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_3_5",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_240_4",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "reader_acquire_0_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_7",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_7ffffffe",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_2",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_7",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_7ffffffe",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_7",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_7ffffffe",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_2",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_7",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_7ffffffe",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "clone_empty",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_embedded_zero",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_utf8",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_long",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_negative_min",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_negative_minus_one",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_length_saved_pointer_read_after_allocation",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_self_alias_0x0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_self_alias_0xffffffff",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "container_reference_48",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_0_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_3_5",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_240_4",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_0_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_3_5",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_240_4",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_0_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_3_5",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_240_4",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "reader_acquire_0_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_7",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_7ffffffe",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_2",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_7",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_7ffffffe",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_0",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_7",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_7ffffffe",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_1",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_2",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_7",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_7ffffffe",
+      "image_base": "0x122c0000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "clone_empty",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_embedded_zero",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_utf8",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_long",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_negative_min",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_negative_minus_one",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_length_saved_pointer_read_after_allocation",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_self_alias_0x0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_self_alias_0xffffffff",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "container_reference_48",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_0_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_3_5",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_240_4",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_0_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_3_5",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_240_4",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_0_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_3_5",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_240_4",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "reader_acquire_0_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_7",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_7ffffffe",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_2",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_7",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_7ffffffe",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_7",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_7ffffffe",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_2",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_7",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_7ffffffe",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "clone_empty",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_embedded_zero",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_utf8",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_long",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_negative_min",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_negative_minus_one",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_length_saved_pointer_read_after_allocation",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_self_alias_0x0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 1,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "clone_self_alias_0xffffffff",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "container_reference_48",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 4,
+      "normal_mutex_pair_verified": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_0_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_3_5",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_0_lengths_240_4",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_0_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_3_5",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_1_lengths_240_4",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_0_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_3_5",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "object88_prefix_flag_7_lengths_240_4",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 9,
+      "normal_mutex_pair_verified": false,
+      "initializer_executed": false
+    },
+    {
+      "case": "reader_acquire_0_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_7",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_0_7ffffffe",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_2",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_7",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_0_7ffffffe",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_0",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_7",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_acquire_2000_7ffffffe",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_1",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_2",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_7",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    },
+    {
+      "case": "reader_release_2000_7ffffffe",
+      "image_base": "0x775c205000",
+      "memory_match": true,
+      "all_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 0,
+      "normal_mutex_pair_verified": true
+    }
+  ],
+  "negatives": [
+    {
+      "case": "reader_True_7fffffff",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "reader_True_80000000",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "reader_True_ffffffff",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "reader_False_0",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "reader_False_7fffffff",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "reader_False_80000000",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "reader_False_80000001",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "reader_False_ffffffff",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "reader_mutex_or_missing_count_0x1000",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "reader_mutex_or_missing_count_0xff80",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "clone_bound",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "clone_missing_payload",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "clone_missing_allocated_page",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "clone_invalid_bound",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "object88_allocation_0",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "object88_allocation_1",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "object88_allocation_2",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "object88_allocation_3",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "object88_allocation_4",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "object88_allocation_5",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "object88_allocation_6",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "object88_allocation_7",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "case": "object88_allocation_8",
+      "rejected": true,
+      "pages_unchanged": true
+    }
+  ],
+  "clone_malloc_null_python_check": true,
+  "scope": "declared_length_clone_48_byte_container_88_byte_prefix_and_serialized_readers",
+  "complete_88_byte_initializer": false,
+  "complete_python_medusa": false
+}

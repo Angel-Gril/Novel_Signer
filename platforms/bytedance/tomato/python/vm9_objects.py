@@ -80,6 +80,214 @@ def unlock_uncontended_mutex(pages, *, mutex_address: int) -> int:
     return _normal_mutex_transition(pages, mutex_address, lock=False)
 
 
+def _shared_reader_transition(pages, mutex_address, *, acquire):
+    transaction = _PageTransaction(pages)
+    lock_uncontended_mutex(transaction, mutex_address=mutex_address)
+    readers = int.from_bytes(_read_span(transaction, mutex_address + 0x88, 4), "little")
+    if readers >= 0x7FFF_FFFF or not acquire and readers == 0:
+        raise RefillUnsupported("shared reader transition requires waiting, signaling or underflow")
+    readers += 1 if acquire else -1
+    _write_span(transaction, mutex_address + 0x88, readers.to_bytes(4, "little"))
+    unlock_uncontended_mutex(transaction, mutex_address=mutex_address)
+    transaction.commit()
+    return readers
+
+
+def acquire_uncontended_shared_reader(pages, *, mutex_address: int) -> int:
+    """Model +0x32a444 without writer/wait state; return the new reader count.
+
+    The native helper locks a normal mutex, increments u32 at +0x88 and
+    unlocks. This serial memory model does not supply host atomicity.
+    """
+    return _shared_reader_transition(pages, mutex_address, acquire=True)
+
+
+def release_uncontended_shared_reader(pages, *, mutex_address: int) -> int:
+    """Model +0x32a4fc without writer/signal state; reject zero or saturated count."""
+    return _shared_reader_transition(pages, mutex_address, acquire=False)
+
+
+def clone_string_object(
+    pages, *, object_address: int, source_object_address: int,
+    allocate: Callable, image_base: int, max_payload_bytes: int = 0x100000,
+) -> int:
+    """Model +0x2483e0, cloning the declared u32 length rather than a C string.
+
+    Read length before modifying the destination and read the source pointer
+    after allocation. Negative int32 length stores the wrapped capacity and
+    NULL payload without allocating. Successful copies append one zero byte;
+    malloc NULL leaves the declared lengths and NULL payload. Return X0.
+    """
+    if not isinstance(max_payload_bytes, int) or not 0 <= max_payload_bytes <= 0x100000:
+        raise ValueError("invalid string clone payload bound")
+    transaction = _PageTransaction(pages)
+    length = int.from_bytes(_read_span(transaction, source_object_address + 12, 4), "little")
+    if length < 0x8000_0000 and length > max_payload_bytes:
+        raise RefillUnsupported("string clone exceeds the explicit payload bound")
+    capacity = (length + 1) & 0xFFFF_FFFF
+    _write_span(transaction, object_address,
+                _word(_image_address(image_base, 0x34F5F8))
+                + capacity.to_bytes(4, "little") + length.to_bytes(4, "little") + bytes(8))
+    pointer = 0
+    if length < 0x8000_0000:
+        pointer = allocate(transaction, capacity)
+        _word(pointer)
+        _write_span(transaction, object_address + 0x10, _word(pointer))
+        if pointer:
+            source = int.from_bytes(_read_span(transaction, source_object_address + 0x10, 8), "little")
+            if length:
+                _write_span(transaction, pointer, _read_span(transaction, source, length))
+            _write_span(transaction, pointer + length, bytes(1))
+    transaction.commit()
+    return capacity if length >= 0x8000_0000 else pointer
+
+
+def _decode_configuration_base64(
+    pages, *, destination_address: int, destination_size: int,
+    source_address: int, source_size: int, image_base: int, max_source_bytes: int = 0x100000,
+) -> int:
+    """Return native signed status and optional output length on staged pages."""
+    if not isinstance(max_source_bytes, int) or not 0 <= max_source_bytes <= 0x100000:
+        raise ValueError("invalid base64 source bound")
+    if not isinstance(source_size, int) or not 0 <= source_size <= max_source_bytes:
+        raise RefillUnsupported("base64 input exceeds the explicit source bound")
+    _word(destination_size)
+    transaction = pages
+    table = _image_address(image_base, 0x95CC0)
+    index, digits, padding = 0, 0, 0
+    while index < source_size:
+        spaces = False
+        while index < source_size and _read_span(transaction, source_address + index, 1)[0] == 32:
+            index += 1
+            spaces = True
+        if index == source_size:
+            break
+        char = _read_span(transaction, source_address + index, 1)[0]
+        if char == 13 and source_size - index >= 2 and _read_span(transaction, source_address + index + 1, 1)[0] == 10:
+            index += 1
+            continue
+        if char == 10:
+            index += 1
+            continue
+        if spaces:
+            return -44, None
+        if char == 61:
+            padding += 1
+            if padding > 2:
+                return -44, None
+        elif char & 128:
+            return -44, None
+        value = _read_span(transaction, table + char, 1)[0]
+        if value == 127 or value <= 63 and padding:
+            return -44, None
+        digits += 1
+        index += 1
+    needed = ((digits * 6 + 7) // 8 - padding) & 0xFFFF_FFFF_FFFF_FFFF if digits else 0
+    if digits and (not destination_address or needed > destination_size):
+        return -42, needed
+    written, group, accumulator, output_width = 0, 0, 0, 3
+    for index in range(source_size if digits else 0):
+        char = _read_span(transaction, source_address + index, 1)[0]
+        if char in (10, 13, 32):
+            continue
+        value = _read_span(transaction, table + char, 1)[0]
+        output_width -= int(char == 61)
+        accumulator = ((accumulator << 6) | value) & 0xFFFF_FFFF
+        group += 1
+        if group == 4:
+            for shift in (16, 8, 0)[:output_width]:
+                _write_span(transaction, destination_address + written, bytes([(accumulator >> shift) & 255]))
+                written += 1
+            group = 0
+    return 0, written
+
+
+def decode_configuration_base64(
+    pages, *, destination_address: int, destination_size: int, length_address: int,
+    source_address: int, source_size: int, image_base: int, max_source_bytes: int = 0x100000,
+) -> int:
+    """Model +0x245814; status 0/-42/-44, native output-length writes and rollback.
+
+    Invalid input does not write length. Buffer queries use the native ceil
+    bound, while successful partial groups are discarded. Spaces are accepted
+    only at line ends/end of input, and CR requires LF. The private ELF lookup
+    table is read from the guest image; no standard decoder is substituted.
+    """
+    transaction = _PageTransaction(pages)
+    status, length = _decode_configuration_base64(transaction,
+        destination_address=destination_address, destination_size=destination_size,
+        source_address=source_address, source_size=source_size, image_base=image_base,
+        max_source_bytes=max_source_bytes)
+    if length is not None:
+        _write_span(transaction, length_address, _word(length))
+        transaction.commit()
+    return status
+
+
+def construct_sized_string_object(
+    pages, *, object_address: int, source_address: int, length: int, image_base: int,
+    allocate: Callable, max_payload_bytes: int = 0x100000,
+) -> int:
+    """Model +0x2481fc from an explicit w2 length; malloc NULL clears both lengths."""
+    if not isinstance(length, int) or not 0 <= length <= 0xFFFF_FFFF:
+        raise RefillUnsupported("sized string length must fit w2")
+    if not isinstance(max_payload_bytes, int) or not 0 <= max_payload_bytes <= 0x100000:
+        raise ValueError("invalid sized string payload bound")
+    if length < 0x8000_0000 and length > max_payload_bytes:
+        raise RefillUnsupported("sized string exceeds the explicit payload bound")
+    transaction = _PageTransaction(pages)
+    _write_span(transaction, object_address, _word(_image_address(image_base, 0x34F5F8)))
+    _write_span(transaction, object_address + 0x10, bytes(8))
+    pointer = 0
+    if length < 0x8000_0000:
+        capacity = length + 1
+        _write_span(transaction, object_address + 8,
+                    capacity.to_bytes(4, "little") + length.to_bytes(4, "little"))
+        pointer = allocate(transaction, capacity)
+        _write_span(transaction, object_address + 0x10, _word(pointer))
+        if pointer:
+            if length:
+                _write_span(transaction, pointer, _read_span(transaction, source_address, length))
+            _write_span(transaction, pointer + length, bytes(1))
+    if not pointer:
+        _write_span(transaction, object_address + 8, bytes(8))
+    transaction.commit()
+    return pointer
+
+
+def construct_decoded_configuration_reference(
+    pages, *, object_address: int, source_object_address: int, image_base: int,
+    allocate: Callable, free: Callable, max_source_bytes: int = 0x100000,
+) -> int:
+    """Model +0x258e7c: base64 decode, optional sized string, free, reference.
+
+    Caller supplies both allocation and free effects on staged pages. This
+    does not execute the later parser or its cryptographic callbacks.
+    Return the new referenced string pointer (NULL for empty/invalid decode).
+    """
+    transaction = _PageTransaction(pages)
+    length = int.from_bytes(_read_span(transaction, source_object_address + 12, 4), "little")
+    if not isinstance(max_source_bytes, int) or not 0 <= max_source_bytes <= 0x100000:
+        raise ValueError("invalid decoded reference source bound")
+    if length > max_source_bytes:
+        raise RefillUnsupported("decoded reference requires a bounded nonnegative length")
+    buffer = allocate(transaction, length)
+    _word(buffer)
+    source = int.from_bytes(_read_span(transaction, source_object_address + 0x10, 8), "little")
+    status, decoded_length = _decode_configuration_base64(transaction, destination_address=buffer,
+        destination_size=length, source_address=source,
+        source_size=length, image_base=image_base, max_source_bytes=max_source_bytes)
+    string = 0
+    if status == 0 and decoded_length:
+        string = _allocate(transaction, allocate, 24)
+        construct_sized_string_object(transaction, object_address=string,
+            source_address=buffer, length=decoded_length, image_base=image_base, allocate=allocate)
+    free(transaction, buffer)
+    _reference_wrapper(transaction, object_address, string, allocate)
+    transaction.commit()
+    return string
+
+
 def construct_string_object(
     pages, *, object_address: int, source_address: int,
     allocate: Callable, vtable_address: int = 0x1260F5F8,
@@ -168,6 +376,16 @@ class RootConfigurationLayout:
     container_addresses: tuple[int, int]
     string_addresses: tuple[int, ...]
     state_address: int
+
+
+@dataclass(frozen=True)
+class ConfigurationObjectLayout88:
+    """+0x26194c prefix; the +0x261c54/+0x261cb0 initializer is not executed."""
+
+    object_address: int
+    cloned_string_address: int
+    container_address: int
+    reference_count_addresses: tuple[int, int, int]
 
 
 # The two service getters used by the measured ``service_refs`` handler.
@@ -414,6 +632,66 @@ def construct_callback_container(
     result = _callback_container(transaction, object_address, descriptor, image_base, allocate)
     transaction.commit()
     return result
+
+
+def construct_configuration_container_reference(
+    pages, *, object_address: int, image_base: int, allocate: Callable,
+) -> int:
+    """Model +0x25c8fc: a new 48-byte container with a 24-byte empty sentinel.
+
+    Its +0x20/+0x28 fields embed comparator and an allocated 8-byte sentinel
+    holder. This layout differs from the 40-byte callback controller variant.
+    Return the generated container pointer; the output is a 16-byte reference.
+    """
+    transaction = _PageTransaction(pages)
+    address = lambda offset: _image_address(image_base, offset)
+    container = _allocate(transaction, allocate, 48)
+    _write_span(transaction, container,
+                _word(address(0x35B808)) + _word(address(0x182D6C)) + bytes(8)
+                + _word(address(0x188A94)) + _word(address(0x188A94)))
+    sentinel = _allocate(transaction, allocate, 24)
+    _write_span(transaction, sentinel, _word(sentinel) + _word(sentinel) + bytes(8))
+    holder = _allocate(transaction, allocate, 8)
+    _write_span(transaction, holder, _word(sentinel))
+    _write_span(transaction, container + 0x28, _word(holder))
+    _reference_wrapper(transaction, object_address, container, allocate)
+    transaction.commit()
+    return container
+
+
+def construct_configuration_object_layout(
+    pages, *, object_address: int, first_string_address: int, second_string_address: int,
+    image_base: int, allocate: Callable, max_payload_bytes: int = 0x100000,
+) -> ConfigurationObjectLayout88:
+    """Model +0x26194c through +0x261a1c, before the nontrivial initializer.
+
+    Generate the 88-byte object and nine allocations for nonnegative string
+    lengths. Decode/publish the lazy constant only if its u32 flag is zero.
+    Padding +0x40..+0x47 remains unchanged. No captured object is used.
+    """
+    transaction = _PageTransaction(pages)
+    address = lambda offset: _image_address(image_base, offset)
+    _read_span(transaction, object_address, 88)
+    flag = address(0x3DEB68)
+    if int.from_bytes(_read_span(transaction, flag, 4), "little") == 0:
+        decode_masked_bytes(transaction, source_address=address(0x9A68C),
+                            destination_address=address(0x3DEB60), mask_address=address(0x9A6DC))
+        _write_span(transaction, flag, (1).to_bytes(4, "little"))
+    _write_span(transaction, object_address, _word(address(0x35BA78)))
+    string = _allocate(transaction, allocate, 24)
+    clone_string_object(transaction, object_address=string, source_object_address=first_string_address,
+                        allocate=allocate, image_base=image_base, max_payload_bytes=max_payload_bytes)
+    first_count = _reference_wrapper(transaction, object_address + 8, string, allocate)
+    null_count = _reference_wrapper(transaction, object_address + 0x18, 0, allocate)
+    clone_string_object(transaction, object_address=object_address + 0x28,
+                        source_object_address=second_string_address, allocate=allocate,
+                        image_base=image_base, max_payload_bytes=max_payload_bytes)
+    container = construct_configuration_container_reference(transaction,
+        object_address=object_address + 0x48, image_base=image_base, allocate=allocate)
+    container_count = int.from_bytes(_read_span(transaction, object_address + 0x50, 8), "little")
+    transaction.commit()
+    return ConfigurationObjectLayout88(object_address, string, container,
+                                       (first_count, null_count, container_count))
 
 
 def construct_service_payload(
