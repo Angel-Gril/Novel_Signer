@@ -34,7 +34,7 @@ allocator 在第三次分配时改变原 key/source 的案例证实：运算使�
 
 初次单字节包装验证失败的原因已定位：旧 oracle 的通用 `REGS` 只含 X0–X4，而此 helper 的长度参数在 **X5**。新 verifier 明确加载 X5；复测上述向量与独立 ARC4 输出一致。这是 oracle 参数装载修正，不是对 native 算法添加特殊例外。
 
-[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json)：4 次 fresh native controls，8 段 VM、36 条构造/配置/密码子树比较。parser 贯通 AES mode-0 解密、两次 checked copy、RC4 reference、结果 clone 及删除分支后，到第 **725 步**，在 `+0x2635ac → +0x248dd8` 之前停止。100 次分配、26 次显式 free、全部主 image、guest、隔离 TLS、2256-byte generation 表及有序副作用一致。单独的 stream reference 子树每次有 3 次分配，无显式 free；temporary count 2→1 保留 payload。
+此前 stream checkpoint 为 4 次 fresh native controls、8 段 VM、36 条子树比较；[当前组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 已为 40 条子树，parser 在 3318 步退出。下面的 725 步记录描述 stream 组件刚接入时的边界。parser 贯通 AES mode-0 解密、两次 checked copy、RC4 reference、结果 clone 及删除分支后，到第 **725 步**，在 `+0x2635ac → +0x248dd8` 之前停止。100 次分配、26 次显式 free、全部主 image、guest、隔离 TLS、2256-byte generation 表及有序副作用一致。单独的 stream reference 子树每次有 3 次分配，无显式 free；temporary count 2→1 保留 payload。
 
 ```text
 python python/verify_vm9_stream_cipher.py --library /private/libmetasec_ml_71332.so --output /private/stream.json
@@ -47,4 +47,4 @@ pure Python state/block 模型只需要 caller pages；reference 构造还需 ma
 
 这组对照可以证实 `+0x2592b8` 的实际跳转、RC4 state 布局及运算、X5 的调用约定、输入读取次序和 reference ownership。它不能证明完整 root/88-byte 初始化、current Medusa 或线上接口已经独立可用。
 
-下一处 `+0x248dd8` 先清 string length，再尾调用 `+0x247a08` 的 fill/resize 路线，需恢复扩容与清理的效果后继续 parser。native 后续还观测到 `+0x256088`，它也尚未由本轮 Python 路线恢复。root 仍第 513 步；完整 Python 前导、当前搜索非空/分页、无 JVM Rust、抖音/起点及最终 Pages/Actions 工具仍未完成。
+后续 [PARSER_UNPACK.md](PARSER_UNPACK.md) 已恢复 `+0x248dd8 → +0x247a08` 和 `+0x256088`，165 字节消息解包成功，parser 在第 3318 步退出；119 次分配、47 次 free 及完整状态一致。下一处是 `+0x261c54 → +0x261cb0` 完整初始化和独立 parser 前导。root 仍第 513 步；完整 Python 前导、当前搜索非空/分页、无 JVM Rust、抖音/起点及最终 Pages/Actions 工具仍未完成。

@@ -303,6 +303,8 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 
 配置树对照可用来排除错误 comparator、节点布局和 duplicate ownership；getter 子树对照证明 `+0x259dbc` 的 136-byte 构造依赖在上述边界下已恢复。栈写入追踪则解释了为何局部测试通过仍可能在组合流程中出现不同 padding：需要证明数据来源和读写顺序，不能只匹配最终摘要。
 
-`+0x259dbc → +0x276b9c → +0x25ab1c` 的 mode-0 路线已由 [密码回调报告](CIPHER_CALLBACK.md) 恢复并组合验证；末端 CBC 解密也有独立差分，初始化模式 1/2/3 尚未恢复，不能声称完整 cipher dispatch。另一条 `+0x2592b8 → +0x258fd8 → +0x243dac` 流运算与 string/reference 构造、清理也已由 [独立流组件](STREAM_REFERENCE.md) 恢复，174 / 9 的组件对照通过。parser 已推进到 725 步，下一处是 `+0x248dd8 → +0x247a08` 的 fill/resize 路线。
+`+0x259dbc → +0x276b9c → +0x25ab1c` 的 mode-0 路线已由 [密码回调报告](CIPHER_CALLBACK.md) 恢复并组合验证；末端 CBC 解密也有独立差分，初始化模式 1/2/3 尚未恢复，不能声称完整 cipher dispatch。另一条 `+0x2592b8 → +0x258fd8 → +0x243dac` 流运算与 string/reference 构造、清理也已由 [独立流组件](STREAM_REFERENCE.md) 恢复，174 / 9 的组件对照通过。先前 parser checkpoint 为 725 步；本轮已贯通此 fill/resize 和 `+0x256088`。
+
+本轮已恢复字符串重填（190 / 5）和有界 Protobuf-C 解包/递归清理（208 / 6）。四次控制中的 165 字节消息解包成功，parser 在第 3318 步 / `+0x9c95c` 退出，119 次分配、47 次 free、全部 guest/image/TLS/generation/有序副作用及 32 个虚拟寄存器槽一致。完整子树对照为 40 条。详见 [PARSER_UNPACK.md](PARSER_UNPACK.md)。组合验证仍使用同次 native VM 入口前导快照。
 
 完整 root VM 前导、88-byte 完整初始化、通用多 key TLS 树、诊断与全局副作用及剩余 callbacks 仍待恢复。当前搜索仍无非空响应与分页证据；独立当前 Medusa、无 JVM Rust 下载链路、抖音/起点闭环及最终 Pages 搜索下载网页仍未完成。

@@ -347,6 +347,99 @@ def append_string_fields(
     return status
 
 
+def pad_and_copy_string_fields(
+    pages, *, destination_fields: int, position: int, source_fields: int = 0,
+    fill: int = 0, allocate: Callable, reallocate: Callable, free: Callable,
+    max_bytes: int = 0x100000,
+) -> int:
+    """Model +0x247a08: pad to position, optional source copy, preserve suffix.
+
+    Validate signed fields before allocation. A source inside the destination
+    capacity is cloned even without growth. Reserve position+source_length+1,
+    then reload destination length and source contents after allocator effects.
+    Final signed length is max(original/reloaded length, position+source_length).
+    Native validation/allocation failures return -1 with their modeled effects;
+    unsupported pages or bounds reject transactionally.
+    """
+    _string_bound(max_bytes)
+    if not isinstance(position, int) or not 0 <= position <= 0xFFFFFFFF:
+        raise RefillUnsupported("string padding position must fit w1")
+    if not isinstance(fill, int) or not 0 <= fill <= 255:
+        raise RefillUnsupported("string padding fill must fit one byte")
+    transaction = _PageTransaction(pages)
+    if not destination_fields or _s32(position) < 0:
+        return -1
+    previous = _s32(int.from_bytes(_read_span(transaction, destination_fields + 4, 4), "little"))
+    pointer = int.from_bytes(_read_span(transaction, destination_fields + 8, 8), "little")
+    capacity = _s32(int.from_bytes(_read_span(transaction, destination_fields, 4), "little"))
+    if previous < 0 or not pointer or capacity < previous or capacity < 1:
+        return -1
+    selected, clone, source_length = source_fields, 0, 0
+    if source_fields:
+        source_length = _s32(int.from_bytes(_read_span(transaction, source_fields + 4, 4), "little"))
+        source = int.from_bytes(_read_span(transaction, source_fields + 8, 8), "little")
+        if source_length < 0 or not source:
+            return -1
+        if pointer <= source < pointer + capacity:
+            clone = _clone_string_fields(transaction, source_fields, allocate, free, max_bytes)
+            if not clone:
+                transaction.commit()
+                return -1
+            selected = clone
+            source_length = _s32(int.from_bytes(_read_span(transaction, clone + 4, 4), "little"))
+    total = (position + source_length) & 0xFFFFFFFF
+    status = _reserve_string_fields(transaction, destination_fields, (total + 1) & 0xFFFFFFFF,
+                                    allocate, reallocate, free, max_bytes)
+    if status:
+        if clone:
+            _destroy_string_fields(transaction, clone, free)
+        transaction.commit()
+        return -1
+    current = _s32(int.from_bytes(_read_span(transaction, destination_fields + 4, 4), "little"))
+    if current < position:
+        width = (position - current) & 0xFFFFFFFF
+        if width > max_bytes:
+            raise RefillUnsupported("string padding exceeds the explicit byte bound")
+        payload = int.from_bytes(_read_span(transaction, destination_fields + 8, 8), "little")
+        _write_span(transaction, payload + current, bytes([fill]) * width)
+        current = position
+    if selected:
+        width = _s32(int.from_bytes(_read_span(transaction, selected + 4, 4), "little"))
+        if width > 0:
+            if width > max_bytes:
+                raise RefillUnsupported("string source copy exceeds the explicit byte bound")
+            payload = int.from_bytes(_read_span(transaction, destination_fields + 8, 8), "little")
+            source = int.from_bytes(_read_span(transaction, selected + 8, 8), "little")
+            _write_span(transaction, payload + position, _read_span(transaction, source, width))
+        if clone:
+            _destroy_string_fields(transaction, clone, free)
+    length = max(_s32(total), current)
+    _write_span(transaction, destination_fields + 4, (length & 0xFFFFFFFF).to_bytes(4, "little"))
+    payload = int.from_bytes(_read_span(transaction, destination_fields + 8, 8), "little")
+    _write_span(transaction, payload + length, bytes(1))
+    transaction.commit()
+    return 0
+
+
+def fill_string_object(
+    pages, *, object_address: int, length: int, fill: int,
+    allocate: Callable, reallocate: Callable, free: Callable,
+    max_bytes: int = 0x100000,
+) -> int:
+    """Model +0x248dd8: clear declared length, then reserve/fill/terminate.
+
+    Invalid position or failed reserve leaves the native length reset visible.
+    Tail-call status is 0/-1; no vtable or payload pointer is pre-reset.
+    """
+    transaction = _PageTransaction(pages)
+    _write_span(transaction, object_address + 12, bytes(4))
+    result = pad_and_copy_string_fields(transaction, destination_fields=object_address + 8,
+        position=length, fill=fill, allocate=allocate, reallocate=reallocate, free=free,
+        max_bytes=max_bytes)
+    transaction.commit()
+    return result
+
+
 def append_string_object(
     pages, *, object_address: int, source_object_address: int, allocate: Callable,
     reallocate: Callable, free: Callable, max_bytes: int = 0x100000,

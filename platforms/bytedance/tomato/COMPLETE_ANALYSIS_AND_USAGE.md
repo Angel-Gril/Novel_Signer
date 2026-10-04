@@ -7,7 +7,7 @@
 
 最新纠正：初始化回调 `0x1000000e` 返回 `MSC.GetABSwitch()`，旧桥接器误传冻结时间。恢复 APK 默认值 `2` 后，三个旧失败时间输入成功，未取整时间的详情请求也被线上接受。Python 已独立恢复这一全局和 bit-5 分支，18 个字节码对照通过；默认 A/B=2 的 publisher 是 `+0x28c268`，两个 child/handler、root 已观测字段装配、callback pair 绑定、引用计数和 JNI 清理已有 92 个新建内存对照。2026-10-04 又恢复了 0x2d0-byte service 配置图、完整无竞争 guard 状态和真实 getter → handler 构造，72 个 native 对照、15 个拒绝/回滚例通过；root 前段的 264-byte 配置及全局启动仍未完成。此前“时间取整稳定”的结论只适用于旧误配桥接器，不能作为 native 时间约束。详见 [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) 与 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。修正后当前搜索在 b/c 两个主机仍为空。
 
-2026-10-04 的后续恢复包括 guest-table cipher（256 组 native 差分 / 11 个回滚例）及完整 mode-0 配置解密 callback（200 / 12）。后续又恢复了流状态和 reference 生命周期（174 / 9）。四次 fresh 控制中的 parser 从 325 步推进到 725 步，100 次分配、26 次 free 和 TLS/generation/有序副作用均一致。36 条完整子树对照仍从同次 native 前导输入快照开始，完整 Python 冷启动和 88-byte 初始化仍未完成。接口、用法与证据用途见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) 与 [STREAM_REFERENCE.md](STREAM_REFERENCE.md)。
+2026-10-04 的后续恢复包括 guest-table cipher（256 组 native 差分 / 11 个回滚例）及完整 mode-0 配置解密 callback（200 / 12）。后续又恢复了流状态和 reference 生命周期（174 / 9）。四次 fresh 控制中的 parser 已在 3318 步 / `+0x9c95c` 退出，165 字节消息成功解包，119 次分配、47 次 free、TLS/generation/有序副作用及 32 个虚拟槽均一致。新增字符串重填为 190 / 5，消息解包/清理为 208 / 6；40 条完整子树对照仍从同次 native VM 前导输入快照开始，完整 Python 冷启动和 88-byte 初始化仍未完成。接口、用法与证据用途见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) 、[STREAM_REFERENCE.md](STREAM_REFERENCE.md) 与 [PARSER_UNPACK.md](PARSER_UNPACK.md)。
 
 ## 1. 完成度结论
 
@@ -238,7 +238,7 @@ descriptor = publish_callback_descriptor(
 
 `set_configuration_u32` 包括 scoped writer、缺失 key 克隆、u32 覆盖和清理，返回旧值或 `0x000a985f`。`construct_registry320`、`construct_singleton136` 已恢复完整构造主体；`get_registry320_reference`、`get_singleton136_reference` 完整构造后才发布 lazy reference。调用者需要提供 caller stack、allocator/free、clock、TLS 初始化/解析和广播边界；cold getter 还需要 `thread_id`。复用栈槽位会改变后续 TLS padding，不能清零或注入 native 的结果页。
 
-配置树通过 96 组 native 差分 / 11 个回滚例，完整主体和 getter 通过 38 / 14。四次 fresh native 控制新增 20 条同次入口子树对照，串接实际 Python 冷 TLS/key/析构注册，并比较内存和有序 allocation/free/clock/registration/wake。详细布局、证据和限制见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。这些结果保留串行 guard/OS 边界和 native 输入前导快照依赖；mode-0 `+0x259dbc` 已贯通，parser 到达第 725 步 / `+0x9b200`，停在 `+0x248dd8` 前；尚不能直接调用这些组件生成当前线上 Medusa。
+配置树通过 96 组 native 差分 / 11 个回滚例，完整主体和 getter 通过 38 / 14。四次 fresh native 控制新增 20 条同次入口子树对照，串接实际 Python 冷 TLS/key/析构注册，并比较内存和有序 allocation/free/clock/registration/wake。详细布局、证据和限制见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。这些结果保留串行 guard/OS 边界和 native 输入前导快照依赖；mode-0 `+0x259dbc` 已贯通，parser 已在第 3318 步 / `+0x9c95c` 退出，但其 native VM 前导仍未由 Python 独立生成；尚不能直接调用这些组件生成当前线上 Medusa。
 
 ### 5.5 验证命令
 

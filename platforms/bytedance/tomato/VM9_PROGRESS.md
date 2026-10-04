@@ -3,7 +3,31 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Stream reference and cleanup continuation (2026-10-04)
+## Padding, descriptor unpack and parser return (2026-10-04)
+
+`vm9_objects.py` restores +0x248dd8 -> +0x247a08 padding/reserve/alias
+cleanup, verified by **190 native groups / 5 rollback cases**.
+`vm9_protobuf.py` restores the bounded +0x256088 -> +0x254330 message
+unpack and +0x2550cc recursive cleanup: **208 / 6**. It reads the three
+generated descriptors/default templates from guest ELF pages. It rejects
+heap scanned-member slabs, custom allocators, packed/oneof and unknown
+schemas; it is not a complete Protobuf-C replacement.
+
+All four same-run controls now return from parser at **step 3318 /
++0x9c95c**, with a successful non-NULL unpack of the 165-byte message.
+Each compares **119 allocations / 47 frees**, every guest/main image page,
+TLS/generation state, ordered effects and all 32 terminal VM slots.
+Complete constructor/config/cipher/unpack subtree comparisons rise to **40**;
+the unpack subtree also compares its actual returned pointer. The fill-only
+intermediate checkpoint was step3134, 101 allocations / 27 frees.
+
+Root remains step513 / +0x99b40. Native VM input prelude snapshots and
+serialized guard/OS/diagnostic boundaries still apply. Next: restore
++0x261c54 -> +0x261cb0 initialization and independently derive +0x262608
+parser caller/prelude state. Full independent current Medusa remains open.
+See [PARSER_UNPACK.md](PARSER_UNPACK.md) for ABI, evidence and limits.
+
+## Earlier stream reference and cleanup checkpoint (2026-10-04)
 
 `vm9_stream_cipher.py` restores +0x243cac state construction, +0x243d50
 processing, +0x243dac one-shot wrapping, +0x258fd8/+0x2592b8 configuration

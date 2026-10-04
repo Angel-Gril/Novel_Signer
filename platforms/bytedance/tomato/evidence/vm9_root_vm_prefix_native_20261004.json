@@ -11,6 +11,9 @@
           "stop_bytecode_offset": "0x99b40",
           "boundary_offset": "0x261a1c",
           "pending_target_offset": "0x261c54",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
@@ -133,15 +136,23 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 725,
-          "stop_bytecode_offset": "0x9b200",
-          "boundary_offset": "0x2635ac",
-          "pending_target_offset": "0x248dd8",
+          "steps": 3318,
+          "stop_bytecode_offset": "0x9c95c",
+          "boundary_offset": "vm_return",
+          "pending_target_offset": null,
+          "vm_path_returned": true,
+          "all_32_vm_slots_match": true,
+          "unpack_results": [
+            {
+              "input_length": 165,
+              "returned_null": false
+            }
+          ],
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 100,
-          "descriptor_match": true,
+          "allocations": 119,
+          "descriptor_match": null,
           "modeled_callbacks": [
             {
               "wrapper_offset": "0x26346c",
@@ -318,9 +329,173 @@
             {
               "wrapper_offset": "0x263498",
               "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2635ac",
+              "target_offset": "0x248dd8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2635c0",
+              "target_offset": "0x256088"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
             }
           ],
-          "explicit_free_calls": 26,
+          "explicit_free_calls": 47,
           "free_sequence_match": true,
           "tls_and_generation_state_match": true,
           "registration_and_wake_order_match": true,
@@ -458,6 +633,8 @@
           "allocations": 12,
           "explicit_free_calls": 1,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -478,6 +655,8 @@
           "allocations": 21,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -498,6 +677,8 @@
           "allocations": 24,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -518,6 +699,8 @@
           "allocations": 63,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -538,6 +721,8 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -558,6 +743,8 @@
           "allocations": 71,
           "explicit_free_calls": 14,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -578,6 +765,8 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -598,6 +787,8 @@
           "allocations": 0,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -618,11 +809,35 @@
           "allocations": 3,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
           "explicit_result_bytes_compared": true
+        },
+        {
+          "phase": "configuration_unpack",
+          "entry_offset": "0x256088",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 16,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": false,
+          "recovered_python_tls_path_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "not_used",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
         }
       ],
       "native_stack_writer_counts": {
@@ -639,8 +854,11 @@
       },
       "configuration_decrypt_callback_python_implemented": true,
       "configuration_stream_callback_python_implemented": true,
-      "pending_parser_target_python_implemented": false,
-      "property_profile": "absent"
+      "configuration_fill_callback_python_implemented": true,
+      "configuration_unpack_callback_python_implemented": true,
+      "property_profile": "absent",
+      "parser_observed_path_python_implemented": true,
+      "independent_python_parser_prelude": false
     },
     {
       "image_base": "0x122c0000",
@@ -653,6 +871,9 @@
           "stop_bytecode_offset": "0x99b40",
           "boundary_offset": "0x261a1c",
           "pending_target_offset": "0x261c54",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
@@ -775,15 +996,23 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 725,
-          "stop_bytecode_offset": "0x9b200",
-          "boundary_offset": "0x2635ac",
-          "pending_target_offset": "0x248dd8",
+          "steps": 3318,
+          "stop_bytecode_offset": "0x9c95c",
+          "boundary_offset": "vm_return",
+          "pending_target_offset": null,
+          "vm_path_returned": true,
+          "all_32_vm_slots_match": true,
+          "unpack_results": [
+            {
+              "input_length": 165,
+              "returned_null": false
+            }
+          ],
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 100,
-          "descriptor_match": true,
+          "allocations": 119,
+          "descriptor_match": null,
           "modeled_callbacks": [
             {
               "wrapper_offset": "0x26346c",
@@ -960,9 +1189,173 @@
             {
               "wrapper_offset": "0x263498",
               "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2635ac",
+              "target_offset": "0x248dd8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2635c0",
+              "target_offset": "0x256088"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
             }
           ],
-          "explicit_free_calls": 26,
+          "explicit_free_calls": 47,
           "free_sequence_match": true,
           "tls_and_generation_state_match": true,
           "registration_and_wake_order_match": true,
@@ -1100,6 +1493,8 @@
           "allocations": 12,
           "explicit_free_calls": 1,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1120,6 +1515,8 @@
           "allocations": 21,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1140,6 +1537,8 @@
           "allocations": 24,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1160,6 +1559,8 @@
           "allocations": 63,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1180,6 +1581,8 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1200,6 +1603,8 @@
           "allocations": 71,
           "explicit_free_calls": 14,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1220,6 +1625,8 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1240,6 +1647,8 @@
           "allocations": 0,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1260,11 +1669,35 @@
           "allocations": 3,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
           "explicit_result_bytes_compared": true
+        },
+        {
+          "phase": "configuration_unpack",
+          "entry_offset": "0x256088",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 16,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": false,
+          "recovered_python_tls_path_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "not_used",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
         }
       ],
       "native_stack_writer_counts": {
@@ -1281,8 +1714,11 @@
       },
       "configuration_decrypt_callback_python_implemented": true,
       "configuration_stream_callback_python_implemented": true,
-      "pending_parser_target_python_implemented": false,
-      "property_profile": "sdk_30"
+      "configuration_fill_callback_python_implemented": true,
+      "configuration_unpack_callback_python_implemented": true,
+      "property_profile": "sdk_30",
+      "parser_observed_path_python_implemented": true,
+      "independent_python_parser_prelude": false
     },
     {
       "image_base": "0x775c205000",
@@ -1295,6 +1731,9 @@
           "stop_bytecode_offset": "0x99b40",
           "boundary_offset": "0x261a1c",
           "pending_target_offset": "0x261c54",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
@@ -1417,15 +1856,23 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 725,
-          "stop_bytecode_offset": "0x9b200",
-          "boundary_offset": "0x2635ac",
-          "pending_target_offset": "0x248dd8",
+          "steps": 3318,
+          "stop_bytecode_offset": "0x9c95c",
+          "boundary_offset": "vm_return",
+          "pending_target_offset": null,
+          "vm_path_returned": true,
+          "all_32_vm_slots_match": true,
+          "unpack_results": [
+            {
+              "input_length": 165,
+              "returned_null": false
+            }
+          ],
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 100,
-          "descriptor_match": true,
+          "allocations": 119,
+          "descriptor_match": null,
           "modeled_callbacks": [
             {
               "wrapper_offset": "0x26346c",
@@ -1602,9 +2049,173 @@
             {
               "wrapper_offset": "0x263498",
               "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2635ac",
+              "target_offset": "0x248dd8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2635c0",
+              "target_offset": "0x256088"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
             }
           ],
-          "explicit_free_calls": 26,
+          "explicit_free_calls": 47,
           "free_sequence_match": true,
           "tls_and_generation_state_match": true,
           "registration_and_wake_order_match": true,
@@ -1742,6 +2353,8 @@
           "allocations": 12,
           "explicit_free_calls": 1,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1762,6 +2375,8 @@
           "allocations": 21,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1782,6 +2397,8 @@
           "allocations": 24,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1802,6 +2419,8 @@
           "allocations": 63,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1822,6 +2441,8 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1842,6 +2463,8 @@
           "allocations": 71,
           "explicit_free_calls": 14,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1862,6 +2485,8 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1882,6 +2507,8 @@
           "allocations": 0,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -1902,11 +2529,35 @@
           "allocations": 3,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
           "explicit_result_bytes_compared": true
+        },
+        {
+          "phase": "configuration_unpack",
+          "entry_offset": "0x256088",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 16,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": false,
+          "recovered_python_tls_path_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "not_used",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
         }
       ],
       "native_stack_writer_counts": {
@@ -1923,8 +2574,11 @@
       },
       "configuration_decrypt_callback_python_implemented": true,
       "configuration_stream_callback_python_implemented": true,
-      "pending_parser_target_python_implemented": false,
-      "property_profile": "absent"
+      "configuration_fill_callback_python_implemented": true,
+      "configuration_unpack_callback_python_implemented": true,
+      "property_profile": "absent",
+      "parser_observed_path_python_implemented": true,
+      "independent_python_parser_prelude": false
     },
     {
       "image_base": "0x775c205000",
@@ -1937,6 +2591,9 @@
           "stop_bytecode_offset": "0x99b40",
           "boundary_offset": "0x261a1c",
           "pending_target_offset": "0x261c54",
+          "vm_path_returned": false,
+          "all_32_vm_slots_match": false,
+          "unpack_results": [],
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
@@ -2059,15 +2716,23 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 725,
-          "stop_bytecode_offset": "0x9b200",
-          "boundary_offset": "0x2635ac",
-          "pending_target_offset": "0x248dd8",
+          "steps": 3318,
+          "stop_bytecode_offset": "0x9c95c",
+          "boundary_offset": "vm_return",
+          "pending_target_offset": null,
+          "vm_path_returned": true,
+          "all_32_vm_slots_match": true,
+          "unpack_results": [
+            {
+              "input_length": 165,
+              "returned_null": false
+            }
+          ],
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 100,
-          "descriptor_match": true,
+          "allocations": 119,
+          "descriptor_match": null,
           "modeled_callbacks": [
             {
               "wrapper_offset": "0x26346c",
@@ -2244,9 +2909,173 @@
             {
               "wrapper_offset": "0x263498",
               "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2635ac",
+              "target_offset": "0x248dd8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x2635c0",
+              "target_offset": "0x256088"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
             }
           ],
-          "explicit_free_calls": 26,
+          "explicit_free_calls": 47,
           "free_sequence_match": true,
           "tls_and_generation_state_match": true,
           "registration_and_wake_order_match": true,
@@ -2384,6 +3213,8 @@
           "allocations": 12,
           "explicit_free_calls": 1,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -2404,6 +3235,8 @@
           "allocations": 21,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -2424,6 +3257,8 @@
           "allocations": 24,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -2444,6 +3279,8 @@
           "allocations": 63,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -2464,6 +3301,8 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -2484,6 +3323,8 @@
           "allocations": 71,
           "explicit_free_calls": 14,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -2504,6 +3345,8 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -2524,6 +3367,8 @@
           "allocations": 0,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
@@ -2544,11 +3389,35 @@
           "allocations": 3,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": false,
+          "returned_null": null,
           "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
           "explicit_result_bytes_compared": true
+        },
+        {
+          "phase": "configuration_unpack",
+          "entry_offset": "0x256088",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 16,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "explicit_return_value_compared": true,
+          "returned_null": false,
+          "recovered_python_tls_path_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "not_used",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": false
         }
       ],
       "native_stack_writer_counts": {
@@ -2565,8 +3434,11 @@
       },
       "configuration_decrypt_callback_python_implemented": true,
       "configuration_stream_callback_python_implemented": true,
-      "pending_parser_target_python_implemented": false,
-      "property_profile": "sdk_30"
+      "configuration_fill_callback_python_implemented": true,
+      "configuration_unpack_callback_python_implemented": true,
+      "property_profile": "sdk_30",
+      "parser_observed_path_python_implemented": true,
+      "independent_python_parser_prelude": false
     }
   ],
   "native_runs": 4,
@@ -2575,7 +3447,7 @@
   "emulated_tls_comparisons": 8,
   "tls_registry_comparisons": 4,
   "scoped_lock_comparisons": 8,
-  "registry_and_cipher_comparisons": 36,
+  "registry_and_cipher_comparisons": 40,
   "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
   "fresh_elf": true,

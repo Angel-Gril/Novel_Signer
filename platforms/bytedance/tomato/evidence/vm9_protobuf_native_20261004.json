@@ -1,0 +1,2106 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "native_differences": 208,
+  "cases": [
+    {
+      "case": "empty",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "empty_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "zero_tag",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "group",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "truncated_tag",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "long_tag",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "zero_low_tag",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "zero_low_tag_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "truncated_varint",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "oversized_varint",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "truncated_fixed32",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "truncated_fixed64",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "truncated_length",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "length_over_intmax",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "short_length",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "wrong_wire",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "unknown_varint",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_varint_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_fixed64",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_fixed64_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_fixed32",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_fixed32_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_string",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_string_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "known_wrong_wire",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "duplicate_string",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "duplicate_string_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "root_all",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "root_all_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "nested_empty",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "nested_empty_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "nested_fields",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "nested_fields_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "nested_malformed",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "nested_wrong_wire",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "repeated_messages",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_messages_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "duplicate_and_unknown",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "duplicate_and_unknown_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_0",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_0_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_1",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_1_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_2",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_2_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_127",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_127_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_128",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_128_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_255",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_255_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_4294967295",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_4294967295_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_4294967296",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_4294967296_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_18446744073709551615",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_18446744073709551615_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_0",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_0_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_1",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_1_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_7",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_7_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_16",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_16_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_127",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_127_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_128",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_128_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_255",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_255_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "repeated_1",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_1_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "repeated_2",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_2_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "repeated_8",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_8_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "repeated_16",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_16_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_1",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_1_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_2",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_2_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_8",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_8_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_16",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_16_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "allocation_failure_0",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_1",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_2",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_3",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_4",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_5",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_6",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_7",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_8",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_9",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_10",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_11",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_12",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "direct_0x350c80",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350c80",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "direct_0x350c80_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "direct_0x350bd0",
+      "image_base": "0x122c0000",
+      "descriptor_offset": "0x350bd0",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "direct_0x350bd0_free",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "empty",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "empty_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "zero_tag",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "group",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "truncated_tag",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "long_tag",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "zero_low_tag",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "zero_low_tag_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "truncated_varint",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "oversized_varint",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "truncated_fixed32",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "truncated_fixed64",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "truncated_length",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "length_over_intmax",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "short_length",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "wrong_wire",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "unknown_varint",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_varint_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_fixed64",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_fixed64_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_fixed32",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_fixed32_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_string",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_string_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "known_wrong_wire",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "duplicate_string",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "duplicate_string_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "root_all",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "root_all_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "nested_empty",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "nested_empty_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "nested_fields",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "nested_fields_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "nested_malformed",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "nested_wrong_wire",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "repeated_messages",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_messages_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "duplicate_and_unknown",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "duplicate_and_unknown_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_0",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_0_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_1",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_1_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_2",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_2_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_127",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_127_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_128",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_128_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_255",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_255_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_4294967295",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_4294967295_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_4294967296",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_4294967296_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "scalar_18446744073709551615",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "scalar_18446744073709551615_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_0",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_0_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_1",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_1_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_7",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_7_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_16",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_16_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_127",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_127_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_128",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_128_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "string_255",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "string_255_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "repeated_1",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_1_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "repeated_2",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_2_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "repeated_8",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_8_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "repeated_16",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "repeated_16_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_1",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_1_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_2",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_2_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_8",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_8_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "unknown_16",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "unknown_16_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "allocation_failure_0",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_1",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_2",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_3",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_4",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_5",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_6",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_7",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_8",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_9",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_10",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_11",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "allocation_failure_12",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350d68",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": true
+    },
+    {
+      "case": "direct_0x350c80",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350c80",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "direct_0x350c80_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    },
+    {
+      "case": "direct_0x350bd0",
+      "image_base": "0x775c205000",
+      "descriptor_offset": "0x350bd0",
+      "guest_bytes_match": true,
+      "image_bytes_match": true,
+      "returned_pointer_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "returned_null": false
+    },
+    {
+      "case": "direct_0x350bd0_free",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "allocation_and_free_order_match": true,
+      "pre_free_bytes_match": true,
+      "no_live_allocations": true
+    }
+  ],
+  "negative_count": 6,
+  "negative_cases": [
+    {
+      "case": "unmapped_data",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "unknown_schema",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "input_bound",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "member_bound",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "slab_bound",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "custom_allocator",
+      "rejected": true,
+      "page_rollback": true
+    }
+  ],
+  "fresh_synthetic_inputs": true,
+  "native_outputs_used_as_model_input": false,
+  "cleanup_model_uses_own_unpack_output": true,
+  "jvm_used": false,
+  "complete_protobuf_c": false,
+  "complete_python_medusa": false,
+  "rollback_scope": "guest_pages_only; allocation/free ledger is an explicit external effect"
+}
