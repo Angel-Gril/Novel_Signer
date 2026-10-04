@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 
 from elftools.elf.elffile import ELFFile
-from unicorn import Uc, UC_ARCH_ARM64, UC_MODE_ARM, UC_HOOK_CODE, UC_HOOK_INTR
+from unicorn import Uc, UC_ARCH_ARM64, UC_MODE_ARM, UC_HOOK_CODE, UC_HOOK_INTR, UC_HOOK_MEM_WRITE
 from unicorn.arm64_const import (
     UC_ARM64_REG_PC, UC_ARM64_REG_SP, UC_ARM64_REG_X0, UC_ARM64_REG_X1,
     UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X30,
@@ -86,7 +86,8 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            extra_registers=None, stop_offset=None, real_singletons=False,
            thread_id=None, observed_memory=None, allocation_effect=None,
            real_mutexes=False, host_imports=None, instruction_limit=10000,
-           instruction_observer=None, syscall_handler=None, malloc_handler=None):
+           instruction_observer=None, syscall_handler=None, malloc_handler=None,
+           memory_write_observer=None):
     cpu = Uc(UC_ARCH_ARM64, UC_MODE_ARM)
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -238,6 +239,9 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
         cpu.reg_write(UC_ARM64_REG_PC, cpu.reg_read(UC_ARM64_REG_X30))
 
     cpu.hook_add(UC_HOOK_CODE, hook)
+    if memory_write_observer:
+        cpu.hook_add(UC_HOOK_MEM_WRITE,
+            lambda cpu, access, address, size, value, user: memory_write_observer(cpu, address, size))
     if syscall_handler:
         def interrupt(cpu, number, user):
             if number != 2:

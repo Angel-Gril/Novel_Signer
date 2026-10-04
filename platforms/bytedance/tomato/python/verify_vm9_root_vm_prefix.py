@@ -14,10 +14,11 @@ import os
 from pathlib import Path
 from unicorn.arm64_const import (
     UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2,
-    UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X30, UC_ARM64_REG_SP,
+    UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X30, UC_ARM64_REG_SP, UC_ARM64_REG_PC,
 )
 
 import vm9_objects as objects
+import vm9_registry as registry
 import verify_vm9_root_configuration as oracle
 from vm9_allocator import _read_span, RefillUnsupported
 from verify_vm9_signer_objects import GUEST, LIBRARY_SHA256
@@ -31,9 +32,13 @@ def probe(library, libc, *, base, property_value, vm_module):
     vm_full = vm_module
     snapshots, boundaries, allocations, registrations = {}, {}, [], []
     native_frees, native_wakes = [], []
+    native_effects, model_effects = [], []
     emutls_returns = {}
     tls_registry_return = None
     scoped_returns = {}
+    registry_returns = {}
+    stack_writer_counts = {"libc:0x68d5c": 0, "image:0x2694f4": 0}
+    clock_seconds = 1791023800
     pending_visits, pending_active, pending_finished = {}, False, False
 
     def boundary(cpu, key, argument=None, width=0):
@@ -49,6 +54,7 @@ def probe(library, libc, *, base, property_value, vm_module):
             "registrations": list(registrations[snapshots[key].get("registration_index", 0):]),
             "frees": list(native_frees[snapshots[key].get("free_index", 0):]),
             "wakes": list(native_wakes[snapshots[key].get("wake_index", 0):]),
+            "effects": list(native_effects[snapshots[key].get("effect_index", 0):]),
         }
 
     def constructor_snapshot(cpu, key):
@@ -56,15 +62,19 @@ def probe(library, libc, *, base, property_value, vm_module):
                  for begin, end, _ in cpu.mem_regions() for page in range(begin, end + 1, 4096)}
         snapshots[key] = {"object_address": cpu.reg_read(UC_ARM64_REG_X0), "pages": pages,
             "secondary_address": cpu.reg_read(UC_ARM64_REG_X1),
+            "third_argument": cpu.reg_read(UC_ARM64_REG_X2),
             "stack_pointer": cpu.reg_read(UC_ARM64_REG_SP),
             "allocation_index": len(allocations),
             "registration_index": len(registrations),
             "free_index": len(native_frees), "wake_index": len(native_wakes),
+            "effect_index": len(native_effects),
             "allocation_next": max(pointer + ((size + 15) & ~15) for size, pointer in allocations)}
 
     def observe(cpu, address):
         nonlocal pending_active, pending_finished, tls_registry_return
         offset = address - base
+        if offset == 0x348450:
+            native_effects.append(["clock", cpu.reg_read(UC_ARM64_REG_X0)])
         if offset == 0x259DBC and not pending_finished:
             pending_active = True
         elif offset == 0x26354C and pending_active:
@@ -75,6 +85,16 @@ def probe(library, libc, *, base, property_value, vm_module):
         constructor_key = {0x166370: "singleton136", 0x2566EC: "registry320"}.get(offset)
         if constructor_key and constructor_key not in snapshots:
             constructor_snapshot(cpu, constructor_key)
+        registry_key = {0x2566EC: "registry320_full", 0x2568C8: "configuration_set",
+                        0x166370: "singleton136_full", 0x15E694: "registry320_getter",
+                        0x161068: "singleton136_getter"}.get(offset)
+        if registry_key and registry_key not in snapshots:
+            constructor_snapshot(cpu, registry_key)
+            registry_returns[registry_key] = cpu.reg_read(UC_ARM64_REG_X30)
+        for registry_key, return_address in registry_returns.items():
+            if address == return_address and registry_key not in boundaries:
+                boundary(cpu, registry_key)
+                boundaries[registry_key]["return_value"] = cpu.reg_read(UC_ARM64_REG_X0)
         constructor_end = {0x166544: "singleton136", 0x256808: "registry320"}.get(offset)
         if constructor_end and constructor_end in snapshots and constructor_end not in boundaries:
             boundary(cpu, constructor_end)
@@ -121,16 +141,34 @@ def probe(library, libc, *, base, property_value, vm_module):
             if int.from_bytes(cpu.mem_read(argument, 8), "little") == base + 0x259DBC:
                 boundary(cpu, "parser", argument, 48)
 
-    control = oracle.probe(library, libc, base=base, property_value=property_value,
+    def allocation_effect(cpu, size, pointer):
+        allocations.append([size, pointer])
+        native_effects.append(["allocate", size, pointer])
+    def registration_effect(cpu, destructor, obj, dso):
+        registrations.append([destructor, obj, dso])
+        native_effects.append(["register", destructor, obj, dso])
+    def free_effect(cpu, pointer):
+        native_frees.append(pointer)
+        native_effects.append(["free", pointer])
+    def wake_effect(cpu, pointer, operation, count):
+        native_wakes.append([pointer, operation, count])
+        native_effects.append(["wake", pointer, operation, count])
+    def stack_write(cpu, address, width):
+        pc = cpu.reg_read(UC_ARM64_REG_PC)
+        label = {oracle.LIBC_BASE + 0x68D5C: "libc:0x68d5c",
+                 base + 0x2694F4: "image:0x2694f4"}.get(pc)
+        if label:
+            stack_writer_counts[label] += 1
+    control = oracle.probe(library, libc, base=base, property_value=property_value, seconds=clock_seconds,
         instruction_observer=observe,
-        allocation_effect=lambda cpu, size, pointer: allocations.append([size, pointer]),
-        registration_effect=lambda cpu, destructor, obj, dso: registrations.append([destructor, obj, dso]),
-        free_effect=lambda cpu, pointer: native_frees.append(pointer),
-        wake_effect=lambda cpu, pointer, operation, count: native_wakes.append([pointer, operation, count]))
+        allocation_effect=allocation_effect, registration_effect=registration_effect,
+        free_effect=free_effect, wake_effect=wake_effect, memory_write_observer=stack_write)
     assert control["returned"] and set(snapshots) == set(boundaries) == {
         "root", "parser", "singleton136", "registry320", "emutls_cold", "emutls_ready", "tls_registry",
-        "scoped_acquire", "scoped_release"}
+        "scoped_acquire", "scoped_release", "registry320_full", "configuration_set",
+        "singleton136_full", "registry320_getter", "singleton136_getter"}
     assert pending_finished and pending_visits.get("0x166370") == 1 and pending_visits.get("0x242640", 0) > 0
+    assert all(stack_writer_counts.values())
 
     class StrictMem(vm_full.Mem):
         def __init__(self, pages):
@@ -159,6 +197,7 @@ def probe(library, libc, *, base, property_value, vm_module):
                 raise RefillUnsupported("bounded VM allocation arena exhausted")
             _read_span(pages, pointer, size)
             model_allocations.append([size, pointer])
+            model_effects.append(["allocate", size, pointer])
             return pointer
 
         def free(pages, pointer):
@@ -267,6 +306,7 @@ def probe(library, libc, *, base, property_value, vm_module):
                 raise RefillUnsupported("bounded constructor arena exhausted")
             _read_span(pages, pointer, size)
             model_allocations.append([size, pointer])
+            model_effects.append(["allocate", size, pointer])
             return pointer
         model(state["pages"], object_address=state["object_address"], image_base=base, allocate=allocate_prefix)
         assert _read_span(state["pages"], GUEST, 0xA000) == expected["guest"], key + " guest"
@@ -290,6 +330,7 @@ def probe(library, libc, *, base, property_value, vm_module):
                                   generation_table=oracle.LIBC_BASE + oracle.LIBC_PTHREAD_GENERATION_OFFSET)
     def once_wake(pages, pointer, operation, count):
         model_wakes.append([pointer, operation, count])
+        model_effects.append(["wake", pointer, operation, count])
         return 0
     emutls = []
     for key in ("emutls_cold", "emutls_ready"):
@@ -322,6 +363,7 @@ def probe(library, libc, *, base, property_value, vm_module):
             set_specific=set_specific, create_key=create_key, once_wake=once_wake)
     def register_atexit(pages, destructor, obj, dso):
         model_registrations.append([destructor, obj, dso])
+        model_effects.append(["register", destructor, obj, dso])
         return 0
     def register_destructor(pages, destructor, obj, dso):
         assert dso == base + 0x34C700
@@ -379,11 +421,67 @@ def probe(library, libc, *, base, property_value, vm_module):
             "free_sequence_match": True, "wake_sequence_match": True,
             "allocations": len(model_allocations), "explicit_free_calls": len(model_frees),
             "native_prelude_snapshot_used": True, "single_live_mutex_only": True, "full_scoped_lock_tree": False})
+    registry_initialization = []
+    for key in ("configuration_set", "registry320_full", "registry320_getter", "singleton136_full", "singleton136_getter"):
+        state, expected = snapshots[key], boundaries[key]
+        allocation_next, model_allocations, model_registrations, model_frees, model_wakes = state["allocation_next"], [], [], [], []
+        model_effects = []
+        def free_registry(pages, pointer):
+            model_frees.append(pointer)
+            model_effects.append(["free", pointer])
+        def broadcast_registry(pages, pointer):
+            return objects.broadcast_condition_no_waiters(pages, condition_address=pointer,
+                wake=once_wake)
+        def read_clock_registry(pages, clock_id):
+            model_effects.append(["clock", clock_id])
+            return 0, clock_seconds, 500000000
+        common = dict(image_base=base, entry_stack_address=state["stack_pointer"],
+            allocate=allocate_prefix, free=free_registry, get_tls=get_tls,
+            initialize_registry=initialize_registry, broadcast=broadcast_registry)
+        if key == "configuration_set":
+            returned = registry.set_configuration_u32(state["pages"], registry_address=state["object_address"],
+                key_address=state["secondary_address"], value=state["third_argument"] & 0xFFFFFFFF, **common)
+            assert returned == expected["return_value"] & 0xFFFFFFFF, key + " return"
+        elif key == "registry320_full":
+            registry.construct_registry320(state["pages"], object_address=state["object_address"],
+                read_clock=read_clock_registry, **common)
+        elif key == "singleton136_full":
+            registry.construct_singleton136(state["pages"], object_address=state["object_address"],
+                read_clock=read_clock_registry, thread_id=137, **common)
+        else:
+            operation = registry.get_registry320_reference if key == "registry320_getter" else registry.get_singleton136_reference
+            reference = operation(state["pages"], read_clock=read_clock_registry, thread_id=137, **common)
+            assert reference.wrapper_address == expected["return_value"], key + " returned wrapper"
+        got = _read_span(state["pages"], GUEST, 0xA000)
+        if got != expected["guest"]:
+            first = next(i for i, (a, b) in enumerate(zip(got, expected["guest"])) if a != b)
+            raise AssertionError(f"{key} guest+{first:#x}")
+        assert _read_span(state["pages"], oracle.TLS, 0xB00) == expected["tls"], key + " TLS"
+        assert _read_span(state["pages"], oracle.LIBC_BASE + oracle.LIBC_PTHREAD_GENERATION_OFFSET,
+                          141 * 16) == expected["pthread_generations"], key + " generations"
+        assert all(_read_span(state["pages"], page << 12, 4096) == data for page, data in expected["image"].items()), key + " image"
+        assert model_allocations == expected["allocations"], key + " allocations"
+        assert model_registrations == expected["registrations"], key + " registrations"
+        assert model_frees == expected["frees"], key + " frees"
+        assert model_wakes == expected["wakes"], key + " wakes"
+        assert model_effects == expected["effects"], key + " ordered effects"
+        registry_initialization.append({"phase": key, "entry_offset": {
+            "configuration_set": "0x2568c8", "registry320_full": "0x2566ec", "registry320_getter": "0x15e694",
+            "singleton136_full": "0x166370", "singleton136_getter": "0x161068"}[key],
+            "guest_objects_match": True, "tls_state_match": True, "pthread_generation_table_match": True,
+            "all_image_pages_match": True, "allocation_sequence_match": True, "registration_sequence_match": True,
+            "free_sequence_match": True, "wake_sequence_match": True, "allocations": len(model_allocations),
+            "explicit_free_calls": len(model_frees), "native_prelude_snapshot_used": True,
+            "real_cold_python_tls_path": True, "ordered_allocator_clock_registration_wake_effects_match": True,
+            "guard_boundary": "serialized_successful_single_thread_guard",
+            "lazy_publication_compared": key in ("registry320_getter", "singleton136_full", "singleton136_getter")})
     return {"image_base": hex(base), "native_control_returned": True, "phases": results,
             "constructor_prefixes": constructors,
             "emulated_tls": emutls,
             "tls_registry": tls_registry,
             "scoped_locks": scoped_locks,
+            "registry_initialization": registry_initialization,
+            "native_stack_writer_counts": stack_writer_counts,
             "pending_callback_native_visits": pending_visits,
             "pending_callback_python_implemented": False}
 
@@ -408,6 +506,7 @@ def main():
         "emulated_tls_comparisons": len(cases) * 2,
         "tls_registry_comparisons": len(cases),
         "scoped_lock_comparisons": len(cases) * 2,
+        "registry_initialization_comparisons": len(cases) * 5,
         "library_sha256": LIBRARY_SHA256, "libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
         "fresh_elf": True, "external_captured_pages_used": False, "native_prelude_snapshot_used": True,
         "trace_branch_opaque_hooks_used": False, "jvm_used": False,
@@ -417,7 +516,8 @@ def main():
                       "constructor_prefix_comparisons": len(cases) * 2,
                       "emulated_tls_comparisons": len(cases) * 2,
                       "tls_registry_comparisons": len(cases),
-                      "scoped_lock_comparisons": len(cases) * 2}))
+                      "scoped_lock_comparisons": len(cases) * 2,
+                      "registry_initialization_comparisons": len(cases) * 5}))
 
 
 if __name__ == "__main__":

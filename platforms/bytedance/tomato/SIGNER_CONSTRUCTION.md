@@ -227,7 +227,7 @@ python python/verify_vm9_parser_digests.py --library /private/libmetasec_ml_7133
 
 ## 136-byte singleton、配置 registry 与 TLS 依赖
 
-本轮已恢复下列组件，但 **136-byte singleton 和 320-byte registry 的完整初始化仍未完成**：
+以下是此前的前缀和 TLS 组件证据；后续的配置树与完整构造主体证据见下一节。**完整 Python 冷启动仍未完成。**
 
 | 组件 | Python 已恢复行为 | native 差分 / 拒绝回滚 |
 | --- | --- | --- |
@@ -239,7 +239,7 @@ python python/verify_vm9_parser_digests.py --library /private/libmetasec_ml_7133
 
 `construct_singleton_layout136` 从 `+0x166370` 恢复到 `+0x166544`。五个 decoder 分别发布 `+0x3d16b4/+0x3d16e4/+0x3d1714/+0x3d1744/+0x3d1774` flag。`+0x173470` 必须先读 GOT `+0x379968`，再读其 table pointer 减 `0xe6fde0` 的内容，不能把默认有效位置 `+0x3d1900` 固定为输出。前缀按顺序分配 `[48,48,56,48]`，生成两个 mutex 和带第三个 mutex 的 helper；保留没有写入的 padding。getter `+0x161068` 的 slot/guard 为 `+0x3d1678/+0x3d1680`，完整 payload 构造尚未接入该 getter。
 
-`construct_registry_layout320` 恢复 `+0x2566ec → +0x256808`，包括三个独立 40-byte 容器/控制器/sentinel、152-byte mutex state 和空 string，共七次分配。getter `+0x15e694` 的 slot/guard 为 `+0x3d1550/+0x3d1558`。后续 `+0x256898` 的 16-byte clock wrapper 已单独恢复，仍需与初始配置插入组合验证。**`+0x26cc60` 是 realtime clock getter，不是线程启动。** `+0x329404` 先生成按 u64 wrap 的有符号微秒，`+0x291958` 再除以 1000 并向零截断；clock 失败路径拒绝，不返回伪造时间。
+`construct_registry_layout320` 恢复 `+0x2566ec → +0x256808`，包括三个独立 40-byte 容器/控制器/sentinel、152-byte mutex state 和空 string，共七次分配。getter `+0x15e694` 的 slot/guard 为 `+0x3d1550/+0x3d1558`。后续 `+0x256898` 的 16-byte clock wrapper 已单独恢复，并由下一节的完整构造器组合验证初始配置插入。**`+0x26cc60` 是 realtime clock getter，不是线程启动。** `+0x329404` 先生成按 u64 wrap 的有符号微秒，`+0x291958` 再除以 1000 并向零截断；clock 失败路径拒绝，不返回伪造时间。
 
 `get_emulated_tls_address` 读取四个 u64 的 size/alignment/index/template control，使用显式 staged-page key/get/set/wake 边界。index 初次分配有 normal mutex 保护；pointer array 按 native 容量规则扩容，对齐块保存 back-pointer，malloc 后重读 template。native 忽略 `pthread_setspecific` 返回值的行为也予以保留。冷 once 从 0→1→2 后必须执行一次 `FUTEX_WAKE_PRIVATE`，即使没有等待者；这条副作用由扩大同次验证发现并补齐。缺失 wake 边界、errno 路线、malloc/realloc NULL、未知 alignment/once/mutex 等未恢复分支拒绝并回滚 pages。
 
@@ -261,8 +261,46 @@ python python/verify_vm9_scoped_lock.py --library /private/libmetasec_ml_71332.s
 
 这些组件从各自的 native **输入前导快照**开始对照，未读取 native 输出作为模型输入；它们还没有串成从 ELF 冷启动到完整 parser 的纯 Python 路径。组件 verifier 中的 TLS、OS 与 allocator 边界也不等于完整 Android 运行时。因此 parser 仍停在第 325 步 `+0x259dbc` 前，root 仍停在第 513 步的 88-byte 前缀，不能据此升级为当前线上 Medusa 已完成。
 
+## 配置树、完整 320/136-byte 构造主体与 getter
+
+`vm9_registry.py` 恢复了配置容器 `+0x25bf14`、字符串比较 `+0x2473dc/+0x188a94`、查询 `+0x25c168`、转移所有权的插入 `+0x25bf3c` 和 setter `+0x2568c8`。输入来自 caller pages、私有 ELF 和显式 allocation/free，代码不嵌入解码后的配置名称。
+
+比较器先检查 nullable fields、payload 和有符号 length；无效返回 -32768。同长度且同 payload pointer，或双方长度都为零，直接相等。否则逐字节按 unsigned 比较，返回 byte 差；双方当前字节都为 NUL 时提前相等，即使声明长度和后续字节不同。耗尽较短长度后，不同长度返回 ±1。因此不能用 `bytes` 排序或普通 `memcmp` 替代。
+
+| 布局 | 字段 |
+| --- | --- |
+| container / 40 bytes | vtable `+0`；incoming-key cleanup `+8`；old-value cleanup `+0x10`；comparator `+0x18`；controller `+0x20` |
+| controller / 40 bytes | sentinel `+0`；u64 count `+8`；comparator `+0x10`；pair-key hook `+0x18`；hook context `+0x20` |
+| sentinel | root `+8`；leftmost `+0x10`；rightmost `+0x18`；空树的后两者指向自身 |
+| node / 40 bytes | u32 color `+0`（0 red / 1 black）；保留 padding `+4..7`；parent/left/right `+8/+0x10/+0x18`；pair `+0x20` |
+| pair / 16 bytes | key pointer `+0`；value pointer `+8` |
+
+查询先 lower-bound，再比较 query/candidate 并返回 value pointer 或 0。`+0x25bf3c` 遇到既有键时销毁传入的新 key string，free 原 value，再写入新 value pointer；缺失时先分配 pair，再执行带 predecessor 判重、旋转和 recolor 的 unique insertion。`+0x24bf54` 在 malloc 前确定插入方向，分配后重读链接。分配期间 key 变成重复值时，native 可返回既有节点并保留新 pair，模型保留这一行为。未知 callbacks、循环、颜色、超界和未恢复 operator-new 失败分支拒绝并回滚 pages；配置树删除尚未恢复。
+
+[配置树证据](evidence/vm9_registry_native_20261004.json) 有 **96 组 native 差分和 11 个拒绝/回滚案例**。覆盖两个 image base、二进制/内部 NUL/NULL/negative length、跨页、升降序和交错插入、双旋、recolor、重复键清理与分配读点变化。每组树序列在一次 native 执行内连续调用，使用同一 allocator，逐次检查对象/分配区、返回值和账本；查询使用独立 synthetic 对象，避免使用已经转移或释放的 key。
+
+`set_configuration_u32` 对照 `+0x2568c8`。先构造实际 scoped writer，再查表；既有 value 原地覆盖并返回旧 u32，缺失时克隆 string object/payload、分配 u32 value、pair 和 tree node，返回 native marker `0x000a985f`。两条路径都清理作用域锁。getter 中的 TLS 初始化由真实恢复的 Python 组件完成，不能直接替换为固定指针。
+
+`construct_registry320` 已从 `+0x2566ec` 恢复至 return：生成三个容器、mutex、空 string、realtime clock reference，清 `+0x138`，构造临时 key、设置值 1、销毁临时 string。`get_registry320_reference` 对照 `+0x15e694`，冷路径分配 wrapper16/payload320，完整构造后创建 count、发布 slot、释放 guard；warm 路径不重复分配。
+
+`construct_singleton136` 已从 `+0x166370` 恢复至 return。在既有 prefix 后，依次实际调用五次 registry getter；从 decoded sources `+0x3d1690/+0x3d16c0/+0x3d16f0/+0x3d1720/+0x3d1750` 构造临时 string，分别注册对象 `+0x68/+0x70/+0x78/+0x7c/+0x50` 的 u32 值，每次销毁临时 string，最后将 object `+8` 的 u32 设置为 2。`get_singleton136_reference` 对照 `+0x161068`，完整构造后才发布 wrapper/count。两个 getter 复用已验证的串行、成功、无等待 guard 边界；不提供宿主并发原子性或竞争分支。
+
+同次验证发现了两处会影响后续 heap 的栈副作用：matching bionic `pthread_mutex_unlock +0x68d5c` 在 guard release 时保存 frame pointer；TLS erase helper `+0x2694f4` 保存 guard pointer。后续 setter 会把该槽位的上七字节作为 padding 复制进 TLS node。模型从原始 caller SP 推导这两个值，并在后续读取前写入；没有把 native 输出 padding 当输入，也没有宣称完整调用栈已模拟。为避免 free 后填充掩盖差异，组件测试另外比较了**全部释放前的 payload bytes**。
+
+[完整构造主体证据](evidence/vm9_registry_initialization_native_20261004.json) 有 **38 组 native 差分和 14 个拒绝/回滚案例**，包括 cold/warm decoder、setter 原值、NUL 等价键、分配时改变 clone 输入、复用栈 padding、clock 边界、冷 getter 后两次 warm getter，以及嵌套构造失败的 pages 回滚。该组件 verifier 的 TLS 地址是明确的 warm 输入边界，不能单独证明冷启动。
+
+扩大的 [同次采样对照](evidence/vm9_root_vm_prefix_native_20261004.json) 在四次 fresh native 控制中新增 **20 条完整子树对照**：每次比较 setter、320-byte 主体及 getter、136-byte 主体及 getter。Python 从各自同次 native **入口前导快照**执行整棵子树，不再在树/TLS 子组件之间重新取快照。冷 TLS、generation key、析构注册、作用域锁、初始配置及五项注册和 lazy publication 均串接；guest、所有主 image pages、隔离 TLS、2256-byte generation 表及按时间顺序合并的 allocation/free/clock/registration/wake events 一致。guard/OS/diagnostic 等明确边界和入口前导快照依赖仍存在，这不等于完整独立 Python Medusa。
+
+```text
+python python/verify_vm9_registry.py --library /private/libmetasec_ml_71332.so --output /private/registry.json
+python python/verify_vm9_registry_initialization.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/registry-initialization.json
+python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/root-vm-prefix.json
+```
+
 ## 证据用途与剩余工作
 
 同次采样把 root → child → handler → pair → 两次发布连接起来，可用于排除错误 handle/对象类型和错误 publisher 分支。新建内存对照证明这些局部对象可以参数化生成，不能据此声称完整初始化已经独立完成。
 
-下一步恢复 `+0x2568c8 → +0x25c168/+0x25bf3c` 的配置查找、覆盖和树插入，组合验证完整 320-byte registry 与 136-byte singleton/getter，再回到 `+0x259dbc` 的分块运算，补齐 parser 和 88-byte 初始化。通用多 key TLS 树、完整 root VM 前导、诊断与全局副作用及剩余 callbacks 仍待恢复。当前搜索仍无非空响应与分页证据；独立当前 Medusa、无 JVM Rust 下载链路、抖音/起点闭环及最终 Pages 搜索下载网页仍未完成。
+配置树对照可用来排除错误 comparator、节点布局和 duplicate ownership；getter 子树对照证明 `+0x259dbc` 的 136-byte 构造依赖在上述边界下已恢复。栈写入追踪则解释了为何局部测试通过仍可能在组合流程中出现不同 padding：需要证明数据来源和读写顺序，不能只匹配最终摘要。
+
+下一步回到 `+0x259dbc → +0x276b9c → +0x25ab1c` 的分块运算和 key/state 生成，扩展 parser 和 88-byte 初始化。静态已确认 `+0x25ab1c` 从 `*(*x0)` 读 mode，0..3 由 guest jump table 分发至 `+0x242640/+0x242b18/+0x242c98/+0x242eb8`；当前 native 路线实际进入 `+0x242640`。这些分支尚未由本轮 Python 恢复，不能将 dispatch 或末端计算假定为完整 callback。通用多 key TLS 树、完整 root VM 前导、诊断与全局副作用及剩余 callbacks 仍待恢复。当前搜索仍无非空响应与分页证据；独立当前 Medusa、无 JVM Rust 下载链路、抖音/起点闭环及最终 Pages 搜索下载网页仍未完成。

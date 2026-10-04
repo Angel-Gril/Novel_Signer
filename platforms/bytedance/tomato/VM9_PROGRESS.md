@@ -3,6 +3,48 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Configuration tree and complete constructor bodies (2026-10-04)
+
+`vm9_registry.py` now models comparison +0x2473dc/+0x188a94,
+configuration-container construction +0x25bf14, lookup +0x25c168,
+transferred-pair insertion +0x25bf3c and setter +0x2568c8.
+The comparator uses unsigned bytes, returns -32768 for invalid fields,
+and terminates equality at a shared NUL. Nodes preserve four padding bytes;
+insertion includes predecessor uniqueness checks, rotations and recoloring.
+Duplicate insertion deletes the incoming key and frees the previous value.
+Native allocator mutation at pair/node read points is explicitly tested.
+
+[Tree evidence](evidence/vm9_registry_native_20261004.json): 96 native
+difference groups / 11 rejection-and-page-rollback cases. Each tree sequence
+uses one native execution with a persistent allocator and checks intermediate
+states; query objects remain independent of transferred/freed keys.
+
+[Constructor evidence](evidence/vm9_registry_initialization_native_20261004.json):
+38 groups / 14 rollback cases. The complete +0x2566ec and +0x166370 bodies,
+and cold/warm +0x15e694 / +0x161068 getters, match with explicit warm TLS,
+clock, allocator and serialized successful-guard boundaries. The setter
+returns the prior u32 or native marker 0x000a985f. All pre-free payloads are
+compared before poisoning; matching final poisoned pages alone hid padding.
+
+The [same-run verifier](evidence/vm9_root_vm_prefix_native_20261004.json)
+now adds 20 constructor/setter/getter comparisons across four fresh native
+controls. Each starts at that run's input prelude and executes the entire
+subtree in Python, including cold emulated TLS, bionic keys, destructor
+registration, map population and lazy publication. Guest/image/TLS/generation
+bytes and ordered allocator/clock/registration/wake effects match.
+Matching bionic unlock saves a frame pointer that is later copied as TLS
+padding; node erase saves its guard pointer in that reused stack slot.
+Both are derived from caller SP and modeled before later reads.
+
+This closes the constructor-body/configuration-map dependency under the
+stated serialized boundaries. Full OS concurrency, native diagnostic/stack
+effects and the full Python startup remain outside the proof. Parser still
+stops at step 325 / +0x9aca4 before +0x259dbc; root remains step 513 at its
+88-byte prefix. Next: recover +0x259dbc -> +0x276b9c -> +0x25ab1c block
+processing and key/state generation, then extend the same-run parser.
+Independent current Medusa, no-JVM Rust, current nonempty search/paging,
+Douyin/Qidian and the final Pages/Actions tools remain incomplete.
+
 ## Singleton dependencies, cold TLS and scoped writer (2026-10-04)
 
 The 136-byte singleton prefix +0x166370 -> +0x166544 and 320-byte
@@ -31,7 +73,7 @@ registration/wake sequences match. Cold acquire generates seven allocations;
 release frees one node. Each component still starts from its own native input
 prelude snapshot: this is not a fully Python startup or a completed parser.
 
-Next: configuration lookup/update/insertion at +0x2568c8 ->
+Earlier next step, now superseded above: configuration lookup/update/insertion at +0x2568c8 ->
 +0x25c168/+0x25bf3c, complete 320/136-byte constructors and singleton
 publication, then +0x259dbc block processing. Parser remains step 325,
 root remains step 513 at the 88-byte prefix. Independent current Medusa,

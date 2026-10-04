@@ -18,8 +18,10 @@ Read in this order:
 
 The Python folder contains the verified primitives and the old Medusa snapshot interpreter. It is labelled carefully because a successful old snapshot replay is not proof of current online compatibility.
 
-Latest constructor work restores the 136/320-byte prefixes, cold TLS/key and
-destructor registration, and the single-mutex scoped writer path with fresh
-native differences and same-run checks. Configuration-tree population and
-complete 136/88-byte initialization remain open; see
+Latest constructor work restores configuration-tree lookup/insertion,
+the complete 136/320-byte constructor bodies and both lazy getters.
+Fresh differences and same-run checks include cold TLS/key/destructor
+registration, scoped writer cleanup and observable stack padding. Guard/OS
+boundaries remain explicit; the complete Python prelude and 88-byte
+initialization are still open. See
 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md).

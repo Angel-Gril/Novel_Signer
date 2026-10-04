@@ -230,7 +230,15 @@ descriptor = publish_callback_descriptor(
 
 服务引用型 handler 依赖两个 guarded singleton。`construct_service_reference(kind="flag")` 生成 2-byte zero payload；`kind="service"` 默认用 Python 构造完整已测 0x2d0-byte 图，读取 fresh ELF/GOT 输入。冷 getter 要求显式 `thread_id`，会生成 guard 的 acquire/release 状态与线程 ID；已发布 getter 不重复分配。handler 可以用 `initialize_services=True` 连续构造并复制这两个引用。`verify_vm9_service_singletons.py` 用 72 个真实 native 对照和 15 个拒绝/回滚例验证这些局部组件；完整 root、诊断全局副作用和独立 signer 仍未完成。
 
-### 5.4 验证命令
+### 5.4 配置树和 136/320 字节构造器
+
+`vm9_registry.py` 的 `compare_string_fields`、`lookup_configuration_value` 和 `insert_configuration_pair` 分别用于验证配置 key 比较、查询和所有权转移式插入。比较器遇到双方相同 NUL 会提前判等；重复插入会删除传入 key 和原 value，不能使用普通字典排序或覆盖语义替代 native 行为。
+
+`set_configuration_u32` 包括 scoped writer、缺失 key 克隆、u32 覆盖和清理，返回旧值或 `0x000a985f`。`construct_registry320`、`construct_singleton136` 已恢复完整构造主体；`get_registry320_reference`、`get_singleton136_reference` 完整构造后才发布 lazy reference。调用者需要提供 caller stack、allocator/free、clock、TLS 初始化/解析和广播边界；cold getter 还需要 `thread_id`。复用栈槽位会改变后续 TLS padding，不能清零或注入 native 的结果页。
+
+配置树通过 96 组 native 差分 / 11 个回滚例，完整主体和 getter 通过 38 / 14。四次 fresh native 控制新增 20 条同次入口子树对照，串接实际 Python 冷 TLS/key/析构注册，并比较内存和有序 allocation/free/clock/registration/wake。详细布局、证据和限制见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。这些结果保留串行 guard/OS 边界和 native 输入前导快照依赖；parser 仍停在 `+0x259dbc` 前，尚不能直接调用它们生成当前线上 Medusa。
+
+### 5.5 验证命令
 
 在仓库根目录运行：
 
@@ -324,6 +332,7 @@ platforms/qidian/            # 起点：独立 APK、接口和解密证据
 - 注册、目录、正文和章节解密链路有公开脱敏证据。
 - 旧 225 字节 Medusa 快照、Helios 和若干辅助头有 Python/向量级复现。
 - VM9 的 TLS/arena/tcache/OS region/allocator/callback 子边界有输入驱动验证。
+- 配置树、136/320 字节完整构造主体与 getter 在明确边界下通过 native 差分和同次子树验证。
 - Rust crate、Python 文件和 JSON evidence 可检查。
 
 ### 仅桥接或捕获状态通过

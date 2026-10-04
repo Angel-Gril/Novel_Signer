@@ -1,0 +1,1123 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "differential_cases": 96,
+  "negative_cases": 11,
+  "cases": [
+    {
+      "case": "compare_0_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_0_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_1_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_1_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_2_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_2_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_3_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_3_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_4_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_4_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_5_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_5_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_6_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_6_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_7_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_7_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_8_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_8_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_9_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_9_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_10_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_10_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_11_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_11_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_12_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_12_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_13_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_13_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_14_False",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_14_True",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "null_first",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "null_second",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "null_payload_first",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "null_payload_second",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "negative_first",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "negative_second",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "same_pointer",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "empty_distinct_pointer",
+      "image_base": "0x122c0000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_0_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_0_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_1_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_1_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_2_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_2_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_3_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_3_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_4_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_4_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_5_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_5_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_6_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_6_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_7_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_7_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_8_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_8_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_9_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_9_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_10_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_10_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_11_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_11_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_12_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_12_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_13_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_13_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_14_False",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "compare_14_True",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "null_first",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "null_second",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "null_payload_first",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "null_payload_second",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "negative_first",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "negative_second",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "same_pointer",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "empty_distinct_pointer",
+      "image_base": "0x775c205000",
+      "native_result_match": true,
+      "guest_bytes_match": true
+    },
+    {
+      "case": "ascending",
+      "image_base": "0x122c0000",
+      "operation_count": 50,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "descending",
+      "image_base": "0x122c0000",
+      "operation_count": 50,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "alternating",
+      "image_base": "0x122c0000",
+      "operation_count": 50,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "left_right",
+      "image_base": "0x122c0000",
+      "operation_count": 11,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "right_left",
+      "image_base": "0x122c0000",
+      "operation_count": 11,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "duplicates",
+      "image_base": "0x122c0000",
+      "operation_count": 26,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 15,
+      "single_native_execution": true
+    },
+    {
+      "case": "nul_equivalent",
+      "image_base": "0x122c0000",
+      "operation_count": 14,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 6,
+      "single_native_execution": true
+    },
+    {
+      "case": "binary",
+      "image_base": "0x122c0000",
+      "operation_count": 20,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "pair_malloc_duplicate",
+      "image_base": "0x122c0000",
+      "operation_count": 8,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "node_malloc_key_change",
+      "image_base": "0x122c0000",
+      "operation_count": 8,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "ascending",
+      "image_base": "0x775c205000",
+      "operation_count": 50,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "descending",
+      "image_base": "0x775c205000",
+      "operation_count": 50,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "alternating",
+      "image_base": "0x775c205000",
+      "operation_count": 50,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "left_right",
+      "image_base": "0x775c205000",
+      "operation_count": 11,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "right_left",
+      "image_base": "0x775c205000",
+      "operation_count": 11,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "duplicates",
+      "image_base": "0x775c205000",
+      "operation_count": 26,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 15,
+      "single_native_execution": true
+    },
+    {
+      "case": "nul_equivalent",
+      "image_base": "0x775c205000",
+      "operation_count": 14,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 6,
+      "single_native_execution": true
+    },
+    {
+      "case": "binary",
+      "image_base": "0x775c205000",
+      "operation_count": 20,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "pair_malloc_duplicate",
+      "image_base": "0x775c205000",
+      "operation_count": 8,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    },
+    {
+      "case": "node_malloc_key_change",
+      "image_base": "0x775c205000",
+      "operation_count": 8,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "lookup_returns_match": true,
+      "allocation_sizes": [
+        40,
+        40,
+        16,
+        40,
+        16,
+        40
+      ],
+      "free_count": 0,
+      "single_native_execution": true
+    }
+  ],
+  "negatives": [
+    {
+      "case": "unknown_comparator",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "unknown_hook",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "unknown_cleanup",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "cycle",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "bad_color",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "node_limit",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "byte_limit",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "null_pair",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "null_node",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_payload",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_node",
+      "rejected": true,
+      "page_rollback": true
+    }
+  ],
+  "fresh_memory": true,
+  "captured_pages_used": false,
+  "native_output_used_as_input": false,
+  "explicit_allocator_boundary": true,
+  "configuration_tree_deletion": false,
+  "complete_registry320_initializer": false,
+  "complete_singleton136_initializer": false,
+  "complete_python_medusa": false,
+  "jvm_used": false
+}

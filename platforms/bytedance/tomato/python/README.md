@@ -128,7 +128,8 @@ the next constructor prefixes, with 4 and 7 allocations respectively.
 The table reader follows guest GOT rather than a fixed default pointer;
 the realtime clock wrapper preserves signed wrap/truncation rules.
 Run `verify_vm9_singleton136.py` (library/libc/output): 78 differences / 13
-rollback cases. Full configuration-map population remains open.
+rollback cases. These prefix tests are retained alongside the complete-body
+tests in `verify_vm9_registry_initialization.py`.
 
 `get_emulated_tls_address` uses explicit allocate/reallocate, key-create,
 get/set-specific and cold once-wake boundaries. Run
@@ -154,8 +155,26 @@ and registration ledgers are not rolled back by page transactions.
 The same-run root verifier additionally compares eight constructor prefixes,
 eight TLS calls, four cold TLS-tree initializers and eight scoped locks,
 including all 2256 generation-table bytes and allocation/free/registration/
-wake sequences. Its native input snapshots remain explicit; the VM parser
+wake sequences. It also compares 20 complete constructor/setter/getter
+subtrees, including ordered clock effects and actual cold Python TLS.
+Its native input snapshots remain explicit; the VM parser
 still stops before +0x259dbc and full Python Medusa is incomplete.
+
+`vm9_registry.py` provides input-driven configuration comparison, lookup,
+red-black insertion, `set_configuration_u32`, `construct_registry320`,
+`construct_singleton136`, `get_registry320_reference` and
+`get_singleton136_reference`. Full constructors include map population and
+cleanup; cold getters publish only after construction and reference count.
+Supply `entry_stack_address` because reused frame words affect copied TLS
+padding. Matching bionic unlock and node-erase stack effects are derived from
+that input. This is not a general native stack emulator or concurrent guard.
+
+Run `verify_vm9_registry.py` (library/output): 96 native groups / 11 rollback
+cases. Run `verify_vm9_registry_initialization.py` (library/libc/output):
+38 / 14, including pre-free bytes, cold/warm getters and rollback of nested
+initialization. Keys are synthetic or decoded at runtime from a private ELF;
+no decoded key strings are exported. TLS resolution is explicit in component
+tests; the same-run subtree checks use recovered Python cold TLS/key models.
 
 `verify_vm9_allocator_lifecycle.py` requires Unicorn and the trusted primary
 initialized checkpoint. `verify_vm9_divmod_backing.py` additionally requires

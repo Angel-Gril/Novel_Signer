@@ -31,7 +31,7 @@ PROPERTY = GUEST + 0xB800
 
 def probe(library, libc, *, base, property_value, seconds=1791023800,
           instruction_observer=None, allocation_effect=None, registration_effect=None,
-          free_effect=None, wake_effect=None):
+          free_effect=None, wake_effect=None, memory_write_observer=None):
     pages = fresh_pages()
     pages.update(image_pages(library, base))
     # Resolve only evidenced external allocator relocations, using their PLTs
@@ -180,7 +180,7 @@ def probe(library, libc, *, base, property_value, seconds=1791023800,
         real_singletons=True, real_mutexes=True, thread_id=137,
         extra_registers={UC_ARM64_REG_X8: GUEST + 0x1800, UC_ARM64_REG_TPIDR_EL0: TLS},
         host_imports=imports, instruction_limit=500000, instruction_observer=observe,
-        syscall_handler=syscall, allocation_effect=allocation_effect)
+        syscall_handler=syscall, allocation_effect=allocation_effect, memory_write_observer=memory_write_observer)
     assert before is not None and after is not None
     assert int.from_bytes(memory[0x1800:0x1808], "little") == root_pointer
     counter = int.from_bytes(memory[0x1808:0x1810], "little")

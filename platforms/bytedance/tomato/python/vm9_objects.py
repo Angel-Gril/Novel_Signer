@@ -1215,12 +1215,17 @@ def construct_single_scoped_lock(
 def destroy_single_scoped_lock(
     pages, *, object_address: int, image_base: int, free: Callable,
     get_tls: Callable, initialize_registry: Callable, broadcast: Callable,
+    entry_stack_address: int | None = None,
 ) -> None:
     """Model +0x268fbc for the matching one-entry writer-owned TLS tree.
 
     Clear the writer count, broadcast at mutex+0x30, remove the TLS node and
     free it. Nested nonzero-status guards perform no release. Other layouts,
     shared-reader ownership and waiter states reject with page rollback.
+    When the native entry stack is supplied, preserve +0x2694f4's saved
+    guard pointer before erase/free; later acquisitions copy its upper
+    seven bytes as stack padding. This is a measured stack effect, not a
+    complete native call-stack emulator.
     """
     transaction = _PageTransaction(pages)
     address = lambda offset: _image_address(image_base, offset)
@@ -1238,6 +1243,8 @@ def destroy_single_scoped_lock(
         unlock_uncontended_mutex(transaction, mutex_address=mutex + 8)
         initialize_registry(transaction)
         tree = get_tls(transaction, address(0x382450))
+        if entry_stack_address is not None:
+            _write_span(transaction, entry_stack_address - 0x40, _word(object_address))
         node = _single_scoped_tls_node(transaction, tree, mutex)
         if not node:
             raise RefillUnsupported("scoped writer has no TLS entry to erase")

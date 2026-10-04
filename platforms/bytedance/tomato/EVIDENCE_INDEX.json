@@ -1229,7 +1229,16 @@
     "free_registration_wake_sequences_compared": true,
     "scoped_single_live_mutex_only": true,
     "complete_singleton136_initializer": false,
-    "complete_registry320_initializer": false
+    "complete_registry320_initializer": false,
+    "registry_initialization_comparisons": 20,
+    "registry320_constructor_body": true,
+    "singleton136_constructor_body": true,
+    "registry320_lazy_publication_compared": true,
+    "singleton136_lazy_publication_compared": true,
+    "real_cold_python_tls_in_constructor_subtrees": true,
+    "ordered_allocator_clock_registration_wake_effects_compared": true,
+    "observable_stack_frame_effects_derived_from_caller_sp": true,
+    "guard_boundary": "serialized_successful_single_thread_guard"
   },
   "vm9_strings_native_20261004": {
     "evidence_file": "evidence/vm9_strings_native_20261004.json",
@@ -1323,6 +1332,36 @@
     "native_stack_padding_is_input": true,
     "no_host_waiters": true,
     "jvm_used": false,
+    "complete_python_medusa": false
+  },
+  "vm9_registry_native_20261004": {
+    "evidence_file": "evidence/vm9_registry_native_20261004.json",
+    "differential_cases": 96,
+    "negative_cases": 11,
+    "fresh_memory": true,
+    "captured_pages_used": false,
+    "native_output_used_as_input": false,
+    "configuration_tree_deletion": false,
+    "explicit_allocator_boundary": true,
+    "complete_python_medusa": false
+  },
+  "vm9_registry_initialization_native_20261004": {
+    "evidence_file": "evidence/vm9_registry_initialization_native_20261004.json",
+    "differential_cases": 38,
+    "negative_cases": 14,
+    "fresh_memory": true,
+    "captured_pages_used": false,
+    "native_output_used_as_input": false,
+    "all_pre_free_payloads_compared": true,
+    "tls_resolution_is_component_boundary": true,
+    "warm_tls_registry_only": true,
+    "registry320_constructor_body": true,
+    "singleton136_constructor_body": true,
+    "registry320_lazy_publication": true,
+    "singleton136_lazy_publication": true,
+    "guard_boundary": "serialized_successful_single_thread_guard",
+    "complete_cold_registry320_initialization": false,
+    "complete_cold_singleton136_initialization": false,
     "complete_python_medusa": false
   }
 }
