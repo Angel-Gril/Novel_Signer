@@ -133,14 +133,14 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 612,
-          "stop_bytecode_offset": "0x9b03c",
-          "boundary_offset": "0x263584",
-          "pending_target_offset": "0x2592b8",
+          "steps": 725,
+          "stop_bytecode_offset": "0x9b200",
+          "boundary_offset": "0x2635ac",
+          "pending_target_offset": "0x248dd8",
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 93,
+          "allocations": 100,
           "descriptor_match": true,
           "modeled_callbacks": [
             {
@@ -274,9 +274,53 @@
             {
               "wrapper_offset": "0x2634f0",
               "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x263584",
+              "target_offset": "0x2592b8"
+            },
+            {
+              "wrapper_offset": "0x263554",
+              "target_offset": "0x2483e0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2481ac"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
             }
           ],
-          "explicit_free_calls": 23,
+          "explicit_free_calls": 26,
           "free_sequence_match": true,
           "tls_and_generation_state_match": true,
           "registration_and_wake_order_match": true,
@@ -414,7 +458,7 @@
           "allocations": 12,
           "explicit_free_calls": 1,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -434,7 +478,7 @@
           "allocations": 21,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -454,7 +498,7 @@
           "allocations": 24,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -474,7 +518,7 @@
           "allocations": 63,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -494,7 +538,7 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -514,7 +558,7 @@
           "allocations": 71,
           "explicit_free_calls": 14,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -534,7 +578,7 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -554,7 +598,27 @@
           "allocations": 0,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": true
+        },
+        {
+          "phase": "stream_reference",
+          "entry_offset": "0x2592b8",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 3,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -574,6 +638,7 @@
         "0x242640": 11
       },
       "configuration_decrypt_callback_python_implemented": true,
+      "configuration_stream_callback_python_implemented": true,
       "pending_parser_target_python_implemented": false,
       "property_profile": "absent"
     },
@@ -710,14 +775,14 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 612,
-          "stop_bytecode_offset": "0x9b03c",
-          "boundary_offset": "0x263584",
-          "pending_target_offset": "0x2592b8",
+          "steps": 725,
+          "stop_bytecode_offset": "0x9b200",
+          "boundary_offset": "0x2635ac",
+          "pending_target_offset": "0x248dd8",
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 93,
+          "allocations": 100,
           "descriptor_match": true,
           "modeled_callbacks": [
             {
@@ -851,9 +916,53 @@
             {
               "wrapper_offset": "0x2634f0",
               "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x263584",
+              "target_offset": "0x2592b8"
+            },
+            {
+              "wrapper_offset": "0x263554",
+              "target_offset": "0x2483e0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2481ac"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
             }
           ],
-          "explicit_free_calls": 23,
+          "explicit_free_calls": 26,
           "free_sequence_match": true,
           "tls_and_generation_state_match": true,
           "registration_and_wake_order_match": true,
@@ -991,7 +1100,7 @@
           "allocations": 12,
           "explicit_free_calls": 1,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1011,7 +1120,7 @@
           "allocations": 21,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1031,7 +1140,7 @@
           "allocations": 24,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -1051,7 +1160,7 @@
           "allocations": 63,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -1071,7 +1180,7 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -1091,7 +1200,7 @@
           "allocations": 71,
           "explicit_free_calls": 14,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1111,7 +1220,7 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1131,7 +1240,27 @@
           "allocations": 0,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": true
+        },
+        {
+          "phase": "stream_reference",
+          "entry_offset": "0x2592b8",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 3,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1151,6 +1280,7 @@
         "0x242640": 11
       },
       "configuration_decrypt_callback_python_implemented": true,
+      "configuration_stream_callback_python_implemented": true,
       "pending_parser_target_python_implemented": false,
       "property_profile": "sdk_30"
     },
@@ -1287,14 +1417,14 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 612,
-          "stop_bytecode_offset": "0x9b03c",
-          "boundary_offset": "0x263584",
-          "pending_target_offset": "0x2592b8",
+          "steps": 725,
+          "stop_bytecode_offset": "0x9b200",
+          "boundary_offset": "0x2635ac",
+          "pending_target_offset": "0x248dd8",
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 93,
+          "allocations": 100,
           "descriptor_match": true,
           "modeled_callbacks": [
             {
@@ -1428,9 +1558,53 @@
             {
               "wrapper_offset": "0x2634f0",
               "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x263584",
+              "target_offset": "0x2592b8"
+            },
+            {
+              "wrapper_offset": "0x263554",
+              "target_offset": "0x2483e0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2481ac"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
             }
           ],
-          "explicit_free_calls": 23,
+          "explicit_free_calls": 26,
           "free_sequence_match": true,
           "tls_and_generation_state_match": true,
           "registration_and_wake_order_match": true,
@@ -1568,7 +1742,7 @@
           "allocations": 12,
           "explicit_free_calls": 1,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1588,7 +1762,7 @@
           "allocations": 21,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1608,7 +1782,7 @@
           "allocations": 24,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -1628,7 +1802,7 @@
           "allocations": 63,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -1648,7 +1822,7 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -1668,7 +1842,7 @@
           "allocations": 71,
           "explicit_free_calls": 14,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1688,7 +1862,7 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1708,7 +1882,27 @@
           "allocations": 0,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": true
+        },
+        {
+          "phase": "stream_reference",
+          "entry_offset": "0x2592b8",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 3,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -1728,6 +1922,7 @@
         "0x242640": 11
       },
       "configuration_decrypt_callback_python_implemented": true,
+      "configuration_stream_callback_python_implemented": true,
       "pending_parser_target_python_implemented": false,
       "property_profile": "absent"
     },
@@ -1864,14 +2059,14 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 612,
-          "stop_bytecode_offset": "0x9b03c",
-          "boundary_offset": "0x263584",
-          "pending_target_offset": "0x2592b8",
+          "steps": 725,
+          "stop_bytecode_offset": "0x9b200",
+          "boundary_offset": "0x2635ac",
+          "pending_target_offset": "0x248dd8",
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 93,
+          "allocations": 100,
           "descriptor_match": true,
           "modeled_callbacks": [
             {
@@ -2005,9 +2200,53 @@
             {
               "wrapper_offset": "0x2634f0",
               "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x263584",
+              "target_offset": "0x2592b8"
+            },
+            {
+              "wrapper_offset": "0x263554",
+              "target_offset": "0x2483e0"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x2635a0",
+              "target_offset": "0x32a264"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484fc"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2481ac"
+            },
+            {
+              "wrapper_offset": "0x26346c",
+              "target_offset": "0x26c858"
+            },
+            {
+              "wrapper_offset": "0x26347c",
+              "target_offset": "0x32a1f0"
+            },
+            {
+              "wrapper_offset": "0x263498",
+              "target_offset": "0x26c9d0"
             }
           ],
-          "explicit_free_calls": 23,
+          "explicit_free_calls": 26,
           "free_sequence_match": true,
           "tls_and_generation_state_match": true,
           "registration_and_wake_order_match": true,
@@ -2145,7 +2384,7 @@
           "allocations": 12,
           "explicit_free_calls": 1,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2165,7 +2404,7 @@
           "allocations": 21,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2185,7 +2424,7 @@
           "allocations": 24,
           "explicit_free_calls": 2,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -2205,7 +2444,7 @@
           "allocations": 63,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -2225,7 +2464,7 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": true,
@@ -2245,7 +2484,7 @@
           "allocations": 71,
           "explicit_free_calls": 14,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2265,7 +2504,7 @@
           "allocations": 66,
           "explicit_free_calls": 12,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": true,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2285,7 +2524,27 @@
           "allocations": 0,
           "explicit_free_calls": 0,
           "native_prelude_snapshot_used": true,
-          "real_cold_python_tls_path": true,
+          "recovered_python_tls_path_used": false,
+          "ordered_allocator_clock_registration_wake_effects_match": true,
+          "guard_boundary": "serialized_successful_single_thread_guard",
+          "lazy_publication_compared": false,
+          "explicit_result_bytes_compared": true
+        },
+        {
+          "phase": "stream_reference",
+          "entry_offset": "0x2592b8",
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 3,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "recovered_python_tls_path_used": false,
           "ordered_allocator_clock_registration_wake_effects_match": true,
           "guard_boundary": "serialized_successful_single_thread_guard",
           "lazy_publication_compared": false,
@@ -2305,6 +2564,7 @@
         "0x242640": 11
       },
       "configuration_decrypt_callback_python_implemented": true,
+      "configuration_stream_callback_python_implemented": true,
       "pending_parser_target_python_implemented": false,
       "property_profile": "sdk_30"
     }
@@ -2315,7 +2575,7 @@
   "emulated_tls_comparisons": 8,
   "tls_registry_comparisons": 4,
   "scoped_lock_comparisons": 8,
-  "registry_and_cipher_comparisons": 32,
+  "registry_and_cipher_comparisons": 36,
   "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
   "fresh_elf": true,

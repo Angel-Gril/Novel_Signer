@@ -27,7 +27,11 @@ initialization are still open. See
 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md).
 
 The configuration cipher work now restores the mode-0 decrypt callback and
-advances parser to step 612, with fresh component and same-run cold-state
+advances parser to step 725, with fresh component and same-run cold-state
 differences. Read [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) for the memory ABI,
 reproduction commands and evidence limits. Complete Python startup, Rust
 current-interface signing and a usable search/download webpage remain open.
+
+The separate stream/reference path is also restored and verified. Read
+[STREAM_REFERENCE.md](STREAM_REFERENCE.md) for RC4 state, X5 call convention,
+reference ownership and the next fill/resize boundary.

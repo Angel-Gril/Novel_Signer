@@ -1205,9 +1205,9 @@
     "native_runs": 4,
     "vm_phase_comparisons": 8,
     "root_steps": 513,
-    "parser_steps": 612,
+    "parser_steps": 725,
     "root_allocations_since_vm_entry": 11,
-    "parser_allocations_since_vm_entry": 93,
+    "parser_allocations_since_vm_entry": 100,
     "all_main_image_pages_compared": true,
     "external_captured_pages_used": false,
     "native_prelude_snapshot_used": true,
@@ -1215,9 +1215,9 @@
     "complete_python_prelude": false,
     "complete_88_byte_initializer": false,
     "complete_python_medusa": false,
-    "parser_free_calls": 23,
-    "parser_descriptor_bytes": 32,
-    "parser_pending_target_offset": "0x2592b8",
+    "parser_free_calls": 26,
+    "parser_descriptor_bytes": 24,
+    "parser_pending_target_offset": "0x248dd8",
     "pending_callback_native_dependencies_observed": true,
     "constructor_prefix_comparisons": 8,
     "emulated_tls_comparisons": 8,
@@ -1239,9 +1239,10 @@
     "guard_boundary": "serialized_successful_single_thread_guard",
     "configuration_decrypt_callback_python_implemented": true,
     "pending_parser_target_python_implemented": false,
-    "registry_and_cipher_comparisons": 32,
+    "registry_and_cipher_comparisons": 36,
     "parser_cold_tls_and_ordered_effects_compared": true,
-    "explicit_stack_result_reference_and_context_bytes_compared": true
+    "explicit_stack_result_reference_and_context_bytes_compared": true,
+    "configuration_stream_callback_python_implemented": true
   },
   "vm9_strings_native_20261004": {
     "evidence_file": "evidence/vm9_strings_native_20261004.json",
@@ -1396,5 +1397,20 @@
     "pre_free_bytes_compared": true,
     "padding_checks_last_byte_only": true,
     "allocation_free_order_compared": true
+  },
+  "vm9_stream_cipher_native_20261004": {
+    "evidence_file": "evidence/vm9_stream_cipher_native_20261004.json",
+    "differential_cases": 174,
+    "negative_cases": 9,
+    "fresh_synthetic_inputs": true,
+    "native_outputs_used_as_model_input": false,
+    "independent_arc4_oracle": true,
+    "one_shot_length_register": "X5",
+    "one_shot_stack_state_bytes": 264,
+    "reference_cleanup_compared": true,
+    "pre_free_bytes_compared": true,
+    "key_and_payload_bytes_exported": false,
+    "jvm_used": false,
+    "complete_python_medusa": false
   }
 }

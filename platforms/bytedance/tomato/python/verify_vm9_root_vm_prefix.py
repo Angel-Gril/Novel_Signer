@@ -20,6 +20,7 @@ from unicorn.arm64_const import (
 import vm9_objects as objects
 import vm9_registry as registry
 import vm9_cipher_callback as cipher_callback
+import vm9_stream_cipher as stream_cipher
 import verify_vm9_root_configuration as oracle
 from vm9_allocator import _read_span, RefillUnsupported
 from verify_vm9_signer_objects import GUEST, LIBRARY_SHA256
@@ -91,14 +92,15 @@ def probe(library, libc, *, base, property_value, vm_module):
         registry_key = {0x2566EC: "registry320_full", 0x2568C8: "configuration_set",
                         0x166370: "singleton136_full", 0x15E694: "registry320_getter",
                         0x161068: "singleton136_getter", 0x259DBC: "cipher_callback",
-                        0x276B9C: "checked_copy", 0x25AA48: "cipher_context"}.get(offset)
+                        0x276B9C: "checked_copy", 0x25AA48: "cipher_context",
+                        0x2592B8: "stream_reference"}.get(offset)
         if registry_key and registry_key not in snapshots:
             constructor_snapshot(cpu, registry_key)
             registry_returns[registry_key] = cpu.reg_read(UC_ARM64_REG_X30)
         for registry_key, return_address in registry_returns.items():
             if address == return_address and registry_key not in boundaries:
                 state = snapshots[registry_key]
-                if registry_key == "cipher_callback":
+                if registry_key in ("cipher_callback", "stream_reference"):
                     boundary(cpu, registry_key, state["output_reference"], 16)
                 elif registry_key == "cipher_context":
                     boundary(cpu, registry_key, state["output_reference"], 0x210)
@@ -150,10 +152,10 @@ def probe(library, libc, *, base, property_value, vm_module):
                     "allocation_next": max(pointer + ((size + 15) & ~15) for size, pointer in allocations)}
         elif offset == 0x261A1C and "root" in snapshots and "root" not in boundaries:
             boundary(cpu, "root")
-        elif offset == 0x263584 and "parser" in snapshots and "parser" not in boundaries:
+        elif offset == 0x2635AC and "parser" in snapshots and "parser" not in boundaries:
             argument = cpu.reg_read(UC_ARM64_REG_X0)
-            if int.from_bytes(cpu.mem_read(argument, 8), "little") == base + 0x2592B8:
-                boundary(cpu, "parser", argument, 32)
+            if int.from_bytes(cpu.mem_read(argument, 8), "little") == base + 0x248DD8:
+                boundary(cpu, "parser", argument, 24)
 
     def allocation_effect(cpu, size, pointer):
         allocations.append([size, pointer])
@@ -181,7 +183,7 @@ def probe(library, libc, *, base, property_value, vm_module):
         "root", "parser", "singleton136", "registry320", "emutls_cold", "emutls_ready", "tls_registry",
         "scoped_acquire", "scoped_release", "registry320_full", "configuration_set",
         "singleton136_full", "registry320_getter", "singleton136_getter",
-        "cipher_callback", "checked_copy", "cipher_context"}
+        "cipher_callback", "checked_copy", "cipher_context", "stream_reference"}
     assert pending_finished and pending_visits.get("0x166370") == 1 and pending_visits.get("0x242640", 0) > 0
     assert all(stack_writer_counts.values())
 
@@ -301,9 +303,9 @@ def probe(library, libc, *, base, property_value, vm_module):
                 objects.construct_sized_string_object(current.m.pages, object_address=words[1],
                     source_address=words[2], length=words[3] & 0xFFFFFFFF,
                     image_base=base, allocate=allocate)
-            elif (wrapper, target) == (0x2634C4, 0x2484B8):
+            elif wrapper == 0x2634C4 and target in (0x2484B8, 0x2484FC):
                 objects.destroy_string_object(current.m.pages, object_address=words[1],
-                    image_base=base, free=free)
+                    image_base=base, free=free, delete_object=target == 0x2484FC)
             elif wrapper == 0x263504 and target in (0x25874C, 0x258780):
                 objects.construct_digest_reference(current.m.pages, object_address=words[1],
                     source_object_address=words[2], algorithm="md5" if target == 0x25874C else "sha1",
@@ -326,6 +328,13 @@ def probe(library, libc, *, base, property_value, vm_module):
                     output_address=words[1], source_address=words[2], length=words[3],
                     entry_stack_address=state["entry_stack_pointer"] - 0x190, get_singleton=vm_singleton)
                 current.m.w64(argument + 32, returned)
+            elif (wrapper, target) == (0x263584, 0x2592B8):
+                stream_cipher.transform_configuration_reference(current.m.pages,
+                    output_reference_address=words[1], data_object_address=words[2], key_object_address=words[3],
+                    entry_stack_address=state["entry_stack_pointer"] - 0x190,
+                    image_base=base, allocate=allocate, free=free)
+            elif (wrapper, target) == (0x2635A0, 0x32A264):
+                free(current.m.pages, words[1])
             elif key == "root" and (wrapper, target) == (0x2584E0, 0x26194C):
                 objects.construct_configuration_object_layout(current.m.pages,
                     object_address=words[1], first_string_address=words[2], second_string_address=words[3],
@@ -346,10 +355,10 @@ def probe(library, libc, *, base, property_value, vm_module):
             stop = "0x261a1c"
             pending = "0x261c54"
         except vm_full.NativeCall as exc:
-            assert key == "parser" and exc.f == base + 0x263584 and vm.m.u64(exc.arg) == base + 0x2592B8
-            descriptor_match = vm.m.rd(exc.arg, 32) == expected["descriptor"]
+            assert key == "parser" and exc.f == base + 0x2635AC and vm.m.u64(exc.arg) == base + 0x248DD8
+            descriptor_match = vm.m.rd(exc.arg, 24) == expected["descriptor"]
             assert descriptor_match
-            stop, pending = "0x263584", "0x2592b8"
+            stop, pending = "0x2635ac", "0x248dd8"
         else:
             raise AssertionError("VM unexpectedly crossed the unimplemented boundary")
         assert vm.m.rd(GUEST, 0xA000) == expected["guest"]
@@ -491,7 +500,7 @@ def probe(library, libc, *, base, property_value, vm_module):
             "native_prelude_snapshot_used": True, "single_live_mutex_only": True, "full_scoped_lock_tree": False})
     registry_initialization = []
     for key in ("configuration_set", "registry320_full", "registry320_getter", "singleton136_full", "singleton136_getter",
-                "cipher_callback", "checked_copy", "cipher_context"):
+                "cipher_callback", "checked_copy", "cipher_context", "stream_reference"):
         state, expected = snapshots[key], boundaries[key]
         allocation_next, model_allocations, model_registrations, model_frees, model_wakes = state["allocation_next"], [], [], [], []
         model_effects = []
@@ -510,7 +519,12 @@ def probe(library, libc, *, base, property_value, vm_module):
         def get_singleton_cipher(pages, sp):
             return registry.get_singleton136_reference(pages, read_clock=read_clock_registry,
                 thread_id=137, **(common | {"entry_stack_address": sp})).wrapper_address
-        if key == "cipher_callback":
+        if key == "stream_reference":
+            stream_cipher.transform_configuration_reference(state["pages"],
+                output_reference_address=state["output_reference"], data_object_address=state["object_address"],
+                key_object_address=state["secondary_address"], entry_stack_address=state["stack_pointer"],
+                image_base=base, allocate=allocate_prefix, free=free_registry)
+        elif key == "cipher_callback":
             cipher_callback.decrypt_configuration_reference(state["pages"],
                 output_reference_address=state["output_reference"], data_object_address=state["object_address"],
                 key_object_address=state["secondary_address"], iv_object_address=state["third_argument"],
@@ -537,7 +551,7 @@ def probe(library, libc, *, base, property_value, vm_module):
             operation = registry.get_registry320_reference if key == "registry320_getter" else registry.get_singleton136_reference
             reference = operation(state["pages"], read_clock=read_clock_registry, thread_id=137, **common)
             assert reference.wrapper_address == expected["return_value"], key + " returned wrapper"
-        if key in ("cipher_callback", "cipher_context", "checked_copy"):
+        if key in ("cipher_callback", "cipher_context", "checked_copy", "stream_reference"):
             pointer = state["object_address"] if key == "checked_copy" else state["output_reference"]
             assert _read_span(state["pages"], pointer, len(expected["descriptor"])) == expected["descriptor"], key + " explicit result bytes"
         got = _read_span(state["pages"], GUEST, 0xA000)
@@ -556,15 +570,17 @@ def probe(library, libc, *, base, property_value, vm_module):
         registry_initialization.append({"phase": key, "entry_offset": {
             "configuration_set": "0x2568c8", "registry320_full": "0x2566ec", "registry320_getter": "0x15e694",
             "singleton136_full": "0x166370", "singleton136_getter": "0x161068",
-            "cipher_callback": "0x259dbc", "checked_copy": "0x276b9c", "cipher_context": "0x25aa48"}[key],
+            "cipher_callback": "0x259dbc", "checked_copy": "0x276b9c", "cipher_context": "0x25aa48",
+            "stream_reference": "0x2592b8"}[key],
             "guest_objects_match": True, "tls_state_match": True, "pthread_generation_table_match": True,
             "all_image_pages_match": True, "allocation_sequence_match": True, "registration_sequence_match": True,
             "free_sequence_match": True, "wake_sequence_match": True, "allocations": len(model_allocations),
             "explicit_free_calls": len(model_frees), "native_prelude_snapshot_used": True,
-            "real_cold_python_tls_path": True, "ordered_allocator_clock_registration_wake_effects_match": True,
+            "recovered_python_tls_path_used": key not in ("cipher_context", "stream_reference"),
+            "ordered_allocator_clock_registration_wake_effects_match": True,
             "guard_boundary": "serialized_successful_single_thread_guard",
             "lazy_publication_compared": key in ("registry320_getter", "singleton136_full", "singleton136_getter"),
-            "explicit_result_bytes_compared": key in ("cipher_callback", "cipher_context", "checked_copy")})
+            "explicit_result_bytes_compared": key in ("cipher_callback", "cipher_context", "checked_copy", "stream_reference")})
     return {"image_base": hex(base), "native_control_returned": True, "phases": results,
             "constructor_prefixes": constructors,
             "emulated_tls": emutls,
@@ -574,6 +590,7 @@ def probe(library, libc, *, base, property_value, vm_module):
             "native_stack_writer_counts": stack_writer_counts,
             "pending_callback_native_visits": pending_visits,
             "configuration_decrypt_callback_python_implemented": True,
+            "configuration_stream_callback_python_implemented": True,
             "pending_parser_target_python_implemented": False}
 
 
@@ -597,7 +614,7 @@ def main():
         "emulated_tls_comparisons": len(cases) * 2,
         "tls_registry_comparisons": len(cases),
         "scoped_lock_comparisons": len(cases) * 2,
-        "registry_and_cipher_comparisons": len(cases) * 8,
+        "registry_and_cipher_comparisons": len(cases) * 9,
         "library_sha256": LIBRARY_SHA256, "libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
         "fresh_elf": True, "external_captured_pages_used": False, "native_prelude_snapshot_used": True,
         "trace_branch_opaque_hooks_used": False, "jvm_used": False,
@@ -608,7 +625,7 @@ def main():
                       "emulated_tls_comparisons": len(cases) * 2,
                       "tls_registry_comparisons": len(cases),
                       "scoped_lock_comparisons": len(cases) * 2,
-                      "registry_and_cipher_comparisons": len(cases) * 8}))
+                      "registry_and_cipher_comparisons": len(cases) * 9}))
 
 
 if __name__ == "__main__":

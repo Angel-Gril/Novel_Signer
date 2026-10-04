@@ -1,6 +1,6 @@
 # 配置密码组件与 parser 回调验证
 
-截止 2026-10-04：配置解密 callback 的 **mode 0 路线**已经由 Python 生成并通过 fresh native 差分，parser 从 325 步推进到 612 步。完整独立 Medusa 尚未完成。本页记录内存接口、验证方法与适用范围。
+截止 2026-10-04：配置解密 callback 的 **mode 0 路线**已经由 Python 生成并通过 fresh native 差分，该里程碑将 parser 从 325 步推进到 612 步；后续 [流运算对照](STREAM_REFERENCE.md) 已推进到 725 步。完整独立 Medusa 尚未完成。本页记录内存接口、验证方法与适用范围。
 
 ## 已恢复接口
 
@@ -44,11 +44,11 @@ key 的临时 clone 用于长度检查；初始化 descriptor 保留原 key obje
 | --- | --- | --- |
 | [cipher native 差分](evidence/vm9_cipher_native_20261004.json) | 256 组 / 11 个拒绝回滚例 | 两个 image bases、fresh synthetic keys/data、同 CPU 多次调用、独立 AES 交叉验证 |
 | [callback native 差分](evidence/vm9_cipher_callback_native_20261004.json) | 200 组 / 12 个拒绝回滚例 | 完整 callback、context builder、forward overlap、分配时来源变更和 malloc NULL；warm singleton 是明确组件输入 |
-| [同次采样 parser/构造对照](evidence/vm9_root_vm_prefix_native_20261004.json) | 4 次 fresh native controls，8 段 VM 与 32 条构造/配置/密码子树对照 | 两个 bases × 属性不存在/SDK30；Python 串接冷 TLS/key/析构注册、配置树和 lazy publication |
+| [同次采样 parser/构造对照](evidence/vm9_root_vm_prefix_native_20261004.json) | 4 次 fresh native controls，8 段 VM 与当前 36 条构造/配置/密码子树对照 | 两个 bases × 属性不存在/SDK30；Python 串接冷 TLS/key/析构注册、配置树和 lazy publication |
 
 每组 cipher sequence 不把 native schedule 输出喂给 Python。callback 比较全部 guest 对象 bytes、全部主 image pages、context、分配/释放顺序、释放前 payload 和 getter 调用次数。native 与 Python 都使用明确的 allocator effects，不能据此推导 Android 真机 allocator 等价。
 
-组合 parser 已推进至第 **612 步 / `+0x9b03c`**，wrapper `+0x263584` 调用 `+0x2592b8` 前。Python 从同次 native VM 入口的前导输入快照开始，之后不在子组件间注入 native 输出。另外显式比较可能落在 native 栈区的 16-byte 输出 reference、0x210-byte context 和 copy destination；这些范围不能由普通 guest 区对照代替。全程 93 次分配、23 次显式 free；guest、主 image、隔离 TLS、2256-byte generation 表、registration/wake 和有序 allocation/free/clock/registration/wake 一致。root 仍第 513 步 / `+0x99b40`，停在 88-byte 前缀 `+0x261a1c`。
+解密里程碑的组合 parser 推进至第 **612 步 / `+0x9b03c`**，wrapper `+0x263584` 调用 `+0x2592b8` 前。Python 从同次 native VM 入口的前导输入快照开始，之后不在子组件间注入 native 输出。另外显式比较可能落在 native 栈区的 16-byte 输出 reference、0x210-byte context 和 copy destination；这些范围不能由普通 guest 区对照代替。全程 93 次分配、23 次显式 free；guest、主 image、隔离 TLS、2256-byte generation 表、registration/wake 和有序 allocation/free/clock/registration/wake 一致。root 仍第 513 步 / `+0x99b40`，停在 88-byte 前缀 `+0x261a1c`。
 
 ```text
 python python/verify_vm9_cipher.py --library /private/libmetasec_ml_71332.so --output /private/cipher.json
@@ -64,4 +64,4 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 
 不能由这些结果声称完整 Python 启动或线上签名已成功。native 前导快照、串行 guard、diagnostic scope 与 OS 边界仍存在，callback 初始化模式 1/2/3 未恢复。当前搜索非空响应/分页、无 JVM Rust 下载器和其他平台亦没有被本轮实验证明。
 
-下一处为 `+0x2592b8 → +0x258fd8 → +0x243dac` 的独立流运算/string/reference 路线；它不是相邻 `+0x259324` 的 AES 加密 callback。需要恢复其状态、输入读取次序与引用清理，再扩展 parser 和 88-byte 初始化。完整 root 前导恢复后，才可重做独立当前 Medusa、服务器矩阵与最终工具验证。
+后续 `+0x2592b8 → +0x258fd8 → +0x243dac` 的独立流运算/string/reference 路线已由 [STREAM_REFERENCE.md](STREAM_REFERENCE.md) 恢复验证；它不是相邻 `+0x259324` 的 AES 加密 callback。当前 parser 到达 725 步，下一处为 `+0x248dd8` 的 fill/resize，再扩展 parser 和 88-byte 初始化。完整 root 前导恢复后，才可重做独立当前 Medusa、服务器矩阵与最终工具验证。

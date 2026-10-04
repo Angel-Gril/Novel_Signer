@@ -3,7 +3,26 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Configuration decrypt callback and parser continuation (2026-10-04)
+## Stream reference and cleanup continuation (2026-10-04)
+
+`vm9_stream_cipher.py` restores +0x243cac state construction, +0x243d50
+processing, +0x243dac one-shot wrapping, +0x258fd8/+0x2592b8 configuration
+reference construction and +0x166e74 string reference cleanup. Fresh synthetic
+native differences and independent ARC4 checks pass **174 groups / 9 rollback
+cases**, including key/state aliases, discard, split calls and pre-free bytes.
+The one-shot native harness explicitly loads length into X5 and compares all
+264 stack-state bytes; old generic oracle registers stopped at X4.
+
+All four same-run controls now reach parser **step 725 / +0x9b200**, before
++0x2635ac calls +0x248dd8. It compares 100 allocations, 26 frees and all guest,
+image, TLS/generation and ordered effects. Complete subtree comparisons rise
+to 36, with the actual stream result reference checked even on native stack.
+Root remains step 513; input prelude snapshots and serialized guard/OS
+boundaries remain explicit. See [STREAM_REFERENCE.md](STREAM_REFERENCE.md).
+Next: +0x248dd8 -> +0x247a08 fill/resize/cleanup, then +0x256088 and the
+remaining parser/88-byte initialization. Complete Python Medusa is still open.
+
+## Earlier configuration-decrypt milestone (2026-10-04)
 
 `vm9_cipher.py` restores guest-table schedules and block encryption/decryption,
 CBC updates and observed +0x25ab1c branches. `vm9_cipher_callback.py` composes

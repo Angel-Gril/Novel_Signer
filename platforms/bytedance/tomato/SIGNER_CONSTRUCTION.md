@@ -198,9 +198,9 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 | VM 子阶段 | 已验证边界 | 结果 |
 | --- | --- | --- |
 | root `+0x991c0` | 第 513 步 `+0x99b40` 的 `+0x26194c` callback 内，Python 生成至 `+0x261a1c` 的前缀；包括此前两次和本构造九次分配 | 整个 guest 对象/分配区、11 次分配顺序、全部主 image pages 与同次 native 一致 |
-| parser `+0x9a6f0` | 第 612 步 `+0x9b03c`，wrapper `+0x263584` 调用 `+0x2592b8` 前 | guest、主 image、TLS/generation、93 次分配及 23 次 free 顺序、32-byte descriptor 一致；已贯通 mode-0 解密 callback 和冷初始化 |
+| parser `+0x9a6f0` | 第 725 步 `+0x9b200`，wrapper `+0x2635ac` 调用 `+0x248dd8` 前 | guest、主 image、TLS/generation、100 次分配及 26 次 free 顺序、24-byte descriptor 一致；已贯通 mode-0 解密、流运算/reference、冷初始化和部分删除 |
 
-两段 VM 的初始状态均来自**这次 native 运行的构造前导快照**，用于差分验证；没有外部签名捕获页，也没有 trace/branch/opaque 注入。但构造前导尚未全部由 Python 生成，所以这不是从完整 Python 启动到解析结束的证明。当前组合对照同时覆盖隔离 TLS 和完整 2256-byte generation 表，但不包含 libc 和 native 调用栈的全部副作用。当前首个未恢复 parser callback 为 `+0x2592b8`，详见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md)。
+两段 VM 的初始状态均来自**这次 native 运行的构造前导快照**，用于差分验证；没有外部签名捕获页，也没有 trace/branch/opaque 注入。但构造前导尚未全部由 Python 生成，所以这不是从完整 Python 启动到解析结束的证明。当前组合对照同时覆盖隔离 TLS 和完整 2256-byte generation 表，但不包含 libc 和 native 调用栈的全部副作用。当前首个未恢复 parser callback 为 `+0x248dd8`，详见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) 和 [STREAM_REFERENCE.md](STREAM_REFERENCE.md)。
 
 ## 字符串追加、扩容、清理与摘要回调
 
@@ -303,6 +303,6 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 
 配置树对照可用来排除错误 comparator、节点布局和 duplicate ownership；getter 子树对照证明 `+0x259dbc` 的 136-byte 构造依赖在上述边界下已恢复。栈写入追踪则解释了为何局部测试通过仍可能在组合流程中出现不同 padding：需要证明数据来源和读写顺序，不能只匹配最终摘要。
 
-`+0x259dbc → +0x276b9c → +0x25ab1c` 的 mode-0 路线已由 [密码回调报告](CIPHER_CALLBACK.md) 恢复并组合验证；末端 CBC 解密也有独立差分，初始化模式 1/2/3 尚未恢复，不能声称完整 cipher dispatch。parser 已推进到 612 步，下一个目标 `+0x2592b8` 实际跳到 `+0x258fd8`，调用 `+0x243dac` 的另一条流运算；应恢复 string/reference 构造与清理后继续推进。
+`+0x259dbc → +0x276b9c → +0x25ab1c` 的 mode-0 路线已由 [密码回调报告](CIPHER_CALLBACK.md) 恢复并组合验证；末端 CBC 解密也有独立差分，初始化模式 1/2/3 尚未恢复，不能声称完整 cipher dispatch。另一条 `+0x2592b8 → +0x258fd8 → +0x243dac` 流运算与 string/reference 构造、清理也已由 [独立流组件](STREAM_REFERENCE.md) 恢复，174 / 9 的组件对照通过。parser 已推进到 725 步，下一处是 `+0x248dd8 → +0x247a08` 的 fill/resize 路线。
 
 完整 root VM 前导、88-byte 完整初始化、通用多 key TLS 树、诊断与全局副作用及剩余 callbacks 仍待恢复。当前搜索仍无非空响应与分页证据；独立当前 Medusa、无 JVM Rust 下载链路、抖音/起点闭环及最终 Pages 搜索下载网页仍未完成。

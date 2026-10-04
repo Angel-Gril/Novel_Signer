@@ -101,7 +101,7 @@ padding, buffer queries and partial groups are preserved. Run
 
 `verify_vm9_root_vm_prefix.py` (library/libc/output arguments) compares eight
 VM phases from four same-fresh-native runs at two image bases. Root step 513
-matches through the 88-byte prefix; parser step 612 matches before +0x2592b8
+matches through the 88-byte prefix; parser step 725 matches before +0x248dd8
 with 13 allocations, four explicit frees and a 48-byte callback descriptor.
 Guest object bytes, allocation sequence and main image pages match.
 These are native-prelude snapshots for differential testing, not a
@@ -155,10 +155,10 @@ and registration ledgers are not rolled back by page transactions.
 The same-run root verifier additionally compares eight constructor prefixes,
 eight TLS calls, four cold TLS-tree initializers and eight scoped locks,
 including all 2256 generation-table bytes and allocation/free/registration/
-wake sequences. It also compares 32 complete constructor/setter/getter/cipher
+wake sequences. It also compares 36 complete constructor/setter/getter/cipher
 subtrees, including ordered clock effects and actual cold Python TLS.
 Its native input snapshots remain explicit; the VM parser
-crosses mode-0 +0x259dbc and stops before +0x2592b8; full Python Medusa is incomplete.
+crosses mode-0 +0x259dbc and stream +0x2592b8, then stops before +0x248dd8; full Python Medusa is incomplete.
 
 `vm9_registry.py` provides input-driven configuration comparison, lookup,
 red-black insertion, `set_configuration_u32`, `construct_registry320`,
@@ -223,3 +223,12 @@ and string payload allocations, poisoned cleanup and indirect guest targets:
 explicit entry SP and allocator/singleton callbacks. Modes 1/2/3 initialization
 and nonzero environment-check branches reject. See
 [the cipher callback guide](../CIPHER_CALLBACK.md) for ABI, evidence and limits.
+
+`vm9_stream_cipher.py` restores RC4 state/discard, processing, one-shot
+wrapping and +0x258fd8/+0x2592b8 string/shared-reference construction and
+cleanup. `verify_vm9_stream_cipher.py` (library/output) passes 174 groups / 9
+rollback cases. Independent ARC4 is verifier-only. The one-shot oracle must
+load length into X5; its entire 264-byte stack state is explicitly compared.
+See [STREAM_REFERENCE.md](../STREAM_REFERENCE.md). The same-run parser now
+reaches step 725 with 100 allocations and 26 frees; snapshots and serialized
+OS/guard boundaries remain explicit.
