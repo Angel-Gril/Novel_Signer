@@ -1,0 +1,23 @@
+{
+  "affected_owner": "vm9_startup.py",
+  "shared_vm_interpreter_changed": false,
+  "new_native_controls": 256,
+  "new_negative_checks": 22,
+  "condition_wait_native_controls": 92,
+  "queue_callable_native_controls": 94,
+  "executor_poll_native_controls": 62,
+  "startup_idle_worker_native_controls": 8,
+  "startup_main_thread_regression": 4,
+  "worker_prefix_and_context_regression": 24,
+  "all_affected_native_regressions_pass": true,
+  "native_input_snapshot_used": false,
+  "complete_worker_runtime": false,
+  "complete_allocator_boot": false,
+  "complete_python_medusa": false,
+  "python_ast_files_checked": 58,
+  "public_scan_pass": true,
+  "document_links_checked": 249,
+  "broken_document_links": 0,
+  "queue_scratch_boundary_rerun_native_controls": 94,
+  "queue_scratch_boundary_rerun_negative_checks": 5
+}

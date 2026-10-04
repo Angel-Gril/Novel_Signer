@@ -3,6 +3,29 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Independent idle worker scheduling checkpoint
+
+Condition wait/owned wrappers, queue callable lifecycle/loop and nonrepeating
+executor deque/poll/signal wait/loop now pass **92 / 94 / 62** fresh native
+controls. Eight additional controls run the main startup and a generated idle
+executor or queue worker in the same native execution; Python generates its own
+arguments independently from ELF inputs and runs the worker with separate TLS.
+Guest/main-image/both TLS/generation state, allocation/effect order and argument
+cleanup match. All **256 new controls and 22 rejection/rollback checks** pass;
+main startup and support/context regressions also pass.
+
+This proves idle worker normal return, not default initialization task bodies,
+OS thread-exit destructors, concurrent workers or real allocator boot. Task
+invocation and finite clock/futex outcomes remain explicit environment services;
+repeat insertion and cancellation reject. Support ownership stays in pthread
+TLS after argument cleanup. Complete worker runtime, fresh Medusa, live header
+matrix/f13 checks, no-JVM Rust, nonempty search/pagination, Douyin/Qidian and the
+final Pages/Actions products remain open.
+
+Next: restore +0x280554's six initialization callers and actual VM callbacks,
+then OS exit cleanup and the real allocator/signing chain. Detailed scope,
+evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
+
 ## Independent root factory and caller (2026-10-04)
 
 The bounded default chain +0x257578 -> +0x257084 -> +0x257308 -> VM

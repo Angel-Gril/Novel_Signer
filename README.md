@@ -42,4 +42,4 @@ Real allocator boot, outer signer/handle and fresh request signing remain
 open. See the [root initialization report](platforms/bytedance/tomato/ROOT_INITIALIZATION.md)
 for reproducible checks and the exact boundary.
 
-Outer startup now independently reproduces the default main-thread caller and three deferred worker descriptors; worker TLS/support prefixes and executor context initialization are also verified. Full worker execution, real allocator boot and fresh request signing remain unfinished. See the [startup report](platforms/bytedance/tomato/STARTUP_INITIALIZATION.md).
+Outer startup now independently reproduces the default main-thread caller and three deferred worker descriptors; worker TLS/support prefixes and executor context initialization are also verified. Condition/queue/executor scheduling now adds 256 native controls, including same-fresh-startup idle worker wait/stop/argument cleanup. Default initialization task bodies, OS thread-exit cleanup, full worker execution, real allocator boot and fresh request signing remain unfinished. See the [startup report](platforms/bytedance/tomato/STARTUP_INITIALIZATION.md).
