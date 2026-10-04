@@ -12,6 +12,7 @@ from elftools.elf.elffile import ELFFile
 from unicorn.arm64_const import UC_ARM64_REG_PC, UC_ARM64_REG_X0, UC_ARM64_REG_TPIDR_EL0
 import vm9_startup as startup
 import vm9_allocator as allocator
+import vm9_objects as objects
 import verify_vm9_startup_init as main_fixture
 import verify_vm9_root_configuration as fixture
 from verify_vm9_signer_objects import native, GUEST, LIBRARY_SHA256
@@ -90,6 +91,90 @@ def probe(library,libc,*,base,kind,warm,thread_id):
         native_input_snapshot_used=False,dispatch_executed=False)
 
 
+def context_inputs(library,libc,base,warm):
+    p=inputs(library,libc,base,False)
+    if warm:
+        table=fixture.LIBC_BASE+fixture.LIBC_PTHREAD_GENERATION_OFFSET
+        allocator._write_span(p,table+9*16,(3).to_bytes(8,'little')+(base+0x3439BC).to_bytes(8,'little'))
+        allocator._write_span(p,base+0x3E31F0,b'\1')
+        allocator._write_span(p,base+0x3E31F4,(0x80000009).to_bytes(4,'little'))
+        allocator._write_span(p,base+0x3E31F8,(2).to_bytes(4,'little'))
+        allocator._write_span(p,base+0x3E3200,(1).to_bytes(8,'little'))
+        allocator._write_span(p,base+0x3D1340+16,(1).to_bytes(8,'little'))
+        allocator._write_span(p,GUEST+0x4000,(1).to_bytes(8,'little')+(14).to_bytes(8,'little')+bytes(112))
+        allocator._write_span(p,GUEST+0x4010,(GUEST+0x4200).to_bytes(8,'little'))
+        assert allocator.pthread_setspecific(p,key=0x80000009,value=GUEST+0x4000,
+            thread_pointer=fixture.TLS,generation_table=table)==0
+    return p
+
+
+def probe_context(library,libc,*,base,warm,thread_id):
+    model=context_inputs(library,libc,base,warm)
+    seed=context_inputs(library,libc,base,warm)
+    oracle={p:v for p,v in seed.items() if not fixture.LIBC_BASE<=p<<12<fixture.LIBC_BASE+0x400000}
+    table=fixture.LIBC_BASE+fixture.LIBC_PTHREAD_GENERATION_OFFSET
+    generations=allocator._read_span(seed,table,141*16)
+    with libc.open('rb') as stream:
+        elf=ELFFile(stream)
+        exports={s.name:fixture.LIBC_BASE+s['st_value'] for sec in elf.iter_sections()
+            if sec['sh_type']=='SHT_DYNSYM' for s in sec.iter_symbols() if s['st_shndx']!='SHN_UNDEF'}
+    events=[];actual_events=[];native_allocations=[];model_allocations=[]
+    def redirect(name):
+        def effect(cpu):
+            if name!='pthread_once':events.append([name])
+            cpu.reg_write(UC_ARM64_REG_PC,exports[name])
+        return effect
+    def observe(cpu,address):
+        if address==base+0x326B18:cpu.mem_write(table,generations)
+    def allocate_effect(cpu,size,pointer):
+        native_allocations.append([size,pointer]);events.append(['allocate',size,pointer])
+    def syscall(cpu,number):
+        from unicorn.arm64_const import UC_ARM64_REG_X1,UC_ARM64_REG_X2
+        assert number==98 and cpu.reg_read(UC_ARM64_REG_X1)&0x7F==1
+        events.append(['wake',cpu.reg_read(UC_ARM64_REG_X0),cpu.reg_read(UC_ARM64_REG_X1),cpu.reg_read(UC_ARM64_REG_X2)])
+        return 0
+    observed={(fixture.TLS,0xB00):None,(table,141*16):None}
+    observed.update({(p<<12,4096):None for p in model if base<=p<<12<base+0x400000})
+    _,memory,_,_=native(library,base,0x326B18,[GUEST+0x3618],oracle,libc=libc,
+        real_singletons=True,real_mutexes=True,thread_id=thread_id,
+        extra_registers={UC_ARM64_REG_TPIDR_EL0:fixture.TLS},observed_memory=observed,
+        instruction_observer=observe,allocation_effect=allocate_effect,syscall_handler=syscall,
+        host_imports={0x348620:redirect('pthread_key_create'),0x3485D0:redirect('pthread_getspecific'),
+            0x348580:redirect('pthread_setspecific'),0x3486B0:redirect('pthread_once')},instruction_limit=100000)
+    position=GUEST+0x4000
+    def allocate(p,size):
+        nonlocal position
+        pointer=position;position+=(size+15)&~15
+        model_allocations.append([size,pointer]);actual_events.append(['allocate',size,pointer])
+        return pointer
+    def reallocate(p,pointer,size):raise AssertionError('unexpected emulated TLS growth')
+    def get_specific(p,key):
+        actual_events.append(['pthread_getspecific'])
+        return allocator.pthread_getspecific(p,key=key,thread_pointer=fixture.TLS,generation_table=table)
+    def set_specific(p,key,value):
+        actual_events.append(['pthread_setspecific'])
+        return allocator.pthread_setspecific(p,key=key,value=value,thread_pointer=fixture.TLS,generation_table=table)
+    def create_key(p,address,destructor):
+        actual_events.append(['pthread_key_create'])
+        return allocator.pthread_key_create(p,key_address=address,destructor=destructor,generation_table=table)
+    def wake(p,*args):actual_events.append(['wake',*args]);return 0
+    def get_tls(p,descriptor):
+        return objects.get_emulated_tls_address(p,control_address=descriptor,image_base=base,
+            allocate=allocate,reallocate=reallocate,get_specific=get_specific,set_specific=set_specific,
+            create_key=create_key,once_wake=wake)
+    startup.initialize_executor_context(model,context_address=GUEST+0x3618,image_base=base,get_tls=get_tls)
+    assert allocator._read_span(model,GUEST,0xA000)==memory,'executor context guest'
+    for (address,width),expected in observed.items():
+        assert allocator._read_span(model,address,width)==expected,('executor context state',hex(address))
+    assert model_allocations==native_allocations, 'executor context allocations'
+    assert actual_events==events, ('executor context ordered effects',actual_events,events)
+    return dict(image_base=hex(base),warm_emulated_tls=warm,thread_id=thread_id,
+        allocations=len(model_allocations),allocation_sizes=[s for s,_ in model_allocations],
+        guest_objects_match=True,all_main_image_pages_match=True,tls_match=True,generation_table_match=True,
+        allocation_sequence_match=True,ordered_semantic_effects_match=True,real_emulated_tls_model_used=True,
+        emulated_tls_input_snapshot_used=False,native_input_snapshot_used=False,executor_poll_executed=False)
+
+
 def negative_cases(library,libc):
     base=0x122c0000;cases=[]
     for label in ('unknown_worker','missing_support','unknown_callable','key_create_error','set_specific_error','recursive_guard'):
@@ -115,6 +200,29 @@ def negative_cases(library,libc):
     return cases
 
 
+def context_negative_cases(library,libc):
+    base=0x122c0000;cases=[]
+    for label in ('unmapped_context','getter_error','unmapped_tls_slot','unmapped_context_vtable'):
+        p=context_inputs(library,libc,base,False)
+        if label=='unmapped_context':del p[(GUEST+0x3618)>>12]
+        if label=='unmapped_context_vtable':del p[(base+0x3750C0)>>12]
+        before={k:bytes(v) for k,v in p.items()};events=[]
+        def get_tls(p,descriptor):
+            events.append('get_tls')
+            if label=='getter_error':raise allocator.RefillUnsupported('unsupported TLS getter')
+            if label=='unmapped_tls_slot':return GUEST+0x200000
+            allocator._write_span(p,GUEST+0x4200,bytes(8));return GUEST+0x4200
+        try:
+            startup.initialize_executor_context(p,context_address=GUEST+0x3618,image_base=base,get_tls=get_tls)
+        except (ValueError,allocator.RefillUnsupported):
+            assert {k:bytes(v) for k,v in p.items()}==before,label+' context rollback'
+            assert len(events)==(0 if label=='unmapped_context' else 1)
+            cases.append(dict(case=label,rejected=True,guest_page_rollback=True,
+                environment_effect_count=len(events),external_effects_rolled_back=False))
+        else:raise AssertionError(label+' context accepted')
+    return cases
+
+
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--library',type=Path,required=True)
     ap.add_argument('--libc',type=Path,required=True);ap.add_argument('--output',type=Path,required=True)
@@ -122,14 +230,19 @@ def main():
     cases=[probe(args.library,args.libc,base=base,kind=kind,warm=warm,thread_id=tid)
         for base in (0x122c0000,0x775c205000) for kind in ('executor','queue')
         for warm in (False,True) for tid in (137,271)]
+    context_cases=[probe_context(args.library,args.libc,base=base,warm=warm,thread_id=tid)
+        for base in (0x122c0000,0x775c205000) for warm in (False,True) for tid in (137,271)]
     negatives=negative_cases(args.library,args.libc)
+    context_negatives=context_negative_cases(args.library,args.libc)
     report=dict(library_sha256=LIBRARY_SHA256,libc_sha256=hashlib.sha256(args.libc.read_bytes()).hexdigest(),
-        native_runs=len(cases),cases=cases,negative_count=len(negatives),negative_cases=negatives,
+        native_runs=len(cases)+len(context_cases),worker_prefix_native_runs=len(cases),cases=cases,
+        executor_context_native_runs=len(context_cases),executor_context_cases=context_cases,negative_count=len(negatives),negative_cases=negatives,executor_context_negative_count=len(context_negatives),
+        executor_context_negative_cases=context_negatives,
         native_input_snapshot_used=False,fresh_logical_worker_inputs=True,
         native_code_used_by_python_model=False,worker_dispatch_executed=False,
         complete_thread_runtime=False,complete_allocator_boot=False,complete_python_medusa=False)
     args.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
-    print(json.dumps(dict(native_runs=len(cases),negative_count=len(negatives),worker_tls_prefix_match=True)))
+    print(json.dumps(dict(native_runs=len(cases)+len(context_cases),executor_context_native_runs=len(context_cases),negative_count=len(negatives),executor_context_negative_count=len(context_negatives),worker_tls_prefix_match=True)))
 
 
 if __name__=='__main__':main()

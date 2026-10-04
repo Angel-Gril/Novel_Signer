@@ -1,6 +1,6 @@
 # 外层启动 caller 与 worker TLS support
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径，以及两类 worker 在第一次 dispatch 前的 TLS support 转移。**真实 allocator boot、完整线程执行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径，以及两类 worker 在第一次 dispatch 前的 TLS support 转移和独立 executor context 初始化。**真实 allocator boot、完整线程执行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
@@ -11,6 +11,7 @@
 | OP45 寄存器相等分支 | 308 | — | 两种基址、全部寄存器索引、正负位移边界、taken／not-taken、32 槽无写入 |
 | 主线程 caller／默认 enqueue | 4 | 13 | 86 步、32 个终止槽、guest、全部主 image、TLS、generation、分配及有序副作用 |
 | executor／queue worker support 前段 | 16 | 6 | 冷／热 key、两种基址和线程 ID、唯一引用清空、TLS 发布、generation、dispatch 参数 |
+| executor context／emulated TLS | 8 | 4 | 冷／热 emulated TLS、实际 ELF descriptor、分配、字段／padding、guest／image／TLS／generation／有序副作用 |
 
 主线程每次使用 16 次分配、3 次成功的 guest thread-create 请求、2 次析构注册、1 次 condition wake，没有 free。线程 entry 分别是 `+0x326a2c`、`+0x3260a4`、`+0x3260a4`。Python 生成了线程参数、共享 executor、两个 queue 和第一个 queue 的 48 字节任务向量。它在 `+0xa71c8` 退出。
 
@@ -30,9 +31,9 @@
 
 `attach_worker_support` 对应 `+0x326a2c/+0x3260a4 → +0x32cc40 → +0x326120`。冷路径创建 support key，析构入口为 `+0x32ce6c`，完成串行 guard 发布；热路径复用 key。native 随后先清空 argument 的唯一 wrapper 引用，再将 wrapper 发布到当前线程的 TLS。
 
-executor 对照停在 `+0x326b18`，尚未初始化其 emulated-TLS context 或执行 `+0x326b84`。queue 对照停在 `+0x291934`，尚未运行 callable、消费任务向量、等待 condition 或执行清理。下一处 queue callable 为 `+0x326578`，包含取出／移动任务、解锁、invoke、析构和等待循环，仍需恢复。
+support prefix 的 executor 对照停在 `+0x326b18`。新增的 `initialize_executor_context` 独立恢复该完整函数：调用既有 Python emulated-TLS 模型处理实际 ELF descriptor `+0x3d1340`，冷路径分配 128／23 字节，发布 context 指针、初始化 enable 标记、vtable、自引用和零字段，保留未写 padding。8 个冷／热控制和4个拒绝／回滚检查通过；尚未在完整 Python worker 中组合执行 `+0x326b84`。queue 对照停在 `+0x291934`，尚未运行 callable、消费任务向量、等待 condition 或执行清理。下一处 queue callable 为 `+0x326578`，包含取出／移动任务、解锁、invoke、析构和等待循环，仍需恢复。
 
-主线程的非空 queue／growth、线程创建失败／异常处理、竞争 guard、condition 的 errno 路径均明确拒绝。13 个 caller 和 6 个 worker 的拒绝检查证明 unsupported 输入不会提交 guest 页；**已调用的外部环境服务不会自动回滚**，这不是 native 失败清理等价性或完整线程取消的证明。
+主线程的非空 queue／growth、线程创建失败／异常处理、竞争 guard、condition 的 errno 路径均明确拒绝。13 个 caller、6 个 worker support 和4个 context 的拒绝检查证明 unsupported 输入不会提交 guest 页；**已调用的外部环境服务不会自动回滚**，这不是 native 失败清理等价性或完整线程取消的证明。
 
 ## 复现与研究接口
 
@@ -44,10 +45,12 @@ python -B python/verify_vm9_startup_init.py --library /private/libmetasec_ml_713
 python -B python/verify_vm9_startup_workers.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/startup-workers.json
 ```
 
-`initialize_startup_caller` 接受 pages、entry SP、return、thread pointer、image base、VM module 和 allocator／thread-create／析构注册／condition 服务，返回 steps、exit offset、32 槽和已执行回调清单。`attach_worker_support` 接受独立 worker argument、kind、key-create／set-specific 服务，返回下一次 dispatch 的参数地址。它们都是研究组件，尚无可用的 Medusa 请求头返回值。
+`initialize_startup_caller` 接受 pages、entry SP、return、thread pointer、image base、VM module 和 allocator／thread-create／析构注册／condition 服务，返回 steps、exit offset、32 槽和已执行回调清单。`attach_worker_support` 接受独立 worker argument、kind、key-create／set-specific 服务，返回下一次 dispatch 的参数地址。`initialize_executor_context` 接受 context 地址及 emulated-TLS getter，初始化后续 executor poll 所需字段。它们都是研究组件，尚无可用的 Medusa 请求头返回值。
 
 脱敏原始控制摘要：[分支](evidence/vm9_branch_eq_native_20261005.json)、[启动](evidence/vm9_startup_init_native_20261005.json)、[worker](evidence/vm9_startup_workers_native_20261005.json)。
 
+另有一个明确标注为 **native-only** 的 [guest 调度探针](evidence/vm9_executor_native_wait_boundary_20261005.json)：在同一 fresh native 运行中，主线程发布三个 worker 后，显式调度第一个 executor worker、提供独立 guest TLS 和虚拟 clock，贯通 support、context 和 poll，停在 `+0x3485c0` 的 `pthread_cond_timedwait` 前。额外分配为128／23字节。它没有运行 wait、创建 host thread或完成 Python worker；clock 是调度探针的显式输入，不是 f13 冻结或线上签名证据。
+
 ## 继续顺序
 
-先恢复 executor context、queue 任务执行／等待／清理，并把 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。然后贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，并重新验证全头线上矩阵。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
+先把已恢复的 executor context 接回完整 Python worker，恢复 poll／timedwait 及 queue 任务执行／等待／清理，并把 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。然后贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，并重新验证全头线上矩阵。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

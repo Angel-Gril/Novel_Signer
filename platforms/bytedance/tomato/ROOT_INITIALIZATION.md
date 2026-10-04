@@ -67,6 +67,6 @@ Verifier 检查目标 ELF SHA256，并把输入内容保留在进程内。公开
 
 ## 仍需继续
 
-外层启动 caller 和两类 worker 的 TLS support 前段已通过独立对照，见 [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md)。下一步恢复 worker context／任务执行／等待／清理，再把这条 fresh root factory 接入更外层 signer constructor／handle 初始化，同时独立补齐实际 allocator 的全局 boot、TLS／arena／OS region 输入。然后必须用新的请求参数贯通 Medusa body，对照签名输出，并重做当前线上全头矩阵与时间戳实验。
+外层启动 caller 和两类 worker 的 TLS support 前段已通过独立对照，见 [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md)。executor context 组件也已恢复；下一步组合验证 worker poll／任务执行／等待／清理，再把这条 fresh root factory 接入更外层 signer constructor／handle 初始化，同时独立补齐实际 allocator 的全局 boot、TLS／arena／OS region 输入。然后必须用新的请求参数贯通 Medusa body，对照签名输出，并重做当前线上全头矩阵与时间戳实验。
 
 无 JVM Rust signer/download、当前非空搜索与分页、抖音／起点闭环、最终 Pages／Actions 搜索下载产品仍未完成。

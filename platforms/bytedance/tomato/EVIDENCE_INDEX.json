@@ -1640,7 +1640,7 @@
   },
   "vm9_startup_workers_native_20261005": {
     "evidence_file": "evidence/vm9_startup_workers_native_20261005.json",
-    "native_runs": 16,
+    "native_runs": 24,
     "negative_count": 6,
     "worker_entry_offsets": [
       "0x326a2c",
@@ -1657,7 +1657,18 @@
     "worker_dispatch_executed": false,
     "complete_thread_runtime": false,
     "complete_allocator_boot": false,
-    "complete_python_medusa": false
+    "complete_python_medusa": false,
+    "worker_prefix_native_runs": 16,
+    "executor_context_native_runs": 8,
+    "executor_context_negative_count": 4,
+    "executor_context_offset": "0x326b18",
+    "cold_and_warm_emulated_tls_verified": true,
+    "executor_context_cold_allocation_sizes": [
+      128,
+      23
+    ],
+    "executor_context_guest_image_tls_generation_effects_match": true,
+    "executor_poll_executed": false
   },
   "vm9_startup_regression_20261005": {
     "evidence_file": "evidence/vm9_startup_regression_20261005.json",
@@ -1668,6 +1679,18 @@
     "state_owner_native_differences": 52,
     "parser_digest_differences": 142,
     "passed": true,
+    "complete_python_medusa": false
+  },
+  "vm9_executor_native_wait_boundary_20261005": {
+    "evidence_file": "evidence/vm9_executor_native_wait_boundary_20261005.json",
+    "native_runs": 1,
+    "native_only_probe": true,
+    "worker_entry_offset": "0x326a2c",
+    "executor_context_offset": "0x326b18",
+    "condition_timedwait_plt_offset": "0x3485c0",
+    "timed_wait_boundary_reached": true,
+    "wait_executed": false,
+    "python_worker_model_used": false,
     "complete_python_medusa": false
   }
 }

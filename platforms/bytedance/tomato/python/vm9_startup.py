@@ -195,6 +195,25 @@ def attach_worker_support(pages, *, argument_address, worker_kind, image_base,
     p.commit();return dispatch
 
 
+def initialize_executor_context(pages, *, context_address, image_base, get_tls):
+    """+0x326b18: publish executor context in emulated TLS and initialize it.
+
+    get_tls receives the actual ELF descriptor +0x3d1340. Context fields and
+    unwritten padding follow the native body; no executor poll is performed.
+    """
+    p=_PageTransaction(pages);obj=context_address;base=image_base
+    _read_span(p,obj,0xE8)
+    slot=get_tls(p,base+0x3D1340)
+    table=_u(p,base+0x3750C0)  # Native latches this before publishing fields.
+    _w(p,slot,obj)
+    _w(p,obj+0x80,1,1)
+    _write_span(p,obj+0x84,bytes(0x5C))
+    _w(p,obj+0x78,table+0x10)
+    _w(p,obj+0xE0,obj+0x78)
+    _w(p,obj+0x69,1,1)
+    p.commit()
+
+
 @dataclass(frozen=True)
 class StartupResult:
     steps:int
