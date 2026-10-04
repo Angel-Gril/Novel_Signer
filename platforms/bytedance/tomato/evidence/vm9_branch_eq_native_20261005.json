@@ -1,0 +1,38 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "controls": 154,
+      "taken": 77,
+      "not_taken": 77,
+      "all_register_indices_covered": true,
+      "signed_displacement_edges_match": true,
+      "native_operand_decode_match": true,
+      "next_pc_match": true,
+      "all_32_registers_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "controls": 154,
+      "taken": 77,
+      "not_taken": 77,
+      "all_register_indices_covered": true,
+      "signed_displacement_edges_match": true,
+      "native_operand_decode_match": true,
+      "next_pc_match": true,
+      "all_32_registers_unchanged": true
+    }
+  ],
+  "native_runs": 308,
+  "synthetic_inputs": true,
+  "native_input_snapshot_used": false,
+  "native_code_used_by_python_model": false,
+  "handler_entry_offset": "0x16ecec",
+  "stop_offset": "0x16ee38",
+  "opcode": 45,
+  "operation": "64-bit register equality",
+  "second_register_high_bit": 21,
+  "sub_bits_are_operands": true,
+  "complete_python_medusa": false
+}

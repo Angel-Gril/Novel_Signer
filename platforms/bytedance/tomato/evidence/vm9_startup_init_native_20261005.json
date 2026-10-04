@@ -1,0 +1,311 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "native_runs": 4,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "thread_id": 137,
+      "steps": 86,
+      "stop_bytecode_offset": "0xa71c8",
+      "all_32_terminal_slots_match": true,
+      "guest_objects_match": true,
+      "all_main_image_pages_match": true,
+      "tls_match": true,
+      "generation_table_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 16,
+      "explicit_frees": 0,
+      "thread_creation_count": 3,
+      "thread_entry_offsets": [
+        "0x326a2c",
+        "0x3260a4",
+        "0x3260a4"
+      ],
+      "thread_handles_arguments_and_order_match": true,
+      "destructor_registrations": 2,
+      "wake_sequence_match": true,
+      "wake_count": 1,
+      "ordered_semantic_effects_match": true,
+      "native_input_snapshot_used": false,
+      "caller_prelude_python_generated": true,
+      "worker_execution_deferred": true,
+      "physical_thread_output_scratch_compared": false,
+      "modeled_callbacks": [
+        {
+          "wrapper_offset": "0x2813e8",
+          "target_offset": "0x347f60"
+        },
+        {
+          "wrapper_offset": "0x2813e8",
+          "target_offset": "0x347f60"
+        },
+        {
+          "wrapper_offset": "0x2813fc",
+          "target_offset": "0x32565c"
+        },
+        {
+          "wrapper_offset": "0x281408",
+          "target_offset": "0x28054c"
+        }
+      ]
+    },
+    {
+      "image_base": "0x122c0000",
+      "thread_id": 271,
+      "steps": 86,
+      "stop_bytecode_offset": "0xa71c8",
+      "all_32_terminal_slots_match": true,
+      "guest_objects_match": true,
+      "all_main_image_pages_match": true,
+      "tls_match": true,
+      "generation_table_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 16,
+      "explicit_frees": 0,
+      "thread_creation_count": 3,
+      "thread_entry_offsets": [
+        "0x326a2c",
+        "0x3260a4",
+        "0x3260a4"
+      ],
+      "thread_handles_arguments_and_order_match": true,
+      "destructor_registrations": 2,
+      "wake_sequence_match": true,
+      "wake_count": 1,
+      "ordered_semantic_effects_match": true,
+      "native_input_snapshot_used": false,
+      "caller_prelude_python_generated": true,
+      "worker_execution_deferred": true,
+      "physical_thread_output_scratch_compared": false,
+      "modeled_callbacks": [
+        {
+          "wrapper_offset": "0x2813e8",
+          "target_offset": "0x347f60"
+        },
+        {
+          "wrapper_offset": "0x2813e8",
+          "target_offset": "0x347f60"
+        },
+        {
+          "wrapper_offset": "0x2813fc",
+          "target_offset": "0x32565c"
+        },
+        {
+          "wrapper_offset": "0x281408",
+          "target_offset": "0x28054c"
+        }
+      ]
+    },
+    {
+      "image_base": "0x775c205000",
+      "thread_id": 137,
+      "steps": 86,
+      "stop_bytecode_offset": "0xa71c8",
+      "all_32_terminal_slots_match": true,
+      "guest_objects_match": true,
+      "all_main_image_pages_match": true,
+      "tls_match": true,
+      "generation_table_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 16,
+      "explicit_frees": 0,
+      "thread_creation_count": 3,
+      "thread_entry_offsets": [
+        "0x326a2c",
+        "0x3260a4",
+        "0x3260a4"
+      ],
+      "thread_handles_arguments_and_order_match": true,
+      "destructor_registrations": 2,
+      "wake_sequence_match": true,
+      "wake_count": 1,
+      "ordered_semantic_effects_match": true,
+      "native_input_snapshot_used": false,
+      "caller_prelude_python_generated": true,
+      "worker_execution_deferred": true,
+      "physical_thread_output_scratch_compared": false,
+      "modeled_callbacks": [
+        {
+          "wrapper_offset": "0x2813e8",
+          "target_offset": "0x347f60"
+        },
+        {
+          "wrapper_offset": "0x2813e8",
+          "target_offset": "0x347f60"
+        },
+        {
+          "wrapper_offset": "0x2813fc",
+          "target_offset": "0x32565c"
+        },
+        {
+          "wrapper_offset": "0x281408",
+          "target_offset": "0x28054c"
+        }
+      ]
+    },
+    {
+      "image_base": "0x775c205000",
+      "thread_id": 271,
+      "steps": 86,
+      "stop_bytecode_offset": "0xa71c8",
+      "all_32_terminal_slots_match": true,
+      "guest_objects_match": true,
+      "all_main_image_pages_match": true,
+      "tls_match": true,
+      "generation_table_match": true,
+      "allocation_sequence_match": true,
+      "allocations": 16,
+      "explicit_frees": 0,
+      "thread_creation_count": 3,
+      "thread_entry_offsets": [
+        "0x326a2c",
+        "0x3260a4",
+        "0x3260a4"
+      ],
+      "thread_handles_arguments_and_order_match": true,
+      "destructor_registrations": 2,
+      "wake_sequence_match": true,
+      "wake_count": 1,
+      "ordered_semantic_effects_match": true,
+      "native_input_snapshot_used": false,
+      "caller_prelude_python_generated": true,
+      "worker_execution_deferred": true,
+      "physical_thread_output_scratch_compared": false,
+      "modeled_callbacks": [
+        {
+          "wrapper_offset": "0x2813e8",
+          "target_offset": "0x347f60"
+        },
+        {
+          "wrapper_offset": "0x2813e8",
+          "target_offset": "0x347f60"
+        },
+        {
+          "wrapper_offset": "0x2813fc",
+          "target_offset": "0x32565c"
+        },
+        {
+          "wrapper_offset": "0x281408",
+          "target_offset": "0x28054c"
+        }
+      ]
+    }
+  ],
+  "negative_count": 13,
+  "negative_cases": [
+    {
+      "case": "instruction_bound",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_stack",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "pac_return",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_tls",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_bytecode",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_thread_id",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "recursive_guard",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocator_null",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 1,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "thread_error",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 4,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_thread_handle",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 4,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "condition_error",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 22,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "nonempty_queue",
+      "rejected": true,
+      "guest_page_rollback": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "fresh_elf_inputs": true,
+  "native_input_snapshot_used": false,
+  "native_code_used_by_python_model": false,
+  "worker_execution_deferred": true,
+  "complete_thread_runtime": false,
+  "complete_outer_signer_constructor": false,
+  "complete_allocator_boot": false,
+  "complete_python_medusa": false,
+  "jvm_used": false
+}

@@ -41,3 +41,5 @@ slots and ordered effects (206 allocations/93 frees for the full factory).
 Real allocator boot, outer signer/handle and fresh request signing remain
 open. See the [root initialization report](platforms/bytedance/tomato/ROOT_INITIALIZATION.md)
 for reproducible checks and the exact boundary.
+
+Outer startup now independently reproduces the default main-thread caller and three deferred worker descriptors; worker TLS/support prefixes are also verified. Full worker execution, real allocator boot and fresh request signing remain unfinished. See the [startup report](platforms/bytedance/tomato/STARTUP_INITIALIZATION.md).

@@ -1,6 +1,6 @@
 {
   "platform": "bytedance.tomato",
-  "generated_from": "ONLINE_VALIDATION_20260929.md, sanitized fresh trial summaries and the 2026-10-04 configuration tree, constructor, cipher and parser controls in the isolated workspace; independent fresh-ELF root factory/caller controls on 2026-10-04",
+  "generated_from": "ONLINE_VALIDATION_20260929.md, sanitized fresh trial summaries and the 2026-10-04 configuration tree, constructor, cipher and parser controls in the isolated workspace; independent fresh-ELF root factory/caller controls on 2026-10-04; independent startup caller, worker TLS/support prefixes and OP45 native controls in the isolated workspace (20261005 trial labels)",
   "redaction": "No raw URLs, request headers, device identifiers, UUIDs, tokens, per-session keys, or response bodies are included.",
   "live_chain": [
     {
@@ -1601,6 +1601,73 @@
     "fresh_input_signer_output_verified": false,
     "online_header_matrix_verified": false,
     "jvm_used": false,
+    "complete_python_medusa": false
+  },
+  "vm9_branch_eq_native_20261005": {
+    "evidence_file": "evidence/vm9_branch_eq_native_20261005.json",
+    "native_runs": 308,
+    "synthetic_inputs": true,
+    "second_register_high_bit": 21,
+    "sub_bits_are_operands": true,
+    "all_register_indices_covered": true,
+    "signed_displacement_edges_match": true,
+    "native_input_snapshot_used": false,
+    "complete_python_medusa": false
+  },
+  "vm9_startup_init_native_20261005": {
+    "evidence_file": "evidence/vm9_startup_init_native_20261005.json",
+    "report": "STARTUP_INITIALIZATION.md",
+    "native_runs": 4,
+    "negative_count": 13,
+    "caller_entry_offset": "0x28040c",
+    "vm_entry_offset": "0xa7050",
+    "steps": 86,
+    "exit_bytecode_offset": "0xa71c8",
+    "allocations": 16,
+    "thread_creation_count": 3,
+    "destructor_registrations": 2,
+    "wake_count": 1,
+    "terminal_virtual_slots_compared": 32,
+    "guest_main_image_tls_generation_compared": true,
+    "ordered_semantic_effects_match": true,
+    "physical_thread_output_scratch_compared": false,
+    "native_input_snapshot_used": false,
+    "caller_prelude_python_generated": true,
+    "worker_execution_deferred": true,
+    "complete_thread_runtime": false,
+    "complete_allocator_boot": false,
+    "complete_python_medusa": false
+  },
+  "vm9_startup_workers_native_20261005": {
+    "evidence_file": "evidence/vm9_startup_workers_native_20261005.json",
+    "native_runs": 16,
+    "negative_count": 6,
+    "worker_entry_offsets": [
+      "0x326a2c",
+      "0x3260a4"
+    ],
+    "boundary_offsets": [
+      "0x326b18",
+      "0x291934"
+    ],
+    "cold_and_warm_support_keys": true,
+    "support_ownership_transfer_verified": true,
+    "guest_main_image_tls_generation_compared": true,
+    "native_input_snapshot_used": false,
+    "worker_dispatch_executed": false,
+    "complete_thread_runtime": false,
+    "complete_allocator_boot": false,
+    "complete_python_medusa": false
+  },
+  "vm9_startup_regression_20261005": {
+    "evidence_file": "evidence/vm9_startup_regression_20261005.json",
+    "root_fresh_native_runs": 8,
+    "root_component_native_runs": 4,
+    "vm_phase_comparisons": 16,
+    "subtree_comparisons": 76,
+    "state_owner_native_differences": 52,
+    "parser_digest_differences": 142,
+    "passed": true,
     "complete_python_medusa": false
   }
 }

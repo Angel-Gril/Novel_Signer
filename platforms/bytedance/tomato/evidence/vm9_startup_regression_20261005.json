@@ -1,0 +1,32 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "root_fresh": {
+    "native_runs": 8,
+    "root_caller_negative_count": 9,
+    "root_factory_negative_count": 2,
+    "native_input_snapshot_used": false,
+    "passed": true
+  },
+  "root_components": {
+    "native_runs": 4,
+    "vm_phase_comparisons": 16,
+    "subtree_comparisons": 76,
+    "earlier_runtime_input_snapshot_used": true,
+    "passed": true
+  },
+  "state_owner": {
+    "native_differences": 52,
+    "negative_count": 6,
+    "passed": true
+  },
+  "parser_digests": {
+    "differential_cases": 142,
+    "negative_cases": 5,
+    "passed": true
+  },
+  "shared_vm_opcode_change": "OP45 second-register bit21 and register equality",
+  "fresh_request_signature_verified": false,
+  "new_online_header_matrix_verified": false,
+  "complete_allocator_boot": false,
+  "complete_python_medusa": false
+}

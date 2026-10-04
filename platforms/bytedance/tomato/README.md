@@ -43,3 +43,5 @@ heap, main image, TLS/generation and ordered effects; full factory counts are
 206/93. Read [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md) for the exact
 input and allocator/OS boundary. Complete current Medusa and the final
 search/download product remain open.
+
+The outer startup caller now passes four fresh-input controls (86 steps, 16 allocations, three deferred worker creations). Worker TLS/support prefixes pass 16 cold/warm controls. The shared OP45 register decode is corrected with 308 native differences and fresh root/parser regressions. Read [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md) for the exact thread and allocator boundary. Complete worker dispatch and independent Medusa signing remain open.

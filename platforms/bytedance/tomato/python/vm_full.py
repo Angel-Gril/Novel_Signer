@@ -200,9 +200,7 @@ class VM:
                 idx = ((dw>>12)&0xF)|((dw>>27)&0x10); dst = ((dw>>27)&0xF)|(((dw>>11)&1)<<4)
                 return "R%d = (R%d <%d)" % (dst, idx, sx16(imm_55(dw)))
             if op == 45:
-                a = ((dw>>22)&0xF)|((dw>>27)&0x10); b = ((dw>>7)&0xF)|((dw>>21)&0x10)
-                if sub == 33:
-                    return "if R%d==0 goto %+d ; %x==0 %s" % (a, sx16(imm_45(dw)), R[a], R[a]==0)
+                a = ((dw>>22)&0xF)|((dw>>27)&0x10); b = ((dw>>7)&0xF)|((dw>>17)&0x10)
                 return "if R%d==R%d goto %+d ; %x==%x %s" % (a, b, sx16(imm_45(dw)), R[a], R[b], R[a]==R[b])
             if op == 20:
                 a = ((dw>>12)&0xF)|((dw>>27)&0x10); b = (dw>>7)&0x1F
@@ -405,20 +403,13 @@ class VM:
             elif op == 55:      # SLTi
                 idx = ((dw>>12)&0xF)|((dw>>27)&0x10); dst = ((dw>>27)&0xF)|(((dw>>11)&1)<<4)
                 self.R[dst] = 1 if sx64(self.R[idx]) < sx16(imm_55(dw)) else 0
-            elif op == 45:      # conditional branch family
-                a = ((dw>>22)&0xF)|((dw>>27)&0x10); b = ((dw>>7)&0xF)|((dw>>21)&0x10)
-                # VM9 has several conditional forms sharing OP45's field
-                # layout. Sub=0 is a signed nonpositive test; sub=33 is an
-                # exact zero test; sub=53 is !=. Other forms remain ==.
-                if sub == 0:
-                    taken = sx64(self.R[a]) <= 0
-                elif sub == 33:
-                    taken = self.R[a] == 0
-                elif sub == 53:
-                    taken = self.R[a] != self.R[b]
-                else:
-                    taken = self.R[a] == self.R[b]
-                if taken: npc = (self.pc + 4 + 4*sx16(imm_45(dw))) & M64
+            elif op == 45:      # BEQ; the "sub" bits encode operands
+                a = ((dw>>22)&0xF)|((dw>>27)&0x10); b = ((dw>>7)&0xF)|((dw>>17)&0x10)
+                # Native +0x16ecec takes b's high bit from instruction bit 21.
+                # Bits 6:11 belong to the registers/displacement, so they do
+                # not select signed, zero-test or inequality variants.
+                if self.R[a] == self.R[b]:
+                    npc = (self.pc + 4 + 4*sx16(imm_45(dw))) & M64
             elif op == 20:      # BNE
                 a = ((dw>>12)&0xF)|((dw>>27)&0x10); b = (dw>>7)&0x1F
                 if self.R[a] != self.R[b]: npc = (self.pc + 4 + 4*sx16(imm_20(dw))) & M64

@@ -17,6 +17,8 @@
 
 当前控制仍使用明确的nonreusing malloc/free与虚拟OS；真实allocator全局boot、TLS/arena/OS region贯通、外层signer/handle、fresh请求签名输出和线上新矩阵仍未完成。无JVM Rust、当前非空搜索与分页、其它平台及最终Pages/Actions产品的完成状态没有变化。
 
+外层启动的最新恢复：`+0x28040c → VM +0xa7050` 的 4 个 fresh 控制完成 86 步／16 次分配／3 次 deferred worker 创建；worker TLS support 前段为 16 个冷／热控制。OP45 的第二寄存器 bit 21 和 equality 语义由 308 个 native 控制确认，共用 VM 的 root／state／parser 回归通过。worker dispatch、真实 allocator boot、fresh 请求签名和新线上矩阵仍未验证。详见 [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md)。
+
 ## 1. 完成度结论
 
 | 范围 | 当前状态 | 可以据此声称什么 |
