@@ -17,14 +17,21 @@ All four same-run controls now return from parser at **step 3318 /
 +0x9c95c**, with a successful non-NULL unpack of the 165-byte message.
 Each compares **119 allocations / 47 frees**, every guest/main image page,
 TLS/generation state, ordered effects and all 32 terminal VM slots.
-Complete constructor/config/cipher/unpack subtree comparisons rise to **40**;
+Complete constructor/config/cipher/unpack subtree comparisons rise to **44**;
 the unpack subtree also compares its actual returned pointer. The fill-only
 intermediate checkpoint was step3134, 101 allocations / 27 frees.
 
-Root remains step513 / +0x99b40. Native VM input prelude snapshots and
-serialized guard/OS/diagnostic boundaries still apply. Next: restore
-+0x261c54 -> +0x261cb0 initialization and independently derive +0x262608
-parser caller/prelude state. Full independent current Medusa remains open.
+`vm9_parser.py` now derives the required +0x262608 caller workspace,
+VM descriptor and initial slots in Python. Four earlier-entry caller controls
+also return with the same 3318 steps, 119 allocations / 47 frees and all
+32 slots; **7 caller preflight/rollback cases** pass. These caller tests do
+not use the native VM-entry prelude snapshot. They still use native inputs
+at the earlier caller boundary, including root heap/TLS/global state.
+
+Root remains step513 / +0x99b40. The original component VM tests retain
+native VM entry snapshots; serialized guard/OS/diagnostic boundaries remain.
+Next: restore +0x261c54 -> +0x261cb0 initialization and generate the state
+before the now-recovered +0x262608 caller. Full independent current Medusa remains open.
 See [PARSER_UNPACK.md](PARSER_UNPACK.md) for ABI, evidence and limits.
 
 ## Earlier stream reference and cleanup checkpoint (2026-10-04)

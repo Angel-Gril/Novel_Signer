@@ -1237,7 +1237,7 @@
     "observable_stack_frame_effects_derived_from_caller_sp": true,
     "guard_boundary": "serialized_successful_single_thread_guard",
     "configuration_decrypt_callback_python_implemented": true,
-    "registry_and_cipher_comparisons": 40,
+    "registry_and_cipher_comparisons": 44,
     "parser_cold_tls_and_ordered_effects_compared": true,
     "explicit_stack_result_reference_and_context_bytes_compared": true,
     "configuration_stream_callback_python_implemented": true,
@@ -1247,8 +1247,13 @@
     "parser_terminal_virtual_slots_compared": 32,
     "parser_input_length": 165,
     "parser_message_unpack_successful": true,
-    "independent_python_parser_prelude": false,
-    "configuration_unpack_subtree_return_pointer_compared": true
+    "configuration_unpack_subtree_return_pointer_compared": true,
+    "parser_vm_entry_prelude_python_generated": true,
+    "parser_caller_comparisons": 4,
+    "parser_caller_negative_count": 7,
+    "parser_caller_entry_snapshot_used": true,
+    "parser_caller_uses_native_vm_entry_snapshot": false,
+    "complete_python_root_prelude": false
   },
   "vm9_strings_native_20261004": {
     "evidence_file": "evidence/vm9_strings_native_20261004.json",

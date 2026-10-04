@@ -1,6 +1,6 @@
 # 配置 parser 的字符串重填、消息解包与退出路径
 
-2026-10-04 已恢复 `+0x248dd8 → +0x247a08` 的字符串重填，以及 `+0x256088 → +0x254330` 的配置消息解包。四次同次 fresh native 对照中的 parser 在第 **3318 步 / +0x9c95c** 正常退出；165 字节配置解包返回非 NULL。root 仍在第 **513 步 / +0x99b40**，尚未恢复 `+0x261c54` 后续初始化。**完整独立 Medusa 未完成。**
+2026-10-04 已恢复 `+0x248dd8 → +0x247a08` 的字符串重填，以及 `+0x256088 → +0x254330` 的配置消息解包。`vm9_parser.py` 已进一步由 Python 生成 `+0x262608` 的所需 caller 前导状态，四次 caller 对照不再读取 native VM 入口快照。四次同次 fresh native 对照中的 parser 在第 **3318 步 / +0x9c95c** 正常退出；165 字节配置解包返回非 NULL。root 仍在第 **513 步 / +0x99b40**，尚未恢复 `+0x261c54` 后续初始化。**完整独立 Medusa 未完成。**
 
 ## 接口与调用约定
 
@@ -37,7 +37,7 @@ native verifier 为该解包路径设置 200000 条指令上限；旧通用 help
 
 ## 同次组合对照
 
-[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 包含两个 image bases × SDK 缺失/30，**4 次 fresh controls、8 段 VM 对照、40 条完整子树对照**。
+[组合证据](evidence/vm9_root_vm_prefix_native_20261004.json) 包含两个 image bases × SDK 缺失/30，**4 次 fresh controls、8 段 VM 对照、44 条完整子树对照**。
 
 | 检查点 | parser steps | allocations | explicit frees | 状态 |
 | --- | ---: | ---: | ---: | --- |
@@ -49,7 +49,17 @@ native verifier 为该解包路径设置 200000 条指令上限；旧通用 help
 
 native VM 只初始化 slots 0、4..7、29、31，其他 slots 保留 caller backing 原有字节。模型从同次入口输入 pages 读取这些字节，不从 native 退出结果初始化。parser 的原生返回点 `+0x26266c` 仅做栈保护校验和返回，没有消费 X0；退出证明以虚拟槽、发布内存与副作用为准。
 
-组合对照仍从同次 native **VM 入口前导输入快照**开始；完整 parser VM 路径返回不代表其 native 前导已经独立生成。串行 guard、OS 和 diagnostic 边界仍明确存在。当前尚未验证当前线上 fresh-input Medusa。
+原有 root/parser VM 组件对照仍从同次 native **VM 入口输入快照**开始。新增四次 caller 对照从更早的 `+0x262608` 调用入口开始，由 Python 生成所需 VM 前导，不读取 `+0x168324` 入口快照。caller 之前的 root/堆/TLS/全局状态仍来自同次 native 控制输入；串行 guard、OS 和 diagnostic 边界仍明确存在。当前尚未验证当前线上 fresh-input Medusa。
+
+## Python 生成 parser caller 前导
+
+`vm9_parser.py` 将已恢复的 parser callbacks 放在一个代码 owner 中，VM 组件和 caller 对照都使用它。生产接口为 `parse_configuration_caller`：输入 caller pages、X0/X1/X2/X8、entry SP、未携带 PAC 的 return address、thread pointer、image base、matching VM interpreter，以及明确的 allocate/reallocate/free/singleton 环境服务。输出 `ParserResult` 包含 steps、终止 offset、32 个虚拟槽和 callback/unpack 计数。
+
+前导工作区起点为 entry SP-0x810。四个输入放在 `+0/+8/+0x10/+0x18`；callback、backing-end 和 exit descriptor 放在 `+0x20/+0x28/+0x30`。读取 TLS guard；寄存器 backing 从工作区 `+0x6c8` 起，只有 native 明确初始化的 slots 被重设，其余保留 caller 工作区内容。native callback 的显式 scratch SP 由工作区地址减 0x190 得到。物理 callee register spills 不属于此 Python 接口的语义输出，也未宣称整个 caller 栈逐字节相等。
+
+四次 `parser_caller` 对照均匹配 **119 allocations / 47 frees**、guest、全部主 image pages、TLS/generation、有序副作用和 32 个虚拟槽。验证包含 **7 个 caller 拒绝/页面回滚案例**：未对齐 stack、PAC return、非法指令预算、unmapped stack/TLS、缺少 bytecode 和非法 u64 输入。异常后 VM image base 恢复，不调用环境服务。VM 模块当前使用共享 image base，调用需串行。
+
+这里已经移除 parser **所需 VM 前导**的快照依赖；并未移除 caller 之前的完整 native root 初始化状态。
 
 ## 复现与使用
 
@@ -81,4 +91,4 @@ if message:
 
 这些证据证明重填容量策略、source alias 处理、分配后的实际读取点、unpack ABI、descriptor-driven message 布局、重复值/unknown fields 处理、清理次序，以及当前 parser 路径的退出。可用于定位 ABI、schema、ownership 或初始化状态错误；不能据此把下载失败归因于服务器，也不能证明所有配置输入、所有 native 环境或其他平台已经等价。
 
-下一段是 `+0x261c54 → +0x261cb0` 的完整初始化及 parser 前导。已静态定位 `+0x262608` 会在调用 VM 前生成 caller 工作区、四项输入和 callback/exit descriptor；这些需由 Python 生成后，才能移除当前 parser 的 VM 前导快照依赖。完整 root/88-byte 初始化、独立当前 Medusa、无 JVM Rust signer/download、搜索非空/分页、抖音/起点及最终 Pages 搜索下载网页与 Actions 工具仍未完成。
+下一段是 `+0x261c54 → +0x261cb0` 的完整初始化及 parser 前导。已静态定位 `+0x262608` 会在调用 VM 前生成 caller 工作区、四项输入和 callback/exit descriptor；这些所需前导状态已由 `vm9_parser.py` 生成并通过 caller 对照；下一步须生成该 caller 之前的 root 状态。完整 root/88-byte 初始化、独立当前 Medusa、无 JVM Rust signer/download、搜索非空/分页、抖音/起点及最终 Pages 搜索下载网页与 Actions 工具仍未完成。
