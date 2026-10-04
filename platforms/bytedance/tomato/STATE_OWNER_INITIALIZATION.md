@@ -72,6 +72,6 @@ verifier 强制核对 ELF SHA256。Native 只在 Unicorn oracle 侧执行，生�
 
 ## 剩余工作
 
-下一处是独立生成更早的 root caller `+0x257084 → +0x257308 → VM +0x991c0` 及所依赖的全局／TLS／arena／OS 输入，消除 root VM native 输入前导，再贯通 fresh-input Medusa body 并进行新请求差分与线上矩阵。当前没有证明这整段初始化已经独立完成。
+后续 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md) 已完成默认 root caller 和更早的 `+0x257578` factory，并以8组fresh ELF/TLS输入消除本报告原有的root VM前导快照依赖。此更新仍使用受控allocator与虚拟OS，尚需接入外层signer/handle，独立补齐实际全局boot／TLS／arena／OS状态，再验证fresh-input Medusa请求输出和线上矩阵。
 
 无 JVM Rust signer/download、当前非空搜索及分页、抖音／起点线上闭环和最终 Pages/Actions 搜索下载产品仍待后续完成。上述 component/VM 结果不代表这些任务已经完成。

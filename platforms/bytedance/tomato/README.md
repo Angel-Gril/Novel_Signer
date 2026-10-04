@@ -37,9 +37,9 @@ The separate stream/reference path is also restored and verified. Read
 reference ownership and the next fill/resize boundary.
 
 
-The observed owner/state/root VM path now returns with matching heap, image,
-TLS/generation, ordered effects and terminal virtual slots. State caller
-prelude is Python-generated; the earlier root VM input prelude remains native.
-Read [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md) for the
-106/15 fresh helper matrix and4-control combined evidence. Complete current
-Medusa and the final search/download product remain open.
+The bounded root factory/caller now runs from fresh ELF/TLS/reference inputs
+without a native entry prelude. Eight controls compare all32 terminal slots,
+heap, main image, TLS/generation and ordered effects; full factory counts are
+206/93. Read [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md) for the exact
+input and allocator/OS boundary. Complete current Medusa and the final
+search/download product remain open.

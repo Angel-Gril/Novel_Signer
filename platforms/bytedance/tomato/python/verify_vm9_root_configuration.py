@@ -29,9 +29,8 @@ TLS = GUEST + 0xA000
 PROPERTY = GUEST + 0xB800
 
 
-def probe(library, libc, *, base, property_value, seconds=1791023800,
-          instruction_observer=None, allocation_effect=None, registration_effect=None,
-          free_effect=None, wake_effect=None, memory_write_observer=None):
+def fresh_inputs(library, *, base, property_value):
+    """Explicit ELF/TLS/reference fixture; no native constructor runs here."""
     pages = fresh_pages()
     pages.update(image_pages(library, base))
     # Resolve only evidenced external allocator relocations, using their PLTs
@@ -50,14 +49,6 @@ def probe(library, libc, *, base, property_value, seconds=1791023800,
                 if symbol.name in bindings:
                     _write_span(pages, base + relocation["r_offset"],
                         (bindings[symbol.name] + relocation["r_addend"]).to_bytes(8, "little"))
-    exports = {}
-    with libc.open("rb") as stream:
-        elf = ELFFile(stream)
-        for section in elf.iter_sections():
-            if section["sh_type"] == "SHT_DYNSYM":
-                exports.update({s.name: LIBC_BASE + s["st_value"] for s in section.iter_symbols()
-                                if s["st_shndx"] != "SHN_UNDEF"})
-
     _write_span(pages, TLS + 8, (TLS + 0x200).to_bytes(8, "little"))
     _write_span(pages, TLS + 0x200, bytes(0x900))
     _write_span(pages, TLS + 0x210, (137).to_bytes(4, "little"))
@@ -84,6 +75,21 @@ def probe(library, libc, *, base, property_value, seconds=1791023800,
     _write_span(pages, GUEST + 0x1010, _read_span(pages, GUEST + 0x1000, 16))
     if property_value is not None and (len(property_value) > 91 or b"\0" in property_value):
         raise ValueError("property fixture must fit the 92-byte native buffer")
+
+    return pages, inputs, sdk_name
+
+
+def probe(library, libc, *, base, property_value, seconds=1791023800,
+          instruction_observer=None, allocation_effect=None, registration_effect=None,
+          free_effect=None, wake_effect=None, memory_write_observer=None):
+    pages, inputs, sdk_name = fresh_inputs(library, base=base, property_value=property_value)
+    exports = {}
+    with libc.open("rb") as stream:
+        elf = ELFFile(stream)
+        for section in elf.iter_sections():
+            if section["sh_type"] == "SHT_DYNSYM":
+                exports.update({s.name: LIBC_BASE + s["st_value"] for s in section.iter_symbols()
+                                if s["st_shndx"] != "SHN_UNDEF"})
 
     calls, registrations = Counter(), []
     root_pointer, before, after = None, None, None

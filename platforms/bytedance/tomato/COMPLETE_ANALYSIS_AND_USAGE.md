@@ -13,7 +13,9 @@
 
 最新检查点恢复了 `+0x25ee84 → +0x26cd0c → +0x26cdc4` 冷启动共享引用、日志／SDK／环境 getter、格式化和目录依赖（**106 组 native 差分 / 15 个拒绝回滚案例**）。Python 生成的 state caller 和完整48-byte owner 已接回 root：state VM **363步 / +0xa54bc退出，28次分配 / 21次free**；root **716步 / +0x99f04退出，171 / 93**，二者全部32个终止虚拟槽与guest/image/TLS/generation/有序副作用一致。组合为 **4个controls / 16段VM / 68条子树**，另有7个state caller前置拒绝案例。详见 [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md)。
 
-该组合仍从更早的同次 native root VM 输入前导开始，未完成完整fresh-input Medusa；它不消费之后的constructor/parser/state入口快照。下一步是独立生成 `+0x257084 → +0x257308` root caller与全局/TLS/arena/OS输入，再验证fresh signer输出及线上矩阵。无JVM Rust、当前非空搜索与分页、其它平台和最终Pages/Actions产品的完成状态没有变化。
+本次又独立生成了 `+0x257578 → +0x257084 → +0x257308 → VM +0x991c0` 默认 root factory。**8个 fresh ELF/TLS 控制不使用任何 native 函数／VM 入口快照**，32个终止虚拟槽、全部主 image、guest/TLS/generation 和有序副作用一致；完整factory分配／释放为206/93，另有9个caller拒绝和2个factory失败回滚案例。旧component对照增至4个controls/16段VM/76条子树，仍单独标注native函数入口输入。详见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)。
+
+当前控制仍使用明确的nonreusing malloc/free与虚拟OS；真实allocator全局boot、TLS/arena/OS region贯通、外层signer/handle、fresh请求签名输出和线上新矩阵仍未完成。无JVM Rust、当前非空搜索与分页、其它平台及最终Pages/Actions产品的完成状态没有变化。
 
 ## 1. 完成度结论
 
@@ -30,7 +32,7 @@
 | Perseus | 当前时间窗内可加可不加 | 只能说明本次矩阵未发现硬依赖，不等于永久可省略 |
 | Gorgon/Ladon/Argus | 有算法/向量或矩阵证据 | 在已测阅读矩阵中可移除；不要把该结论外推到其他产品或接口 |
 | 搜索 | 当前 `7.1.3.32` 首阶段仍为空；旧 `6.8.1.32` 配置的外部 Java 服务已返回两页 | 旧服务分别返回 9/10 本书、同一 searchId；不代表当前版本搜索或独立 signer 完成 |
-| Python allocator/runtime | TLS、arena、tcache、OS region、空 bin、清理、部分 callback 已独立建模 | 是 VM9 研究组件，不是完整 Medusa signer |
+| Python allocator/runtime | TLS、arena、tcache、OS region、空 bin、清理、部分 callback 和受控环境下的 fresh root factory 已独立建模 | 是 VM9 研究组件，不是完整 Medusa signer |
 | Rust | scaffold 可编译；明确返回 current Medusa unavailable | 可承载已验证纯 Rust 边界和参数模型，不能独立访问当前阅读接口 |
 | 抖音 | 仅静态/社区材料 | 没有当前版本线上签名和正文闭环 |
 | 起点 | 证据缺口 | 没有 APK、签名样本、接口矩阵或章节解密向量 |

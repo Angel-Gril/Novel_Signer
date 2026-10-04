@@ -1,6 +1,6 @@
 # 默认配置下的 signer 构造和 callback 发布
 
-当前已恢复两个 child、两类 handler、引用计数 wrapper、root 已观测字段装配、空 callback 容器、最终 callback pair 绑定，以及 264-byte root 配置进入初始化器前的 Python 布局。**完整 root constructor 与独立 fresh-input Medusa 仍未完成。** 本页只适用于已测番茄 `7.1.3.32` native artifact，不外推到抖音或其他平台。
+当前已恢复两个 child、两类 handler、引用计数 wrapper、root 已观测字段装配、空 callback 容器、最终 callback pair 绑定，以及受控环境下的 264-byte 配置 root factory／caller／VM 默认初始化路径。后者有8组 fresh ELF/TLS 对照，不依赖 native 入口快照，见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)。**完整外层 signer constructor、实际 allocator boot 与独立 fresh-input Medusa 仍未完成。** 本页只适用于已测番茄 `7.1.3.32` native artifact，不外推到抖音或其他平台。
 
 两类证据分别是 [同次构造采样](evidence/vm9_signer_constructor_graph_20261003.json) 和 [新建内存对照](evidence/vm9_signer_objects_python_20261003.json)。前者说明实际桥接器走了哪条路径；后者说明哪些对象字段可以由输入生成。
 
@@ -18,7 +18,7 @@ WriteHook 的 reported PC 可能指向执行块的邻近位置。字段写入归
 
 ```mermaid
 flowchart TD
-    R["root: 40 bytes / +0x27c930"] -->|"+0x08, +0x10"| C["配置对象及引用计数：尚未独立恢复"]
+    R["root: 40 bytes / +0x27c930"] -->|"+0x08, +0x10"| C["配置对象及引用计数：受控 fresh factory 已恢复；外层装配待贯通"]
     R -->|"+0x18"| A["child A: 40 bytes / +0x27d0c4"]
     R -->|"+0x20"| B["child B: 40 bytes / +0x27d0c4"]
     A -->|"+0x20"| PA["pair: +0x2830c4, handler A"]
@@ -28,7 +28,7 @@ flowchart TD
     R --> P["+0x28c268 发布两个 callback"]
 ```
 
-root 的 `+0x00` 在当前对象写入记录中没有被 constructor 写入。快照中恰好为零，不能据此把清零这个字段当成构造规则。`construct_signer_root` 现在只装配调用者显式提供的 `+0x08/+0x10/+0x18/+0x20` 四个依赖；服务 singleton 的已测构造分支已恢复，但 root 前段配置对象和全局副作用仍需独立恢复。
+root 的 `+0x00` 在当前对象写入记录中没有被 constructor 写入。快照中恰好为零，不能据此把清零这个字段当成构造规则。`construct_signer_root` 现在只装配调用者显式提供的 `+0x08/+0x10/+0x18/+0x20` 四个依赖；服务 singleton 和默认配置 root factory 的已测构造分支已恢复，但外层 root constructor 的装配、配置 getter 和后续全局副作用仍需贯通。
 
 | 组件 | 可生成的布局与边界 |
 | --- | --- |
@@ -123,9 +123,9 @@ python python/verify_vm9_signer_objects.py --library /private/libmetasec_ml_7133
 python python/verify_vm9_service_singletons.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/service-singletons.json
 ```
 
-## 264-byte root 配置：布局已恢复，初始化器仍需移植
+## 264-byte root 配置：布局与后续默认初始化
 
-`construct_root_configuration_layout` 对照 `+0x257084` 到 `+0x257240` 的真实指令，生成 264-byte 对象及 30 次嵌套分配。它在复制第三个配置字符串到临时引用、调用 `+0x257308` 之前结束，不能直接当作完成初始化的 root 使用。它与 8-byte configuration singleton 是不同对象。
+`construct_root_configuration_layout` 对照 `+0x257084` 到 `+0x257240` 的真实指令，生成 264-byte 对象及 30 次嵌套分配。它在复制第三个配置字符串到临时引用、调用 `+0x257308` 之前结束，不能直接当作完成初始化的 root 使用。它与 8-byte configuration singleton 是不同对象。后续默认 initializer、caller 和更早 factory 已在受控 fresh 输入下恢复，见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)；该 layout API 本身仍只返回前缀。
 
 | 字段 | Python 已恢复的规则 |
 | --- | --- |
@@ -148,7 +148,7 @@ python python/verify_vm9_configuration_primitives.py --library /private/libmetas
 
 ## fresh ELF 的 native 初始化基线
 
-新的 [root 初始化证据](evidence/vm9_root_configuration_native_20261004.json) 在两个 image base、八种 SDK 属性输入下，真实执行 `+0x257578 → +0x257084 → +0x257308`，16 个案例均正常返回，各进行 206 次分配与 31 对 mutex lock/unlock。**这项证据是 native 验证基线，初始化器仍由 Unicorn 执行，不能当作纯 Python 配置初始化完成。**
+新的 [root 初始化证据](evidence/vm9_root_configuration_native_20261004.json) 在两个 image base、八种 SDK 属性输入下，真实执行 `+0x257578 → +0x257084 → +0x257308`，16 个案例均正常返回，各进行 206 次分配与 31 对 mutex lock/unlock。**这份历史证据只证明 native 基线；新的纯 Python 默认 factory 证据单独记录于 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，不能把两种验证混为一谈。**
 
 前两个 root 输入共享同一 reference；两个不同的字符串从 ELF 常量解码，长度分别为 4 和 240。输入 count 使用显式测试值 7。字符串内容只留在本地内存中。malloc/free 的 ABS64 链接按 relocation 表绑定到明确分配边界，不能把 NULL allocator descriptor 随意替换成业务 callback。
 
@@ -308,3 +308,5 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 本轮已恢复字符串重填（190 / 5）和有界 Protobuf-C 解包/递归清理（208 / 6）。四次控制中的 165 字节消息解包成功，parser 在第 3318 步 / `+0x9c95c` 退出，119 次分配、47 次 free、全部 guest/image/TLS/generation/有序副作用及 32 个虚拟寄存器槽一致。完整子树对照现为 60 条（包含后续 context/wrapper/constructor）。详见 [PARSER_UNPACK.md](PARSER_UNPACK.md)。原有 VM 组件对照仍使用同次 native VM 入口快照；新增四次 `+0x262608` caller 对照由 Python 生成所需前导，另有 7 个拒绝/回滚案例。caller 之前的 root/堆/TLS 状态仍由 native 控制提供。
 
 后续 [配置初始化报告](CONFIGURATION_INITIALIZATION.md) 恢复已观察的88-byte构造与默认初始化路径：helper 166 / 5，context/wrapper 125次分配、69次free，constructor 134 / 69、status6。四次 root 控制从较早 VM 输入开始，自行生成 constructor/parser 状态，推进至第605步 / +0x99cd8，138 / 70的 guest/image/TLS/generation/有序副作用一致。下一处是 +0x2698f0 -> VM +0xa46a0。+0x26ecb4 为 saved frame getter，不能把其写入误述为 TLS。完整 root VM 前导、88-byte其它初始化分支、通用多 key TLS 树、诊断与全局副作用及剩余 callbacks 仍待恢复。当前搜索仍无非空响应与分页证据；独立当前 Medusa、无 JVM Rust 下载链路、抖音/起点闭环及最终 Pages 搜索下载网页仍未完成。
+
+最新默认 state/caller 与独立配置 root factory 已在 [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md) 和 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md) 中更新：root716步退出，8组factory控制不读取native入口快照。本页较早的605步及下一处state依赖属于历史检查点；外层signer/handle与实际allocator boot仍未完成。

@@ -35,8 +35,9 @@ GitHub Actions runs the same checks, a public-data secret scan, and publishes `d
 The `build-rust` workflow also produces Linux and Windows artifacts on manual dispatch or version tags. Those artifacts are the current Rust integration scaffold; they do not contain a current online Medusa implementation until the independent VM work is completed.
 
 
-The latest independent initialization checkpoint returns the observed state
-VM at363steps and root VM at716steps, including all32 terminal slots and
-ordered effects. The earlier native root input prelude still needs independent
-generation. See the [owner/state report](platforms/bytedance/tomato/STATE_OWNER_INITIALIZATION.md)
-for the106/15 helper matrix and the exact remaining boundary.
+The latest bounded root factory/caller runs from fresh ELF/TLS/reference
+inputs without native entry snapshots. Eight controls match all32 terminal
+slots and ordered effects (206 allocations/93 frees for the full factory).
+Real allocator boot, outer signer/handle and fresh request signing remain
+open. See the [root initialization report](platforms/bytedance/tomato/ROOT_INITIALIZATION.md)
+for reproducible checks and the exact boundary.

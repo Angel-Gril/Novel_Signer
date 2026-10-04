@@ -3,6 +3,27 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Independent root factory and caller (2026-10-04)
+
+The bounded default chain +0x257578 -> +0x257084 -> +0x257308 -> VM
++0x991c0 now runs in Python from fresh ELF/TLS/reference inputs, with **no
+native entry or VM prelude snapshot used as model input**. Eight controls
+(two image bases x four SDK profiles) match all32 terminal slots,
+main-image/guest/TLS/generation state and ordered effects. Root still returns
+at716/+0x99f04; full factory counts are **206 allocations / 93 frees**,
+2 destructor registrations and9 wakes. Nine caller preflight and two factory
+allocation-failure cases prove page rollback and VM-base restoration.
+
+The component verifier retains4 controls/16 VM phases and now76 subtrees,
+including Python-generated root caller and constructor. Its native function
+inputs remain labeled separately from the new independent factory evidence.
+
+The factory test uses an explicit nonreusing malloc/free boundary and virtual
+OS environment. Real allocator global boot/arena/OS state, the outer signer
+constructor/handle and fresh request signing are still open. Complete Medusa,
+no-JVM Rust, nonempty current search, other platforms and final Pages/Actions
+product remain open. See [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md).
+
 ## Shared/environment dependencies and observed state/root exits (2026-10-04)
 
 The +0x25ee84 -> +0x26cd0c -> +0x26cdc4 default chain now has Python
@@ -12,7 +33,7 @@ Fresh helper differences pass **106 / 15**. JNI, live log endpoints,
 interrupted IO, cold SDK-conversion singleton and unknown formatter branches
 remain explicitly unsupported.
 
-Four controls pass **16 VM comparisons / 68 complete subtrees**. State VM
+The earlier state-owner checkpoint passed **16 VM comparisons / 68 complete subtrees**; the current component verifier has76 after adding root caller/constructor. State VM
 +0xa46a0 returns at **step363 / +0xa54bc**, with **28 allocations / 21 frees**
 and all32 terminal virtual slots matching. Its Python caller prelude also
 passes; the full48-byte owner composes **32 / 21**, including seven generated
@@ -26,9 +47,9 @@ uses no later constructor/parser/state-owner/state-caller/state-VM entry
 snapshot. Independent subtree tests retain their own native function inputs.
 Parser remains returned at3318,119/47. The old root step513 phase is retained.
 
-**Complete fresh-input Medusa is still open.** Next: generate the earlier
-+0x257084 -> +0x257308 root caller, globals/TLS/arena/OS inputs independently,
-then fresh signer body/online checks. Current no-JVM Rust, nonempty search,
+**Complete fresh-input Medusa is still open.** The root caller dependency
+recorded here is superseded by the independent factory checkpoint above;
+real allocator boot and fresh signer body/online checks remain open. Current no-JVM Rust, nonempty search,
 other platforms and final Pages/Actions download product remain open.
 See [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md).
 
