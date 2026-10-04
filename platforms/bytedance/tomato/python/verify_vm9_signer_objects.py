@@ -86,7 +86,7 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            extra_registers=None, stop_offset=None, real_singletons=False,
            thread_id=None, observed_memory=None, allocation_effect=None,
            real_mutexes=False, host_imports=None, instruction_limit=10000,
-           instruction_observer=None, syscall_handler=None):
+           instruction_observer=None, syscall_handler=None, malloc_handler=None):
     cpu = Uc(UC_ARCH_ARM64, UC_MODE_ARM)
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -164,7 +164,7 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
         offset = address - base
         if offset == 0x347FD0:  # malloc PLT; operator new executes normally
             requested = cpu.reg_read(UC_ARM64_REG_X0)
-            result = allocation.take(requested)
+            result = malloc_handler(cpu, requested) if malloc_handler else allocation.take(requested)
             if allocation_effect:
                 allocation_effect(cpu, requested, result)
         elif offset == 0x347F20:  # memset PLT

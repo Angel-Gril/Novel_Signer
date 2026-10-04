@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+import hashlib
 import struct
 from vm9_allocator import (
     RefillUnsupported, _PageTransaction, _read_span, _write_span,
@@ -142,6 +143,258 @@ def clone_string_object(
     return capacity if length >= 0x8000_0000 else pointer
 
 
+def _s32(value):
+    value &= 0xFFFF_FFFF
+    return value - 0x100000000 if value & 0x80000000 else value
+
+
+def round_string_capacity(requested: int) -> int:
+    """Model +0x2469fc W0, including signed overflow and strict power rounding."""
+    if not isinstance(requested, int) or not 0 <= requested <= 0xFFFF_FFFF:
+        raise RefillUnsupported("capacity request must fit w0")
+    if _s32(requested) < 8:
+        return 8
+    spread = requested
+    for shift in (1, 2, 4, 8, 16):
+        spread |= spread >> shift
+    candidate = (spread + 1) & 0xFFFF_FFFF
+    return requested if _s32(candidate) < _s32(requested) else candidate
+
+
+def _string_bound(limit):
+    if not isinstance(limit, int) or not 0 <= limit <= 0x100000:
+        raise ValueError("invalid string operation bound")
+
+
+def _malloc(pages, allocate, size):
+    pointer = allocate(pages, size)
+    _word(pointer)
+    if pointer:
+        _read_span(pages, pointer, size)
+    return pointer
+
+
+def _reserve_string_fields(pages, fields, requested, allocate, reallocate, free, limit):
+    if not fields:
+        return -1
+    pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+    if not pointer:
+        return -1
+    length = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
+    capacity = int.from_bytes(_read_span(pages, fields, 4), "little")
+    if _s32(length) < 0 or _s32(capacity) < 1 or _s32(requested) < 1 or capacity < length:
+        return -1
+    if capacity > requested:
+        return 0
+    rounded = round_string_capacity(requested)
+    if _s32(rounded) <= _s32(capacity):
+        return 0
+    if max(length, rounded) > limit:
+        raise RefillUnsupported("string reserve exceeds the explicit operation bound")
+    result = 0
+    if _s32(capacity * 7) >= _s32(length * 8):
+        result = _malloc(pages, allocate, rounded)
+        if result:
+            if length:
+                _write_span(pages, result, _read_span(pages, pointer, length))
+            free(pages, pointer)
+    if not result:
+        result = reallocate(pages, pointer, rounded)
+        _word(result)
+        if not result:
+            pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+            result = reallocate(pages, pointer, requested)
+            _word(result)
+            rounded = requested
+        if not result:
+            return -1
+        _read_span(pages, result, rounded)
+    # Native reloads length after allocator/free effects and before publishing.
+    current_length = _s32(int.from_bytes(_read_span(pages, fields + 4, 4), "little"))
+    _write_span(pages, fields + 8, _word(result))
+    _write_span(pages, fields, rounded.to_bytes(4, "little"))
+    _write_span(pages, result + current_length, bytes(1))
+    return 0
+
+
+def reserve_string_fields(
+    pages, *, fields_address: int, requested: int, allocate: Callable,
+    reallocate: Callable, free: Callable, max_bytes: int = 0x100000,
+) -> int:
+    """Model +0x2468e8 on capacity/u32 length/pointer fields; return 0 or -1.
+
+    malloc/realloc NULL and native validation failures are represented results.
+    Unsupported pages/effects roll back. Host allocator ledgers are external.
+    All three effects must operate only on the staged pages they receive.
+    """
+    _string_bound(max_bytes)
+    if not isinstance(requested, int) or not 0 <= requested <= 0xFFFF_FFFF:
+        raise RefillUnsupported("reserve request must fit w1")
+    transaction = _PageTransaction(pages)
+    status = _reserve_string_fields(transaction, fields_address, requested,
+                                    allocate, reallocate, free, max_bytes)
+    transaction.commit()
+    return status
+
+
+def _destroy_string_fields(pages, fields, free):
+    if not fields:
+        return -1
+    capacity = _s32(int.from_bytes(_read_span(pages, fields, 4), "little"))
+    length = _s32(int.from_bytes(_read_span(pages, fields + 4, 4), "little"))
+    if length < 0 or capacity < 1 or capacity < length:
+        return -1
+    pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+    if not pointer:
+        return -1
+    free(pages, pointer)
+    free(pages, fields)
+    return 0
+
+
+def destroy_string_fields(pages, *, fields_address: int, free: Callable) -> int:
+    """Model +0x246d7c clone cleanup, freeing payload then field structure."""
+    transaction = _PageTransaction(pages)
+    status = _destroy_string_fields(transaction, fields_address, free)
+    transaction.commit()
+    return status
+
+
+def _clone_string_fields(pages, fields, allocate, free, limit):
+    length = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
+    if _s32(length) < 0:
+        return 0
+    pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+    if not pointer:
+        return 0
+    if length + 1 > limit:
+        raise RefillUnsupported("alias clone exceeds the explicit operation bound")
+    clone = _malloc(pages, allocate, 16)
+    if not clone:
+        return 0
+    capacity = round_string_capacity((length + 1) & 0xFFFF_FFFF)
+    if capacity > limit:
+        raise RefillUnsupported("alias clone capacity exceeds the explicit operation bound")
+    payload = _malloc(pages, allocate, capacity)
+    _write_span(pages, clone + 8, _word(payload))
+    if not payload:
+        capacity = length + 1
+        payload = _malloc(pages, allocate, capacity)
+        _write_span(pages, clone + 8, _word(payload))
+        if not payload:
+            free(pages, clone)
+            return 0
+    _write_span(pages, clone, capacity.to_bytes(4, "little") + length.to_bytes(4, "little"))
+    if length:
+        _write_span(pages, payload, _read_span(pages, pointer, length))
+    _write_span(pages, payload + length, bytes(1))
+    return clone
+
+
+def append_string_fields(
+    pages, *, destination_fields: int, source_fields: int, allocate: Callable,
+    reallocate: Callable, free: Callable, max_bytes: int = 0x100000,
+) -> int:
+    """Model +0x246ba0, including aliases, allocator failures and temp cleanup.
+
+    Fields are capacity/u32 length/pointer (16 bytes). Return native signed
+    status 0/-1. Append uses memmove semantics; source inside the destination
+    buffer is cloned before a growth attempt. Reject unmodeled memory/effects
+    with rollback, while preserving modeled native failure effects.
+    """
+    _string_bound(max_bytes)
+    transaction = _PageTransaction(pages)
+    if not destination_fields or not source_fields:
+        return -1
+    destination = int.from_bytes(_read_span(transaction, destination_fields + 8, 8), "little")
+    if not destination:
+        return -1
+    source = int.from_bytes(_read_span(transaction, source_fields + 8, 8), "little")
+    if not source:
+        return -1
+    capacity = int.from_bytes(_read_span(transaction, destination_fields, 4), "little")
+    previous = int.from_bytes(_read_span(transaction, destination_fields + 4, 4), "little")
+    length = int.from_bytes(_read_span(transaction, source_fields + 4, 4), "little")
+    total = (previous + length) & 0xFFFF_FFFF
+    if (previous | length | total | ((capacity - previous) & 0xFFFF_FFFF)) & 0x80000000:
+        return -1
+    if max(previous, length, total + 1) > max_bytes:
+        raise RefillUnsupported("string append exceeds the explicit operation bound")
+    requested = (total + 1) & 0xFFFF_FFFF
+    selected, clone = source_fields, 0
+    status = 0
+    if _s32(capacity) <= _s32(requested):
+        delta = (source - destination) & 0xFFFF_FFFF_FFFF_FFFF
+        if delta < 0x8000000000000000 and delta < _s32(capacity):
+            clone = _clone_string_fields(transaction, source_fields, allocate, free, max_bytes)
+            if not clone:
+                transaction.commit()
+                return -1
+            selected = clone
+        status = _reserve_string_fields(transaction, destination_fields, requested,
+                                        allocate, reallocate, free, max_bytes)
+    if status == 0:
+        if length:
+            pointer = int.from_bytes(_read_span(transaction, destination_fields + 8, 8), "little")
+            source = int.from_bytes(_read_span(transaction, selected + 8, 8), "little")
+            _write_span(transaction, pointer + previous, _read_span(transaction, source, length))
+        pointer = int.from_bytes(_read_span(transaction, destination_fields + 8, 8), "little")
+        _write_span(transaction, pointer + total, bytes(1))
+        _write_span(transaction, destination_fields + 4, total.to_bytes(4, "little"))
+    if clone:
+        _destroy_string_fields(transaction, clone, free)
+    transaction.commit()
+    return status
+
+
+def append_string_object(
+    pages, *, object_address: int, source_object_address: int, allocate: Callable,
+    reallocate: Callable, free: Callable, max_bytes: int = 0x100000,
+) -> int:
+    """Model +0x248684: append fields at +8 and return destination even on -1."""
+    append_string_fields(pages, destination_fields=object_address + 8,
+        source_fields=source_object_address + 8, allocate=allocate,
+        reallocate=reallocate, free=free, max_bytes=max_bytes)
+    return object_address
+
+
+def _append_string_byte(pages, fields, value, allocate, reallocate, free, limit):
+    capacity = int.from_bytes(_read_span(pages, fields, 4), "little")
+    length = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
+    if (length | ((capacity - length) & 0xFFFF_FFFF)) & 0x80000000:
+        return -1
+    if length + 2 > limit:
+        raise RefillUnsupported("byte append exceeds the explicit string bound")
+    status = _reserve_string_fields(pages, fields, (length + 2) & 0xFFFF_FFFF,
+                                    allocate, reallocate, free, limit)
+    if status:
+        return -1
+    pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+    _write_span(pages, pointer + length, bytes([value & 255]))
+    pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+    _write_span(pages, pointer + length + 1, bytes(1))
+    current_length = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
+    _write_span(pages, fields + 4, ((current_length + 1) & 0xFFFF_FFFF).to_bytes(4, "little"))
+    return 0
+
+
+def destroy_string_object(
+    pages, *, object_address: int, image_base: int, free: Callable, delete_object: bool = False,
+) -> None:
+    """Model +0x2484b8/+0x2484fc, restoring empty fields after payload free."""
+    transaction = _PageTransaction(pages)
+    pointer = int.from_bytes(_read_span(transaction, object_address + 0x10, 8), "little")
+    _write_span(transaction, object_address, _word(_image_address(image_base, 0x34F5F8)))
+    if pointer:
+        free(transaction, pointer)
+        _write_span(transaction, object_address + 0x10, bytes(8))
+    _write_span(transaction, object_address + 8,
+                _read_span(transaction, _image_address(image_base, 0x6E208), 8))
+    if delete_object:
+        free(transaction, object_address)
+    transaction.commit()
+
+
 def _decode_configuration_base64(
     pages, *, destination_address: int, destination_size: int,
     source_address: int, source_size: int, image_base: int, max_source_bytes: int = 0x100000,
@@ -236,23 +489,103 @@ def construct_sized_string_object(
     if length < 0x8000_0000 and length > max_payload_bytes:
         raise RefillUnsupported("sized string exceeds the explicit payload bound")
     transaction = _PageTransaction(pages)
-    _write_span(transaction, object_address, _word(_image_address(image_base, 0x34F5F8)))
-    _write_span(transaction, object_address + 0x10, bytes(8))
+    pointer = _sized_string_object(transaction, object_address, length, image_base,
+        allocate, lambda staged, size: _read_span(staged, source_address, size))
+    transaction.commit()
+    return pointer
+
+
+def _sized_string_object(pages, object_address, length, image_base, allocate, read_source):
+    _write_span(pages, object_address, _word(_image_address(image_base, 0x34F5F8)))
+    _write_span(pages, object_address + 0x10, bytes(8))
     pointer = 0
     if length < 0x8000_0000:
         capacity = length + 1
-        _write_span(transaction, object_address + 8,
+        _write_span(pages, object_address + 8,
                     capacity.to_bytes(4, "little") + length.to_bytes(4, "little"))
-        pointer = allocate(transaction, capacity)
-        _write_span(transaction, object_address + 0x10, _word(pointer))
+        pointer = allocate(pages, capacity)
+        _write_span(pages, object_address + 0x10, _word(pointer))
         if pointer:
             if length:
-                _write_span(transaction, pointer, _read_span(transaction, source_address, length))
-            _write_span(transaction, pointer + length, bytes(1))
+                _write_span(pages, pointer, read_source(pages, length))
+            _write_span(pages, pointer + length, bytes(1))
     if not pointer:
-        _write_span(transaction, object_address + 8, bytes(8))
-    transaction.commit()
+        _write_span(pages, object_address + 8, bytes(8))
     return pointer
+
+
+def construct_digest_reference(
+    pages, *, object_address: int, source_object_address: int, algorithm: str,
+    flag: int, image_base: int, allocate: Callable, reallocate: Callable, free: Callable,
+    max_source_bytes: int = 0x100000,
+) -> int:
+    """Model +0x25874c (MD5) / +0x258780 (SHA-1) reference construction.
+
+    Flag bit0 selects the guest ELF's hexadecimal alphabet; otherwise store
+    raw bytes. Hex builds an empty string/count then reserves and appends
+    characters in native order. Host allocation/free effects are explicit.
+    Diagnostic scopes and native temporary stack references are excluded.
+    Return the referenced string pointer, not the native X0 return value.
+    """
+    _string_bound(max_source_bytes)
+    if algorithm not in ("md5", "sha1") or not isinstance(flag, int) or not 0 <= flag <= 0xFFFFFFFF:
+        raise RefillUnsupported("unsupported digest algorithm or flag")
+    transaction = _PageTransaction(pages)
+    length = int.from_bytes(_read_span(transaction, source_object_address + 12, 4), "little")
+    pointer = int.from_bytes(_read_span(transaction, source_object_address + 16, 8), "little")
+    if length > max_source_bytes:
+        raise RefillUnsupported("digest source exceeds the explicit bound")
+    if not pointer and algorithm == "md5":
+        data = b""  # Measured MD5 wrapper's explicit NULL-source branch.
+    else:
+        data = _read_span(transaction, pointer, length) if length else b""
+    if algorithm == "sha1":
+        # +0x2450ac lazily decodes the padding byte before finalization.
+        padding = _image_address(image_base, 0x3DE27C)
+        flag_address = _image_address(image_base, 0x3DE280)
+        if not int.from_bytes(_read_span(transaction, flag_address, 4), "little"):
+            decode_masked_bytes(transaction,
+                source_address=_image_address(image_base, 0x95B78),
+                destination_address=padding, mask_address=_image_address(image_base, 0x95B7C))
+            _write_span(transaction, flag_address, (1).to_bytes(4, "little"))
+        if _read_span(transaction, padding, 1) != b"\x80" or _read_span(transaction, _image_address(image_base, 0x95B7A), 1) != bytes(1):
+            raise RefillUnsupported("nonstandard SHA-1 padding is not modeled")
+    digest = hashlib.new(algorithm, data).digest()
+    _write_span(transaction, object_address, bytes(16))
+    string = _allocate(transaction, allocate, 24)
+    if not flag & 1:
+        _sized_string_object(transaction, string, len(digest), image_base,
+            allocate, lambda staged, size: digest[:size])
+        _reference_wrapper(transaction, object_address, string, allocate)
+    else:
+        construct_string_object(transaction, object_address=string, source_address=0,
+            allocate=allocate, vtable_address=_image_address(image_base, 0x34F5F8),
+            empty_descriptor_address=_image_address(image_base, 0x6E168))
+        # Native constructs a temporary stack reference/count before reserve;
+        # its pair is not published to the caller until conversion finishes.
+        count = _allocate(transaction, allocate, 4)
+        _write_span(transaction, count, (1).to_bytes(4, "little"))
+        _reserve_string_fields(transaction, string + 8, len(digest) * 2 + 1,
+                               allocate, reallocate, free, 0x100000)
+        for value in digest:
+            for nibble in (value >> 4, value & 15):
+                alphabet = int.from_bytes(_read_span(transaction,
+                    _image_address(image_base, 0x37A068), 8), "little")
+                char = _read_span(transaction, alphabet + nibble, 1)[0]
+                _append_string_byte(transaction, string + 8, char,
+                                    allocate, reallocate, free, 0x100000)
+        current_length = int.from_bytes(_read_span(transaction, string + 12, 4), "little")
+        if _s32(current_length) > len(digest) * 2:
+            pointer = int.from_bytes(_read_span(transaction, string + 16, 8), "little")
+            _write_span(transaction, string + 12, (len(digest) * 2).to_bytes(4, "little"))
+            _write_span(transaction, pointer + len(digest) * 2, bytes(1))
+        if int.from_bytes(_read_span(transaction, count, 4), "little") != 1:
+            raise RefillUnsupported("digest temporary reference count was changed by host effects")
+        _write_span(transaction, object_address, _word(string) + _word(count))
+        # Copy increments 1 -> 2, then temporary cleanup decrements 2 -> 1.
+        # No host effects occur between these two measured count operations.
+    transaction.commit()
+    return string
 
 
 def construct_decoded_configuration_reference(

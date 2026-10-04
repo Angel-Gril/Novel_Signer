@@ -5,6 +5,14 @@ checkpoint, not a completion claim.
 
 ## 88-byte configuration prefix and parser dependencies (2026-10-04)
 
+String append/reserve/alias/cleanup now pass 166 fresh native differences
+and eight rejection/rollback cases. MD5/SHA-1 reference construction and
+single-byte append pass 142 differences and five rollback cases, including
+raw/hex, NULL branches, realloc failures and alphabet/GOT read timing.
+SHA-1's lazy padding decode is included; private constants stay in memory.
+See [string evidence](evidence/vm9_strings_native_20261004.json) and
+[digest evidence](evidence/vm9_parser_digests_native_20261004.json).
+
 The +0x26194c constructor prefix through +0x261a1c is now input-driven Python:
 88-byte layout, two string clones, three counts and a distinct 48-byte empty
 container graph, with nine successful allocations. Serialized shared-reader
@@ -18,13 +26,16 @@ Explicit nonreusing free, diagnostic and allocation boundaries remain visible.
 
 Four same-fresh-native runs at two bases and absent/SDK 30 give eight VM phase
 comparisons. Root step 513 generates the 88-byte prefix (11 total allocations
-since that VM entry). Parser step 220 stops before +0x248684 string append
-(six allocations). Guest object/allocator bytes, allocation order and all main
-image pages match; parser's 32-byte descriptor also matches. Both starts use
+since that VM entry). Parser step 325 at +0x9aca4 stops before +0x259dbc
+(13 allocations and four explicit frees). Guest object/allocator bytes,
+allocation order and all main image pages match; parser's 48-byte descriptor
+also matches. Both starts use
 their own native prelude snapshots for differential testing: no external
 captured pages or trace/branch/opaque hooks, but no fully Python prelude claim.
 
-Next: +0x248684 -> +0x246ba0 append, capacity growth and alias handling, then
+Next: +0x259dbc and its +0x276b9c -> +0x161068 -> +0x166370 dependency;
+a fresh native control observed the 136-byte singleton startup followed by
++0x25ab1c block processing. These effects remain unimplemented. Then recover
 remaining parser callbacks and 88-byte initialization. Full independent
 Medusa, no-JVM Rust, nonempty search, other platforms and the final web tool
 remain incomplete. See [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md),

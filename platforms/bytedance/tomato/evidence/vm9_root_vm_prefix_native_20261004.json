@@ -129,14 +129,14 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 220,
-          "stop_bytecode_offset": "0x9ab00",
-          "boundary_offset": "0x2634d0",
-          "pending_target_offset": "0x248684",
+          "steps": 325,
+          "stop_bytecode_offset": "0x9aca4",
+          "boundary_offset": "0x263534",
+          "pending_target_offset": "0x259dbc",
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 6,
+          "allocations": 13,
           "descriptor_match": true,
           "modeled_callbacks": [
             {
@@ -174,13 +174,58 @@
             {
               "wrapper_offset": "0x2634c4",
               "target_offset": "0x2481ac"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x2634f0",
+              "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x263504",
+              "target_offset": "0x25874c"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634f0",
+              "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x263524",
+              "target_offset": "0x248344"
             }
           ],
-          "explicit_free_calls": 1,
+          "explicit_free_calls": 4,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
         }
       ],
+      "pending_callback_native_visits": {
+        "0x259dbc": 1,
+        "0x276b9c": 1,
+        "0x161068": 2,
+        "0x166370": 1,
+        "0x25ab1c": 1,
+        "0x242640": 11
+      },
+      "pending_callback_python_implemented": false,
       "property_profile": "absent"
     },
     {
@@ -312,14 +357,14 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 220,
-          "stop_bytecode_offset": "0x9ab00",
-          "boundary_offset": "0x2634d0",
-          "pending_target_offset": "0x248684",
+          "steps": 325,
+          "stop_bytecode_offset": "0x9aca4",
+          "boundary_offset": "0x263534",
+          "pending_target_offset": "0x259dbc",
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 6,
+          "allocations": 13,
           "descriptor_match": true,
           "modeled_callbacks": [
             {
@@ -357,13 +402,58 @@
             {
               "wrapper_offset": "0x2634c4",
               "target_offset": "0x2481ac"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x2634f0",
+              "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x263504",
+              "target_offset": "0x25874c"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634f0",
+              "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x263524",
+              "target_offset": "0x248344"
             }
           ],
-          "explicit_free_calls": 1,
+          "explicit_free_calls": 4,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
         }
       ],
+      "pending_callback_native_visits": {
+        "0x259dbc": 1,
+        "0x276b9c": 1,
+        "0x161068": 2,
+        "0x166370": 1,
+        "0x25ab1c": 1,
+        "0x242640": 11
+      },
+      "pending_callback_python_implemented": false,
       "property_profile": "sdk_30"
     },
     {
@@ -495,14 +585,14 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 220,
-          "stop_bytecode_offset": "0x9ab00",
-          "boundary_offset": "0x2634d0",
-          "pending_target_offset": "0x248684",
+          "steps": 325,
+          "stop_bytecode_offset": "0x9aca4",
+          "boundary_offset": "0x263534",
+          "pending_target_offset": "0x259dbc",
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 6,
+          "allocations": 13,
           "descriptor_match": true,
           "modeled_callbacks": [
             {
@@ -540,13 +630,58 @@
             {
               "wrapper_offset": "0x2634c4",
               "target_offset": "0x2481ac"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x2634f0",
+              "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x263504",
+              "target_offset": "0x25874c"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634f0",
+              "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x263524",
+              "target_offset": "0x248344"
             }
           ],
-          "explicit_free_calls": 1,
+          "explicit_free_calls": 4,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
         }
       ],
+      "pending_callback_native_visits": {
+        "0x259dbc": 1,
+        "0x276b9c": 1,
+        "0x161068": 2,
+        "0x166370": 1,
+        "0x25ab1c": 1,
+        "0x242640": 11
+      },
+      "pending_callback_python_implemented": false,
       "property_profile": "absent"
     },
     {
@@ -678,14 +813,14 @@
         {
           "phase": "parser",
           "vm_entry_offset": "0x9a6f0",
-          "steps": 220,
-          "stop_bytecode_offset": "0x9ab00",
-          "boundary_offset": "0x2634d0",
-          "pending_target_offset": "0x248684",
+          "steps": 325,
+          "stop_bytecode_offset": "0x9aca4",
+          "boundary_offset": "0x263534",
+          "pending_target_offset": "0x259dbc",
           "guest_objects_match": true,
           "all_image_pages_match": true,
           "allocation_sequence_match": true,
-          "allocations": 6,
+          "allocations": 13,
           "descriptor_match": true,
           "modeled_callbacks": [
             {
@@ -723,13 +858,58 @@
             {
               "wrapper_offset": "0x2634c4",
               "target_offset": "0x2481ac"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x2634f0",
+              "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634d0",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x263504",
+              "target_offset": "0x25874c"
+            },
+            {
+              "wrapper_offset": "0x2634c4",
+              "target_offset": "0x2484b8"
+            },
+            {
+              "wrapper_offset": "0x2634f0",
+              "target_offset": "0x2481fc"
+            },
+            {
+              "wrapper_offset": "0x263524",
+              "target_offset": "0x248344"
             }
           ],
-          "explicit_free_calls": 1,
+          "explicit_free_calls": 4,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
         }
       ],
+      "pending_callback_native_visits": {
+        "0x259dbc": 1,
+        "0x276b9c": 1,
+        "0x161068": 2,
+        "0x166370": 1,
+        "0x25ab1c": 1,
+        "0x242640": 11
+      },
+      "pending_callback_python_implemented": false,
       "property_profile": "sdk_30"
     }
   ],

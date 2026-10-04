@@ -30,6 +30,7 @@ class PrefixBoundary(Exception):
 def probe(library, libc, *, base, property_value, vm_module):
     vm_full = vm_module
     snapshots, boundaries, allocations = {}, {}, []
+    pending_visits, pending_active, pending_finished = {}, False, False
 
     def boundary(cpu, key, argument=None, width=0):
         boundaries[key] = {
@@ -41,7 +42,15 @@ def probe(library, libc, *, base, property_value, vm_module):
         }
 
     def observe(cpu, address):
+        nonlocal pending_active, pending_finished
         offset = address - base
+        if offset == 0x259DBC and not pending_finished:
+            pending_active = True
+        elif offset == 0x26354C and pending_active:
+            pending_active, pending_finished = False, True
+        if pending_active and offset in (0x259DBC, 0x276B9C, 0x161068, 0x166370, 0x25AB1C, 0x242640):
+            key = hex(offset)
+            pending_visits[key] = pending_visits.get(key, 0) + 1
         if offset == 0x168324:
             values = [cpu.reg_read(reg) for reg in (
                 UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4)]
@@ -55,15 +64,16 @@ def probe(library, libc, *, base, property_value, vm_module):
                     "allocation_next": max(pointer + ((size + 15) & ~15) for size, pointer in allocations)}
         elif offset == 0x261A1C and "root" in snapshots and "root" not in boundaries:
             boundary(cpu, "root")
-        elif offset == 0x2634D0 and "parser" in snapshots and "parser" not in boundaries:
+        elif offset == 0x263534 and "parser" in snapshots and "parser" not in boundaries:
             argument = cpu.reg_read(UC_ARM64_REG_X0)
-            if int.from_bytes(cpu.mem_read(argument, 8), "little") == base + 0x248684:
-                boundary(cpu, "parser", argument, 32)
+            if int.from_bytes(cpu.mem_read(argument, 8), "little") == base + 0x259DBC:
+                boundary(cpu, "parser", argument, 48)
 
     control = oracle.probe(library, libc, base=base, property_value=property_value,
         instruction_observer=observe,
         allocation_effect=lambda cpu, size, pointer: allocations.append([size, pointer]))
     assert control["returned"] and set(snapshots) == set(boundaries) == {"root", "parser"}
+    assert pending_finished and pending_visits.get("0x166370") == 1 and pending_visits.get("0x242640", 0) > 0
 
     class StrictMem(vm_full.Mem):
         def __init__(self, pages):
@@ -98,6 +108,9 @@ def probe(library, libc, *, base, property_value, vm_module):
             # Exactly the nonreusing free boundary used by the native oracle.
             frees.append(pointer)
 
+        def reallocate(pages, pointer, size):
+            raise RefillUnsupported("this native prefix has no realloc boundary")
+
         def callback(current, function, argument):
             wrapper = function - base
             words = [current.m.u64(argument + i * 8) for i in range(4)]
@@ -126,6 +139,25 @@ def probe(library, libc, *, base, property_value, vm_module):
                 objects.construct_decoded_configuration_reference(current.m.pages,
                     object_address=words[1], source_object_address=words[2], image_base=base,
                     allocate=allocate, free=free)
+            elif (wrapper, target) == (0x2634D0, 0x248684):
+                result = objects.append_string_object(current.m.pages, object_address=words[1],
+                    source_object_address=words[2], allocate=allocate, reallocate=reallocate, free=free)
+                current.m.w64(argument + 24, result)
+            elif (wrapper, target) == (0x2634F0, 0x2481FC):
+                objects.construct_sized_string_object(current.m.pages, object_address=words[1],
+                    source_address=words[2], length=words[3] & 0xFFFFFFFF,
+                    image_base=base, allocate=allocate)
+            elif (wrapper, target) == (0x2634C4, 0x2484B8):
+                objects.destroy_string_object(current.m.pages, object_address=words[1],
+                    image_base=base, free=free)
+            elif wrapper == 0x263504 and target in (0x25874C, 0x258780):
+                objects.construct_digest_reference(current.m.pages, object_address=words[1],
+                    source_object_address=words[2], algorithm="md5" if target == 0x25874C else "sha1",
+                    flag=words[3] & 255, image_base=base, allocate=allocate, reallocate=reallocate, free=free)
+            elif (wrapper, target) == (0x263524, 0x248344):
+                objects.construct_string_object(current.m.pages, object_address=words[1],
+                    source_address=words[2], allocate=allocate, vtable_address=base + 0x34F5F8,
+                    empty_descriptor_address=base + 0x6E168)
             elif key == "root" and (wrapper, target) == (0x2584E0, 0x26194C):
                 objects.construct_configuration_object_layout(current.m.pages,
                     object_address=words[1], first_string_address=words[2], second_string_address=words[3],
@@ -146,10 +178,10 @@ def probe(library, libc, *, base, property_value, vm_module):
             stop = "0x261a1c"
             pending = "0x261c54"
         except vm_full.NativeCall as exc:
-            assert key == "parser" and exc.f == base + 0x2634D0 and vm.m.u64(exc.arg) == base + 0x248684
-            descriptor_match = vm.m.rd(exc.arg, 32) == expected["descriptor"]
+            assert key == "parser" and exc.f == base + 0x263534 and vm.m.u64(exc.arg) == base + 0x259DBC
+            descriptor_match = vm.m.rd(exc.arg, 48) == expected["descriptor"]
             assert descriptor_match
-            stop, pending = "0x2634d0", "0x248684"
+            stop, pending = "0x263534", "0x259dbc"
         else:
             raise AssertionError("VM unexpectedly crossed the unimplemented boundary")
         assert vm.m.rd(GUEST, 0xA000) == expected["guest"]
@@ -161,7 +193,9 @@ def probe(library, libc, *, base, property_value, vm_module):
             "allocation_sequence_match": True, "allocations": len(model_allocations),
             "descriptor_match": descriptor_match, "modeled_callbacks": modeled, "explicit_free_calls": len(frees),
             "native_prelude_snapshot_used": True, "complete_initializer": False})
-    return {"image_base": hex(base), "native_control_returned": True, "phases": results}
+    return {"image_base": hex(base), "native_control_returned": True, "phases": results,
+            "pending_callback_native_visits": pending_visits,
+            "pending_callback_python_implemented": False}
 
 
 def main():

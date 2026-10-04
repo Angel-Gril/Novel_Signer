@@ -198,12 +198,35 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 | VM 子阶段 | 已验证边界 | 结果 |
 | --- | --- | --- |
 | root `+0x991c0` | 第 513 步 `+0x99b40` 的 `+0x26194c` callback 内，Python 生成至 `+0x261a1c` 的前缀；包括此前两次和本构造九次分配 | 整个 guest 对象/分配区、11 次分配顺序、全部主 image pages 与同次 native 一致 |
-| parser `+0x9a6f0` | 第 220 步 `+0x9ab00`，wrapper `+0x2634d0` 调用 `+0x248684` 前 | guest 对象/分配区、六次分配顺序、全部主 image pages、32-byte descriptor 与同次 native 一致 |
+| parser `+0x9a6f0` | 第 325 步 `+0x9aca4`，wrapper `+0x263534` 调用 `+0x259dbc` 前 | guest 对象/分配区、13 次分配顺序、全部主 image pages、48-byte descriptor 与同次 native 一致；四次显式 free |
 
-两段 VM 的初始状态均来自**这次 native 运行的构造前导快照**，用于差分验证；没有外部签名捕获页，也没有 trace/branch/opaque 注入。但构造前导尚未全部由 Python 生成，所以这不是从完整 Python 启动到解析结束的证明。主 image 对照也不包含 libc、TLS 和 native 调用栈的全部副作用。当前首个未恢复 parser callback 为 `+0x248684 → +0x246ba0` 的字符串追加及容量处理。
+两段 VM 的初始状态均来自**这次 native 运行的构造前导快照**，用于差分验证；没有外部签名捕获页，也没有 trace/branch/opaque 注入。但构造前导尚未全部由 Python 生成，所以这不是从完整 Python 启动到解析结束的证明。主 image 对照也不包含 libc、TLS 和 native 调用栈的全部副作用。当前首个未恢复 parser callback 为 `+0x259dbc`。
+
+## 字符串追加、扩容、清理与摘要回调
+
+`append_string_object` 对照 `+0x248684 → +0x246ba0`，在原内容后追加 source 的声明长度数据；wrapper 即使内部返回 -1 也返回 destination object。`append_string_fields` 返回内部的有符号状态。fields 为 16 字节的 capacity/u32 length/payload pointer。
+
+`reserve_string_fields` 对照 `+0x2468e8`。容量比较为严格大于：capacity 等于请求仍可能增长。`round_string_capacity` 保留 native 的 signed w32 取整规则，例如 8→16、16→32；溢出候选值小于原请求时保留原请求。增长按容量/长度比例选择 malloc/copy/free 或 realloc；malloc NULL 转入 realloc，rounded realloc NULL 再按原请求重试。分配和 free 后按 native 顺序重读字段，再发布 pointer/capacity 和终止符。
+
+增长前，若 source payload 位于 destination buffer 内，先生成独立的 fields/payload clone；成功或失败后均按实际分支清理临时 clone。正常追加使用 memmove 语义。`destroy_string_fields` 对照 `+0x246d7c` 清理 clone；`destroy_string_object` 对照 `+0x2484b8/+0x2484fc`，先保存 payload、写回虚表、free 非空 payload，再清 pointer 并从 ELF `+0x6e208` 恢复空 fields。delete 分支最后 free 外层对象。
+
+[字符串证据](evidence/vm9_strings_native_20261004.json) 有 **166 个 native 差分和 8 个拒绝/回滚案例**，验证两种 image base、跨页、self/partial alias、分配失败重试、realloc 移动/原地和宿主在 native 读点修改 length 的情况。两侧使用相同的显式 malloc/realloc/free 规则；释放与移动后的旧缓冲区填充非零字节，以检测过期指针读取。这不证明 Android allocator 已完整实现。
+
+`construct_digest_reference` 对照 `+0x25874c` 的 MD5 和 `+0x258780` 的 SHA-1：按输入 string 的声明长度求摘要，flag bit0 为零时构造 raw digest string，为一时构造 hex string。hex 每个半字节都重读 guest GOT `+0x37a068` 指向的字母表；完成转换后才发布 caller reference。SHA-1 还按 native 规则从 ELF source/mask `+0x95b78/+0x95b7c` 延迟生成 `+0x3de27c` 的 padding 并发布 `+0x3de280` flag。非标准 padding 拒绝。MD5 的 NULL payload 分支按空输入处理。
+
+[摘要证据](evidence/vm9_parser_digests_native_20261004.json) 有 **142 个 native 差分和 5 个拒绝/回滚案例**，包含单字节追加、raw/hex、flag 0/1/2/3、空输入、二进制、跨 block/跨页、NULL payload、分配失败，以及分配期间修改字母表、GOT 和源数据。比较整个 guest 对象/分配区、全部主 image pages、allocator 状态和调用顺序。数据均为 synthetic 输入；native 摘要指令真实执行，Python 使用 `hashlib`。hash 初始化常量限定为匹配 build 的 guest 状态；不支持任意变更 hash 初始状态。模型返回新 string pointer，不将其宣称为 native X0。
+
+```text
+python python/verify_vm9_strings.py --library /private/libmetasec_ml_71332.so --output /private/strings.json
+python python/verify_vm9_parser_digests.py --library /private/libmetasec_ml_71332.so --output /private/parser-digests.json
+```
+
+两类模型遇到未知页或未恢复 effect 会回滚 guest pages；明确建模的分配失败保留 native 已发生的内存变化。外部 allocator 账本不属于 page 回滚保证，caller 应自行管理它。operator-new 重试/异常、诊断和 native 临时栈副作用仍是明确的边界。
+
+后续 `+0x259dbc` 的一次 fresh native 控制实测调用了 `+0x276b9c → +0x161068 → +0x166370`，进入 136-byte singleton 的首次构造，随后调用 `+0x25ab1c` 分块处理。这个依赖必须恢复并验证，不能仅替换末端运算就宣称 callback 或 88-byte 初始化完成。
 
 ## 证据用途与剩余工作
 
 同次采样把 root → child → handler → pair → 两次发布连接起来，可用于排除错误 handle/对象类型和错误 publisher 分支。新建内存对照证明这些局部对象可以参数化生成，不能据此声称完整初始化已经独立完成。
 
-两个服务 singleton、264-byte root 配置布局、88-byte 对象前缀和内部解析器的 Base64/reference 依赖已恢复。下一步从 `+0x248684` 字符串追加及容量处理继续，补齐内部解析器和 88-byte 对象初始化；然后继续 `+0x257308` 的 root VM 初始化、136-byte singleton、属性解析所依赖的启动状态、诊断与全局副作用及剩余 native callbacks，再接入 VM9 fresh-input 签名并贯穿同次采样验证。新的 native 基线可用于逐字段、逐分配和全局写入差分，避免把验证环境的 TLS 重叠或未解析 import 当作目标行为。当前搜索仍无非空响应与分页证据；无 JVM Rust 下载器、抖音/起点闭环及最终 Pages 搜索下载网页也尚未完成。
+两个服务 singleton、264-byte root 配置布局、88-byte 对象前缀，以及内部解析器的 Base64/reference、字符串追加/清理和 MD5/SHA-1 依赖已恢复。下一步从 `+0x259dbc` 及其 136-byte singleton 依赖继续，补齐内部解析器和 88-byte 对象初始化；再继续 `+0x257308` 的 root VM 初始化、属性解析所依赖的启动状态、诊断与全局副作用及剩余 native callbacks，接入 VM9 fresh-input 签名并贯穿同次采样验证。新的 native 基线可用于逐字段、逐分配和全局写入差分，避免把验证环境的 TLS 重叠或未解析 import 当作目标行为。当前搜索仍无非空响应与分页证据；无 JVM Rust 下载器、抖音/起点闭环及最终 Pages 搜索下载网页也尚未完成。

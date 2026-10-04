@@ -101,11 +101,26 @@ padding, buffer queries and partial groups are preserved. Run
 
 `verify_vm9_root_vm_prefix.py` (library/libc/output arguments) compares eight
 VM phases from four same-fresh-native runs at two image bases. Root step 513
-matches through the 88-byte prefix; parser step 220 matches before +0x248684
-string append. Guest object bytes, allocation sequence and main image pages
-match. These are native-prelude snapshots for differential testing, not a
+matches through the 88-byte prefix; parser step 325 matches before +0x259dbc
+with 13 allocations, four explicit frees and a 48-byte callback descriptor.
+Guest object bytes, allocation sequence and main image pages match.
+These are native-prelude snapshots for differential testing, not a
 fully Python startup. No trace/branch/opaque hooks or external captured pages
 are used. Complete parser, root initialization and current Medusa remain open.
+
+`append_string_object`, `append_string_fields`, `reserve_string_fields` and
+the string cleanup helpers preserve native alias, growth, failure and field
+reload rules. `verify_vm9_strings.py` (library/output arguments) passes 166
+native differences and eight rollback cases under explicit malloc/realloc/free
+effects. Allocator ledgers are external to page transactions.
+
+`construct_digest_reference` models the parser's MD5/SHA-1 raw or hex string
+references, including SHA-1 padding initialization and guest alphabet/GOT
+reads. `verify_vm9_parser_digests.py` (library/output arguments) passes 142
+native differences and five rollback cases, including single-byte append.
+Only synthetic inputs and sanitized evidence are used; no digest payload or
+private ELF alphabet is exported. Diagnostic/native stack effects and the
+later 136-byte singleton remain outside these component models.
 
 `verify_vm9_allocator_lifecycle.py` requires Unicorn and the trusted primary
 initialized checkpoint. `verify_vm9_divmod_backing.py` additionally requires

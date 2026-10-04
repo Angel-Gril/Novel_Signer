@@ -1,0 +1,3865 @@
+{
+  "fresh_memory": true,
+  "synthetic_inputs_only": true,
+  "captured_pages_used": false,
+  "jvm_used": false,
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "differential_cases": 142,
+  "negative_cases": 5,
+  "cases": [
+    {
+      "case": "byte_8_0_()_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": []
+    },
+    {
+      "case": "byte_8_6_()_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "byte_8_7_()_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "byte_8_8_()_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "realloc",
+          "size": 16
+        }
+      ]
+    },
+    {
+      "case": "byte_8_6_(0,)_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 16
+        }
+      ]
+    },
+    {
+      "case": "byte_8_7_(0, 1)_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 9
+        }
+      ]
+    },
+    {
+      "case": "byte_8_7_(0, 1, 2)_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 9
+        }
+      ]
+    },
+    {
+      "case": "byte_8_80000000_()_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": []
+    },
+    {
+      "case": "md5_empty_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_empty_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_empty_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_empty_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_short_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_short_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_short_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_short_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_binary_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_binary_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_binary_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_binary_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_multi_block_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_multi_block_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_multi_block_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_multi_block_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_embedded_zero_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_embedded_zero_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_embedded_zero_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_embedded_zero_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_raw_payload_null_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_empty_payload_null_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_malloc_null_realloc_moves_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_malloc_null_realloc_inplace_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_rounded_retry_exact_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 33
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_initial_growth_fails_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 33
+        },
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "free"
+        },
+        {
+          "kind": "malloc",
+          "size": 32
+        },
+        {
+          "kind": "free"
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "md5_null_source_empty_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_null_source_nonzero_length_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_alphabet",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_got",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_input_after_hash",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_reference_before_publish",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_empty_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_empty_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_empty_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_empty_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_short_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_short_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_short_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_short_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_binary_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_binary_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_binary_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_binary_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_multi_block_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_multi_block_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_multi_block_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_multi_block_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_embedded_zero_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_embedded_zero_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_embedded_zero_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_embedded_zero_3",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_raw_payload_null_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_empty_payload_null_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_malloc_null_realloc_moves_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_malloc_null_realloc_inplace_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_rounded_retry_exact_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 41
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_initial_growth_fails_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 41
+        },
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "free"
+        },
+        {
+          "kind": "malloc",
+          "size": 32
+        },
+        {
+          "kind": "free"
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "sha1_null_source_empty_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_alphabet",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_got",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_input_after_hash",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_reference_before_publish",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "byte_8_0_()_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": []
+    },
+    {
+      "case": "byte_8_6_()_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "byte_8_7_()_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "byte_8_8_()_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "realloc",
+          "size": 16
+        }
+      ]
+    },
+    {
+      "case": "byte_8_6_(0,)_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 16
+        }
+      ]
+    },
+    {
+      "case": "byte_8_7_(0, 1)_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 9
+        }
+      ]
+    },
+    {
+      "case": "byte_8_7_(0, 1, 2)_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 16
+        },
+        {
+          "kind": "realloc",
+          "size": 9
+        }
+      ]
+    },
+    {
+      "case": "byte_8_80000000_()_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": true,
+      "effects": []
+    },
+    {
+      "case": "md5_empty_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_empty_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_empty_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_empty_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_short_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_short_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_short_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_short_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_binary_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_binary_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_binary_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_binary_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_multi_block_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_multi_block_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_multi_block_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_multi_block_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_embedded_zero_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_embedded_zero_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_embedded_zero_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_embedded_zero_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_raw_payload_null_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_empty_payload_null_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_malloc_null_realloc_moves_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_malloc_null_realloc_inplace_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_rounded_retry_exact_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 33
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "md5_hex_initial_growth_fails_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 33
+        },
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "free"
+        },
+        {
+          "kind": "malloc",
+          "size": 32
+        },
+        {
+          "kind": "free"
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "md5_null_source_empty_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 17
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "md5_null_source_nonzero_length_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_alphabet",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_got",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_input_after_hash",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "md5_reference_before_publish",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_empty_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_empty_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_empty_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_empty_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_short_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_short_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_short_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_short_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_binary_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_binary_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_binary_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_binary_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_multi_block_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_multi_block_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_multi_block_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_multi_block_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_embedded_zero_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_embedded_zero_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_embedded_zero_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_embedded_zero_3",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_raw_payload_null_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_empty_payload_null_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_malloc_null_realloc_moves_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_malloc_null_realloc_inplace_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_rounded_retry_exact_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 41
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "sha1_hex_initial_growth_fails_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        },
+        {
+          "kind": "realloc",
+          "size": 41
+        },
+        {
+          "kind": "malloc",
+          "size": 16
+        },
+        {
+          "kind": "free"
+        },
+        {
+          "kind": "malloc",
+          "size": 32
+        },
+        {
+          "kind": "free"
+        },
+        {
+          "kind": "realloc",
+          "size": 64
+        }
+      ]
+    },
+    {
+      "case": "sha1_null_source_empty_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 21
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        }
+      ]
+    },
+    {
+      "case": "sha1_alphabet",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_got",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_input_after_hash",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    },
+    {
+      "case": "sha1_reference_before_publish",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "allocator_state_match": true,
+      "effect_order_match": true,
+      "native_result_checked": false,
+      "effects": [
+        {
+          "kind": "malloc",
+          "size": 24
+        },
+        {
+          "kind": "malloc",
+          "size": 8
+        },
+        {
+          "kind": "malloc",
+          "size": 4
+        },
+        {
+          "kind": "malloc",
+          "size": 64
+        },
+        {
+          "kind": "free"
+        }
+      ]
+    }
+  ],
+  "negatives": [
+    {
+      "case": "unknown_algorithm",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "negative_flag",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "source_bound",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_payload",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_alphabet",
+      "rejected": true,
+      "page_rollback": true
+    }
+  ],
+  "allocator_boundary": "explicit_malloc_realloc_free_effects",
+  "complete_88_byte_initializer": false,
+  "complete_python_medusa": false
+}
