@@ -1,11 +1,13 @@
 # 番茄（ByteDance Tomato）完整分析与使用报告
 
-> 截止：2026-10-03  
+> 截止：2026-10-04
 > 结论：**本项目整体尚未完成，不能作为当前线上小说搜索下载器发布。**
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
 最新纠正：初始化回调 `0x1000000e` 返回 `MSC.GetABSwitch()`，旧桥接器误传冻结时间。恢复 APK 默认值 `2` 后，三个旧失败时间输入成功，未取整时间的详情请求也被线上接受。Python 已独立恢复这一全局和 bit-5 分支，18 个字节码对照通过；默认 A/B=2 的 publisher 是 `+0x28c268`，两个 child/handler、root 已观测字段装配、callback pair 绑定、引用计数和 JNI 清理已有 92 个新建内存对照。2026-10-04 又恢复了 0x2d0-byte service 配置图、完整无竞争 guard 状态和真实 getter → handler 构造，72 个 native 对照、15 个拒绝/回滚例通过；root 前段的 264-byte 配置及全局启动仍未完成。此前“时间取整稳定”的结论只适用于旧误配桥接器，不能作为 native 时间约束。详见 [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) 与 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。修正后当前搜索在 b/c 两个主机仍为空。
+
+2026-10-04 的后续恢复包括 guest-table cipher（256 组 native 差分 / 11 个回滚例）及完整 mode-0 配置解密 callback（200 / 12）。四次 fresh 控制中的 parser 从 325 步推进到 612 步，93 次分配、23 次 free 和 TLS/generation/有序副作用均一致。32 条完整子树对照仍从同次 native 前导输入快照开始，完整 Python 冷启动和 88-byte 初始化仍未完成。接口、用法与证据用途见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md)。
 
 ## 1. 完成度结论
 
@@ -236,7 +238,7 @@ descriptor = publish_callback_descriptor(
 
 `set_configuration_u32` 包括 scoped writer、缺失 key 克隆、u32 覆盖和清理，返回旧值或 `0x000a985f`。`construct_registry320`、`construct_singleton136` 已恢复完整构造主体；`get_registry320_reference`、`get_singleton136_reference` 完整构造后才发布 lazy reference。调用者需要提供 caller stack、allocator/free、clock、TLS 初始化/解析和广播边界；cold getter 还需要 `thread_id`。复用栈槽位会改变后续 TLS padding，不能清零或注入 native 的结果页。
 
-配置树通过 96 组 native 差分 / 11 个回滚例，完整主体和 getter 通过 38 / 14。四次 fresh native 控制新增 20 条同次入口子树对照，串接实际 Python 冷 TLS/key/析构注册，并比较内存和有序 allocation/free/clock/registration/wake。详细布局、证据和限制见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。这些结果保留串行 guard/OS 边界和 native 输入前导快照依赖；parser 仍停在 `+0x259dbc` 前，尚不能直接调用它们生成当前线上 Medusa。
+配置树通过 96 组 native 差分 / 11 个回滚例，完整主体和 getter 通过 38 / 14。四次 fresh native 控制新增 20 条同次入口子树对照，串接实际 Python 冷 TLS/key/析构注册，并比较内存和有序 allocation/free/clock/registration/wake。详细布局、证据和限制见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。这些结果保留串行 guard/OS 边界和 native 输入前导快照依赖；mode-0 `+0x259dbc` 已贯通，parser 到达第 612 步 / `+0x9b03c`，停在 `+0x2592b8` 前；尚不能直接调用这些组件生成当前线上 Medusa。
 
 ### 5.5 验证命令
 

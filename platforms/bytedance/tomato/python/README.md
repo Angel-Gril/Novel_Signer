@@ -101,7 +101,7 @@ padding, buffer queries and partial groups are preserved. Run
 
 `verify_vm9_root_vm_prefix.py` (library/libc/output arguments) compares eight
 VM phases from four same-fresh-native runs at two image bases. Root step 513
-matches through the 88-byte prefix; parser step 325 matches before +0x259dbc
+matches through the 88-byte prefix; parser step 612 matches before +0x2592b8
 with 13 allocations, four explicit frees and a 48-byte callback descriptor.
 Guest object bytes, allocation sequence and main image pages match.
 These are native-prelude snapshots for differential testing, not a
@@ -155,10 +155,10 @@ and registration ledgers are not rolled back by page transactions.
 The same-run root verifier additionally compares eight constructor prefixes,
 eight TLS calls, four cold TLS-tree initializers and eight scoped locks,
 including all 2256 generation-table bytes and allocation/free/registration/
-wake sequences. It also compares 20 complete constructor/setter/getter
+wake sequences. It also compares 32 complete constructor/setter/getter/cipher
 subtrees, including ordered clock effects and actual cold Python TLS.
 Its native input snapshots remain explicit; the VM parser
-still stops before +0x259dbc and full Python Medusa is incomplete.
+crosses mode-0 +0x259dbc and stops before +0x2592b8; full Python Medusa is incomplete.
 
 `vm9_registry.py` provides input-driven configuration comparison, lookup,
 red-black insertion, `set_configuration_u32`, `construct_registry320`,
@@ -208,3 +208,18 @@ The held-out detail capture's trace was separately replayed with
 not a fresh-input current Medusa implementation. The remaining one-byte
 handoff difference is documented in
 `evidence/vm9_detail_body_compare_20261002.json`.
+
+`vm9_cipher.py` reads matching guest cipher tables and builds enc/dec schedules,
+block encryption/decryption, CBC IV updates and the observed ECB/CBC dispatcher.
+Run `verify_vm9_cipher.py` (library/output): 256 native groups / 11 rollback
+cases. PyCryptodome AES is used only as a verifier oracle.
+
+`vm9_cipher_callback.py` supplies `initialize_cipher_context`,
+`checked_forward_copy` and `decrypt_configuration_reference`. The copy executes
+two recovered singleton getters before its forward byte loop. Complete mode-0
+callback tests cover last-byte-only trimming, allocator mutation, failed clone
+and string payload allocations, poisoned cleanup and indirect guest targets:
+`verify_vm9_cipher_callback.py` passes 200 groups / 12 rollback cases. Supply
+explicit entry SP and allocator/singleton callbacks. Modes 1/2/3 initialization
+and nonzero environment-check branches reject. See
+[the cipher callback guide](../CIPHER_CALLBACK.md) for ABI, evidence and limits.

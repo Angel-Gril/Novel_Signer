@@ -3,7 +3,32 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Configuration tree and complete constructor bodies (2026-10-04)
+## Configuration decrypt callback and parser continuation (2026-10-04)
+
+`vm9_cipher.py` restores guest-table schedules and block encryption/decryption,
+CBC updates and observed +0x25ab1c branches. `vm9_cipher_callback.py` composes
+mode-0 +0x259dbc with context clearing, two actual singleton getters, forward
+byte copy, last-byte-only trimming, reference/count construction and cleanup.
+Fresh component evidence: **256 / 11** cipher and **200 / 12** callback
+native-difference / rejection-and-page-rollback groups. Pre-free bytes and
+allocation order are checked; independent AES is a verifier-only oracle.
+
+The same-run verifier now crosses +0x263534/+0x259dbc, clones the resulting
+string and executes another checked forward copy. Parser reaches **step 612 /
++0x9b03c**, before +0x263584 invokes +0x2592b8. All four native controls match:
+93 allocations, 23 frees, all guest/image/TLS/generation bytes and ordered
+allocator/clock/destructor-registration/wake effects. It compares 32 complete
+configuration/constructor/cipher subtrees, including 12 new cipher comparisons.
+Root remains step 513 at its 88-byte constructor prefix.
+
+See [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) for pointer ABI, behavior,
+reproduction commands and evidence use. Full Python startup remains open:
+same-run VM input prelude snapshots and serialized OS/guard boundaries are
+explicit. Callback initialization modes 1/2/3 and nonzero environment checks
+reject. Next is +0x2592b8 -> +0x258fd8 -> +0x243dac's separate stream/reference
+path, followed by remaining parser and 88-byte initialization.
+
+## Earlier configuration-tree checkpoint (2026-10-04)
 
 `vm9_registry.py` now models comparison +0x2473dc/+0x188a94,
 configuration-container construction +0x25bf14, lookup +0x25c168,
@@ -38,8 +63,8 @@ Both are derived from caller SP and modeled before later reads.
 
 This closes the constructor-body/configuration-map dependency under the
 stated serialized boundaries. Full OS concurrency, native diagnostic/stack
-effects and the full Python startup remain outside the proof. Parser still
-stops at step 325 / +0x9aca4 before +0x259dbc; root remains step 513 at its
+effects and the full Python startup remain outside the proof. At that checkpoint parser still
+stopped at step 325 / +0x9aca4 before +0x259dbc; root remains step 513 at its
 88-byte prefix. Next: recover +0x259dbc -> +0x276b9c -> +0x25ab1c block
 processing and key/state generation, then extend the same-run parser.
 Independent current Medusa, no-JVM Rust, current nonempty search/paging,

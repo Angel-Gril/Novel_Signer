@@ -198,9 +198,9 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 | VM 子阶段 | 已验证边界 | 结果 |
 | --- | --- | --- |
 | root `+0x991c0` | 第 513 步 `+0x99b40` 的 `+0x26194c` callback 内，Python 生成至 `+0x261a1c` 的前缀；包括此前两次和本构造九次分配 | 整个 guest 对象/分配区、11 次分配顺序、全部主 image pages 与同次 native 一致 |
-| parser `+0x9a6f0` | 第 325 步 `+0x9aca4`，wrapper `+0x263534` 调用 `+0x259dbc` 前 | guest 对象/分配区、13 次分配顺序、全部主 image pages、48-byte descriptor 与同次 native 一致；四次显式 free |
+| parser `+0x9a6f0` | 第 612 步 `+0x9b03c`，wrapper `+0x263584` 调用 `+0x2592b8` 前 | guest、主 image、TLS/generation、93 次分配及 23 次 free 顺序、32-byte descriptor 一致；已贯通 mode-0 解密 callback 和冷初始化 |
 
-两段 VM 的初始状态均来自**这次 native 运行的构造前导快照**，用于差分验证；没有外部签名捕获页，也没有 trace/branch/opaque 注入。但构造前导尚未全部由 Python 生成，所以这不是从完整 Python 启动到解析结束的证明。主 image 对照也不包含 libc、TLS 和 native 调用栈的全部副作用。当前首个未恢复 parser callback 为 `+0x259dbc`。
+两段 VM 的初始状态均来自**这次 native 运行的构造前导快照**，用于差分验证；没有外部签名捕获页，也没有 trace/branch/opaque 注入。但构造前导尚未全部由 Python 生成，所以这不是从完整 Python 启动到解析结束的证明。当前组合对照同时覆盖隔离 TLS 和完整 2256-byte generation 表，但不包含 libc 和 native 调用栈的全部副作用。当前首个未恢复 parser callback 为 `+0x2592b8`，详见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md)。
 
 ## 字符串追加、扩容、清理与摘要回调
 
@@ -237,7 +237,7 @@ python python/verify_vm9_parser_digests.py --library /private/libmetasec_ml_7133
 | 线程析构注册与 TLS 树初始化 | `+0x34265c` 本地 fallback 的冷 key、TLS 注册标记和 24-byte 链表节点；`+0x269880` 的树头与析构注册 | [32 / 5](evidence/vm9_thread_destructors_native_20261004.json) |
 | 单个活跃 mutex 的作用域 writer 锁 | `+0x268eb0/+0x268fbc` 的节点创建、同 mutex 重入、writer count、广播、擦除和 free | [42 / 7](evidence/vm9_scoped_lock_native_20261004.json) |
 
-`construct_singleton_layout136` 从 `+0x166370` 恢复到 `+0x166544`。五个 decoder 分别发布 `+0x3d16b4/+0x3d16e4/+0x3d1714/+0x3d1744/+0x3d1774` flag。`+0x173470` 必须先读 GOT `+0x379968`，再读其 table pointer 减 `0xe6fde0` 的内容，不能把默认有效位置 `+0x3d1900` 固定为输出。前缀按顺序分配 `[48,48,56,48]`，生成两个 mutex 和带第三个 mutex 的 helper；保留没有写入的 padding。getter `+0x161068` 的 slot/guard 为 `+0x3d1678/+0x3d1680`，完整 payload 构造尚未接入该 getter。
+`construct_singleton_layout136` 从 `+0x166370` 恢复到 `+0x166544`。五个 decoder 分别发布 `+0x3d16b4/+0x3d16e4/+0x3d1714/+0x3d1744/+0x3d1774` flag。`+0x173470` 必须先读 GOT `+0x379968`，再读其 table pointer 减 `0xe6fde0` 的内容，不能把默认有效位置 `+0x3d1900` 固定为输出。前缀按顺序分配 `[48,48,56,48]`，生成两个 mutex 和带第三个 mutex 的 helper；保留没有写入的 padding。getter `+0x161068` 的 slot/guard 为 `+0x3d1678/+0x3d1680`，完整 payload 构造已由下节的 `get_singleton136_reference` 接入该 getter。
 
 `construct_registry_layout320` 恢复 `+0x2566ec → +0x256808`，包括三个独立 40-byte 容器/控制器/sentinel、152-byte mutex state 和空 string，共七次分配。getter `+0x15e694` 的 slot/guard 为 `+0x3d1550/+0x3d1558`。后续 `+0x256898` 的 16-byte clock wrapper 已单独恢复，并由下一节的完整构造器组合验证初始配置插入。**`+0x26cc60` 是 realtime clock getter，不是线程启动。** `+0x329404` 先生成按 u64 wrap 的有符号微秒，`+0x291958` 再除以 1000 并向零截断；clock 失败路径拒绝，不返回伪造时间。
 
@@ -303,4 +303,6 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 
 配置树对照可用来排除错误 comparator、节点布局和 duplicate ownership；getter 子树对照证明 `+0x259dbc` 的 136-byte 构造依赖在上述边界下已恢复。栈写入追踪则解释了为何局部测试通过仍可能在组合流程中出现不同 padding：需要证明数据来源和读写顺序，不能只匹配最终摘要。
 
-下一步回到 `+0x259dbc → +0x276b9c → +0x25ab1c` 的分块运算和 key/state 生成，扩展 parser 和 88-byte 初始化。静态已确认 `+0x25ab1c` 从 `*(*x0)` 读 mode，0..3 由 guest jump table 分发至 `+0x242640/+0x242b18/+0x242c98/+0x242eb8`；当前 native 路线实际进入 `+0x242640`。这些分支尚未由本轮 Python 恢复，不能将 dispatch 或末端计算假定为完整 callback。通用多 key TLS 树、完整 root VM 前导、诊断与全局副作用及剩余 callbacks 仍待恢复。当前搜索仍无非空响应与分页证据；独立当前 Medusa、无 JVM Rust 下载链路、抖音/起点闭环及最终 Pages 搜索下载网页仍未完成。
+`+0x259dbc → +0x276b9c → +0x25ab1c` 的 mode-0 路线已由 [密码回调报告](CIPHER_CALLBACK.md) 恢复并组合验证；末端 CBC 解密也有独立差分，初始化模式 1/2/3 尚未恢复，不能声称完整 cipher dispatch。parser 已推进到 612 步，下一个目标 `+0x2592b8` 实际跳到 `+0x258fd8`，调用 `+0x243dac` 的另一条流运算；应恢复 string/reference 构造与清理后继续推进。
+
+完整 root VM 前导、88-byte 完整初始化、通用多 key TLS 树、诊断与全局副作用及剩余 callbacks 仍待恢复。当前搜索仍无非空响应与分页证据；独立当前 Medusa、无 JVM Rust 下载链路、抖音/起点闭环及最终 Pages 搜索下载网页仍未完成。

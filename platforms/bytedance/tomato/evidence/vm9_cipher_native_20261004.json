@@ -1,0 +1,2639 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "differential_cases": 256,
+  "negative_cases": 11,
+  "cases": [
+    {
+      "case": "schedule_16_False",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_16_True",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_-4",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_0",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_4",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_240",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_480",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_16_None",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_16_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_16_-3",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_16_5",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_16_None",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_16_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_16_-3",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_16_5",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_1",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_15",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_16",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_17",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_31",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_32",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_48",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_64",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_1",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_15",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_16",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_17",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_31",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_32",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_48",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_64",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_16_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_16_-3",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_16_5",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_split_16",
+      "image_base": "0x122c0000",
+      "operation_count": 3,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_24_False",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_24_True",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_-4",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_0",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_4",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_240",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_480",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_24_None",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_24_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_24_-3",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_24_5",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_24_None",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_24_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_24_-3",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_24_5",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_1",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_15",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_16",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_17",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_31",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_32",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_48",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_64",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_1",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_15",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_16",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_17",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_31",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_32",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_48",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_64",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_24_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_24_-3",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_24_5",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_split_24",
+      "image_base": "0x122c0000",
+      "operation_count": 3,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_32_False",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_32_True",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_-4",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_0",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_4",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_240",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_480",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_32_None",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_32_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_32_-3",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_32_5",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_32_None",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_32_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_32_-3",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_32_5",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_1",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_15",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_16",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_17",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_31",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_32",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_48",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_64",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_1",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_15",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_16",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_17",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_31",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_32",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_48",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_64",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_32_0",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_32_-3",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_32_5",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_split_32",
+      "image_base": "0x122c0000",
+      "operation_count": 3,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_0",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_1",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_15",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_17",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_23",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_25",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_31",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_33",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_2147483648",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_4294967295",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "ignored_mode_4",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "ignored_mode_4294967295",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_91750",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_92778",
+      "image_base": "0x122c0000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_93778",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_94778",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_95778",
+      "image_base": "0x122c0000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_16_False",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_16_True",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_-4",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_0",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_4",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_240",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_16_480",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_16_None",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_16_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_16_-3",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_16_5",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_16_None",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_16_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_16_-3",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_16_5",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_1",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_15",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_16",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_17",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_31",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_32",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_48",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_16_64",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_1",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_15",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_16",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_17",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_31",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_32",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_48",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_16_64",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_16_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_16_-3",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_16_5",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_split_16",
+      "image_base": "0x775c205000",
+      "operation_count": 3,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_24_False",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_24_True",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_-4",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_0",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_4",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_240",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_24_480",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_24_None",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_24_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_24_-3",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_24_5",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_24_None",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_24_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_24_-3",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_24_5",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_1",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_15",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_16",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_17",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_31",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_32",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_48",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_24_64",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_1",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_15",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_16",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_17",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_31",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_32",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_48",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_24_64",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_24_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_24_-3",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_24_5",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_split_24",
+      "image_base": "0x775c205000",
+      "operation_count": 3,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_32_False",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_32_True",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_-4",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_0",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_4",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_240",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "schedule_alias_32_480",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_32_None",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_32_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_32_-3",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "encrypt_32_5",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_32_None",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_32_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_32_-3",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "decrypt_32_5",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_1",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_15",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_16",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_17",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_31",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_32",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_48",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_0_32_64",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_1",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_15",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_16",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_17",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_31",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_32",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_48",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "dispatch_1_32_64",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_32_0",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_32_-3",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_overlap_32_5",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "cbc_split_32",
+      "image_base": "0x775c205000",
+      "operation_count": 3,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": true,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_0",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_1",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_15",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_17",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_23",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_25",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_31",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_33",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_2147483648",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "invalid_size_4294967295",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "ignored_mode_4",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "ignored_mode_4294967295",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_91750",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_92778",
+      "image_base": "0x775c205000",
+      "operation_count": 1,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_93778",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_94778",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    },
+    {
+      "case": "guest_table_mutation_95778",
+      "image_base": "0x775c205000",
+      "operation_count": 2,
+      "all_intermediate_guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "native_status_match": true,
+      "independent_aes_checked": false,
+      "single_native_execution": true
+    }
+  ],
+  "negatives": [
+    {
+      "case": "missing_key",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_table",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_context",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "bad_rounds",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_output",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "late_block_unmapped",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "unsupported_stream_2",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "unsupported_stream_3",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "unknown_jump",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "byte_bound",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "length_overflow",
+      "rejected": true,
+      "page_rollback": true
+    }
+  ],
+  "fresh_memory": true,
+  "captured_pages_used": false,
+  "native_output_used_as_input": false,
+  "models_use_guest_tables": true,
+  "independent_aes_is_verifier_only": true,
+  "key_sizes": [
+    16,
+    24,
+    32
+  ],
+  "ecb_cbc_decryption_dispatch": true,
+  "stream_dispatch_recovered": false,
+  "complete_259dbc_callback": false,
+  "complete_python_medusa": false,
+  "jvm_used": false
+}

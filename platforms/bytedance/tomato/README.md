@@ -25,3 +25,9 @@ registration, scoped writer cleanup and observable stack padding. Guard/OS
 boundaries remain explicit; the complete Python prelude and 88-byte
 initialization are still open. See
 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md).
+
+The configuration cipher work now restores the mode-0 decrypt callback and
+advances parser to step 612, with fresh component and same-run cold-state
+differences. Read [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) for the memory ABI,
+reproduction commands and evidence limits. Complete Python startup, Rust
+current-interface signing and a usable search/download webpage remain open.

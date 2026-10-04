@@ -14,11 +14,12 @@ import os
 from pathlib import Path
 from unicorn.arm64_const import (
     UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2,
-    UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X30, UC_ARM64_REG_SP, UC_ARM64_REG_PC,
+    UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X8, UC_ARM64_REG_X30, UC_ARM64_REG_SP, UC_ARM64_REG_PC,
 )
 
 import vm9_objects as objects
 import vm9_registry as registry
+import vm9_cipher_callback as cipher_callback
 import verify_vm9_root_configuration as oracle
 from vm9_allocator import _read_span, RefillUnsupported
 from verify_vm9_signer_objects import GUEST, LIBRARY_SHA256
@@ -63,6 +64,8 @@ def probe(library, libc, *, base, property_value, vm_module):
         snapshots[key] = {"object_address": cpu.reg_read(UC_ARM64_REG_X0), "pages": pages,
             "secondary_address": cpu.reg_read(UC_ARM64_REG_X1),
             "third_argument": cpu.reg_read(UC_ARM64_REG_X2),
+            "fourth_argument": cpu.reg_read(UC_ARM64_REG_X3),
+            "output_reference": cpu.reg_read(UC_ARM64_REG_X8),
             "stack_pointer": cpu.reg_read(UC_ARM64_REG_SP),
             "allocation_index": len(allocations),
             "registration_index": len(registrations),
@@ -87,13 +90,22 @@ def probe(library, libc, *, base, property_value, vm_module):
             constructor_snapshot(cpu, constructor_key)
         registry_key = {0x2566EC: "registry320_full", 0x2568C8: "configuration_set",
                         0x166370: "singleton136_full", 0x15E694: "registry320_getter",
-                        0x161068: "singleton136_getter"}.get(offset)
+                        0x161068: "singleton136_getter", 0x259DBC: "cipher_callback",
+                        0x276B9C: "checked_copy", 0x25AA48: "cipher_context"}.get(offset)
         if registry_key and registry_key not in snapshots:
             constructor_snapshot(cpu, registry_key)
             registry_returns[registry_key] = cpu.reg_read(UC_ARM64_REG_X30)
         for registry_key, return_address in registry_returns.items():
             if address == return_address and registry_key not in boundaries:
-                boundary(cpu, registry_key)
+                state = snapshots[registry_key]
+                if registry_key == "cipher_callback":
+                    boundary(cpu, registry_key, state["output_reference"], 16)
+                elif registry_key == "cipher_context":
+                    boundary(cpu, registry_key, state["output_reference"], 0x210)
+                elif registry_key == "checked_copy":
+                    boundary(cpu, registry_key, state["object_address"], state["third_argument"])
+                else:
+                    boundary(cpu, registry_key)
                 boundaries[registry_key]["return_value"] = cpu.reg_read(UC_ARM64_REG_X0)
         constructor_end = {0x166544: "singleton136", 0x256808: "registry320"}.get(offset)
         if constructor_end and constructor_end in snapshots and constructor_end not in boundaries:
@@ -131,15 +143,17 @@ def probe(library, libc, *, base, property_value, vm_module):
                 pages = {page >> 12: bytearray(cpu.mem_read(page, 4096))
                          for begin, end, _ in cpu.mem_regions() for page in range(begin, end + 1, 4096)}
                 snapshots[key] = {"values": values, "descriptor": descriptor, "pages": pages,
+                    "entry_stack_pointer": cpu.reg_read(UC_ARM64_REG_SP),
+                    "registration_index": len(registrations), "effect_index": len(native_effects),
                     "allocation_index": len(allocations),
                     "free_index": len(native_frees), "wake_index": len(native_wakes),
                     "allocation_next": max(pointer + ((size + 15) & ~15) for size, pointer in allocations)}
         elif offset == 0x261A1C and "root" in snapshots and "root" not in boundaries:
             boundary(cpu, "root")
-        elif offset == 0x263534 and "parser" in snapshots and "parser" not in boundaries:
+        elif offset == 0x263584 and "parser" in snapshots and "parser" not in boundaries:
             argument = cpu.reg_read(UC_ARM64_REG_X0)
-            if int.from_bytes(cpu.mem_read(argument, 8), "little") == base + 0x259DBC:
-                boundary(cpu, "parser", argument, 48)
+            if int.from_bytes(cpu.mem_read(argument, 8), "little") == base + 0x2592B8:
+                boundary(cpu, "parser", argument, 32)
 
     def allocation_effect(cpu, size, pointer):
         allocations.append([size, pointer])
@@ -166,7 +180,8 @@ def probe(library, libc, *, base, property_value, vm_module):
     assert control["returned"] and set(snapshots) == set(boundaries) == {
         "root", "parser", "singleton136", "registry320", "emutls_cold", "emutls_ready", "tls_registry",
         "scoped_acquire", "scoped_release", "registry320_full", "configuration_set",
-        "singleton136_full", "registry320_getter", "singleton136_getter"}
+        "singleton136_full", "registry320_getter", "singleton136_getter",
+        "cipher_callback", "checked_copy", "cipher_context"}
     assert pending_finished and pending_visits.get("0x166370") == 1 and pending_visits.get("0x242640", 0) > 0
     assert all(stack_writer_counts.values())
 
@@ -178,6 +193,16 @@ def probe(library, libc, *, base, property_value, vm_module):
                 raise RefillUnsupported("unmapped fresh guest page")
             return self.pages[address >> 12]
 
+    from vm9_allocator import pthread_getspecific, pthread_setspecific, pthread_key_create
+    def get_specific(pages, key):
+        return pthread_getspecific(pages, key=key, thread_pointer=oracle.TLS,
+            generation_table=oracle.LIBC_BASE + oracle.LIBC_PTHREAD_GENERATION_OFFSET)
+    def set_specific(pages, key, pointer):
+        return pthread_setspecific(pages, key=key, value=pointer, thread_pointer=oracle.TLS,
+            generation_table=oracle.LIBC_BASE + oracle.LIBC_PTHREAD_GENERATION_OFFSET)
+    def create_key(pages, key_address, destructor):
+        return pthread_key_create(pages, key_address=key_address, destructor=destructor,
+            generation_table=oracle.LIBC_BASE + oracle.LIBC_PTHREAD_GENERATION_OFFSET)
     results = []
     vm_full.B = base
     for key in ("root", "parser"):
@@ -188,6 +213,7 @@ def probe(library, libc, *, base, property_value, vm_module):
         vm.R[29], vm.R[31] = (descriptor[1] - 0x130) & ~15, descriptor[2]
         allocation_next = state["allocation_next"]
         model_allocations, modeled, frees = [], [], []
+        vm_registrations, vm_wakes, vm_effects = [], [], []
 
         def allocate(pages, size):
             nonlocal allocation_next
@@ -197,15 +223,47 @@ def probe(library, libc, *, base, property_value, vm_module):
                 raise RefillUnsupported("bounded VM allocation arena exhausted")
             _read_span(pages, pointer, size)
             model_allocations.append([size, pointer])
-            model_effects.append(["allocate", size, pointer])
+            vm_effects.append(["allocate", size, pointer])
             return pointer
 
         def free(pages, pointer):
             # Exactly the nonreusing free boundary used by the native oracle.
             frees.append(pointer)
+            vm_effects.append(["free", pointer])
 
         def reallocate(pages, pointer, size):
             raise RefillUnsupported("this native prefix has no realloc boundary")
+
+        def vm_wake(pages, pointer, operation, count):
+            vm_wakes.append([pointer, operation, count])
+            vm_effects.append(["wake", pointer, operation, count])
+            return 0
+        def vm_get_tls(pages, control):
+            return objects.get_emulated_tls_address(pages, control_address=control, image_base=base,
+                allocate=allocate, reallocate=reallocate, get_specific=get_specific,
+                set_specific=set_specific, create_key=create_key, once_wake=vm_wake)
+        def vm_atexit(pages, destructor, obj, dso):
+            vm_registrations.append([destructor, obj, dso])
+            vm_effects.append(["register", destructor, obj, dso])
+            return 0
+        def vm_thread_destructor(pages, destructor, obj, dso):
+            assert dso == base + 0x34C700
+            return objects.register_emulated_thread_destructor(pages, destructor_address=destructor,
+                object_address=obj, image_base=base, allocate=allocate, get_tls=vm_get_tls,
+                create_key=create_key, set_specific=set_specific, register_atexit=vm_atexit, thread_id=137)
+        def vm_initialize_registry(pages):
+            objects.initialize_scoped_tls_registry(pages, image_base=base, get_tls=vm_get_tls,
+                register_destructor=vm_thread_destructor)
+        def vm_clock(pages, clock_id):
+            vm_effects.append(["clock", clock_id])
+            return 0, clock_seconds, 500000000
+        def vm_broadcast(pages, pointer):
+            return objects.broadcast_condition_no_waiters(pages, condition_address=pointer, wake=vm_wake)
+        def vm_singleton(pages, sp):
+            return registry.get_singleton136_reference(pages, entry_stack_address=sp,
+                image_base=base, allocate=allocate, free=free, read_clock=vm_clock,
+                get_tls=vm_get_tls, initialize_registry=vm_initialize_registry,
+                broadcast=vm_broadcast, thread_id=137).wrapper_address
 
         def callback(current, function, argument):
             wrapper = function - base
@@ -254,6 +312,20 @@ def probe(library, libc, *, base, property_value, vm_module):
                 objects.construct_string_object(current.m.pages, object_address=words[1],
                     source_address=words[2], allocate=allocate, vtable_address=base + 0x34F5F8,
                     empty_descriptor_address=base + 0x6E168)
+            elif (wrapper, target) == (0x263534, 0x259DBC):
+                cipher_callback.decrypt_configuration_reference(current.m.pages,
+                    output_reference_address=words[1], data_object_address=words[2], key_object_address=words[3],
+                    iv_object_address=current.m.u64(argument + 32), mode_address=current.m.u64(argument + 40),
+                    entry_stack_address=state["entry_stack_pointer"] - 0x190,
+                    image_base=base, allocate=allocate, free=free, get_singleton=vm_singleton)
+            elif (wrapper, target) == (0x263554, 0x2483E0):
+                objects.clone_string_object(current.m.pages, object_address=words[1],
+                    source_object_address=words[2], image_base=base, allocate=allocate)
+            elif (wrapper, target) == (0x263564, 0x276B9C):
+                returned = cipher_callback.checked_forward_copy(current.m.pages,
+                    output_address=words[1], source_address=words[2], length=words[3],
+                    entry_stack_address=state["entry_stack_pointer"] - 0x190, get_singleton=vm_singleton)
+                current.m.w64(argument + 32, returned)
             elif key == "root" and (wrapper, target) == (0x2584E0, 0x26194C):
                 objects.construct_configuration_object_layout(current.m.pages,
                     object_address=words[1], first_string_address=words[2], second_string_address=words[3],
@@ -274,22 +346,28 @@ def probe(library, libc, *, base, property_value, vm_module):
             stop = "0x261a1c"
             pending = "0x261c54"
         except vm_full.NativeCall as exc:
-            assert key == "parser" and exc.f == base + 0x263534 and vm.m.u64(exc.arg) == base + 0x259DBC
-            descriptor_match = vm.m.rd(exc.arg, 48) == expected["descriptor"]
+            assert key == "parser" and exc.f == base + 0x263584 and vm.m.u64(exc.arg) == base + 0x2592B8
+            descriptor_match = vm.m.rd(exc.arg, 32) == expected["descriptor"]
             assert descriptor_match
-            stop, pending = "0x263534", "0x259dbc"
+            stop, pending = "0x263584", "0x2592b8"
         else:
             raise AssertionError("VM unexpectedly crossed the unimplemented boundary")
         assert vm.m.rd(GUEST, 0xA000) == expected["guest"]
         assert all(vm.m.rd(page << 12, 4096) == data for page, data in expected["image"].items())
         assert model_allocations == expected["allocations"]
         assert frees == expected["frees"]
+        assert vm_registrations == expected["registrations"], key + " registrations"
+        assert vm_wakes == expected["wakes"], key + " wakes"
+        assert vm_effects == expected["effects"], key + " ordered VM effects"
+        assert vm.m.rd(oracle.TLS, 0xB00) == expected["tls"], key + " VM TLS"
+        assert vm.m.rd(oracle.LIBC_BASE + oracle.LIBC_PTHREAD_GENERATION_OFFSET, 141 * 16) == expected["pthread_generations"], key + " VM generations"
         results.append({"phase": key, "vm_entry_offset": hex(values[0] - base),
             "steps": vm.steps, "stop_bytecode_offset": hex(vm.pc - base), "boundary_offset": stop,
             "pending_target_offset": pending, "guest_objects_match": True, "all_image_pages_match": True,
             "allocation_sequence_match": True, "allocations": len(model_allocations),
             "descriptor_match": descriptor_match, "modeled_callbacks": modeled, "explicit_free_calls": len(frees),
-            "free_sequence_match": True,
+            "free_sequence_match": True, "tls_and_generation_state_match": True,
+            "registration_and_wake_order_match": True, "all_ordered_effects_match": True,
             "native_prelude_snapshot_used": True, "complete_initializer": False})
     constructors = []
     for key, model, start, stop in (
@@ -318,16 +396,6 @@ def probe(library, libc, *, base, property_value, vm_module):
             "complete_initializer": False})
     # Both actual calls use the recovered bionic generation checks. The first
     # also allocates its key through the Python generation-table scanner.
-    from vm9_allocator import pthread_getspecific, pthread_setspecific, pthread_key_create
-    def get_specific(pages, key):
-        return pthread_getspecific(pages, key=key, thread_pointer=oracle.TLS,
-                                   generation_table=oracle.LIBC_BASE + oracle.LIBC_PTHREAD_GENERATION_OFFSET)
-    def set_specific(pages, key, pointer):
-        return pthread_setspecific(pages, key=key, value=pointer, thread_pointer=oracle.TLS,
-                                   generation_table=oracle.LIBC_BASE + oracle.LIBC_PTHREAD_GENERATION_OFFSET)
-    def create_key(pages, key_address, destructor):
-        return pthread_key_create(pages, key_address=key_address, destructor=destructor,
-                                  generation_table=oracle.LIBC_BASE + oracle.LIBC_PTHREAD_GENERATION_OFFSET)
     def once_wake(pages, pointer, operation, count):
         model_wakes.append([pointer, operation, count])
         model_effects.append(["wake", pointer, operation, count])
@@ -422,7 +490,8 @@ def probe(library, libc, *, base, property_value, vm_module):
             "allocations": len(model_allocations), "explicit_free_calls": len(model_frees),
             "native_prelude_snapshot_used": True, "single_live_mutex_only": True, "full_scoped_lock_tree": False})
     registry_initialization = []
-    for key in ("configuration_set", "registry320_full", "registry320_getter", "singleton136_full", "singleton136_getter"):
+    for key in ("configuration_set", "registry320_full", "registry320_getter", "singleton136_full", "singleton136_getter",
+                "cipher_callback", "checked_copy", "cipher_context"):
         state, expected = snapshots[key], boundaries[key]
         allocation_next, model_allocations, model_registrations, model_frees, model_wakes = state["allocation_next"], [], [], [], []
         model_effects = []
@@ -438,7 +507,23 @@ def probe(library, libc, *, base, property_value, vm_module):
         common = dict(image_base=base, entry_stack_address=state["stack_pointer"],
             allocate=allocate_prefix, free=free_registry, get_tls=get_tls,
             initialize_registry=initialize_registry, broadcast=broadcast_registry)
-        if key == "configuration_set":
+        def get_singleton_cipher(pages, sp):
+            return registry.get_singleton136_reference(pages, read_clock=read_clock_registry,
+                thread_id=137, **(common | {"entry_stack_address": sp})).wrapper_address
+        if key == "cipher_callback":
+            cipher_callback.decrypt_configuration_reference(state["pages"],
+                output_reference_address=state["output_reference"], data_object_address=state["object_address"],
+                key_object_address=state["secondary_address"], iv_object_address=state["third_argument"],
+                mode_address=state["fourth_argument"], entry_stack_address=state["stack_pointer"],
+                image_base=base, allocate=allocate_prefix, free=free_registry, get_singleton=get_singleton_cipher)
+        elif key == "checked_copy":
+            cipher_callback.checked_forward_copy(state["pages"], output_address=state["object_address"],
+                source_address=state["secondary_address"], length=state["third_argument"],
+                entry_stack_address=state["stack_pointer"], get_singleton=get_singleton_cipher)
+        elif key == "cipher_context":
+            cipher_callback.initialize_cipher_context(state["pages"], descriptor_address=state["object_address"],
+                context_address=state["output_reference"], image_base=base)
+        elif key == "configuration_set":
             returned = registry.set_configuration_u32(state["pages"], registry_address=state["object_address"],
                 key_address=state["secondary_address"], value=state["third_argument"] & 0xFFFFFFFF, **common)
             assert returned == expected["return_value"] & 0xFFFFFFFF, key + " return"
@@ -452,6 +537,9 @@ def probe(library, libc, *, base, property_value, vm_module):
             operation = registry.get_registry320_reference if key == "registry320_getter" else registry.get_singleton136_reference
             reference = operation(state["pages"], read_clock=read_clock_registry, thread_id=137, **common)
             assert reference.wrapper_address == expected["return_value"], key + " returned wrapper"
+        if key in ("cipher_callback", "cipher_context", "checked_copy"):
+            pointer = state["object_address"] if key == "checked_copy" else state["output_reference"]
+            assert _read_span(state["pages"], pointer, len(expected["descriptor"])) == expected["descriptor"], key + " explicit result bytes"
         got = _read_span(state["pages"], GUEST, 0xA000)
         if got != expected["guest"]:
             first = next(i for i, (a, b) in enumerate(zip(got, expected["guest"])) if a != b)
@@ -467,14 +555,16 @@ def probe(library, libc, *, base, property_value, vm_module):
         assert model_effects == expected["effects"], key + " ordered effects"
         registry_initialization.append({"phase": key, "entry_offset": {
             "configuration_set": "0x2568c8", "registry320_full": "0x2566ec", "registry320_getter": "0x15e694",
-            "singleton136_full": "0x166370", "singleton136_getter": "0x161068"}[key],
+            "singleton136_full": "0x166370", "singleton136_getter": "0x161068",
+            "cipher_callback": "0x259dbc", "checked_copy": "0x276b9c", "cipher_context": "0x25aa48"}[key],
             "guest_objects_match": True, "tls_state_match": True, "pthread_generation_table_match": True,
             "all_image_pages_match": True, "allocation_sequence_match": True, "registration_sequence_match": True,
             "free_sequence_match": True, "wake_sequence_match": True, "allocations": len(model_allocations),
             "explicit_free_calls": len(model_frees), "native_prelude_snapshot_used": True,
             "real_cold_python_tls_path": True, "ordered_allocator_clock_registration_wake_effects_match": True,
             "guard_boundary": "serialized_successful_single_thread_guard",
-            "lazy_publication_compared": key in ("registry320_getter", "singleton136_full", "singleton136_getter")})
+            "lazy_publication_compared": key in ("registry320_getter", "singleton136_full", "singleton136_getter"),
+            "explicit_result_bytes_compared": key in ("cipher_callback", "cipher_context", "checked_copy")})
     return {"image_base": hex(base), "native_control_returned": True, "phases": results,
             "constructor_prefixes": constructors,
             "emulated_tls": emutls,
@@ -483,7 +573,8 @@ def probe(library, libc, *, base, property_value, vm_module):
             "registry_initialization": registry_initialization,
             "native_stack_writer_counts": stack_writer_counts,
             "pending_callback_native_visits": pending_visits,
-            "pending_callback_python_implemented": False}
+            "configuration_decrypt_callback_python_implemented": True,
+            "pending_parser_target_python_implemented": False}
 
 
 def main():
@@ -506,7 +597,7 @@ def main():
         "emulated_tls_comparisons": len(cases) * 2,
         "tls_registry_comparisons": len(cases),
         "scoped_lock_comparisons": len(cases) * 2,
-        "registry_initialization_comparisons": len(cases) * 5,
+        "registry_and_cipher_comparisons": len(cases) * 8,
         "library_sha256": LIBRARY_SHA256, "libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
         "fresh_elf": True, "external_captured_pages_used": False, "native_prelude_snapshot_used": True,
         "trace_branch_opaque_hooks_used": False, "jvm_used": False,
@@ -517,7 +608,7 @@ def main():
                       "emulated_tls_comparisons": len(cases) * 2,
                       "tls_registry_comparisons": len(cases),
                       "scoped_lock_comparisons": len(cases) * 2,
-                      "registry_initialization_comparisons": len(cases) * 5}))
+                      "registry_and_cipher_comparisons": len(cases) * 8}))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 {
   "platform": "bytedance.tomato",
-  "generated_from": "ONLINE_VALIDATION_20260929.md, fresh trial summaries, allocator/callback audits, and the 2026-10-03 initialization and version-separated search controls in the isolated workspace",
+  "generated_from": "ONLINE_VALIDATION_20260929.md, sanitized fresh trial summaries and the 2026-10-04 configuration tree, constructor, cipher and parser controls in the isolated workspace",
   "redaction": "No raw URLs, request headers, device identifiers, UUIDs, tokens, per-session keys, or response bodies are included.",
   "live_chain": [
     {
@@ -1205,9 +1205,9 @@
     "native_runs": 4,
     "vm_phase_comparisons": 8,
     "root_steps": 513,
-    "parser_steps": 325,
+    "parser_steps": 612,
     "root_allocations_since_vm_entry": 11,
-    "parser_allocations_since_vm_entry": 13,
+    "parser_allocations_since_vm_entry": 93,
     "all_main_image_pages_compared": true,
     "external_captured_pages_used": false,
     "native_prelude_snapshot_used": true,
@@ -1215,11 +1215,10 @@
     "complete_python_prelude": false,
     "complete_88_byte_initializer": false,
     "complete_python_medusa": false,
-    "parser_free_calls": 4,
-    "parser_descriptor_bytes": 48,
-    "parser_pending_target_offset": "0x259dbc",
+    "parser_free_calls": 23,
+    "parser_descriptor_bytes": 32,
+    "parser_pending_target_offset": "0x2592b8",
     "pending_callback_native_dependencies_observed": true,
-    "pending_callback_python_implemented": false,
     "constructor_prefix_comparisons": 8,
     "emulated_tls_comparisons": 8,
     "tls_registry_comparisons": 4,
@@ -1230,7 +1229,6 @@
     "scoped_single_live_mutex_only": true,
     "complete_singleton136_initializer": false,
     "complete_registry320_initializer": false,
-    "registry_initialization_comparisons": 20,
     "registry320_constructor_body": true,
     "singleton136_constructor_body": true,
     "registry320_lazy_publication_compared": true,
@@ -1238,7 +1236,12 @@
     "real_cold_python_tls_in_constructor_subtrees": true,
     "ordered_allocator_clock_registration_wake_effects_compared": true,
     "observable_stack_frame_effects_derived_from_caller_sp": true,
-    "guard_boundary": "serialized_successful_single_thread_guard"
+    "guard_boundary": "serialized_successful_single_thread_guard",
+    "configuration_decrypt_callback_python_implemented": true,
+    "pending_parser_target_python_implemented": false,
+    "registry_and_cipher_comparisons": 32,
+    "parser_cold_tls_and_ordered_effects_compared": true,
+    "explicit_stack_result_reference_and_context_bytes_compared": true
   },
   "vm9_strings_native_20261004": {
     "evidence_file": "evidence/vm9_strings_native_20261004.json",
@@ -1363,5 +1366,35 @@
     "complete_cold_registry320_initialization": false,
     "complete_cold_singleton136_initialization": false,
     "complete_python_medusa": false
+  },
+  "vm9_cipher_native_20261004": {
+    "evidence_file": "evidence/vm9_cipher_native_20261004.json",
+    "differential_cases": 256,
+    "negative_cases": 11,
+    "fresh_synthetic_inputs": true,
+    "native_outputs_used_as_model_input": false,
+    "jvm_used": false,
+    "keys_payloads_and_ciphertexts_exported": false,
+    "complete_python_medusa": false,
+    "guest_tables_read_from_matching_elf": true,
+    "independent_aes_oracle": true,
+    "stream_modes_recovered": false
+  },
+  "vm9_cipher_callback_native_20261004": {
+    "evidence_file": "evidence/vm9_cipher_callback_native_20261004.json",
+    "differential_cases": 200,
+    "negative_cases": 12,
+    "fresh_synthetic_inputs": true,
+    "native_outputs_used_as_model_input": false,
+    "jvm_used": false,
+    "keys_payloads_and_ciphertexts_exported": false,
+    "complete_python_medusa": false,
+    "verified_callback_modes": [
+      0
+    ],
+    "serialized_warm_singleton_component_boundary": true,
+    "pre_free_bytes_compared": true,
+    "padding_checks_last_byte_only": true,
+    "allocation_free_order_compared": true
   }
 }
