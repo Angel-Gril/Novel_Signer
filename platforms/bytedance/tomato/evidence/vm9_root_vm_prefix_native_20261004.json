@@ -123,6 +123,7 @@
             }
           ],
           "explicit_free_calls": 0,
+          "free_sequence_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
         },
@@ -213,8 +214,123 @@
             }
           ],
           "explicit_free_calls": 4,
+          "free_sequence_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
+        }
+      ],
+      "constructor_prefixes": [
+        {
+          "phase": "singleton136",
+          "entry_offset": "0x166370",
+          "boundary_offset": "0x166544",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 4,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
+          "phase": "registry320",
+          "entry_offset": "0x2566ec",
+          "boundary_offset": "0x256808",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 7,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        }
+      ],
+      "emulated_tls": [
+        {
+          "phase": "emutls_cold",
+          "entry_offset": "0x34377c",
+          "control_offset": "0x382470",
+          "return_pointer_match": true,
+          "guest_objects_match": true,
+          "tls_generation_state_match": true,
+          "all_image_pages_match": true,
+          "pthread_generation_table_match": true,
+          "pthread_generation_table_bytes": 2256,
+          "allocation_sequence_match": true,
+          "allocations": 2,
+          "once_wake_sequence_match": true,
+          "native_prelude_snapshot_used": true,
+          "once_key_already_initialized": false,
+          "python_key_creation": true,
+          "complete_python_pthread_boot": false
+        },
+        {
+          "phase": "emutls_ready",
+          "entry_offset": "0x34377c",
+          "control_offset": "0x382450",
+          "return_pointer_match": true,
+          "guest_objects_match": true,
+          "tls_generation_state_match": true,
+          "all_image_pages_match": true,
+          "pthread_generation_table_match": true,
+          "pthread_generation_table_bytes": 2256,
+          "allocation_sequence_match": true,
+          "allocations": 1,
+          "once_wake_sequence_match": true,
+          "native_prelude_snapshot_used": true,
+          "once_key_already_initialized": true,
+          "python_key_creation": false,
+          "complete_python_pthread_boot": false
+        }
+      ],
+      "tls_registry": {
+        "entry_offset": "0x269880",
+        "guest_objects_match": true,
+        "tls_state_match": true,
+        "pthread_generation_table_match": true,
+        "all_image_pages_match": true,
+        "allocation_sequence_match": true,
+        "registration_sequence_match": true,
+        "once_wake_sequence_match": true,
+        "allocations": 6,
+        "process_destructor_registrations": 1,
+        "native_prelude_snapshot_used": true,
+        "complete_scoped_lock": false
+      },
+      "scoped_locks": [
+        {
+          "phase": "scoped_acquire",
+          "entry_offset": "0x268eb0",
+          "guard_bytes_match": true,
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 7,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "single_live_mutex_only": true,
+          "full_scoped_lock_tree": false
+        },
+        {
+          "phase": "scoped_release",
+          "entry_offset": "0x268fbc",
+          "guard_bytes_match": true,
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 0,
+          "explicit_free_calls": 1,
+          "native_prelude_snapshot_used": true,
+          "single_live_mutex_only": true,
+          "full_scoped_lock_tree": false
         }
       ],
       "pending_callback_native_visits": {
@@ -351,6 +467,7 @@
             }
           ],
           "explicit_free_calls": 0,
+          "free_sequence_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
         },
@@ -441,8 +558,123 @@
             }
           ],
           "explicit_free_calls": 4,
+          "free_sequence_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
+        }
+      ],
+      "constructor_prefixes": [
+        {
+          "phase": "singleton136",
+          "entry_offset": "0x166370",
+          "boundary_offset": "0x166544",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 4,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
+          "phase": "registry320",
+          "entry_offset": "0x2566ec",
+          "boundary_offset": "0x256808",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 7,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        }
+      ],
+      "emulated_tls": [
+        {
+          "phase": "emutls_cold",
+          "entry_offset": "0x34377c",
+          "control_offset": "0x382470",
+          "return_pointer_match": true,
+          "guest_objects_match": true,
+          "tls_generation_state_match": true,
+          "all_image_pages_match": true,
+          "pthread_generation_table_match": true,
+          "pthread_generation_table_bytes": 2256,
+          "allocation_sequence_match": true,
+          "allocations": 2,
+          "once_wake_sequence_match": true,
+          "native_prelude_snapshot_used": true,
+          "once_key_already_initialized": false,
+          "python_key_creation": true,
+          "complete_python_pthread_boot": false
+        },
+        {
+          "phase": "emutls_ready",
+          "entry_offset": "0x34377c",
+          "control_offset": "0x382450",
+          "return_pointer_match": true,
+          "guest_objects_match": true,
+          "tls_generation_state_match": true,
+          "all_image_pages_match": true,
+          "pthread_generation_table_match": true,
+          "pthread_generation_table_bytes": 2256,
+          "allocation_sequence_match": true,
+          "allocations": 1,
+          "once_wake_sequence_match": true,
+          "native_prelude_snapshot_used": true,
+          "once_key_already_initialized": true,
+          "python_key_creation": false,
+          "complete_python_pthread_boot": false
+        }
+      ],
+      "tls_registry": {
+        "entry_offset": "0x269880",
+        "guest_objects_match": true,
+        "tls_state_match": true,
+        "pthread_generation_table_match": true,
+        "all_image_pages_match": true,
+        "allocation_sequence_match": true,
+        "registration_sequence_match": true,
+        "once_wake_sequence_match": true,
+        "allocations": 6,
+        "process_destructor_registrations": 1,
+        "native_prelude_snapshot_used": true,
+        "complete_scoped_lock": false
+      },
+      "scoped_locks": [
+        {
+          "phase": "scoped_acquire",
+          "entry_offset": "0x268eb0",
+          "guard_bytes_match": true,
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 7,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "single_live_mutex_only": true,
+          "full_scoped_lock_tree": false
+        },
+        {
+          "phase": "scoped_release",
+          "entry_offset": "0x268fbc",
+          "guard_bytes_match": true,
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 0,
+          "explicit_free_calls": 1,
+          "native_prelude_snapshot_used": true,
+          "single_live_mutex_only": true,
+          "full_scoped_lock_tree": false
         }
       ],
       "pending_callback_native_visits": {
@@ -579,6 +811,7 @@
             }
           ],
           "explicit_free_calls": 0,
+          "free_sequence_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
         },
@@ -669,8 +902,123 @@
             }
           ],
           "explicit_free_calls": 4,
+          "free_sequence_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
+        }
+      ],
+      "constructor_prefixes": [
+        {
+          "phase": "singleton136",
+          "entry_offset": "0x166370",
+          "boundary_offset": "0x166544",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 4,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
+          "phase": "registry320",
+          "entry_offset": "0x2566ec",
+          "boundary_offset": "0x256808",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 7,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        }
+      ],
+      "emulated_tls": [
+        {
+          "phase": "emutls_cold",
+          "entry_offset": "0x34377c",
+          "control_offset": "0x382470",
+          "return_pointer_match": true,
+          "guest_objects_match": true,
+          "tls_generation_state_match": true,
+          "all_image_pages_match": true,
+          "pthread_generation_table_match": true,
+          "pthread_generation_table_bytes": 2256,
+          "allocation_sequence_match": true,
+          "allocations": 2,
+          "once_wake_sequence_match": true,
+          "native_prelude_snapshot_used": true,
+          "once_key_already_initialized": false,
+          "python_key_creation": true,
+          "complete_python_pthread_boot": false
+        },
+        {
+          "phase": "emutls_ready",
+          "entry_offset": "0x34377c",
+          "control_offset": "0x382450",
+          "return_pointer_match": true,
+          "guest_objects_match": true,
+          "tls_generation_state_match": true,
+          "all_image_pages_match": true,
+          "pthread_generation_table_match": true,
+          "pthread_generation_table_bytes": 2256,
+          "allocation_sequence_match": true,
+          "allocations": 1,
+          "once_wake_sequence_match": true,
+          "native_prelude_snapshot_used": true,
+          "once_key_already_initialized": true,
+          "python_key_creation": false,
+          "complete_python_pthread_boot": false
+        }
+      ],
+      "tls_registry": {
+        "entry_offset": "0x269880",
+        "guest_objects_match": true,
+        "tls_state_match": true,
+        "pthread_generation_table_match": true,
+        "all_image_pages_match": true,
+        "allocation_sequence_match": true,
+        "registration_sequence_match": true,
+        "once_wake_sequence_match": true,
+        "allocations": 6,
+        "process_destructor_registrations": 1,
+        "native_prelude_snapshot_used": true,
+        "complete_scoped_lock": false
+      },
+      "scoped_locks": [
+        {
+          "phase": "scoped_acquire",
+          "entry_offset": "0x268eb0",
+          "guard_bytes_match": true,
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 7,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "single_live_mutex_only": true,
+          "full_scoped_lock_tree": false
+        },
+        {
+          "phase": "scoped_release",
+          "entry_offset": "0x268fbc",
+          "guard_bytes_match": true,
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 0,
+          "explicit_free_calls": 1,
+          "native_prelude_snapshot_used": true,
+          "single_live_mutex_only": true,
+          "full_scoped_lock_tree": false
         }
       ],
       "pending_callback_native_visits": {
@@ -807,6 +1155,7 @@
             }
           ],
           "explicit_free_calls": 0,
+          "free_sequence_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
         },
@@ -897,8 +1246,123 @@
             }
           ],
           "explicit_free_calls": 4,
+          "free_sequence_match": true,
           "native_prelude_snapshot_used": true,
           "complete_initializer": false
+        }
+      ],
+      "constructor_prefixes": [
+        {
+          "phase": "singleton136",
+          "entry_offset": "0x166370",
+          "boundary_offset": "0x166544",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 4,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        },
+        {
+          "phase": "registry320",
+          "entry_offset": "0x2566ec",
+          "boundary_offset": "0x256808",
+          "guest_objects_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "allocations": 7,
+          "native_prelude_snapshot_used": true,
+          "complete_initializer": false
+        }
+      ],
+      "emulated_tls": [
+        {
+          "phase": "emutls_cold",
+          "entry_offset": "0x34377c",
+          "control_offset": "0x382470",
+          "return_pointer_match": true,
+          "guest_objects_match": true,
+          "tls_generation_state_match": true,
+          "all_image_pages_match": true,
+          "pthread_generation_table_match": true,
+          "pthread_generation_table_bytes": 2256,
+          "allocation_sequence_match": true,
+          "allocations": 2,
+          "once_wake_sequence_match": true,
+          "native_prelude_snapshot_used": true,
+          "once_key_already_initialized": false,
+          "python_key_creation": true,
+          "complete_python_pthread_boot": false
+        },
+        {
+          "phase": "emutls_ready",
+          "entry_offset": "0x34377c",
+          "control_offset": "0x382450",
+          "return_pointer_match": true,
+          "guest_objects_match": true,
+          "tls_generation_state_match": true,
+          "all_image_pages_match": true,
+          "pthread_generation_table_match": true,
+          "pthread_generation_table_bytes": 2256,
+          "allocation_sequence_match": true,
+          "allocations": 1,
+          "once_wake_sequence_match": true,
+          "native_prelude_snapshot_used": true,
+          "once_key_already_initialized": true,
+          "python_key_creation": false,
+          "complete_python_pthread_boot": false
+        }
+      ],
+      "tls_registry": {
+        "entry_offset": "0x269880",
+        "guest_objects_match": true,
+        "tls_state_match": true,
+        "pthread_generation_table_match": true,
+        "all_image_pages_match": true,
+        "allocation_sequence_match": true,
+        "registration_sequence_match": true,
+        "once_wake_sequence_match": true,
+        "allocations": 6,
+        "process_destructor_registrations": 1,
+        "native_prelude_snapshot_used": true,
+        "complete_scoped_lock": false
+      },
+      "scoped_locks": [
+        {
+          "phase": "scoped_acquire",
+          "entry_offset": "0x268eb0",
+          "guard_bytes_match": true,
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 7,
+          "explicit_free_calls": 0,
+          "native_prelude_snapshot_used": true,
+          "single_live_mutex_only": true,
+          "full_scoped_lock_tree": false
+        },
+        {
+          "phase": "scoped_release",
+          "entry_offset": "0x268fbc",
+          "guard_bytes_match": true,
+          "guest_objects_match": true,
+          "tls_state_match": true,
+          "pthread_generation_table_match": true,
+          "all_image_pages_match": true,
+          "allocation_sequence_match": true,
+          "registration_sequence_match": true,
+          "free_sequence_match": true,
+          "wake_sequence_match": true,
+          "allocations": 0,
+          "explicit_free_calls": 1,
+          "native_prelude_snapshot_used": true,
+          "single_live_mutex_only": true,
+          "full_scoped_lock_tree": false
         }
       ],
       "pending_callback_native_visits": {
@@ -915,6 +1379,10 @@
   ],
   "native_runs": 4,
   "vm_phase_comparisons": 8,
+  "constructor_prefix_comparisons": 8,
+  "emulated_tls_comparisons": 8,
+  "tls_registry_comparisons": 4,
+  "scoped_lock_comparisons": 8,
   "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
   "fresh_elf": true,

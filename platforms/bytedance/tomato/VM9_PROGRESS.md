@@ -3,6 +3,42 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Singleton dependencies, cold TLS and scoped writer (2026-10-04)
+
+The 136-byte singleton prefix +0x166370 -> +0x166544 and 320-byte
+registry prefix +0x2566ec -> +0x256808 now have input-driven models.
+GOT-dependent table reads, normal mutexes, the full 56-byte helper and
+realtime clock wrapper pass 78 native differences / 13 rollback cases.
+The clock getter +0x26cc60 is not thread startup.
+
+Emulated TLS passes 60 differences / 12 rollback cases; matching bionic key
+creation passes 36 / 4. The current libc generation table is +0xe0200,
+distinct from the older checkpoint's +0x1d0200. Cold once completion also
+requires its real no-waiter futex wake; matching memory alone missed that
+event until the same-run comparison was expanded.
+
+Local thread-destructor registration and cold scoped TLS-tree initialization
+pass 32 / 5. Zero/one live mutex scoped writer acquire/release passes 42 / 7,
+including same-mutex nesting, copied stack padding, poisoned free, condition
+u32 wrap and explicit wake. Multiple live keys, shared readers, contention,
+host keys and destructor execution remain outside the supported branch.
+
+Four same-fresh-native controls compare eight original VM phases, eight
+constructor prefixes, eight emulated-TLS calls, four cold TLS-tree initializers
+and eight scoped acquire/release calls. Guest bytes, all main image pages,
+isolated TLS, the complete 2256-byte generation table and allocation/free/
+registration/wake sequences match. Cold acquire generates seven allocations;
+release frees one node. Each component still starts from its own native input
+prelude snapshot: this is not a fully Python startup or a completed parser.
+
+Next: configuration lookup/update/insertion at +0x2568c8 ->
++0x25c168/+0x25bf3c, complete 320/136-byte constructors and singleton
+publication, then +0x259dbc block processing. Parser remains step 325,
+root remains step 513 at the 88-byte prefix. Independent current Medusa,
+no-JVM Rust, nonempty search, other platforms and the final web tool remain
+incomplete. See [construction report](SIGNER_CONSTRUCTION.md) and
+[same-run evidence](evidence/vm9_root_vm_prefix_native_20261004.json).
+
 ## 88-byte configuration prefix and parser dependencies (2026-10-04)
 
 String append/reserve/alias/cleanup now pass 166 fresh native differences
@@ -33,10 +69,11 @@ also matches. Both starts use
 their own native prelude snapshots for differential testing: no external
 captured pages or trace/branch/opaque hooks, but no fully Python prelude claim.
 
-Next: +0x259dbc and its +0x276b9c -> +0x161068 -> +0x166370 dependency;
-a fresh native control observed the 136-byte singleton startup followed by
-+0x25ab1c block processing. These effects remain unimplemented. Then recover
-remaining parser callbacks and 88-byte initialization. Full independent
+This earlier checkpoint first located +0x259dbc and its
++0x276b9c -> +0x161068 -> +0x166370 dependency, followed by
++0x25ab1c block processing. The newer dependency recovery above supersedes
+that earlier blocker description. Remaining parser callbacks, 88-byte
+initialization and full independent
 Medusa, no-JVM Rust, nonempty search, other platforms and the final web tool
 remain incomplete. See [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md),
 [object evidence](evidence/vm9_configuration_objects_native_20261004.json),

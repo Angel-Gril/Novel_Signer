@@ -122,6 +122,41 @@ Only synthetic inputs and sanitized evidence are used; no digest payload or
 private ELF alphabet is exported. Diagnostic/native stack effects and the
 later 136-byte singleton remain outside these component models.
 
+`construct_singleton_layout136` and `construct_registry_layout320` generate
+the next constructor prefixes, with 4 and 7 allocations respectively.
+`construct_singleton_helper56` is a full helper constructor.
+The table reader follows guest GOT rather than a fixed default pointer;
+the realtime clock wrapper preserves signed wrap/truncation rules.
+Run `verify_vm9_singleton136.py` (library/libc/output): 78 differences / 13
+rollback cases. Full configuration-map population remains open.
+
+`get_emulated_tls_address` uses explicit allocate/reallocate, key-create,
+get/set-specific and cold once-wake boundaries. Run
+`verify_vm9_emulated_tls.py`: 60 differences / 12 rollback cases.
+`vm9_allocator.pthread_key_create` models matching bionic's serialized
+141-entry generation-table scan: `verify_vm9_pthread_keys.py` passes 36 / 4.
+For the current matching libc explicitly supply libc-base +0xe0200; the
+older checkpoint default is not this libc ABI.
+
+`register_emulated_thread_destructor` recovers local cold key/TLS list
+registration; `initialize_scoped_tls_registry` initializes its guarded
+thread-local tree. Run `verify_vm9_thread_destructors.py`: 32 / 5.
+Registration does not execute a process/thread destructor.
+
+`construct_single_scoped_lock`, `destroy_single_scoped_lock` and
+`broadcast_condition_no_waiters` cover zero/one live TLS mutex and an idle
+writer. The constructor takes original scratch memory because native copies
+seven stack padding bytes into its 48-byte node. Run
+`verify_vm9_scoped_lock.py`: 42 / 7, including nesting, poisoned free and wake
+ordering. Multiple live keys/readers/waiters are rejected. Caller allocator
+and registration ledgers are not rolled back by page transactions.
+
+The same-run root verifier additionally compares eight constructor prefixes,
+eight TLS calls, four cold TLS-tree initializers and eight scoped locks,
+including all 2256 generation-table bytes and allocation/free/registration/
+wake sequences. Its native input snapshots remain explicit; the VM parser
+still stops before +0x259dbc and full Python Medusa is incomplete.
+
 `verify_vm9_allocator_lifecycle.py` requires Unicorn and the trusted primary
 initialized checkpoint. `verify_vm9_divmod_backing.py` additionally requires
 the paired private memory image and `TOMATO_LIBMETASEC`. Both write sanitized

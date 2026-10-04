@@ -1,0 +1,382 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "fresh_memory": true,
+  "captured_pages_used": false,
+  "jvm_used": false,
+  "differential_cases": 36,
+  "negative_cases": 4,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 0,
+      "initial_free_generation": "0x0",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 0,
+      "initial_free_generation": "0x2",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 0,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 1,
+      "initial_free_generation": "0x0",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 1,
+      "initial_free_generation": "0x2",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 1,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 2,
+      "initial_free_generation": "0x0",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 2,
+      "initial_free_generation": "0x2",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 2,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 140,
+      "initial_free_generation": "0x0",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 140,
+      "initial_free_generation": "0x2",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 140,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 141,
+      "initial_free_generation": "0x0",
+      "result": 11,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 141,
+      "initial_free_generation": "0x2",
+      "result": 11,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "used_entries": 141,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 11,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "output_alias_offset": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "result": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "output_alias_offset": 8,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "result": 0
+    },
+    {
+      "image_base": "0x122c0000",
+      "output_alias_offset": 16,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "result": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 0,
+      "initial_free_generation": "0x0",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 0,
+      "initial_free_generation": "0x2",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 0,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 1,
+      "initial_free_generation": "0x0",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 1,
+      "initial_free_generation": "0x2",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 1,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 2,
+      "initial_free_generation": "0x0",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 2,
+      "initial_free_generation": "0x2",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 2,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 140,
+      "initial_free_generation": "0x0",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 140,
+      "initial_free_generation": "0x2",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 140,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 141,
+      "initial_free_generation": "0x0",
+      "result": 11,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 141,
+      "initial_free_generation": "0x2",
+      "result": 11,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "used_entries": 141,
+      "initial_free_generation": "0xfffffffffffffffe",
+      "result": 11,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "whole_generation_table_bytes": 2256,
+      "allocations": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "output_alias_offset": 0,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "result": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "output_alias_offset": 8,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "result": 0
+    },
+    {
+      "image_base": "0x775c205000",
+      "output_alias_offset": 16,
+      "guest_bytes_match": true,
+      "generation_table_match": true,
+      "result": 0
+    }
+  ],
+  "negatives": [
+    {
+      "case": "unaligned_table",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "negative_destructor",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_table_page",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_output_page",
+      "rejected": true,
+      "page_rollback": true
+    }
+  ],
+  "generation_table_offset": "0xe0200",
+  "key_entries": 141,
+  "serialized_state_only": true,
+  "host_keys_created": false,
+  "destructors_executed": false,
+  "complete_python_pthread_boot": false,
+  "complete_python_medusa": false
+}

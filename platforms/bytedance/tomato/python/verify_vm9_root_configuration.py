@@ -24,12 +24,14 @@ from vm9_allocator import RefillUnsupported, _read_span, _write_span
 from verify_vm9_signer_objects import GUEST, LIBRARY_SHA256, fresh_pages, image_pages, native
 
 LIBC_BASE = 0x51000000
+LIBC_PTHREAD_GENERATION_OFFSET = 0xE0200  # Matching libc, not the older checkpoint ABI.
 TLS = GUEST + 0xA000
 PROPERTY = GUEST + 0xB800
 
 
 def probe(library, libc, *, base, property_value, seconds=1791023800,
-          instruction_observer=None, allocation_effect=None):
+          instruction_observer=None, allocation_effect=None, registration_effect=None,
+          free_effect=None, wake_effect=None):
     pages = fresh_pages()
     pages.update(image_pages(library, base))
     # Resolve only evidenced external allocator relocations, using their PLTs
@@ -108,6 +110,8 @@ def probe(library, libc, *, base, property_value, seconds=1791023800,
         return call
 
     def free(cpu):
+        if free_effect:
+            free_effect(cpu, cpu.reg_read(UC_ARM64_REG_X0))
         calls["free:nonreusing_allocator"] += 1
         return 0
 
@@ -116,6 +120,8 @@ def probe(library, libc, *, base, property_value, seconds=1791023800,
         if not base <= values[0] < base + 0x348000:
             raise RefillUnsupported("destructor is outside the loaded image")
         registrations.append([hex(value - base) for value in values])
+        if registration_effect:
+            registration_effect(cpu, *values)
         calls["__cxa_atexit:register_only"] += 1
         return 0
 
@@ -156,6 +162,8 @@ def probe(library, libc, *, base, property_value, seconds=1791023800,
         if number == 198:  # socket; explicit unsupported virtual family
             return -97
         if number == 98 and cpu.reg_read(UC_ARM64_REG_X1) & 0x7F == 1:
+            if wake_effect:
+                wake_effect(cpu, *[cpu.reg_read(reg) for reg in (UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2)])
             return 0  # FUTEX_WAKE with no virtual waiters
         raise RefillUnsupported("unknown virtual syscall " + str(number))
 

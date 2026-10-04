@@ -1,0 +1,1144 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "fresh_memory": true,
+  "captured_pages_used": false,
+  "jvm_used": false,
+  "differential_cases": 60,
+  "negative_cases": 12,
+  "cases": [
+    {
+      "case": "new_array_0_0_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "create",
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": true
+    },
+    {
+      "case": "new_array_0_0_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "create",
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": true
+    },
+    {
+      "case": "new_array_0_2_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_0_2_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_1_2_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_1_2_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_14_2_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_14_2_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_15_2_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        256,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_15_2_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        256,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_31_2_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        384,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_31_2_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        384,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_0_0",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        15
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_1_1",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        16
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_7_2",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        22
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_16_8",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        31
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_31_16",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        54
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_65_64",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        136
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_96_128",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        231
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_3_2_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_15_14_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        256,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_31_30_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        384,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_3_2_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_15_14_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        256,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_31_30_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        384,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "existing_slot_False",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        47
+      ],
+      "pthread_events": [
+        "get"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "existing_slot_True",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [],
+      "pthread_events": [
+        "get"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "template_after_malloc",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        47
+      ],
+      "pthread_events": [
+        "get"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "size_alignment_latched",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        47
+      ],
+      "pthread_events": [
+        "get"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "ignored_setspecific_failure",
+      "image_base": "0x122c0000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_0_0_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "create",
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": true
+    },
+    {
+      "case": "new_array_0_0_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "create",
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": true
+    },
+    {
+      "case": "new_array_0_2_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_0_2_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_1_2_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_1_2_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_14_2_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_14_2_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_15_2_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        256,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_15_2_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        256,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_31_2_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        384,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "new_array_31_2_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        384,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_0_0",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        15
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_1_1",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        16
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_7_2",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        22
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_16_8",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        31
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_31_16",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        54
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_65_64",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        136
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "alignment_96_128",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        231
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_3_2_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_15_14_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        256,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_31_30_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        384,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_3_2_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_15_14_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        256,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "grow_31_30_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        384,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "existing_slot_False",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        47
+      ],
+      "pthread_events": [
+        "get"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "existing_slot_True",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [],
+      "pthread_events": [
+        "get"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "template_after_malloc",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        47
+      ],
+      "pthread_events": [
+        "get"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "size_alignment_latched",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        47
+      ],
+      "pthread_events": [
+        "get"
+      ],
+      "cold_native_key_initializer_executed": false
+    },
+    {
+      "case": "ignored_setspecific_failure",
+      "image_base": "0x775c205000",
+      "guest_bytes_match": true,
+      "all_main_image_pages_match": true,
+      "return_pointer_match": true,
+      "allocator_effects_match": true,
+      "pthread_event_order_match": true,
+      "allocation_sizes": [
+        128,
+        47
+      ],
+      "pthread_events": [
+        "get",
+        "set"
+      ],
+      "cold_native_key_initializer_executed": false
+    }
+  ],
+  "negatives": [
+    {
+      "case": "once_in_progress",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "key_create_failure",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_once_wake_boundary",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "once_wake_errno_path",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "index_bound",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "invalid_alignment",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "payload_bound",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "array_malloc_null",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "variable_malloc_null",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "array_realloc_null",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_control_page",
+      "rejected": true,
+      "page_rollback": true
+    },
+    {
+      "case": "missing_global_page",
+      "rejected": true,
+      "page_rollback": true
+    }
+  ],
+  "pthread_boundary": "serialized_once_and_explicit_key_get_set_wake_results",
+  "bionic_key_allocation_implemented": false,
+  "thread_destructors_executed": false,
+  "complete_registry320_initializer": false,
+  "complete_singleton136_initializer": false,
+  "complete_88_byte_initializer": false,
+  "complete_python_medusa": false
+}

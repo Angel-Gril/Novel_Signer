@@ -17,3 +17,9 @@ Read in this order:
 11. [rust/README.md](rust/README.md) — what the no-JVM Rust crate can and cannot do today.
 
 The Python folder contains the verified primitives and the old Medusa snapshot interpreter. It is labelled carefully because a successful old snapshot replay is not proof of current online compatibility.
+
+Latest constructor work restores the 136/320-byte prefixes, cold TLS/key and
+destructor registration, and the single-mutex scoped writer path with fresh
+native differences and same-run checks. Configuration-tree population and
+complete 136/88-byte initialization remain open; see
+[SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md).

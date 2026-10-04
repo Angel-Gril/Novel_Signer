@@ -127,6 +127,32 @@ def pthread_setspecific(pages, *, key, value, thread_pointer, generation_table=0
     return 0
 
 
+def pthread_key_create(pages, *, key_address, destructor, generation_table):
+    """Model matching bionic's serialized generation-table key allocation.
+
+    Scan 141 entries for an even/free generation, increment that generation,
+    store the destructor, then publish index|0x80000000 as a u32 key. Return
+    0 or EAGAIN=11. No actual host key, atomicity or destructor execution is
+    supplied. Unsupported pages/ABI inputs roll back guest pages.
+    """
+    if (not isinstance(generation_table, int) or generation_table < 0 or generation_table & 7
+            or not isinstance(key_address, int) or not 0 <= key_address < 1 << 64
+            or not isinstance(destructor, int) or not 0 <= destructor < 1 << 64):
+        raise RefillUnsupported("invalid pthread key-create ABI input")
+    transaction = _PageTransaction(pages)
+    for index in range(141):
+        entry = generation_table + index * 16
+        generation = int.from_bytes(_read_span(transaction, entry, 8), "little")
+        if generation & 1:
+            continue
+        _write_span(transaction, entry, ((generation + 1) & ((1 << 64) - 1)).to_bytes(8, "little"))
+        _write_span(transaction, entry + 8, destructor.to_bytes(8, "little"))
+        _write_span(transaction, key_address, (index | 0x80000000).to_bytes(4, "little"))
+        transaction.commit()
+        return 0
+    return 11
+
+
 @dataclass(frozen=True)
 class FreeListPop:
     """Observed result of one non-empty size-class free-list pop."""

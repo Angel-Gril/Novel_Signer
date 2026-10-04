@@ -721,6 +721,26 @@ class ConfigurationObjectLayout88:
     reference_count_addresses: tuple[int, int, int]
 
 
+@dataclass(frozen=True)
+class SingletonLayout136:
+    """+0x166370 through +0x166544; registry initialization is still excluded."""
+
+    object_address: int
+    mutex_addresses: tuple[int, int]
+    helper_address: int
+    helper_mutex_address: int
+    table_value: int
+
+
+@dataclass(frozen=True)
+class RegistryLayout320:
+    """+0x2566ec through +0x256808; clock and configuration writes excluded."""
+
+    object_address: int
+    controller_addresses: tuple[int, int, int]
+    empty_string_payload: int
+
+
 # The two service getters used by the measured ``service_refs`` handler.
 # Offsets are image-relative and come from the A/B=2 native artifact.
 SERVICE_A_GUARD_OFFSET = 0x3D1568
@@ -758,6 +778,474 @@ def _allocate(pages, allocate, size):
         raise RefillUnsupported("native constructor allocation did not succeed")
     _read_span(pages, pointer, size)
     return pointer
+
+
+def read_singleton136_table_value(pages, *, image_base: int) -> int:
+    """Model +0x173470's relocated table read, including changed GOT inputs.
+
+    The bitwise address expression simplifies to the constant signed index
+    -0xe6fde0. Read the table pointer through GOT +0x379968, not its default
+    effective slot +0x3d1900. The resulting value need not be a mapped pointer.
+    """
+    table = int.from_bytes(_read_span(pages, _image_address(image_base, 0x379968), 8), "little")
+    slot = (table - 0xE6FDE0) & 0xFFFF_FFFF_FFFF_FFFF
+    return int.from_bytes(_read_span(pages, slot, 8), "little")
+
+
+def construct_normal_mutex_object(pages, *, object_address: int, image_base: int) -> None:
+    """Model +0x15dea8 with flag bit0 clear (48 bytes, NULL bionic attrs).
+
+    Recursive mutex attributes and host failures are outside this branch.
+    Like the other mutex constructors this is a serialized guest layout,
+    not a host synchronization primitive.
+    """
+    transaction = _PageTransaction(pages)
+    _write_span(transaction, object_address, _word(_image_address(image_base, 0x34C738)))
+    _write_span(transaction, object_address + 8, bytes(40))
+    transaction.commit()
+
+
+def construct_singleton_helper56(pages, *, object_address: int, image_base: int,
+                                 allocate: Callable) -> int:
+    """Model the full +0x1666e8 constructor; return its new 48-byte mutex.
+
+    Zero three words at +8, byte +0x20 and word +0x28, preserving padding.
+    Allocate/initialize the mutex before publishing its pointer at +0x30.
+    Native X0 is not this API's return value.
+    """
+    transaction = _PageTransaction(pages)
+    _write_span(transaction, object_address, _word(_image_address(image_base, 0x34C7D8)))
+    _write_span(transaction, object_address + 8, bytes(24))
+    _write_span(transaction, object_address + 0x20, bytes(1))
+    _write_span(transaction, object_address + 0x28, bytes(8))
+    mutex = _allocate(transaction, allocate, 48)
+    construct_normal_mutex_object(transaction, object_address=mutex, image_base=image_base)
+    _write_span(transaction, object_address + 0x30, _word(mutex))
+    transaction.commit()
+    return mutex
+
+
+def construct_singleton_layout136(pages, *, object_address: int, image_base: int,
+                                  allocate: Callable) -> SingletonLayout136:
+    """Model +0x166370 through +0x166544; do not publish a singleton.
+
+    Decode five flag-controlled constants, generate object/mutex/helper fields
+    and preserve unwritten padding. The subsequent +0x15e694 registry getter
+    and +0x2568c8 configuration writes are NOT performed by this prefix.
+    Allocator effects act on staged pages; external ledgers are not rolled back.
+    """
+    transaction = _PageTransaction(pages)
+    for source, mask, destination, flag in (
+        (0x70360, 0x70530, 0x3D1690, 0x3D16B4),
+        (0x70390, 0x70500, 0x3D16C0, 0x3D16E4),
+        (0x703C0, 0x704D0, 0x3D16F0, 0x3D1714),
+        (0x703F0, 0x704A0, 0x3D1720, 0x3D1744),
+        (0x70420, 0x70470, 0x3D1750, 0x3D1774),
+    ):
+        flag_address = _image_address(image_base, flag)
+        if not int.from_bytes(_read_span(transaction, flag_address, 4), "little"):
+            decode_masked_bytes(transaction, source_address=_image_address(image_base, source),
+                mask_address=_image_address(image_base, mask),
+                destination_address=_image_address(image_base, destination))
+            _write_span(transaction, flag_address, (1).to_bytes(4, "little"))
+    _write_span(transaction, object_address + 0x30, bytes(4))
+    _write_span(transaction, object_address, _word(_image_address(image_base, 0x34C7B8)))
+    _write_span(transaction, object_address + 8, (255).to_bytes(4, "little") * 2)
+    _write_span(transaction, object_address + 0x10, bytes(32))
+    value = read_singleton136_table_value(transaction, image_base=image_base)
+    _write_span(transaction, object_address + 0x38, _word(value) + bytes(8))
+    _write_span(transaction, object_address + 0x50, bytes(4))
+    _write_span(transaction, object_address + 0x48, bytes([255]) * 8)
+    mutex_a = _allocate(transaction, allocate, 48)
+    construct_normal_mutex_object(transaction, object_address=mutex_a, image_base=image_base)
+    _write_span(transaction, object_address + 0x58, _word(mutex_a))
+    mutex_b = _allocate(transaction, allocate, 48)
+    construct_normal_mutex_object(transaction, object_address=mutex_b, image_base=image_base)
+    _write_span(transaction, object_address + 0x60, _word(mutex_b) + bytes(8))
+    _write_span(transaction, object_address + 0x70, bytes(16))
+    helper = _allocate(transaction, allocate, 56)
+    helper_mutex = construct_singleton_helper56(transaction, object_address=helper,
+                                               image_base=image_base, allocate=allocate)
+    _write_span(transaction, object_address + 0x80, _word(helper))
+    transaction.commit()
+    return SingletonLayout136(object_address, (mutex_a, mutex_b), helper, helper_mutex, value)
+
+
+def construct_registry_layout320(pages, *, object_address: int, image_base: int,
+                                 allocate: Callable) -> RegistryLayout320:
+    """Model +0x2566ec through +0x256808 from ELF/guest inputs.
+
+    Generate three distinct inline containers, a cleared inline 152-byte
+    mutex state and an empty string. Stop before the +0x256898 clock wrapper,
+    +0x26cc60 realtime getter and initial +0x2568c8 map insertion.
+    This prefix cannot be published as a complete registry singleton.
+    """
+    transaction = _PageTransaction(pages)
+    address = lambda offset: _image_address(image_base, offset)
+    if not int.from_bytes(_read_span(transaction, address(0x3DE6B0), 4), "little"):
+        decode_masked_bytes(transaction, source_address=address(0x98D00),
+            destination_address=address(0x3DE690), mask_address=address(0x98D30))
+        _write_span(transaction, address(0x3DE6B0), (1).to_bytes(4, "little"))
+    _write_span(transaction, object_address, _word(address(0x35B5B8)))
+    controllers = []
+    for offset, context in ((8, 0x165334), (0x30, 0x182D6C), (0x58, 0x25686C)):
+        controllers.append(_callback_container(transaction, object_address + offset,
+            (address(0x182D6C), address(context), address(0x188A94)), image_base, allocate,
+            vtable_offset=0x35B7C0, hook_offset=0x24B560))
+    _write_span(transaction, object_address + 0x80, bytes(152))
+    _mutex_state(transaction, object_address + 0x80, image_base)
+    string = construct_string_object(transaction, object_address=object_address + 0x118,
+        source_address=0, allocate=allocate, vtable_address=address(0x34F5F8),
+        empty_descriptor_address=address(0x6E168))
+    transaction.commit()
+    return RegistryLayout320(object_address, tuple(controllers), string)
+
+
+def construct_registry_clock_reference(pages, *, object_address: int, allocate: Callable,
+                                       read_clock: Callable) -> int:
+    """Model +0x256898/+0x256f90; allocate a 16-byte realtime millisecond pair.
+
+    read_clock(staged_pages, 0) supplies explicit clock_gettime status/sec/nsec.
+    Native converts to wrapped signed microseconds, then divides by 1000 with
+    truncation toward zero. Publish the pointer only after the clock call and
+    two payload words. Clock failure/invalid timespec branches reject with
+    page rollback; C++ error/exception handling is not replaced with success.
+    Return the generated payload pointer, not native X0.
+    """
+    transaction = _PageTransaction(pages)
+    clock = _allocate(transaction, allocate, 16)
+    status, seconds, nanoseconds = read_clock(transaction, 0)
+    if status != 0:
+        raise RefillUnsupported("failed native realtime clock branch is not modeled")
+    if (not isinstance(seconds, int) or not -(1 << 63) <= seconds < 1 << 63
+            or not isinstance(nanoseconds, int) or not 0 <= nanoseconds < 1000000000):
+        raise RefillUnsupported("invalid realtime timespec")
+    micros = (seconds * 1000000 + nanoseconds // 1000) & 0xFFFF_FFFF_FFFF_FFFF
+    signed = micros - (1 << 64) if micros >= 1 << 63 else micros
+    milliseconds = (abs(signed) // 1000) * (-1 if signed < 0 else 1)
+    _write_span(transaction, clock, _word(milliseconds & 0xFFFF_FFFF_FFFF_FFFF) + bytes(8))
+    _write_span(transaction, object_address, _word(clock))
+    transaction.commit()
+    return clock
+
+
+def get_emulated_tls_address(
+    pages, *, control_address: int, image_base: int, allocate: Callable,
+    reallocate: Callable, get_specific: Callable, set_specific: Callable,
+    create_key: Callable | None = None, once_wake: Callable | None = None, max_slots: int = 4096,
+    max_payload_bytes: int = 0x100000,
+) -> int:
+    """Model +0x34377c with explicit serialized pthread/allocator boundaries.
+
+    Control is size/alignment/index/template (four u64 words). Cold once/key
+    initialization is performed, then descriptor indexing, per-thread pointer
+    array growth and aligned variable initialization. pthread operations act
+    on staged pages; create_key(pages, key_address, destructor) supplies the
+    OS result. Cold once completion also calls once_wake(pages, address, 129,
+    0x7fffffff); matching bionic performs this wake even with no waiters. Actual
+    key allocation, futex and concurrency are outside this component.
+    malloc/realloc NULL, bad alignment, in-progress once, unsupported
+    mutex states and key-create failure reject with page rollback. Native's
+    unchecked pthread_setspecific status is preserved. Return native X0.
+    """
+    if not isinstance(max_slots, int) or not 1 <= max_slots <= 0x100000:
+        raise ValueError("invalid emulated TLS slot bound")
+    _string_bound(max_payload_bytes)
+    transaction = _PageTransaction(pages)
+    address = lambda offset: _image_address(image_base, offset)
+    read_word = lambda pointer: int.from_bytes(_read_span(transaction, pointer, 8), "little")
+    index = read_word(control_address + 16)
+    if not index:
+        once, key_address = address(0x3E31F8), address(0x3E31F4)
+        state = int.from_bytes(_read_span(transaction, once, 4), "little")
+        if state == 0:
+            if create_key is None or once_wake is None:
+                raise RefillUnsupported("cold emulated TLS requires key-create and once-wake boundaries")
+            _write_span(transaction, once, (1).to_bytes(4, "little"))
+            if create_key(transaction, key_address, address(0x3439BC)) != 0:
+                raise RefillUnsupported("emulated TLS pthread key creation failed")
+            _write_span(transaction, address(0x3E31F0), bytes([1]))
+            _write_span(transaction, once, (2).to_bytes(4, "little"))
+            wake_result = once_wake(transaction, once, 129, 0x7FFF_FFFF)
+            if not isinstance(wake_result, int) or wake_result < 0:
+                raise RefillUnsupported("emulated TLS once wake requires the libc errno path")
+        elif state != 2:
+            raise RefillUnsupported("in-progress or unknown emulated TLS once state")
+        mutex = address(0x3E3208)
+        lock_uncontended_mutex(transaction, mutex_address=mutex)
+        index = read_word(control_address + 16)
+        if not index:
+            index = (read_word(address(0x3E3200)) + 1) & 0xFFFF_FFFF_FFFF_FFFF
+            if not 1 <= index <= max_slots:
+                raise RefillUnsupported("emulated TLS index exceeds the explicit bound")
+            _write_span(transaction, address(0x3E3200), _word(index))
+            _write_span(transaction, control_address + 16, _word(index))
+        unlock_uncontended_mutex(transaction, mutex_address=mutex)
+    if not 1 <= index <= max_slots:
+        raise RefillUnsupported("emulated TLS index exceeds the explicit bound")
+    key = int.from_bytes(_read_span(transaction, address(0x3E31F4), 4), "little")
+    array = get_specific(transaction, key)
+    _word(array)
+    capacity = read_word(array + 8) if array else 0
+    if not array or capacity < index:
+        new_capacity = ((index + 17) & ~15) - 2
+        if new_capacity > max_slots:
+            raise RefillUnsupported("emulated TLS array exceeds the explicit bound")
+        request = new_capacity * 8 + 16
+        if array:
+            array = reallocate(transaction, array, request)
+            _word(array)
+            if not array:
+                raise RefillUnsupported("emulated TLS realloc NULL abort branch")
+            _write_span(transaction, array + 16 + capacity * 8, bytes((new_capacity - capacity) * 8))
+        else:
+            array = _allocate(transaction, allocate, request)
+            _write_span(transaction, array + 16, bytes(new_capacity * 8))
+            _write_span(transaction, array, (1).to_bytes(8, "little"))
+        _write_span(transaction, array + 8, _word(new_capacity))
+        set_specific(transaction, key, array)  # Native ignores this return value.
+    slot = array + 16 + (index - 1) * 8
+    result = read_word(slot)
+    if not result:
+        alignment = max(read_word(control_address + 8), 8)
+        if alignment & (alignment - 1):
+            raise RefillUnsupported("emulated TLS alignment is not a power of two")
+        size = read_word(control_address)
+        request = size + alignment + 7
+        if size > max_payload_bytes or request > max_payload_bytes:
+            raise RefillUnsupported("emulated TLS variable exceeds the explicit bound")
+        block = _allocate(transaction, allocate, request)
+        result = (block + alignment + 7) & -alignment
+        _write_span(transaction, result - 8, _word(block))
+        template = read_word(control_address + 24)  # Native reloads after malloc.
+        if size:
+            _write_span(transaction, result, _read_span(transaction, template, size) if template else bytes(size))
+        _write_span(transaction, slot, _word(result))
+    transaction.commit()
+    return result
+
+
+def register_emulated_thread_destructor(
+    pages, *, destructor_address: int, object_address: int, image_base: int,
+    allocate: Callable, get_tls: Callable, create_key: Callable,
+    set_specific: Callable, register_atexit: Callable, thread_id: int | None = None,
+) -> int:
+    """Model +0x34265c's local fallback, including its cold key and TLS list.
+
+    get_tls(pages, control_address) supplies the emulated TLS component. The
+    bionic key and process atexit calls are explicit staged-page boundaries;
+    process/thread destructors are registered, never executed here. The
+    imported __cxa_thread_atexit branch, contention and key-create abort are
+    rejected. Supported malloc/setspecific failures return uint32 -1, as
+    native does. Page rollback cannot undo external callback ledgers.
+    """
+    _word(destructor_address)
+    _word(object_address)
+    transaction = _PageTransaction(pages)
+    address = lambda offset: _image_address(image_base, offset)
+    if int.from_bytes(_read_span(transaction, address(0x3751A0), 8), "little"):
+        raise RefillUnsupported("imported thread-destructor registration is outside the local fallback")
+    guard_address = address(0x3E2FA8)
+    guard = _read_span(transaction, guard_address, 8)
+    if not guard[0] & 1:
+        if guard[0] or guard[1] not in (0, 1):
+            raise RefillUnsupported("unsupported thread-destructor singleton guard")
+        if guard[1] == 0:
+            if not isinstance(thread_id, int) or not 0 <= thread_id <= 0xFFFF_FFFF:
+                raise RefillUnsupported("cold thread-destructor key requires explicit gettid")
+            mutex = address(0x3E2F40)
+            lock_uncontended_mutex(transaction, mutex_address=mutex)
+            _write_span(transaction, guard_address + 4, thread_id.to_bytes(4, "little"))
+            _write_span(transaction, guard_address + 1, bytes([2]))
+            unlock_uncontended_mutex(transaction, mutex_address=mutex)
+            if create_key(transaction, address(0x3E2FB0), address(0x342854)) != 0:
+                raise RefillUnsupported("thread-destructor pthread key-create abort branch")
+            register_atexit(transaction, address(0x3427C8), address(0x3E2FA0), address(0x34C700))
+            lock_uncontended_mutex(transaction, mutex_address=mutex)
+            _write_span(transaction, guard_address, bytes([1, 1]))
+            unlock_uncontended_mutex(transaction, mutex_address=mutex)
+    flag = get_tls(transaction, address(0x3D13A0))
+    if not _read_span(transaction, flag, 1)[0] & 1:
+        key_address = address(0x3E2FB0)
+        key = int.from_bytes(_read_span(transaction, key_address, 4), "little")
+        if set_specific(transaction, key, key_address) != 0:
+            transaction.commit()
+            return 0xFFFF_FFFF
+        flag = get_tls(transaction, address(0x3D13A0))
+        _write_span(transaction, flag, bytes([1]))
+    node = allocate(transaction, 24)
+    _word(node)
+    if not node:
+        transaction.commit()
+        return 0xFFFF_FFFF
+    _write_span(transaction, node, _word(destructor_address) + _word(object_address))
+    head_address = get_tls(transaction, address(0x3D13C0))
+    previous = _read_span(transaction, head_address, 8)
+    _write_span(transaction, head_address, _word(node))
+    _write_span(transaction, node + 16, previous)
+    transaction.commit()
+    return 0
+
+
+def initialize_scoped_tls_registry(
+    pages, *, image_base: int, get_tls: Callable, register_destructor: Callable,
+) -> None:
+    """Model +0x269880: one-byte TLS guard, empty tree and destructor registration.
+
+    register_destructor(pages, destructor, object, dso) must own registration
+    side effects; its result is ignored by native. The tree header stores
+    leftmost/sentinel at +0, root at +8 and count at +16. Its nodes and the
+    scoped lock operations are separate components. Return no native X0.
+    """
+    transaction = _PageTransaction(pages)
+    address = lambda offset: _image_address(image_base, offset)
+    flag = get_tls(transaction, address(0x382470))
+    if not _read_span(transaction, flag, 1)[0]:
+        flag = get_tls(transaction, address(0x382470))
+        _write_span(transaction, flag, bytes([1]))
+        tree = get_tls(transaction, address(0x382450))
+        _write_span(transaction, tree + 16, bytes(8))
+        _write_span(transaction, tree + 8, bytes(8))
+        _write_span(transaction, tree, _word(tree + 8))
+        register_destructor(transaction, address(0x268CF0), tree, address(0x34C700))
+    transaction.commit()
+
+
+def broadcast_condition_no_waiters(pages, *, condition_address: int, wake: Callable) -> int:
+    """Matching bionic broadcast: add four to u32, then explicit FUTEX_WAKE.
+
+    wake(pages, condition_address, operation, count) must supply the no-waiter
+    OS boundary and return a nonnegative result. No host waiter or atomicity
+    is implemented. Unknown/error wake results reject with page rollback.
+    """
+    if not isinstance(condition_address, int) or condition_address < 0 or condition_address & 3:
+        raise RefillUnsupported("condition broadcast requires aligned guest u32")
+    transaction = _PageTransaction(pages)
+    state = (int.from_bytes(_read_span(transaction, condition_address, 4), "little") + 4) & 0xFFFF_FFFF
+    _write_span(transaction, condition_address, state.to_bytes(4, "little"))
+    result = wake(transaction, condition_address, 1 if state & 1 else 129, 0x7FFF_FFFF)
+    if not isinstance(result, int) or result < 0:
+        raise RefillUnsupported("condition wake error requires the libc errno path")
+    transaction.commit()
+    return 0
+
+
+def _single_scoped_tls_node(pages, tree, mutex):
+    leftmost, root, count = (int.from_bytes(_read_span(pages, tree + i * 8, 8), "little") for i in range(3))
+    if count == 0 and root == 0 and leftmost == tree + 8:
+        return 0
+    if count != 1 or not root or leftmost != root:
+        raise RefillUnsupported("scoped TLS tree requires zero or one live mutex entry")
+    if (_read_span(pages, root, 16) != bytes(16)
+            or int.from_bytes(_read_span(pages, root + 16, 8), "little") != tree + 8
+            or _read_span(pages, root + 24, 1) != bytes([1])
+            or int.from_bytes(_read_span(pages, root + 32, 8), "little") != mutex):
+        raise RefillUnsupported("unknown scoped TLS node or another live mutex key")
+    return root
+
+
+def construct_single_scoped_lock(
+    pages, *, object_address: int, mutex_address: int, scratch_address: int,
+    image_base: int, allocate: Callable, get_tls: Callable, initialize_registry: Callable,
+) -> int:
+    """Model +0x268eb0 for zero/one live TLS mutex entry and an idle writer.
+
+    Native copies a 16-byte stack pair into a new 48-byte TLS node, including
+    seven padding bytes. scratch_address names caller-supplied working memory
+    with its original padding, read AFTER allocation as native does. No native
+    output is an input. Nested acquisition of the same active entry preserves
+    the outer ownership. Another live mutex, readers or waiting writer rejects
+    with page rollback. Return the stored u32 status, not native X0.
+    """
+    transaction = _PageTransaction(pages)
+    address = lambda offset: _image_address(image_base, offset)
+    _write_span(transaction, object_address, _word(address(0x35D2A0)) + _word(mutex_address))
+    status = (-0x91D) & 0xFFFF_FFFF
+    _write_span(transaction, object_address + 16, status.to_bytes(4, "little"))
+    initialize_registry(transaction)
+    _write_span(transaction, scratch_address, _word(mutex_address))
+    tree = get_tls(transaction, address(0x382450))
+    node = _single_scoped_tls_node(transaction, tree, mutex_address)
+    initialize_registry(transaction)
+    if not node:
+        initialize_registry(transaction)
+        _write_span(transaction, scratch_address + 8, bytes([0]))
+        _write_span(transaction, scratch_address, _word(mutex_address))
+        tree = get_tls(transaction, address(0x382450))
+        if _single_scoped_tls_node(transaction, tree, mutex_address):
+            raise RefillUnsupported("scoped TLS tree changed before insertion")
+        node = _allocate(transaction, allocate, 48)
+        pair = _read_span(transaction, scratch_address, 16)
+        _write_span(transaction, node + 32, pair)
+        _write_span(transaction, node, bytes(16) + _word(tree + 8))
+        _write_span(transaction, tree + 8, _word(node))
+        _write_span(transaction, tree, _word(node))
+        _write_span(transaction, node + 24, bytes([1]))
+        _write_span(transaction, tree + 16, (1).to_bytes(8, "little"))
+    # +0x268cf4 repeats lookup before testing the thread-local ownership bit.
+    initialize_registry(transaction)
+    _write_span(transaction, scratch_address, _word(mutex_address))
+    tree = get_tls(transaction, address(0x382450))
+    _single_scoped_tls_node(transaction, tree, mutex_address)
+    initialize_registry(transaction)
+    initialize_registry(transaction)
+    _write_span(transaction, scratch_address, _word(mutex_address))
+    tree = get_tls(transaction, address(0x382450))
+    node = _single_scoped_tls_node(transaction, tree, mutex_address)
+    if not _read_span(transaction, node + 40, 1)[0]:
+        primitive = mutex_address + 8
+        lock_uncontended_mutex(transaction, mutex_address=primitive)
+        readers = int.from_bytes(_read_span(transaction, mutex_address + 0x90, 4), "little")
+        if readers:
+            raise RefillUnsupported("scoped writer acquisition requires waiting")
+        _write_span(transaction, mutex_address + 0x90, (0x80000000).to_bytes(4, "little"))
+        unlock_uncontended_mutex(transaction, mutex_address=primitive)
+        _write_span(transaction, mutex_address + 0x94, bytes([0]))
+        status = 0
+        _write_span(transaction, object_address + 16, bytes(4))
+        initialize_registry(transaction)
+        _write_span(transaction, scratch_address, _word(mutex_address))
+        tree = get_tls(transaction, address(0x382450))
+        node = _single_scoped_tls_node(transaction, tree, mutex_address)
+        _write_span(transaction, node + 40, bytes([1]))
+    transaction.commit()
+    return status
+
+
+def destroy_single_scoped_lock(
+    pages, *, object_address: int, image_base: int, free: Callable,
+    get_tls: Callable, initialize_registry: Callable, broadcast: Callable,
+) -> None:
+    """Model +0x268fbc for the matching one-entry writer-owned TLS tree.
+
+    Clear the writer count, broadcast at mutex+0x30, remove the TLS node and
+    free it. Nested nonzero-status guards perform no release. Other layouts,
+    shared-reader ownership and waiter states reject with page rollback.
+    """
+    transaction = _PageTransaction(pages)
+    address = lambda offset: _image_address(image_base, offset)
+    status = int.from_bytes(_read_span(transaction, object_address + 16, 4), "little")
+    _write_span(transaction, object_address, _word(address(0x35D2A0)))
+    if not status:
+        mutex = int.from_bytes(_read_span(transaction, object_address + 8, 8), "little")
+        if _read_span(transaction, mutex + 0x94, 1)[0]:
+            raise RefillUnsupported("scoped shared-reader release is outside the writer branch")
+        lock_uncontended_mutex(transaction, mutex_address=mutex + 8)
+        if int.from_bytes(_read_span(transaction, mutex + 0x90, 4), "little") != 0x80000000:
+            raise RefillUnsupported("scoped writer release requires exactly one active writer")
+        _write_span(transaction, mutex + 0x90, bytes(4))
+        broadcast(transaction, mutex + 0x30)
+        unlock_uncontended_mutex(transaction, mutex_address=mutex + 8)
+        initialize_registry(transaction)
+        tree = get_tls(transaction, address(0x382450))
+        node = _single_scoped_tls_node(transaction, tree, mutex)
+        if not node:
+            raise RefillUnsupported("scoped writer has no TLS entry to erase")
+        _write_span(transaction, tree, _word(tree + 8))
+        _write_span(transaction, tree + 16, bytes(8))
+        _write_span(transaction, tree + 8, bytes(8))
+        free(transaction, node)
+    transaction.commit()
 
 
 def _reference_wrapper(pages, object_address, referenced_address, allocate):
@@ -1103,7 +1591,7 @@ def construct_service_payload(
     string(object_address + 0x2B8, source)
 
     mutex = _allocate(transaction, allocate, 0x30)
-    _write_span(transaction, mutex, _word(address(0x34C738)) + bytes(40))
+    construct_normal_mutex_object(transaction, object_address=mutex, image_base=image_base)
     _write_span(transaction, object_address + 0x98, _word(mutex))
     state = _allocate(transaction, allocate, 0x98)
     _write_span(transaction, state, bytes(0x98))
