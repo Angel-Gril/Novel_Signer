@@ -84,13 +84,27 @@ start at the actual +0x8df44 fresh entry (flag 3), including preinit failure;
 success leaves flag 2. No allocation provider or native initialization pages
 supply these sequences. OS services remain explicit/virtual.
 
-Next: recover public malloc +0x8f00c on the static TSD, especially tcache
-creation +0x8f334 -> +0x98c54 and arena binding +0x8f354 -> +0x8dda0, then
-empty tcache refill. The outer cold-init prefix still stops before CPU query
-at +0x8e41c/flag 1. Raw/internal small success does not prove reentrant public
-malloc, CPU sysconf, final flag 0, fresh Medusa or the online header matrix.
-Nonempty config/cache, DSS, dirty cleanup, junk/redzones, large/huge allocation
-and concurrent publication remain unsupported. No-JVM Rust, nonempty current
+Matching-libc fresh tcache/arena binding and bounded public small now add
+52 native controls and 24 rejection/rollback checks. Actual +0x98c54/+0x98490
+create zeroed, aligned storage using the recovered region allocator, publish
+the circular arena list and initialize all bins. +0x8dda0 restores single-arena
+binding. +0x8f00c composes same-owner recursive malloc, cache caller publication,
++0x97ecc/+0x7970c empty-bin refill, cached pop and accounting. Controls cover
+zero/unaligned requests, bitmap boundaries, exhausted slabs, multiple regions,
+poisoned cached objects cleared by the zero option, NULL/ENOMEM and partial
+refill failure. Two ready-flag controls use an explicit fixture, not actual
+cold-init completion. All retained mapping bytes, globals/TLS, returns, OS calls
+and mapping metadata match; no native initialization pages seed Python.
+
+Next: connect CPU query sysconf +0x1d2e4 -> get_nprocs +0x2669c with actual
+stdio/file OS inputs and the small-free dispatch +0x1bac0 -> +0x91990, then
+atfork allocation, arena table finalization and TSD migration. The outer Python
+cold prefix still stops at +0x8e41c/flag 1. Full cold return/flag 0, fresh Medusa
+and the online header matrix remain open. Multi-arena selection, GC, profiling,
+large/huge, cache destruction and concurrent publication are unsupported, as
+are earlier region/config/DSS/dirty branches. One radix-allocation failure probe
+reached a pending-link wait without return in 300000 instructions; it is not a
+successful control or proof of an infinite loop. No-JVM Rust, current nonempty
 search/pagination, Douyin/Qidian and final Pages/Actions products remain open.
 Evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
 

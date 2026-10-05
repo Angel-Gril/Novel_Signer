@@ -329,9 +329,9 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_cold_malloc.py --lib
 
 ### 前阶段确认的 native 分配路径
 
-没有 malloc hook 的 native 控制记录了有序入口与受控 request size：CPU 查询进入 `get_nprocs +0x2669c`，文件缓冲触发 public malloc 重入；当前样本路径随后进入 `+0x79fa4 → +0x787dc`，atfork 又请求 48 字节，TSD 迁移经 `+0x8df44 → +0x79fa4` 请求 128 字节。`+0x787dc` 先调用 `+0x75d44` 从 available-slab 树取最小地址节点；该 helper 现已恢复，空树时返回 NULL，不执行 allocation。NULL 使 caller 转到 `+0x78d7c`，释放 bin mutex／获取 arena mutex，再尝试 `+0x7779c` extent allocation。没有可用 extent 时进入 `+0x765b0`；`+0x7ed7c` 先尝试 chunk cache，miss 后默认 `+0x7edc4` callback 经 `+0x7f600` mapping，再由 `+0x7e14c` 注册，随后执行 `+0x772b0` page 标记与 `+0x7dd70` bitmap 初始化；全部 10 个 native cold 控制实际观察到这条新 region 路径。这些主体的有界默认分支已在下节 region／small 阶段恢复；非空 chunk cache 和 public tcache 仍待恢复。`+0x75f38` 是 redzone 填充 helper，不能当作冷 refill 入口。
+没有 malloc hook 的 native 控制记录了有序入口与受控 request size：CPU 查询进入 `get_nprocs +0x2669c`，文件缓冲触发 public malloc 重入；当前样本路径随后进入 `+0x79fa4 → +0x787dc`，atfork 又请求 48 字节，TSD 迁移经 `+0x8df44 → +0x79fa4` 请求 128 字节。`+0x787dc` 先调用 `+0x75d44` 从 available-slab 树取最小地址节点；该 helper 现已恢复，空树时返回 NULL，不执行 allocation。NULL 使 caller 转到 `+0x78d7c`，释放 bin mutex／获取 arena mutex，再尝试 `+0x7779c` extent allocation。没有可用 extent 时进入 `+0x765b0`；`+0x7ed7c` 先尝试 chunk cache，miss 后默认 `+0x7edc4` callback 经 `+0x7f600` mapping，再由 `+0x7e14c` 注册，随后执行 `+0x772b0` page 标记与 `+0x7dd70` bitmap 初始化；全部 10 个 native cold 控制实际观察到这条新 region 路径。这些主体的有界默认分支已在下节 region／small 阶段恢复；非空 chunk cache 仍待恢复；有界 public tcache 的新进展见后节。`+0x75f38` 是 redzone 填充 helper，不能当作冷 refill 入口。
 
-`python_preinit_complete = false` 表示全部配置／分支尚未完成，与已验证的 `default_empty_preinit_complete = true` 不冲突。非空配置 `+0x8ce70`、TSD fallback、arena table resize、真实 CPU 文件服务和 public malloc／tcache／region 组合仍未覆盖。atfork 和 TSD 组件通过不能证明 `cold_init_until_cpu_query()` 已跨过停止点。
+`python_preinit_complete = false` 表示全部配置／分支尚未完成，与已验证的 `default_empty_preinit_complete = true` 不冲突。非空配置 `+0x8ce70`、TSD fallback、arena table resize、真实 CPU 文件服务和完整 public malloc 冷启动组合仍未覆盖。atfork 和 TSD 组件通过不能证明 `cold_init_until_cpu_query()` 已跨过停止点。
 
 复现（需要私下提供匹配 hash 的 ELF，输出路径保留在私有目录）：
 
@@ -346,7 +346,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_cold_malloc.py --lib
 
 ## 同次 fresh region、slab 与内部小对象入口（本阶段续进）
 
-**默认 arena 0 的新 region、清洁 slab 和 raw/internal small allocation 已贯通；public malloc／tcache、完整 cold init 的 `flag = 0` 与 fresh Medusa 仍未完成。** 新 owner [vm9_libc_region.py](python/vm9_libc_region.py) 从 fresh ELF、显式虚拟 OS 与真实 base allocation 构造状态，不接收 native 初始化页或分配返回值。这里恢复的是 matching libc 函数体在 guest 内的行为；OS mapping 由 GuestOS 和明确的 syscall provider 管理，尚非真实 Android OS 启动。
+**默认 arena 0 的新 region、清洁 slab 和 raw/internal small allocation 已贯通；完整 public malloc／tcache、完整 cold init 的 `flag = 0` 与 fresh Medusa 仍未完成。** 新 owner [vm9_libc_region.py](python/vm9_libc_region.py) 从 fresh ELF、显式虚拟 OS 与真实 base allocation 构造状态，不接收 native 初始化页或分配返回值。这里恢复的是 matching libc 函数体在 guest 内的行为；OS mapping 由 GuestOS 和明确的 syscall provider 管理，尚非真实 Android OS 启动。
 
 恢复范围：
 
@@ -375,12 +375,47 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_region.py --library 
 
 公开[对照证据](evidence/vm9_libc_fresh_region_small_native_20261005.json)仅含样本 hash、控制标签、offset／count 和 booleans。native 输入快照、ELF、对象数据和请求内容没有发布。
 
-**当前外层冷启动停止点仍为 `+0x8e41c`／`flag=1`。** 本阶段的真实 raw/internal 分配已经可用，但尚未接过 CPU 查询中的 public malloc。`+0x8f00c` 在 static TSD 上进入 `+0x8f334 → +0x98c54` 的 tcache 获取／创建，以及 `+0x8f354 → +0x8dda0` 的 arena 绑定；随后还需恢复 empty tcache bin refill 与剩余 accounting。非空配置、primary／secondary DSS、非空 chunk cache、dirty cleanup、junk/redzone fill、large/huge allocation 和并发 publication 未完成，不能用 base allocation 代替这些调用。
+**region／raw small 阶段的外层冷启动停止点为 `+0x8e41c`／`flag=1`。** 当时真实 raw/internal 分配已经可用，public tcache 创建、arena 绑定、empty-bin refill 与 accounting 尚未恢复；下一节记录其新的有界实现，CPU 查询整体仍未接回。非空配置、primary／secondary DSS、非空 chunk cache、dirty cleanup、junk/redzone fill、large/huge allocation 和并发 publication 未完成，不能用 base allocation 代替这些调用。
+
+## Matching libc tcache 与有界 public small（2026-10-05）
+
+`python/vm9_libc_tcache.py` 在同次 fresh cold prefix 生成的 static TSD、arena 和映射状态上，恢复默认 tcache 创建及有界 public small 分配。该阶段新增 **52 组 native 对照和 24 项拒绝／回滚检查**。上一节 region／raw internal 的 56／26 是独立阶段的控制，不能把两个阶段数量当作签名成功数。
+
+已恢复的实际路径：
+
+- `+0x8dda0`：单 arena 的真实 mutex、引用计数与 TSD arena 绑定。非 current TSD 返回 arena，但不向 TSD 发布。
+- `+0x98c54`：matching pthread key 的 TSD 读取、state 0／2 迁移、默认 tcache 开关读取与 cache 创建。此函数本身不保存返回值到 wrapper `+0x10`；由 public malloc 的 caller 保存。
+- `+0x98490 → +0x7a668 → +0x79fa4`：64 字节对齐的清零存储，默认 backing class 为 7168 字节；实际调用上一阶段 region／slab 分配，计入 arena internal allocation。没有外部 allocator 返回值。
+- `+0x98428`：持有 arena mutex 的 circular cache list 发布，包含已有 head 的插入和完整 bin/list 指针初始化。
+- `+0x97ecc → +0x7970c`：空 small bin 的批量补货、冷／热 slab bitmap pop、bin/arena counters，以及失败后的部分列表压缩和 count/floor 更新。
+- `+0x8f00c`：在同一初始化 owner 的 `flag=1` 重入状态，或显式 ready 状态，执行 0～14336 字节 public malloc。包括零长度按 1 字节归类、tcache caller 发布、已缓存对象 pop、空 bin 补货、关闭 tcache 的 direct 路径、清零、TSD allocation accounting 和 NULL/ENOMEM。
+
+控制从 fresh `+0x8e350` 实际执行到 `+0x8e41c`，随后只用明确的 caller continuation 选择上述函数；**没有执行 CPU 查询，也没有获得完整 cold-init return**。两个 ready 控制显式把 flag 置为 0，只验证 ready 分配分支，不证明自然初始化达到了 flag 0。其他控制保持 `flag=1`。
+
+52 组控制按两个主 image 基址各 26 组运行：默认／重复创建、关闭 cache、TSD state 0／2、单次／重复／非 current arena 绑定、直接 create、chunk16／20、misaligned trim、命名失败、禁止 DSS 的 mapping failure；public 的默认请求、`[0,1,31,127,4095,7169,14335]`、65 次小对象、slab 耗尽、多 region、关闭 tcache、显式 ready 与 TSD 状态；另外含 NULL/ENOMEM 和部分补货失败。清零控制先把未消费的 128 字节 cache 对象写入 `0xA5`，后续实际返回必须全零。
+
+所有成功控制比较返回、guest、相关 libc globals／TLS、每一页保留的 owned mapping、mapping records／cursor 和有序 OS calls。native 没有 allocator return hook，也没有使用 Python boot 输出预种 native。OS 仍是显式虚拟服务。公开证据见 `evidence/vm9_libc_fresh_tcache_native_20261005.json`，只包含受控 case 标签、样本 hash、offset、count 与 boolean。
+
+24 项拒绝检查覆盖多 arena、contended mutex、缺失 arena／TSD、损坏 capacity／count、large cache backing、junk、非空 cache 关闭时的析构、晚发生的 provider 错误、尚未初始化的 public entry、另一线程的初始化 owner、profiling、GC 第 228 次事件、非空／large／超大 batch／错误 slab 的 refill。拒绝时 guest pages、mapping records 和 cursor 不变；已经调用的 external provider ledger 不回滚。
+
+一个针对 radix allocation 的失败诊断在 300000 条原生指令预算内未返回，停止在 `+0x94ea0～+0x94eb4` 的 pending-link 等待边界。该次失败不是部分补货控制，也不能证明无限循环。正式部分补货控制允许真实 radix 节点先分配，再令后续 region mapping 失败，52 组成功控制不包含该未返回诊断。pending radix 和 failed-registration cleanup 继续明确拒绝。
+
+复现命令：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_tcache.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-tcache-report.json
+```
+
+owner API 为 `bind_thread_arena`、`create_thread_cache`、`get_thread_cache`、`refill_small_cache_bin` 和 `allocate_public_small`。它们接收同一个 `GuestOS`，原子提交 guest pages／mapping records／cursor；输入必须由真实已恢复的 boot 路径生成。不是独立 signer API。
+
+**外层 Python cold prefix 仍停在 `+0x8e41c`。** 接下来的实际 native 路线已确认是 `sysconf +0x1d2e4 → get_nprocs +0x2669c → fopen +0x57cd8 → fclose +0x56c78 → free +0x1bac0`；allocator dispatch 的 free 目标为 `+0x91990`。需要继续恢复实际 stdio／文件 OS 输入和 small free，使 CPU 查询中的分配及释放相互闭合，随后接 atfork 的 48 字节 public allocation、arena table 收尾与 `+0x99c78` 的 128 字节 internal TSD migration。
+
+完整 public allocator 仍不支持 multi-arena selection、large/huge、GC、profiling、cache 析构、并发和此前 region 的未恢复分支。当前结果没有证明 full cold-init flag 0、fresh Medusa 或线上全头矩阵；其他平台与最终产品亦未完成。
 
 ## 继续顺序
 
 继续恢复 matching libc 的真实 allocator 冷启动，将当前显式 allocator／TLS／OS 服务逐项替换为已验证实现，并将 startup、`+0x256e50` 配置构造和既有 root factory 接到外层 signer。未识别 callback、support 关联状态类型和真实线程创建仍需真实来源，不以空回调填补。
 
-先前停在 syscall 167 的 native 诊断已推进到 `flag = 0` 返回；Python 同次 fresh 冷启动目前停在 `+0x8e41c`、`flag = 1`。新 region／清洁 slab／raw internal small 已有有界实现；下一步恢复 `+0x8f00c` 的 public malloc／tcache（`+0x98c54` 和 `+0x8dda0`），再接 CPU 查询、atfork allocation 和 TSD migration，验证完整 Python `flag = 0` 返回。真实 OS/TLS 创建仍是单独未完成边界。
+先前停在 syscall 167 的 native 诊断已推进到 `flag = 0` 返回；Python 同次 fresh 冷启动目前停在 `+0x8e41c`、`flag = 1`。新 region／清洁 slab／raw internal small 和有界 public small／tcache 已有实现；下一步恢复 CPU 查询的实际 stdio、文件 OS 输入与 `+0x91990` small free，再接 atfork allocation、arena table 和 TSD migration，验证完整 Python `flag = 0` 返回。真实 OS/TLS 创建仍是单独未完成边界。
 
 随后用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
