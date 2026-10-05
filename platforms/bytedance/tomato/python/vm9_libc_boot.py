@@ -588,3 +588,23 @@ def migrate_static_tsd(pages, *, libc_base, thread_pointer, allocate_internal):
         _w(p, target, 1, 1)
     _w(p, current + 0x44, 0, 1)
     p.commit()
+
+
+
+def pop_available_slab(pages, *, control_address):
+    """Actual +0x75d44, selecting/removing the leftmost available-slab node.
+
+    An empty tree returns NULL and performs no allocation. The cold caller
+    continues at +0x78d7c; this helper never creates a slab or an OS region.
+    Tree layout and removal reuse the algorithm with matching control offsets.
+    """
+    from vm9_allocator import _AllocatorTree
+    p = _PageTransaction(pages)
+    tree = _AllocatorTree(p, control_address + 0x30, lambda node: node)
+    node = tree.first()
+    if node:
+        tree.remove(node)
+        _w(p, control_address + 0xD0,
+            (_u(p, control_address + 0xD0) + 1) & ((1 << 64) - 1))
+    p.commit()
+    return node + 0x10 if node else 0

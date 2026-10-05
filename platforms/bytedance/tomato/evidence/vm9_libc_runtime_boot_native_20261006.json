@@ -218,6 +218,114 @@
       "untouched_padding_match": true,
       "allocation_explicit_boundary": true,
       "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "empty",
+      "image_base": "0x122c0000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "one",
+      "image_base": "0x122c0000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "two_left",
+      "image_base": "0x122c0000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "two_right",
+      "image_base": "0x122c0000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "seven",
+      "image_base": "0x122c0000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "counter_wrap",
+      "image_base": "0x122c0000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "empty",
+      "image_base": "0x775c205000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "one",
+      "image_base": "0x775c205000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "two_left",
+      "image_base": "0x775c205000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "two_right",
+      "image_base": "0x775c205000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "seven",
+      "image_base": "0x775c205000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "available_slab",
+      "variant": "counter_wrap",
+      "image_base": "0x775c205000",
+      "returned_pointer_tree_counter_and_padding_match": true,
+      "explicit_constructed_tree_input": true,
+      "allocation_provider_used": false,
+      "native_input_snapshot_used": false
     }
   ],
   "rejection_cases": [
@@ -276,6 +384,24 @@
       "guest_pages_unchanged": true,
       "external_calls": 1,
       "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "available_slab_bad_sentinel",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 0
+    },
+    {
+      "case": "available_slab_cyclic_tree",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 0
+    },
+    {
+      "case": "available_slab_missing_node",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 0
     }
   ],
   "allocation_explicit_boundary": true,

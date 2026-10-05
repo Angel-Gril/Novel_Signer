@@ -67,13 +67,19 @@ no initialized native pages supply the model. All-branch preinit and public
 malloc remain incomplete.
 
 Atfork +0x67374 and static TSD migration +0x99c78 add 24 native controls and
-8 rollback checks. Their 48/128-byte public/internal allocation providers are
+8 rollback checks. Available-slab tree pop +0x75d44 adds 12 native controls
+and 3 rejection checks, with no allocation provider. The atfork/TSD
+48/128-byte public/internal allocation providers are
 explicit control boundaries, not recovered public malloc. NULL/key diagnostic
 and TSD fallback branches reject. Mapping helper refactor regressions pass
 42 native/20 owner checks; early boot regressions pass 56/7.
 
 Next: recover matching public small allocation and tcache, especially cold
-bin refill +0x787dc -> +0x75d44 and actual slab/OS region acquisition, then
+bin refill +0x787dc. Its recovered +0x75d44 returns NULL for an empty
+available tree; cold continuation +0x78d7c attempts extent allocation
++0x7779c and fresh region mapping/registration +0x765b0 -> +0x7ed7c ->
++0x7e14c. All 10 native cold traces reach fresh region creation. Recover
+those bodies and slab/OS acquisition, then
 compose CPU query, atfork allocation and TSD migration past +0x8e41c.
 The redzone helper +0x75f38 is not a refill entry. Nonempty config +0x8ce70,
 TSD fallback and arena table resize remain unsupported. Complete Python

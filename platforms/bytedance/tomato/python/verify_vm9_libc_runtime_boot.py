@@ -1,4 +1,4 @@
-"""Native differences for atfork registration and static TSD migration.
+"""Native differences for atfork, static TSD migration and available-slab pop.
 
 The public/internal allocation calls are explicit control boundaries. These
 controls do not prove public malloc, CPU query, or a complete cold boot.
@@ -109,6 +109,60 @@ def case(library, libc, image, kind, variant):
         allocation_explicit_boundary=True, native_input_snapshot_used=False)
 
 
+
+def available_slab_case(library, libc, image, variant):
+    control = GUEST + 0x1700
+    def prepare_tree():
+        pages = fresh(library, libc, image)
+        allocator._write_span(pages, control, bytes([0xA5]) * 0xE0)
+        root = control + 0x30
+        nil = root + 8
+        for address in (root, nil, nil + 8): put(pages, address, nil)
+        put(pages, control + 0xD0, (1 << 64) - 1 if variant == "counter_wrap" else 7)
+        tree = allocator._AllocatorTree(pages, root, lambda node: node)
+        order = {"empty": [], "one": [0], "two_left": [1, 0], "two_right": [0, 1],
+                 "seven": [3, 1, 5, 0, 2, 4, 6], "counter_wrap": [0]}[variant]
+        for i in order:
+            node = GUEST + 0x5000 + i * 0x80
+            allocator._write_span(pages, node, bytes([0x5A]) * 0x40)
+            tree.insert(node)
+        return pages
+    pages, seed = prepare_tree(), prepare_tree()
+    expected, memory, allocations, ledger = native(library, image,
+        LIBC + 0x75D44 - image, [control], inputs(seed), libc=libc,
+        real_mutexes=True, extra_registers={UC_ARM64_REG_TPIDR_EL0: WORKER_TLS},
+        instruction_limit=100000)
+    actual = boot.pop_available_slab(pages, control_address=control)
+    assert expected == actual == (0 if variant == "empty" else GUEST + 0x5010)
+    assert not allocations and not ledger
+    assert allocator._read_span(pages, GUEST, 0xA000) == memory, (variant, "tree/counter/padding")
+    return dict(case="available_slab", variant=variant, image_base=hex(image),
+        returned_pointer_tree_counter_and_padding_match=True,
+        explicit_constructed_tree_input=True, allocation_provider_used=False,
+        native_input_snapshot_used=False)
+
+
+def available_slab_rejections(library, libc):
+    results = []
+    for variant in ("bad_sentinel", "cyclic_tree", "missing_node"):
+        pages = fresh(library, libc, 0x122C0000)
+        control = GUEST + 0x1700
+        root, nil = control + 0x30, control + 0x38
+        for address in (root, nil, nil + 8): put(pages, address, nil)
+        node = GUEST + 0x5000
+        if variant == "bad_sentinel": put(pages, nil, 0)
+        elif variant == "cyclic_tree": put(pages, root, node); put(pages, node, node)
+        else: put(pages, root, 0x47000000)
+        before = {k: bytes(v) for k, v in pages.items()}
+        try: boot.pop_available_slab(pages, control_address=control)
+        except (allocator.RefillUnsupported, ValueError): pass
+        else: raise AssertionError((variant, "must reject"))
+        assert before == {k: bytes(v) for k, v in pages.items()}
+        results.append(dict(case="available_slab_" + variant, rejected=True,
+            guest_pages_unchanged=True, external_calls=0))
+    return results
+
+
 def rejection_cases(library, libc):
     results = []
     for label in ("atfork_contended", "atfork_missing_tail", "atfork_bad_provider",
@@ -162,7 +216,11 @@ def main():
             for variant in variants:
                 cases.append(case(args.library, args.libc, image, kind, variant))
                 print("runtime boot", hex(image), kind, variant, "PASS", flush=True)
-    rejected = rejection_cases(args.library, args.libc)
+    for image in (0x122C0000, 0x775C205000):
+        for variant in ("empty", "one", "two_left", "two_right", "seven", "counter_wrap"):
+            cases.append(available_slab_case(args.library, args.libc, image, variant))
+            print("available slab", hex(image), variant, "PASS", flush=True)
+    rejected = rejection_cases(args.library, args.libc) + available_slab_rejections(args.library, args.libc)
     report = dict(schema="vm9-libc-runtime-boot-components-v1", sample_sha256=LIBRARY_SHA256,
         libc_sha256=LIBC_SHA256, cases=cases, rejection_cases=rejected,
         allocation_explicit_boundary=True, actual_public_allocator_integrated=False,
