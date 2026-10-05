@@ -428,12 +428,37 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_free.py --library C:
 
 新的 native 冷启动诊断进一步确认 CPU 查询实际执行 `fopen +0x57cd8 → mode parse +0x5786c → FILE 获取 +0x749dc → stdio 初始化 +0x74868 → __atexit_register_cleanup +0x75550 → fgets +0x573e4 → fclose +0x56c78 → free +0x91990`。诊断中的完整 native cold return 成功，并不表示 Python 已接回这条路线。coarse 控制证据见 `evidence/vm9_libc_cpu_stdio_frontier_native_20261005.json`；OS ledger 的 preceding-observed-entry 只记录先前出现的入口，不能用它推定 syscall 的动态调用栈。
 
-**下一步是恢复 `+0x74868/+0x749dc` 的 FILE 扩展对象及递归 mutex 初始化、`+0x75550` 的 guarded 退出清理注册，再贯通实际 open/read/stat/close 与 fgets 解析。** 已恢复的 public small allocation 与 cached small free 可随后用于 CPU 文件缓冲的完整生命周期，不能以直接返回 CPU 数替代这些副作用。Python 整体仍停在 `+0x8e41c`；atfork、arena table 和 TSD migration 仍待组合验证。
+该 cached small free 阶段当时的下一步是恢复 stdio／FILE 构造、cleanup 注册和文件 OS 输入；其新的恢复结果见下一节。CPU 查询仍不能用直接返回 CPU 数替代，Python 整体仍停在 `+0x8e41c`；atfork、arena table 和 TSD migration 仍待组合验证。
+
+## Matching libc stdio、只读 FILE 和缓冲区构造
+
+新增 `python/vm9_libc_stdio.py`、`python/vm9_libc_file.py`，通过 **100 组 native 对照／40 项拒绝与回滚检查**：stdio 构造 **38／13**，private recursive mutex、只读 FILE 和 buffer 构造 **62／27**。每组均使用两个主 image 基址之一，各自从 ELF／独立受控 TLS 建立输入。native 实际执行 `+0x8e350` 至 `+0x8e41c` 后，通过明确的 continuation 调用本节函数；Python 也先执行同次 fresh prefix。**没有继续运行整个 CPU 查询，没有自然 cold return／flag 0，也没有 fresh Medusa 输出。** inactive-key fixture 仅在第一个 preinit 处应用一次，之后不重置已创建的 keys。
+
+stdio 初始化 `+0x74868` 为 3 个标准 FILE 和 17 个静态备用 FILE 连接 extension。FILE stride 为 `0x98`，extension stride 为 `0x68`；extension 的 `+0..+0x37` 清零，`+0x38` 的 40 字节 mutex 初始化为 recursive type 1（首 u16 `0x4000`），`+0x60` 写 1，而 `+0x61..+0x67` padding 保留。`+0x749dc` 从现有 glue 查找 flags 为 0 的 FILE，先写 1 保留，再初始化 native 实际写入的 core 字段和 extension；没有额外清零其余字段。控制验证重复初始化、连续获取全部 17 个备用 FILE，以及 poison/padding 保留。无空闲 FILE 时，静态定位到的 `malloc(0xa1f)` 和新 glue 发布仍拒绝；不能将现有 pool 获取推广为完整增长支持。
+
+`+0x75550 __atexit_register_cleanup` 已恢复 fresh 4096 字节匿名页和 existing-tail 覆写。fresh header 的 count 为 1、capacity 为 170；slot 0 写 callback 与两个零参数，再以实际 mprotect outcome 更新整页保护。existing chain 沿 next 到尾页，先 RW 再覆写 slot 0，随后尝试 RO。cleanup mmap 失败写 errno 并提前返回，但外层 stdio 初始化仍发布 initialized flag；existing-tail RW 失败提前返回，最终 RO 失败则按 native 行为忽略失败并发布 cleanup flag。GuestOS 对 pages、mapping records、cursor 做同一个 transaction；未知／foreign/cyclic chain 和晚发生的 provider 异常拒绝时回滚 guest 状态，**不会撤销 provider 已发生的外部调用**。退出时执行 cleanup callback 尚未恢复。
+
+原 Python fixture 仅应用 RELATIVE relocations。新 stdio fixture 从 ELF 定义符号解析并应用 `__sF` 的 **7 项**绑定：GLOB_DAT `+0xd8f00`；ABS64 `+0xdb418/+0xdb4b0/+0xdb548/+0xdb608/+0xdb610/+0xdb648`，分别使用 ELF 的 symbol value 和 addend。它们属于装载输入，不能归因于 stdio 构造器，也不是 native 输出快照。其余不参与本阶段的 ELF 符号绑定未被本补充修改，未声称建立了通用完整 ELF loader。
+
+private recursive mutex 恢复 `+0x68cf8 → +0x68890` 的 uncontended 获取、同 owner depth 增减，以及 `+0x68d5c` 的释放。owner tid 从 `TP+8 → pthread+0x10` 读取。depth 饱和返回 EAGAIN 11，错误 owner unlock 返回 EPERM 1；相应 guest 状态与 native 一致。shared、normal/type-mismatch、waiter／futex、缺失 tid 和不一致状态不冒充已完成的并发实现。
+
+只读 `fopen +0x57cd8` 连接 mode parse、FILE 获取和实际 openat outcome，并写入对应 cookie/callback/fd。`r/rb/rx` 的 flags 为 0，`re` 为 `0x80000`；只读 x 后缀不会启用 create/exclusive。失败释放 FILE reservation，fd 大于 32767 时调用 close 并写 EMFILE 24。未分配缓冲的 readonly `fclose +0x56c78` 已闭合 FILE recursive lock、close callback、flags/counters/orientation 清理和 unlock；close 的 EINTR 按 matching wrapper 返回成功并保留 errno 4。对照包括重复打开、关闭后复用、重复关闭／EBADF、fd 0／32767／32768、打开与关闭失败，以及已持有 FILE 锁时的嵌套关闭。
+
+`+0x597b8 → +0x5986c` 的 regular-file buffer 构造已接到实际 fstat 和既有 public small allocator。fstat provider 显式返回 `(kernel_outcome, 128-byte-stat)`；regular block size 1024／4096／8192 均有对照。fstat 失败或 block size 为 0 时选择 1024 字节默认缓冲，只有 native 实际写入的字段才更新；zero-block 控制验证旧 FILE block 字段保留。成功 buffer 指针与大小、flags、所有保留映射页、allocator globals/TLS 和 OS 顺序与 native 一致。关闭 DSS 的 mmap/ENOMEM 控制验证分配失败时改用 `FILE+0x77` 的内嵌单字节缓冲。character/isatty/ioctl、负值／过大 block size、非法 stat/provider、已存在 buffer、foreign callback 和 profiling 的晚拒绝分支均有回滚验证。
+
+公开证据：`evidence/vm9_libc_stdio_native.json`、`evidence/vm9_libc_readonly_file_native.json`。比较所有有定义的返回值、guest/stdio/allocator globals、TLS/key state、每页保留映射、有序 OS calls，以及 mapping records/cursor/protection；void 构造器和 cleanup 的遗留 X0 不参加返回值比较。OS 服务仍是显式虚拟输入，未打开宿主 `/proc/stat`，也没有 hook 替代这些 control 中的 native malloc。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_stdio.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-stdio-report.json
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_file.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-file-report.json
+```
+
+**下一步是恢复 `fgets +0x573e4 → refill +0x5a960 → read callback +0x75090` 的实际读入、EINTR／EOF 和行处理，再把带缓冲的 fclose 接回 cached small free，贯通 `get_nprocs +0x2669c` 的解析。** 本节未读任何 FILE 内容；有缓冲、ungetc/auxiliary-buffer 和 write/update/append/seek 的关闭分支仍拒绝。之后才能将 CPU 查询、atfork allocation、arena table 收尾和 TSD migration 组合到自然 `flag=0` 返回，并进入 fresh Medusa 验证。
 
 ## 继续顺序
 
 继续恢复 matching libc 的真实 allocator 冷启动，将当前显式 allocator／TLS／OS 服务逐项替换为已验证实现，并将 startup、`+0x256e50` 配置构造和既有 root factory 接到外层 signer。未识别 callback、support 关联状态类型和真实线程创建仍需真实来源，不以空回调填补。
 
-先前停在 syscall 167 的 native 诊断已推进到 `flag = 0` 返回；Python 同次 fresh 冷启动目前停在 `+0x8e41c`、`flag = 1`。新 region／清洁 slab／raw internal small 和有界 public small／tcache 已有实现；下一步恢复 CPU 查询中 `+0x74868/+0x749dc` 的 stdio／递归 mutex、`+0x75550` cleanup 注册和文件 OS 输入，将已有 public small／cached small free 接回完整 FILE 生命周期，再接 atfork allocation、arena table 和 TSD migration，验证完整 Python `flag = 0` 返回。真实 OS/TLS 创建仍是单独未完成边界。
+先前停在 syscall 167 的 native 诊断已推进到 `flag = 0` 返回；Python 同次 fresh 冷启动目前停在 `+0x8e41c`、`flag = 1`。新 region／清洁 slab／raw internal small、有界 public small／tcache，以及本节 stdio／只读 FILE／regular buffer 构造已有实现；下一步恢复实际 fgets/refill/read/EOF 和 buffered-close/free，将已有 public small／cached small free 接回完整 FILE 生命周期，再接 CPU 解析、atfork allocation、arena table 和 TSD migration，验证完整 Python `flag = 0` 返回。真实 OS/TLS 创建仍是单独未完成边界。
 
 随后用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

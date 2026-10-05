@@ -104,12 +104,33 @@ Defined allocation returns and all mapping/global/TLS bytes match; C free's
 void return is deliberately excluded. Full-bin flush, direct arena release,
 large/huge, profiling, junk and GC remain unsupported.
 
-Next: connect CPU query sysconf +0x1d2e4 -> get_nprocs +0x2669c with actual
-stdio/file OS inputs: +0x749dc -> +0x74868 FILE/recursive-mutex initialization,
-+0x75550 __atexit_register_cleanup with guarded mapping, then open/stat/read/
-close and +0x573e4 fgets. Actual native probes reach those entries and return;
-Python has not restored them. Join public small/cached free into that complete
-FILE lifecycle, then atfork allocation, arena table finalization and TSD migration. The outer Python
+Matching-libc stdio constructors and cleanup registration now add **38 native
+controls / 13 rejection and rollback checks**. Three standard and seventeen
+static FILE extensions, recursive mutex initialization, existing-pool FILE
+selection, preserved padding and guarded cleanup mapping/tail replacement match.
+The fresh Python fixture parses seven __sF defined-symbol relocations from the
+ELF; these are loader input, never native-generated boot pages. Other unused
+symbol relocations are not claimed to be repaired.
+
+Private uncontended recursive lock/unlock, readonly fopen, unbuffered fclose
+and regular-file buffer construction add **62 native controls / 27 rollback
+checks**. Controls cover depth/overflow/wrong-owner returns, fd limits/failures,
+reused FILE, nested locks and close EINTR behavior. Actual fstat and public small
+malloc construct 1024/4096/8192-byte buffers; fstat/zero-block defaults and
+malloc ENOMEM's inline one-byte fallback match as well. All defined returns,
+stdio/allocator/TLS/key state, guest bytes, retained mapping pages, ordered OS
+calls and mapping metadata/protection match. Void constructor/cleanup returns
+are excluded. Unsupported provider/FILE/character-file/profiling branches
+roll back guest state while retaining explicit external effects.
+
+Both batches run the actual same-fresh cold prefix before an explicit
++0x8e41c continuation. No file content was read or CPU count computed by Python.
+Evidence: evidence/vm9_libc_stdio_native.json and
+evidence/vm9_libc_readonly_file_native.json. Next: recover +0x573e4 fgets ->
++0x5a960 refill -> +0x75090 read callback, EINTR/EOF and line behavior, then
+buffered fclose/cached free and +0x2669c get_nprocs parsing. Join the complete
+FILE lifecycle to CPU query, atfork allocation, arena table finalization and
+TSD migration. The outer Python
 cold prefix still stops at +0x8e41c/flag 1. Full cold return/flag 0, fresh Medusa
 and the online header matrix remain open. Multi-arena selection, GC, profiling,
 large/huge, cache destruction and concurrent publication are unsupported, as
