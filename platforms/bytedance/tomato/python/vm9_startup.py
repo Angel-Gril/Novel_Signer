@@ -3,7 +3,8 @@
 Thread creation, clocks, finite futex outcomes and task invocation belong to
 providers. Idle workers can run through normal argument cleanup; serial default
 task bodies can attach to the startup-generated default queue. Repeating tasks
-and OS thread-exit destructors remain separate boundaries. No host threads or blocking waits are silently created.
+and full OS thread exit remain separate boundaries; the empty support key
+destructor phase is explicit. No host threads or blocking waits are silently created.
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -956,6 +957,46 @@ def run_startup_worker(pages, *, argument_address, worker_kind, image_base,
     if _u(p,arg):raise RefillUnsupported('worker argument acquired unsupported support ownership')
     _w(p,arg,0);free(p,arg)
     p.commit();return 0
+
+
+def destroy_empty_worker_support(pages, *, wrapper_address, free):
+    """+0x32ce6c/+0x32ccf0 for empty support vectors, including capacity.
+
+    Nonempty waiter/reference vectors need additional destructor callbacks
+    and are rejected before frees. This does not clear a pthread TLS slot;
+    bionic's key dispatcher owns that step before calling this destructor.
+    """
+    if not wrapper_address:return
+    p=_PageTransaction(pages);support=_u(p,wrapper_address)
+    if support:
+        _read_span(p,support,48)
+        for offset,stride in ((0,8),(0x18,16)):
+            begin=_u(p,support+offset);end=_u(p,support+offset+8)
+            capacity=_u(p,support+offset+16)
+            if begin!=end or capacity<end or (capacity-begin)%stride:
+                raise RefillUnsupported('nonempty or invalid support exit vector')
+        conditions=_u(p,support+0x18);references=_u(p,support)
+        if conditions:_w(p,support+0x20,conditions);free(p,conditions)
+        if references:_w(p,support+8,references);free(p,references)
+        free(p,support)
+    free(p,wrapper_address);p.commit()
+
+
+def run_worker_thread_key_cleanup(pages, *, image_base, thread_pointer,
+        generation_table, free):
+    """Explicit bionic key-exit phase for the evidenced empty support.
+
+    Support values are cleared before destruction. Emulated-TLS, allocator
+    and other destructor targets remain unsupported and roll back guest pages.
+    This is a key-cleanup phase, not pthread_exit/OS termination.
+    """
+    from vm9_allocator import pthread_key_clean_all
+    def invoke(staged,destructor,value):
+        if destructor!=image_base+0x32ce6c:
+            raise RefillUnsupported('unrecovered thread-exit destructor')
+        destroy_empty_worker_support(staged,wrapper_address=value,free=free)
+    return pthread_key_clean_all(pages,thread_pointer=thread_pointer,
+        generation_table=generation_table,invoke=invoke)
 
 
 @dataclass(frozen=True)

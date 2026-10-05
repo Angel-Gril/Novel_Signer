@@ -127,6 +127,43 @@ def pthread_setspecific(pages, *, key, value, thread_pointer, generation_table=0
     return 0
 
 
+def pthread_key_clean_all(pages, *, thread_pointer, generation_table, invoke):
+    """Matching bionic's serialized +0x685a0 TSD destructor phase.
+
+    Scan 141 keys in ascending order for up to four passes. An active key
+    needs a matching generation, nonzero value and destructor. Clear value
+    before invocation; callbacks may republish it for a later pass. Inactive
+    and stale slots are retained, unlike pthread_getspecific. No OS thread
+    termination or concurrent generation mutation is implied.
+    """
+    for address in (thread_pointer,generation_table):
+        if not isinstance(address,int) or address<0 or address&7:
+            raise RefillUnsupported('invalid pthread key-cleanup address')
+    transaction=_PageTransaction(pages)
+    pthread=int.from_bytes(_read_span(transaction,thread_pointer+8,8),'little')
+    slots=pthread+0xe8;calls=[]
+    _read_span(transaction,generation_table,141*16)
+    _read_span(transaction,slots,141*16)
+    for iteration in range(4):
+        invoked=0
+        for index in range(141):
+            entry=generation_table+index*16;slot=slots+index*16
+            generation=int.from_bytes(_read_span(transaction,entry,8),'little')
+            if not generation&1:continue
+            saved=int.from_bytes(_read_span(transaction,slot,8),'little')
+            if saved!=generation:continue
+            value=int.from_bytes(_read_span(transaction,slot+8,8),'little')
+            if not value:continue
+            destructor=int.from_bytes(_read_span(transaction,entry+8,8),'little')
+            if not destructor:continue
+            if int.from_bytes(_read_span(transaction,entry,8),'little')!=saved:continue
+            _write_span(transaction,slot+8,bytes(8))
+            invoke(transaction,destructor,value)
+            calls.append((iteration,index,destructor,value));invoked+=1
+        if not invoked:break
+    transaction.commit();return tuple(calls)
+
+
 def pthread_key_create(pages, *, key_address, destructor, generation_table):
     """Model matching bionic's serialized generation-table key allocation.
 

@@ -1,0 +1,183 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "native_runs": 1,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "thread_id": 137,
+      "worker_kind": "default_queue",
+      "worker_index": 1,
+      "startup_generated_worker_arguments": true,
+      "worker_tls_independent": true,
+      "worker_wait_calls": 1,
+      "complete_idle_worker_normal_return": false,
+      "complete_nonempty_worker_normal_return": true,
+      "argument_cleanup_match": true,
+      "argument_free_calls": 1,
+      "total_free_calls": 3,
+      "support_retained_in_tls": false,
+      "support_thread_key_cleanup_complete": true,
+      "support_wrapper_released": true,
+      "all_main_image_pages_match": true,
+      "both_threads_tls_match": true,
+      "generation_table_match": true,
+      "guest_objects_match": true,
+      "allocation_sequence_match": true,
+      "allocation_count": 22,
+      "worker_allocation_sizes": [
+        16384,
+        16384,
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "thread_handles_arguments_and_order_match": true,
+      "ordered_semantic_effects_match": true,
+      "native_input_snapshot_used": false,
+      "default_initialization_task_executed": true,
+      "default_caller_returns": 6,
+      "nested_vm_returns": 48,
+      "worker_task_stack_abi_independently_derived": true,
+      "worker_stack_independent": true,
+      "all_caller_slots_virtual_stack_guest_and_regions_match": true,
+      "mapped_initialization_region_count": 6,
+      "os_thread_exit_destructor_executed": true,
+      "complete_os_thread_exit": false,
+      "complete_worker_runtime": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unknown_worker",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "getter_failure",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "environment_effect_count": 3,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unknown_poll_vtable",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "environment_effect_count": 3,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "executor_cancellation",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "environment_effect_count": 3,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "queue_wait_bound",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "environment_effect_count": 2,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "task_body_unrecovered",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "environment_effect_count": 3,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "argument_not_freed_on_failure": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "bad_saved_register",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "argument_not_freed_on_failure": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "wrong_queue_callable",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "argument_not_freed_on_failure": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "empty_default_queue",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "argument_not_freed_on_failure": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "multiple_default_tasks",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "argument_not_freed_on_failure": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unknown_default_target",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "argument_not_freed_on_failure": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 2,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "busy_first_once",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "argument_not_freed_on_failure": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 2,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "first_allocation_fails",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "argument_not_freed_on_failure": true,
+      "vm_base_restored": true,
+      "environment_effect_count": 3,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "same_fresh_startup_and_worker_control": true,
+  "native_input_snapshot_used": false,
+  "native_code_used_by_python_model": false,
+  "bounded_allocator_used": true,
+  "virtual_os_used": true,
+  "host_threads_created": false,
+  "host_wait_executed": false,
+  "default_initialization_task_executed": true,
+  "same_fresh_startup_nonempty_worker_verified": true,
+  "os_thread_exit_destructor_executed": true,
+  "same_startup_worker_exit_key_phase_verified": true,
+  "complete_os_thread_exit": false,
+  "complete_worker_runtime": false,
+  "complete_allocator_boot": false,
+  "complete_python_medusa": false
+}

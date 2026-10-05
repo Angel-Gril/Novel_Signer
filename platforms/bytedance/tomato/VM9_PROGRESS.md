@@ -20,7 +20,10 @@ same-fresh-startup nonempty queue worker. Four native controls verify all
 six caller returns and 48 nested returns per execution, queue wait/stop,
 normal return and argument free with independent thread stack/TLS inputs.
 Eight new failure cases and the eight idle-worker controls also pass.
-Complete worker runtime, OS thread-exit destructors, real allocator boot, fresh
+A further same-startup control runs bionic key cleanup and releases the empty
+support/wrapper after argument cleanup. Twenty key-cleanup and eight support
+destructor controls, plus three rollback cases, pass.
+Complete worker runtime, other TLS destructors/full OS exit, real allocator boot, fresh
 Medusa, live header matrix/f13 checks, no-JVM Rust, nonempty search/pagination,
 Douyin/Qidian and the final Pages/Actions products remain open.
 
@@ -1140,3 +1143,20 @@ pass. The worker argument is freed; support remains TLS-owned.
 Evidence: [nonempty worker](evidence/vm9_startup_default_worker_native_20261005.json)
 and [idle regression](evidence/vm9_startup_worker_regression_20261005.json).
 OS TLS destruction, real allocator/arena/OS boot and fresh signing remain open.
+
+
+## Empty support key-exit cleanup (2026-10-05)
+
+Matching bionic's +0x685a0 key dispatcher now has 20 fresh controls covering
+141-key order, generation checks, value clearing before callbacks and the
+four-pass bound. Empty support +0x32ce6c/+0x32ccf0 has eight controls,
+including reserved-vector capacity/free order; three unknown/failure paths
+roll back guest pages. A same-startup default-worker control explicitly
+runs the real libc key phase at normal worker return, checks all six caller
+returns/48 nested returns again, and verifies argument -> support -> wrapper
+frees with zero support TLS value. Eight idle controls also pass again.
+Evidence: [key/support](evidence/vm9_thread_key_cleanup_native_20261005.json)
+and [same startup](evidence/vm9_default_worker_key_cleanup_native_20261005.json).
+Full pthread_exit, nonempty support vectors, +0x3439bc emulated-TLS arrays
+and +0x342854 fallback destructor chains remain open, along with real
+allocator boot, independent signing and all downstream product work.

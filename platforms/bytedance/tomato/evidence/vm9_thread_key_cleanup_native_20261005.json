@@ -1,0 +1,352 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "key_cleanup_native_runs": 20,
+  "support_destructor_native_runs": 8,
+  "key_cleanup_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "inactive_value",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": true,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "stale_value",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": true,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "null_destructor",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "null_value",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one_key",
+      "destructor_calls": 1,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "ordered_keys",
+      "destructor_calls": 3,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "republish_four_passes",
+      "destructor_calls": 4,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": true,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "publish_later_key",
+      "destructor_calls": 2,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "delete_later_key",
+      "destructor_calls": 1,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "inactive_value",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": true,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "stale_value",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": true,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "null_destructor",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "null_value",
+      "destructor_calls": 0,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one_key",
+      "destructor_calls": 1,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "ordered_keys",
+      "destructor_calls": 3,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "republish_four_passes",
+      "destructor_calls": 4,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": true,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "publish_later_key",
+      "destructor_calls": 2,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "delete_later_key",
+      "destructor_calls": 1,
+      "key_order_match": true,
+      "complete_tls_generation_state_match": true,
+      "value_cleared_before_callback": true,
+      "four_pass_bound_verified": false,
+      "inactive_stale_values_retained": false,
+      "synthetic_destructor_provider": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "support_destructor_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "null_wrapper",
+      "free_calls": 0,
+      "guest_state_match": true,
+      "support_and_wrapper_free_order_match": true,
+      "empty_vectors_only": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "null_support",
+      "free_calls": 1,
+      "guest_state_match": true,
+      "support_and_wrapper_free_order_match": true,
+      "empty_vectors_only": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_support",
+      "free_calls": 2,
+      "guest_state_match": true,
+      "support_and_wrapper_free_order_match": true,
+      "empty_vectors_only": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "reserved_empty_vectors",
+      "free_calls": 4,
+      "guest_state_match": true,
+      "support_and_wrapper_free_order_match": true,
+      "empty_vectors_only": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "null_wrapper",
+      "free_calls": 0,
+      "guest_state_match": true,
+      "support_and_wrapper_free_order_match": true,
+      "empty_vectors_only": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "null_support",
+      "free_calls": 1,
+      "guest_state_match": true,
+      "support_and_wrapper_free_order_match": true,
+      "empty_vectors_only": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_support",
+      "free_calls": 2,
+      "guest_state_match": true,
+      "support_and_wrapper_free_order_match": true,
+      "empty_vectors_only": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "reserved_empty_vectors",
+      "free_calls": 4,
+      "guest_state_match": true,
+      "support_and_wrapper_free_order_match": true,
+      "empty_vectors_only": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unknown_exit_destructor",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "no_free_on_unsupported_exit": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "callback_failure",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "no_free_on_unsupported_exit": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "nonempty_support_vector",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "no_free_on_unsupported_exit": true,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "pthread_key_cleanup_phase_verified": true,
+  "empty_support_destructor_verified": true,
+  "same_startup_worker_exit_key_phase_verified": false,
+  "emulated_tls_destructor_executed": false,
+  "complete_os_thread_exit": false,
+  "complete_allocator_boot": false,
+  "complete_python_medusa": false
+}
