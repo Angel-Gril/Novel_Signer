@@ -34,12 +34,14 @@ The earlier arena-prefix completion claim in commit 1b8aa32 is retracted:
 allocation/zeroing/publication alone must leave the once operation pending.
 Fourteen corrected controls and seven rollback cases verify the split and the
 explicit complete-initializer gate. The remaining five default caller
-preludes/first callbacks pass 40 controls, but their initializer bodies remain
+preludes/first callbacks pass 40 controls. The second +0x280610 caller now
+passes four complete cold/hot controls; its two nested callers also pass 12
+entry/return controls and nine rejection cases. Four initializer bodies remain
 open. The older two-million-instruction native probe still describes its own
 limited boundary, not the latest completed first-caller result.
 
-Next: recover +0x280610's initializer +0x280a74 and nested callers
-+0x280b54/+0x280bdc, then the remaining four bodies and +0x280554 task
+Next: recover +0x280690's initializer +0x280c58 and nested callers
++0x280d38/+0x280dc0, then the remaining three bodies and +0x280554 task
 composition, OS exit cleanup and real allocator/signing chain. Detailed
 scope, evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
 
@@ -1106,3 +1108,14 @@ initializer bodies. No native input snapshot is used in these checks.
 The controlled allocator and broadcast provider do not prove real arena/OS
 boot, concurrent workers, fresh Medusa output or live header validation.
 Details and correction provenance: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
+
+## Second table caller (2026-10-05)
+
+The second +0x280610 caller completes one +0x280b54 / VM +0xeee60 and
+seven +0x280bdc / VM +0xef520 returns. Four fresh cold/hot controls compare
+full caller return state, heap/image, once and ordered environment effects.
+Twelve additional controls compare the nested wrappers and returns; nine
+failure cases leave guest pages unchanged and restore the VM base. The
+allocator and broadcast remain providers. This closes two individual
+callers, while six-caller composition and the final signing chain remain open.
+Details: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).

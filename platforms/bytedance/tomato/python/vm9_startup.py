@@ -553,18 +553,26 @@ class ArenaBootPrefixResult:
     once_initialization_pending: bool = False
 
 
-def initialize_arena_boot_prefix(pages, *, image_base, allocate):
-    """+0x280890 through the call to +0x280970, excluding nested VM bodies."""
+def _table_initialization_layout(table_index):
+    if not isinstance(table_index,int) or isinstance(table_index,bool) or table_index not in (0,1):
+        raise RefillUnsupported('only first and second table initializer layouts are modeled')
+    return (0x280890+table_index*0x1E4,0x3E09A8+table_index*0x48,
+        0x280970+table_index*0x1E4,0x2809F8+table_index*0x1E4)
+
+
+def initialize_arena_boot_prefix(pages, *, image_base, allocate, table_index=0):
+    """First/second allocation and publication prefix, excluding nested VMs."""
+    _,table,initial,_=_table_initialization_layout(table_index)
     p=_PageTransaction(pages)
-    _read_span(p,image_base+0x3E09A8,0x40)
+    _read_span(p,image_base+table,0x40)
     region=allocate(p,0x4000)
     if not isinstance(region,int) or not 0<region<(1<<64)-0x4000:
         raise RefillUnsupported('arena prefix requires a non-null guest allocation')
     _read_span(p,region,0x4000)
     _write_span(p,region,bytes(0x4000))
-    for index in range(8):_w(p,image_base+0x3E09A8+index*8,region+index*0x800)
+    for index in range(8):_w(p,image_base+table+index*8,region+index*0x800)
     p.commit()
-    return ArenaBootPrefixResult(region)
+    return ArenaBootPrefixResult(region,next_caller_offset=initial)
 
 
 def begin_once_arena_boot(pages, *, image_base, allocate):
@@ -587,7 +595,7 @@ def begin_once_arena_boot(pages, *, image_base, allocate):
     return ArenaBootPrefixResult(result.region_address,once_initialization_pending=True)
 
 
-def call_once_arena_boot(pages, *, image_base, initializer, broadcast):
+def call_once_arena_boot(pages, *, image_base, initializer, broadcast, table_index=0):
     """Serial once gate with an explicit complete initializer provider.
 
     No partial built-in initializer is treated as completion. Broadcast is an
@@ -595,7 +603,8 @@ def call_once_arena_boot(pages, *, image_base, initializer, broadcast):
     """
     if not callable(initializer) or not callable(broadcast):
         raise RefillUnsupported('once gate requires explicit initializer and broadcast')
-    p=_PageTransaction(pages);control=image_base+0x3E09E8;mutex=image_base+0x3E2EB8
+    _,table,_,_=_table_initialization_layout(table_index)
+    p=_PageTransaction(pages);control=image_base+table+0x40;mutex=image_base+0x3E2EB8
     objects.lock_uncontended_mutex(p,mutex_address=mutex)
     state=_u(p,control)
     if state==1:raise RefillUnsupported('arena once wait path remains unrecovered')
@@ -638,7 +647,9 @@ def prepare_initialization_caller(pages, *, caller_offset, arguments,
         0x35DA20+index*0x30,caller+0x5C) for index,caller in enumerate(default_callers)}
     layouts.update({
         0x280970:(0x520,0xEE3B0,0x35DB20,0x35DB40,0x2809D4),
-        0x2809F8:(0x300,0xEEA70,0,0,0x280A50)})
+        0x2809F8:(0x300,0xEEA70,0,0,0x280A50),
+        0x280B54:(0x520,0xEEE60,0x35DB50,0x35DB70,0x280BB8),
+        0x280BDC:(0x300,0xEF520,0,0,0x280C34)})
     if caller_offset not in layouts:raise RefillUnsupported('unknown initialization caller')
     if not isinstance(entry_stack_address,int) or entry_stack_address&15:
         raise RefillUnsupported('initialization stack must be aligned')
@@ -647,7 +658,7 @@ def prepare_initialization_caller(pages, *, caller_offset, arguments,
     args=tuple(arguments);needed=1 if caller_offset in default_callers else 2
     if len(args)!=needed or any(not isinstance(v,int) or not 0<=v<1<<64 for v in args):
         raise RefillUnsupported('invalid initialization caller arguments')
-    if caller_offset==0x280970 and args[1]>=1<<32:
+    if caller_offset in (0x280970,0x280B54) and args[1]>=1<<32:
         raise RefillUnsupported('arena initialization flag must fit W1')
     size,entry,table_a,table_b,continuation=layouts[caller_offset]
     p=_PageTransaction(pages);S=entry_stack_address;C=S-0x20-size;E=S-0x30
@@ -664,8 +675,8 @@ def prepare_initialization_caller(pages, *, caller_offset, arguments,
     _write_span(p,S-0x28,_read_span(p,thread_pointer+0x28,8))
     packed=C+8 if caller_offset in default_callers else C
     _w(p,packed,args[0])
-    if caller_offset==0x280970:_w(p,C+8,args[1],4)
-    elif caller_offset==0x2809F8:_w(p,C+8,args[1])
+    if caller_offset in (0x280970,0x280B54):_w(p,C+8,args[1],4)
+    elif caller_offset in (0x2809F8,0x280BDC):_w(p,C+8,args[1])
     for adr,value in ((C+0x10,image_base+0x281414),(C+0x18,E),(C+0x20,return_address),
             (G,S-0x20),(G+8,image_base+continuation)):_w(p,adr,value)
     # Generic VM preserves physical callee-saved registers. X19 already owns
@@ -735,15 +746,17 @@ def run_initialization_vm(pages, *, vm_module, image_base, stop_offset=None,
                 step=current.steps,bytecode_offset=hex(current.pc-image_base),
                 words=words,executed=False)
             events.append(event)
-            if (wrapper,target)==(0x281610,0x347F20):
+            if wrapper in (0x281610,0x281638) and target==0x347F20:
                 d,fill,n=words[1:];fill&=255
                 if n>0x100000:raise RefillUnsupported('unbounded initialization memset')
                 _read_span(p,d,n);_write_span(p,d,bytes([fill])*n)
-            elif (wrapper,target)==(0x281598,0x32A0A0) and once_provider is not None:
-                if words[1]!=image_base+0x3E09E8 or words[3]!=image_base+0x280890:
-                    raise RefillUnsupported('first default once callback package differs')
+            elif wrapper in (0x281598,0x2815AC) and target==0x32A0A0 and once_provider is not None:
+                table_index=(wrapper-0x281598)//0x14
+                initializer,table,_,_=_table_initialization_layout(table_index)
+                if frame.caller_offset!=0x280590+table_index*0x80 or words[1]!=image_base+table+0x40 or words[3]!=image_base+initializer:
+                    raise RefillUnsupported('default once callback package differs')
                 once_provider(current,frame,words)
-            elif (wrapper,target)==(0x281624,0x347F60):
+            elif wrapper in (0x281624,0x28164C) and target==0x347F60:
                 d,s,n=words[1:]
                 if n>0x100000 or (d<s+n and s<d+n):
                     raise RefillUnsupported('unsupported initialization memcpy span')
@@ -782,16 +795,17 @@ class ArenaInitializationResult:
 
 def initialize_arena_boot(pages, *, image_base, allocate, vm_module,
         entry_stack_address, return_address, thread_pointer,
-        saved_frame_pointer=0, saved_registers=None):
-    """+0x280890 through one +0x280970 and all seven +0x2809f8 returns.
+        saved_frame_pointer=0, saved_registers=None, table_index=0):
+    """First/second table initializer through all eight nested VM returns.
 
-    Guest allocator/TLS/ELF inputs remain explicit. This initializes the first
+    Guest allocator/TLS/ELF inputs remain explicit. This initializes the selected
     default-task table, not jemalloc's complete arena/global/OS boot.
     """
     if not isinstance(entry_stack_address,int) or entry_stack_address&15:
         raise RefillUnsupported('arena initializer stack must be aligned')
     if not isinstance(return_address,int) or not 0<=return_address<1<<56:
         raise RefillUnsupported('arena initializer return must be untagged')
+    initializer,table,initial,repeated=_table_initialization_layout(table_index)
     p=_PageTransaction(pages);S=entry_stack_address;F=S-0x20
     _read_span(p,S-0xA00,0xA00)
     regs={i:0 for i in range(19,29)}
@@ -801,10 +815,10 @@ def initialize_arena_boot(pages, *, image_base, allocate, vm_module,
         regs.update(saved_registers)
     _w(p,F,saved_frame_pointer);_w(p,F+8,return_address);_w(p,F+16,regs[19])
     # Native operator-new's preserved spills before the explicit malloc service.
-    for address,value in ((F-0x20,F),(F-0x18,image_base+0x2808A4),
+    for address,value in ((F-0x20,F),(F-0x18,image_base+initializer+0x14),
             (F-0x10,regs[19])):_w(p,address,value)
-    prefix=initialize_arena_boot_prefix(p,image_base=image_base,allocate=allocate)
-    regs[19]=image_base+0x3E09A8
+    prefix=initialize_arena_boot_prefix(p,image_base=image_base,allocate=allocate,table_index=table_index)
+    regs[19]=image_base+table
     results=[]
     def call(caller,arguments,stack,ret,fp):
         result=run_initialization_vm(p,caller_offset=caller,arguments=arguments,
@@ -813,13 +827,13 @@ def initialize_arena_boot(pages, *, image_base, allocate, vm_module,
             saved_frame_pointer=fp,saved_registers=regs,max_steps=1000000)
         if not result.complete:raise RefillUnsupported('nested arena initializer did not return')
         results.append(result)
-    call(0x280970,(prefix.region_address,0),F,0x280930,F)
+    call(initial,(prefix.region_address,0),F,initializer+0xA0,F)
     for index in range(7):
-        pair=tuple(_u(p,image_base+0x3E09A8+(index+i)*8) for i in range(2))
-        if index<6:call(0x2809F8,pair,F,0x280938+index*8,F)
+        pair=tuple(_u(p,image_base+table+(index+i)*8) for i in range(2))
+        if index<6:call(repeated,pair,F,initializer+0xA8+index*8,F)
         else:
             regs[19]=_u(p,F+16)
-            result=run_initialization_vm(p,caller_offset=0x2809F8,arguments=pair,
+            result=run_initialization_vm(p,caller_offset=repeated,arguments=pair,
                 entry_stack_address=S,return_address=return_address,
                 thread_pointer=thread_pointer,image_base=image_base,vm_module=vm_module,
                 saved_frame_pointer=saved_frame_pointer,saved_registers=regs,max_steps=1000000)
@@ -828,14 +842,15 @@ def initialize_arena_boot(pages, *, image_base, allocate, vm_module,
     p.commit();return ArenaInitializationResult(prefix.region_address,tuple(results))
 
 
-def run_first_default_caller(pages, *, allocate, broadcast, vm_module,
+def run_default_initialization_caller(pages, *, table_index, allocate, broadcast, vm_module,
         entry_stack_address, return_address, thread_pointer, image_base,
         saved_frame_pointer=0, saved_registers=None):
-    """First +0x280590 VM and its once/complete first-table initializer.
+    """First or second default VM caller with its complete table initializer.
 
-    This is one of the six default task callers. It does not synthesize the
-    remaining five, an OS thread, or allocator-global boot.
+    An individual caller does not synthesize the six-caller task, an OS thread,
+    or allocator-global boot. Environment effects remain explicit providers.
     """
+    _table_initialization_layout(table_index)
     p=_PageTransaction(pages);nested=[]
     def once_provider(vm,frame,words):
         C=frame.stack_address;G=C-0x60;F=C-0x1C0
@@ -851,16 +866,24 @@ def run_first_default_caller(pages, *, allocate, broadcast, vm_module,
         def initialize(staged):
             result=initialize_arena_boot(staged,image_base=image_base,allocate=allocate,
                 vm_module=vm_module,entry_stack_address=F,return_address=image_base+0x32A148,
-                thread_pointer=thread_pointer,saved_frame_pointer=F,saved_registers=regs)
+                thread_pointer=thread_pointer,saved_frame_pointer=F,saved_registers=regs,
+                table_index=table_index)
             nested.extend(result.caller_results);return result
-        call_once_arena_boot(vm.m.pages,image_base=image_base,initializer=initialize,broadcast=broadcast)
-    result=run_initialization_vm(p,caller_offset=0x280590,arguments=(0,),
+        call_once_arena_boot(vm.m.pages,image_base=image_base,initializer=initialize,
+            broadcast=broadcast,table_index=table_index)
+    result=run_initialization_vm(p,caller_offset=0x280590+table_index*0x80,arguments=(0,),
         entry_stack_address=entry_stack_address,return_address=return_address,
         thread_pointer=thread_pointer,image_base=image_base,vm_module=vm_module,
         saved_frame_pointer=saved_frame_pointer,saved_registers=saved_registers,
         once_provider=once_provider,max_steps=1000000)
-    if not result.complete:raise RefillUnsupported('first default caller did not return')
+    if not result.complete:raise RefillUnsupported('default initialization caller did not return')
     p.commit();return result,tuple(nested)
+
+
+def run_first_default_caller(pages, **kwargs):
+    """Preserve the first-caller entry point with the verified first layout."""
+    return run_default_initialization_caller(pages,table_index=0,**kwargs)
+
 
 def run_startup_worker(pages, *, argument_address, worker_kind, image_base,
         thread_pointer, thread_id, create_key, set_specific, get_tls,

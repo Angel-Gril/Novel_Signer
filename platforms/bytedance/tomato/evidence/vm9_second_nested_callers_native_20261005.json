@@ -1,0 +1,213 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "native_runs": 12,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280b54",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280b54",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280b54",
+      "stack_prefill": 60,
+      "steps": 54721,
+      "stop_bytecode_offset": "0xef510",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 6,
+      "callback_word_package_match": false,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": true,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280bdc",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280bdc",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280bdc",
+      "stack_prefill": 60,
+      "steps": 38536,
+      "stop_bytecode_offset": "0xef904",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 0,
+      "callback_word_package_match": false,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": true,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280b54",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280b54",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280b54",
+      "stack_prefill": 60,
+      "steps": 54721,
+      "stop_bytecode_offset": "0xef510",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 6,
+      "callback_word_package_match": false,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": true,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280bdc",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280bdc",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280bdc",
+      "stack_prefill": 60,
+      "steps": 38536,
+      "stop_bytecode_offset": "0xef904",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 0,
+      "callback_word_package_match": false,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": true,
+      "complete_default_task_vm": false
+    }
+  ],
+  "negative_checks": 9,
+  "negative_cases": [
+    {
+      "case": "invalid_table",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "busy_second_once",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "locked_mutex",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "null_allocator",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_allocator",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "broadcast_failure",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "tagged_return",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_stack",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "canary_mismatch",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true,
+      "external_provider_effects_rolled_back": false
+    }
+  ],
+  "fresh_elf_stack_tls_inputs": true,
+  "native_input_snapshot_used": false,
+  "all_six_default_callers_complete": false,
+  "complete_real_allocator_boot": false,
+  "complete_python_medusa": false
+}

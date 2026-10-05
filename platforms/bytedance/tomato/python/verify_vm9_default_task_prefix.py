@@ -33,9 +33,9 @@ DEFAULT_CALLERS=(0x280590,0x280610,0x280690,0x280710,0x280790,0x280810)
 
 
 def prelude(library,libc,vm_module,base,caller,fill):
-    arguments=(0,) if caller in DEFAULT_CALLERS else (GUEST+0x4000,37) if caller==0x280970 else (GUEST+0x4800,GUEST+0x4000)
+    arguments=(0,) if caller in DEFAULT_CALLERS else (GUEST+0x4000,37) if caller in (0x280970,0x280B54) else (GUEST+0x4800,GUEST+0x4000)
     pages=fresh(library,libc,base,fill);model=fresh(library,libc,base,fill)
-    size=0x350 if caller in DEFAULT_CALLERS else {0x280970:0x520,0x2809F8:0x300}[caller]
+    size=0x350 if caller in DEFAULT_CALLERS else {0x280970:0x520,0x2809F8:0x300,0x280B54:0x520,0x280BDC:0x300}[caller]
     start=GUEST+0xEF00-0x20-size-0x180;width=GUEST+0xEF00-start
     observed={(start,width):None}
     native(library,base,caller,arguments,pages,libc=libc,stop_offset=0x1684F0,
@@ -50,15 +50,15 @@ def prelude(library,libc,vm_module,base,caller,fill):
 
 
 def boundary(library,libc,vm_module,base,caller,fill,*,bytecode_stop=None):
-    arguments=(0,) if caller in DEFAULT_CALLERS else (GUEST+0x4000,0) if caller==0x280970 else (GUEST+0x4800,GUEST+0x4000)
+    arguments=(0,) if caller in DEFAULT_CALLERS else (GUEST+0x4000,0) if caller in (0x280970,0x280B54) else (GUEST+0x4800,GUEST+0x4000)
     native_pages=fresh(library,libc,base,fill);model=fresh(library,libc,base,fill)
     expected={};backing=GUEST+0xEF00-0x148
     virtual_top=GUEST+0xEF00-0x160
-    frame_width=0x50 if caller in DEFAULT_CALLERS else {0x280970:0x220,0x2809F8:0x50}[caller]
+    frame_width=0x50 if caller in DEFAULT_CALLERS else {0x280970:0x220,0x2809F8:0x50,0x280B54:0x220,0x280BDC:0x50}[caller]
     virtual_start=virtual_top-frame_width
     class Boundary(Exception):pass
     def observe(cpu,address):
-        continuation={0x280970:0x2809D4,0x2809F8:0x280A50}.get(caller)
+        continuation={0x280970:0x2809D4,0x2809F8:0x280A50,0x280B54:0x280BB8,0x280BDC:0x280C34}.get(caller)
         if (caller in DEFAULT_CALLERS and address==base+0x281598+(caller-0x280590)//0x80*0x14) or (bytecode_stop is None and continuation is not None and address==base+continuation) or (
             bytecode_stop is not None and base+0x168324<=address<base+0x174000 and
             cpu.reg_read(UC_ARM64_REG_X28)==backing and

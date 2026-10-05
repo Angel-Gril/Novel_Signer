@@ -1,6 +1,6 @@
 # 外层启动 caller 与 worker 调度／清理
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲 worker 已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。默认初始化任务的第一个 caller 及完整八段首表初始化已通过 fresh 对照；其余五个 caller 的入口／首回调已对照，但初始化正文尚未完成。**六个 caller 的完整串联、OS thread-exit 析构、真实 allocator boot、完整线程执行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲 worker 已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。默认初始化任务的前两个 caller 已通过 fresh cold／hot 返回对照；其余四个 caller 的入口／首回调已对照，但初始化正文尚未完成。**六个 caller 的完整串联、OS thread-exit 析构、真实 allocator boot、完整线程执行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
@@ -111,6 +111,22 @@ python -B python/verify_vm9_remaining_default_callers.py --library /private/libm
 
 对应脱敏证据：[纠正后的 gate](evidence/vm9_arena_boot_native_20261005.json)、[乘法](evidence/vm9_multiply_native_20261005.json)、[caller 前段](evidence/vm9_default_caller_prefix_native_20261005.json)、[完整首表](evidence/vm9_first_arena_initializer_native_20261005.json)、[第一个 caller](evidence/vm9_first_default_caller_native_20261005.json)、[其余五个前段](evidence/vm9_remaining_default_callers_prefix_native_20261005.json)。受影响回归为 fresh root 8／11、parser 142／5、同次空闲 worker 8／6（native／negative），见 [回归摘要](evidence/vm9_initializer_regression_20261005.json)。
 
+## 第二个默认 caller 的完整返回（2026-10-05）
+
+第二个 `+0x280610 → VM +0xede10` 使用 once `+0x3e0a30` 和 initializer `+0x280a74`，发布到 `+0x3e09f0`。其嵌套 caller 为 `+0x280b54 → VM +0xeee60`（54,721 步），再执行七次 `+0x280bdc → VM +0xef520`（各 38,536 步），包括最终 tailcall。`+0x281638/+0x28164c` 封装的 memset／memcpy 已根据本地 native 实现恢复。
+
+两种基址的四个 cold／hot 组合都通过，比较 32 槽、虚拟栈、heap、全部主 image、once 状态与分配／broadcast 时序。两个 nested caller 的前置／完整返回另通过 12 个控制；9 个异常案例确认未知布局、busy once、锁已持有、空／未映射分配、broadcast 失败、tagged return、未映射栈和 canary 改变均拒绝，guest 页及 VM base 恢复。外部 provider 的副作用不由 guest transaction 回滚。
+
+研究接口 `run_default_initialization_caller(..., table_index=0|1)` 选择已恢复的前两项；`run_first_default_caller` 保留第一个 caller 的入口。`table_index` 超出已恢复范围会拒绝，不会套用已知状态伪造后续初始化。Native 输出仍只用作 expected output，allocator 与 broadcast 仍是显式环境服务。
+
+```text
+python -B python/verify_vm9_arena_initializer.py --table-index 1 --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/second-initializer.json
+python -B python/verify_vm9_second_initializer_prefix.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/second-nested.json
+python -B python/verify_vm9_first_default_caller.py --table-index 1 --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/second-caller.json
+```
+
+证据：[第二张表逐个返回的 16 次对照](evidence/vm9_second_arena_initializer_native_20261005.json)、[第一个 caller 的四组回归](evidence/vm9_first_default_caller_regression_20261005.json)、[第二项 nested 与拒绝检查](evidence/vm9_second_nested_callers_native_20261005.json)、[第二个 caller](evidence/vm9_second_default_caller_native_20261005.json)。这证明默认任务中的两个 caller；六项的整体串联和完整 worker 尚未验证。
+
 ## 继续顺序
 
-继续恢复其余五个 caller `+0x280610/+0x280690/+0x280710/+0x280790/+0x280810` 的 initializer 正文，再组合非空 queue 的默认 invoke `+0x280554`。第二个 caller 的 once 控制为 `+0x3e0a30`，initializer 为 `+0x280a74`，nested caller 为 `+0x280b54/+0x280bdc`；同样先独立生成输入，再以 native 返回作 expected output。随后恢复 OS thread-exit support/emulated-TLS 析构，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
+继续恢复其余四个 caller `+0x280690/+0x280710/+0x280790/+0x280810` 的 initializer 正文，再组合非空 queue 的默认 invoke `+0x280554`。第三个 caller 的 once 控制为 `+0x3e0a78`，initializer 为 `+0x280c58`，nested caller 为 `+0x280d38/+0x280dc0`；同样先独立生成输入，再以 native 返回作 expected output。随后恢复 OS thread-exit support/emulated-TLS 析构，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

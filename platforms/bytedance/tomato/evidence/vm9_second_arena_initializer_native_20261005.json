@@ -1,0 +1,67 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "native_runs": 2,
+  "nested_vm_return_comparisons": 16,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "table_index": 1,
+      "allocator_region_offset": "0x4300",
+      "initialized_region_bytes": 16384,
+      "nested_caller_entries": 8,
+      "nested_caller_returns": 8,
+      "python_phase_steps": [
+        54721,
+        38536,
+        38536,
+        38536,
+        38536,
+        38536,
+        38536,
+        38536
+      ],
+      "all_32_terminal_slots_match_at_every_nested_return": true,
+      "complete_guest_heap_match_at_every_nested_return": true,
+      "all_main_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "table_initializer_completed": true,
+      "first_table_initializer_completed": false,
+      "full_default_six_caller_task_completed": false,
+      "native_input_snapshot_used": false,
+      "complete_real_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "table_index": 1,
+      "allocator_region_offset": "0x4300",
+      "initialized_region_bytes": 16384,
+      "nested_caller_entries": 8,
+      "nested_caller_returns": 8,
+      "python_phase_steps": [
+        54721,
+        38536,
+        38536,
+        38536,
+        38536,
+        38536,
+        38536,
+        38536
+      ],
+      "all_32_terminal_slots_match_at_every_nested_return": true,
+      "complete_guest_heap_match_at_every_nested_return": true,
+      "all_main_image_pages_match": true,
+      "allocation_sequence_match": true,
+      "table_initializer_completed": true,
+      "first_table_initializer_completed": false,
+      "full_default_six_caller_task_completed": false,
+      "native_input_snapshot_used": false,
+      "complete_real_allocator_boot": false,
+      "complete_python_medusa": false
+    }
+  ],
+  "synthetic_elf_tls_allocator_inputs": true,
+  "native_input_snapshot_used": false,
+  "complete_real_allocator_boot": false,
+  "complete_python_medusa": false
+}
