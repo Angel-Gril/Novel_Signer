@@ -1,0 +1,839 @@
+{
+  "negative_cases": [
+    {
+      "case": "array_bound",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "array_grows_past_bound",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 1,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "array_defer_without_set",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "fallback_callback_fails",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 1,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "fallback_cycle_bound",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 4,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "waiter_mutex_not_held",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "reference_mutex_contended",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "shared_zero_without_provider",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 1,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "broadcast_fails",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 1,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_fallback_missing_services",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_array_missing_set",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "tree_cycle_bound",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 0,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_fallback_unknown_callback",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_provider_effects": 0,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "array_native_runs": 14,
+  "fallback_native_runs": 12,
+  "support_native_runs": 16,
+  "composition_native_runs": 6,
+  "tree_native_runs": 10,
+  "registry_native_runs": 4,
+  "tree_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "node_free_calls": 0,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one",
+      "node_free_calls": 1,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "balanced",
+      "node_free_calls": 3,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "left_chain",
+      "node_free_calls": 3,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "right_reload",
+      "node_free_calls": 3,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "node_free_calls": 0,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one",
+      "node_free_calls": 1,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "balanced",
+      "node_free_calls": 3,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "left_chain",
+      "node_free_calls": 3,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "right_reload",
+      "node_free_calls": 3,
+      "postorder_and_right_reload_match": true,
+      "tree_header_retained": true,
+      "guest_image_tls_generation_match": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "registry_cases": [
+    {
+      "image_base": "0x122c0000",
+      "tree_nodes": 0,
+      "actual_registry_callback_executed": true,
+      "synthetic_destructor_callback_used": false,
+      "same_fresh_registry_registration_and_key_cleanup": true,
+      "emulated_tls_key_precedes_fallback_key": true,
+      "array_deferral_keeps_tls_alive_for_fallback": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "tree_population_is_explicit_synthetic_input": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "tree_nodes": 3,
+      "actual_registry_callback_executed": true,
+      "synthetic_destructor_callback_used": false,
+      "same_fresh_registry_registration_and_key_cleanup": true,
+      "emulated_tls_key_precedes_fallback_key": true,
+      "array_deferral_keeps_tls_alive_for_fallback": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "tree_population_is_explicit_synthetic_input": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "tree_nodes": 0,
+      "actual_registry_callback_executed": true,
+      "synthetic_destructor_callback_used": false,
+      "same_fresh_registry_registration_and_key_cleanup": true,
+      "emulated_tls_key_precedes_fallback_key": true,
+      "array_deferral_keeps_tls_alive_for_fallback": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "tree_population_is_explicit_synthetic_input": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "tree_nodes": 3,
+      "actual_registry_callback_executed": true,
+      "synthetic_destructor_callback_used": false,
+      "same_fresh_registry_registration_and_key_cleanup": true,
+      "emulated_tls_key_precedes_fallback_key": true,
+      "array_deferral_keeps_tls_alive_for_fallback": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "tree_population_is_explicit_synthetic_input": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    }
+  ],
+  "array_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "free_calls": 1,
+      "deferral_branch_taken": false,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "populated",
+      "free_calls": 3,
+      "deferral_branch_taken": false,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "defer_one",
+      "free_calls": 0,
+      "deferral_branch_taken": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "defer_u64",
+      "free_calls": 0,
+      "deferral_branch_taken": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "defer_set_failure",
+      "free_calls": 0,
+      "deferral_branch_taken": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "shrink_after_free",
+      "free_calls": 2,
+      "deferral_branch_taken": false,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "grow_after_free",
+      "free_calls": 3,
+      "deferral_branch_taken": false,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "free_calls": 1,
+      "deferral_branch_taken": false,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "populated",
+      "free_calls": 3,
+      "deferral_branch_taken": false,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "defer_one",
+      "free_calls": 0,
+      "deferral_branch_taken": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "defer_u64",
+      "free_calls": 0,
+      "deferral_branch_taken": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "defer_set_failure",
+      "free_calls": 0,
+      "deferral_branch_taken": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "shrink_after_free",
+      "free_calls": 2,
+      "deferral_branch_taken": false,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "grow_after_free",
+      "free_calls": 3,
+      "deferral_branch_taken": false,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "allocator_poisoning_is_explicit": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "fallback_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "destructor_calls": 0,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one",
+      "destructor_calls": 1,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "three",
+      "destructor_calls": 3,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "publish_node",
+      "destructor_calls": 3,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": true,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "clear_head",
+      "destructor_calls": 1,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "relocated_head",
+      "destructor_calls": 2,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "destructor_calls": 0,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one",
+      "destructor_calls": 1,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "three",
+      "destructor_calls": 3,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "publish_node",
+      "destructor_calls": 3,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": true,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clear_head",
+      "destructor_calls": 1,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "relocated_head",
+      "destructor_calls": 2,
+      "head_removed_before_callback": true,
+      "callback_published_node_verified": false,
+      "final_flag_cleared": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "explicit_tls_getter_used": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "support_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "one_pair",
+      "waiter_pairs": 1,
+      "reference_entries": 0,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "two_pairs",
+      "waiter_pairs": 2,
+      "reference_entries": 0,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "shared_pair",
+      "waiter_pairs": 1,
+      "reference_entries": 0,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "refs_positive",
+      "waiter_pairs": 0,
+      "reference_entries": 1,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "refs_zero",
+      "waiter_pairs": 0,
+      "reference_entries": 1,
+      "zero_shared_calls": 1,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "refs_alias",
+      "waiter_pairs": 0,
+      "reference_entries": 2,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "refs_reload",
+      "waiter_pairs": 0,
+      "reference_entries": 1,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "mixed",
+      "waiter_pairs": 1,
+      "reference_entries": 1,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one_pair",
+      "waiter_pairs": 1,
+      "reference_entries": 0,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "two_pairs",
+      "waiter_pairs": 2,
+      "reference_entries": 0,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "shared_pair",
+      "waiter_pairs": 1,
+      "reference_entries": 0,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "refs_positive",
+      "waiter_pairs": 0,
+      "reference_entries": 1,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "refs_zero",
+      "waiter_pairs": 0,
+      "reference_entries": 1,
+      "zero_shared_calls": 1,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "refs_alias",
+      "waiter_pairs": 0,
+      "reference_entries": 2,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "refs_reload",
+      "waiter_pairs": 0,
+      "reference_entries": 1,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "mixed",
+      "waiter_pairs": 1,
+      "reference_entries": 1,
+      "zero_shared_calls": 0,
+      "guest_image_tls_generation_match": true,
+      "ordered_unlock_broadcast_flag_count_and_free_match": true,
+      "shared_zero_callback_is_explicit": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "composition_cases": [
+    {
+      "image_base": "0x122c0000",
+      "registered_destructors": 1,
+      "callback_returns": 1,
+      "key_destructor_calls": 3,
+      "same_fresh_registration_and_key_cleanup": true,
+      "support_fallback_and_array_keys_composed": false,
+      "registration_lifo_and_array_defer_then_free_match": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "synthetic_destructor_callbacks": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "registered_destructors": 3,
+      "callback_returns": 3,
+      "key_destructor_calls": 3,
+      "same_fresh_registration_and_key_cleanup": true,
+      "support_fallback_and_array_keys_composed": false,
+      "registration_lifo_and_array_defer_then_free_match": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "synthetic_destructor_callbacks": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "registered_destructors": 3,
+      "callback_returns": 3,
+      "key_destructor_calls": 4,
+      "same_fresh_registration_and_key_cleanup": true,
+      "support_fallback_and_array_keys_composed": true,
+      "registration_lifo_and_array_defer_then_free_match": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "synthetic_destructor_callbacks": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "registered_destructors": 1,
+      "callback_returns": 1,
+      "key_destructor_calls": 3,
+      "same_fresh_registration_and_key_cleanup": true,
+      "support_fallback_and_array_keys_composed": false,
+      "registration_lifo_and_array_defer_then_free_match": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "synthetic_destructor_callbacks": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "registered_destructors": 3,
+      "callback_returns": 3,
+      "key_destructor_calls": 3,
+      "same_fresh_registration_and_key_cleanup": true,
+      "support_fallback_and_array_keys_composed": false,
+      "registration_lifo_and_array_defer_then_free_match": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "synthetic_destructor_callbacks": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "registered_destructors": 3,
+      "callback_returns": 3,
+      "key_destructor_calls": 4,
+      "same_fresh_registration_and_key_cleanup": true,
+      "support_fallback_and_array_keys_composed": true,
+      "registration_lifo_and_array_defer_then_free_match": true,
+      "all_allocator_blocks_freed": true,
+      "guest_image_tls_generation_match": true,
+      "ordered_effects_match": true,
+      "synthetic_destructor_callbacks": true,
+      "native_input_snapshot_used": false,
+      "complete_os_thread_exit": false,
+      "complete_allocator_boot": false,
+      "complete_python_medusa": false
+    }
+  ],
+  "native_input_snapshot_used": false,
+  "complete_os_thread_exit": false,
+  "complete_allocator_boot": false,
+  "complete_python_medusa": false
+}

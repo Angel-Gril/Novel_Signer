@@ -1,4 +1,4 @@
-"""Input-driven host object constructors for the observed VM9 build.
+"""Input-driven host object construction and TLS exit for the observed VM9 build.
 
 The caller supplies guest allocation. No native constructor, copied output
 object or captured string payload is used. Global vtables still belong to the
@@ -1116,6 +1116,85 @@ def get_emulated_tls_address(
         _write_span(transaction, slot, _word(result))
     transaction.commit()
     return result
+
+
+def destroy_emulated_tls_array(pages, *, array_address, image_base, free,
+        set_specific=None, max_slots=4096):
+    """+0x3439bc: defer/re-publish, then free aligned blocks and array.
+
+    Slots keep their pointer values after free, as native does. Capacity is
+    reloaded after each nonnull block free, allowing explicit provider effects.
+    The pthread key dispatcher, not this function, clears the incoming value.
+    """
+    if not isinstance(max_slots,int) or not 1<=max_slots<=0x100000:
+        raise ValueError('invalid emulated TLS destructor bound')
+    p=_PageTransaction(pages)
+    read=lambda a:int.from_bytes(_read_span(p,a,8),'little')
+    remaining=read(array_address)
+    if remaining:
+        if set_specific is None:raise RefillUnsupported('emulated TLS defer requires set-specific')
+        _write_span(p,array_address,_word(remaining-1))
+        key=int.from_bytes(_read_span(p,_image_address(image_base,0x3e31f4),4),'little')
+        set_specific(p,key,array_address)  # Native tailcall does not check failure.
+        p.commit();return False
+    capacity=read(array_address+8);index=0
+    while index<capacity:
+        if capacity>max_slots:raise RefillUnsupported('emulated TLS exit capacity exceeds bound')
+        value=read(array_address+16+index*8)
+        if value:
+            free(p,read(value-8))
+            capacity=read(array_address+8)
+        index+=1
+    free(p,array_address);p.commit();return True
+
+
+def destroy_scoped_tls_tree(pages, *, tree_address, free, max_nodes=64):
+    """+0x268cf0/+0x269060: postorder node free, header left untouched.
+
+    Read the right child after left destruction, as +0x269068 does. The
+    explicit stack avoids host recursion; a node-entry budget rejects cycles
+    and excessive growth. Payload/parent/color bytes have trivial destruction.
+    """
+    if not isinstance(max_nodes,int) or not 1<=max_nodes<=4096:
+        raise ValueError('invalid scoped TLS destructor node bound')
+    p=_PageTransaction(pages)
+    read=lambda a:int.from_bytes(_read_span(p,a,8),'little')
+    frames=[(read(tree_address+8),0)];count=0
+    while frames:
+        node,phase=frames.pop()
+        if not node:continue
+        if phase==0:
+            if count>=max_nodes:raise RefillUnsupported('scoped TLS tree destructor bound exceeded')
+            count+=1;frames.append((node,1));frames.append((read(node),0))
+        elif phase==1:
+            frames.append((node,2));frames.append((read(node+8),0))
+        else:free(p,node)
+    p.commit();return count
+
+
+def run_emulated_thread_destructors(pages, *, image_base, get_tls, invoke,
+        free, max_nodes=64):
+    """+0x342854: pop fallback TLS nodes before callback, then clear flag.
+
+    Re-read the head after callback/free so callback-published nodes run too.
+    Getter, callback and allocation/free effects belong to explicit providers;
+    cycles/repeated publication are limited by max_nodes and roll back pages.
+    """
+    if not isinstance(max_nodes,int) or not 1<=max_nodes<=4096:
+        raise ValueError('invalid fallback destructor bound')
+    p=_PageTransaction(pages);head_descriptor=_image_address(image_base,0x3d13c0)
+    read=lambda a:int.from_bytes(_read_span(p,a,8),'little')
+    head=get_tls(p,head_descriptor);node=read(head);count=0
+    while node:
+        if count>=max_nodes:raise RefillUnsupported('fallback destructor node bound exceeded')
+        successor=read(node+16)
+        head=get_tls(p,head_descriptor)
+        _write_span(p,head,_word(successor))
+        function=read(node);argument=read(node+8)
+        invoke(p,function,argument)
+        free(p,node);count+=1;node=read(head)
+    flag=get_tls(p,_image_address(image_base,0x3d13a0))
+    _write_span(p,flag,bytes([0]));p.commit();return count
 
 
 def register_emulated_thread_destructor(

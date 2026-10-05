@@ -3,8 +3,8 @@
 Thread creation, clocks, finite futex outcomes and task invocation belong to
 providers. Idle workers can run through normal argument cleanup; serial default
 task bodies can attach to the startup-generated default queue. Repeating tasks
-and full OS thread exit remain separate boundaries; the empty support key
-destructor phase is explicit. No host threads or blocking waits are silently created.
+and full OS thread exit remain separate boundaries; support and
+emulated/fallback TLS key destructor phases use explicit providers. No host threads or blocking waits are silently created.
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -959,6 +959,53 @@ def run_startup_worker(pages, *, argument_address, worker_kind, image_base,
     p.commit();return 0
 
 
+def destroy_worker_support(pages, *, wrapper_address, free, broadcast=None,
+        invoke_shared=None, max_items=64):
+    """+0x32ce6c/+0x32ccf0, including bounded nonempty support vectors.
+
+    Waiter pairs unlock then broadcast. Referenced objects set exit bit 4
+    under their normal mutex, broadcast, unlock, then decrement the shared
+    counter; old count zero invokes vtable+0x10 through an explicit provider.
+    The vector ends are captured per native phase. Guest rollback cannot undo
+    provider effects; real atomic concurrency and allocation are not supplied.
+    """
+    if not isinstance(max_items,int) or not 1<=max_items<=4096:
+        raise ValueError('invalid support destructor vector bound')
+    if not wrapper_address:return
+    p=_PageTransaction(pages);support=_u(p,wrapper_address)
+    def vector(offset,stride):
+        begin=_u(p,support+offset);end=_u(p,support+offset+8);capacity=_u(p,support+offset+16)
+        if not begin<=end<=capacity or (end-begin)%stride or (capacity-begin)%stride:
+            raise RefillUnsupported('invalid support exit vector')
+        if (end-begin)//stride>max_items:raise RefillUnsupported('support exit vector exceeds bound')
+        _read_span(p,begin,end-begin)
+        if begin!=end and broadcast is None:raise RefillUnsupported('nonempty support requires broadcast')
+        return begin,end
+    if support:
+        _read_span(p,support,48)
+        begin,end=vector(0x18,16)
+        for entry in range(begin,end,16):
+            objects.unlock_uncontended_mutex(p,mutex_address=_u(p,entry+8))
+            broadcast(p,_u(p,entry))
+        begin,end=vector(0,8)
+        for entry in range(begin,end,8):
+            obj=_u(p,entry)
+            objects.lock_uncontended_mutex(p,mutex_address=obj+0x18)
+            _w(p,obj+0x70,_u(p,obj+0x70,4)|4,4)
+            broadcast(p,obj+0x40)
+            objects.unlock_uncontended_mutex(p,mutex_address=obj+0x18)
+            # Native reloads the vector pointee after the broadcast callback.
+            obj=_u(p,entry);old=_u(p,obj+8);_w(p,obj+8,(old-1)&((1<<64)-1))
+            if old==0:
+                if invoke_shared is None:raise RefillUnsupported('shared zero-count destructor requires provider')
+                invoke_shared(p,_u(p,_u(p,obj)+0x10),obj)
+        conditions=_u(p,support+0x18);references=_u(p,support)
+        if conditions:_w(p,support+0x20,conditions);free(p,conditions)
+        if references:_w(p,support+8,references);free(p,references)
+        free(p,support)
+    free(p,wrapper_address);p.commit()
+
+
 def destroy_empty_worker_support(pages, *, wrapper_address, free):
     """+0x32ce6c/+0x32ccf0 for empty support vectors, including capacity.
 
@@ -975,26 +1022,37 @@ def destroy_empty_worker_support(pages, *, wrapper_address, free):
             capacity=_u(p,support+offset+16)
             if begin!=end or capacity<end or (capacity-begin)%stride:
                 raise RefillUnsupported('nonempty or invalid support exit vector')
-        conditions=_u(p,support+0x18);references=_u(p,support)
-        if conditions:_w(p,support+0x20,conditions);free(p,conditions)
-        if references:_w(p,support+8,references);free(p,references)
-        free(p,support)
-    free(p,wrapper_address);p.commit()
+    destroy_worker_support(p,wrapper_address=wrapper_address,free=free)
+    p.commit()
 
 
 def run_worker_thread_key_cleanup(pages, *, image_base, thread_pointer,
-        generation_table, free):
-    """Explicit bionic key-exit phase for the evidenced empty support.
+        generation_table, free, set_specific=None, get_tls=None,
+        invoke_destructor=None, broadcast=None, invoke_shared=None):
+    """Bionic key-exit phase with support and emulated/fallback TLS targets.
 
-    Support values are cleared before destruction. Emulated-TLS, allocator
-    and other destructor targets remain unsupported and roll back guest pages.
-    This is a key-cleanup phase, not pthread_exit/OS termination.
+    Values clear before destruction. Callback/getter/broadcast services are
+    explicit; unknown targets reject and roll back guest pages. This phase
+    does not terminate an OS thread or bootstrap the real allocator.
     """
     from vm9_allocator import pthread_key_clean_all
     def invoke(staged,destructor,value):
-        if destructor!=image_base+0x32ce6c:
-            raise RefillUnsupported('unrecovered thread-exit destructor')
-        destroy_empty_worker_support(staged,wrapper_address=value,free=free)
+        if destructor==image_base+0x32ce6c:
+            destroy_worker_support(staged,wrapper_address=value,free=free,
+                broadcast=broadcast,invoke_shared=invoke_shared)
+        elif destructor==image_base+0x3439bc:
+            objects.destroy_emulated_tls_array(staged,array_address=value,image_base=image_base,
+                free=free,set_specific=set_specific)
+        elif destructor==image_base+0x342854:
+            if get_tls is None:raise RefillUnsupported('fallback destructor chain requires TLS getter')
+            def fallback_callback(p,function,argument):
+                if function==image_base+0x268cf0:
+                    objects.destroy_scoped_tls_tree(p,tree_address=argument,free=free)
+                elif invoke_destructor is not None:invoke_destructor(p,function,argument)
+                else:raise RefillUnsupported('unrecovered fallback destructor callback')
+            objects.run_emulated_thread_destructors(staged,image_base=image_base,get_tls=get_tls,
+                invoke=fallback_callback,free=free)
+        else:raise RefillUnsupported('unrecovered thread-exit destructor')
     return pthread_key_clean_all(pages,thread_pointer=thread_pointer,
         generation_table=generation_table,invoke=invoke)
 

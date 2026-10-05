@@ -23,7 +23,11 @@ Eight new failure cases and the eight idle-worker controls also pass.
 A further same-startup control runs bionic key cleanup and releases the empty
 support/wrapper after argument cleanup. Twenty key-cleanup and eight support
 destructor controls, plus three rollback cases, pass.
-Complete worker runtime, other TLS destructors/full OS exit, real allocator boot, fresh
+Emulated-TLS arrays, fallback chains, nonempty support loops and the actual
+registered scoped-TLS tree destructor now pass 62 further native controls and
+13 rollback checks, including same-fresh registration/key cleanup and actual
+registry initialization/exit. Unknown shared/fallback callbacks still require
+explicit services. Complete worker runtime, full OS exit, real allocator boot, fresh
 Medusa, live header matrix/f13 checks, no-JVM Rust, nonempty search/pagination,
 Douyin/Qidian and the final Pages/Actions products remain open.
 
@@ -1160,3 +1164,23 @@ and [same startup](evidence/vm9_default_worker_key_cleanup_native_20261005.json)
 Full pthread_exit, nonempty support vectors, +0x3439bc emulated-TLS arrays
 and +0x342854 fallback destructor chains remain open, along with real
 allocator boot, independent signing and all downstream product work.
+
+
+## Emulated/fallback TLS and nonempty support exit (2026-10-05)
+
+Restored +0x3439bc array defer/republication/free, +0x342854 pop/callback/free
+and flag cleanup, and +0x32ccf0 nonempty waiter/reference vectors with
+broadcast/exit-bit/shared-counter ordering. The real +0x268cf0/+0x269060
+scoped-TLS tree callback now performs postorder free and reloads the right
+child after left destruction. Unknown callbacks are never replaced with RET.
+
+Evidence: [62 native controls / 13 rollback checks](evidence/vm9_tls_exit_destructors_native_20261005.json).
+Fourteen array, twelve fallback, sixteen support, six fresh registration/key
+compositions, ten tree and four actual registry compositions pass at two bases.
+The actual registry key order puts emulated TLS first; its defer keeps storage
+alive for fallback before final array free. Registry callbacks execute the real
+recovered tree body. Other fixture callbacks, shared zero destruction and the
+allocator/pthread/scheduler environment remain explicit input boundaries.
+Affected [key/support and same-default-worker regressions](evidence/vm9_tls_exit_regression_20261005.json)
+also pass. Full OS thread exit, concrete shared/other callback bodies, real
+allocator/arena/OS region boot, fresh signing and downstream products stay open.

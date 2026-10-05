@@ -1,0 +1,13 @@
+{
+  "key_cleanup_native_runs": 20,
+  "empty_support_native_runs": 8,
+  "key_support_negative_checks": 3,
+  "same_default_worker_native_runs": 1,
+  "same_default_worker_negative_checks": 14,
+  "six_default_callers_and_48_nested_returns_match": true,
+  "guest_image_tls_generation_and_effects_match": true,
+  "native_input_snapshot_used": false,
+  "complete_os_thread_exit": false,
+  "complete_allocator_boot": false,
+  "complete_python_medusa": false
+}
