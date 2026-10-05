@@ -295,12 +295,58 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_cold_malloc.py --lib
 
 公开证据：[mapping／sbrk](evidence/vm9_libc_mapping_native_20261005.json)、[早期 boot](evidence/vm9_libc_boot_native_20261005.json)、[native cold malloc](evidence/vm9_libc_cold_malloc_native_20261005.json)。这些只有控制标签、offset／count／boolean 和样本 hash；不包含 ELF、native 页、请求、设备数据或密钥。先前 [cold boundary](evidence/vm9_allocator_cold_boundary_20261005.json) 保留为历史定位证据，不能用它代表当前停止位置。
 
-**完整 Python preinit／malloc 冷启动仍未完成。** 默认空配置及 early preinit 前缀已通过；下一步需继续恢复 `+0x7cf2c` 的 arena/bin 初始化、`+0x99378` 的 tcache 初始化及 `+0x99938` 的实际 TSD boot。非空 `+0x8ce70` 配置解析与 atfork 注册分支仍明确拒绝。接着需将真实 base allocation、arena／OS region 与原有 Python startup/signing 模型合成。仅有早期字段和 native 冷启动成功，不能宣称已生成 fresh Medusa 签名或新的线上全头矩阵。
+上述为 2026-10-05 阶段结果。arena/bin、tcache、main/static TSD、真实 base allocation 和默认空配置 preinit 的后续结果见下节；旧证据保留作为历史边界。
+
+## Matching libc arena／base allocation 与冷启动前缀（2026-10-06，Asia/Shanghai）
+
+**默认空配置的 Python preinit 已完整返回；完整 Python public malloc 冷启动与独立 fresh Medusa 仍未完成。** 同次 fresh 的 `+0x8e350` 已执行真实 base allocation、initial arena 构造／发布、main/static TSD，以及初始化 mutex 的获取／释放，停止在 CPU 查询前的 `+0x8e41c`。成功状态是 `flag = 1`，尚未贯通完整冷初始化返回的 `flag = 0`。这些结果使用 fresh ELF/TLS 与明确的虚拟 OS 输入，没有 native 入口快照或初始化后页供给 Python。
+
+实现见 [vm9_libc_boot.py](python/vm9_libc_boot.py)、[vm9_libc_base.py](python/vm9_libc_base.py) 和 [vm9_libc_mapping.py](python/vm9_libc_mapping.py)。当前已恢复：
+
+- `+0x75dc0` bin 几何／redzone、`+0x7dce8` bitmap 层级，以及 `+0x7cf2c` 的 36 个 bin、page-mark array 和 large／huge class counts。
+- `+0x99378` tcache capacity table，包括真实 W32 shift／modulo-32 行为；`+0x99938` main/static TSD、实际 `libc+0xe0200` generation table 和已有状态转换。缺失 TSD 的 fallback 分支仍拒绝。
+- `+0x7cce8` 初始 arena 完整布局、mutex／tree sentinel、统计和 36 个 controls；`+0x8e20c/+0x8e0f8` 的现有 table slot 构造／发布。arena table resize 分支仍拒绝。
+- `+0x7d998` 真实 base extent allocation：64 字节 rounding、size-class 查找、冷 mapping、热分割、exact consumption、descriptor 回收与 accounting。新 descriptor 使用 mapping 前 128 字节；tree root／link 使用 matching libc 布局，不迁移旧 checkpoint 的全局地址。
+- `preinit_complete_with_base_allocator()` 同次执行默认 `+0x8e250` 至返回，成功状态 `flag = 2`；`cold_init_until_cpu_query()` 再组合 main TSD 和真实初始化锁，成功状态 `flag = 1`，停在 `+0x8e41c`。
+
+| 本阶段范围 | Native 对照 | 拒绝／回滚 | 边界与比较 |
+| --- | ---: | ---: | --- |
+| arena/bin、bitmap、tcache、static TSD、arena constructor | 94 | 9 | 两个基址；跨页／redzone／边界 option、key exhaustion；孤立分配调用仍是显式 base provider |
+| 真实 base allocator 与同次 fresh 组合 | 46 | 10 | 返回、全部 guest／TLS／global、mapping 页／records／cursor、有序 OS 调用；default preinit 返回与 cold prefix 均执行实际 base allocator |
+| atfork 注册、static TSD 迁移 | 24 | 8 | 两个基址；链表、NULL、TSD 状态和 alias／padding；public／internal allocation 是显式测试边界 |
+| 真实 native cold-malloc 路径追踪 | 10 | — | 真实重入 malloc、CPU 文件解析、atfork 和 TSD 收尾，返回 `flag = 0`；malloc hooks 为 0，OS 为有界虚拟输入 |
+
+前两组共 **140 个 native 控制／19 项拒绝**，新增的注册／迁移组件为 **24／8**。这些数量不与不同输入边界的 native-only 完整 malloc 控制合并为“Python 完成数量”。同次 fresh prefix 控制只种初始 inactive-key fixture，不用 Python boot 输出预种 native。页、mapping records 和 cursor 在拒绝时整体回滚；外部 provider ledger 不回滚。
+
+### atfork 与 TSD 收尾的准确边界
+
+`register_atfork()` 恢复 `+0x67374` 的真实 48 字节节点布局、prepare／parent／child／DSO 字段、normal mutex 和 head／tail append；NULL allocation 的普通返回是 ENOMEM=12。它没有执行 fork callbacks，且依赖显式 public malloc provider，不能冒用 base allocation 代替 public malloc。
+
+`migrate_static_tsd()` 恢复 `+0x99c78` 的 main-key 路径：经显式 `+0x8e0ec` internal allocation 得到 128 字节对象，按实际五组 16 字节加 8 字节复制共 88 字节，保留其余 padding，再执行 setspecific／getspecific、state 0/1/2/其他转换和 `+0x44` 清零。自别名与向前重叠复制已与 native 比较。NULL、key 发布失败、fallback list 和 logging／abort 分支仍拒绝；该 void 函数返回寄存器不是语义返回值。
+
+真实 binary 的 `+0x933ac` 只有 `mov w0,#0; ret`。这可以按样本实现返回 0，但不能描述为已恢复一套额外 mutex 初始化逻辑。
+
+### 下一条真实分配路径
+
+没有 malloc hook 的 native 控制记录了有序入口与受控 request size：CPU 查询进入 `get_nprocs +0x2669c`，文件缓冲触发 public malloc 重入；当前样本路径随后进入 `+0x79fa4 → +0x787dc`，atfork 又请求 48 字节，TSD 迁移经 `+0x8df44 → +0x79fa4` 请求 128 字节。`+0x787dc` 的冷 refill 先调用 `+0x75d44`，再选择 bitmap region；须继续恢复其 slab／OS region 获取与缓存依赖。`+0x75f38` 是 redzone 填充 helper，不能当作冷 refill 入口。
+
+`python_preinit_complete = false` 表示全部配置／分支尚未完成，与已验证的 `default_empty_preinit_complete = true` 不冲突。非空配置 `+0x8ce70`、TSD fallback、arena table resize、真实 CPU 文件服务和 public malloc／tcache／region 组合仍未覆盖。atfork 和 TSD 组件通过不能证明 `cold_init_until_cpu_query()` 已跨过停止点。
+
+复现（需要私下提供匹配 hash 的 ELF，输出路径保留在私有目录）：
+
+```bash
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_arena_boot.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/libc-arena-boot.json
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_base.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/libc-real-base.json
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_runtime_boot.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/libc-runtime-boot.json
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_cold_malloc.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/libc-cold-path.json
+```
+
+公开证据：[arena／tcache／TSD](evidence/vm9_libc_arena_boot_native_20261006.json)、[真实 base 与 fresh 组合](evidence/vm9_libc_real_base_native_20261006.json)、[atfork／TSD 迁移](evidence/vm9_libc_runtime_boot_native_20261006.json)、[native 冷启动有序路径](evidence/vm9_libc_cold_path_native_20261006.json)。mapping 抽取公共 body 后的 **42 个 native／20 个 owner 检查**与 early boot 的 **56／7**均回归通过，见[回归摘要](evidence/vm9_libc_arena_base_regression_20261006.json)。公开材料只包含控制标签、offset／count／boolean、受控 size 和样本 hash，不包含 ELF、初始化页、请求、设备、token 或密钥。
 
 ## 继续顺序
 
 继续恢复 matching libc 的真实 allocator 冷启动，将当前显式 allocator／TLS／OS 服务逐项替换为已验证实现，并将 startup、`+0x256e50` 配置构造和既有 root factory 接到外层 signer。未识别 callback、support 关联状态类型和真实线程创建仍需真实来源，不以空回调填补。
 
-先前停在 syscall 167 的诊断已由本阶段 10 组 native cold-malloc 控制推进到返回，详见上节。完整 Python allocator 的其余初始化和真实 OS/TLS 创建仍是未完成边界。
+先前停在 syscall 167 的 native 诊断已推进到 `flag = 0` 返回；Python 同次 fresh 冷启动目前停在 `+0x8e41c`、`flag = 1`。下一步优先恢复真实 public small allocation／tcache／`+0x787dc → +0x75d44` refill，再接 CPU 查询、atfork allocation 和 TSD migration，验证完整 Python `flag = 0` 返回。真实 OS/TLS 创建仍是单独未完成边界。
 
 随后用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

@@ -22,6 +22,8 @@ from verify_vm9_libc_mapping import LIBC_SHA256, REGS
 ENTRY = root.LIBC_BASE + 0x1BB08
 PHASES = {0x8F00C, 0x8E350, 0x8E250, 0x7DC7C, 0x7F13C, 0x89410,
           0x7CF2C, 0x99378, 0x99938, 0x933AC, 0x99C78}
+ALLOCATION_PATH = {0x1BB08, 0x8DF44, 0x79FA4, 0x787DC, 0x7A3C8,
+                   0x2669C, 0x67374, 0x99C78}
 
 
 def cstring(cpu, address, limit=255):
@@ -39,6 +41,7 @@ def cold_case(library, libc, base, size, cpus, *, naming_failure=False):
     os = allocator.GuestOS(seed)
     counters = Counter()
     phases = Counter()
+    allocation_path = []
     initial = [False]
     snapshot = {}
     file_cursor = [0]
@@ -59,6 +62,13 @@ def cold_case(library, libc, base, size, cpus, *, naming_failure=False):
         offset = pc - root.LIBC_BASE
         if offset in PHASES:
             phases[offset] += 1
+        if offset in ALLOCATION_PATH:
+            event = {"entry_offset": hex(offset)}
+            if offset in (0x1BB08, 0x8DF44):
+                event["request_size"] = cpu.reg_read(UC_ARM64_REG_X0)
+            elif offset in (0x79FA4, 0x7A3C8):
+                event["request_size"] = cpu.reg_read(UC_ARM64_REG_X1)
+            allocation_path.append(event)
         if offset == 0x1BB24 and cpu.reg_read(UC_ARM64_REG_X30) == STOP:
             pointer = cpu.reg_read(UC_ARM64_REG_X0)
             record = os.mapping_for(pointer)
@@ -157,6 +167,7 @@ def cold_case(library, libc, base, size, cpus, *, naming_failure=False):
         phase_entries={hex(k): v for k, v in sorted(phases.items())},
         syscall_counts={str(k): v for k, v in sorted(counters.items())},
         surviving_owned_mappings=len(os.mappings), malloc_hook_calls=0,
+        actual_allocation_entry_trace=allocation_path,
         native_input_snapshot_used=False, explicit_virtual_os=True,
         python_malloc_cold_boot_complete=False, fresh_medusa_signature_generated=False)
 

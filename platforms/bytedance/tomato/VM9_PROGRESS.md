@@ -51,22 +51,35 @@ publication alone leaves once pending; only a complete initializer can publish
 -1 and broadcast. OP17/sub57 passes 240 W32-multiply controls. No captured
 native input snapshot or native initialization pages feed these Python models.
 
-Matching-libc native cold malloc now returns under explicit virtual OS services
-without allocator hooks in 10 fresh controls at two main-image bases. All use
-actual reentrant malloc and preserve keys created after the first entry.
-Python mapping/sbrk and base/DSS/chunk/radix-tree boot components add 98 native
-differences, four preservation controls and 23 rejection/rollback checks.
-Two of those controls compose the actual preinit entry through the recovered
-default-config/base/DSS/chunk/extent prefix, stopping before arena/bin.
-Existing 70 shared/pthread_exit controls and 11 rejection checks also pass.
-Native malloc succeeds here; complete Python preinit/malloc remains open.
+Matching-libc native cold malloc returns under explicit virtual OS services
+without allocator hooks in 10 fresh controls at two main-image bases. Actual
+reentrant public malloc, CPU file parsing, atfork registration and TSD migration
+reach flag 0; entry traces are now recorded without guest pointers or pages.
+This remains a native-only result.
 
-Next: recover arena/bin boot +0x7cf2c, tcache boot +0x99378 and TSD boot
-+0x99938, then compose actual base allocation. Nonempty configuration
-preinit +0x8ce70 and atfork registration remain explicit unsupported branches.
-Continue composing
-arena/OS region and the fresh signer path. No fresh Medusa signature or new
-online header matrix has passed. Evidence and reproduction:
+Python now additionally passes 94 arena/bin/bitmap/tcache/static-TSD/arena
+constructor native controls and 9 rejection checks, and 46 real base allocator
+and same-fresh composition controls with 10 rejection checks. Default empty-config
+preinit actually returns with flag 2; initial arena construction/publication,
+main TSD and init-mutex transitions compose through +0x8e41c with flag 1.
+Actual base allocation owns its mappings, matching extent tree and accounting;
+no initialized native pages supply the model. All-branch preinit and public
+malloc remain incomplete.
+
+Atfork +0x67374 and static TSD migration +0x99c78 add 24 native controls and
+8 rollback checks. Their 48/128-byte public/internal allocation providers are
+explicit control boundaries, not recovered public malloc. NULL/key diagnostic
+and TSD fallback branches reject. Mapping helper refactor regressions pass
+42 native/20 owner checks; early boot regressions pass 56/7.
+
+Next: recover matching public small allocation and tcache, especially cold
+bin refill +0x787dc -> +0x75d44 and actual slab/OS region acquisition, then
+compose CPU query, atfork allocation and TSD migration past +0x8e41c.
+The redzone helper +0x75f38 is not a refill entry. Nonempty config +0x8ce70,
+TSD fallback and arena table resize remain unsupported. Complete Python
+cold boot/flag 0, fresh Medusa and the new online header matrix remain open;
+no-JVM Rust, nonempty search/pagination, Douyin/Qidian and final Pages/Actions
+products are also unfinished. Evidence and reproduction:
 [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
 
 ## Independent root factory and caller (2026-10-04)

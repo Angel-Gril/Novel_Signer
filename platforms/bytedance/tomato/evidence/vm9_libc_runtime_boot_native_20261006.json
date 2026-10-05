@@ -1,0 +1,288 @@
+{
+  "schema": "vm9-libc-runtime-boot-components-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "case": "atfork",
+      "variant": "empty",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "atfork",
+      "variant": "one_node",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "atfork",
+      "variant": "three_nodes",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "atfork",
+      "variant": "allocation_null",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state0",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state1",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state2",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state3",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state4",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "last_key",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "alias_self",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "alias_forward",
+      "image_base": "0x122c0000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "atfork",
+      "variant": "empty",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "atfork",
+      "variant": "one_node",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "atfork",
+      "variant": "three_nodes",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "atfork",
+      "variant": "allocation_null",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state0",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state1",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state2",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state3",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "state4",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "last_key",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "alias_self",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "tsd",
+      "variant": "alias_forward",
+      "image_base": "0x775c205000",
+      "guest_globals_tls_and_ordered_allocation_match": true,
+      "untouched_padding_match": true,
+      "allocation_explicit_boundary": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "rejection_cases": [
+    {
+      "case": "atfork_contended",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 1,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "atfork_missing_tail",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 1,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "atfork_bad_provider",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 1,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "tsd_null_diagnostic",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 1,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "tsd_missing_destination",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 1,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "tsd_invalid_key",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 1,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "tsd_missing_generation",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 1,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "tsd_late_provider_error",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "external_calls": 1,
+      "external_provider_effects_rolled_back": false
+    }
+  ],
+  "allocation_explicit_boundary": true,
+  "actual_public_allocator_integrated": false,
+  "cpu_query_and_reentrant_malloc_restored": false,
+  "complete_tsd_fallback": false,
+  "python_malloc_cold_boot_complete": false,
+  "standalone_medusa_complete": false,
+  "native_input_snapshot_used": false
+}

@@ -1,0 +1,1259 @@
+{
+  "schema": "vm9-native-libc-cold-malloc-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "case": "cold_malloc",
+      "image_base": "0x122c0000",
+      "request_size": 0,
+      "synthetic_cpu_count": 1,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 0
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    },
+    {
+      "case": "cold_malloc",
+      "image_base": "0x122c0000",
+      "request_size": 32,
+      "synthetic_cpu_count": 2,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 32
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    },
+    {
+      "case": "cold_malloc",
+      "image_base": "0x122c0000",
+      "request_size": 4096,
+      "synthetic_cpu_count": 4,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    },
+    {
+      "case": "cold_malloc",
+      "image_base": "0x122c0000",
+      "request_size": 8192,
+      "synthetic_cpu_count": 2,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 8192
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    },
+    {
+      "case": "anonymous_name_failure",
+      "image_base": "0x122c0000",
+      "request_size": 32,
+      "synthetic_cpu_count": 2,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 32
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    },
+    {
+      "case": "cold_malloc",
+      "image_base": "0x775c205000",
+      "request_size": 0,
+      "synthetic_cpu_count": 1,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 0
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    },
+    {
+      "case": "cold_malloc",
+      "image_base": "0x775c205000",
+      "request_size": 32,
+      "synthetic_cpu_count": 2,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 32
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    },
+    {
+      "case": "cold_malloc",
+      "image_base": "0x775c205000",
+      "request_size": 4096,
+      "synthetic_cpu_count": 4,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    },
+    {
+      "case": "cold_malloc",
+      "image_base": "0x775c205000",
+      "request_size": 8192,
+      "synthetic_cpu_count": 2,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 8192
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    },
+    {
+      "case": "anonymous_name_failure",
+      "image_base": "0x775c205000",
+      "request_size": 32,
+      "synthetic_cpu_count": 2,
+      "returned_request_span_owned_and_readable": true,
+      "initialization_flag_zero": true,
+      "arena_zero_and_table_published": true,
+      "chunk_constants_consistent": true,
+      "native_reentrant_malloc_entries": 3,
+      "initial_key_fixture_applied_once": true,
+      "kernel_errno_preserved": true,
+      "phase_entries": {
+        "0x7cf2c": 1,
+        "0x7dc7c": 1,
+        "0x7f13c": 1,
+        "0x89410": 1,
+        "0x8e250": 1,
+        "0x8e350": 3,
+        "0x8f00c": 3,
+        "0x933ac": 1,
+        "0x99378": 1,
+        "0x99938": 1,
+        "0x99c78": 1
+      },
+      "syscall_counts": {
+        "56": 1,
+        "57": 1,
+        "63": 2,
+        "80": 1,
+        "167": 3,
+        "214": 1,
+        "215": 2,
+        "222": 4,
+        "226": 1
+      },
+      "surviving_owned_mappings": 3,
+      "malloc_hook_calls": 0,
+      "actual_allocation_entry_trace": [
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 32
+        },
+        {
+          "entry_offset": "0x2669c"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 4096
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 7168
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x67374"
+        },
+        {
+          "entry_offset": "0x1bb08",
+          "request_size": 48
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x99c78"
+        },
+        {
+          "entry_offset": "0x8df44",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x79fa4",
+          "request_size": 128
+        },
+        {
+          "entry_offset": "0x787dc"
+        },
+        {
+          "entry_offset": "0x787dc"
+        }
+      ],
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "python_malloc_cold_boot_complete": false,
+      "fresh_medusa_signature_generated": false
+    }
+  ],
+  "native_malloc_cold_boot_under_virtual_os": true,
+  "python_malloc_cold_boot_complete": false,
+  "standalone_medusa_complete": false,
+  "current_online_header_matrix_verified": false
+}

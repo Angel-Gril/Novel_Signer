@@ -1,0 +1,21 @@
+{
+  "schema": "vm9-libc-arena-base-regression-v1",
+  "cases": [
+    {
+      "case": "mapping_aligned_helper_refactor",
+      "native_controls": 42,
+      "all_passed": true,
+      "source_schema": "vm9-libc-mapping-v1",
+      "owner_checks": 20
+    },
+    {
+      "case": "early_boot_with_extended_owner",
+      "native_controls": 56,
+      "rejection_checks": 7,
+      "all_passed": true,
+      "source_schema": "vm9-libc-boot-components-v1"
+    }
+  ],
+  "python_malloc_cold_boot_complete": false,
+  "standalone_medusa_complete": false
+}

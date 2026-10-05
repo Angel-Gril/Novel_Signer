@@ -63,20 +63,12 @@ def map_allocator(guest_os, *, length, thread_pointer, os_call):
     return result
 
 
-def map_aligned_allocator(guest_os, *, length, alignment, flag_address,
-                          thread_pointer, os_call):
-    """+0x7f600: map, retry expanded span, trim prefix/suffix, set one byte.
-
-    Alignment is a bounded page-size power of two. A failing munmap reaches
-    unrecovered logging/abort callbacks and therefore explicitly rejects.
-    """
+def _aligned_mapping(tx, *, length, alignment, thread_pointer, os_call):
+    """Shared +0x7f600 body; caller owns transaction and output flag."""
     _length(length)
     if (not isinstance(alignment, int) or not 0x1000 <= alignment <= 0x100000
             or alignment & (alignment - 1)):
         raise RefillUnsupported("unsupported bounded libc mapping alignment")
-    tx = guest_os.begin()
-    _read_span(tx.pages, _word(flag_address), 1)
-
     def unmap(address, size):
         outcome = _kernel(os_call(tx, "munmap", address, size))
         if outcome < 0:
@@ -105,6 +97,20 @@ def map_aligned_allocator(guest_os, *, length, alignment, flag_address,
                     unmap(result + length, suffix)
             else:
                 result = 0
+    return result
+
+
+def map_aligned_allocator(guest_os, *, length, alignment, flag_address,
+                          thread_pointer, os_call):
+    """+0x7f600: map, retry expanded span, trim prefix/suffix, set one byte.
+
+    Alignment is a bounded page-size power of two. A failing munmap reaches
+    unrecovered logging/abort callbacks and therefore explicitly rejects.
+    """
+    tx = guest_os.begin()
+    _read_span(tx.pages, _word(flag_address), 1)
+    result = _aligned_mapping(tx, length=length, alignment=alignment,
+                             thread_pointer=thread_pointer, os_call=os_call)
     if result:
         _write_span(tx.pages, flag_address, b"\1")
     tx.commit()
