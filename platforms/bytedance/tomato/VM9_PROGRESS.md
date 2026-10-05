@@ -74,19 +74,25 @@ explicit control boundaries, not recovered public malloc. NULL/key diagnostic
 and TSD fallback branches reject. Mapping helper refactor regressions pass
 42 native/20 owner checks; early boot regressions pass 56/7.
 
-Next: recover matching public small allocation and tcache, especially cold
-bin refill +0x787dc. Its recovered +0x75d44 returns NULL for an empty
-available tree; cold continuation +0x78d7c attempts extent allocation
-+0x7779c and fresh region mapping/registration +0x765b0 -> +0x7ed7c ->
-+0x7e14c. All 10 native cold traces reach fresh region creation. Recover
-those bodies and slab/OS acquisition, then
-compose CPU query, atfork allocation and TSD migration past +0x8e41c.
-The redzone helper +0x75f38 is not a refill entry. Nonempty config +0x8ce70,
-TSD fallback and arena table resize remain unsupported. Complete Python
-cold boot/flag 0, fresh Medusa and the new online header matrix remain open;
-no-JVM Rust, nonempty search/pagination, Douyin/Qidian and final Pages/Actions
-products are also unfinished. Evidence and reproduction:
-[STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
+Matching-libc same-fresh region and direct/internal small allocation now add
+56 native controls and 26 rejection/rollback checks. They compose real base
+allocation, empty chunk-cache/default callback/aligned mmap, radix registration,
+free extent split, class page marks, bitmap initialization and cold/hot small
+allocation. Controls cover unaligned sizes, 65-slot bitmap propagation,
+exhausted slabs, multiple regions and actual internal accounting. Four controls
+start at the actual +0x8df44 fresh entry (flag 3), including preinit failure;
+success leaves flag 2. No allocation provider or native initialization pages
+supply these sequences. OS services remain explicit/virtual.
+
+Next: recover public malloc +0x8f00c on the static TSD, especially tcache
+creation +0x8f334 -> +0x98c54 and arena binding +0x8f354 -> +0x8dda0, then
+empty tcache refill. The outer cold-init prefix still stops before CPU query
+at +0x8e41c/flag 1. Raw/internal small success does not prove reentrant public
+malloc, CPU sysconf, final flag 0, fresh Medusa or the online header matrix.
+Nonempty config/cache, DSS, dirty cleanup, junk/redzones, large/huge allocation
+and concurrent publication remain unsupported. No-JVM Rust, nonempty current
+search/pagination, Douyin/Qidian and final Pages/Actions products remain open.
+Evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
 
 ## Independent root factory and caller (2026-10-04)
 
