@@ -546,6 +546,43 @@ def initialize_executor_context(pages, *, context_address, image_base, get_tls):
     p.commit()
 
 
+def initialize_arena_boot(pages, *, image_base, allocate):
+    """+0x280890: allocate/clear the first 0x4000 arena and publish slabs.
+
+    The once/mutex state transition is owned by the caller (+0x32a0a0). This
+    function models the initializer body itself: one fresh allocation, a full
+    zero fill, and eight region pointers at image+0x3e09a8. The native loop's
+    add-immediate is 4<<12, so it executes exactly once at the 0x4000 bound.
+    """
+    p=_PageTransaction(pages);base=image_base
+    region=allocate(p,0x4000)
+    if not isinstance(region,int) or region<=0 or region&0xFFF:
+        raise RefillUnsupported('arena initializer requires page-aligned allocation')
+    _read_span(p,region,0x4000);_write_span(p,region,bytes(0x4000))
+    table=base+0x3E09A8
+    _read_span(p,table,0x48)
+    words=(region,region+0x800,region+0x1000,region+0x1800,
+           region+0x2000,region+0x2800,region+0x3000,region+0x3800)
+    for index,value in enumerate(words):_w(p,table+index*8,value)
+    p.commit();return region
+
+
+def call_once_arena_boot(pages, *, image_base, allocate, initializer=None):
+    """+0x32a0a0 state gate for +0x280890, serial uncontended path."""
+    p=_PageTransaction(pages);control=image_base+0x3E09E8;mutex=image_base+0x3E2EB8
+    _read_span(p,control,8);_read_span(p,mutex,2)
+    state=_u(p,control)
+    if state not in (0,1,(1<<64)-1):raise RefillUnsupported('unknown arena once state')
+    if state==0:
+        _w(p,control,1);objects.lock_uncontended_mutex(p,mutex_address=mutex)
+        objects.unlock_uncontended_mutex(p,mutex_address=mutex)
+        region=(initializer or initialize_arena_boot)(p,image_base=image_base,allocate=allocate)
+        _w(p,control,(1<<64)-1);objects.lock_uncontended_mutex(p,mutex_address=mutex)
+        objects.unlock_uncontended_mutex(p,mutex_address=mutex);p.commit();return region
+    if state==1:raise RefillUnsupported('arena once is in progress; wait path unsupported')
+    p.commit();return 0
+
+
 def run_startup_worker(pages, *, argument_address, worker_kind, image_base,
         thread_pointer, thread_id, create_key, set_specific, get_tls,
         clock, futex, free, invoke, task_address, max_iterations=64):
@@ -652,3 +689,4 @@ def initialize_startup_caller(pages, *, entry_stack_address, return_address,
         result=StartupResult(vm.steps,vm.pc-base,tuple(vm.R),callbacks.modeled)
         p.commit();return result
     finally:vm_module.B=previous
+

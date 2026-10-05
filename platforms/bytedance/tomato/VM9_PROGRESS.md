@@ -1074,3 +1074,8 @@ periodic cleanup, native constructor/callback state, or an independent Medusa
 body. The next run must use a trace and memory from the same capture before
 extending interception across the refill/cleanup boundaries. The current
 Python signer, no-JVM Rust chain and live search/download remain unfinished.
+
+
+## Arena boot body (2026-10-05)
+
+Fresh-input differential now covers `+0x280890` and its serial once wrapper `+0x32a0a0` at two relocated image bases. The model allocates and clears `0x4000`, publishes eight slab pointers, and records the once state transition. The native image table is captured through an explicit observation boundary; no native snapshot pages are fed into Python. A null allocator negative case rolls back without writes. This does not close the nested initialization VMs, OS region mapping, or real allocator boot. Evidence: [vm9_arena_boot_native_20261005.json](evidence/vm9_arena_boot_native_20261005.json).

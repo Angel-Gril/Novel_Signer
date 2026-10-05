@@ -31,6 +31,12 @@
 
 `vm_full.py` 是共用解释器，因此本次重新运行已有回归：[vm9_startup_regression_20261005.json](evidence/vm9_startup_regression_20261005.json)。fresh root 的 8 组、旧 component 的 4 组／16 段 VM／76 条子树、state owner 的 52 组／6 个拒绝、parser digest 的 142 组／5 个拒绝均通过。旧 component 仍保留自己的 native 入口输入边界，没有被重新标成独立启动。
 
+## Arena boot body and once gate (2026-10-05)
+
+The first `+0x280890` arena initializer is now reproduced from fresh ELF pages and an explicit allocator boundary. Two image bases (`0x122c0000` and `0x775c205000`) match the native body: one `0x4000` allocation, complete zero fill, eight published pointers at `base+0x3e09a8`, and the serial `+0x32a0a0` state transition. The native image table is observed explicitly because the differential oracle does not copy mutated image pages back into its input dictionary. A null allocator is rejected before any guest-page mutation.
+
+This closes only the first arena publication body. The nested `+0x280970` and seven `+0x2809f8` initialization VMs, OS region registration, thread-exit destruction, complete allocator boot, and independent current Medusa remain open. Evidence: [vm9_arena_boot_native_20261005.json](evidence/vm9_arena_boot_native_20261005.json).
+
 ## Worker 调度、等待与所有权
 
 `attach_worker_support` 对应 `+0x326a2c/+0x3260a4 → +0x32cc40 → +0x326120`。冷路径创建 support key，析构入口为 `+0x32ce6c`，完成串行 guard 发布；热路径复用 key。native 随后先清空 argument 的唯一 wrapper 引用，再将 wrapper 发布到当前线程的 TLS。

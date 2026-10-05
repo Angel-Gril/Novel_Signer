@@ -1,0 +1,48 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "native_runs": 2,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "native_runs": 1,
+      "arena_allocation_size": 16384,
+      "arena_region_offset": "0x4000",
+      "region_zero_fill_match": true,
+      "published_table_words": 8,
+      "table_match": true,
+      "once_state_transition": true,
+      "guest_bytes_match": true,
+      "allocation_sequence_match": true,
+      "native_input_snapshot_used": false,
+      "complete_real_allocator_boot": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "native_runs": 1,
+      "arena_allocation_size": 16384,
+      "arena_region_offset": "0x4000",
+      "region_zero_fill_match": true,
+      "published_table_words": 8,
+      "table_match": true,
+      "once_state_transition": true,
+      "guest_bytes_match": true,
+      "allocation_sequence_match": true,
+      "native_input_snapshot_used": false,
+      "complete_real_allocator_boot": false,
+      "complete_python_medusa": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "bad_allocator",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    }
+  ],
+  "fresh_synthetic_inputs": true,
+  "native_input_snapshot_used": false,
+  "native_code_used_by_python_model": false,
+  "complete_real_allocator_boot": false,
+  "complete_python_medusa": false
+}
