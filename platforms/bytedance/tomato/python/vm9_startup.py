@@ -2,8 +2,8 @@
 
 Thread creation, clocks, finite futex outcomes and task invocation belong to
 providers. Idle workers can run through normal argument cleanup; serial default
-task bodies have their own explicit entry. Same-startup nonempty worker task
-attachment, repeating tasks and OS thread-exit destructors remain separate boundaries. No host threads or blocking waits are silently created.
+task bodies can attach to the startup-generated default queue. Repeating tasks
+and OS thread-exit destructors remain separate boundaries. No host threads or blocking waits are silently created.
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -956,6 +956,71 @@ def run_startup_worker(pages, *, argument_address, worker_kind, image_base,
     if _u(p,arg):raise RefillUnsupported('worker argument acquired unsupported support ownership')
     _w(p,arg,0);free(p,arg)
     p.commit();return 0
+
+
+@dataclass(frozen=True)
+class DefaultQueueWorkerResult:
+    return_code: int
+    tasks: tuple[DefaultInitializationTaskResult,...]
+
+
+def run_default_queue_worker(pages, *, argument_address, image_base,
+        entry_stack_address, thread_pointer, thread_id, vm_module, allocate,
+        broadcast, create_key, set_specific, get_tls, clock, futex, free,
+        saved_registers=None, max_iterations=64):
+    """Attach +0x280554 to +0x3260a4/+0x326578 using worker-entry ABI.
+
+    The caller supplies fresh thread inputs, not a native entry snapshot. The
+    worker's 0x30-byte frame and queue's 0xa0-byte frame determine the task
+    storage, SP, FP, continuation and callee-saved values. Only X27/X28 pass
+    through the queue unchanged. OS exit/TLS destruction remains separate.
+    """
+    S=entry_stack_address;base=image_base
+    if not isinstance(S,int) or S&15:
+        raise RefillUnsupported('default queue worker stack must be aligned')
+    inherited={index:0 for index in range(19,29)}
+    if saved_registers is not None:
+        if any(index not in inherited for index in saved_registers):
+            raise RefillUnsupported('unsupported worker saved register')
+        inherited.update(saved_registers)
+    if any(not isinstance(value,int) or not 0<=value<1<<64 for value in inherited.values()):
+        raise RefillUnsupported('worker saved register outside guest ABI')
+    p=_PageTransaction(pages)
+    _read_span(p,S-0xd0,0xd0)
+    if _u(p,argument_address+0x10)!=base+0x372600:
+        raise RefillUnsupported('default worker requires the queue callable')
+    q=_u(p,argument_address+0x18)
+    if _u(p,q+0x20)-_u(p,q+0x18)!=48:
+        raise RefillUnsupported('default worker requires exactly one queued task')
+    task=S-0xc0;results=[]
+    def invoke(staged,function,object_address):
+        if function!=base+0x280554 or object_address!=task:
+            raise RefillUnsupported('unsupported default worker task invocation')
+        regs=dict(inherited)
+        regs.update({19:q+0x30,20:q+0x58,21:q+0x18,22:thread_pointer,
+            23:q,24:1,25:0,26:1})
+        # The last queue unlock tailcalls +0x329f68. Its 0x10-byte
+        # wrapper and matching bionic's uncontended 0x50-byte frame leave
+        # saved words below Q. The sixth tailcall reads one of these as an
+        # otherwise unwritten VM slot; derive it rather than zero padding.
+        Q=S-0xd0
+        for address,value in ((Q-0x10,Q+0x50),(Q-8,base+0x326614),
+                (Q-0x60,Q-0x10),(Q-0x58,base+0x329f78),
+                (Q-0x50,regs[19]),(Q-0x48,regs[20]),(Q-0x40,regs[21])):
+            _w(staged,address,value)
+        result=run_default_initialization_task(staged,allocate=allocate,
+            broadcast=broadcast,vm_module=vm_module,entry_stack_address=S-0xd0,
+            return_address=base+0x326620,thread_pointer=thread_pointer,
+            image_base=base,saved_frame_pointer=S-0x80,saved_registers=regs)
+        results.append(result)
+        return result.caller_results[-1].registers[0]
+    returned=run_startup_worker(p,argument_address=argument_address,worker_kind='queue',
+        image_base=base,thread_pointer=thread_pointer,thread_id=thread_id,
+        create_key=create_key,set_specific=set_specific,get_tls=get_tls,
+        clock=clock,futex=futex,free=free,invoke=invoke,task_address=task,
+        max_iterations=max_iterations)
+    if len(results)!=1:raise RefillUnsupported('default worker did not execute exactly one task')
+    p.commit();return DefaultQueueWorkerResult(returned,tuple(results))
 
 
 @dataclass(frozen=True)

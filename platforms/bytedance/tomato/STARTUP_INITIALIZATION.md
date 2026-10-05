@@ -1,6 +1,6 @@
 # 外层启动 caller 与 worker 调度／清理
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲 worker 已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。默认初始化任务的六个 caller 及 `+0x280554` 的完整串联已通过 fresh cold／hot 对照。**同次主线程启动→非空 worker→默认任务→退出的组合、OS thread-exit 析构、真实 allocator boot、完整线程执行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM，并保持 support 的 pthread TLS 所有权。**OS thread-exit 析构、真实 allocator boot、完整线程运行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
@@ -16,6 +16,7 @@
 | queue callable 生命周期／循环 | 94 | 5 | inline／heap／empty、自移动赋值、擦除和 padding、等待后投递／停止、invoke 与释放顺序 |
 | executor deque／poll／signal wait／循环 | 62 | 6 | segment 边界、非重复任务析构／释放、W32 delay、timeout／signal／spurious wake、clock 顺序 |
 | 同次 fresh 启动→独立 TLS→空闲 worker→清理 | 8 | 6 | 启动生成 argument、完整主 image、双方 TLS、generation、分配／副作用、argument free、support TLS 所有权 |
+| 同次 fresh 启动→非空默认 worker→六项正文→清理 | 4 | 8 新增、6 调度回归 | 两基址／两线程 ID，独立 worker 栈；每项全部 32 槽、虚拟栈、guest 和六区域，最终 image／双方 TLS／generation、分配及副作用顺序 |
 
 主线程每次使用 16 次分配、3 次成功的 guest thread-create 请求、2 次析构注册、1 次 condition wake，没有 free。线程 entry 分别是 `+0x326a2c`、`+0x3260a4`、`+0x3260a4`。Python 生成了线程参数、共享 executor、两个 queue 和第一个 queue 的 48 字节任务向量。它在 `+0xa71c8` 退出。
 
@@ -158,8 +159,24 @@ python -B python/verify_vm9_default_initialization_task.py --library /private/li
 
 证据：[六个独立 caller](evidence/vm9_all_default_callers_native_20261005.json)、[完整默认任务](evidence/vm9_default_initialization_task_native_20261005.json)。这里只推送脱敏状态、offset／count／boolean，不推送私有 ELF、初始化后的解码表或 native memory。没有 JVM 或 native 输入快照进入 Python；ELF 字节码、显式合成入口栈／TLS、已映射 allocator 区域、无竞争 matching libc mutex 和 provider broadcast 仍是研究运行条件。
 
-**本阶段完成的是有界串行默认任务正文。** 真实 allocator global／arena／OS region boot、主线程发布的 worker 与正文整合、OS thread-exit TLS 析构和 fresh 请求签名仍未验证。不能把六项默认 caller 的完成解释为独立 Python Medusa 已完成。
+**本节完成的是有界串行默认任务正文。** 同次主线程发布的 worker 与正文整合已由下一节推进；真实 allocator global／arena／OS region boot、OS thread-exit TLS 析构和 fresh 请求签名仍未验证。不能把六项默认 caller 的完成解释为独立 Python Medusa 已完成。
+
+## 同次 fresh 非空 worker 完整任务与 argument 清理（2026-10-05）
+
+`run_default_queue_worker` 已将串行正文接回主线程实际生成的第二个 worker（index 1）。Native 从 `+0x28040c` 启动，在调度边界运行 `+0x3260a4 → +0x326578 → +0x280554`，完整执行六项正文，进入一次 queue wait，再由显式停止输入退出并清理 argument。Python 独立生成同一批 descriptor、queue 和任务，使用独立 worker 栈及 TLS。验证没有把 native startup 输出、入口页或寄存器灌入 Python。
+
+新入口的栈关系来自 wrapper ABI：worker 入口 SP 为 S，queue SP 为 `Q=S-0xd0`，任务存储为 `S-0xc0`，任务 FP 为 `S-0x80`，返回地址为 `image+0x326620`。queue 推导 X19～X26，X27/X28 从明确的入口值保留。`+0x329f68` 及 matching bionic 的解锁保存帧会留下一个由第六项 tailcall 读取的未覆盖槽；模型按 ABI 构造这些保存字。主线程栈残留及 native 快照不作为替代输入。
+
+**4 个 native case 全部通过**（两种加载基址 × 两种线程 ID）。每个 case 比较六次 caller 返回的全部 32 槽、实际虚拟栈、完整 guest 对象及全部六个 0x4000 区域；最终比较全部主 image、主线程和 worker TLS、pthread generation、22 次分配及有序副作用。每次六项正文有 48 次嵌套 VM 返回，argument 仅 free 一次，wrapper/support 未被 argument 清理释放，仍由 pthread TLS 持有。
+
+新增 **8 项拒绝／回滚检查**覆盖错位栈、不支持的保存寄存器、错误 queue callable、空／多任务队列、未知默认目标、busy once 和首次分配失败。guest 页及 VM base 均还原，失败不释放 argument；provider 的外部副作用不回滚。另有 **8 组空闲 worker／6 项旧调度拒绝检查**回归通过。
+
+```bash
+python -B python/verify_vm9_startup_worker_loop.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --default-queue --output /private/startup-default-worker.json
+```
+
+证据：[同次启动与非空默认 worker](evidence/vm9_startup_default_worker_native_20261005.json)、[空闲 worker 回归](evidence/vm9_startup_worker_regression_20261005.json)。这里验证的是显式 allocator／映射区域、无竞争 mutex、provider broadcast、虚拟 futex 和显式停止服务下的组合；未比较整个 interpreter 物理 scratch 栈，未创建 host thread，未执行真正的分配器 free 或 OS thread exit。**有界非空 worker 的任务执行和 argument 清理已完成，完整独立 Medusa 仍未完成。**
 
 ## 继续顺序
 
-下一步将 `run_default_initialization_task` 接回同次 fresh 启动生成的非空 queue worker，验证 startup→worker support→queue invoke→六项正文→argument 清理；继续使用独立生成的 ELF／栈／TLS／allocator 输入。随后恢复 OS thread-exit support/emulated-TLS 析构，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
+下一步恢复 OS thread-exit support/emulated-TLS 析构，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

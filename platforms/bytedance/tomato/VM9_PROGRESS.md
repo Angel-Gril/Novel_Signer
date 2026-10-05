@@ -3,7 +3,7 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Independent startup and serial default task checkpoint
+## Independent startup and default queue worker checkpoint
 
 Condition wait/owned wrappers, queue callable lifecycle/loop and nonrepeating
 executor deque/poll/signal wait/loop now pass **92 / 94 / 62** fresh native
@@ -14,9 +14,12 @@ Guest/main-image/both TLS/generation state, allocation/effect order and argument
 cleanup match. All **256 new controls and 22 rejection/rollback checks** pass;
 main startup and support/context regressions also pass.
 
-Idle worker normal return was the previous boundary. All six default
-initialization caller bodies now complete under explicit allocator/broadcast
-services, and +0x280554's serial six-caller task also passes fresh controls.
+Idle worker normal return was an earlier boundary. All six default
+initialization caller bodies and +0x280554's serial task now attach to the
+same-fresh-startup nonempty queue worker. Four native controls verify all
+six caller returns and 48 nested returns per execution, queue wait/stop,
+normal return and argument free with independent thread stack/TLS inputs.
+Eight new failure cases and the eight idle-worker controls also pass.
 Complete worker runtime, OS thread-exit destructors, real allocator boot, fresh
 Medusa, live header matrix/f13 checks, no-JVM Rust, nonempty search/pagination,
 Douyin/Qidian and the final Pages/Actions products remain open.
@@ -1123,3 +1126,17 @@ and [serial task](evidence/vm9_default_initialization_task_native_20261005.json)
 The explicit mapped allocator/broadcast boundaries remain; same-startup
 nonempty worker execution, OS exit destructors, real allocator initialization
 and independent Medusa signing remain unfinished.
+
+
+## Same-startup nonempty default worker (2026-10-05)
+
+`run_default_queue_worker` derives queue/task stack and saved-register inputs
+from the +0x3260a4/+0x326578 ABI, including the matching bionic unlock saved
+words read by the sixth tailcall. Native startup outputs remain expectations
+only. All four fresh controls compare every caller's 32 slots, virtual stack,
+guest and six regions, then image/both TLS/generation and ordered effects.
+Eight new rollback checks and eight idle controls/six old rejection checks
+pass. The worker argument is freed; support remains TLS-owned.
+Evidence: [nonempty worker](evidence/vm9_startup_default_worker_native_20261005.json)
+and [idle regression](evidence/vm9_startup_worker_regression_20261005.json).
+OS TLS destruction, real allocator/arena/OS boot and fresh signing remain open.

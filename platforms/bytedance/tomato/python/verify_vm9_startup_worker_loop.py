@@ -1,7 +1,7 @@
-"""Same fresh startup, independent worker TLS, idle dispatch and cleanup.
+"""Same fresh startup, independent worker TLS, dispatch and argument cleanup.
 
-The native scheduler selects a startup-generated idle worker; Python generates
-its own descriptors from ELF inputs. The default nonempty queue is untouched.
+The scheduler selects an idle or default nonempty startup-generated worker;
+Python generates its own descriptors and task ABI from independent ELF inputs.
 OS thread-exit destructors and real allocator boot remain separate boundaries.
 """
 from __future__ import annotations
@@ -10,7 +10,7 @@ import hashlib
 import json
 from pathlib import Path
 from elftools.elf.elffile import ELFFile
-from unicorn.arm64_const import UC_ARM64_REG_PC,UC_ARM64_REG_SP,UC_ARM64_REG_X0,UC_ARM64_REG_X1,UC_ARM64_REG_X2,UC_ARM64_REG_X3,UC_ARM64_REG_X30,UC_ARM64_REG_TPIDR_EL0
+from unicorn.arm64_const import UC_ARM64_REG_X19,UC_ARM64_REG_X28,UC_ARM64_REG_PC,UC_ARM64_REG_SP,UC_ARM64_REG_X0,UC_ARM64_REG_X1,UC_ARM64_REG_X2,UC_ARM64_REG_X3,UC_ARM64_REG_X30,UC_ARM64_REG_TPIDR_EL0
 import os
 import vm9_startup as startup
 import vm9_objects as objects
@@ -18,16 +18,27 @@ import vm9_allocator as allocator
 import verify_vm9_startup_init as fixture
 import verify_vm9_root_configuration as root
 from verify_vm9_signer_objects import native,GUEST,STOP,LIBRARY_SHA256
+from verify_vm9_default_task_prefix import fresh,DEFAULT_CALLERS
 
 WORKER_TLS=GUEST+0xD000
+WORKER_STACK=GUEST+0x3F000
+WORKER_STACK_REGION=GUEST+0x30000
+WORKER_STACK_BYTES=0x10000
+ARENAS=GUEST+0x10000
+ARENA_BYTES=6*0x4000
 
 
 def put(p,a,v,n=8):allocator._write_span(p,a,(v&((1<<(8*n))-1)).to_bytes(n,'little'))
 def get(p,a,n=8):return int.from_bytes(allocator._read_span(p,a,n),'little')
 
 
-def inputs(library,libc,base,thread_id):
-    p=fixture.fresh_inputs(library,libc,base)
+def inputs(library,libc,base,thread_id,default=False):
+    p=fresh(library,libc,base,0) if default else fixture.fresh_inputs(library,libc,base)
+    if default:
+        for address in range(ARENAS,ARENAS+ARENA_BYTES,4096):
+            p[address>>12]=bytearray([0x3c])*4096
+        for address in range(WORKER_STACK_REGION,WORKER_STACK_REGION+WORKER_STACK_BYTES,4096):
+            p[address>>12]=bytearray(4096)
     put(p,WORKER_TLS+8,WORKER_TLS+0x200)
     allocator._write_span(p,WORKER_TLS+0x200,bytes(0x900))
     put(p,WORKER_TLS+0x210,thread_id,4)
@@ -36,15 +47,21 @@ def inputs(library,libc,base,thread_id):
 
 
 def probe(library,libc,exports,*,base,kind,thread_id):
-    model=inputs(library,libc,base,thread_id)
-    seed=inputs(library,libc,base,thread_id)
-    oracle={p:v for p,v in seed.items() if not root.LIBC_BASE<=p<<12<root.LIBC_BASE+0x400000}
+    default=kind=='default_queue'
+    worker_kind='queue' if default else kind
+    model=inputs(library,libc,base,thread_id,default)
+    seed=inputs(library,libc,base,thread_id,default)
+    oracle={p:v for p,v in seed.items() if not root.LIBC_BASE<=p<<12<root.LIBC_BASE+0x400000
+        and not ARENAS<=p<<12<ARENAS+ARENA_BYTES
+        and not WORKER_STACK_REGION<=p<<12<WORKER_STACK_REGION+WORKER_STACK_BYTES}
     table=root.LIBC_BASE+root.LIBC_PTHREAD_GENERATION_OFFSET
     observed={(root.TLS,0xB00):None,(WORKER_TLS,0xB00):None,(table,141*16):None}
     observed.update({(p<<12,4096):None for p in model if base<=p<<12<base+0x400000})
+    if default:observed[ARENAS,ARENA_BYTES]=None
+    returns=[];compared=[];task_returns=[];caller_stack=[None]
     events=[];actual_events=[];threads=[];model_threads=[];allocations=[];model_allocations=[]
     switched=[False];worker_arg=[None];worker_context=[None];worker_waits=[0];model_waits=[0]
-    selected=0 if kind=='executor' else 2
+    selected=1 if default else 0 if kind=='executor' else 2
     def read(cpu,a,n=8):return int.from_bytes(cpu.mem_read(a,n),'little')
     def write(cpu,a,v,n=8):cpu.mem_write(a,(v&((1<<(8*n))-1)).to_bytes(n,'little'))
     def create(cpu):
@@ -81,26 +98,63 @@ def probe(library,libc,exports,*,base,kind,thread_id):
             q=worker_context[0];assert address==q+0x58 and read(cpu,q+0x30,2)==0
             write(cpu,q+0x88,0,1)
         return -4
+    position_native=[GUEST+0x4000];region_native=[0]
+    def allocate_native(cpu,size):
+        if size==0x4000:
+            assert default and region_native[0]<6
+            pointer=ARENAS+region_native[0]*0x4000;region_native[0]+=1;return pointer
+        pointer=position_native[0];position_native[0]+=(size+15)&~15
+        assert position_native[0]<GUEST+0x9000
+        return pointer
+    def broadcast_native(cpu):
+        address=cpu.reg_read(UC_ARM64_REG_X0)
+        assert address==base+0x3e2ee0
+        events.append(['broadcast',address,[read(cpu,base+0x3e09e8+i*0x48) for i in range(6)],
+            read(cpu,base+0x3e2eb8,2)]);return 0
     def observe(cpu,address):
+        off=address-base
+        if default and off==0x28040c:
+            cpu.mem_map(ARENAS,ARENA_BYTES);cpu.mem_write(ARENAS,bytes([0x3c])*ARENA_BYTES)
+            cpu.mem_map(WORKER_STACK_REGION,WORKER_STACK_BYTES)
+        if default and switched[0]:
+            if off==0x280554:events.append(['default_task_enter'])
+            if off==0x326620:
+                task_returns.append(True);events.append(['default_task_return'])
+            if off in DEFAULT_CALLERS:caller_stack[0]=cpu.reg_read(UC_ARM64_REG_SP)
+            if off in tuple(caller+0x5c for caller in DEFAULT_CALLERS):
+                C=caller_stack[0]
+                returns.append(dict(index=DEFAULT_CALLERS.index(off-0x5c),
+                    registers=[read(cpu,C-0x148+i*8) for i in range(32)],
+                    virtual_stack=bytes(cpu.mem_read(C-0x1b0,0x50)),
+                    guest=bytes(cpu.mem_read(GUEST,0xa000)),
+                    arenas=bytes(cpu.mem_read(ARENAS,ARENA_BYTES))))
         if address!=base+0x280478 or switched[0]:return
         switched[0]=True;_,entry,arg=threads[selected];worker_arg[0]=arg
         owner=read(cpu,arg+8);worker_context[0]=read(cpu,owner+8) if kind=='executor' else read(cpu,arg+0x18)
         cpu.reg_write(UC_ARM64_REG_PC,entry);cpu.reg_write(UC_ARM64_REG_X0,arg)
-        cpu.reg_write(UC_ARM64_REG_X30,STOP);cpu.reg_write(UC_ARM64_REG_SP,GUEST+0xEF00)
+        cpu.reg_write(UC_ARM64_REG_X30,STOP);cpu.reg_write(UC_ARM64_REG_SP,WORKER_STACK if default else GUEST+0xef00)
         cpu.reg_write(UC_ARM64_REG_TPIDR_EL0,WORKER_TLS)
+        for index in range(10):cpu.reg_write(UC_ARM64_REG_X19+index,0)
     result,memory,_,_=native(library,base,0x28040c,[],oracle,libc=libc,real_singletons=True,
         real_mutexes=True,thread_id=thread_id,extra_registers={UC_ARM64_REG_TPIDR_EL0:root.TLS},
-        host_imports={0x348000:create,0x347ea0:register,0x347fa0:free,0x348450:clock,
+        host_imports={0x348000:create,0x347ea0:register,0x347fa0:free,0x348450:clock,0x3485a0:broadcast_native,
             0x348590:redirect('pthread_cond_signal',False),0x348620:redirect('pthread_key_create'),
             0x348580:redirect('pthread_setspecific'),0x3485d0:redirect('pthread_getspecific'),
             0x3486b0:redirect('pthread_once',False),0x3485b0:redirect('pthread_cond_wait',False),
             0x3485c0:redirect('pthread_cond_timedwait',False)},instruction_observer=observe,
-        syscall_handler=syscall,allocation_effect=allocation,observed_memory=observed,instruction_limit=1000000)
+        syscall_handler=syscall,malloc_handler=allocate_native,allocation_effect=allocation,
+        observed_memory=observed,instruction_limit=900000000 if default else 1000000,
+        code_hook_ranges=((base+0x28040c,base+0x281414),(base+0x326000,base+0x327000),
+            (base+0x347e00,base+0x348700)) if default else None)
     assert switched[0] and result==0 and worker_waits[0]==1
-    position=GUEST+0x4000
+    position=GUEST+0x4000;regions=[0]
     def allocate(p,size):
         nonlocal position
-        pointer=position;position+=(size+15)&~15
+        if size==0x4000:
+            assert default and regions[0]<6
+            pointer=ARENAS+regions[0]*0x4000;regions[0]+=1
+        else:
+            pointer=position;position+=(size+15)&~15
         if position>=GUEST+0x9000:raise allocator.RefillUnsupported('bounded startup arena exhausted')
         allocator._read_span(p,pointer,size);model_allocations.append([size,pointer]);actual_events.append(['allocate',size,pointer]);return pointer
     def create_thread(p,out,attr,entry,arg):
@@ -141,9 +195,41 @@ def probe(library,libc,exports,*,base,kind,thread_id):
             put(p,ctx+0x88,0,1)
         return -4
     def invoke(*a):raise allocator.RefillUnsupported('unexpected task invocation in idle-worker control')
-    actual=startup.run_startup_worker(model,argument_address=arg,worker_kind=kind,image_base=base,
-        thread_pointer=WORKER_TLS,thread_id=thread_id,create_key=key,set_specific=specific,get_tls=get_tls,
-        clock=model_clock,futex=futex,free=model_free,invoke=invoke,task_address=GUEST+0xBC00)
+    if default:
+        def broadcast(p,address):
+            actual_events.append(['broadcast',address,[get(p,base+0x3e09e8+i*0x48) for i in range(6)],
+                get(p,base+0x3e2eb8,2)]);return 0
+        original=startup.run_default_initialization_caller
+        original_task=startup.run_default_initialization_task
+        def compare_caller(p,**kwargs):
+            result,nested=original(p,**kwargs);expected=returns[len(compared)]
+            index=kwargs['table_index'];assert index==expected['index']
+            assert list(result.registers)==expected['registers'],('worker task slots',index,
+                [(i,hex(a),hex(b)) for i,(a,b) in enumerate(zip(result.registers,expected['registers'])) if a!=b])
+            assert allocator._read_span(p,kwargs['entry_stack_address']-0x1b0,0x50)==expected['virtual_stack'],('virtual stack',index)
+            assert allocator._read_span(p,GUEST,0xa000)==expected['guest'],('caller guest',index)
+            assert allocator._read_span(p,ARENAS,ARENA_BYTES)==expected['arenas'],('caller arenas',index)
+            compared.append(index);return result,nested
+        def compare_task(p,**kwargs):
+            actual_events.append(['default_task_enter']);result=original_task(p,**kwargs)
+            actual_events.append(['default_task_return']);return result
+        startup.run_default_initialization_caller=compare_caller
+        startup.run_default_initialization_task=compare_task
+        try:
+            worker=startup.run_default_queue_worker(model,argument_address=arg,image_base=base,
+                entry_stack_address=WORKER_STACK,thread_pointer=WORKER_TLS,thread_id=thread_id,
+                vm_module=vm_full,allocate=allocate,broadcast=broadcast,create_key=key,
+                set_specific=specific,get_tls=get_tls,clock=model_clock,futex=futex,free=model_free)
+        finally:
+            startup.run_default_initialization_caller=original
+            startup.run_default_initialization_task=original_task
+        assert len(returns)==len(compared)==6 and len(task_returns)==len(worker.tasks)==1
+        assert sum(len(phases) for phases in worker.tasks[0].nested_results)==48
+        actual=worker.return_code
+    else:
+        actual=startup.run_startup_worker(model,argument_address=arg,worker_kind=worker_kind,image_base=base,
+            thread_pointer=WORKER_TLS,thread_id=thread_id,create_key=key,set_specific=specific,get_tls=get_tls,
+            clock=model_clock,futex=futex,free=model_free,invoke=invoke,task_address=GUEST+0xBC00)
     assert actual==result==0 and model_waits[0]==1
     assert allocator._read_span(model,GUEST,0xA000)==memory,('guest',kind,
         [hex(GUEST+i) for i,(a,b) in enumerate(zip(allocator._read_span(model,GUEST,0xA000),memory)) if a!=b][:25])
@@ -160,12 +246,16 @@ def probe(library,libc,exports,*,base,kind,thread_id):
     assert frees==[arg] and wrapper not in frees
     return dict(image_base=hex(base),thread_id=thread_id,worker_kind=kind,worker_index=selected,
         startup_generated_worker_arguments=True,worker_tls_independent=True,worker_wait_calls=1,
-        complete_idle_worker_normal_return=True,argument_cleanup_match=True,argument_free_calls=len(frees),
+        complete_idle_worker_normal_return=not default,complete_nonempty_worker_normal_return=default,argument_cleanup_match=True,argument_free_calls=len(frees),
         support_retained_in_tls=True,all_main_image_pages_match=True,both_threads_tls_match=True,
         generation_table_match=True,guest_objects_match=True,allocation_sequence_match=True,
         allocation_count=len(allocations),worker_allocation_sizes=[s for s,_ in allocations[16:]],
         thread_handles_arguments_and_order_match=True,ordered_semantic_effects_match=True,
-        native_input_snapshot_used=False,default_initialization_task_executed=False,
+        native_input_snapshot_used=False,default_initialization_task_executed=default,
+        default_caller_returns=len(compared),nested_vm_returns=48 if default else 0,
+        worker_task_stack_abi_independently_derived=default,worker_stack_independent=default,
+        all_caller_slots_virtual_stack_guest_and_regions_match=default,
+        mapped_initialization_region_count=regions[0],
         os_thread_exit_destructor_executed=False,complete_worker_runtime=False,
         complete_allocator_boot=False,complete_python_medusa=False)
 
@@ -210,9 +300,61 @@ def negative_cases(library,libc):
     return cases
 
 
+def default_worker_negative_cases(library,libc,vm_module):
+    base=0x122c0000;cases=[]
+    for label in ('unaligned_stack','bad_saved_register','wrong_queue_callable',
+            'empty_default_queue','multiple_default_tasks','unknown_default_target',
+            'busy_first_once','first_allocation_fails'):
+        p=inputs(library,libc,base,137,True);threads=[];position=[GUEST+0x4000]
+        def boot_allocate(p,size):
+            pointer=position[0];position[0]+=(size+15)&~15
+            assert position[0]<GUEST+0x9000;return pointer
+        def create(p,out,attr,entry,arg):
+            handle=GUEST+0xc800+len(threads)*0x100;put(p,out,handle)
+            threads.append((entry,arg));return 0
+        startup.initialize_startup_caller(p,entry_stack_address=GUEST+0xef00,
+            return_address=STOP,thread_pointer=root.TLS,image_base=base,
+            vm_module=vm_module,allocate=boot_allocate,create_thread=create,
+            register_destructor=lambda *a:0,thread_id=137,
+            signal_condition=lambda p,address:startup.signal_condition_no_waiters(
+                p,condition_address=address,wake=lambda *a:0))
+        _,arg=threads[1];q=get(p,arg+0x18);begin=get(p,q+0x18)
+        if label=='wrong_queue_callable':put(p,arg+0x10,0)
+        if label=='empty_default_queue':put(p,q+0x20,begin)
+        if label=='multiple_default_tasks':put(p,q+0x20,begin+96)
+        if label=='unknown_default_target':put(p,base+0x35d660,base+0x280550)
+        if label=='busy_first_once':put(p,base+0x3e09e8,1)
+        before={k:bytes(v) for k,v in p.items()};effects=[];old=vm_module.B
+        def key(p,address,destructor):effects.append('key_create');put(p,address,0x80000002,4);return 0
+        def specific(p,key,value):effects.append('set_specific');return 0
+        def allocate(p,size):effects.append('allocate');return 0
+        try:
+            startup.run_default_queue_worker(p,argument_address=arg,image_base=base,
+                entry_stack_address=WORKER_STACK+1 if label=='unaligned_stack' else WORKER_STACK,
+                saved_registers={18:0} if label=='bad_saved_register' else None,
+                thread_pointer=WORKER_TLS,thread_id=137,vm_module=vm_module,
+                allocate=allocate,broadcast=lambda *a:0,create_key=key,set_specific=specific,
+                get_tls=lambda *a:0,clock=lambda *a:(1000,0),futex=lambda *a:0,
+                free=lambda *a:effects.append('free'),max_iterations=2)
+        except (allocator.RefillUnsupported,ValueError):pass
+        else:raise AssertionError(('default worker did not reject',label))
+        assert {k:bytes(v) for k,v in p.items()}==before,('default worker rollback',label)
+        assert vm_module.B==old and 'free' not in effects,label
+        if label in ('unaligned_stack','bad_saved_register','wrong_queue_callable',
+                'empty_default_queue','multiple_default_tasks'):assert not effects,label
+        if label=='first_allocation_fails':assert effects.count('allocate')==1,label
+        cases.append(dict(case=label,rejected=True,guest_pages_unchanged=True,
+            argument_not_freed_on_failure=True,vm_base_restored=True,
+            environment_effect_count=len(effects),external_effects_rolled_back=False))
+    return cases
+
+
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--library',type=Path,required=True)
     ap.add_argument('--libc',type=Path,required=True);ap.add_argument('--output',type=Path,required=True)
+    ap.add_argument('--default-queue',action='store_true')
+    ap.add_argument('--image-base',type=lambda value:int(value,0))
+    ap.add_argument('--thread-id',type=int)
     args=ap.parse_args();assert hashlib.sha256(args.library.read_bytes()).hexdigest()==LIBRARY_SHA256
     os.environ['TOMATO_LIBMETASEC']=str(args.library.resolve())
     global vm_full
@@ -221,16 +363,21 @@ def main():
         e=ELFFile(f);exports={s.name:root.LIBC_BASE+s['st_value'] for sec in e.iter_sections()
             if sec['sh_type']=='SHT_DYNSYM' for s in sec.iter_symbols() if s['st_shndx']!='SHN_UNDEF'}
     cases=[probe(args.library,args.libc,exports,base=base,kind=kind,thread_id=tid)
-        for base in (0x122c0000,0x775c205000) for kind in ('executor','queue') for tid in (137,271)]
+        for base in ((args.image_base,) if args.image_base is not None else (0x122c0000,0x775c205000))
+        for kind in (('default_queue',) if args.default_queue else ('executor','queue'))
+        for tid in ((args.thread_id,) if args.thread_id is not None else (137,271))]
     negatives=negative_cases(args.library,args.libc)
+    if args.default_queue:negatives+=default_worker_negative_cases(args.library,args.libc,vm_full)
     report=dict(library_sha256=LIBRARY_SHA256,native_runs=len(cases),cases=cases,negative_cases=negatives,
         same_fresh_startup_and_worker_control=True,native_input_snapshot_used=False,
         native_code_used_by_python_model=False,bounded_allocator_used=True,virtual_os_used=True,
-        host_threads_created=False,host_wait_executed=False,default_initialization_task_executed=False,
+        host_threads_created=False,host_wait_executed=False,default_initialization_task_executed=args.default_queue,
+        same_fresh_startup_nonempty_worker_verified=args.default_queue,
         os_thread_exit_destructor_executed=False,complete_worker_runtime=False,
         complete_allocator_boot=False,complete_python_medusa=False)
     args.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
-    print(json.dumps(dict(native_runs=len(cases),negative_checks=len(negatives),same_fresh_startup_idle_worker_match=True)))
+    print(json.dumps(dict(native_runs=len(cases),negative_checks=len(negatives),same_fresh_startup_idle_worker_match=not args.default_queue,
+        same_fresh_startup_nonempty_worker_match=args.default_queue)))
 
 
 if __name__=='__main__':main()
