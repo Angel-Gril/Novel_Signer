@@ -1,0 +1,2893 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "native_runs": 240,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        17
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        0,
+        17
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        18
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        1,
+        18
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        2,
+        19
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        2,
+        19
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        3,
+        20
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        3,
+        20
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        4,
+        21
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        4,
+        21
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        5,
+        22
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        5,
+        22
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        6,
+        23
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        6,
+        23
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        24
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        7,
+        24
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        8,
+        25
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        8,
+        25
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        9,
+        26
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        9,
+        26
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        10,
+        27
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        10,
+        27
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        11,
+        28
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        11,
+        28
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        12,
+        29
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        12,
+        29
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        13,
+        30
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        13,
+        30
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        14,
+        31
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        14,
+        31
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        15,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        15,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        16,
+        1
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        16,
+        1
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        17,
+        2
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        17,
+        2
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        18,
+        3
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        18,
+        3
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        19,
+        4
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        19,
+        4
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        20,
+        5
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        20,
+        5
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        21,
+        6
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        21,
+        6
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        22,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        22,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        23,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        23,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        24,
+        9
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        24,
+        9
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        25,
+        10
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        25,
+        10
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        26,
+        11
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        26,
+        11
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        27,
+        12
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        27,
+        12
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        28,
+        13
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        28,
+        13
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        29,
+        14
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        29,
+        14
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        30,
+        15
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        30,
+        15
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        17
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        0,
+        17
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        18
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        1,
+        18
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        2,
+        19
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        2,
+        19
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        3,
+        20
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        3,
+        20
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        4,
+        21
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        4,
+        21
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        5,
+        22
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        5,
+        22
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        6,
+        23
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        6,
+        23
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        24
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        7,
+        24
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        8,
+        25
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        8,
+        25
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        9,
+        26
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        9,
+        26
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        10,
+        27
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        10,
+        27
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        11,
+        28
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        11,
+        28
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        12,
+        29
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        12,
+        29
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        13,
+        30
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        13,
+        30
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        14,
+        31
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        14,
+        31
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        15,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        15,
+        0
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        16,
+        1
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        16,
+        1
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        17,
+        2
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        17,
+        2
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        18,
+        3
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        18,
+        3
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        19,
+        4
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        19,
+        4
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        20,
+        5
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        20,
+        5
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        21,
+        6
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        21,
+        6
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        22,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        22,
+        7
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        23,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        23,
+        8
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        24,
+        9
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        24,
+        9
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        25,
+        10
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        25,
+        10
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        26,
+        11
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        26,
+        11
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        27,
+        12
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        27,
+        12
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        28,
+        13
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        28,
+        13
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        29,
+        14
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        29,
+        14
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        30,
+        15
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        30,
+        15
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": false,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "operand_indices": [
+        31,
+        16
+      ],
+      "upper_words_ignored": true,
+      "hidden_backing_supplied": true,
+      "low_and_high_signed_words_match": true,
+      "visible_32_registers_unchanged": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "handler_entry_offset": "0x16b618",
+  "native_stop_offset": "0x16b6e4",
+  "opcode": 17,
+  "subopcode": 57,
+  "operation": "unsigned W multiplication with sign-extended low and high product words",
+  "native_input_snapshot_used": false,
+  "complete_python_medusa": false
+}

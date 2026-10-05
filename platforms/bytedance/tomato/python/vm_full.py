@@ -143,7 +143,7 @@ class VM:
         self.register_backing_base = None
         self.opaque_hook = None            # optional callable(vm, dw, op, sub)
         self.trace = False
-        # Native op17/sub26 and sub52 use two hidden VM slots immediately
+        # Native multiply/divmod and sub52 use two hidden VM slots immediately
         # after the 32 traced slots. Keep an abstract copy of those slots.
         self._vm_tmp32 = 0
         self._vm_tmp33 = 0
@@ -522,6 +522,14 @@ class VM:
                     self.R[fA] = sx32(((self.R[fD] & 0xFFFFFFFF) + (self.R[fC] & 0xFFFFFFFF)) & 0xFFFFFFFF) & M64
                 elif sub == 54:
                     self.R[fB] = 1 if self.R[fA] < self.R[fD] else 0
+                elif sub == 57:   # native +0x16b618, unsigned W operands
+                    product = (self.R[fA] & 0xFFFFFFFF) * (self.R[fC] & 0xFFFFFFFF)
+                    self._vm_tmp32 = sx32(product & 0xFFFFFFFF) & M64
+                    self._vm_tmp33 = sx32((product >> 32) & 0xFFFFFFFF) & M64
+                    if self.register_backing_base is not None:
+                        reg_base = self.register_backing_base
+                        m.w64((reg_base + 0x100) & M64, self._vm_tmp32)
+                        m.w64((reg_base + 0x108) & M64, self._vm_tmp33)
                 elif sub == 26:   # 32-bit unsigned divmod (native handler 0x16b97c)
                     # The native handler reads 32-bit values from the VM slot
                     # array at x28 and writes sign-extended quotient/remainder

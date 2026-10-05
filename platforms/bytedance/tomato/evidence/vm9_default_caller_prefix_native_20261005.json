@@ -1,0 +1,279 @@
+{
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "native_runs": 20,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280590",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280970",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x2809f8",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280590",
+      "stack_prefill": 165,
+      "steps": 33,
+      "stop_bytecode_offset": "0xedd70",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 0,
+      "callback_word_package_match": true,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": false,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280590",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280970",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x2809f8",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280590",
+      "stack_prefill": 60,
+      "steps": 33,
+      "stop_bytecode_offset": "0xedd70",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 0,
+      "callback_word_package_match": true,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": false,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x280970",
+      "stack_prefill": 60,
+      "steps": 61633,
+      "stop_bytecode_offset": "0xeea60",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 6,
+      "callback_word_package_match": false,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": true,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "caller_offset": "0x2809f8",
+      "stack_prefill": 60,
+      "steps": 125576,
+      "stop_bytecode_offset": "0xeee54",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 0,
+      "callback_word_package_match": false,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": true,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280590",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280970",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x2809f8",
+      "stack_prefill": 165,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280590",
+      "stack_prefill": 165,
+      "steps": 33,
+      "stop_bytecode_offset": "0xedd70",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 0,
+      "callback_word_package_match": true,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": false,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280590",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280970",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x2809f8",
+      "stack_prefill": 60,
+      "caller_and_generic_prelude_match": true,
+      "all_34_initial_backing_words_match": true,
+      "physical_prelude_span_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280590",
+      "stack_prefill": 60,
+      "steps": 33,
+      "stop_bytecode_offset": "0xedd70",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 0,
+      "callback_word_package_match": true,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": false,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x280970",
+      "stack_prefill": 60,
+      "steps": 61633,
+      "stop_bytecode_offset": "0xeea60",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 6,
+      "callback_word_package_match": false,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": true,
+      "complete_default_task_vm": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "caller_offset": "0x2809f8",
+      "stack_prefill": 60,
+      "steps": 125576,
+      "stop_bytecode_offset": "0xeee54",
+      "all_32_boundary_registers_match": true,
+      "vm_local_frame_match": true,
+      "all_main_image_pages_match": true,
+      "guest_heap_match": true,
+      "modeled_callback_count": 0,
+      "callback_word_package_match": false,
+      "native_input_snapshot_used": false,
+      "nested_caller_vm_returned": true,
+      "complete_default_task_vm": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true
+    },
+    {
+      "case": "unmapped_stack",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true
+    },
+    {
+      "case": "missing_bytecode",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true
+    },
+    {
+      "case": "tagged_return",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true
+    },
+    {
+      "case": "step_budget",
+      "rejected": true,
+      "guest_pages_unchanged": true,
+      "vm_base_restored": true
+    }
+  ],
+  "fresh_elf_and_entry_stack_inputs": true,
+  "native_input_snapshot_used": false,
+  "complete_default_task_vm": false,
+  "complete_allocator_boot": false,
+  "complete_python_medusa": false
+}

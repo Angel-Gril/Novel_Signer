@@ -1,0 +1,28 @@
+{
+  "shared_vm_change": "OP17/sub57 unsigned low-W32 multiply into hidden slots 32/33",
+  "regressions": [
+    {
+      "component": "fresh root factory/caller",
+      "native_controls": 8,
+      "negative_checks": 11,
+      "all_selected_controls_passed": true,
+      "private_report_filename": "_root_after57.json"
+    },
+    {
+      "component": "parser digest",
+      "native_controls": 142,
+      "negative_checks": 5,
+      "all_selected_controls_passed": true,
+      "private_report_filename": "_parser_after57.json"
+    },
+    {
+      "component": "same-fresh-startup idle worker",
+      "native_controls": 8,
+      "negative_checks": 6,
+      "all_selected_controls_passed": true,
+      "private_report_filename": "_worker_after_initializer.json"
+    }
+  ],
+  "complete_python_medusa": false,
+  "online_header_matrix_verified": false
+}

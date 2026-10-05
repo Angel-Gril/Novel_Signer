@@ -22,16 +22,26 @@ TLS after argument cleanup. Complete worker runtime, fresh Medusa, live header
 matrix/f13 checks, no-JVM Rust, nonempty search/pagination, Douyin/Qidian and the
 final Pages/Actions products remain open.
 
-A new native-only bounded probe reaches only the first +0x280590 caller and
-its +0xedcf0/+0xee3b0 nested VM entries within two million instructions, with
-one additional 16384-byte allocation and no caller return observed. Multiple
-VM entries are not evidence that successive default callers completed; budget
-exhaustion does not prove an infinite loop.
+The first default caller +0x280590 now completes its real first-table
+initializer: one +0x280970 / VM +0xee3b0 and seven +0x2809f8 / VM +0xeea70
+returns. Two direct initializer controls compare all 16 nested returns; four
+cold/hot caller controls compare complete return state and ordered
+allocation/broadcast effects. ELF, entry stack, TLS and allocator inputs are
+fresh and independently generated. Condition broadcast remains an explicit
+provider. OP17/sub57 now passes 240 W32-multiply controls.
 
-Next: restore +0x280554's first initialization caller/nested VM and then the
-remaining five callers and actual VM callbacks,
-then OS exit cleanup and the real allocator/signing chain. Detailed scope,
-evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
+The earlier arena-prefix completion claim in commit 1b8aa32 is retracted:
+allocation/zeroing/publication alone must leave the once operation pending.
+Fourteen corrected controls and seven rollback cases verify the split and the
+explicit complete-initializer gate. The remaining five default caller
+preludes/first callbacks pass 40 controls, but their initializer bodies remain
+open. The older two-million-instruction native probe still describes its own
+limited boundary, not the latest completed first-caller result.
+
+Next: recover +0x280610's initializer +0x280a74 and nested callers
++0x280b54/+0x280bdc, then the remaining four bodies and +0x280554 task
+composition, OS exit cleanup and real allocator/signing chain. Detailed
+scope, evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
 
 ## Independent root factory and caller (2026-10-04)
 
@@ -1076,6 +1086,23 @@ extending interception across the refill/cleanup boundaries. The current
 Python signer, no-JVM Rust chain and live search/download remain unfinished.
 
 
-## Arena boot body (2026-10-05)
+## First table initializer and corrected once gate (2026-10-05)
 
-Fresh-input differential now covers `+0x280890` and its serial once wrapper `+0x32a0a0` at two relocated image bases. The model allocates and clears `0x4000`, publishes eight slab pointers, and records the once state transition. The native image table is captured through an explicit observation boundary; no native snapshot pages are fed into Python. A null allocator negative case rolls back without writes. This does not close the nested initialization VMs, OS region mapping, or real allocator boot. Evidence: [vm9_arena_boot_native_20261005.json](evidence/vm9_arena_boot_native_20261005.json).
+The former arena-prefix completion claim from commit `1b8aa32` is corrected.
+The prefix allocates/clears `0x4000` and publishes eight table pointers;
+`begin_once_arena_boot` leaves state 1 until the nested initializer completes.
+The explicit gate now follows lock -> publish 1 -> unlock -> complete
+initializer -> lock -> publish -1 -> unlock -> broadcast, and refuses a
+partial-prefix result. Busy-state waits remain unsupported.
+
+The complete first initializer now executes all eight nested VM returns;
+fresh controls at two relocated image bases compare every terminal slot and
+heap at every return, plus all image pages and allocation order. Four further
+cold/hot controls complete the first +0x280590 caller, including once and
+broadcast ordering. This completes one of six default callers. The other five
+entry/first-callback boundaries pass 40 controls but do not execute their
+initializer bodies. No native input snapshot is used in these checks.
+
+The controlled allocator and broadcast provider do not prove real arena/OS
+boot, concurrent workers, fresh Medusa output or live header validation.
+Details and correction provenance: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).

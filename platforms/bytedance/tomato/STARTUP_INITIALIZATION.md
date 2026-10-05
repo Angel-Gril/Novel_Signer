@@ -1,6 +1,6 @@
 # 外层启动 caller 与 worker 调度／清理
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲 worker 已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。**默认初始化任务的六段 VM、OS thread-exit 析构、真实 allocator boot、完整线程执行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲 worker 已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。默认初始化任务的第一个 caller 及完整八段首表初始化已通过 fresh 对照；其余五个 caller 的入口／首回调已对照，但初始化正文尚未完成。**六个 caller 的完整串联、OS thread-exit 析构、真实 allocator boot、完整线程执行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
@@ -73,12 +73,44 @@ python -B python/verify_vm9_startup_worker_loop.py --library /private/libmetasec
 
 脱敏原始控制摘要：[分支](evidence/vm9_branch_eq_native_20261005.json)、[启动](evidence/vm9_startup_init_native_20261005.json)、[worker](evidence/vm9_startup_workers_native_20261005.json)。
 
-新增脱敏控制摘要：[condition wait](evidence/vm9_condition_wait_native.json)、[queue](evidence/vm9_queue_callable_native.json)、[executor](evidence/vm9_executor_poll_native.json)、[同次启动与空闲 worker](evidence/vm9_startup_worker_loop_native.json)。256 组新控制／22 个拒绝检查通过；主线程 4 组／13 个拒绝和 worker support/context 24 组／10 个拒绝再次通过，见 [受影响回归](evidence/vm9_worker_scheduler_regression.json)。共享 VM 解释器本轮未改动。
+新增脱敏控制摘要：[condition wait](evidence/vm9_condition_wait_native.json)、[queue](evidence/vm9_queue_callable_native.json)、[executor](evidence/vm9_executor_poll_native.json)、[同次启动与空闲 worker](evidence/vm9_startup_worker_loop_native.json)。256 组新控制／22 个拒绝检查通过；主线程 4 组／13 个拒绝和 worker support/context 24 组／10 个拒绝再次通过，见 [受影响回归](evidence/vm9_worker_scheduler_regression.json)。上述 worker 调度批次未改共享 VM 解释器；随后首表初始化批次新增的乘法指令见下文。
 
 此前另有一个明确标注为 **native-only** 的 [guest 调度探针](evidence/vm9_executor_native_wait_boundary_20261005.json)：在同一 fresh native 运行中，主线程发布三个 worker 后，显式调度第一个 executor worker、提供独立 guest TLS 和虚拟 clock，贯通 support、context 和 poll，停在 `+0x3485c0` 的 `pthread_cond_timedwait` 前。额外分配为128／23字节。它没有运行 wait、创建 host thread或完成 Python worker；clock 是调度探针的显式输入，不是 f13 冻结或线上签名证据。
 
-最新 [native-only 默认任务前段探针](evidence/vm9_default_task_prefix_boundary.json) 在绑定 memset／strlen GOT 后，以 2,000,000 条原生指令预算继续同次启动生成的非空 queue worker。只观察到第一个 caller `+0x280590` 进入，尚未观察到任何默认 caller 的 VM 返回位置；其嵌套 VM entry 为 `+0xedcf0/+0xee3b0`，新增一次 16384 字节分配。多个 VM entry 不等于多个默认 caller 已完成。该探针因指令预算耗尽结束，不证明无限循环，也没有验证 Python 默认任务。下一处恢复应从第一个 caller 的嵌套初始化 VM 与回调开始。
+最新 [native-only 默认任务前段探针](evidence/vm9_default_task_prefix_boundary.json) 在绑定 memset／strlen GOT 后，以 2,000,000 条原生指令预算继续同次启动生成的非空 queue worker。只观察到第一个 caller `+0x280590` 进入，尚未观察到任何默认 caller 的 VM 返回位置；其嵌套 VM entry 为 `+0xedcf0/+0xee3b0`，新增一次 16384 字节分配。多个 VM entry 不等于多个默认 caller 已完成。该探针因指令预算耗尽结束，不证明无限循环，也没有验证 Python 默认任务。这项旧探针的预算边界已被下述更长的 fresh 返回验证推进，原探针本身仍仅证明前段。
+
+## 第一个默认 caller 与首表完整初始化（2026-10-05）
+
+`run_first_default_caller` 已恢复 `+0x280590 → VM +0xedcf0 → +0x281598 → +0x32a0a0`，再执行 `+0x280890` 的完整 initializer：一次 `+0x280970 → VM +0xee3b0`，七次 `+0x2809f8 → VM +0xeea70`（包含最后一次 tailcall）。首段为 61,633 步，后七段各 125,576 步；这八次返回属于第一个默认 caller，不能算成八个默认任务。
+
+| 新增范围 | Native 对照 | 拒绝检查 | 实际边界 |
+| --- | ---: | ---: | --- |
+| arena prefix／显式 once gate | 14 | 7 | 两种基址、三种 gate state、两种分配偏移；prefix 停在首个 nested caller 之前 |
+| OP17/sub57 W32 无符号乘法 | 240 | — | 全部寄存器索引、溢出、忽略上半字、hidden backing 有／无；普通 32 槽不变 |
+| 第一个 caller／两个 nested caller 前置与边界 | 20 | 5 | 全部 34 个初始 backing word、物理前置栈；首回调包或完整 nested 返回 |
+| 完整首表 initializer | 2 | — | 16 次 nested 返回：每次 32 个终止槽及整个 guest heap；最终全部主 image 和分配顺序 |
+| 第一个默认 caller cold／hot 完整返回 | 4 | — | 两种基址；cold 每次八次 nested 返回，hot 跳过；32 槽、虚拟栈、heap／image 和 allocation／broadcast 时序 |
+| 剩余五个 caller 的前置／首回调 | 40 | — | 两种基址 × 两种栈预填值 × 五个 caller × 两个边界；正文停在首个未知 initializer 之前 |
+
+**纠正旧提交 `1b8aa32` 的完成声明。** 当时只实现了 0x4000 字节分配／清零／八个指针发布，却将 once 写成完成值 -1；旧 verifier 没有比较完整 initializer 的完成状态。现已将前段拆为 `initialize_arena_boot_prefix` 与 `begin_once_arena_boot`：后者保持 once=1，表示 pending。`call_once_arena_boot` 只有完整 initializer 返回后才 lock、写 -1、unlock、broadcast，拒绝把 `ArenaBootPrefixResult` 当成完成。旧 evidence 文件同名更新并保存纠正来源。allocator 输出不要求页对齐，完整 fresh 控制实际使用 guest+0x4300。
+
+首表与第一个 caller 的 Python 输入来自各自 fresh ELF、函数入口栈、TLS 和显式 allocator，不来自 native 输出或入口前导快照。`prepare_initialization_caller` 独立生成 wrapper 和 generic VM ABI；完整退出会检查 TLS canary 并将终止槽写回 backing，供后续 nested caller 复用。新恢复的 OP17/sub57 将两个 W32 无符号操作数相乘，低／高 32 位分别符号扩展到 hidden slot 32／33。
+
+仍保留明确的环境边界：分配地址由 allocator provider 提供；broadcast 在两边使用同一个显式服务；这里只比较串行且无竞争的 matching libc mutex。once=1 的等待路径拒绝执行。没有真实 host thread、并发 worker 或 OS condition runtime 完成证据。完整首表初始化也不等于真实 jemalloc arena／OS region boot。
+
+新增复现命令（在本目录执行）：
+
+```text
+python -B python/verify_vm9_arena_boot.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/arena-gate.json
+python -B python/verify_vm9_multiply.py --library /private/libmetasec_ml_71332.so --output /private/multiply.json
+python -B python/verify_vm9_default_task_prefix.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/default-prefix.json
+python -B python/verify_vm9_arena_initializer.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/first-initializer.json
+python -B python/verify_vm9_first_default_caller.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/first-caller.json
+python -B python/verify_vm9_remaining_default_callers.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/remaining-prefix.json
+```
+
+对应脱敏证据：[纠正后的 gate](evidence/vm9_arena_boot_native_20261005.json)、[乘法](evidence/vm9_multiply_native_20261005.json)、[caller 前段](evidence/vm9_default_caller_prefix_native_20261005.json)、[完整首表](evidence/vm9_first_arena_initializer_native_20261005.json)、[第一个 caller](evidence/vm9_first_default_caller_native_20261005.json)、[其余五个前段](evidence/vm9_remaining_default_callers_prefix_native_20261005.json)。受影响回归为 fresh root 8／11、parser 142／5、同次空闲 worker 8／6（native／negative），见 [回归摘要](evidence/vm9_initializer_regression_20261005.json)。
 
 ## 继续顺序
 
-先恢复非空 queue 的默认 invoke `+0x280554` 及六个 caller `+0x280590/+0x280610/+0x280690/+0x280710/+0x280790/+0x280810` 的实际初始化 VM 和回调。补齐其 fresh fixture 的 memset／strlen GOT 绑定，继续定位尚未返回的 native 默认任务；不能将它的输出变成 Python 输入。随后恢复 OS thread-exit support/emulated-TLS 析构，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
+继续恢复其余五个 caller `+0x280610/+0x280690/+0x280710/+0x280790/+0x280810` 的 initializer 正文，再组合非空 queue 的默认 invoke `+0x280554`。第二个 caller 的 once 控制为 `+0x3e0a30`，initializer 为 `+0x280a74`，nested caller 为 `+0x280b54/+0x280bdc`；同样先独立生成输入，再以 native 返回作 expected output。随后恢复 OS thread-exit support/emulated-TLS 析构，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
