@@ -3,6 +3,8 @@
 The continuation at +0x8e41c is explicit: CPU query, full cold-init return are not executed or claimed.
 Public small/refill controls run as explicit continuations of that fresh prefix. Only inactive keys and ELF
 options seed native; no Python-generated boot pages seed the oracle.
+The separate small-free verifier supplies an explicit allocate/free continuation;
+C void-free return values are excluded from defined-return comparison.
 """
 from __future__ import annotations
 import argparse
@@ -23,10 +25,10 @@ from verify_vm9_libc_arena_boot import put, get, LIBC
 
 CONTINUE = GUEST + 0xF720
 ENTRIES = {0x8E250, 0x8E350, 0x99938, 0x8DDA0, 0x98C54, 0x98490,
-    0x98428, 0x8F00C, 0x7970C, 0x97ECC, 0x7A668, 0x79FA4, 0x787DC, 0x765B0, 0x7E14C}
+    0x98428, 0x8F00C, 0x7970C, 0x97ECC, 0x1BAC0, 0x91990, 0x7A668, 0x79FA4, 0x787DC, 0x765B0, 0x7E14C}
 
 
-def case(library, libc, image, label):
+def case(library, libc, image, label, *, free_actions=None):
     p, seed = fresh(library, libc, image), fresh(library, libc, image)
     bits = 16 if label in ("chunk16", "public_partial") else 20 if label == "chunk20" else 18
     for pages in (p, seed):
@@ -44,13 +46,14 @@ def case(library, libc, image, label):
     pending = []
     wrapper = LIBC + 0xDB6B8
     tsd = wrapper + 8
+    free_control = free_actions is not None
     public = label.startswith("public_")
     requests = {"public_default": [128], "public_sizes": [0, 1, 31, 127, 4095, 7169, 14335],
         "public_bitmap": [8] * 65, "public_exhausted": [4096] * 12,
         "public_regions": [14336] * 40, "public_disabled": [128, 48, 7168],
         "public_zero": [128] * 3, "public_null": [128], "public_partial": [14336], "public_ready": [128],
         "public_state_zero": [128], "public_state_two": [128, 128]}.get(label, [])
-    iterations = len(requests) if public else 3 if label in ("three_caches", "three_binds") else 1
+    iterations = len(free_actions) if free_control else len(requests) if public else 3 if label in ("three_caches", "three_binds") else 1
     binding = label in ("bind", "three_binds", "bind_noncurrent")
     direct = label == "direct_create"
     def fail_mmap(count):
@@ -99,11 +102,14 @@ def case(library, libc, image, label):
         if not pending:
             cpu.reg_write(UC_ARM64_REG_PC, STOP); return None
         offset, args = pending.pop(0)
-        for reg, value in zip(REGS, args): cpu.reg_write(reg, value)
+        for reg, value in zip(REGS, args):
+            if isinstance(value, tuple): value = results[value[1]]
+            cpu.reg_write(reg, value)
         cpu.reg_write(UC_ARM64_REG_X30, CONTINUE)
         cpu.reg_write(UC_ARM64_REG_PC, LIBC + offset)
         return None
     def cold_continuation(cpu):
+        if label == "free_zero": cpu.mem_write(LIBC + 0xE69C9, bytes([1]))
         if label == "public_ready": cpu.mem_write(LIBC + 0xDB6A0, bytes(4))
         if label == "public_zero": cpu.mem_write(LIBC + 0xE69C9, bytes([1]))
         if label in ("state_zero", "public_state_zero"): cpu.mem_write(tsd, (0).to_bytes(4, "little"))
@@ -111,8 +117,14 @@ def case(library, libc, image, label):
         if label == "bind_noncurrent": cpu.mem_write(tsd, (3).to_bytes(4, "little"))
         arena = int.from_bytes(cpu.mem_read(LIBC + 0xE6968, 8), "little")
         entry = 0x8F00C if public else 0x8DDA0 if binding else 0x98490 if direct else 0x98C54
-        pending.extend((entry, [size]) for size in requests) if public else pending.extend(
-            (entry, [tsd, arena] if direct else [tsd]) for _ in range(iterations))
+        if free_control:
+            for op, value in free_actions:
+                pending.append((0x8F00C, [value]) if op == "allocate" else
+                    (0x1BAC0, [0 if value is None else ("result", value)]))
+        elif public:
+            pending.extend((entry, [size]) for size in requests)
+        else:
+            pending.extend((entry, [tsd, arena] if direct else [tsd]) for _ in range(iterations))
         return dispatch(cpu)
     def poison_remaining(read, write):
         cache = int.from_bytes(read(wrapper + 0x10, 8), "little")
@@ -124,6 +136,12 @@ def case(library, libc, image, label):
             write(pointer, bytes([0xA5]) * 128)
     def continuation(cpu):
         results.append(cpu.reg_read(UC_ARM64_REG_X0))
+        if free_control and len(results) == 1 and label in ("free_reuse", "free_zero"):
+            cpu.mem_write(results[0], bytes([0xA5]) * 128)
+        if free_control and len(results) == 1 and label == "free_state_two":
+            cpu.mem_write(tsd, (2).to_bytes(4, "little"))
+        if label == "free_zero" and len(results) == len(free_actions):
+            assert bytes(cpu.mem_read(results[-1], 128)) == bytes(128)
         if label == "public_zero" and len(results) > 1:
             assert bytes(cpu.mem_read(results[-1], 128)) == bytes(128)
         if label == "public_zero" and len(results) == 1:
@@ -140,12 +158,21 @@ def case(library, libc, image, label):
     assert stop == 0x8E41C
     if label in ("state_zero", "state_two", "bind_noncurrent", "public_state_zero", "public_state_two"):
         put(p, tsd, {"state_zero": 0, "state_two": 2, "bind_noncurrent": 3, "public_state_zero": 0, "public_state_two": 2}[label], 4)
+    if label == "free_zero": put(p, LIBC + 0xE69C9, 1, 1)
     if label == "public_ready": put(p, LIBC + 0xDB6A0, 0, 4)
     if label == "public_zero": put(p, LIBC + 0xE69C9, 1, 1)
     arena = get(p, LIBC + 0xE6968)
     actual = []
     for i in range(iterations):
-        if public:
+        if free_control:
+            op, value = free_actions[i]
+            if op == "allocate":
+                result = model.allocate_public_small(os, request_size=value, libc_base=LIBC,
+                    thread_pointer=WORKER_TLS, os_call=os_call)
+            else:
+                result = model.release_cached_small(os, pointer=0 if value is None else actual[value],
+                    libc_base=LIBC, thread_pointer=WORKER_TLS)
+        elif public:
             result = model.allocate_public_small(os, request_size=requests[i], libc_base=LIBC,
                 thread_pointer=WORKER_TLS, os_call=os_call)
         elif binding:
@@ -156,6 +183,12 @@ def case(library, libc, image, label):
             result = fn(os, tsd_address=tsd, libc_base=LIBC, thread_pointer=WORKER_TLS,
                 os_call=os_call, **extra)
         actual.append(result)
+        if free_control and i == 0 and label in ("free_reuse", "free_zero"):
+            allocator._write_span(p, result, bytes([0xA5]) * 128)
+        if free_control and i == 0 and label == "free_state_two":
+            put(p, tsd, 2, 4)
+        if label == "free_zero" and i == len(free_actions)-1:
+            assert allocator._read_span(p, result, 128) == bytes(128)
         if label == "public_zero" and i > 0:
             assert allocator._read_span(p, result, 128) == bytes(128)
         if label == "public_zero" and i == 0:
@@ -166,7 +199,14 @@ def case(library, libc, image, label):
     if label == "public_partial":
         cache = get(p, wrapper + 0x10)
         assert actual[0] and m_maps[0] >= 4 and get(p, cache + 35 * 32 + 0x30, 4) == 1
-    assert actual == results, (label, "results", actual, results)
+    if free_control:
+        assert all(actual[i] == results[i] for i, (op, _) in enumerate(free_actions) if op == "allocate")
+        if label in ("free_reuse", "free_zero"):
+            assert actual[0] == actual[-1]
+        if label == "free_reuse":
+            assert allocator._read_span(p, actual[-1], 128) == bytes([0xA5]) * 128
+    else:
+        assert actual == results, (label, "results", actual, results)
     assert n_calls == m_calls, (label, "ordered OS calls")
     assert os.mappings == nos.mappings and os.next_address == nos.next_address, (label, "OS metadata")
     assert allocator._read_span(p, GUEST, 0xA000) == memory
@@ -181,6 +221,7 @@ def case(library, libc, image, label):
         ordered_os_calls=len(m_calls), retained_owned_mappings=len(os.mappings),
         actual_entry_counts={hex(k): v for k,v in sorted(counts.items())},
         ready_flag_fixture_applied=label == "public_ready",
+        void_free_return_ignored=free_control,
         allocation_provider_used=False, native_input_snapshot_used=False, explicit_virtual_os=True,
         python_malloc_cold_boot_complete=False)
 

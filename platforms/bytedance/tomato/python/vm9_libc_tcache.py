@@ -312,3 +312,71 @@ def allocate_public_small(guest_os, *, request_size, libc_base, thread_pointer, 
         thread_pointer=thread_pointer, os_call=os_call)
     tx.commit()
     return result
+
+
+def release_cached_small(guest_os, *, pointer, libc_base, thread_pointer):
+    """Actual free +0x1bac0 -> +0x91990, NULL or nonfull clean small cache.
+
+    C free has a void ABI; no native X0 value is part of this contract. The
+    bitmap remains allocated while the object is owned by the thread cache.
+    Full-bin flush, direct arena release, profiling and GC explicitly reject.
+    """
+    if pointer == 0:
+        return None
+    if not isinstance(pointer, int) or not 0 < pointer <= MASK:
+        raise allocator.RefillUnsupported("free pointer outside uint64 ABI")
+    tx = guest_os.begin()
+    p = tx.pages
+    wrapper = _current_tsd(p, libc_base, thread_pointer)
+    cache = _u(p, wrapper + 0x10)
+    mask = _u(p, _indirect(p, libc_base, 0xD8DD8))
+    chunk = pointer & ~mask
+    page = (pointer - chunk) >> 12
+    bias = _u(p, _indirect(p, libc_base, 0xD8F58))
+    limit = _u(p, _indirect(p, libc_base, 0xD8E10))
+    if chunk == pointer or not bias <= page < limit:
+        raise allocator.RefillUnsupported("huge/non-arena free is unrecovered")
+    tag = _u(p, chunk + 0x68 + (page - bias) * 8)
+    class_id = (tag >> 4) & 255
+    if tag & 3 != 1 or not 0 <= class_id < 36:
+        raise allocator.RefillUnsupported("free requires an allocated small page tag")
+    width = _u(p, libc_base + 0xA6C80 + class_id * 8)
+    # Valid C free input must identify a live allocated slot, not an interior
+    # address or a never-issued bitmap slot. Invalid frees are not emulated.
+    first_page = page - (tag >> 12)
+    row = libc_base + 0xE9120 + class_id * 96
+    stride = _u(p, row + 0x10)
+    delta = pointer - chunk - (first_page << 12) - _u(p, row + 0x58, 4)
+    if first_page < bias or not stride or delta < 0 or delta % stride:
+        raise allocator.RefillUnsupported("free pointer is not a slab slot boundary")
+    slot = delta // stride
+    slab = chunk + _u(p, libc_base + 0xE9EA0) + (first_page - bias) * 96 + 16
+    if slot >= _u(p, row + 0x20, 4) or _u(p, slab, 4) != class_id:
+        raise allocator.RefillUnsupported("free pointer is outside the matching slab")
+    if _u(p, slab + 8 + (slot >> 6) * 8) & (1 << (slot & 63)):
+        raise allocator.RefillUnsupported("free pointer names a never-issued slab slot")
+    allocator._read_span(p, pointer, width)
+    _w(p, wrapper + 0x20, (_u(p, wrapper + 0x20) + width) & MASK)
+    if _u(p, libc_base + 0xE69C0):
+        raise allocator.RefillUnsupported("free profiling callback is unrecovered")
+    if not cache:
+        raise allocator.RefillUnsupported("direct arena small release is unrecovered")
+    if _u(p, libc_base + 0xE69CA, 1):
+        raise allocator.RefillUnsupported("free junk fill is unrecovered")
+    target = cache + class_id * 32
+    capacity = _u(p, _u(p, _indirect(p, libc_base, 0xD8E20)) + class_id * 4, 4)
+    count = _u(p, target + 0x30, 4)
+    if count >= capacity:
+        raise allocator.RefillUnsupported("full/corrupt free bin flush is unrecovered")
+    vector = _u(p, target + 0x38)
+    for i in range(count):
+        if _u(p, vector + i * 8) == pointer:
+            raise allocator.RefillUnsupported("object already belongs to the cache")
+    _w(p, vector + count * 8, pointer)
+    _w(p, target + 0x30, count + 1, 4)
+    event = (_u(p, cache + 0x18, 4) + 1) & 0xFFFFFFFF
+    _w(p, cache + 0x18, event, 4)
+    if event == 228:
+        raise allocator.RefillUnsupported("free tcache GC event is unrecovered")
+    tx.commit()
+    return None

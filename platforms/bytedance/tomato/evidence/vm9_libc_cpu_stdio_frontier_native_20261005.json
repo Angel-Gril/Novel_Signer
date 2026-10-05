@@ -1,0 +1,128 @@
+{
+  "schema": "vm9-libc-cpu-stdio-frontier-probe-v1",
+  "entry_counts": {
+    "0x1d2e4": 1,
+    "0x2669c": 1,
+    "0x57cd8": 1,
+    "0x5786c": 1,
+    "0x749dc": 1,
+    "0x74868": 1,
+    "0x75550": 1,
+    "0x573e4": 6,
+    "0x56c78": 1,
+    "0x1bac0": 1,
+    "0x91990": 1
+  },
+  "ordered_phase_trace": [
+    "sysconf",
+    "get_nprocs",
+    "fopen",
+    "mode_parse",
+    "stdio_file_acquire",
+    "stdio_initialize",
+    "stdio_cleanup_registration",
+    "fgets",
+    "fgets",
+    "fgets",
+    "fgets",
+    "fgets",
+    "fgets",
+    "fclose",
+    "free_dispatch",
+    "allocator_free"
+  ],
+  "native_cold_return_flag_zero": true,
+  "allocation_provider_used": false,
+  "native_input_snapshot_used": false,
+  "explicit_virtual_os": true,
+  "python_stdio_file_lifecycle_restored": false,
+  "python_malloc_cold_boot_complete": false,
+  "standalone_medusa_complete": false,
+  "ordered_os_calls_with_preceding_observed_entry": [
+    {
+      "preceding_observed_entry": "prefix",
+      "syscall": 214,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "prefix",
+      "syscall": 222,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "prefix",
+      "syscall": 167,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "stdio_cleanup_registration",
+      "syscall": 222,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "stdio_cleanup_registration",
+      "syscall": 226,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "stdio_cleanup_registration",
+      "syscall": 56,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fgets",
+      "syscall": 80,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fgets",
+      "syscall": 222,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fgets",
+      "syscall": 167,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fgets",
+      "syscall": 215,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fgets",
+      "syscall": 222,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fgets",
+      "syscall": 167,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fgets",
+      "syscall": 215,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fgets",
+      "syscall": 63,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fgets",
+      "syscall": 63,
+      "succeeded": true
+    },
+    {
+      "preceding_observed_entry": "fclose",
+      "syscall": 57,
+      "succeeded": true
+    }
+  ],
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "controlled_cpu_count": 4,
+  "preceding_observed_entry_is_not_call_stack": true,
+  "current_online_header_matrix_verified": false
+}

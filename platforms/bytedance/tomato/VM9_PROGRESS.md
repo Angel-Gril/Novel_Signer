@@ -96,9 +96,20 @@ refill failure. Two ready-flag controls use an explicit fixture, not actual
 cold-init completion. All retained mapping bytes, globals/TLS, returns, OS calls
 and mapping metadata match; no native initialization pages seed Python.
 
+Actual free dispatch +0x1bac0 -> +0x91990 now adds 16 native controls and
+13 rejection/rollback checks for NULL and nonfull clean small cache bins.
+Controls include 4096-byte buffer release, six classes, pointer reuse with
+preserved poison/zero clearing, batch release/reallocation and state-2 TSD.
+Defined allocation returns and all mapping/global/TLS bytes match; C free's
+void return is deliberately excluded. Full-bin flush, direct arena release,
+large/huge, profiling, junk and GC remain unsupported.
+
 Next: connect CPU query sysconf +0x1d2e4 -> get_nprocs +0x2669c with actual
-stdio/file OS inputs and the small-free dispatch +0x1bac0 -> +0x91990, then
-atfork allocation, arena table finalization and TSD migration. The outer Python
+stdio/file OS inputs: +0x749dc -> +0x74868 FILE/recursive-mutex initialization,
++0x75550 __atexit_register_cleanup with guarded mapping, then open/stat/read/
+close and +0x573e4 fgets. Actual native probes reach those entries and return;
+Python has not restored them. Join public small/cached free into that complete
+FILE lifecycle, then atfork allocation, arena table finalization and TSD migration. The outer Python
 cold prefix still stops at +0x8e41c/flag 1. Full cold return/flag 0, fresh Medusa
 and the online header matrix remain open. Multi-arena selection, GC, profiling,
 large/huge, cache destruction and concurrent publication are unsupported, as

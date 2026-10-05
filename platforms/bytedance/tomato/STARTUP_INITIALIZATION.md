@@ -408,14 +408,32 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_tcache.py --library 
 
 owner API 为 `bind_thread_arena`、`create_thread_cache`、`get_thread_cache`、`refill_small_cache_bin` 和 `allocate_public_small`。它们接收同一个 `GuestOS`，原子提交 guest pages／mapping records／cursor；输入必须由真实已恢复的 boot 路径生成。不是独立 signer API。
 
-**外层 Python cold prefix 仍停在 `+0x8e41c`。** 接下来的实际 native 路线已确认是 `sysconf +0x1d2e4 → get_nprocs +0x2669c → fopen +0x57cd8 → fclose +0x56c78 → free +0x1bac0`；allocator dispatch 的 free 目标为 `+0x91990`。需要继续恢复实际 stdio／文件 OS 输入和 small free，使 CPU 查询中的分配及释放相互闭合，随后接 atfork 的 48 字节 public allocation、arena table 收尾与 `+0x99c78` 的 128 字节 internal TSD migration。
+**外层 Python cold prefix 仍停在 `+0x8e41c`。** 接下来的实际 native 路线已确认是 `sysconf +0x1d2e4 → get_nprocs +0x2669c → fopen +0x57cd8 → fclose +0x56c78 → free +0x1bac0`；allocator dispatch 的 free 目标为 `+0x91990`。cached small free 的新进展见下一节；还需恢复实际 stdio／文件 OS 输入，使 CPU 查询中的分配及释放相互闭合，随后接 atfork 的 48 字节 public allocation、arena table 收尾与 `+0x99c78` 的 128 字节 internal TSD migration。
 
 完整 public allocator 仍不支持 multi-arena selection、large/huge、GC、profiling、cache 析构、并发和此前 region 的未恢复分支。当前结果没有证明 full cold-init flag 0、fresh Medusa 或线上全头矩阵；其他平台与最终产品亦未完成。
+
+## Matching libc cached small free（2026-10-05）
+
+`release_cached_small()` 已恢复实际 `free +0x1bac0 → +0x91990` 的 NULL 与未满 clean small bin 路径，新增 **16 组 native 对照和 13 项拒绝／回滚检查**。`C free` 返回类型为 void，不把 native 遗留的 X0 当作功能返回值。非 NULL 路径读取实际 page tag/class、计入 TSD deallocation、把对象放回 cache vector、更新 count/event；bitmap 保留 allocated 状态，直到后续真正从 cache 向 arena 释放。
+
+每个主 image 基址运行 8 组：NULL、128／4096 字节、跨六个 size class、释放后直接复用、清零复用、批量逆序释放及重取、TSD state 2 迁移。复用控制必须返回原指针；默认复用保留显式写入的 `0xA5`，打开 zero 选项后的复用必须全部清零。对照比较所有有定义的 allocation 返回值、guest、libc globals/TLS、每一页保留映射、映射记录／cursor 和有序 OS calls，不对 void free 的 X0 作数值比较。此前 tcache 验证器的 default 与 poisoned-zero 控制也通过了共享执行器回归。
+
+13 项拒绝检查覆盖对象内部地址、bitmap 标记为 free 的 slot、非法／huge 指针、错误 page tag、profiling、缺失 tcache 的 direct arena release、free junk、full/corrupt bin、重复入 cache、GC 和缺失 TSD。拒绝时 guest pages、mapping records 和 cursor 不变。完整 bin flush、直接 arena release、large/huge、profiling／GC 和 free junk 仍未恢复；不能从本阶段推广为完整 `free()`。
+
+公开证据：`evidence/vm9_libc_cached_small_free_native_20261005.json`。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_free.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-free-report.json
+```
+
+新的 native 冷启动诊断进一步确认 CPU 查询实际执行 `fopen +0x57cd8 → mode parse +0x5786c → FILE 获取 +0x749dc → stdio 初始化 +0x74868 → __atexit_register_cleanup +0x75550 → fgets +0x573e4 → fclose +0x56c78 → free +0x91990`。诊断中的完整 native cold return 成功，并不表示 Python 已接回这条路线。coarse 控制证据见 `evidence/vm9_libc_cpu_stdio_frontier_native_20261005.json`；OS ledger 的 preceding-observed-entry 只记录先前出现的入口，不能用它推定 syscall 的动态调用栈。
+
+**下一步是恢复 `+0x74868/+0x749dc` 的 FILE 扩展对象及递归 mutex 初始化、`+0x75550` 的 guarded 退出清理注册，再贯通实际 open/read/stat/close 与 fgets 解析。** 已恢复的 public small allocation 与 cached small free 可随后用于 CPU 文件缓冲的完整生命周期，不能以直接返回 CPU 数替代这些副作用。Python 整体仍停在 `+0x8e41c`；atfork、arena table 和 TSD migration 仍待组合验证。
 
 ## 继续顺序
 
 继续恢复 matching libc 的真实 allocator 冷启动，将当前显式 allocator／TLS／OS 服务逐项替换为已验证实现，并将 startup、`+0x256e50` 配置构造和既有 root factory 接到外层 signer。未识别 callback、support 关联状态类型和真实线程创建仍需真实来源，不以空回调填补。
 
-先前停在 syscall 167 的 native 诊断已推进到 `flag = 0` 返回；Python 同次 fresh 冷启动目前停在 `+0x8e41c`、`flag = 1`。新 region／清洁 slab／raw internal small 和有界 public small／tcache 已有实现；下一步恢复 CPU 查询的实际 stdio、文件 OS 输入与 `+0x91990` small free，再接 atfork allocation、arena table 和 TSD migration，验证完整 Python `flag = 0` 返回。真实 OS/TLS 创建仍是单独未完成边界。
+先前停在 syscall 167 的 native 诊断已推进到 `flag = 0` 返回；Python 同次 fresh 冷启动目前停在 `+0x8e41c`、`flag = 1`。新 region／清洁 slab／raw internal small 和有界 public small／tcache 已有实现；下一步恢复 CPU 查询中 `+0x74868/+0x749dc` 的 stdio／递归 mutex、`+0x75550` cleanup 注册和文件 OS 输入，将已有 public small／cached small free 接回完整 FILE 生命周期，再接 atfork allocation、arena table 和 TSD migration，验证完整 Python `flag = 0` 返回。真实 OS/TLS 创建仍是单独未完成边界。
 
 随后用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
