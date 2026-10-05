@@ -1,6 +1,6 @@
 # 外层启动 caller 与 worker 调度／清理
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲 worker 已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。默认初始化任务的前两个 caller 已通过 fresh cold／hot 返回对照；其余四个 caller 的入口／首回调已对照，但初始化正文尚未完成。**六个 caller 的完整串联、OS thread-exit 析构、真实 allocator boot、完整线程执行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲 worker 已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。默认初始化任务的六个 caller 及 `+0x280554` 的完整串联已通过 fresh cold／hot 对照。**同次主线程启动→非空 worker→默认任务→退出的组合、OS thread-exit 析构、真实 allocator boot、完整线程执行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
@@ -117,7 +117,7 @@ python -B python/verify_vm9_remaining_default_callers.py --library /private/libm
 
 两种基址的四个 cold／hot 组合都通过，比较 32 槽、虚拟栈、heap、全部主 image、once 状态与分配／broadcast 时序。两个 nested caller 的前置／完整返回另通过 12 个控制；9 个异常案例确认未知布局、busy once、锁已持有、空／未映射分配、broadcast 失败、tagged return、未映射栈和 canary 改变均拒绝，guest 页及 VM base 恢复。外部 provider 的副作用不由 guest transaction 回滚。
 
-研究接口 `run_default_initialization_caller(..., table_index=0|1)` 选择已恢复的前两项；`run_first_default_caller` 保留第一个 caller 的入口。`table_index` 超出已恢复范围会拒绝，不会套用已知状态伪造后续初始化。Native 输出仍只用作 expected output，allocator 与 broadcast 仍是显式环境服务。
+研究接口 `run_default_initialization_caller(..., table_index=0|1)` 选择已恢复的前两项；`run_first_default_caller` 保留第一个 caller 的入口。此阶段当时仅接受两项；后续六项验证后扩展为 0..5，超出范围仍拒绝。Native 输出仍只用作 expected output，allocator 与 broadcast 仍是显式环境服务。
 
 ```text
 python -B python/verify_vm9_arena_initializer.py --table-index 1 --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/second-initializer.json
@@ -125,8 +125,41 @@ python -B python/verify_vm9_second_initializer_prefix.py --library /private/libm
 python -B python/verify_vm9_first_default_caller.py --table-index 1 --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/second-caller.json
 ```
 
-证据：[第二张表逐个返回的 16 次对照](evidence/vm9_second_arena_initializer_native_20261005.json)、[第一个 caller 的四组回归](evidence/vm9_first_default_caller_regression_20261005.json)、[第二项 nested 与拒绝检查](evidence/vm9_second_nested_callers_native_20261005.json)、[第二个 caller](evidence/vm9_second_default_caller_native_20261005.json)。这证明默认任务中的两个 caller；六项的整体串联和完整 worker 尚未验证。
+证据：[第二张表逐个返回的 16 次对照](evidence/vm9_second_arena_initializer_native_20261005.json)、[第一个 caller 的四组回归](evidence/vm9_first_default_caller_regression_20261005.json)、[第二项 nested 与拒绝检查](evidence/vm9_second_nested_callers_native_20261005.json)、[第二个 caller](evidence/vm9_second_default_caller_native_20261005.json)。这项阶段证据只比较两个 caller；后续六项串联结果见下文，完整 worker 仍未验证。
+
+## 六项默认初始化正文与串联（2026-10-05）
+
+`run_default_initialization_caller` 已扩展为 `table_index=0..5`，六项均完成；`run_default_initialization_task` 恢复 `+0x280554` 的外层顺序：前五项普通调用，第六项恢复外层 SP／FP／return 后 tailcall。它是已验证的串行默认任务正文，还没有接回同次 fresh 主线程发布的非空 worker。
+
+| 顺序 | 默认 caller | Initializer | 第一个 nested caller／VM | 重复七次的 caller／VM | Python nested 步数（首段／后段） |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `+0x280590` | `+0x280890` | `+0x280970 / +0xee3b0` | `+0x2809f8 / +0xeea70` | 61,633 / 125,576 |
+| 2 | `+0x280610` | `+0x280a74` | `+0x280b54 / +0xeee60` | `+0x280bdc / +0xef520` | 54,721 / 38,536 |
+| 3 | `+0x280690` | `+0x280c58` | `+0x280d38 / +0xef910` | `+0x280dc0 / +0xeffd0` | 44,353 / 30,856 |
+| 4 | `+0x280710` | `+0x280e3c` | `+0x280f1c / +0xf03c0` | `+0x280fa4 / +0xf0a50` | 39,745 / 69,256 |
+| 5 | `+0x280790` | `+0x281020` | `+0x281100 / +0xf0e40` | `+0x281188 / +0xf1500` | 47,809 / 74,376 |
+| 6 | `+0x280810` | `+0x281204` | `+0x2812e4 / +0xf18f0` | `+0x28136c / +0xf1fb0` | 58,177 / 163,976 |
+
+六项单独对照共 **24 个 native case**（六项 × 两基址 × cold／hot）。cold 默认 caller 为 39 步，hot 为 23 步；每个 cold 完成八段 nested VM。第三至第六项的 verifier 还在每次 nested 返回处比较全部 32 槽和完整 guest heap；前两项有各自单独的逐次 initializer 返回证据。旧报告中的 `all_six_default_callers_complete=false` 表示那份单项报告没有验证整链，不能用它代表更新后的项目结论。
+
+整链另有 **4 个 native case**（两基址 × cold／hot）。cold 每次提供六个不同的 0x4000 字节区域，完成六个 caller 和 48 次 nested 返回；hot 的六个 once 均完成，因而没有分配或 broadcast。每个默认 caller 返回时比较 32 槽、虚拟栈、完整 guest heap 和全部六个区域，最终比较全部主 image 页；ordered allocator／broadcast、各 once 状态及第六项 tailcall 栈均一致。两个 cold 合计观察到 96 次 nested 返回，但不是 96 个独立默认 caller。
+
+增加 **5 个整链拒绝／回滚检查**：第三项 once busy、第三次 allocator 返回空、第三次 broadcast 失败、未映射栈和 tagged return。前两项已执行后第三项失败，整条 guest transaction 也恢复原页。外部 provider 已发生的副作用不会被回滚。现有第二项 9 个拒绝案例在扩展后再次通过（非法 index 改为 6）。
+
+Native oracle 可选择只在 wrapper／PLT 区间安装观察 hook；VM 指令本身仍由 Unicorn 执行。第三项的完整逐指令观察和区间观察报告完全一致，用作这项诊断优化的控制。它提高验证速度，不是 Python signer 性能优化结果，也没有删去 allocator／broadcast 或返回边界的检查。
+
+```text
+python -B python/verify_vm9_first_default_caller.py --table-index 2 --bounded-hooks --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/caller-3.json
+python -B python/verify_vm9_first_default_caller.py --table-index 3 --bounded-hooks --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/caller-4.json
+python -B python/verify_vm9_first_default_caller.py --table-index 4 --bounded-hooks --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/caller-5.json
+python -B python/verify_vm9_first_default_caller.py --table-index 5 --bounded-hooks --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/caller-6.json
+python -B python/verify_vm9_default_initialization_task.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/default-task.json
+```
+
+证据：[六个独立 caller](evidence/vm9_all_default_callers_native_20261005.json)、[完整默认任务](evidence/vm9_default_initialization_task_native_20261005.json)。这里只推送脱敏状态、offset／count／boolean，不推送私有 ELF、初始化后的解码表或 native memory。没有 JVM 或 native 输入快照进入 Python；ELF 字节码、显式合成入口栈／TLS、已映射 allocator 区域、无竞争 matching libc mutex 和 provider broadcast 仍是研究运行条件。
+
+**本阶段完成的是有界串行默认任务正文。** 真实 allocator global／arena／OS region boot、主线程发布的 worker 与正文整合、OS thread-exit TLS 析构和 fresh 请求签名仍未验证。不能把六项默认 caller 的完成解释为独立 Python Medusa 已完成。
 
 ## 继续顺序
 
-继续恢复其余四个 caller `+0x280690/+0x280710/+0x280790/+0x280810` 的 initializer 正文，再组合非空 queue 的默认 invoke `+0x280554`。第三个 caller 的 once 控制为 `+0x3e0a78`，initializer 为 `+0x280c58`，nested caller 为 `+0x280d38/+0x280dc0`；同样先独立生成输入，再以 native 返回作 expected output。随后恢复 OS thread-exit support/emulated-TLS 析构，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
+下一步将 `run_default_initialization_task` 接回同次 fresh 启动生成的非空 queue worker，验证 startup→worker support→queue invoke→六项正文→argument 清理；继续使用独立生成的 ELF／栈／TLS／allocator 输入。随后恢复 OS thread-exit support/emulated-TLS 析构，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

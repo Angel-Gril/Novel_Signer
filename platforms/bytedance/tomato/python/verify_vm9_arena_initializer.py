@@ -64,7 +64,7 @@ def probe(library,libc,vm_module,base,region,table_index=0):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--library',type=Path,required=True)
     parser.add_argument('--libc',type=Path,required=True);parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--table-index',type=int,choices=(0,1),default=0)
+    parser.add_argument('--table-index',type=int,choices=range(6),default=0)
     args=parser.parse_args();assert hashlib.sha256(args.library.read_bytes()).hexdigest()==LIBRARY_SHA256
     os.environ['TOMATO_LIBMETASEC']=str(args.library.resolve());import vm_full
     cases=[probe(args.library,args.libc,vm_full,base,GUEST+0x4300,args.table_index) for base in (0x122C0000,0x775C205000)]

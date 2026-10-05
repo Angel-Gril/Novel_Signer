@@ -1,9 +1,9 @@
 """Bounded async startup and serial workers with explicit environment services.
 
 Thread creation, clocks, finite futex outcomes and task invocation belong to
-providers. Idle workers can run through normal argument cleanup; default task
-bodies, repeating-task insertion and OS thread-exit destructors remain separate
-boundaries. No host threads or blocking waits are silently created.
+providers. Idle workers can run through normal argument cleanup; serial default
+task bodies have their own explicit entry. Same-startup nonempty worker task
+attachment, repeating tasks and OS thread-exit destructors remain separate boundaries. No host threads or blocking waits are silently created.
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -554,14 +554,14 @@ class ArenaBootPrefixResult:
 
 
 def _table_initialization_layout(table_index):
-    if not isinstance(table_index,int) or isinstance(table_index,bool) or table_index not in (0,1):
-        raise RefillUnsupported('only first and second table initializer layouts are modeled')
+    if not isinstance(table_index,int) or isinstance(table_index,bool) or table_index not in range(6):
+        raise RefillUnsupported('table initializer index must be in 0..5')
     return (0x280890+table_index*0x1E4,0x3E09A8+table_index*0x48,
         0x280970+table_index*0x1E4,0x2809F8+table_index*0x1E4)
 
 
 def initialize_arena_boot_prefix(pages, *, image_base, allocate, table_index=0):
-    """First/second allocation and publication prefix, excluding nested VMs."""
+    """Selected table allocation/publication prefix, excluding nested VMs."""
     _,table,initial,_=_table_initialization_layout(table_index)
     p=_PageTransaction(pages)
     _read_span(p,image_base+table,0x40)
@@ -645,11 +645,15 @@ def prepare_initialization_caller(pages, *, caller_offset, arguments,
     default_callers=(0x280590,0x280610,0x280690,0x280710,0x280790,0x280810)
     layouts={caller:(0x350,0xEDCF0+index*0x120,0x35DA00+index*0x30,
         0x35DA20+index*0x30,caller+0x5C) for index,caller in enumerate(default_callers)}
-    layouts.update({
-        0x280970:(0x520,0xEE3B0,0x35DB20,0x35DB40,0x2809D4),
-        0x2809F8:(0x300,0xEEA70,0,0,0x280A50),
-        0x280B54:(0x520,0xEEE60,0x35DB50,0x35DB70,0x280BB8),
-        0x280BDC:(0x300,0xEF520,0,0,0x280C34)})
+    initial_entries=(0xEE3B0,0xEEE60,0xEF910,0xF03C0,0xF0E40,0xF18F0)
+    repeated_entries=(0xEEA70,0xEF520,0xEFFD0,0xF0A50,0xF1500,0xF1FB0)
+    initial_callers=tuple(0x280970+index*0x1E4 for index in range(6))
+    repeated_callers=tuple(0x2809F8+index*0x1E4 for index in range(6))
+    for index,caller in enumerate(initial_callers):
+        layouts[caller]=(0x520,initial_entries[index],0x35DB20+index*0x30,
+            0x35DB40+index*0x30,caller+0x64)
+        repeated=repeated_callers[index]
+        layouts[repeated]=(0x300,repeated_entries[index],0,0,repeated+0x58)
     if caller_offset not in layouts:raise RefillUnsupported('unknown initialization caller')
     if not isinstance(entry_stack_address,int) or entry_stack_address&15:
         raise RefillUnsupported('initialization stack must be aligned')
@@ -658,7 +662,7 @@ def prepare_initialization_caller(pages, *, caller_offset, arguments,
     args=tuple(arguments);needed=1 if caller_offset in default_callers else 2
     if len(args)!=needed or any(not isinstance(v,int) or not 0<=v<1<<64 for v in args):
         raise RefillUnsupported('invalid initialization caller arguments')
-    if caller_offset in (0x280970,0x280B54) and args[1]>=1<<32:
+    if caller_offset in initial_callers and args[1]>=1<<32:
         raise RefillUnsupported('arena initialization flag must fit W1')
     size,entry,table_a,table_b,continuation=layouts[caller_offset]
     p=_PageTransaction(pages);S=entry_stack_address;C=S-0x20-size;E=S-0x30
@@ -675,8 +679,8 @@ def prepare_initialization_caller(pages, *, caller_offset, arguments,
     _write_span(p,S-0x28,_read_span(p,thread_pointer+0x28,8))
     packed=C+8 if caller_offset in default_callers else C
     _w(p,packed,args[0])
-    if caller_offset in (0x280970,0x280B54):_w(p,C+8,args[1],4)
-    elif caller_offset in (0x2809F8,0x280BDC):_w(p,C+8,args[1])
+    if caller_offset in initial_callers:_w(p,C+8,args[1],4)
+    elif caller_offset in repeated_callers:_w(p,C+8,args[1])
     for adr,value in ((C+0x10,image_base+0x281414),(C+0x18,E),(C+0x20,return_address),
             (G,S-0x20),(G+8,image_base+continuation)):_w(p,adr,value)
     # Generic VM preserves physical callee-saved registers. X19 already owns
@@ -746,17 +750,17 @@ def run_initialization_vm(pages, *, vm_module, image_base, stop_offset=None,
                 step=current.steps,bytecode_offset=hex(current.pc-image_base),
                 words=words,executed=False)
             events.append(event)
-            if wrapper in (0x281610,0x281638) and target==0x347F20:
+            if wrapper in tuple(0x281610+i*0x28 for i in range(6)) and target==0x347F20:
                 d,fill,n=words[1:];fill&=255
                 if n>0x100000:raise RefillUnsupported('unbounded initialization memset')
                 _read_span(p,d,n);_write_span(p,d,bytes([fill])*n)
-            elif wrapper in (0x281598,0x2815AC) and target==0x32A0A0 and once_provider is not None:
+            elif wrapper in tuple(0x281598+i*0x14 for i in range(6)) and target==0x32A0A0 and once_provider is not None:
                 table_index=(wrapper-0x281598)//0x14
                 initializer,table,_,_=_table_initialization_layout(table_index)
                 if frame.caller_offset!=0x280590+table_index*0x80 or words[1]!=image_base+table+0x40 or words[3]!=image_base+initializer:
                     raise RefillUnsupported('default once callback package differs')
                 once_provider(current,frame,words)
-            elif wrapper in (0x281624,0x28164C) and target==0x347F60:
+            elif wrapper in tuple(0x281624+i*0x28 for i in range(6)) and target==0x347F60:
                 d,s,n=words[1:]
                 if n>0x100000 or (d<s+n and s<d+n):
                     raise RefillUnsupported('unsupported initialization memcpy span')
@@ -796,7 +800,7 @@ class ArenaInitializationResult:
 def initialize_arena_boot(pages, *, image_base, allocate, vm_module,
         entry_stack_address, return_address, thread_pointer,
         saved_frame_pointer=0, saved_registers=None, table_index=0):
-    """First/second table initializer through all eight nested VM returns.
+    """Selected table initializer through all eight nested VM returns.
 
     Guest allocator/TLS/ELF inputs remain explicit. This initializes the selected
     default-task table, not jemalloc's complete arena/global/OS boot.
@@ -845,7 +849,7 @@ def initialize_arena_boot(pages, *, image_base, allocate, vm_module,
 def run_default_initialization_caller(pages, *, table_index, allocate, broadcast, vm_module,
         entry_stack_address, return_address, thread_pointer, image_base,
         saved_frame_pointer=0, saved_registers=None):
-    """First or second default VM caller with its complete table initializer.
+    """Selected default VM caller with its complete table initializer.
 
     An individual caller does not synthesize the six-caller task, an OS thread,
     or allocator-global boot. Environment effects remain explicit providers.
@@ -878,6 +882,40 @@ def run_default_initialization_caller(pages, *, table_index, allocate, broadcast
         once_provider=once_provider,max_steps=1000000)
     if not result.complete:raise RefillUnsupported('default initialization caller did not return')
     p.commit();return result,tuple(nested)
+
+
+@dataclass(frozen=True)
+class DefaultInitializationTaskResult:
+    caller_results: tuple[InitializationVMResult,...]
+    nested_results: tuple[tuple[InitializationVMResult,...],...]
+
+
+def run_default_initialization_task(pages, *, allocate,broadcast,vm_module,
+        entry_stack_address,return_address,thread_pointer,image_base,
+        saved_frame_pointer=0,saved_registers=None):
+    """+0x280554 serial body: five calls then the sixth tailcall.
+
+    All six tables use the supplied allocator and environment services. This
+    does not attach a worker, destroy thread TLS, or bootstrap jemalloc/OS.
+    """
+    if not isinstance(entry_stack_address,int) or entry_stack_address&15:
+        raise RefillUnsupported('default task stack must be aligned')
+    if not isinstance(return_address,int) or not 0<=return_address<1<<56:
+        raise RefillUnsupported('default task return must be untagged')
+    p=_PageTransaction(pages);S=entry_stack_address;F=S-0x10
+    _read_span(p,F,0x10);_w(p,F,saved_frame_pointer);_w(p,F+8,return_address)
+    callers=[];nested=[]
+    for index in range(6):
+        final=index==5
+        result,phases=run_default_initialization_caller(p,table_index=index,
+            allocate=allocate,broadcast=broadcast,vm_module=vm_module,
+            entry_stack_address=S if final else F,
+            return_address=return_address if final else image_base+0x280564+index*8,
+            thread_pointer=thread_pointer,image_base=image_base,
+            saved_frame_pointer=saved_frame_pointer if final else F,
+            saved_registers=saved_registers)
+        callers.append(result);nested.append(phases)
+    p.commit();return DefaultInitializationTaskResult(tuple(callers),tuple(nested))
 
 
 def run_first_default_caller(pages, **kwargs):

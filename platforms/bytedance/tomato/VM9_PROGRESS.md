@@ -3,7 +3,7 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Independent idle worker scheduling checkpoint
+## Independent startup and serial default task checkpoint
 
 Condition wait/owned wrappers, queue callable lifecycle/loop and nonrepeating
 executor deque/poll/signal wait/loop now pass **92 / 94 / 62** fresh native
@@ -14,35 +14,29 @@ Guest/main-image/both TLS/generation state, allocation/effect order and argument
 cleanup match. All **256 new controls and 22 rejection/rollback checks** pass;
 main startup and support/context regressions also pass.
 
-This proves idle worker normal return, not default initialization task bodies,
-OS thread-exit destructors, concurrent workers or real allocator boot. Task
-invocation and finite clock/futex outcomes remain explicit environment services;
-repeat insertion and cancellation reject. Support ownership stays in pthread
-TLS after argument cleanup. Complete worker runtime, fresh Medusa, live header
-matrix/f13 checks, no-JVM Rust, nonempty search/pagination, Douyin/Qidian and the
-final Pages/Actions products remain open.
+Idle worker normal return was the previous boundary. All six default
+initialization caller bodies now complete under explicit allocator/broadcast
+services, and +0x280554's serial six-caller task also passes fresh controls.
+Complete worker runtime, OS thread-exit destructors, real allocator boot, fresh
+Medusa, live header matrix/f13 checks, no-JVM Rust, nonempty search/pagination,
+Douyin/Qidian and the final Pages/Actions products remain open.
 
-The first default caller +0x280590 now completes its real first-table
-initializer: one +0x280970 / VM +0xee3b0 and seven +0x2809f8 / VM +0xeea70
-returns. Two direct initializer controls compare all 16 nested returns; four
-cold/hot caller controls compare complete return state and ordered
-allocation/broadcast effects. ELF, entry stack, TLS and allocator inputs are
-fresh and independently generated. Condition broadcast remains an explicit
-provider. OP17/sub57 now passes 240 W32-multiply controls.
+The six individual callers pass 24 cold/hot native controls at two relocated
+bases. Four separate task controls execute five calls followed by the sixth
+tailcall; each cold case completes all 48 nested returns using six distinct
+mapped 0x4000-byte allocation regions. At each default return, all 32 slots,
+virtual stack, guest heap and all six regions match. Main image pages and
+ordered allocation/broadcast/once states match. Five task rollback cases and
+nine existing caller rejection cases pass. This is a serial task-body result,
+not a same-startup nonempty-worker or genuine OS/allocator boot result.
 
-The earlier arena-prefix completion claim in commit 1b8aa32 is retracted:
-allocation/zeroing/publication alone must leave the once operation pending.
-Fourteen corrected controls and seven rollback cases verify the split and the
-explicit complete-initializer gate. The remaining five default caller
-preludes/first callbacks pass 40 controls. The second +0x280610 caller now
-passes four complete cold/hot controls; its two nested callers also pass 12
-entry/return controls and nine rejection cases. Four initializer bodies remain
-open. The older two-million-instruction native probe still describes its own
-limited boundary, not the latest completed first-caller result.
+The partial-arena completion claim in commit 1b8aa32 is corrected: pointer
+publication alone leaves once pending; only a complete initializer can publish
+-1 and broadcast. OP17/sub57 passes 240 W32-multiply controls. No captured
+native input snapshot or native initialization pages feed these Python models.
 
-Next: recover +0x280690's initializer +0x280c58 and nested callers
-+0x280d38/+0x280dc0, then the remaining three bodies and +0x280554 task
-composition, OS exit cleanup and real allocator/signing chain. Detailed
+Next: connect the completed task to a same-fresh-startup nonempty queue worker,
+then OS thread-exit cleanup and the real allocator/signing chain. Detailed
 scope, evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
 
 ## Independent root factory and caller (2026-10-04)
@@ -1119,3 +1113,13 @@ failure cases leave guest pages unchanged and restore the VM base. The
 allocator and broadcast remain providers. This closes two individual
 callers, while six-caller composition and the final signing chain remain open.
 Details: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
+
+## Complete serial default task (2026-10-05)
+
+All six default caller bodies and the +0x280554 serial composition now pass
+fresh native differential controls. This supersedes the earlier one-caller
+and two-caller checkpoints above. Evidence: [individual callers](evidence/vm9_all_default_callers_native_20261005.json)
+and [serial task](evidence/vm9_default_initialization_task_native_20261005.json).
+The explicit mapped allocator/broadcast boundaries remain; same-startup
+nonempty worker execution, OS exit destructors, real allocator initialization
+and independent Medusa signing remain unfinished.

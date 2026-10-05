@@ -30,7 +30,7 @@ def negative_checks(library,libc,vm_module):
             return GUEST+0x4300
         try:
             startup.run_default_initialization_caller(pages,
-                table_index=2 if label=='invalid_table' else 1,allocate=allocate,
+                table_index=6 if label=='invalid_table' else 1,allocate=allocate,
                 broadcast=lambda *_:1 if label=='broadcast_failure' else 0,
                 vm_module=vm_module,
                 entry_stack_address=GUEST+0x200000 if label=='unmapped_stack' else GUEST+0xEF00,

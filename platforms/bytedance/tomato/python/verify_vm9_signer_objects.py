@@ -87,7 +87,7 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            thread_id=None, observed_memory=None, allocation_effect=None,
            real_mutexes=False, host_imports=None, instruction_limit=10000,
            instruction_observer=None, syscall_handler=None, malloc_handler=None,
-           memory_write_observer=None):
+           memory_write_observer=None, code_hook_ranges=None):
     cpu = Uc(UC_ARCH_ARM64, UC_MODE_ARM)
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -238,7 +238,17 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
         cpu.reg_write(UC_ARM64_REG_X0, result)
         cpu.reg_write(UC_ARM64_REG_PC, cpu.reg_read(UC_ARM64_REG_X30))
 
-    cpu.hook_add(UC_HOOK_CODE, hook)
+    if code_hook_ranges is None:
+        cpu.hook_add(UC_HOOK_CODE,hook)
+    else:
+        ranges=tuple(code_hook_ranges)
+        if not ranges or any(not isinstance(start,int) or not isinstance(end,int)
+                or start<0 or end<start for start,end in ranges):
+            raise ValueError('invalid native code observation ranges')
+        if any(a<=d and c<=b for index,(a,b) in enumerate(ranges)
+                for c,d in ranges[index+1:]):
+            raise ValueError('overlapping native code observation ranges')
+        for start,end in ranges:cpu.hook_add(UC_HOOK_CODE,hook,begin=start,end=end)
     if memory_write_observer:
         cpu.hook_add(UC_HOOK_MEM_WRITE,
             lambda cpu, access, address, size, value, user: memory_write_observer(cpu, address, size))

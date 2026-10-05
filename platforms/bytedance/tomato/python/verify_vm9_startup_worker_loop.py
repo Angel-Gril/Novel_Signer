@@ -140,7 +140,7 @@ def probe(library,libc,exports,*,base,kind,thread_id):
             assert address==ctx+0x58 and get(p,ctx+0x30,2)==0
             put(p,ctx+0x88,0,1)
         return -4
-    def invoke(*a):raise allocator.RefillUnsupported('default initialization task body remains unrecovered')
+    def invoke(*a):raise allocator.RefillUnsupported('unexpected task invocation in idle-worker control')
     actual=startup.run_startup_worker(model,argument_address=arg,worker_kind=kind,image_base=base,
         thread_pointer=WORKER_TLS,thread_id=thread_id,create_key=key,set_specific=specific,get_tls=get_tls,
         clock=model_clock,futex=futex,free=model_free,invoke=invoke,task_address=GUEST+0xBC00)
