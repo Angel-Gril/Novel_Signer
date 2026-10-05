@@ -33,7 +33,7 @@ A further same-fresh nonempty worker completes the full guest joinable exit body
 with all six default returns, 48 nested returns and support/wrapper cleanup;
 14 worker rollback checks pass. Unknown callbacks/support-associated state types
 still require concrete sources. Actual OS create/termination, complete worker
-runtime, real allocator boot, fresh
+runtime, complete Python allocator boot, fresh
 Medusa, live header matrix/f13 checks, no-JVM Rust, nonempty search/pagination,
 Douyin/Qidian and the final Pages/Actions products remain open.
 
@@ -51,13 +51,23 @@ publication alone leaves once pending; only a complete initializer can publish
 -1 and broadcast. OP17/sub57 passes 240 W32-multiply controls. No captured
 native input snapshot or native initialization pages feed these Python models.
 
-Next: recover the matching libc's real allocator cold path
-+0x1bb08 -> +0x8f00c -> +0x8e350, starting with program-break/OS mapping
-inputs and TLS/arena boot. A native probe without allocator hooks reaches
-brk(0), an explicit 0x40000 anonymous map and then syscall 167; this is
-boundary diagnosis, not a completed Python allocator. Continue the actual
-signer/fresh-request path after replacing explicit services. Detailed
-scope, evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
+Matching-libc native cold malloc now returns under explicit virtual OS services
+without allocator hooks in 10 fresh controls at two main-image bases. All use
+actual reentrant malloc and preserve keys created after the first entry.
+Python mapping/sbrk and base/DSS/chunk/radix-tree boot components add 98 native
+differences, four preservation controls and 23 rejection/rollback checks.
+Two of those controls compose the actual preinit entry through the recovered
+default-config/base/DSS/chunk/extent prefix, stopping before arena/bin.
+Existing 70 shared/pthread_exit controls and 11 rejection checks also pass.
+Native malloc succeeds here; complete Python preinit/malloc remains open.
+
+Next: recover arena/bin boot +0x7cf2c, tcache boot +0x99378 and TSD boot
++0x99938, then compose actual base allocation. Nonempty configuration
+preinit +0x8ce70 and atfork registration remain explicit unsupported branches.
+Continue composing
+arena/OS region and the fresh signer path. No fresh Medusa signature or new
+online header matrix has passed. Evidence and reproduction:
+[STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
 
 ## Independent root factory and caller (2026-10-04)
 

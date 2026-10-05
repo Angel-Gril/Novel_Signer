@@ -1,0 +1,14 @@
+{
+  "schema": "vm9-libc-cold-mapping-regression-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "shared_native_controls": 16,
+  "pthread_exit_native_controls": 54,
+  "rejection_controls": 11,
+  "all_passed": true,
+  "whole_mapping_exit_contract_preserved": true,
+  "partial_unmap_exit_rejected": true,
+  "native_input_snapshot_used": false,
+  "python_malloc_cold_boot_complete": false,
+  "standalone_medusa_complete": false
+}

@@ -253,10 +253,54 @@ python -B platforms/bytedance/tomato/python/verify_vm9_startup_worker_loop.py --
 
 公开证据：[70 个组件 native case／11 项回滚](evidence/vm9_guest_pthread_exit_native_20261005.json)、[同次 fresh worker 及回归](evidence/vm9_guest_pthread_exit_regression_20261005.json)。既有 62 个 TLS 退出 case／13 项拒绝、20 个 key case／8 个空 support case／3 项拒绝重新通过；70 个 Python 文件语法检查通过。公开内容只有合成标签、offset／count／boolean 和样本 hash。
 
+## Matching libc 冷启动：映射与早期 boot（2026-10-05）
+
+本阶段将先前停在 syscall 167 的诊断推进到 **真实 native `malloc` 冷启动返回**。路径仍为 `libc+0x1bb08 → +0x8f00c → +0x8e350`，没有 malloc hooks、JVM 或 native 初始化快照作为输入。这里的“真实”指匹配样本的 ARM64 函数体；OS 输入仍是明确的合成服务，尚不是完整 Python allocator。
+
+真实执行先查询 `brk(0)`、申请 256 KiB 匿名 RW mapping，再通过 `prctl(0x53564d41, 0, base, length, name)` 命名。随后申请一页并设为只读，读取明确构造的 `/proc/stat`；CPU 数量读取会重入真实 `malloc`。对齐映射会先释放不对齐的申请，再申请扩展区间并裁掉前后缀。探针最初在重入入口重复清空 key 表，导致 TSD 错误；现在 key fixture 只在首次入口应用，后续实际 key 创建和重入状态完整保留。该探针错误不能当作目标 libc 的初始化缺陷。
+
+**10 组 native 控制**覆盖两个主 image 地址、0／32／4096／8192 字节申请、1／2／4 个合成 CPU 和匿名命名失败。全部返回有效 owned request span；初始化标志 `+0xdb6a0` 变为 0，arena count/table/arena-zero 发布，chunk 常量一致，实际重入 malloc 可见；命名失败仍保留 mapping 并更新 errno。执行有 200,000 条 native 指令上限，所有这些控制在返回处结束。不是绕过失败分支，也不是预算耗尽后的完成推断。
+
+Python owner 新增和恢复内容：
+
+| Owner / 函数 | 已验证行为 |
+| --- | --- |
+| `GuestOS.name_exact / protect_exact` | 整个 owned mapping 的名称与权限 metadata 原子更新 |
+| `GuestOS.unmap_range` | 单个 owned mapping 内按页裁剪，保留剩余内容、名称、权限及描述符；不能跨 mapping 或洞 |
+| `GuestOS.unmap_exact` | 保持原来的完整映射要求；线程退出 partial-unmap 仍明确拒绝 |
+| `vm9_libc_mapping.map_allocator` `+0x7f56c` | 明确 mmap 结果、命名成功／失败、errno；命名失败不撤销 mapping |
+| `map_aligned_allocator` `+0x7f600` | 首次对齐、重新申请、前缀／后缀裁剪；仅写 flag 的一个字节 |
+| `sbrk` `+0x1e6c8` | fresh／cached break、增减、溢出、实际返回缓存和 errno；按二进制的 unsigned 判断处理 shrink |
+| `configuration_preinit` `+0x8ce70` | 已恢复实际 NULL／空字符串分支；非空配置解析明确拒绝 |
+| `vm9_libc_boot.initialize_allocator_mutex` `+0x932ec` | 实际 normal attr 的 mutex 初始化，写 40 字节，保留后续 padding |
+| `initialize_base_tree` `+0x89460` | 仅写 root 与两个 sentinel 指针 |
+| `extent_boot` `+0x89410` | normal mutex 初始化后，仅清除 `+0xe6928` 的一字节 |
+| `preinit_prefix` `+0x8e250` | 从实际入口恢复线程发布、空配置及 base／DSS／chunk／extent，在 `+0x8e2c4` 调用 arena/bin 前停止 |
+| `base_boot / dss_boot / chunk_boot` | `+0x7dc7c / +0x7f46c / +0x7f13c`，使用匹配 libc 全局偏移和明确 break 服务 |
+| `initialize_rtree` `+0x94ef4` | 1..64 bit 层级、回调地址、节点及缓存索引，保留未写 padding |
+
+**42 组 mapping／sbrk native 对照 + 56 组早期 boot native 对照**比较返回值、guest/TLS、全局字段、mapping metadata、保留页和有序 OS 调用，均从各自 fresh ELF 输入开始。其中两组从实际 `+0x8e250` 入口同次 fresh 贯穿已恢复的早期组件，比较线程发布、base／DSS／chunk／extent 全局状态；只证明 `+0x8e2c4` 前缀，未执行 arena/bin。另有 4 项保留检查和 23 项拒绝／回滚检查；跨页 mutex/tree、radix tree 层级边界、错误 break、缺页、无效 OS 返回及未恢复 munmap 错误路径均覆盖。Guest 页／记录／mapping 游标在拒绝时回滚；外部 provider ledger 不能回滚。
+
+`protect_exact` 只维护 metadata；通用 Python byte-page 读写不会自动执行权限检查。native verifier 会实际调用 Unicorn `mem_protect`。mapping helper 仅支持当前隔离地址策略与有界页大小／power-of-two 对齐。NULL mmap 是明确的 native 控制结果，在此有界 owner 内不创建地址 0 的 mapping；未恢复的 munmap logging／abort 路径明确拒绝，不能以 RET 或默认成功填补。早期 boot 只覆盖实际 normal attr；不模拟 mutex 竞争或任意 pthread ABI。
+
+复现（样本必须私下提供，hash 错误即拒绝）：
+
+```bash
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_mapping.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/libc-mapping.json
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_boot.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/libc-boot.json
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_cold_malloc.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/libc-cold-malloc.json
+```
+
+原有 shared／pthread_exit 的 **70 组 native 对照／11 项拒绝**重新通过，包括保留 `unmap_exact` 的 partial-unmap 拒绝；[回归摘要](evidence/vm9_libc_cold_mapping_regression_20261005.json)。
+
+公开证据：[mapping／sbrk](evidence/vm9_libc_mapping_native_20261005.json)、[早期 boot](evidence/vm9_libc_boot_native_20261005.json)、[native cold malloc](evidence/vm9_libc_cold_malloc_native_20261005.json)。这些只有控制标签、offset／count／boolean 和样本 hash；不包含 ELF、native 页、请求、设备数据或密钥。先前 [cold boundary](evidence/vm9_allocator_cold_boundary_20261005.json) 保留为历史定位证据，不能用它代表当前停止位置。
+
+**完整 Python preinit／malloc 冷启动仍未完成。** 默认空配置及 early preinit 前缀已通过；下一步需继续恢复 `+0x7cf2c` 的 arena/bin 初始化、`+0x99378` 的 tcache 初始化及 `+0x99938` 的实际 TSD boot。非空 `+0x8ce70` 配置解析与 atfork 注册分支仍明确拒绝。接着需将真实 base allocation、arena／OS region 与原有 Python startup/signing 模型合成。仅有早期字段和 native 冷启动成功，不能宣称已生成 fresh Medusa 签名或新的线上全头矩阵。
+
 ## 继续顺序
 
 继续恢复 matching libc 的真实 allocator 冷启动，将当前显式 allocator／TLS／OS 服务逐项替换为已验证实现，并将 startup、`+0x256e50` 配置构造和既有 root factory 接到外层 signer。未识别 callback、support 关联状态类型和真实线程创建仍需真实来源，不以空回调填补。
 
-无 allocator hooks 的 fresh native `malloc` 探针已确认：`libc+0x1bb08 → dispatch+0x8f00c → cold init+0x8e350`。第一次 OS 依赖是 `brk(0)`；提供明确的 program-break 输入后，请求 0x40000 字节匿名 RW mapping；接入现有 GuestOS 后推进到 syscall 167。这个探针仅定位下一依赖，尚未生成 Python allocator boot 或 Medusa 签名，也未作为组件完成证据。脱敏诊断：[cold boundary](evidence/vm9_allocator_cold_boundary_20261005.json)；它记录 post-SVC PC 和三组显式 OS 输入边界，不含 native 页。
+先前停在 syscall 167 的诊断已由本阶段 10 组 native cold-malloc 控制推进到返回，详见上节。完整 Python allocator 的其余初始化和真实 OS/TLS 创建仍是未完成边界。
 
 随后用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

@@ -1,0 +1,496 @@
+{
+  "schema": "vm9-libc-boot-components-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "case": "mutex",
+      "variant": "same_page",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "mutex",
+      "variant": "cross_page",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "base_tree",
+      "variant": "same_page",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "base_tree",
+      "variant": "cross_page",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 1,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 15,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 16,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 17,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 31,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 32,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 33,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 46,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 48,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 49,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 63,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 64,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "base_boot",
+      "variant": "cold",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "dss_boot",
+      "variant": "cold",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "dss_boot",
+      "variant": "warm",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 12,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 18,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 32,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 48,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 63,
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "mutex",
+      "variant": "same_page",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "mutex",
+      "variant": "cross_page",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "base_tree",
+      "variant": "same_page",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "base_tree",
+      "variant": "cross_page",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 1,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 15,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 16,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 17,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 31,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 32,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 33,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 46,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 48,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 49,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 63,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "rtree",
+      "variant": 64,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "base_boot",
+      "variant": "cold",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "dss_boot",
+      "variant": "cold",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "dss_boot",
+      "variant": "warm",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 12,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 18,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 32,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 48,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "chunk_boot",
+      "variant": 63,
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "configuration_preinit",
+      "variant": "null",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "configuration_preinit",
+      "variant": "empty_string",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "extent_boot",
+      "variant": "cold",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "configuration_preinit",
+      "variant": "null",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "configuration_preinit",
+      "variant": "empty_string",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "extent_boot",
+      "variant": "cold",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "preinit_prefix",
+      "variant": "cold",
+      "image_base": "0x122c0000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "preinit_prefix",
+      "variant": "cold",
+      "image_base": "0x775c205000",
+      "return_guest_globals_tls_and_calls_match": true,
+      "untouched_padding_match": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "rejection_cases": [
+    {
+      "case": "invalid_exponent",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "case": "missing_tree_page",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "case": "missing_mutex_page",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "case": "missing_dss_cache",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "case": "brk_provider_failure",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "case": "nonempty_configuration",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "case": "prefix_registration_flag",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    }
+  ],
+  "python_preinit_complete": false,
+  "python_malloc_cold_boot_complete": false,
+  "standalone_medusa_complete": false,
+  "native_input_snapshot_used": false
+}

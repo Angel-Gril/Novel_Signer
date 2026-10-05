@@ -1,0 +1,438 @@
+{
+  "schema": "vm9-libc-mapping-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "mapping_cases": [
+    {
+      "case": "plain",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 2,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "plain_mmap_failure",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 1,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "plain_null",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 1,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "plain_name_failure",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 2,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_fast",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 2,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_prefix",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 6,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_suffix",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 6,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_both",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 7,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_first_failure",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 1,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_second_failure",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 4,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_name_failure",
+      "image_base": "0x122c0000",
+      "ordered_os_calls": 7,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "plain",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 2,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "plain_mmap_failure",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 1,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "plain_null",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 1,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "plain_name_failure",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 2,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_fast",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 2,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_prefix",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 6,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_suffix",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 6,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_both",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 7,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_first_failure",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 1,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_second_failure",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 4,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "aligned_name_failure",
+      "image_base": "0x775c205000",
+      "ordered_os_calls": 7,
+      "return_guest_tls_and_retained_pages_match": true,
+      "mapping_metadata_match": true,
+      "untouched_flag_padding_match": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "sbrk_cases": [
+    {
+      "case": "cold_query",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "warm_query",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "cold_grow",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "warm_grow",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "warm_shrink",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "grow_refused",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "shrink_kernel_retains_old",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "overflow",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "underflow",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "signed_min_underflow",
+      "image_base": "0x122c0000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "cold_query",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "warm_query",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "cold_grow",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "warm_grow",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "warm_shrink",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "grow_refused",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "shrink_kernel_retains_old",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "overflow",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "underflow",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "signed_min_underflow",
+      "image_base": "0x775c205000",
+      "returned_value_cache_errno_and_calls_match": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "owner_cases": [
+    {
+      "case": "prefix",
+      "surviving_bytes_names_protection_preserved": true
+    },
+    {
+      "case": "suffix",
+      "surviving_bytes_names_protection_preserved": true
+    },
+    {
+      "case": "middle",
+      "surviving_bytes_names_protection_preserved": true
+    },
+    {
+      "case": "whole",
+      "surviving_bytes_names_protection_preserved": true
+    },
+    {
+      "case": "exact_still_rejects_partial",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "unaligned",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "zero_length",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "unknown",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "cross_mapping",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "missing_page",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "bad_name",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "partial_name",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "bad_protection",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "partial_protection",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "rollback",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true
+    },
+    {
+      "case": "munmap_failure",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true,
+      "external_provider_effects_rolled_back": false,
+      "external_calls": 3
+    },
+    {
+      "case": "invalid_kernel",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true,
+      "external_provider_effects_rolled_back": false,
+      "external_calls": 1
+    },
+    {
+      "case": "invalid_alignment",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true,
+      "external_provider_effects_rolled_back": false,
+      "external_calls": 0
+    },
+    {
+      "case": "unmapped_flag",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true,
+      "external_provider_effects_rolled_back": false,
+      "external_calls": 0
+    },
+    {
+      "case": "late_name_provider_failure",
+      "rejected": true,
+      "pages_mappings_cursor_unchanged": true,
+      "external_provider_effects_rolled_back": false,
+      "external_calls": 2
+    }
+  ],
+  "native_input_snapshot_used": false,
+  "python_malloc_cold_boot_complete": false,
+  "standalone_medusa_complete": false
+}

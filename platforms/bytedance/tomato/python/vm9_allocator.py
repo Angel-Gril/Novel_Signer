@@ -12,7 +12,7 @@ The input page map has the same shape used by
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Callable, Mapping, MutableMapping
 from collections.abc import MutableMapping as MutableMappingABC
 
@@ -365,7 +365,7 @@ class GuestMapping:
 
 
 class GuestOS:
-    """Deterministic owner for the two observed guest mapping requests.
+    """Deterministic owner for bounded guest anonymous mapping operations.
 
     New pages are created only through this owner. Unsupported requests are
     rejected before the caller's page map or mapping list is changed.
@@ -414,6 +414,28 @@ class GuestOS:
         """Release one complete owned guest mapping; never touch host memory."""
         transaction = self.begin()
         transaction.unmap_exact(address, length)
+        transaction.commit()
+
+    def unmap_range(self, address: int, length: int) -> None:
+        """Trim page-aligned bytes within one owned mapping atomically."""
+        transaction = self.begin()
+        transaction.unmap_range(address, length)
+        transaction.commit()
+
+    def name_exact(self, address: int, length: int, name: bytes) -> None:
+        """Name a complete owned mapping; never infer success for an OS call."""
+        transaction = self.begin()
+        transaction.name_exact(address, length, name)
+        transaction.commit()
+
+    def protect_exact(self, address: int, length: int, prot: int) -> None:
+        """Update whole-mapping protection metadata.
+
+        The byte-page helpers do not enforce this metadata on each access.
+        A CPU provider must apply the corresponding hardware permissions.
+        """
+        transaction = self.begin()
+        transaction.protect_exact(address, length, prot)
         transaction.commit()
 
     def mapping_for(self, address: int) -> GuestMapping | None:
@@ -480,6 +502,44 @@ class _GuestOSTransaction:
         for key in keys:
             del self.pages[key]
         self.mappings.remove(mapping)
+
+    def _owned_span(self, address: int, length: int, *, exact: bool) -> GuestMapping:
+        if (not isinstance(address, int) or not isinstance(length, int)
+                or address < 0 or length <= 0 or (address | length) & 0xFFF
+                or address + length > 1 << 64):
+            raise RefillUnsupported("invalid owned guest mapping span")
+        mapping = next((item for item in self.mappings
+            if item.base <= address and address + length <= item.end), None)
+        if mapping is None or (exact and (mapping.base != address or mapping.length != length)):
+            raise RefillUnsupported("operation requires one owned guest mapping")
+        if any(key not in self.pages or len(self.pages[key]) != 0x1000
+                for key in range(mapping.base >> 12, mapping.end >> 12)):
+            raise RefillUnsupported("owned guest mapping contains missing or truncated pages")
+        return mapping
+
+    def unmap_range(self, address: int, length: int) -> None:
+        mapping = self._owned_span(address, length, exact=False)
+        remaining = []
+        if address > mapping.base:
+            remaining.append(replace(mapping, length=address - mapping.base))
+        if address + length < mapping.end:
+            remaining.append(replace(mapping, base=address + length,
+                                     length=mapping.end - address - length))
+        index = self.mappings.index(mapping)
+        self.mappings[index:index + 1] = remaining
+        for key in range(address >> 12, (address + length) >> 12):
+            del self.pages[key]
+
+    def name_exact(self, address: int, length: int, name: bytes) -> None:
+        mapping = self._owned_span(address, length, exact=True)
+        name = self._validate_name(name)
+        self.mappings[self.mappings.index(mapping)] = replace(mapping, anonymous_name=name)
+
+    def protect_exact(self, address: int, length: int, prot: int) -> None:
+        mapping = self._owned_span(address, length, exact=True)
+        if prot not in (1, 3):
+            raise RefillUnsupported("unsupported guest mapping protection")
+        self.mappings[self.mappings.index(mapping)] = replace(mapping, prot=prot)
 
     def commit(self) -> None:
         original = self.owner.pages
