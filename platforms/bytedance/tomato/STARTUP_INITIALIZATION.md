@@ -1,8 +1,8 @@
 # 外层启动 caller 与 worker 调度／清理
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。**其他具体析构回调、完整 OS thread exit、真实 allocator boot、完整线程运行、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、真实 allocator boot、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
-实现见 [vm9_startup.py](python/vm9_startup.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
+实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
 ## 验证结果与输入边界
 
@@ -219,6 +219,44 @@ python -B python/verify_vm9_tls_exit_destructors.py --library /private/libmetase
 
 证据：[TLS 退出析构与组合](evidence/vm9_tls_exit_destructors_native_20261005.json)、[受影响回归](evidence/vm9_tls_exit_regression_20261005.json)。公开报告只有合成 case、offset／count／boolean 与样本 hash，没有 ELF、native 内存、请求或签名 payload。**三个 key target 及已知 registry callback 的有界退出组件已恢复；完整 OS thread exit 与独立 Medusa 仍未完成。** 未执行 host pthread_exit、真实 allocator 清理、线程列表注销或栈/OS region unmap；未知 callback、并发、实际 shared 对象析构仍是剩余边界。
 
+## 实际 executor shared 析构与 guest pthread_exit（2026-10-05）
+
+本轮恢复与旧的合成 shared callback 分开记录。真实 `+0x326710` 构造器发布的 32 字节 owner 使用 vtable `+0x372670`；shared count 在 `owner+8`，weak count 在 `owner+16`，payload 在 `owner+24`。`release_executor_shared` 对应 `+0x329eb4`，可选不释放 weak 的模式对应 `+0x329e64`。旧 shared count 为零时，实际 `+0x326b04` 经 payload vtable 的 `+8` 调用 `+0x3269cc`；成功的显式 thread join 后清空 payload 的 `+16` handle。weak count 非零时减一，旧值为零时由实际 `+0x326b14` free owner。普通 payload 析构不会 free 静态 executor 本体。
+
+**16 组 native 对照**从双方各自 fresh ELF／TLS 输入运行真实构造器再释放；覆盖旧 shared count 为 1／0／u64 最大值、weak 为 0／1／最大值、空 thread handle、shared-only 和实际已注册 `+0x326984` 析构体。完整 guest、主 image、TLS、分配／create／register／join／free 顺序均一致。这里的 create／join／allocator 是明确的环境服务。`+0x326984` 在真实构造器中注册到 process `__cxa_atexit`；本轮验证其函数体，不把它改称为应用实际注册的线程 callback。这个 executor owner 的类型布局不适用于 support 的关联状态对象；不能用其 vtable 填补此前非空 support 测试的合成 shared callback。
+
+匹配 libc 的样本 SHA256 为 `d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db`。`vm9_thread_exit.py` 恢复以下实际函数体：
+
+| 顺序与入口（libc 相对 offset） | 恢复行为 |
+| --- | --- |
+| `+0x6b23c`／`+0x6b2a4` | libc 32 字节线程析构节点的注册／LIFO 执行；先 pop、实际 callback、free，再重读 head；descriptor 为 `+0xdb3a8` |
+| `pthread_exit +0x68138` | 先运行 libc 线程析构，再写 pthread `+0x70` 返回值；执行 `+0x58` cleanup 链及 matching key 清理 |
+| pthread `+0x78` | 非零 signal-stack 指针触发 disable 和 0x5000 字节 munmap；native 忽略 OS 返回值，仍清指针 |
+| pthread `+0x50` | 串行 CAS 0→1；可 join 等状态执行 terminal exit 并保留列表／线程 mapping；state 3 进入 detached 分支 |
+| `+0x6837c` | 在 libc `+0xe01d0` list mutex 下重接 next／previous，必要时更新 `+0xe01f8` head；保留当前线程的 links |
+| `+0x1be0c` | detached 分支清 tid address、阻塞信号、munmap pthread `+0x20/+0xa8` 的区域，再执行 terminal guest exit |
+
+**54 组 native 对照**在两个 image bases 下覆盖各线程状态、链表头／中／尾、signal stack、joinable 保留区域、detached 回收、OS 错误、callback 动态追加／清 head、实际 registry 树析构、libc 真实注册→退出和 support／emulated／fallback key 组合。另有真实 `+0x326984` 经 fallback 链执行的控制；其 owner/payload 是明确生成的合成状态，真实构造器证据属于前述 16 组，二者不能混称。
+
+`GuestOS.unmap_exact` 仅回收完整 owned guest mapping；Python 实际删除页和 mapping record，Unicorn 实际 `mem_unmap`。对照还比较回收前的完整 region 字节，因此覆盖了 pthread 本体位于待回收区域内的情形。最后一次 munmap 后模型不再读取 pthread。未知／部分 mapping、未知 callback、循环链、竞争 mutex、未知 vtable、缺少 join 或 join 出错等 **11 项拒绝／回滚**通过；guest 页和 mapping record 回滚，外部 provider ledger 不回滚。
+
+同次 fresh 主线程启动 → 非空 queue worker → 六项默认正文／48 次 nested return → argument free → **完整 guest 可 join pthread_exit 分支**，另有 **1 组组合 native 对照／14 项拒绝检查**通过。该控制中的 libc 析构 head 和 cleanup 链为空，support key 非空；成功释放 support/wrapper 后，pthread state 变为 1，执行虚拟 terminal exit。该生成 worker 使用显式 TLS／create／allocator，未实测 host thread、真实线程注销或 allocator 退出。
+
+API `run_pthread_exit(guest_os, ..., get_libc_tls, free, os_call, ...)` 要求显式提供 libc TLS getter、allocator 和 OS 服务；恢复过的 registry／executor callback 自动分派，其他 callback 无 provider 则拒绝。OS 服务接受操作及 ABI 字段，并提供返回值／guest errno；terminal exit 返回可检查的 `GuestThreadExitResult`，不会终止宿主 Python。thread cleanup 节点不由此函数 free；libc 析构节点会 free；两种 ownership 不混用。
+
+从仓库根目录复现：
+
+```bash
+python -B platforms/bytedance/tomato/python/verify_vm9_pthread_exit.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --output /private/pthread-exit.json
+python -B platforms/bytedance/tomato/python/verify_vm9_startup_worker_loop.py --library /private/libmetasec_ml_71332.so --libc /private/libc.so --default-queue --pthread-exit --image-base 0x122c0000 --thread-id 137 --output /private/worker-pthread-exit.json
+```
+
+公开证据：[70 个组件 native case／11 项回滚](evidence/vm9_guest_pthread_exit_native_20261005.json)、[同次 fresh worker 及回归](evidence/vm9_guest_pthread_exit_regression_20261005.json)。既有 62 个 TLS 退出 case／13 项拒绝、20 个 key case／8 个空 support case／3 项拒绝重新通过；70 个 Python 文件语法检查通过。公开内容只有合成标签、offset／count／boolean 和样本 hash。
+
 ## 继续顺序
 
-下一步继续恢复实际 shared 零引用析构和其余已注册 callback，贯通完整 pthread_exit 的线程状态／注销与 OS region 回收，将 startup、`+0x256e50` 配置构造和既有 root factory 接到更外层 signer。再贯通真实 allocator boot／arena／OS region，用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。
+继续恢复 matching libc 的真实 allocator 冷启动，将当前显式 allocator／TLS／OS 服务逐项替换为已验证实现，并将 startup、`+0x256e50` 配置构造和既有 root factory 接到外层 signer。未识别 callback、support 关联状态类型和真实线程创建仍需真实来源，不以空回调填补。
+
+无 allocator hooks 的 fresh native `malloc` 探针已确认：`libc+0x1bb08 → dispatch+0x8f00c → cold init+0x8e350`。第一次 OS 依赖是 `brk(0)`；提供明确的 program-break 输入后，请求 0x40000 字节匿名 RW mapping；接入现有 GuestOS 后推进到 syscall 167。这个探针仅定位下一依赖，尚未生成 Python allocator boot 或 Medusa 签名，也未作为组件完成证据。脱敏诊断：[cold boundary](evidence/vm9_allocator_cold_boundary_20261005.json)；它记录 post-SVC PC 和三组显式 OS 输入边界，不含 native 页。
+
+随后用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

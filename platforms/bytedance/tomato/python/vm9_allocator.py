@@ -410,6 +410,12 @@ class GuestOS:
         transaction.commit()
         return result
 
+    def unmap_exact(self, address: int, length: int) -> None:
+        """Release one complete owned guest mapping; never touch host memory."""
+        transaction = self.begin()
+        transaction.unmap_exact(address, length)
+        transaction.commit()
+
     def mapping_for(self, address: int) -> GuestMapping | None:
         return next((item for item in self.mappings if item.base <= address < item.end), None)
 
@@ -461,6 +467,19 @@ class _GuestOSTransaction:
         self.mappings.append(result)
         self.next_address = base + length
         return result
+
+    def unmap_exact(self, address: int, length: int) -> None:
+        """Bounded whole-mapping release used by the guest thread exit path."""
+        mapping = next((item for item in self.mappings
+            if item.base == address and item.length == length), None)
+        if mapping is None:
+            raise RefillUnsupported("guest munmap requires a complete owned mapping")
+        keys = tuple(range(address >> 12, (address + length) >> 12))
+        if any(key not in self.pages for key in keys):
+            raise RefillUnsupported("owned guest mapping contains missing pages")
+        for key in keys:
+            del self.pages[key]
+        self.mappings.remove(mapping)
 
     def commit(self) -> None:
         original = self.owner.pages

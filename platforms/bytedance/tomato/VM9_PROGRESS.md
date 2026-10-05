@@ -26,8 +26,14 @@ destructor controls, plus three rollback cases, pass.
 Emulated-TLS arrays, fallback chains, nonempty support loops and the actual
 registered scoped-TLS tree destructor now pass 62 further native controls and
 13 rollback checks, including same-fresh registration/key cleanup and actual
-registry initialization/exit. Unknown shared/fallback callbacks still require
-explicit services. Complete worker runtime, full OS exit, real allocator boot, fresh
+registry initialization/exit. The actual executor shared/weak destructor and
+matching-libc guest pthread_exit now add 70 native controls and 11 rollback
+checks, including real libc registration/exit and detached list/mapping cleanup.
+A further same-fresh nonempty worker completes the full guest joinable exit body
+with all six default returns, 48 nested returns and support/wrapper cleanup;
+14 worker rollback checks pass. Unknown callbacks/support-associated state types
+still require concrete sources. Actual OS create/termination, complete worker
+runtime, real allocator boot, fresh
 Medusa, live header matrix/f13 checks, no-JVM Rust, nonempty search/pagination,
 Douyin/Qidian and the final Pages/Actions products remain open.
 
@@ -45,8 +51,12 @@ publication alone leaves once pending; only a complete initializer can publish
 -1 and broadcast. OP17/sub57 passes 240 W32-multiply controls. No captured
 native input snapshot or native initialization pages feed these Python models.
 
-Next: connect the completed task to a same-fresh-startup nonempty queue worker,
-then OS thread-exit cleanup and the real allocator/signing chain. Detailed
+Next: recover the matching libc's real allocator cold path
++0x1bb08 -> +0x8f00c -> +0x8e350, starting with program-break/OS mapping
+inputs and TLS/arena boot. A native probe without allocator hooks reaches
+brk(0), an explicit 0x40000 anonymous map and then syscall 167; this is
+boundary diagnosis, not a completed Python allocator. Continue the actual
+signer/fresh-request path after replacing explicit services. Detailed
 scope, evidence and reproduction: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
 
 ## Independent root factory and caller (2026-10-04)

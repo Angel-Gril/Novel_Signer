@@ -190,6 +190,61 @@ def get_executor_reference(pages, *, output_reference_address, scratch_address,
     p.commit();return _u(p,output_reference_address)
 
 
+def release_executor_shared(pages, *, owner_address, image_base, free,
+        join_thread=None, release_weak=True):
+    """+0x329eb4 (or +0x329e64) for the real +0x372670 executor owner.
+
+    The +0x326710 constructor publishes this 32-byte control block. On old
+    shared count zero, +0x326b04 dispatches the payload's ordinary destructor
+    +0x3269cc. A successful explicit join clears its handle; other join/error
+    or payload vtables reject. Weak-zero +0x326b14 frees only the owner.
+    This is not an associated-state destructor for nonempty support vectors.
+    """
+    p=_PageTransaction(pages)
+    if _u(p,owner_address)!=image_base+0x372670:
+        raise RefillUnsupported('unrecovered executor shared-owner vtable')
+    old=_u(p,owner_address+8);_w(p,owner_address+8,(old-1)&((1<<64)-1))
+    if old==0:
+        if _u(p,image_base+0x372680)!=image_base+0x326b04:
+            raise RefillUnsupported('unrecovered executor shared-zero virtual target')
+        payload=_u(p,owner_address+24)
+        if _u(p,payload)!=image_base+0x372648 or _u(p,image_base+0x372650)!=image_base+0x3269cc:
+            raise RefillUnsupported('unrecovered shared executor payload destructor')
+        # +0x3269cc writes its base vtable before loading the thread slot.
+        _w(p,payload,image_base+0x372648)
+        handle=_u(p,payload+16)
+        if handle:
+            if join_thread is None:raise RefillUnsupported('executor destructor requires thread join')
+            if join_thread(p,handle)!=0:raise RefillUnsupported('executor thread-join error path')
+            _w(p,payload+16,0)
+        if _u(p,payload+16):raise RefillUnsupported('executor destructor left a live thread handle')
+        if release_weak:
+            weak=_u(p,owner_address+16)
+            if weak:_w(p,owner_address+16,(weak-1)&((1<<64)-1))
+            if weak==0:
+                if _u(p,_u(p,owner_address)+0x20)!=image_base+0x326b14:
+                    raise RefillUnsupported('unrecovered executor weak-zero virtual target')
+                free(p,owner_address)
+    p.commit();return old==0
+
+
+def invoke_registered_thread_destructor(pages, *, function_address,
+        object_address, image_base, free, join_thread=None):
+    """Dispatch known bodies only when supplied by a registered caller.
+
+    +0x326984 is process atexit in the real executor constructor; supporting
+    its body here does not register it as a per-thread callback. Controlled
+    fallback nodes may explicitly refer to it. Unknown callbacks reject.
+    """
+    if function_address==image_base+0x268cf0:
+        objects.destroy_scoped_tls_tree(pages,tree_address=object_address,free=free)
+    elif function_address==image_base+0x326984:
+        owner=_u(pages,object_address+8)
+        if owner:release_executor_shared(pages,owner_address=owner,image_base=image_base,
+            free=free,join_thread=join_thread)
+    else:raise RefillUnsupported('unrecovered registered thread destructor')
+
+
 def construct_async_queue(pages, *, object_address, scratch_address, image_base,
         allocate, create_thread):
     """+0x325a04, one worker, zero queue/mutex/condition and thread ownership."""
@@ -1028,7 +1083,7 @@ def destroy_empty_worker_support(pages, *, wrapper_address, free):
 
 def run_worker_thread_key_cleanup(pages, *, image_base, thread_pointer,
         generation_table, free, set_specific=None, get_tls=None,
-        invoke_destructor=None, broadcast=None, invoke_shared=None):
+        invoke_destructor=None, broadcast=None, invoke_shared=None, join_thread=None):
     """Bionic key-exit phase with support and emulated/fallback TLS targets.
 
     Values clear before destruction. Callback/getter/broadcast services are
@@ -1046,8 +1101,9 @@ def run_worker_thread_key_cleanup(pages, *, image_base, thread_pointer,
         elif destructor==image_base+0x342854:
             if get_tls is None:raise RefillUnsupported('fallback destructor chain requires TLS getter')
             def fallback_callback(p,function,argument):
-                if function==image_base+0x268cf0:
-                    objects.destroy_scoped_tls_tree(p,tree_address=argument,free=free)
+                if function in (image_base+0x268cf0,image_base+0x326984):
+                    invoke_registered_thread_destructor(p,function_address=function,object_address=argument,
+                        image_base=image_base,free=free,join_thread=join_thread)
                 elif invoke_destructor is not None:invoke_destructor(p,function,argument)
                 else:raise RefillUnsupported('unrecovered fallback destructor callback')
             objects.run_emulated_thread_destructors(staged,image_base=image_base,get_tls=get_tls,

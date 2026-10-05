@@ -1,0 +1,43 @@
+{
+  "schema": "vm9-matching-libc-cold-boundary-diagnosis-v1",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "image_base": "0x122c0000",
+  "actual_malloc_entry_offset": "0x1bb08",
+  "fresh_dispatch_offset": "0xd9000",
+  "actual_malloc_body_offset": "0x8f00c",
+  "actual_cold_init_offset": "0x8e350",
+  "diagnostic_profiles": [
+    {
+      "explicit_brk_query": false,
+      "explicit_anonymous_map": false,
+      "stopped_syscall": 214
+    },
+    {
+      "explicit_brk_query": true,
+      "explicit_anonymous_map": false,
+      "stopped_syscall": 222,
+      "mmap_length": 262144,
+      "mmap_prot": 3,
+      "mmap_flags": 34,
+      "mmap_anonymous_fd": true,
+      "mmap_offset": 0
+    },
+    {
+      "explicit_brk_query": true,
+      "explicit_anonymous_map": true,
+      "guest_os_mapping_count": 1,
+      "stopped_syscall": 167
+    }
+  ],
+  "post_svc_pc_offsets": [
+    "0x6b0c4",
+    "0x6a7ac",
+    "0x6ac2c"
+  ],
+  "allocator_calls_hooked": false,
+  "native_input_snapshot_used": false,
+  "native_probe_only": true,
+  "disposable_private_probe": true,
+  "python_allocator_boot_complete": false,
+  "standalone_medusa_complete": false
+}

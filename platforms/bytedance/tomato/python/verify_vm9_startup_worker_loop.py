@@ -2,7 +2,8 @@
 
 The scheduler selects an idle or default nonempty startup-generated worker;
 Python generates its own descriptors and task ABI from independent ELF inputs.
-OS thread-exit destructors and real allocator boot remain separate boundaries.
+Optional key/full guest pthread_exit phases follow the same worker.
+Actual OS thread creation/termination and real allocator boot remain boundaries.
 """
 from __future__ import annotations
 import argparse
@@ -13,6 +14,7 @@ from elftools.elf.elffile import ELFFile
 from unicorn.arm64_const import UC_ARM64_REG_X19,UC_ARM64_REG_X28,UC_ARM64_REG_PC,UC_ARM64_REG_SP,UC_ARM64_REG_X0,UC_ARM64_REG_X1,UC_ARM64_REG_X2,UC_ARM64_REG_X3,UC_ARM64_REG_X30,UC_ARM64_REG_TPIDR_EL0
 import os
 import vm9_startup as startup
+import vm9_thread_exit as thread_exit
 import vm9_objects as objects
 import vm9_allocator as allocator
 import verify_vm9_startup_init as fixture
@@ -46,11 +48,14 @@ def inputs(library,libc,base,thread_id,default=False):
     return p
 
 
-def probe(library,libc,exports,*,base,kind,thread_id,cleanup_keys=False):
+def probe(library,libc,exports,*,base,kind,thread_id,cleanup_keys=False,pthread_exit=False):
     default=kind=='default_queue'
     worker_kind='queue' if default else kind
     model=inputs(library,libc,base,thread_id,default)
     seed=inputs(library,libc,base,thread_id,default)
+    if pthread_exit:
+        assert cleanup_keys
+        for pages in (model,seed):put(pages,GUEST+0xbc80,0)
     oracle={p:v for p,v in seed.items() if not root.LIBC_BASE<=p<<12<root.LIBC_BASE+0x400000
         and not ARENAS<=p<<12<ARENAS+ARENA_BYTES
         and not WORKER_STACK_REGION<=p<<12<WORKER_STACK_REGION+WORKER_STACK_BYTES}
@@ -61,7 +66,7 @@ def probe(library,libc,exports,*,base,kind,thread_id,cleanup_keys=False):
     returns=[];compared=[];task_returns=[];caller_stack=[None]
     events=[];actual_events=[];threads=[];model_threads=[];allocations=[];model_allocations=[]
     switched=[False];worker_arg=[None];worker_context=[None];worker_waits=[0];model_waits=[0]
-    key_cleanup_started=[False];key_cleanup_returned=[False];worker_wrapper=[None]
+    key_cleanup_started=[False];key_cleanup_returned=[False];worker_wrapper=[None];pthread_exit_started=[False]
     selected=1 if default else 0 if kind=='executor' else 2
     def read(cpu,a,n=8):return int.from_bytes(cpu.mem_read(a,n),'little')
     def write(cpu,a,v,n=8):cpu.mem_write(a,(v&((1<<(8*n))-1)).to_bytes(n,'little'))
@@ -84,6 +89,10 @@ def probe(library,libc,exports,*,base,kind,thread_id,cleanup_keys=False):
         events.append(['clock',clock_id,*value])
         cpu.mem_write(cpu.reg_read(UC_ARM64_REG_X1),b''.join(v.to_bytes(8,'little') for v in value));return 0
     def syscall(cpu,number):
+        if pthread_exit and number==93:
+            assert pthread_exit_started[0] and key_cleanup_returned[0]
+            assert cpu.reg_read(UC_ARM64_REG_X0)==0
+            events.append(['os_exit',0]);cpu.reg_write(UC_ARM64_REG_PC,STOP);return 0
         if number==113:return clock(cpu)
         assert number==98,number
         address=cpu.reg_read(UC_ARM64_REG_X0);op=cpu.reg_read(UC_ARM64_REG_X1);expected=cpu.reg_read(UC_ARM64_REG_X2)
@@ -117,12 +126,20 @@ def probe(library,libc,exports,*,base,kind,thread_id,cleanup_keys=False):
         if cleanup_keys and address==root.LIBC_BASE+0x6866c:
             assert key_cleanup_started[0]
             key_cleanup_returned[0]=True;events.append(['key_cleanup_return'])
+        if pthread_exit and address==root.LIBC_BASE+0x685a0:
+            assert pthread_exit_started[0] and not key_cleanup_started[0]
+            key_cleanup_started[0]=True;events.append(['key_cleanup_enter'])
         if cleanup_keys and switched[0] and off==0x326108 and not key_cleanup_started[0]:
             assert cpu.reg_read(UC_ARM64_REG_X0)==0
             key_index=read(cpu,base+0x3e2f30,4)&0x7fffffff
             assert read(cpu,read(cpu,WORKER_TLS+8)+0xf0+key_index*16)==worker_wrapper[0]
-            key_cleanup_started[0]=True;events.append(['key_cleanup_enter'])
-            cpu.reg_write(UC_ARM64_REG_PC,root.LIBC_BASE+0x685a0)
+            if pthread_exit:
+                assert not pthread_exit_started[0]
+                pthread_exit_started[0]=True;events.append(['pthread_exit_enter'])
+                cpu.reg_write(UC_ARM64_REG_PC,root.LIBC_BASE+0x68138)
+            else:
+                key_cleanup_started[0]=True;events.append(['key_cleanup_enter'])
+                cpu.reg_write(UC_ARM64_REG_PC,root.LIBC_BASE+0x685a0)
             cpu.reg_write(UC_ARM64_REG_X30,STOP);return
         if default and off==0x28040c:
             cpu.mem_map(ARENAS,ARENA_BYTES);cpu.mem_write(ARENAS,bytes([0x3c])*ARENA_BYTES)
@@ -146,9 +163,12 @@ def probe(library,libc,exports,*,base,kind,thread_id,cleanup_keys=False):
         cpu.reg_write(UC_ARM64_REG_X30,STOP);cpu.reg_write(UC_ARM64_REG_SP,WORKER_STACK if default else GUEST+0xef00)
         cpu.reg_write(UC_ARM64_REG_TPIDR_EL0,WORKER_TLS)
         for index in range(10):cpu.reg_write(UC_ARM64_REG_X19+index,0)
+    def libc_exit_tls(cpu):
+        assert pthread_exit and cpu.reg_read(UC_ARM64_REG_X0)==root.LIBC_BASE+0xdb3a8
+        events.append(['get_libc_tls']);return GUEST+0xbc80
     result,memory,_,_=native(library,base,0x28040c,[],oracle,libc=libc,real_singletons=True,
         real_mutexes=True,thread_id=thread_id,extra_registers={UC_ARM64_REG_TPIDR_EL0:root.TLS},
-        host_imports={0x348000:create,0x347ea0:register,0x347fa0:free,0x348450:clock,0x3485a0:broadcast_native,
+        host_imports={root.LIBC_BASE+0x9be24-base:libc_exit_tls,0x348000:create,0x347ea0:register,0x347fa0:free,0x348450:clock,0x3485a0:broadcast_native,
             0x348590:redirect('pthread_cond_signal',False),0x348620:redirect('pthread_key_create'),
             0x348580:redirect('pthread_setspecific'),0x3485d0:redirect('pthread_getspecific'),
             0x3486b0:redirect('pthread_once',False),0x3485b0:redirect('pthread_cond_wait',False),
@@ -157,7 +177,9 @@ def probe(library,libc,exports,*,base,kind,thread_id,cleanup_keys=False):
         observed_memory=observed,instruction_limit=900000000 if default else 1000000,
         code_hook_ranges=((base+0x28040c,base+0x281414),(base+0x326000,base+0x327000),
             (base+0x347e00,base+0x348700),
-            (base+0x32ccf0,base+0x32cf00),(root.LIBC_BASE+0x685a0,root.LIBC_BASE+0x68670)) if default else None)
+            (base+0x32ccf0,base+0x32cf00),(root.LIBC_BASE+0x68138,root.LIBC_BASE+0x68670),
+            (root.LIBC_BASE+0x6b2a4,root.LIBC_BASE+0x6b2f0),
+            (root.LIBC_BASE+0x9be24,root.LIBC_BASE+0x9be24)) if default else None)
     assert switched[0] and result==0 and worker_waits[0]==1
     position=GUEST+0x4000;regions=[0]
     def allocate(p,size):
@@ -248,11 +270,33 @@ def probe(library,libc,exports,*,base,kind,thread_id,cleanup_keys=False):
     assert retained==wrapper,'support stays TLS-owned through worker return'
     if cleanup_keys:
         assert key_cleanup_started[0] and key_cleanup_returned[0]
-        actual_events.append(['key_cleanup_enter'])
-        exit_calls=startup.run_worker_thread_key_cleanup(model,image_base=base,
-            thread_pointer=WORKER_TLS,generation_table=table,free=model_free)
-        assert len(exit_calls)==1
-        actual_events.append(['key_cleanup_return'])
+        if pthread_exit:
+            assert pthread_exit_started[0]
+            actual_events.append(['pthread_exit_enter'])
+            original_cleanup=startup.run_worker_thread_key_cleanup
+            def record_cleanup(pages,**kwargs):
+                actual_events.append(['key_cleanup_enter']);calls=original_cleanup(pages,**kwargs)
+                assert len(calls)==1;actual_events.append(['key_cleanup_return']);return calls
+            def get_libc_tls(pages,descriptor):
+                assert descriptor==root.LIBC_BASE+0xdb3a8
+                actual_events.append(['get_libc_tls']);return GUEST+0xbc80
+            def os_call(pages,operation,*fields):
+                assert operation=='exit' and fields==(0,)
+                actual_events.append(['os_exit',0]);return 0
+            startup.run_worker_thread_key_cleanup=record_cleanup
+            try:
+                exit_result=thread_exit.run_pthread_exit(allocator.GuestOS(model),image_base=base,
+                    libc_base=root.LIBC_BASE,thread_pointer=WORKER_TLS,return_value=0,
+                    get_libc_tls=get_libc_tls,free=model_free,os_call=os_call)
+            finally:startup.run_worker_thread_key_cleanup=original_cleanup
+            assert not exit_result.detached and exit_result.unmapped_regions==0
+            assert get(model,get(model,WORKER_TLS+8)+0x50,4)==1
+        else:
+            actual_events.append(['key_cleanup_enter'])
+            exit_calls=startup.run_worker_thread_key_cleanup(model,image_base=base,
+                thread_pointer=WORKER_TLS,generation_table=table,free=model_free)
+            assert len(exit_calls)==1
+            actual_events.append(['key_cleanup_return'])
         assert allocator.pthread_getspecific(model,key=support_key,thread_pointer=WORKER_TLS,generation_table=table)==0
     assert allocator._read_span(model,GUEST,0xA000)==memory,('guest',kind,
         [hex(GUEST+i) for i,(a,b) in enumerate(zip(allocator._read_span(model,GUEST,0xA000),memory)) if a!=b][:25])
@@ -278,7 +322,7 @@ def probe(library,libc,exports,*,base,kind,thread_id,cleanup_keys=False):
         worker_task_stack_abi_independently_derived=default,worker_stack_independent=default,
         all_caller_slots_virtual_stack_guest_and_regions_match=default,
         mapped_initialization_region_count=regions[0],
-        os_thread_exit_destructor_executed=cleanup_keys,complete_os_thread_exit=False,complete_worker_runtime=False,
+        os_thread_exit_destructor_executed=cleanup_keys,full_guest_joinable_pthread_exit_body=pthread_exit,complete_os_thread_exit=False,complete_worker_runtime=False,
         complete_allocator_boot=False,complete_python_medusa=False)
 
 
@@ -376,10 +420,11 @@ def main():
     ap.add_argument('--libc',type=Path,required=True);ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--default-queue',action='store_true')
     ap.add_argument('--thread-key-cleanup',action='store_true')
+    ap.add_argument('--pthread-exit',action='store_true')
     ap.add_argument('--image-base',type=lambda value:int(value,0))
     ap.add_argument('--thread-id',type=int)
     args=ap.parse_args()
-    if args.thread_key_cleanup and not args.default_queue:ap.error('--thread-key-cleanup requires --default-queue')
+    if (args.thread_key_cleanup or args.pthread_exit) and not args.default_queue:ap.error('exit phases require --default-queue')
     assert hashlib.sha256(args.library.read_bytes()).hexdigest()==LIBRARY_SHA256
     os.environ['TOMATO_LIBMETASEC']=str(args.library.resolve())
     global vm_full
@@ -387,7 +432,7 @@ def main():
     with args.libc.open('rb') as f:
         e=ELFFile(f);exports={s.name:root.LIBC_BASE+s['st_value'] for sec in e.iter_sections()
             if sec['sh_type']=='SHT_DYNSYM' for s in sec.iter_symbols() if s['st_shndx']!='SHN_UNDEF'}
-    cases=[probe(args.library,args.libc,exports,base=base,kind=kind,thread_id=tid,cleanup_keys=args.thread_key_cleanup)
+    cases=[probe(args.library,args.libc,exports,base=base,kind=kind,thread_id=tid,cleanup_keys=args.thread_key_cleanup or args.pthread_exit,pthread_exit=args.pthread_exit)
         for base in ((args.image_base,) if args.image_base is not None else (0x122c0000,0x775c205000))
         for kind in (('default_queue',) if args.default_queue else ('executor','queue'))
         for tid in ((args.thread_id,) if args.thread_id is not None else (137,271))]
@@ -398,14 +443,16 @@ def main():
         native_code_used_by_python_model=False,bounded_allocator_used=True,virtual_os_used=True,
         host_threads_created=False,host_wait_executed=False,default_initialization_task_executed=args.default_queue,
         same_fresh_startup_nonempty_worker_verified=args.default_queue,
-        os_thread_exit_destructor_executed=args.thread_key_cleanup,
-        same_startup_worker_exit_key_phase_verified=args.thread_key_cleanup,
+        os_thread_exit_destructor_executed=args.thread_key_cleanup or args.pthread_exit,
+        same_startup_full_guest_joinable_pthread_exit_verified=args.pthread_exit,
+        same_startup_worker_exit_key_phase_verified=args.thread_key_cleanup or args.pthread_exit,
         complete_os_thread_exit=False,complete_worker_runtime=False,
         complete_allocator_boot=False,complete_python_medusa=False)
     args.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(dict(native_runs=len(cases),negative_checks=len(negatives),same_fresh_startup_idle_worker_match=not args.default_queue,
         same_fresh_startup_nonempty_worker_match=args.default_queue,
-        support_thread_key_cleanup_match=args.thread_key_cleanup)))
+        support_thread_key_cleanup_match=args.thread_key_cleanup or args.pthread_exit,
+        full_guest_joinable_pthread_exit_match=args.pthread_exit)))
 
 
 if __name__=='__main__':main()
