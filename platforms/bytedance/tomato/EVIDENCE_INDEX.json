@@ -2090,28 +2090,51 @@
   },
   "vm9_descriptor_target_roles_20261006": {
     "evidence_file": "evidence/vm9_descriptor_target_roles_20261006.json",
-    "schema": "vm9-descriptor-target-roles-v1",
-    "status": "static_continuation_role_audit",
+    "schema": "vm9-descriptor-target-roles-v2",
+    "status": "corrected_active_target_entry_audit",
     "native_sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "active_writer_relocation": {
+      "image_relative_targets": [
+        "0x32a444",
+        "0x32a4fc"
+      ],
+      "runtime_examples_at_0x122c0000": [
+        "0x125ea444",
+        "0x125ea4fc"
+      ],
+      "formula": "image_base + target_offset"
+    },
     "targets": {
-      "0x31e444": {
-        "role": "interior_continuation_with_owner_frame_epilogue",
-        "standalone_callback_entry": false
+      "0x32a444": {
+        "role": "shared_reader_acquire_function_entry",
+        "standalone_callback_entry": true,
+        "python_component": "vm9_objects.acquire_uncontended_shared_reader"
       },
-      "0x31e4fc": {
-        "role": "interior_continuation_after_prologue_prefix",
-        "standalone_callback_entry": false
+      "0x32a4fc": {
+        "role": "shared_reader_release_function_entry",
+        "standalone_callback_entry": true,
+        "python_component": "vm9_objects.release_uncontended_shared_reader"
       }
     },
+    "correction": {
+      "previously_audited_offsets": [
+        "0x31e444",
+        "0x31e4fc"
+      ],
+      "previous_interpretation": "interior continuation locations",
+      "corrected_interpretation": "not selected by the active descriptor writer; active values resolve to +0x32a444/+0x32a4fc",
+      "superseded_by": "evidence/vm9_descriptor_target_roles_20261006.json"
+    },
     "native_input_snapshot_used": false,
+    "active_final_br_target_executed": false,
     "callback_object_parameterized": false,
     "fresh_medusa_output_verified": false,
     "current_online_header_matrix_verified": false,
     "complete_python_medusa": false,
     "limitations": [
-      "Static audit only; neither target is executed and live frame inputs are not recovered.",
-      "Descriptor writer, packed x8 composition and active continuation state remain unresolved.",
-      "No online signer, Rust download chain or product capability is implied."
+      "Static entry audit only; the final br x1 transfer and return handoff are not executed here.",
+      "The descriptor writer and packed callback x8 composition remain separate input boundaries.",
+      "The Python shared-reader components do not prove the complete current Medusa signer."
     ]
   },
   "vm9_descriptor_writer_store64_20261006": {
@@ -2120,7 +2143,10 @@
     "native_offset": "0x171268",
     "semantics": "VM STORE64 writes virtual_register[value_slot] to virtual_register[base_slot] + signed_immediate",
     "active_call": "991c0#1",
-    "active_descriptor_fields": ["+0x00", "+0x08"],
+    "active_descriptor_fields": [
+      "+0x00",
+      "+0x08"
+    ],
     "fresh_input_parameterization": false,
     "fresh_medusa_output": false,
     "online_validation": false
@@ -2130,7 +2156,12 @@
     "evidence_file": "evidence/vm9_descriptor_writer_fresh_inputs_20261006.json",
     "vm_entry": "0x991c0",
     "controls": 4,
-    "descriptor_store_sequence": ["+0x140 branch A", "+0x148 object", "+0x148 object", "+0x140 branch B"],
+    "descriptor_store_sequence": [
+      "+0x140 branch A",
+      "+0x148 object",
+      "+0x148 object",
+      "+0x140 branch B"
+    ],
     "writer_input_sources": {
       "base": "R29 = R29 - 640",
       "branch_a": "R1 = [R20 + 72]",

@@ -2,19 +2,21 @@
 
 
 ## 2026-10-06: corrected literal logger sink boundary
-## 2026-10-06: descriptor trampoline continuation
-## 2026-10-06: descriptor branch targets are continuation labels
+## 2026-10-06: corrected active descriptor target relocation
 
-The current ELF places the observed targets at interior code locations: the
-first target reaches an existing frame cleanup/epilogue, while the second is
-inside a path whose prologue prefix precedes the target. They must retain the
-owner frame and live VM state; treating either value as a standalone callback
-entry would be an unsupported control-flow substitution. See [target-role
-evidence](evidence/vm9_descriptor_target_roles_20261006.json).
+The active `+0x991c0` writer stores image-relative `+0x32a444` and
+`+0x32a4fc`, producing `0x125ea444` and `0x125ea4fc` at image base
+`0x122c0000`. The earlier static audit inspected `+0x31e444` and
+`+0x31e4fc`, which are one `0x10000` page below the active values and are
+not selected by this writer; that interpretation is superseded and recorded in
+the corrected [target-role evidence](evidence/vm9_descriptor_target_roles_20261006.json).
 
-The descriptor writer and packed x8 input that select these continuations are
-still unresolved.
-
+The active targets begin with real function prologues for the shared-reader
+acquire/release helpers. Their bounded Python counterparts are
+`vm9_objects.acquire_uncontended_shared_reader` and
+`vm9_objects.release_uncontended_shared_reader`. This corrects the target-role
+classification, but the final `br x1` transfer, callback-object composition,
+and return handoff are still not executed as one complete native continuation.
 
 
 `vm9_callbacks.dispatch_descriptor_trampoline` now models the recovered

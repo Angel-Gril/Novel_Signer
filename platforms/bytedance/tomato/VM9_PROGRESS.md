@@ -3,19 +3,18 @@
 
 ## 2026-10-06: corrected literal logger sink state boundary
 ## 2026-10-06: descriptor trampoline semantics parameterized
-## 2026-10-06: descriptor target roles remain continuation-bound
+## 2026-10-06: corrected active descriptor target roles
 
-Static inspection of the two observed branch targets records a second boundary:
-`+0x31e444` is inside an existing frame's cleanup/epilogue path and
-`+0x31e4fc` begins after a prologue prefix in another object-update path.
-Neither address is a safe standalone callback entry. The sanitized audit records the
-actual instruction windows and the current ELF hash without executing either
-target. Evidence: [descriptor target roles](evidence/vm9_descriptor_target_roles_20261006.json).
+The active writer values resolve to image-relative `+0x32a444` and
+`+0x32a4fc`, not `+0x31e444`/`+0x31e4fc`. At the current ELF those active
+addresses are function entries for shared-reader acquire and release, with
+real prologue instructions. The earlier one-page-lower audit was a wrong target
+selection and is explicitly superseded in [corrected target-role evidence](evidence/vm9_descriptor_target_roles_20261006.json).
 
-This prevents a common false recovery in which `br x1` is replaced with a
-normal Python function call. The owner frame, descriptor writer, packed x8
-composition and live continuation inputs remain open.
-
+This closes the static target-role misclassification and connects the active
+values to the existing bounded shared-reader components. It does not execute
+the final `br x1` handoff or prove the callback object, full VM continuation, or
+fresh Medusa output.
 
 
 The generic `+0x2584ac` sequence is now represented as a transactional
