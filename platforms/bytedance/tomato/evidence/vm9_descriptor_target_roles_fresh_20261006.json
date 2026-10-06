@@ -53,6 +53,228 @@
       }
     ]
   },
+  "relative_relocation_occurrences": {
+    "active": [
+      {
+        "relocation_offset": "0x379718",
+        "addend": "0x32a444",
+        "type": 1027
+      },
+      {
+        "relocation_offset": "0x379728",
+        "addend": "0x32a4fc",
+        "type": 1027
+      },
+      {
+        "relocation_offset": "0x381c50",
+        "addend": "0x32a444",
+        "type": 1027
+      },
+      {
+        "relocation_offset": "0x381c60",
+        "addend": "0x32a4fc",
+        "type": 1027
+      },
+      {
+        "relocation_offset": "0x381cb8",
+        "addend": "0x32a444",
+        "type": 1027
+      },
+      {
+        "relocation_offset": "0x381cc8",
+        "addend": "0x32a4fc",
+        "type": 1027
+      },
+      {
+        "relocation_offset": "0x383468",
+        "addend": "0x32a444",
+        "type": 1027
+      },
+      {
+        "relocation_offset": "0x383478",
+        "addend": "0x32a4fc",
+        "type": 1027
+      },
+      {
+        "relocation_offset": "0x383520",
+        "addend": "0x32a444",
+        "type": 1027
+      },
+      {
+        "relocation_offset": "0x383530",
+        "addend": "0x32a4fc",
+        "type": 1027
+      }
+    ],
+    "superseded": [],
+    "active_pair_regions": [
+      {
+        "active_pair_offset": "0x379718",
+        "context": [
+          {
+            "relocation_offset": "0x379708",
+            "addend": "0x26c9d0",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x379710",
+            "addend": "0x281700",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x379718",
+            "addend": "0x32a444",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x379720",
+            "addend": "0x32a40c",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x379728",
+            "addend": "0x32a4fc",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x379730",
+            "addend": "0x32a0a0",
+            "type": 1027
+          }
+        ]
+      },
+      {
+        "active_pair_offset": "0x381c50",
+        "context": [
+          {
+            "relocation_offset": "0x381c40",
+            "addend": "0x2484b8",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x381c48",
+            "addend": "0x2483e0",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x381c50",
+            "addend": "0x32a444",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x381c58",
+            "addend": "0x32a40c",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x381c60",
+            "addend": "0x32a4fc",
+            "type": 1027
+          }
+        ]
+      },
+      {
+        "active_pair_offset": "0x381cb8",
+        "context": [
+          {
+            "relocation_offset": "0x381ca8",
+            "addend": "0x32a264",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x381cb0",
+            "addend": "0x167e54",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x381cb8",
+            "addend": "0x32a444",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x381cc0",
+            "addend": "0x32a40c",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x381cc8",
+            "addend": "0x32a4fc",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x381cd0",
+            "addend": "0x26c858",
+            "type": 1027
+          }
+        ]
+      },
+      {
+        "active_pair_offset": "0x383468",
+        "context": [
+          {
+            "relocation_offset": "0x383458",
+            "addend": "0x2a3378",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x383460",
+            "addend": "0x2a337c",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x383468",
+            "addend": "0x32a444",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x383470",
+            "addend": "0x32a40c",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x383478",
+            "addend": "0x32a4fc",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x383480",
+            "addend": "0x2781f4",
+            "type": 1027
+          }
+        ]
+      },
+      {
+        "active_pair_offset": "0x383520",
+        "context": [
+          {
+            "relocation_offset": "0x383510",
+            "addend": "0x26c858",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x383518",
+            "addend": "0x26c9d0",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x383520",
+            "addend": "0x32a444",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x383528",
+            "addend": "0x32a40c",
+            "type": 1027
+          },
+          {
+            "relocation_offset": "0x383530",
+            "addend": "0x32a4fc",
+            "type": 1027
+          }
+        ]
+      }
+    ]
+  },
   "controls": 16,
   "cases": [
     {
@@ -458,6 +680,8 @@
   ],
   "all_memory_matches": true,
   "all_return_statuses_zero": true,
+  "active_relocation_count": 10,
+  "superseded_relocation_count": 0,
   "all_mutex_pairs_match": true,
   "descriptor_trampoline_executed": false,
   "callback_object_parameterized": false,

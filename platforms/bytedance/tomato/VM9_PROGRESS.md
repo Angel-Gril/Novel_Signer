@@ -1,6 +1,15 @@
 # Current VM9 progress checkpoint
 
 
+## 2026-10-06: active target relocation table lead
+
+静态 ELF 还发现 active pair 的 10 个 `R_AARCH64_RELATIVE` relocation addend，分布在
+5 个连续 dispatch/table 区域。每个局部上下文都重复
+`+0x32a444 → +0x32a40c → +0x32a4fc`，其中 `+0x32a40c` 是已确认的 shared-reader
+对象初始化入口；旧偏移没有 relocation。它为下一步追踪对象首字段和实际下一跳
+提供了候选表面，但没有证明这 5 张表都属于当前请求路径。出现列表已写入
+fresh target evidence。
+
 ## 2026-10-06: corrected descriptor targets direct fresh differential
 
 对 active writer 生成的 `+0x32a444/+0x32a4fc` 已做独立 fresh native

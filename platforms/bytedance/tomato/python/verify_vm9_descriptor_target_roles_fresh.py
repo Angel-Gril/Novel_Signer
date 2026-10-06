@@ -30,6 +30,49 @@ COUNTS = {"acquire": (0, 1, 7, 0x7FFFFFFE),
           "release": (1, 2, 7, 0x7FFFFFFE)}
 
 
+def relocation_occurrences(library: Path):
+    with library.open("rb") as stream:
+        elf = ELFFile(stream)
+        relsec = elf.get_section_by_name(".rela.dyn")
+        rows = sorted(
+            ({"relocation_offset": relocation["r_offset"],
+              "addend": relocation["r_addend"],
+              "type": relocation["r_info_type"]}
+             for relocation in relsec.iter_relocations()),
+            key=lambda row: row["relocation_offset"],
+        )
+    active = [row for row in rows if row["addend"] in TARGETS.values()]
+    superseded = [row for row in rows if row["addend"] in OLD_TARGETS.values()]
+    assert len(active) == 10
+    assert not superseded
+    by_offset = {row["relocation_offset"]: row for row in rows}
+    regions = []
+    for row in active:
+        if row["addend"] != TARGETS["acquire"]:
+            continue
+        pair = [by_offset.get(row["relocation_offset"] + 8),
+                by_offset.get(row["relocation_offset"] + 16)]
+        assert pair[0] and pair[0]["addend"] == 0x32A40C
+        assert pair[1] and pair[1]["addend"] == TARGETS["release"]
+        context = []
+        for delta in (-16, -8, 0, 8, 16, 24):
+            item = by_offset.get(row["relocation_offset"] + delta)
+            if item is not None:
+                context.append({"relocation_offset": hex(item["relocation_offset"]),
+                                "addend": hex(item["addend"]),
+                                "type": item["type"]})
+        regions.append({"active_pair_offset": hex(row["relocation_offset"]),
+                        "context": context})
+    assert len(regions) == 5
+    return {
+        "active": [{"relocation_offset": hex(row["relocation_offset"]),
+                     "addend": hex(row["addend"]), "type": row["type"]}
+                    for row in active],
+        "superseded": [],
+        "active_pair_regions": regions,
+    }
+
+
 def disassemble_entries(library: Path):
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -114,10 +157,13 @@ def main() -> None:
         "active_image_relative_targets": {label: hex(offset) for label, offset in TARGETS.items()},
         "superseded_image_relative_targets": {label: hex(offset) for label, offset in OLD_TARGETS.items()},
         "native_entry_disassembly": disassemble_entries(args.library),
+        "relative_relocation_occurrences": relocation_occurrences(args.library),
         "controls": len(cases),
         "cases": cases,
         "all_memory_matches": all(case["memory_match"] for case in cases),
         "all_return_statuses_zero": all(case["return_status_zero"] for case in cases),
+        "active_relocation_count": 10,
+        "superseded_relocation_count": 0,
         "all_mutex_pairs_match": all(case["normal_mutex_pair"] == [
             ["pthread_mutex_lock", GUEST + 0x1000],
             ["pthread_mutex_unlock", GUEST + 0x1000],

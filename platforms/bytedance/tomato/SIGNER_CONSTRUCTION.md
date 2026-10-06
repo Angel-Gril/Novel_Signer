@@ -1,6 +1,16 @@
 # 默认配置下的 signer 构造和 callback 发布
 
 
+## 2026-10-06: active target relocation table lead
+
+The same ELF contains ten `R_AARCH64_RELATIVE` relocations whose addends are the
+active pair, distributed across five contiguous dispatch/table regions. Each local
+context repeats `+0x32a444`, `+0x32a40c`, `+0x32a4fc`; `+0x32a40c` is the observed
+shared-reader object initializer. There are no relocations for the superseded
+offsets. This is a static linkage lead for the next object-graph trace, not proof
+that all five tables are used by the current request. The machine-readable
+occurrence list is in the fresh target evidence file.
+
 ## 2026-10-06: corrected targets direct fresh differential
 
 新增 `verify_vm9_descriptor_target_roles_fresh.py` 和

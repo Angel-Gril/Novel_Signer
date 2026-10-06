@@ -2198,6 +2198,9 @@
     "descriptor_trampoline_executed": false,
     "callback_object_parameterized": false,
     "fresh_medusa_output_verified": false,
-    "complete_python_medusa": false
+    "complete_python_medusa": false,
+    "active_relocation_count": 10,
+    "superseded_relocation_count": 0,
+    "static_relocation_table_scan": ".rela.dyn addends; active target pair appears in five table regions"
   }
 }
