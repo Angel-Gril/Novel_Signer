@@ -1833,3 +1833,19 @@ allocator/pthread/scheduler environment remain explicit input boundaries.
 Affected [key/support and same-default-worker regressions](evidence/vm9_tls_exit_regression_20261005.json)
 also pass. Full OS thread exit, concrete shared/other callback bodies, real
 allocator/arena/OS region boot, fresh signing and downstream products stay open.
+
+## VM STORE64 descriptor writer (2026-10-06)
+
+The next native boundary is now isolated at `+0x171268`. Its exact semantics
+are the VM `STORE64` operation: decode the bytecode word, read the base and
+value virtual-register slots, sign-extend the displacement, and write eight
+bytes to `base + displacement`. The active `991c0#1` oracle stores descriptor
+`+0x00` and `+0x08` with slots 29/1 and 29/17 at displacements `0x140` and
+`0x148`; the public model reproduces all four fresh trace-state effects and
+rejects non-STORE64 or uninitialized-target inputs.
+
+This closes only the field-store instruction boundary. The VM word/register
+file is still supplied by a captured oracle, so independent fresh input
+construction, live owner-frame continuation, packed callback x8, complete
+allocator/arena/OS boot and fresh Medusa remain open.
+Evidence: [descriptor writer STORE64](evidence/vm9_descriptor_writer_store64_20261006.json).

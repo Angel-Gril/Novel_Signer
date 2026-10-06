@@ -2113,5 +2113,16 @@
       "Descriptor writer, packed x8 composition and active continuation state remain unresolved.",
       "No online signer, Rust download chain or product capability is implied."
     ]
+  },
+  "vm9_descriptor_writer_store64_20261006": {
+    "status": "instruction_boundary_parameterized",
+    "evidence_file": "evidence/vm9_descriptor_writer_store64_20261006.json",
+    "native_offset": "0x171268",
+    "semantics": "VM STORE64 writes virtual_register[value_slot] to virtual_register[base_slot] + signed_immediate",
+    "active_call": "991c0#1",
+    "active_descriptor_fields": ["+0x00", "+0x08"],
+    "fresh_input_parameterization": false,
+    "fresh_medusa_output": false,
+    "online_validation": false
   }
 }

@@ -1,0 +1,119 @@
+{
+  "evidence_id": "vm9_descriptor_writer_store64_20261006",
+  "schema": "vm9-descriptor-writer-store64-v1",
+  "status": "instruction_boundary_parameterized",
+  "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "trace_sha256": "cc6ec20c47e0a7e9a85c0da771a3b1b5908b0cbe03058589b9f0cbefdd7e9169",
+  "writer": {
+    "so_offset": "0x171268",
+    "native_instructions": {
+      "0x171238": "ldr x17, [x28, x13, lsl #3]",
+      "0x171240": "ldr x15, [x28, x14, lsl #3]",
+      "0x171248": "sxth x16, w11",
+      "0x171268": "str x15, [x17, x16]"
+    },
+    "semantics": "STORE64: guest[virtual_register[base_slot] + signed_immediate] = virtual_register[value_slot]"
+  },
+  "descriptor_sample": {
+    "address": "0xe4ffe290",
+    "call": "991c0#1",
+    "hit_count": 4,
+    "hits": [
+      {
+        "call": "991c0#1",
+        "instruction_index": 507,
+        "word": "0x8b40501a",
+        "base_slot": 29,
+        "value_slot": 1,
+        "immediate": 320,
+        "base_value": "0xe4ffe150",
+        "value": "0x125ea444",
+        "destination": "0xe4ffe290",
+        "field_offset": 0
+      },
+      {
+        "call": "991c0#1",
+        "instruction_index": 509,
+        "word": "0x8b68501a",
+        "base_slot": 29,
+        "value_slot": 17,
+        "immediate": 328,
+        "base_value": "0xe4ffe150",
+        "value": "0x1284a288",
+        "destination": "0xe4ffe298",
+        "field_offset": 8
+      },
+      {
+        "call": "991c0#1",
+        "instruction_index": 555,
+        "word": "0x8b68501a",
+        "base_slot": 29,
+        "value_slot": 17,
+        "immediate": 328,
+        "base_value": "0xe4ffe150",
+        "value": "0x1284a288",
+        "destination": "0xe4ffe298",
+        "field_offset": 8
+      },
+      {
+        "call": "991c0#1",
+        "instruction_index": 556,
+        "word": "0x8b40501a",
+        "base_slot": 29,
+        "value_slot": 1,
+        "immediate": 320,
+        "base_value": "0xe4ffe150",
+        "value": "0x125ea4fc",
+        "destination": "0xe4ffe290",
+        "field_offset": 0
+      }
+    ],
+    "modeled_results": [
+      {
+        "destination": "0xe4ffe290",
+        "value": "0x125ea444",
+        "previous": "0x0"
+      },
+      {
+        "destination": "0xe4ffe298",
+        "value": "0x1284a288",
+        "previous": "0x0"
+      },
+      {
+        "destination": "0xe4ffe298",
+        "value": "0x1284a288",
+        "previous": "0x0"
+      },
+      {
+        "destination": "0xe4ffe290",
+        "value": "0x125ea4fc",
+        "previous": "0x0"
+      }
+    ]
+  },
+  "negative_controls": [
+    {
+      "case": "non_store64_word",
+      "rejected": true
+    },
+    {
+      "case": "uninitialized_register_target",
+      "rejected": true
+    }
+  ],
+  "input_boundary": {
+    "vm_word": true,
+    "virtual_registers": true,
+    "descriptor_field_target": true,
+    "owner_frame_live_state": false,
+    "packed_callback_x8": false,
+    "fresh_input_generation": false,
+    "fresh_medusa_output": false
+  },
+  "limitations": [
+    "The trace is a captured VM/native oracle, not a fresh startup.",
+    "This recovers the STORE64 field permutation and memory effect only.",
+    "The caller that produces the VM word/register file and the owner-frame continuations remain unresolved.",
+    "No online server validation, Rust signer, or download product is implied."
+  ]
+}

@@ -499,3 +499,22 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 ## Current VM prelude boundary
 
 The native outer path reaches `+0x257084 -> +0x257308 -> +0x168324 -> +0x26cf08`; the Python outer path currently reaches `+0x2584ac` after the same root VM entry address. Fresh entry sampling shows the stack and descriptor agree, while the 32-word VM backing spill does not. The native backing capture is evidence only; seeding it into Python is rejected because it consumes a native snapshot and then stops at an unmapped page. The next implementation boundary is the caller spill generation before `+0x168324`, followed by a new fresh-input comparison.
+
+## 2026-10-06: VM STORE64 descriptor-writer boundary
+
+`+0x171268` is now parameterized at the instruction level. Static disassembly
+shows the native VM implementation loading `x17 = R[base_slot]`, `x15 =
+R[value_slot]`, sign-extending the decoded 16-bit displacement into `x16`, and
+executing `str x15, [x17, x16]`. The public model is
+`python/vm9_descriptor_writer.py`; it accepts only a VM word and an explicit
+32-slot virtual-register file, and it rolls back on missing guest pages or an
+invalid target.
+
+The captured `991c0#1` VM oracle produces the active descriptor pair with
+`base_slot=29`, `base_value=vm_stack-0xAE0`, `value_slot=1/17`, and signed
+immediates `0x140/0x148`. Four stores reproduce the observed branch target and
+object field values under the model. This is a new parameterized instruction
+boundary, not a fresh startup: the caller that generates the word/register
+file, the owner-frame continuation state, packed callback composition and
+fresh Medusa output remain unresolved. See
+[evidence/vm9_descriptor_writer_store64_20261006.json](evidence/vm9_descriptor_writer_store64_20261006.json).
