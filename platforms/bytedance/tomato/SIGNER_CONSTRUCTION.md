@@ -1,4 +1,11 @@
 
+## 2026-10-06: packed callback consumer ABI
+
+The [fresh native consumer evidence](evidence/vm9_packed_callback_consumer_native_fresh_20261006.json) executes `+0x2887f0` for twelve fresh 32-byte objects. It verifies the consumer-side layout `target/+0x08 packed x8/+0x10 x0/+0x18 x1`, the indirect call registers, and the caller stack/`x30` restoration.
+
+The upstream packed-x8 composition is intentionally still unsupported. This evidence can be cited to constrain the required object writer and to reject any model that drops or reorders the packed word, but it cannot supply that writer or prove the current VM9 chain.
+
+
 ## 2026-10-06: separate callback return trampoline boundary
 
 The [fresh native return-trampoline evidence](evidence/vm9_callback_return_trampoline_native_fresh_20261006.json) executes `+0x25863c → +0x25865c` directly from the private ELF. Eight controls verify stack save/restore, `x30` restoration, the 16-byte zeroing at `x19`, the selector-dependent `csel`, and the final `br x8` boundary.

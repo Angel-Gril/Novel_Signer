@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-06: packed callback consumer ABI fresh differential
+
+新增 [packed consumer evidence](evidence/vm9_packed_callback_consumer_native_fresh_20261006.json)。从私有 ELF 提取并执行 `+0x2887f0` 的 28 字节 consumer，12 组 fresh 32 字节 callback object 全部通过。
+
+原生 consumer 被实测为：从 object `+0x00` 取 indirect target、从 `+0x08` 取 packed `x8`、从 `+0x10/+0x18` 取 `x0/x1`，调用目标后恢复 caller 的 `x30` 和 `sp`。每组都确认 callback 入口收到原始 packed x8、两个参数和正确返回 PC，返回值与栈恢复一致。
+
+这只闭合了 packed callback 的消费 ABI。packed x8 上游组合、当前 VM9 callback object writer、owner-frame continuation、fresh Medusa 和线上校验仍未完成；合成 callback hook 不构成当前 native body 证据。
+
+
 ## 2026-10-06: native `+0x25863c → +0x25865c` return trampoline differential
 
 新增 [return trampoline evidence](evidence/vm9_callback_return_trampoline_native_fresh_20261006.json)。从私有 ELF 提取并在 Unicorn 中执行原始 `+0x25863c` 入口和 `+0x25865c` continuation，8 组 fresh 控制均通过。

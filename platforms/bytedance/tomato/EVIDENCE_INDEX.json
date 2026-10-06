@@ -2285,5 +2285,26 @@
       "Synthetic registers/object memory do not parameterize the current VM9 owner frame.",
       "This path does not prove packed callback x8 or current Medusa output."
     ]
+  },
+  "vm9_packed_callback_consumer_native_fresh_20261006": {
+    "evidence_file": "evidence/vm9_packed_callback_consumer_native_fresh_20261006.json",
+    "schema": "vm9-packed-callback-consumer-native-fresh-v1",
+    "status": "native_packed_callback_consumer_fresh_differential_pass",
+    "consumer_offset": "0x2887f0",
+    "consumer_size": 28,
+    "controls": 12,
+    "all_native_controls_pass": true,
+    "packed_x8_consumer_abi_verified": true,
+    "packed_x8_composition_parameterized": false,
+    "current_vm_callback_object_graph_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "complete_python_medusa": false,
+    "no_jvm_rust_signer_complete": false,
+    "interpretation": "Exact ELF consumer bytes preserve object field order and pass packed x8 unchanged to the indirect callback, with caller stack/x30 restoration verified on fresh inputs.",
+    "limitations": [
+      "Packed x8 is an explicit fresh object input; upstream composition remains unknown.",
+      "Synthetic callback hook is used and the current native callback body is not executed.",
+      "No current VM9 object graph, fresh Medusa output or online acceptance is established."
+    ]
   }
 }

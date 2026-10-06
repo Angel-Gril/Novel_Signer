@@ -37,7 +37,12 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 
 #
-### Separate callback return trampoline
+#
+### Packed callback consumer ABI
+
+`python/verify_vm9_packed_callback_consumer_native_fresh_20261006.py` executes the exact native consumer at `+0x2887f0` with fresh callback objects. Its evidence is useful for reviewing object layout and register order: the packed x8 word is passed unchanged as the callback's `x8`, while `+0x10/+0x18` become `x0/x1`. The verifier does not parameterize how the packed value was produced, so `compose_packed_callback_x8` remains fail-closed.
+
+## Separate callback return trampoline
 
 The verifier `python/verify_vm9_callback_return_trampoline_native_fresh_20261006.py` executes the exact native bytes at `+0x25863c` and `+0x25865c` on fresh synthetic registers, stack and object memory. The resulting evidence is useful when distinguishing callback-family paths: it proves the stack restoration, object zeroing and selector-dependent `br x8` boundary independently of the direct descriptor wrapper. It does not prove the final target body, packed callback x8 construction, current VM9 object graph or online signer.
 
