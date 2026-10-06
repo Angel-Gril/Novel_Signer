@@ -3,6 +3,42 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Current same-startup worker/actual-allocator checkpoint (2026-10-06)
+
+The actual-allocator main startup now feeds its generated nonempty queue worker
+in the same fresh native/Python run. **2 native controls / 4 rollback checks**
+pass at both relocated bases: main and worker use distinct explicit IDs 137/271,
+separate 64 KiB stacks and independent TLS. Each complete native run executes
+**22 actual malloc PLT calls and one actual argument free**, with zero substituted
+allocator returns. Six top-level default caller returns and separately measured
+**48 native / 48 Python nested returns** match. At each caller all32 slots,
+virtual stack, observed full image/TLS/libc globals and every retained mapping
+page match; final guest/image/both TLS/global/mapping state, ordered virtual
+OS/clock/wait/wake effects, mapping records/protection/cursor also match.
+
+An early composed probe used the oracle's fixed main gettid in the worker.
+Only the guard owner at +0x3e2f3c differed; it did not prove missing runtime
+initialization. A callable explicit gettid provider now follows current TPIDR,
+retaining the old integer path. No expected bytes, copied native TLS or relaxed
+assertions supply the fix. A wrong temporary negative-fixture once address was
+also corrected before the final all-case CLI reached exit 0.
+
+The new production run_default_queue_worker publishes guest/mapping state only
+on complete success. Unmapped stack, busy third once, failed third broadcast and
+late reintroduced argument ownership prove rollback, including failure after
+all six task bodies. External provider effects remain visible. Small free,
+main-startup and independent-worker regressions pass **32 native / 24 rollback**;
+all three CLI runs are terminal. The shared interpreter is unchanged.
+
+Normal return frees the argument into the actual small cache; support and
+allocator TSD remain TLS-owned. Real OS thread creation/termination, allocator
+key-exit +0x99584 and its actual cleanup/internal-free branches, full allocator
+branches and root composition are still open. Fresh Medusa/signing, online
+header/f13 matrix, no-JVM Rust, nonempty search/pagination, Douyin/Qidian and final
+Pages/Actions products are not complete. Evidence:
+[same-startup worker](evidence/vm9_same_startup_worker_actual_allocator_native.json),
+[regressions](evidence/vm9_same_startup_worker_actual_allocator_regression.json).
+
 ## Current main-startup/independent-worker allocator checkpoint (2026-10-06)
 
 Fresh main +0x28040c startup now composes actual malloc in **2 native controls /
@@ -30,9 +66,10 @@ tcache/region/cold/large/serial-task regressions pass **148 native / 70 rollback
 with all five CLI runs terminal. These remain serial virtual-OS controls;
 physical libc stack bytes and real OS thread creation are not claimed.
 
-Main startup and separate worker allocations are now verified. The complete
-same-startup nonempty worker, argument/TLS cleanup, root, fresh request signature
-and online matrix still need a final composed control. Arena-table resize,
+This earlier checkpoint proved main startup and separate worker allocations.
+The newer checkpoint above now closes their same-startup nonempty worker and
+normal argument cleanup. Allocator TLS exit, root, fresh request signature and
+online matrix still need composed controls. Arena-table resize,
 reentrant inflight TSD allocation, full-bin/GC, large cache/free/huge and remaining
 callbacks remain explicit frontiers. No-JVM Rust, nonempty search/pagination,
 Douyin/Qidian and final Pages/Actions products remain open. Evidence:

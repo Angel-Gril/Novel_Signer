@@ -1,8 +1,24 @@
 # 外层启动 caller 与 worker 调度／清理
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**默认 matching libc 冷启动已另行验证自然返回；完整 allocator 分支、同次 startup→worker 实际 allocator 组合及 root 接入、真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**默认 matching libc 冷启动已另行验证自然返回；完整 allocator 分支、实际 allocator TLS 退出析构及 root 接入、真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
+
+## 当前同次 startup→worker／实际 allocator 组合（2026-10-06）
+
+同次 fresh ELF／TLS 运行已贯通 `+0x28040c` 主线程 startup → 实际分配的非空 queue descriptor → 独立 worker TLS／栈 → 六项默认任务 → 正常返回及 argument 清理。**两个基址的 2 个 native 对照／4 项回滚检查已终态通过**。每个 native 组合实际执行 22 次 malloc PLT、1 次 argument free，没有替代 allocator 返回值；六个顶层 caller 完整返回，native 和 Python 分别记录 **48 次嵌套 VM 返回**。每项全部 32 槽、虚拟栈、image、TLS、libc globals、全部保留 mapping 页，以及最终 guest／image／双方 TLS／映射、OS／clock／wait／wake 顺序均一致。
+
+主线程／worker 的显式线程 ID 分别为 137／271，使用独立 64 KiB 栈。早期组合只有 `+0x3e2f3c` guard owner 不一致，原因是 native oracle 仍固定返回主线程 gettid；改为随当前 TPIDR 的显式 provider 后关闭差异，没有复制 native TLS 或放宽断言。正式验证也修正了临时 negative fixture 的 once 地址，最终全部 CLI exit 0。
+
+生产入口为 [run_default_queue_worker](python/vm9_startup_allocator.py)。unmapped 栈、第三项 busy once、第三次 broadcast 失败，以及六项任务完成后重新引入 argument 所有权，均证明整个 worker 的 guest／mapping／protection／cursor 回滚；主线程已提交状态保留，外部 provider 效果不回滚。small free、主线程 startup、独立 worker 分配共享回归 **32／24**全部通过。证据：[同次实际 allocator worker](evidence/vm9_same_startup_worker_actual_allocator_native.json)、[共享回归](evidence/vm9_same_startup_worker_actual_allocator_regression.json)。
+
+正常返回只完成 argument 清理；support 和 allocator TSD 仍由 TLS 持有。下一处是自然注册的 allocator key 退出回调 **matching libc `+0x99584`** 及其实际 cleanup／internal-free 分支，然后接 root 与 fresh Medusa 请求。**实际 allocator 的 TLS 退出、完整 root、fresh Medusa、线上矩阵、真实 OS 线程创建／终止仍未通过。** Rust、非空搜索与分页、其他平台和最终 Pages／Actions 产品仍待后续验收。
+
+复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_startup_worker_allocator.py --library <matching-main.so> --libc <matching-libc.so> --output <private-composed-report.json>
+```
 
 ## 当前主线程 startup／独立 worker allocator 检查点（2026-10-06）
 
@@ -12,7 +28,7 @@
 
 worker 分配矩阵 **14 个 native 对照／8 项拒绝与回滚检查**通过，覆盖两基址、small／large／mixed、两 worker、单 CPU 与 40 次 65536 字节跨 region。每次返回都比较 globals、TLS 和全部保留 mapping 页；相关 tcache、region、cold、large、serial 默认任务回归 **148／70**全部终态通过。证据：[主线程](evidence/vm9_main_startup_actual_allocator_native.json)、[独立 worker 分配](evidence/vm9_worker_actual_allocator_native.json)、[共享回归](evidence/vm9_worker_actual_allocator_regression.json)。
 
-这些结果仍采用显式虚拟 OS 服务、线程输入和串行调度。**完整同次 startup→非空 queue worker→argument／TLS 清理、root、fresh Medusa 签名和线上矩阵尚未通过**；arena table 扩展、inflight TSD 重入、full-bin／GC、large cache／free／huge 和其余 callback 仍有明确拒绝边界。真实 OS 线程创建和完整物理 libc 栈不在本轮证据范围。
+这些结果仍采用显式虚拟 OS 服务、线程输入和串行调度。这一较早阶段尚未完成同次 worker；上方最新组合现已通过正常 argument 清理。**实际 allocator 的 TLS 退出、root、fresh Medusa 签名和线上矩阵仍未通过**；arena table 扩展、inflight TSD 重入、full-bin／GC、large cache／free／huge 和其余 callback 仍有明确拒绝边界。真实 OS 线程创建和完整物理 libc 栈不在本轮证据范围。
 
 复现：
 

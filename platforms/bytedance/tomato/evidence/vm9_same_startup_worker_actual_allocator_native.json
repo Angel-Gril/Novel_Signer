@@ -1,0 +1,91 @@
+{
+  "schema": "vm9-same-startup-worker-actual-allocator-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "main_thread_id": 137,
+      "worker_thread_id": 271,
+      "actual_native_malloc_plt_calls": 22,
+      "actual_native_argument_free_calls": 1,
+      "substituted_allocations": 0,
+      "native_default_caller_returns": 6,
+      "python_default_caller_returns_compared": 6,
+      "native_nested_vm_returns": 48,
+      "python_nested_vm_returns": 48,
+      "all32_slots_virtual_stack_image_tls_globals_and_owned_mapping_bytes_match_at_each_caller": true,
+      "final_guest_image_both_tls_globals_and_all_owned_mapping_bytes_match": true,
+      "os_clock_wait_wake_order_mapping_records_protection_and_cursor_match": true,
+      "startup_generated_worker_descriptor_used": true,
+      "worker_support_retained_in_tls": true,
+      "normal_argument_cleanup_verified": true,
+      "actual_native_malloc": true,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "physical_stack_compared": false,
+      "actual_os_thread_creation_and_exit_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "main_thread_id": 137,
+      "worker_thread_id": 271,
+      "actual_native_malloc_plt_calls": 22,
+      "actual_native_argument_free_calls": 1,
+      "substituted_allocations": 0,
+      "native_default_caller_returns": 6,
+      "python_default_caller_returns_compared": 6,
+      "native_nested_vm_returns": 48,
+      "python_nested_vm_returns": 48,
+      "all32_slots_virtual_stack_image_tls_globals_and_owned_mapping_bytes_match_at_each_caller": true,
+      "final_guest_image_both_tls_globals_and_all_owned_mapping_bytes_match": true,
+      "os_clock_wait_wake_order_mapping_records_protection_and_cursor_match": true,
+      "startup_generated_worker_descriptor_used": true,
+      "worker_support_retained_in_tls": true,
+      "normal_argument_cleanup_verified": true,
+      "actual_native_malloc": true,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true,
+      "physical_stack_compared": false,
+      "actual_os_thread_creation_and_exit_verified": false
+    }
+  ],
+  "rejection_cases": [
+    {
+      "case": "unmapped_worker_stack",
+      "rejected": true,
+      "all_guest_pages_mapping_protection_cursor_unchanged": true,
+      "broadcasts_before_rejection": 0,
+      "waits_before_rejection": 0,
+      "external_provider_effects_not_rolled_back": false
+    },
+    {
+      "case": "busy_third_once",
+      "rejected": true,
+      "all_guest_pages_mapping_protection_cursor_unchanged": true,
+      "broadcasts_before_rejection": 2,
+      "waits_before_rejection": 0,
+      "external_provider_effects_not_rolled_back": true
+    },
+    {
+      "case": "third_broadcast_failure",
+      "rejected": true,
+      "all_guest_pages_mapping_protection_cursor_unchanged": true,
+      "broadcasts_before_rejection": 3,
+      "waits_before_rejection": 0,
+      "external_provider_effects_not_rolled_back": true
+    },
+    {
+      "case": "late_argument_ownership",
+      "rejected": true,
+      "all_guest_pages_mapping_protection_cursor_unchanged": true,
+      "broadcasts_before_rejection": 6,
+      "waits_before_rejection": 1,
+      "external_provider_effects_not_rolled_back": true
+    }
+  ],
+  "same_startup_worker_actual_allocator_composed": true,
+  "worker_allocator_tls_exit_destructors_composed": false,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false
+}

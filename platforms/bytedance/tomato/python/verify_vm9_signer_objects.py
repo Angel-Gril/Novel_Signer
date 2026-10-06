@@ -213,9 +213,10 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             result = 0  # Explicit successful single-thread mutex boundary.
         elif offset == 0x348310 and real_singletons:
             assert cpu.reg_read(UC_ARM64_REG_X0) == 0xB2
-            assert isinstance(thread_id, int) and 0 <= thread_id <= 0xFFFF_FFFF
-            ledger.append(["gettid", thread_id])
-            result = thread_id
+            current_thread_id = thread_id(cpu) if callable(thread_id) else thread_id
+            assert isinstance(current_thread_id, int) and 0 <= current_thread_id <= 0xFFFF_FFFF
+            ledger.append(["gettid", current_thread_id])
+            result = current_thread_id
         elif offset in (0x3485A0, 0x3485B0, 0x32D64C) and real_singletons and offset not in (host_imports or {}):
             raise RefillUnsupported("condition broadcast/wait or runtime abort is outside the oracle")
         elif offset in (0x15F094, 0x264158) and not real_singletons:

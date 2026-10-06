@@ -1,0 +1,28 @@
+{
+  "schema": "vm9-same-startup-worker-allocator-regression-v1",
+  "cases": [
+    {
+      "case": "main_startup_allocator",
+      "native_controls": 2,
+      "rejection_and_rollback_checks": 3,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "small_free",
+      "native_controls": 16,
+      "rejection_and_rollback_checks": 13,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "worker_allocator",
+      "native_controls": 14,
+      "rejection_and_rollback_checks": 8,
+      "terminal_exit_zero": true
+    }
+  ],
+  "native_controls": 32,
+  "rejection_and_rollback_checks": 24,
+  "all_regression_cli_runs_terminal": true,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false
+}
