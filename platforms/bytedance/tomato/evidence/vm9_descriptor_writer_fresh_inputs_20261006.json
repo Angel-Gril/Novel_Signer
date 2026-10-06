@@ -1,0 +1,293 @@
+{
+  "evidence_id": "vm9_descriptor_writer_fresh_inputs_20261006",
+  "schema": "vm9-descriptor-writer-fresh-inputs-v1",
+  "status": "fresh_root_writer_inputs_generated_with_deterministic_allocator_seed",
+  "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "controls": 4,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "absent",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "python_vm_entry_offset": "0x991c0",
+      "root_object": "0x136e0140",
+      "vm_stack": "0x7004e730",
+      "writer_stores": [
+        {
+          "step": 422,
+          "word": "0x8b40501a",
+          "base_slot": 29,
+          "value_slot": 1,
+          "immediate": 320,
+          "base_value": "0x7004e8f0",
+          "value": "0x125ea444",
+          "destination": "0x7004ea30",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 424,
+          "word": "0x8b68501a",
+          "base_slot": 29,
+          "value_slot": 17,
+          "immediate": 328,
+          "base_value": "0x7004e8f0",
+          "value": "0x136da148",
+          "destination": "0x7004ea38",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 470,
+          "word": "0x8b68501a",
+          "base_slot": 29,
+          "value_slot": 17,
+          "immediate": 328,
+          "base_value": "0x7004e8f0",
+          "value": "0x136da148",
+          "destination": "0x7004ea38",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 471,
+          "word": "0x8b40501a",
+          "base_slot": 29,
+          "value_slot": 1,
+          "immediate": 320,
+          "base_value": "0x7004e8f0",
+          "value": "0x125ea4fc",
+          "destination": "0x7004ea30",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        }
+      ],
+      "branch_targets": [
+        "0x125ea444",
+        "0x125ea4fc"
+      ],
+      "fresh_object_value": "0x136da148",
+      "descriptor_callback_reached": false,
+      "logger_callback_reached": false,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "sdk_30",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "python_vm_entry_offset": "0x991c0",
+      "root_object": "0x136e0140",
+      "vm_stack": "0x7004e730",
+      "writer_stores": [
+        {
+          "step": 422,
+          "word": "0x8b40501a",
+          "base_slot": 29,
+          "value_slot": 1,
+          "immediate": 320,
+          "base_value": "0x7004e8f0",
+          "value": "0x125ea444",
+          "destination": "0x7004ea30",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 424,
+          "word": "0x8b68501a",
+          "base_slot": 29,
+          "value_slot": 17,
+          "immediate": 328,
+          "base_value": "0x7004e8f0",
+          "value": "0x136da148",
+          "destination": "0x7004ea38",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 470,
+          "word": "0x8b68501a",
+          "base_slot": 29,
+          "value_slot": 17,
+          "immediate": 328,
+          "base_value": "0x7004e8f0",
+          "value": "0x136da148",
+          "destination": "0x7004ea38",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 471,
+          "word": "0x8b40501a",
+          "base_slot": 29,
+          "value_slot": 1,
+          "immediate": 320,
+          "base_value": "0x7004e8f0",
+          "value": "0x125ea4fc",
+          "destination": "0x7004ea30",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        }
+      ],
+      "branch_targets": [
+        "0x125ea444",
+        "0x125ea4fc"
+      ],
+      "fresh_object_value": "0x136da148",
+      "descriptor_callback_reached": false,
+      "logger_callback_reached": false,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "absent",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "python_vm_entry_offset": "0x991c0",
+      "root_object": "0x136e0140",
+      "vm_stack": "0x7004e730",
+      "writer_stores": [
+        {
+          "step": 422,
+          "word": "0x8b40501a",
+          "base_slot": 29,
+          "value_slot": 1,
+          "immediate": 320,
+          "base_value": "0x7004e8f0",
+          "value": "0x775c52f444",
+          "destination": "0x7004ea30",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 424,
+          "word": "0x8b68501a",
+          "base_slot": 29,
+          "value_slot": 17,
+          "immediate": 328,
+          "base_value": "0x7004e8f0",
+          "value": "0x136da148",
+          "destination": "0x7004ea38",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 470,
+          "word": "0x8b68501a",
+          "base_slot": 29,
+          "value_slot": 17,
+          "immediate": 328,
+          "base_value": "0x7004e8f0",
+          "value": "0x136da148",
+          "destination": "0x7004ea38",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 471,
+          "word": "0x8b40501a",
+          "base_slot": 29,
+          "value_slot": 1,
+          "immediate": 320,
+          "base_value": "0x7004e8f0",
+          "value": "0x775c52f4fc",
+          "destination": "0x7004ea30",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        }
+      ],
+      "branch_targets": [
+        "0x775c52f444",
+        "0x775c52f4fc"
+      ],
+      "fresh_object_value": "0x136da148",
+      "descriptor_callback_reached": false,
+      "logger_callback_reached": false,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "sdk_30",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "python_vm_entry_offset": "0x991c0",
+      "root_object": "0x136e0140",
+      "vm_stack": "0x7004e730",
+      "writer_stores": [
+        {
+          "step": 422,
+          "word": "0x8b40501a",
+          "base_slot": 29,
+          "value_slot": 1,
+          "immediate": 320,
+          "base_value": "0x7004e8f0",
+          "value": "0x775c52f444",
+          "destination": "0x7004ea30",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 424,
+          "word": "0x8b68501a",
+          "base_slot": 29,
+          "value_slot": 17,
+          "immediate": 328,
+          "base_value": "0x7004e8f0",
+          "value": "0x136da148",
+          "destination": "0x7004ea38",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 470,
+          "word": "0x8b68501a",
+          "base_slot": 29,
+          "value_slot": 17,
+          "immediate": 328,
+          "base_value": "0x7004e8f0",
+          "value": "0x136da148",
+          "destination": "0x7004ea38",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        },
+        {
+          "step": 471,
+          "word": "0x8b40501a",
+          "base_slot": 29,
+          "value_slot": 1,
+          "immediate": 320,
+          "base_value": "0x7004e8f0",
+          "value": "0x775c52f4fc",
+          "destination": "0x7004ea30",
+          "destination_page_mapped": true,
+          "value_page_mapped": true
+        }
+      ],
+      "branch_targets": [
+        "0x775c52f444",
+        "0x775c52f4fc"
+      ],
+      "fresh_object_value": "0x136da148",
+      "descriptor_callback_reached": false,
+      "logger_callback_reached": false,
+      "fresh_medusa_output_verified": false
+    }
+  ],
+  "all_controls_fresh": true,
+  "fresh_object_values_are_observed_as_register_inputs": true,
+  "fresh_object_values_vary_across_same_seed_controls": false,
+  "fresh_object_values_are_not_hardcoded": false,
+  "descriptor_writer_parameterized": true,
+  "descriptor_callback_reached": false,
+  "fresh_medusa_output_verified": false,
+  "complete_python_medusa": false,
+  "no_jvm_rust_signer_complete": false,
+  "limitations": [
+    "The controls cover the bounded +0x991c0 root caller and its four STORE64 fields only.",
+    "The owner-frame continuation and remaining callback body are still not executed.",
+    "The generated object pointer is observed from the current fresh model allocation; the deterministic seed repeats the same address across these controls.",
+    "No current Medusa output, header matrix, Rust chain or download product is implied."
+  ]
+}

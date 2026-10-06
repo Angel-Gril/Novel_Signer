@@ -1849,3 +1849,16 @@ file is still supplied by a captured oracle, so independent fresh input
 construction, live owner-frame continuation, packed callback x8, complete
 allocator/arena/OS boot and fresh Medusa remain open.
 Evidence: [descriptor writer STORE64](evidence/vm9_descriptor_writer_store64_20261006.json).
+
+## Fresh root writer inputs (2026-10-06)
+
+The bounded root caller now produces the descriptor writer inputs from its own
+fresh VM/register state. Four controls (two image bases × absent/SDK 30) match
+the sequence `+0x140 branch A → +0x148 object → +0x148 object → +0x140 branch B`.
+The branch words relocate with the image base and the field8 value is observed
+from the current VM slot 17. The deterministic allocator seed repeats that
+object address, so the result is not a cross-seed entropy claim.
+
+The owner-frame continuation and callback body remain unresolved. This evidence
+closes a bounded fresh writer-input boundary, not the full Python Medusa or
+online signing chain. Evidence: [fresh writer inputs](evidence/vm9_descriptor_writer_fresh_inputs_20261006.json).

@@ -2124,5 +2124,17 @@
     "fresh_input_parameterization": false,
     "fresh_medusa_output": false,
     "online_validation": false
+  },
+  "vm9_descriptor_writer_fresh_inputs_20261006": {
+    "status": "fresh_root_writer_inputs_generated_with_deterministic_allocator_seed",
+    "evidence_file": "evidence/vm9_descriptor_writer_fresh_inputs_20261006.json",
+    "vm_entry": "0x991c0",
+    "controls": 4,
+    "descriptor_store_sequence": ["+0x140 branch A", "+0x148 object", "+0x148 object", "+0x140 branch B"],
+    "fresh_elf_inputs": true,
+    "native_input_snapshot_used": false,
+    "descriptor_callback_reached": false,
+    "fresh_medusa_output": false,
+    "online_validation": false
   }
 }

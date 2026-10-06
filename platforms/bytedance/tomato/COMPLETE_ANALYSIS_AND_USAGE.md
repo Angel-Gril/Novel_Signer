@@ -350,6 +350,7 @@ platforms/qidian/            # 起点：独立 APK、接口和解密证据
 - VM9 的 TLS/arena/tcache/OS region/allocator/callback 子边界有输入驱动验证。
 - 配置树、136/320 字节完整构造主体与 getter 在明确边界下通过 native 差分和同次子树验证。
 - Rust crate、Python 文件和 JSON evidence 可检查。
+- `+0x171268` 的 VM `STORE64` 字段解码，以及 `+0x991c0` 四组 fresh root writer 输入已通过；这只闭合 descriptor 字段写入边界，不等于 callback continuation 或 Medusa 完成。
 
 ### 仅桥接或捕获状态通过
 

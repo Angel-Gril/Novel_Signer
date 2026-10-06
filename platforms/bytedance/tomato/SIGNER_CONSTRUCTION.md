@@ -518,3 +518,19 @@ boundary, not a fresh startup: the caller that generates the word/register
 file, the owner-frame continuation state, packed callback composition and
 fresh Medusa output remain unresolved. See
 [evidence/vm9_descriptor_writer_store64_20261006.json](evidence/vm9_descriptor_writer_store64_20261006.json).
+
+## 2026-10-06: fresh root writer inputs
+
+The bounded Python `+0x991c0` root caller now has an input-driven writer
+probe. Four fresh controls (two image bases × absent/SDK 30) generate the same
+four-instruction descriptor sequence from the current VM/register state:
+`+0x140` branch A, `+0x148` object, `+0x148` object, then `+0x140` branch B.
+The branch values relocate with the image base; the object value is read from
+fresh virtual-register slot 17 and its destination page is mapped. The same
+allocator seed intentionally repeats the object address, so this evidence does
+not claim cross-seed variation. See [fresh writer evidence](evidence/vm9_descriptor_writer_fresh_inputs_20261006.json).
+
+This closes the writer input boundary for the bounded root caller only. The
+active owner-frame continuation still does not execute, descriptor callback
+publication is not complete, and no fresh Medusa or online signer output is
+verified.
