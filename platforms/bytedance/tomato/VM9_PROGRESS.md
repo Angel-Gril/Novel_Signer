@@ -3,6 +3,20 @@
 
 ## 2026-10-06: corrected literal logger sink state boundary
 ## 2026-10-06: descriptor trampoline semantics parameterized
+## 2026-10-06: descriptor target roles remain continuation-bound
+
+Static inspection of the two observed branch targets records a second boundary:
+`+0x31e444` is inside an existing frame's cleanup/epilogue path and
+`+0x31e4fc` begins after a prologue prefix in another object-update path.
+Neither address is a safe standalone callback entry. The sanitized audit records the
+actual instruction windows and the current ELF hash without executing either
+target. Evidence: [descriptor target roles](evidence/vm9_descriptor_target_roles_20261006.json).
+
+This prevents a common false recovery in which `br x1` is replaced with a
+normal Python function call. The owner frame, descriptor writer, packed x8
+composition and live continuation inputs remain open.
+
+
 
 The generic `+0x2584ac` sequence is now represented as a transactional
 component: read the initial target/object pair, invoke an explicit

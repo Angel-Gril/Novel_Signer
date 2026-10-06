@@ -3,6 +3,19 @@
 
 ## 2026-10-06: corrected literal logger sink boundary
 ## 2026-10-06: descriptor trampoline continuation
+## 2026-10-06: descriptor branch targets are continuation labels
+
+The current ELF places the observed targets at interior code locations: the
+first target reaches an existing frame cleanup/epilogue, while the second is
+inside a path whose prologue prefix precedes the target. They must retain the
+owner frame and live VM state; treating either value as a standalone callback
+entry would be an unsupported control-flow substitution. See [target-role
+evidence](evidence/vm9_descriptor_target_roles_20261006.json).
+
+The descriptor writer and packed x8 input that select these continuations are
+still unresolved.
+
+
 
 `vm9_callbacks.dispatch_descriptor_trampoline` now models the recovered
 `+0x2584ac` instruction boundary with explicit transaction and callback inputs:

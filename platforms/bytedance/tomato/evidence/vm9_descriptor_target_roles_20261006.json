@@ -1,0 +1,41 @@
+{
+  "evidence_id": "vm9_descriptor_target_roles_20261006",
+  "schema": "vm9-descriptor-target-roles-v1",
+  "status": "static_continuation_role_audit",
+  "native_sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "context": {
+    "start": "0x31e1d4",
+    "end": "0x31e540"
+  },
+  "targets": {
+    "0x31e444": {
+      "role": "interior_continuation_with_owner_frame_epilogue",
+      "first_instruction": "ldur x0, [x29, #-0x40]",
+      "epilogue_evidence": [
+        "ldp x20, x19, [sp, #0x1b0]",
+        "mov w0, wzr",
+        "ldp x29, x30, [sp, #0x170]",
+        "ret"
+      ],
+      "standalone_callback_entry": false
+    },
+    "0x31e4fc": {
+      "role": "interior_continuation_after_prologue_prefix",
+      "first_instruction": "mov x29, sp",
+      "preceding_instructions": [
+        "stp x29, x30, [sp, #-0x20]!",
+        "str x19, [sp, #0x10]",
+        "mov x29, sp"
+      ],
+      "standalone_callback_entry": false
+    }
+  },
+  "native_input_snapshot_used": false,
+  "callback_object_parameterized": false,
+  "fresh_medusa_output_verified": false,
+  "limitations": [
+    "The audit is static and does not execute either target or recover its live frame inputs.",
+    "The descriptor writer, packed x8 composition and active continuation state remain unresolved.",
+    "No online signer, Rust download chain or product capability is implied."
+  ]
+}

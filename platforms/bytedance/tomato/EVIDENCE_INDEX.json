@@ -2087,5 +2087,31 @@
       "mov x0, x8",
       "br x1"
     ]
+  },
+  "vm9_descriptor_target_roles_20261006": {
+    "evidence_file": "evidence/vm9_descriptor_target_roles_20261006.json",
+    "schema": "vm9-descriptor-target-roles-v1",
+    "status": "static_continuation_role_audit",
+    "native_sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "targets": {
+      "0x31e444": {
+        "role": "interior_continuation_with_owner_frame_epilogue",
+        "standalone_callback_entry": false
+      },
+      "0x31e4fc": {
+        "role": "interior_continuation_after_prologue_prefix",
+        "standalone_callback_entry": false
+      }
+    },
+    "native_input_snapshot_used": false,
+    "callback_object_parameterized": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false,
+    "limitations": [
+      "Static audit only; neither target is executed and live frame inputs are not recovered.",
+      "Descriptor writer, packed x8 composition and active continuation state remain unresolved.",
+      "No online signer, Rust download chain or product capability is implied."
+    ]
   }
 }
