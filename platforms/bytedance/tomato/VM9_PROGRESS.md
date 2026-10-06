@@ -1,5 +1,31 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-06: outer constructor allocation/free ledger through wrapper publication
+
+The fresh Python outer constructor now continues past the second registry
+append. The two decoded globals are handled in native order:
+
+`+0x27cd10` appends `+0x3e08d8` (`"51"`), releases its temporary payload,
+constructs the second `+0x27d188` child-B reference, then
+`+0x27cdbc` appends `+0x3e08e0` (`"59"`). The measured 16-byte reserve at
+`+0x246988` is produced by the real string-growth model, rather than inserted
+as an unexplained padding allocation. The NULL temporary reference is then
+released, yielding the native 4-byte counter, 241-byte payload and 24-byte
+object frees.
+
+The subsequent `+0x28ded0` logger/state path currently models its explicit
+allocator boundary: two 64/128/256/8/8 grow-and-release cycles followed by
+40/64/96 state allocations, then the `+0x165968` singleton counter. Across
+both image bases and absent/SDK 30 fresh ELF controls, Python has **310/310
+allocation sizes and pointers and 115/115 ordered frees identical to the
+native oracle**. Evidence: [outer constructor allocator match](evidence/vm9_outer_constructor_allocator_match_20261006.json).
+
+This is an allocator/free-ledger result. Formatter text, locale and sink
+dispatch, the native `+0x26cf08` handoff, descriptor writer, logger callback
+semantics and fresh Medusa output remain open. The descriptor trampoline is
+still an explicit rejection boundary; this result does not establish a
+complete Python Medusa or an online signer.
+
 ## 2026-10-06: 外层 constructor 的 logger 与 descriptor trampoline 边界
 
 新增 [outer constructor boundary verifier](python/verify_vm9_outer_constructor_boundary.py) 和 [边界证据](evidence/vm9_outer_constructor_boundary_20261006.json)。从 fresh ELF/TLS、同次 actual allocator 和虚拟启动服务开始，4 组（两种 image base × absent/SDK 30）都到达 `+0x26e9e0` logger callback，然后进入当前 active 的 `+0x2584ac` descriptor trampoline。每组都记录了 callback 参数块、descriptor 地址、field0 branch target 和 field8 传给后续分支的对象；不同基址只改变 relocated 地址，字段关系和停点一致。配套的 [native logger trace](python/verify_vm9_native_logger_trace.py) 又在同样两种基址与 absent/SDK 30 共 4 组记录了真实 `+0x26e9e0 → +0x271ec8 → +0x271ddc` 寄存器入口，并确认返回到 `+0x26cf0c`；这组 native 结果用于和 Python descriptor 参数做差分，不能直接当成 Python 实现。

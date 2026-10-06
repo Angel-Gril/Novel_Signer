@@ -15,7 +15,7 @@ from capstone import Cs, CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN
 from elftools.elf.elffile import ELFFile
 from unicorn.arm64_const import (
     UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X8,
-    UC_ARM64_REG_X30, UC_ARM64_REG_SP, UC_ARM64_REG_PC, UC_ARM64_REG_TPIDR_EL0,
+    UC_ARM64_REG_X30, UC_ARM64_REG_X29, UC_ARM64_REG_SP, UC_ARM64_REG_PC, UC_ARM64_REG_TPIDR_EL0,
 )
 import vm9_allocator as a
 from vm9_libc_boot import _w
@@ -71,16 +71,34 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
     environment = h.Environment(pages, 2)
     if mapping_address is not None: environment.os.next_address = mapping_address
     observed = io.observed_spans()
-    counts = Counter(); entries = Counter(); root_inputs = {}; pending = []
+    counts = Counter(); entries = Counter(); root_inputs = {}; pending = []; allocation_sequence = []; allocation_unwind = []; string_allocations = []; bss_writes = []; bss_changes = []; free_sequence = []; allocator_events = []
     state = {'mapped': False, 'booted': False, 'returned': False, 'last_pc': 0}
     virtual_threads = []; services = Counter(); returned_graph = {}
 
     def u(cpu, address, width=8): return int.from_bytes(cpu.mem_read(address, width), 'little')
+    def observe_memory_write(cpu, address, size):
+        interesting = (image + 0x3E07C0 <= address < image + 0x3E0900)
+        if interesting:
+            value = bytes(cpu.mem_read(address, size))
+            if size > 1 and any(value):
+                bss_writes.append({'address': hex(address), 'size': size, 'value': value.hex(), 'pc': hex(cpu.reg_read(UC_ARM64_REG_PC) - image)})
+    tracked = [image + 0x3E07C8, image + 0x3E07D0, image + 0x3E07E0, image + 0x3E08D8, image + 0x3E08E0]
+    tracked_previous = {address: b'' for address in tracked}
 
     def observe(cpu, pc):
         state['last_pc'] = pc
+        if len(bss_changes) < 128:
+            for address in tracked:
+                try:
+                    value = bytes(cpu.mem_read(address, 256))
+                except Exception:
+                    continue
+                if tracked_previous[address] != value:
+                    if tracked_previous[address] or any(value):
+                        bss_changes.append({'address': hex(address), 'pc': hex(pc - image), 'value': value.split(b'\0', 1)[0].decode('utf-8', 'backslashreplace')})
+                    tracked_previous[address] = value
         offset = pc - image
-        if trace is not None and offset in (0x168324, 0x1683F0, 0x257084, 0x257308, 0x258488, 0x2584AC, 0x26CF08, 0x26E9E0, 0x271EC8, 0x271DDC):
+        if trace is not None and offset in (0x168324, 0x1683F0, 0x257084, 0x257308, 0x257360, 0x258488, 0x2584AC, 0x26CF08, 0x26E9E0, 0x271EC8, 0x271DDC):
             if len(trace) < 256:
                 x0 = cpu.reg_read(UC_ARM64_REG_X0)
                 x1 = cpu.reg_read(UC_ARM64_REG_X1)
@@ -114,6 +132,14 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
                             cpu.mem_read(backing + i * 8, 8), 'little')) for i in range(32)]
                     except Exception:
                         record['register_backing_words'] = None
+                if offset in (0x257308, 0x257360):
+                    sp = cpu.reg_read(UC_ARM64_REG_SP)
+                    record['caller_stack_bytes_0x900'] = safe_bytes(sp - 0x200, 0x900)
+                    if offset == 0x257308:
+                        state['root_object'] = x0
+                    if offset == 0x257360 and state.get('root_object'):
+                        record['root_object'] = hex(state['root_object'])
+                        record['root_object_bytes_0x120'] = safe_bytes(state['root_object'], 0x120)
                 trace.append(record)
         if offset in ENTRIES: entries[hex(offset)] += 1
         if offset == 0x1658E4 and not state['mapped']:
@@ -122,10 +148,41 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
                 cpu.mem_write(address, bytes(pages[address >> 12]))
         if pc == io.LIBC + 0x8E250 and not state['booted']:
             state['booted'] = True; cpu.mem_write(io.TABLE, a._read_span(pages, io.TABLE, 141 * 16))
-        if pending and pc == pending[-1]: pending.pop()
+        if pending and pc == pending[-1][0]:
+            _, kind, value, callsite = pending.pop()
+            if kind == 'malloc':
+                pointer = cpu.reg_read(UC_ARM64_REG_X0)
+                allocation_sequence.append([value, pointer, hex(callsite)])
+                allocator_events.append(['alloc', value, pointer, hex(callsite)])
+            else:
+                free_sequence.append(value)
+                allocator_events.append(['free', value])
         if offset in (0x347FD0, 0x347FA0):
-            counts['malloc' if offset == 0x347FD0 else 'free'] += 1
-            pending.append(cpu.reg_read(UC_ARM64_REG_X30))
+            kind = 'malloc' if offset == 0x347FD0 else 'free'
+            counts[kind] += 1
+            if kind == 'malloc' and cpu.reg_read(UC_ARM64_REG_X30) - image == 0x248388 and len(string_allocations) < 128:
+                source = cpu.reg_read(UC_ARM64_REG_X1)
+                try:
+                    raw = bytes(cpu.mem_read(source, 256))
+                except Exception:
+                    raw = b''
+                string_allocations.append({'size': cpu.reg_read(UC_ARM64_REG_X0), 'source': hex(source), 'bytes': raw.split(b'\0', 1)[0].decode('utf-8', 'backslashreplace')})
+            if kind == 'malloc' and len(allocation_unwind) < 400:
+                sp = cpu.reg_read(UC_ARM64_REG_SP)
+                fp = cpu.reg_read(UC_ARM64_REG_X29)
+                frames = []
+                for _ in range(16):
+                    try:
+                        next_fp = int.from_bytes(cpu.mem_read(fp, 8), 'little')
+                        lr = int.from_bytes(cpu.mem_read(fp + 8, 8), 'little')
+                    except Exception:
+                        break
+                    frames.append({'fp': hex(fp), 'lr': hex(lr), 'lr_offset': hex(lr - image) if image <= lr < image + 0x1000000 else None})
+                    if not next_fp or next_fp <= fp or next_fp - fp > 0x10000 or next_fp & 0xf:
+                        break
+                    fp = next_fp
+                allocation_unwind.append({'index': len(allocation_unwind), 'size': cpu.reg_read(UC_ARM64_REG_X0), 'pc': hex(pc), 'sp': hex(sp), 'x29': hex(cpu.reg_read(UC_ARM64_REG_X29)), 'x30': hex(cpu.reg_read(UC_ARM64_REG_X30)), 'frames': frames})
+            pending.append((cpu.reg_read(UC_ARM64_REG_X30), kind, cpu.reg_read(UC_ARM64_REG_X0), cpu.reg_read(UC_ARM64_REG_X30) - image))
         if pc == io.LIBC + 0x9833C: counts['gc'] += 1
         if pc == io.LIBC + 0x97F40: counts['flush'] += 1
         if offset == 0x257578:
@@ -231,7 +288,7 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
             references=(io.GUEST + 0x8000, io.GUEST + 0x8010), env=io.GUEST + 0x7800,
             ref_types={io.GUEST + 0x8000: 2, io.GUEST + 0x8010: 3}, libc=libc, real_malloc=True,
             real_mutexes=True, real_recursive_mutexes=True, real_singletons=True, thread_id=137,
-            host_imports=imports, syscall_handler=syscall, instruction_observer=observe,
+            host_imports=imports, syscall_handler=syscall, instruction_observer=observe, memory_write_observer=observe_memory_write,
             extra_registers={UC_ARM64_REG_SP: stack_address, UC_ARM64_REG_TPIDR_EL0: root_fixture.TLS,
                 UC_ARM64_REG_X30: io.CONTINUE}, instruction_limit=10000000)
     except Exception:
@@ -252,7 +309,8 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
     return dict(image_base=hex(image), function_offset='0x1658e4', native_outer_getter_returned=True,
         actual_allocator_counts=dict(counts), actual_entry_counts=dict(entries), **root_inputs, **returned_graph,
         virtual_thread_entry_offsets=[hex(entry - image) for _, entry, _ in virtual_threads],
-        explicit_service_counts=dict(services), ordered_callback_publication_and_jni_cleanup_verified=True,
+        explicit_service_counts=dict(services), allocation_sequence=allocation_sequence, allocation_unwind=allocation_unwind, string_allocations=string_allocations, bss_writes=bss_writes, bss_changes=bss_changes, allocator_events=allocator_events,
+        free_sequence=free_sequence, ordered_callback_publication_and_jni_cleanup_verified=True,
         virtual_descriptors_not_executed=True, physical_stack_compared=False, substituted_allocations=0,
         native_input_snapshot_used=False, python_outer_comparison_passed=False)
 

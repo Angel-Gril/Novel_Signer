@@ -1743,6 +1743,31 @@
     "current_online_header_matrix_verified": false,
     "complete_python_medusa": false
   },
+  "vm9_outer_constructor_allocator_match_20261006": {
+    "evidence_file": "evidence/vm9_outer_constructor_allocator_match_20261006.json",
+    "schema": "vm9-outer-constructor-allocator-match-v1",
+    "controls": 4,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
+    "fresh_elf_inputs": true,
+    "native_input_snapshot_used": false,
+    "native_allocation_count": 310,
+    "native_free_count": 115,
+    "python_native_allocation_sequence_match": true,
+    "python_native_free_sequence_match": true,
+    "logger_state_allocation_ledger_recovered": true,
+    "logger_state_semantics_complete": false,
+    "descriptor_trampoline_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false
+  },
   "vm9_outer_constructor_logger_provider_20261006": {
     "evidence_file": "evidence/vm9_outer_constructor_logger_provider_20261006.json",
     "schema": "vm9-outer-constructor-boundary-v1",

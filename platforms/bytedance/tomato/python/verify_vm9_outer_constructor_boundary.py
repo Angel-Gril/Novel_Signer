@@ -47,6 +47,10 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     wake_calls: list[list[int]] = []
     logger_calls: list[dict] = []
     logger_errors: list[str] = []
+    allocation_calls: list[list[int]] = []
+    allocation_sites: list[list[str]] = []
+    free_calls: list[int] = []
+    allocator_events: list[list[int | str]] = []
     trampoline_calls: list[dict] = []
     python_vm_entries: list[dict] = []
 
@@ -66,13 +70,37 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
             wake=lambda _p, pointer, operation, count:
                 wake_calls.append([pointer, operation, count]) or 0)
 
+    # Native +0x1658e4 cold getter allocates its 16-byte wrapper and 40-byte
+    # outer object before entering +0x27c930/+0x28040c. Keep those allocations
+    # in the same allocator transaction so all later pointers and object fields
+    # use the native order. The wrapper's 4-byte count is constructed only after
+    # the body returns, matching +0x165968; this boundary verifier stops earlier.
+    prefix_session = outer_allocator.make_session(
+        environment.os, image_base=image, libc_base=io.LIBC,
+        thread_pointer=config_fixture.TLS, scratch_address=worker_fixture.SCRATCH,
+        brk=environment.brk, os_call=environment.service,
+        once_wake=lambda _p, pointer, operation, count:
+            wake_calls.append([pointer, operation, count]) or 0,
+        register_destructor=register_destructor, thread_id=137,
+        read_clock=lambda _p, _clock_id: (0, 1791023800, 500000000),
+        allocation_effect=lambda _p, size, pointer: (allocation_calls.append([size, pointer]), allocator_events.append(["alloc", size, pointer]), allocation_sites.append([f"{f.filename}:{f.lineno}:{f.function}" for f in __import__("inspect").stack()[1:9]])),
+        free_effect=lambda _p, pointer: (free_calls.append(pointer), allocator_events.append(["free", pointer])))
+    singleton_wrapper = prefix_session.allocate(prefix_session.pages, 16)
+    outer_root = prefix_session.allocate(prefix_session.pages, 40)
+    if not singleton_wrapper or not outer_root:
+        raise RefillUnsupported("outer singleton prefix allocation failed")
+    decoded_global_lengths = outer_constructor.initialize_outer_global_strings(
+        prefix_session.pages, image_base=image)
+    prefix_session.commit()
+
     startup_model.initialize_main_startup(
         environment.os, vm_module=vm_module, image_base=image,
         entry_stack_address=worker_fixture.TOP, return_address=oracle.STOP,
         thread_pointer=config_fixture.TLS, scratch_address=worker_fixture.SCRATCH,
         libc_base=io.LIBC, brk=environment.brk, os_call=environment.service,
         create_thread=create_thread, register_destructor=register_destructor,
-        thread_id=137, signal_condition=signal_condition)
+        thread_id=137, signal_condition=signal_condition,
+        allocation_effect=lambda _p, size, pointer: (allocation_calls.append([size, pointer]), allocator_events.append(["alloc", size, pointer]), allocation_sites.append([f"{f.filename}:{f.lineno}:{f.function}" for f in __import__("inspect").stack()[1:9]])))
 
     session = outer_allocator.make_session(
         environment.os, image_base=image, libc_base=io.LIBC,
@@ -81,7 +109,9 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         once_wake=lambda _p, pointer, operation, count:
             wake_calls.append([pointer, operation, count]) or 0,
         register_destructor=register_destructor, thread_id=137,
-        read_clock=lambda _p, _clock_id: (0, 1791023800, 500000000))
+        read_clock=lambda _p, _clock_id: (0, 1791023800, 500000000),
+        allocation_effect=lambda _p, size, pointer: (allocation_calls.append([size, pointer]), allocator_events.append(["alloc", size, pointer]), allocation_sites.append([f"{f.filename}:{f.lineno}:{f.function}" for f in __import__("inspect").stack()[1:9]])),
+        free_effect=lambda _p, pointer: (free_calls.append(pointer), allocator_events.append(["free", pointer])))
 
     def get_registry(entry_stack_address):
         return registry.get_registry320_reference(
@@ -159,8 +189,11 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                         return self.m.rd(address, width).hex()
                     except Exception:
                         return None
+                root_object = self.m.u64(stack)
                 python_vm_entries.append({
                     "entry_offset": "0x991c0",
+                    "root_object": hex(root_object),
+                    "root_object_bytes_0x120": safe_span(root_object, 0x120),
                     "registers_0_8": [hex(value) for value in self.R[:9]],
                     "stack": hex(stack),
                     "stack_bytes_0x800": safe_span(stack - 0x400, 0x800),
@@ -173,7 +206,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     try:
         try:
             outer_constructor.construct_default_outer(
-                session.pages, outer_root_address=io.GUEST + 0x1800,
+                session.pages, outer_root_address=outer_root,
                 entry_stack_address=worker_fixture.TOP,
                 thread_pointer=config_fixture.TLS, image_base=image,
                 vm_module=vm_module, allocate=session.allocate,
@@ -190,19 +223,20 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                 thread_id=137, prepare_format=session.prepare_format,
                 prefix_stack_effect=prefix_stack_effect,
                 logger_callback=lambda *args, **kwargs: None, logger_callback_required=True,
-                root_output_address=io.GUEST + 0x1800)
+                root_output_address=io.GUEST + 0x1800,
+                singleton_wrapper_address=singleton_wrapper)
         except RefillUnsupported as exc:
             error = str(exc)
         else:
-            raise AssertionError("outer constructor crossed an unrecovered boundary")
+            error = None
     finally:
         root_model.RootCallbacks = previous
         vm_module.VM = previous_vm
 
-    if not logger_calls:
-        raise AssertionError("logger callback boundary was not reached")
-    if not trampoline_calls and not logger_errors:
-        raise AssertionError("descriptor trampoline boundary was not reached")
+    # This probe may now cross the former logger stop after the decoded cold
+    # globals; preserve the observation even when no callback is emitted.
+    if not logger_calls and not trampoline_calls and not logger_errors:
+        error = error or "constructor completed without logger callback"
     return {
         "image_base": hex(image),
         "property_profile": label,
@@ -212,6 +246,13 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         "rejection": error,
         "logger_calls": logger_calls,
         "python_vm_entries": python_vm_entries,
+        "allocation_sequence": allocation_calls,
+        "allocation_sites": allocation_sites,
+        "free_calls": [hex(value) for value in free_calls],
+        "allocator_events": allocator_events,
+        "singleton_wrapper_address": _hex(singleton_wrapper),
+        "outer_root_prefix_address": _hex(outer_root),
+        "decoded_outer_global_lengths": list(decoded_global_lengths),
         "descriptor_trampoline": trampoline_calls,
         "logger_model_requested": apply_logger_model,
         "logger_model_errors": logger_errors,

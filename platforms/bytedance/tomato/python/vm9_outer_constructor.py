@@ -38,6 +38,30 @@ class OuterConstructorResult:
     logger_callback_required: bool
 
 
+
+def initialize_outer_global_strings(pages, *, image_base: int) -> tuple[int, ...]:
+    """Decode the five +0x27c930 cold globals before startup.
+
+    The native getter calls +0x167e54 with fresh ELF source/mask pairs before
+    entering +0x28040c. Keeping the decode here preserves fresh-input behavior
+    and avoids seeding runtime BSS from a captured process snapshot.
+    """
+    pairs = (
+        (0xA62C4, 0xA653C, 0x3E07C8),
+        (0xA62C8, 0xA6534, 0x3E07D0),
+        (0xA62D0, 0xA6440, 0x3E07E0),
+        (0xA63C4, 0xA6438, 0x3E08D8),
+        (0xA63C8, 0xA6434, 0x3E08E0),
+    )
+    lengths = []
+    for source, mask, destination in pairs:
+        lengths.append(objects.decode_masked_bytes(
+            pages, source_address=image_base + source,
+            destination_address=image_base + destination,
+            mask_address=image_base + mask, max_bytes=0x1000))
+    return tuple(lengths)
+
+
 NATIVE_ORDER = (
     "+0x291440:outer-clock-storage",
     "+0x28040c:startup",
@@ -105,6 +129,42 @@ def _construct_outer_root_layout(pages, *, outer_root_address: int,
     transaction.commit()
 
 
+def _model_logger_state_allocations(pages, *, allocate: Callable,
+                                    free: Callable) -> tuple[int, ...]:
+    """Reproduce the measured logger/state allocator boundary.
+
+    The native path at ``+0x28ded0`` performs two formatter passes.  Their
+    allocator-visible contract is two grow/release cycles (64, 128, 256,
+    8, 8), followed by the final 40/64/96 state objects.  The formatter's
+    text, locale and sink side effects remain a separate callback boundary;
+    this helper deliberately records only the fresh allocator transaction.
+    """
+    published: list[int] = []
+    for _ in range(2):
+        first = allocate(pages, 64)
+        second = allocate(pages, 128)
+        if not first or not second:
+            raise RefillUnsupported("logger formatter buffer allocation failed")
+        free(pages, first)
+        third = allocate(pages, 256)
+        if not third:
+            raise RefillUnsupported("logger formatter growth allocation failed")
+        free(pages, second)
+        small_a = allocate(pages, 8)
+        small_b = allocate(pages, 8)
+        if not small_a or not small_b:
+            raise RefillUnsupported("logger formatter scratch allocation failed")
+        free(pages, small_a)
+        free(pages, third)
+        free(pages, small_b)
+    for size in (40, 64, 96):
+        pointer = allocate(pages, size)
+        if not pointer:
+            raise RefillUnsupported("logger state allocation failed")
+        published.append(pointer)
+    return tuple(published)
+
+
 def construct_default_outer(
     pages, *, outer_root_address: int, entry_stack_address: int,
     thread_pointer: int, image_base: int, vm_module, allocate: Callable,
@@ -117,6 +177,7 @@ def construct_default_outer(
     logger_callback: Callable | None = None,
     logger_callback_required: bool = False,
     root_output_address: int | None = None,
+    singleton_wrapper_address: int | None = None,
 ) -> OuterConstructorResult:
     """Compose the recovered default outer constructor in native call order.
 
@@ -157,7 +218,7 @@ def construct_default_outer(
 
     temporary = entry_stack_address - 0xA0
     objects.construct_string_object(
-        pages, object_address=temporary, source_address=image_base + 0x3DE7C8,
+        pages, object_address=temporary, source_address=image_base + 0x3E07C8,
         allocate=allocate, vtable_address=image_base + 0x34F5F8,
         empty_descriptor_address=image_base + 0x6E168)
     registry.append_registry_string_caller(
@@ -197,8 +258,11 @@ def construct_default_outer(
         pages, object_address=third_string, source_address=image_base + 0x3E07E0,
         allocate=allocate, vtable_address=image_base + 0x34F5F8,
         empty_descriptor_address=image_base + 0x6E168)
+    # Native +0x162944 assigns the third string into the same temporary
+    # reference that was initialized as NULL; releasing that old count is what
+    # makes the matching libc reuse the native 4-byte tcache slot.
     configuration.assign_owned_string_reference(
-        pages, reference_address=initializer_reference,
+        pages, reference_address=null_reference,
         object_address=third_string, image_base=image_base,
         allocate=allocate, free=free)
     events.append(NATIVE_ORDER[6])
@@ -211,7 +275,7 @@ def construct_default_outer(
     objects.copy_reference_wrapper(pages, object_address=second_reference_copy,
                                    source_address=second_reference)
     objects.copy_reference_wrapper(pages, object_address=initializer_reference_copy,
-                                   source_address=initializer_reference)
+                                   source_address=null_reference)
     events.extend(NATIVE_ORDER[7:10])
 
     if root_output_address is None:
@@ -239,11 +303,16 @@ def construct_default_outer(
         stream.release_string_reference(pages, reference_address=reference,
                                         image_base=image_base, free=free)
 
-    internal_reference = entry_stack_address - 0x1C0
-    objects.construct_reference_wrapper(
-        pages, object_address=internal_reference,
-        referenced_address=factory.object_address, allocate=allocate)
+    # +0x27ceac copies the root factory's already-published output wrapper
+    # into the 40-byte outer object. Native does not allocate a second wrapper
+    # here; the following +0x27cf68 state refresh allocates a temporary 48-byte
+    # object and releases it before child A, so matching-libc reuses that slot.
+    internal_reference = root_output_address
     events.append(NATIVE_ORDER[11])
+    refresh = allocate(pages, 48)
+    if not refresh:
+        raise RefillUnsupported("root state refresh allocation failed")
+    free(pages, refresh)
 
     child_a = allocate(pages, 0x28)
     if not child_a:
@@ -274,29 +343,111 @@ def construct_default_outer(
         image_base=image_base, kind="embedded_state")
     events.append(NATIVE_ORDER[15])
 
+    # +0x27d188 first constructs a stack-local shared reference used by the
+    # service child path. Its wrapper is stack-owned; only the four-byte count
+    # is allocated before the 0x80-byte handler object.
+    service_temp_reference = entry_stack_address - 0x1A0
+    objects.construct_reference_wrapper(
+        pages, object_address=service_temp_reference,
+        referenced_address=0, allocate=allocate)
+
     handler_b = allocate(pages, 0x80)
     if not handler_b:
         raise RefillUnsupported("service handler allocation failed")
-    service_reference = objects.construct_service_reference(
-        pages, image_base=image_base, kind="service", allocate=allocate,
-        thread_id=thread_id).wrapper_address
-    flag_reference = objects.construct_service_reference(
-        pages, image_base=image_base, kind="flag", allocate=allocate,
-        thread_id=thread_id).wrapper_address
+    # Native +0x263fb8 initializes the handler's two NULL reference counters
+    # and mutex first, then calls the service and flag singleton getters. Let
+    # the measured constructor own that order instead of prebuilding the two
+    # singleton wrappers before the 0x80-byte handler.
     objects.construct_signer_handler(
         pages, object_address=handler_b, image_base=image_base,
-        allocate=allocate, kind="service_refs",
-        service_reference_address=service_reference,
-        flag_reference_address=flag_reference)
+        allocate=allocate, kind="service_refs", initialize_services=True,
+        thread_id=thread_id)
+    # +0x27cd10 appends the freshly decoded global "51" after the service
+    # handler has been constructed. The temporary object lives on the native
+    # caller stack; only its three-byte payload is allocator-visible.
+    # Reuse the already-proven caller slot. The nested VM owns a register
+    # backing window below the outer SP, so an arbitrary new offset can alias
+    # that window and corrupt the temporary object before its destructor.
+    registry_temp_51 = temporary
+    objects.construct_string_object(
+        pages, object_address=registry_temp_51,
+        source_address=image_base + 0x3E08D8, allocate=allocate,
+        vtable_address=image_base + 0x34F5F8,
+        empty_descriptor_address=image_base + 0x6E168)
+    registry.append_registry_string_caller(
+        pages, registry_address=registry_object,
+        source_object_address=registry_temp_51,
+        entry_stack_address=entry_stack_address,
+        return_address=image_base + 0x27CD1C,
+        thread_pointer=thread_pointer, image_base=image_base,
+        vm_module=vm_module, allocate=allocate, reallocate=reallocate,
+        free=free, get_tls=get_tls, initialize_registry=initialize_registry,
+        broadcast=broadcast)
+    objects.destroy_string_object(
+        pages, object_address=registry_temp_51,
+        image_base=image_base, free=free)
+
+    # The second +0x27d188 call wraps child B. Native reaches it after the
+    # first registry append; releasing the "51" payload first is what makes
+    # this four-byte reference counter reuse the freed three-byte slot.
+    service_child_reference = entry_stack_address - 0x150
+    objects.construct_reference_wrapper(
+        pages, object_address=service_child_reference,
+        referenced_address=child_b, allocate=allocate)
     pair_b = objects.bind_signer_child_callback(
         pages, child_address=child_b, handler_address=handler_b,
         image_base=image_base, kind="service_refs")
     events.append(NATIVE_ORDER[16])
 
+    # +0x27cdbc repeats the getter/append path for the decoded global "59".
+    registry_temp_59 = temporary
+    objects.construct_string_object(
+        pages, object_address=registry_temp_59,
+        source_address=image_base + 0x3E08E0, allocate=allocate,
+        vtable_address=image_base + 0x34F5F8,
+        empty_descriptor_address=image_base + 0x6E168)
+    registry.append_registry_string_caller(
+        pages, registry_address=registry_object,
+        source_object_address=registry_temp_59,
+        entry_stack_address=entry_stack_address,
+        return_address=image_base + 0x27CDC8,
+        thread_pointer=thread_pointer, image_base=image_base,
+        vm_module=vm_module, allocate=allocate, reallocate=reallocate,
+        free=free, get_tls=get_tls, initialize_registry=initialize_registry,
+        broadcast=broadcast)
+    objects.destroy_string_object(
+        pages, object_address=registry_temp_59,
+        image_base=image_base, free=free)
+
+    # The native getter releases the NULL-initialized temporary reference
+    # after the second append.  It owns the 240-byte global string, so this
+    # produces the measured 4-byte-count -> 241-byte-payload -> 24-byte-object
+    # free order before the logger/state formatter starts.
+    stream.release_string_reference(
+        pages, reference_address=null_reference,
+        image_base=image_base, free=free)
+
     _construct_outer_root_layout(
         pages, outer_root_address=outer_root_address,
         internal_root_reference_address=internal_reference,
         child_a=child_a, child_b=child_b)
+
+    logger_state_addresses = _model_logger_state_allocations(
+        pages, allocate=allocate, free=free)
+
+    # +0x165968 publishes the singleton wrapper's initial count only after
+    # the constructor body and logger/state branch return.  The caller can
+    # provide the wrapper allocated by +0x1658e4; absent that address this
+    # explicit publication boundary remains closed.
+    if singleton_wrapper_address is not None:
+        counter = allocate(pages, 4)
+        if not counter:
+            raise RefillUnsupported("outer singleton counter allocation failed")
+        transaction = _PageTransaction(pages)
+        _read_span(transaction, singleton_wrapper_address, 16)
+        _write_span(transaction, singleton_wrapper_address + 8, _word(counter))
+        _write_span(transaction, counter, (1).to_bytes(4, "little"))
+        transaction.commit()
 
     if logger_callback is not None:
         logger_callback(pages)

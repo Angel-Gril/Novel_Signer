@@ -1,5 +1,26 @@
 # 默认配置下的 signer 构造和 callback 发布
 
+## 2026-10-06: registry 双追加与 logger/state allocator 对照
+
+外层 Python constructor 已继续恢复到 native allocation index 309。它从
+fresh ELF 解码得到的两个全局字符串按真实调用点追加：`+0x27cd10` 使用
+`+0x3e08d8`（`"51"`），随后释放临时字符串并执行第二个
+`+0x27d188` child-B reference；`+0x27cdbc` 再使用 `+0x3e08e0`
+（`"59"`）。第二次追加触发 `+0x246988` 的 16-byte string reserve，说明
+增长分支由输入驱动并产生了 native 的 tcache 复用。
+
+第二个临时 reference 释放后，`+0x28ded0` 的 logger/state 分支已恢复其
+allocator 可观测边界：两轮 `64,128,256,8,8` 缓冲增长/释放，随后
+`40,64,96` 状态对象和 `+0x165968` 的 4-byte singleton counter。四组
+fresh 控制（两种 image base × absent/SDK 30）与 native 对照的 **310 次
+allocation size/pointer、115 次 ordered free 全部一致**，见
+[allocator match evidence](evidence/vm9_outer_constructor_allocator_match_20261006.json)。
+
+这仍然不是完整 logger 语义：格式化内容、locale/sink dispatch、native
+`+0x26cf08` handoff、descriptor writer 和 callback 参数发布尚未独立恢复。
+因此 `complete_python_medusa`、fresh Medusa 输出、线上全头矩阵、无 JVM
+Rust 下载链路、非空搜索/分页及其他平台闭环仍保持未完成。
+
 ## 2026-10-06: 外层 logger callback 与 active descriptor trampoline 边界
 
 [边界 verifier](python/verify_vm9_outer_constructor_boundary.py) 在同次 fresh ELF/TLS/actual allocator 状态上跑过两种 image base 与 absent/SDK 30 共 4 组。每组先到达 `+0x26e9e0`，随后由 `+0x2584ac` 读取 descriptor：`argument+8` 是 descriptor，field0 是 relocated logger branch target，field8 是后续 x0 object；其余字段与 logger 的 first/second/width 参数块也保留在证据中。配套的 [native logger trace](python/verify_vm9_native_logger_trace.py) 在 4 组 native outer controls 中记录了 `+0x26e9e0 → +0x271ec8 → +0x271ddc` 的真实寄存器入口和 `+0x26cf0c` 返回点。控制在该 trampoline 明确拒绝，未执行猜测性的 no-op 或伪 callback。

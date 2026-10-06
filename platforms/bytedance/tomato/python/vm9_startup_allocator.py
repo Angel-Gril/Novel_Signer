@@ -8,7 +8,8 @@ from vm9_libc_tcache import _public_large
 
 
 def initialize_default_task(guest_os, *, vm_module, image_base, entry_stack_address,
-        return_address, thread_pointer, scratch_address, libc_base, brk, os_call, broadcast):
+        return_address, thread_pointer, scratch_address, libc_base, brk, os_call, broadcast,
+        allocation_effect=None):
     """Run +0x280554 with actual default malloc boot and owned large extents.
 
     Thread/TLS/stack and virtual OS/broadcast services are explicit inputs.
@@ -25,8 +26,11 @@ def initialize_default_task(guest_os, *, vm_module, image_base, entry_stack_addr
         return _public_large(inner,request_size=request_size,libc_base=libc_base,
             thread_pointer=thread_pointer,os_call=os_call,scratch_address=scratch_address)
     def allocate(staged,size):
-        return _allocate_staged(tx,staged,request_size=size,libc_base=libc_base,
+        pointer = _allocate_staged(tx,staged,request_size=size,libc_base=libc_base,
             thread_pointer=thread_pointer,os_call=os_call,allocation_body=allocation_body)
+        if allocation_effect:
+            allocation_effect(staged, size, pointer)
+        return pointer
     result=startup.run_default_initialization_task(tx.pages,allocate=allocate,
         broadcast=broadcast,vm_module=vm_module,entry_stack_address=entry_stack_address,
         return_address=return_address,thread_pointer=thread_pointer,image_base=image_base)
@@ -35,7 +39,8 @@ def initialize_default_task(guest_os, *, vm_module, image_base, entry_stack_addr
 
 def initialize_main_startup(guest_os, *, vm_module, image_base, entry_stack_address,
         return_address, thread_pointer, scratch_address, libc_base, brk, os_call,
-        create_thread, register_destructor, thread_id, signal_condition):
+        create_thread, register_destructor, thread_id, signal_condition,
+        allocation_effect=None):
     """Fresh +0x28040c startup with actual cold/small/large allocation.
 
     Thread creation is an explicit provider that publishes guest descriptors.
@@ -54,8 +59,11 @@ def initialize_main_startup(guest_os, *, vm_module, image_base, entry_stack_addr
         return body(inner, request_size=request_size, libc_base=libc_base,
             thread_pointer=thread_pointer, os_call=os_call, scratch_address=scratch_address)
     def allocate(staged, size):
-        return _allocate_staged(tx, staged, request_size=size, libc_base=libc_base,
+        pointer = _allocate_staged(tx, staged, request_size=size, libc_base=libc_base,
             thread_pointer=thread_pointer, os_call=os_call, allocation_body=allocation_body)
+        if allocation_effect:
+            allocation_effect(staged, size, pointer)
+        return pointer
     result = startup.initialize_startup_caller(tx.pages, vm_module=vm_module,
         image_base=image_base, entry_stack_address=entry_stack_address,
         return_address=return_address, thread_pointer=thread_pointer, allocate=allocate,

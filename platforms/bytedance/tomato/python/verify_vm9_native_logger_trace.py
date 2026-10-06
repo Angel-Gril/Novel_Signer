@@ -45,6 +45,8 @@ def main():
                     ("0x271ec8", "0x271ddc")],
                 "outer_vm_trace": trace,
                 "actual_allocator_counts": result["actual_allocator_counts"],
+                "allocation_sequence": result["allocation_sequence"],
+                "free_sequence": result["free_sequence"],
                 "native_input_snapshot_used": False,
                 "fresh_medusa_output_verified": False,
             }

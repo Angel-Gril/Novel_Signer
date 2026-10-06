@@ -184,6 +184,8 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
         elif offset == 0x347F20:  # memset PLT
             target, fill, width = [cpu.reg_read(reg) for reg in REGS[:3]]
             cpu.mem_write(target, bytes([fill & 255]) * width)
+            if memory_write_observer:
+                memory_write_observer(cpu, target, width)
             result = target
         elif offset == 0x347EE0:
             assert "pthread_mutex_init" in mutex_entries
@@ -202,6 +204,8 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
         elif offset in (0x347F60, 0x348410):  # memcpy / memmove PLT
             target, source, width = [cpu.reg_read(reg) for reg in REGS[:3]]
             cpu.mem_write(target, bytes(cpu.mem_read(source, width)))
+            if memory_write_observer:
+                memory_write_observer(cpu, target, width)
             result = target
         elif offset in (0x347F00, 0x347F10) and (real_singletons or real_mutexes):
             lock = offset == 0x347F00
