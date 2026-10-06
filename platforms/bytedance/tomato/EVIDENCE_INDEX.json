@@ -1900,5 +1900,50 @@
       "The Python run still stops before the native logger/callback handoff; exact spill does not prove VM semantics or signer output.",
       "No native memory snapshot is copied into Python and no online signature or Rust result is implied."
     ]
+  },
+  "vm9_logger_handoff_boundary_20261006": {
+    "evidence_file": "evidence/vm9_logger_handoff_boundary_20261006.json",
+    "schema": "vm9-logger-handoff-boundary-v1",
+    "controls": 4,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
+    "fresh_elf_inputs": true,
+    "native_input_snapshot_used": false,
+    "native_path": [
+      "0x257084",
+      "0x257308",
+      "0x168324",
+      "0x1684f0",
+      "0x99f04",
+      "0x26cf08",
+      "0x26e9e0"
+    ],
+    "python_path": [
+      "construct_root_caller",
+      "0x99f04",
+      "logger_handoff_provider"
+    ],
+    "all_controls_handoff_relation_match": true,
+    "native_logger_object_relative_offset": "-0xae0",
+    "static_source_offset": "0x3dedb8",
+    "first_argument_offset": "0x3dedd0",
+    "x2": 8,
+    "x3": 3,
+    "logger_object_fields_recovered": false,
+    "logger_sink_dispatch_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false,
+    "limitations": [
+      "Only the post-VM handoff address/argument relation is matched; short-string object payload and +0x271ec8 sink behavior remain open.",
+      "The Python provider rejects at +0x26cf08 and does not invoke a guessed logger callback.",
+      "No online signature, Rust download, or other-platform result is implied."
+    ]
   }
 }

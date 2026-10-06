@@ -1,6 +1,19 @@
 # 默认配置下的 signer 构造和 callback 发布
 
 
+## 2026-10-06: post-VM logger handoff
+
+Native fresh controls show the root VM returning at `+0x99f04` before
+`+0x26cf08` prepares a stack-local short string and calls `+0x26e9e0`. The
+Python outer constructor now exposes a separate handoff provider. Across two
+image bases and absent/SDK 30, it generates the same relative object address
+(`VM stack - 0xAE0`), source/argument offsets (`+0x3DEDB8`, `+0x3DEDD0`) and
+register values (`x2=8`, `x3=3`), then fails closed. See [handoff evidence](evidence/vm9_logger_handoff_boundary_20261006.json).
+
+Logger object field reconstruction, payload ownership, formatter/sink dispatch
+and callback semantics are still unresolved.
+
+
 ## 2026-10-06: root caller spill generated from fresh constructor state
 
 The generic VM prelude backing window is now generated from the current

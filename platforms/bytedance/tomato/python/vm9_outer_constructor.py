@@ -175,6 +175,7 @@ def construct_default_outer(
     thread_id: int, prepare_format: Callable | None = None,
     prefix_stack_effect: Callable | None = None,
     logger_callback: Callable | None = None,
+    logger_handoff_callback: Callable | None = None,
     logger_callback_required: bool = False,
     root_output_address: int | None = None,
     singleton_wrapper_address: int | None = None,
@@ -297,6 +298,21 @@ def construct_default_outer(
         prepare_format=prepare_format, prefix_stack_effect=prefix_stack_effect,
         logger_callback=logger_callback, outer_root_address=outer_root_address)
     events.append(NATIVE_ORDER[10])
+
+    # Native +0x257308 returns from the VM and then +0x26cf08 builds a
+    # stack-local short string before calling +0x26e9e0. Keep this as a
+    # separate provider boundary: the argument relation is fresh-input
+    # derivable, while the logger object fields and downstream sink semantics
+    # are not yet recovered. A provider may record the boundary or reject it;
+    # the default path does not silently invoke a guessed logger.
+    if logger_handoff_callback is not None:
+        vm_stack = entry_stack_address - 0x8D0
+        logger_handoff_callback(
+            pages, vm_stack=vm_stack,
+            object_address=vm_stack - 0xAE0,
+            source_object_address=image_base + 0x3DEDB8,
+            first_argument=image_base + 0x3DEDD0,
+            second_argument=8, width=3)
 
     for reference in (initializer_reference_copy, second_reference_copy,
                       first_reference):

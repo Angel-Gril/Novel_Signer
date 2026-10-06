@@ -39,7 +39,7 @@ def _hex(value):
 
 
 def case(library: Path, libc: Path, image: int, label: str, property_value: bytes | None,
-         vm_module, apply_logger_model=False):
+         vm_module, apply_logger_model=False, capture_logger_handoff=False):
     pages, _, _ = root_fixture.fresh(library, libc, image, property_value)
     environment = worker_fixture.Environment(pages, 2)
     threads: list[list[int]] = []
@@ -52,6 +52,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     free_calls: list[int] = []
     allocator_events: list[list[int | str]] = []
     trampoline_calls: list[dict] = []
+    logger_handoffs: list[dict] = []
     python_vm_entries: list[dict] = []
 
     def create_thread(staged, output, _attr, entry, argument):
@@ -130,6 +131,11 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                              (-0x148, image + 0x32A210),
                              (-0xF8, image + 0x32A210)):
             _w(staged, stack + delta, value)
+
+    def capture_logger_handoff(pages, **fields):
+        logger_handoffs.append({key: _hex(value) if isinstance(value, int) else value
+                                for key, value in fields.items()})
+        raise RefillUnsupported('native +0x26cf08 logger handoff is not recovered')
 
     class BoundaryCallbacks(root_model.RootCallbacks):
         def __init__(self, *args, **kwargs):
@@ -224,7 +230,8 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                 prefix_stack_effect=prefix_stack_effect,
                 logger_callback=lambda *args, **kwargs: None, logger_callback_required=True,
                 root_output_address=io.GUEST + 0x1800,
-                singleton_wrapper_address=singleton_wrapper)
+                singleton_wrapper_address=singleton_wrapper,
+                logger_handoff_callback=(capture_logger_handoff if capture_logger_handoff else None))
         except RefillUnsupported as exc:
             error = str(exc)
         else:
@@ -254,6 +261,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         "outer_root_prefix_address": _hex(outer_root),
         "decoded_outer_global_lengths": list(decoded_global_lengths),
         "descriptor_trampoline": trampoline_calls,
+        "logger_handoffs": logger_handoffs,
         "logger_model_requested": apply_logger_model,
         "logger_model_errors": logger_errors,
         "logger_model_applied": bool(apply_logger_model and not logger_errors),

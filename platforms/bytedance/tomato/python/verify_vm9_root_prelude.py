@@ -53,9 +53,28 @@ def main() -> None:
                               and item.get("register_backing_words_after_prelude")]
             if len(native_prelude) != 1:
                 raise AssertionError("native root prelude boundary count changed")
-            python_result = boundary.case(
-                args.library, args.libc, image, label, value, vm_full,
-                apply_logger_model=False)
+            vm_runs: list[dict] = []
+            previous_vm = vm_full.VM
+            class TraceVM(previous_vm):
+                def run(self):
+                    start = self.pc - vm_full.B
+                    try:
+                        return super().run()
+                    finally:
+                        vm_runs.append({
+                            "start_offset": hex(start),
+                            "stop_offset": hex(self.pc - vm_full.B),
+                            "steps": self.steps,
+                            "registers_0_8": [hex(value) for value in self.R[:9]],
+                            "modeled_callbacks": list(getattr(self.native_hook, "modeled", [])),
+                        })
+            vm_full.VM = TraceVM
+            try:
+                python_result = boundary.case(
+                    args.library, args.libc, image, label, value, vm_full,
+                    apply_logger_model=False)
+            finally:
+                vm_full.VM = previous_vm
             python_entries = python_result.get("python_vm_entries", [])
             if len(python_entries) != 1:
                 raise AssertionError("Python root VM entry count changed")
@@ -82,6 +101,7 @@ def main() -> None:
                 "python_logger_callback_reached": bool(python_result.get("logger_calls")),
                 "python_descriptor_trampoline_reached": bool(
                     python_result.get("descriptor_trampoline")),
+                "python_vm_runs": vm_runs,
                 "native_outer_getter_returned": native_result[
                     "native_outer_getter_returned"],
                 "fresh_medusa_output_verified": False,

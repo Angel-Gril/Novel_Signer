@@ -1,0 +1,129 @@
+{
+  "schema": "vm9-logger-handoff-boundary-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "controls": 4,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "absent",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_entry_offset": "0x26cf08",
+      "native_logger_offset": "0x26e9e0",
+      "native_vm_return_offset": "0x99f04",
+      "python_vm_return_offset": "0x99f04",
+      "checks": {
+        "vm_stack_match": true,
+        "object_relative_offset_match": true,
+        "native_object_relative_offset": -2784,
+        "python_object_relative_offset": -2784,
+        "static_source_offset_match": true,
+        "first_argument_offset_match": true,
+        "x2_match": true,
+        "x3_match": true
+      },
+      "python_rejected_at": "0x26cf08",
+      "native_outer_getter_returned": true,
+      "logger_semantics_complete": false,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "sdk_30",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_entry_offset": "0x26cf08",
+      "native_logger_offset": "0x26e9e0",
+      "native_vm_return_offset": "0x99f04",
+      "python_vm_return_offset": "0x99f04",
+      "checks": {
+        "vm_stack_match": true,
+        "object_relative_offset_match": true,
+        "native_object_relative_offset": -2784,
+        "python_object_relative_offset": -2784,
+        "static_source_offset_match": true,
+        "first_argument_offset_match": true,
+        "x2_match": true,
+        "x3_match": true
+      },
+      "python_rejected_at": "0x26cf08",
+      "native_outer_getter_returned": true,
+      "logger_semantics_complete": false,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "absent",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_entry_offset": "0x26cf08",
+      "native_logger_offset": "0x26e9e0",
+      "native_vm_return_offset": "0x99f04",
+      "python_vm_return_offset": "0x99f04",
+      "checks": {
+        "vm_stack_match": true,
+        "object_relative_offset_match": true,
+        "native_object_relative_offset": -2784,
+        "python_object_relative_offset": -2784,
+        "static_source_offset_match": true,
+        "first_argument_offset_match": true,
+        "x2_match": true,
+        "x3_match": true
+      },
+      "python_rejected_at": "0x26cf08",
+      "native_outer_getter_returned": true,
+      "logger_semantics_complete": false,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "sdk_30",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_entry_offset": "0x26cf08",
+      "native_logger_offset": "0x26e9e0",
+      "native_vm_return_offset": "0x99f04",
+      "python_vm_return_offset": "0x99f04",
+      "checks": {
+        "vm_stack_match": true,
+        "object_relative_offset_match": true,
+        "native_object_relative_offset": -2784,
+        "python_object_relative_offset": -2784,
+        "static_source_offset_match": true,
+        "first_argument_offset_match": true,
+        "x2_match": true,
+        "x3_match": true
+      },
+      "python_rejected_at": "0x26cf08",
+      "native_outer_getter_returned": true,
+      "logger_semantics_complete": false,
+      "fresh_medusa_output_verified": false
+    }
+  ],
+  "native_path": [
+    "0x257084",
+    "0x257308",
+    "0x168324",
+    "0x1684f0",
+    "0x99f04",
+    "0x26cf08",
+    "0x26e9e0"
+  ],
+  "python_path": [
+    "construct_root_caller",
+    "0x99f04",
+    "logger_handoff_provider"
+  ],
+  "native_input_snapshot_used": false,
+  "all_controls_handoff_relation_match": true,
+  "logger_object_fields_recovered": false,
+  "logger_sink_dispatch_recovered": false,
+  "fresh_medusa_output_verified": false,
+  "complete_python_medusa": false,
+  "limitations": [
+    "Only the post-VM handoff address/argument relation is matched; the short-string object payload and +0x271ec8 sink behavior remain open.",
+    "The Python provider rejects at +0x26cf08 and does not invoke a guessed logger callback.",
+    "No online signature, Rust download, or other-platform result is implied."
+  ]
+}

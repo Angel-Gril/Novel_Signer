@@ -1,6 +1,21 @@
 # Current VM9 progress checkpoint
 
 
+## 2026-10-06: post-VM logger handoff boundary
+
+The native root VM returns at `+0x99f04`, then the outer path enters
+`+0x26cf08 → +0x26e9e0`. Four fresh controls now match the handoff
+relations: the logger object is `VM stack - 0xAE0`, the source object is
+`image + 0x3DEDB8`, the first logger argument is `image + 0x3DEDD0`, and
+`x2=8`, `x3=3`. The Python provider generates those addresses from the
+current stack and image base, then rejects at the handoff instead of invoking a
+guessed logger. Evidence: [logger handoff boundary](evidence/vm9_logger_handoff_boundary_20261006.json).
+
+The short-string object fields, payload contents, `+0x271ec8` formatting/sink
+dispatch and callback side effects remain open. This is a post-VM argument
+boundary result, not a fresh Medusa signature.
+
+
 ## 2026-10-06: fresh root caller spill aligned at the generic VM prelude
 
 The native path `+0x257084 → +0x257308 → +0x168324 → +0x1684f0` was
