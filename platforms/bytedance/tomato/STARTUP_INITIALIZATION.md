@@ -4,11 +4,17 @@
 
 实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
-## 当前 native 外层接入控制（2026-10-06）
+## 当前 Python registry 字符串 caller（2026-10-06）
+
+`+0x256e50 → VM +0x98d50` 的有界 Python caller 已恢复 lazy decode、scoped writer、C-string/object append 和 release，12 native／6 rollback 通过；底层新增 `+0x2486b0` C-string append 为28/8，受影响旧字符串/registry回归204/22。cold/warm普通调用分别147/119步，stop `+0x99018`，每次返回全部32槽、guest/image/TLS、释放前字节和副作用顺序均匹配。
+
+该验收使用既有 registry 布局生成的组件输入、显式 warm scoped TLS 和合成 allocator effects；**仍需同次实际 allocator/TLS 下的 main startup／registry/reference／string prefix／actual root／outer publication 组合**。累计内容的 `+0x256ff0 → +0x248908` 格式化分支保留明确拒绝；matching-libc realloc尚未恢复。证据和复现见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md#当前-registry-字符串-caller-与-c-字符串追加2026-10-06)。
+
+## 此前 native 外层接入控制（2026-10-06）
 
 [外层 native-only 控制](python/verify_vm9_outer_signer_native.py) 已从同次 fresh `+0x1658e4 → +0x27c930` 自然返回，10组通过。它实际执行默认主 startup、root factory、两 child／handler 和 callback publication；每组 310 malloc／115 free／1 GC／3 flush，warm getter 复用 wrapper 且没有额外副作用。root 的 caller 输入由 native constructor 准备，入口 SP 为 getter SP−`0x210`。此前 307/115 的 recursive-mutex oracle 拒绝边界已恢复，专用对照为48 native／15拒绝，受影响回归106/34。
 
-该控制使用三条未执行的虚拟 pthread descriptor 和显式 JNI 服务，**不是同次独立 Python startup／worker／root 组合验收**。既有 Python 主 startup、worker 和 actual root 仍是分别通过的组件。下一步接回外层 prefix，恢复 `+0x256e50 → VM +0x98d50` 及其 callback，再做同次 Python 外层比较。证据、复现和边界统一见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md#当前递归-mutex-与-native-外层冷启动2026-10-06)。
+该控制使用三条未执行的虚拟 pthread descriptor 和显式 JNI 服务，**不是同次独立 Python startup／worker／root 组合验收**。既有 Python 主 startup、worker 和 actual root 仍是分别通过的组件。该 caller 的有界 Python 组件已进一步通过，但完整 prefix 与 outer 的同次组合仍需验收。native 控制的证据、复现和边界见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md#此前递归-mutex-与-native-外层冷启动2026-10-06)。
 
 ## 此前 small GC 与独立 actual root（2026-10-06）
 

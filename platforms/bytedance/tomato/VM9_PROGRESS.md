@@ -3,7 +3,44 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Current recursive mutex and native outer-signer control (2026-10-06)
+## Current registry-string caller and C-string append (2026-10-06)
+
+[Live C-string append](python/vm9_objects.py) +0x2486b0 is restored with both
+byte loops, partial prefix/length publication and reserve/memmove tail.
+Moving/in-place realloc, poisoned alias reads and modeled NULL failure effects
+match **28 native controls / 8 rollback checks**. Unsupported provider/memory
+or resource-bound failures roll pages back; native NULL realloc preserves
+partial writes and the wrapper's object return. Matching-libc realloc itself
+is not restored. [Evidence](evidence/vm9_cstring_append_native_20261006.json).
+
+[Registry owner](python/vm9_registry.py) now generates the independent
++0x256e50 caller and runs VM +0x98d50. It composes lazy decode, existing scoped
+writer, C-string/object append and release. All32 caller slots are retained
+for a later invocation at the same SP. The correct acquisition pair is VM
+native SP-0x48; pre-free node padding is checked, not hidden by final poison.
+**12 native / 6 rollback controls** pass at both bases: cold/three-call sequences,
+growth before formatting, empty/binary values, relocated stack/canary and
+allocator-time padding changes. Each return's all32 slots, guest/image/TLS,
+pre-free bytes, allocator blocks and TLS/wake order match. Typical cold/warm
+VM lengths are 147/119 steps, stop +0x99018. These are newly constructed
+registry-layout inputs with **explicit warm TLS and synthetic allocation
+effects**, not complete actual-allocator process startup.
+[Caller evidence](evidence/vm9_registry_string_caller_native_20261006.json).
+
+Large accumulated data reaches +0x256ff0 -> +0x248908 formatting; it remains
+closed, with third-call rollback after two completed large appends. Preflight,
+missing source, VM step budget and late free-provider errors also reject,
+preserving guest pages and VM base. Affected old string and registry suites
+terminate with **204 native / 22 rollback checks**.
+[Regression evidence](evidence/vm9_registry_string_regression_20261006.json).
+
+Next compose main startup, registry/reference and this string caller in one
+actual allocator/TLS prefix, then execute actual root and outer publication.
+Full independent Python outer construction, fresh Medusa output, online
+headers/f13, no-JVM Rust, nonempty search/pagination, other platforms and final
+Pages/Actions products remain incomplete. See [signer report](SIGNER_CONSTRUCTION.md).
+
+## Previous recursive mutex and native outer-signer control (2026-10-06)
 
 The actual-libc oracle now has an explicit private recursive-mutex opt-in.
 It validates NULL or attr=1 initialization and serial TLS owner/depth branches
@@ -32,8 +69,8 @@ scope exclusions and JNI services remain explicit. This is **native-only
 outer completion under bounded providers**, not independent Python outer
 construction, same-startup Python worker/root composition, real host threads,
 fresh Medusa output, online full-header matrix or f13 freeze confirmation.
-The next Python prefix includes +0x256e50 -> VM +0x98d50 before actual root;
-restore that caller and callbacks, then compose outer assembly/publication.
+The bounded Python +0x256e50 caller is now verified above; same-startup actual
+allocator/TLS prefix/root and outer assembly/publication remain to compose.
 Affected regressions terminate with **106 native / 34 rejection or rollback
 checks** (signer components, actual root and old recursive initialization).
 [Regression summary](evidence/vm9_recursive_mutex_regression_20261006.json).

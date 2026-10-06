@@ -1,0 +1,31 @@
+{
+  "schema": "vm9-registry-string-regression-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "checks": [
+    {
+      "verifier": "verify_vm9_strings.py",
+      "native_controls": 166,
+      "rollback_checks": 8,
+      "terminal_exit_code": 0,
+      "result": "PASS",
+      "source_report_sha256": "11eaefec5d2f93521a2aed1bf4b60be710649fb39b85ea2e3df47250f038983d"
+    },
+    {
+      "verifier": "verify_vm9_registry_initialization.py",
+      "native_controls": 38,
+      "rollback_checks": 14,
+      "terminal_exit_code": 0,
+      "result": "PASS",
+      "source_report_sha256": "542a1bae8a3b0e4081def04940717c1f17087f0e731eb39c9566008b436dd5d5"
+    }
+  ],
+  "native_controls": 204,
+  "rollback_checks": 22,
+  "native_input_snapshot_used": false,
+  "raw_native_memory_exported": false,
+  "private_paths_exported": false,
+  "full_python_outer_constructor_verified": false,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false
+}

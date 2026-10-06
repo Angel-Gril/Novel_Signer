@@ -1,0 +1,945 @@
+{
+  "schema": "vm9-registry-string-caller-native-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "case": "cold_once",
+      "image_base": "0x122c0000",
+      "same_run_calls": 1,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "same_run_three",
+      "image_base": "0x122c0000",
+      "same_run_calls": 3,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "long_growth_before_format",
+      "image_base": "0x122c0000",
+      "same_run_calls": 2,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "empty_binary",
+      "image_base": "0x122c0000",
+      "same_run_calls": 3,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "relocated_stack_canary",
+      "image_base": "0x122c0000",
+      "same_run_calls": 3,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "allocator_padding",
+      "image_base": "0x122c0000",
+      "same_run_calls": 3,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "cold_once",
+      "image_base": "0x775c205000",
+      "same_run_calls": 1,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "same_run_three",
+      "image_base": "0x775c205000",
+      "same_run_calls": 3,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "long_growth_before_format",
+      "image_base": "0x775c205000",
+      "same_run_calls": 2,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "empty_binary",
+      "image_base": "0x775c205000",
+      "same_run_calls": 3,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "relocated_stack_canary",
+      "image_base": "0x775c205000",
+      "same_run_calls": 3,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "case": "allocator_padding",
+      "image_base": "0x775c205000",
+      "same_run_calls": 3,
+      "vm_results": [
+        {
+          "steps": 147,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fcc",
+              "target_offset": "0x167e54"
+            },
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        },
+        {
+          "steps": 119,
+          "stop_offset": "0x99018",
+          "modeled_callbacks": [
+            {
+              "wrapper_offset": "0x256fe0",
+              "target_offset": "0x268eb0"
+            },
+            {
+              "wrapper_offset": "0x257004",
+              "target_offset": "0x2486b0"
+            },
+            {
+              "wrapper_offset": "0x257024",
+              "target_offset": "0x248684"
+            },
+            {
+              "wrapper_offset": "0x257044",
+              "target_offset": "0x268fbc"
+            }
+          ]
+        }
+      ],
+      "all_32_slots_match_at_every_return": true,
+      "guest_image_tls_bytes_and_padding_match": true,
+      "ordered_allocator_tls_wake_effects_and_live_blocks_match": true,
+      "all_pre_free_bytes_match": true,
+      "physical_stack_compared": false,
+      "explicit_warm_tls": true,
+      "explicit_allocator_effects": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "rejection_cases": [
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "guest_pages_and_vm_base_unchanged": true,
+      "external_allocator_effects_not_rolled_back": false
+    },
+    {
+      "case": "tagged_return",
+      "rejected": true,
+      "guest_pages_and_vm_base_unchanged": true,
+      "external_allocator_effects_not_rolled_back": false
+    },
+    {
+      "case": "missing_source",
+      "rejected": true,
+      "guest_pages_and_vm_base_unchanged": true,
+      "external_allocator_effects_not_rolled_back": false
+    },
+    {
+      "case": "vm_step_bound",
+      "rejected": true,
+      "guest_pages_and_vm_base_unchanged": true,
+      "external_allocator_effects_not_rolled_back": false
+    },
+    {
+      "case": "late_free_provider_failure",
+      "rejected": true,
+      "guest_pages_and_vm_base_unchanged": true,
+      "external_allocator_effects_not_rolled_back": true
+    },
+    {
+      "case": "formatting_branch_unrecovered",
+      "rejected": true,
+      "guest_pages_and_vm_base_unchanged": true,
+      "external_allocator_effects_not_rolled_back": false
+    }
+  ],
+  "native_controls": 12,
+  "rollback_checks": 6,
+  "native_input_snapshot_used": false,
+  "python_registry_string_caller_verified": true,
+  "explicit_warm_tls": true,
+  "explicit_allocator_effects": true,
+  "actual_allocator_outer_startup_composed": false,
+  "matching_libc_realloc_restored": false,
+  "large_registry_formatting_branch_restored": false,
+  "full_python_outer_constructor_verified": false,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false
+}

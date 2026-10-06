@@ -451,6 +451,86 @@ def append_string_object(
     return object_address
 
 
+def _copy_cstring_prefix(pages, fields, source, limit):
+    capacity = int.from_bytes(_read_span(pages, fields, 4), "little")
+    length = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
+    pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+    if _s32(length) < 0 or _s32(capacity) < 0 or capacity < length:
+        raise RefillUnsupported("cstring append requires bounded nonnegative fields")
+    available = capacity - length
+    if max(capacity, length) > limit:
+        raise RefillUnsupported("cstring append capacity exceeds the explicit bound")
+    for index in range(available):
+        # Both native loops load/store one byte at a time. Bulk reading the
+        # source first would change an overlapping source/terminator.
+        value = _read_span(pages, source + index, 1)
+        _write_span(pages, pointer + length + index, value)
+        if not value[0]:
+            current = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
+            _write_span(pages, fields + 4, ((current + index) & 0xFFFFFFFF).to_bytes(4, "little"))
+            return True, index
+    current = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
+    _write_span(pages, fields + 4, ((current + available) & 0xFFFFFFFF).to_bytes(4, "little"))
+    return False, available
+
+
+def _append_cstring_fields(pages, fields, source, allocate, reallocate, free, limit):
+    # +0x246e4c validates before its second byte loop; +0x2486b0 has already
+    # copied the first prefix and published its length before arriving here.
+    pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+    length = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
+    capacity = int.from_bytes(_read_span(pages, fields, 4), "little")
+    if not pointer or not source or _s32(length) < 0 or _s32(capacity) < 1 or capacity < length:
+        return -1
+    terminated, copied = _copy_cstring_prefix(pages, fields, source, limit)
+    if terminated: return 0
+    source += copied
+    remaining = len(_cstring(pages, source, limit)) - 1
+    previous = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
+    total = previous + remaining
+    if total + 1 > limit:
+        raise RefillUnsupported("cstring append tail exceeds the explicit bound")
+    # +0x246f10 captures source/total before reserve. It deliberately does
+    # not clone an aliased source. After realloc/free, reload its live bytes
+    # and the destination's live length as the native memmove does.
+    capacity = int.from_bytes(_read_span(pages, fields, 4), "little")
+    if capacity <= total:
+        if _reserve_string_fields(pages, fields, (total + 1) & 0xFFFFFFFF,
+                                  allocate, reallocate, free, limit): return -1
+    if remaining:
+        pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+        current = _s32(int.from_bytes(_read_span(pages, fields + 4, 4), "little"))
+        _write_span(pages, pointer + current, _read_span(pages, source, remaining))
+    _write_span(pages, fields + 4, total.to_bytes(4, "little"))
+    pointer = int.from_bytes(_read_span(pages, fields + 8, 8), "little")
+    _write_span(pages, pointer + total, bytes(1))
+    return 0
+
+
+def append_cstring_object(
+    pages, *, object_address: int, source_address: int, allocate: Callable,
+    reallocate: Callable, free: Callable, max_bytes: int = 0x100000,
+) -> int:
+    """+0x2486b0 with bounded fields and live overlapping C-string input.
+
+    Preserve the first byte loop, its partial length publication, the second
+    +0x246e4c loop and the reserve/memmove tail. Native NULL realloc outcomes
+    retain their partial prefix writes. Unsupported memory/provider/bounds
+    failures roll pages back. X0 returns the object even if the tail fails.
+    This does not restore matching-libc realloc or host allocation itself.
+    """
+    _string_bound(max_bytes)
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, object_address, 24)
+    fields = object_address + 8
+    terminated, copied = _copy_cstring_prefix(transaction, fields, source_address, max_bytes)
+    if not terminated:
+        _append_cstring_fields(transaction, fields, source_address + copied,
+            allocate, reallocate, free, max_bytes)
+    transaction.commit()
+    return object_address
+
+
 def _append_string_byte(pages, fields, value, allocate, reallocate, free, limit):
     capacity = int.from_bytes(_read_span(pages, fields, 4), "little")
     length = int.from_bytes(_read_span(pages, fields + 4, 4), "little")

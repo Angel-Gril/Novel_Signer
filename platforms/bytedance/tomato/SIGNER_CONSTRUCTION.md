@@ -4,7 +4,28 @@
 
 两类证据分别是 [同次构造采样](evidence/vm9_signer_constructor_graph_20261003.json) 和 [新建内存对照](evidence/vm9_signer_objects_python_20261003.json)。前者说明实际桥接器走了哪条路径；后者说明哪些对象字段可以由输入生成。
 
-## 当前递归 mutex 与 native 外层冷启动（2026-10-06）
+## 当前 registry 字符串 caller 与 C 字符串追加（2026-10-06）
+
+已进一步补齐 [C 字符串追加](python/vm9_objects.py) `append_cstring_object`（`+0x2486b0 → +0x246e4c → +0x246f10`），并在 [registry owner](python/vm9_registry.py) 新增 `append_registry_string_caller`，独立生成 `+0x256e50` caller 和 `VM +0x98d50`。这两项是 Python 实现，不执行 native 指令，也不读取 native 入口快照。
+
+C 字符串追加逐字节读写保留两个 prefix loop，再执行 reserve/memmove tail。容量恰好耗尽时仍可能为终止符扩容；与目标重叠的源不能提前整体读取。该 helper 的 tail 不创建 alias clone，因此移动 realloc 后必须读取旧地址的当时字节，验证器用 poison free/realloc 对照这一行为。realloc 的两次 NULL 返回按 native 规则保留先前的部分写入及已发布 length，外层 X0 仍返回对象；不支持的内存、bound 或 provider 异常按事务回滚。[专用 CLI](python/verify_vm9_cstring_append.py) **28 native／8 rollback**终态通过，覆盖 fits、empty、capacity exact-fill、长字符串、full/empty、跨页、self/suffix alias、unused-space alias、in-place/moving realloc、首次／全部 realloc NULL 及 late provider failure。见 [C-string 证据](evidence/vm9_cstring_append_native_20261006.json)。这不代表 matching-libc realloc 已恢复。
+
+新 caller 从显式 SP、return、TLS canary、ELF 和 registry/source 对象生成参数与 32 槽输入；结束时保留实际 caller 的 32 槽工作区，供同一 SP 的后续调用使用。冷路径恢复两次 `+0x256fcc → +0x167e54` lazy decode；共同的 `+0x256fe0 → +0x268eb0` scoped writer、`+0x257024 → +0x248684` object append 和 `+0x257044 → +0x268fbc` release 均复用既有 owner。后续调用增加 `+0x257004 → +0x2486b0` C-string 追加。scoped scratch 是当前 VM native SP−`0x48`；这是 `+0x268eb0` 的实际 SP+8 pair，未多减一层 frame。释放前 TLS node 的七字节 padding 也严格比较，不能因释放后 poison 一致而省略。
+
+[caller 差分 CLI](python/verify_vm9_registry_string_caller.py) **12 native／6 rollback**终态通过：两基址各覆盖冷调用、同次三次调用、扩容、空值/内嵌 NUL/二进制字节、改变 stack/canary，以及 allocator 时改变待复制的 stack padding。普通冷调用 147 VM steps，普通后续调用 119 steps，stop `+0x99018`。每次返回的全部32槽、guest／所有 main-image／TLS 字节、所有 pre-free bytes、allocator calls/live blocks 及 TLS/wake 顺序都匹配；并验证 caller 的 VM base 恢复。scoped TLS 是显式 warm component 服务，allocator 是合成 malloc/realloc/free effects；起点 registry 是既有布局 owner 生成的组件输入，而不是完整 process startup。见 [caller 证据](evidence/vm9_registry_string_caller_native_20261006.json)。
+
+累计字符串变长时会进入额外的 **`+0x256ff0 → +0x248908` 格式化 callback**。该分支仍拒绝，并有先完成前两次大字符串 append、再在第三次拒绝的专用回滚检查；guest 页和 VM base 保持第三次调用前状态。没有删掉此边界来把整个 caller 宣称为任意输入已完成。unaligned SP、tagged return、缺失 source、VM step budget 和 late free provider failure 也明确拒绝。
+
+受影响既有回归为 **204 native／22 rollback**：字符串 reserve/append/alias/cleanup 166/8，registry 初始化/getter 38/14，均终态通过。见 [回归摘要](evidence/vm9_registry_string_regression_20261006.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_cstring_append.py --library "$env:TOMATO_LIBMETASEC" --output cstring-append-result.json
+python -B platforms/bytedance/tomato/python/verify_vm9_registry_string_caller.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output registry-string-caller-result.json
+```
+
+**默认 registry 字符串 caller 的有界 Python 组件已通过；同次独立 Python 外层 constructor 仍未通过。** 下一步把默认 main startup、registry/reference 和字符串前段接入同一实际 allocator／TLS 状态，再调用已恢复的 actual root，继续 outer assembly 和 callback publication。格式化 callback、matching-libc realloc 和其他未测分支保留明确边界。fresh Medusa 输出、线上全头/f13 矩阵、Rust 下载链路、非空搜索与分页、抖音/起点和最终 Pages/Actions 产品仍未完成。
+
+## 此前递归 mutex 与 native 外层冷启动（2026-10-06）
 
 独立 actual root 的下一步 native 控制现已从 `+0x1658e4 → +0x27c930` 自然返回。此前的 **307 malloc／115 free** 停点是验证器拒绝递归 mutex 的能力边界，并非构造器错误；本轮已越过该点，旧停点不再代表当前进度。
 
@@ -27,7 +48,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_recursive_mutex.py --libr
 python -B platforms/bytedance/tomato/python/verify_vm9_outer_signer_native.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output outer-signer-result.json
 ```
 
-下一步独立生成外层 prefix 的 startup、registry/reference 和字符串输入；其中 `+0x256e50 → VM +0x98d50` 及回调是要接回的 caller。随后在同次生成状态下执行已恢复的 actual root、外层装配和 callback 发布，并对照 fresh 签名输出。不能把本轮 native-only 返回作为 Python 外层已经完成的证据。
+此处记录 native-only 控制之后的接入方向；上方已进一步验收默认 registry 字符串 caller 的有界 Python 组件。完整 startup／prefix／actual root／outer publication 的同次 Python 组合与 fresh 签名输出仍未通过。
 
 ## 此前静态接入定位（2026-10-06）
 

@@ -7,6 +7,7 @@ staged-page effects; their external ledgers are not rolled back with pages.
 from __future__ import annotations
 
 from collections.abc import Callable
+from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
 import vm9_objects as objects
 
@@ -447,3 +448,98 @@ def get_singleton136_reference(pages, *, entry_stack_address: int, image_base: i
         _write_span(transaction, entry_stack_address - 0xA0, objects._word(entry_stack_address - 0x50))
     transaction.commit()
     return result
+
+
+@dataclass(frozen=True)
+class RegistryStringResult:
+    steps: int
+    stop_offset: int
+    registers: tuple[int, ...]
+    modeled_callbacks: list[dict]
+
+
+def append_registry_string_caller(pages, *, registry_address, source_object_address,
+        entry_stack_address, return_address, thread_pointer, image_base, vm_module,
+        allocate, reallocate, free, get_tls, initialize_registry, broadcast,
+        saved_frame_pointer=0, saved_x28=0, saved_x19=0, max_steps=100000):
+    """Independent +0x256e50 caller and VM +0x98d50 with explicit services.
+
+    Restore lazy decode, scoped writer, C-string delimiter/object append and
+    release in the observed path. Caller ELF/TLS/stack/object bytes seed all
+    retained slots; no native entry snapshot is consumed. Full outer startup
+    and matching-libc realloc are separate dependencies.
+    """
+    if not isinstance(entry_stack_address, int) or entry_stack_address & 15:
+        raise RefillUnsupported("registry string caller stack must be aligned")
+    if not isinstance(return_address, int) or not 0 <= return_address < 1 << 56:
+        raise RefillUnsupported("registry string caller return must be untagged")
+    if not isinstance(max_steps, int) or not 1 <= max_steps <= 1000000:
+        raise ValueError("invalid registry string VM bound")
+    p = _PageTransaction(pages); stack = entry_stack_address - 0x480
+    _read_span(p, stack - 0x400, 0x880)
+    _read_span(p, registry_address, 320); _read_span(p, source_object_address, 24)
+    def word(address, value): _write_span(p, address, objects._word(value))
+    word(stack, registry_address); word(stack + 8, source_object_address)
+    word(stack + 0x10, image_base + 0x257050)
+    word(stack + 0x18, stack + 0x450); word(stack + 0x20, return_address)
+    for delta, value in ((-0x20, saved_frame_pointer), (-0x18, return_address),
+                         (-0x10, saved_x28), (-8, saved_x19)):
+        word(entry_stack_address + delta, value)
+    _write_span(p, entry_stack_address - 0x28, _read_span(p, thread_pointer + 0x28, 8))
+    initial = [int.from_bytes(_read_span(p, stack + 0x338 + index * 8, 8), "little") for index in range(32)]
+    class StrictMem(vm_module.Mem):
+        def __init__(self, pages): self.pages = pages
+        def _pg(self, address):
+            if address >> 12 not in self.pages: raise RefillUnsupported("unmapped registry string VM page")
+            return self.pages[address >> 12]
+    modeled = []
+    native_stack = stack - 0x180
+    def callback(vm, function, argument):
+        wrapper = function - image_base
+        words = [vm.m.u64(argument + index * 8) for index in range(4)]
+        target = words[0] - image_base
+        if (wrapper, target) == (0x256FCC, 0x167E54):
+            objects.decode_masked_bytes(vm.m.pages, source_address=words[1],
+                destination_address=words[2], mask_address=words[3])
+        elif (wrapper, target) == (0x256FE0, 0x268EB0):
+            objects.construct_single_scoped_lock(vm.m.pages, object_address=words[1],
+                mutex_address=words[2], scratch_address=native_stack - 0x48,
+                image_base=image_base, allocate=allocate, get_tls=get_tls, initialize_registry=initialize_registry)
+        elif (wrapper, target) in ((0x257004, 0x2486B0), (0x257024, 0x248684)):
+            if target == 0x2486B0:
+                value = objects.append_cstring_object(vm.m.pages, object_address=words[1], source_address=words[2],
+                    allocate=allocate, reallocate=reallocate, free=free)
+            else:
+                value = objects.append_string_object(vm.m.pages, object_address=words[1], source_object_address=words[2],
+                    allocate=allocate, reallocate=reallocate, free=free)
+            vm.m.w64(argument + 0x18, value)
+        elif (wrapper, target) == (0x257044, 0x268FBC):
+            objects.destroy_single_scoped_lock(vm.m.pages, object_address=words[1], image_base=image_base,
+                free=free, get_tls=get_tls, initialize_registry=initialize_registry, broadcast=broadcast,
+                entry_stack_address=native_stack)
+        else:
+            raise RefillUnsupported(f"unrecovered registry string callback +{wrapper:#x} -> +{target:#x}")
+        modeled.append(dict(wrapper_offset=hex(wrapper), target_offset=hex(target)))
+    previous = vm_module.B
+    try:
+        vm_module.B = image_base
+        vm = vm_module.VM(StrictMem(p), 0x98D50, stack, image_base + 0x35B5D0,
+            image_base + 0x35B620, image_base + 0x257050, return_address, maxsteps=max_steps)
+        vm.R = initial; vm.R[0] = 0
+        vm.R[4:8] = [stack, image_base + 0x35B5D0, image_base + 0x35B620, image_base + 0x257050]
+        vm.R[29] = (stack + 0x320) & ~15; vm.R[31] = return_address; vm.native_hook = callback
+        try: vm.run()
+        except vm_module.VMExit: pass
+        except RuntimeError as exc:
+            if str(exc).startswith("step limit @"):
+                raise RefillUnsupported("registry string VM step bound exhausted") from exc
+            raise
+        else: raise RefillUnsupported("registry string VM did not reach explicit exit")
+        if _read_span(p, thread_pointer + 0x28, 8) != _read_span(p, entry_stack_address - 0x28, 8):
+            raise RefillUnsupported("registry string caller TLS canary changed")
+        result = RegistryStringResult(vm.steps, vm.pc - image_base, tuple(vm.R), modeled)
+        # The actual interpreter retains all32 slots in this caller workspace.
+        # A later call at the same SP consumes those untouched slot inputs.
+        for index, value in enumerate(vm.R): word(stack + 0x338 + index * 8, value)
+        p.commit(); return result
+    finally: vm_module.B = previous
