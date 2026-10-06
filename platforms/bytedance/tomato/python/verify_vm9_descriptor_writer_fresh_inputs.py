@@ -79,6 +79,23 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
                     fields = writer.decode_store64(word & writer.MASK32)
                     if fields.immediate in (0x140, 0x148):
                         destination = (self.R[fields.base_slot] + fields.immediate) & writer.MASK64
+                        value = self.R[fields.value_slot]
+                        source_candidates = []
+                        if fields.value_slot == 1:
+                            source_candidates = [self.R[20] + 72, self.R[20] + 88]
+                        elif fields.value_slot == 17:
+                            source_candidates = [self.R[30] + 8]
+                        source_address = next((address for address in source_candidates
+                                               if self.m.u64(address) == value), None)
+                        try:
+                            source_bytes = self.m.rd(source_address, 0x20).hex() if source_address is not None else None
+                        except Exception:
+                            source_bytes = None
+                        object_address = self.R[30] + 8 if fields.value_slot == 17 else None
+                        try:
+                            object_bytes = self.m.rd(object_address, 0x100).hex() if object_address is not None else None
+                        except Exception:
+                            object_bytes = None
                         local.append({
                             "step": self.steps,
                             "word": hex(word & writer.MASK32),
@@ -86,10 +103,16 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
                             "value_slot": fields.value_slot,
                             "immediate": fields.immediate,
                             "base_value": hex(self.R[fields.base_slot]),
-                            "value": hex(self.R[fields.value_slot]),
+                            "value": hex(value),
                             "destination": hex(destination),
                             "destination_page_mapped": (destination >> 12) in self.m.pages,
-                            "value_page_mapped": (self.R[fields.value_slot] >> 12) in self.m.pages,
+                            "value_page_mapped": (value >> 12) in self.m.pages,
+                            "r20": hex(self.R[20]),
+                            "r30": hex(self.R[30]),
+                            "value_source_address": hex(source_address) if source_address is not None else None,
+                            "value_source_bytes_0x20": source_bytes,
+                            "object_address": hex(object_address) if object_address is not None else None,
+                            "object_bytes_0x100": object_bytes,
                         })
                 if previous_hook is not None:
                     previous_hook(vm, word, op, sub)
@@ -206,6 +229,22 @@ def main() -> None:
         for label, value in PROFILES.items()
     ]
     object_values = {row["fresh_object_value"] for row in rows}
+    object_snapshots = [
+        store for row in rows for store in row["writer_stores"]
+        if store.get("object_bytes_0x100") is not None
+    ]
+    def object_words(store):
+        raw = bytes.fromhex(store["object_bytes_0x100"])
+        return (raw[0x00:0x88],
+                int.from_bytes(raw[0x88:0x8C], "little"),
+                int.from_bytes(raw[0x8C:0x90], "little"))
+    object_layout_confirmed = bool(object_snapshots) and any(
+        prefix == bytes(0x88) and count == 1 and adjacent == 1
+        for prefix, count, adjacent in map(object_words, object_snapshots)
+    )
+    object_zero_prefix_confirmed = bool(object_snapshots) and all(
+        object_words(store)[0] == bytes(0x88) for store in object_snapshots
+    )
     report = {
         "evidence_id": "vm9_descriptor_writer_fresh_inputs_20261006",
         "schema": "vm9-descriptor-writer-fresh-inputs-v1",
@@ -218,6 +257,15 @@ def main() -> None:
         "fresh_object_values_are_observed_as_register_inputs": True,
         "fresh_object_values_vary_across_same_seed_controls": len(object_values) >= 2,
         "fresh_object_values_are_not_hardcoded": False,
+        "fresh_shared_reader_object_observed": object_layout_confirmed,
+        "fresh_shared_reader_object_zero_prefix": object_zero_prefix_confirmed,
+        "shared_reader_object_layout": {
+            "zero_prefix_bytes": "0x00..0x87",
+            "reader_count_offset": "0x88",
+            "reader_count_u32": 1,
+            "adjacent_word_u32": 1,
+            "object_is_descriptor_pair": False,
+        },
         "descriptor_writer_parameterized": True,
         "descriptor_callback_reached": any(row["descriptor_callback_reached"] for row in rows),
         "fresh_medusa_output_verified": False,
@@ -226,7 +274,7 @@ def main() -> None:
         "limitations": [
             "The controls cover the bounded +0x991c0 root caller and its four STORE64 fields only.",
             "The owner-frame continuation and remaining callback body are still not executed.",
-            "The generated object pointer is observed from the current fresh model allocation; the deterministic seed repeats the same address across these controls.",
+            "The generated object pointer is observed from the current fresh model allocation; its fresh bytes are a shared-reader state object (zero prefix, u32 reader count at +0x88), not a descriptor pair.",
             "No current Medusa output, header matrix, Rust chain or download product is implied.",
         ],
     }

@@ -25,7 +25,13 @@
           "value": "0x125ea444",
           "destination": "0x7004ea30",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x12641c70",
+          "r30": "0x136da140",
+          "value_source_address": "0x12641cb8",
+          "value_source_bytes_0x20": "44a45e12000000000ca45e1200000000fca45e120000000058c8521200000000",
+          "object_address": null,
+          "object_bytes_0x100": null
         },
         {
           "step": 424,
@@ -37,7 +43,13 @@
           "value": "0x136da148",
           "destination": "0x7004ea38",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x12641c70",
+          "r30": "0x136da140",
+          "value_source_address": null,
+          "value_source_bytes_0x20": null,
+          "object_address": "0x136da148",
+          "object_bytes_0x100": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
         },
         {
           "step": 470,
@@ -49,7 +61,13 @@
           "value": "0x136da148",
           "destination": "0x7004ea38",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x12641c70",
+          "r30": "0x136da140",
+          "value_source_address": null,
+          "value_source_bytes_0x20": null,
+          "object_address": "0x136da148",
+          "object_bytes_0x100": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
         },
         {
           "step": 471,
@@ -61,7 +79,13 @@
           "value": "0x125ea4fc",
           "destination": "0x7004ea30",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x12641c70",
+          "r30": "0x136da140",
+          "value_source_address": "0x12641cc8",
+          "value_source_bytes_0x20": "fca45e120000000058c8521200000000d0c9521200000000fcaf331300000000",
+          "object_address": null,
+          "object_bytes_0x100": null
         }
       ],
       "branch_targets": [
@@ -176,7 +200,13 @@
           "value": "0x125ea444",
           "destination": "0x7004ea30",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x12641c70",
+          "r30": "0x136da140",
+          "value_source_address": "0x12641cb8",
+          "value_source_bytes_0x20": "44a45e12000000000ca45e1200000000fca45e120000000058c8521200000000",
+          "object_address": null,
+          "object_bytes_0x100": null
         },
         {
           "step": 424,
@@ -188,7 +218,13 @@
           "value": "0x136da148",
           "destination": "0x7004ea38",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x12641c70",
+          "r30": "0x136da140",
+          "value_source_address": null,
+          "value_source_bytes_0x20": null,
+          "object_address": "0x136da148",
+          "object_bytes_0x100": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
         },
         {
           "step": 470,
@@ -200,7 +236,13 @@
           "value": "0x136da148",
           "destination": "0x7004ea38",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x12641c70",
+          "r30": "0x136da140",
+          "value_source_address": null,
+          "value_source_bytes_0x20": null,
+          "object_address": "0x136da148",
+          "object_bytes_0x100": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
         },
         {
           "step": 471,
@@ -212,7 +254,13 @@
           "value": "0x125ea4fc",
           "destination": "0x7004ea30",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x12641c70",
+          "r30": "0x136da140",
+          "value_source_address": "0x12641cc8",
+          "value_source_bytes_0x20": "fca45e120000000058c8521200000000d0c9521200000000fcaf331300000000",
+          "object_address": null,
+          "object_bytes_0x100": null
         }
       ],
       "branch_targets": [
@@ -327,7 +375,13 @@
           "value": "0x775c52f444",
           "destination": "0x7004ea30",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x775c586c70",
+          "r30": "0x136da140",
+          "value_source_address": "0x775c586cb8",
+          "value_source_bytes_0x20": "44f4525c770000000cf4525c77000000fcf4525c770000005818475c77000000",
+          "object_address": null,
+          "object_bytes_0x100": null
         },
         {
           "step": 424,
@@ -339,7 +393,13 @@
           "value": "0x136da148",
           "destination": "0x7004ea38",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x775c586c70",
+          "r30": "0x136da140",
+          "value_source_address": null,
+          "value_source_bytes_0x20": null,
+          "object_address": "0x136da148",
+          "object_bytes_0x100": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
         },
         {
           "step": 470,
@@ -351,7 +411,13 @@
           "value": "0x136da148",
           "destination": "0x7004ea38",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x775c586c70",
+          "r30": "0x136da140",
+          "value_source_address": null,
+          "value_source_bytes_0x20": null,
+          "object_address": "0x136da148",
+          "object_bytes_0x100": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
         },
         {
           "step": 471,
@@ -363,7 +429,13 @@
           "value": "0x775c52f4fc",
           "destination": "0x7004ea30",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x775c586c70",
+          "r30": "0x136da140",
+          "value_source_address": "0x775c586cc8",
+          "value_source_bytes_0x20": "fcf4525c770000005818475c77000000d019475c77000000fcff275d77000000",
+          "object_address": null,
+          "object_bytes_0x100": null
         }
       ],
       "branch_targets": [
@@ -478,7 +550,13 @@
           "value": "0x775c52f444",
           "destination": "0x7004ea30",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x775c586c70",
+          "r30": "0x136da140",
+          "value_source_address": "0x775c586cb8",
+          "value_source_bytes_0x20": "44f4525c770000000cf4525c77000000fcf4525c770000005818475c77000000",
+          "object_address": null,
+          "object_bytes_0x100": null
         },
         {
           "step": 424,
@@ -490,7 +568,13 @@
           "value": "0x136da148",
           "destination": "0x7004ea38",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x775c586c70",
+          "r30": "0x136da140",
+          "value_source_address": null,
+          "value_source_bytes_0x20": null,
+          "object_address": "0x136da148",
+          "object_bytes_0x100": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
         },
         {
           "step": 470,
@@ -502,7 +586,13 @@
           "value": "0x136da148",
           "destination": "0x7004ea38",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x775c586c70",
+          "r30": "0x136da140",
+          "value_source_address": null,
+          "value_source_bytes_0x20": null,
+          "object_address": "0x136da148",
+          "object_bytes_0x100": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
         },
         {
           "step": 471,
@@ -514,7 +604,13 @@
           "value": "0x775c52f4fc",
           "destination": "0x7004ea30",
           "destination_page_mapped": true,
-          "value_page_mapped": true
+          "value_page_mapped": true,
+          "r20": "0x775c586c70",
+          "r30": "0x136da140",
+          "value_source_address": "0x775c586cc8",
+          "value_source_bytes_0x20": "fcf4525c770000005818475c77000000d019475c77000000fcff275d77000000",
+          "object_address": null,
+          "object_bytes_0x100": null
         }
       ],
       "branch_targets": [
@@ -615,6 +711,15 @@
   "fresh_object_values_are_observed_as_register_inputs": true,
   "fresh_object_values_vary_across_same_seed_controls": false,
   "fresh_object_values_are_not_hardcoded": false,
+  "fresh_shared_reader_object_observed": true,
+  "fresh_shared_reader_object_zero_prefix": true,
+  "shared_reader_object_layout": {
+    "zero_prefix_bytes": "0x00..0x87",
+    "reader_count_offset": "0x88",
+    "reader_count_u32": 1,
+    "adjacent_word_u32": 1,
+    "object_is_descriptor_pair": false
+  },
   "descriptor_writer_parameterized": true,
   "descriptor_callback_reached": false,
   "fresh_medusa_output_verified": false,
@@ -623,7 +728,7 @@
   "limitations": [
     "The controls cover the bounded +0x991c0 root caller and its four STORE64 fields only.",
     "The owner-frame continuation and remaining callback body are still not executed.",
-    "The generated object pointer is observed from the current fresh model allocation; the deterministic seed repeats the same address across these controls.",
+    "The generated object pointer is observed from the current fresh model allocation; its fresh bytes are a shared-reader state object (zero prefix, u32 reader count at +0x88), not a descriptor pair.",
     "No current Medusa output, header matrix, Rust chain or download product is implied."
   ]
 }

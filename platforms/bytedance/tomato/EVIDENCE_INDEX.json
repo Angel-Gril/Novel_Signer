@@ -2177,7 +2177,17 @@
     "native_input_snapshot_used": false,
     "descriptor_callback_reached": false,
     "fresh_medusa_output": false,
-    "online_validation": false
+    "online_validation": false,
+    "fresh_shared_reader_object_observed": true,
+    "fresh_shared_reader_object_zero_prefix": true,
+    "shared_reader_object_layout": {
+      "zero_prefix_bytes": "0x00..0x87",
+      "reader_count_offset": "0x88",
+      "reader_count_u32": 1,
+      "adjacent_word_u32": 1,
+      "object_is_descriptor_pair": false
+    },
+    "object_graph_boundary": "writer object is initialized shared-reader state; callback descriptor chain remains separate"
   },
   "vm9_descriptor_target_roles_fresh_20261006": {
     "evidence_file": "evidence/vm9_descriptor_target_roles_fresh_20261006.json",

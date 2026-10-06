@@ -1,6 +1,16 @@
 # Current VM9 progress checkpoint
 
 
+## 2026-10-06: fresh writer object classified as shared-reader state
+
+四组 fresh `+0x991c0` 控制现在保留了 active target pair 所用对象的局部字节：
+初始化前为零；经过 `+0x32a40c` 后，`+0x00..+0x87` 仍为零，`+0x88` 的 u32
+reader count 为 `1`，相邻 u32 也是 `1`。因此该指针是 shared-reader 状态对象，
+不是两字 callback descriptor。后续必须把 writer/reader 生命周期和
+`+0x2584ac` 的 `[x0]` target、`[x0+8]` object 链分开追踪，不能把二者直接拼接。
+
+
+
 ## 2026-10-06: active target relocation table lead
 
 静态 ELF 还发现 active pair 的 10 个 `R_AARCH64_RELATIVE` relocation addend，分布在

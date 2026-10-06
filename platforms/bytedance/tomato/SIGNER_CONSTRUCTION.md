@@ -1,6 +1,19 @@
 # 默认配置下的 signer 构造和 callback 发布
 
 
+## 2026-10-06: fresh writer object classified as shared-reader state
+
+The four fresh `+0x991c0` controls now retain the bytes around the object written
+into the active target pair. Before the initializer, the object is zeroed; after
+`+0x32a40c` initializes it, the first `0x88` bytes remain zero and the u32 reader
+count at `+0x88` is `1` (the adjacent word is also `1`). The pointer is therefore a
+shared-reader state object, not a two-word callback descriptor. This explains why
+the active writer target audit and the `+0x2584ac` descriptor trampoline must remain
+separate boundaries: the former writes reader lifecycle state, while the latter
+expects `[x0]` to contain a branch target and `[x0+8]` an object pointer.
+
+
+
 ## 2026-10-06: active target relocation table lead
 
 The same ELF contains ten `R_AARCH64_RELATIVE` relocations whose addends are the
