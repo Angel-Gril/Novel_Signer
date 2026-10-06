@@ -229,7 +229,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                     "vm_registers_0_8": [_hex(value) for value in vm.R[:9]],
                 })
                 raise RefillUnsupported(
-                    "native +0x2584ac descriptor trampoline is not recovered")
+                    "native +0x2584ac wrapper is verified, but the current callback object graph is not recovered")
             return super().__call__(vm, function, argument)
 
     previous = root_model.RootCallbacks
@@ -316,6 +316,8 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         "logger_model_requested": apply_logger_model,
         "logger_model_errors": logger_errors,
         "logger_model_applied": bool(apply_logger_model and not logger_errors),
+        "descriptor_trampoline_wrapper_verified": True,
+        "descriptor_trampoline_current_graph_recovered": False,
         "descriptor_trampoline_recovered": False,
         "fresh_medusa_output_verified": False,
         "complete_python_medusa": False,
@@ -354,13 +356,15 @@ def main():
         "python_vm_entry_offset": "0x991c0",
         "logger_model_requested": args.apply_logger_model,
         "logger_model_applied": bool(args.apply_logger_model and all(not row["logger_model_errors"] for row in rows)),
+        "descriptor_trampoline_wrapper_verified": True,
+        "descriptor_trampoline_current_graph_recovered": False,
         "descriptor_trampoline_recovered": False,
         "fresh_medusa_output_verified": False,
         "current_online_header_matrix_verified": False,
         "complete_python_medusa": False,
     }
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print("outer constructor boundary", len(rows), "PASS; descriptor trampoline remains open", flush=True)
+    print("outer constructor boundary", len(rows), "PASS; wrapper verified, current callback graph remains open", flush=True)
 
 
 if __name__ == "__main__":

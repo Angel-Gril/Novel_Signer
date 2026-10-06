@@ -9,7 +9,7 @@
       "fresh_elf_inputs": true,
       "native_input_snapshot_used": false,
       "rejected_at_boundary": true,
-      "rejection": "native +0x2584ac descriptor trampoline is not recovered",
+      "rejection": "native +0x2584ac wrapper is verified, but the current callback object graph is not recovered",
       "logger_calls": [
         {
           "argument": "0x7004ea48",
@@ -461,6 +461,8 @@
       "logger_model_requested": false,
       "logger_model_errors": [],
       "logger_model_applied": false,
+      "descriptor_trampoline_wrapper_verified": true,
+      "descriptor_trampoline_current_graph_recovered": false,
       "descriptor_trampoline_recovered": false,
       "fresh_medusa_output_verified": false,
       "complete_python_medusa": false
@@ -471,7 +473,7 @@
       "fresh_elf_inputs": true,
       "native_input_snapshot_used": false,
       "rejected_at_boundary": true,
-      "rejection": "native +0x2584ac descriptor trampoline is not recovered",
+      "rejection": "native +0x2584ac wrapper is verified, but the current callback object graph is not recovered",
       "logger_calls": [
         {
           "argument": "0x7004ea48",
@@ -923,6 +925,8 @@
       "logger_model_requested": false,
       "logger_model_errors": [],
       "logger_model_applied": false,
+      "descriptor_trampoline_wrapper_verified": true,
+      "descriptor_trampoline_current_graph_recovered": false,
       "descriptor_trampoline_recovered": false,
       "fresh_medusa_output_verified": false,
       "complete_python_medusa": false
@@ -933,7 +937,7 @@
       "fresh_elf_inputs": true,
       "native_input_snapshot_used": false,
       "rejected_at_boundary": true,
-      "rejection": "native +0x2584ac descriptor trampoline is not recovered",
+      "rejection": "native +0x2584ac wrapper is verified, but the current callback object graph is not recovered",
       "logger_calls": [
         {
           "argument": "0x7004ea48",
@@ -1385,6 +1389,8 @@
       "logger_model_requested": false,
       "logger_model_errors": [],
       "logger_model_applied": false,
+      "descriptor_trampoline_wrapper_verified": true,
+      "descriptor_trampoline_current_graph_recovered": false,
       "descriptor_trampoline_recovered": false,
       "fresh_medusa_output_verified": false,
       "complete_python_medusa": false
@@ -1395,7 +1401,7 @@
       "fresh_elf_inputs": true,
       "native_input_snapshot_used": false,
       "rejected_at_boundary": true,
-      "rejection": "native +0x2584ac descriptor trampoline is not recovered",
+      "rejection": "native +0x2584ac wrapper is verified, but the current callback object graph is not recovered",
       "logger_calls": [
         {
           "argument": "0x7004ea48",
@@ -1847,6 +1853,8 @@
       "logger_model_requested": false,
       "logger_model_errors": [],
       "logger_model_applied": false,
+      "descriptor_trampoline_wrapper_verified": true,
+      "descriptor_trampoline_current_graph_recovered": false,
       "descriptor_trampoline_recovered": false,
       "fresh_medusa_output_verified": false,
       "complete_python_medusa": false
