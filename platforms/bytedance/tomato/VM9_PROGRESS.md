@@ -21,6 +21,12 @@ fresh root callback 序列显示当前有界路径直接进入 `+0x2584b8`，其
 
 
 
+Python 侧已新增 `vm9_callbacks.dispatch_direct_descriptor_branch`，将直接
+`+0x2584b8` descriptor pair、branch target 和 object callback 作为事务边界；
+它只服务已验证的短 wrapper，不代替 `+0x2584ac` pre-dispatch。
+
+
+
 ## 2026-10-06: fresh writer object classified as shared-reader state
 
 四组 fresh `+0x991c0` 控制现在保留了 active target pair 所用对象的局部字节：
