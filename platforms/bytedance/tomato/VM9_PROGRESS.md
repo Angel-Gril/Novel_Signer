@@ -2,9 +2,9 @@
 
 ## 2026-10-06: 外层 constructor 的 logger 与 descriptor trampoline 边界
 
-新增 [outer constructor boundary verifier](python/verify_vm9_outer_constructor_boundary.py) 和 [边界证据](evidence/vm9_outer_constructor_boundary_20261006.json)。从 fresh ELF/TLS、同次 actual allocator 和虚拟启动服务开始，4 组（两种 image base × absent/SDK 30）都到达 `+0x26e9e0` logger callback，然后进入当前 active 的 `+0x2584ac` descriptor trampoline。每组都记录了 callback 参数块、descriptor 地址、field0 branch target 和 field8 传给后续分支的对象；不同基址只改变 relocated 地址，字段关系和停点一致。
+新增 [outer constructor boundary verifier](python/verify_vm9_outer_constructor_boundary.py) 和 [边界证据](evidence/vm9_outer_constructor_boundary_20261006.json)。从 fresh ELF/TLS、同次 actual allocator 和虚拟启动服务开始，4 组（两种 image base × absent/SDK 30）都到达 `+0x26e9e0` logger callback，然后进入当前 active 的 `+0x2584ac` descriptor trampoline。每组都记录了 callback 参数块、descriptor 地址、field0 branch target 和 field8 传给后续分支的对象；不同基址只改变 relocated 地址，字段关系和停点一致。配套的 [native logger trace](python/verify_vm9_native_logger_trace.py) 又在同样两种基址与 absent/SDK 30 共 4 组记录了真实 `+0x26e9e0 → +0x271ec8 → +0x271ddc` 寄存器入口，并确认返回到 `+0x26cf0c`；这组 native 结果用于和 Python descriptor 参数做差分，不能直接当成 Python 实现。
 
-该控制在 trampoline 处显式拒绝，未把它替换成 no-op，也未把静态猜测当作 callback 实现。当前已确认 descriptor 位于 native bridge argument+8，field0 是 logger branch target，field8 是后续 x0 object；`+0x2887f0` 仍未成为当前 active path。logger/global 的实际状态写入、trampoline 的完整调用/返回语义和 descriptor writer 的输入驱动对象图仍未恢复，因此这不是完整 outer constructor、fresh Medusa 或线上签名证据。
+该控制在 trampoline 处显式拒绝，未把它替换成 no-op，也未把静态猜测当作 callback 实现。当前已确认 descriptor 位于 native bridge argument+8，field0 是 logger branch target，field8 是后续 x0 object；`+0x2887f0` 仍未成为当前 active path。logger/global 的实际状态写入、trampoline 的完整调用/返回语义和 descriptor writer 的输入驱动对象图仍未恢复，因此这不是完整 outer constructor、fresh Medusa 或线上签名证据。可选 logger provider 控制见 [provider evidence](evidence/vm9_outer_constructor_logger_provider_20261006.json)：absent 两组继续到达同一 `+0x2584ac`，SDK=30 两组在已有 singleton136 前置条件处拒绝，错误为 `SDK conversion requires an initialized singleton136`。
 
 ## 2026-10-06: actual allocator 外层前段组合
 

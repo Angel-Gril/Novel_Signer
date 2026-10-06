@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 
 import vm9_objects as objects
+import vm9_configuration_init as configuration
 import vm9_outer_allocator as outer_allocator
 import vm9_outer_constructor as outer_constructor
 import vm9_registry as registry
@@ -38,13 +39,14 @@ def _hex(value):
 
 
 def case(library: Path, libc: Path, image: int, label: str, property_value: bytes | None,
-         vm_module):
+         vm_module, apply_logger_model=False):
     pages, _, _ = root_fixture.fresh(library, libc, image, property_value)
     environment = worker_fixture.Environment(pages, 2)
     threads: list[list[int]] = []
     destructor_calls: list[list[int]] = []
     wake_calls: list[list[int]] = []
     logger_calls: list[dict] = []
+    logger_errors: list[str] = []
     trampoline_calls: list[dict] = []
 
     def create_thread(staged, output, _attr, entry, argument):
@@ -114,8 +116,18 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                 "register_values": [_hex(value) for value in register_values],
                 "argument_words": [_hex(vm.m.u64(argument + i * 8)) for i in range(8)],
             })
-            # The logger side effect is intentionally not guessed here. The
-            # purpose of this control is to reach and record the next boundary.
+            if apply_logger_model:
+                try:
+                    configuration.initialize_unavailable_logger(
+                        vm.m.pages, image_base=self.base,
+                        read_property=lambda _p, _name: property_value,
+                        syscall=prefix._syscall,
+                        errno_address=config_fixture.TLS + 0x100,
+                        property_buffer_address=argument + 0x100)
+                except RefillUnsupported as exc:
+                    logger_errors.append(str(exc))
+                    raise
+            # The default control intentionally does not guess the logger side effect.
 
         def __call__(self, vm, function, argument):
             wrapper = function - self.base
@@ -167,7 +179,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
 
     if not logger_calls:
         raise AssertionError("logger callback boundary was not reached")
-    if not trampoline_calls:
+    if not trampoline_calls and not logger_errors:
         raise AssertionError("descriptor trampoline boundary was not reached")
     return {
         "image_base": hex(image),
@@ -178,7 +190,9 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         "rejection": error,
         "logger_calls": logger_calls,
         "descriptor_trampoline": trampoline_calls,
-        "logger_model_applied": False,
+        "logger_model_requested": apply_logger_model,
+        "logger_model_errors": logger_errors,
+        "logger_model_applied": bool(apply_logger_model and not logger_errors),
         "descriptor_trampoline_recovered": False,
         "fresh_medusa_output_verified": False,
         "complete_python_medusa": False,
@@ -190,6 +204,7 @@ def main():
     parser.add_argument("--library", type=Path, default=LIBRARY)
     parser.add_argument("--libc", type=Path, default=LIBC)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--apply-logger-model", action="store_true")
     args = parser.parse_args()
     assert hashlib.sha256(args.library.read_bytes()).hexdigest() == oracle.LIBRARY_SHA256
     assert hashlib.sha256(args.libc.read_bytes()).hexdigest() == io.LIBC_SHA256
@@ -199,7 +214,7 @@ def main():
     rows = []
     for image in (0x122C0000, 0x775C205000):
         for label, value in PROFILES.items():
-            row = case(args.library, args.libc, image, label, value, vm_full)
+            row = case(args.library, args.libc, image, label, value, vm_full, args.apply_logger_model)
             rows.append(row)
             print("outer constructor boundary", hex(image), label, "PASS", flush=True)
     report = {
@@ -212,7 +227,8 @@ def main():
         "native_input_snapshot_used": False,
         "logger_callback_arguments_captured": True,
         "active_descriptor_trampoline_captured": True,
-        "logger_model_applied": False,
+        "logger_model_requested": args.apply_logger_model,
+        "logger_model_applied": bool(args.apply_logger_model and all(not row["logger_model_errors"] for row in rows)),
         "descriptor_trampoline_recovered": False,
         "fresh_medusa_output_verified": False,
         "current_online_header_matrix_verified": False,

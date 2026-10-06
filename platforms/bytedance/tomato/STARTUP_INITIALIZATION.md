@@ -4,7 +4,7 @@
 
 外层构造器边界控制已从 fresh ELF/TLS 和同次 actual allocator 状态跑过 4 组：两种 image base、属性缺失和 SDK=30。主启动、registry getter、root factory 之后稳定进入 `+0x26e9e0` logger，再到 active `+0x2584ac` descriptor trampoline；证据记录 callback 参数、descriptor field0/field8 和拒绝位置。
 
-这里仍然是显式边界：logger 的 global/BSS 状态写入、trampoline 的真实调用/返回和 descriptor writer 的输入驱动来源没有完成，不能把这组到达证据写成完整 outer constructor 或 fresh Medusa。真实 OS 线程、线上全头矩阵、f13 冻结、Rust 和最终 Pages/Actions 产品仍未完成。
+这里仍然是显式边界：logger 的 global/BSS 状态写入、trampoline 的真实调用/返回和 descriptor writer 的输入驱动来源没有完成，不能把这组到达证据写成完整 outer constructor 或 fresh Medusa。native logger trace 已固定 `+0x26e9e0 → +0x271ec8 → +0x271ddc → +0x26cf0c` 的入口/返回关系，但还没有把它转换成 Python descriptor handoff。真实 OS 线程、线上全头矩阵、f13 冻结、Rust 和最终 Pages/Actions 产品仍未完成。logger provider 的 SDK=30 控制还明确暴露了 singleton136 cold/warm 依赖，不能把属性转换通过写成 logger 已完成。
 
 ## 启动到 registry/root 的同次状态桥接（2026-10-06）
 

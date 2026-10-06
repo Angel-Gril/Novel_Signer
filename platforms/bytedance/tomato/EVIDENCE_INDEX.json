@@ -1740,5 +1740,51 @@
     "fresh_medusa_output_verified": false,
     "current_online_header_matrix_verified": false,
     "complete_python_medusa": false
+  },
+  "vm9_outer_constructor_logger_provider_20261006": {
+    "evidence_file": "evidence/vm9_outer_constructor_logger_provider_20261006.json",
+    "schema": "vm9-outer-constructor-boundary-v1",
+    "controls": 4,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
+    "logger_model_requested": true,
+    "absent_profiles_reached_descriptor_trampoline": 2,
+    "sdk_30_profiles_rejected_at_singleton136": 2,
+    "sdk_30_rejection": "SDK conversion requires an initialized singleton136",
+    "descriptor_trampoline_recovered": false,
+    "logger_model_applied": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false
+  },
+  "vm9_native_logger_trace_20261006": {
+    "evidence_file": "evidence/vm9_native_logger_trace_20261006.json",
+    "schema": "vm9-native-logger-register-trace-v1",
+    "controls": 4,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
+    "logger_entry_offset": "0x26e9e0",
+    "logger_downstream_offsets": [
+      "0x271ec8",
+      "0x271ddc"
+    ],
+    "logger_return_offset": "0x26cf0c",
+    "native_input_snapshot_used": false,
+    "python_descriptor_comparison_complete": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false
   }
 }

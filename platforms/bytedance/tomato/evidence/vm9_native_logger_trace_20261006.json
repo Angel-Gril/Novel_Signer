@@ -1,0 +1,131 @@
+{
+  "schema": "vm9-native-logger-register-trace-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "absent",
+      "native_outer_getter_returned": true,
+      "logger_entry": {
+        "offset": "0x26e9e0",
+        "x0": "0x7004dc50",
+        "x1": "0x1269edd0",
+        "x2": "0x8",
+        "x3": "0x3",
+        "x8": "0x0",
+        "sp": "0x7004dc40",
+        "x30": "0x1252cf0c"
+      },
+      "logger_return_offset": "0x26cf0c",
+      "logger_downstream_offsets": [
+        "0x271ec8",
+        "0x271ddc"
+      ],
+      "actual_allocator_counts": {
+        "malloc": 310,
+        "free": 115,
+        "gc": 1,
+        "flush": 3
+      },
+      "native_input_snapshot_used": false,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "sdk_30",
+      "native_outer_getter_returned": true,
+      "logger_entry": {
+        "offset": "0x26e9e0",
+        "x0": "0x7004dc50",
+        "x1": "0x1269edd0",
+        "x2": "0x8",
+        "x3": "0x3",
+        "x8": "0x0",
+        "sp": "0x7004dc40",
+        "x30": "0x1252cf0c"
+      },
+      "logger_return_offset": "0x26cf0c",
+      "logger_downstream_offsets": [
+        "0x271ec8",
+        "0x271ddc"
+      ],
+      "actual_allocator_counts": {
+        "malloc": 310,
+        "free": 115,
+        "gc": 1,
+        "flush": 3
+      },
+      "native_input_snapshot_used": false,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "absent",
+      "native_outer_getter_returned": true,
+      "logger_entry": {
+        "offset": "0x26e9e0",
+        "x0": "0x7004dc50",
+        "x1": "0x775c5e3dd0",
+        "x2": "0x8",
+        "x3": "0x3",
+        "x8": "0x0",
+        "sp": "0x7004dc40",
+        "x30": "0x775c471f0c"
+      },
+      "logger_return_offset": "0x26cf0c",
+      "logger_downstream_offsets": [
+        "0x271ec8",
+        "0x271ddc"
+      ],
+      "actual_allocator_counts": {
+        "malloc": 310,
+        "free": 115,
+        "gc": 1,
+        "flush": 3
+      },
+      "native_input_snapshot_used": false,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "sdk_30",
+      "native_outer_getter_returned": true,
+      "logger_entry": {
+        "offset": "0x26e9e0",
+        "x0": "0x7004dc50",
+        "x1": "0x775c5e3dd0",
+        "x2": "0x8",
+        "x3": "0x3",
+        "x8": "0x0",
+        "sp": "0x7004dc40",
+        "x30": "0x775c471f0c"
+      },
+      "logger_return_offset": "0x26cf0c",
+      "logger_downstream_offsets": [
+        "0x271ec8",
+        "0x271ddc"
+      ],
+      "actual_allocator_counts": {
+        "malloc": 310,
+        "free": 115,
+        "gc": 1,
+        "flush": 3
+      },
+      "native_input_snapshot_used": false,
+      "fresh_medusa_output_verified": false
+    }
+  ],
+  "controls": 4,
+  "logger_entry_offset": "0x26e9e0",
+  "logger_downstream_offsets": [
+    "0x271ec8",
+    "0x271ddc"
+  ],
+  "logger_return_offset": "0x26cf0c",
+  "native_input_snapshot_used": false,
+  "python_descriptor_comparison_complete": false,
+  "fresh_medusa_output_verified": false,
+  "current_online_header_matrix_verified": false,
+  "complete_python_medusa": false
+}

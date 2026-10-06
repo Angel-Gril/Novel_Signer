@@ -14,7 +14,7 @@ from pathlib import Path
 from capstone import Cs, CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN
 from elftools.elf.elffile import ELFFile
 from unicorn.arm64_const import (
-    UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3,
+    UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X8,
     UC_ARM64_REG_X30, UC_ARM64_REG_SP, UC_ARM64_REG_PC, UC_ARM64_REG_TPIDR_EL0,
 )
 import vm9_allocator as a
@@ -65,7 +65,7 @@ def bind_native_imports(library, libc, redirect, imports):
     return exports
 
 
-def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None):
+def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None):
     pages, sdk_name = fresh(library, libc, image, property_value)
     if canary is not None: _w(pages, root_fixture.TLS + 0x28, canary)
     environment = h.Environment(pages, 2)
@@ -80,6 +80,18 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
     def observe(cpu, pc):
         state['last_pc'] = pc
         offset = pc - image
+        if trace is not None and offset in (0x258488, 0x2584AC, 0x26E9E0, 0x271EC8, 0x271DDC):
+            if len(trace) < 256:
+                trace.append({
+                    'offset': hex(offset),
+                    'x0': hex(cpu.reg_read(UC_ARM64_REG_X0)),
+                    'x1': hex(cpu.reg_read(UC_ARM64_REG_X1)),
+                    'x2': hex(cpu.reg_read(UC_ARM64_REG_X2)),
+                    'x3': hex(cpu.reg_read(UC_ARM64_REG_X3)),
+                    'x8': hex(cpu.reg_read(UC_ARM64_REG_X8)),
+                    'sp': hex(cpu.reg_read(UC_ARM64_REG_SP)),
+                    'x30': hex(cpu.reg_read(UC_ARM64_REG_X30)),
+                })
         if offset in ENTRIES: entries[hex(offset)] += 1
         if offset == 0x1658E4 and not state['mapped']:
             state['mapped'] = True; cpu.mem_map(h.STACK, h.STACK_BYTES)

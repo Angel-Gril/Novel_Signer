@@ -65,9 +65,9 @@
           ]
         }
       ],
-      "logger_model_requested": false,
+      "logger_model_requested": true,
       "logger_model_errors": [],
-      "logger_model_applied": false,
+      "logger_model_applied": true,
       "descriptor_trampoline_recovered": false,
       "fresh_medusa_output_verified": false,
       "complete_python_medusa": false
@@ -78,7 +78,7 @@
       "fresh_elf_inputs": true,
       "native_input_snapshot_used": false,
       "rejected_at_boundary": true,
-      "rejection": "native +0x2584ac descriptor trampoline is not recovered",
+      "rejection": "SDK conversion requires an initialized singleton136",
       "logger_calls": [
         {
           "argument": "0x7004ea48",
@@ -104,38 +104,11 @@
           ]
         }
       ],
-      "descriptor_trampoline": [
-        {
-          "function": "0x125184ac",
-          "argument": "0x7004ea40",
-          "descriptor": "0x7004ea48",
-          "fields": [
-            "0x1252e9e0",
-            "0x7004eb08",
-            "0x1269e6d8",
-            "0x1269e6e4",
-            "0x28",
-            "0x12508344",
-            "0x7004eb08",
-            "0x1269e6cc"
-          ],
-          "branch_target": "0x1252e9e0",
-          "x0_object": "0x7004eb08",
-          "vm_registers_0_8": [
-            "0x0",
-            "0x0",
-            "0x1269e6d8",
-            "0x1251846c",
-            "0x125184ac",
-            "0x7004ea40",
-            "0x135de864",
-            "0x13707fc0",
-            "0x13764a1c"
-          ]
-        }
+      "descriptor_trampoline": [],
+      "logger_model_requested": true,
+      "logger_model_errors": [
+        "SDK conversion requires an initialized singleton136"
       ],
-      "logger_model_requested": false,
-      "logger_model_errors": [],
       "logger_model_applied": false,
       "descriptor_trampoline_recovered": false,
       "fresh_medusa_output_verified": false,
@@ -203,9 +176,9 @@
           ]
         }
       ],
-      "logger_model_requested": false,
+      "logger_model_requested": true,
       "logger_model_errors": [],
-      "logger_model_applied": false,
+      "logger_model_applied": true,
       "descriptor_trampoline_recovered": false,
       "fresh_medusa_output_verified": false,
       "complete_python_medusa": false
@@ -216,7 +189,7 @@
       "fresh_elf_inputs": true,
       "native_input_snapshot_used": false,
       "rejected_at_boundary": true,
-      "rejection": "native +0x2584ac descriptor trampoline is not recovered",
+      "rejection": "SDK conversion requires an initialized singleton136",
       "logger_calls": [
         {
           "argument": "0x7004ea48",
@@ -242,38 +215,11 @@
           ]
         }
       ],
-      "descriptor_trampoline": [
-        {
-          "function": "0x775c45d4ac",
-          "argument": "0x7004ea40",
-          "descriptor": "0x7004ea48",
-          "fields": [
-            "0x775c4739e0",
-            "0x7004eb08",
-            "0x775c5e36d8",
-            "0x775c5e36e4",
-            "0x28",
-            "0x775c44d344",
-            "0x7004eb08",
-            "0x775c5e36cc"
-          ],
-          "branch_target": "0x775c4739e0",
-          "x0_object": "0x7004eb08",
-          "vm_registers_0_8": [
-            "0x0",
-            "0x0",
-            "0x775c5e36d8",
-            "0x775c45d46c",
-            "0x775c45d4ac",
-            "0x7004ea40",
-            "0x775d523864",
-            "0x775d64cfc0",
-            "0x775d6a9a1c"
-          ]
-        }
+      "descriptor_trampoline": [],
+      "logger_model_requested": true,
+      "logger_model_errors": [
+        "SDK conversion requires an initialized singleton136"
       ],
-      "logger_model_requested": false,
-      "logger_model_errors": [],
       "logger_model_applied": false,
       "descriptor_trampoline_recovered": false,
       "fresh_medusa_output_verified": false,
@@ -285,7 +231,7 @@
   "native_input_snapshot_used": false,
   "logger_callback_arguments_captured": true,
   "active_descriptor_trampoline_captured": true,
-  "logger_model_requested": false,
+  "logger_model_requested": true,
   "logger_model_applied": false,
   "descriptor_trampoline_recovered": false,
   "fresh_medusa_output_verified": false,
