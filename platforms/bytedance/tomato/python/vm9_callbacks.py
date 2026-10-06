@@ -30,6 +30,16 @@ class CallbackDescriptorWrite:
 
 
 @dataclass(frozen=True)
+class DirectDescriptorBranchResult:
+    """The direct +0x2584b8 descriptor handoff result."""
+
+    descriptor_address: int
+    branch_target: int
+    object_address: int
+    branch_result: int | None
+
+
+@dataclass(frozen=True)
 class DescriptorTrampolineResult:
     """The bounded state returned by the +0x2584ac trampoline model."""
 
@@ -170,6 +180,37 @@ def publish_callback_descriptor(
     )
     transaction.commit()
     return CallbackDescriptorWrite(descriptor_address, branch_target, object_address)
+
+
+def dispatch_direct_descriptor_branch(
+    pages,
+    *,
+    descriptor_address: int,
+    branch_dispatch: Callable[[int, int], int | None] | None,
+) -> DirectDescriptorBranchResult:
+    """Model the direct ``+0x2584b8`` ``ldp/mov/br`` wrapper.
+
+    Unlike ``dispatch_descriptor_trampoline`` this entry does not call a
+    pre-dispatch function or save a second continuation. It reads the two
+    descriptor words, passes the object pointer to the explicit branch
+    callback, and commits only after that callback succeeds.
+    """
+    if not isinstance(descriptor_address, int) or descriptor_address <= 0:
+        raise RefillUnsupported("descriptor address must be a positive integer")
+    if descriptor_address & 7:
+        raise RefillUnsupported("descriptor address must be 8-byte aligned")
+    if branch_dispatch is None:
+        raise RefillUnsupported("direct descriptor branch callback is required")
+    transaction = _PageTransaction(pages)
+    branch_target = int.from_bytes(_read_span(transaction, descriptor_address, 8), "little")
+    object_address = int.from_bytes(_read_span(transaction, descriptor_address + 8, 8), "little")
+    if not branch_target or not object_address:
+        raise RefillUnsupported("direct descriptor branch requires non-null fields")
+    branch_result = branch_dispatch(branch_target, object_address)
+    transaction.commit()
+    return DirectDescriptorBranchResult(
+        descriptor_address, branch_target, object_address, branch_result,
+    )
 
 
 def dispatch_descriptor_trampoline(

@@ -2235,6 +2235,8 @@
     "packed_callback_x8_parameterized": false,
     "full_callback_chain_recovered": false,
     "fresh_medusa_output_verified": false,
-    "complete_python_medusa": false
+    "complete_python_medusa": false,
+    "all_python_direct_dispatches": true,
+    "python_component": "vm9_callbacks.dispatch_direct_descriptor_branch"
   }
 }

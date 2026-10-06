@@ -29,6 +29,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -56,6 +57,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -83,6 +85,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -110,6 +113,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -137,6 +141,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -164,6 +169,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -191,6 +197,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -218,6 +225,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -245,6 +253,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -272,6 +281,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -299,6 +309,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -326,6 +337,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -353,6 +365,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -380,6 +393,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -407,6 +421,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -434,6 +449,7 @@
       "memory_match": true,
       "descriptor_unchanged": true,
       "direct_br_x1_executed": true,
+      "python_direct_descriptor_dispatch": true,
       "normal_mutex_pair": [
         [
           "pthread_mutex_lock",
@@ -451,6 +467,7 @@
   ],
   "all_memory_matches": true,
   "all_direct_br_handoffs": true,
+  "all_python_direct_dispatches": true,
   "all_descriptor_unchanged": true,
   "pre_dispatch_trampoline_executed": false,
   "packed_callback_x8_parameterized": false,

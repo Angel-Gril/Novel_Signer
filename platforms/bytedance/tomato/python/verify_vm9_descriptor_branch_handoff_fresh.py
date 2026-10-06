@@ -18,6 +18,7 @@ from pathlib import Path
 from capstone import Cs, CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN
 from elftools.elf.elffile import ELFFile
 
+import vm9_callbacks as callbacks
 import vm9_objects as objects
 from vm9_allocator import _read_span, _write_span
 from verify_vm9_signer_objects import GUEST, LIBRARY_SHA256, fresh_pages, native
@@ -59,7 +60,17 @@ def one_case(library: Path, libc: Path, base: int, kind: str, count: int):
     model_pages = {index: bytearray(data) for index, data in pages.items()}
     model = (objects.acquire_uncontended_shared_reader if kind == "acquire"
              else objects.release_uncontended_shared_reader)
-    model_count = model(model_pages, mutex_address=object_address)
+    direct = callbacks.dispatch_direct_descriptor_branch(
+        model_pages,
+        descriptor_address=descriptor,
+        branch_dispatch=lambda target, object_value: (
+            model(model_pages, mutex_address=object_value)
+            if target == base + TARGETS[kind] else (_ for _ in ()).throw(
+                AssertionError(f"unexpected branch target {target:#x}"))),
+    )
+    assert direct.branch_target == base + TARGETS[kind]
+    assert direct.object_address == object_address
+    model_count = direct.branch_result
     actual_memory = _read_span(model_pages, GUEST, 0xA000)
     if actual_memory != expected_memory:
         first = next(i for i, (left, right) in enumerate(zip(actual_memory, expected_memory)) if left != right)
@@ -84,6 +95,7 @@ def one_case(library: Path, libc: Path, base: int, kind: str, count: int):
         "memory_match": True,
         "descriptor_unchanged": True,
         "direct_br_x1_executed": True,
+        "python_direct_descriptor_dispatch": True,
         "normal_mutex_pair": ledger,
         "allocations": 0,
         "fresh_memory": True,
@@ -113,6 +125,7 @@ def main() -> None:
         "cases": cases,
         "all_memory_matches": all(case["memory_match"] for case in cases),
         "all_direct_br_handoffs": all(case["direct_br_x1_executed"] for case in cases),
+        "all_python_direct_dispatches": all(case["python_direct_descriptor_dispatch"] for case in cases),
         "all_descriptor_unchanged": all(case["descriptor_unchanged"] for case in cases),
         "pre_dispatch_trampoline_executed": False,
         "packed_callback_x8_parameterized": False,

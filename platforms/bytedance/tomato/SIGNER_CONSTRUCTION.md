@@ -23,6 +23,13 @@ object graph publication, or the online Medusa signer.
 
 
 
+The reusable Python boundary `vm9_callbacks.dispatch_direct_descriptor_branch` now
+uses the same explicit descriptor pair and branch callback contract as this direct
+native control. It does not synthesize the packed x8 form or the longer pre-dispatch
+continuation.
+
+
+
 ## 2026-10-06: fresh writer object classified as shared-reader state
 
 The four fresh `+0x991c0` controls now retain the bytes around the object written
