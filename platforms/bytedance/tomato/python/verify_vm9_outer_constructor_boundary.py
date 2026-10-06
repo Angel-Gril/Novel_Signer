@@ -20,6 +20,7 @@ import vm9_registry as registry
 import vm9_root as root_model
 import vm9_startup as startup
 import vm9_startup_allocator as startup_model
+import vm9_logger as logger_model
 from vm9_allocator import RefillUnsupported
 from vm9_libc_boot import _w
 import verify_vm9_libc_stdio as io
@@ -39,7 +40,8 @@ def _hex(value):
 
 
 def case(library: Path, libc: Path, image: int, label: str, property_value: bytes | None,
-         vm_module, apply_logger_model=False, capture_logger_handoff=False):
+         vm_module, apply_logger_model=False, capture_logger_handoff=False,
+         apply_handoff_model=False):
     pages, _, _ = root_fixture.fresh(library, libc, image, property_value)
     environment = worker_fixture.Environment(pages, 2)
     threads: list[list[int]] = []
@@ -53,6 +55,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     allocator_events: list[list[int | str]] = []
     trampoline_calls: list[dict] = []
     logger_handoffs: list[dict] = []
+    logger_models: list[dict] = []
     python_vm_entries: list[dict] = []
 
     def create_thread(staged, output, _attr, entry, argument):
@@ -135,6 +138,23 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     def capture_logger_handoff(pages, **fields):
         logger_handoffs.append({key: _hex(value) if isinstance(value, int) else value
                                 for key, value in fields.items()})
+        if apply_handoff_model:
+            try:
+                tag = logger_model._read_cstring(pages, image + 0x3DEDB8, 0x100)
+                tag_address = logger_model.choose_tag_payload(
+                    allocation_calls, allocation_sites, free_calls,
+                    tag_length=len(tag), allocator_events=allocator_events)
+                model = logger_model.materialize_post_vm_logger(
+                    pages, vm_stack=fields['vm_stack'], image_base=image,
+                    object_address=fields['object_address'],
+                    format_object_address=image + 0x3DEDD0,
+                    tag_address=tag_address,
+                    thread_pointer=config_fixture.TLS)
+                logger_models.append(model)
+            except RefillUnsupported as exc:
+                logger_errors.append(str(exc))
+                raise
+            return
         raise RefillUnsupported('native +0x26cf08 logger handoff is not recovered')
 
     class BoundaryCallbacks(root_model.RootCallbacks):
@@ -262,6 +282,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         "decoded_outer_global_lengths": list(decoded_global_lengths),
         "descriptor_trampoline": trampoline_calls,
         "logger_handoffs": logger_handoffs,
+        "logger_models": logger_models,
         "logger_model_requested": apply_logger_model,
         "logger_model_errors": logger_errors,
         "logger_model_applied": bool(apply_logger_model and not logger_errors),

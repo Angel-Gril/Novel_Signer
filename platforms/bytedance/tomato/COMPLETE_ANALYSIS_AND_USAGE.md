@@ -17,6 +17,8 @@
 
 当前控制仍使用明确的nonreusing malloc/free与虚拟OS；真实allocator全局boot、TLS/arena/OS region贯通、外层signer/handle、fresh请求签名输出和线上新矩阵仍未完成。无JVM Rust、当前非空搜索与分页、其它平台及最终Pages/Actions产品的完成状态没有变化。
 
+2026-10-06 新增 logger 边界证据：native fresh trace 已贯通 `+0x26e9e0 → +0x271ec8 → +0x2772a4 → +0x271ddc`；Python 从同次 allocator/TLS/VM 输入生成 0x80-byte logger object、`METASEC` 标签和 fallback 格式化文本，4 组控制匹配对象字节、标签前缀、格式 payload 前缀、消息、level=6 及 sink 入参关系。该结果只关闭 logger object/formatter 输入边界，sink callback、descriptor trampoline、fresh Medusa、线上全头矩阵和最终下载产品仍未完成。详见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md) 与 `evidence/vm9_logger_model_match_20261006.json`。
+
 外层启动的最新恢复：`+0x28040c → VM +0xa7050` 的 4 个 fresh 控制完成 86 步／16 次分配／3 次 deferred worker 创建；worker TLS support 前段为16个冷／热控制，executor context 的实际 emulated-TLS 初始化另有8个冷／热对照；native-only guest 调度探针已到达 timedwait，完整 Python worker仍未通过。OP45 的第二寄存器 bit 21 和 equality 语义由 308 个 native 控制确认，共用 VM 的 root／state／parser 回归通过。worker dispatch、真实 allocator boot、fresh 请求签名和新线上矩阵仍未验证。详见 [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md)。
 
 ## 1. 完成度结论
@@ -34,7 +36,7 @@
 | Perseus | 当前时间窗内可加可不加 | 只能说明本次矩阵未发现硬依赖，不等于永久可省略 |
 | Gorgon/Ladon/Argus | 有算法/向量或矩阵证据 | 在已测阅读矩阵中可移除；不要把该结论外推到其他产品或接口 |
 | 搜索 | 当前 `7.1.3.32` 首阶段仍为空；旧 `6.8.1.32` 配置的外部 Java 服务已返回两页 | 旧服务分别返回 9/10 本书、同一 searchId；不代表当前版本搜索或独立 signer 完成 |
-| Python allocator/runtime | TLS、arena、tcache、OS region、空 bin、清理、部分 callback 和受控环境下的 fresh root factory 已独立建模 | 是 VM9 研究组件，不是完整 Medusa signer |
+| Python allocator/runtime | TLS、arena、tcache、OS region、空 bin、清理、受控 fresh root factory，以及 logger object/formatter 输入边界已独立建模 | 是 VM9 研究组件，不是完整 Medusa signer |
 | Rust | scaffold 可编译；明确返回 current Medusa unavailable | 可承载已验证纯 Rust 边界和参数模型，不能独立访问当前阅读接口 |
 | 抖音 | 仅静态/社区材料 | 没有当前版本线上签名和正文闭环 |
 | 起点 | 证据缺口 | 没有 APK、签名样本、接口矩阵或章节解密向量 |

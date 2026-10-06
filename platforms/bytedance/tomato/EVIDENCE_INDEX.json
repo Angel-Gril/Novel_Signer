@@ -1945,5 +1945,69 @@
       "The Python provider rejects at +0x26cf08 and does not invoke a guessed logger callback.",
       "No online signature, Rust download, or other-platform result is implied."
     ]
+  },
+  "vm9_native_logger_dispatch_trace_20261006": {
+    "evidence_file": "evidence/vm9_native_logger_dispatch_trace_20261006.json",
+    "schema": "vm9-native-logger-register-trace-v1",
+    "controls": 4,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
+    "native_input_snapshot_used": false,
+    "logger_entry_offset": "0x26e9e0",
+    "formatter_entry_offset": "0x271ec8",
+    "formatter_helper_offset": "0x2772a4",
+    "sink_entry_offset": "0x271ddc",
+    "logger_return_offset": "0x26cf0c",
+    "observed_tag_payload": "METASEC",
+    "observed_formatted_message": "Invalid JavaVM, fallback to test path.",
+    "sink_level": 6,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false,
+    "limitations": [
+      "The trace captures register and bounded memory-entry state; it does not prove the final sink callback body or file/socket side effects.",
+      "The 0x271ec8 formatter dispatch table remains only partially recovered."
+    ]
+  },
+  "vm9_logger_model_match_20261006": {
+    "evidence_file": "evidence/vm9_logger_model_match_20261006.json",
+    "schema": "vm9-logger-handoff-boundary-v1",
+    "controls": 4,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
+    "fresh_elf_inputs": true,
+    "native_input_snapshot_used": false,
+    "handoff_relation_match": true,
+    "logger_object_0x80_match": true,
+    "tag_payload_prefix_match": true,
+    "format_object_payload_prefix_match": true,
+    "formatted_message_match": true,
+    "sink_entry_level_match": true,
+    "sink_entry_tag_match": true,
+    "logger_object_fields_recovered": true,
+    "formatter_payload_recovered": true,
+    "logger_sink_dispatch_recovered": false,
+    "native_callback_published": false,
+    "descriptor_trampoline_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false,
+    "limitations": [
+      "The model writes only the observed object/formatter boundary and remains fail-closed for the final sink callback.",
+      "Matching object bytes and fallback text do not establish an online signer output or a complete Medusa implementation.",
+      "No Rust download, search/pagination, Douyin, Qidian or Pages/Actions result is implied."
+    ]
   }
 }

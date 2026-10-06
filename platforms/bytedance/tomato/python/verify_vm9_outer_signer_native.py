@@ -98,7 +98,7 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
                         bss_changes.append({'address': hex(address), 'pc': hex(pc - image), 'value': value.split(b'\0', 1)[0].decode('utf-8', 'backslashreplace')})
                     tracked_previous[address] = value
         offset = pc - image
-        if trace is not None and offset in (0x168324, 0x1683F0, 0x1684F0, 0x257084, 0x257308, 0x257360, 0x258488, 0x2584AC, 0x26CF08, 0x26E9E0, 0x271EC8, 0x271DDC):
+        if trace is not None and offset in (0x168324, 0x1683F0, 0x1684F0, 0x257084, 0x257308, 0x257360, 0x258488, 0x2584AC, 0x26CF08, 0x26E9E0, 0x271EC8, 0x271DDC, 0x2772A4):
             if len(trace) < 256:
                 x0 = cpu.reg_read(UC_ARM64_REG_X0)
                 x1 = cpu.reg_read(UC_ARM64_REG_X1)
@@ -120,6 +120,13 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
                 if offset in (0x26CF08, 0x26E9E0):
                     record['x0_bytes_0x80'] = safe_bytes(x0, 0x80)
                     record['x1_bytes_0x40'] = safe_bytes(x1, 0x40)
+                if offset in (0x271EC8, 0x271DDC, 0x2772A4):
+                    record['x0_bytes_0x80'] = safe_bytes(x0, 0x80)
+                    record['x1_bytes_0x80'] = safe_bytes(x1, 0x80)
+                    record['x2_bytes_0x420'] = safe_bytes(cpu.reg_read(UC_ARM64_REG_X2), 0x420)
+                    record['x3_bytes_0x100'] = safe_bytes(cpu.reg_read(UC_ARM64_REG_X3), 0x100)
+                    record['logger_global_0x40'] = safe_bytes(image + 0x382600, 0x40)
+                    record['logger_bss_0x80'] = safe_bytes(image + 0x3DF1BC, 0x80)
                 if offset in (0x168324, 0x1683F0) and x0 - image == 0x991C0:
                     record['x4'] = hex(cpu.reg_read(UC_ARM64_REG_X4))
                     sp = cpu.reg_read(UC_ARM64_REG_SP)

@@ -1,6 +1,28 @@
 # Current VM9 progress checkpoint
 
 
+## 2026-10-06: logger object and formatter payload boundary
+
+The native fresh dispatch trace was extended through `+0x271ec8`,
+`+0x2772a4` and `+0x271ddc`. At `+0x271ec8`, `x1` points to the
+heap payload `"METASEC\0"`; `x2` is the decoded fallback format object and
+`+0x271ddc` receives the formatted text `"Invalid JavaVM, fallback to test path."`
+with `x0=6`. The logger object at `vm_stack-0xAE0` has a stable 0x80-byte
+field layout across two image bases and absent/SDK 30 controls.
+
+The independent Python model now derives the tag payload from the live
+allocator event ledger, materializes the 0x80-byte logger object from the
+fresh VM stack/image/TLS inputs, and writes the bounded formatter payload.
+Four fresh controls match the native object bytes, tag prefix, format-object
+payload prefix, formatted message, level and sink-entry tag. Evidence: [native
+dispatch trace](evidence/vm9_native_logger_dispatch_trace_20261006.json) and
+[logger model match](evidence/vm9_logger_model_match_20261006.json).
+
+This closes only the logger object/formatter input boundary. The final
+`+0x271ddc` sink callback, file/socket writes, native callback publication,
+descriptor trampoline and fresh Medusa signature remain open.
+
+
 ## 2026-10-06: post-VM logger handoff boundary
 
 The native root VM returns at `+0x99f04`, then the outer path enters

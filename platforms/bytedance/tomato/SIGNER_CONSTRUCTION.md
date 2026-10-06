@@ -1,6 +1,28 @@
 # 默认配置下的 signer 构造和 callback 发布
 
 
+## 2026-10-06: logger object and formatter payload boundary
+
+The native register trace now covers `+0x26e9e0 → +0x271ec8 → +0x2772a4 → +0x271ddc`.
+The logger object at `vm_stack-0xAE0` has a stable 0x80-byte layout: its
+vtable is `image+0x34F5F8`, field `+0x10` points to the `METASEC` payload,
+and the remaining stack/image/TLS relationships are generated from the fresh
+VM stack and image base. The formatter receives the decoded fallback text and
+produces `Invalid JavaVM, fallback to test path.` before the sink entry
+(`level=6`, tag=`METASEC`).
+
+[logger model verifier](python/verify_vm9_logger_handoff.py) applies this
+model from the allocator event ledger rather than a native memory snapshot.
+Four controls match the native 0x80-byte object, tag payload prefix, format
+payload prefix, formatted message, sink level and sink tag. Evidence: [dispatch
+trace](evidence/vm9_native_logger_dispatch_trace_20261006.json) and [model
+match](evidence/vm9_logger_model_match_20261006.json).
+
+The sink callback body, logger mutex/locale dispatch, file/socket side effects,
+descriptor publication, fresh Medusa output and online header matrix are still
+explicitly false.
+
+
 ## 2026-10-06: post-VM logger handoff
 
 Native fresh controls show the root VM returning at `+0x99f04` before
@@ -10,8 +32,7 @@ image bases and absent/SDK 30, it generates the same relative object address
 (`VM stack - 0xAE0`), source/argument offsets (`+0x3DEDB8`, `+0x3DEDD0`) and
 register values (`x2=8`, `x3=3`), then fails closed. See [handoff evidence](evidence/vm9_logger_handoff_boundary_20261006.json).
 
-Logger object field reconstruction, payload ownership, formatter/sink dispatch
-and callback semantics are still unresolved.
+The bounded object and formatter-input model is now matched separately; final sink dispatch, payload ownership beyond the observed tag, and callback semantics remain unresolved.
 
 
 ## 2026-10-06: root caller spill generated from fresh constructor state
