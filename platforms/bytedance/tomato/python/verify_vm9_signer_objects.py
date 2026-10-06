@@ -87,9 +87,12 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            thread_id=None, observed_memory=None, allocation_effect=None,
            real_mutexes=False, host_imports=None, instruction_limit=10000,
            instruction_observer=None, syscall_handler=None, malloc_handler=None,
-           memory_write_observer=None, code_hook_ranges=None, real_malloc=False):
+           memory_write_observer=None, code_hook_ranges=None, real_malloc=False,
+           real_recursive_mutexes=False):
     if real_malloc and (libc is None or malloc_handler is not None or allocation_effect is not None):
         raise ValueError("real malloc requires libc and no substituted allocation provider")
+    if real_recursive_mutexes and (libc is None or not real_mutexes):
+        raise ValueError("recursive mutex oracle requires matching libc and real_mutexes")
     cpu = Uc(UC_ARCH_ARM64, UC_MODE_ARM)
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -183,7 +186,11 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             cpu.mem_write(target, bytes([fill & 255]) * width)
             result = target
         elif offset == 0x347EE0:
-            assert "pthread_mutex_init" in mutex_entries and cpu.reg_read(UC_ARM64_REG_X1) == 0
+            assert "pthread_mutex_init" in mutex_entries
+            attribute = cpu.reg_read(UC_ARM64_REG_X1)
+            if attribute:
+                if not real_recursive_mutexes or int.from_bytes(cpu.mem_read(attribute, 8), "little") != 1:
+                    raise RefillUnsupported("oracle accepts only NULL or explicit private recursive attributes")
             cpu.reg_write(UC_ARM64_REG_PC, mutex_entries["pthread_mutex_init"])
             return
         elif offset == 0x347F40:  # strlen PLT
@@ -201,7 +208,25 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             if real_mutexes:
                 target = cpu.reg_read(UC_ARM64_REG_X0)
                 state = int.from_bytes(cpu.mem_read(target, 2), "little")
-                if state & ~0x2000 != (0 if lock else 1):
+                if real_recursive_mutexes and state & 0xC000 == 0x4000:
+                    # Execute the actual matching-libc export after checking its
+                    # bounded serial branch. TLS/pthread supply the owner tid;
+                    # the explicit singleton gettid provider is not substituted.
+                    if state & 0xE000 != 0x4000 or state & 3 not in (0, 1):
+                        raise RefillUnsupported("oracle recursive mutex requires private uncontended state")
+                    thread = cpu.reg_read(UC_ARM64_REG_TPIDR_EL0)
+                    pthread = int.from_bytes(cpu.mem_read(thread + 8, 8), "little")
+                    tid = int.from_bytes(cpu.mem_read(pthread + 0x10, 4), "little")
+                    owner = int.from_bytes(cpu.mem_read(target + 4, 4), "little")
+                    if not tid:
+                        raise RefillUnsupported("oracle recursive mutex requires nonzero guest tid")
+                    if state & 3 == 0 and (state != 0x4000 or owner):
+                        raise RefillUnsupported("oracle recursive mutex ownership is inconsistent")
+                    if state & 3 == 1 and not owner:
+                        raise RefillUnsupported("oracle recursive mutex owner is missing")
+                    if lock and owner not in (0, tid):
+                        raise RefillUnsupported("oracle recursive mutex contention is unrecovered")
+                elif state & ~0x2000 != (0 if lock else 1):
                     raise RefillUnsupported("oracle supports only uncontended normal bionic mutexes")
                 name = "pthread_mutex_lock" if lock else "pthread_mutex_unlock"
                 assert name in mutex_entries

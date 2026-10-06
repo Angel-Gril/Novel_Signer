@@ -4,9 +4,34 @@
 
 两类证据分别是 [同次构造采样](evidence/vm9_signer_constructor_graph_20261003.json) 和 [新建内存对照](evidence/vm9_signer_objects_python_20261003.json)。前者说明实际桥接器走了哪条路径；后者说明哪些对象字段可以由输入生成。
 
-## 本轮接入定位（2026-10-06）
+## 当前递归 mutex 与 native 外层冷启动（2026-10-06）
 
-`+0x257578` actual root factory 已独立通过后，静态 BL 复核定位到两个直接调用点：默认外层 constructor `+0x27c930` 内的 `+0x27cbe8`，以及另一路 `+0x2a67e0`。前者设置三个 reference、flag=5 和 X8 输出，返回后通过 `+0x27cbf4 → +0x27ceac` 装配外层 root。下一步优先恢复这个默认 constructor 的输入准备、装配和后续 child／callback publication，并在同次 startup 状态下验收。第二个调用点只说明另一路复用该 factory，不构成默认路径或签名输出已通过的证据。本节是静态调用归属，尚无新的 outer constructor 组合 PASS。
+独立 actual root 的下一步 native 控制现已从 `+0x1658e4 → +0x27c930` 自然返回。此前的 **307 malloc／115 free** 停点是验证器拒绝递归 mutex 的能力边界，并非构造器错误；本轮已越过该点，旧停点不再代表当前进度。
+
+[共享 native oracle](python/verify_vm9_signer_objects.py) 增加显式 `real_recursive_mutexes=True`，要求同时提供 matching libc 和 `real_mutexes=True`。非 NULL attrs 只接收实际 `attr_init → settype(1)` 得到的私有 recursive 值 1；普通 mutex 默认边界保留。oracle 在校验已恢复的串行状态后执行真实 libc export，不把 attrs 改成 NULL、不假设 lock 成功、不过滤该 PLT hook。其他 attrs、shared/error-checking/destroyed/wait 状态、缺失 owner、foreign-owner lock 和零 tid 均明确拒绝。
+
+Python 复用 [既有 stdio mutex owner](python/vm9_libc_stdio.py)。本样本私有 recursive 状态为 `0x4000`，第一次 acquire 写 `0x4001` 和 owner；owner 从 `TPIDR_EL0+8 → pthread+0x10` 的 u32 读取。同线程递归增加状态中的 4，逐级 release 减 4，最后 release 清 owner 并恢复 `0x4000`。深度饱和返回 EAGAIN=11，错误 owner unlock 返回 EPERM=1；本轮没有恢复竞争等待、共享路径或真实 OS 原子并发。
+
+[专用差分 CLI](python/verify_vm9_recursive_mutex.py) 的 **48 native／15 拒绝检查**终态通过：两基址、跨页对象、完整 `+0x329f88` attrs 构造、NULL attrs 普通初始化、首锁／重入／释放／溢出／错误 owner，以及同次构造→两次 acquire→两次 release→再次 acquire/release 的序列。序列在每次返回后比较整个可观察 guest 对象区；TLS tid=137/271，而 singleton gettid provider 保持 137，确认 recursive owner 来自 TLS。非 NULL attrs 与不支持状态在 native export 执行前拒绝。见 [递归锁证据](evidence/vm9_recursive_mutex_native_20261006.json)。
+
+[外层 native-only CLI](python/verify_vm9_outer_signer_native.py) 的 **10 controls**终态通过：两基址×四 SDK profile，另两组改变 stack／mapping cursor／TLS canary。每组 cold getter 完成 **310 malloc PLT／115 free PLT／1 GC／3 small flush**，同次执行主启动 `+0x28040c`、root factory `+0x257578`、两 child、两 handler 和 `+0x28c268` 发布；之后再次调用实际 warm getter，复用同一 wrapper，没有新增 allocator／provider 副作用。wrapper 和配置的 count 都为 1，singleton slot／guard 发布、两类 handler vtable／callback pair、两次发布 tag 和 JNI reference 清理顺序都逐项断言。root 输入由 constructor 实际准备，flag=5；它的入口 SP 是 getter 入口 SP−`0x210`。未沿用旧私有探针的不准确 root backing 公式。见 [外层控制证据](evidence/vm9_outer_signer_native_20261006.json)。
+
+该控制仍显式提供虚拟 OS、三条 thread descriptor、JNI attach/invoke/reference 类型及删除、clock、SDK 属性和诊断 scope。descriptor 的 entry 为 `+0x326a2c`、两次 `+0x3260a4`，本控制没有执行 worker，也没有真实 OS 线程或 JVM。**这证明有界服务契约下的 native 外层控制能返回，不证明完整 Python 外层构造器、同次 Python startup／root／worker 组合或 fresh Medusa 输出已通过。** 无新的线上请求，Perseus 全头矩阵与 f13 冻结实测仍未验收。
+
+受影响回归为 **106 native／34 拒绝或 rollback 检查**：signer 组件 92/13、actual root 10/8、既有 stdio recursive 初始化 4/13，均终态通过。见 [回归摘要](evidence/vm9_recursive_mutex_regression_20261006.json)。
+
+复现命令使用调用者持有的样本路径；报告只输出静态偏移、计数、合成 fixture 标识及布尔断言，不导出 native memory、请求或设备信息：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_recursive_mutex.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output recursive-mutex-result.json
+python -B platforms/bytedance/tomato/python/verify_vm9_outer_signer_native.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output outer-signer-result.json
+```
+
+下一步独立生成外层 prefix 的 startup、registry/reference 和字符串输入；其中 `+0x256e50 → VM +0x98d50` 及回调是要接回的 caller。随后在同次生成状态下执行已恢复的 actual root、外层装配和 callback 发布，并对照 fresh 签名输出。不能把本轮 native-only 返回作为 Python 外层已经完成的证据。
+
+## 此前静态接入定位（2026-10-06）
+
+`+0x257578` actual root factory 已独立通过后，静态 BL 复核定位到两个直接调用点：默认外层 constructor `+0x27c930` 内的 `+0x27cbe8`，以及另一路 `+0x2a67e0`。前者设置三个 reference、flag=5 和 X8 输出，返回后通过 `+0x27cbf4 → +0x27ceac` 装配外层 root。下一步优先恢复这个默认 constructor 的输入准备、装配和后续 child／callback publication，并在同次 startup 状态下验收。第二个调用点只说明另一路复用该 factory，不构成默认路径或签名输出已通过的证据。本节记录此前静态调用归属；当前 native-only 外层返回见上，完整 Python outer constructor 组合仍未 PASS。
 
 ## 实际默认路径与旧结论纠正
 

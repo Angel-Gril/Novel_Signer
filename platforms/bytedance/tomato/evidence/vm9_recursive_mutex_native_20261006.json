@@ -1,0 +1,865 @@
+{
+  "schema": "vm9-recursive-mutex-native-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "case": "constructor",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": false,
+      "constructor_return_is_unspecified": true,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutexattr_init": 1,
+        "pthread_mutexattr_settype": 1,
+        "pthread_mutex_init": 1,
+        "pthread_mutexattr_destroy": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "init_attribute",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_init": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "init_null",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_init": 1
+      },
+      "final_state": "0x0",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "first_lock",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x4001",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "recursive_lock",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x4005",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "recursive_unlock",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4005",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "last_unlock",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "overflow",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x5ffd",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "wrong_owner_unlock",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4001",
+      "final_owner": 271,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "idle_unlock",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "constructor",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": false,
+      "constructor_return_is_unspecified": true,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutexattr_init": 1,
+        "pthread_mutexattr_settype": 1,
+        "pthread_mutex_init": 1,
+        "pthread_mutexattr_destroy": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "init_attribute",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_init": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "init_null",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_init": 1
+      },
+      "final_state": "0x0",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "first_lock",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x4001",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "recursive_lock",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x4005",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "recursive_unlock",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4005",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "last_unlock",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "overflow",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x5ffd",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "wrong_owner_unlock",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4001",
+      "final_owner": 271,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "idle_unlock",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "constructor",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": false,
+      "constructor_return_is_unspecified": true,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutexattr_init": 1,
+        "pthread_mutexattr_settype": 1,
+        "pthread_mutex_init": 1,
+        "pthread_mutexattr_destroy": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "init_attribute",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_init": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "init_null",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_init": 1
+      },
+      "final_state": "0x0",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "first_lock",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x4001",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "recursive_lock",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x4005",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "recursive_unlock",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4005",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "last_unlock",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "overflow",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x5ffd",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "wrong_owner_unlock",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4001",
+      "final_owner": 271,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "idle_unlock",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "constructor",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": false,
+      "constructor_return_is_unspecified": true,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutexattr_init": 1,
+        "pthread_mutexattr_settype": 1,
+        "pthread_mutex_init": 1,
+        "pthread_mutexattr_destroy": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "init_attribute",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_init": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "init_null",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_init": 1
+      },
+      "final_state": "0x0",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "first_lock",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x4001",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "recursive_lock",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x4005",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "recursive_unlock",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4005",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "last_unlock",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "overflow",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_lock": 1
+      },
+      "final_state": "0x5ffd",
+      "final_owner": 137,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "wrong_owner_unlock",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4001",
+      "final_owner": 271,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "idle_unlock",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "defined_return_matches": true,
+      "constructor_return_is_unspecified": false,
+      "mutex_and_surrounding_guest_bytes_match": true,
+      "actual_export_counts": {
+        "pthread_mutex_unlock": 1
+      },
+      "final_state": "0x4000",
+      "final_owner": 0,
+      "explicit_tls_thread_id": 137,
+      "normal_default_oracle_boundary_preserved": true
+    },
+    {
+      "case": "same_run_constructor_recursive_acquire_release_reacquire",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "explicit_tls_thread_id": 137,
+      "singleton_gettid_provider": 137,
+      "states": [
+        "0x4000",
+        "0x4001",
+        "0x4005",
+        "0x4001",
+        "0x4000",
+        "0x4001",
+        "0x4000"
+      ],
+      "guest_bytes_match_at_every_return": true,
+      "same_run_sequence_returns": 7,
+      "final_owner_cleared": true,
+      "no_native_state_seeds_python": true
+    },
+    {
+      "case": "same_run_constructor_recursive_acquire_release_reacquire",
+      "image_base": "0x122c0000",
+      "cross_page": false,
+      "explicit_tls_thread_id": 271,
+      "singleton_gettid_provider": 137,
+      "states": [
+        "0x4000",
+        "0x4001",
+        "0x4005",
+        "0x4001",
+        "0x4000",
+        "0x4001",
+        "0x4000"
+      ],
+      "guest_bytes_match_at_every_return": true,
+      "same_run_sequence_returns": 7,
+      "final_owner_cleared": true,
+      "no_native_state_seeds_python": true
+    },
+    {
+      "case": "same_run_constructor_recursive_acquire_release_reacquire",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "explicit_tls_thread_id": 137,
+      "singleton_gettid_provider": 137,
+      "states": [
+        "0x4000",
+        "0x4001",
+        "0x4005",
+        "0x4001",
+        "0x4000",
+        "0x4001",
+        "0x4000"
+      ],
+      "guest_bytes_match_at_every_return": true,
+      "same_run_sequence_returns": 7,
+      "final_owner_cleared": true,
+      "no_native_state_seeds_python": true
+    },
+    {
+      "case": "same_run_constructor_recursive_acquire_release_reacquire",
+      "image_base": "0x122c0000",
+      "cross_page": true,
+      "explicit_tls_thread_id": 271,
+      "singleton_gettid_provider": 137,
+      "states": [
+        "0x4000",
+        "0x4001",
+        "0x4005",
+        "0x4001",
+        "0x4000",
+        "0x4001",
+        "0x4000"
+      ],
+      "guest_bytes_match_at_every_return": true,
+      "same_run_sequence_returns": 7,
+      "final_owner_cleared": true,
+      "no_native_state_seeds_python": true
+    },
+    {
+      "case": "same_run_constructor_recursive_acquire_release_reacquire",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "explicit_tls_thread_id": 137,
+      "singleton_gettid_provider": 137,
+      "states": [
+        "0x4000",
+        "0x4001",
+        "0x4005",
+        "0x4001",
+        "0x4000",
+        "0x4001",
+        "0x4000"
+      ],
+      "guest_bytes_match_at_every_return": true,
+      "same_run_sequence_returns": 7,
+      "final_owner_cleared": true,
+      "no_native_state_seeds_python": true
+    },
+    {
+      "case": "same_run_constructor_recursive_acquire_release_reacquire",
+      "image_base": "0x775c205000",
+      "cross_page": false,
+      "explicit_tls_thread_id": 271,
+      "singleton_gettid_provider": 137,
+      "states": [
+        "0x4000",
+        "0x4001",
+        "0x4005",
+        "0x4001",
+        "0x4000",
+        "0x4001",
+        "0x4000"
+      ],
+      "guest_bytes_match_at_every_return": true,
+      "same_run_sequence_returns": 7,
+      "final_owner_cleared": true,
+      "no_native_state_seeds_python": true
+    },
+    {
+      "case": "same_run_constructor_recursive_acquire_release_reacquire",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "explicit_tls_thread_id": 137,
+      "singleton_gettid_provider": 137,
+      "states": [
+        "0x4000",
+        "0x4001",
+        "0x4005",
+        "0x4001",
+        "0x4000",
+        "0x4001",
+        "0x4000"
+      ],
+      "guest_bytes_match_at_every_return": true,
+      "same_run_sequence_returns": 7,
+      "final_owner_cleared": true,
+      "no_native_state_seeds_python": true
+    },
+    {
+      "case": "same_run_constructor_recursive_acquire_release_reacquire",
+      "image_base": "0x775c205000",
+      "cross_page": true,
+      "explicit_tls_thread_id": 271,
+      "singleton_gettid_provider": 137,
+      "states": [
+        "0x4000",
+        "0x4001",
+        "0x4005",
+        "0x4001",
+        "0x4000",
+        "0x4001",
+        "0x4000"
+      ],
+      "guest_bytes_match_at_every_return": true,
+      "same_run_sequence_returns": 7,
+      "final_owner_cleared": true,
+      "no_native_state_seeds_python": true
+    }
+  ],
+  "rejection_cases": [
+    {
+      "case": "recursive_opt_in_missing",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "recursive_attribute_opt_in_missing",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "unknown_attribute",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "shared_attribute",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "errorcheck_attribute",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "shared_state",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "errorcheck_state",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "destroyed_state",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "contended_state",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "foreign_owner_lock",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "missing_owner",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "inconsistent_idle_owner",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "zero_tid",
+      "rejected_before_native_export": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "recursive_requires_libc",
+      "rejected_at_preflight": true,
+      "input_pages_unchanged": true
+    },
+    {
+      "case": "recursive_requires_real_mutexes",
+      "rejected_at_preflight": true,
+      "input_pages_unchanged": true
+    }
+  ],
+  "native_controls": 48,
+  "rejection_checks": 15,
+  "private_serial_recursive_transitions_verified": true,
+  "native_constructor_attribute_sequence_verified": true,
+  "native_input_snapshot_used": false,
+  "host_threads_or_jvm_used": false,
+  "shared_or_waiting_paths_restored": false,
+  "full_python_outer_constructor_verified": false,
+  "standalone_medusa_complete": false
+}

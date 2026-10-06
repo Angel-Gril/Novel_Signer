@@ -3,7 +3,45 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Current small-GC and actual-root checkpoint (2026-10-06)
+## Current recursive mutex and native outer-signer control (2026-10-06)
+
+The actual-libc oracle now has an explicit private recursive-mutex opt-in.
+It validates NULL or attr=1 initialization and serial TLS owner/depth branches
+before executing the actual matching-libc exports. The ordinary default stays
+closed to recursive/shared/error-checking/destroyed/wait states. Existing Python
+stdio mutex semantics are reused: **48 native controls / 15 rejection checks**
+pass across both bases, cross-page layouts, overflow/wrong-owner outcomes and
+same-run construction/acquire/recursive-release/reacquire with two TLS tids.
+[Mutex evidence](evidence/vm9_recursive_mutex_native_20261006.json).
+
+The previous native-only outer frontier at 307 mallocs / 115 frees was the
+oracle rejecting this mutex, not a constructor failure. The reproducible
+[fresh outer control](python/verify_vm9_outer_signer_native.py) now naturally
+returns from +0x1658e4 -> +0x27c930 for **10 controls**: two bases times four
+SDK profiles plus altered stack/mapping/canary inputs. Each executes 310
+actual malloc PLTs, 115 free PLTs, one small GC and three small flushes.
+Same-run main startup, actual root, both children/handlers, root slot/guard,
+count=1, callback pairs and ordered two-tag publication/JNI cleanup are
+asserted. A second actual warm getter reuses the wrapper with no new
+allocator/provider effects. The root caller SP is getter SP-0x210; no guessed
+native backing formula or captured root input seeds a Python comparison.
+[Outer evidence](evidence/vm9_outer_signer_native_20261006.json).
+
+Virtual OS, clock/properties, three unexecuted pthread descriptors, diagnostic
+scope exclusions and JNI services remain explicit. This is **native-only
+outer completion under bounded providers**, not independent Python outer
+construction, same-startup Python worker/root composition, real host threads,
+fresh Medusa output, online full-header matrix or f13 freeze confirmation.
+The next Python prefix includes +0x256e50 -> VM +0x98d50 before actual root;
+restore that caller and callbacks, then compose outer assembly/publication.
+Affected regressions terminate with **106 native / 34 rejection or rollback
+checks** (signer components, actual root and old recursive initialization).
+[Regression summary](evidence/vm9_recursive_mutex_regression_20261006.json).
+Rust, nonempty search/pagination, Douyin/Qidian and final Pages/Actions products
+remain incomplete. See [signer report](SIGNER_CONSTRUCTION.md) for reproduction
+and evidence limits.
+
+## Previous small-GC and actual-root checkpoint (2026-10-06)
 
 Small-cursor GC +0x9833c is restored by the shared matching-libc exit/cache
 owner: **28 native controls / 8 rollback checks** pass. Positive low water
