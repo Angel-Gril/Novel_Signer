@@ -295,7 +295,7 @@ def construct_default_outer(
         errno_address=errno_address, mkdir=mkdir,
         register_destructor=register_destructor, thread_id=thread_id,
         prepare_format=prepare_format, prefix_stack_effect=prefix_stack_effect,
-        logger_callback=logger_callback)
+        logger_callback=logger_callback, outer_root_address=outer_root_address)
     events.append(NATIVE_ORDER[10])
 
     for reference in (initializer_reference_copy, second_reference_copy,

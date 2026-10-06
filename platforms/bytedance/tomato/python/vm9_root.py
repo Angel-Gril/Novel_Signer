@@ -185,6 +185,40 @@ def construct_initialized_root(pages, *, object_address, initial_reference_addre
     _write_span(staged,entry_stack_address-0x108,_read_span(staged,thread_pointer+0x28,8))
     if prefix_stack_effect is not None:
         prefix_stack_effect(staged,entry_stack_address)
+
+    # +0x257084/+0x257308 leave a fresh caller spill immediately below the
+    # VM stack.  The generic +0x168324 prelude only clears R0; the remaining
+    # slots are values produced by this constructor (root fields, the outer
+    # object and the caller frame), so they must be generated before the VM
+    # entry rather than copied from a native snapshot.  This seed is enabled
+    # only for the composed outer path, where the outer object address is
+    # available; the standalone root prefix tests retain their older explicit
+    # boundary.
+    outer_for_backing = environment.pop('outer_root_address', None)
+    if outer_for_backing is not None:
+        caller_entry = entry_stack_address - 0x80
+        vm_stack = caller_entry - 0x5A0
+        backing = vm_stack + 0x458
+        guest_base = environment.get('guest_base', 0x70000000)
+        root_field_b0 = int.from_bytes(_read_span(staged, object_address + 0xB0, 8), 'little')
+        root_field_70 = int.from_bytes(_read_span(staged, object_address + 0x70, 8), 'little')
+        root_field_08 = int.from_bytes(_read_span(staged, object_address + 8, 8), 'little')
+        seed = (
+            0, 0x98, entry_stack_address + 8, flag,
+            vm_stack, image_base + 0x35B6A0, image_base + 0x35B740,
+            image_base + 0x258520, root_field_70, guest_base + 0xA000,
+            outer_for_backing, entry_stack_address + 0x160, object_address,
+            root_field_08, guest_base + 0xA000,
+        )
+        for index, value in enumerate(seed):
+            _word(staged, backing + index * 8, value)
+        # These three aliases are written by the same caller frame and are
+        # distinct from the later object fields above.
+        _word(staged, backing + 25 * 8, entry_stack_address - 0xF0)
+        _word(staged, backing + 27 * 8, entry_stack_address - 0xB0)
+        _word(staged, backing + 29 * 8, entry_stack_address - 0x1E0)
+        _word(staged, backing + 31 * 8, image_base + 0x257250)
+
     temporary=entry_stack_address-0x78
     objects.copy_reference_wrapper(staged,object_address=temporary,source_address=initializer_reference_address)
     _write_span(staged,entry_stack_address-0x68,_read_span(staged,thread_pointer+0x28,8))

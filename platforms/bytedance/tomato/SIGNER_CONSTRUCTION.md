@@ -1,6 +1,20 @@
 # 默认配置下的 signer 构造和 callback 发布
 
 
+## 2026-10-06: root caller spill generated from fresh constructor state
+
+The generic VM prelude backing window is now generated from the current
+constructor state. The Python path writes the root flag, root field pointers,
+outer object address, VM callback arguments, stack aliases and return address
+before entering `+0x991c0`. Native fresh controls were observed at
+`+0x1684f0` after the same prelude. Four controls (two image bases × absent/SDK
+30) matched all 32 backing words. See [prelude evidence](evidence/vm9_root_prelude_backing_match_20261006.json).
+
+The backing match is a boundary result. The Python run still stops before the
+native logger/callback handoff; it does not establish a complete VM, fresh
+Medusa output, online signer, or Rust download implementation.
+
+
 ## 2026-10-06: fresh state-write boundary
 
 One fresh native outer getter control (image base `0x122c0000`, absent

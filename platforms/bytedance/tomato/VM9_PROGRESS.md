@@ -1,6 +1,22 @@
 # Current VM9 progress checkpoint
 
 
+## 2026-10-06: fresh root caller spill aligned at the generic VM prelude
+
+The native path `+0x257084 → +0x257308 → +0x168324 → +0x1684f0` was
+traced at the point where the generic prelude has finished writing the VM
+backing window. The Python outer path now derives that window from the current
+root object, outer object, entry stack, ELF addresses and guest base; it never
+reads a native memory snapshot. Across two image bases and absent/SDK 30
+controls, all 32 backing words matched the same fresh native controls with no
+mismatch indices. Evidence: [root prelude backing match](evidence/vm9_root_prelude_backing_match_20261006.json).
+
+This closes only the caller-spill/prelude divergence. The Python control still
+does not reach the native logger/callback handoff in this run, so logger
+semantics, descriptor publication, fresh Medusa output and the online header
+matrix remain open.
+
+
 ## 2026-10-06: logger/state write boundary from a fresh outer getter
 
 A fresh native outer getter control at image base `0x122c0000` with the absent

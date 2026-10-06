@@ -1862,5 +1862,43 @@
       "The raw native trace and process memory are omitted.",
       "No online signature or Rust download result is implied."
     ]
+  },
+  "vm9_root_prelude_backing_match_20261006": {
+    "evidence_file": "evidence/vm9_root_prelude_backing_match_20261006.json",
+    "schema": "vm9-root-prelude-backing-match-v1",
+    "controls": 4,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
+    "fresh_elf_inputs": true,
+    "native_input_snapshot_used": false,
+    "native_prelude_path": [
+      "0x257084",
+      "0x257308",
+      "0x168324",
+      "0x1684f0"
+    ],
+    "python_seed_path": [
+      "construct_initialized_root",
+      "construct_root_caller",
+      "0x991c0"
+    ],
+    "all_controls_32_word_match": true,
+    "caller_spill_generated_from_current_objects": true,
+    "python_logger_callback_semantics_complete": false,
+    "descriptor_trampoline_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false,
+    "limitations": [
+      "This proves only the 32-slot caller spill at the generic VM prelude boundary.",
+      "The Python run still stops before the native logger/callback handoff; exact spill does not prove VM semantics or signer output.",
+      "No native memory snapshot is copied into Python and no online signature or Rust result is implied."
+    ]
   }
 }

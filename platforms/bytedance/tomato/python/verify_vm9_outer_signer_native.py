@@ -14,7 +14,7 @@ from pathlib import Path
 from capstone import Cs, CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN
 from elftools.elf.elffile import ELFFile
 from unicorn.arm64_const import (
-    UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X8,
+    UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X8, UC_ARM64_REG_X16, UC_ARM64_REG_X28,
     UC_ARM64_REG_X30, UC_ARM64_REG_X29, UC_ARM64_REG_SP, UC_ARM64_REG_PC, UC_ARM64_REG_TPIDR_EL0,
 )
 import vm9_allocator as a
@@ -72,7 +72,7 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
     if mapping_address is not None: environment.os.next_address = mapping_address
     observed = io.observed_spans()
     counts = Counter(); entries = Counter(); root_inputs = {}; pending = []; allocation_sequence = []; allocation_unwind = []; string_allocations = []; bss_writes = []; bss_changes = []; free_sequence = []; allocator_events = []
-    state = {'mapped': False, 'booted': False, 'returned': False, 'last_pc': 0}
+    state = {'mapped': False, 'booted': False, 'returned': False, 'last_pc': 0, 'root_prelude_pending': False}
     virtual_threads = []; services = Counter(); returned_graph = {}
 
     def u(cpu, address, width=8): return int.from_bytes(cpu.mem_read(address, width), 'little')
@@ -98,7 +98,7 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
                         bss_changes.append({'address': hex(address), 'pc': hex(pc - image), 'value': value.split(b'\0', 1)[0].decode('utf-8', 'backslashreplace')})
                     tracked_previous[address] = value
         offset = pc - image
-        if trace is not None and offset in (0x168324, 0x1683F0, 0x257084, 0x257308, 0x257360, 0x258488, 0x2584AC, 0x26CF08, 0x26E9E0, 0x271EC8, 0x271DDC):
+        if trace is not None and offset in (0x168324, 0x1683F0, 0x1684F0, 0x257084, 0x257308, 0x257360, 0x258488, 0x2584AC, 0x26CF08, 0x26E9E0, 0x271EC8, 0x271DDC):
             if len(trace) < 256:
                 x0 = cpu.reg_read(UC_ARM64_REG_X0)
                 x1 = cpu.reg_read(UC_ARM64_REG_X1)
@@ -132,6 +132,15 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
                             cpu.mem_read(backing + i * 8, 8), 'little')) for i in range(32)]
                     except Exception:
                         record['register_backing_words'] = None
+                if offset == 0x168324 and x0 - image == 0x991C0:
+                    state['root_prelude_pending'] = True
+                if offset == 0x1684F0 and state.get('root_prelude_pending'):
+                    backing = cpu.reg_read(UC_ARM64_REG_X28)
+                    record['backing_address'] = hex(backing)
+                    record['virtual_stack'] = hex(cpu.reg_read(UC_ARM64_REG_X16))
+                    record['register_backing_words_after_prelude'] = [hex(int.from_bytes(
+                        cpu.mem_read(backing + i * 8, 8), 'little')) for i in range(32)]
+                    state['root_prelude_pending'] = False
                 if offset in (0x257308, 0x257360):
                     sp = cpu.reg_read(UC_ARM64_REG_SP)
                     record['caller_stack_bytes_0x900'] = safe_bytes(sp - 0x200, 0x900)

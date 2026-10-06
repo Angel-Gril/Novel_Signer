@@ -1,0 +1,99 @@
+{
+  "schema": "vm9-root-prelude-backing-match-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "controls": 4,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "absent",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_prelude_offset": "0x1684f0",
+      "python_vm_entry_offset": "0x991c0",
+      "native_word_count": 32,
+      "python_word_count": 32,
+      "mismatch_indices": [],
+      "all_32_backing_words_match": true,
+      "backing_span_sha256": "5a3e135c6835306122f212c55e59efbd3d7ede3af68565037399c500a83c3d8c",
+      "python_logger_callback_reached": false,
+      "python_descriptor_trampoline_reached": false,
+      "native_outer_getter_returned": true,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "sdk_30",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_prelude_offset": "0x1684f0",
+      "python_vm_entry_offset": "0x991c0",
+      "native_word_count": 32,
+      "python_word_count": 32,
+      "mismatch_indices": [],
+      "all_32_backing_words_match": true,
+      "backing_span_sha256": "5a3e135c6835306122f212c55e59efbd3d7ede3af68565037399c500a83c3d8c",
+      "python_logger_callback_reached": false,
+      "python_descriptor_trampoline_reached": false,
+      "native_outer_getter_returned": true,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "absent",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_prelude_offset": "0x1684f0",
+      "python_vm_entry_offset": "0x991c0",
+      "native_word_count": 32,
+      "python_word_count": 32,
+      "mismatch_indices": [],
+      "all_32_backing_words_match": true,
+      "backing_span_sha256": "4ff618e9903f98415ad7a2fcb57b1fa4ade28d77bd0283bc62a9eee3456eb938",
+      "python_logger_callback_reached": false,
+      "python_descriptor_trampoline_reached": false,
+      "native_outer_getter_returned": true,
+      "fresh_medusa_output_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "sdk_30",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_prelude_offset": "0x1684f0",
+      "python_vm_entry_offset": "0x991c0",
+      "native_word_count": 32,
+      "python_word_count": 32,
+      "mismatch_indices": [],
+      "all_32_backing_words_match": true,
+      "backing_span_sha256": "4ff618e9903f98415ad7a2fcb57b1fa4ade28d77bd0283bc62a9eee3456eb938",
+      "python_logger_callback_reached": false,
+      "python_descriptor_trampoline_reached": false,
+      "native_outer_getter_returned": true,
+      "fresh_medusa_output_verified": false
+    }
+  ],
+  "native_prelude_path": [
+    "0x257084",
+    "0x257308",
+    "0x168324",
+    "0x1684f0"
+  ],
+  "python_seed_path": [
+    "construct_initialized_root",
+    "construct_root_caller",
+    "0x991c0"
+  ],
+  "native_input_snapshot_used": false,
+  "caller_spill_generated_from_current_objects": true,
+  "all_controls_32_word_match": true,
+  "python_logger_callback_semantics_complete": false,
+  "descriptor_trampoline_recovered": false,
+  "fresh_medusa_output_verified": false,
+  "complete_python_medusa": false,
+  "limitations": [
+    "This proves only the 32-slot caller spill at the generic VM prelude boundary.",
+    "The Python run still stops before the native logger/callback handoff; exact spill does not prove VM semantics or a signer output.",
+    "No native memory snapshot is copied into Python and no online signature or Rust result is implied."
+  ]
+}
