@@ -1,4 +1,7 @@
 
+The reusable Python API now exposes these as separate boundaries: `dispatch_packed_callback_consumer` takes an explicit packed word and preserves it as callback `x8`; `dispatch_callback_result_writer` writes only the low 32 bits of the explicit callback result. Neither function constructs a packed word or claims a current signer.
+
+
 ## 2026-10-06: callback result writeback
 
 The [result-writer evidence](evidence/vm9_callback_result_writer_native_fresh_20261006.json) executes `+0x28863c` for twelve fresh objects. It verifies target dispatch with object `x0`, the `w0` writeback at object `+0x08`, and caller `x19/x30/sp` restoration. The upstream object writer and packed-x8 composition remain unsupported.

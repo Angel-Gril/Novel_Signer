@@ -1,5 +1,12 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-06: callback consumer APIs kept explicit
+
+`vm9_callbacks.py` 现在提供 `dispatch_packed_callback_consumer` 和 `dispatch_callback_result_writer`。前者只读取并传递 `target/packed_x8/x0/x1` 四个显式字段；后者只执行 `target` 读取、callback `x0=object` 和 `object+0x08` 低 32 位写回。两者都拒绝空 target、未提供 callback 或越界输入。
+
+这使 Python 使用方可以引用已经由 native differential 证明的 ABI，而不会把 packed x8 的未知上游组合或当前对象图隐藏在常量中。
+
+
 ## 2026-10-06: callback result writer fresh differential
 
 补充 [result-writer evidence](evidence/vm9_callback_result_writer_native_fresh_20261006.json)：`+0x28863c` 的原始 native bytes 在 12 组 fresh object 控制中执行通过。它从 object `+0x00` 取目标、以 object 作为 callback `x0`，把 callback `w0` 写回 object `+0x08`，再恢复保存的 `x19/x30` 和 `sp`。

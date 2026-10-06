@@ -39,7 +39,10 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 #
 #
 #
-### Callback result writeback
+#
+The public callback model keeps these boundaries explicit through `vm9_callbacks.dispatch_packed_callback_consumer` and `dispatch_callback_result_writer`. A caller must provide the packed word and callback body; missing or invalid inputs fail closed. This is how the native evidence can be reused without turning a captured value into a false parameterization claim.
+
+## Callback result writeback
 
 `python/verify_vm9_callback_result_writer_native_fresh_20261006.py` executes the exact `+0x28863c` result writer on fresh objects. Reviewers can use its evidence to verify that the callback receives the object pointer and that only the low 32 bits of `w0` are written back at `+0x08`, with the saved caller registers restored. It remains a consumer/result boundary; it does not provide the upstream packed x8 composition or a current Medusa signer.
 

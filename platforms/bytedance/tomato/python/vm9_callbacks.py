@@ -52,6 +52,28 @@ class DescriptorTrampolineResult:
 
 
 @dataclass(frozen=True)
+class PackedCallbackConsumerResult:
+    """Inputs observed by the +0x2887f0 packed callback consumer."""
+
+    object_address: int
+    branch_target: int
+    packed_x8: int
+    argument_x0: int
+    argument_x1: int
+    callback_result: int | None
+
+
+@dataclass(frozen=True)
+class CallbackResultWriterResult:
+    """Result state written by the +0x28863c callback wrapper."""
+
+    object_address: int
+    branch_target: int
+    callback_result: int
+    stored_low_word: int
+
+
+@dataclass(frozen=True)
 class ABSwitchGateResult:
     global_address: int
     ab_switch: int
@@ -255,6 +277,71 @@ def dispatch_descriptor_trampoline(
     return DescriptorTrampolineResult(
         descriptor_address, initial_target, initial_object,
         final_target, final_object, branch_result,
+    )
+
+
+def dispatch_packed_callback_consumer(
+    pages,
+    *,
+    object_address: int,
+    invoke: Callable[[int, int, int, int], int | None] | None,
+) -> PackedCallbackConsumerResult:
+    """Model the verified +0x2887f0 consumer ABI.
+
+    The four object words are explicit inputs: target, packed ``x8``, callback
+    ``x0`` and callback ``x1``.  ``invoke`` receives them in that order after
+    the target and arguments are read.  This function deliberately does not
+    construct packed x8; callers must provide the captured/derived value and
+    the composition boundary remains unsupported.
+    """
+    if not isinstance(object_address, int) or object_address <= 0 or object_address & 7:
+        raise RefillUnsupported("packed callback object address must be a positive 8-byte-aligned integer")
+    if invoke is None:
+        raise RefillUnsupported("packed callback consumer invoke callback is required")
+    transaction = _PageTransaction(pages)
+    raw = _read_span(transaction, object_address, 0x20)
+    branch_target = int.from_bytes(raw[0:8], "little")
+    packed_x8 = int.from_bytes(raw[8:16], "little")
+    argument_x0 = int.from_bytes(raw[16:24], "little")
+    argument_x1 = int.from_bytes(raw[24:32], "little")
+    if not branch_target:
+        raise RefillUnsupported("packed callback consumer requires a non-null target")
+    callback_result = invoke(branch_target, packed_x8, argument_x0, argument_x1)
+    transaction.commit()
+    return PackedCallbackConsumerResult(
+        object_address, branch_target, packed_x8, argument_x0, argument_x1, callback_result,
+    )
+
+
+def dispatch_callback_result_writer(
+    pages,
+    *,
+    object_address: int,
+    invoke: Callable[[int], int] | None,
+) -> CallbackResultWriterResult:
+    """Model the verified +0x28863c object result writeback.
+
+    The target is read from object+0, the callback receives the object address
+    as ``x0``, and only the low 32 bits of its result are stored at object+8.
+    The callback body and upstream object writer remain explicit caller inputs.
+    """
+    if not isinstance(object_address, int) or object_address <= 0 or object_address & 7:
+        raise RefillUnsupported("callback result object address must be a positive 8-byte-aligned integer")
+    if invoke is None:
+        raise RefillUnsupported("callback result writer invoke callback is required")
+    transaction = _PageTransaction(pages)
+    raw = _read_span(transaction, object_address, 0x10)
+    branch_target = int.from_bytes(raw[0:8], "little")
+    if not branch_target:
+        raise RefillUnsupported("callback result writer requires a non-null target")
+    callback_result = int(invoke(object_address))
+    if not 0 <= callback_result <= 0xFFFF_FFFF_FFFF_FFFF:
+        raise RefillUnsupported("callback result is outside the native integer ABI")
+    stored_low_word = callback_result & 0xFFFF_FFFF
+    _write_span(transaction, object_address + 8, stored_low_word.to_bytes(4, "little"))
+    transaction.commit()
+    return CallbackResultWriterResult(
+        object_address, branch_target, callback_result, stored_low_word,
     )
 
 
