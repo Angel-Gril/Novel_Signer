@@ -1,8 +1,9 @@
 """Same fresh main startup -> default worker with actual malloc and argument free.
 
 OS services and serial thread selection are explicit. No native snapshot seeds
-Python. Normal return retains TLS support/TSD; optional key cleanup is checked
-from the same fresh state. Full OS thread exit remains a separate frontier.
+Python. Normal return retains TLS support/TSD; optional key cleanup or the
+joinable guest pthread-exit branch is compared from that same fresh state.
+Actual detached composition and host OS thread exit remain separate boundaries.
 """
 from __future__ import annotations
 from pathlib import Path
@@ -17,7 +18,8 @@ from unicorn.arm64_const import (UC_ARM64_REG_X0,UC_ARM64_REG_X1,UC_ARM64_REG_X2
     UC_ARM64_REG_PC,UC_ARM64_REG_SP,UC_ARM64_REG_TPIDR_EL0)
 
 
-def case(LIBRARY,LIBC,IMAGE,vm_module, *, tls_exit=False):
+def case(LIBRARY,LIBC,IMAGE,vm_module, *, tls_exit=False, pthread_exit=False):
+    tls_exit=tls_exit or pthread_exit
     p=h.fresh(LIBRARY,LIBC,IMAGE)
     WSTACK=io.GUEST+0x60000;WTOP=WSTACK+0xF000;WTLS=h.WORKERS[0]
     for address in range(WSTACK,WSTACK+0x10000,4096):p[address>>12]=bytearray(4096)
@@ -43,6 +45,14 @@ def case(LIBRARY,LIBC,IMAGE,vm_module, *, tls_exit=False):
      def effect(cpu):cpu.reg_write(UC_ARM64_REG_PC,exports[name])
      return effect
     def syscall(cpu,num):
+     if pthread_exit and num==233:
+      address,length,advice=[cpu.reg_read(UC_ARM64_REG_X0+i) for i in range(3)]
+      assert address%4096==0 and length>0 and length%4096==0 and advice==4
+      assert any(record.base<=address and address+length<=record.end for record in ne.os.mappings)
+      ne.calls.append(['madvise',address,length,advice]);return 0
+     if pthread_exit and num==93:
+      assert cpu.reg_read(UC_ARM64_REG_X0)==0
+      native_side.append(['exit',0]);cpu.reg_write(UC_ARM64_REG_PC,oracle.STOP);return 0
      if num==113:
       native_side.append(['clock',cpu.reg_read(UC_ARM64_REG_X0),1000,1234]);cpu.mem_write(cpu.reg_read(UC_ARM64_REG_X1),(1000).to_bytes(8,'little')+(1234).to_bytes(8,'little'));return 0
      if num==98:
@@ -57,7 +67,8 @@ def case(LIBRARY,LIBC,IMAGE,vm_module, *, tls_exit=False):
      if tls_exit and pc==oracle.STOP+8:
       normal_expected.update({span:bytes(cpu.mem_read(*span)) for span in observed})
       exit_started[0]=True
-      cpu.reg_write(UC_ARM64_REG_PC,io.LIBC+0x685a0)
+      if pthread_exit:cpu.reg_write(UC_ARM64_REG_X0,9)
+      cpu.reg_write(UC_ARM64_REG_PC,io.LIBC+(0x68138 if pthread_exit else 0x685a0))
       cpu.reg_write(UC_ARM64_REG_X30,oracle.STOP)
      if tls_exit and pc==io.LIBC+0x68640:
       exit_calls.append([cpu.reg_read(UC_ARM64_REG_X0+23),cpu.reg_read(UC_ARM64_REG_X0+19),cpu.reg_read(UC_ARM64_REG_X0+5),cpu.reg_read(UC_ARM64_REG_X0)])
@@ -137,7 +148,7 @@ def case(LIBRARY,LIBC,IMAGE,vm_module, *, tls_exit=False):
      for (address,width),data in normal_expected.items():
       assert a._read_span(p,address,width)==data,('normal worker before exit',hex(address))
      import vm9_libc_exit as exit_model
-     original_cleanup=a.pthread_key_clean_all;compared=[0]
+     original_cleanup=a.pthread_key_clean_all;compared=[0];checked_exit_calls=[]
      def check_cleanup(pages,*,thread_pointer,generation_table,invoke):
       def check_callback(staged,destructor,value):
        invoke(staged,destructor,value)
@@ -146,14 +157,27 @@ def case(LIBRARY,LIBC,IMAGE,vm_module, *, tls_exit=False):
         assert a._read_span(staged,address,width)==data,('TLS callback spans',compared[0],hex(address))
        compared[0]+=1
        print('PYTHON_TLS_CALLBACK_MATCH',compared[0],flush=True)
-      return original_cleanup(pages,thread_pointer=thread_pointer,
+      calls=original_cleanup(pages,thread_pointer=thread_pointer,
        generation_table=generation_table,invoke=check_callback)
+      checked_exit_calls.extend(calls);return calls
      a.pthread_key_clean_all=check_cleanup
      try:
-      exits=exit_model.cleanup_worker_thread_keys(me.os,image_base=IMAGE,thread_pointer=WTLS,
-       libc_base=io.LIBC,scratch_address=h.SCRATCH,os_call=me.service)
+      if pthread_exit:
+       def full_os(staged,operation,*fields):
+        if operation=='madvise':
+         assert fields[0]%4096==0 and fields[1]>0 and fields[1]%4096==0 and fields[2]==4
+         assert any(record.base<=fields[0] and fields[0]+fields[1]<=record.end for record in me.os.mappings)
+         me.calls.append([operation,*fields]);return 0
+        if operation=='exit':model_side.append(['exit',*fields]);return 0
+        return me.service(staged,operation,*fields)
+       outcome=exit_model.run_worker_pthread_exit(me.os,image_base=IMAGE,thread_pointer=WTLS,
+        libc_base=io.LIBC,return_value=9,scratch_address=h.SCRATCH,os_call=full_os,once_wake=wake)
+       exits=checked_exit_calls
+      else:
+       exits=exit_model.cleanup_worker_thread_keys(me.os,image_base=IMAGE,thread_pointer=WTLS,
+        libc_base=io.LIBC,scratch_address=h.SCRATCH,os_call=me.service)
      finally:a.pthread_key_clean_all=original_cleanup
-     assert compared[0]==len(exit_stages)==4
+     assert compared[0]==len(exit_stages)==(5 if pthread_exit else 4)
      expected_calls=[(4-pass_left,(entry-io.TABLE)//16-1,destructor,value) for pass_left,entry,destructor,value in exit_calls]
      assert list(exits)==expected_calls,('actual key callbacks',list(exits),expected_calls)
     mismatch=[]
@@ -185,8 +209,18 @@ def case(LIBRARY,LIBC,IMAGE,vm_module, *, tls_exit=False):
       actual_support_key_callbacks=sum(d==IMAGE+0x32ce6c for _,_,d,_ in exits),
       python_and_native_key_callback_order_matches=True,worker_allocator_and_support_key_values_cleared=True,
       all_image_both_tls_globals_and_owned_mapping_bytes_match_after_each_exit_callback=True,
-      native_exit_callback_returns=4,python_exit_callbacks_compared=4,
+      native_exit_callback_returns=len(exit_stages),python_exit_callbacks_compared=compared[0],
       actual_allocator_tls_key_exit_composed=True,complete_pthread_exit_verified=False)
+    if pthread_exit:
+     assert not outcome.host_thread_terminated and not outcome.detached and outcome.unmapped_regions==0
+     assert outcome.libc_destructors==outcome.cleanup_handlers==0
+     assert io.get(p,io.get(p,WTLS+8)+0x50,4)==1
+     assert io.get(p,io.get(p,WTLS+8)+0x70)==9
+     assert a.pthread_getspecific(p,key=io.get(p,io.LIBC+0xE6AE8,4),thread_pointer=WTLS,generation_table=io.TABLE)==0
+     row.update(full_joinable_guest_pthread_exit_composed=True,complete_pthread_exit_verified=False,
+      actual_libc_emutls_array_callbacks=sum(d==io.LIBC+0x9BD3C for _,_,d,_ in exits),
+      actual_madvise_lengths=[call[2] for call in me.calls if call[0]=='madvise'],
+      libc_destructor_head_and_cleanup_chain_empty=True,worker_state_exited=True,guest_terminal_exit_verified=True)
     print(json.dumps(row),flush=True)
     return row
 

@@ -123,17 +123,22 @@ def cpu_read(label,cursor,calls,size):
 
 def cpu_fresh(library,libc,image):
     p=stdio_fresh(library,libc,image);bound=[]
+    # These defined dynamic symbols are resolved by the native ELF loader.
+    # Keep the Python initial pages equally linked before runtime execution.
+    expected={0xD8DC8:'__stack_chk_guard',0xD8DA8:'pthread_create'}
     with libc.open("rb") as stream:
         elf=ELFFile(stream)
         for sec in elf.iter_sections():
             if sec["sh_type"]!="SHT_RELA":continue
             symbols=elf.get_section(sec["sh_link"])
             for r in sec.iter_relocations():
-                if r["r_offset"]!=0xD8DC8:continue
+                if r["r_offset"] not in expected:continue
                 symbol=symbols.get_symbol(r["r_info_sym"])
-                assert r["r_info_type"]==1025 and symbol.name=="__stack_chk_guard" and symbol["st_value"]==0xDE888 and r["r_addend"]==0
-                put(p,LIBC+0xD8DC8,LIBC+symbol["st_value"]);bound.append(r["r_offset"])
-    assert bound==[0xD8DC8]
+                assert r["r_info_type"]==1025 and symbol.name==expected[r["r_offset"]]
+                assert symbol["st_shndx"]!='SHN_UNDEF' and r["r_addend"]==0
+                if symbol.name=='__stack_chk_guard':assert symbol["st_value"]==0xDE888
+                put(p,LIBC+r["r_offset"],LIBC+symbol["st_value"]);bound.append(r["r_offset"])
+    assert set(bound)==set(expected) and len(bound)==len(expected)
     return p
 
 

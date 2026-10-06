@@ -3,7 +3,65 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Current actual-allocator worker TLS key-exit checkpoint (2026-10-06)
+## Current actual-allocator joinable guest pthread-exit checkpoint (2026-10-06)
+
+The same fresh ELF main startup, generated nonempty queue worker and natural
+matching-libc allocator now continue through the complete **joinable guest
+pthread_exit branch**. **2 native controls / 6 rollback checks** terminate
+successfully at both bases. Each run has 22 actual malloc PLT calls, six caller
+returns and independently counted **48 native / 48 Python nested returns**,
+then three allocator, one support and one libc emutls-array destructor return.
+All32 slots and virtual stack match at every default caller; full observed
+image, both TLS areas, libc globals and all retained mapping pages match after
+each of five callbacks and at final state. OS/clock/wait/wake/service ordering,
+mapping records/protection/cursor match. TLS values clear, pthread return=9,
+state=1, libc destructor/cleanup heads are empty, and guest exit(0) is reached.
+
+[vm9_libc_emutls.py](python/vm9_libc_emutls.py) restores +0x9be24/+0x9bd10/
++0x9bd90 and +0x9bd3c from fresh ELF/explicit descriptors and actual allocation.
+Its capacity/indexed-pointer ABI differs from the main image emutls header.
+**20 native controls / 9 rollback checks** pass, including descriptor/template
+comparisons at each return, aligned payloads, multiple descriptors/threads and
+actual component free. The fixture resolves defined pthread_create's +0xd8da8
+ELF relocation; it does not set a ready flag or create host threads.
+
+[vm9_libc_release.py](python/vm9_libc_release.py) restores the bounded matching
+empty small slab/extent release and default purge, using the shared bitmap
+owner with actual bin-to-arena mutex transitions. Ordered explicit advisory
+madvise lengths 4096/20480, advice=4 and result=0 match native. The virtual
+service does not simulate kernel page discard. The full wrapper in
+[vm9_libc_exit.py](python/vm9_libc_exit.py) reuses the shared pthread-exit body
+under one GuestOS transaction; publication occurs only after complete success.
+
+Busy emutls mutex, unknown cleanup handler, first/second purge failure, late
+unknown key destructor and terminal provider failure reject with all guest
+pages/mappings/cursor unchanged. Late checks execute both madvise calls, and
+the terminal failure reaches its exit provider. External provider effects do
+not roll back. All five affected regression CLIs terminate successfully:
+**154 native controls / 61 rollback checks** across old key-phase, shared
+pthread_exit, cached free, worker allocator and tcache.
+
+Evidence: [full guest composition](evidence/vm9_same_startup_worker_actual_allocator_pthread_exit_native.json),
+[libc emutls](evidence/vm9_libc_emutls_native_20261006.json),
+[regressions](evidence/vm9_same_startup_worker_actual_allocator_pthread_exit_regression.json).
+Commands, ABI and boundaries are in [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
+
+Actual detached worker unregister/region reclaim is not composed; host thread
+creation/termination, all allocator/emutls branches, root composition and
+fresh Medusa remain unverified. Growth, whole-region release, spare-region
+replacement, large cache/huge free, profiling and custom hooks still reject.
+No-JVM Rust, nonempty search/pagination, Douyin/Qidian and final Pages/Actions
+products remain incomplete.
+
+A subsequent independent Python root attempt using actual cold allocation
+completes 165 allocations and 42 frees, then rejects a full small class-2 cache
+(count=capacity=8) during parser string destruction. Static matching-libc
+instructions assign its full-bin callsite +0x91d18 to +0x97f40. Recover the
+half-cache flush and retained-slot move/stats, then run native/Python root
+composition. [Frontier evidence](evidence/vm9_root_actual_allocator_frontier_20261006.json)
+marks native root comparison and fresh signer output false; it is no pass.
+
+## Prior actual-allocator worker TLS key-exit checkpoint (2026-10-06)
 
 The same fresh main startup, startup-generated nonempty worker, natural
 matching-libc allocator and six default tasks now continue through actual
@@ -42,14 +100,15 @@ creates natural libc emulated TLS and invokes its +0x9bd3c key destructor.
 With an explicit successful virtual madvise service, one base reaches two
 advice=4 requests (4096 / 20480 bytes) and guest exit(0). This is a path-locating
 probe, not a Python composition pass. Its getter/array destructor, empty
-slab/extent release and purge services are the next recovery boundary.
+slab/extent release and purge services are now covered by the newer guest
+joinable composition above; the old probe is still not that proof.
 
-This composes the actual allocator **key phase**, not all of pthread_exit or
-host thread termination. Matching empty-slab extent release/purge, nonempty
-large-cache cleanup, profiling and other allocator branches still reject.
-Complete pthread_exit with natural libc emulated TLS/destructor inputs and OS
-unregister/reclaim, root composition, fresh-input Medusa and the online header/
-f13 matrix remain unverified. No-JVM Rust, nonempty search/pagination,
+This older entry composes the actual allocator **key phase**. It still rejects
+matching empty-slab release/purge; the newer wrapper above covers those in the
+guest joinable branch. Nonempty large-cache cleanup, profiling and other
+allocator branches still reject. Actual detached unregister/reclaim, host
+thread termination, root composition, fresh-input Medusa and the online
+header/f13 matrix remain unverified. No-JVM Rust, nonempty search/pagination,
 Douyin/Qidian and final Pages/Actions products remain incomplete.
 
 ## Prior normal-return same-startup worker/actual-allocator checkpoint (2026-10-06)

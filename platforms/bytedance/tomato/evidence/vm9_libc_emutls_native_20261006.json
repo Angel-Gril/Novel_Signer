@@ -1,0 +1,473 @@
+{
+  "schema": "vm9-libc-fresh-emutls-getter-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "case": "cold",
+      "image_base": "0x122c0000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "repeat",
+      "image_base": "0x122c0000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "aligned64",
+      "image_base": "0x122c0000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "template",
+      "image_base": "0x122c0000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "two_descriptors",
+      "image_base": "0x122c0000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 5,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 2
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "two_threads",
+      "image_base": "0x122c0000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 5,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 2,
+        "0x9bd90": 2
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "preassigned_index",
+      "image_base": "0x122c0000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 5,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 2
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "destroy",
+      "image_base": "0x122c0000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1,
+        "0x9bd3c": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 2,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "destroy_two",
+      "image_base": "0x122c0000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 5,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 2,
+        "0x9bd3c": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 3,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "destroy_aligned",
+      "image_base": "0x122c0000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1,
+        "0x9bd3c": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 2,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "cold",
+      "image_base": "0x775c205000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "repeat",
+      "image_base": "0x775c205000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "aligned64",
+      "image_base": "0x775c205000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "template",
+      "image_base": "0x775c205000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "two_descriptors",
+      "image_base": "0x775c205000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 5,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 2
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "two_threads",
+      "image_base": "0x775c205000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 5,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 2,
+        "0x9bd90": 2
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "preassigned_index",
+      "image_base": "0x775c205000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 5,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 2
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 0,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "destroy",
+      "image_base": "0x775c205000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1,
+        "0x9bd3c": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 2,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "destroy_two",
+      "image_base": "0x775c205000",
+      "getter_returns": 2,
+      "native_entry_counts": {
+        "0x1bb08": 5,
+        "0x9be24": 2,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 2,
+        "0x9bd3c": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 3,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "case": "destroy_aligned",
+      "image_base": "0x775c205000",
+      "getter_returns": 1,
+      "native_entry_counts": {
+        "0x1bb08": 4,
+        "0x9be24": 1,
+        "0x9bd10": 1,
+        "0x1baa0": 1,
+        "0x9bd90": 1,
+        "0x9bd3c": 1
+      },
+      "fresh_main_then_independent_worker_tls": true,
+      "all_observed_globals_tls_control_payload_and_owned_mapping_bytes_match_at_every_return": true,
+      "actual_allocator_used": true,
+      "actual_free_calls_compared": 2,
+      "os_order_mappings_protection_cursor_and_once_wake_match": true,
+      "substituted_allocations": 0,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    }
+  ],
+  "rejection_cases": [
+    {
+      "case": "busy_once",
+      "rejected": true,
+      "all_guest_pages_owned_mappings_and_cursor_unchanged": true,
+      "external_once_wake_effects_not_rolled_back": false
+    },
+    {
+      "case": "busy_index_mutex",
+      "rejected": true,
+      "all_guest_pages_owned_mappings_and_cursor_unchanged": true,
+      "external_once_wake_effects_not_rolled_back": true
+    },
+    {
+      "case": "exhausted_keys",
+      "rejected": true,
+      "all_guest_pages_owned_mappings_and_cursor_unchanged": true,
+      "external_once_wake_effects_not_rolled_back": false
+    },
+    {
+      "case": "index_overflow",
+      "rejected": true,
+      "all_guest_pages_owned_mappings_and_cursor_unchanged": true,
+      "external_once_wake_effects_not_rolled_back": true
+    },
+    {
+      "case": "late_bad_alignment",
+      "rejected": true,
+      "all_guest_pages_owned_mappings_and_cursor_unchanged": true,
+      "external_once_wake_effects_not_rolled_back": true
+    },
+    {
+      "case": "late_once_wake_failure",
+      "rejected": true,
+      "all_guest_pages_owned_mappings_and_cursor_unchanged": true,
+      "external_once_wake_effects_not_rolled_back": true
+    },
+    {
+      "case": "array_growth",
+      "rejected": true,
+      "all_guest_pages_owned_mappings_and_cursor_unchanged": true,
+      "external_once_wake_effects_not_rolled_back": false
+    },
+    {
+      "case": "array_capacity_overflow",
+      "rejected": true,
+      "all_guest_pages_unchanged": true,
+      "actual_staged_free_calls_before_rejection": 0
+    },
+    {
+      "case": "late_array_free_failure",
+      "rejected": true,
+      "all_guest_pages_unchanged": true,
+      "actual_staged_free_calls_before_rejection": 2
+    }
+  ],
+  "emutls_array_destructor_with_actual_free_verified": true,
+  "complete_pthread_exit_verified": false,
+  "complete_python_medusa": false,
+  "native_input_snapshot_used": false
+}

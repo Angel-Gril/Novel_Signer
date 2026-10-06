@@ -1708,7 +1708,7 @@ def _purge_dirty_extents(pages, arena, constants):
         _release_extent(pages, arena, pointer, False, True, constants)
 
 
-def _return_slab_slot(pages, arena, pointer, class_id, constants):
+def _return_slab_slot(pages, arena, pointer, class_id, constants, *, release_extent=None):
     region = pointer & ~read_u64(pages, constants.bitmap_mask_address)
     bias = read_u64(pages, constants.page_bias_address)
     entry_address = region + 0x68 + (((pointer - region) >> 12) - bias) * 8
@@ -1751,7 +1751,8 @@ def _return_slab_slot(pages, arena, pointer, class_id, constants):
         elif total != 1:
             tree = _AllocatorTree(pages, state + 0x538, lambda node: node)
             tree.remove(slab - 0x10)
-        _release_extent(pages, arena, slab, True, False, constants)
+        release = _release_extent if release_extent is None else release_extent
+        release(pages, arena, slab, True, False, constants)
         write_u64(pages, state + 0x5E0, read_u64(pages, state + 0x5E0) - 1)
     elif count == 0:
         current = read_u64(pages, state + 0x530)

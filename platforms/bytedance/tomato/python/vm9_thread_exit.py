@@ -80,7 +80,7 @@ class GuestThreadExitResult:
     host_thread_terminated: bool = False
 
 
-def run_pthread_exit(guest_os, *, image_base, libc_base, thread_pointer,
+def _run_pthread_exit(tx, *, image_base, libc_base, thread_pointer,
         return_value, get_libc_tls, free, os_call, invoke=None,
         set_specific=None, get_image_tls=None, broadcast=None,
         invoke_shared=None, join_thread=None, max_nodes=64):
@@ -98,7 +98,7 @@ def run_pthread_exit(guest_os, *, image_base, libc_base, thread_pointer,
     _bound(max_nodes)
     if not isinstance(return_value,int) or not 0<=return_value<1<<64:
         raise RefillUnsupported('pthread exit return value outside guest ABI')
-    tx=guest_os.begin();p=tx.pages
+    p=tx.pages
     def dispatch(staged,function,argument):
         if function in (image_base+0x268cf0,image_base+0x326984):
             startup.invoke_registered_thread_destructor(staged,function_address=function,
@@ -139,5 +139,18 @@ def run_pthread_exit(guest_os, *, image_base, libc_base, thread_pointer,
             address=_u(p,thread+0x20);size=_u(p,thread+0xa8)
             unmap(address,size)
             # The pthread struct may already be unmapped. Never read it again.
-    call('exit',0);tx.commit()
+    call('exit',0)
     return GuestThreadExitResult(cxa,handlers,detached,detached,unmapped)
+
+
+def run_pthread_exit(guest_os, *, image_base, libc_base, thread_pointer,
+        return_value, get_libc_tls, free, os_call, invoke=None,
+        set_specific=None, get_image_tls=None, broadcast=None,
+        invoke_shared=None, join_thread=None, max_nodes=64):
+    """Commit the shared serialized pthread-exit body on complete success."""
+    tx=guest_os.begin()
+    result=_run_pthread_exit(tx,image_base=image_base,libc_base=libc_base,
+        thread_pointer=thread_pointer,return_value=return_value,get_libc_tls=get_libc_tls,
+        free=free,os_call=os_call,invoke=invoke,set_specific=set_specific,get_image_tls=get_image_tls,
+        broadcast=broadcast,invoke_shared=invoke_shared,join_thread=join_thread,max_nodes=max_nodes)
+    tx.commit();return result

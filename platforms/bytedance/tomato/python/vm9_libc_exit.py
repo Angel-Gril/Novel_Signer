@@ -29,27 +29,27 @@ def _small_slot(p, pointer, libc_base):
     return _u(p,chunk),class_id,slab
 
 
-def _return_small(p, pointer, libc_base):
+def _return_small(p, pointer, libc_base, *, release_extent=None):
     arena,class_id,slab=_small_slot(p,pointer,libc_base)
     if _u(p,_indirect(p,libc_base,0xD8E80),1):
         raise a.RefillUnsupported('direct free junk fill is unrecovered')
     total=_u(p,libc_base+0xE9120+class_id*96+0x20,4)
-    if _u(p,slab+4,4)+1>=total:
+    if release_extent is None and _u(p,slab+4,4)+1>=total:
         raise a.RefillUnsupported('matching empty-slab extent release is unrecovered')
     lock=arena+0x508+class_id*0xE0
     objects.lock_uncontended_mutex(p,mutex_address=lock)
-    a._return_slab_slot(p,arena,pointer,class_id,_small_constants(p,libc_base))
+    a._return_slab_slot(p,arena,pointer,class_id,_small_constants(p,libc_base),release_extent=release_extent)
     objects.unlock_uncontended_mutex(p,mutex_address=lock)
 
 
-def _internal_free(p, pointer, libc_base):
+def _internal_free(p, pointer, libc_base, *, release_extent=None):
     arena,class_id,_=_small_slot(p,pointer,libc_base)
     width=_u(p,libc_base+0xA6C80+class_id*8)
     before=_u(p,arena+0x58)
     if before<width:
         raise a.RefillUnsupported('internal-free accounting underflow')
     _w(p,arena+0x58,before-width)
-    _return_small(p,pointer,libc_base)
+    _return_small(p,pointer,libc_base,release_extent=release_extent)
 
 
 def _unlink_cache(p, cache, arena, libc_base):
@@ -76,7 +76,7 @@ def _unlink_cache(p, cache, arena, libc_base):
     objects.unlock_uncontended_mutex(p,mutex_address=arena+8)
 
 
-def _destroy_cache(p, tsd, libc_base):
+def _destroy_cache(p, tsd, libc_base, *, release_extent=None):
     cache=_u(p,tsd+8)
     if not cache:return
     arena=_u(p,tsd+0x28)
@@ -109,9 +109,9 @@ def _destroy_cache(p, tsd, libc_base):
                 if current!=owner:
                     _w(p,vector+len(retained)*8,pointer);retained.append(pointer)
                     continue
-                if _u(p,slab+4,4)+1>=_u(p,libc_base+0xE9120+i*96+0x20,4):
+                if release_extent is None and _u(p,slab+4,4)+1>=_u(p,libc_base+0xE9120+i*96+0x20,4):
                     raise a.RefillUnsupported('matching empty-slab extent release is unrecovered')
-                a._return_slab_slot(p,owner,pointer,i,_small_constants(p,libc_base))
+                a._return_slab_slot(p,owner,pointer,i,_small_constants(p,libc_base),release_extent=release_extent)
             objects.unlock_uncontended_mutex(p,mutex_address=lock)
             pointers=retained
         if not preferred_seen:
@@ -132,16 +132,17 @@ def _destroy_cache(p, tsd, libc_base):
         _w(p,row+0x10,(_u(p,row+0x10)+value)&MASK);_w(p,target,0)
         objects.unlock_uncontended_mutex(p,mutex_address=arena+8)
         if a._signed32(_u(p,target+8,4))>0:_w(p,target+8,0,4)
-    _internal_free(p,cache,libc_base)
+    if release_extent is None:_internal_free(p,cache,libc_base)
+    else:_internal_free(p,cache,libc_base,release_extent=release_extent)
     _w(p,tsd+8,0)
 
 
-def _destroy_tsd(tx, p, wrapper, *, libc_base, thread_pointer, scratch_address, os_call):
+def _destroy_tsd(tx, p, wrapper, *, libc_base, thread_pointer, scratch_address, os_call, release_extent=None):
     """Actual +0x99584/+0x9975c, clear flag and republish only when needed."""
     if _u(p,wrapper,1):
         _w(p,wrapper,0,1);tsd=wrapper+8;state=_u(p,tsd,4)
         if state==1:
-            _destroy_cache(p,tsd,libc_base)
+            _destroy_cache(p,tsd,libc_base,release_extent=release_extent)
             arena=_u(p,tsd+0x28)
             if arena:
                 objects.lock_uncontended_mutex(p,mutex_address=libc_base+0xE6980)
@@ -154,7 +155,8 @@ def _destroy_tsd(tx, p, wrapper, *, libc_base, thread_pointer, scratch_address, 
             table=_u(p,tsd+0x30)
             if table:
                 _w(p,tsd+0x30,0);_w(p,tsd+0x3C,1,1)
-                _internal_free(p,table,libc_base)
+                if release_extent is None:_internal_free(p,table,libc_base)
+                else:_internal_free(p,table,libc_base,release_extent=release_extent)
             if _u(p,tsd+0x48):
                 raise a.RefillUnsupported('nonempty allocator profiling TSD cleanup is unrecovered')
         if state in (1,3):
@@ -169,7 +171,21 @@ def _destroy_tsd(tx, p, wrapper, *, libc_base, thread_pointer, scratch_address, 
         if a.pthread_setspecific(p,key=_u(p,libc_base+0xE9F68,4),value=wrapper,
                 thread_pointer=thread_pointer,generation_table=libc_base+0xE0200):
             raise a.RefillUnsupported('allocator exit setspecific diagnostic/abort is unrecovered')
-    else:_internal_free(p,wrapper,libc_base)
+    elif release_extent is None:_internal_free(p,wrapper,libc_base)
+    else:_internal_free(p,wrapper,libc_base,release_extent=release_extent)
+
+
+def _free_in_exit(tx,p,pointer,*,libc_base,thread_pointer,scratch_address,os_call,release_extent=None):
+    if not pointer:return
+    from vm9_libc_tcache import _release_cached_small_pages
+    wrapper=_current_tsd(p,libc_base,thread_pointer,tx=tx,
+        scratch_address=scratch_address,os_call=os_call)
+    if _u(p,wrapper+0x10):
+        return _release_cached_small_pages(p,pointer=pointer,libc_base=libc_base,thread_pointer=thread_pointer)
+    _,class_id,_=_small_slot(p,pointer,libc_base)
+    _w(p,wrapper+0x20,(_u(p,wrapper+0x20)+_u(p,libc_base+0xA6C80+class_id*8))&MASK)
+    if _u(p,libc_base+0xE69C0):raise a.RefillUnsupported('exit free profiling is unrecovered')
+    _return_small(p,pointer,libc_base,release_extent=release_extent)
 
 
 def cleanup_worker_thread_keys(guest_os, *, image_base, thread_pointer,
@@ -183,17 +199,8 @@ def cleanup_worker_thread_keys(guest_os, *, image_base, thread_pointer,
     """
     tx=guest_os.begin()
     def free(p,pointer):
-        if not pointer:return
-        from vm9_libc_tcache import _release_cached_small_pages
-        wrapper=_current_tsd(p,libc_base,thread_pointer,tx=tx,
+        return _free_in_exit(tx,p,pointer,libc_base=libc_base,thread_pointer=thread_pointer,
             scratch_address=scratch_address,os_call=os_call)
-        if _u(p,wrapper+0x10):
-            return _release_cached_small_pages(p,pointer=pointer,libc_base=libc_base,thread_pointer=thread_pointer)
-        _,class_id,_=_small_slot(p,pointer,libc_base)
-        _w(p,wrapper+0x20,(_u(p,wrapper+0x20)+_u(p,libc_base+0xA6C80+class_id*8))&MASK)
-        if _u(p,libc_base+0xE69C0):
-            raise a.RefillUnsupported('exit free profiling is unrecovered')
-        _return_small(p,pointer,libc_base)
     def invoke(p,destructor,value):
         if destructor!=libc_base+0x99584:
             raise a.RefillUnsupported('unrecovered matching allocator exit callback')
@@ -202,3 +209,41 @@ def cleanup_worker_thread_keys(guest_os, *, image_base, thread_pointer,
     calls=startup.run_worker_thread_key_cleanup(tx.pages,image_base=image_base,
         thread_pointer=thread_pointer,generation_table=libc_base+0xE0200,free=free,invoke_destructor=invoke)
     tx.commit();return calls
+
+
+def run_worker_pthread_exit(guest_os,*,image_base,libc_base,thread_pointer,
+        return_value,scratch_address,os_call,once_wake):
+    """Actual allocator, libc emutls and the shared guest pthread_exit body.
+
+    Natural ready allocator state and explicit thread/TLS/OS inputs are
+    required. The default empty libc destructor/cleanup heads and recovered
+    allocator/support/libc-emutls keys compose. Small empty extents use actual
+    metadata release and an explicit successful advisory madvise provider.
+    Huge/large free, profiling, unknown callbacks and purge failure reject.
+    Only whole success publishes guest pages, owned mappings and cursor;
+    external provider effects persist. This never terminates a host thread.
+    """
+    import vm9_libc_emutls as emutls
+    import vm9_libc_release as release
+    import vm9_thread_exit as thread_exit
+    tx=guest_os.begin()
+    def release_extent(p,arena,slab,dirty,force_clean,constants):
+        return release.release_empty_small_extent(p,arena,slab,dirty,force_clean,constants,
+            libc_base=libc_base,os_call=os_call)
+    def free(p,pointer):
+        return _free_in_exit(tx,p,pointer,libc_base=libc_base,thread_pointer=thread_pointer,
+            scratch_address=scratch_address,os_call=os_call,release_extent=release_extent)
+    def invoke(p,destructor,value):
+        if destructor==libc_base+0x99584:
+            _destroy_tsd(tx,p,value,libc_base=libc_base,thread_pointer=thread_pointer,
+                scratch_address=scratch_address,os_call=os_call,release_extent=release_extent)
+        elif destructor==libc_base+0x9BD3C:
+            emutls.destroy_array(p,array_address=value,free=free)
+        else:raise a.RefillUnsupported('unrecovered actual-allocator pthread exit callback')
+    def get_tls(p,control):
+        return emutls._get_thread_variable(tx,p,control_address=control,libc_base=libc_base,
+            thread_pointer=thread_pointer,scratch_address=scratch_address,os_call=os_call,once_wake=once_wake)
+    result=thread_exit._run_pthread_exit(tx,image_base=image_base,libc_base=libc_base,
+        thread_pointer=thread_pointer,return_value=return_value,get_libc_tls=get_tls,
+        free=free,os_call=os_call,invoke=invoke)
+    tx.commit();return result

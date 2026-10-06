@@ -4,6 +4,12 @@
 
 生产实现见 [vm9_root.py](python/vm9_root.py)，差分验证见 [verify_vm9_root_fresh.py](python/verify_vm9_root_fresh.py)，脱敏证据见 [vm9_root_fresh_native_20261004.json](evidence/vm9_root_fresh_native_20261004.json)。历史 component 对照见 [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md)。
 
+## 实际 allocator 接入的当前边界（2026-10-06）
+
+下表既有 8 组成功对照仍使用 nonreusing allocator。matching libc 的自然冷启动、实际 worker 分配和 guest 可 join 退出已有独立组合验收，见 [启动当前证据](STARTUP_INITIALIZATION.md)；不能因此将旧 root 控制改记为实际 allocator 通过。
+
+新的独立 Python root 前段探针使用 fresh ELF／显式虚拟 OS 和自然启动的实际 allocator，完成 165 次分配／42 次释放后，在 parser 字符串析构触发 class 2 的 8/8 满 small cache，按现有未恢复边界拒绝。静态反汇编映射为 `free +0x91d18 → +0x97f40`，需恢复 half-cache flush、保留槽搬移和统计，再进行实际 allocator 的完整 root 原生对照。[脱敏前段证据](evidence/vm9_root_actual_allocator_frontier_20261006.json) 明确记录 root 未完成、没有 native root 比较通过、没有 fresh 请求签名输出；它不替代下表成功对照，也不构成完整 Medusa 证据。
+
 ## 验证结果与边界
 
 | 对照项 | 结果 |
