@@ -137,18 +137,24 @@ def create_thread_cache(guest_os, *, tsd_address, arena_address, libc_base, thre
     return result
 
 
-def _fallback_tsd(tx, *, libc_base, thread_pointer, scratch_address, os_call):
+def _fallback_tsd(tx, *, libc_base, thread_pointer, scratch_address, os_call, pages=None):
     """Missing public TSD: +0x99610/99600/996d4, temporary list and actual malloc.
 
     The caller owns 32 bytes of mapped scratch for the ABI's temporary node.
     Only the serial, uncontended list and default internal 128-byte allocation
     are recovered; null allocation and diagnostic/abort paths explicitly reject.
+    An optional owned page staging chain preserves earlier callback writes.
     """
     from vm9_libc_base import _allocate_staged
     from vm9_libc_cold import _internal_small
     if scratch_address is None or scratch_address & 7 or os_call is None:
         raise allocator.RefillUnsupported("missing TSD requires aligned mapped scratch and OS service")
-    p = tx.pages
+    p = tx.pages if pages is None else pages
+    owner_pages = p
+    while isinstance(owner_pages, allocator._PageTransaction):
+        owner_pages = owner_pages.original
+    if owner_pages is not tx.pages:
+        raise allocator.RefillUnsupported("TSD fallback requires the owning OS staging chain")
     allocator._read_span(p, scratch_address, 32)
     key = _u(p, _indirect(p, libc_base, 0xD8F98), 4)
     owner = _u(p, thread_pointer + 8)
@@ -233,7 +239,7 @@ def _current_tsd(pages, libc_base, thread_pointer, *, tx=None, scratch_address=N
         if tx is None:
             raise allocator.RefillUnsupported("missing TSD fallback requires its owning OS transaction")
         wrapper = _fallback_tsd(tx, libc_base=libc_base, thread_pointer=thread_pointer,
-            scratch_address=scratch_address, os_call=os_call)
+            scratch_address=scratch_address, os_call=os_call, pages=pages)
     state = _u(pages, wrapper + 8, 4)
     if state in (0, 2):
         _w(pages, wrapper + 8, 1 if state == 0 else 3, 4)

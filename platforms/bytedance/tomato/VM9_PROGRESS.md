@@ -3,7 +3,56 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Current same-startup worker/actual-allocator checkpoint (2026-10-06)
+## Current actual-allocator worker TLS key-exit checkpoint (2026-10-06)
+
+The same fresh main startup, startup-generated nonempty worker, natural
+matching-libc allocator and six default tasks now continue through actual
+allocator/support thread-key cleanup. **2 native controls / 5 rollback checks**
+pass at both relocated bases. Each run retains the prior 22 actual malloc PLT
+calls, six caller returns and independently counted **48 native / 48 Python
+nested returns**, then executes **three allocator +0x99584 callbacks and one
+support callback across three key passes**. All32 slots and virtual stack match
+at each default caller. Full observed image, both TLS areas, libc globals and
+every retained mapping page also match after each of the four destructor
+returns and at final exit-key state. Ordered OS/clock/wait/wake effects, mapping
+records/protection/cursor match. Both allocator and support TLS key values clear.
+
+The new [matching-libc exit owner](python/vm9_libc_exit.py) restores bounded
++0x99584/+0x9975c, tcache ring detachment and stats draining, small-cache flush
+including foreign-arena slots, actual direct/internal small release, arena
+reference/table cleanup and TSD fallback allocation/republication. The native
+control exposed a nonempty cache slot owned by another arena; treating all
+slots as belonging to the preferred arena correctly failed before recovery.
+Fallback allocation now preserves the outer key-cleanup page staging chain;
+no native bytes initialize Python. The pre-change composed control failed at
+the missing actual allocator destructor, and the final differential CLI exits 0.
+
+Busy cache mutex, count overflow, nonempty large cache, a late unknown key
+callback and a late invalid support vector all reject with **all guest pages,
+owned mappings and cursor unchanged**. The latter two run at least three actual
+internal releases before rejecting, proving rollback beyond early validation.
+External provider effects remain outside rollback. Fresh tcache, independent
+worker allocator and generic key-cleanup regressions pass **94 native controls /
+35 rollback checks**, with every CLI terminal. Evidence:
+[actual allocator TLS exit](evidence/vm9_same_startup_worker_actual_allocator_tls_exit_native.json),
+[shared regressions](evidence/vm9_same_startup_worker_actual_allocator_tls_exit_regression.json).
+
+The next native-only probe enters +0x68138 -> +0x6b2a4 -> +0x9be24,
+creates natural libc emulated TLS and invokes its +0x9bd3c key destructor.
+With an explicit successful virtual madvise service, one base reaches two
+advice=4 requests (4096 / 20480 bytes) and guest exit(0). This is a path-locating
+probe, not a Python composition pass. Its getter/array destructor, empty
+slab/extent release and purge services are the next recovery boundary.
+
+This composes the actual allocator **key phase**, not all of pthread_exit or
+host thread termination. Matching empty-slab extent release/purge, nonempty
+large-cache cleanup, profiling and other allocator branches still reject.
+Complete pthread_exit with natural libc emulated TLS/destructor inputs and OS
+unregister/reclaim, root composition, fresh-input Medusa and the online header/
+f13 matrix remain unverified. No-JVM Rust, nonempty search/pagination,
+Douyin/Qidian and final Pages/Actions products remain incomplete.
+
+## Prior normal-return same-startup worker/actual-allocator checkpoint (2026-10-06)
 
 The actual-allocator main startup now feeds its generated nonempty queue worker
 in the same fresh native/Python run. **2 native controls / 4 rollback checks**
@@ -30,10 +79,10 @@ all six task bodies. External provider effects remain visible. Small free,
 main-startup and independent-worker regressions pass **32 native / 24 rollback**;
 all three CLI runs are terminal. The shared interpreter is unchanged.
 
-Normal return frees the argument into the actual small cache; support and
-allocator TSD remain TLS-owned. Real OS thread creation/termination, allocator
-key-exit +0x99584 and its actual cleanup/internal-free branches, full allocator
-branches and root composition are still open. Fresh Medusa/signing, online
+This prior normal-return control frees the argument into the actual small
+cache and retains support/TSD in TLS. The newer key-exit checkpoint above
+restores the bounded +0x99584 cleanup/internal-free path. Real OS thread
+creation/termination, full allocator branches and root composition stay open. Fresh Medusa/signing, online
 header/f13 matrix, no-JVM Rust, nonempty search/pagination, Douyin/Qidian and final
 Pages/Actions products are not complete. Evidence:
 [same-startup worker](evidence/vm9_same_startup_worker_actual_allocator_native.json),

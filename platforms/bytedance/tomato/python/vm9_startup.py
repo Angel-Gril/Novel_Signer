@@ -1087,7 +1087,9 @@ def run_worker_thread_key_cleanup(pages, *, image_base, thread_pointer,
     """Bionic key-exit phase with support and emulated/fallback TLS targets.
 
     Values clear before destruction. Callback/getter/broadcast services are
-    explicit; unknown targets reject and roll back guest pages. This phase
+    explicit; additional recovered key callbacks use invoke_destructor and
+    must reject unsupported targets. Without that provider unknown targets
+    reject and roll back guest pages. This phase
     does not terminate an OS thread or bootstrap the real allocator.
     """
     from vm9_allocator import pthread_key_clean_all
@@ -1108,6 +1110,7 @@ def run_worker_thread_key_cleanup(pages, *, image_base, thread_pointer,
                 else:raise RefillUnsupported('unrecovered fallback destructor callback')
             objects.run_emulated_thread_destructors(staged,image_base=image_base,get_tls=get_tls,
                 invoke=fallback_callback,free=free)
+        elif invoke_destructor is not None:invoke_destructor(staged,destructor,value)
         else:raise RefillUnsupported('unrecovered thread-exit destructor')
     return pthread_key_clean_all(pages,thread_pointer=thread_pointer,
         generation_table=generation_table,invoke=invoke)

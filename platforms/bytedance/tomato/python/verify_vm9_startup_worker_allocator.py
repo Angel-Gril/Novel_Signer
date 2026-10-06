@@ -1,7 +1,8 @@
 """Same fresh main startup -> default worker with actual malloc and argument free.
 
 OS services and serial thread selection are explicit. No native snapshot seeds
-Python. Normal return retains TLS support/TSD; OS exit is a separate frontier.
+Python. Normal return retains TLS support/TSD; optional key cleanup is checked
+from the same fresh state. Full OS thread exit remains a separate frontier.
 """
 from __future__ import annotations
 from pathlib import Path
@@ -16,7 +17,7 @@ from unicorn.arm64_const import (UC_ARM64_REG_X0,UC_ARM64_REG_X1,UC_ARM64_REG_X2
     UC_ARM64_REG_PC,UC_ARM64_REG_SP,UC_ARM64_REG_TPIDR_EL0)
 
 
-def case(LIBRARY,LIBC,IMAGE,vm_module):
+def case(LIBRARY,LIBC,IMAGE,vm_module, *, tls_exit=False):
     p=h.fresh(LIBRARY,LIBC,IMAGE)
     WSTACK=io.GUEST+0x60000;WTOP=WSTACK+0xF000;WTLS=h.WORKERS[0]
     for address in range(WSTACK,WSTACK+0x10000,4096):p[address>>12]=bytearray(4096)
@@ -51,7 +52,18 @@ def case(LIBRARY,LIBC,IMAGE,vm_module):
       queue=worker_queue[0];assert cpu.reg_read(UC_ARM64_REG_X0)==queue+0x58
       native_side.append(['wait',cpu.reg_read(UC_ARM64_REG_X0),cpu.reg_read(UC_ARM64_REG_X1),cpu.reg_read(UC_ARM64_REG_X2),None]);cpu.mem_write(queue+0x88,b'\0');return -4
      return ne.syscall(cpu,num,observed)
+    exit_calls=[];exit_stages=[];normal_expected={};exit_started=[False]
     def observe(cpu,pc):
+     if tls_exit and pc==oracle.STOP+8:
+      normal_expected.update({span:bytes(cpu.mem_read(*span)) for span in observed})
+      exit_started[0]=True
+      cpu.reg_write(UC_ARM64_REG_PC,io.LIBC+0x685a0)
+      cpu.reg_write(UC_ARM64_REG_X30,oracle.STOP)
+     if tls_exit and pc==io.LIBC+0x68640:
+      exit_calls.append([cpu.reg_read(UC_ARM64_REG_X0+23),cpu.reg_read(UC_ARM64_REG_X0+19),cpu.reg_read(UC_ARM64_REG_X0+5),cpu.reg_read(UC_ARM64_REG_X0)])
+     if tls_exit and pc==io.LIBC+0x68644:
+      exit_stages.append({span:bytes(cpu.mem_read(*span)) for span in observed})
+      print('NATIVE_TLS_CALLBACK_RETURN',len(exit_stages),flush=True)
      if pc-IMAGE in {offset for i in range(6) for offset in (0x280970+i*0x1E4+0x64,0x2809F8+i*0x1E4+0x58)}:native_nested[pc-IMAGE]+=1
      if pc==IMAGE+0x28040c and not resources[0]:
       resources[0]=True;cpu.mem_map(h.STACK,h.STACK_BYTES)
@@ -69,7 +81,7 @@ def case(LIBRARY,LIBC,IMAGE,vm_module):
       switched[0]=True;handle,entry,arg=threads[1];worker_argument[0]=arg
       worker_queue[0]=int.from_bytes(cpu.mem_read(arg+0x18,8),'little')
       cpu.reg_write(UC_ARM64_REG_PC,entry);cpu.reg_write(UC_ARM64_REG_SP,WTOP)
-      cpu.reg_write(UC_ARM64_REG_X0,arg);cpu.reg_write(UC_ARM64_REG_X30,oracle.STOP)
+      cpu.reg_write(UC_ARM64_REG_X0,arg);cpu.reg_write(UC_ARM64_REG_X30,oracle.STOP+8 if tls_exit else oracle.STOP)
       cpu.reg_write(UC_ARM64_REG_TPIDR_EL0,WTLS);cpu.reg_write(UC_ARM64_REG_X29,0)
       for index in range(19,29):cpu.reg_write(UC_ARM64_REG_X0+index,0)
      if pc-IMAGE in DEFAULT_CALLERS:caller_top[0]=cpu.reg_read(UC_ARM64_REG_SP)
@@ -86,7 +98,7 @@ def case(LIBRARY,LIBC,IMAGE,vm_module):
       0x348310:lambda cpu:271 if cpu.reg_read(UC_ARM64_REG_TPIDR_EL0)==WTLS else 137},
      syscall_handler=syscall,instruction_observer=observe,observed_memory=observed,extra_registers={UC_ARM64_REG_SP:h.TOP,UC_ARM64_REG_TPIDR_EL0:root.TLS},instruction_limit=900000000,
      code_hook_ranges=((IMAGE+0x28040c,IMAGE+0x281414),(IMAGE+0x326000,IMAGE+0x327000),
-     (IMAGE+0x347E00,IMAGE+0x348700),(io.LIBC+0x8e250,io.LIBC+0x8e254)))
+     (IMAGE+0x347E00,IMAGE+0x348700),(io.LIBC+0x8e250,io.LIBC+0x8e254),*((((oracle.STOP+8,oracle.STOP+12),(io.LIBC+0x68640,io.LIBC+0x68644))) if tls_exit else ())))
     print('NATIVE_STARTUP_PASS',result,'threads',len(threads),'counts',dict(counts),'substitutions',len(allocations),flush=True)
     def model_create(staged,out,attr,entry,arg):
      handle=io.GUEST+0xc800+len(model_threads)*0x100;a._write_span(staged,out,handle.to_bytes(8,'little'));model_threads.append([handle,entry,arg]);return 0
@@ -121,6 +133,29 @@ def case(LIBRARY,LIBC,IMAGE,vm_module):
       thread_pointer=WTLS,thread_id=271,vm_module=vm_module,scratch_address=h.SCRATCH,libc_base=io.LIBC,brk=me.brk,os_call=me.service,
       broadcast=lambda *args:0,clock=clock,futex=futex)
     finally:startup.run_default_initialization_caller=original
+    if tls_exit:
+     for (address,width),data in normal_expected.items():
+      assert a._read_span(p,address,width)==data,('normal worker before exit',hex(address))
+     import vm9_libc_exit as exit_model
+     original_cleanup=a.pthread_key_clean_all;compared=[0]
+     def check_cleanup(pages,*,thread_pointer,generation_table,invoke):
+      def check_callback(staged,destructor,value):
+       invoke(staged,destructor,value)
+       expected=exit_stages[compared[0]]
+       for (address,width),data in expected.items():
+        assert a._read_span(staged,address,width)==data,('TLS callback spans',compared[0],hex(address))
+       compared[0]+=1
+       print('PYTHON_TLS_CALLBACK_MATCH',compared[0],flush=True)
+      return original_cleanup(pages,thread_pointer=thread_pointer,
+       generation_table=generation_table,invoke=check_callback)
+     a.pthread_key_clean_all=check_cleanup
+     try:
+      exits=exit_model.cleanup_worker_thread_keys(me.os,image_base=IMAGE,thread_pointer=WTLS,
+       libc_base=io.LIBC,scratch_address=h.SCRATCH,os_call=me.service)
+     finally:a.pthread_key_clean_all=original_cleanup
+     assert compared[0]==len(exit_stages)==4
+     expected_calls=[(4-pass_left,(entry-io.TABLE)//16-1,destructor,value) for pass_left,entry,destructor,value in exit_calls]
+     assert list(exits)==expected_calls,('actual key callbacks',list(exits),expected_calls)
     mismatch=[]
     for (address,width),data in observed.items():
      current=a._read_span(p,address,width)
@@ -128,22 +163,30 @@ def case(LIBRARY,LIBC,IMAGE,vm_module):
     print('FINAL_WORKER','six caller controls',len(task_returns),'mismatch',mismatch,'os_match',me.calls==ne.calls,flush=True)
     assert not mismatch and me.calls==ne.calls
     assert len(task_returns)==6 and len(model_nested)==48 and sum(native_nested.values())==48
-    assert counts['malloc_plt']==22 and counts['free_plt']==1 and not allocations
-    assert worker.return_code==result==0 and len(worker.tasks)==1
+    assert counts['malloc_plt']==22 and counts['free_plt']==(3 if tls_exit else 1) and not allocations
+    assert worker.return_code==0 and (tls_exit or result==0) and len(worker.tasks)==1
     assert native_side==model_side and ne.os.mappings==me.os.mappings and ne.os.next_address==me.os.next_address
     assert a._read_span(p,io.GUEST,0xA000)==memory
     support_key=io.get(p,IMAGE+0x3E2F30,4)
-    assert a.pthread_getspecific(p,key=support_key,thread_pointer=WTLS,generation_table=io.TABLE)
+    assert bool(a.pthread_getspecific(p,key=support_key,thread_pointer=WTLS,generation_table=io.TABLE))== (not tls_exit)
     row=dict(image_base=hex(IMAGE),main_thread_id=137,worker_thread_id=271,
-     actual_native_malloc_plt_calls=22,actual_native_argument_free_calls=1,substituted_allocations=0,
+     actual_native_malloc_plt_calls=22,actual_native_argument_free_calls=1,actual_native_free_plt_calls=counts['free_plt'],substituted_allocations=0,
      native_default_caller_returns=6,python_default_caller_returns_compared=6,
      native_nested_vm_returns=sum(native_nested.values()),python_nested_vm_returns=len(model_nested),
      all32_slots_virtual_stack_image_tls_globals_and_owned_mapping_bytes_match_at_each_caller=True,
      final_guest_image_both_tls_globals_and_all_owned_mapping_bytes_match=True,
      os_clock_wait_wake_order_mapping_records_protection_and_cursor_match=True,
-     startup_generated_worker_descriptor_used=True,worker_support_retained_in_tls=True,
+     startup_generated_worker_descriptor_used=True,worker_support_retained_in_tls=not tls_exit,
      normal_argument_cleanup_verified=True,actual_native_malloc=True,native_input_snapshot_used=False,
      explicit_virtual_os=True,physical_stack_compared=False,actual_os_thread_creation_and_exit_verified=False)
+    if tls_exit:
+     assert a.pthread_getspecific(p,key=io.get(p,io.LIBC+0xE9F68,4),thread_pointer=WTLS,generation_table=io.TABLE)==0
+     row.update(actual_allocator_key_callbacks=sum(d==io.LIBC+0x99584 for _,_,d,_ in exits),
+      actual_support_key_callbacks=sum(d==IMAGE+0x32ce6c for _,_,d,_ in exits),
+      python_and_native_key_callback_order_matches=True,worker_allocator_and_support_key_values_cleared=True,
+      all_image_both_tls_globals_and_owned_mapping_bytes_match_after_each_exit_callback=True,
+      native_exit_callback_returns=4,python_exit_callbacks_compared=4,
+      actual_allocator_tls_key_exit_composed=True,complete_pthread_exit_verified=False)
     print(json.dumps(row),flush=True)
     return row
 

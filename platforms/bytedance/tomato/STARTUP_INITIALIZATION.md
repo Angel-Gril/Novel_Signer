@@ -1,10 +1,30 @@
 # 外层启动 caller 与 worker 调度／清理
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**默认 matching libc 冷启动已另行验证自然返回；完整 allocator 分支、实际 allocator TLS 退出析构及 root 接入、真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**默认 matching libc 冷启动已另行验证自然返回；完整 allocator 分支、实际 allocator 与完整 pthread_exit 的组合及 root 接入、真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
-## 当前同次 startup→worker／实际 allocator 组合（2026-10-06）
+## 当前实际 allocator 的 worker TLS key 退出（2026-10-06）
+
+同次 fresh 主线程 startup → 实际分配的非空 queue worker → 六项默认任务 → argument free，现已继续贯通自然注册的 allocator／support key 析构。**两个基址的 2 个 native 对照／5 项拒绝与回滚检查均终态通过**。每个组合仍有 22 次实际 malloc、六项 caller 完整返回，以及独立计数的 **48 次 native／48 次 Python nested return**；随后在三轮 key 清理中实际完成 **3 次 matching libc `+0x99584` 和 1 次 support callback**。四次析构返回后的完整观察 image、双方 TLS、libc globals 和全部保留 mapping 页均逐项匹配，最终 allocator／support 的 TLS value 清零。OS／clock／wait／wake 顺序、映射记录／保护／cursor 也一致。
+
+生产实现 [vm9_libc_exit.py](python/vm9_libc_exit.py) 恢复 `+0x99584 → +0x9975c` 的清 flag、tcache 卸载／计数归并、缓存刷新、直接／internal small release、arena 引用与指针表清理、fallback TSD 的实际分配及后续轮重发布。缓存中确有属于另一 arena 的槽位，按实际 owner 分组刷新后才关闭差异。fallback 分配使用所属 OS 事务的 page staging chain，保留 key 清理已完成的写入；Python 初始化不读取 native 输出。
+
+入口 `cleanup_worker_thread_keys(guest_os, *, image_base, thread_pointer, libc_base, scratch_address, os_call)` 从已经提交的同次 worker 输出继续。`guest_os` 必须持有该 worker 的实际 allocator mappings，`scratch_address` 为调用者提供的映射临时区；`os_call` 沿用 matching-libc 的显式虚拟 OS 服务。返回 `(iteration, key_index, destructor, value)` 记录。所有 key 回调成功后才提交 guest 页／mapping／cursor；外部服务效果不能回滚。该入口完成 key 清理阶段，不会终止宿主线程。
+
+busy cache mutex、count 越界、非空 large cache、后段未知 key callback 和后段损坏 support 向量均明确拒绝，全部 guest 页及 owned mappings／cursor 保持调用前状态。后两项在至少三次实际 internal free 后拒绝，覆盖晚期回滚。原有 tcache、独立 worker allocator、通用 key 清理回归 **94 个 native 对照／35 项回滚**全部通过。证据：[同次实际 allocator TLS 退出](evidence/vm9_same_startup_worker_actual_allocator_tls_exit_native.json)、[共享回归](evidence/vm9_same_startup_worker_actual_allocator_tls_exit_regression.json)。
+
+后续原生探针从同次 worker 返回进入 matching libc `+0x68138 → +0x6b2a4 → +0x9be24`，额外创建 libc emulated-TLS 状态；key 阶段出现自然注册的 `+0x9bd3c` 析构。单基址探针在显式虚拟 `madvise` 成功返回下，观察到 4096／20480 字节两次 advice=4 请求及 guest `exit(0)`。这只是原生路径定位，未作为 Python 组合通过的证据。下一处需恢复该 getter／数组析构及实际空 slab／extent release、purge 服务，再接完整 pthread_exit 与 root。
+
+**该结果尚未贯通实际 allocator 的完整 pthread_exit。** matching empty-slab extent release／purge、非空 large cache、profiling 等 allocator 分支仍明确拒绝；完整 pthread_exit 的自然 libc emulated-TLS 输入和 OS 注销／回收、root 接入、fresh Medusa 签名及新的线上全头矩阵仍需继续。Rust、非空搜索与分页、抖音／起点及最终 Pages／Actions 产品仍待验收。
+
+复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_startup_worker_exit_allocator.py --library <matching-main.so> --libc <matching-libc.so> --output <private-worker-tls-exit-report.json>
+```
+
+## 前一阶段：同次 startup→worker／实际 allocator 正常返回（2026-10-06）
 
 同次 fresh ELF／TLS 运行已贯通 `+0x28040c` 主线程 startup → 实际分配的非空 queue descriptor → 独立 worker TLS／栈 → 六项默认任务 → 正常返回及 argument 清理。**两个基址的 2 个 native 对照／4 项回滚检查已终态通过**。每个 native 组合实际执行 22 次 malloc PLT、1 次 argument free，没有替代 allocator 返回值；六个顶层 caller 完整返回，native 和 Python 分别记录 **48 次嵌套 VM 返回**。每项全部 32 槽、虚拟栈、image、TLS、libc globals、全部保留 mapping 页，以及最终 guest／image／双方 TLS／映射、OS／clock／wait／wake 顺序均一致。
 
@@ -12,7 +32,7 @@
 
 生产入口为 [run_default_queue_worker](python/vm9_startup_allocator.py)。unmapped 栈、第三项 busy once、第三次 broadcast 失败，以及六项任务完成后重新引入 argument 所有权，均证明整个 worker 的 guest／mapping／protection／cursor 回滚；主线程已提交状态保留，外部 provider 效果不回滚。small free、主线程 startup、独立 worker 分配共享回归 **32／24**全部通过。证据：[同次实际 allocator worker](evidence/vm9_same_startup_worker_actual_allocator_native.json)、[共享回归](evidence/vm9_same_startup_worker_actual_allocator_regression.json)。
 
-正常返回只完成 argument 清理；support 和 allocator TSD 仍由 TLS 持有。下一处是自然注册的 allocator key 退出回调 **matching libc `+0x99584`** 及其实际 cleanup／internal-free 分支，然后接 root 与 fresh Medusa 请求。**实际 allocator 的 TLS 退出、完整 root、fresh Medusa、线上矩阵、真实 OS 线程创建／终止仍未通过。** Rust、非空搜索与分页、其他平台和最终 Pages／Actions 产品仍待后续验收。
+该前一阶段的正常返回只完成 argument 清理；support 和 allocator TSD 仍由 TLS 持有。上方最新 key 退出检查点已恢复自然注册的 **matching libc `+0x99584`** 及其有界 cleanup／internal-free 分支。**实际 allocator 与完整 pthread_exit 的组合、完整 root、fresh Medusa、线上矩阵、真实 OS 线程创建／终止仍未通过。** Rust、非空搜索与分页、其他平台和最终 Pages／Actions 产品仍待后续验收。
 
 复现：
 
@@ -28,7 +48,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_startup_worker_allocator.
 
 worker 分配矩阵 **14 个 native 对照／8 项拒绝与回滚检查**通过，覆盖两基址、small／large／mixed、两 worker、单 CPU 与 40 次 65536 字节跨 region。每次返回都比较 globals、TLS 和全部保留 mapping 页；相关 tcache、region、cold、large、serial 默认任务回归 **148／70**全部终态通过。证据：[主线程](evidence/vm9_main_startup_actual_allocator_native.json)、[独立 worker 分配](evidence/vm9_worker_actual_allocator_native.json)、[共享回归](evidence/vm9_worker_actual_allocator_regression.json)。
 
-这些结果仍采用显式虚拟 OS 服务、线程输入和串行调度。这一较早阶段尚未完成同次 worker；上方最新组合现已通过正常 argument 清理。**实际 allocator 的 TLS 退出、root、fresh Medusa 签名和线上矩阵仍未通过**；arena table 扩展、inflight TSD 重入、full-bin／GC、large cache／free／huge 和其余 callback 仍有明确拒绝边界。真实 OS 线程创建和完整物理 libc 栈不在本轮证据范围。
+这些结果仍采用显式虚拟 OS 服务、线程输入和串行调度。这一较早阶段尚未完成同次 worker；上方最新组合现已通过正常 argument 清理。此较早检查点尚未执行实际 allocator 的 TLS 退出；上方最新检查点现已验证有界 key 清理。**完整 pthread_exit／root／fresh Medusa 签名和线上矩阵仍未通过**；arena table 扩展、inflight TSD 重入、full-bin／GC、large cache／free／huge 和其余 callback 仍有明确拒绝边界。真实 OS 线程创建和完整物理 libc 栈不在本轮证据范围。
 
 复现：
 
