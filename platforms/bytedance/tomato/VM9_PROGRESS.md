@@ -1855,9 +1855,11 @@ Evidence: [descriptor writer STORE64](evidence/vm9_descriptor_writer_store64_202
 The bounded root caller now produces the descriptor writer inputs from its own
 fresh VM/register state. Four controls (two image bases × absent/SDK 30) match
 the sequence `+0x140 branch A → +0x148 object → +0x148 object → +0x140 branch B`.
-The branch words relocate with the image base and the field8 value is observed
-from the current VM slot 17. The deterministic allocator seed repeats that
-object address, so the result is not a cross-seed entropy claim.
+The branch words relocate with the image base. `R29` comes from the caller
+frame setup (`R29 = R29 - 640`), branch A/B load `R1` from `[R20+72]` and
+`[R20+88]`, and field8 is generated from the current frame by `R17 = R30 + 8`.
+The deterministic allocator seed repeats that object address, so the result is
+not a cross-seed entropy claim.
 
 The owner-frame continuation and callback body remain unresolved. This evidence
 closes a bounded fresh writer-input boundary, not the full Python Medusa or

@@ -30,11 +30,26 @@ LIBRARY = RUNTIME_ROOT / "libmetasec_ml_71332.so"
 LIBC = RUNTIME_ROOT / "_vlibc.so"
 BASES = (0x122C0000, 0x775C205000)
 PROFILES = {"absent": None, "sdk_30": b"30"}
+SOURCE_SEMANTICS = {
+    "0xff7b600f": "R29 = R29 - 640",
+    "0x89020218": "R1 = [R20 + 72]",
+    "0x83a2020f": "R17 = R30 + 8",
+    "0x89020618": "R1 = [R20 + 88]",
+}
+
+
+def annotate_source(source):
+    if source is None:
+        return None
+    source = dict(source)
+    source["operation"] = SOURCE_SEMANTICS.get(source["previous_word"], "unmapped VM source")
+    return source
 
 
 def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_module):
     stores: list[dict] = []
     vm_starts: list[dict] = []
+    register_changes: list[dict] = []
 
     previous_vm = vm_module.VM
 
@@ -45,8 +60,21 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
                 return super().run()
             previous_hook = self.step_hook
             local: list[dict] = []
+            previous_values = {slot: self.R[slot] for slot in (1, 17, 29)}
+            previous_step = None
+            previous_word = None
 
             def hook(vm, word, op, sub):
+                nonlocal previous_values, previous_step, previous_word
+                for slot in (1, 17, 29):
+                    if self.R[slot] != previous_values[slot]:
+                        register_changes.append({
+                            "step_before": self.steps,
+                            "slot": slot,
+                            "value": hex(self.R[slot]),
+                            "previous_step": previous_step,
+                            "previous_word": hex(previous_word) if previous_word is not None else None,
+                        })
                 if start == 0x991C0 and op == writer.STORE64_OPCODE:
                     fields = writer.decode_store64(word & writer.MASK32)
                     if fields.immediate in (0x140, 0x148):
@@ -65,6 +93,9 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
                         })
                 if previous_hook is not None:
                     previous_hook(vm, word, op, sub)
+                previous_values = {slot: self.R[slot] for slot in (1, 17, 29)}
+                previous_step = self.steps
+                previous_word = word
 
             self.step_hook = hook
             try:
@@ -117,6 +148,24 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
     object_value = int(active[1]["value"], 16)
     if not object_value or object_value in (branch_a, branch_b):
         raise AssertionError(f"{hex(image)} {label}: invalid fresh object value")
+    writer_sources = [
+        {
+            "writer_step": store["step"],
+            "base_source": annotate_source(next((change for change in reversed(register_changes)
+                                 if change["slot"] == store["base_slot"]
+                                 and change["step_before"] <= store["step"]), None)),
+            "value_source": annotate_source(next((change for change in reversed(register_changes)
+                                  if change["slot"] == store["value_slot"]
+                                  and change["step_before"] <= store["step"]), None)),
+        }
+        for store in active
+    ]
+    expected_value_words = ["0x89020218", "0x83a2020f", "0x83a2020f", "0x89020618"]
+    for source, expected_word in zip(writer_sources, expected_value_words):
+        if source["base_source"] is None or source["base_source"]["previous_word"] != "0xff7b600f":
+            raise AssertionError(f"{hex(image)} {label}: base source not caller frame setup")
+        if source["value_source"] is None or source["value_source"]["previous_word"] != expected_word:
+            raise AssertionError(f"{hex(image)} {label}: value source mismatch {source}")
 
     return {
         "image_base": hex(image),
@@ -129,6 +178,13 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
         "writer_stores": active,
         "branch_targets": [hex(branch_a), hex(branch_b)],
         "fresh_object_value": active[1]["value"],
+        "writer_input_sources": writer_sources,
+        "source_semantics": {
+            "base_frame": SOURCE_SEMANTICS["0xff7b600f"],
+            "branch_a": SOURCE_SEMANTICS["0x89020218"],
+            "object": SOURCE_SEMANTICS["0x83a2020f"],
+            "branch_b": SOURCE_SEMANTICS["0x89020618"],
+        },
         "descriptor_callback_reached": bool(result.get("descriptor_trampoline")),
         "logger_callback_reached": bool(result.get("logger_calls")),
         "fresh_medusa_output_verified": False,

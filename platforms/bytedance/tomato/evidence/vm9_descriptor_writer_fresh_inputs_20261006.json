@@ -69,6 +69,90 @@
         "0x125ea4fc"
       ],
       "fresh_object_value": "0x136da148",
+      "writer_input_sources": [
+        {
+          "writer_step": 422,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 422,
+            "slot": 1,
+            "value": "0x125ea444",
+            "previous_step": 421,
+            "previous_word": "0x89020218",
+            "operation": "R1 = [R20 + 72]"
+          }
+        },
+        {
+          "writer_step": 424,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 424,
+            "slot": 17,
+            "value": "0x136da148",
+            "previous_step": 423,
+            "previous_word": "0x83a2020f",
+            "operation": "R17 = R30 + 8"
+          }
+        },
+        {
+          "writer_step": 470,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 424,
+            "slot": 17,
+            "value": "0x136da148",
+            "previous_step": 423,
+            "previous_word": "0x83a2020f",
+            "operation": "R17 = R30 + 8"
+          }
+        },
+        {
+          "writer_step": 471,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 470,
+            "slot": 1,
+            "value": "0x125ea4fc",
+            "previous_step": 469,
+            "previous_word": "0x89020618",
+            "operation": "R1 = [R20 + 88]"
+          }
+        }
+      ],
+      "source_semantics": {
+        "base_frame": "R29 = R29 - 640",
+        "branch_a": "R1 = [R20 + 72]",
+        "object": "R17 = R30 + 8",
+        "branch_b": "R1 = [R20 + 88]"
+      },
       "descriptor_callback_reached": false,
       "logger_callback_reached": false,
       "fresh_medusa_output_verified": false
@@ -136,6 +220,90 @@
         "0x125ea4fc"
       ],
       "fresh_object_value": "0x136da148",
+      "writer_input_sources": [
+        {
+          "writer_step": 422,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 422,
+            "slot": 1,
+            "value": "0x125ea444",
+            "previous_step": 421,
+            "previous_word": "0x89020218",
+            "operation": "R1 = [R20 + 72]"
+          }
+        },
+        {
+          "writer_step": 424,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 424,
+            "slot": 17,
+            "value": "0x136da148",
+            "previous_step": 423,
+            "previous_word": "0x83a2020f",
+            "operation": "R17 = R30 + 8"
+          }
+        },
+        {
+          "writer_step": 470,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 424,
+            "slot": 17,
+            "value": "0x136da148",
+            "previous_step": 423,
+            "previous_word": "0x83a2020f",
+            "operation": "R17 = R30 + 8"
+          }
+        },
+        {
+          "writer_step": 471,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 470,
+            "slot": 1,
+            "value": "0x125ea4fc",
+            "previous_step": 469,
+            "previous_word": "0x89020618",
+            "operation": "R1 = [R20 + 88]"
+          }
+        }
+      ],
+      "source_semantics": {
+        "base_frame": "R29 = R29 - 640",
+        "branch_a": "R1 = [R20 + 72]",
+        "object": "R17 = R30 + 8",
+        "branch_b": "R1 = [R20 + 88]"
+      },
       "descriptor_callback_reached": false,
       "logger_callback_reached": false,
       "fresh_medusa_output_verified": false
@@ -203,6 +371,90 @@
         "0x775c52f4fc"
       ],
       "fresh_object_value": "0x136da148",
+      "writer_input_sources": [
+        {
+          "writer_step": 422,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 422,
+            "slot": 1,
+            "value": "0x775c52f444",
+            "previous_step": 421,
+            "previous_word": "0x89020218",
+            "operation": "R1 = [R20 + 72]"
+          }
+        },
+        {
+          "writer_step": 424,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 424,
+            "slot": 17,
+            "value": "0x136da148",
+            "previous_step": 423,
+            "previous_word": "0x83a2020f",
+            "operation": "R17 = R30 + 8"
+          }
+        },
+        {
+          "writer_step": 470,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 424,
+            "slot": 17,
+            "value": "0x136da148",
+            "previous_step": 423,
+            "previous_word": "0x83a2020f",
+            "operation": "R17 = R30 + 8"
+          }
+        },
+        {
+          "writer_step": 471,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 470,
+            "slot": 1,
+            "value": "0x775c52f4fc",
+            "previous_step": 469,
+            "previous_word": "0x89020618",
+            "operation": "R1 = [R20 + 88]"
+          }
+        }
+      ],
+      "source_semantics": {
+        "base_frame": "R29 = R29 - 640",
+        "branch_a": "R1 = [R20 + 72]",
+        "object": "R17 = R30 + 8",
+        "branch_b": "R1 = [R20 + 88]"
+      },
       "descriptor_callback_reached": false,
       "logger_callback_reached": false,
       "fresh_medusa_output_verified": false
@@ -270,6 +522,90 @@
         "0x775c52f4fc"
       ],
       "fresh_object_value": "0x136da148",
+      "writer_input_sources": [
+        {
+          "writer_step": 422,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 422,
+            "slot": 1,
+            "value": "0x775c52f444",
+            "previous_step": 421,
+            "previous_word": "0x89020218",
+            "operation": "R1 = [R20 + 72]"
+          }
+        },
+        {
+          "writer_step": 424,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 424,
+            "slot": 17,
+            "value": "0x136da148",
+            "previous_step": 423,
+            "previous_word": "0x83a2020f",
+            "operation": "R17 = R30 + 8"
+          }
+        },
+        {
+          "writer_step": 470,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 424,
+            "slot": 17,
+            "value": "0x136da148",
+            "previous_step": 423,
+            "previous_word": "0x83a2020f",
+            "operation": "R17 = R30 + 8"
+          }
+        },
+        {
+          "writer_step": 471,
+          "base_source": {
+            "step_before": 2,
+            "slot": 29,
+            "value": "0x7004e8f0",
+            "previous_step": 1,
+            "previous_word": "0xff7b600f",
+            "operation": "R29 = R29 - 640"
+          },
+          "value_source": {
+            "step_before": 470,
+            "slot": 1,
+            "value": "0x775c52f4fc",
+            "previous_step": 469,
+            "previous_word": "0x89020618",
+            "operation": "R1 = [R20 + 88]"
+          }
+        }
+      ],
+      "source_semantics": {
+        "base_frame": "R29 = R29 - 640",
+        "branch_a": "R1 = [R20 + 72]",
+        "object": "R17 = R30 + 8",
+        "branch_b": "R1 = [R20 + 88]"
+      },
       "descriptor_callback_reached": false,
       "logger_callback_reached": false,
       "fresh_medusa_output_verified": false

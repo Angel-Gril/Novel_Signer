@@ -2131,6 +2131,12 @@
     "vm_entry": "0x991c0",
     "controls": 4,
     "descriptor_store_sequence": ["+0x140 branch A", "+0x148 object", "+0x148 object", "+0x140 branch B"],
+    "writer_input_sources": {
+      "base": "R29 = R29 - 640",
+      "branch_a": "R1 = [R20 + 72]",
+      "object": "R17 = R30 + 8",
+      "branch_b": "R1 = [R20 + 88]"
+    },
     "fresh_elf_inputs": true,
     "native_input_snapshot_used": false,
     "descriptor_callback_reached": false,
