@@ -4,7 +4,17 @@
 
 实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
-## 当前 small 满缓存 flush 与 root GC 边界（2026-10-06）
+## 当前 small GC 与独立 actual root（2026-10-06）
+
+matching libc `+0x9833c` 的 small-cursor GC 已恢复，共 **28 native／8 rollback** 终态通过。正 low watermark 复用 shared small flush，负 low watermark 调整 fill，按原生 W-register shift 更新 fill，并更新 low／cursor／event。覆盖负／零／正 watermark、fill 边界、cursor=35／exact wrap，以及 malloc／free／large allocation 对 small GC 的触发。large cursor 仍拒绝；旧公开 allocator 入口默认仍保留 event=228 的拒绝边界。见 [GC owner](python/vm9_libc_exit.py)、[验证器](python/verify_vm9_libc_gc.py) 和 [脱敏证据](evidence/vm9_libc_gc_native_20261006.json)。
+
+新的 [实际 allocator root bridge](python/vm9_root_allocator.py) 已完成 **10 native／8 rollback**：从独立 fresh 输入贯通自然 libc cold boot、actual allocator 和完整 `+0x257578` root factory。每组 206 malloc／93 free、3 flush／1 GC，716 步 root VM；32 槽、guest／主 image／观察的 TLS 与 libc globals／全部 retained mappings、有序回调和 OS metadata 全部匹配。两基址、四种 SDK profile，以及改变 stack／mapping／canary 的两组都通过。GC 后与第 206 次分配后失败仍完整回滚 guest owned state。见 [root 说明](ROOT_INITIALIZATION.md) 和 [root 证据](evidence/vm9_root_actual_allocator_native_20261006.json)。
+
+本组从 root factory 输入开始，**尚未将同次 main startup／非空 worker 接到 root**。以前 170/54、event=228 的 root 拒绝是历史边界，不能继续当作当前 frontier；也不能据此跳到 fresh 签名已完成。下一步从同次启动状态组合 root，再推进 signer／handle、fresh Medusa 输出和新的线上全头矩阵。
+
+受影响回归 **90 native／55 rollback** 全部终态通过（旧 fresh root、small flush、cached free、默认 tcache 边界），见 [回归证据](evidence/vm9_root_actual_allocator_regression_20261006.json)。
+
+## 上一阶段 small 满缓存 flush 与 root GC 定位（2026-10-06）
 
 已把 matching libc `free +0x91d18 → +0x97f40` 的满 small-cache 分支恢复到生产实现。缓存满时归还前半槽位、保留后半槽位，再追加本次 free；按槽位的实际 arena 分组，在各自 bin mutex 下更新共享 bitmap／slab tree，归并 preferred arena 的统计，搬移保留向量，并更新 count／low watermark。`+0x97f40` 由 [vm9_libc_exit.py](python/vm9_libc_exit.py) 单一实现持有，TLS 析构复用 remaining=0，C free 使用 remaining=count/2；没有复制第二套 flush 逻辑。
 
@@ -20,7 +30,7 @@ busy bin mutex、count 越界、错误 cached class、满缓存 duplicate、后�
 python -B platforms/bytedance/tomato/python/verify_vm9_libc_small_flush.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output small-flush-result.json
 ```
 
-接回独立 root Python 前段后，已越过先前的 **165 次分配／42 次释放、class 2 满缓存**；现在推进到 **170 次分配／54 次释放**，在下一次 free 的 **tcache event=228** 明确拒绝。当前 GC cursor=0、signed low watermark=-1、fill divisor log2=1；静态原生分支为 **`+0x91cbc → +0x9833c`**，随后更新 cursor／watermark／event，并可能进入共享 small flush。下一步恢复并独立验证这个 GC owner，再做 actual allocator 的完整 root 原生对照。[当前 GC 前段证据](evidence/vm9_root_actual_allocator_gc_frontier_20261006.json) 明确标记 root、native root 比较和 fresh 签名均未通过；没有清零计数或跳过 GC 来继续。
+上一阶段接回独立 root Python 前段后，越过了 **165 次分配／42 次释放、class 2 满缓存**，曾推进到 **170 次分配／54 次释放**，在下一次 free 的 **tcache event=228** 明确拒绝。当前 GC cursor=0、signed low watermark=-1、fill divisor log2=1；静态原生分支为 **`+0x91cbc → +0x9833c`**，随后更新 cursor／watermark／event，并可能进入共享 small flush。当时下一步是恢复 GC owner 和做完整 root 对照；这两项已由顶部的新证据推进。[历史 GC 前段证据](evidence/vm9_root_actual_allocator_gc_frontier_20261006.json) 明确标记 root、native root 比较和 fresh 签名均未通过；没有清零计数或跳过 GC 来继续。
 
 ## 当前实际 allocator 与完整 guest 可 join 退出组合（2026-10-06）
 
@@ -50,7 +60,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_startup_worker_pthread_ex
 
 **验收边界仍是实际 allocator 的 guest 可 join 分支。** 本轮未组合 actual detached worker 的线程列表注销／thread region unmap，未执行 host thread 创建／终止；realloc／emutls growth、whole-region release、replacement spare region、large cache／huge free、profiling、非默认 purge hook 及未知 callback 仍明确拒绝。独立 fresh Medusa 签名、线上全头矩阵和 f13 时间戳实验尚未通过。
 
-此阶段首次 actual root 探针在 165 次分配／42 次释放的 class 2 满缓存处拒绝，[旧前段观察](evidence/vm9_root_actual_allocator_frontier_20261006.json) 仍只记录那次未完成运行。该分支已由顶部 14/7 small-flush 对照恢复，当前 root 边界前移到 170/54 的 GC event；两项前段都不能作为 root 返回或请求签名通过的证据。
+此阶段首次 actual root 探针在 165 次分配／42 次释放的 class 2 满缓存处拒绝，[旧前段观察](evidence/vm9_root_actual_allocator_frontier_20261006.json) 仍只记录那次未完成运行。该分支已由顶部 14/7 small-flush 对照恢复，当时 root 边界前移到 170/54 的 GC event；顶部新 actual-root 证据已越过这处边界。两项旧前段本身不构成 root 返回或请求签名通过的证据。
 
 ## 先前实际 allocator 的 worker TLS key 退出（2026-10-06）
 

@@ -1,8 +1,12 @@
 # 默认配置下的 signer 构造和 callback 发布
 
-当前已恢复两个 child、两类 handler、引用计数 wrapper、root 已观测字段装配、空 callback 容器、最终 callback pair 绑定，以及受控环境下的 264-byte 配置 root factory／caller／VM 默认初始化路径。后者有8组 fresh ELF/TLS 对照，不依赖 native 入口快照，见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)。**完整外层 signer constructor、实际 allocator boot 与独立 fresh-input Medusa 仍未完成。** 本页只适用于已测番茄 `7.1.3.32` native artifact，不外推到抖音或其他平台。
+当前已恢复两个 child、两类 handler、引用计数 wrapper、root 已观测字段装配、空 callback 容器、最终 callback pair 绑定，以及受控环境下的 264-byte 配置 root factory／caller／VM 默认初始化路径。后者的旧 nonreusing 对照为8组；2026-10-06 新增 actual allocator 的10组 native／8组 rollback 对照，均不依赖 native 入口快照，见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)。**完整外层 signer constructor、同次 startup／root 组合、全部 allocator 分支与独立 fresh-input Medusa 仍未完成。** 本页只适用于已测番茄 `7.1.3.32` native artifact，不外推到抖音或其他平台。
 
 两类证据分别是 [同次构造采样](evidence/vm9_signer_constructor_graph_20261003.json) 和 [新建内存对照](evidence/vm9_signer_objects_python_20261003.json)。前者说明实际桥接器走了哪条路径；后者说明哪些对象字段可以由输入生成。
+
+## 本轮接入定位（2026-10-06）
+
+`+0x257578` actual root factory 已独立通过后，静态 BL 复核定位到两个直接调用点：默认外层 constructor `+0x27c930` 内的 `+0x27cbe8`，以及另一路 `+0x2a67e0`。前者设置三个 reference、flag=5 和 X8 输出，返回后通过 `+0x27cbf4 → +0x27ceac` 装配外层 root。下一步优先恢复这个默认 constructor 的输入准备、装配和后续 child／callback publication，并在同次 startup 状态下验收。第二个调用点只说明另一路复用该 factory，不构成默认路径或签名输出已通过的证据。本节是静态调用归属，尚无新的 outer constructor 组合 PASS。
 
 ## 实际默认路径与旧结论纠正
 

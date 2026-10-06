@@ -147,7 +147,7 @@ def construct_root_caller(pages, *, object_address, source_reference_address,
 def construct_initialized_root(pages, *, object_address, initial_reference_address,
         first_reference_address, second_reference_address, initializer_reference_address,
         flag, entry_stack_address, thread_pointer, image_base, vm_module,
-        allocate, saved_x28=0, **environment):
+        allocate, saved_x28=0, prefix_stack_effect=None, **environment):
     """+0x257084 layout, temporary third reference, caller and release.
 
     This composes the bounded default native path from constructor entry inputs;
@@ -173,6 +173,11 @@ def construct_initialized_root(pages, *, object_address, initial_reference_addre
             (-0xE8,image_base+0x2572CC),(-0xE0,0),
             (-0xD8,object_address+0xC0),(-0xD0,image_base+0x182D6C)):
         _word(staged,entry_stack_address+delta,value)
+    # +0x163e00 retains the explicit TLS canary in another otherwise unused
+    # VM backing slot, even when the diagnostic allocator bypasses libc.
+    _write_span(staged,entry_stack_address-0x108,_read_span(staged,thread_pointer+0x28,8))
+    if prefix_stack_effect is not None:
+        prefix_stack_effect(staged,entry_stack_address)
     temporary=entry_stack_address-0x78
     objects.copy_reference_wrapper(staged,object_address=temporary,source_address=initializer_reference_address)
     _write_span(staged,entry_stack_address-0x68,_read_span(staged,thread_pointer+0x28,8))

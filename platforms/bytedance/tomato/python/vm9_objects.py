@@ -899,7 +899,8 @@ def construct_normal_mutex_object(pages, *, object_address: int, image_base: int
 
 
 def construct_singleton_helper56(pages, *, object_address: int, image_base: int,
-                                 allocate: Callable) -> int:
+                                 allocate: Callable, entry_stack_address: int | None = None,
+                                 allocate_at_stack: Callable | None = None) -> int:
     """Model the full +0x1666e8 constructor; return its new 48-byte mutex.
 
     Zero three words at +8, byte +0x20 and word +0x28, preserving padding.
@@ -911,7 +912,14 @@ def construct_singleton_helper56(pages, *, object_address: int, image_base: int,
     _write_span(transaction, object_address + 8, bytes(24))
     _write_span(transaction, object_address + 0x20, bytes(1))
     _write_span(transaction, object_address + 0x28, bytes(8))
-    mutex = _allocate(transaction, allocate, 48)
+    if allocate_at_stack is not None:
+        if not isinstance(entry_stack_address,int) or entry_stack_address&15:
+            raise RefillUnsupported('singleton helper allocator stack must be aligned')
+        def helper_allocate(p,size):
+            return allocate_at_stack(p,size,entry_stack_address-0x20)
+    else:
+        helper_allocate=allocate
+    mutex = _allocate(transaction, helper_allocate, 48)
     construct_normal_mutex_object(transaction, object_address=mutex, image_base=image_base)
     _write_span(transaction, object_address + 0x30, _word(mutex))
     transaction.commit()
@@ -919,7 +927,8 @@ def construct_singleton_helper56(pages, *, object_address: int, image_base: int,
 
 
 def construct_singleton_layout136(pages, *, object_address: int, image_base: int,
-                                  allocate: Callable) -> SingletonLayout136:
+                                  allocate: Callable, entry_stack_address: int | None = None,
+                                  allocate_at_stack: Callable | None = None) -> SingletonLayout136:
     """Model +0x166370 through +0x166544; do not publish a singleton.
 
     Decode five flag-controlled constants, generate object/mutex/helper fields
@@ -928,6 +937,15 @@ def construct_singleton_layout136(pages, *, object_address: int, image_base: int
     Allocator effects act on staged pages; external ledgers are not rolled back.
     """
     transaction = _PageTransaction(pages)
+    if allocate_at_stack is not None:
+        if not isinstance(entry_stack_address,int) or entry_stack_address&15:
+            raise RefillUnsupported('singleton layout allocator stack must be aligned')
+        # +0x166370 reserves its fixed frame and five temporary strings;
+        # the operator-new calls execute at this surviving body SP.
+        def layout_allocate(p,size):
+            return allocate_at_stack(p,size,entry_stack_address-0x100)
+    else:
+        layout_allocate=allocate
     for source, mask, destination, flag in (
         (0x70360, 0x70530, 0x3D1690, 0x3D16B4),
         (0x70390, 0x70500, 0x3D16C0, 0x3D16E4),
@@ -949,16 +967,18 @@ def construct_singleton_layout136(pages, *, object_address: int, image_base: int
     _write_span(transaction, object_address + 0x38, _word(value) + bytes(8))
     _write_span(transaction, object_address + 0x50, bytes(4))
     _write_span(transaction, object_address + 0x48, bytes([255]) * 8)
-    mutex_a = _allocate(transaction, allocate, 48)
+    mutex_a = _allocate(transaction, layout_allocate, 48)
     construct_normal_mutex_object(transaction, object_address=mutex_a, image_base=image_base)
     _write_span(transaction, object_address + 0x58, _word(mutex_a))
-    mutex_b = _allocate(transaction, allocate, 48)
+    mutex_b = _allocate(transaction, layout_allocate, 48)
     construct_normal_mutex_object(transaction, object_address=mutex_b, image_base=image_base)
     _write_span(transaction, object_address + 0x60, _word(mutex_b) + bytes(8))
     _write_span(transaction, object_address + 0x70, bytes(16))
-    helper = _allocate(transaction, allocate, 56)
+    helper = _allocate(transaction, layout_allocate, 56)
     helper_mutex = construct_singleton_helper56(transaction, object_address=helper,
-                                               image_base=image_base, allocate=allocate)
+                                               image_base=image_base, allocate=allocate,
+        entry_stack_address=entry_stack_address-0x100 if entry_stack_address is not None else None,
+        allocate_at_stack=allocate_at_stack)
     _write_span(transaction, object_address + 0x80, _word(helper))
     transaction.commit()
     return SingletonLayout136(object_address, (mutex_a, mutex_b), helper, helper_mutex, value)

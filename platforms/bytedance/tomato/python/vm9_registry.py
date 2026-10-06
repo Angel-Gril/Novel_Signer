@@ -391,7 +391,7 @@ def construct_singleton136(pages, *, object_address: int, entry_stack_address: i
                            read_clock: Callable, get_tls: Callable,
                            initialize_registry: Callable, broadcast: Callable,
                            thread_id: int | None = None, max_nodes: int = 4096,
-                           max_bytes: int = 0x100000):
+                           max_bytes: int = 0x100000, allocate_at_stack: Callable | None = None):
     """Model +0x166370 through return, including five actual registry getters.
 
     Each getter resolves/publishes its dependency in order; five decoded ELF
@@ -401,7 +401,8 @@ def construct_singleton136(pages, *, object_address: int, entry_stack_address: i
     """
     transaction = _PageTransaction(pages)
     layout = objects.construct_singleton_layout136(transaction, object_address=object_address,
-                                                  image_base=image_base, allocate=allocate)
+                                                  image_base=image_base, allocate=allocate,
+        entry_stack_address=entry_stack_address,allocate_at_stack=allocate_at_stack)
     current_stack = entry_stack_address - 0x100
     common = dict(image_base=image_base, allocate=allocate, free=free, read_clock=read_clock,
         get_tls=get_tls, initialize_registry=initialize_registry, broadcast=broadcast,
@@ -430,13 +431,13 @@ def get_singleton136_reference(pages, *, entry_stack_address: int, image_base: i
                                allocate: Callable, free: Callable, read_clock: Callable,
                                get_tls: Callable, initialize_registry: Callable,
                                broadcast: Callable, thread_id: int | None = None,
-                               max_nodes: int = 4096, max_bytes: int = 0x100000):
+                               max_nodes: int = 4096, max_bytes: int = 0x100000, allocate_at_stack: Callable | None = None):
     """Model +0x161068; publish only after its complete constructor body."""
     def initialize(staged, pointer):
         construct_singleton136(staged, object_address=pointer, entry_stack_address=entry_stack_address - 0x20,
             image_base=image_base, allocate=allocate, free=free, read_clock=read_clock,
             get_tls=get_tls, initialize_registry=initialize_registry, broadcast=broadcast,
-            thread_id=thread_id, max_nodes=max_nodes, max_bytes=max_bytes)
+            thread_id=thread_id, max_nodes=max_nodes, max_bytes=max_bytes,allocate_at_stack=allocate_at_stack)
     transaction = _PageTransaction(pages)
     result = objects.construct_lazy_reference(transaction,
         guard_address=objects._image_address(image_base, 0x3D1680),

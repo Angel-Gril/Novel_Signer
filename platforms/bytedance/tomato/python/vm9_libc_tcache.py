@@ -390,7 +390,7 @@ def _public_allocation_context(tx, *, libc_base, thread_pointer, os_call, scratc
     return wrapper, cache, arena
 
 
-def _public_small(tx, *, request_size, libc_base, thread_pointer, os_call, scratch_address=None):
+def _public_small(tx, *, request_size, libc_base, thread_pointer, os_call, scratch_address=None, collect_cache=None):
     """+0x8f00c positive/zero small entry on ready or same-owner recursive init."""
     if not isinstance(request_size, int) or not 0 <= request_size <= 0x3800:
         raise allocator.RefillUnsupported("public entry only recovers nonnegative small sizes")
@@ -428,7 +428,8 @@ def _public_small(tx, *, request_size, libc_base, thread_pointer, os_call, scrat
             event = (_u(p, cache + 0x18, 4) + 1) & 0xFFFFFFFF
             _w(p, cache + 0x18, event, 4)
             if event == 228:
-                raise allocator.RefillUnsupported("tcache GC event is unrecovered")
+                if collect_cache is None:raise allocator.RefillUnsupported("tcache GC event is unrecovered")
+                collect_cache(p,wrapper+8,cache)
     elif arena:
         pointer, actual_width = region._direct_small(tx, arena_address=arena,
             request_size=size, zero=False, libc_base=libc_base,
@@ -451,7 +452,7 @@ def allocate_public_small(guest_os, *, request_size, libc_base, thread_pointer, 
     return result
 
 
-def _release_cached_small_pages(pages, *, pointer, libc_base, thread_pointer, flush_bin=None):
+def _release_cached_small_pages(pages, *, pointer, libc_base, thread_pointer, flush_bin=None, collect_cache=None):
     """Actual free +0x1bac0 -> +0x91990, NULL or nonfull clean small cache.
 
     C free has a void ABI; no native X0 value is part of this contract. The
@@ -519,7 +520,8 @@ def _release_cached_small_pages(pages, *, pointer, libc_base, thread_pointer, fl
     event = (_u(p, cache + 0x18, 4) + 1) & 0xFFFFFFFF
     _w(p, cache + 0x18, event, 4)
     if event == 228:
-        raise allocator.RefillUnsupported("free tcache GC event is unrecovered")
+        if collect_cache is None:raise allocator.RefillUnsupported("free tcache GC event is unrecovered")
+        collect_cache(p,wrapper+8,cache)
     return None
 
 
@@ -537,7 +539,7 @@ def release_cached_small(guest_os, *, pointer, libc_base, thread_pointer):
     return None
 
 
-def _public_large(tx, *, request_size, libc_base, thread_pointer, os_call, scratch_address=None):
+def _public_large(tx, *, request_size, libc_base, thread_pointer, os_call, scratch_address=None, collect_cache=None):
     """Actual cache-sized large branch; empty cache calls +0x7a3c8 once."""
     from vm9_libc_large import _direct_large
     if not isinstance(request_size, int) or not 0x3800 < request_size <= 0x10000:
@@ -566,6 +568,7 @@ def _public_large(tx, *, request_size, libc_base, thread_pointer, os_call, scrat
     event = (_u(p, cache + 0x18, 4) + 1) & 0xFFFFFFFF
     _w(p, cache + 0x18, event, 4)
     if event == 228:
-        raise allocator.RefillUnsupported("large tcache GC event is unrecovered")
+        if collect_cache is None:raise allocator.RefillUnsupported("large tcache GC event is unrecovered")
+        collect_cache(p,wrapper+8,cache)
     _w(p, wrapper + 0x18, (_u(p, wrapper + 0x18) + width) & MASK)
     return pointer

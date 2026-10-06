@@ -3,7 +3,46 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
-## Current full-small-cache flush and root GC checkpoint (2026-10-06)
+## Current small-GC and actual-root checkpoint (2026-10-06)
+
+Small-cursor GC +0x9833c is restored by the shared matching-libc exit/cache
+owner: **28 native controls / 8 rollback checks** pass. Positive low water
+reuses the real shared flush, negative low water adapts fill, and W-register
+variable shift, low/cursor/event updates match. Malloc, void free and large
+allocation trigger the small GC correctly. Large-cursor GC stays closed;
+legacy public entries without an explicit GC callback retain event=228
+rejection. [GC evidence](evidence/vm9_libc_gc_native_20261006.json).
+
+The [actual root bridge](python/vm9_root_allocator.py) now composes natural
+cold malloc, actual small/large allocation, shared small flush/GC/extent
+release and existing root/TLS/registry/state owners in one GuestOS transaction.
+[Strict verifier](python/verify_vm9_root_allocator.py) terminates with
+**10 native controls / 8 rollback checks**: two bases times four SDK profiles,
+plus two controls changing stack, mapping cursor and TLS canary. Every run
+naturally returns after 206 actual malloc PLTs, 93 free PLTs, three small
+flushes and one GC. Root VM has 716 steps and stops at +0x99f04; count=1.
+All32 slots, guest objects, all main-image pages, observed TLS/libc globals,
+all retained mapping pages, ordered effects and OS records/protection/cursor
+match. Observable malloc/TLS/cache-refill spills derive from explicit SP,
+ELF offsets, TLS canary and live cache/refill state. No native snapshot or
+substituted allocation seeds Python. [Root evidence](evidence/vm9_root_actual_allocator_native_20261006.json).
+
+Preflight, mapping/observer and oversized-property failures preserve pages,
+owned mappings/cursor and VM base. Late controls fail after GC, free #93 or
+allocation #206; external provider effects are not rolled back. The former
+170-allocation/54-free GC frontier below is historical. This proves a bounded
+independent actual-root factory, not same-startup worker/root composition,
+full physical-stack emulation, fresh request signing or an online pass.
+Realloc/large GC/nondefault config/host threads remain outside this result.
+Next compose root after the same fresh startup worker, then continue outer
+signer/handle initialization and compare fresh Medusa outputs. Rust, nonempty
+search/pagination, other platforms and final Pages/Actions remain incomplete.
+
+Affected regressions terminate with **90 native / 55 rollback checks**
+(old fresh root, small flush, cached free, default tcache boundaries).
+[Regression evidence](evidence/vm9_root_actual_allocator_regression_20261006.json).
+
+## Previous full-small-cache flush and root GC checkpoint (2026-10-06)
 
 Matching libc free +0x91d18 -> +0x97f40 is now implemented by a single
 _flush_small_bin owner in [vm9_libc_exit.py](python/vm9_libc_exit.py).

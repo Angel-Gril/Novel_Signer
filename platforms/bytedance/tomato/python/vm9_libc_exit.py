@@ -112,6 +112,35 @@ def _flush_small_bin(p,tsd,cache,class_id,remaining,*,libc_base,release_extent=N
 
 
 
+def _collect_small_cache(p,tsd,cache,*,libc_base,release_extent=None):
+    """+0x9833c: signed low water, adaptive fill, cursor and event reset.
+
+    Positive small-bin watermarks reuse +0x97f40. Large-bin GC is outside
+    this owner. The surrounding allocator/GuestOS transaction owns rollback.
+    """
+    classes=_u(p,libc_base+0xE9F48);index=_u(p,cache+0x1C,4)
+    if not 36<=classes<=45 or not 0<=index<36:
+        raise a.RefillUnsupported('large/invalid tcache GC cursor is unrecovered')
+    target=cache+0x20+index*32
+    low=a._signed32(_u(p,target+8,4));fill=_u(p,target+12,4)
+    count=_u(p,target+16,4);capacity=_u(p,_u(p,libc_base+0xE9F50)+index*4,4)
+    if count>capacity or fill>31 or low>count:
+        raise a.RefillUnsupported('invalid small tcache GC geometry')
+    if low>0:
+        remaining=count-low+(low>>2)
+        _flush_small_bin(p,tsd,cache,index,remaining,libc_base=libc_base,release_extent=release_extent)
+        fill=_u(p,target+12,4);next_fill=(fill+1)&0xFFFFFFFF
+        if capacity>>(next_fill&31):_w(p,target+12,next_fill,4)
+    elif low<0 and fill>1:
+        _w(p,target+12,fill-1,4)
+    # Native reloads the cursor after its callback, then normalizes only the
+    # exact cache-class count; the bin low water uses the entry's original index.
+    following=(_u(p,cache+0x1C,4)+1)&0xFFFFFFFF
+    _w(p,target+8,_u(p,target+16,4),4)
+    _w(p,cache+0x1C,0 if following==classes else following,4)
+    _w(p,cache+0x18,0,4)
+
+
 def _destroy_cache(p, tsd, libc_base, *, release_extent=None):
     cache=_u(p,tsd+8)
     if not cache:return
@@ -177,19 +206,22 @@ def _destroy_tsd(tx, p, wrapper, *, libc_base, thread_pointer, scratch_address, 
     else:_internal_free(p,wrapper,libc_base,release_extent=release_extent)
 
 
-def _free_in_exit(tx,p,pointer,*,libc_base,thread_pointer,scratch_address,os_call,release_extent=None,flush_small=False):
+def _free_in_exit(tx,p,pointer,*,libc_base,thread_pointer,scratch_address,os_call,release_extent=None,flush_small=False,collect_cache=None):
     if not pointer:return
     from vm9_libc_tcache import _release_cached_small_pages
     wrapper=_current_tsd(p,libc_base,thread_pointer,tx=tx,
         scratch_address=scratch_address,os_call=os_call)
     if _u(p,wrapper+0x10):
         if not flush_small:
-            return _release_cached_small_pages(p,pointer=pointer,libc_base=libc_base,thread_pointer=thread_pointer)
+            if collect_cache is None:
+                return _release_cached_small_pages(p,pointer=pointer,libc_base=libc_base,thread_pointer=thread_pointer)
+            return _release_cached_small_pages(p,pointer=pointer,libc_base=libc_base,
+                thread_pointer=thread_pointer,collect_cache=collect_cache)
         def flush(staged,tsd,cache,class_id,remaining):
             return _flush_small_bin(staged,tsd,cache,class_id,remaining,
                 libc_base=libc_base,release_extent=release_extent)
         return _release_cached_small_pages(p,pointer=pointer,libc_base=libc_base,
-            thread_pointer=thread_pointer,flush_bin=flush)
+            thread_pointer=thread_pointer,flush_bin=flush,collect_cache=collect_cache)
     _,class_id,_=_small_slot(p,pointer,libc_base)
     _w(p,wrapper+0x20,(_u(p,wrapper+0x20)+_u(p,libc_base+0xA6C80+class_id*8))&MASK)
     if _u(p,libc_base+0xE69C0):raise a.RefillUnsupported('exit free profiling is unrecovered')
