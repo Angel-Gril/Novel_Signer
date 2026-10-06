@@ -1,0 +1,471 @@
+{
+  "evidence_id": "vm9_descriptor_target_roles_fresh_20261006",
+  "schema": "vm9-descriptor-target-roles-fresh-v1",
+  "status": "corrected_targets_direct_fresh_differential",
+  "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "active_image_relative_targets": {
+    "acquire": "0x32a444",
+    "release": "0x32a4fc"
+  },
+  "superseded_image_relative_targets": {
+    "acquire": "0x31e444",
+    "release": "0x31e4fc"
+  },
+  "native_entry_disassembly": {
+    "acquire": [
+      {
+        "address": "0x32a444",
+        "mnemonic": "paciasp",
+        "op_str": ""
+      },
+      {
+        "address": "0x32a448",
+        "mnemonic": "sub",
+        "op_str": "sp, sp, #0x50"
+      },
+      {
+        "address": "0x32a44c",
+        "mnemonic": "stp",
+        "op_str": "x29, x30, [sp, #0x20]"
+      }
+    ],
+    "release": [
+      {
+        "address": "0x32a4fc",
+        "mnemonic": "paciasp",
+        "op_str": ""
+      },
+      {
+        "address": "0x32a500",
+        "mnemonic": "stp",
+        "op_str": "x29, x30, [sp, #-0x20]!"
+      },
+      {
+        "address": "0x32a504",
+        "mnemonic": "str",
+        "op_str": "x19, [sp, #0x10]"
+      },
+      {
+        "address": "0x32a508",
+        "mnemonic": "mov",
+        "op_str": "x29, sp"
+      }
+    ]
+  },
+  "controls": 16,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "kind": "acquire",
+      "native_offset": "0x32a444",
+      "old_offset_not_executed": "0x31e444",
+      "initial_count": "0x0",
+      "final_count": "0x1",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "acquire",
+      "native_offset": "0x32a444",
+      "old_offset_not_executed": "0x31e444",
+      "initial_count": "0x1",
+      "final_count": "0x2",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "acquire",
+      "native_offset": "0x32a444",
+      "old_offset_not_executed": "0x31e444",
+      "initial_count": "0x7",
+      "final_count": "0x8",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "acquire",
+      "native_offset": "0x32a444",
+      "old_offset_not_executed": "0x31e444",
+      "initial_count": "0x7ffffffe",
+      "final_count": "0x7fffffff",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "release",
+      "native_offset": "0x32a4fc",
+      "old_offset_not_executed": "0x31e4fc",
+      "initial_count": "0x1",
+      "final_count": "0x0",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "release",
+      "native_offset": "0x32a4fc",
+      "old_offset_not_executed": "0x31e4fc",
+      "initial_count": "0x2",
+      "final_count": "0x1",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "release",
+      "native_offset": "0x32a4fc",
+      "old_offset_not_executed": "0x31e4fc",
+      "initial_count": "0x7",
+      "final_count": "0x6",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "release",
+      "native_offset": "0x32a4fc",
+      "old_offset_not_executed": "0x31e4fc",
+      "initial_count": "0x7ffffffe",
+      "final_count": "0x7ffffffd",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "acquire",
+      "native_offset": "0x32a444",
+      "old_offset_not_executed": "0x31e444",
+      "initial_count": "0x0",
+      "final_count": "0x1",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "acquire",
+      "native_offset": "0x32a444",
+      "old_offset_not_executed": "0x31e444",
+      "initial_count": "0x1",
+      "final_count": "0x2",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "acquire",
+      "native_offset": "0x32a444",
+      "old_offset_not_executed": "0x31e444",
+      "initial_count": "0x7",
+      "final_count": "0x8",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "acquire",
+      "native_offset": "0x32a444",
+      "old_offset_not_executed": "0x31e444",
+      "initial_count": "0x7ffffffe",
+      "final_count": "0x7fffffff",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "release",
+      "native_offset": "0x32a4fc",
+      "old_offset_not_executed": "0x31e4fc",
+      "initial_count": "0x1",
+      "final_count": "0x0",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "release",
+      "native_offset": "0x32a4fc",
+      "old_offset_not_executed": "0x31e4fc",
+      "initial_count": "0x2",
+      "final_count": "0x1",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "release",
+      "native_offset": "0x32a4fc",
+      "old_offset_not_executed": "0x31e4fc",
+      "initial_count": "0x7",
+      "final_count": "0x6",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "release",
+      "native_offset": "0x32a4fc",
+      "old_offset_not_executed": "0x31e4fc",
+      "initial_count": "0x7ffffffe",
+      "final_count": "0x7ffffffd",
+      "native_return": "0x0",
+      "object_address": "0x70001000",
+      "memory_match": true,
+      "return_status_zero": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879052288
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879052288
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "all_memory_matches": true,
+  "all_return_statuses_zero": true,
+  "all_mutex_pairs_match": true,
+  "descriptor_trampoline_executed": false,
+  "callback_object_parameterized": false,
+  "fresh_medusa_output_verified": false,
+  "complete_python_medusa": false,
+  "limitations": [
+    "The direct calls prove the corrected shared-reader entries only.",
+    "The +0x2584ac trampoline, packed callback object and continuation chain remain unexecuted.",
+    "No online signer, Rust download chain or product capability is implied."
+  ]
+}

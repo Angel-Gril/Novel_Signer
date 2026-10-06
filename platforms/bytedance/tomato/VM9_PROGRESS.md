@@ -1,6 +1,20 @@
 # Current VM9 progress checkpoint
 
 
+## 2026-10-06: corrected descriptor targets direct fresh differential
+
+对 active writer 生成的 `+0x32a444/+0x32a4fc` 已做独立 fresh native
+差分：两种 image base、acquire/release 两方向、16 组 reader count 控制全部
+匹配内存结果和正常 mutex lock/unlock；native 返回值为 0。旧的
+`+0x31e444/+0x31e4fc` 未执行并保留为 superseded offsets。证据为
+[evidence/vm9_descriptor_target_roles_fresh_20261006.json](evidence/vm9_descriptor_target_roles_fresh_20261006.json)。
+
+这仍不是 `+0x2584ac` 的完整分支链。由于 shared-reader 函数的返回值是 mutex
+状态，且 trampoline 会在 `br x1` 后重新读取当前 `x0` 对象，下一步仍需从同次
+fresh descriptor/object graph 追踪实际下一跳和返回链接；不得把这 16 组函数
+差分当成 callback object 或 fresh Medusa 已恢复。
+
+
 ## 2026-10-06: corrected literal logger sink state boundary
 ## 2026-10-06: descriptor trampoline semantics parameterized
 ## 2026-10-06: corrected active descriptor target roles

@@ -1,6 +1,21 @@
 # 默认配置下的 signer 构造和 callback 发布
 
 
+## 2026-10-06: corrected targets direct fresh differential
+
+新增 `verify_vm9_descriptor_target_roles_fresh.py` 和
+[evidence/vm9_descriptor_target_roles_fresh_20261006.json](evidence/vm9_descriptor_target_roles_fresh_20261006.json)。
+在两种 image base、两种 reader 方向和 16 组 fresh mutex/count 输入上，native
+直接调用 `+0x32a444` / `+0x32a4fc`，与 Python reader 模型逐字节比对；所有
+控制都匹配正常 mutex 的 lock/unlock 序列，native 返回状态为 0，且没有分配。
+这把“active target 是真实 shared-reader 函数入口”的静态结论推进到直接
+fresh differential 证据；旧的 `+0x31e444` / `+0x31e4fc` 没有执行。
+
+该证据仍然只覆盖两个函数本身。`+0x2584ac` 的最终 `br x1`、packed callback
+object、对象首字段如何组成下一跳以及完整 VM continuation 仍未执行，因此
+不能据此声称 callback chain、fresh Medusa 或线上头矩阵已经完成。
+
+
 ## 2026-10-06: corrected literal logger sink boundary
 ## 2026-10-06: corrected active descriptor target relocation
 

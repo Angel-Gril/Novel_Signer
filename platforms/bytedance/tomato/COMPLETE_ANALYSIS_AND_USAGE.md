@@ -1,3 +1,9 @@
+新增一条可复核证据：`evidence/vm9_descriptor_target_roles_fresh_20261006.json`
+直接在 fresh guest 页上调用 active writer 生成的 `+0x32a444/+0x32a4fc`，16
+组控制全部通过；它证明的是 shared-reader 函数本身及其 mutex/count 语义，
+不是完整 descriptor trampoline、callback object、当前 Medusa 或线上签名。
+旧偏移 `+0x31e444/+0x31e4fc` 已明确标记为 superseded。
+
 # 番茄（ByteDance Tomato）完整分析与使用报告
 
 > 截止：2026-10-04

@@ -1188,7 +1188,12 @@
     "fresh_memory": true,
     "captured_pages_used": false,
     "complete_88_byte_initializer": false,
-    "complete_python_medusa": false
+    "complete_python_medusa": false,
+    "corrected_reader_target_offsets": [
+      "0x32a444",
+      "0x32a4fc"
+    ],
+    "reader_target_role_differential_verified": true
   },
   "vm9_configuration_decode_native_20261004": {
     "evidence_file": "evidence/vm9_configuration_decode_native_20261004.json",
@@ -2173,5 +2178,26 @@
     "descriptor_callback_reached": false,
     "fresh_medusa_output": false,
     "online_validation": false
+  },
+  "vm9_descriptor_target_roles_fresh_20261006": {
+    "evidence_file": "evidence/vm9_descriptor_target_roles_fresh_20261006.json",
+    "schema": "vm9-descriptor-target-roles-fresh-v1",
+    "status": "corrected_targets_direct_fresh_differential",
+    "controls": 16,
+    "active_image_relative_targets": {
+      "acquire": "0x32a444",
+      "release": "0x32a4fc"
+    },
+    "superseded_image_relative_targets": {
+      "acquire": "0x31e444",
+      "release": "0x31e4fc"
+    },
+    "all_memory_matches": true,
+    "all_return_statuses_zero": true,
+    "all_mutex_pairs_match": true,
+    "descriptor_trampoline_executed": false,
+    "callback_object_parameterized": false,
+    "fresh_medusa_output_verified": false,
+    "complete_python_medusa": false
   }
 }
