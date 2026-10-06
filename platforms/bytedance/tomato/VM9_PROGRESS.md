@@ -1,5 +1,11 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-06: 外层 constructor 的 logger 与 descriptor trampoline 边界
+
+新增 [outer constructor boundary verifier](python/verify_vm9_outer_constructor_boundary.py) 和 [边界证据](evidence/vm9_outer_constructor_boundary_20261006.json)。从 fresh ELF/TLS、同次 actual allocator 和虚拟启动服务开始，4 组（两种 image base × absent/SDK 30）都到达 `+0x26e9e0` logger callback，然后进入当前 active 的 `+0x2584ac` descriptor trampoline。每组都记录了 callback 参数块、descriptor 地址、field0 branch target 和 field8 传给后续分支的对象；不同基址只改变 relocated 地址，字段关系和停点一致。
+
+该控制在 trampoline 处显式拒绝，未把它替换成 no-op，也未把静态猜测当作 callback 实现。当前已确认 descriptor 位于 native bridge argument+8，field0 是 logger branch target，field8 是后续 x0 object；`+0x2887f0` 仍未成为当前 active path。logger/global 的实际状态写入、trampoline 的完整调用/返回语义和 descriptor writer 的输入驱动对象图仍未恢复，因此这不是完整 outer constructor、fresh Medusa 或线上签名证据。
+
 ## 2026-10-06: actual allocator 外层前段组合
 
 `verify_vm9_outer_prefix_allocator.py` 已完成 fresh main startup → registry string caller → actual root → 两 child/handler → callback publication 的同次 guest 状态组合。4 组（两基址 × absent/SDK 30）通过，147/716 VM steps，root reference count=1，JNI publication 的 invoke/type/delete 顺序通过；缺页输入回滚。该证据仍是 Python-only composition，不是 native whole-prefix match，也没有产生 fresh Medusa 签名。

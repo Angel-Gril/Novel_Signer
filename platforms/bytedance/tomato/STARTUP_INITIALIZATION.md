@@ -1,5 +1,11 @@
 # 外层启动 caller 与 worker 调度／清理
 
+## 2026-10-06: outer constructor logger/trampoline 边界
+
+外层构造器边界控制已从 fresh ELF/TLS 和同次 actual allocator 状态跑过 4 组：两种 image base、属性缺失和 SDK=30。主启动、registry getter、root factory 之后稳定进入 `+0x26e9e0` logger，再到 active `+0x2584ac` descriptor trampoline；证据记录 callback 参数、descriptor field0/field8 和拒绝位置。
+
+这里仍然是显式边界：logger 的 global/BSS 状态写入、trampoline 的真实调用/返回和 descriptor writer 的输入驱动来源没有完成，不能把这组到达证据写成完整 outer constructor 或 fresh Medusa。真实 OS 线程、线上全头矩阵、f13 冻结、Rust 和最终 Pages/Actions 产品仍未完成。
+
 ## 启动到 registry/root 的同次状态桥接（2026-10-06）
 
 主启动的 actual allocator 结果现在可以直接交给新的 [外层前段组合器](python/vm9_outer_allocator.py)：fresh `+0x28040c` 返回后不重新构造 allocator，而是在同一个 guest OS/TLS 状态中运行 registry string caller，再调用 root factory。4 组组合结果见 [组合证据](evidence/vm9_outer_prefix_actual_allocator_20261006.json)。同一 checkpoint 还完成两个 child、两类 handler、callback pair 绑定和 JNI publication；这是 Python 状态连续性证据，native whole-prefix 对照和 fresh signer 仍保持未完成。

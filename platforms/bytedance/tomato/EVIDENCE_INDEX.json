@@ -1693,7 +1693,6 @@
     "python_worker_model_used": false,
     "complete_python_medusa": false
   },
-
   "vm9_outer_prefix_actual_allocator_20261006": {
     "evidence_file": "evidence/vm9_outer_prefix_actual_allocator_20261006.json",
     "python_actual_allocator_prefix_composed": true,
@@ -1701,14 +1700,45 @@
     "python_outer_assembly_composed": true,
     "callback_publication_verified": true,
     "case_count": 4,
-    "image_bases": ["0x122c0000", "0x775c205000"],
-    "property_profiles": ["absent", "sdk_30"],
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
     "registry_string_vm_steps": 147,
     "root_vm_steps": 716,
     "root_reference_count": 1,
     "native_whole_prefix_comparison": false,
     "matching_libc_realloc_restored": false,
     "fresh_medusa_output_verified": false,
+    "complete_python_medusa": false
+  },
+  "vm9_outer_constructor_boundary_20261006": {
+    "evidence_file": "evidence/vm9_outer_constructor_boundary_20261006.json",
+    "schema": "vm9-outer-constructor-boundary-v1",
+    "controls": 4,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
+    "fresh_elf_inputs": true,
+    "native_input_snapshot_used": false,
+    "logger_callback_arguments_captured": true,
+    "active_descriptor_trampoline_captured": true,
+    "descriptor_argument_plus_8": true,
+    "descriptor_field0_is_branch_target": true,
+    "descriptor_field8_is_x0_object": true,
+    "logger_model_applied": false,
+    "descriptor_trampoline_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
     "complete_python_medusa": false
   }
 }

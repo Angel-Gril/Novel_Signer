@@ -1,5 +1,11 @@
 # 默认配置下的 signer 构造和 callback 发布
 
+## 2026-10-06: 外层 logger callback 与 active descriptor trampoline 边界
+
+[边界 verifier](python/verify_vm9_outer_constructor_boundary.py) 在同次 fresh ELF/TLS/actual allocator 状态上跑过两种 image base 与 absent/SDK 30 共 4 组。每组先到达 `+0x26e9e0`，随后由 `+0x2584ac` 读取 descriptor：`argument+8` 是 descriptor，field0 是 relocated logger branch target，field8 是后续 x0 object；其余字段与 logger 的 first/second/width 参数块也保留在证据中。控制在该 trampoline 明确拒绝，未执行猜测性的 no-op 或伪 callback。
+
+这一步把 outer constructor 的下一个真实边界固定下来，但没有恢复 logger/global 写入或 trampoline 的完整 native handoff。`+0x2887f0` 仍不是当前路径，descriptor writer 的 input-driven object graph 仍缺失。因而 `complete_python_medusa`、fresh Medusa 输出、online header matrix 和无 JVM Rust 链路继续保持 false。
+
 ## 同次 actual allocator/TLS 外层前段组合（2026-10-06）
 
 新增 [外层前段 verifier](python/verify_vm9_outer_prefix_allocator.py) 与 [组合证据](evidence/vm9_outer_prefix_actual_allocator_20261006.json)。它从 fresh ELF 输入启动 `+0x28040c`，然后在同一实际 matching-libc allocator/TLS 状态中创建 registry、执行 `+0x256e50 → VM +0x98d50` 字符串 caller，最后接入 `+0x257578` root factory。两种 image base 和 absent/SDK 30 两种属性共 4 组通过；每组 3 个启动 descriptor、147 步 registry VM、716 步 root VM、217 次分配、94 次释放，输出 root reference count 为 1。缺页输入按事务回滚。

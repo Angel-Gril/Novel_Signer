@@ -30,7 +30,7 @@ class RootCallbacks:
             vm_module, allocate, reallocate, free, get_singleton, get_tls,
             initialize_registry, broadcast, read_property, syscall,
             errno_address, mkdir, register_destructor, thread_id=None,
-            prepare_format=None):
+            prepare_format=None, logger_callback=None):
         self.base=image_base; self.stack=native_stack_address
         self.thread_pointer=thread_pointer; self.vm_module=vm_module
         self.allocate=allocate; self.reallocate=reallocate; self.free=free
@@ -40,12 +40,13 @@ class RootCallbacks:
             read_property=read_property,syscall=syscall,errno_address=errno_address,
             mkdir=mkdir,register_destructor=register_destructor,
             thread_id=thread_id,prepare_format=prepare_format)
+        self.logger_callback=logger_callback
         self.modeled=[]
 
     def __call__(self, vm, function, argument):
         base=self.base; pages=vm.m.pages
         wrapper=function-base
-        words=[vm.m.u64(argument+i*8) for i in range(4)]
+        words=[vm.m.u64(argument+i*8) for i in range(8)]
         target=words[0]-base
         if (wrapper,target) in ((0x258444,0x26C858),(0x258454,0x26C9D0)):
             pass  # Same explicit diagnostic-scope exclusion as native controls.
@@ -79,6 +80,12 @@ class RootCallbacks:
                 entry_stack_address=self.stack-0x180,return_address=base+0x16AA4C,
                 thread_pointer=self.thread_pointer,image_base=base,vm_module=self.vm_module,
                 allocate=self.allocate,**self.environment)
+        elif (wrapper,target)==(0x258488,0x26E9E0):
+            if self.logger_callback is None:
+                raise RefillUnsupported('native +0x26e9e0 logger callback is unrecovered')
+            self.logger_callback(vm, argument=argument, object_address=words[1],
+                first_argument=words[2], second_argument=words[3],
+                width=words[4] & 0xFFFFFFFF, register_values=tuple(vm.R[4:8]))
         else:
             raise RefillUnsupported(f'unrecovered root callback +{wrapper:#x} -> +{target:#x}')
         self.modeled.append(dict(wrapper_offset=hex(wrapper),target_offset=hex(target)))
