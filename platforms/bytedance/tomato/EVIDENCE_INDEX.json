@@ -1692,5 +1692,23 @@
     "wait_executed": false,
     "python_worker_model_used": false,
     "complete_python_medusa": false
+  },
+
+  "vm9_outer_prefix_actual_allocator_20261006": {
+    "evidence_file": "evidence/vm9_outer_prefix_actual_allocator_20261006.json",
+    "python_actual_allocator_prefix_composed": true,
+    "same_guest_state_startup_registry_string_root": true,
+    "python_outer_assembly_composed": true,
+    "callback_publication_verified": true,
+    "case_count": 4,
+    "image_bases": ["0x122c0000", "0x775c205000"],
+    "property_profiles": ["absent", "sdk_30"],
+    "registry_string_vm_steps": 147,
+    "root_vm_steps": 716,
+    "root_reference_count": 1,
+    "native_whole_prefix_comparison": false,
+    "matching_libc_realloc_restored": false,
+    "fresh_medusa_output_verified": false,
+    "complete_python_medusa": false
   }
 }

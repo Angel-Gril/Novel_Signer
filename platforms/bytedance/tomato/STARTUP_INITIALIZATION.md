@@ -1,5 +1,10 @@
 # 外层启动 caller 与 worker 调度／清理
 
+## 启动到 registry/root 的同次状态桥接（2026-10-06）
+
+主启动的 actual allocator 结果现在可以直接交给新的 [外层前段组合器](python/vm9_outer_allocator.py)：fresh `+0x28040c` 返回后不重新构造 allocator，而是在同一个 guest OS/TLS 状态中运行 registry string caller，再调用 root factory。4 组组合结果见 [组合证据](evidence/vm9_outer_prefix_actual_allocator_20261006.json)。同一 checkpoint 还完成两个 child、两类 handler、callback pair 绑定和 JNI publication；这是 Python 状态连续性证据，native whole-prefix 对照和 fresh signer 仍保持未完成。
+
+
 当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**默认 matching libc 冷启动、实际 allocator 与同次非空 worker 的 guest 可 join pthread_exit 分支已分别验证；完整 allocator 分支、实际 detached worker 注销／回收组合及 root 接入、真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
@@ -8,7 +13,7 @@
 
 `+0x256e50 → VM +0x98d50` 的有界 Python caller 已恢复 lazy decode、scoped writer、C-string/object append 和 release，12 native／6 rollback 通过；底层新增 `+0x2486b0` C-string append 为28/8，受影响旧字符串/registry回归204/22。cold/warm普通调用分别147/119步，stop `+0x99018`，每次返回全部32槽、guest/image/TLS、释放前字节和副作用顺序均匹配。
 
-该验收使用既有 registry 布局生成的组件输入、显式 warm scoped TLS 和合成 allocator effects；**仍需同次实际 allocator/TLS 下的 main startup／registry/reference／string prefix／actual root／outer publication 组合**。累计内容的 `+0x256ff0 → +0x248908` 格式化分支保留明确拒绝；matching-libc realloc尚未恢复。证据和复现见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md#当前-registry-字符串-caller-与-c-字符串追加2026-10-06)。
+该验收使用既有 registry 布局生成的组件输入、显式 warm scoped TLS 和合成 allocator effects；**已通过同次实际 allocator/TLS 下的 main startup／registry/reference／string prefix／actual root 前段组合；仍需 native whole-prefix 对照和 outer publication**。累计内容的 `+0x256ff0 → +0x248908` 格式化分支保留明确拒绝；matching-libc realloc尚未恢复。证据和复现见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md#当前-registry-字符串-caller-与-c-字符串追加2026-10-06)。
 
 ## 此前 native 外层接入控制（2026-10-06）
 

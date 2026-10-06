@@ -1,6 +1,13 @@
 # 默认配置下的 signer 构造和 callback 发布
 
-当前已恢复两个 child、两类 handler、引用计数 wrapper、root 已观测字段装配、空 callback 容器、最终 callback pair 绑定，以及受控环境下的 264-byte 配置 root factory／caller／VM 默认初始化路径。后者的旧 nonreusing 对照为8组；2026-10-06 新增 actual allocator 的10组 native／8组 rollback 对照，均不依赖 native 入口快照，见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)。**完整外层 signer constructor、同次 startup／root 组合、全部 allocator 分支与独立 fresh-input Medusa 仍未完成。** 本页只适用于已测番茄 `7.1.3.32` native artifact，不外推到抖音或其他平台。
+## 同次 actual allocator/TLS 外层前段组合（2026-10-06）
+
+新增 [外层前段 verifier](python/verify_vm9_outer_prefix_allocator.py) 与 [组合证据](evidence/vm9_outer_prefix_actual_allocator_20261006.json)。它从 fresh ELF 输入启动 `+0x28040c`，然后在同一实际 matching-libc allocator/TLS 状态中创建 registry、执行 `+0x256e50 → VM +0x98d50` 字符串 caller，最后接入 `+0x257578` root factory。两种 image base 和 absent/SDK 30 两种属性共 4 组通过；每组 3 个启动 descriptor、147 步 registry VM、716 步 root VM、217 次分配、94 次释放，输出 root reference count 为 1。缺页输入按事务回滚。
+
+该 checkpoint 证明 Python 组件可以在同一次 guest 状态中传递 allocator、TLS、registry/reference 和 root，而不是把 native 前导快照拼接到 Python。它仍未完成 native whole-prefix 对照、matching-libc realloc、格式化 callback 或 fresh Medusa 输出；公开 JSON 也明确保留这些 false 边界。
+
+
+当前已恢复两个 child、两类 handler、引用计数 wrapper、root 已观测字段装配、空 callback 容器、最终 callback pair 绑定，以及受控环境下的 264-byte 配置 root factory／caller／VM 默认初始化路径。后者的旧 nonreusing 对照为8组；2026-10-06 新增 actual allocator 的10组 native／8组 rollback 对照，均不依赖 native 入口快照，见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)。**完整外层 signer constructor、native whole-prefix 对照、全部 allocator 分支与独立 fresh-input Medusa 仍未完成；同次 Python actual-allocator 前段组合已通过。** 本页只适用于已测番茄 `7.1.3.32` native artifact，不外推到抖音或其他平台。
 
 两类证据分别是 [同次构造采样](evidence/vm9_signer_constructor_graph_20261003.json) 和 [新建内存对照](evidence/vm9_signer_objects_python_20261003.json)。前者说明实际桥接器走了哪条路径；后者说明哪些对象字段可以由输入生成。
 
@@ -23,7 +30,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_cstring_append.py --libra
 python -B platforms/bytedance/tomato/python/verify_vm9_registry_string_caller.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output registry-string-caller-result.json
 ```
 
-**默认 registry 字符串 caller 的有界 Python 组件已通过；同次独立 Python 外层 constructor 仍未通过。** 下一步把默认 main startup、registry/reference 和字符串前段接入同一实际 allocator／TLS 状态，再调用已恢复的 actual root，继续 outer assembly 和 callback publication。格式化 callback、matching-libc realloc 和其他未测分支保留明确边界。fresh Medusa 输出、线上全头/f13 矩阵、Rust 下载链路、非空搜索与分页、抖音/起点和最终 Pages/Actions 产品仍未完成。
+**默认 registry 字符串 caller 的有界 Python 组件已通过；新的同次 actual allocator/TLS 前段组合也已通过。下一步做 native whole-prefix 对照，恢复格式化/realloc 边界，再继续 outer assembly 和 callback publication。格式化 callback、matching-libc realloc 和其他未测分支保留明确边界。fresh Medusa 输出、线上全头/f13 矩阵、Rust 下载链路、非空搜索与分页、抖音/起点和最终 Pages/Actions 产品仍未完成。
 
 ## 此前递归 mutex 与 native 外层冷启动（2026-10-06）
 

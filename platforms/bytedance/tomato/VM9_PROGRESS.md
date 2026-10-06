@@ -1,5 +1,9 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-06: actual allocator 外层前段组合
+
+`verify_vm9_outer_prefix_allocator.py` 已完成 fresh main startup → registry string caller → actual root → 两 child/handler → callback publication 的同次 guest 状态组合。4 组（两基址 × absent/SDK 30）通过，147/716 VM steps，root reference count=1，JNI publication 的 invoke/type/delete 顺序通过；缺页输入回滚。该证据仍是 Python-only composition，不是 native whole-prefix match，也没有产生 fresh Medusa 签名。
+
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
