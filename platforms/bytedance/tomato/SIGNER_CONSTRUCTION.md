@@ -7,8 +7,9 @@
 `vm9_callbacks.dispatch_descriptor_trampoline` now models the recovered
 `+0x2584ac` instruction boundary with explicit transaction and callback inputs:
 `ldr x8,[x0]; blr x8`, reload `ldp x1,x8,[x0]`, then
-`mov x0,x8; br x1`. The test proves a pre-dispatch target rewrite is observed
-by the final branch and that missing/null inputs fail without guest writes.
+`mov x0,x8; br x1`. The verifier checks those six instructions against the
+current private ELF, proves a pre-dispatch target rewrite is observed by the
+final branch, and proves missing/null inputs fail without guest writes.
 See [trampoline evidence](evidence/vm9_descriptor_trampoline_semantics_20261006.json).
 
 The callback-object writer, packed x8 composition and actual branch bodies are

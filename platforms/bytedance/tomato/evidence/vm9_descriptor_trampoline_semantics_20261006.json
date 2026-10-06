@@ -5,7 +5,17 @@
   "instruction_boundary": {
     "entry": "+0x2584ac",
     "pre_dispatch": "ldr x8,[x0]; blr x8",
-    "reload_and_handoff": "ldp x1,x8,[x0]; mov x0,x8; br x1"
+    "reload_and_handoff": "ldp x1,x8,[x0]; mov x0,x8; br x1",
+    "native_static_disassembly_match": true,
+    "native_sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "native_disassembly": [
+      "str x30, [sp, #-0x10]!",
+      "ldr x8, [x0]",
+      "blr x8",
+      "ldp x1, x8, [x0]",
+      "mov x0, x8",
+      "br x1"
+    ]
   },
   "initial_target": "0x125ea444",
   "final_target": "0x125ea4fc",

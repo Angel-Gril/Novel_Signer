@@ -7,9 +7,10 @@
 The generic `+0x2584ac` sequence is now represented as a transactional
 component: read the initial target/object pair, invoke an explicit
 pre-dispatch callback, reload the pair, then invoke an explicit branch
-callback with the reloaded object. The verifier covers the target rewrite and
-null/missing-callback rollback cases without executing a guest function pointer.
-Evidence: [descriptor trampoline semantics](evidence/vm9_descriptor_trampoline_semantics_20261006.json).
+callback with the reloaded object. The verifier also checks the six-instruction
+sequence against the current private ELF (`str/ldr/blr/ldp/mov/br`) and covers
+target rewrite plus null/missing-callback rollback cases without executing a
+guest function pointer. Evidence: [descriptor trampoline semantics](evidence/vm9_descriptor_trampoline_semantics_20261006.json).
 
 This closes only the instruction-level continuation contract. The native
 callback-object writer, packed x8 composition, active current VM9 branch body,

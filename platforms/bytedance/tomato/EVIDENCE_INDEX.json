@@ -2076,6 +2076,16 @@
       "Pre-dispatch and branch bodies are explicit callbacks; the model does not execute a native pointer or change the VM PC.",
       "The packed callback-object composition and current VM9 object graph remain unresolved.",
       "This local semantic component does not establish an online signer or Rust download chain."
+    ],
+    "native_static_disassembly_match": true,
+    "native_sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instruction_sequence": [
+      "str x30, [sp, #-0x10]!",
+      "ldr x8, [x0]",
+      "blr x8",
+      "ldp x1, x8, [x0]",
+      "mov x0, x8",
+      "br x1"
     ]
   }
 }

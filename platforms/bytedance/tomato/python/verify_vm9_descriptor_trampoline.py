@@ -10,6 +10,9 @@ import hashlib
 import json
 from pathlib import Path
 
+from capstone import Cs, CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN
+from elftools.elf.elffile import ELFFile
+
 import vm9_allocator as allocator
 import vm9_callbacks as callbacks
 
@@ -28,10 +31,40 @@ def put(pages, address, value):
     page[offset:offset + len(value)] = value
 
 
+def native_trampoline_disassembly(library: Path):
+    """Read only the six public instruction fields at +0x2584ac."""
+    raw_hash = hashlib.sha256(library.read_bytes()).hexdigest()
+    with library.open("rb") as stream:
+        elf = ELFFile(stream)
+        section = next(
+            section for section in elf.iter_sections()
+            if section["sh_addr"] <= 0x2584AC < section["sh_addr"] + section["sh_size"]
+        )
+        file_offset = section["sh_offset"] + (0x2584AC - section["sh_addr"])
+        stream.seek(file_offset)
+        code = stream.read(24)
+    disassembler = Cs(CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN)
+    rows = list(disassembler.disasm(code, 0x2584AC))
+    rendered = [f"{row.mnemonic} {row.op_str}".strip() for row in rows]
+    expected = [
+        "str x30, [sp, #-0x10]!",
+        "ldr x8, [x0]",
+        "blr x8",
+        "ldp x1, x8, [x0]",
+        "mov x0, x8",
+        "br x1",
+    ]
+    if rendered[:len(expected)] != expected:
+        raise AssertionError({"expected": expected, "actual": rendered})
+    return raw_hash, rendered[:len(expected)]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", type=Path, required=True)
+    ap.add_argument("--library", type=Path, default=Path(r"C:\AI\6\libmetasec_ml_71332.so"))
     args = ap.parse_args()
+    native_hash, native_disassembly = native_trampoline_disassembly(args.library)
 
     pages = {index: bytearray(0x1000) for index in range(4)}
     descriptor = 0x1000
@@ -101,6 +134,9 @@ def main() -> None:
             "entry": "+0x2584ac",
             "pre_dispatch": "ldr x8,[x0]; blr x8",
             "reload_and_handoff": "ldp x1,x8,[x0]; mov x0,x8; br x1",
+            "native_static_disassembly_match": True,
+            "native_sample_sha256": native_hash,
+            "native_disassembly": native_disassembly,
         },
         "initial_target": hex(result.initial_target),
         "final_target": hex(result.final_target),
