@@ -2261,5 +2261,29 @@
       "The descriptor mutation is synthetic and does not parameterize current VM9 packed callback x8.",
       "No fresh Medusa output or online header matrix is established."
     ]
+  },
+  "vm9_callback_return_trampoline_native_fresh_20261006": {
+    "evidence_file": "evidence/vm9_callback_return_trampoline_native_fresh_20261006.json",
+    "schema": "vm9-callback-return-trampoline-native-fresh-v1",
+    "status": "native_return_trampoline_fresh_differential_pass",
+    "entry_offset": "0x25863c",
+    "continuation_offset": "0x25865c",
+    "branch_offset": "0x2586a0",
+    "controls": 8,
+    "all_native_controls_pass": true,
+    "stack_save_restore_verified": true,
+    "object_zero_initialization_verified": true,
+    "selector_branch_verified": true,
+    "current_vm_callback_object_graph_recovered": false,
+    "packed_callback_x8_parameterized": false,
+    "fresh_medusa_output_verified": false,
+    "complete_python_medusa": false,
+    "no_jvm_rust_signer_complete": false,
+    "interpretation": "Exact ELF return-trampoline bytes independently execute stack restoration, 16-byte object zeroing, selector-dependent branch selection and final br x8 boundary on fresh synthetic inputs.",
+    "limitations": [
+      "Final branch target body and continuation are not executed.",
+      "Synthetic registers/object memory do not parameterize the current VM9 owner frame.",
+      "This path does not prove packed callback x8 or current Medusa output."
+    ]
   }
 }

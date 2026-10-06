@@ -36,7 +36,12 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 外层启动的最新恢复：`+0x28040c → VM +0xa7050` 的 4 个 fresh 控制完成 86 步／16 次分配／3 次 deferred worker 创建；worker TLS support 前段为16个冷／热控制，executor context 的实际 emulated-TLS 初始化另有8个冷／热对照；native-only guest 调度探针已到达 timedwait，完整 Python worker仍未通过。OP45 的第二寄存器 bit 21 和 equality 语义由 308 个 native 控制确认，共用 VM 的 root／state／parser 回归通过。worker dispatch、真实 allocator boot、fresh 请求签名和新线上矩阵仍未验证。详见 [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md)。
 
 
-### Native descriptor trampoline evidence
+#
+### Separate callback return trampoline
+
+The verifier `python/verify_vm9_callback_return_trampoline_native_fresh_20261006.py` executes the exact native bytes at `+0x25863c` and `+0x25865c` on fresh synthetic registers, stack and object memory. The resulting evidence is useful when distinguishing callback-family paths: it proves the stack restoration, object zeroing and selector-dependent `br x8` boundary independently of the direct descriptor wrapper. It does not prove the final target body, packed callback x8 construction, current VM9 object graph or online signer.
+
+## Native descriptor trampoline evidence
 
 `python/verify_vm9_descriptor_trampoline_native_fresh_20261006.py` executes the private ELF bytes at `+0x2584ac` in a controlled ARM64 emulator. Its JSON evidence records 12 fresh descriptor controls, including the saved caller `x30`, callback return PC, descriptor rewrite, final `x0/x1`, and the final branch boundary. This is useful as a key instruction-level proof when reviewing the signer: it validates the wrapper ABI independently of the Python model. It must be cited together with the limitation fields because the callback mutation is synthetic and the current VM9 object graph, packed callback x8, Medusa output, and server acceptance are still unresolved.
 

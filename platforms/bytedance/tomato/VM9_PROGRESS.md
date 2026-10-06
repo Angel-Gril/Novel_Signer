@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-06: native `+0x25863c → +0x25865c` return trampoline differential
+
+新增 [return trampoline evidence](evidence/vm9_callback_return_trampoline_native_fresh_20261006.json)。从私有 ELF 提取并在 Unicorn 中执行原始 `+0x25863c` 入口和 `+0x25865c` continuation，8 组 fresh 控制均通过。
+
+证据确认：入口把 `x9/x30` 压栈后把返回地址改到 continuation；continuation 恢复 `sp/x30`，把 `x19` 指向对象的 16 字节清零，写入并重载 selector 中间值，按 `w20 & 1` 在乘法路径与 `IMAGE+0x2586a0` 路径间选择，最终在 `br x8` 边界得到可复现目标。
+
+这是一条与直接 `+0x2584b8` reader wrapper 和 `+0x2584ac` descriptor wrapper 分开的 callback-family 路径。它闭合了返回 trampoline 的栈和分支语义，但没有执行最终 target body，也没有恢复当前 VM9 owner-frame、packed callback x8、fresh Medusa 或线上矩阵。
+
+
 ## 2026-10-06: native `+0x2584ac` fresh wrapper differential
 
 新增 [native wrapper evidence](evidence/vm9_descriptor_trampoline_native_fresh_20261006.json)。测试直接从私有 ELF 提取 `+0x2584ac` 的 24 字节原始指令，在 Unicorn 中执行 12 组 fresh descriptor 控制。每组由 synthetic pre-dispatch hook 在真实 `blr x8` 边界改写 descriptor，再让原始 wrapper 执行 `ldp x1,x8,[x0]; mov x0,x8; br x1`。

@@ -1,4 +1,11 @@
 
+## 2026-10-06: separate callback return trampoline boundary
+
+The [fresh native return-trampoline evidence](evidence/vm9_callback_return_trampoline_native_fresh_20261006.json) executes `+0x25863c → +0x25865c` directly from the private ELF. Eight controls verify stack save/restore, `x30` restoration, the 16-byte zeroing at `x19`, the selector-dependent `csel`, and the final `br x8` boundary.
+
+This path must remain separate from the direct `+0x2584b8` shared-reader handoff and the `+0x2584ac` descriptor wrapper. The final target body and owner-frame continuation are still not executed; the result does not parameterize packed callback x8 or current Medusa.
+
+
 ## 2026-10-06: native `+0x2584ac` wrapper execution boundary
 
 The new [native fresh differential](evidence/vm9_descriptor_trampoline_native_fresh_20261006.json) executes the exact 24 bytes extracted from the private ELF rather than only interpreting them in Python. Twelve fresh descriptors are run under Unicorn. A synthetic pre-dispatch hook mutates both descriptor words at the real callback boundary; the native wrapper then reloads them and reaches the final `br x1` target.

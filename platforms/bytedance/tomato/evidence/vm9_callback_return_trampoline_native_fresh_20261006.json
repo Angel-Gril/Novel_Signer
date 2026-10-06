@@ -1,0 +1,294 @@
+{
+  "evidence_id": "vm9_callback_return_trampoline_native_fresh_20261006",
+  "schema": "vm9-callback-return-trampoline-native-fresh-v1",
+  "status": "native_return_trampoline_fresh_differential_pass",
+  "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "entry_offset": "0x25863c",
+  "continuation_offset": "0x25865c",
+  "branch_offset": "0x2586a0",
+  "entry_disassembly": [
+    "add x10, x10, #0x6dc",
+    "ldr x8, [sp, #8]",
+    "sub sp, sp, #0x10",
+    "stp x9, x30, [sp]",
+    "adr x9, #0x25865c",
+    "mov x30, x9",
+    "ret"
+  ],
+  "continuation_disassembly": [
+    "ldp x9, x30, [sp]",
+    "add sp, sp, #0x10",
+    "mov w8, #2",
+    "stp xzr, xzr, [x19]",
+    "tst w20, #1",
+    "str x8, [sp, #0x18]",
+    "ldr x8, [sp, #0x18]",
+    "str x9, [sp, #0x20]",
+    "ldr x9, [sp, #0x20]",
+    "madd w8, w8, w8, w8",
+    "mul x9, x9, x10",
+    "adrp x10, #0x258000",
+    "and x8, x8, #1",
+    "add x10, x10, #0x6a0",
+    "add x8, x8, x10",
+    "csel x8, x8, x9, ne",
+    "br x8"
+  ],
+  "controls": 8,
+  "cases": [
+    {
+      "index": 0,
+      "selector": 0,
+      "saved_x9": "0x1",
+      "branch_target": "0x122588ac",
+      "branch_state": {
+        "pc": "0x122588ac",
+        "sp": "0x50000800",
+        "x8": "0x122588ac",
+        "x9": "0x122588ac",
+        "x10": "0x122586a0",
+        "x19": "0x51000000",
+        "x20": "0x0",
+        "x30": "0x70000000"
+      },
+      "object_after": "00000000000000000000000000000000",
+      "stack_x8": "0x2",
+      "stack_x9": "0x1",
+      "checks": {
+        "branch_boundary_reached": true,
+        "branch_target_matches_selector": true,
+        "x9_multiplied_input": true,
+        "sp_restored": true,
+        "x30_restored": true,
+        "object_zeroed": true,
+        "stack_x8_seed": true,
+        "stack_x9_saved": true,
+        "selector_register_preserved": true
+      }
+    },
+    {
+      "index": 1,
+      "selector": 1,
+      "saved_x9": "0x1",
+      "branch_target": "0x122586a0",
+      "branch_state": {
+        "pc": "0x122586a0",
+        "sp": "0x50000800",
+        "x8": "0x122586a0",
+        "x9": "0x122588b4",
+        "x10": "0x122586a0",
+        "x19": "0x51000000",
+        "x20": "0x1",
+        "x30": "0x70000100"
+      },
+      "object_after": "00000000000000000000000000000000",
+      "stack_x8": "0x2",
+      "stack_x9": "0x1",
+      "checks": {
+        "branch_boundary_reached": true,
+        "branch_target_matches_selector": true,
+        "x9_multiplied_input": true,
+        "sp_restored": true,
+        "x30_restored": true,
+        "object_zeroed": true,
+        "stack_x8_seed": true,
+        "stack_x9_saved": true,
+        "selector_register_preserved": true
+      }
+    },
+    {
+      "index": 2,
+      "selector": 2,
+      "saved_x9": "0x1",
+      "branch_target": "0x122588bc",
+      "branch_state": {
+        "pc": "0x122588bc",
+        "sp": "0x50000800",
+        "x8": "0x122588bc",
+        "x9": "0x122588bc",
+        "x10": "0x122586a0",
+        "x19": "0x51000000",
+        "x20": "0x2",
+        "x30": "0x70000200"
+      },
+      "object_after": "00000000000000000000000000000000",
+      "stack_x8": "0x2",
+      "stack_x9": "0x1",
+      "checks": {
+        "branch_boundary_reached": true,
+        "branch_target_matches_selector": true,
+        "x9_multiplied_input": true,
+        "sp_restored": true,
+        "x30_restored": true,
+        "object_zeroed": true,
+        "stack_x8_seed": true,
+        "stack_x9_saved": true,
+        "selector_register_preserved": true
+      }
+    },
+    {
+      "index": 3,
+      "selector": 3,
+      "saved_x9": "0x1",
+      "branch_target": "0x122586a0",
+      "branch_state": {
+        "pc": "0x122586a0",
+        "sp": "0x50000800",
+        "x8": "0x122586a0",
+        "x9": "0x122588c4",
+        "x10": "0x122586a0",
+        "x19": "0x51000000",
+        "x20": "0x3",
+        "x30": "0x70000300"
+      },
+      "object_after": "00000000000000000000000000000000",
+      "stack_x8": "0x2",
+      "stack_x9": "0x1",
+      "checks": {
+        "branch_boundary_reached": true,
+        "branch_target_matches_selector": true,
+        "x9_multiplied_input": true,
+        "sp_restored": true,
+        "x30_restored": true,
+        "object_zeroed": true,
+        "stack_x8_seed": true,
+        "stack_x9_saved": true,
+        "selector_register_preserved": true
+      }
+    },
+    {
+      "index": 4,
+      "selector": 1,
+      "saved_x9": "0x2",
+      "branch_target": "0x122586a0",
+      "branch_state": {
+        "pc": "0x122586a0",
+        "sp": "0x50000800",
+        "x8": "0x122586a0",
+        "x9": "0x244b1198",
+        "x10": "0x122586a0",
+        "x19": "0x51000000",
+        "x20": "0x1",
+        "x30": "0x70000400"
+      },
+      "object_after": "00000000000000000000000000000000",
+      "stack_x8": "0x2",
+      "stack_x9": "0x2",
+      "checks": {
+        "branch_boundary_reached": true,
+        "branch_target_matches_selector": true,
+        "x9_multiplied_input": true,
+        "sp_restored": true,
+        "x30_restored": true,
+        "object_zeroed": true,
+        "stack_x8_seed": true,
+        "stack_x9_saved": true,
+        "selector_register_preserved": true
+      }
+    },
+    {
+      "index": 5,
+      "selector": 1,
+      "saved_x9": "0x3",
+      "branch_target": "0x122586a0",
+      "branch_state": {
+        "pc": "0x122586a0",
+        "sp": "0x50000800",
+        "x8": "0x122586a0",
+        "x9": "0x36709a7c",
+        "x10": "0x122586a0",
+        "x19": "0x51000000",
+        "x20": "0x1",
+        "x30": "0x70000500"
+      },
+      "object_after": "00000000000000000000000000000000",
+      "stack_x8": "0x2",
+      "stack_x9": "0x3",
+      "checks": {
+        "branch_boundary_reached": true,
+        "branch_target_matches_selector": true,
+        "x9_multiplied_input": true,
+        "sp_restored": true,
+        "x30_restored": true,
+        "object_zeroed": true,
+        "stack_x8_seed": true,
+        "stack_x9_saved": true,
+        "selector_register_preserved": true
+      }
+    },
+    {
+      "index": 6,
+      "selector": 0,
+      "saved_x9": "0x2",
+      "branch_target": "0x244b11b8",
+      "branch_state": {
+        "pc": "0x244b11b8",
+        "sp": "0x50000800",
+        "x8": "0x244b11b8",
+        "x9": "0x244b11b8",
+        "x10": "0x122586a0",
+        "x19": "0x51000000",
+        "x20": "0x0",
+        "x30": "0x70000600"
+      },
+      "object_after": "00000000000000000000000000000000",
+      "stack_x8": "0x2",
+      "stack_x9": "0x2",
+      "checks": {
+        "branch_boundary_reached": true,
+        "branch_target_matches_selector": true,
+        "x9_multiplied_input": true,
+        "sp_restored": true,
+        "x30_restored": true,
+        "object_zeroed": true,
+        "stack_x8_seed": true,
+        "stack_x9_saved": true,
+        "selector_register_preserved": true
+      }
+    },
+    {
+      "index": 7,
+      "selector": 2,
+      "saved_x9": "0x3",
+      "branch_target": "0x36709aac",
+      "branch_state": {
+        "pc": "0x36709aac",
+        "sp": "0x50000800",
+        "x8": "0x36709aac",
+        "x9": "0x36709aac",
+        "x10": "0x122586a0",
+        "x19": "0x51000000",
+        "x20": "0x2",
+        "x30": "0x70000700"
+      },
+      "object_after": "00000000000000000000000000000000",
+      "stack_x8": "0x2",
+      "stack_x9": "0x3",
+      "checks": {
+        "branch_boundary_reached": true,
+        "branch_target_matches_selector": true,
+        "x9_multiplied_input": true,
+        "sp_restored": true,
+        "x30_restored": true,
+        "object_zeroed": true,
+        "stack_x8_seed": true,
+        "stack_x9_saved": true,
+        "selector_register_preserved": true
+      }
+    }
+  ],
+  "all_native_controls_pass": true,
+  "stack_save_restore_verified": true,
+  "object_zero_initialization_verified": true,
+  "selector_branch_verified": true,
+  "current_vm_callback_object_graph_recovered": false,
+  "packed_callback_x8_parameterized": false,
+  "fresh_medusa_output_verified": false,
+  "complete_python_medusa": false,
+  "no_jvm_rust_signer_complete": false,
+  "limitations": [
+    "The final branch target is a stop boundary; its body and continuation are not executed.",
+    "The controls use synthetic fresh registers, stack and object memory; they do not parameterize the current VM9 owner frame.",
+    "The trampoline is a separate callback-family path and does not prove the +0x2584ac descriptor graph or packed callback x8 composition."
+  ]
+}
