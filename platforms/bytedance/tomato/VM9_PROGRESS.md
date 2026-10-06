@@ -3,6 +3,32 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Current default-task/actual-allocator checkpoint (2026-10-06)
+
+The default +0x280554 task now composes naturally initialized matching libc and
+its owned large extents in **2 fresh native controls / 4 rollback checks** at two
+relocated bases. Each native execution reaches six default returns and separately
+counts **48 actual nested returns**, matching Python's 48. Six malloc PLT calls
+enter actual libc malloc selected from its ELF symbol; six large bodies execute,
+with zero substituted allocator returns. First allocation naturally boots FILE/CPU,
+atfork/table/TSD and flag 0. All32 slots/virtual stack/main image/owned mappings
+match at each caller; final TLS/globals/OS/mapping state and once/broadcast order
+match. Legacy default task, large and cold regressions pass **42/21**.
+
+A private prototype's nearby stack produced stack-shaped TLS-tail differences.
+Moving only the execution stack to an independent 64 KiB region closes final TLS
+matching at both bases; no native TLS snapshot or relaxed assertion supplies it.
+The formal fixture uses separate stack and TLS. OS/broadcast services and the
+thread input remain explicit and virtual. Busy third once and failed third
+broadcast also prove late whole-task page/mapping/cursor rollback.
+
+This is a serial default-task composition, not a same-startup independent worker,
+complete root or fresh Medusa result. Missing-thread TSD fallback, arena selection,
+cache/GC and the remaining callback/OS boundaries still need real sources and
+controls. Rust, nonempty search/pagination, Douyin/Qidian and final Pages/Actions
+products remain open. Evidence: [task/allocator](evidence/vm9_default_task_actual_allocator_native.json),
+[regressions](evidence/vm9_default_task_actual_allocator_regression.json).
+
 ## Current public-large checkpoint (2026-10-06)
 
 Bounded empty-cache public large allocation now matches actual native bodies in
@@ -13,10 +39,10 @@ search/split/registration, first/last large page marks, free-tree and page accou
 arena/class large statistics, cache event and TSD allocated bytes. Shared region
 and public-context regressions pass **356 native / 141 rollback checks**.
 
-This recovers the previous +0x8f6ec -> +0x7a3c8 size frontier, including the default
-task's six allocation requests. It does not yet compose their six VM task bodies
-with this allocator. The old native task verifier substitutes malloc PLT output;
-a new composition must execute matching-libc malloc and retain its owned mappings.
+This earlier stage recovered +0x8f6ec -> +0x7a3c8 and the default task's six
+allocation requests. The newer checkpoint above now composes their six VM bodies
+with actual malloc and owned mappings. The old task controls still substitute
+malloc PLT output; the new verifier explicitly selects real malloc instead.
 Nonempty large cache/pop/free, uncached/huge, junk/zero, GC, all-branch allocator,
 real OS/thread creation, startup/root, fresh Medusa and online/product validation
 remain open. Evidence: [large](evidence/vm9_libc_public_large_native.json),
@@ -43,8 +69,8 @@ The bounded public path covers 0..14336 bytes, including repeated requests after
 TSD migration. Two separate fresh native-only probes return nonnull at 16384 bytes,
 while Python rejects the unrecovered public-large size branch. The observed call in those pre-recovery probes
 was **+0x8f6ec -> +0x7a3c8**, now recovered in the current checkpoint above. These two probes are not Python/native allocation
-byte matches and are not included in the 96 new controls. The recovered large/cache path now needs composition with the default task's six
-VM bodies before its explicit allocation providers can be considered replaced.
+byte matches and are not included in the 96 new controls. The newer task/allocator checkpoint above now verifies their serial composition;
+same-startup independent worker/root integration remains open.
 
 All-branch malloc/free, real thread/OS creation, startup/root allocator composition,
 fresh Medusa, current online headers/f13, no-JVM Rust, nonempty search/pagination,

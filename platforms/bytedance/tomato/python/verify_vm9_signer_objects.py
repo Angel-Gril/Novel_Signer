@@ -87,7 +87,9 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            thread_id=None, observed_memory=None, allocation_effect=None,
            real_mutexes=False, host_imports=None, instruction_limit=10000,
            instruction_observer=None, syscall_handler=None, malloc_handler=None,
-           memory_write_observer=None, code_hook_ranges=None):
+           memory_write_observer=None, code_hook_ranges=None, real_malloc=False):
+    if real_malloc and (libc is None or malloc_handler is not None or allocation_effect is not None):
+        raise ValueError("real malloc requires libc and no substituted allocation provider")
     cpu = Uc(UC_ARCH_ARM64, UC_MODE_ARM)
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -107,6 +109,7 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
                                       (base + relocation["r_addend"]).to_bytes(8, "little"))
     libc_base = 0x51000000
     mutex_entries = {}
+    malloc_entry = None
     if libc:
         with libc.open("rb") as stream:
             elf = ELFFile(stream)
@@ -121,6 +124,8 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             for section in elf.iter_sections():
                 if section["sh_type"] in ("SHT_SYMTAB", "SHT_DYNSYM"):
                     for symbol in section.iter_symbols():
+                        if symbol.name == "malloc" and symbol["st_value"] and symbol["st_shndx"] != "SHN_UNDEF":
+                            malloc_entry = libc_base + symbol["st_value"]
                         if symbol.name in ("pthread_mutex_init", "pthread_mutex_lock", "pthread_mutex_unlock"):
                             mutex_entries[symbol.name] = libc_base + symbol["st_value"]
                 elif section["sh_type"] == "SHT_RELA":
@@ -164,6 +169,11 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             instruction_observer(cpu, address)
         offset = address - base
         if offset == 0x347FD0:  # malloc PLT; operator new executes normally
+            if real_malloc:
+                if malloc_entry is None:
+                    raise RefillUnsupported("actual libc malloc symbol is missing")
+                cpu.reg_write(UC_ARM64_REG_PC, malloc_entry)
+                return
             requested = cpu.reg_read(UC_ARM64_REG_X0)
             result = malloc_handler(cpu, requested) if malloc_handler else allocation.take(requested)
             if allocation_effect:

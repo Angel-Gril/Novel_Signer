@@ -4,6 +4,12 @@
 
 实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
+## 当前默认任务与实际 allocator 组合（2026-10-06）
+
+新增 [vm9_startup_allocator.py](python/vm9_startup_allocator.py) 的 `initialize_default_task()`，现已将 `+0x280554` 的六项默认 VM 正文接回从 fresh ELF/TLS 自然启动的 matching libc allocator。两基址各一组实际原生代码对照通过，均完整返回六个默认 caller，并分别计数 native/Python 的 **48 次嵌套返回**。首次 0x4000 请求实际执行 cold boot、CPU FILE 生命周期、atfork/table/TSD，再完成六次实际 public large 分配；这些 owned mapping 中的初始化结果均逐 caller 匹配，没有显式分配器提供返回指针或 native 初始化快照输入。
+
+新组合通过 **2 个 native 对照／4 项拒绝与回滚检查**，旧默认任务、public large 和自然 cold 回归 **42／21** 均通过。证据：[实际 allocator→默认任务](evidence/vm9_default_task_actual_allocator_native.json)、[回归](evidence/vm9_default_task_actual_allocator_regression.json)。这一阶段仍使用显式虚拟 OS／broadcast、合成独立线程栈与 TLS；同次 startup worker 的真实 allocator 组合、root 和 fresh Medusa 尚未完成。
+
 ## 当前 allocator 检查点（2026-10-06）
 
 Python 已从 fresh ELF／受控 TLS 输入贯通默认 empty-config libc 冷启动，实际读入 CPU 文件、释放 FILE 缓冲、注册 atfork、发布 arena table、迁移 static TSD，并自然返回 `flag=0`。没有在 `+0x8e41c` 提前返回，没有人工设置 ready flag，也没有用 native 初始化快照提供 Python 输入。该冷启动阶段覆盖默认虚拟 OS 服务下的 0 至 14336 字节 public small 请求；后续新增章节另验证 14337 至 65536 字节的空 large-cache 分配。两者均不代表 all-branch allocator 或完整独立 Medusa 已完成。
@@ -305,7 +311,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_cold_malloc.py --lib
 
 ## Matching libc arena／base allocation 与冷启动前缀（本阶段）
 
-**默认空配置的 Python preinit 已完整返回；完整 Python public malloc 冷启动与独立 fresh Medusa 仍未完成。** 同次 fresh 的 `+0x8e350` 已执行真实 base allocation、initial arena 构造／发布、main/static TSD，以及初始化 mutex 的获取／释放，停止在 CPU 查询前的 `+0x8e41c`。成功状态是 `flag = 1`，尚未贯通完整冷初始化返回的 `flag = 0`。这些结果使用 fresh ELF/TLS 与明确的虚拟 OS 输入，没有 native 入口快照或初始化后页供给 Python。
+**本 preinit 历史阶段只完成默认空配置；新的默认 public malloc 冷启动与任务组合见后续章节，独立 fresh Medusa 仍未完成。** 同次 fresh 的 `+0x8e350` 已执行真实 base allocation、initial arena 构造／发布、main/static TSD，以及初始化 mutex 的获取／释放，停止在 CPU 查询前的 `+0x8e41c`。成功状态是 `flag = 1`，尚未贯通完整冷初始化返回的 `flag = 0`。这些结果使用 fresh ELF/TLS 与明确的虚拟 OS 输入，没有 native 入口快照或初始化后页供给 Python。
 
 实现见 [vm9_libc_boot.py](python/vm9_libc_boot.py)、[vm9_libc_base.py](python/vm9_libc_base.py) 和 [vm9_libc_mapping.py](python/vm9_libc_mapping.py)。当前已恢复：
 
@@ -508,12 +514,30 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_cold.py --library C:
 python -B platforms/bytedance/tomato/python/verify_vm9_libc_large.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-large-report.json
 ```
 
-**默认任务要求的六次 0x4000 分配序列已经通过；默认任务正文尚未使用该真实 allocator 做组合对照。** 旧任务 verifier 的 native malloc PLT 会返回显式 provider 分配，需要在新的组合控制中明确执行 matching libc malloc 正文。随后将 recovered allocator 的 owned mappings／records 经 staged bridge 接入六项 VM，并比较各 caller、once/broadcast 和最终状态，再接同次 startup worker/root。公开报告保留 `default_initialization_task_allocator_composed=false`、`standalone_medusa_complete=false` 和线上矩阵 false。
+**本 large 分配阶段当时只证明六次 0x4000 分配序列；其后默认任务正文组合已由下一节的新控制验证。** 旧任务 verifier 的默认 native malloc PLT 返回显式 provider 分配，该历史控制边界保持不变；新控制显式选择 actual libc malloc，验证 owned mappings／records、六项 VM、once/broadcast 和最终状态。该旧 large 报告的 `default_initialization_task_allocator_composed=false` 仅描述自身范围；新任务组合报告为 true，完整 worker/root、Medusa 和线上矩阵仍为 false。
+
+## 默认六项 VM 与真实 malloc 正文贯通（2026-10-06）
+
+`initialize_default_task()` 在一个 GuestOS transaction 内执行既有六项默认任务。allocation callback 通过已有 staged bridge 进入真实 allocator bodies：首次 flag3 触发 default cold initialization，随后每次 0x4000 请求走 recovered public large，而不是显式返回一个已映射区域。任务完整返回才发布页、mapping records/protection 和 cursor；异常不发布部分启动状态，外部 provider 效果仍不由 guest 回滚。
+
+新 [验证器](python/verify_vm9_default_task_allocator.py) 让 native main malloc PLT 保留 LR/参数，转入 matching libc ELF 中定义的 malloc symbol。共享 oracle 新增的 `real_malloc=True` 与替代 allocator handler 不可混用；默认 false 保留历史 component 控制。每组实际观察六次 main malloc PLT、六次 `+0x7a3c8`，通用替代分配器调用数为 0；`+0x8e250/+0x8e41c/+0x8e51c/+0x99c78` 各实际到达一次，最终 flag0。
+
+每组完整观察六个顶层 caller 返回。对每一项，native 独立计数一个 initial nested return 和七个 repeated nested returns，合计 48；Python 也返回六组各八段。比较每项返回的全部 32 槽、虚拟栈、主 image 全页和全部 allocator-owned mapping 页；最终比较 guest 输出、libc/stdio/allocator globals、TLS/key state、有序 OS calls、mapping records/cursor/protection，以及六次 once/broadcast 的状态和顺序。matching libc uncontended mutex 正文也实际执行，24 项 mutex ledger 与 once 顺序一致。完整物理 libc 栈不在 byte 比较范围，虚拟 OS／broadcast 仍是明确的研究输入。
+
+**输入栈的边界已修正。** 初始私有组合探针沿用接近 TLS 的旧栈；六项对象/槽均匹配，但最终 TLS 后半段出现栈保存值型差异。单独改用与 TLS 分离的 64 KiB 栈后，两基址的完整 TLS 与最终状态均通过，正式 fixture 保留这个布局。没有复制 native TLS 结果，也没有删掉 TLS 比较来消除差异。此控制输入布局证明有界组合，不代表真实 OS 线程创建已恢复。
+
+四个拒绝／回滚控制覆盖第三项 busy once、第三次 broadcast 失败、未映射栈与 tagged return。前两项分别已完成两项和三项实际任务工作后才拒绝，确认所有 guest pages、OS-owned mappings/protection/cursor 与 VM base 不变；外部 OS/provider 调用轨迹不重置。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_default_task_allocator.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/default-task-allocator-report.json
+```
+
+**下一步仍是同次主线程 startup→独立 worker TLS→真实 allocator→默认任务→argument/TLS 清理的组合，然后接 root/signature。** 当前组合以一个显式受控线程入口开始；另一线程缺失 TSD 的 fallback、多 arena 选择、cache/full-bin/GC、未知 callback 和实际 OS 输入仍需分别验证。不能用该任务完成结果替代 fresh Medusa 或当前线上全头矩阵。Rust、搜索非空/分页、抖音/起点和最终 Pages/Actions 下载产品仍待后续完成。
 
 ## 继续顺序
 
 继续恢复 matching libc 的真实 allocator 冷启动，将当前显式 allocator／TLS／OS 服务逐项替换为已验证实现，并将 startup、`+0x256e50` 配置构造和既有 root factory 接到外层 signer。未识别 callback、support 关联状态类型和真实线程创建仍需真实来源，不以空回调填补。
 
-默认 empty-config Python 冷启动现已自然返回 `flag=0`；真实 FILE 生命周期、CPU 解析、atfork allocation、arena table 和 TSD migration 已组合验证。0x4000 public large 分配分支现已通过有界对照；接下来以 actual native malloc 正文作为控制，将自然 ready 的 allocator 状态接回默认任务、同次 startup worker/root。真实 OS/TLS 创建与完整 allocator 分支仍是未完成边界。
+默认 empty-config Python 冷启动现已自然返回 `flag=0`；真实 FILE 生命周期、CPU 解析、atfork allocation、arena table 和 TSD migration 已组合验证。0x4000 public large 分配分支现已通过有界对照；实际 malloc 正文与默认六项任务现已组合通过；接下来将自然 ready 的 allocator 状态接回同次主线程启动生成的独立 worker TLS，贯通 worker/退出清理后接 root/signature。真实 OS/TLS 创建与完整 allocator 分支仍是未完成边界。
 
 随后用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

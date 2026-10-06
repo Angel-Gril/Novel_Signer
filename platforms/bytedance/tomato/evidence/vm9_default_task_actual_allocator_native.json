@@ -1,0 +1,122 @@
+{
+  "schema": "vm9-default-task-actual-allocator-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "native_default_returns": 6,
+      "python_default_returns_compared": 6,
+      "python_nested_vm_returns": 48,
+      "native_nested_vm_returns": 48,
+      "native_nested_return_counts": {
+        "0x2809d4": 1,
+        "0x280a50": 7,
+        "0x280bb8": 1,
+        "0x280c34": 7,
+        "0x280d9c": 1,
+        "0x280e18": 7,
+        "0x280f80": 1,
+        "0x280ffc": 7,
+        "0x281164": 1,
+        "0x2811e0": 7,
+        "0x281348": 1,
+        "0x2813c4": 7
+      },
+      "actual_main_malloc_plt_calls": 6,
+      "actual_libc_entry_counts": {
+        "0x7a3c8": 6,
+        "0x8e250": 1,
+        "0x8e41c": 1,
+        "0x8e51c": 1,
+        "0x99c78": 1
+      },
+      "all_retained_mapping_bytes_and_main_image_slots_tls_os_order_match": true,
+      "ordered_once_broadcasts_verified": true,
+      "actual_native_malloc": true,
+      "substituted_native_allocations": 0,
+      "natural_default_cold_return": true,
+      "independent_stack_region_bytes": 65536,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "native_default_returns": 6,
+      "python_default_returns_compared": 6,
+      "python_nested_vm_returns": 48,
+      "native_nested_vm_returns": 48,
+      "native_nested_return_counts": {
+        "0x2809d4": 1,
+        "0x280a50": 7,
+        "0x280bb8": 1,
+        "0x280c34": 7,
+        "0x280d9c": 1,
+        "0x280e18": 7,
+        "0x280f80": 1,
+        "0x280ffc": 7,
+        "0x281164": 1,
+        "0x2811e0": 7,
+        "0x281348": 1,
+        "0x2813c4": 7
+      },
+      "actual_main_malloc_plt_calls": 6,
+      "actual_libc_entry_counts": {
+        "0x7a3c8": 6,
+        "0x8e250": 1,
+        "0x8e41c": 1,
+        "0x8e51c": 1,
+        "0x99c78": 1
+      },
+      "all_retained_mapping_bytes_and_main_image_slots_tls_os_order_match": true,
+      "ordered_once_broadcasts_verified": true,
+      "actual_native_malloc": true,
+      "substituted_native_allocations": 0,
+      "natural_default_cold_return": true,
+      "independent_stack_region_bytes": 65536,
+      "native_input_snapshot_used": false,
+      "explicit_virtual_os": true
+    }
+  ],
+  "rejection_cases": [
+    {
+      "case": "busy_third_once",
+      "rejected": true,
+      "guest_pages_mappings_protection_and_cursor_unchanged": true,
+      "vm_base_restored": true,
+      "broadcasts_before_rejection": 2,
+      "external_provider_effects_not_rolled_back": true
+    },
+    {
+      "case": "third_broadcast_fails",
+      "rejected": true,
+      "guest_pages_mappings_protection_and_cursor_unchanged": true,
+      "vm_base_restored": true,
+      "broadcasts_before_rejection": 3,
+      "external_provider_effects_not_rolled_back": true
+    },
+    {
+      "case": "unmapped_stack",
+      "rejected": true,
+      "guest_pages_mappings_protection_and_cursor_unchanged": true,
+      "vm_base_restored": true,
+      "broadcasts_before_rejection": 0,
+      "external_provider_effects_not_rolled_back": false
+    },
+    {
+      "case": "tagged_return",
+      "rejected": true,
+      "guest_pages_mappings_protection_and_cursor_unchanged": true,
+      "vm_base_restored": true,
+      "broadcasts_before_rejection": 0,
+      "external_provider_effects_not_rolled_back": false
+    }
+  ],
+  "serial_default_task_actual_allocator_composed": true,
+  "native_input_snapshot_used": false,
+  "explicit_virtual_os": true,
+  "independent_stack_and_tls_regions": true,
+  "same_startup_worker_actual_allocator_composed": false,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false
+}
