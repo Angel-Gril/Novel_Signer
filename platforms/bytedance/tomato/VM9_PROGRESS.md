@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+
+## 2026-10-06: logger/state write boundary from a fresh outer getter
+
+A fresh native outer getter control at image base `0x122c0000` with the absent
+property profile returned normally and decoded the five lazy globals with
+lengths `3, 5, 241, 3, 3`. The trace directly observed the final stores at
+`+0x27ce44` (`image+0x3d1998 = 0`) and `+0x27ce6c`
+(`image+0x3e07c0 = 0`). Evidence: [state-write boundary](evidence/vm9_outer_constructor_state_write_boundary_20261006.json).
+
+These stores establish a fresh-input state boundary only. They do not recover
+the `+0x28ded0` formatter fields, locale/sink dispatch, callback publication,
+or the native `+0x26cf08` handoff. The raw process-memory trace is omitted,
+and the Python model still does not consume a native snapshot.
+
 ## 2026-10-06: outer constructor allocation/free ledger through wrapper publication
 
 The fresh Python outer constructor now continues past the second registry

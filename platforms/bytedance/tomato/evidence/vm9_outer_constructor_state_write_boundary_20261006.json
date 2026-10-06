@@ -1,0 +1,61 @@
+{
+  "schema": "vm9-outer-constructor-state-write-boundary-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "control": "one fresh native outer getter control at image base 0x122c0000, absent property",
+  "native_input_snapshot_used": false,
+  "native_outer_getter_returned": true,
+  "decoded_global_lengths": [
+    3,
+    5,
+    241,
+    3,
+    3
+  ],
+  "writes": [
+    {
+      "value": "0x00000000",
+      "pc": "0x27ce44",
+      "meaning": "fresh hash/state global store",
+      "offset": "0x3d1998"
+    },
+    {
+      "value": "0x0000000000000000",
+      "pc": "0x27ce6c",
+      "meaning": "fresh elapsed/timestamp state store",
+      "offset": "0x3e07c0"
+    }
+  ],
+  "lazy_decode_sources": [
+    {
+      "length": 3,
+      "destination": "0x3e07c8"
+    },
+    {
+      "length": 5,
+      "destination": "0x3e07d0"
+    },
+    {
+      "length": 241,
+      "destination": "0x3e07e0"
+    },
+    {
+      "length": 3,
+      "destination": "0x3e08d8"
+    },
+    {
+      "length": 3,
+      "destination": "0x3e08e0"
+    }
+  ],
+  "interpretation": "Fresh ELF decode and the final +0x27ce44/+0x27ce6c stores are directly observed. The write values are control-input dependent; no native page snapshot is used by the Python model.",
+  "state_object_semantics_complete": false,
+  "logger_callback_semantics_complete": false,
+  "fresh_medusa_output_verified": false,
+  "complete_python_medusa": false,
+  "limitations": [
+    "This records two state stores and decoded lengths only; it does not recover +0x28ded0 formatter text, locale/sink dispatch or +0x26cf08 handoff.",
+    "The raw native trace containing source strings and process memory is intentionally omitted from the repository.",
+    "No online signature or Rust download result is implied."
+  ]
+}

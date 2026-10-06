@@ -1811,7 +1811,10 @@
     "native_input_snapshot_used": false,
     "python_descriptor_comparison_complete": false,
     "native_root_vm_entry_backing_captured": true,
-    "native_root_vm_entry_probe_offsets": ["0x168324", "0x1683f0"],
+    "native_root_vm_entry_probe_offsets": [
+      "0x168324",
+      "0x1683f0"
+    ],
     "native_python_prelude_backing_aligned": false,
     "fresh_medusa_output_verified": false,
     "current_online_header_matrix_verified": false,
@@ -1828,5 +1831,36 @@
     "native_outer_trampoline_258488_executed": false,
     "native_outer_trampoline_2584ac_executed": false,
     "python_current_trampoline_is_prelude_divergence_marker": true
+  },
+  "vm9_outer_constructor_state_write_boundary_20261006": {
+    "evidence_file": "evidence/vm9_outer_constructor_state_write_boundary_20261006.json",
+    "schema": "vm9-outer-constructor-state-write-boundary-v1",
+    "control_count": 1,
+    "image_base": "0x122c0000",
+    "property_profile": "absent",
+    "fresh_elf_inputs": true,
+    "native_input_snapshot_used": false,
+    "native_outer_getter_returned": true,
+    "decoded_global_lengths": [
+      3,
+      5,
+      241,
+      3,
+      3
+    ],
+    "observed_state_stores": [
+      "0x3d1998",
+      "0x3e07c0"
+    ],
+    "state_object_semantics_complete": false,
+    "logger_callback_semantics_complete": false,
+    "fresh_medusa_output_verified": false,
+    "complete_python_medusa": false,
+    "current_online_header_matrix_verified": false,
+    "limitations": [
+      "Only two final state stores and lazy decode lengths are directly observed; formatter text, locale/sink dispatch and native +0x26cf08 handoff remain open.",
+      "The raw native trace and process memory are omitted.",
+      "No online signature or Rust download result is implied."
+    ]
   }
 }

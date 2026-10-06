@@ -1,5 +1,19 @@
 # 默认配置下的 signer 构造和 callback 发布
 
+
+## 2026-10-06: fresh state-write boundary
+
+One fresh native outer getter control (image base `0x122c0000`, absent
+property) returned successfully after decoding lazy global lengths
+`3, 5, 241, 3, 3`. It wrote zero to the hash/state global at
+`+0x27ce44` (`image+0x3d1998`) and zero to the elapsed/timestamp state at
+`+0x27ce6c` (`image+0x3e07c0`). The sanitized record is in
+[state-write evidence](evidence/vm9_outer_constructor_state_write_boundary_20261006.json).
+
+This is a direct fresh native observation of two stores, not a logger semantic
+implementation. Formatter contents, locale and sink dispatch, `+0x26cf08`,
+descriptor publication and fresh Medusa output remain unresolved.
+
 ## 2026-10-06: registry 双追加与 logger/state allocator 对照
 
 外层 Python constructor 已继续恢复到 native allocation index 309。它从
