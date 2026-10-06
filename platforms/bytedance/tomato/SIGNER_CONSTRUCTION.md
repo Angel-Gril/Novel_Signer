@@ -373,3 +373,7 @@ python python/verify_vm9_root_vm_prefix.py --library /private/libmetasec_ml_7133
 后续 [配置初始化报告](CONFIGURATION_INITIALIZATION.md) 恢复已观察的88-byte构造与默认初始化路径：helper 166 / 5，context/wrapper 125次分配、69次free，constructor 134 / 69、status6。四次 root 控制从较早 VM 输入开始，自行生成 constructor/parser 状态，推进至第605步 / +0x99cd8，138 / 70的 guest/image/TLS/generation/有序副作用一致。下一处是 +0x2698f0 -> VM +0xa46a0。+0x26ecb4 为 saved frame getter，不能把其写入误述为 TLS。完整 root VM 前导、88-byte其它初始化分支、通用多 key TLS 树、诊断与全局副作用及剩余 callbacks 仍待恢复。当前搜索仍无非空响应与分页证据；独立当前 Medusa、无 JVM Rust 下载链路、抖音/起点闭环及最终 Pages 搜索下载网页仍未完成。
 
 最新默认 state/caller 与独立配置 root factory 已在 [STATE_OWNER_INITIALIZATION.md](STATE_OWNER_INITIALIZATION.md) 和 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md) 中更新：root716步退出，8组factory控制不读取native入口快照。本页较早的605步及下一处state依赖属于历史检查点；外层signer/handle与实际allocator boot仍未完成。
+
+## Current VM prelude boundary
+
+The native outer path reaches `+0x257084 -> +0x257308 -> +0x168324 -> +0x26cf08`; the Python outer path currently reaches `+0x2584ac` after the same root VM entry address. Fresh entry sampling shows the stack and descriptor agree, while the 32-word VM backing spill does not. The native backing capture is evidence only; seeding it into Python is rejected because it consumes a native snapshot and then stops at an unmapped page. The next implementation boundary is the caller spill generation before `+0x168324`, followed by a new fresh-input comparison.

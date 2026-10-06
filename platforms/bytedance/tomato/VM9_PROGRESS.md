@@ -8,6 +8,8 @@
 
 新的 native outer trace 说明这条 `+0x2584ac` 不是外层 constructor 的 native active path：4 组 native 控制都走 `+0x257084 → +0x257308 → +0x168324 → +0x26cf08 → +0x26e9e0 → +0x271ec8 → +0x271ddc`，没有进入 `+0x258488/+0x2584ac`。因此 Python 到达 trampoline 是 VM prelude/分支不一致的证据；logger/global 的实际状态写入、native `+0x26cf08` handoff、descriptor writer 的输入驱动对象图仍未恢复，这不是完整 outer constructor、fresh Medusa 或线上签名证据。
 
+本轮继续把 native `+0x168324` 入口和 Python outer 的 `VM +0x991c0` 入口并排采样。两者的 fresh stack、root object、descriptor（callback `+0x258520`、return `+0x257250`）和 VM stack 地址已对齐；但 native `+0x1683f0` 处保留的 32 个 backing words 与 Python 当前生成的 backing 不一致。受控地把整组 native backing words 写入 Python 只会绕过 logger 停点，随后在未映射 guest page 停止，因此不能作为实现。该实验仅用于定位，未把 native 快照写入生产路径。下一处应恢复 `+0x257084/+0x257308` 产生这些 backing words 的 fresh caller spill，再重新执行 Python/native 差分。
+
 ## 2026-10-06: actual allocator 外层前段组合
 
 `verify_vm9_outer_prefix_allocator.py` 已完成 fresh main startup → registry string caller → actual root → 两 child/handler → callback publication 的同次 guest 状态组合。4 组（两基址 × absent/SDK 30）通过，147/716 VM steps，root reference count=1，JNI publication 的 invoke/type/delete 顺序通过；缺页输入回滚。该证据仍是 Python-only composition，不是 native whole-prefix match，也没有产生 fresh Medusa 签名。

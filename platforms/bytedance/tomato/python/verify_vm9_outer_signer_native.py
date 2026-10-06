@@ -14,7 +14,7 @@ from pathlib import Path
 from capstone import Cs, CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN
 from elftools.elf.elffile import ELFFile
 from unicorn.arm64_const import (
-    UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X8,
+    UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X8,
     UC_ARM64_REG_X30, UC_ARM64_REG_SP, UC_ARM64_REG_PC, UC_ARM64_REG_TPIDR_EL0,
 )
 import vm9_allocator as a
@@ -80,18 +80,41 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
     def observe(cpu, pc):
         state['last_pc'] = pc
         offset = pc - image
-        if trace is not None and offset in (0x168324, 0x257084, 0x257308, 0x258488, 0x2584AC, 0x26CF08, 0x26E9E0, 0x271EC8, 0x271DDC):
+        if trace is not None and offset in (0x168324, 0x1683F0, 0x257084, 0x257308, 0x258488, 0x2584AC, 0x26CF08, 0x26E9E0, 0x271EC8, 0x271DDC):
             if len(trace) < 256:
-                trace.append({
+                x0 = cpu.reg_read(UC_ARM64_REG_X0)
+                x1 = cpu.reg_read(UC_ARM64_REG_X1)
+                def safe_bytes(address, width):
+                    try:
+                        return bytes(cpu.mem_read(address, width)).hex()
+                    except Exception:
+                        return None
+                record = {
                     'offset': hex(offset),
-                    'x0': hex(cpu.reg_read(UC_ARM64_REG_X0)),
-                    'x1': hex(cpu.reg_read(UC_ARM64_REG_X1)),
+                    'x0': hex(x0),
+                    'x1': hex(x1),
                     'x2': hex(cpu.reg_read(UC_ARM64_REG_X2)),
                     'x3': hex(cpu.reg_read(UC_ARM64_REG_X3)),
                     'x8': hex(cpu.reg_read(UC_ARM64_REG_X8)),
                     'sp': hex(cpu.reg_read(UC_ARM64_REG_SP)),
                     'x30': hex(cpu.reg_read(UC_ARM64_REG_X30)),
-                })
+                }
+                if offset in (0x26CF08, 0x26E9E0):
+                    record['x0_bytes_0x80'] = safe_bytes(x0, 0x80)
+                    record['x1_bytes_0x40'] = safe_bytes(x1, 0x40)
+                if offset in (0x168324, 0x1683F0) and x0 - image == 0x991C0:
+                    record['x4'] = hex(cpu.reg_read(UC_ARM64_REG_X4))
+                    sp = cpu.reg_read(UC_ARM64_REG_SP)
+                    record['stack_bytes_0x900'] = safe_bytes(sp - 0x400, 0x900)
+                    descriptor = cpu.reg_read(UC_ARM64_REG_X4)
+                    record['descriptor_bytes_0x30'] = safe_bytes(descriptor, 0x30)
+                    try:
+                        backing = int.from_bytes(cpu.mem_read(descriptor + 8, 8), 'little') - 0x118
+                        record['register_backing_words'] = [hex(int.from_bytes(
+                            cpu.mem_read(backing + i * 8, 8), 'little')) for i in range(32)]
+                    except Exception:
+                        record['register_backing_words'] = None
+                trace.append(record)
         if offset in ENTRIES: entries[hex(offset)] += 1
         if offset == 0x1658E4 and not state['mapped']:
             state['mapped'] = True; cpu.mem_map(h.STACK, h.STACK_BYTES)

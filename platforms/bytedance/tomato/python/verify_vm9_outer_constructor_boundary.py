@@ -48,6 +48,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     logger_calls: list[dict] = []
     logger_errors: list[str] = []
     trampoline_calls: list[dict] = []
+    python_vm_entries: list[dict] = []
 
     def create_thread(staged, output, _attr, entry, argument):
         handle = io.GUEST + 0xC800 + len(threads) * 0x100
@@ -148,7 +149,27 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
             return super().__call__(vm, function, argument)
 
     previous = root_model.RootCallbacks
+    previous_vm = vm_module.VM
+    class ObservedVM(previous_vm):
+        def run(self):
+            if self.pc - vm_module.B == 0x991C0:
+                stack = self.R[4]
+                def safe_span(address, width):
+                    try:
+                        return self.m.rd(address, width).hex()
+                    except Exception:
+                        return None
+                python_vm_entries.append({
+                    "entry_offset": "0x991c0",
+                    "registers_0_8": [hex(value) for value in self.R[:9]],
+                    "stack": hex(stack),
+                    "stack_bytes_0x800": safe_span(stack - 0x400, 0x800),
+                    "register_backing_bytes_0x100": safe_span(stack + 0x458, 0x100),
+                    "register_backing_words": [hex(value) for value in self.R],
+                })
+            return super().run()
     root_model.RootCallbacks = BoundaryCallbacks
+    vm_module.VM = ObservedVM
     try:
         try:
             outer_constructor.construct_default_outer(
@@ -176,6 +197,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
             raise AssertionError("outer constructor crossed an unrecovered boundary")
     finally:
         root_model.RootCallbacks = previous
+        vm_module.VM = previous_vm
 
     if not logger_calls:
         raise AssertionError("logger callback boundary was not reached")
@@ -189,6 +211,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         "rejected_at_boundary": True,
         "rejection": error,
         "logger_calls": logger_calls,
+        "python_vm_entries": python_vm_entries,
         "descriptor_trampoline": trampoline_calls,
         "logger_model_requested": apply_logger_model,
         "logger_model_errors": logger_errors,
@@ -227,6 +250,8 @@ def main():
         "native_input_snapshot_used": False,
         "logger_callback_arguments_captured": True,
         "active_descriptor_trampoline_captured": True,
+        "python_vm_entry_captured": True,
+        "python_vm_entry_offset": "0x991c0",
         "logger_model_requested": args.apply_logger_model,
         "logger_model_applied": bool(args.apply_logger_model and all(not row["logger_model_errors"] for row in rows)),
         "descriptor_trampoline_recovered": False,
