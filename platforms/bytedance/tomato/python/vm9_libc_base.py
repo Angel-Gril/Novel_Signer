@@ -87,7 +87,7 @@ def base_allocate(guest_os, *, request_size, libc_base, thread_pointer, os_call)
     return result
 
 
-def _allocate_staged(tx, pages, *, request_size, libc_base, thread_pointer, os_call):
+def _allocate_staged(tx, pages, *, request_size, libc_base, thread_pointer, os_call, allocation_body=None):
     """Bridge component page staging to the outer GuestOS transaction.
 
     Only an owned staging chain is accepted. New/removed mapping pages enter
@@ -105,8 +105,9 @@ def _allocate_staged(tx, pages, *, request_size, libc_base, thread_pointer, os_c
     inner.pages = {k: bytearray(v) for k, v in pages.items()}
     inner.mappings = list(tx.mappings)
     inner.next_address = tx.next_address
-    result = _base_allocate(inner, request_size=request_size, libc_base=libc_base,
-                            thread_pointer=thread_pointer, os_call=os_call)
+    body = _base_allocate if allocation_body is None else allocation_body
+    result = body(inner, request_size=request_size, libc_base=libc_base,
+                  thread_pointer=thread_pointer, os_call=os_call)
     for key in set(original) - set(inner.pages):
         del original[key]
         for staged in chain:
@@ -167,7 +168,7 @@ def preinit_complete_with_base_allocator(guest_os, *, libc_base, thread_pointer,
     return result
 
 
-def cold_init_until_cpu_query(guest_os, *, libc_base, thread_pointer, brk, os_call):
+def _cold_prefix_transaction(tx, *, libc_base, thread_pointer, brk, os_call):
     """Fresh default +0x8e350 through +0x8e41c, before CPU-count/sysconf.
 
     Actual preinit, main TSD and init-mutex transitions are composed in one
@@ -176,7 +177,6 @@ def cold_init_until_cpu_query(guest_os, *, libc_base, thread_pointer, brk, os_ca
     not claimed. Nonfresh/concurrent owner branches reject.
     """
     from vm9_libc_boot import tsd_boot
-    tx = guest_os.begin()
     p = tx.pages
     if _u(p, libc_base + 0xDB6A0, 4) != 3 or _u(p, libc_base + 0xE69B8):
         raise allocator.RefillUnsupported("cold prefix requires the fresh unowned state")
@@ -189,5 +189,13 @@ def cold_init_until_cpu_query(guest_os, *, libc_base, thread_pointer, brk, os_ca
     if not status:
         _w(p, libc_base + 0xDB6A0, 1, 4)
     objects.unlock_uncontended_mutex(p, mutex_address=mutex)
-    tx.commit()
     return 1 if status else 0x8E41C
+
+
+def cold_init_until_cpu_query(guest_os, *, libc_base, thread_pointer, brk, os_call):
+    """Actual same-fresh prefix to +0x8e41c; the continuation is separate."""
+    tx = guest_os.begin()
+    result = _cold_prefix_transaction(tx, libc_base=libc_base, thread_pointer=thread_pointer,
+        brk=brk, os_call=os_call)
+    tx.commit()
+    return result

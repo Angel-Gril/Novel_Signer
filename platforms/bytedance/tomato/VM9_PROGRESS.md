@@ -3,6 +3,40 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Current default libc cold-return checkpoint (2026-10-06)
+
+Python now reaches the natural default empty-config malloc cold return and flag 0
+from fresh ELF/TLS inputs under explicit virtual OS services. Real fgets/refill/read,
+EOF/line handling and buffered fclose/cached free feed get_nprocs; real atfork public
+allocation, arena-table base allocation and static-to-dynamic TSD migration then
+complete. No +0x8e41c frontier shortcut, ready-flag fixture or native boot snapshot
+supplies the Python result. The actual fresh atfork mutex is recursive 0x4000;
+older normal-mutex component fixtures did not prove this fresh branch.
+
+All **96 new native controls / 27 rejection and rollback checks** pass: readonly
+stream **46/19**, CPU query **24**, default cold/fresh public small **26/8**.
+Free/runtime-boot/stdio/readonly-FILE regressions add **152/64** passing checks,
+for **248 native controls / 91 rejection and rollback checks** in the full run.
+The cold CLI records separate full-case, full-cold and full-fresh-small matrix
+booleans; a selected-case run does not claim full coverage.
+
+The bounded public path covers 0..14336 bytes, including repeated requests after
+TSD migration. Two separate fresh native-only probes return nonnull at 16384 bytes,
+while Python rejects the unrecovered public-large size branch. The observed next
+call is **+0x8f6ec -> +0x7a3c8**. These two probes are not Python/native allocation
+byte matches and are not included in the 96 new controls. Recover this large/cache
+path before replacing the default task's six explicit 0x4000 allocation providers.
+
+All-branch malloc/free, real thread/OS creation, startup/root allocator composition,
+fresh Medusa, current online headers/f13, no-JVM Rust, nonempty search/pagination,
+Douyin/Qidian and final Pages/Actions products remain incomplete.
+Evidence: [stream](evidence/vm9_libc_readonly_stream_native.json),
+[CPU query](evidence/vm9_libc_cpu_query_native.json),
+[natural cold return](evidence/vm9_libc_default_cold_return_native.json),
+[regressions](evidence/vm9_libc_default_cold_regression.json),
+[large frontier](evidence/vm9_libc_large_frontier_native.json).
+Reproduction and boundaries: [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md).
+
 ## Independent startup and default queue worker checkpoint
 
 Condition wait/owned wrappers, queue callable lifecycle/loop and nonrepeating
@@ -33,7 +67,7 @@ A further same-fresh nonempty worker completes the full guest joinable exit body
 with all six default returns, 48 nested returns and support/wrapper cleanup;
 14 worker rollback checks pass. Unknown callbacks/support-associated state types
 still require concrete sources. Actual OS create/termination, complete worker
-runtime, complete Python allocator boot, fresh
+runtime, all-branch Python allocator and startup/root composition, fresh
 Medusa, live header matrix/f13 checks, no-JVM Rust, nonempty search/pagination,
 Douyin/Qidian and the final Pages/Actions products remain open.
 
@@ -55,7 +89,8 @@ Matching-libc native cold malloc returns under explicit virtual OS services
 without allocator hooks in 10 fresh controls at two main-image bases. Actual
 reentrant public malloc, CPU file parsing, atfork registration and TSD migration
 reach flag 0; entry traces are now recorded without guest pointers or pages.
-This remains a native-only result.
+This was the earlier native-only checkpoint; the new Python default cold return
+is verified in the current checkpoint above.
 
 Python now additionally passes 94 arena/bin/bitmap/tcache/static-TSD/arena
 constructor native controls and 9 rejection checks, and 46 real base allocator
@@ -123,15 +158,13 @@ calls and mapping metadata/protection match. Void constructor/cleanup returns
 are excluded. Unsupported provider/FILE/character-file/profiling branches
 roll back guest state while retaining explicit external effects.
 
-Both batches run the actual same-fresh cold prefix before an explicit
-+0x8e41c continuation. No file content was read or CPU count computed by Python.
-Evidence: evidence/vm9_libc_stdio_native.json and
-evidence/vm9_libc_readonly_file_native.json. Next: recover +0x573e4 fgets ->
-+0x5a960 refill -> +0x75090 read callback, EINTR/EOF and line behavior, then
-buffered fclose/cached free and +0x2669c get_nprocs parsing. Join the complete
-FILE lifecycle to CPU query, atfork allocation, arena table finalization and
-TSD migration. The outer Python
-cold prefix still stops at +0x8e41c/flag 1. Full cold return/flag 0, fresh Medusa
+Those earlier two component batches ran the actual same-fresh cold prefix
+before an explicit +0x8e41c continuation. Their controls read no file content
+and computed no Python CPU count. Evidence: evidence/vm9_libc_stdio_native.json
+and evidence/vm9_libc_readonly_file_native.json. The new default cold controls
+now join actual fgets/refill/read, buffered fclose/free and get_nprocs to real
+atfork allocation, arena-table finalization and TSD migration, reaching the
+natural flag 0 return as recorded in the current checkpoint above. Fresh Medusa
 and the online header matrix remain open. Multi-arena selection, GC, profiling,
 large/huge, cache destruction and concurrent publication are unsupported, as
 are earlier region/config/DSS/dirty branches. One radix-allocation failure probe

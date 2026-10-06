@@ -1,0 +1,43 @@
+{
+  "schema": "vm9-libc-fresh-large-frontier-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "case": "fresh_large_frontier",
+      "image_base": "0x122c0000",
+      "request_size": 16384,
+      "native_run_terminal": true,
+      "native_public_malloc_returned_nonnull": true,
+      "natural_ready_flag_zero": true,
+      "python_size_guard_reached": true,
+      "direct_call_counts": {
+        "0x8f6ec": {
+          "0x7a3c8": 1
+        }
+      },
+      "python_vs_native_allocation_bytes_compared": false
+    },
+    {
+      "case": "fresh_large_frontier",
+      "image_base": "0x775c205000",
+      "request_size": 16384,
+      "native_run_terminal": true,
+      "native_public_malloc_returned_nonnull": true,
+      "natural_ready_flag_zero": true,
+      "python_size_guard_reached": true,
+      "direct_call_counts": {
+        "0x8f6ec": {
+          "0x7a3c8": 1
+        }
+      },
+      "python_vs_native_allocation_bytes_compared": false
+    }
+  ],
+  "native_input_snapshot_used": false,
+  "explicit_virtual_os": true,
+  "allocation_provider_used": false,
+  "python_public_large_complete": false,
+  "standalone_medusa_complete": false,
+  "current_online_header_matrix_verified": false
+}

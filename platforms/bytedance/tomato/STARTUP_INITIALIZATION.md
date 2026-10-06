@@ -1,8 +1,14 @@
 # 外层启动 caller 与 worker 调度／清理
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、真实 allocator boot、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**默认 matching libc 冷启动已另行验证自然返回；完整 allocator 分支与 startup/root 接入、真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
+
+## 当前 allocator 检查点（2026-10-06）
+
+Python 已从 fresh ELF／受控 TLS 输入贯通默认 empty-config libc 冷启动，实际读入 CPU 文件、释放 FILE 缓冲、注册 atfork、发布 arena table、迁移 static TSD，并自然返回 `flag=0`。没有在 `+0x8e41c` 提前返回，没有人工设置 ready flag，也没有用 native 初始化快照提供 Python 输入。该结果覆盖默认虚拟 OS 服务下的冷启动和 0 至 14336 字节 public small 请求，不代表 all-branch allocator 或完整独立 Medusa 已完成。
+
+本轮新增 **96 个 native 对照／27 项拒绝与回滚检查**；旧 free、runtime boot、stdio 和 readonly FILE 回归 **152／64** 全通过。详细边界、复现命令和下一处 large 分配见下方“实际 FILE 读入、CPU 查询与默认冷启动自然返回”。
 
 ## 验证结果与输入边界
 
@@ -375,7 +381,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_region.py --library 
 
 公开[对照证据](evidence/vm9_libc_fresh_region_small_native_20261005.json)仅含样本 hash、控制标签、offset／count 和 booleans。native 输入快照、ELF、对象数据和请求内容没有发布。
 
-**region／raw small 阶段的外层冷启动停止点为 `+0x8e41c`／`flag=1`。** 当时真实 raw/internal 分配已经可用，public tcache 创建、arena 绑定、empty-bin refill 与 accounting 尚未恢复；下一节记录其新的有界实现，CPU 查询整体仍未接回。非空配置、primary／secondary DSS、非空 chunk cache、dirty cleanup、junk/redzone fill、large/huge allocation 和并发 publication 未完成，不能用 base allocation 代替这些调用。
+**region／raw small 阶段的外层冷启动停止点为 `+0x8e41c`／`flag=1`。** 当时真实 raw/internal 分配已经可用，public tcache 创建、arena 绑定、empty-bin refill 与 accounting 尚未恢复；下一节记录其新的有界实现，该阶段 CPU 查询整体尚未接回；更新结果见“实际 FILE 读入、CPU 查询与默认冷启动自然返回”。非空配置、primary／secondary DSS、非空 chunk cache、dirty cleanup、junk/redzone fill、large/huge allocation 和并发 publication 未完成，不能用 base allocation 代替这些调用。
 
 ## Matching libc tcache 与有界 public small（2026-10-05）
 
@@ -408,9 +414,9 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_tcache.py --library 
 
 owner API 为 `bind_thread_arena`、`create_thread_cache`、`get_thread_cache`、`refill_small_cache_bin` 和 `allocate_public_small`。它们接收同一个 `GuestOS`，原子提交 guest pages／mapping records／cursor；输入必须由真实已恢复的 boot 路径生成。不是独立 signer API。
 
-**外层 Python cold prefix 仍停在 `+0x8e41c`。** 接下来的实际 native 路线已确认是 `sysconf +0x1d2e4 → get_nprocs +0x2669c → fopen +0x57cd8 → fclose +0x56c78 → free +0x1bac0`；allocator dispatch 的 free 目标为 `+0x91990`。cached small free 的新进展见下一节；还需恢复实际 stdio／文件 OS 输入，使 CPU 查询中的分配及释放相互闭合，随后接 atfork 的 48 字节 public allocation、arena table 收尾与 `+0x99c78` 的 128 字节 internal TSD migration。
+**该有界 public-small 阶段的外层 Python cold prefix 停在 `+0x8e41c`；当前自然返回进展见下方新增章节。** 接下来的实际 native 路线已确认是 `sysconf +0x1d2e4 → get_nprocs +0x2669c → fopen +0x57cd8 → fclose +0x56c78 → free +0x1bac0`；allocator dispatch 的 free 目标为 `+0x91990`。cached small free 的新进展见下一节；还需恢复实际 stdio／文件 OS 输入，使 CPU 查询中的分配及释放相互闭合，随后接 atfork 的 48 字节 public allocation、arena table 收尾与 `+0x99c78` 的 128 字节 internal TSD migration。
 
-完整 public allocator 仍不支持 multi-arena selection、large/huge、GC、profiling、cache 析构、并发和此前 region 的未恢复分支。当前结果没有证明 full cold-init flag 0、fresh Medusa 或线上全头矩阵；其他平台与最终产品亦未完成。
+完整 public allocator 仍不支持 multi-arena selection、large/huge、GC、profiling、cache 析构、并发和此前 region 的未恢复分支。本节控制本身没有证明 full cold-init flag 0；新的默认冷启动对照见下方新增章节。fresh Medusa、线上全头矩阵、其他平台与最终产品仍未完成。
 
 ## Matching libc cached small free（2026-10-05）
 
@@ -428,7 +434,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_free.py --library C:
 
 新的 native 冷启动诊断进一步确认 CPU 查询实际执行 `fopen +0x57cd8 → mode parse +0x5786c → FILE 获取 +0x749dc → stdio 初始化 +0x74868 → __atexit_register_cleanup +0x75550 → fgets +0x573e4 → fclose +0x56c78 → free +0x91990`。诊断中的完整 native cold return 成功，并不表示 Python 已接回这条路线。coarse 控制证据见 `evidence/vm9_libc_cpu_stdio_frontier_native_20261005.json`；OS ledger 的 preceding-observed-entry 只记录先前出现的入口，不能用它推定 syscall 的动态调用栈。
 
-该 cached small free 阶段当时的下一步是恢复 stdio／FILE 构造、cleanup 注册和文件 OS 输入；其新的恢复结果见下一节。CPU 查询仍不能用直接返回 CPU 数替代，Python 整体仍停在 `+0x8e41c`；atfork、arena table 和 TSD migration 仍待组合验证。
+该 cached small free 阶段当时的下一步是恢复 stdio／FILE 构造、cleanup 注册和文件 OS 输入；其 stdio 构造结果见下一节，实际读入与自然冷启动返回见再后的新增章节。CPU 查询没有用直接返回 CPU 数替代。
 
 ## Matching libc stdio、只读 FILE 和缓冲区构造
 
@@ -453,12 +459,45 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_stdio.py --library C
 python -B platforms/bytedance/tomato/python/verify_vm9_libc_file.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-file-report.json
 ```
 
-**下一步是恢复 `fgets +0x573e4 → refill +0x5a960 → read callback +0x75090` 的实际读入、EINTR／EOF 和行处理，再把带缓冲的 fclose 接回 cached small free，贯通 `get_nprocs +0x2669c` 的解析。** 本节未读任何 FILE 内容；有缓冲、ungetc/auxiliary-buffer 和 write/update/append/seek 的关闭分支仍拒绝。之后才能将 CPU 查询、atfork allocation、arena table 收尾和 TSD migration 组合到自然 `flag=0` 返回，并进入 fresh Medusa 验证。
+**该 stdio 构造阶段当时的下一步是恢复实际读入和 CPU 解析；现已由下方新增章节完成默认分支的组合验证。** 本节的旧构造控制未读 FILE 内容；更新控制恢复只读带缓冲 close。ungetc/auxiliary-buffer 和 write/update/append/seek 仍拒绝，fresh Medusa 仍待独立验证。
+
+## 实际 FILE 读入、CPU 查询与默认冷启动自然返回（2026-10-06）
+
+新增 [vm9_libc_cold.py](python/vm9_libc_cold.py)，并扩展既有 FILE/free/atfork owner。生产入口为 `initialize_default_malloc()` 和 `allocate_default_small()`；两者在同一个 GuestOS transaction 内组合真实初始化及 allocator bodies，不用 allocation provider 代替内部 malloc。`brk/openat/fstat/read/close/mmap/munmap/prctl` 仍由显式虚拟 OS 输入提供，未打开宿主 `/proc/stat`。
+
+| 验证范围 | Native 对照 | 拒绝／回滚 | 公开证据 |
+| --- | ---: | ---: | --- |
+| fgets／refill／read 与 buffered fclose/free | 46 | 19 | [readonly stream](evidence/vm9_libc_readonly_stream_native.json) |
+| get_nprocs 实际 FILE 解析 | 24 | — | [CPU query](evidence/vm9_libc_cpu_query_native.json) |
+| 默认冷启动自然返回与 fresh public small malloc | 26 | 8 | [default cold return](evidence/vm9_libc_default_cold_return_native.json) |
+| free／runtime boot／stdio／readonly FILE 回归 | 152 | 64 | [本轮回归汇总](evidence/vm9_libc_default_cold_regression.json) |
+
+实际调用链为 `fgets +0x573e4 → refill +0x5a960 → read callback +0x75090`。恢复 EINTR 重试及 errno、EOF/error flags、FILE pointer/count/offset、换行、截断、嵌入 NUL、无换行的最后一行、已有缓冲和部分读入后错误。buffered `fclose +0x56c78` 在 close 错误时也执行真实 cached-small release；它和公开 free 共用同一 body，不另建释放模型。持续 EINTR 等超出有界策略的输入明确拒绝，guest transaction 不发布部分结果；外部 provider 副作用不由 guest 回滚。
+
+`get_nprocs +0x2669c` 从 ELF 核实 `/proc/stat`、`re` 和 `cpu%u%c`，通过 fgets256 读取，再按首个 space 截断和实际 conversion-count 语义计数。控制覆盖空文件、打开／读取失败、短读、EINTR、非匹配行、十进制正负号及 uint32/uint64 溢出；该实现不是通用 scanf。打开失败返回 1，成功打开的空文件返回 0。CPU stack guard 从 ELF 的 defined-symbol relocation 绑定，变化时明确拒绝。
+
+默认 cold controls 从实际 `+0x8e350` 运行到自然 return。fresh public controls 从 `+0x1bb08` 开始，仅用虚拟 caller return 串联后续请求，不跳过初始化正文。CPU 文件生命周期后，atfork 的 48 字节节点经真实 public allocation 构造，arena table 经真实 base allocation 创建并发布，`+0x99c78` 的 128 字节 TSD migration 经真实 internal allocation 完成。`+0x933ac` 是经 ELF 指令核实的 `mov w0,#0; ret`，没有输入一个任意 no-op provider。
+
+**新发现：fresh ELF 的 atfork mutex `+0xdb380` 实际类型为 recursive `0x4000`。** 旧 atfork component 控制曾明确将其改成 normal mutex，那些控制不能证明 fresh 的真实类型分支。新的默认 cold 组合保留 ELF 类型，使用已恢复的递归 lock/unlock 与 guest TLS；旧 normal 分支回归保持通过。
+
+26 组控制为两基址各 8 个 cold 输入和 5 个 fresh public 请求组合。请求覆盖 0、128、4096、14336 字节，以及同次 `[128,48,4096,14336]` 的连续分配。每次自然 cold 控制都实际观察 `+0x8e41c/+0x8e51c/+0x99c78` 各一次，并检查 ready flag 为 0、dynamic TSD 已发布及 main marker 清零。比较有定义的返回、guest 输出、stdio/allocator globals、TLS/keys、所有保留 mapping 页、有序 OS 调用和 mapping records/cursor/protection。临时栈 scratch 不由 native 输出提供，完整物理栈不在比较范围。
+
+报告分别记录 `full_case_set_verified`、`full_default_cold_matrix_verified` 和 `full_fresh_public_small_matrix_verified`；仅运行 `--case fresh_128` 时三个 full 标记均为 false，即使所选冷启动成功。所有本轮公开报告保留 `standalone_medusa_complete=false` 与 `current_online_header_matrix_verified=false`。历史报告的 false 代表其自身控制范围，应结合本节的新证据读取。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_stream.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-stream-report.json
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_cpu_query.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-cpu-report.json
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_cold.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-cold-report.json
+```
+
+**下一处已实测定位为 public large 的 `+0x8f6ec → +0x7a3c8`。** 默认任务的 allocator consumer 要求六次 0x4000 字节请求，而当前 public-small body 上限为 0x3800。两个同次 fresh native 探针在自然 flag0 后都返回非空的 16384 字节分配，Python 则在 size guard 明确拒绝。这两个是 native-only 定位探针，未比较 Python large allocation 的 bytes，不计入上表 96 个 Python/native 对照。证据：[large frontier](evidence/vm9_libc_large_frontier_native.json)。接下来恢复这个真实 large/cache 分支，再将已验证的自然 ready 状态接回 startup/default worker/root。
+
+完整 allocator 仍缺 large/huge、full-bin/GC、profiling、multi-arena、cache 析构、非空配置/DSS/dirty、并发等待及相应诊断分支。真实线程/OS 输入创建、未知 callback/support 关联状态、fresh Medusa 签名、新线上全头矩阵与 f13、无 JVM Rust、搜索非空/分页、其他平台及最终 Pages/Actions 产品仍待验收。
 
 ## 继续顺序
 
 继续恢复 matching libc 的真实 allocator 冷启动，将当前显式 allocator／TLS／OS 服务逐项替换为已验证实现，并将 startup、`+0x256e50` 配置构造和既有 root factory 接到外层 signer。未识别 callback、support 关联状态类型和真实线程创建仍需真实来源，不以空回调填补。
 
-先前停在 syscall 167 的 native 诊断已推进到 `flag = 0` 返回；Python 同次 fresh 冷启动目前停在 `+0x8e41c`、`flag = 1`。新 region／清洁 slab／raw internal small、有界 public small／tcache，以及本节 stdio／只读 FILE／regular buffer 构造已有实现；下一步恢复实际 fgets/refill/read/EOF 和 buffered-close/free，将已有 public small／cached small free 接回完整 FILE 生命周期，再接 CPU 解析、atfork allocation、arena table 和 TSD migration，验证完整 Python `flag = 0` 返回。真实 OS/TLS 创建仍是单独未完成边界。
+默认 empty-config Python 冷启动现已自然返回 `flag=0`；真实 FILE 生命周期、CPU 解析、atfork allocation、arena table 和 TSD migration 已组合验证。接下来恢复已实测到达的 0x4000 public large 分配分支，将自然 ready 的 allocator 状态接回 startup/default worker/root。真实 OS/TLS 创建与完整 allocator 分支仍是未完成边界。
 
 随后用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

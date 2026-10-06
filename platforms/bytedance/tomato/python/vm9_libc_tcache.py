@@ -314,7 +314,7 @@ def allocate_public_small(guest_os, *, request_size, libc_base, thread_pointer, 
     return result
 
 
-def release_cached_small(guest_os, *, pointer, libc_base, thread_pointer):
+def _release_cached_small(tx, *, pointer, libc_base, thread_pointer):
     """Actual free +0x1bac0 -> +0x91990, NULL or nonfull clean small cache.
 
     C free has a void ABI; no native X0 value is part of this contract. The
@@ -325,7 +325,6 @@ def release_cached_small(guest_os, *, pointer, libc_base, thread_pointer):
         return None
     if not isinstance(pointer, int) or not 0 < pointer <= MASK:
         raise allocator.RefillUnsupported("free pointer outside uint64 ABI")
-    tx = guest_os.begin()
     p = tx.pages
     wrapper = _current_tsd(p, libc_base, thread_pointer)
     cache = _u(p, wrapper + 0x10)
@@ -378,5 +377,13 @@ def release_cached_small(guest_os, *, pointer, libc_base, thread_pointer):
     _w(p, cache + 0x18, event, 4)
     if event == 228:
         raise allocator.RefillUnsupported("free tcache GC event is unrecovered")
+    return None
+
+
+def release_cached_small(guest_os, *, pointer, libc_base, thread_pointer):
+    """Actual C void free, sharing the outer transaction with FILE cleanup."""
+    if pointer == 0: return None
+    tx = guest_os.begin()
+    _release_cached_small(tx, pointer=pointer, libc_base=libc_base, thread_pointer=thread_pointer)
     tx.commit()
     return None

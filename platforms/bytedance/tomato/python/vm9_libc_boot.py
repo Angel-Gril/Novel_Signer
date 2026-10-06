@@ -513,7 +513,7 @@ def _allocation_boundary(pages, provider, size):
     return pointer
 
 
-def register_atfork(pages, *, libc_base, prepare, parent, child, dso, allocate_public):
+def register_atfork(pages, *, libc_base, prepare, parent, child, dso, allocate_public, thread_pointer=None):
     """Actual +0x67374 registration with an explicit public malloc boundary.
 
     This constructs the real 48-byte node and appends it to the matching libc
@@ -532,7 +532,16 @@ def register_atfork(pages, *, libc_base, prepare, parent, child, dso, allocate_p
     _w(p, node + 0x28, dso)
     mutex = libc_base + 0xDB380
     head = libc_base + 0xE01C0
-    lock_uncontended_mutex(p, mutex_address=mutex)
+    if _u(p, mutex, 2) & 0xC000 == 0x4000:
+        from vm9_libc_stdio import lock_recursive_mutex, unlock_recursive_mutex
+        if thread_pointer is None:
+            raise RefillUnsupported("fresh atfork recursive mutex requires explicit guest TLS")
+        lock = lambda: lock_recursive_mutex(p, mutex_address=mutex, thread_pointer=thread_pointer)
+        unlock = lambda: unlock_recursive_mutex(p, mutex_address=mutex, thread_pointer=thread_pointer)
+    else:
+        lock = lambda: lock_uncontended_mutex(p, mutex_address=mutex)
+        unlock = lambda: unlock_uncontended_mutex(p, mutex_address=mutex)
+    lock()
     _w(p, node, 0)
     tail = _u(p, head + 8)
     _w(p, node + 8, tail)
@@ -541,7 +550,7 @@ def register_atfork(pages, *, libc_base, prepare, parent, child, dso, allocate_p
     if not _u(p, head):
         _w(p, head, node)
     _w(p, head + 8, node)
-    unlock_uncontended_mutex(p, mutex_address=mutex)
+    unlock()
     p.commit()
     return 0
 
