@@ -1,0 +1,465 @@
+{
+  "evidence_id": "vm9_descriptor_branch_handoff_fresh_20261006",
+  "schema": "vm9-descriptor-branch-handoff-fresh-v1",
+  "status": "direct_wrapper_branch_handoff_verified",
+  "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "wrapper_offset": "0x2584b8",
+  "wrapper_disassembly": [
+    "ldp x1, x8, [x0]",
+    "mov x0, x8",
+    "br x1"
+  ],
+  "active_target_offsets": {
+    "acquire": "0x32a444",
+    "release": "0x32a4fc"
+  },
+  "controls": 16,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "kind": "acquire",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a444",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x0",
+      "final_count": "0x1",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "acquire",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a444",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x1",
+      "final_count": "0x2",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "acquire",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a444",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x7",
+      "final_count": "0x8",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "acquire",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a444",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x7ffffffe",
+      "final_count": "0x7fffffff",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "release",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a4fc",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x1",
+      "final_count": "0x0",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "release",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a4fc",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x2",
+      "final_count": "0x1",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "release",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a4fc",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x7",
+      "final_count": "0x6",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "release",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a4fc",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x7ffffffe",
+      "final_count": "0x7ffffffd",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "acquire",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a444",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x0",
+      "final_count": "0x1",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "acquire",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a444",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x1",
+      "final_count": "0x2",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "acquire",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a444",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x7",
+      "final_count": "0x8",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "acquire",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a444",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x7ffffffe",
+      "final_count": "0x7fffffff",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "release",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a4fc",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x1",
+      "final_count": "0x0",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "release",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a4fc",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x2",
+      "final_count": "0x1",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "release",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a4fc",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x7",
+      "final_count": "0x6",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "release",
+      "wrapper_offset": "0x2584b8",
+      "target_offset": "0x32a4fc",
+      "descriptor": "0x70001000",
+      "object_address": "0x70002000",
+      "initial_count": "0x7ffffffe",
+      "final_count": "0x7ffffffd",
+      "native_return": "0x0",
+      "memory_match": true,
+      "descriptor_unchanged": true,
+      "direct_br_x1_executed": true,
+      "normal_mutex_pair": [
+        [
+          "pthread_mutex_lock",
+          1879056384
+        ],
+        [
+          "pthread_mutex_unlock",
+          1879056384
+        ]
+      ],
+      "allocations": 0,
+      "fresh_memory": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "all_memory_matches": true,
+  "all_direct_br_handoffs": true,
+  "all_descriptor_unchanged": true,
+  "pre_dispatch_trampoline_executed": false,
+  "packed_callback_x8_parameterized": false,
+  "full_callback_chain_recovered": false,
+  "fresh_medusa_output_verified": false,
+  "complete_python_medusa": false,
+  "limitations": [
+    "This proves the direct +0x2584b8 descriptor handoff used by the bounded root VM callback sequence.",
+    "The longer +0x2584ac pre-dispatch path, packed x8 composition and current native object graph remain unresolved.",
+    "No online signer, Rust download chain or product capability is implied."
+  ]
+}

@@ -1,6 +1,21 @@
 # 默认配置下的 signer 构造和 callback 发布
 
 
+## 2026-10-06: direct +0x2584b8 branch handoff verified
+
+The fresh root callback sequence captures direct entries at `+0x2584b8` with a
+16-byte descriptor. A separate 16-control native differential executes
+`ldp x1,x8,[x0]; mov x0,x8; br x1` and the active acquire/release targets on
+fresh descriptor and reader objects. Guest bytes, descriptor preservation,
+normal mutex lock/unlock, and the target return status all match the Python model.
+See [direct handoff evidence](evidence/vm9_descriptor_branch_handoff_fresh_20261006.json).
+
+This closes the direct wrapper branch ABI used by the bounded root VM component.
+It does not close the longer `+0x2584ac` pre-dispatch path, packed callback x8,
+object graph publication, or the online Medusa signer.
+
+
+
 ## 2026-10-06: fresh writer object classified as shared-reader state
 
 The four fresh `+0x991c0` controls now retain the bytes around the object written

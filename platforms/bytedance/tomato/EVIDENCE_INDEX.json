@@ -2187,7 +2187,10 @@
       "adjacent_word_u32": 1,
       "object_is_descriptor_pair": false
     },
-    "object_graph_boundary": "writer object is initialized shared-reader state; callback descriptor chain remains separate"
+    "object_graph_boundary": "writer object is initialized shared-reader state; callback descriptor chain remains separate",
+    "native_callback_sequence_captured": true,
+    "direct_reader_wrapper_offset": "0x2584b8",
+    "direct_reader_handoff_evidence": "evidence/vm9_descriptor_branch_handoff_fresh_20261006.json"
   },
   "vm9_descriptor_target_roles_fresh_20261006": {
     "evidence_file": "evidence/vm9_descriptor_target_roles_fresh_20261006.json",
@@ -2212,5 +2215,24 @@
     "active_relocation_count": 10,
     "superseded_relocation_count": 0,
     "static_relocation_table_scan": ".rela.dyn addends; active target pair appears in five table regions"
+  },
+  "vm9_descriptor_branch_handoff_fresh_20261006": {
+    "evidence_file": "evidence/vm9_descriptor_branch_handoff_fresh_20261006.json",
+    "schema": "vm9-descriptor-branch-handoff-fresh-v1",
+    "status": "direct_wrapper_branch_handoff_verified",
+    "wrapper_offset": "0x2584b8",
+    "active_target_offsets": {
+      "acquire": "0x32a444",
+      "release": "0x32a4fc"
+    },
+    "controls": 16,
+    "all_memory_matches": true,
+    "all_direct_br_handoffs": true,
+    "all_descriptor_unchanged": true,
+    "pre_dispatch_trampoline_executed": false,
+    "packed_callback_x8_parameterized": false,
+    "full_callback_chain_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "complete_python_medusa": false
   }
 }

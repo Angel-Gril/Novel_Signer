@@ -1,3 +1,9 @@
+新增直接 handoff 证据：`evidence/vm9_descriptor_branch_handoff_fresh_20261006.json`。
+它在 fresh descriptor/reader 对象上实测 `+0x2584b8` 的 `ldp/mov/br`，并对
+`+0x32a444/+0x32a4fc` 完成 16 组 native/Python 差分。这只证明当前有界 root
+VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback object、
+完整当前 Medusa 和线上矩阵仍未完成。
+
 新增一条可复核证据：`evidence/vm9_descriptor_target_roles_fresh_20261006.json`
 直接在 fresh guest 页上调用 active writer 生成的 `+0x32a444/+0x32a4fc`，16
 组控制全部通过；它证明的是 shared-reader 函数本身及其 mutex/count 语义，

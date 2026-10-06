@@ -179,6 +179,624 @@
       },
       "descriptor_callback_reached": false,
       "logger_callback_reached": false,
+      "native_callback_sequence": [
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x12427e54",
+            "0x12359154",
+            "0x1269e6cc",
+            "0x123591ac",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x12427e54",
+            "0x1235915c",
+            "0x1269e6d8",
+            "0x123591a4",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x12427e54",
+            "0x12359164",
+            "0x1269e6e4",
+            "0x12359194",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584b8",
+          "argument": "0x7004ea30",
+          "argument_words": [
+            "0x125ea444",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584b8",
+          "argument": "0x7004ea30",
+          "argument_words": [
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258478",
+          "argument": "0x7004ea70",
+          "argument_words": [
+            "0x12508344",
+            "0x7004eaf0",
+            "0x1269e6f8",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x1252c9d0"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x125ea1f0",
+            "0x58",
+            "0x0",
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x2584e0",
+          "argument": "0x7004e9f0",
+          "argument_words": [
+            "0x1252194c",
+            "0x136e6000",
+            "0x136d90e0",
+            "0x136d9040",
+            "0x7004eaf0",
+            "0x125ea1f0",
+            "0x58",
+            "0x136e6000"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x258460",
+          "argument": "0x7004ea98",
+          "argument_words": [
+            "0x125ea264",
+            "0x136d80c0",
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136e6000",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x125ea1f0",
+            "0x4",
+            "0x136e6000",
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136e6000",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x125ea1f0",
+            "0x30",
+            "0x136d80c0",
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258500",
+          "argument": "0x7004e9c0",
+          "argument_words": [
+            "0x125298f0",
+            "0x136d36c0",
+            "0x136d9040",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x1252194c",
+            "0x136e6000"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x258460",
+          "argument": "0x7004ea98",
+          "argument_words": [
+            "0x125ea264",
+            "0x136d80e8",
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d36c0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x125ea1f0",
+            "0x4",
+            "0x136d36c0",
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d36c0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x25846c",
+          "argument": "0x7004ea88",
+          "argument_words": [
+            "0x125084b8",
+            "0x7004eaf0",
+            "0x125ea264",
+            "0x136d80e8",
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        }
+      ],
       "fresh_medusa_output_verified": false
     },
     {
@@ -354,6 +972,624 @@
       },
       "descriptor_callback_reached": false,
       "logger_callback_reached": false,
+      "native_callback_sequence": [
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x12427e54",
+            "0x12359154",
+            "0x1269e6cc",
+            "0x123591ac",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x12427e54",
+            "0x1235915c",
+            "0x1269e6d8",
+            "0x123591a4",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x12427e54",
+            "0x12359164",
+            "0x1269e6e4",
+            "0x12359194",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584b8",
+          "argument": "0x7004ea30",
+          "argument_words": [
+            "0x125ea444",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584b8",
+          "argument": "0x7004ea30",
+          "argument_words": [
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258478",
+          "argument": "0x7004ea70",
+          "argument_words": [
+            "0x12508344",
+            "0x7004eaf0",
+            "0x1269e6f8",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x1252c9d0"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x125ea1f0",
+            "0x58",
+            "0x0",
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x2584e0",
+          "argument": "0x7004e9f0",
+          "argument_words": [
+            "0x1252194c",
+            "0x136e6000",
+            "0x136d90e0",
+            "0x136d9040",
+            "0x7004eaf0",
+            "0x125ea1f0",
+            "0x58",
+            "0x136e6000"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x258460",
+          "argument": "0x7004ea98",
+          "argument_words": [
+            "0x125ea264",
+            "0x136d80c0",
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136e6000",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x125ea1f0",
+            "0x4",
+            "0x136e6000",
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136e6000",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x125ea1f0",
+            "0x30",
+            "0x136d80c0",
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258500",
+          "argument": "0x7004e9c0",
+          "argument_words": [
+            "0x125298f0",
+            "0x136d36c0",
+            "0x136d9040",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x1252194c",
+            "0x136e6000"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x258460",
+          "argument": "0x7004ea98",
+          "argument_words": [
+            "0x125ea264",
+            "0x136d80e8",
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d36c0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x125ea1f0",
+            "0x4",
+            "0x136d36c0",
+            "0x125ea4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d36c0",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        },
+        {
+          "function_offset": "0x25846c",
+          "argument": "0x7004ea88",
+          "argument_words": [
+            "0x125084b8",
+            "0x7004eaf0",
+            "0x125ea264",
+            "0x136d80e8",
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8",
+            "0x1235918c",
+            "0x1260f5f8"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x1252c9d0",
+            "0x7004eb08",
+            "0x1252c858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x12427e54",
+            "0x12359174",
+            "0x1269e6f8"
+          ]
+        }
+      ],
       "fresh_medusa_output_verified": false
     },
     {
@@ -529,6 +1765,624 @@
       },
       "descriptor_callback_reached": false,
       "logger_callback_reached": false,
+      "native_callback_sequence": [
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x775c36ce54",
+            "0x775c29e154",
+            "0x775c5e36cc",
+            "0x775c29e1ac",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x775c36ce54",
+            "0x775c29e15c",
+            "0x775c5e36d8",
+            "0x775c29e1a4",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x775c36ce54",
+            "0x775c29e164",
+            "0x775c5e36e4",
+            "0x775c29e194",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584b8",
+          "argument": "0x7004ea30",
+          "argument_words": [
+            "0x775c52f444",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584b8",
+          "argument": "0x7004ea30",
+          "argument_words": [
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258478",
+          "argument": "0x7004ea70",
+          "argument_words": [
+            "0x775c44d344",
+            "0x7004eaf0",
+            "0x775c5e36f8",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x775c4719d0"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x775c52f1f0",
+            "0x58",
+            "0x0",
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x2584e0",
+          "argument": "0x7004e9f0",
+          "argument_words": [
+            "0x775c46694c",
+            "0x136e6000",
+            "0x136d90e0",
+            "0x136d9040",
+            "0x7004eaf0",
+            "0x775c52f1f0",
+            "0x58",
+            "0x136e6000"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x258460",
+          "argument": "0x7004ea98",
+          "argument_words": [
+            "0x775c52f264",
+            "0x136d80c0",
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136e6000",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x775c52f1f0",
+            "0x4",
+            "0x136e6000",
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136e6000",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x775c52f1f0",
+            "0x30",
+            "0x136d80c0",
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258500",
+          "argument": "0x7004e9c0",
+          "argument_words": [
+            "0x775c46e8f0",
+            "0x136d36c0",
+            "0x136d9040",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x775c46694c",
+            "0x136e6000"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x258460",
+          "argument": "0x7004ea98",
+          "argument_words": [
+            "0x775c52f264",
+            "0x136d80e8",
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d36c0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x775c52f1f0",
+            "0x4",
+            "0x136d36c0",
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d36c0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x25846c",
+          "argument": "0x7004ea88",
+          "argument_words": [
+            "0x775c44d4b8",
+            "0x7004eaf0",
+            "0x775c52f264",
+            "0x136d80e8",
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        }
+      ],
       "fresh_medusa_output_verified": false
     },
     {
@@ -704,6 +2558,624 @@
       },
       "descriptor_callback_reached": false,
       "logger_callback_reached": false,
+      "native_callback_sequence": [
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x775c36ce54",
+            "0x775c29e154",
+            "0x775c5e36cc",
+            "0x775c29e1ac",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x775c36ce54",
+            "0x775c29e15c",
+            "0x775c5e36d8",
+            "0x775c29e1a4",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x775c36ce54",
+            "0x775c29e164",
+            "0x775c5e36e4",
+            "0x775c29e194",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258430",
+          "argument": "0x7004ead0",
+          "argument_words": [
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9100",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d90e0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584b8",
+          "argument": "0x7004ea30",
+          "argument_words": [
+            "0x775c52f444",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584b8",
+          "argument": "0x7004ea30",
+          "argument_words": [
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258478",
+          "argument": "0x7004ea70",
+          "argument_words": [
+            "0x775c44d344",
+            "0x7004eaf0",
+            "0x775c5e36f8",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x775c4719d0"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x775c52f1f0",
+            "0x58",
+            "0x0",
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x2584e0",
+          "argument": "0x7004e9f0",
+          "argument_words": [
+            "0x775c46694c",
+            "0x136e6000",
+            "0x136d90e0",
+            "0x136d9040",
+            "0x7004eaf0",
+            "0x775c52f1f0",
+            "0x58",
+            "0x136e6000"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x258460",
+          "argument": "0x7004ea98",
+          "argument_words": [
+            "0x775c52f264",
+            "0x136d80c0",
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136e6000",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x775c52f1f0",
+            "0x4",
+            "0x136e6000",
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136e6000",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x775c52f1f0",
+            "0x30",
+            "0x136d80c0",
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258500",
+          "argument": "0x7004e9c0",
+          "argument_words": [
+            "0x775c46e8f0",
+            "0x136d36c0",
+            "0x136d9040",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x775c46694c",
+            "0x136e6000"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x258460",
+          "argument": "0x7004ea98",
+          "argument_words": [
+            "0x775c52f264",
+            "0x136d80e8",
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d36c0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x2584c4",
+          "argument": "0x7004ea18",
+          "argument_words": [
+            "0x775c52f1f0",
+            "0x4",
+            "0x136d36c0",
+            "0x775c52f4fc",
+            "0x136da148",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d36c0",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        },
+        {
+          "function_offset": "0x25846c",
+          "argument": "0x7004ea88",
+          "argument_words": [
+            "0x775c44d4b8",
+            "0x7004eaf0",
+            "0x775c52f264",
+            "0x136d80e8",
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08"
+          ]
+        },
+        {
+          "function_offset": "0x258444",
+          "argument": "0x7004eab8",
+          "argument_words": [
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8",
+            "0x775c29e18c",
+            "0x775c5545f8"
+          ]
+        },
+        {
+          "function_offset": "0x258454",
+          "argument": "0x7004eaa8",
+          "argument_words": [
+            "0x775c4719d0",
+            "0x7004eb08",
+            "0x775c471858",
+            "0x7004eb08",
+            "0x136d9040",
+            "0x775c36ce54",
+            "0x775c29e174",
+            "0x775c5e36f8"
+          ]
+        }
+      ],
       "fresh_medusa_output_verified": false
     }
   ],

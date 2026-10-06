@@ -50,6 +50,7 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
     stores: list[dict] = []
     vm_starts: list[dict] = []
     register_changes: list[dict] = []
+    native_callbacks: list[dict] = []
 
     previous_vm = vm_module.VM
 
@@ -59,6 +60,7 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
             if start != 0x991C0:
                 return super().run()
             previous_hook = self.step_hook
+            previous_native_hook = self.native_hook
             local: list[dict] = []
             previous_values = {slot: self.R[slot] for slot in (1, 17, 29)}
             previous_step = None
@@ -120,11 +122,27 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
                 previous_step = self.steps
                 previous_word = word
 
+            def native_hook(vm, function, argument):
+                try:
+                    words = [vm.m.u64(argument + index * 8) for index in range(8)]
+                except Exception:
+                    words = None
+                native_callbacks.append({
+                    "function_offset": hex(function - vm_module.B),
+                    "argument": hex(argument),
+                    "argument_words": [hex(word) for word in words] if words is not None else None,
+                })
+                if previous_native_hook is None:
+                    raise RuntimeError("root native callback unexpectedly missing")
+                return previous_native_hook(vm, function, argument)
+
             self.step_hook = hook
+            self.native_hook = native_hook
             try:
                 return super().run()
             finally:
                 self.step_hook = previous_hook
+                self.native_hook = previous_native_hook
                 if start == 0x991C0:
                     vm_starts.append({
                         "start_offset": hex(start),
@@ -210,6 +228,7 @@ def capture_case(library: Path, libc: Path, image: int, label: str, value, vm_mo
         },
         "descriptor_callback_reached": bool(result.get("descriptor_trampoline")),
         "logger_callback_reached": bool(result.get("logger_calls")),
+        "native_callback_sequence": native_callbacks,
         "fresh_medusa_output_verified": False,
     }
 

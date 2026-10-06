@@ -1,6 +1,20 @@
 # Current VM9 progress checkpoint
 
 
+## 2026-10-06: direct +0x2584b8 branch handoff verified
+
+fresh root callback 序列显示当前有界路径直接进入 `+0x2584b8`，其 16 字 descriptor
+的 field0 是 active target、field8 是 reader object。新增 16 组 native fresh
+差分，逐条执行 `ldp x1,x8,[x0]; mov x0,x8; br x1` 到
+`+0x32a444/+0x32a4fc`，内存、descriptor 保持、mutex lock/unlock 和返回状态
+均与 Python 模型一致。证据为
+[evidence/vm9_descriptor_branch_handoff_fresh_20261006.json](evidence/vm9_descriptor_branch_handoff_fresh_20261006.json)。
+
+这只闭合了直接 `+0x2584b8` wrapper 的 branch ABI；更长的
+`+0x2584ac` pre-dispatch、packed callback x8、完整对象图和线上 Medusa 仍未闭合。
+
+
+
 ## 2026-10-06: fresh writer object classified as shared-reader state
 
 四组 fresh `+0x991c0` 控制现在保留了 active target pair 所用对象的局部字节：
