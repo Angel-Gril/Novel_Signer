@@ -80,7 +80,7 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
     def observe(cpu, pc):
         state['last_pc'] = pc
         offset = pc - image
-        if trace is not None and offset in (0x258488, 0x2584AC, 0x26E9E0, 0x271EC8, 0x271DDC):
+        if trace is not None and offset in (0x168324, 0x257084, 0x257308, 0x258488, 0x2584AC, 0x26CF08, 0x26E9E0, 0x271EC8, 0x271DDC):
             if len(trace) < 256:
                 trace.append({
                     'offset': hex(offset),

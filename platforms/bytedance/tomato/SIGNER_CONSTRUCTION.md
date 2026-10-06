@@ -4,7 +4,7 @@
 
 [边界 verifier](python/verify_vm9_outer_constructor_boundary.py) 在同次 fresh ELF/TLS/actual allocator 状态上跑过两种 image base 与 absent/SDK 30 共 4 组。每组先到达 `+0x26e9e0`，随后由 `+0x2584ac` 读取 descriptor：`argument+8` 是 descriptor，field0 是 relocated logger branch target，field8 是后续 x0 object；其余字段与 logger 的 first/second/width 参数块也保留在证据中。配套的 [native logger trace](python/verify_vm9_native_logger_trace.py) 在 4 组 native outer controls 中记录了 `+0x26e9e0 → +0x271ec8 → +0x271ddc` 的真实寄存器入口和 `+0x26cf0c` 返回点。控制在该 trampoline 明确拒绝，未执行猜测性的 no-op 或伪 callback。
 
-这一步把 outer constructor 的下一个真实边界固定下来，但没有恢复 logger/global 写入或 trampoline 的完整 native handoff。`+0x2887f0` 仍不是当前路径，descriptor writer 的 input-driven object graph 仍缺失。因而 `complete_python_medusa`、fresh Medusa 输出、online header matrix 和无 JVM Rust 链路继续保持 false。可选 logger provider 的结果另见 [provider evidence](evidence/vm9_outer_constructor_logger_provider_20261006.json)：absent 两组到达同一 trampoline，SDK=30 两组被 singleton136 前置条件拒绝。
+这一步把 Python 当前的 trampoline 边界固定下来，但 native outer trace 证明外层 constructor 实际走的是 `+0x257084 → +0x257308 → +0x168324 → +0x26cf08 → +0x26e9e0 → +0x271ec8 → +0x271ddc`，没有执行 `+0x258488/+0x2584ac`。因此 Python 到达 trampoline 反映的是 VM prelude/分支差异，不能当成 native outer 已恢复。`+0x2887f0` 仍不是当前路径，native `+0x26cf08` handoff 和 descriptor writer 的 input-driven object graph 仍缺失。因而 `complete_python_medusa`、fresh Medusa 输出、online header matrix 和无 JVM Rust 链路继续保持 false。provider 的结果另见 [provider evidence](evidence/vm9_outer_constructor_logger_provider_20261006.json)。
 
 ## 同次 actual allocator/TLS 外层前段组合（2026-10-06）
 

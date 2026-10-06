@@ -43,6 +43,7 @@ def main():
                 "logger_downstream_offsets": [
                     item["offset"] for item in trace if item["offset"] in
                     ("0x271ec8", "0x271ddc")],
+                "outer_vm_trace": trace,
                 "actual_allocator_counts": result["actual_allocator_counts"],
                 "native_input_snapshot_used": False,
                 "fresh_medusa_output_verified": False,
@@ -59,6 +60,7 @@ def main():
         "logger_entry_offset": "0x26e9e0",
         "logger_downstream_offsets": ["0x271ec8", "0x271ddc"],
         "logger_return_offset": "0x26cf0c",
+        "outer_vm_trace_offsets": ["0x168324", "0x257084", "0x257308", "0x258488", "0x2584ac", "0x26cf08"],
         "native_input_snapshot_used": False,
         "python_descriptor_comparison_complete": False,
         "fresh_medusa_output_verified": False,

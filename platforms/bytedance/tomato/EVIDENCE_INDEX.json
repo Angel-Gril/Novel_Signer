@@ -1785,6 +1785,18 @@
     "python_descriptor_comparison_complete": false,
     "fresh_medusa_output_verified": false,
     "current_online_header_matrix_verified": false,
-    "complete_python_medusa": false
+    "complete_python_medusa": false,
+    "native_outer_vm_path": [
+      "0x257084",
+      "0x257308",
+      "0x168324",
+      "0x26cf08",
+      "0x26e9e0",
+      "0x271ec8",
+      "0x271ddc"
+    ],
+    "native_outer_trampoline_258488_executed": false,
+    "native_outer_trampoline_2584ac_executed": false,
+    "python_current_trampoline_is_prelude_divergence_marker": true
   }
 }
