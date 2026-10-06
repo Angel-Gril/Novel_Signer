@@ -1,7 +1,7 @@
-"""Matching libc thread-cache creation and single-arena binding.
+"""Matching libc thread-cache, bounded missing TSD and default arena binding.
 
 Restores bounded +0x98490/+0x98c54/+0x8dda0 paths with actual region
-allocation. No native pages or caller-provided allocation results initialize
+allocation, including default one/two-arena worker selection. No native pages or caller-provided allocation results initialize
 cache storage. Bounded public small allocation and empty cache refill compose
 these owners. Default cold init is composed by vm9_libc_cold; bounded empty-cache
 large allocation is also restored. Nonempty large cache/free, GC and signing
@@ -17,10 +17,11 @@ from vm9_libc_boot import _u, _w, _indirect
 MASK = (1 << 64) - 1
 
 
-def _bind_arena(pages, *, tsd_address, libc_base):
-    """Actual +0x8dda0 single-arena path; tsd points after wrapper +8."""
-    if _u(pages, libc_base + 0xE6970, 4) != 1:
-        raise allocator.RefillUnsupported("multi-arena selection/construction is unrecovered")
+def _bind_arena(pages, *, tsd_address, libc_base, allocate_base=None):
+    """Actual +0x8dda0 serial one/two-arena selection and construction."""
+    limit = _u(pages, libc_base + 0xE6970, 4)
+    if limit not in (1, 2):
+        raise allocator.RefillUnsupported("arena selection requires the default one/two-arena limit")
     result = _u(pages, libc_base + 0xE6968)
     if not result:
         raise allocator.RefillUnsupported("arena zero has not been constructed")
@@ -30,11 +31,37 @@ def _bind_arena(pages, *, tsd_address, libc_base):
     arena = _u(pages, table)
     if not arena:
         raise allocator.RefillUnsupported("empty first arena table slot")
+    if limit == 2:
+        if _u(pages, libc_base + 0xE6960, 4) < limit:
+            raise allocator.RefillUnsupported("arena-table growth is unrecovered")
+        other = _u(pages, table + 8)
+        if other and _u(pages, other + 4, 4) < _u(pages, arena + 4, 4):
+            arena = other
+        if _u(pages, arena + 4, 4) and not other:
+            if allocate_base is None:
+                raise allocator.RefillUnsupported("new arena requires actual base allocation")
+            from vm9_libc_boot import construct_arena
+            arena = construct_arena(pages, libc_base=libc_base, arena_index=1,
+                allocate_base=allocate_base)
+            _w(pages, table + 8, arena)
+            if not arena:
+                objects.unlock_uncontended_mutex(pages, mutex_address=mutex)
+                return 0
+        result = arena
     _w(pages, arena + 4, (_u(pages, arena + 4, 4) + 1) & 0xFFFFFFFF, 4)
     if _u(pages, tsd_address, 4) == 1:
         _w(pages, tsd_address + 0x28, arena)
     objects.unlock_uncontended_mutex(pages, mutex_address=mutex)
     return result
+
+
+def _bind_arena_transaction(tx, *, tsd_address, libc_base, thread_pointer, os_call):
+    from vm9_libc_base import _allocate_staged
+    def allocate(pages, size):
+        return _allocate_staged(tx, pages, request_size=size, libc_base=libc_base,
+            thread_pointer=thread_pointer, os_call=os_call)
+    return _bind_arena(tx.pages, tsd_address=tsd_address, libc_base=libc_base,
+        allocate_base=allocate)
 
 
 def bind_thread_arena(guest_os, *, tsd_address, libc_base):
@@ -110,12 +137,103 @@ def create_thread_cache(guest_os, *, tsd_address, arena_address, libc_base, thre
     return result
 
 
-def _current_tsd(pages, libc_base, thread_pointer):
+def _fallback_tsd(tx, *, libc_base, thread_pointer, scratch_address, os_call):
+    """Missing public TSD: +0x99610/99600/996d4, temporary list and actual malloc.
+
+    The caller owns 32 bytes of mapped scratch for the ABI's temporary node.
+    Only the serial, uncontended list and default internal 128-byte allocation
+    are recovered; null allocation and diagnostic/abort paths explicitly reject.
+    """
+    from vm9_libc_base import _allocate_staged
+    from vm9_libc_cold import _internal_small
+    if scratch_address is None or scratch_address & 7 or os_call is None:
+        raise allocator.RefillUnsupported("missing TSD requires aligned mapped scratch and OS service")
+    p = tx.pages
+    allocator._read_span(p, scratch_address, 32)
+    key = _u(p, _indirect(p, libc_base, 0xD8F98), 4)
+    owner = _u(p, thread_pointer + 8)
+    if not owner:
+        raise allocator.RefillUnsupported("missing TSD has no pthread identity")
+    head_address = _indirect(p, libc_base, 0xD8DF8)
+    mutex = head_address + 8
+    objects.lock_uncontended_mutex(p, mutex_address=mutex)
+    head = _u(p, head_address)
+    current = head
+    for _ in range(141):
+        if not current:
+            break
+        if current == scratch_address:
+            raise allocator.RefillUnsupported("TSD scratch aliases a live fallback node")
+        if _u(p, current + 0x10) == owner:
+            wrapper = _u(p, current + 0x18)
+            if not wrapper:
+                raise allocator.RefillUnsupported("recursive inflight TSD allocation is unrecovered")
+            objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+            return wrapper
+        current = _u(p, current)
+        if current == head:
+            break
+    else:
+        raise allocator.RefillUnsupported("TSD fallback list is cyclic or exceeds its bound")
+    _w(p, scratch_address, scratch_address)
+    _w(p, scratch_address + 8, scratch_address)
+    _w(p, scratch_address + 0x10, owner)
+    if head:
+        tail = _u(p, head + 8)
+        if not tail or _u(p, tail) != head:
+            raise allocator.RefillUnsupported("invalid TSD fallback circular list")
+        _w(p, scratch_address + 8, tail)
+        _w(p, scratch_address, head)
+        _w(p, tail, scratch_address)
+        _w(p, head + 8, scratch_address)
+        published = _u(p, scratch_address)
+    else:
+        published = scratch_address
+    _w(p, head_address, published)
+    objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+    wrapper = _allocate_staged(tx, p, request_size=128, libc_base=libc_base,
+        thread_pointer=thread_pointer, os_call=os_call, allocation_body=_internal_small)
+    _w(p, scratch_address + 0x18, wrapper)
+    if not wrapper:
+        raise allocator.RefillUnsupported("TSD allocation diagnostic/abort branch is unrecovered")
+    _w(p, wrapper, 0, 1)
+    _w(p, wrapper + 8, 0, 4)
+    for offset in range(0x10, 0x40, 8):
+        _w(p, wrapper + offset, 0)
+    _w(p, wrapper + 0x40, 0, 4)
+    _w(p, wrapper + 0x44, 0, 1)
+    _w(p, wrapper + 0x48, 2, 4)
+    _w(p, wrapper + 0x50, 0)
+    status = allocator.pthread_setspecific(p, key=key, value=wrapper,
+        thread_pointer=thread_pointer, generation_table=libc_base + 0xE0200)
+    if status:
+        raise allocator.RefillUnsupported("TSD setspecific diagnostic/abort branch is unrecovered")
+    objects.lock_uncontended_mutex(p, mutex_address=mutex)
+    if _u(p, head_address) == scratch_address:
+        following = _u(p, scratch_address)
+        _w(p, head_address, 0 if following == scratch_address else following)
+        if following == scratch_address:
+            objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+            return wrapper
+    previous = _u(p, scratch_address + 8)
+    following = _u(p, scratch_address)
+    _w(p, previous, following)
+    _w(p, following + 8, previous)
+    _w(p, scratch_address, scratch_address)
+    _w(p, scratch_address + 8, scratch_address)
+    objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+    return wrapper
+
+
+def _current_tsd(pages, libc_base, thread_pointer, *, tx=None, scratch_address=None, os_call=None):
     key = _u(pages, _indirect(pages, libc_base, 0xD8F98), 4)
     wrapper = allocator.pthread_getspecific(pages, key=key,
         thread_pointer=thread_pointer, generation_table=libc_base + 0xE0200)
     if not wrapper:
-        raise allocator.RefillUnsupported("missing TSD fallback allocation is unrecovered")
+        if tx is None:
+            raise allocator.RefillUnsupported("missing TSD fallback requires its owning OS transaction")
+        wrapper = _fallback_tsd(tx, libc_base=libc_base, thread_pointer=thread_pointer,
+            scratch_address=scratch_address, os_call=os_call)
     state = _u(pages, wrapper + 8, 4)
     if state in (0, 2):
         _w(pages, wrapper + 8, 1 if state == 0 else 3, 4)
@@ -148,7 +266,8 @@ def _get_thread_cache(tx, *, tsd_address, libc_base, thread_pointer, os_call):
         return 0
     arena = _u(p, tsd_address + 0x28)
     if not arena:
-        arena = _bind_arena(p, tsd_address=tsd_address, libc_base=libc_base)
+        arena = _bind_arena_transaction(tx, tsd_address=tsd_address, libc_base=libc_base,
+            thread_pointer=thread_pointer, os_call=os_call)
         if not arena:
             return 0
     return _create_tcache(tx, tsd_address=tsd_address, arena_address=arena,
@@ -235,7 +354,7 @@ def refill_small_cache_bin(guest_os, *, arena_address, cache_address, class_id, 
     return result
 
 
-def _public_allocation_context(tx, *, libc_base, thread_pointer, os_call):
+def _public_allocation_context(tx, *, libc_base, thread_pointer, os_call, scratch_address=None):
     """Actual shared init/profiling/TSD/cache/arena prefix of +0x8f00c."""
     p = tx.pages
     flag = _u(p, libc_base + 0xDB6A0, 4)
@@ -250,7 +369,8 @@ def _public_allocation_context(tx, *, libc_base, thread_pointer, os_call):
         raise allocator.RefillUnsupported("public allocator cold initialization is unfinished")
     if _u(p, libc_base + 0xE69C0):
         raise allocator.RefillUnsupported("public profiling hooks are unrecovered")
-    wrapper = _current_tsd(p, libc_base, thread_pointer)
+    wrapper = _current_tsd(p, libc_base, thread_pointer, tx=tx,
+        scratch_address=scratch_address, os_call=os_call)
     tsd = wrapper + 8
     cache = _u(p, wrapper + 0x10)
     if not cache and _u(p, tsd, 4) == 1:
@@ -259,16 +379,17 @@ def _public_allocation_context(tx, *, libc_base, thread_pointer, os_call):
         _w(p, wrapper + 0x10, cache)
     arena = _u(p, wrapper + 0x30)
     if not arena:
-        arena = _bind_arena(p, tsd_address=tsd, libc_base=libc_base)
+        arena = _bind_arena_transaction(tx, tsd_address=tsd, libc_base=libc_base,
+            thread_pointer=thread_pointer, os_call=os_call)
     return wrapper, cache, arena
 
 
-def _public_small(tx, *, request_size, libc_base, thread_pointer, os_call):
+def _public_small(tx, *, request_size, libc_base, thread_pointer, os_call, scratch_address=None):
     """+0x8f00c positive/zero small entry on ready or same-owner recursive init."""
     if not isinstance(request_size, int) or not 0 <= request_size <= 0x3800:
         raise allocator.RefillUnsupported("public entry only recovers nonnegative small sizes")
     wrapper, cache, arena = _public_allocation_context(tx, libc_base=libc_base,
-        thread_pointer=thread_pointer, os_call=os_call)
+        thread_pointer=thread_pointer, os_call=os_call, scratch_address=scratch_address)
     p = tx.pages
     size = max(request_size, 1)
     class_id = region._size_index(p, libc_base, size)
@@ -399,13 +520,13 @@ def release_cached_small(guest_os, *, pointer, libc_base, thread_pointer):
     return None
 
 
-def _public_large(tx, *, request_size, libc_base, thread_pointer, os_call):
+def _public_large(tx, *, request_size, libc_base, thread_pointer, os_call, scratch_address=None):
     """Actual cache-sized large branch; empty cache calls +0x7a3c8 once."""
     from vm9_libc_large import _direct_large
     if not isinstance(request_size, int) or not 0x3800 < request_size <= 0x10000:
         raise allocator.RefillUnsupported("public large request outside bounded policy")
     wrapper, cache, arena = _public_allocation_context(tx, libc_base=libc_base,
-        thread_pointer=thread_pointer, os_call=os_call)
+        thread_pointer=thread_pointer, os_call=os_call, scratch_address=scratch_address)
     p = tx.pages
     class_id = region._size_index(p, libc_base, request_size)
     width = _u(p, _indirect(p, libc_base, 0xD8EE0) + class_id * 8)

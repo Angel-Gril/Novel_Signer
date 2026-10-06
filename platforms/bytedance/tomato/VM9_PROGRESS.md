@@ -3,6 +3,43 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Current main-startup/independent-worker allocator checkpoint (2026-10-06)
+
+Fresh main +0x28040c startup now composes actual malloc in **2 native controls /
+3 rollback checks** at both relocated bases: sixteen actual malloc PLT calls,
+three explicit guest thread descriptors and two destructor registrations. All32
+VM slots, full main image, main TLS, libc globals, owned mapping bytes and ordered
+OS/descriptor/registration state match. The initializer publishes guest and
+mapping state only after the whole startup returns; third thread-create failure
+proves late rollback while external provider effects remain visible.
+
+Independent worker allocation adds **14 native controls / 8 rollback checks**.
+After natural main malloc boot, fresh worker TLS follows +0x99610 ->
++0x99600/+0x8e0ec -> +0x996d4: the temporary circular fallback node, real
+128-byte TSD allocation, exact partial field initialization and key publication
+are recovered. An explicit foreign live-node control verifies insertion/removal
+without destroying its existing ring. Default one/two-arena selection, arena 1
+construction and clean region allocation now compose. +0x7de3c/+0x8ed90 also
+allocates the worker's arena pointer table through actual internal small malloc;
+omitting it produced real retained-page differences, not just a counter mismatch.
+
+Small/large/mixed requests, two workers, one CPU and forty 65536-byte requests
+crossing regions match at every return, including all observed globals, TLS and
+retained mapping bytes plus OS order, mapping records/protection/cursor. Related
+tcache/region/cold/large/serial-task regressions pass **148 native / 70 rollback**,
+with all five CLI runs terminal. These remain serial virtual-OS controls;
+physical libc stack bytes and real OS thread creation are not claimed.
+
+Main startup and separate worker allocations are now verified. The complete
+same-startup nonempty worker, argument/TLS cleanup, root, fresh request signature
+and online matrix still need a final composed control. Arena-table resize,
+reentrant inflight TSD allocation, full-bin/GC, large cache/free/huge and remaining
+callbacks remain explicit frontiers. No-JVM Rust, nonempty search/pagination,
+Douyin/Qidian and final Pages/Actions products remain open. Evidence:
+[main startup](evidence/vm9_main_startup_actual_allocator_native.json),
+[independent workers](evidence/vm9_worker_actual_allocator_native.json),
+[regressions](evidence/vm9_worker_actual_allocator_regression.json).
+
 ## Current default-task/actual-allocator checkpoint (2026-10-06)
 
 The default +0x280554 task now composes naturally initialized matching libc and
@@ -23,9 +60,9 @@ thread input remain explicit and virtual. Busy third once and failed third
 broadcast also prove late whole-task page/mapping/cursor rollback.
 
 This is a serial default-task composition, not a same-startup independent worker,
-complete root or fresh Medusa result. Missing-thread TSD fallback, arena selection,
-cache/GC and the remaining callback/OS boundaries still need real sources and
-controls. Rust, nonempty search/pagination, Douyin/Qidian and final Pages/Actions
+complete root or fresh Medusa result. The newer checkpoint above restores the
+bounded missing-thread TSD and default one/two-arena branches. Full cache/GC and
+the remaining callback/OS boundaries still need real sources and controls. Rust, nonempty search/pagination, Douyin/Qidian and final Pages/Actions
 products remain open. Evidence: [task/allocator](evidence/vm9_default_task_actual_allocator_native.json),
 [regressions](evidence/vm9_default_task_actual_allocator_regression.json).
 

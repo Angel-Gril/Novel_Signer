@@ -98,7 +98,7 @@ def allocate_default_small(guest_os, *, request_size, scratch_address, libc_base
         if status:
             tx.commit();return 0
     result=_public_small(tx,request_size=request_size,libc_base=libc_base,
-        thread_pointer=thread_pointer,os_call=os_call)
+        thread_pointer=thread_pointer,os_call=os_call,scratch_address=scratch_address)
     tx.commit()
     return result
 
@@ -114,6 +114,6 @@ def allocate_default_large(guest_os, *, request_size, scratch_address, libc_base
             tx.commit()
             return 0
     result = _public_large(tx, request_size=request_size, libc_base=libc_base,
-        thread_pointer=thread_pointer, os_call=os_call)
+        thread_pointer=thread_pointer, os_call=os_call, scratch_address=scratch_address)
     tx.commit()
     return result

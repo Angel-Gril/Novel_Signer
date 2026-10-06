@@ -1,0 +1,40 @@
+{
+  "schema": "vm9-worker-actual-allocator-regression-v1",
+  "cases": [
+    {
+      "case": "tcache",
+      "native_controls": 52,
+      "rejection_and_rollback_checks": 24,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "region",
+      "native_controls": 56,
+      "rejection_and_rollback_checks": 26,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "large",
+      "native_controls": 12,
+      "rejection_and_rollback_checks": 8,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "cold",
+      "native_controls": 26,
+      "rejection_and_rollback_checks": 8,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "default_task_allocator",
+      "native_controls": 2,
+      "rejection_and_rollback_checks": 4,
+      "terminal_exit_zero": true
+    }
+  ],
+  "native_controls": 148,
+  "rejection_and_rollback_checks": 70,
+  "all_regression_cli_runs_terminal": true,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false
+}

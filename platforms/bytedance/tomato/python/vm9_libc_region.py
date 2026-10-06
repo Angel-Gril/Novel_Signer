@@ -114,13 +114,72 @@ def _empty_chunk_cache(pages, arena, roots):
     objects.unlock_uncontended_mutex(pages, mutex_address=mutex)
 
 
+def _thread_arena_lookup(tx, *, arena_index, libc_base, thread_pointer, os_call):
+    """+0x7de3c/+0x8ed90 existing default arena, including a fresh TLS table.
+
+    Recovered one/two-arena geometry allocates its pointer table through actual
+    internal small allocation. Resizing/freeing an older table and constructing
+    a missing table slot are separate branches and reject.
+    """
+    from vm9_libc_tcache import _current_tsd
+    from vm9_libc_cold import _internal_small
+    p = tx.pages
+    wrapper = _current_tsd(p, libc_base, thread_pointer)
+    pointer = _u(p, wrapper + 0x38)
+    saved_count = _u(p, wrapper + 0x40, 4)
+    if pointer and arena_index < saved_count:
+        value = _u(p, pointer + arena_index * 8)
+        if value:
+            return value
+    mutex = libc_base + 0xE6980
+    objects.lock_uncontended_mutex(p, mutex_address=mutex)
+    count = _u(p, libc_base + 0xE6960, 4)
+    objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+    if count not in (1, 2) or not 0 <= arena_index < count:
+        raise allocator.RefillUnsupported("thread arena lookup requires the default existing table")
+    if pointer and saved_count != count:
+        raise allocator.RefillUnsupported("thread arena table resize/free is unrecovered")
+    if not pointer:
+        if _u(p, wrapper + 0x44, 1):
+            objects.lock_uncontended_mutex(p, mutex_address=mutex)
+            table = _u(p, libc_base + 0xE69D0)
+            value = _u(p, table + arena_index * 8)
+            objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+            return value
+        _w(p, wrapper + 0x44, 1, 1)
+        pointer = _allocate_staged(tx, p, request_size=count * 8, libc_base=libc_base,
+            thread_pointer=thread_pointer, os_call=os_call, allocation_body=_internal_small)
+        _w(p, wrapper + 0x44, 0, 1)
+        if not pointer:
+            objects.lock_uncontended_mutex(p, mutex_address=mutex)
+            table = _u(p, libc_base + 0xE69D0)
+            value = _u(p, table + arena_index * 8)
+            objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+            return value
+        _w(p, wrapper + 0x38, pointer)
+        _w(p, wrapper + 0x40, count, 4)
+    objects.lock_uncontended_mutex(p, mutex_address=mutex)
+    table = _u(p, libc_base + 0xE69D0)
+    allocator._write_span(p, pointer, allocator._read_span(p, table, count * 8))
+    objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+    return _u(p, pointer + arena_index * 8)
+
+
 def _fresh_arena_region(tx, *, arena_address, libc_base, thread_pointer, os_call):
     p = tx.pages
     arena = arena_address
     if _u(p, arena + 0xC8):
         raise allocator.RefillUnsupported("spare arena chunk reuse is unrecovered")
-    if _u(p, arena, 4) != 0 or arena != _u(p, libc_base + 0xE6968):
-        raise allocator.RefillUnsupported("cold region currently requires initial arena zero")
+    index = _u(p, arena, 4)
+    if index == 0:
+        valid = arena == _u(p, libc_base + 0xE6968)
+    elif index == 1 and _u(p, libc_base + 0xE6970, 4) == 2:
+        table = _u(p, libc_base + 0xE69D0)
+        valid = _u(p, libc_base + 0xE6960, 4) >= 2 and _u(p, table + 8) == arena
+    else:
+        valid = False
+    if not valid:
+        raise allocator.RefillUnsupported("region requires a published default arena zero/one")
     if _u(p, arena + 0x4F0) != _indirect(p, libc_base, 0xD8F30):
         raise allocator.RefillUnsupported("unknown arena chunk allocation callback")
     mode = _u(p, arena + 0xC0, 4)
@@ -129,6 +188,11 @@ def _fresh_arena_region(tx, *, arena_address, libc_base, thread_pointer, os_call
     # +0x7ed7c and the default +0x7edc4 callback try separate cache trees.
     _empty_chunk_cache(p, arena, ((0x1F8, 0x48), (0x268, 0x58)))
     objects.unlock_uncontended_mutex(p, mutex_address=arena + 8)
+    if index:
+        selected = _thread_arena_lookup(tx, arena_index=index, libc_base=libc_base,
+            thread_pointer=thread_pointer, os_call=os_call)
+        if selected != arena:
+            raise allocator.RefillUnsupported("thread arena lookup does not resolve the published region owner")
     _empty_chunk_cache(p, arena, ((0x2D8, 0x48), (0x348, 0x58)))
     length = _u(p, libc_base + 0xE9F38)
     region = _aligned_mapping(tx, length=length, alignment=length,

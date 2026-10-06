@@ -1,8 +1,25 @@
 # 外层启动 caller 与 worker 调度／清理
 
-当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**默认 matching libc 冷启动已另行验证自然返回；完整 allocator 分支与 startup/root 接入、真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
+当前独立 Python 已恢复 `+0x28040c → VM +0xa7050` 的默认主线程路径、worker TLS support、executor context，以及 queue／executor 的有界串行调度。空闲和默认非空 queue worker 均已从同次 fresh 启动贯通等待、停止、正常返回和 argument 清理。非空 worker 执行全部六项默认初始化及 48 次嵌套 VM；worker 返回时 support 仍由 pthread TLS 持有。显式 key 清理阶段已进一步恢复 emulated-TLS 数组、fallback 链、实际 TLS registry 树析构和有界非空 support 向量。已恢复真实 executor shared owner 的零引用／weak 引用释放，以及 matching libc 的 guest `pthread_exit`：线程析构、cleanup handlers、线程状态、detached 注销和 owned mapping 回收。一个同次 fresh 非空 worker 已贯通完整 guest 可 join 退出分支。**默认 matching libc 冷启动已另行验证自然返回；完整 allocator 分支、同次 startup→worker 实际 allocator 组合及 root 接入、真实 OS 线程创建／终止、未识别 callback、非空 support 的关联状态具体析构、独立 fresh 请求 Medusa 和新的线上全头矩阵仍未通过。**
 
 实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
+
+## 当前主线程 startup／独立 worker allocator 检查点（2026-10-06）
+
+`+0x28040c` 主线程启动现已接回实际 matching libc malloc：两个基址的 **2 个 native 对照／3 项回滚检查**通过。每次有 16 次实际 malloc、3 个显式 guest thread-create 请求和 2 次析构注册；全部 32 槽、主 image、主线程 TLS、libc globals、owned mappings 的字节，以及 OS、线程描述符、注册与映射顺序一致。第三次 thread-create 失败时，guest 页／mapping／protection／cursor 回滚，外部 provider 已发生的效果保留。生产入口为 [initialize_main_startup](python/vm9_startup_allocator.py)。
+
+独立 worker 首次分配已恢复 `+0x99610 → +0x99600/+0x8e0ec → +0x996d4` 的 TSD fallback：临时环链、实际 128 字节分配、保留 padding 的字段初始化、key 发布和节点移除。显式 foreign live-node 控制也验证了非空环链保留。默认 1／2 个 arena 的选择、arena 1 构造、实际 OS region 注册贯通；`+0x7de3c/+0x8ed90` 还会为 worker 实际分配 arena 指针表，省略它会造成保留 mapping 的真实字节差异。
+
+worker 分配矩阵 **14 个 native 对照／8 项拒绝与回滚检查**通过，覆盖两基址、small／large／mixed、两 worker、单 CPU 与 40 次 65536 字节跨 region。每次返回都比较 globals、TLS 和全部保留 mapping 页；相关 tcache、region、cold、large、serial 默认任务回归 **148／70**全部终态通过。证据：[主线程](evidence/vm9_main_startup_actual_allocator_native.json)、[独立 worker 分配](evidence/vm9_worker_actual_allocator_native.json)、[共享回归](evidence/vm9_worker_actual_allocator_regression.json)。
+
+这些结果仍采用显式虚拟 OS 服务、线程输入和串行调度。**完整同次 startup→非空 queue worker→argument／TLS 清理、root、fresh Medusa 签名和线上矩阵尚未通过**；arena table 扩展、inflight TSD 重入、full-bin／GC、large cache／free／huge 和其余 callback 仍有明确拒绝边界。真实 OS 线程创建和完整物理 libc 栈不在本轮证据范围。
+
+复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_worker_allocator.py --library <matching-main.so> --libc <matching-libc.so> --output <private-worker-report.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_startup_allocator.py --library <matching-main.so> --libc <matching-libc.so> --output <private-startup-report.json>
+```
 
 ## 当前默认任务与实际 allocator 组合（2026-10-06）
 
