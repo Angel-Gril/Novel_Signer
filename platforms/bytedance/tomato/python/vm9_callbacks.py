@@ -30,6 +30,18 @@ class CallbackDescriptorWrite:
 
 
 @dataclass(frozen=True)
+class DescriptorTrampolineResult:
+    """The bounded state returned by the +0x2584ac trampoline model."""
+
+    descriptor_address: int
+    initial_target: int
+    initial_object: int
+    final_target: int
+    final_object: int
+    branch_result: int | None
+
+
+@dataclass(frozen=True)
 class ABSwitchGateResult:
     global_address: int
     ab_switch: int
@@ -158,6 +170,51 @@ def publish_callback_descriptor(
     )
     transaction.commit()
     return CallbackDescriptorWrite(descriptor_address, branch_target, object_address)
+
+
+def dispatch_descriptor_trampoline(
+    pages,
+    *,
+    descriptor_address: int,
+    pre_dispatch: Callable[[object, int, int], object] | None,
+    branch_dispatch: Callable[[int, int], int | None] | None,
+) -> DescriptorTrampolineResult:
+    """Model the recovered ``+0x2584ac`` descriptor continuation.
+
+    The native sequence first calls the function pointer loaded from
+    ``[x0]``. It then reloads ``[x0]`` and ``[x0+8]``, moves the second word
+    into ``x0`` and branches through the first word. The callback-object
+    composition that supplies these words is still an explicit input.
+
+    ``pre_dispatch`` receives ``(transaction, initial_target, descriptor_address)``
+    and may publish the next pair before the reload. ``branch_dispatch``
+    receives ``(final_target, final_object)`` and represents the branch target;
+    it must be supplied by the caller because no generic callback body is
+    recovered. This function never invents a target, changes the VM PC, or
+    executes a native pointer.
+    """
+    if not isinstance(descriptor_address, int) or descriptor_address <= 0:
+        raise RefillUnsupported("descriptor address must be a positive integer")
+    if descriptor_address & 7:
+        raise RefillUnsupported("descriptor address must be 8-byte aligned")
+    if pre_dispatch is None or branch_dispatch is None:
+        raise RefillUnsupported("descriptor pre-dispatch and branch callbacks are required")
+    transaction = _PageTransaction(pages)
+    initial_target = int.from_bytes(_read_span(transaction, descriptor_address, 8), "little")
+    initial_object = int.from_bytes(_read_span(transaction, descriptor_address + 8, 8), "little")
+    if not initial_target or not initial_object:
+        raise RefillUnsupported("descriptor trampoline requires non-null initial fields")
+    pre_dispatch(transaction, initial_target, descriptor_address)
+    final_target = int.from_bytes(_read_span(transaction, descriptor_address, 8), "little")
+    final_object = int.from_bytes(_read_span(transaction, descriptor_address + 8, 8), "little")
+    if not final_target or not final_object:
+        raise RefillUnsupported("descriptor trampoline published null final fields")
+    branch_result = branch_dispatch(final_target, final_object)
+    transaction.commit()
+    return DescriptorTrampolineResult(
+        descriptor_address, initial_target, initial_object,
+        final_target, final_object, branch_result,
+    )
 
 
 def compose_packed_callback_x8(*, upper_word: int, lower_word: int) -> int:

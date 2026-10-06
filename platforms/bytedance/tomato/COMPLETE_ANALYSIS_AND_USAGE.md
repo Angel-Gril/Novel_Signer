@@ -18,6 +18,7 @@
 当前控制仍使用明确的nonreusing malloc/free与虚拟OS；真实allocator全局boot、TLS/arena/OS region贯通、外层signer/handle、fresh请求签名输出和线上新矩阵仍未完成。无JVM Rust、当前非空搜索与分页、其它平台及最终Pages/Actions产品的完成状态没有变化。
 
 2026-10-06 新增并纠正 logger 边界证据：native fresh trace 已贯通 `+0x26cdc4 → +0x26cf08 → +0x26e9e0 → +0x271ec8 → +0x271ddc → +0x271f18`；四组控制匹配真实 24-byte owned string object 前缀、`METASEC` 标签、fallback 文本、level=6、sink 全局前后状态和返回值。此前的 0x80-byte 记录只是周围 native stack window，已标记为历史范围，不能当作 128 字节完整对象。该结果只关闭 literal logger/sink 状态边界，sink callback 实体、descriptor trampoline、fresh Medusa、线上全头矩阵和最终下载产品仍未完成。详见 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)、`evidence/vm9_logger_sink_match_20261006.json` 和 `EVIDENCE_INDEX.json`。
+新增 descriptor trampoline 组件证据：`+0x2584ac` 的预调度、descriptor 重载和显式分支回调已作为事务性 Python 边界验证；这只说明指令级 continuation contract，不能替代 packed x8 对象构造、真实 callback body、fresh Medusa 或线上验证。详见 `evidence/vm9_descriptor_trampoline_semantics_20261006.json`。
 
 外层启动的最新恢复：`+0x28040c → VM +0xa7050` 的 4 个 fresh 控制完成 86 步／16 次分配／3 次 deferred worker 创建；worker TLS support 前段为16个冷／热控制，executor context 的实际 emulated-TLS 初始化另有8个冷／热对照；native-only guest 调度探针已到达 timedwait，完整 Python worker仍未通过。OP45 的第二寄存器 bit 21 和 equality 语义由 308 个 native 控制确认，共用 VM 的 root／state／parser 回归通过。worker dispatch、真实 allocator boot、fresh 请求签名和新线上矩阵仍未验证。详见 [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md)。
 

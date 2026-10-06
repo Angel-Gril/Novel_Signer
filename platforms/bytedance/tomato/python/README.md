@@ -42,10 +42,12 @@ lookup-cache generation, callback tables and standalone current Medusa remain
 unsupported.
 
 `vm9_callbacks.py` contains only directly attributed callback effects:
-`clock_callback` writes a supplied guest timespec and wrapper result, while
+`clock_callback` writes a supplied guest timespec and wrapper result,
 `publish_callback_descriptor` writes the two fields consumed by the active
-descriptor trampoline. The packed callback-object composition and remaining
-native object graph are explicit unsupported boundaries.
+descriptor trampoline, and `dispatch_descriptor_trampoline` models the
+observed pre-dispatch/reload/branch sequence with explicit callbacks. The
+packed callback-object composition, actual branch bodies and remaining native
+object graph are explicit unsupported boundaries.
 The module accepts trusted local checkpoint pages. See
 [ALLOCATOR_LIFECYCLE.md](../ALLOCATOR_LIFECYCLE.md) for usage, 83 native
 differential cases, 360 sequential operations and the same-capture chain.

@@ -2,6 +2,20 @@
 
 
 ## 2026-10-06: corrected literal logger sink boundary
+## 2026-10-06: descriptor trampoline continuation
+
+`vm9_callbacks.dispatch_descriptor_trampoline` now models the recovered
+`+0x2584ac` instruction boundary with explicit transaction and callback inputs:
+`ldr x8,[x0]; blr x8`, reload `ldp x1,x8,[x0]`, then
+`mov x0,x8; br x1`. The test proves a pre-dispatch target rewrite is observed
+by the final branch and that missing/null inputs fail without guest writes.
+See [trampoline evidence](evidence/vm9_descriptor_trampoline_semantics_20261006.json).
+
+The callback-object writer, packed x8 composition and actual branch bodies are
+still not recovered. This component therefore does not change the fresh Medusa
+or no-JVM Rust status.
+
+
 
 The bounded verifier passes four fresh controls (two image bases × absent/SDK
 30). It compares the actual native path

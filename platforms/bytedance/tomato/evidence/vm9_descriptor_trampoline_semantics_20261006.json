@@ -1,0 +1,52 @@
+{
+  "evidence_id": "vm9_descriptor_trampoline_semantics_20261006",
+  "schema": "vm9-descriptor-trampoline-semantics-v1",
+  "status": "bounded_semantics_parameterized",
+  "instruction_boundary": {
+    "entry": "+0x2584ac",
+    "pre_dispatch": "ldr x8,[x0]; blr x8",
+    "reload_and_handoff": "ldp x1,x8,[x0]; mov x0,x8; br x1"
+  },
+  "initial_target": "0x125ea444",
+  "final_target": "0x125ea4fc",
+  "object_address": "0x3088",
+  "branch_result": "0x5a",
+  "events": [
+    [
+      "pre_dispatch",
+      308192324,
+      4096
+    ],
+    [
+      "branch_dispatch",
+      308192508,
+      12424
+    ]
+  ],
+  "negative_cases": [
+    {
+      "case": "missing_pre_dispatch",
+      "rejected": true,
+      "unchanged": true
+    },
+    {
+      "case": "missing_branch_dispatch",
+      "rejected": true,
+      "unchanged": true
+    },
+    {
+      "case": "null_initial_fields",
+      "rejected": true,
+      "unchanged": true
+    }
+  ],
+  "native_input_snapshot_used": false,
+  "packed_callback_x8_parameterized": false,
+  "active_current_vm_callback_recovered": false,
+  "fresh_medusa_output_verified": false,
+  "limitations": [
+    "The pre-dispatch and branch callbacks are explicit caller inputs; no native pointer is executed.",
+    "The packed callback-object composition and current VM9 object graph remain unresolved.",
+    "This local semantic test does not establish a fresh online signer or Rust download chain."
+  ]
+}

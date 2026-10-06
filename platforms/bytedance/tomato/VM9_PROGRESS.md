@@ -2,6 +2,20 @@
 
 
 ## 2026-10-06: corrected literal logger sink state boundary
+## 2026-10-06: descriptor trampoline semantics parameterized
+
+The generic `+0x2584ac` sequence is now represented as a transactional
+component: read the initial target/object pair, invoke an explicit
+pre-dispatch callback, reload the pair, then invoke an explicit branch
+callback with the reloaded object. The verifier covers the target rewrite and
+null/missing-callback rollback cases without executing a guest function pointer.
+Evidence: [descriptor trampoline semantics](evidence/vm9_descriptor_trampoline_semantics_20261006.json).
+
+This closes only the instruction-level continuation contract. The native
+callback-object writer, packed x8 composition, active current VM9 branch body,
+fresh Medusa output and online header matrix remain open.
+
+
 
 The four fresh controls now pass the complete bounded sink verifier: two image
 bases (`0x122c0000`, `0x775c205000`) crossed with absent and SDK 30 property

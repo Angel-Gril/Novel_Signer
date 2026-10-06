@@ -2055,5 +2055,27 @@
       "The model reproduces unavailable-sink state and return values but does not execute file/socket callback bodies or publish the native descriptor.",
       "This is a component boundary result and does not prove current online Medusa or a Rust download chain."
     ]
+  },
+  "vm9_descriptor_trampoline_semantics_20261006": {
+    "evidence_file": "evidence/vm9_descriptor_trampoline_semantics_20261006.json",
+    "schema": "vm9-descriptor-trampoline-semantics-v1",
+    "status": "bounded_semantics_parameterized",
+    "instruction_boundary": {
+      "entry": "+0x2584ac",
+      "pre_dispatch": "ldr x8,[x0]; blr x8",
+      "reload_and_handoff": "ldp x1,x8,[x0]; mov x0,x8; br x1"
+    },
+    "transactional_model_verified": true,
+    "native_input_snapshot_used": false,
+    "packed_callback_x8_parameterized": false,
+    "active_current_vm_callback_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false,
+    "limitations": [
+      "Pre-dispatch and branch bodies are explicit callbacks; the model does not execute a native pointer or change the VM PC.",
+      "The packed callback-object composition and current VM9 object graph remain unresolved.",
+      "This local semantic component does not establish an online signer or Rust download chain."
+    ]
   }
 }
