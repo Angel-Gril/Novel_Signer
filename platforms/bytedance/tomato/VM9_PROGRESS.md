@@ -1,24 +1,39 @@
 # Current VM9 progress checkpoint
 
 
+## 2026-10-06: corrected literal logger sink state boundary
+
+The four fresh controls now pass the complete bounded sink verifier: two image
+bases (`0x122c0000`, `0x775c205000`) crossed with absent and SDK 30 property
+profiles. Native and Python agree on the `+0x26cdc4 → +0x26cf08 → +0x26e9e0
+→ +0x271ec8 → +0x271ddc → +0x271f18` path, the owned 24-byte string
+object prefix, `METASEC` payload, decoded fallback message, `level=6`, the
+unavailable-sink global state before/after the call, and the return value.
+
+The earlier 0x80-byte capture is a native stack window, not a claim that all
+128 bytes are logger-object fields. The corrected model uses the 24-byte object
+layout and derives the payload through the allocator event ledger. Evidence:
+[corrected sink boundary](evidence/vm9_logger_sink_match_20261006.json).
+
+This closes a literal logger/sink state boundary only. The sink callback body,
+file/socket effects, descriptor publication, fresh Medusa output, and online
+header matrix remain open.
+
+
 ## 2026-10-06: logger object and formatter payload boundary
 
 The native fresh dispatch trace was extended through `+0x271ec8`,
 `+0x2772a4` and `+0x271ddc`. At `+0x271ec8`, `x1` points to the
 heap payload `"METASEC\0"`; `x2` is the decoded fallback format object and
 `+0x271ddc` receives the formatted text `"Invalid JavaVM, fallback to test path."`
-with `x0=6`. The logger object at `vm_stack-0xAE0` has a stable 0x80-byte
-field layout across two image bases and absent/SDK 30 controls.
+with `x0=6`. The native capture around `vm_stack-0xAE0` is a 0x80-byte stack window. The
+owned logger string object within it is modeled as 24 bytes; the surrounding
+bytes are caller/callee stack state and are not promoted to object fields.
+The earlier [broad-window record](evidence/vm9_logger_model_match_20261006.json)
+is retained as historical scope only. Use the corrected sink evidence above for
+the object-size and global-state claims.
 
-The independent Python model now derives the tag payload from the live
-allocator event ledger, materializes the 0x80-byte logger object from the
-fresh VM stack/image/TLS inputs, and writes the bounded formatter payload.
-Four fresh controls match the native object bytes, tag prefix, format-object
-payload prefix, formatted message, level and sink-entry tag. Evidence: [native
-dispatch trace](evidence/vm9_native_logger_dispatch_trace_20261006.json) and
-[logger model match](evidence/vm9_logger_model_match_20261006.json).
-
-This closes only the logger object/formatter input boundary. The final
+This closes only the literal logger object/formatter input boundary. The final
 `+0x271ddc` sink callback, file/socket writes, native callback publication,
 descriptor trampoline and fresh Medusa signature remain open.
 

@@ -30,7 +30,7 @@ class RootCallbacks:
             vm_module, allocate, reallocate, free, get_singleton, get_tls,
             initialize_registry, broadcast, read_property, syscall,
             errno_address, mkdir, register_destructor, thread_id=None,
-            prepare_format=None, logger_callback=None):
+            prepare_format=None, logger_callback=None, logger_observer=None):
         self.base=image_base; self.stack=native_stack_address
         self.thread_pointer=thread_pointer; self.vm_module=vm_module
         self.allocate=allocate; self.reallocate=reallocate; self.free=free
@@ -39,7 +39,7 @@ class RootCallbacks:
             initialize_registry=initialize_registry,broadcast=broadcast,
             read_property=read_property,syscall=syscall,errno_address=errno_address,
             mkdir=mkdir,register_destructor=register_destructor,
-            thread_id=thread_id,prepare_format=prepare_format)
+            thread_id=thread_id,prepare_format=prepare_format,logger_observer=logger_observer)
         self.logger_callback=logger_callback
         self.modeled=[]
 

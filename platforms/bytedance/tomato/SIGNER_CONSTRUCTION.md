@@ -1,22 +1,33 @@
 # 默认配置下的 signer 构造和 callback 发布
 
 
+## 2026-10-06: corrected literal logger sink boundary
+
+The bounded verifier passes four fresh controls (two image bases × absent/SDK
+30). It compares the actual native path
+`+0x26cdc4 → +0x26cf08 → +0x26e9e0 → +0x271ec8 → +0x271ddc → +0x271f18`
+with the Python path
+`construct_default_shared_reference → log_literal_unavailable →
+initialize_unavailable_logger`. The 24-byte owned string object, `METASEC`
+payload, fallback text, `level=6`, sink global state before and after the call,
+and sink return value all match. See [corrected sink evidence](evidence/vm9_logger_sink_match_20261006.json).
+
+The native 0x80-byte capture is a surrounding stack window. It must not be
+used as proof that the entire window is a logger object. The sink callback body,
+file/socket side effects, descriptor publication, fresh Medusa output and
+online header matrix remain explicitly unresolved.
+
+
 ## 2026-10-06: logger object and formatter payload boundary
 
 The native register trace now covers `+0x26e9e0 → +0x271ec8 → +0x2772a4 → +0x271ddc`.
-The logger object at `vm_stack-0xAE0` has a stable 0x80-byte layout: its
-vtable is `image+0x34F5F8`, field `+0x10` points to the `METASEC` payload,
-and the remaining stack/image/TLS relationships are generated from the fresh
-VM stack and image base. The formatter receives the decoded fallback text and
-produces `Invalid JavaVM, fallback to test path.` before the sink entry
-(`level=6`, tag=`METASEC`).
-
-[logger model verifier](python/verify_vm9_logger_handoff.py) applies this
-model from the allocator event ledger rather than a native memory snapshot.
-Four controls match the native 0x80-byte object, tag payload prefix, format
-payload prefix, formatted message, sink level and sink tag. Evidence: [dispatch
-trace](evidence/vm9_native_logger_dispatch_trace_20261006.json) and [model
-match](evidence/vm9_logger_model_match_20261006.json).
+The native capture around `vm_stack-0xAE0` is a 0x80-byte stack window. The
+owned logger string object is only promoted as a 24-byte object; field `+0x10`
+points to the `METASEC` payload. The formatter receives the decoded fallback
+text and produces `Invalid JavaVM, fallback to test path.` before the sink
+entry (`level=6`, tag=`METASEC`). The earlier 0x80-byte record is retained as
+historical scope; the corrected object/global comparison is in the [sink
+evidence](evidence/vm9_logger_sink_match_20261006.json).
 
 The sink callback body, logger mutex/locale dispatch, file/socket side effects,
 descriptor publication, fresh Medusa output and online header matrix are still

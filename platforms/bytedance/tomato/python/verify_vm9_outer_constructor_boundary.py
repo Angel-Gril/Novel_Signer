@@ -21,7 +21,7 @@ import vm9_root as root_model
 import vm9_startup as startup
 import vm9_startup_allocator as startup_model
 import vm9_logger as logger_model
-from vm9_allocator import RefillUnsupported
+from vm9_allocator import RefillUnsupported, _read_span
 from vm9_libc_boot import _w
 import verify_vm9_libc_stdio as io
 import verify_vm9_outer_prefix_allocator as prefix
@@ -41,7 +41,7 @@ def _hex(value):
 
 def case(library: Path, libc: Path, image: int, label: str, property_value: bytes | None,
          vm_module, apply_logger_model=False, capture_logger_handoff=False,
-         apply_handoff_model=False):
+         apply_handoff_model=False, logger_observer=None):
     pages, _, _ = root_fixture.fresh(library, libc, image, property_value)
     environment = worker_fixture.Environment(pages, 2)
     threads: list[list[int]] = []
@@ -56,6 +56,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     trampoline_calls: list[dict] = []
     logger_handoffs: list[dict] = []
     logger_models: list[dict] = []
+    logger_observations: list[dict] = []
     python_vm_entries: list[dict] = []
 
     def create_thread(staged, output, _attr, entry, argument):
@@ -134,6 +135,33 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                              (-0x148, image + 0x32A210),
                              (-0xF8, image + 0x32A210)):
             _w(staged, stack + delta, value)
+
+    def observe_logger(pages, *, phase, **fields):
+        row = {"phase": phase}
+        for key, value in fields.items():
+            row[key] = _hex(value) if isinstance(value, int) else value
+        if "tag_address" in fields:
+            try:
+                row["tag_bytes_0x40"] = _read_span(pages, fields["tag_address"], 0x40).hex()
+            except Exception:
+                row["tag_bytes_0x40"] = None
+        if "output_address" in fields:
+            try:
+                row["output_bytes_0x420"] = _read_span(pages, fields["output_address"], 0x420).hex()
+            except Exception:
+                row["output_bytes_0x420"] = None
+        if "object_address" in fields:
+            try:
+                row["object_bytes_0x80"] = _read_span(pages, fields["object_address"], 0x80).hex()
+            except Exception:
+                row["object_bytes_0x80"] = None
+        try:
+            row["logger_global_0x40"] = _read_span(pages, image + 0x382600, 0x40).hex()
+        except Exception:
+            row["logger_global_0x40"] = None
+        logger_observations.append(row)
+        if logger_observer is not None:
+            logger_observer(pages, **fields, phase=phase)
 
     def capture_logger_handoff(pages, **fields):
         logger_handoffs.append({key: _hex(value) if isinstance(value, int) else value
@@ -251,7 +279,8 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                 logger_callback=lambda *args, **kwargs: None, logger_callback_required=True,
                 root_output_address=io.GUEST + 0x1800,
                 singleton_wrapper_address=singleton_wrapper,
-                logger_handoff_callback=(capture_logger_handoff if capture_logger_handoff else None))
+                logger_handoff_callback=(capture_logger_handoff if capture_logger_handoff else None),
+                logger_observer=observe_logger)
         except RefillUnsupported as exc:
             error = str(exc)
         else:
@@ -262,7 +291,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
 
     # This probe may now cross the former logger stop after the decoded cold
     # globals; preserve the observation even when no callback is emitted.
-    if not logger_calls and not trampoline_calls and not logger_errors:
+    if not logger_calls and not trampoline_calls and not logger_errors and not logger_observations:
         error = error or "constructor completed without logger callback"
     return {
         "image_base": hex(image),
@@ -283,6 +312,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         "descriptor_trampoline": trampoline_calls,
         "logger_handoffs": logger_handoffs,
         "logger_models": logger_models,
+        "logger_observations": logger_observations,
         "logger_model_requested": apply_logger_model,
         "logger_model_errors": logger_errors,
         "logger_model_applied": bool(apply_logger_model and not logger_errors),

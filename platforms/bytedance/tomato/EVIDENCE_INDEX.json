@@ -2005,9 +2005,55 @@
     "current_online_header_matrix_verified": false,
     "complete_python_medusa": false,
     "limitations": [
-      "The model writes only the observed object/formatter boundary and remains fail-closed for the final sink callback.",
-      "Matching object bytes and fallback text do not establish an online signer output or a complete Medusa implementation.",
+      "The earlier record intentionally used a 0x80-byte native stack window and must not be read as proof that all 128 bytes are logger-object fields.",
+      "Use vm9_logger_sink_match_20261006 for the corrected 24-byte object and sink-global boundary.",
+      "Matching logger state does not establish an online signer output, complete Medusa implementation, or callback side effects.",
       "No Rust download, search/pagination, Douyin, Qidian or Pages/Actions result is implied."
+    ],
+    "status": "historical_scope_only",
+    "logger_object_window_note": "The 0x80-byte capture is a native stack window. The owned logger string object is modeled and compared as a 24-byte object; the remaining window is surrounding stack state."
+  },
+  "vm9_logger_sink_match_20261006": {
+    "evidence_file": "evidence/vm9_logger_sink_match_20261006.json",
+    "schema": "vm9-logger-sink-boundary-v1",
+    "controls": 4,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
+    "fresh_elf_inputs": true,
+    "native_input_snapshot_used": false,
+    "native_path": [
+      "0x26cdc4",
+      "0x26cf08",
+      "0x26e9e0",
+      "0x271ec8",
+      "0x271ddc",
+      "0x271f18"
+    ],
+    "python_path": [
+      "construct_default_shared_reference",
+      "log_literal_unavailable",
+      "initialize_unavailable_logger"
+    ],
+    "object_size_modeled": 24,
+    "object_24_byte_prefix_match": true,
+    "formatter_and_sink_arguments_match": true,
+    "sink_global_before_after_match": true,
+    "sink_return_match": true,
+    "sink_callback_body_recovered": false,
+    "descriptor_trampoline_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false,
+    "limitations": [
+      "The 128-byte native capture is a surrounding stack window; only the owned 24-byte object prefix is treated as the logger object.",
+      "The model reproduces unavailable-sink state and return values but does not execute file/socket callback bodies or publish the native descriptor.",
+      "This is a component boundary result and does not prove current online Medusa or a Rust download chain."
     ]
   }
 }

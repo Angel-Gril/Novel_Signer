@@ -1,132 +1,114 @@
-"""Bounded model of the post-VM unavailable logger handoff.
+"""Literal-only +0x26e9e0/+0x271ec8 logger and +0x271ddc input model.
 
-The native outer path enters ``+0x26e9e0`` with a stack-local logger object.
-This module materializes only fields directly supported by the fresh register
-trace and the ``+0x271ec8 -> +0x271ddc`` formatting boundary. It does not
-claim to recover the final sink callback, file/socket writes, or descriptor
-publication.
+Read the real 24-byte string object while its payload is alive. All text comes
+from guest inputs; this owner never writes a tag, chooses a pointer from a
+ledger, copies stack padding, or executes a native instruction. Conversion
+formats, live sinks and concurrent dispatch remain explicit boundaries.
 """
 from __future__ import annotations
+from dataclasses import dataclass
 
-import struct
-
-from vm9_allocator import _PageTransaction, _read_span, _write_span, RefillUnsupported
-
-MASK64 = (1 << 64) - 1
-POISON = 0xA5A5A5A5A5A5A5A5
-MESSAGE_FALLBACK = b"Invalid JavaVM, fallback to test path."
-TAG_FALLBACK = b"METASEC"
+from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
 
 
-def _u64(value: int) -> bytes:
-    if not isinstance(value, int) or not 0 <= value <= MASK64:
-        raise RefillUnsupported("logger field is outside uint64")
-    return value.to_bytes(8, "little")
+def cstring(pages, address, *, max_bytes=0x100000):
+    # +0x27617c(NULL) returns 0. Other callers decide whether NULL is valid.
+    if not address:
+        return b""
+    out = bytearray()
+    for offset in range(max_bytes):
+        byte = _read_span(pages, address + offset, 1)[0]
+        if byte == 0:
+            return bytes(out)
+        out.append(byte)
+    raise RefillUnsupported("logger C string exceeds explicit bound")
 
 
-def _read_cstring(pages, address: int, limit: int = 0x400) -> bytes:
-    raw = _read_span(pages, address, limit)
-    return raw.split(b"\0", 1)[0]
+@dataclass(frozen=True)
+class LiteralLogResult:
+    tag_address: int
+    output_address: int
+    level: int
+    tag: bytes
+    message: bytes
+    formatted_length: int
+    dispatch_mode: int
+    callback_address: int
+    return_value: int
 
 
-def _write_words(pages, address: int, words: list[int]) -> None:
-    _write_span(pages, address, b"".join(_u64(word) for word in words))
+def format_literal(pages, *, format_address, output_address, capacity=0x400):
+    """Observed +0x2772a4 path with no '%' conversions; writes C terminator.
 
-
-def choose_tag_payload(allocation_calls, allocation_sites, free_calls, *,
-                       tag_length: int, allocator_events=None) -> int:
-    """Find the live payload made by the shared logger string constructor.
-
-    The caller supplies the same allocator ledger used by the fresh Python
-    constructor. This avoids hard-coding the matching-libc heap address while
-    still identifying the allocation by the recovered native construction
-    site and exact ``strlen(tag)+1`` size.
+    This target helper is not libc vsnprintf. Truncation, percent processing
+    and format instrumentation are not generalized from the literal control.
     """
-    live = set()
-    if allocator_events is not None:
-        for event in allocator_events:
-            if event and event[0] == "alloc" and len(event) >= 3:
-                live.add(event[2])
-            elif event and event[0] == "free" and len(event) >= 2:
-                live.discard(event[1])
-    else:
-        live = {pointer for _, pointer in allocation_calls} - set(free_calls)
-    for index in range(len(allocation_calls) - 1, -1, -1):
-        size, pointer = allocation_calls[index]
-        sites = allocation_sites[index] if index < len(allocation_sites) else ()
-        site_text = " ".join(str(item) for item in sites)
-        if (size == tag_length + 1 and pointer in live
-                and "construct_default_shared_reference" in site_text
-                and "construct_string_object" in site_text):
-            return pointer
-    raise RefillUnsupported("fresh shared logger tag payload is not in allocator ledger")
+    if not format_address or not 1 <= capacity <= 0x400:
+        raise RefillUnsupported("invalid bounded logger format inputs")
+    text = cstring(pages, format_address)
+    if b"%" in text or len(text) >= capacity:
+        raise RefillUnsupported("conversion or truncated logger format is unrecovered")
+    _write_span(pages, output_address, text + bytes(1))
+    return text
 
 
-def materialize_post_vm_logger(pages, *, vm_stack: int, image_base: int,
-                               object_address: int, format_object_address: int,
-                               tag_address: int, thread_pointer: int,
-                               output_address: int | None = None) -> dict:
-    """Materialize the proven logger object/formatter boundary.
+def log_literal_unavailable(pages, *, object_address, format_address,
+                            entry_stack_address, image_base, read_property,
+                            syscall, errno_address, observer=None):
+    """+0x26e9e0 object -> literal format -> unavailable sink, in native order.
 
-    ``vm_stack`` is the stack value observed at the generic VM prelude. The
-    native logger object is ``vm_stack-0xAE0``. The field offsets and scratch
-    relationships below are taken from four fresh native controls at two image
-    bases and two property profiles. The formatter output is the exact
-    fallback message observed at ``+0x271ddc``.
+    entry_stack_address is SP on entry to +0x26e9e0, not the root VM stack.
+    The object and its owned payload are read here; construction/destruction
+    remain with construct_default_shared_reference. The sink initializer is
+    the previously verified configuration owner and receives its actual SDK
+    scratch address.
     """
-    if object_address != vm_stack - 0xAE0:
-        raise RefillUnsupported("logger object is not vm_stack-0xAE0")
-    if format_object_address != image_base + 0x3DEDD0:
-        raise RefillUnsupported("logger format object is not image+0x3DEDD0")
-    if output_address is None:
-        # +0x271ec8 allocates 0x430 bytes below its entry frame; the buffer
-        # passed to +0x271ddc is entry-vm-stack-0x1048.
-        output_address = vm_stack - 0x1048
-
-    source = _read_cstring(pages, format_object_address)
-    message = source or MESSAGE_FALLBACK
-    if message != MESSAGE_FALLBACK:
-        raise RefillUnsupported("unrecovered non-fallback logger format string")
-
-    words = [
-        image_base + 0x34F5F8,
-        (7 << 32) | 8,
-        tag_address,
-        vm_stack - 0x970,
-        vm_stack - 0xA70,
-        POISON,
-        vm_stack - 0xA70,
-        image_base + 0x26CD98,
-        vm_stack - 0x960,
-        image_base + 0x3DEE20,
-        thread_pointer,
-        vm_stack - 0xA40,
-        vm_stack - 0xA50,
-        POISON,
-        vm_stack - 0xA20,
-        image_base + 0x25EEF4,
-    ]
+    from vm9_configuration_init import initialize_unavailable_logger, _u
+    if entry_stack_address & 15:
+        raise RefillUnsupported("logger SP must be 16-byte aligned")
     staged = _PageTransaction(pages)
-    _write_words(staged, object_address, words)
-    _write_span(staged, tag_address, TAG_FALLBACK + b"\0")
-    _write_span(staged, output_address, message + b"\0")
+    payload = _u(staged, object_address + 16)
+    if not payload:
+        raise RefillUnsupported("NULL borrowed logger tag is not covered")
+    tag = cstring(staged, payload)
+    # Wrapper -0x120; formatter saves -0x30 and reserves -0x430.
+    formatter_sp = entry_stack_address - 0x120 - 0x30 - 0x430
+    output = formatter_sp + 0x28
+    message = format_literal(staged, format_address=format_address,
+                             output_address=output)
+    # +0x271ddc creates a one-byte level plus two NUL-terminated strings.
+    sink_sp = formatter_sp - 0x70
+    _write_span(staged, sink_sp + 4, (6).to_bytes(4, "little"))
+    fields = (sink_sp + 4, 1, payload, len(tag) + 1,
+              output, len(message) + 1)
+    _write_span(staged, sink_sp + 8,
+                b"".join(value.to_bytes(8, "little") for value in fields))
+    if observer:
+        observer(staged, phase="before_sink", object_address=object_address,
+                 tag_address=payload, output_address=output, level=6,
+                 sink_stack_address=sink_sp, format_address=format_address)
+    # SDK query +0x271ba8: sink SP-0x40, then a 0x60-byte property buffer.
+    initialize_unavailable_logger(staged, image_base=image_base,
+        read_property=read_property, syscall=syscall, errno_address=errno_address,
+        property_buffer_address=sink_sp-0xA0)
+    mode = _u(staged, image_base+0x382600, 4)
+    callback = _u(staged, image_base + (0x382610 if mode == 1 else 0x382618))
+    if mode == 1:
+        if callback != image_base + 0x27220C:
+            raise RefillUnsupported("unrecovered file sink callback")
+        result = 0xFFFFFFFF
+    elif mode == 0:
+        if callback != image_base + 0x272214:
+            raise RefillUnsupported("unrecovered socket sink callback")
+        # Native returns the failed socket syscall result for the socket profile.
+        result = 0xFFFFFF9F
+    else:
+        result = 0
+    if observer:
+        observer(staged, phase="after_sink", object_address=object_address,
+                 tag_address=payload, output_address=output, level=6,
+                 sink_stack_address=sink_sp, format_address=format_address,
+                 return_value=result)
     staged.commit()
-    return {
-        "object_address": hex(object_address),
-        "object_bytes_0x80": _read_span(pages, object_address, 0x80).hex(),
-        "tag_address": hex(tag_address),
-        "tag_bytes_0x40": _read_span(pages, tag_address, 0x40).hex(),
-        "format_object_address": hex(format_object_address),
-        "format_bytes_0x80": _read_span(pages, format_object_address, 0x80).hex(),
-        "log_level": 6,
-        "tag_length": len(TAG_FALLBACK),
-        "format_width": 3,
-        "output_address": hex(output_address),
-        "output_bytes_0x420": _read_span(pages, output_address, 0x420).hex(),
-        "output_text": message.decode("ascii"),
-        "logger_object_fields_recovered": True,
-        "formatter_payload_recovered": True,
-        "sink_dispatch_recovered": False,
-        "native_callback_published": False,
-        "fresh_medusa_output_verified": False,
-    }
+    return LiteralLogResult(payload, output, 6, tag, message, len(message),
+                            mode, callback, result)

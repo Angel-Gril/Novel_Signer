@@ -24,12 +24,13 @@ class StateCallbacks:
     def __init__(self, *, image_base, native_stack_address, allocate, reallocate,
             free, get_tls, initialize_registry, broadcast, read_property,
             syscall, errno_address, mkdir, register_destructor,
-            thread_id=None, prepare_format=None):
+            thread_id=None, prepare_format=None, logger_observer=None):
         self.base,self.stack=image_base,native_stack_address
         self.allocate,self.reallocate,self.free=allocate,reallocate,free
         self.get_tls,self.initialize_registry,self.broadcast=get_tls,initialize_registry,broadcast
         self.read_property,self.syscall,self.errno,self.mkdir=read_property,syscall,errno_address,mkdir
         self.register,self.thread_id,self.prepare_format=register_destructor,thread_id,prepare_format
+        self.logger_observer=logger_observer
         self.modeled=[]
 
     def __call__(self,vm,function,argument):
@@ -47,7 +48,7 @@ class StateCallbacks:
                 entry_stack_address=self.stack-0x190,image_base=b,allocate=allocate,reallocate=reallocate,
                 free=free,read_property=self.read_property,syscall=self.syscall,errno_address=self.errno,
                 mkdir=self.mkdir,thread_id=self.thread_id,register_destructor=self.register,
-                prepare_format=self.prepare_format)
+                prepare_format=self.prepare_format,logger_observer=self.logger_observer)
         elif wrapper==0x26A500 and target in (0x2481AC,0x2484B8,0x2484FC):
             if target==0x2481AC:
                 objects.construct_string_object(p,object_address=words[1],source_address=0,allocate=allocate,
@@ -80,7 +81,7 @@ def construct_state_caller(pages, *, object_address, source_object_address,
         entry_stack_address, return_address, thread_pointer, image_base,
         vm_module, allocate, reallocate, free, get_tls, initialize_registry,
         broadcast, read_property, syscall, errno_address, mkdir,
-        register_destructor, thread_id=None, prepare_format=None, max_steps=100000):
+        register_destructor, thread_id=None, prepare_format=None, max_steps=100000, logger_observer=None):
     """+0x269988 prelude and observed +0xa46a0 VM, returning all32 virtual slots."""
     if not isinstance(max_steps,int) or not 1<=max_steps<=1000000:
         raise ValueError('invalid state instruction bound')
@@ -112,7 +113,7 @@ def construct_state_caller(pages, *, object_address, source_object_address,
             allocate=allocate,reallocate=reallocate,free=free,get_tls=get_tls,
             initialize_registry=initialize_registry,broadcast=broadcast,read_property=read_property,
             syscall=syscall,errno_address=errno_address,mkdir=mkdir,register_destructor=register_destructor,
-            thread_id=thread_id,prepare_format=prepare_format)
+            thread_id=thread_id,prepare_format=prepare_format,logger_observer=logger_observer)
         vm.native_hook=callbacks
         try:vm.run()
         except vm_module.VMExit:pass

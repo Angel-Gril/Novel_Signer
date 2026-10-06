@@ -1,0 +1,175 @@
+{
+  "schema": "vm9-logger-sink-boundary-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "controls": 4,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "absent",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_path": [
+        "0x26cdc4",
+        "0x26cf08",
+        "0x26e9e0",
+        "0x271ec8",
+        "0x271ddc",
+        "0x271f18"
+      ],
+      "python_path": [
+        "construct_default_shared_reference",
+        "log_literal_unavailable",
+        "initialize_unavailable_logger"
+      ],
+      "checks": {
+        "object_address_match": true,
+        "object_24_byte_prefix_match": true,
+        "format_address_match": true,
+        "tag_address_match": true,
+        "output_address_match": true,
+        "tag_payload_match": true,
+        "formatted_message_match": true,
+        "level_match": true,
+        "global_before_match": true,
+        "global_after_match": true,
+        "sink_return_match": true
+      },
+      "logger_object_size_modeled": 24,
+      "logger_object_window_observed": 128,
+      "sink_callback_body_recovered": false,
+      "descriptor_trampoline_recovered": false,
+      "fresh_medusa_output_verified": false,
+      "native_outer_getter_returned": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "sdk_30",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_path": [
+        "0x26cdc4",
+        "0x26cf08",
+        "0x26e9e0",
+        "0x271ec8",
+        "0x271ddc",
+        "0x271f18"
+      ],
+      "python_path": [
+        "construct_default_shared_reference",
+        "log_literal_unavailable",
+        "initialize_unavailable_logger"
+      ],
+      "checks": {
+        "object_address_match": true,
+        "object_24_byte_prefix_match": true,
+        "format_address_match": true,
+        "tag_address_match": true,
+        "output_address_match": true,
+        "tag_payload_match": true,
+        "formatted_message_match": true,
+        "level_match": true,
+        "global_before_match": true,
+        "global_after_match": true,
+        "sink_return_match": true
+      },
+      "logger_object_size_modeled": 24,
+      "logger_object_window_observed": 128,
+      "sink_callback_body_recovered": false,
+      "descriptor_trampoline_recovered": false,
+      "fresh_medusa_output_verified": false,
+      "native_outer_getter_returned": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "absent",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_path": [
+        "0x26cdc4",
+        "0x26cf08",
+        "0x26e9e0",
+        "0x271ec8",
+        "0x271ddc",
+        "0x271f18"
+      ],
+      "python_path": [
+        "construct_default_shared_reference",
+        "log_literal_unavailable",
+        "initialize_unavailable_logger"
+      ],
+      "checks": {
+        "object_address_match": true,
+        "object_24_byte_prefix_match": true,
+        "format_address_match": true,
+        "tag_address_match": true,
+        "output_address_match": true,
+        "tag_payload_match": true,
+        "formatted_message_match": true,
+        "level_match": true,
+        "global_before_match": true,
+        "global_after_match": true,
+        "sink_return_match": true
+      },
+      "logger_object_size_modeled": 24,
+      "logger_object_window_observed": 128,
+      "sink_callback_body_recovered": false,
+      "descriptor_trampoline_recovered": false,
+      "fresh_medusa_output_verified": false,
+      "native_outer_getter_returned": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "sdk_30",
+      "fresh_elf_inputs": true,
+      "native_input_snapshot_used": false,
+      "native_path": [
+        "0x26cdc4",
+        "0x26cf08",
+        "0x26e9e0",
+        "0x271ec8",
+        "0x271ddc",
+        "0x271f18"
+      ],
+      "python_path": [
+        "construct_default_shared_reference",
+        "log_literal_unavailable",
+        "initialize_unavailable_logger"
+      ],
+      "checks": {
+        "object_address_match": true,
+        "object_24_byte_prefix_match": true,
+        "format_address_match": true,
+        "tag_address_match": true,
+        "output_address_match": true,
+        "tag_payload_match": true,
+        "formatted_message_match": true,
+        "level_match": true,
+        "global_before_match": true,
+        "global_after_match": true,
+        "sink_return_match": true
+      },
+      "logger_object_size_modeled": 24,
+      "logger_object_window_observed": 128,
+      "sink_callback_body_recovered": false,
+      "descriptor_trampoline_recovered": false,
+      "fresh_medusa_output_verified": false,
+      "native_outer_getter_returned": true
+    }
+  ],
+  "native_input_snapshot_used": false,
+  "logger_object_size_modeled": 24,
+  "logger_object_window_not_treated_as_object": true,
+  "literal_formatter_recovered": true,
+  "unavailable_sink_state_recovered": true,
+  "sink_callback_body_recovered": false,
+  "descriptor_trampoline_recovered": false,
+  "fresh_medusa_output_verified": false,
+  "current_online_header_matrix_verified": false,
+  "complete_python_medusa": false,
+  "limitations": [
+    "Only the 24-byte string-object prefix and literal unavailable-sink state are matched; the 128-byte native window contains adjacent stack data.",
+    "The model deliberately rejects conversion formats, live file/socket writes and final callback publication.",
+    "No online signature, Rust download, search/pagination, Douyin, Qidian or Pages/Actions result is implied."
+  ]
+}

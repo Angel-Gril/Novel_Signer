@@ -405,7 +405,7 @@ def initialize_unavailable_logger(pages, *, image_base, read_property, syscall,
 
 
 def construct_default_shared_reference(pages, *, entry_stack_address, image_base,
-        allocate, free, read_property, syscall, errno_address):
+        allocate, free, read_property, syscall, errno_address, logger_observer=None):
     """+0x26cdc4 default/no-JNI factory, publishing an inline global reference.
 
     Preserve four allocations and temporary-string free in their actual order.
@@ -426,9 +426,12 @@ def construct_default_shared_reference(pages, *, entry_stack_address, image_base
     objects.construct_string_object(staged,object_address=temporary,
         source_address=image_base+0x3DEDB8,allocate=allocate,
         vtable_address=image_base+0x34F5F8,empty_descriptor_address=image_base+0x6E168)
-    initialize_unavailable_logger(staged,image_base=image_base,
-        read_property=read_property,syscall=syscall,errno_address=errno_address,
-        property_buffer_address=entry_stack_address-0x700)
+    from vm9_logger import log_literal_unavailable
+    log_literal_unavailable(staged, object_address=temporary,
+        format_address=image_base+0x3DEDD0,
+        entry_stack_address=entry_stack_address-0x70, image_base=image_base,
+        read_property=read_property, syscall=syscall, errno_address=errno_address,
+        observer=logger_observer)
     objects.destroy_string_object(staged,object_address=temporary,image_base=image_base,free=free)
     payload=allocate(staged,24)
     if not payload:raise RefillUnsupported('shared string operator-new NULL abort is unsupported')
@@ -442,7 +445,7 @@ def construct_default_shared_reference(pages, *, entry_stack_address, image_base
 
 def get_inline_shared_reference(pages, *, output_reference_address,
         entry_stack_address, image_base, allocate, free, read_property,
-        syscall, errno_address, thread_id=None, register_destructor=None):
+        syscall, errno_address, thread_id=None, register_destructor=None, logger_observer=None):
     """+0x26cd0c serialized cold acquire/factory/atexit/release/copy.
 
     Output alias behavior is the actual zero-before-source-read +0x15f580.
@@ -461,7 +464,8 @@ def get_inline_shared_reference(pages, *, output_reference_address,
         _w(staged,guard+4,thread_id,4);_w(staged,guard+1,2,1)
         construct_default_shared_reference(staged,entry_stack_address=entry_stack_address-0x40,
             image_base=image_base,allocate=allocate,free=free,
-            read_property=read_property,syscall=syscall,errno_address=errno_address)
+            read_property=read_property,syscall=syscall,errno_address=errno_address,
+            logger_observer=logger_observer)
         # Native does not inspect __cxa_atexit's return.
         register_destructor(staged,image_base+0x15E1A8,guard+8,image_base+0x34C700)
         _w(staged,guard,1,1);_w(staged,guard+1,1,1)
@@ -605,7 +609,7 @@ def ensure_environment_directory(pages, *, object_address, entry_stack_address,
 def construct_environment_reference(pages, *, output_reference_address,
         entry_stack_address, image_base, allocate, reallocate, free,
         read_property, syscall, errno_address, mkdir,
-        thread_id=None, register_destructor=None, prepare_format=None):
+        thread_id=None, register_destructor=None, prepare_format=None, logger_observer=None):
     """+0x25ee84 observed default shared/getter/format/filesystem branch.
 
     All path content is generated from loaded guest constants and references.
@@ -619,7 +623,8 @@ def construct_environment_reference(pages, *, output_reference_address,
     get_inline_shared_reference(staged,output_reference_address=reference,
         entry_stack_address=entry_stack_address-0x60,image_base=image_base,
         allocate=allocate,free=free,read_property=read_property,syscall=syscall,
-        errno_address=errno_address,thread_id=thread_id,register_destructor=register_destructor)
+        errno_address=errno_address,thread_id=thread_id,register_destructor=register_destructor,
+        logger_observer=logger_observer)
     # +0x25eef4 latches the shared object before zeroing caller output.
     shared=_u(staged,reference);_write_span(staged,output_reference_address,bytes(16))
     if shared:
