@@ -1,6 +1,12 @@
 # Current VM9 progress checkpoint
 
 
+同次四组 fresh root 控制记录到 8 次 `+0x2584b8`、0 次 `+0x2584ac`。这说明有界
+root VM 当前走的是短 descriptor wrapper；较长 pre-dispatch trampoline 在这些
+控制中没有进入，必须作为独立 native 路径继续追踪。
+
+
+
 ## 2026-10-06: direct +0x2584b8 branch handoff verified
 
 fresh root callback 序列显示当前有界路径直接进入 `+0x2584b8`，其 16 字 descriptor

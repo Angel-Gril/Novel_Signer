@@ -3185,6 +3185,20 @@
   "fresh_object_values_are_not_hardcoded": false,
   "fresh_shared_reader_object_observed": true,
   "fresh_shared_reader_object_zero_prefix": true,
+  "native_callback_offset_counts": {
+    "0x258430": 16,
+    "0x258444": 56,
+    "0x258454": 56,
+    "0x258460": 8,
+    "0x25846c": 4,
+    "0x258478": 4,
+    "0x2584b8": 8,
+    "0x2584c4": 16,
+    "0x2584e0": 4,
+    "0x258500": 4
+  },
+  "direct_reader_wrapper_calls_observed": 8,
+  "long_pre_dispatch_trampoline_calls_observed": 0,
   "shared_reader_object_layout": {
     "zero_prefix_bytes": "0x00..0x87",
     "reader_count_offset": "0x88",

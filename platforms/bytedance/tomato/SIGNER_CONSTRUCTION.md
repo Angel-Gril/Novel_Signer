@@ -1,6 +1,13 @@
 # 默认配置下的 signer 构造和 callback 发布
 
 
+The same four fresh root controls recorded eight direct `+0x2584b8` entries and
+zero `+0x2584ac` entries. This is a path distinction: the bounded root VM uses the
+short descriptor wrapper, while the longer pre-dispatch trampoline remains a
+separate unobserved native path in these controls.
+
+
+
 ## 2026-10-06: direct +0x2584b8 branch handoff verified
 
 The fresh root callback sequence captures direct entries at `+0x2584b8` with a

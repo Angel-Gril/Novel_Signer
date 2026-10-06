@@ -2190,7 +2190,9 @@
     "object_graph_boundary": "writer object is initialized shared-reader state; callback descriptor chain remains separate",
     "native_callback_sequence_captured": true,
     "direct_reader_wrapper_offset": "0x2584b8",
-    "direct_reader_handoff_evidence": "evidence/vm9_descriptor_branch_handoff_fresh_20261006.json"
+    "direct_reader_handoff_evidence": "evidence/vm9_descriptor_branch_handoff_fresh_20261006.json",
+    "direct_reader_wrapper_calls_observed": 8,
+    "long_pre_dispatch_trampoline_calls_observed": 0
   },
   "vm9_descriptor_target_roles_fresh_20261006": {
     "evidence_file": "evidence/vm9_descriptor_target_roles_fresh_20261006.json",

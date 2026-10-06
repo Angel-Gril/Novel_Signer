@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 import sys
+from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -264,6 +265,10 @@ def main() -> None:
     object_zero_prefix_confirmed = bool(object_snapshots) and all(
         object_words(store)[0] == bytes(0x88) for store in object_snapshots
     )
+    callback_offsets = Counter(
+        callback["function_offset"]
+        for row in rows for callback in row["native_callback_sequence"]
+    )
     report = {
         "evidence_id": "vm9_descriptor_writer_fresh_inputs_20261006",
         "schema": "vm9-descriptor-writer-fresh-inputs-v1",
@@ -278,6 +283,9 @@ def main() -> None:
         "fresh_object_values_are_not_hardcoded": False,
         "fresh_shared_reader_object_observed": object_layout_confirmed,
         "fresh_shared_reader_object_zero_prefix": object_zero_prefix_confirmed,
+        "native_callback_offset_counts": dict(sorted(callback_offsets.items())),
+        "direct_reader_wrapper_calls_observed": callback_offsets.get("0x2584b8", 0),
+        "long_pre_dispatch_trampoline_calls_observed": callback_offsets.get("0x2584ac", 0),
         "shared_reader_object_layout": {
             "zero_prefix_bytes": "0x00..0x87",
             "reader_count_offset": "0x88",
