@@ -2306,5 +2306,26 @@
       "Synthetic callback hook is used and the current native callback body is not executed.",
       "No current VM9 object graph, fresh Medusa output or online acceptance is established."
     ]
+  },
+  "vm9_callback_result_writer_native_fresh_20261006": {
+    "evidence_file": "evidence/vm9_callback_result_writer_native_fresh_20261006.json",
+    "schema": "vm9-callback-result-writer-native-fresh-v1",
+    "status": "native_callback_result_writer_fresh_differential_pass",
+    "writer_offset": "0x28863c",
+    "writer_size": 28,
+    "controls": 12,
+    "all_native_controls_pass": true,
+    "callback_object_result_writeback_verified": true,
+    "packed_x8_composition_parameterized": false,
+    "current_vm_callback_object_graph_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "complete_python_medusa": false,
+    "no_jvm_rust_signer_complete": false,
+    "interpretation": "Exact ELF result-writer bytes dispatch with object x0, write callback w0 to object+0x08, and restore caller state on fresh inputs.",
+    "limitations": [
+      "Synthetic callback body is used.",
+      "Upstream callback-object writer and packed x8 composition remain unknown.",
+      "No current VM9 owner-frame or online signer evidence is established."
+    ]
   }
 }

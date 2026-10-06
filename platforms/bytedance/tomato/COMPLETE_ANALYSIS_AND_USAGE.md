@@ -38,7 +38,12 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 #
 #
-### Packed callback consumer ABI
+#
+### Callback result writeback
+
+`python/verify_vm9_callback_result_writer_native_fresh_20261006.py` executes the exact `+0x28863c` result writer on fresh objects. Reviewers can use its evidence to verify that the callback receives the object pointer and that only the low 32 bits of `w0` are written back at `+0x08`, with the saved caller registers restored. It remains a consumer/result boundary; it does not provide the upstream packed x8 composition or a current Medusa signer.
+
+## Packed callback consumer ABI
 
 `python/verify_vm9_packed_callback_consumer_native_fresh_20261006.py` executes the exact native consumer at `+0x2887f0` with fresh callback objects. Its evidence is useful for reviewing object layout and register order: the packed x8 word is passed unchanged as the callback's `x8`, while `+0x10/+0x18` become `x0/x1`. The verifier does not parameterize how the packed value was produced, so `compose_packed_callback_x8` remains fail-closed.
 

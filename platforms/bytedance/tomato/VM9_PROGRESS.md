@@ -1,5 +1,12 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-06: callback result writer fresh differential
+
+补充 [result-writer evidence](evidence/vm9_callback_result_writer_native_fresh_20261006.json)：`+0x28863c` 的原始 native bytes 在 12 组 fresh object 控制中执行通过。它从 object `+0x00` 取目标、以 object 作为 callback `x0`，把 callback `w0` 写回 object `+0x08`，再恢复保存的 `x19/x30` 和 `sp`。
+
+该结果补齐了同一 callback object 家族的“结果写回”边界，但没有恢复 object 的上游 writer、packed x8 组合、当前 VM9 owner-frame continuation 或 Medusa 输出。
+
+
 ## 2026-10-06: packed callback consumer ABI fresh differential
 
 新增 [packed consumer evidence](evidence/vm9_packed_callback_consumer_native_fresh_20261006.json)。从私有 ELF 提取并执行 `+0x2887f0` 的 28 字节 consumer，12 组 fresh 32 字节 callback object 全部通过。

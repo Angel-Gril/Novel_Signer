@@ -1,4 +1,9 @@
 
+## 2026-10-06: callback result writeback
+
+The [result-writer evidence](evidence/vm9_callback_result_writer_native_fresh_20261006.json) executes `+0x28863c` for twelve fresh objects. It verifies target dispatch with object `x0`, the `w0` writeback at object `+0x08`, and caller `x19/x30/sp` restoration. The upstream object writer and packed-x8 composition remain unsupported.
+
+
 ## 2026-10-06: packed callback consumer ABI
 
 The [fresh native consumer evidence](evidence/vm9_packed_callback_consumer_native_fresh_20261006.json) executes `+0x2887f0` for twelve fresh 32-byte objects. It verifies the consumer-side layout `target/+0x08 packed x8/+0x10 x0/+0x18 x1`, the indirect call registers, and the caller stack/`x30` restoration.

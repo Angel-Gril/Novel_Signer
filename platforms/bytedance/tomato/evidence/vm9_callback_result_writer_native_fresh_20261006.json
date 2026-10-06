@@ -1,0 +1,464 @@
+{
+  "evidence_id": "vm9_callback_result_writer_native_fresh_20261006",
+  "schema": "vm9-callback-result-writer-native-fresh-v1",
+  "status": "native_callback_result_writer_fresh_differential_pass",
+  "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "writer_offset": "0x28863c",
+  "writer_size": 28,
+  "writer_disassembly": [
+    "stp x30, x19, [sp, #-0x10]!",
+    "ldr x8, [x0]",
+    "mov x19, x0",
+    "blr x8",
+    "str w0, [x19, #8]",
+    "ldp x30, x19, [sp], #0x10",
+    "ret"
+  ],
+  "controls": 12,
+  "cases": [
+    {
+      "index": 0,
+      "object_address": "0x500000",
+      "initial_result_word": "0xa5a5a5a500000000",
+      "callback_result": "0x100000000",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x500000",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x500000",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300100",
+        "return_x0": "0x100000000",
+        "return_x19": "0x710000",
+        "return_sp": "0x600800",
+        "return_x30": "0x300100"
+      },
+      "saved_original_x30": "0x300100",
+      "saved_original_x19": "0x710000",
+      "result_word_after": "0x0",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 1,
+      "object_address": "0x500040",
+      "initial_result_word": "0xa5a5a5a500000001",
+      "callback_result": "0x100001112",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x500040",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x500040",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300110",
+        "return_x0": "0x100001112",
+        "return_x19": "0x710020",
+        "return_sp": "0x600800",
+        "return_x30": "0x300110"
+      },
+      "saved_original_x30": "0x300110",
+      "saved_original_x19": "0x710020",
+      "result_word_after": "0x1112",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 2,
+      "object_address": "0x500080",
+      "initial_result_word": "0xa5a5a5a500000002",
+      "callback_result": "0x100002224",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x500080",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x500080",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300120",
+        "return_x0": "0x100002224",
+        "return_x19": "0x710040",
+        "return_sp": "0x600800",
+        "return_x30": "0x300120"
+      },
+      "saved_original_x30": "0x300120",
+      "saved_original_x19": "0x710040",
+      "result_word_after": "0x2224",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 3,
+      "object_address": "0x5000c0",
+      "initial_result_word": "0xa5a5a5a500000003",
+      "callback_result": "0x100003336",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x5000c0",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x5000c0",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300130",
+        "return_x0": "0x100003336",
+        "return_x19": "0x710060",
+        "return_sp": "0x600800",
+        "return_x30": "0x300130"
+      },
+      "saved_original_x30": "0x300130",
+      "saved_original_x19": "0x710060",
+      "result_word_after": "0x3336",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 4,
+      "object_address": "0x500100",
+      "initial_result_word": "0xa5a5a5a500000004",
+      "callback_result": "0x100004448",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x500100",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x500100",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300140",
+        "return_x0": "0x100004448",
+        "return_x19": "0x710080",
+        "return_sp": "0x600800",
+        "return_x30": "0x300140"
+      },
+      "saved_original_x30": "0x300140",
+      "saved_original_x19": "0x710080",
+      "result_word_after": "0x4448",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 5,
+      "object_address": "0x500140",
+      "initial_result_word": "0xa5a5a5a500000005",
+      "callback_result": "0x10000555a",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x500140",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x500140",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300150",
+        "return_x0": "0x10000555a",
+        "return_x19": "0x7100a0",
+        "return_sp": "0x600800",
+        "return_x30": "0x300150"
+      },
+      "saved_original_x30": "0x300150",
+      "saved_original_x19": "0x7100a0",
+      "result_word_after": "0x555a",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 6,
+      "object_address": "0x500180",
+      "initial_result_word": "0xa5a5a5a500000006",
+      "callback_result": "0x10000666c",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x500180",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x500180",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300160",
+        "return_x0": "0x10000666c",
+        "return_x19": "0x7100c0",
+        "return_sp": "0x600800",
+        "return_x30": "0x300160"
+      },
+      "saved_original_x30": "0x300160",
+      "saved_original_x19": "0x7100c0",
+      "result_word_after": "0x666c",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 7,
+      "object_address": "0x5001c0",
+      "initial_result_word": "0xa5a5a5a500000007",
+      "callback_result": "0x10000777e",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x5001c0",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x5001c0",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300170",
+        "return_x0": "0x10000777e",
+        "return_x19": "0x7100e0",
+        "return_sp": "0x600800",
+        "return_x30": "0x300170"
+      },
+      "saved_original_x30": "0x300170",
+      "saved_original_x19": "0x7100e0",
+      "result_word_after": "0x777e",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 8,
+      "object_address": "0x500200",
+      "initial_result_word": "0xa5a5a5a500000008",
+      "callback_result": "0x100008890",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x500200",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x500200",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300180",
+        "return_x0": "0x100008890",
+        "return_x19": "0x710100",
+        "return_sp": "0x600800",
+        "return_x30": "0x300180"
+      },
+      "saved_original_x30": "0x300180",
+      "saved_original_x19": "0x710100",
+      "result_word_after": "0x8890",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 9,
+      "object_address": "0x500240",
+      "initial_result_word": "0xa5a5a5a500000009",
+      "callback_result": "0x1000099a2",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x500240",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x500240",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x300190",
+        "return_x0": "0x1000099a2",
+        "return_x19": "0x710120",
+        "return_sp": "0x600800",
+        "return_x30": "0x300190"
+      },
+      "saved_original_x30": "0x300190",
+      "saved_original_x19": "0x710120",
+      "result_word_after": "0x99a2",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 10,
+      "object_address": "0x500280",
+      "initial_result_word": "0xa5a5a5a50000000a",
+      "callback_result": "0x10000aab4",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x500280",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x500280",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x3001a0",
+        "return_x0": "0x10000aab4",
+        "return_x19": "0x710140",
+        "return_sp": "0x600800",
+        "return_x30": "0x3001a0"
+      },
+      "saved_original_x30": "0x3001a0",
+      "saved_original_x19": "0x710140",
+      "result_word_after": "0xaab4",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    },
+    {
+      "index": 11,
+      "object_address": "0x5002c0",
+      "initial_result_word": "0xa5a5a5a50000000b",
+      "callback_result": "0x10000bbc6",
+      "callback": {
+        "callback_pc": "0x200000",
+        "callback_x0": "0x5002c0",
+        "callback_x8": "0x200000",
+        "callback_x19": "0x5002c0",
+        "callback_x30": "0x100010",
+        "callback_sp": "0x6007f0"
+      },
+      "return_boundary": {
+        "return_pc": "0x3001b0",
+        "return_x0": "0x10000bbc6",
+        "return_x19": "0x710160",
+        "return_sp": "0x600800",
+        "return_x30": "0x3001b0"
+      },
+      "saved_original_x30": "0x3001b0",
+      "saved_original_x19": "0x710160",
+      "result_word_after": "0xbbc6",
+      "checks": {
+        "callback_x0_is_object": true,
+        "callback_x19_is_object": true,
+        "callback_x30_is_return_pc": true,
+        "saved_original_x30": true,
+        "saved_original_x19": true,
+        "result_low_word_written": true,
+        "return_x0_preserved": true,
+        "return_x19_restored": true,
+        "return_sp_restored": true,
+        "return_x30_restored": true
+      }
+    }
+  ],
+  "all_native_controls_pass": true,
+  "callback_object_result_writeback_verified": true,
+  "packed_x8_composition_parameterized": false,
+  "current_vm_callback_object_graph_recovered": false,
+  "fresh_medusa_output_verified": false,
+  "complete_python_medusa": false,
+  "no_jvm_rust_signer_complete": false,
+  "limitations": [
+    "The callback body is a synthetic hook; only the native result-writeback wrapper is executed.",
+    "The object target and result word are fresh inputs; no upstream writer or packed-x8 composition is inferred.",
+    "No current VM9 owner-frame, fresh Medusa output or online acceptance is established."
+  ]
+}
