@@ -4,6 +4,24 @@
 
 实现见 [vm9_startup.py](python/vm9_startup.py) 和 [vm9_thread_exit.py](python/vm9_thread_exit.py)。此前的独立 root factory 见 [ROOT_INITIALIZATION.md](ROOT_INITIALIZATION.md)，本次启动结果不能替代请求签名验收。
 
+## 当前 small 满缓存 flush 与 root GC 边界（2026-10-06）
+
+已把 matching libc `free +0x91d18 → +0x97f40` 的满 small-cache 分支恢复到生产实现。缓存满时归还前半槽位、保留后半槽位，再追加本次 free；按槽位的实际 arena 分组，在各自 bin mutex 下更新共享 bitmap／slab tree，归并 preferred arena 的统计，搬移保留向量，并更新 count／low watermark。`+0x97f40` 由 [vm9_libc_exit.py](python/vm9_libc_exit.py) 单一实现持有，TLS 析构复用 remaining=0，C free 使用 remaining=count/2；没有复制第二套 flush 逻辑。
+
+新增 `release_small_with_flush(guest_os, *, pointer, libc_base, thread_pointer, scratch_address, os_call)`，从 ready actual allocator 状态执行有界 C free，在同一个 GuestOS 事务成功后发布页面／mappings／cursor。旧 `release_cached_small` 默认入口仍保留满缓存拒绝边界。重复 free 在 flush 之前检查整个缓存，防止已归还前半槽位后遗漏 duplicate；profiling、large／huge free、GC 等未恢复分支仍拒绝。
+
+[新差分 CLI](python/verify_vm9_libc_small_flush.py) 的 **14 组原生对照／7 项拒绝与回滚**全部终态通过：两个基址各覆盖 32／128／256 字节 class、flush 后复用、连续三次 flush、foreign-only 与 mixed arena 缓存。所有 malloc 返回值以及每次 malloc／void free 返回后的完整观察 globals、TLS 和 retained mapping bytes 匹配；最终 guest 区、OS 顺序、mappings／保护／cursor 也一致。输入是双方独立的 fresh ELF／TLS／显式虚拟 OS，未用 native 快照或返回值初始化 Python。
+
+busy bin mutex、count 越界、错误 cached class、满缓存 duplicate、后段重复 cached slot、后段 GC event 和第 3 次 slot 归还后 provider failure 均明确拒绝，全部 guest 页及 mapping／cursor 保持调用前状态。后段 duplicate／provider failure 各完成 3 次实际 slot 归还，GC failure 完成 4 次。重构后的 actual joinable guest exit、旧 key-phase、cached-free 回归 **20 组原生对照／24 项回滚**全部终态通过。
+
+证据：[fresh small flush](evidence/vm9_libc_small_flush_native_20261006.json)、[共享回归](evidence/vm9_libc_small_flush_regression_20261006.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_small_flush.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output small-flush-result.json
+```
+
+接回独立 root Python 前段后，已越过先前的 **165 次分配／42 次释放、class 2 满缓存**；现在推进到 **170 次分配／54 次释放**，在下一次 free 的 **tcache event=228** 明确拒绝。当前 GC cursor=0、signed low watermark=-1、fill divisor log2=1；静态原生分支为 **`+0x91cbc → +0x9833c`**，随后更新 cursor／watermark／event，并可能进入共享 small flush。下一步恢复并独立验证这个 GC owner，再做 actual allocator 的完整 root 原生对照。[当前 GC 前段证据](evidence/vm9_root_actual_allocator_gc_frontier_20261006.json) 明确标记 root、native root 比较和 fresh 签名均未通过；没有清零计数或跳过 GC 来继续。
+
 ## 当前实际 allocator 与完整 guest 可 join 退出组合（2026-10-06）
 
 同次 fresh ELF／显式 TLS／虚拟 OS → 主线程 startup → 自己生成的非空 queue worker → 六项默认任务 → argument free → matching libc `pthread_exit +0x68138` 的可 join 分支，现在已完成独立 Python 组合。**2 组原生对照／6 项拒绝与回滚检查均已终态通过**，覆盖两个 relocated image bases。每次仍有 22 次实际 malloc、六项 caller 返回，以及独立计数的 48 次 native／48 次 Python nested return；退出继续完成 **3 次 allocator、1 次 support、1 次 libc emulated-TLS array callback**。五次回调返回后，完整观察 image、双方 TLS、libc globals、全部保留 mapping 页逐项一致；最终状态、OS／clock／wait／wake 顺序、映射记录／保护／cursor 也一致。
@@ -32,7 +50,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_startup_worker_pthread_ex
 
 **验收边界仍是实际 allocator 的 guest 可 join 分支。** 本轮未组合 actual detached worker 的线程列表注销／thread region unmap，未执行 host thread 创建／终止；realloc／emutls growth、whole-region release、replacement spare region、large cache／huge free、profiling、非默认 purge hook 及未知 callback 仍明确拒绝。独立 fresh Medusa 签名、线上全头矩阵和 f13 时间戳实验尚未通过。
 
-后续已把 root factory 接到自然冷启动的实际 allocator 进行 Python 前段探查：完成 **165 次分配／42 次释放**后，配置解析的字符串析构触发 small class 2 的 **8/8 满缓存**，按既有边界拒绝。静态反汇编对应 free callsite `+0x91d18 → flush +0x97f40`，下一步恢复 half-cache flush、保留槽搬移及统计，然后重做 root 原生／Python组合；这不是 root 返回或请求签名通过的证据。[前段观察](evidence/vm9_root_actual_allocator_frontier_20261006.json) 明确标记 `native_root_comparison_verified=false`。
+此阶段首次 actual root 探针在 165 次分配／42 次释放的 class 2 满缓存处拒绝，[旧前段观察](evidence/vm9_root_actual_allocator_frontier_20261006.json) 仍只记录那次未完成运行。该分支已由顶部 14/7 small-flush 对照恢复，当前 root 边界前移到 170/54 的 GC event；两项前段都不能作为 root 返回或请求签名通过的证据。
 
 ## 先前实际 allocator 的 worker TLS key 退出（2026-10-06）
 

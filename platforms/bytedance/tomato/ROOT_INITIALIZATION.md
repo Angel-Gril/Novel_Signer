@@ -8,7 +8,9 @@
 
 下表既有 8 组成功对照仍使用 nonreusing allocator。matching libc 的自然冷启动、实际 worker 分配和 guest 可 join 退出已有独立组合验收，见 [启动当前证据](STARTUP_INITIALIZATION.md)；不能因此将旧 root 控制改记为实际 allocator 通过。
 
-新的独立 Python root 前段探针使用 fresh ELF／显式虚拟 OS 和自然启动的实际 allocator，完成 165 次分配／42 次释放后，在 parser 字符串析构触发 class 2 的 8/8 满 small cache，按现有未恢复边界拒绝。静态反汇编映射为 `free +0x91d18 → +0x97f40`，需恢复 half-cache flush、保留槽搬移和统计，再进行实际 allocator 的完整 root 原生对照。[脱敏前段证据](evidence/vm9_root_actual_allocator_frontier_20261006.json) 明确记录 root 未完成、没有 native root 比较通过、没有 fresh 请求签名输出；它不替代下表成功对照，也不构成完整 Medusa 证据。
+首个 actual root Python 探针曾在 165 次分配／42 次释放、class 2 的 8/8 满缓存处拒绝，[旧前段证据](evidence/vm9_root_actual_allocator_frontier_20261006.json) 保留这次观察。`free +0x91d18 → +0x97f40` 的 half-cache flush／保留槽搬移／统计已恢复，fresh small-cache 对照 **14 native／7 rollback**通过，详见 [当前启动记录](STARTUP_INITIALIZATION.md)。
+
+接回 root 后，当前独立 Python 前段推进到 **170 次实际分配／54 次释放**，在下一次 free 的 **tcache event=228** 拒绝；GC cursor=0，signed low watermark=-1，fill divisor log2=1。下一步恢复 **`+0x91cbc → +0x9833c`** 的 GC、cursor／watermark／event 更新及可能的 shared flush，然后验证完整 actual root。[当前 GC 前段证据](evidence/vm9_root_actual_allocator_gc_frontier_20261006.json) 明确记录 root 未完成、没有 native root 比较通过、没有 fresh 请求签名输出；前段不替代下表成功对照，也不构成完整 Medusa 证据。
 
 ## 验证结果与边界
 

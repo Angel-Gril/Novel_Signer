@@ -451,12 +451,13 @@ def allocate_public_small(guest_os, *, request_size, libc_base, thread_pointer, 
     return result
 
 
-def _release_cached_small_pages(pages, *, pointer, libc_base, thread_pointer):
+def _release_cached_small_pages(pages, *, pointer, libc_base, thread_pointer, flush_bin=None):
     """Actual free +0x1bac0 -> +0x91990, NULL or nonfull clean small cache.
 
     C free has a void ABI; no native X0 value is part of this contract. The
     bitmap remains allocated while the object is owned by the thread cache.
-    Full-bin flush, direct arena release, profiling and GC explicitly reject.
+    The default entry rejects full-bin flush; an explicit shared-owner flush
+    provider can restore it. Direct arena release, profiling and GC reject here.
     """
     if pointer == 0:
         return None
@@ -502,12 +503,17 @@ def _release_cached_small_pages(pages, *, pointer, libc_base, thread_pointer):
     target = cache + class_id * 32
     capacity = _u(p, _u(p, _indirect(p, libc_base, 0xD8E20)) + class_id * 4, 4)
     count = _u(p, target + 0x30, 4)
-    if count >= capacity:
+    if count > capacity or count == capacity and flush_bin is None:
         raise allocator.RefillUnsupported("full/corrupt free bin flush is unrecovered")
     vector = _u(p, target + 0x38)
     for i in range(count):
         if _u(p, vector + i * 8) == pointer:
             raise allocator.RefillUnsupported("object already belongs to the cache")
+    if count == capacity:
+        flush_bin(p,wrapper+8,cache,class_id,count>>1)
+        count=_u(p,target+0x30,4)
+        if count>=capacity:
+            raise allocator.RefillUnsupported("small flush failed to create cache space")
     _w(p, vector + count * 8, pointer)
     _w(p, target + 0x30, count + 1, 4)
     event = (_u(p, cache + 0x18, 4) + 1) & 0xFFFFFFFF

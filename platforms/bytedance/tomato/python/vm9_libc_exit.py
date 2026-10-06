@@ -76,6 +76,42 @@ def _unlink_cache(p, cache, arena, libc_base):
     objects.unlock_uncontended_mutex(p,mutex_address=arena+8)
 
 
+def _flush_small_bin(p,tsd,cache,class_id,remaining,*,libc_base,release_extent=None):
+    """+0x97f40: group by actual arena; retain the final remaining slots."""
+    arena=_u(p,tsd+0x28);target=cache+0x20+class_id*32;count=_u(p,target+0x10,4)
+    capacity=_u(p,_u(p,libc_base+0xE9F50)+class_id*4,4)
+    if not arena or not 0<=remaining<=count<=capacity:raise a.RefillUnsupported('invalid small flush geometry')
+    vector=_u(p,target+0x18)
+    pointers=[_u(p,vector+j*8) for j in range(count-remaining)]
+    if any(_small_slot(p,x,libc_base)[1]!=class_id for x in pointers):raise a.RefillUnsupported('flush pointer wrong class')
+    preferred_seen=False
+    while pointers:
+        arena_owner=_small_slot(p,pointers[0],libc_base)[0];lock=arena_owner+0x508+class_id*0xE0
+        objects.lock_uncontended_mutex(p,mutex_address=lock)
+        if arena_owner==arena:
+            preferred_seen=True
+            _w(p,lock+0xC0,(_u(p,lock+0xC0)+1)&MASK)
+            _w(p,lock+0xA8,(_u(p,lock+0xA8)+_u(p,target))&MASK);_w(p,target,0)
+        retained=[]
+        for pointer in pointers:
+            current,_,slab=_small_slot(p,pointer,libc_base)
+            if current!=arena_owner:
+                _w(p,vector+len(retained)*8,pointer);retained.append(pointer);continue
+            if release_extent is None and _u(p,slab+4,4)+1>=_u(p,libc_base+0xE9120+class_id*96+0x20,4):
+                raise a.RefillUnsupported('matching empty-slab extent release is unrecovered')
+            a._return_slab_slot(p,arena_owner,pointer,class_id,_small_constants(p,libc_base),release_extent=release_extent)
+        objects.unlock_uncontended_mutex(p,mutex_address=lock);pointers=retained
+    if not preferred_seen:
+        lock=arena+0x508+class_id*0xE0;objects.lock_uncontended_mutex(p,mutex_address=lock)
+        _w(p,lock+0xC0,(_u(p,lock+0xC0)+1)&MASK)
+        _w(p,lock+0xA8,(_u(p,lock+0xA8)+_u(p,target))&MASK);_w(p,target,0)
+        objects.unlock_uncontended_mutex(p,mutex_address=lock)
+    a._write_span(p,vector,a._read_span(p,vector+(count-remaining)*8,remaining*8))
+    _w(p,target+0x10,remaining,4)
+    if remaining<a._signed32(_u(p,target+8,4)):_w(p,target+8,remaining,4)
+
+
+
 def _destroy_cache(p, tsd, libc_base, *, release_extent=None):
     cache=_u(p,tsd+8)
     if not cache:return
@@ -87,41 +123,7 @@ def _destroy_cache(p, tsd, libc_base, *, release_extent=None):
         raise a.RefillUnsupported('unsupported exit cache geometry')
     _unlink_cache(p,cache,arena,libc_base)
     for i in range(36):
-        target=cache+0x20+i*32;count=_u(p,target+0x10,4)
-        capacity=_u(p,_u(p,libc_base+0xE9F50)+i*4,4)
-        if count>capacity:
-            raise a.RefillUnsupported('exit cache count exceeds capacity')
-        pointers=[_u(p,_u(p,target+0x18)+j*8) for j in range(count)]
-        if any(_small_slot(p,pointer,libc_base)[1]!=i for pointer in pointers):
-            raise a.RefillUnsupported('exit cache pointer has the wrong class')
-        preferred_seen=False
-        while pointers:
-            owner=_small_slot(p,pointers[0],libc_base)[0]
-            lock=owner+0x508+i*0xE0
-            objects.lock_uncontended_mutex(p,mutex_address=lock)
-            if owner==arena:
-                preferred_seen=True
-                _w(p,lock+0xC0,(_u(p,lock+0xC0)+1)&MASK)
-                _w(p,lock+0xA8,(_u(p,lock+0xA8)+_u(p,target))&MASK);_w(p,target,0)
-            retained=[];vector=_u(p,target+0x18)
-            for pointer in pointers:
-                current,_,slab=_small_slot(p,pointer,libc_base)
-                if current!=owner:
-                    _w(p,vector+len(retained)*8,pointer);retained.append(pointer)
-                    continue
-                if release_extent is None and _u(p,slab+4,4)+1>=_u(p,libc_base+0xE9120+i*96+0x20,4):
-                    raise a.RefillUnsupported('matching empty-slab extent release is unrecovered')
-                a._return_slab_slot(p,owner,pointer,i,_small_constants(p,libc_base),release_extent=release_extent)
-            objects.unlock_uncontended_mutex(p,mutex_address=lock)
-            pointers=retained
-        if not preferred_seen:
-            lock=arena+0x508+i*0xE0
-            objects.lock_uncontended_mutex(p,mutex_address=lock)
-            _w(p,lock+0xC0,(_u(p,lock+0xC0)+1)&MASK)
-            _w(p,lock+0xA8,(_u(p,lock+0xA8)+_u(p,target))&MASK);_w(p,target,0)
-            objects.unlock_uncontended_mutex(p,mutex_address=lock)
-        _w(p,target+0x10,0,4)
-        if a._signed32(_u(p,target+8,4))>0:_w(p,target+8,0,4)
+        _flush_small_bin(p,tsd,cache,i,0,libc_base=libc_base,release_extent=release_extent)
     for i in range(36,classes):
         target=cache+0x20+i*32
         if _u(p,target+0x10,4):
@@ -175,13 +177,19 @@ def _destroy_tsd(tx, p, wrapper, *, libc_base, thread_pointer, scratch_address, 
     else:_internal_free(p,wrapper,libc_base,release_extent=release_extent)
 
 
-def _free_in_exit(tx,p,pointer,*,libc_base,thread_pointer,scratch_address,os_call,release_extent=None):
+def _free_in_exit(tx,p,pointer,*,libc_base,thread_pointer,scratch_address,os_call,release_extent=None,flush_small=False):
     if not pointer:return
     from vm9_libc_tcache import _release_cached_small_pages
     wrapper=_current_tsd(p,libc_base,thread_pointer,tx=tx,
         scratch_address=scratch_address,os_call=os_call)
     if _u(p,wrapper+0x10):
-        return _release_cached_small_pages(p,pointer=pointer,libc_base=libc_base,thread_pointer=thread_pointer)
+        if not flush_small:
+            return _release_cached_small_pages(p,pointer=pointer,libc_base=libc_base,thread_pointer=thread_pointer)
+        def flush(staged,tsd,cache,class_id,remaining):
+            return _flush_small_bin(staged,tsd,cache,class_id,remaining,
+                libc_base=libc_base,release_extent=release_extent)
+        return _release_cached_small_pages(p,pointer=pointer,libc_base=libc_base,
+            thread_pointer=thread_pointer,flush_bin=flush)
     _,class_id,_=_small_slot(p,pointer,libc_base)
     _w(p,wrapper+0x20,(_u(p,wrapper+0x20)+_u(p,libc_base+0xA6C80+class_id*8))&MASK)
     if _u(p,libc_base+0xE69C0):raise a.RefillUnsupported('exit free profiling is unrecovered')
@@ -247,3 +255,21 @@ def run_worker_pthread_exit(guest_os,*,image_base,libc_base,thread_pointer,
         thread_pointer=thread_pointer,return_value=return_value,get_libc_tls=get_tls,
         free=free,os_call=os_call,invoke=invoke)
     tx.commit();return result
+
+
+def release_small_with_flush(guest_os,*,pointer,libc_base,thread_pointer,scratch_address,os_call):
+    """Ready matching allocator C free, including half-cache flush when full.
+
+    This reuses exit's +0x97f40 owner without unlinking or destroying the cache.
+    Actual small extent release may call the explicit successful madvise service.
+    Large/huge free, profiling and tcache GC remain rejected. All guest state
+    publishes only on success; external provider effects do not roll back.
+    """
+    import vm9_libc_release as release
+    tx=guest_os.begin()
+    def release_extent(p,arena,slab,dirty,force_clean,constants):
+        return release.release_empty_small_extent(p,arena,slab,dirty,force_clean,constants,
+            libc_base=libc_base,os_call=os_call)
+    _free_in_exit(tx,tx.pages,pointer,libc_base=libc_base,thread_pointer=thread_pointer,
+        scratch_address=scratch_address,os_call=os_call,release_extent=release_extent,flush_small=True)
+    tx.commit()

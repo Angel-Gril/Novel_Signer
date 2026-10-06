@@ -1,0 +1,31 @@
+{
+  "schema": "vm9-libc-small-flush-regression-v1",
+  "date": "2026-10-06",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "suites": [
+    {
+      "verifier": "python/verify_vm9_startup_worker_pthread_exit_allocator.py",
+      "native_controls": 2,
+      "rollback_checks": 6,
+      "terminal_exit_code": 0
+    },
+    {
+      "verifier": "python/verify_vm9_startup_worker_exit_allocator.py",
+      "native_controls": 2,
+      "rollback_checks": 5,
+      "terminal_exit_code": 0
+    },
+    {
+      "verifier": "python/verify_vm9_libc_free.py",
+      "native_controls": 16,
+      "rollback_checks": 13,
+      "terminal_exit_code": 0
+    }
+  ],
+  "native_controls": 20,
+  "rollback_checks": 24,
+  "all_verifiers_terminal_success": true,
+  "native_input_snapshot_used": false,
+  "complete_python_medusa": false
+}

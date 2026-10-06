@@ -3,6 +3,41 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Current full-small-cache flush and root GC checkpoint (2026-10-06)
+
+Matching libc free +0x91d18 -> +0x97f40 is now implemented by a single
+_flush_small_bin owner in [vm9_libc_exit.py](python/vm9_libc_exit.py).
+TSD destruction reuses remaining=0; ready-allocator C free retains the final
+half of a full bin, groups returned slots by actual arena, updates shared
+bitmap/tree/stats under the correct mutex, moves retained slots and updates
+count/low-watermark before appending the incoming free. The new public entry
+is release_small_with_flush; the old cached-free entry keeps its strict
+full-bin boundary. Duplicate incoming free is checked before flushing.
+
+[Fresh differential CLI](python/verify_vm9_libc_small_flush.py) terminates with
+**14 native controls / 7 rollback checks** across both bases: 32/128/256-byte
+classes, reuse after flush, three consecutive flushes, foreign-only and mixed
+arena cache slots. Every defined malloc result and every malloc/void-free
+return's full observed globals/TLS/retained-mapping bytes match. Final guest,
+OS order, mappings/protection/cursor match. No native snapshot seeds Python.
+Busy bin mutex, corrupt count, wrong class, full-cache duplicate, late duplicate,
+late GC and third-slot provider failure reject atomically; late controls
+perform three/four actual slab returns. Affected same-startup guest exit,
+old key-phase and cached-free regressions terminate with **20 native / 24
+rollback checks**. Evidence: [small flush](evidence/vm9_libc_small_flush_native_20261006.json),
+[regressions](evidence/vm9_libc_small_flush_regression_20261006.json).
+
+The subsequent independent Python root attempt passes the former class-2
+8/8 full-cache boundary and reaches **170 allocations / 54 frees**, then
+rejects free tcache event=228. GC cursor=0, signed low-watermark=-1, fill
+divisor log2=1. Static instructions assign the branch +0x91cbc -> +0x9833c;
+recover that GC owner before another full native/Python actual-root comparison.
+[GC frontier](evidence/vm9_root_actual_allocator_gc_frontier_20261006.json)
+explicitly marks root completion/native root comparison/fresh signer false.
+No GC counter reset or bypass is used. Complete independent Medusa, online
+header/f13 matrix, no-JVM Rust, nonempty search/pagination, other platforms
+and final Pages/Actions products remain incomplete.
+
 ## Current actual-allocator joinable guest pthread-exit checkpoint (2026-10-06)
 
 The same fresh ELF main startup, generated nonempty queue worker and natural
@@ -53,13 +88,11 @@ replacement, large cache/huge free, profiling and custom hooks still reject.
 No-JVM Rust, nonempty search/pagination, Douyin/Qidian and final Pages/Actions
 products remain incomplete.
 
-A subsequent independent Python root attempt using actual cold allocation
-completes 165 allocations and 42 frees, then rejects a full small class-2 cache
-(count=capacity=8) during parser string destruction. Static matching-libc
-instructions assign its full-bin callsite +0x91d18 to +0x97f40. Recover the
-half-cache flush and retained-slot move/stats, then run native/Python root
-composition. [Frontier evidence](evidence/vm9_root_actual_allocator_frontier_20261006.json)
-marks native root comparison and fresh signer output false; it is no pass.
+That stage's first actual-root Python attempt stopped at 165 allocations /
+42 frees and a full class-2 cache. [Its frontier evidence](evidence/vm9_root_actual_allocator_frontier_20261006.json)
+still describes that old incomplete run. The newer 14/7 small-flush controls
+above restore the branch; the current Python root stops at 170/54 and GC.
+Neither partial root run proves native root comparison or fresh signing.
 
 ## Prior actual-allocator worker TLS key-exit checkpoint (2026-10-06)
 
