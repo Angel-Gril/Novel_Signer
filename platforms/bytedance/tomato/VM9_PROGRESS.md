@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-06: native `+0x2584ac` fresh wrapper differential
+
+新增 [native wrapper evidence](evidence/vm9_descriptor_trampoline_native_fresh_20261006.json)。测试直接从私有 ELF 提取 `+0x2584ac` 的 24 字节原始指令，在 Unicorn 中执行 12 组 fresh descriptor 控制。每组由 synthetic pre-dispatch hook 在真实 `blr x8` 边界改写 descriptor，再让原始 wrapper 执行 `ldp x1,x8,[x0]; mov x0,x8; br x1`。
+
+全部控制验证了：callback 入口 `x0` 保持 descriptor；`blr` 返回地址为 reload 点；栈中保存的原始 `x30` 未损坏；descriptor 的 target/object 改写被 reload 读取；最终 branch 入口收到改写后的 `x1` 和 `x0`；执行在最终 branch target 边界停止。该证据把之前的静态/事务模型推进到真实 native wrapper 指令差分。
+
+这仍不等于当前 VM9 callback object graph：callback body 是 hook 提供的 synthetic side effect，最终 branch target 和 continuation 没有继续执行，packed callback x8、fresh Medusa 输出与线上矩阵仍未恢复。
+
+
 
 同次四组 fresh root 控制记录到 8 次 `+0x2584b8`、0 次 `+0x2584ac`。这说明有界
 root VM 当前走的是短 descriptor wrapper；较长 pre-dispatch trampoline 在这些

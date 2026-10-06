@@ -1,3 +1,10 @@
+
+## 2026-10-06: native `+0x2584ac` wrapper execution boundary
+
+The new [native fresh differential](evidence/vm9_descriptor_trampoline_native_fresh_20261006.json) executes the exact 24 bytes extracted from the private ELF rather than only interpreting them in Python. Twelve fresh descriptors are run under Unicorn. A synthetic pre-dispatch hook mutates both descriptor words at the real callback boundary; the native wrapper then reloads them and reaches the final `br x1` target.
+
+The differential records the callback entry `x0`, the `blr` return PC, the saved caller `x30` on the stack, the final branch `x0/x1`, and the rewritten descriptor for every control. This proves the wrapper-level stack and reload contract. It does not recover the current VM9 callback body, packed entry `x8`, final continuation, fresh Medusa output, or an online header matrix.
+
 # 默认配置下的 signer 构造和 callback 发布
 
 

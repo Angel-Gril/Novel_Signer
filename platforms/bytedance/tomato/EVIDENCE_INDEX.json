@@ -2238,5 +2238,28 @@
     "complete_python_medusa": false,
     "all_python_direct_dispatches": true,
     "python_component": "vm9_callbacks.dispatch_direct_descriptor_branch"
+  },
+  "vm9_descriptor_trampoline_native_fresh_20261006": {
+    "evidence_file": "evidence/vm9_descriptor_trampoline_native_fresh_20261006.json",
+    "schema": "vm9-descriptor-trampoline-native-fresh-v1",
+    "status": "native_wrapper_fresh_differential_pass",
+    "wrapper_offset": "0x2584ac",
+    "wrapper_size": 24,
+    "controls": 12,
+    "all_native_controls_pass": true,
+    "callback_side_effect_modeled_at_hook": true,
+    "saved_x30_stack_effect_verified": true,
+    "final_br_x1_boundary_verified": true,
+    "packed_callback_x8_parameterized": false,
+    "current_vm_callback_object_graph_recovered": false,
+    "fresh_medusa_output_verified": false,
+    "complete_python_medusa": false,
+    "no_jvm_rust_signer_complete": false,
+    "interpretation": "Exact private ELF wrapper bytes execute through callback return, descriptor reload and final br x1 on synthetic fresh inputs. This is wrapper ABI evidence, not current VM9 object-graph or online signer evidence.",
+    "limitations": [
+      "Unicorn stops at the final branch target; unknown callback body and continuation are not executed.",
+      "The descriptor mutation is synthetic and does not parameterize current VM9 packed callback x8.",
+      "No fresh Medusa output or online header matrix is established."
+    ]
   }
 }
