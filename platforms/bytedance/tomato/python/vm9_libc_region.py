@@ -2,8 +2,9 @@
 
 This owner recovers the empty chunk-cache/default-callback path of +0x765b0.
 It also recovers bounded clean-slab carving and direct/internal small allocation.
-Public malloc/tcache, large allocation and the CPU query remain unsupported. Unknown
-DSS, nonempty chunk caches and failed registration cleanup reject atomically.
+Its shared clean-extent split also feeds the separate large owner. Public malloc
+and CPU composition live in their own modules. Unknown DSS, nonempty chunk caches
+and failed registration cleanup reject atomically.
 """
 from __future__ import annotations
 import vm9_allocator as allocator
@@ -243,11 +244,11 @@ def _find_extent(pages, arena, size, libc_base):
     return node + 16 if node else 0
 
 
-def _consume_slab_extent(pages, arena, pointer, size, class_id, libc_base):
-    """Clean +0x772b0/+0x76f3c/+0x76f10 with real free-tree split/accounting."""
+def _split_clean_extent(pages, arena, pointer, size, libc_base):
+    """Shared clean +0x76f3c/+0x76f10 free-tree split and page accounting."""
     node, region, page = _extent_location(pages, pointer, libc_base)
-    if _u(pages, region) != arena or not 0 <= class_id < 36:
-        raise allocator.RefillUnsupported("slab extent arena/class mismatch")
+    if _u(pages, region) != arena:
+        raise allocator.RefillUnsupported("clean extent arena mismatch")
     bias = _u(pages, libc_base + 0xE9EB0)
     entry = region + 0x68 + (page - bias) * 8
     tag = _u(pages, entry)
@@ -273,6 +274,14 @@ def _consume_slab_extent(pages, arena, pointer, size, class_id, libc_base):
             _w(pages, address, (_u(pages, address) & 4) | 0xFF0 | remaining)
         remainder = region + _u(pages, libc_base + 0xE9EA0) + (page + count - bias) * 96
         tree.insert(remainder)
+    return entry, region, page, count
+
+
+def _consume_slab_extent(pages, arena, pointer, size, class_id, libc_base):
+    """Clean +0x772b0 slab markers after the shared extent split."""
+    if not 0 <= class_id < 36:
+        raise allocator.RefillUnsupported("slab extent arena/class mismatch")
+    entry, _, _, count = _split_clean_extent(pages, arena, pointer, size, libc_base)
     for index in range(count):
         address = entry + index * 8
         _w(pages, address, (_u(pages, address) & 4) | 1 | (class_id << 4) | (index << 12))

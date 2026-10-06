@@ -1,0 +1,66 @@
+{
+  "schema": "vm9-libc-public-large-regression-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "case": "region",
+      "native_controls": 56,
+      "rejection_and_rollback_checks": 26,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "tcache",
+      "native_controls": 52,
+      "rejection_and_rollback_checks": 24,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "cold",
+      "native_controls": 26,
+      "rejection_and_rollback_checks": 8,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "stream",
+      "native_controls": 46,
+      "rejection_and_rollback_checks": 19,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "cpu_query",
+      "native_controls": 24,
+      "rejection_and_rollback_checks": 0,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "free",
+      "native_controls": 16,
+      "rejection_and_rollback_checks": 13,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "runtime_boot",
+      "native_controls": 36,
+      "rejection_and_rollback_checks": 11,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "stdio",
+      "native_controls": 38,
+      "rejection_and_rollback_checks": 13,
+      "terminal_exit_zero": true
+    },
+    {
+      "case": "file",
+      "native_controls": 62,
+      "rejection_and_rollback_checks": 27,
+      "terminal_exit_zero": true
+    }
+  ],
+  "native_controls": 356,
+  "rejection_and_rollback_checks": 141,
+  "all_nine_cli_runs_terminal": true,
+  "standalone_medusa_complete": false,
+  "current_online_header_matrix_verified": false
+}

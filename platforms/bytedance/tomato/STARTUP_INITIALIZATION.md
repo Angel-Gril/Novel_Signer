@@ -6,7 +6,7 @@
 
 ## 当前 allocator 检查点（2026-10-06）
 
-Python 已从 fresh ELF／受控 TLS 输入贯通默认 empty-config libc 冷启动，实际读入 CPU 文件、释放 FILE 缓冲、注册 atfork、发布 arena table、迁移 static TSD，并自然返回 `flag=0`。没有在 `+0x8e41c` 提前返回，没有人工设置 ready flag，也没有用 native 初始化快照提供 Python 输入。该结果覆盖默认虚拟 OS 服务下的冷启动和 0 至 14336 字节 public small 请求，不代表 all-branch allocator 或完整独立 Medusa 已完成。
+Python 已从 fresh ELF／受控 TLS 输入贯通默认 empty-config libc 冷启动，实际读入 CPU 文件、释放 FILE 缓冲、注册 atfork、发布 arena table、迁移 static TSD，并自然返回 `flag=0`。没有在 `+0x8e41c` 提前返回，没有人工设置 ready flag，也没有用 native 初始化快照提供 Python 输入。该冷启动阶段覆盖默认虚拟 OS 服务下的 0 至 14336 字节 public small 请求；后续新增章节另验证 14337 至 65536 字节的空 large-cache 分配。两者均不代表 all-branch allocator 或完整独立 Medusa 已完成。
 
 本轮新增 **96 个 native 对照／27 项拒绝与回滚检查**；旧 free、runtime boot、stdio 和 readonly FILE 回归 **152／64** 全通过。详细边界、复现命令和下一处 large 分配见下方“实际 FILE 读入、CPU 查询与默认冷启动自然返回”。
 
@@ -490,14 +490,30 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_cpu_query.py --libra
 python -B platforms/bytedance/tomato/python/verify_vm9_libc_cold.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-cold-report.json
 ```
 
-**下一处已实测定位为 public large 的 `+0x8f6ec → +0x7a3c8`。** 默认任务的 allocator consumer 要求六次 0x4000 字节请求，而当前 public-small body 上限为 0x3800。两个同次 fresh native 探针在自然 flag0 后都返回非空的 16384 字节分配，Python 则在 size guard 明确拒绝。这两个是 native-only 定位探针，未比较 Python large allocation 的 bytes，不计入上表 96 个 Python/native 对照。证据：[large frontier](evidence/vm9_libc_large_frontier_native.json)。接下来恢复这个真实 large/cache 分支，再将已验证的自然 ready 状态接回 startup/default worker/root。
+**此前默认任务 allocator 的 size guard 已实测定位为 public large 的 `+0x8f6ec → +0x7a3c8`；新的有界恢复见下一节。** 默认任务的 allocator consumer 要求六次 0x4000 字节请求，而当前 public-small body 上限为 0x3800。两个同次 fresh native 探针在自然 flag0 后都返回非空的 16384 字节分配，Python 则在 size guard 明确拒绝。这两个是 native-only 定位探针，未比较 Python large allocation 的 bytes，不计入上表 96 个 Python/native 对照。证据：[large frontier](evidence/vm9_libc_large_frontier_native.json)。该阶段的两个 native-only 探针是恢复前的定位证据；下一节记录已恢复的实际 large 分配，默认任务正文的 allocator 接入仍需单独验证。
 
 完整 allocator 仍缺 large/huge、full-bin/GC、profiling、multi-arena、cache 析构、非空配置/DSS/dirty、并发等待及相应诊断分支。真实线程/OS 输入创建、未知 callback/support 关联状态、fresh Medusa 签名、新线上全头矩阵与 f13、无 JVM Rust、搜索非空/分页、其他平台及最终 Pages/Actions 产品仍待验收。
+
+## 自然 cold 启动后的空 large-cache 分配（2026-10-06）
+
+新增 [vm9_libc_large.py](python/vm9_libc_large.py) 与 `allocate_default_large()`，恢复 `+0x8f6ec → +0x7a3c8 → +0x77984/+0x77a68` 的有界 clean allocation。已有 region owner 提取共享 `+0x76f3c/+0x76f10` extent split/accounting；small slab 继续由自身标记函数处理，large 使用 `+0x77138` 的首尾标记，保留 interior page marks 和 zero-bit，更新 free extent tree、已用页／region accounting、arena large 统计和 size-class 统计。没有把 large 分配当作 small bitmap pop 或 base allocation。
+
+原生空 large-cache 分支不批量 refill，也不增加 cached-pop 次数：它将 low-water 写为 -1，直接分配一次，然后更新 cache GC event 和 TSD allocated bytes。新实现遵循这个分支，暂不恢复非空 large cache pop、large free、uncached large、junk/zero option、GC 与 huge。
+
+**12 个 Python/native 对照／8 项拒绝与回滚检查通过。** 两基址分别覆盖 14337、16384、20481、65536 字节、同次六次 16384 字节及四十次 65536 字节跨 region 分配。每个序列从 actual fresh public malloc 经自然初始化开始，比较有定义返回、完整 stdio/allocator/TLS/keys、所有保留 mapping 页、有序 OS calls 和 mapping records/cursor/protection。回滚覆盖 small/negative/over-limit 请求、非空 large bin、GC event、junk/zero option 和 profiling；晚期 GC 拒绝发生在实际 extent split 后，确认这些中间页／树／统计不发布。
+
+共享代码回归另通过 **356 native controls／141 项拒绝与回滚检查**，含 region 56/26、tcache 52/24、此前自然 cold/stream/CPU/free/runtime boot/stdio/readonly FILE 的 248/91。证据：[public large](evidence/vm9_libc_public_large_native.json)、[large 回归](evidence/vm9_libc_public_large_regression.json)。此回归重新验证旧控制，不与旧轮次重复累加为独立覆盖率。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_large.py --library C:/private/libmetasec_ml_71332.so --libc C:/private/matching-libc.so --output C:/private/libc-large-report.json
+```
+
+**默认任务要求的六次 0x4000 分配序列已经通过；默认任务正文尚未使用该真实 allocator 做组合对照。** 旧任务 verifier 的 native malloc PLT 会返回显式 provider 分配，需要在新的组合控制中明确执行 matching libc malloc 正文。随后将 recovered allocator 的 owned mappings／records 经 staged bridge 接入六项 VM，并比较各 caller、once/broadcast 和最终状态，再接同次 startup worker/root。公开报告保留 `default_initialization_task_allocator_composed=false`、`standalone_medusa_complete=false` 和线上矩阵 false。
 
 ## 继续顺序
 
 继续恢复 matching libc 的真实 allocator 冷启动，将当前显式 allocator／TLS／OS 服务逐项替换为已验证实现，并将 startup、`+0x256e50` 配置构造和既有 root factory 接到外层 signer。未识别 callback、support 关联状态类型和真实线程创建仍需真实来源，不以空回调填补。
 
-默认 empty-config Python 冷启动现已自然返回 `flag=0`；真实 FILE 生命周期、CPU 解析、atfork allocation、arena table 和 TSD migration 已组合验证。接下来恢复已实测到达的 0x4000 public large 分配分支，将自然 ready 的 allocator 状态接回 startup/default worker/root。真实 OS/TLS 创建与完整 allocator 分支仍是未完成边界。
+默认 empty-config Python 冷启动现已自然返回 `flag=0`；真实 FILE 生命周期、CPU 解析、atfork allocation、arena table 和 TSD migration 已组合验证。0x4000 public large 分配分支现已通过有界对照；接下来以 actual native malloc 正文作为控制，将自然 ready 的 allocator 状态接回默认任务、同次 startup worker/root。真实 OS/TLS 创建与完整 allocator 分支仍是未完成边界。
 
 随后用新的请求输入生成 Medusa，重新验证全头线上矩阵与 f13 时间戳分支。无 JVM Rust、非空搜索／分页、抖音／起点和最终 Pages／Actions 下载产品仍需各自完成验收。

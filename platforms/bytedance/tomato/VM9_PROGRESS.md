@@ -3,6 +3,25 @@
 This file records the current state of the independent VM9 work. It is a
 checkpoint, not a completion claim.
 
+## Current public-large checkpoint (2026-10-06)
+
+Bounded empty-cache public large allocation now matches actual native bodies in
+**12 controls / 8 rejection and rollback checks**. Two bases cover unaligned
+14337/20481, exact 16384/65536, six consecutive 16384 requests and forty 65536
+requests crossing arena regions. Natural default cold startup feeds actual extent
+search/split/registration, first/last large page marks, free-tree and page accounting,
+arena/class large statistics, cache event and TSD allocated bytes. Shared region
+and public-context regressions pass **356 native / 141 rollback checks**.
+
+This recovers the previous +0x8f6ec -> +0x7a3c8 size frontier, including the default
+task's six allocation requests. It does not yet compose their six VM task bodies
+with this allocator. The old native task verifier substitutes malloc PLT output;
+a new composition must execute matching-libc malloc and retain its owned mappings.
+Nonempty large cache/pop/free, uncached/huge, junk/zero, GC, all-branch allocator,
+real OS/thread creation, startup/root, fresh Medusa and online/product validation
+remain open. Evidence: [large](evidence/vm9_libc_public_large_native.json),
+[regressions](evidence/vm9_libc_public_large_regression.json).
+
 ## Current default libc cold-return checkpoint (2026-10-06)
 
 Python now reaches the natural default empty-config malloc cold return and flag 0
@@ -22,10 +41,10 @@ booleans; a selected-case run does not claim full coverage.
 
 The bounded public path covers 0..14336 bytes, including repeated requests after
 TSD migration. Two separate fresh native-only probes return nonnull at 16384 bytes,
-while Python rejects the unrecovered public-large size branch. The observed next
-call is **+0x8f6ec -> +0x7a3c8**. These two probes are not Python/native allocation
-byte matches and are not included in the 96 new controls. Recover this large/cache
-path before replacing the default task's six explicit 0x4000 allocation providers.
+while Python rejects the unrecovered public-large size branch. The observed call in those pre-recovery probes
+was **+0x8f6ec -> +0x7a3c8**, now recovered in the current checkpoint above. These two probes are not Python/native allocation
+byte matches and are not included in the 96 new controls. The recovered large/cache path now needs composition with the default task's six
+VM bodies before its explicit allocation providers can be considered replaced.
 
 All-branch malloc/free, real thread/OS creation, startup/root allocator composition,
 fresh Medusa, current online headers/f13, no-JVM Rust, nonempty search/pagination,

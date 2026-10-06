@@ -26,7 +26,7 @@ from verify_vm9_libc_arena_boot import LIBC, put, get
 
 CONTINUE = GUEST + 0xF720
 ENTRIES = {0x8E250, 0x8E350, 0x74868, 0x749DC, 0x75550, 0x68C8C,
-    0x68CF8, 0x68D5C, 0x68890, 0x57CD8, 0x5786C, 0x56C78, 0x1F86C, 0x1F8F0, 0x597B8, 0x5986C, 0x1BB08, 0x8F00C, 0x573E4, 0x5A960, 0x75090, 0x1BAC0, 0x91990, 0x2669C, 0x67374, 0x99C78, 0x933AC, 0x8E41C, 0x8E51C, 0x8DF44, 0x8E0EC, 0x7D998, 0x1BDD0}
+    0x68CF8, 0x68D5C, 0x68890, 0x57CD8, 0x5786C, 0x56C78, 0x1F86C, 0x1F8F0, 0x597B8, 0x5986C, 0x1BB08, 0x8F00C, 0x573E4, 0x5A960, 0x75090, 0x1BAC0, 0x91990, 0x2669C, 0x67374, 0x99C78, 0x933AC, 0x8E41C, 0x8E51C, 0x8DF44, 0x8E0EC, 0x7D998, 0x1BDD0, 0x7A3C8, 0x77984, 0x77A68, 0x77138, 0x76F3C}
 CASE_LABELS = (
     "init", "init_twice", "acquire", "acquire_twice", "acquire_all17",
     "extension_padding", "file_core", "cleanup_fresh", "cleanup_twice", "cleanup_replace",
@@ -43,9 +43,14 @@ FILE_CASE_LABELS = ("open", "open_twice", "open_close", "open_reuse", "close_twi
 
 FRESH_MALLOC_CASE_LABELS = ("fresh_zero","fresh_128","fresh_4096","fresh_14336","fresh_repeat")
 
+LARGE_MALLOC_CASE_LABELS = ("large_14337", "large_16384", "large_six", "large_20481", "large_65536", "large_regions")
+PUBLIC_MALLOC_CASE_LABELS = FRESH_MALLOC_CASE_LABELS + LARGE_MALLOC_CASE_LABELS
+
 
 def fresh_requests(label):
-    return {"fresh_zero":[0],"fresh_128":[128],"fresh_4096":[4096],"fresh_14336":[14336],"fresh_repeat":[128,48,4096,14336]}.get(label,[])
+    return {"fresh_zero":[0],"fresh_128":[128],"fresh_4096":[4096],"fresh_14336":[14336],"fresh_repeat":[128,48,4096,14336],
+        "large_14337":[14337], "large_16384":[16384], "large_six":[16384]*6,
+        "large_20481":[20481], "large_65536":[65536], "large_regions":[65536]*40}.get(label,[])
 
 
 COLD_CASE_LABELS = ("cold_one", "cold_two", "cold_eight", "cold_empty", "cold_open_failure",
@@ -133,7 +138,7 @@ def cpu_fresh(library,libc,image):
 
 
 def file_mode(label):
-    if label in CPU_CASE_LABELS+COLD_CASE_LABELS+FRESH_MALLOC_CASE_LABELS:return b"re"
+    if label in CPU_CASE_LABELS+COLD_CASE_LABELS+PUBLIC_MALLOC_CASE_LABELS:return b"re"
     return {"mode_binary": b"rb", "mode_cloexec": b"re", "mode_exclusive_ignored": b"rx", "mode_invalid": b"x"}.get(label, b"r")
 
 
@@ -210,7 +215,7 @@ def prepare(label, read, write, guest_os, map_cpu=None):
 
 
 def actions_for(label):
-    if label in FRESH_MALLOC_CASE_LABELS:return [("fresh_malloc",size) for size in fresh_requests(label)]
+    if label in PUBLIC_MALLOC_CASE_LABELS:return [("fresh_malloc",size) for size in fresh_requests(label)]
     if label in COLD_CASE_LABELS:return [("cold_init",0)]
     if label in CPU_CASE_LABELS:return [("cpu_query",0)]
     if label in STREAM_CASE_LABELS:
@@ -251,15 +256,15 @@ def actions_for(label):
 
 
 def case(library, libc, image, label):
-    fresh_malloc=label in FRESH_MALLOC_CASE_LABELS
+    fresh_malloc=label in PUBLIC_MALLOC_CASE_LABELS
     natural=label in COLD_CASE_LABELS or fresh_malloc
-    fresh_function=cpu_fresh if label in CPU_CASE_LABELS+COLD_CASE_LABELS+FRESH_MALLOC_CASE_LABELS else stdio_fresh
+    fresh_function=cpu_fresh if label in CPU_CASE_LABELS+COLD_CASE_LABELS+PUBLIC_MALLOC_CASE_LABELS else stdio_fresh
     p, seed = fresh_function(library, libc, image), fresh_function(library, libc, image)
     if label == "buffer_malloc_failure":
         for pages in (p, seed): put(pages, LIBC + 0xDB690, 0, 4)
     os, nos = allocator.GuestOS(p), allocator.GuestOS(seed)
     observed = observed_spans()
-    if label in CPU_CASE_LABELS+COLD_CASE_LABELS+FRESH_MALLOC_CASE_LABELS:observed.update({(LIBC+0xD8DC8,8):None,(LIBC+0xDE888,8):None})
+    if label in CPU_CASE_LABELS+COLD_CASE_LABELS+PUBLIC_MALLOC_CASE_LABELS:observed.update({(LIBC+0xD8DC8,8):None,(LIBC+0xDE888,8):None})
     if natural:observed.update({(LIBC+0xDB380,40):None,(LIBC+0xE01C0,16):None})
     counts = Counter()
     n_calls, m_calls, results = [], [], []
@@ -323,8 +328,8 @@ def case(library, libc, image, label):
             return descriptor(n_opens)
         if number == 63:
             n_calls.append(["read",fields[0],fields[2]])
-            assert label in STREAM_CASE_LABELS or label in CPU_CASE_LABELS+COLD_CASE_LABELS+FRESH_MALLOC_CASE_LABELS
-            fn=cpu_read if label in CPU_CASE_LABELS+COLD_CASE_LABELS+FRESH_MALLOC_CASE_LABELS else stream_read
+            assert label in STREAM_CASE_LABELS or label in CPU_CASE_LABELS+COLD_CASE_LABELS+PUBLIC_MALLOC_CASE_LABELS
+            fn=cpu_read if label in CPU_CASE_LABELS+COLD_CASE_LABELS+PUBLIC_MALLOC_CASE_LABELS else stream_read
             status,data=fn(label,n_cursor,n_reads,fields[2])
             if status>=0: cpu.mem_write(fields[1],data)
             return status
@@ -355,7 +360,7 @@ def case(library, libc, image, label):
         if operation == "openat": return descriptor(m_opens)
         if operation == "close": return close_result()
         if operation == "fstat": return stat_result()
-        if operation == "read": return (cpu_read if label in CPU_CASE_LABELS+COLD_CASE_LABELS+FRESH_MALLOC_CASE_LABELS else stream_read)(label,m_cursor,m_reads,fields[1])
+        if operation == "read": return (cpu_read if label in CPU_CASE_LABELS+COLD_CASE_LABELS+PUBLIC_MALLOC_CASE_LABELS else stream_read)(label,m_cursor,m_reads,fields[1])
         if operation == "munmap": return 0
         assert operation == "prctl"
         return 0
@@ -428,7 +433,8 @@ def case(library, libc, image, label):
                 libc_base=LIBC, thread_pointer=WORKER_TLS, os_call=os_call)
         elif op == "fresh_malloc":
             cold_model=__import__("vm9_libc_cold")
-            result=cold_model.allocate_default_small(os,request_size=value,scratch_address=GUEST+0xED98,
+            allocate=cold_model.allocate_default_large if label in LARGE_MALLOC_CASE_LABELS else cold_model.allocate_default_small
+            result=allocate(os,request_size=value,scratch_address=GUEST+0xED98,
                 libc_base=LIBC,thread_pointer=WORKER_TLS,
                 brk=lambda *args:m_calls.append(["brk",0]) or 0x13600000,os_call=os_call)
         elif op == "cold_init":
@@ -480,7 +486,8 @@ def case(library, libc, image, label):
         assert counts[0x8E41C]==counts[0x8E51C]==counts[0x99C78]==1
     return dict(case=label, image_base=hex(image), same_fresh_cold_prefix_composed=True, natural_default_cold_return=natural,
         natural_ready_flag_zero=natural,static_to_dynamic_tsd_verified=natural,
-        fresh_public_small_malloc_control=fresh_malloc,
+        fresh_public_small_malloc_control=label in FRESH_MALLOC_CASE_LABELS,
+        fresh_public_large_malloc_control=label in LARGE_MALLOC_CASE_LABELS,
         derived_cpu_count=get(p,LIBC+0xE9F44,4) if natural else actual[0] if label in CPU_CASE_LABELS else 0,
         defined_returns_stdio_globals_tls_guest_bytes_all_mapping_bytes_and_metadata_match=True,
         ordered_os_calls=len(m_calls), retained_owned_mappings=len(os.mappings),

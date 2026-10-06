@@ -3,7 +3,9 @@
 Restores bounded +0x98490/+0x98c54/+0x8dda0 paths with actual region
 allocation. No native pages or caller-provided allocation results initialize
 cache storage. Bounded public small allocation and empty cache refill compose
-these owners; full cold init, large allocation, GC and signing remain open.
+these owners. Default cold init is composed by vm9_libc_cold; bounded empty-cache
+large allocation is also restored. Nonempty large cache/free, GC and signing
+remain open.
 """
 from __future__ import annotations
 
@@ -233,10 +235,8 @@ def refill_small_cache_bin(guest_os, *, arena_address, cache_address, class_id, 
     return result
 
 
-def _public_small(tx, *, request_size, libc_base, thread_pointer, os_call):
-    """+0x8f00c positive/zero small entry on ready or same-owner recursive init."""
-    if not isinstance(request_size, int) or not 0 <= request_size <= 0x3800:
-        raise allocator.RefillUnsupported("public entry only recovers nonnegative small sizes")
+def _public_allocation_context(tx, *, libc_base, thread_pointer, os_call):
+    """Actual shared init/profiling/TSD/cache/arena prefix of +0x8f00c."""
     p = tx.pages
     flag = _u(p, libc_base + 0xDB6A0, 4)
     if flag == 1:
@@ -252,9 +252,6 @@ def _public_small(tx, *, request_size, libc_base, thread_pointer, os_call):
         raise allocator.RefillUnsupported("public profiling hooks are unrecovered")
     wrapper = _current_tsd(p, libc_base, thread_pointer)
     tsd = wrapper + 8
-    size = max(request_size, 1)
-    class_id = region._size_index(p, libc_base, size)
-    width = _u(p, _indirect(p, libc_base, 0xD8EE0) + class_id * 8)
     cache = _u(p, wrapper + 0x10)
     if not cache and _u(p, tsd, 4) == 1:
         cache = _get_thread_cache(tx, tsd_address=tsd, libc_base=libc_base,
@@ -263,6 +260,19 @@ def _public_small(tx, *, request_size, libc_base, thread_pointer, os_call):
     arena = _u(p, wrapper + 0x30)
     if not arena:
         arena = _bind_arena(p, tsd_address=tsd, libc_base=libc_base)
+    return wrapper, cache, arena
+
+
+def _public_small(tx, *, request_size, libc_base, thread_pointer, os_call):
+    """+0x8f00c positive/zero small entry on ready or same-owner recursive init."""
+    if not isinstance(request_size, int) or not 0 <= request_size <= 0x3800:
+        raise allocator.RefillUnsupported("public entry only recovers nonnegative small sizes")
+    wrapper, cache, arena = _public_allocation_context(tx, libc_base=libc_base,
+        thread_pointer=thread_pointer, os_call=os_call)
+    p = tx.pages
+    size = max(request_size, 1)
+    class_id = region._size_index(p, libc_base, size)
+    width = _u(p, _indirect(p, libc_base, 0xD8EE0) + class_id * 8)
     pointer = 0
     if arena and cache:
         target = cache + class_id * 32
@@ -387,3 +397,37 @@ def release_cached_small(guest_os, *, pointer, libc_base, thread_pointer):
     _release_cached_small(tx, pointer=pointer, libc_base=libc_base, thread_pointer=thread_pointer)
     tx.commit()
     return None
+
+
+def _public_large(tx, *, request_size, libc_base, thread_pointer, os_call):
+    """Actual cache-sized large branch; empty cache calls +0x7a3c8 once."""
+    from vm9_libc_large import _direct_large
+    if not isinstance(request_size, int) or not 0x3800 < request_size <= 0x10000:
+        raise allocator.RefillUnsupported("public large request outside bounded policy")
+    wrapper, cache, arena = _public_allocation_context(tx, libc_base=libc_base,
+        thread_pointer=thread_pointer, os_call=os_call)
+    p = tx.pages
+    class_id = region._size_index(p, libc_base, request_size)
+    width = _u(p, _indirect(p, libc_base, 0xD8EE0) + class_id * 8)
+    if not arena or not cache or class_id >= _u(p, libc_base + 0xE9F48):
+        raise allocator.RefillUnsupported("uncached/unbound public large entry is unrecovered")
+    if request_size > _u(p, _indirect(p, libc_base, 0xD8F70)):
+        raise allocator.RefillUnsupported("request exceeds actual large tcache maximum")
+    target = cache + class_id * 32
+    if _u(p, target + 0x30, 4):
+        raise allocator.RefillUnsupported("nonempty large cache pop/free is unrecovered")
+    _w(p, target + 0x28, 0xFFFFFFFF, 4)
+    pointer, actual_width = _direct_large(tx, arena_address=arena, request_size=width,
+        libc_base=libc_base, thread_pointer=thread_pointer, os_call=os_call)
+    if actual_width != width:
+        raise allocator.RefillUnsupported("public large size class mismatch")
+    if not pointer:
+        _w(p, thread_pointer + 0x10, 12, 4)
+        return 0
+    # Empty-large-bin miss increments GC event, not the cached-pop counter.
+    event = (_u(p, cache + 0x18, 4) + 1) & 0xFFFFFFFF
+    _w(p, cache + 0x18, event, 4)
+    if event == 228:
+        raise allocator.RefillUnsupported("large tcache GC event is unrecovered")
+    _w(p, wrapper + 0x18, (_u(p, wrapper + 0x18) + width) & MASK)
+    return pointer

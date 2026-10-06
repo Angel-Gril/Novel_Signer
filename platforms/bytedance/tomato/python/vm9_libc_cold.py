@@ -101,3 +101,19 @@ def allocate_default_small(guest_os, *, request_size, scratch_address, libc_base
         thread_pointer=thread_pointer,os_call=os_call)
     tx.commit()
     return result
+
+
+def allocate_default_large(guest_os, *, request_size, scratch_address, libc_base, thread_pointer, brk, os_call):
+    """Fresh/ready public cache-sized large entry with natural default init."""
+    from vm9_libc_tcache import _public_large
+    tx = guest_os.begin()
+    if _u(tx.pages, libc_base + 0xDB6A0, 4) == 3:
+        status = _initialize_default(tx, scratch_address=scratch_address, libc_base=libc_base,
+            thread_pointer=thread_pointer, brk=brk, os_call=os_call)
+        if status:
+            tx.commit()
+            return 0
+    result = _public_large(tx, request_size=request_size, libc_base=libc_base,
+        thread_pointer=thread_pointer, os_call=os_call)
+    tx.commit()
+    return result
