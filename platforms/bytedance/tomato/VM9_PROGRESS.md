@@ -1,5 +1,12 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-06: Medusa f13 explicit clock differential
+
+`medusa_f13.py` 现在支持 `wall_time`/`wall_nanoseconds` 和 `MEDUSA_F13_SNAPSHOT_DIR`，可在不复制私有快照的情况下注入测试输入。新增 [clock evidence](evidence/medusa_f13_clock_parameter_20261006.json)：同一 query 的 5 组时间控制输出全部为 `af82bde0311cf322dc9f36ececc60d61`，且每组 `svc_log` 都没有 syscall 113。
+
+结论是当前 BIG VM 快照的这条 f13 路径没有读取时钟；这验证了参数入口和“未消费”事实，不能把冻结时间改写成线上时间戳已解决，也不能证明当前线上 Medusa。
+
+
 ## 2026-10-06: callback consumer APIs kept explicit
 
 `vm9_callbacks.py` 现在提供 `dispatch_packed_callback_consumer` 和 `dispatch_callback_result_writer`。前者只读取并传递 `target/packed_x8/x0/x1` 四个显式字段；后者只执行 `target` 读取、callback `x0=object` 和 `object+0x08` 低 32 位写回。两者都拒绝空 target、未提供 callback 或越界输入。

@@ -42,6 +42,11 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 #
 The public callback model keeps these boundaries explicit through `vm9_callbacks.dispatch_packed_callback_consumer` and `dispatch_callback_result_writer`. A caller must provide the packed word and callback body; missing or invalid inputs fail closed. This is how the native evidence can be reused without turning a captured value into a false parameterization claim.
 
+
+### Medusa f13 clock input status
+
+`python/verify_medusa_f13_clock_parameter_20261006.py` can reproduce the f13 core with private snapshots supplied through `MEDUSA_F13_SNAPSHOT_DIR`. Its evidence records identical output for multiple explicit timestamps and no syscall 113. Use this as a negative control when reviewing timestamp work: the Python API accepts time, but the current snapshot path does not consume it, so live timestamp freezing and online Medusa acceptance remain open.
+
 ## Callback result writeback
 
 `python/verify_vm9_callback_result_writer_native_fresh_20261006.py` executes the exact `+0x28863c` result writer on fresh objects. Reviewers can use its evidence to verify that the callback receives the object pointer and that only the low 32 bits of `w0` are written back at `+0x08`, with the saved caller registers restored. It remains a consumer/result boundary; it does not provide the upstream packed x8 composition or a current Medusa signer.

@@ -6,12 +6,15 @@
 # (dump_bigstart_m0/m1/m2/copy2.bin + dump_bigstart_regs.txt — one-time dump, frozen ts/rand).
 # Verified: r0 key32 exact (48b9ab07..e1), r2/r3 f13-core exact via query swap.
 import struct, hashlib, sys, time
-WALLTS = [1790085004]  # frozen harness wall clock; override for live
+WALLTS = [1790085004]  # default frozen harness wall clock
+WALLNS = [953000000]   # default frozen harness nanoseconds
+_ACTIVE_WALLTS = [WALLTS[0]]
+_ACTIVE_WALLNS = [WALLNS[0]]
 from capstone import *
 from capstone.arm64_const import *
 
 import os
-D = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'udghook') + os.sep
+D = os.environ.get('MEDUSA_F13_SNAPSHOT_DIR', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'udghook')) + os.sep
 M0A, M1A, C2A, M2A = 0x12290000, 0x12800000, 0x11EC0000, 0xe4fc0000
 DIGEST_ADDR = 0x122ac240      # SM3(query) input slot (32 bytes)
 KEY32_ADDR  = 0xe4ff2478      # BIG output key32
@@ -195,7 +198,7 @@ def do_svc():
     if nr==178: ret=0x40dc
     elif nr==222: ret=mmap_top[0]; mmap_top[0]+=(a1+0xfff)&~0xfff
     elif nr in (215,226): ret=0
-    elif nr==113: wr_mem(a1, struct.pack('<qq',WALLTS[0],953000000))
+    elif nr==113: wr_mem(a1, struct.pack('<qq',_ACTIVE_WALLTS[0],_ACTIVE_WALLNS[0]))
     elif nr==63: ret=0
     elif nr in (56,48,98,79): ret=(-2)&MASK64
     else: svc_log.append(('UNK',nr,a0,a1))
@@ -204,9 +207,24 @@ def do_svc():
 def w(op): return 64 if md.reg_name(op.reg)[0] in 'x' else 32
 
 # ---------------- main loop ----------------
-def compute(query=None, digest=None):
-    """Run the BIG VM once. query: raw query string (SM3 applied); or pass digest=32B directly.
-       Returns key32 (32 bytes)."""
+def compute(query=None, digest=None, *, wall_time=None, wall_nanoseconds=None):
+    """Run the BIG VM once with explicit clock inputs.
+
+    ``wall_time`` and ``wall_nanoseconds`` feed the emulated clock syscall.
+    Omitting them retains the frozen snapshot defaults.  This makes timestamp
+    dependence testable without pretending that the frozen VM snapshot is a
+    live signer.
+    """
+    if wall_time is None:
+        wall_time = WALLTS[0]
+    if wall_nanoseconds is None:
+        wall_nanoseconds = WALLNS[0]
+    if not isinstance(wall_time, int) or not isinstance(wall_nanoseconds, int):
+        raise TypeError("wall_time and wall_nanoseconds must be integers")
+    if not 0 <= wall_nanoseconds < 1_000_000_000:
+        raise ValueError("wall_nanoseconds must be in [0, 1_000_000_000)")
+    _ACTIVE_WALLTS[0] = wall_time
+    _ACTIVE_WALLNS[0] = wall_nanoseconds
     global mem
     mem = Mem()
     mem.load(M0A, SNAP0); mem.load(M1A, SNAP1); mem.load(M2A, SNAP2); mem.load(C2A, SNAP3)
@@ -421,9 +439,9 @@ def compute(query=None, digest=None):
         if step>2000000: raise RuntimeError('runaway')
     return mem.read(KEY32_ADDR, 32)
 
-def medusa_f13_core(query):
-    """f13 core: 16 bytes = key32[0:16] ^ key32[16:32]."""
-    k32 = compute(query)
+def medusa_f13_core(query, *, wall_time=None, wall_nanoseconds=None):
+    """f13 core with optional explicit emulated clock inputs."""
+    k32 = compute(query, wall_time=wall_time, wall_nanoseconds=wall_nanoseconds)
     return bytes(a^b for a,b in zip(k32[0:16], k32[16:32]))
 
 def _sxtw(v):
@@ -516,9 +534,9 @@ def medusa_f13_tail(core16):
     NOR(18, 8, 8)
     return ((R[2] | R[8]) & 0xffffffff).to_bytes(4, "little")
 
-def medusa_f13(query):
+def medusa_f13(query, *, wall_time=None, wall_nanoseconds=None):
     """f13 full: 20 bytes = core16 + tail4."""
-    c16 = medusa_f13_core(query)
+    c16 = medusa_f13_core(query, wall_time=wall_time, wall_nanoseconds=wall_nanoseconds)
     return c16 + medusa_f13_tail(c16)
 
 def medusa_f14(query):

@@ -1,4 +1,9 @@
 
+## 2026-10-06: f13 clock input boundary
+
+The pure-Python f13 core now accepts explicit clock inputs and an environment-selected private snapshot directory. The [differential evidence](evidence/medusa_f13_clock_parameter_20261006.json) shows five time controls produce the same 16-byte core and zero clock syscalls in the bounded snapshot. This is a negative result: it prevents claiming that the frozen timestamp has been parameterized into live behavior.
+
+
 The reusable Python API now exposes these as separate boundaries: `dispatch_packed_callback_consumer` takes an explicit packed word and preserves it as callback `x8`; `dispatch_callback_result_writer` writes only the low 32 bits of the explicit callback result. Neither function constructs a packed word or claims a current signer.
 
 

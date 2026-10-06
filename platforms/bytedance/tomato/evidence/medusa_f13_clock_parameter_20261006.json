@@ -1,0 +1,73 @@
+{
+  "evidence_id": "medusa_f13_clock_parameter_20261006",
+  "schema": "medusa-f13-clock-parameter-v1",
+  "status": "explicit_clock_inputs_accepted_but_not_consumed_by_snapshot_path",
+  "snapshot_directory_sha256": "9a27197cdd2a971c50bb87c42960818a68b6e5528e1a7cfbe3a6922341241bed",
+  "query_sha256": "b481f9ff8774da8ef199421fbf0a80812a29b8086a36cf31358e04b4a8215b49",
+  "controls": [
+    {
+      "index": 0,
+      "wall_time": 1790085004,
+      "wall_nanoseconds": 953000000,
+      "output_sha256": "8e045b692ab155546df70ea679043905646aae79a670493eafe19595994f0be2",
+      "output_hex": "af82bde0311cf322dc9f36ececc60d61",
+      "output_length": 16,
+      "syscall_counts": {},
+      "clock_syscall_count": 0
+    },
+    {
+      "index": 1,
+      "wall_time": 1790085005,
+      "wall_nanoseconds": 953000000,
+      "output_sha256": "8e045b692ab155546df70ea679043905646aae79a670493eafe19595994f0be2",
+      "output_hex": "af82bde0311cf322dc9f36ececc60d61",
+      "output_length": 16,
+      "syscall_counts": {},
+      "clock_syscall_count": 0
+    },
+    {
+      "index": 2,
+      "wall_time": 1790085004,
+      "wall_nanoseconds": 953000001,
+      "output_sha256": "8e045b692ab155546df70ea679043905646aae79a670493eafe19595994f0be2",
+      "output_hex": "af82bde0311cf322dc9f36ececc60d61",
+      "output_length": 16,
+      "syscall_counts": {},
+      "clock_syscall_count": 0
+    },
+    {
+      "index": 3,
+      "wall_time": 0,
+      "wall_nanoseconds": 0,
+      "output_sha256": "8e045b692ab155546df70ea679043905646aae79a670493eafe19595994f0be2",
+      "output_hex": "af82bde0311cf322dc9f36ececc60d61",
+      "output_length": 16,
+      "syscall_counts": {},
+      "clock_syscall_count": 0
+    },
+    {
+      "index": 4,
+      "wall_time": 2147483647,
+      "wall_nanoseconds": 999999999,
+      "output_sha256": "8e045b692ab155546df70ea679043905646aae79a670493eafe19595994f0be2",
+      "output_hex": "af82bde0311cf322dc9f36ececc60d61",
+      "output_length": 16,
+      "syscall_counts": {},
+      "clock_syscall_count": 0
+    }
+  ],
+  "all_outputs_equal": true,
+  "all_clock_syscalls_zero": true,
+  "frozen_default_output_sha256": "8e045b692ab155546df70ea679043905646aae79a670493eafe19595994f0be2",
+  "frozen_default_output_hex": "af82bde0311cf322dc9f36ececc60d61",
+  "explicit_clock_api_parameterized": true,
+  "snapshot_clock_path_observed": false,
+  "fresh_medusa_output_verified": false,
+  "current_online_header_matrix_verified": false,
+  "complete_python_medusa": false,
+  "limitations": [
+    "The private BIG VM snapshot does not execute syscall 113 in this bounded f13 path.",
+    "Equal outputs under clock changes therefore do not establish live timestamp behavior.",
+    "No server request or current online Medusa acceptance is performed by this verifier."
+  ]
+}

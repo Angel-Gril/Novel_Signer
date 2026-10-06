@@ -2327,5 +2327,24 @@
       "Upstream callback-object writer and packed x8 composition remain unknown.",
       "No current VM9 owner-frame or online signer evidence is established."
     ]
+  },
+  "medusa_f13_clock_parameter_20261006": {
+    "evidence_file": "evidence/medusa_f13_clock_parameter_20261006.json",
+    "schema": "medusa-f13-clock-parameter-v1",
+    "status": "explicit_clock_inputs_accepted_but_not_consumed_by_snapshot_path",
+    "controls": 5,
+    "all_outputs_equal": true,
+    "all_clock_syscalls_zero": true,
+    "explicit_clock_api_parameterized": true,
+    "snapshot_clock_path_observed": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false,
+    "interpretation": "The f13 Python API accepts explicit time inputs, but the current private BIG VM snapshot executes no syscall 113 and produces identical output across the controls.",
+    "limitations": [
+      "This is a frozen snapshot negative control, not live timestamp evidence.",
+      "No current online request or server acceptance is tested.",
+      "Full current Medusa initialization and parameterization remain open."
+    ]
   }
 }
