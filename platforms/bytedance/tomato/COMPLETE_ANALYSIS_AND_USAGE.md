@@ -17,7 +17,15 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-07 最新mode组件检查点：新增38个原生控制/14个负控制，恢复token/
+2026-10-07 最新event formatter检查点：新增22个原生控制/19个负控制，
+恢复144字节五参数对象、live uint64/int32索引渲染、heap C++输出和临时清理。
+同次owning allocator低基址生成mode/event/辅助strings，内部推进至事件发布
+`+0x28ff44`，请求free计数17；高基址仍`+0x26edc4`。外层945/965与完整父事务
+未提交的边界保持。双全局页比较还补齐了mode共用的六组hex selector。
+完整callback/fresh签名/线上矩阵仍未通过。详见
+[REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。
+
+2026-10-07 此前mode组件检查点：新增38个原生控制/14个负控制，恢复token/
 参数向量、signed32渲染、inline转换及清理。同次owning allocator可独立生成
 `{"x0":0}`，低基址内部推进到五参数formatter `+0x28e86c`，高基址仍真实JNI
 `+0x26edc4`。外层仍945/965，完整event父事务未提交。builder比较明确排除

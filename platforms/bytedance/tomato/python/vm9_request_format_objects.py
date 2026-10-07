@@ -1,4 +1,4 @@
-"""Bounded native format objects for the request's signed-int32 mode path.
+"""Bounded request format objects for signed-int32 mode and event arguments.
 
 Restore token/argument vectors, inline rendering/conversion and cleanup.
 Token padding is unspecified native stack data and is not a semantic field.
@@ -6,6 +6,7 @@ No native output, prebuilt JSON result or allocation return seeds the model.
 """
 from __future__ import annotations
 from dataclasses import dataclass
+import re
 import vm9_objects as objects
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
 from vm9_cpp_strings import construct_cpp_string
@@ -38,32 +39,33 @@ def _allocate(p, size, allocate):
     return pointer
 
 
-def _format_tokens(data):
-    """Recovered plain-literal/{0} branch, excluding escapes and specs."""
-    if b'{{' in data or b'}}' in data.replace(b'{0}', b''):
-        raise RefillUnsupported('format escapes are outside the recovered mode branch')
+def _format_tokens(data, argument_count=1):
+    """Recovered plain literals and single decimal indexes; no specs/escapes."""
+    fields = list(re.finditer(rb'\{([0-4])\}', data))
+    literal_data = re.sub(rb'\{([0-4])\}', b'', data)
+    if b'{{' in data or b'}}' in literal_data:
+        raise RefillUnsupported('format escapes are outside the recovered branch')
     result = []
     start = 0
-    while True:
-        offset = data.find(b'{0}', start)
-        if offset < 0:
-            if start < len(data):
-                result.append((2, start, len(data) - start))
-            break
+    for field in fields:
+        index = int(field[1])
+        if index >= argument_count:
+            raise RefillUnsupported('format index is outside the recovered argument range')
+        offset = field.start()
         if offset > start:
-            result.append((2, start, offset - start))
-        result.append((1, offset + 1, 1))
-        start = offset + 3
-    # A single outer JSON brace in a literal is supported by the actual mode
-    # sample; other brace syntax is refused rather than silently reinterpreted.
-    for tag, offset, length in result:
+            result.append((2, start, offset-start, 0))
+        result.append((1, offset+1, 1, index))
+        start = field.end()
+    if start < len(data):
+        result.append((2, start, len(data)-start, 0))
+    for tag, offset, length, index in result:
         if tag == 2:
-            literal = data[offset:offset + length]
+            literal = data[offset:offset+length]
             if b'{' in literal and not (offset == 0 and literal.startswith(b'{"')
                     and literal.count(b'{') == 1 and literal.endswith(b':')):
-                raise RefillUnsupported('format argument/spec syntax is outside the recovered mode branch')
-            if b'}' in literal and not (offset + length == len(data) and literal == b'}'):
-                raise RefillUnsupported('format closing brace syntax is outside the recovered mode branch')
+                raise RefillUnsupported('format argument/spec syntax is outside the recovered branch')
+            if b'}' in literal and not (offset+length == len(data) and literal == b'}'):
+                raise RefillUnsupported('format closing brace syntax is outside the recovered branch')
     if len(result) > MAX_TOKENS:
         raise RefillUnsupported('format token vector exceeds explicit bound')
     return result
@@ -83,45 +85,41 @@ def _parser_names(p, image):
             raise RefillUnsupported('format parser radix prefixes do not match recovered branch')
 
 
-def _write_token(p, address, tag, source, length):
+def _write_token(p, address, tag, source, length, index=0):
     # +4..7 and literal +44..47 are unspecified copied stack padding.
     # Keep them untouched. Only fields consumed by the native renderer belong
     # to this contract; verifier never masks any initialized semantic field.
     _w(p,address,tag,4)
     _w(p,address+8,source)
     _w(p,address+16,length)
-    _write_span(p,address+24,bytes(16))
+    _w(p,address+24,index)
+    _w(p,address+32,0)
     _w(p,address+40,2,4)
     if tag == 1:
         _write_span(p,address+44,b' ')
     _write_span(p,address+48,bytes(16))
 
 
-def build_mode_format_object(pages, *, image_base, object_address,
-        format_address, argument_address, allocate, free):
-    """+0x28f0f4/28f16c for one borrowed signed-int32 argument.
-
-    Original reserve, temporary pointer vector, ownership move and cleanup
-    preserve allocation order. Empty/literal-only inputs do not read the mode.
-    Return is the helper API object address, not a native X0 ABI assertion.
-    """
+def _build_format_object(pages, *, image_base, object_address,
+        format_address, argument_addresses, vtable_offsets, allocate, free):
     p = _PageTransaction(pages)
-    _read_span(p, object_address, 80)
+    count_arguments = len(argument_addresses)
+    _read_span(p,object_address,64+16*count_arguments)
     data = objects._cstring(p,format_address,MAX_FORMAT_BYTES+1)[:-1] if format_address else b''
-    plan = _format_tokens(data)
+    plan = _format_tokens(data,count_arguments)
     _w(p,object_address,format_address)
     _w(p,object_address+8,len(data))
     _write_span(p,object_address+16,bytes(24))
-    vector = object_address + 40
+    vector = object_address+40
     _write_span(p,vector,bytes(24))
     count, capacity, begin = 0, 0, 0
-    for tag, offset, length in plan:
+    for tag, offset, length, index in plan:
         if tag == 1:
             _parser_names(p,image_base)
         if count == capacity:
             new_capacity = max(1,capacity*2)
             new_begin = _allocate(p,new_capacity*TOKEN_BYTES,allocate)
-            _write_token(p,new_begin+count*TOKEN_BYTES,tag,format_address+offset,length)
+            _write_token(p,new_begin+count*TOKEN_BYTES,tag,format_address+offset,length,index)
             if count:
                 _write_span(p,new_begin,_read_span(p,begin,count*TOKEN_BYTES))
             old_begin = begin
@@ -132,25 +130,52 @@ def build_mode_format_object(pages, *, image_base, object_address,
             if old_begin:
                 free(p,old_begin)
         else:
-            _write_token(p,begin+count*TOKEN_BYTES,tag,format_address+offset,length)
+            _write_token(p,begin+count*TOKEN_BYTES,tag,format_address+offset,length,index)
             _w(p,vector+8,begin+(count+1)*TOKEN_BYTES)
         count += 1
-    reserved = _allocate(p,8,allocate)
+    vector_bytes = count_arguments*8
+    reserved = _allocate(p,vector_bytes,allocate)
     _w(p,object_address+16,reserved)
     _w(p,object_address+24,reserved)
-    _w(p,object_address+32,reserved+8)
-    # Typed argument cell borrows the live uint32 address and does not copy it.
-    _w(p,object_address+64,image_base+0x35F858)
-    _w(p,object_address+72,argument_address)
-    temporary = _allocate(p,8,allocate)
-    _w(p,temporary,object_address+64)
-    # +0x187710 destroys the reserved destination, then moves the temporary.
+    _w(p,object_address+32,reserved+vector_bytes)
+    for index,(argument,vtable) in enumerate(zip(argument_addresses,vtable_offsets)):
+        _w(p,object_address+64+index*16,image_base+vtable)
+        _w(p,object_address+72+index*16,argument)
+    temporary = _allocate(p,vector_bytes,allocate)
+    for index in range(count_arguments):
+        _w(p,temporary+index*8,object_address+64+index*16)
     free(p,reserved)
     _w(p,object_address+16,temporary)
-    _w(p,object_address+24,temporary+8)
-    _w(p,object_address+32,temporary+8)
+    _w(p,object_address+24,temporary+vector_bytes)
+    _w(p,object_address+32,temporary+vector_bytes)
     p.commit()
     return object_address
+
+
+def build_mode_format_object(pages, *, image_base, object_address,
+        format_address, argument_address, allocate, free):
+    """+0x28f0f4/28f16c: 80-byte formatter, one live signed-int32 cell."""
+    return _build_format_object(pages,image_base=image_base,object_address=object_address,
+        format_address=format_address,argument_addresses=(argument_address,),
+        vtable_offsets=(0x35F858,),allocate=allocate,free=free)
+
+
+def build_event_format_object(pages, *, image_base, object_address,
+        format_address, argument_addresses, allocate, free):
+    """+0x28e86c/28e91c: four uint64 cells and one signed-int32 cell.
+
+    A 144-byte formatter retains five borrowed pointers. The actual default
+    format references only the first four; the fifth scalar is never read
+    unless the supplied supported format contains {4}.
+    """
+    if len(argument_addresses) != 5:
+        raise RefillUnsupported('event format requires exactly five argument pointers')
+    for address in argument_addresses:
+        if not isinstance(address,int) or not 0 <= address < 1 << 64:
+            raise RefillUnsupported('event format argument pointer must fit uint64')
+    return _build_format_object(pages,image_base=image_base,object_address=object_address,
+        format_address=format_address,argument_addresses=argument_addresses,
+        vtable_offsets=(0x34DA48,)*4+(0x35F858,),allocate=allocate,free=free)
 
 
 def _signed32_bytes(p, address, image):
@@ -163,18 +188,31 @@ def _signed32_bytes(p, address, image):
     for offset,expected in ((0x3E1AB0,b'N'),(0x3E1AB8,b'n'),(0x3E1AC0,b'D'),(0x3E1AC8,b'd')):
         if objects._cstring(p,image+offset,2) != expected+b'\0':
             raise RefillUnsupported('mode renderer selectors do not match recovered branch')
+    _hex_selectors(p,image)
     raw = _u(p,address,4)
     value = raw - (1 << 32) if raw & (1 << 31) else raw
     return str(value).encode('ascii')
 
 
-def render_mode_format_to_buffer(pages, *, image_base, format_object_address,
-        buffer_object_address, max_output_bytes=128):
-    """+0x1b40d4 inline buffer path through +0x295528/+0x28e9b4.
+def _hex_selectors(p, image):
+    # +0x186c84 runs for both signed-int32 and uint64, including empty specs.
+    for index,expected in enumerate((b'x',b'x-',b'X-',b'x+',b'X+',b'X')):
+        _lazy(p,image,0x7DE38+index*4,0x3D20E0+index*8,0x7DE64-index*4,0x3D20E4+index*8)
+        if objects._cstring(p,image+0x3D20E0+index*8,len(expected)+1) != expected+b'\0':
+            raise RefillUnsupported('shared renderer hex selectors do not match recovered branch')
 
-    The 144-byte object has pointer, uint32 length/capacity, and 128 inline
-    bytes. Heap/growth and format specifications are explicit refusals.
-    """
+
+def _unsigned64_bytes(p, address, image):
+    for index,expected in enumerate((b'N',b'n',b'D',b'd')):
+        _lazy(p,image,0x7DE28+index*4,0x3D20C0+index*8,0x7DE74-index*4,0x3D20C4+index*8)
+        if objects._cstring(p,image+0x3D20C0+index*8,len(expected)+1) != expected+b'\0':
+            raise RefillUnsupported('event uint64 renderer selectors do not match recovered branch')
+    _hex_selectors(p,image)
+    return str(_u(p,address)).encode('ascii')
+
+
+def _render_format_to_buffer(pages, *, image_base, format_object_address,
+        buffer_object_address, max_output_bytes, argument_count):
     if not isinstance(max_output_bytes,int) or not 0 <= max_output_bytes <= 128:
         raise ValueError('invalid inline format output bound')
     p = _PageTransaction(pages)
@@ -187,8 +225,8 @@ def render_mode_format_to_buffer(pages, *, image_base, format_object_address,
             (end-begin)//64 > MAX_TOKENS):
         raise RefillUnsupported('invalid format token vector')
     arg_begin,arg_end = (_u(p,format_object_address+n) for n in (16,24))
-    if arg_end-arg_begin != 8:
-        raise RefillUnsupported('mode format requires exactly one argument')
+    if arg_end-arg_begin != argument_count*8:
+        raise RefillUnsupported('format argument vector has the wrong size')
     for token in range(begin,end,64):
         tag = _u(p,token,4)
         if tag == 0:
@@ -199,23 +237,46 @@ def render_mode_format_to_buffer(pages, *, image_base, format_object_address,
                 raise RefillUnsupported('format literal exceeds bound')
             piece = _read_span(p,_u(p,token+8),size)
         elif tag == 1:
-            if (_u(p,token+24) or _u(p,token+32) or _u(p,token+40,4)!=2
+            index = _u(p,token+24)
+            if index >= argument_count:
+                raise RefillUnsupported('format token index is outside the recovered argument range')
+            if (_u(p,token+32) or _u(p,token+40,4)!=2
                     or _u(p,token+44,1)!=32 or _u(p,token+56)):
-                raise RefillUnsupported('format spec is outside recovered mode renderer')
-            cell = _u(p,arg_begin)
-            if _u(p,cell) != image_base+0x35F858:
-                raise RefillUnsupported('unsupported mode format argument vtable')
-            piece = _signed32_bytes(p,_u(p,cell+8),image_base)
+                raise RefillUnsupported('format spec is outside recovered renderer')
+            cell = _u(p,arg_begin+index*8)
+            vtable = _u(p,cell)
+            if vtable == image_base+0x35F858:
+                piece = _signed32_bytes(p,_u(p,cell+8),image_base)
+            elif argument_count == 5 and vtable == image_base+0x34DA48:
+                piece = _unsigned64_bytes(p,_u(p,cell+8),image_base)
+            else:
+                raise RefillUnsupported('unsupported format argument vtable')
         else:
             raise RefillUnsupported('unsupported format token kind')
         length = _u(p,buffer_object_address+8,4)
         if length+len(piece) > max_output_bytes:
-            raise RefillUnsupported('mode format inline buffer growth is not recovered')
+            raise RefillUnsupported('format inline buffer growth is not recovered')
         if piece:
             _write_span(p,buffer_object_address+16+length,piece)
             _w(p,buffer_object_address+8,length+len(piece),4)
     p.commit()
     return _u(p,buffer_object_address+8,4)
+
+
+def render_mode_format_to_buffer(pages, *, image_base, format_object_address,
+        buffer_object_address, max_output_bytes=128):
+    """+0x1b40d4 inline rendering for the single signed-int32 formatter."""
+    return _render_format_to_buffer(pages,image_base=image_base,
+        format_object_address=format_object_address,buffer_object_address=buffer_object_address,
+        max_output_bytes=max_output_bytes,argument_count=1)
+
+
+def render_event_format_to_buffer(pages, *, image_base, format_object_address,
+        buffer_object_address, max_output_bytes=128):
+    """+0x295528: indexes 0..4, borrowed uint64/int32, inline conversion."""
+    return _render_format_to_buffer(pages,image_base=image_base,
+        format_object_address=format_object_address,buffer_object_address=buffer_object_address,
+        max_output_bytes=max_output_bytes,argument_count=5)
 
 
 def destroy_mode_format_object(pages, *, object_address, free):
@@ -270,3 +331,38 @@ def execute_event_mode(pages, *, image_base, entry_stack_address,
             whole_request_callback_completed=False)
     p.commit()
     return ModeFormatResult(output_object_address,fmt,buffer,length)
+
+
+@dataclass(frozen=True)
+class EventArgumentsResult:
+    object_address: int
+    format_object_address: int
+    conversion_object_address: int
+    rendered_length: int
+
+
+def execute_event_arguments(pages, *, image_base, format_object_address,
+        conversion_object_address, output_object_address, format_address,
+        argument_addresses, allocate, free, observer=None):
+    """Construct/render/convert/clean the five-cell formatter before emission.
+
+    The conversion buffer remains inline; the output C++ string may own heap
+    storage. Its ownership passes to the caller and is not freed here.
+    """
+    p = _PageTransaction(pages)
+    build_event_format_object(p,image_base=image_base,object_address=format_object_address,
+        format_address=format_address,argument_addresses=argument_addresses,allocate=allocate,free=free)
+    length = render_event_format_to_buffer(p,image_base=image_base,
+        format_object_address=format_object_address,buffer_object_address=conversion_object_address)
+    construct_cpp_string(p,object_address=output_object_address,
+        source_address=_u(p,conversion_object_address),length=length,allocate=allocate)
+    if _u(p,conversion_object_address) != conversion_object_address+16:
+        raise RefillUnsupported('event arguments conversion buffer ownership is unsupported')
+    destroy_mode_format_object(p,object_address=format_object_address,free=free)
+    if observer:
+        observer(p,phase='event_arguments_body_completed',output_object_address=output_object_address,
+            format_object_address=format_object_address,conversion_object_address=conversion_object_address,
+            rendered_length=length,bounded_event_arguments_body_completed=True,
+            whole_request_callback_completed=False)
+    p.commit()
+    return EventArgumentsResult(output_object_address,format_object_address,conversion_object_address,length)

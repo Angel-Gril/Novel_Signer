@@ -3,7 +3,8 @@
 2026-10-07。本阶段恢复 `+0x28e788` 的有界完整模式路径：构造 formatter、token
 与参数向量，读取 live signed-int32 参数，转换为 C++ string，清理临时对象。
 新增 **38 个原生控制、14 个负控制**。同次 owning allocator 组合能生成
-`{"x0":0}`，随后在五参数 formatter `+0x28e86c` 明确停止。
+`{"x0":0}`，mode阶段随后在五参数 formatter `+0x28e86c` 明确停止；
+后续恢复已推进至发布 `+0x28ff44`，见 [REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。
 **完整 request callback、独立 Medusa 签名和线上下载仍未完成。**
 
 样本 SHA-256：`712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c`。
@@ -140,3 +141,12 @@ signed int32 ABI、向量移动/清理，以及独立参数化构造 JSON 的有
 fresh Medusa 签名、新的线上全头矩阵、无 JVM Rust 下载链路、非空搜索与分页、
 抖音/起点闭环和最终 Pages/Actions 产品仍未完成。本阶段没有服务器请求、
 线上签名或小说正文。
+
+
+## 2026-10-07 后续：event format 与扩大全局比较
+
+五参数formatter已由另22个原生控制/19个负控制恢复；当前同次组合的低基址
+停止点为`+0x28ff44`。本页第5节记录mode阶段的历史边界。event的双全局页
+对照还发现signed renderer调用`+0x186c84`会发布六组hex selector，现已
+补齐到mode owner，并扩大本页38个mode回归的全局比较到`+0x3d2000`。
+详见 [REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。完整callback与签名仍未完成。

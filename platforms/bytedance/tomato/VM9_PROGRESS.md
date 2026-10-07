@@ -2374,3 +2374,18 @@ online signing chain. Evidence: [fresh writer inputs](evidence/vm9_descriptor_wr
 同次owning allocator组合生成 `{"x0":0}`，低基址内部推进到五参数
 `+0x28e86c`；高基址仍`+0x26edc4`。外层945/965没有增加，event父事务
 没有提交。详见 [REQUEST_MODE_FORMAT.md](REQUEST_MODE_FORMAT.md)。
+
+
+## 2026-10-07 五参数 event format：22个原生控制/19个负控制
+
+`28e86c → 28e91c → 1b40d4 → 1b414c → cleanup` 的144字节对象已恢复，
+包括五个typed cells、index分派、live uint64/signed32和heap C++输出。
+原始event caller控制真实执行到`28ff44`入口；最终payload和local窗口无mask，
+builder-only仍只排除未指定token padding。双全局页对照补齐了signed mode
+共用的六组hex selector；旧38/14 mode回归也验证此全局页。
+
+同次owning allocator生成`{"x0":0}`与29字节event JSON，新增event临时
+分配完成清理，请求free数17。低基址最新缺口为`+0x28ff44`发布；高基址
+仍真实TLS/JNI `+0x26edc4`。外层仍945/965，完整event父事务未提交，
+whole-native outer/request与fresh签名尚未通过。详见
+[REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。

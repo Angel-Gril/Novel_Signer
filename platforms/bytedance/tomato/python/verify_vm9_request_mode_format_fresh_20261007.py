@@ -108,7 +108,7 @@ def warm_mode(p,image,data):
 def mode_case(library,libc,image,entries,mode,data=None):
     p=fresh(library,image)
     if data is not None:warm_mode(p,image,data)
-    observed={(image+0x3E1000,4096):None,(STACK-0xB0,80):None,
+    observed={(image+0x3E1000,4096):None,(image+0x3D2000,4096):None,(STACK-0xB0,80):None,
         (STACK-0x140,144):None,(STACK-0x60,4):None}
     expected,actual=Effects(blocks={}),Effects(blocks={})
     _,memory,_,ledger=native(library,image,0x28E788,[mode],p,libc=libc,
@@ -133,6 +133,7 @@ def mode_case(library,libc,image,entries,mode,data=None):
         warm_input=data is not None,format_input_hex=data.hex() if data is not None else None,
         output_utf8=output.decode('ascii'),full_cpp_object_and_payload_match=True,
         full_inline_buffer_and_format_object_match=True,observed_global_page_match=True,
+        shared_hex_selector_global_page_match=True,
         ordered_allocator_and_cleanup_effects_match=True,temporary_allocations_all_freed=True,
         actual_native_mode_constructor_renderer_converter_and_cleanup_executed=True,
         explicit_component_allocator_used=True,matching_libc_string_imports_executed=True,
@@ -148,7 +149,7 @@ def late_parameter_case(library,libc,image,entries,old,new):
     fmt.build_mode_format_object(p,image_base=image,object_address=OBJECT,
         format_address=FORMAT,argument_address=ARGUMENT,allocate=builder.malloc,free=builder.free)
     _write_span(p,ARGUMENT,new.to_bytes(4,'little'))
-    buffer=GUEST+0x3000;observed={(buffer,144):None,(image+0x3E1000,4096):None}
+    buffer=GUEST+0x3000;observed={(buffer,144):None,(image+0x3E1000,4096):None,(image+0x3D2000,4096):None}
     effect=Effects(blocks=builder.blocks)
     _,memory,_,ledger=native(library,image,0x1B40D4,[OBJECT],p,libc=libc,
         extra_registers={arm.UC_ARM64_REG_X8:buffer},host_imports=services(entries,effect),
@@ -165,7 +166,7 @@ def late_parameter_case(library,libc,image,entries,old,new):
     return dict(image_base=hex(image),initial_mode=old,updated_mode=new,
         original_native_converter_uses_updated_parameter=True,
         borrowed_pointer_retained_without_scalar_snapshot=True,
-        full_buffer_payload_and_global_page_match=True,native_input_snapshot_used=False,
+        full_buffer_payload_and_global_page_match=True,shared_hex_selector_global_page_match=True,native_input_snapshot_used=False,
         fixture_from_separately_native_verified_builder=True)
 
 

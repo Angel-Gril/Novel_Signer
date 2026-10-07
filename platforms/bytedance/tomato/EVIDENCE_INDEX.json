@@ -2501,7 +2501,7 @@
   "vm9_request_diagnostic_continuation_20261007": {
     "evidence_file": "evidence/vm9_request_diagnostic_continuation_20261007.json",
     "schema": "vm9-request-diagnostic-continuation-probe-v1",
-    "status": "same_session_signed_mode_body_completed_event_five_argument_formatter_open",
+    "status": "same_session_event_mode_and_five_argument_format_completed_emission_open",
     "controls": 2,
     "nested_getter_composition_controls": 1,
     "owning_allocator_session_used": true,
@@ -2518,12 +2518,17 @@
       "elapsed_monotonic_microseconds": 0,
       "elapsed_from_fixed_explicit_clock": true,
       "outer_callback_orchestration_component_verified": true,
-      "unresolved_leaf_target_offset": "0x28e86c",
+      "unresolved_leaf_target_offset": "0x28ff44",
       "event_string_prefix_staged_without_commit": true,
       "sampled_event_mode_prefix_staged_without_commit": true,
       "bounded_mode_body_completed_in_parent_transaction": true,
       "mode_cpp_output_utf8": "{\"x0\":0}",
-      "mode_temporary_allocations_cleaned": true
+      "mode_temporary_allocations_cleaned": true,
+      "bounded_event_arguments_body_completed_in_parent_transaction": true,
+      "event_arguments_cpp_output_utf8": "{\"x1\":0,\"x2\":0,\"x3\":0,\"x4\":0}",
+      "event_arguments_output_heap_owned": true,
+      "event_temporary_allocations_cleaned": true,
+      "request_free_count": 17
     },
     "high_image": {
       "image_base": "0x775c205000",
@@ -2558,7 +2563,7 @@
       "Later callback bodies and whole-native request equivalence, real URL/header/JNI, fresh signatures and online matrix remain open.",
       "Event and boolean callback supported prefixes are observed in staged transactions; missing real leaf bodies refuse and no new callback body transaction is committed.",
       "Native prefix evidence stops before real JNI/mode builder; same-session new inner prefixes are staged without commit and outer VM remains 945/965.",
-      "Signed mode body completes in the staged parent using owning allocator/free; whole event callback still refuses at +0x28e86c without committing."
+      "Mode and five-cell event formatting complete in the staged parent using owning allocator/free; event publication +0x28ff44 still refuses and the parent callback transaction does not commit."
     ],
     "parsed_memory_import_relocations": 35,
     "signed_format_composition_controls": 1,
@@ -2578,7 +2583,8 @@
     "request_evaluator_prefix_composition_controls": 1,
     "native_jni_acquisition_stub_used": false,
     "actual_jni_acquisition_body_executed": false,
-    "request_mode_body_composition_controls": 1
+    "request_mode_body_composition_controls": 1,
+    "request_event_arguments_body_composition_controls": 1
   },
   "vm9_request_string_callbacks_fresh_20261007": {
     "evidence_file": "evidence/vm9_request_string_callbacks_fresh_20261007.json",
@@ -2716,7 +2722,44 @@
       "Builder excludes unspecified token padding; full mode final payload has no padding exclusion.",
       "Matching libc executes string imports; malloc/free and memcpy/memset are explicit component services.",
       "Supported literal/{0}, signed32 and inline conversion only; other grammar/types/growth refuse.",
-      "Whole request/fresh signing, actual JNI and online matrix remain open."
+      "Whole request/fresh signing, actual JNI and online matrix remain open.",
+      "Mode renderer now also verifies the shared hex-selector page +0x3d2000; this closes a previously unobserved global initialization side effect."
+    ],
+    "shared_hex_selector_global_page_match": true
+  },
+  "vm9_request_event_format_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_event_format_fresh_20261007.json",
+    "schema": "vm9-request-event-format-fresh-differential-v1",
+    "status": "bounded_five_cell_event_constructor_renderer_conversion_cleanup_native_verified_emission_open",
+    "controls": 22,
+    "builder_controls": 12,
+    "event_prefix_controls": 6,
+    "live_parameter_controls": 4,
+    "negative_controls": 19,
+    "five_parameter_formatter_bytes": 144,
+    "bounded_event_arguments_format_verified": true,
+    "default_fifth_cell_constructed_but_not_referenced": true,
+    "live_uint64_and_signed_int32_pointers_verified": true,
+    "event_prefix_full_final_payload_comparison_uses_no_mask": true,
+    "full_unmasked_builder_payload_equivalence_claimed": false,
+    "native_input_snapshot_used": false,
+    "explicit_component_allocator_used": true,
+    "matching_libc_allocator_used": false,
+    "matching_libc_string_imports_executed": true,
+    "event_emission_body_executed": false,
+    "same_session_event_arguments_body_composition_controls": 1,
+    "complete_request_event_callback_verified": false,
+    "full_generic_format_grammar_recovered": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "Builder comparison excludes only unspecified token padding; original event prefix compares the full final payload and bounded local window after temporary cleanup without masking.",
+      "Native +0x28ddd0 stops at +0x28ff44 before emission; publication and final caller output cleanup have not executed.",
+      "The 128-byte conversion buffer stays inline while the final event C++ string may own heap storage; conversion buffer growth refuses.",
+      "Matching libc executes string imports; component allocation/free and memcpy/memset are explicit services.",
+      "Same-session Python composition uses its owning allocator and synthetic requests; whole-native outer/request equivalence, real JNI/URL/headers, signatures and online behavior remain open."
     ]
   }
 }

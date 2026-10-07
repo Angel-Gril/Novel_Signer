@@ -331,3 +331,25 @@ commit. See [REQUEST_MODE_FORMAT.md](../REQUEST_MODE_FORMAT.md).
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_request_mode_format_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_mode_format_fresh_20261007.json
 ```
+
+
+### Five-argument event format (2026-10-07)
+
+The existing format owner now builds a 144-byte object with four live uint64
+cells and one live signed-int32 cell, indexes 0..4, bounded inline rendering,
+heap C++ output and temporary cleanup. Twelve builder controls, six original
+event-prefix controls, four late-parameter controls and 19 negatives pass.
+Complete prefixes stop before emission +0x28ff44 and compare the full final
+payload, bounded locals and two global pages without padding exclusion;
+builder-only controls still exclude unspecified token padding.
+
+The same owning-session composition produces the three caller strings, records
+17 frees and stops at emission. The high branch still needs actual JNI
++0x26edc4. Outer steps remain 945/965 and the parent callback does not commit.
+Shared hex-selector initialization is also restored for the previous signed
+mode owner, whose native regressions now compare that global page.
+See [REQUEST_EVENT_FORMAT.md](../REQUEST_EVENT_FORMAT.md).
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_event_format_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_event_format_fresh_20261007.json
+```

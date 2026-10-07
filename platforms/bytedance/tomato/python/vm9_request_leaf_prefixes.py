@@ -185,7 +185,24 @@ def execute_event_formatter_prefix(pages, *, image_base, entry_stack_address,
                 mode_output_address=local+0x18,
                 mode_cpp_object_hex=_read_span(p,local+0x18,24).hex(),
                 argument_addresses=[local+n for n in (0x50,0x48,0x40,0x38,0x34)],
-                unresolved_leaf_target_offset='0x28e86c', body_transaction_committed=False)
-        raise RefillUnsupported('request event argument formatter +0x28e86c is not recovered')
+                call_target_offset='0x28e86c', unresolved_leaf_target_offset=None, body_transaction_committed=False)
+        import vm9_request_format_objects as formatting
+        from vm9_cpp_strings import construct_cpp_string
+        formatting.execute_event_arguments(p,image_base=image_base,
+            format_object_address=local+0x58,conversion_object_address=local+0xE8,
+            output_object_address=local,format_address=image_base+0x6FF77,
+            argument_addresses=tuple(local+n for n in (0x50,0x48,0x40,0x38,0x34)),
+            allocate=allocate,free=free,observer=observer)
+        construct_cpp_string(p,object_address=local+0x58,
+            source_address=image_base+0x6E844,allocate=allocate)
+        if observer:
+            observer(p,phase='before_event_emission',event_object_address=event_object_address,
+                mode_output_address=local+0x18,arguments_output_address=local,
+                auxiliary_output_address=local+0x58,
+                mode_cpp_object_hex=_read_span(p,local+0x18,24).hex(),
+                arguments_cpp_object_hex=_read_span(p,local,24).hex(),
+                auxiliary_cpp_object_hex=_read_span(p,local+0x58,24).hex(),
+                unresolved_leaf_target_offset='0x28ff44',body_transaction_committed=False)
+        raise RefillUnsupported('request event emission +0x28ff44 is not recovered')
     p.commit()
     return False

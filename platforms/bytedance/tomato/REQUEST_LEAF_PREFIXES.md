@@ -119,3 +119,11 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_diagnostic_contin
 为五参数 `+0x28e86c`，高基址仍`+0x26edc4`。本页30个前导控制刻意不提供
 allocator/free，在实际mode构造前停止；不把它们改称完整mode控制。
 当前详见 [REQUEST_MODE_FORMAT.md](REQUEST_MODE_FORMAT.md)。
+
+
+## 后续：五参数 event format
+
+后续22个原生控制/19个负控制已恢复五参数formatter与转换/临时清理，
+最新同次组合低基址停止于event emission `+0x28ff44`；高基址仍真实JNI
+`+0x26edc4`。本页前导控制仍保持独立范围。详见
+[REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。
