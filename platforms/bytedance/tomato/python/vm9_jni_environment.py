@@ -590,3 +590,37 @@ def convert_java_long(pages, *, image_base, entry_stack_address,
             called=True
     result=JavaLongConversionResult(word,tuple(lengths),cls,method,locked,called,frame)
     p.commit();return result
+
+
+@dataclass(frozen=True)
+class JavaCacheMutexInitializationResult:
+    allocated_mutex_object: int
+    inline_mutex_object: int
+    registration_status: int
+
+
+def initialize_java_cache_mutexes(pages, *, image_base, allocate, register_exit):
+    """.init_array +0x271940: new48, publish +3df0a8, inline +3df118.
+
+    Both +0x15dea8 constructors use flag0/normal mutex attributes. Preserve
+    preexisting class/method cache fields; this is not a cache reset routine.
+    Finally request __cxa_atexit(+165388, inline, +34c700). Nonzero registration
+    status is not rejected by the original body. Actual destructor execution,
+    all ELF constructors, allocator boot and whole JNI_OnLoad remain separate.
+    Page rollback cannot reverse allocator/exit-provider effects.
+    """
+    if not isinstance(image_base,int) or not 0<=image_base<=MASK64-0x3DF148:
+        raise RefillUnsupported('JNI cache mutex image base must fit guest addresses')
+    if not callable(allocate):raise RefillUnsupported('JNI cache mutex requires an allocator')
+    p=_PageTransaction(pages);allocated=allocate(p,48)
+    _address(allocated,'JNI cache allocated mutex',48)
+    objects.construct_normal_mutex_object(p,object_address=allocated,image_base=image_base)
+    _w(p,image_base+0x3DF0A8,allocated)
+    inline=image_base+0x3DF118
+    objects.construct_normal_mutex_object(p,object_address=inline,image_base=image_base)
+    if not callable(register_exit):raise RefillUnsupported('JNI cache mutex requires an exit registration service')
+    status=register_exit(p,image_base+0x165388,inline,image_base+0x34C700)
+    if not isinstance(status,int) or not -(1<<31)<=status<=0xFFFFFFFF:
+        raise RefillUnsupported('exit registration status must fit signed/unsigned uint32')
+    result=JavaCacheMutexInitializationResult(allocated,inline,status&0xFFFFFFFF)
+    p.commit();return result

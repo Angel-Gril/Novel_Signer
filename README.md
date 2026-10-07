@@ -27,7 +27,8 @@ JNI continuation now compares the actual dispatcher, its integer variadic frame,
 and exception order (54 controls/10 negatives), plus Long conversion with an
 explicit cache mutex (34 controls/11 negatives). Two original JNI_OnLoad probes
 execute the dispatcher in the same run and stop before Long conversion. The
-mutex constructor/publication, cold once completion and fresh signer remain open;
+cache mutex constructor adds 8 controls/6 negatives. Its integration with the
+same fresh cold startup, once completion and fresh signer remain open;
 see the [JNI report](platforms/bytedance/tomato/REQUEST_JNI_DISPATCH.md).
 
 ## Build and checks

@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07 后续cache mutex构造来源已恢复
+
+`.init_array +271940` 新增8个原生/Python对照、6个负控制：分配48、normal mutex
+构造、发布+3df0a8、原地构造+3df118、__cxa_atexit参数/状态通过；不清除已有
+class/method缓存。分配和exit服务仍显式，析构body及整个.init_array未执行。
+本轮JNI累计96个组件对照、27个负控制，另2条原始入口观察；完整bootstrap对照0。
+下一步把此构造与actual dispatcher/Long/object清理接回同次fresh启动，验证cold once。
+下方两条入口探针未执行本构造，仍停+270854前且once1；不能拼接成完整bootstrap。
+完整Medusa/fresh签名/线上矩阵及下载产品仍未完成，见
+[JNI报告第7节](REQUEST_JNI_DISPATCH.md#7-后续init_array-0x271940-的-mutex-构造已恢复)。
+
 ## 2026-10-07 actual JNI dispatcher 与 Long 转换组件
 
 - Dispatcher新增54个原生/Python对照、10个负控制：30 dispatcher、20异常helper、

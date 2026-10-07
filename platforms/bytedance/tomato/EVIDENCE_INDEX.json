@@ -3098,5 +3098,32 @@
     "fresh_input_signer_output_verified": false,
     "current_online_header_matrix_verified": false,
     "no_jvm_rust_signer_complete": false
+  },
+  "vm9_jni_cache_mutex_fresh_20261007": {
+    "evidence_file": "evidence/vm9_jni_cache_mutex_fresh_20261007.json",
+    "schema": "vm9-jni-cache-mutex-fresh-differential-v1",
+    "status": "original_init_array_cache_mutex_allocation_publication_inline_mutex_and_exit_registration_verified",
+    "controls": 8,
+    "negative_controls": 6,
+    "native_input_snapshot_used": false,
+    "cache_mutex_constructor_recovered": true,
+    "explicit_allocator_and_exit_registration_services_used": true,
+    "matching_libc_mutex_init_body_executed": true,
+    "cache_class_method_fields_preserved": true,
+    "all_ELF_constructors_recovered": false,
+    "actual_destructor_executed": false,
+    "full_JNI_OnLoad_recovered": false,
+    "actual_android_jvm_executed": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "A single .init_array body is verified; all ELF constructors/allocator/OS boot are not.",
+      "Constructor controls are separate from original JNI_OnLoad prefix probes; cold once/full bootstrap not composed.",
+      "Allocator/exit registration are explicit services; the +0x165388 destructor body is not executed.",
+      "Nonzero exit registration status is not rejected by the original body; actual OS registration is not proved.",
+      "Guest rollback does not reverse external allocator/registration effects; fresh signing and download product remain open."
+    ]
   }
 }

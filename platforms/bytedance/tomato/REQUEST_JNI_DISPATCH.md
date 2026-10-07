@@ -7,7 +7,8 @@
 
 关闭 verifier 的 dispatcher oracle stub 后，新增 **54 个原生/Python 对照和10个负控制**：
 30个 `+0x26E70C` dispatcher、20个异常 helper、4个 actual TLS acquisition→dispatcher 组合。
-另新增 **34个 Long 转换对照和11个负控制**。两条原始 JNI_OnLoad 入口观察单独计数：
+另新增 **34个 Long 转换对照和11个负控制**。后续cache mutex构造又增加 **8个对照、6个负控制**（第7节），本轮累计96/27。
+两条原始 JNI_OnLoad 入口观察单独计数：
 它们执行 actual dispatcher 后停在 `+0x270854` 前，**Python 完整 bootstrap 对照数为0**。
 
 样本 SHA256：`712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c`。
@@ -87,7 +88,7 @@ class/method就绪后，`+0x224FF8` 调用 live JNI `0x1A8`（CallLongMethodV）
 FindClass/global/method失败、已有global、live table替换、shared normal mutex、全部/部分
 warm decode、锁内复查发布、零返回值和64位全1。比较fresh guest前`0xA000`、全部主ELF页、
 实际消费的variadic窗口、lock scope、JNI顺序和返回值。mutex对象/全局指针由fixture提供，
-**未恢复或验证其全局构造与发布来源**。
+**这34个组件对照未执行其全局构造与发布**；后续构造对照见第7节。
 
 11个负控制覆盖无效输入/栈、缺失/竞争mutex、缺JNI服务/function、溢出返回、未支持的锁状态
 和最后Long服务拒绝。失败时 guest页保持不变；已经发生的外部JNI服务效果不会回滚，晚期
@@ -151,7 +152,42 @@ TLS/JavaVM环境40/14；前面的计数格式为“对照/负控制”，原始�
 Long字符串/缓存/锁内复查、64位返回和受控原始入口到达的位置。引用时保留样本hash、基址、
 fixture/services、比较窗口和边界；不要只引用“通过”或将不同组件拼接成完整执行证据。
 
-下一步恢复 **`+0x3DF0A8` cache mutex的构造与发布来源**，将Long转换接回同次fresh启动，
+cache mutex构造来源已在后续第7节恢复；下一步将该构造和Long转换接回同次fresh启动，
 再验证caller释放返回object、cold once完成及后续actual startup VM。真实全局TLS/OS/arena
 启动、完整请求返回和真实URL/headers/JNI转换仍需继续。fresh Medusa、新的线上全头矩阵、
 无JVM Rust、搜索非空/分页、抖音/起点闭环和最终Pages/Actions下载产品仍未完成。
+
+
+## 7. 后续：`.init_array +0x271940` 的 mutex 构造已恢复
+
+直接检查本hash ELF的13项`.init_array`后，定位到`+0x271940`。原始body顺序为：
+
+1. `+0x32A1F0` 分配48字节，经 `+0x15DEA8`、flag0构造normal mutex对象。
+2. 将其地址发布到 `+0x3DF0A8`；class/method等已有cache字段保持不变。
+3. 在 `+0x3DF118` 原地构造另一48字节normal mutex对象。
+4. 尾调用 `__cxa_atexit(+0x165388, image+0x3DF118, image+0x34C700)`。
+   这里只注册inline对象的析构，未补造allocated cache对象的析构/free；原始body不检查
+   注册返回值。非零返回控制证明状态不会导致本构造器拒绝或回滚已发布对象。
+
+`initialize_java_cache_mutexes(pages, *, image_base, allocate, register_exit)` 已实现以上顺序。
+`allocate(pages, 48)` 与 `register_exit(pages, fn, object, dso)` 为显式服务；构造布局复用
+已验证的normal mutex owner。返回allocated/inline对象地址及32位注册状态。
+它不是完整ELF loader、allocator boot或OS退出实现，也没有执行`+0x165388`析构body。
+
+新增 **8个原生/Python对照、6个负控制**。两基址各覆盖cold、预置class/method cache、
+非零注册返回值和替代分配地址；比较guest payload、全部主ELF页、allocation/registration
+顺序参数与构造器返回状态。native执行真实`+0x271940`及matching-libc mutex init；
+不使用native入口前导快照。NULL/unmapped allocation、缺服务、溢出注册状态和晚期服务
+拒绝均明确拒绝且guest页不变；allocator/注册服务的外部效果仍不自动撤销。
+
+该验证同样先观察到原生body返回、Python因缺少函数报AttributeError，随后实现并通过。
+它与第4节的两条原始入口观察分别执行。第4节没有执行本构造，因此其cache指针仍为0、
+once仍1；不能把本节组件对照拼成同次原始JNI_OnLoad已经完成Long/once的证据。
+下一步把本构造、dispatcher、Long和object cleanup接回同次fresh启动，再进入actual startup VM。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_cache_mutex_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_jni_cache_mutex_fresh_20261007.json
+```
+
+- [cache mutex构造验证器](python/verify_vm9_jni_cache_mutex_fresh_20261007.py)
+- [8/6机器证据](evidence/vm9_jni_cache_mutex_fresh_20261007.json)

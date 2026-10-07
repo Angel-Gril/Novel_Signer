@@ -426,3 +426,10 @@ and cache mutex inputs remain explicit; unused GP/SIMD/physical spill ABI is
 excluded. Two original JNI_OnLoad observations reach +0x270854 before the cache
 mutex is initialized; full once/bootstrap/fresh signer remains open. See
 [REQUEST_JNI_DISPATCH.md](../REQUEST_JNI_DISPATCH.md) for API and reproduction.
+
+
+`initialize_java_cache_mutexes` subsequently restores `.init_array +0x271940`
+(8 controls/6 negatives): allocate48/publish cache mutex, inline normal mutex,
+and explicit exit registration. Cache fields are preserved. Full ELF init,
+actual destructor and same-fresh cold once integration remain open; see
+[JNI report section 7](../REQUEST_JNI_DISPATCH.md#7-后续init_array-0x271940-的-mutex-构造已恢复).

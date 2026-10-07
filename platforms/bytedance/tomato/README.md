@@ -10,7 +10,9 @@ Actual JNI dispatcher/exception handling now passes 54 native/Python controls
 and 10 negatives; Long conversion adds 34 controls and 11 negatives with an
 explicit cache mutex. Two original JNI_OnLoad observations execute the actual
 dispatcher and stop before Long conversion; once remains 1 and the cache mutex
-global is zero. Its constructor/publication and full fresh signer remain open.
+global is zero in those probes. The later +0x271940 cache mutex constructor
+passes 8 controls/6 negatives; combining it with the same fresh cold startup
+and producing a fresh signer output remain open.
 See [REQUEST_JNI_DISPATCH.md](REQUEST_JNI_DISPATCH.md).
 
 
