@@ -81,3 +81,23 @@ def destroy_cpp_string(pages, *, object_address, free):
         pointer = int.from_bytes(_read_span(p, object_address + 16, 8), 'little')
         free(p, pointer)
     p.commit()
+
+
+def move_assign_cpp_string(pages, *, object_address, source_object_address, free):
+    """+0x17f5bc/180ce4: release destination, transfer 24 bytes, empty source.
+
+    Only the source's first two bytes clear; its tail is retained. Object
+    self-alias and overlap are outside this recovered distinct-owner path.
+    """
+    if not isinstance(object_address,int) or not isinstance(source_object_address,int):
+        raise RefillUnsupported('C++ move requires integer object addresses')
+    if max(object_address,source_object_address) < min(object_address,source_object_address)+24:
+        raise RefillUnsupported('C++ move overlapping/self-alias objects are unsupported')
+    p = _PageTransaction(pages)
+    _read_span(p,object_address,24)
+    _read_span(p,source_object_address,24)
+    destroy_cpp_string(p,object_address=object_address,free=free)
+    _write_span(p,object_address,_read_span(p,source_object_address,24))
+    _write_span(p,source_object_address,bytes(2))
+    p.commit()
+    return object_address

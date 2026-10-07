@@ -131,10 +131,15 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                         entry_stack_address=frame.native_stack_address - 0x270,
                         event_object_address=obj, argument_words=(x1, x2, x3, x4),
                         mode=mode, observer=event_leaf_observer, allocate=allocate, free=free)
-                vm9_request_event.execute_request_event(vm.m.pages, image_base=image,
+                event_result = vm9_request_event.execute_request_event(vm.m.pages, image_base=image,
                     entry_stack_address=frame.native_stack_address - 0x180,
                     argument_words=(words[1], words[2], words[3], vm.m.u64(argument + 32)),
                     allocate=allocate, free=free, format_event=format_event, observer=event_observer)
+                diagnostic_scope.setdefault('request_event_completed', []).append(dict(
+                    wrapper_offset=hex(wrapper),target_offset=hex(target),
+                    formatter_calls=event_result.formatter_calls,
+                    emit_error_event=event_result.emit_error_event,
+                    bounded_request_event_returned=True,callback_transaction_committed_to_request_stage=True))
             elif allocate is not None and (wrapper, target) == (0x285A80, 0x28BB5C):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()
@@ -356,6 +361,18 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
         try:
             vm.run()
         except PrefixBoundary:
+            return staged, frame, vm, ledger, decoded
+        except vm_module.VMExit:
+            from vm9_request_caller import validate_request_vm_exit
+            if diagnostic_scope is None:
+                raise RefillUnsupported('request VM completion requires its owning diagnostic context')
+            result = validate_request_vm_exit(staged,image_base=image,pc=vm.pc,
+                registers=tuple(vm.R),return_address=inputs['return_address'])
+            result.update(vm_steps=vm.steps,all_dispatched_callback_models_returned=True,
+                whole_native_request_equivalence_verified=False,
+                request_transaction_committed_to_supplied_pages=True)
+            staged.commit()
+            diagnostic_scope['request_vm_return'] = result
             return staged, frame, vm, ledger, decoded
         except Exception as exc:
             if diagnostic_scope is not None:

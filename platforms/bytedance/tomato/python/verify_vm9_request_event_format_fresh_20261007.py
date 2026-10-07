@@ -82,7 +82,7 @@ def prefix_case(library,libc,image,entries,values,divisor=1):
             event_object_address=event,argument_words=values[:4],mode=values[4],
             allocate=actual.malloc,free=actual.free,observer=observer)
     except RefillUnsupported as exc:
-        assert str(exc)=='request event emission +0x28ff44 is not recovered',str(exc)
+        assert str(exc)=='request event logger cold singleton +0x295de8 is not recovered',str(exc)
     else:raise AssertionError('unrecovered event emission was accepted')
     assert snapshot(model)==before,'parent request transaction unexpectedly committed'
     assert len(captures)==1

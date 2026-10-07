@@ -353,3 +353,24 @@ See [REQUEST_EVENT_FORMAT.md](../REQUEST_EVENT_FORMAT.md).
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_request_event_format_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_event_format_fresh_20261007.json
 ```
+
+
+### Warm event emission and bounded request VM return (2026-10-07)
+
+`vm9_request_event.execute_event_emission` now models distinct-owner moves,
+normal mutex transitions, 96-byte record-vector append/growth, count>=200 drop
+and cleanup. `vm9_cpp_strings.move_assign_cpp_string` preserves source tail
+bytes, while record move construction clears the full object. Forty native
+controls and 14 negatives cover emission, returned formatter/event callers,
+heap ownership, nonempty old records and the actual VM return handler.
+
+The low same-session synthetic Python request reaches 957/+0xffb78 with its
+caller sentinel matched, commits request pages, and preserves/appends logger
+records (33 allocations/18 frees). Its output is a tree reference, not a
+signature. The high branch still needs actual JNI +0x26edc4. Cold/alternate
+publication and whole-native request/physical caller ABI remain unverified.
+See [REQUEST_EVENT_EMISSION.md](../REQUEST_EVENT_EMISSION.md).
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_event_emission_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_event_emission_fresh_20261007.json
+```

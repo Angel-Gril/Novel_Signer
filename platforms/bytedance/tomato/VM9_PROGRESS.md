@@ -2399,3 +2399,22 @@ assignment，只清零source头两个字节，heap JSON pointer不复制、不�
 这些控制使用warm singleton与一个旧空record，Python emission owner仍未
 实现，当前同次请求停止点没有改变。复现和边界见
 [REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。
+
+
+## 2026-10-07 warm event发布与低基址synthetic请求返回
+
+新增40个原生控制/14个负控制，恢复`28ff44`的四个move、uncontended mutex、
+96字节record vector追加/迁移/增长、199追加/200丢弃与临时析构。原始
+`28ddd0/28dc40` caller在12个控制里自然返回。source头两个字节清零与
+record move-construction全24字节清零分别恢复，heap ownership不重复free。
+
+低基址同次owning Python session从945推进至957/+ffb78，R31匹配caller
+sentinel，event callback与此synthetic VM模型返回；request页提交，record
+从1条增至2条，33 allocations/18 frees。x8输出为configuration reference，
+不是签名。高基址仍965/+f8fd0和真实JNI acquisition `26edc4`。
+
+`op17/sub30`的native return是有条件分支；四个单指令native控制执行
+`168324 → 16a974 → 172440 → ret`。request owner只接受sample PC/word和
+匹配caller sentinel，不把VMExit统一视为成功。physical caller epilogue/X0
+ABI、全原生request、真实URL/headers/JNI和fresh Medusa仍未通过。
+详见 [REQUEST_EVENT_EMISSION.md](REQUEST_EVENT_EMISSION.md)。

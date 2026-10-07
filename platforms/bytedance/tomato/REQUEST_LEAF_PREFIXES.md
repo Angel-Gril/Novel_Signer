@@ -127,3 +127,13 @@ allocator/free，在实际mode构造前停止；不把它们改称完整mode控�
 最新同次组合低基址停止于event emission `+0x28ff44`；高基址仍真实JNI
 `+0x26edc4`。本页前导控制仍保持独立范围。详见
 [REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。
+
+
+## 后续：warm发布与当前返回边界
+
+后续warm event emission已由40个原生控制/14个负控制恢复；低基址同次
+owning session的synthetic请求VM模型在957/+ffb78返回，event callback
+及request页状态已提交，record数2、33 allocations/18 frees。高基址仍
+965/+f8fd0的真实JNI `26edc4`。本页旧停止点属于其阶段历史；完整Medusa
+签名与whole-native request仍未通过。详见
+[REQUEST_EVENT_EMISSION.md](REQUEST_EVENT_EMISSION.md)。

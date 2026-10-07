@@ -46,7 +46,8 @@
         1024,
         40,
         40,
-        32
+        32,
+        192
       ],
       "diagnostic_events": [
         [
@@ -265,7 +266,8 @@
         "0x136fb000",
         "0x136d3a80",
         "0x136fd000",
-        "0x136d3ab0"
+        "0x136d3ab0",
+        "0x136e6060"
       ],
       "request_reallocation_requests": [],
       "matching_libc_realloc_implemented": false,
@@ -423,12 +425,32 @@
           "body_transaction_committed": false,
           "native_input_snapshot_used": false,
           "whole_callback_transaction_committed": false
+        },
+        {
+          "phase": "event_emission_completed",
+          "logger_address": 325972224,
+          "record_count": 2,
+          "record_address": 326013024,
+          "appended": true,
+          "dropped": false,
+          "warm_logger_publication_completed": true,
+          "whole_request_callback_completed": false,
+          "native_input_snapshot_used": false,
+          "whole_callback_transaction_committed": false
+        },
+        {
+          "phase": "event_formatter_completed",
+          "bounded_event_formatter_completed": true,
+          "whole_request_callback_completed": false,
+          "body_transaction_committed": true,
+          "native_input_snapshot_used": false,
+          "whole_callback_transaction_committed": false
         }
       ],
       "request_evaluator_prefixes": [],
       "native_jni_acquisition_stub_used": false,
       "actual_jni_acquisition_body_executed": false,
-      "inner_callback_body_transaction_committed": false,
+      "inner_callback_body_transaction_committed": true,
       "clock_stores": [
         {
           "object_address": 1879370760,
@@ -682,23 +704,36 @@
           "pair_address": 325939808
         }
       ],
-      "next_callback": {
-        "wrapper_offset": "0x285fb4",
-        "bounded_callback_orchestration_component_verified": true,
-        "supported_prefix_staged_without_transaction_commit": true,
-        "unresolved_leaf_target_offset": "0x28ff44",
-        "target_offset": "0x28dc38",
-        "target_address": "0x1254dc38",
-        "null_target": false,
-        "packed_words": [
-          "0x1254dc38",
-          "0x0",
-          "0x0",
-          "0x0"
-        ],
-        "callback_body_implemented": false,
-        "native_outer_branch_equivalence_verified": false
+      "next_callback": null,
+      "request_vm_return": {
+        "bytecode_offset": "0xffb78",
+        "instruction_word": "0x7c00791",
+        "opcode": 17,
+        "subopcode": 30,
+        "selected_slot": 31,
+        "selected_target": 3735879680,
+        "caller_sentinel_matches": true,
+        "native_handler_offset": "0x16a974",
+        "native_epilogue_offset": "0x172440",
+        "physical_native_caller_epilogue_modeled": false,
+        "native_return_x0_abi_compared": false,
+        "vm_steps": 957,
+        "all_dispatched_callback_models_returned": true,
+        "whole_native_request_equivalence_verified": false,
+        "request_transaction_committed_to_supplied_pages": true
       },
+      "request_event_completed": [
+        {
+          "wrapper_offset": "0x285fb4",
+          "target_offset": "0x28dc38",
+          "formatter_calls": 1,
+          "emit_error_event": false,
+          "bounded_request_event_returned": true,
+          "callback_transaction_committed_to_request_stage": true
+        }
+      ],
+      "request_parent_transaction_committed_to_owning_session": true,
+      "complete_low_synthetic_request_vm_model_returned": true,
       "callback_ledger": [
         {
           "wrapper": "0x285888",
@@ -987,15 +1022,15 @@
           ]
         }
       ],
-      "continuation_error": "RefillUnsupported: request event emission +0x28ff44 is not recovered",
+      "continuation_error": null,
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
       "request_objects_are_synthetic": true,
-      "steps": 945,
-      "stop_bytecode_offset": "0xffb48",
-      "boundary_wrapper_offset": "0x285fb4",
-      "boundary_target_offset": "0x28dc38",
+      "steps": 957,
+      "stop_bytecode_offset": "0xffb78",
+      "boundary_wrapper_offset": null,
+      "boundary_target_offset": null,
       "initial_diagnostic_wrapper_offset": "0x2858d0",
       "initial_diagnostic_target_offset": "0x26c858",
       "actual_jvm_used": false,
@@ -1671,6 +1706,10 @@
         "callback_body_implemented": false,
         "native_outer_branch_equivalence_verified": false
       },
+      "request_vm_return": null,
+      "request_event_completed": [],
+      "request_parent_transaction_committed_to_owning_session": false,
+      "complete_low_synthetic_request_vm_model_returned": false,
       "callback_ledger": [
         {
           "wrapper": "0x285888",
@@ -1996,7 +2035,9 @@
   "request_evaluator_prefix_composition_controls": 1,
   "native_jni_acquisition_stub_used": false,
   "actual_jni_acquisition_body_executed": false,
-  "inner_callback_body_transaction_committed": false,
+  "inner_callback_body_transaction_committed": true,
+  "request_event_return_composition_controls": 1,
+  "request_vm_model_return_composition_controls": 1,
   "whole_handoff_native_differential_verified": false,
   "real_url_headers_jni_conversion_verified": false,
   "no_jvm_rust_signer_complete": false,

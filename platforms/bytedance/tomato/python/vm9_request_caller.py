@@ -139,3 +139,25 @@ def prepare_request_vm_caller(pages, *, entry_stack_address, return_address,
     tx.commit()
     return RequestVmCallerFrame(local, 0x99020, local, local + 0x10,
         backing, registers, vm_arguments)
+
+
+def validate_request_vm_exit(pages, *, image_base, pc, registers, return_address):
+    """Validate the observed +0xffb78 return branch of native +0x16a974.
+
+    op17/sub30 is not an unconditional native return. The selected virtual
+    slot must equal the caller's saved sentinel. Native x0 return ABI and the
+    caller's stack-canary/physical epilogue are outside this helper contract.
+    """
+    if pc != image_base+0xFFB78 or len(registers) != 32:
+        raise RefillUnsupported('request VM exit is outside the recovered return branch')
+    word=int.from_bytes(_read_span(pages,pc,4),'little')
+    if word != 0x07C00791:
+        raise RefillUnsupported('request VM exit word does not match the sample')
+    slot=(word>>22)&31
+    if registers[slot] != return_address:
+        raise RefillUnsupported('request VM exit target does not match its caller sentinel')
+    return dict(bytecode_offset=hex(pc-image_base),instruction_word=hex(word),
+        opcode=word&63,subopcode=(word>>6)&63,selected_slot=slot,
+        selected_target=return_address,caller_sentinel_matches=True,
+        native_handler_offset='0x16a974',native_epilogue_offset='0x172440',
+        physical_native_caller_epilogue_modeled=False,native_return_x0_abi_compared=False)

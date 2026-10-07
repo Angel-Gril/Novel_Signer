@@ -17,7 +17,16 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-07 最新event formatter检查点：新增22个原生控制/19个负控制，
+2026-10-07 最新warm event发布检查点：新增40个原生控制/14个负控制，恢复
+string所有权移动、非空record迁移、vector增长/200条丢弃和caller清理。
+低基址同次owning session的合成请求模型在957/+ffb78返回，event record
+增至2条，33次分配/18次free与输出引用通过；页状态已提交。高基址仍
+965/+f8fd0的真实JNI获取。返回条件另由原生dispatcher/handler/ret控制验证，
+不把解释器VMExit当作无条件成功。synthetic输出是tree reference，未生成
+Medusa签名，whole-native request/真实URL/headers/JNI及线上矩阵仍未通过。
+详见 [REQUEST_EVENT_EMISSION.md](REQUEST_EVENT_EMISSION.md)。
+
+2026-10-07 此前event formatter检查点：新增22个原生控制/19个负控制，
 恢复144字节五参数对象、live uint64/int32索引渲染、heap C++输出和临时清理。
 同次owning allocator低基址生成mode/event/辅助strings，内部推进至事件发布
 `+0x28ff44`，请求free计数17；高基址仍`+0x26edc4`。外层945/965与完整父事务

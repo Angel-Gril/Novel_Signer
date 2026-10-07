@@ -150,3 +150,13 @@ fresh Medusa 签名、新的线上全头矩阵、无 JVM Rust 下载链路、非
 对照还发现signed renderer调用`+0x186c84`会发布六组hex selector，现已
 补齐到mode owner，并扩大本页38个mode回归的全局比较到`+0x3d2000`。
 详见 [REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。完整callback与签名仍未完成。
+
+
+## 后续：warm发布与当前返回边界
+
+后续warm event emission已由40个原生控制/14个负控制恢复；低基址同次
+owning session的synthetic请求VM模型在957/+ffb78返回，event callback
+及request页状态已提交，record数2、33 allocations/18 frees。高基址仍
+965/+f8fd0的真实JNI `26edc4`。本页旧停止点属于其阶段历史；完整Medusa
+签名与whole-native request仍未通过。详见
+[REQUEST_EVENT_EMISSION.md](REQUEST_EVENT_EMISSION.md)。

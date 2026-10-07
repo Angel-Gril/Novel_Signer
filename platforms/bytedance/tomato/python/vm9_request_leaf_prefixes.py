@@ -203,6 +203,17 @@ def execute_event_formatter_prefix(pages, *, image_base, entry_stack_address,
                 arguments_cpp_object_hex=_read_span(p,local,24).hex(),
                 auxiliary_cpp_object_hex=_read_span(p,local+0x58,24).hex(),
                 unresolved_leaf_target_offset='0x28ff44',body_transaction_committed=False)
-        raise RefillUnsupported('request event emission +0x28ff44 is not recovered')
+        import vm9_request_event as events
+        from vm9_cpp_strings import destroy_cpp_string
+        events.execute_event_emission(p,image_base=image_base,entry_stack_address=local,
+            input_object_addresses=(event_object_address,local+0x18,local,local+0x58),
+            allocate=allocate,free=free,observer=observer)
+        for address in (local+0x58,local,local+0x18):
+            destroy_cpp_string(p,object_address=address,free=free)
+        if observer:
+            observer(p,phase='event_formatter_completed',bounded_event_formatter_completed=True,
+                whole_request_callback_completed=False,body_transaction_committed=True)
+        p.commit()
+        return True
     p.commit()
     return False

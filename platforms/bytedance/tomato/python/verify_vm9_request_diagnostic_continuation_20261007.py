@@ -56,6 +56,11 @@ def case(library, libc, image, label, property_value, vm_module):
         pair = result.callback_pair_addresses[0]
         assert int.from_bytes(_read_span(staged, pair, 8), 'little') == image + 0x2830C4
         handler = int.from_bytes(_read_span(staged, pair + 8, 8), 'little')
+        logger_address=int.from_bytes(_read_span(staged,image+0x3E1B08,8),'little')
+        logger_begin=int.from_bytes(_read_span(staged,logger_address+40,8),'little')
+        logger_end=int.from_bytes(_read_span(staged,logger_address+48,8),'little')
+        assert logger_end-logger_begin==96
+        old_record=_read_span(staged,logger_begin,96)
         inputs = dict(entry_stack_address=worker.TOP, return_address=0xDEAD0000,
             thread_pointer=fixture.TLS, image_base=image, argument_x0=handler,
             argument_x1=request, argument_x2=0, argument_x3=request + 0x200,
@@ -92,8 +97,10 @@ def case(library, libc, image, label, property_value, vm_module):
         nested = diag.get('nested_getters', [])
         assert not reallocations, 'this composition must not silently substitute real realloc'
         if image == 0x122C0000:
-            assert vm.steps == 945 and vm.pc - image == 0xFFB48
-            assert continuation_error == 'RefillUnsupported: request event emission +0x28ff44 is not recovered'
+            assert vm.steps == 957 and vm.pc - image == 0xFFB78
+            assert continuation_error is None
+            assert diag['request_vm_return']['caller_sentinel_matches']
+            assert diag['request_vm_return']['selected_slot']==31
             assert len(nested) == 1
             assert len(diag.get('formatted_strings', [])) == 1
             formatted = diag['formatted_strings'][0]
@@ -101,7 +108,8 @@ def case(library, libc, image, label, property_value, vm_module):
             assert formatted['format_bytes_hex'] == '25647c2573'
             assert len(diag.get('configuration_insertions', [])) == 1
             assert len(diag.get('string_cleanups', [])) == 1
-            assert len(frees) == 17
+            assert len(frees) == 18
+            assert frees[-1]==logger_begin
             assert len(diag.get('request_event_prefixes', [])) == 1
             event_prefix = diag['request_event_prefixes'][0]
             assert event_prefix['phase'] == 'before_first_formatter'
@@ -110,8 +118,8 @@ def case(library, libc, image, label, property_value, vm_module):
             assert event_prefix['first_object_hex'][:2] == '22'
             assert event_prefix['second_object_hex'][:2] == '26'
             assert not event_prefix['body_transaction_committed']
-            assert len(diag.get('request_event_leaf_prefixes', [])) == 6
-            sampling, mode_prefix, mode_body, event_arguments, arguments_body, emission = diag['request_event_leaf_prefixes']
+            assert len(diag.get('request_event_leaf_prefixes', [])) == 8
+            sampling, mode_prefix, mode_body, event_arguments, arguments_body, emission, emission_completed, formatter_completed = diag['request_event_leaf_prefixes']
             assert sampling['phase'] == 'sampling_decision' and sampling['selected']
             assert sampling['divisor'] == 10 and sampling['sequence'] == 0
             assert sampling['argument_words'] == [0, 0, 0, 0]
@@ -138,7 +146,32 @@ def case(library, libc, image, label, property_value, vm_module):
             assert emission['arguments_cpp_object_hex'][:2] == '21'
             assert emission['auxiliary_cpp_object_hex'].startswith('047b7d00')
             assert not emission['body_transaction_committed']
-            assert [size for size, _ in allocations][-13:] == [64,128,256,8,8,64,128,256,512,1024,40,40,32]
+            assert emission_completed['phase']=='event_emission_completed' and emission_completed['appended']
+            assert emission_completed['record_count']==2 and not emission_completed['dropped']
+            assert formatter_completed['phase']=='event_formatter_completed' and formatter_completed['body_transaction_committed']
+            assert len(diag['request_event_completed'])==1
+            assert diag['request_event_completed'][0]['bounded_request_event_returned']
+            assert diag['request_event_completed'][0]['formatter_calls']==1
+            assert [size for size, _ in allocations][-14:] == [64,128,256,8,8,64,128,256,512,1024,40,40,32,192]
+            assert len(allocations)==33
+            current_begin=int.from_bytes(_read_span(state,logger_address+40,8),'little')
+            current_end=int.from_bytes(_read_span(state,logger_address+48,8),'little')
+            assert current_end-current_begin==192
+            assert _read_span(state,current_begin,96)==old_record
+            emitted_record=current_begin+96
+            def text(address):
+                tag=_read_span(state,address,1)[0]
+                length=int.from_bytes(_read_span(state,address+8,8),'little') if tag&1 else tag>>1
+                pointer=int.from_bytes(_read_span(state,address+16,8),'little') if tag&1 else address+1
+                return _read_span(state,pointer,length)
+            assert text(emitted_record+24)==b'{"x0":0}'
+            assert text(emitted_record+48)==b'{"x1":0,"x2":0,"x3":0,"x4":0}'
+            assert text(emitted_record+72)==b'{}'
+            assert _read_span(state,emitted_record+48,1)==b'\x21'
+            assert _read_span(state,logger_address,2)==bytes(2)
+            assert _read_span(state,inputs['output_x8'],16)==allocations[0][1].to_bytes(8,'little')+allocations[3][1].to_bytes(8,'little')
+            staged.commit()
+            assert _read_span(pages,current_begin,192)==_read_span(state,current_begin,192)
             assert len(diag.get('elapsed_clocks', [])) == 1
             assert diag['elapsed_clocks'][0]['elapsed_microseconds'] == 0
             assert clock_reads == [[1, 0, 1791023800, 500000000]] * 2
@@ -187,17 +220,18 @@ def case(library, libc, image, label, property_value, vm_module):
             assert getter['vm_steps'] == 54 and getter['vm_exit_pc'] == image + 0x99150
             assert getter['output_matches_receiver']
             assert getter['acquire_reader_count'] == getter['released_reader_count'] + 1
-        inner = (diag.get('request_event_leaf_prefixes') or diag.get('request_evaluator_prefixes'))[-1]
-        leaf_target = inner['unresolved_leaf_target_offset']
-        next_callback = dict(wrapper_offset=hex(ledger[-1][0]),
-            bounded_callback_orchestration_component_verified=True,
-            supported_prefix_staged_without_transaction_commit=True,
-            unresolved_leaf_target_offset=leaf_target,
-
-            target_offset=hex(ledger[-1][1]) if ledger[-1][3][0] else None,
-            target_address=hex(ledger[-1][3][0]), null_target=not bool(ledger[-1][3][0]),
-            packed_words=[hex(word) for word in ledger[-1][3]],
-            callback_body_implemented=False, native_outer_branch_equivalence_verified=False)
+        if diag.get('request_vm_return'):
+            next_callback=None
+        else:
+            inner=diag['request_evaluator_prefixes'][-1]
+            next_callback=dict(wrapper_offset=hex(ledger[-1][0]),
+                bounded_callback_orchestration_component_verified=True,
+                supported_prefix_staged_without_transaction_commit=True,
+                unresolved_leaf_target_offset=inner['unresolved_leaf_target_offset'],
+                target_offset=hex(ledger[-1][1]) if ledger[-1][3][0] else None,
+                target_address=hex(ledger[-1][3][0]),null_target=not bool(ledger[-1][3][0]),
+                packed_words=[hex(word) for word in ledger[-1][3]],
+                callback_body_implemented=False,native_outer_branch_equivalence_verified=False)
         assert any(item[:2] == (0x2858D0, 0x26C858) for item in ledger)
         assert [size for size, _ in allocations][:4] == [40, 40, 40, 4]
         descriptor = [item for item in ledger if item[:2] == (0x2858BC, 0x25C324)]
@@ -239,7 +273,7 @@ def case(library, libc, image, label, property_value, vm_module):
             request_evaluator_prefixes=diag.get('request_evaluator_prefixes', []),
             native_jni_acquisition_stub_used=False,
             actual_jni_acquisition_body_executed=False,
-            inner_callback_body_transaction_committed=False,
+            inner_callback_body_transaction_committed=bool(diag.get('request_event_completed')),
             clock_stores=diag.get('clock_stores', []),
             elapsed_clocks=diag.get('elapsed_clocks', []),
             request_clock_reads=clock_reads,
@@ -249,14 +283,18 @@ def case(library, libc, image, label, property_value, vm_module):
             memory_fills=diag.get('memory_fills', []),
             configuration_insertions=diag.get('configuration_insertions', []),
             next_callback=next_callback,
+            request_vm_return=diag.get('request_vm_return'),
+            request_event_completed=diag.get('request_event_completed',[]),
+            request_parent_transaction_committed_to_owning_session=bool(diag.get('request_vm_return')),
+            complete_low_synthetic_request_vm_model_returned=bool(diag.get('request_vm_return')),
             callback_ledger=[dict(wrapper=hex(item[0]), target=hex(item[1]), argument=hex(item[2]), words=[hex(x) for x in item[3]]) for item in ledger],
             continuation_error=continuation_error,
             x8_reference_output_generated=True, reference_count_initial_value=1,
             allocated_spans_inside_owned_os_mappings=True,
             request_objects_are_synthetic=True, steps=vm.steps,
             stop_bytecode_offset=hex(vm.pc - image),
-            boundary_wrapper_offset=next_callback['wrapper_offset'],
-            boundary_target_offset=next_callback['target_offset'],
+            boundary_wrapper_offset=next_callback['wrapper_offset'] if next_callback else None,
+            boundary_target_offset=next_callback['target_offset'] if next_callback else None,
             initial_diagnostic_wrapper_offset='0x2858d0',
             initial_diagnostic_target_offset='0x26c858',
             actual_jvm_used=False, actual_os_threads_created=False,
@@ -308,7 +346,9 @@ def main():
         request_evaluator_prefix_composition_controls=sum(bool(row['request_evaluator_prefixes']) for row in rows),
         native_jni_acquisition_stub_used=False,
         actual_jni_acquisition_body_executed=False,
-        inner_callback_body_transaction_committed=False,
+        inner_callback_body_transaction_committed=any(bool(row['request_event_completed']) for row in rows),
+        request_event_return_composition_controls=sum(bool(row['request_event_completed']) for row in rows),
+        request_vm_model_return_composition_controls=sum(bool(row['request_vm_return']) for row in rows),
         whole_handoff_native_differential_verified=False,
         real_url_headers_jni_conversion_verified=False,
         no_jvm_rust_signer_complete=False,

@@ -168,3 +168,13 @@ uncontended mutex lock/unlock，allocator/free仍为显式Effects。
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_request_event_emission_probe_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_event_emission_probe_20261007.json
 ```
+
+
+## 后续：warm发布与当前返回边界
+
+后续warm event emission已由40个原生控制/14个负控制恢复；低基址同次
+owning session的synthetic请求VM模型在957/+ffb78返回，event callback
+及request页状态已提交，record数2、33 allocations/18 frees。高基址仍
+965/+f8fd0的真实JNI `26edc4`。本页旧停止点属于其阶段历史；完整Medusa
+签名与whole-native request仍未通过。详见
+[REQUEST_EVENT_EMISSION.md](REQUEST_EVENT_EMISSION.md)。
