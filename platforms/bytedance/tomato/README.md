@@ -1,5 +1,13 @@
 # Tomato / Fanqie (ByteDance)
 
+Current initialization evidence (2026-10-07): the fresh Python outer constructor
+returns and four independent native controls match its core graph and default
+logger record semantics. The constructor hash, remaining formatter globals,
+publication/JNI and fresh request signing remain open. Use
+[VM9_PROGRESS.md](VM9_PROGRESS.md) for the current boundary; older logger/
+trampoline stops below are historical scope.
+
+
 This directory is limited to the `com.dragon.read` / Tomato material. Douyin and Qidian are documented in their own directories.
 
 Read in this order:

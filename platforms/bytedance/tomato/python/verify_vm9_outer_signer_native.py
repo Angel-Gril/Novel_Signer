@@ -65,7 +65,7 @@ def bind_native_imports(library, libc, redirect, imports):
     return exports
 
 
-def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None):
+def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None, terminal_observer=None, execution_observer=None):
     pages, sdk_name = fresh(library, libc, image, property_value)
     if canary is not None: _w(pages, root_fixture.TLS + 0x28, canary)
     environment = h.Environment(pages, 2)
@@ -87,6 +87,8 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
 
     def observe(cpu, pc):
         state['last_pc'] = pc
+        if execution_observer is not None:
+            execution_observer(cpu, pc)
         if len(bss_changes) < 128:
             for address in tracked:
                 try:
@@ -287,6 +289,11 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
         returned_graph.update(root=root, wrapper_count_is_one=True, configuration_count_is_one=True,
             child_handler_callback_pairs_verified=True, outer_singleton_and_guard_published=True,
             publication_support_recursive_mutex_released=True)
+        if terminal_observer is not None:
+            terminal_observer(cpu, wrapper=wrapper, root=root,
+                              allocation_sequence=allocation_sequence,
+                              free_sequence=free_sequence,
+                              allocator_events=allocator_events)
         state.update(returned=True, wrapper=wrapper, cold_counts=dict(counts), cold_services=dict(services))
         # Re-enter the actual warm getter; no native output is input to Python.
         cpu.reg_write(UC_ARM64_REG_X30, io.CONTINUE)

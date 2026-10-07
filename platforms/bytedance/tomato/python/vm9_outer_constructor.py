@@ -21,6 +21,7 @@ import vm9_objects as objects
 import vm9_registry as registry
 import vm9_root as root
 import vm9_stream_cipher as stream
+import vm9_libc_stdio as libc_stdio
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
 
 
@@ -110,34 +111,79 @@ def _assign_shared_reference(pages, destination: int, source: int) -> None:
     transaction.commit()
 
 
-def _construct_outer_root_layout(pages, *, outer_root_address: int,
-                                  internal_root_reference_address: int,
-                                  child_a: int, child_b: int) -> None:
-    """Publish the 40-byte outer root fields in native order.
+def _release_retained_reference(pages, address: int) -> None:
+    """Release a copied reference whose pointee must remain alive.
 
-    ``+0x27ceac`` owns the first 16 bytes. The two child constructors then
-    publish pointers at ``+0x18`` and ``+0x20``. The eight bytes at ``+0x10``
-    are cleared by the native constructor and remain an explicit zero field.
+    Destruction at count <= 1 needs a type-specific native destructor and is
+    deliberately rejected. This covers +0x15e268/+0x15f718/+0x27d204's
+    retained branch in the fresh outer constructor.
     """
     transaction = _PageTransaction(pages)
+    counter = int.from_bytes(_read_span(transaction, address + 8, 8), "little")
+    if counter:
+        count = int.from_bytes(_read_span(transaction, counter, 4), "little")
+        if not 1 < count <= 0x7FFF_FFFF:
+            raise RefillUnsupported("outer retained reference requires destruction")
+        _write_span(transaction, counter, (count - 1).to_bytes(4, "little"))
+    transaction.commit()
+
+
+def _publish_outer_children(pages, *, outer_root_address: int,
+                            child_a: int, child_b: int) -> None:
+    transaction = _PageTransaction(pages)
     _read_span(transaction, outer_root_address, 0x28)
-    _assign_shared_reference(transaction, outer_root_address,
-                             internal_root_reference_address)
-    _write_span(transaction, outer_root_address + 0x10, bytes(8))
     _write_span(transaction, outer_root_address + 0x18, _word(child_a))
     _write_span(transaction, outer_root_address + 0x20, _word(child_b))
     transaction.commit()
 
 
-def _model_logger_state_allocations(pages, *, allocate: Callable,
+def _refresh_internal_root_state(pages, *, root_address: int, image_base: int,
+                                 entry_stack_address: int, allocate: Callable,
+                                 free: Callable, get_tls: Callable,
+                                 initialize_registry: Callable,
+                                 broadcast: Callable) -> None:
+    """Recover +0x27cf68's zero-flag scoped writer refresh.
+
+    Decode the three lazy globals from the current ELF; acquire the existing
+    TLS writer scope, replace only the low u32 at root+0x68, then release it.
+    Unsupported TLS tree or wait states retain the scoped owner's rejection.
+    """
+    for source, mask, destination, guard in (
+        (0xA63CC, 0xA642C, 0x3E08E8, 0x3E08F0),
+        (0xA63D4, 0xA6424, 0x3E08F4, 0x3E08FC),
+        (0xA63DC, 0xA6418, 0x3E0900, 0x3E090C),
+    ):
+        if not int.from_bytes(_read_span(pages, image_base + guard, 4), "little"):
+            objects.decode_masked_bytes(pages, source_address=image_base + source,
+                destination_address=image_base + destination,
+                mask_address=image_base + mask)
+            _write_span(pages, image_base + guard, (1).to_bytes(4, "little"))
+    guard_object = entry_stack_address - 0x220
+    scratch = entry_stack_address - 0x250
+    state = int.from_bytes(_read_span(pages, root_address + 0x100, 8), "little")
+    status = objects.construct_single_scoped_lock(
+        pages, object_address=guard_object, mutex_address=state,
+        scratch_address=scratch, image_base=image_base, allocate=allocate,
+        get_tls=get_tls, initialize_registry=initialize_registry)
+    if status:
+        raise RefillUnsupported("root refresh requires a fresh writer scope")
+    _write_span(pages, root_address + 0x68, bytes(4))
+    objects.destroy_single_scoped_lock(pages, object_address=guard_object,
+        image_base=image_base, free=free, get_tls=get_tls,
+        initialize_registry=initialize_registry, broadcast=broadcast)
+
+
+def _model_logger_state_allocations(pages, *, image_base: int,
+                                    outer_root_address: int, allocate: Callable,
                                     free: Callable) -> tuple[int, ...]:
     """Reproduce the measured logger/state allocator boundary.
 
     The native path at ``+0x28ded0`` performs two formatter passes.  Their
     allocator-visible contract is two grow/release cycles (64, 128, 256,
     8, 8), followed by the final 40/64/96 state objects.  The formatter's
-    text, locale and sink side effects remain a separate callback boundary;
-    this helper deliberately records only the fresh allocator transaction.
+    temporary buffer contents and non-default branches remain unresolved.
+    The final default record/vector and publication mutex are generated below;
+    their semantic fields have a separate native differential.
     """
     published: list[int] = []
     for _ in range(2):
@@ -162,7 +208,69 @@ def _model_logger_state_allocations(pages, *, allocate: Callable,
         if not pointer:
             raise RefillUnsupported("logger state allocation failed")
         published.append(pointer)
+    # +0x295ec0 -> +0x329f88 constructs the publication support mutex.
+    # Its 40-byte ABI is already owned by the matching-libc mutex model.
+    libc_stdio.initialize_recursive_mutex(pages, mutex_address=published[0])
+    _write_span(pages, image_base + 0x3E1E08, _word(published[0]))
+    _publish_default_logger_record(pages, image_base=image_base,
+        outer_root_address=outer_root_address, container=published[1],
+        record=published[2])
     return tuple(published)
+
+
+def _publish_default_logger_record(pages, *, image_base: int,
+                                   outer_root_address: int, container: int,
+                                   record: int) -> None:
+    """Recover the observed default +0x28ff44 record and cold singleton.
+
+    Four 24-byte libc++ short strings form a 96-byte vector item. String
+    padding is generated as zero, not copied from native stack residue.
+    Only the default zero-value/no-error path is supported; longer strings,
+    nonzero state, existing records and concurrent singleton states reject.
+    JSON parser/formatter temporary buffers remain allocator-only above.
+    """
+    transaction = _PageTransaction(pages)
+    pages = transaction
+    if int.from_bytes(_read_span(pages, outer_root_address, 4), "little"):
+        raise RefillUnsupported("logger record nonzero outer value is unrecovered")
+    for source, mask, destination, guard in (
+        (0x11F100, 0x11F2A0, 0x3E19D0, 0x3E19E4),
+        (0x11F120, 0x11F280, 0x3E19F0, 0x3E1A08),
+        (0x11F1CC, 0x11F1D8, 0x3E1AD0, 0x3E1ADC),
+    ):
+        if not int.from_bytes(_read_span(pages, image_base + guard, 4), "little"):
+            objects.decode_masked_bytes(pages, source_address=image_base + source,
+                destination_address=image_base + destination,
+                mask_address=image_base + mask)
+            _write_span(pages, image_base + guard, (1).to_bytes(4, "little"))
+    title = objects._cstring(pages, image_base + 0x3E19D0, 24)[:-1]
+    flag_format = objects._cstring(pages, image_base + 0x3E1AD0, 24)[:-1]
+    state_format = objects._cstring(pages, image_base + 0x6FA4A, 24)[:-1]
+    if flag_format.count(b"{0}") != 1 or state_format.count(b"{0}") != 1:
+        raise RefillUnsupported("logger JSON format is outside the observed default path")
+    texts = (title, flag_format.replace(b"{0}", b"0"),
+             state_format.replace(b"{0}", b"0"), b"{}")
+    if any(len(text) > 22 or b"\0" in text for text in texts):
+        raise RefillUnsupported("logger record requires a libc++ long string")
+    slot = image_base + 0x3E1B08
+    if int.from_bytes(_read_span(transaction, slot, 8), "little"):
+        raise RefillUnsupported("logger record singleton is not fresh")
+    once = image_base + 0x3E1E00
+    once_state = int.from_bytes(_read_span(transaction, once, 8), "little")
+    if once_state not in (0, 0xFFFF_FFFF_FFFF_FFFF):
+        raise RefillUnsupported("publication once state requires waiting")
+    _write_span(transaction, once, _word(0xFFFF_FFFF_FFFF_FFFF))
+    _write_span(transaction, container, bytes(64))
+    _write_span(transaction, container + 0x28,
+                _word(record) + _word(record + 96) + _word(record + 96))
+    for index, text in enumerate(texts):
+        _write_span(transaction, record + index * 24,
+                    bytes([len(text) * 2]) + text + bytes(23 - len(text)))
+    previous = _read_span(transaction, image_base + 0x3E1DF8, 8)
+    _write_span(transaction, slot,
+                _word(container) + _word(image_base + 0x2903FC) + previous)
+    _write_span(transaction, image_base + 0x3E1DF8, _word(slot))
+    transaction.commit()
 
 
 def construct_default_outer(
@@ -182,6 +290,10 @@ def construct_default_outer(
     singleton_wrapper_address: int | None = None,
 ) -> OuterConstructorResult:
     """Compose the recovered default outer constructor in native call order.
+
+    A returned result describes the core graph, not complete native state.
+    Default logger strings/vector are generated, but parser scratch buffers,
+    native string padding and remaining global effects are not fully modeled.
 
     Startup itself is supplied by the caller because it owns the process-level
     allocator/OS transaction. ``get_registry`` is called here at the exact
@@ -305,21 +417,24 @@ def construct_default_outer(
         logger_observer=observe_shared_logger)
     events.append(NATIVE_ORDER[10])
 
+    internal_reference = root_output_address
+    _assign_shared_reference(pages, outer_root_address + 8, internal_reference)
+    _release_retained_reference(pages, internal_reference)
+
     for reference in (initializer_reference_copy, second_reference_copy,
                       first_reference):
         stream.release_string_reference(pages, reference_address=reference,
                                         image_base=image_base, free=free)
 
-    # +0x27ceac copies the root factory's already-published output wrapper
-    # into the 40-byte outer object. Native does not allocate a second wrapper
-    # here; the following +0x27cf68 state refresh allocates a temporary 48-byte
-    # object and releases it before child A, so matching-libc reuses that slot.
-    internal_reference = root_output_address
+    # +0x27ceac copies the root factory reference into outer+8 and
+    # +0x15e268 drops the temporary count. +0x27cf68 then refreshes the
+    # internal root under the recovered scoped writer lock.
     events.append(NATIVE_ORDER[11])
-    refresh = allocate(pages, 48)
-    if not refresh:
-        raise RefillUnsupported("root state refresh allocation failed")
-    free(pages, refresh)
+    _refresh_internal_root_state(
+        pages, root_address=factory.object_address, image_base=image_base,
+        entry_stack_address=entry_stack_address, allocate=allocate, free=free,
+        get_tls=get_tls, initialize_registry=initialize_registry,
+        broadcast=broadcast)
 
     child_a = allocate(pages, 0x28)
     if not child_a:
@@ -346,7 +461,7 @@ def construct_default_outer(
         pages, object_address=handler_a, image_base=image_base,
         allocate=allocate, kind="embedded_state")
     pair_a = objects.bind_signer_child_callback(
-        pages, child_address=child_a, handler_address=handler_a,
+        pages, child_address=child_b, handler_address=handler_a,
         image_base=image_base, kind="embedded_state")
     events.append(NATIVE_ORDER[15])
 
@@ -356,7 +471,12 @@ def construct_default_outer(
     service_temp_reference = entry_stack_address - 0x1A0
     objects.construct_reference_wrapper(
         pages, object_address=service_temp_reference,
-        referenced_address=0, allocate=allocate)
+        referenced_address=child_b, allocate=allocate)
+    objects.copy_reference_wrapper(pages, object_address=handler_a + 0x30,
+                                   source_address=service_temp_reference)
+    _release_retained_reference(pages, service_temp_reference)
+    objects.copy_reference_wrapper(pages, object_address=handler_a + 0x40,
+                                   source_address=config_reference)
 
     handler_b = allocate(pages, 0x80)
     if not handler_b:
@@ -400,9 +520,14 @@ def construct_default_outer(
     service_child_reference = entry_stack_address - 0x150
     objects.construct_reference_wrapper(
         pages, object_address=service_child_reference,
-        referenced_address=child_b, allocate=allocate)
+        referenced_address=child_a, allocate=allocate)
+    objects.copy_reference_wrapper(pages, object_address=handler_b + 0x30,
+                                   source_address=service_child_reference)
+    _release_retained_reference(pages, service_child_reference)
+    objects.copy_reference_wrapper(pages, object_address=handler_b + 0x40,
+                                   source_address=config_reference)
     pair_b = objects.bind_signer_child_callback(
-        pages, child_address=child_b, handler_address=handler_b,
+        pages, child_address=child_a, handler_address=handler_b,
         image_base=image_base, kind="service_refs")
     events.append(NATIVE_ORDER[16])
 
@@ -434,13 +559,19 @@ def construct_default_outer(
         pages, reference_address=null_reference,
         image_base=image_base, free=free)
 
-    _construct_outer_root_layout(
-        pages, outer_root_address=outer_root_address,
-        internal_root_reference_address=internal_reference,
-        child_a=child_a, child_b=child_b)
+    # +0x27cde0 ORs the runtime registry flag; +0x27ce58 releases the
+    # original second-string wrapper after its initializer copies are gone.
+    state_flags = int.from_bytes(_read_span(pages, registry_object + 0x130, 8), "little")
+    flags = int.from_bytes(_read_span(pages, state_flags + 8, 8), "little")
+    _write_span(pages, state_flags + 8, _word(flags | 0x10))
+    stream.release_string_reference(pages, reference_address=second_reference,
+                                  image_base=image_base, free=free)
+    _publish_outer_children(pages, outer_root_address=outer_root_address,
+                            child_a=child_a, child_b=child_b)
 
     logger_state_addresses = _model_logger_state_allocations(
-        pages, allocate=allocate, free=free)
+        pages, image_base=image_base, outer_root_address=outer_root_address,
+        allocate=allocate, free=free)
 
     # +0x165968 publishes the singleton wrapper's initial count only after
     # the constructor body and logger/state branch return.  The caller can
@@ -452,8 +583,16 @@ def construct_default_outer(
             raise RefillUnsupported("outer singleton counter allocation failed")
         transaction = _PageTransaction(pages)
         _read_span(transaction, singleton_wrapper_address, 16)
+        _write_span(transaction, singleton_wrapper_address, _word(outer_root_address))
         _write_span(transaction, singleton_wrapper_address + 8, _word(counter))
         _write_span(transaction, counter, (1).to_bytes(4, "little"))
+        # +0x165958 stores the singleton before the uncontended guard release.
+        guard = image_base + 0x3D15E0
+        if any(_read_span(transaction, guard, 2)):
+            raise RefillUnsupported("outer singleton guard is not fresh")
+        _write_span(transaction, image_base + 0x3D15D8, _word(singleton_wrapper_address))
+        _write_span(transaction, guard + 4, thread_id.to_bytes(4, "little"))
+        _write_span(transaction, guard, bytes((1, 1)))
         transaction.commit()
 
     if logger_callback is not None:
@@ -463,11 +602,11 @@ def construct_default_outer(
         outer_root_address=outer_root_address,
         registry_reference_address=registry_ref,
         internal_root_address=factory.object_address,
-        internal_root_reference_address=internal_reference,
+        internal_root_reference_address=outer_root_address + 8,
         configuration_reference_address=config_reference,
         child_addresses=(child_a, child_b),
         handler_addresses=(handler_a, handler_b),
-        callback_pair_addresses=(pair_a, pair_b),
+        callback_pair_addresses=(pair_b, pair_a),
         events=tuple(events),
         logger_callback_required=logger_callback_required,
     )

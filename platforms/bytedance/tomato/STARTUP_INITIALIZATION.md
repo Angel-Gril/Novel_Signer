@@ -1,5 +1,12 @@
 # 外层启动 caller 与 worker 调度／清理
 
+> **2026-10-07 当前状态：** fresh Python outer 已返回，4 组 native 差分通过
+> 20 个对象跨度、allocator/free ledger 与默认 logger record 的语义字段。
+> 此前“当前仍停在 `+0x2584ac`”是历史结论，已被新运行取代。
+> 构造器哈希、JSON 初始化标记、完整 publication/JNI 和 fresh 请求签名仍待恢复。
+> 最新验证范围、复现入口和剩余缺口由 [VM9_PROGRESS.md](VM9_PROGRESS.md) 统一记录。
+
+
 ## 2026-10-06: outer constructor logger/trampoline 边界
 
 外层构造器边界控制已从 fresh ELF/TLS 和同次 actual allocator 状态跑过 4 组：两种 image base、属性缺失和 SDK=30。主启动、registry getter、root factory 之后稳定进入 `+0x26e9e0` logger，再到 active `+0x2584ac` descriptor trampoline；证据记录 callback 参数、descriptor field0/field8 和拒绝位置。

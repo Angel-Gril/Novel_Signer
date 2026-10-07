@@ -1,8 +1,8 @@
-"""Capture the fresh outer-constructor logger/trampoline boundary.
+"""Observe the fresh Python outer constructor, including return or rejection.
 
-This verifier deliberately stops at the active +0x2584ac descriptor trampoline.
-It records the logger callback arguments and descriptor fields without replacing
-that trampoline with a guessed no-op or callback implementation.
+Optional observers receive independently generated Python state. Captured callback
+boundaries and constructor completion are reported from this run; standalone
+wrapper evidence is not promoted to a current-path observation.
 """
 from __future__ import annotations
 
@@ -41,7 +41,7 @@ def _hex(value):
 
 def case(library: Path, libc: Path, image: int, label: str, property_value: bytes | None,
          vm_module, apply_logger_model=False, capture_logger_handoff=False,
-         apply_handoff_model=False, logger_observer=None):
+         apply_handoff_model=False, logger_observer=None, terminal_observer=None):
     pages, _, _ = root_fixture.fresh(library, libc, image, property_value)
     environment = worker_fixture.Environment(pages, 2)
     threads: list[list[int]] = []
@@ -58,6 +58,9 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     logger_models: list[dict] = []
     logger_observations: list[dict] = []
     python_vm_entries: list[dict] = []
+    python_vm_runs: list[dict] = []
+    logger_applied: list[bool] = []
+    constructor_result = None
 
     def create_thread(staged, output, _attr, entry, argument):
         handle = io.GUEST + 0xC800 + len(threads) * 0x100
@@ -79,7 +82,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     # outer object before entering +0x27c930/+0x28040c. Keep those allocations
     # in the same allocator transaction so all later pointers and object fields
     # use the native order. The wrapper's 4-byte count is constructed only after
-    # the body returns, matching +0x165968; this boundary verifier stops earlier.
+    # the body returns, matching +0x165968.
     prefix_session = outer_allocator.make_session(
         environment.os, image_base=image, libc_base=io.LIBC,
         thread_pointer=config_fixture.TLS, scratch_address=worker_fixture.SCRATCH,
@@ -209,6 +212,7 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                         syscall=prefix._syscall,
                         errno_address=config_fixture.TLS + 0x100,
                         property_buffer_address=argument + 0x100)
+                    logger_applied.append(True)
                 except RefillUnsupported as exc:
                     logger_errors.append(str(exc))
                     raise
@@ -254,12 +258,24 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                     "register_backing_bytes_0x100": safe_span(stack + 0x458, 0x100),
                     "register_backing_words": [hex(value) for value in self.R],
                 })
-            return super().run()
+            start = self.pc - vm_module.B
+            try:
+                return super().run()
+            finally:
+                python_vm_runs.append({
+                    "entry_offset": hex(start),
+                    "stop_offset": hex(self.pc - vm_module.B),
+                    "steps": self.steps,
+                    "callback_wrapper_offsets": [
+                        item["wrapper_offset"] for item in
+                        getattr(self.native_hook, "modeled", [])
+                        if "wrapper_offset" in item],
+                })
     root_model.RootCallbacks = BoundaryCallbacks
     vm_module.VM = ObservedVM
     try:
         try:
-            outer_constructor.construct_default_outer(
+            constructor_result = outer_constructor.construct_default_outer(
                 session.pages, outer_root_address=outer_root,
                 entry_stack_address=worker_fixture.TOP,
                 thread_pointer=config_fixture.TLS, image_base=image,
@@ -289,19 +305,25 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         root_model.RootCallbacks = previous
         vm_module.VM = previous_vm
 
-    # This probe may now cross the former logger stop after the decoded cold
-    # globals; preserve the observation even when no callback is emitted.
-    if not logger_calls and not trampoline_calls and not logger_errors and not logger_observations:
-        error = error or "constructor completed without logger callback"
+    if constructor_result is not None and terminal_observer is not None:
+        terminal_observer(session.pages, result=constructor_result,
+                          singleton_wrapper=singleton_wrapper,
+                          allocation_sequence=allocation_calls,
+                          free_sequence=free_calls,
+                          allocator_events=allocator_events)
     return {
         "image_base": hex(image),
         "property_profile": label,
         "fresh_elf_inputs": True,
         "native_input_snapshot_used": False,
-        "rejected_at_boundary": True,
+        "rejected_at_boundary": error is not None,
+        "python_constructor_returned": constructor_result is not None,
+        "python_outer_native_state_complete": False,
+        "logger_record_state_complete": False,
         "rejection": error,
         "logger_calls": logger_calls,
         "python_vm_entries": python_vm_entries,
+        "python_vm_runs": python_vm_runs,
         "allocation_sequence": allocation_calls,
         "allocation_sites": allocation_sites,
         "free_calls": [hex(value) for value in free_calls],
@@ -315,8 +337,9 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         "logger_observations": logger_observations,
         "logger_model_requested": apply_logger_model,
         "logger_model_errors": logger_errors,
-        "logger_model_applied": bool(apply_logger_model and not logger_errors),
-        "descriptor_trampoline_wrapper_verified": True,
+        "logger_model_applied": bool(logger_applied),
+        "descriptor_trampoline_wrapper_verified": False,
+        "standalone_wrapper_verifier_executed": False,
         "descriptor_trampoline_current_graph_recovered": False,
         "descriptor_trampoline_recovered": False,
         "fresh_medusa_output_verified": False,
@@ -341,22 +364,25 @@ def main():
         for label, value in PROFILES.items():
             row = case(args.library, args.libc, image, label, value, vm_full, args.apply_logger_model)
             rows.append(row)
-            print("outer constructor boundary", hex(image), label, "PASS", flush=True)
+            status = "RETURNED" if row["python_constructor_returned"] else "REJECTED"
+            print("outer constructor boundary", hex(image), label, status, flush=True)
     report = {
-        "schema": "vm9-outer-constructor-boundary-v1",
+        "schema": "vm9-outer-constructor-boundary-v2",
         "sample_sha256": oracle.LIBRARY_SHA256,
         "libc_sha256": io.LIBC_SHA256,
         "cases": rows,
         "controls": len(rows),
         "fresh_elf_inputs": True,
         "native_input_snapshot_used": False,
-        "logger_callback_arguments_captured": True,
-        "active_descriptor_trampoline_captured": True,
-        "python_vm_entry_captured": True,
+        "logger_callback_arguments_captured": any(row["logger_calls"] for row in rows),
+        "active_descriptor_trampoline_captured": any(row["descriptor_trampoline"] for row in rows),
+        "python_vm_entry_captured": all(row["python_vm_entries"] for row in rows),
+        "python_constructor_returned": all(row["python_constructor_returned"] for row in rows),
         "python_vm_entry_offset": "0x991c0",
         "logger_model_requested": args.apply_logger_model,
-        "logger_model_applied": bool(args.apply_logger_model and all(not row["logger_model_errors"] for row in rows)),
-        "descriptor_trampoline_wrapper_verified": True,
+        "logger_model_applied": bool(args.apply_logger_model and all(row["logger_model_applied"] for row in rows)),
+        "descriptor_trampoline_wrapper_verified": False,
+        "standalone_wrapper_verifier_executed": False,
         "descriptor_trampoline_current_graph_recovered": False,
         "descriptor_trampoline_recovered": False,
         "fresh_medusa_output_verified": False,
@@ -364,7 +390,7 @@ def main():
         "complete_python_medusa": False,
     }
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print("outer constructor boundary", len(rows), "PASS; wrapper verified, current callback graph remains open", flush=True)
+    print("outer constructor observations", len(rows), "recorded; object graph and signing require differential verification", flush=True)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,65 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07：fresh outer 返回对象图与默认记录差分
+
+当前状态以 [fresh object-graph evidence](evidence/vm9_outer_graph_fresh_20261007.json)
+为准。此前 `vm9_outer_constructor_boundary_20261006.json` 的“当前停在
+`+0x2584ac`”结论已被本次运行取代；保留旧文件作为历史证据，不再用于描述当前代码。
+
+边界 verifier 以前未保存 `OuterConstructorResult`，却固定写入
+`rejected_at_boundary=true`、logger/trampoline 已捕获。现在这些状态由本次实际返回、
+异常和 callback 观察计算；独立 wrapper tests 的通过不会被自动标成当前路径已执行。
+
+同输入差分的顺序固定为 **Python 先从 fresh ELF/TLS、matching-libc allocator 与显式
+OS/clock/property/virtual-thread 服务运行，native 后独立运行**。native 终态仅作期望值，
+不注入 Python。两基址 × absent/SDK 30 共 4 组均通过：
+
+- root VM `+0x991c0` 在 716 步到 `+0x99f04`；每组短 wrapper `+0x2584b8`
+  调用 2 次、长 wrapper `+0x2584ac` 0 次、logger VM callback 0 次。
+- 每组 310 次分配、115 次释放的尺寸、指针和先后顺序相同。
+- 20 个对象跨度与对应地址一致：singleton/count、40 字节 outer、264 字节 internal
+  root/count/state、两 child/state/count/callback pair、两 handler、配置 count、
+  publication recursive mutex 和 64 字节记录容器。
+- outer 的 internal reference 位于 `+8/+0x10`，临时 factory reference 已减计数；
+  `+0x27cf68` 按真实 scoped writer 路径清零 root `+0x68` 的低 u32，保留高 u32。
+- native 指令显示 embedded handler 绑定 child B、service handler 绑定 child A；
+  两 handler 的 child/configuration references 和计数已接回。
+- singleton slot/guard、refresh lazy globals、sink global、publication once/chain 与
+  logger-record singleton 的选定字段全部相同。
+- `+0x28ff44` 的默认 96 字节记录由 fresh ELF 解码 title/格式，生成四个 libc++
+  short strings。字符串长度、内容和终止符相同，64 字节容器的 begin/end/capacity
+  相同；unused string padding 由 Python 置零，不复制 native 栈残留。
+
+195 个存活分配中，唯一完整 byte-span 差异为 allocation #308 的记录填充字节。
+这不代表整个 native 状态完成：额外检查仍发现 `image+0x3D1998` 构造器哈希与
+`image+0x3E1AB0…+0x3E1ACC` 的 8 个格式化初始化标记未生成。构造耗时
+`image+0x3E07C0` 在本次显式时钟控制中相同。JSON parser/formatter 临时 buffer
+内容仍仅恢复 allocator ledger；Python 的 JNI publication/cleanup 尚未与 native 对照。
+默认 record 模型明确拒绝 nonzero outer 值、long string、已有 record singleton 和
+未恢复的 concurrent once 分支。4 个拒绝控制（nonzero outer、超长格式、已有 singleton、
+busy once）均抛出 `RefillUnsupported`，且所有 guest pages 保持不变。
+
+复现本次四组差分与拒绝控制：
+
+```powershell
+python platforms/bytedance/tomato/python/verify_vm9_outer_graph_fresh_20261007.py --library C:\AI\6\libmetasec_ml_71332.so --libc C:\AI\6\_vlibc.so --output platforms/bytedance/tomato/evidence/vm9_outer_graph_fresh_20261007.json
+python scripts/check_python.py
+python scripts/scan_public.py
+```
+
+匹配样本的 SHA-256 已写入证据并在 verifier 入口检查；二进制不随仓库发布。
+
+下一步恢复 `+0x27cdd0 → +0x27ce44` 的 8 字节 caller 哈希输入及 u32 计算，再定位
+JSON 初始化标记和 `+0x28c268` 的 Python publication/JNI 服务，之后才接 fresh 请求签名。
+两组 native 基址控制在 hash 入口观察到当前 8 字节为零，但 Python 必须从自己的
+fresh caller 状态准备这些字节，不能写入采样 hash 常量。
+
+**完整独立 Medusa、fresh 请求签名与线上全头矩阵仍未通过。** Rust signer/download、
+非空搜索与分页、抖音/起点闭环和最终 Pages/Actions 搜索下载产品仍待完成。
+Rust 当前 Medusa 保持 unavailable。本轮仅公开 offsets/counts/hashes/equality；
+私有 ELF、运行页、设备材料和原始探针未提交。
+
+
 ## 2026-10-06: Medusa f13 explicit clock differential
 
 `medusa_f13.py` 现在支持 `wall_time`/`wall_nanoseconds` 和 `MEDUSA_F13_SNAPSHOT_DIR`，可在不复制私有快照的情况下注入测试输入。新增 [clock evidence](evidence/medusa_f13_clock_parameter_20261006.json)：同一 query 的 5 组时间控制输出全部为 `af82bde0311cf322dc9f36ececc60d61`，且每组 `svc_log` 都没有 syscall 113。

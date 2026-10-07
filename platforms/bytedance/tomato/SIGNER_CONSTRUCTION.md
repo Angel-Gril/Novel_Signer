@@ -1,3 +1,9 @@
+> **2026-10-07 当前状态：** fresh Python outer 已返回，4 组 native 差分通过
+> 20 个对象跨度、allocator/free ledger 与默认 logger record 的语义字段。
+> 此前“当前仍停在 `+0x2584ac`”是历史结论，已被新运行取代。
+> 构造器哈希、JSON 初始化标记、完整 publication/JNI 和 fresh 请求签名仍待恢复。
+> 最新验证范围、复现入口和剩余缺口由 [VM9_PROGRESS.md](VM9_PROGRESS.md) 统一记录。
+
 
 ## 2026-10-06: f13 clock input boundary
 

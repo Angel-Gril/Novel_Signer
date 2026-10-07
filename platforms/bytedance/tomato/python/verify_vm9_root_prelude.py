@@ -2,8 +2,8 @@
 
 The native and Python controls are run independently. Native backing words are
 used only as expected observations; they are never copied into the Python
-pages. The verifier records the 32-slot equality and stops before the unresolved
-logger/callback path.
+pages. The verifier records only 32-slot equality; subsequent constructor
+completion and returned object state require the outer-graph differential.
 """
 from __future__ import annotations
 
@@ -128,7 +128,7 @@ def main() -> None:
         "complete_python_medusa": False,
         "limitations": [
             "This proves only the 32-slot caller spill at the generic VM prelude boundary.",
-            "The Python run still stops before the native logger/callback handoff; exact spill does not prove VM semantics or a signer output.",
+            "Exact spill does not prove complete outer state or a signer output; see the fresh outer-graph verifier for the current return status.",
             "No native memory snapshot is copied into Python and no online signature or Rust result is implied.",
         ],
     }

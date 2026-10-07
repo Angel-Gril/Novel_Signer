@@ -1,0 +1,1690 @@
+{
+  "schema": "vm9-outer-graph-fresh-differential-v1",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "controls": 4,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "absent",
+      "python_constructor_returned": true,
+      "native_outer_getter_returned": true,
+      "native_warm_getter_reuses_wrapper": true,
+      "python_root_vm_runs": [
+        {
+          "entry_offset": "0x991c0",
+          "stop_offset": "0x99f04",
+          "steps": 716,
+          "callback_wrapper_offsets": [
+            "0x258430",
+            "0x258430",
+            "0x258430",
+            "0x258430",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x2584b8",
+            "0x258444",
+            "0x258454",
+            "0x2584b8",
+            "0x258478",
+            "0x2584c4",
+            "0x2584e0",
+            "0x258444",
+            "0x258460",
+            "0x258454",
+            "0x258444",
+            "0x2584c4",
+            "0x258454",
+            "0x2584c4",
+            "0x258500",
+            "0x258444",
+            "0x258460",
+            "0x258454",
+            "0x258444",
+            "0x2584c4",
+            "0x258454",
+            "0x25846c",
+            "0x258444",
+            "0x258454"
+          ]
+        }
+      ],
+      "root_callback_wrapper_counts": {
+        "0x258430": 4,
+        "0x258444": 14,
+        "0x258454": 14,
+        "0x2584b8": 2,
+        "0x258478": 1,
+        "0x2584c4": 4,
+        "0x2584e0": 1,
+        "0x258460": 2,
+        "0x258500": 1,
+        "0x25846c": 1
+      },
+      "logger_vm_callback_count": 0,
+      "long_descriptor_trampoline_count": 0,
+      "logger_observation_count": 2,
+      "allocation_count": 310,
+      "free_count": 115,
+      "allocation_sequence_equal": true,
+      "free_sequence_equal": true,
+      "returned_core_graph_equal": true,
+      "core_object_spans": {
+        "singleton_wrapper": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "a25847c271d00a06ad1ae9c148b2b73d8c16a2ddfce53763d5cbf52f8a44dff6",
+          "python_sha256": "a25847c271d00a06ad1ae9c148b2b73d8c16a2ddfce53763d5cbf52f8a44dff6",
+          "address_equal": true
+        },
+        "singleton_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "outer_root": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "3c055e7ca3ce90cfcefb611f673916877076c576514dbcf51bd9f8d1a898dc25",
+          "python_sha256": "3c055e7ca3ce90cfcefb611f673916877076c576514dbcf51bd9f8d1a898dc25",
+          "address_equal": true
+        },
+        "internal_root": {
+          "size": 264,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "cc44745cf2f7f5308a42db424901136602a3d3090bec23d775b1446c623a2b24",
+          "python_sha256": "cc44745cf2f7f5308a42db424901136602a3d3090bec23d775b1446c623a2b24",
+          "address_equal": true
+        },
+        "internal_root_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "internal_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "004c3481f1972dd4d5b0d02568ca94ee9e131f37ab97d6a843eebb8b4e968473",
+          "python_sha256": "004c3481f1972dd4d5b0d02568ca94ee9e131f37ab97d6a843eebb8b4e968473",
+          "address_equal": true
+        },
+        "child_0": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "d1d833ac8b3994f2db09f6506eead9bf50aa05bf3c31c0c533f22ca1eecf7fd2",
+          "python_sha256": "d1d833ac8b3994f2db09f6506eead9bf50aa05bf3c31c0c533f22ca1eecf7fd2",
+          "address_equal": true
+        },
+        "child_0_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "d017f0fbe321922a11d35748e99e87f72e35ad71d82944cad62050236773ac66",
+          "python_sha256": "d017f0fbe321922a11d35748e99e87f72e35ad71d82944cad62050236773ac66",
+          "address_equal": true
+        },
+        "child_0_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "child_0_callback_pair": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "1ea4734d4f68d072c5cdd776c3f240107875e9425ce35c18dde487a3e5cbe458",
+          "python_sha256": "1ea4734d4f68d072c5cdd776c3f240107875e9425ce35c18dde487a3e5cbe458",
+          "address_equal": true
+        },
+        "child_0_handler": {
+          "size": 128,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "671ed327b7c6c3aff2a8ddf690bce969f2bdc22d1b123aee6dffd68eab4316e6",
+          "python_sha256": "671ed327b7c6c3aff2a8ddf690bce969f2bdc22d1b123aee6dffd68eab4316e6",
+          "address_equal": true
+        },
+        "child_0_configuration_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "python_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "address_equal": true
+        },
+        "child_1": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "5ec7cb44f7164683db17964d944595d7eabe2d5df6f0ea00edfe624943210c70",
+          "python_sha256": "5ec7cb44f7164683db17964d944595d7eabe2d5df6f0ea00edfe624943210c70",
+          "address_equal": true
+        },
+        "child_1_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "d017f0fbe321922a11d35748e99e87f72e35ad71d82944cad62050236773ac66",
+          "python_sha256": "d017f0fbe321922a11d35748e99e87f72e35ad71d82944cad62050236773ac66",
+          "address_equal": true
+        },
+        "child_1_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "child_1_callback_pair": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "4607d329d1dd076c227df4a8cd0083093a2cd00c16541d8a40bef2165423b750",
+          "python_sha256": "4607d329d1dd076c227df4a8cd0083093a2cd00c16541d8a40bef2165423b750",
+          "address_equal": true
+        },
+        "child_1_handler": {
+          "size": 232,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "e819e1c2e0be506e96f503f45c01ed9833320d115cb0b963ae79658b34841834",
+          "python_sha256": "e819e1c2e0be506e96f503f45c01ed9833320d115cb0b963ae79658b34841834",
+          "address_equal": true
+        },
+        "child_1_configuration_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "python_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "address_equal": true
+        },
+        "publication_recursive_mutex": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "e0392020b05a23844e085871026094e8da2f57a727cb25f2c2a15f730dc7323f",
+          "python_sha256": "e0392020b05a23844e085871026094e8da2f57a727cb25f2c2a15f730dc7323f",
+          "address_equal": true
+        },
+        "logger_record_container": {
+          "size": 64,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "420db6d17e88bbe12ebd1b510627e0e5dbf20999f11965894d11e711bc1dc352",
+          "python_sha256": "420db6d17e88bbe12ebd1b510627e0e5dbf20999f11965894d11e711bc1dc352",
+          "address_equal": true
+        }
+      },
+      "global_spans": {
+        "outer_slot_and_guard": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "ba8ffbda54ec33f182da4ba93b692a80387f1d3d56ac3d7fdcb63aeaeb200e04",
+          "python_sha256": "ba8ffbda54ec33f182da4ba93b692a80387f1d3d56ac3d7fdcb63aeaeb200e04"
+        },
+        "refresh_lazy_globals": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "fc9fed38954cc25a6eb8581ab71325095a1605fc7ba45788f7478ab391722232",
+          "python_sha256": "fc9fed38954cc25a6eb8581ab71325095a1605fc7ba45788f7478ab391722232"
+        },
+        "logger_sink": {
+          "size": 64,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "5e69f3c787bdaa0efb2f081ff26c85c650db0fe26358ffb3ef2b002d55cdfd3f",
+          "python_sha256": "5e69f3c787bdaa0efb2f081ff26c85c650db0fe26358ffb3ef2b002d55cdfd3f"
+        },
+        "publication_mutex_slot": {
+          "size": 8,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "6d44175e4085bf901a18b7c6d244882fa6b2034e463654017074f7cf367b3832",
+          "python_sha256": "6d44175e4085bf901a18b7c6d244882fa6b2034e463654017074f7cf367b3832"
+        },
+        "publication_once_and_chain": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "1109dff75cdb87aed622999498cceccf9eae4d870cb1538b0a03aad1c9c1f9cb",
+          "python_sha256": "1109dff75cdb87aed622999498cceccf9eae4d870cb1538b0a03aad1c9c1f9cb"
+        },
+        "logger_record_singleton": {
+          "size": 24,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "4bbba3fe638c3443a28d0990c6acd4a8d77edeb6263648a378882e8baf5bdf7b",
+          "python_sha256": "4bbba3fe638c3443a28d0990c6acd4a8d77edeb6263648a378882e8baf5bdf7b"
+        }
+      },
+      "additional_global_observations": {
+        "constructor_hash_input_and_result": {
+          "size": 8,
+          "equal": false,
+          "mismatch_offsets": [
+            "0x4",
+            "0x5",
+            "0x6",
+            "0x7"
+          ],
+          "native_sha256": "e476d99d8f3161f2546ee4afa6ee6f2c8191ff2f30a147b688e8e819f4645b37",
+          "python_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc"
+        },
+        "constructor_elapsed": {
+          "size": 8,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+          "python_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc"
+        },
+        "record_lazy_globals": {
+          "size": 272,
+          "equal": false,
+          "mismatch_offsets": [
+            "0xe0",
+            "0xe4",
+            "0xe8",
+            "0xec",
+            "0xf0",
+            "0xf4",
+            "0xf8",
+            "0xfc"
+          ],
+          "native_sha256": "e26d7278be5d5961086d37b40e573914f70272f7aeb5c26c7f12fb4ce9cb8b88",
+          "python_sha256": "b2c3debcdb817e6a86abacc54ca4d00e6ffe768754064718a1584a4d85f207ad"
+        }
+      },
+      "live_allocation_count": 195,
+      "live_allocation_mismatches": [
+        {
+          "allocation_index": 308,
+          "size": 96,
+          "equal": false,
+          "mismatch_offsets": [
+            "0x22",
+            "0x23",
+            "0x29",
+            "0x2a",
+            "0x2b",
+            "0x3a",
+            "0x3b",
+            "0x40",
+            "0x41",
+            "0x42",
+            "0x43",
+            "0x50",
+            "0x54",
+            "0x58",
+            "0x59",
+            "0x5a",
+            "0x5b",
+            "0x5c",
+            "0x5d",
+            "0x5e",
+            "0x5f"
+          ],
+          "native_sha256": "391f25ec12bd5e71e88cfcccbdf8f6150735b2e235ec9b5a0412e2aa450e2db5",
+          "python_sha256": "0a338a1227e80976a855edf49169318051b988259fd59a4e3e52dd0240a833f9"
+        }
+      ],
+      "logger_record_strings": [
+        {
+          "index": 0,
+          "length": 18,
+          "owned_bytes": {
+            "size": 20,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "1aa0db6ec601a4bb072ccd95a355d2de48183fe63b979f720a93a9476611b220",
+            "python_sha256": "1aa0db6ec601a4bb072ccd95a355d2de48183fe63b979f720a93a9476611b220"
+          },
+          "unused_padding_equal": true
+        },
+        {
+          "index": 1,
+          "length": 8,
+          "owned_bytes": {
+            "size": 10,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "2b30b7b0e0e66e45fcee303b89d89b00b08fa08066820956fe494e4712278675",
+            "python_sha256": "2b30b7b0e0e66e45fcee303b89d89b00b08fa08066820956fe494e4712278675"
+          },
+          "unused_padding_equal": false
+        },
+        {
+          "index": 2,
+          "length": 8,
+          "owned_bytes": {
+            "size": 10,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "8b937c0a38edc45dd04ded2cbb291bfd922f959f802e1c5c1cc3fb89e67c8602",
+            "python_sha256": "8b937c0a38edc45dd04ded2cbb291bfd922f959f802e1c5c1cc3fb89e67c8602"
+          },
+          "unused_padding_equal": false
+        },
+        {
+          "index": 3,
+          "length": 2,
+          "owned_bytes": {
+            "size": 4,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "5f7c648040ccd1970afedb367064c3273d901c4864b3751671f24709b32f2a53",
+            "python_sha256": "5f7c648040ccd1970afedb367064c3273d901c4864b3751671f24709b32f2a53"
+          },
+          "unused_padding_equal": false
+        }
+      ],
+      "default_logger_record_semantics_equal": true,
+      "complete_native_outer_state_equal": false,
+      "native_input_snapshot_used": false,
+      "python_executed_before_native": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "sdk_30",
+      "python_constructor_returned": true,
+      "native_outer_getter_returned": true,
+      "native_warm_getter_reuses_wrapper": true,
+      "python_root_vm_runs": [
+        {
+          "entry_offset": "0x991c0",
+          "stop_offset": "0x99f04",
+          "steps": 716,
+          "callback_wrapper_offsets": [
+            "0x258430",
+            "0x258430",
+            "0x258430",
+            "0x258430",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x2584b8",
+            "0x258444",
+            "0x258454",
+            "0x2584b8",
+            "0x258478",
+            "0x2584c4",
+            "0x2584e0",
+            "0x258444",
+            "0x258460",
+            "0x258454",
+            "0x258444",
+            "0x2584c4",
+            "0x258454",
+            "0x2584c4",
+            "0x258500",
+            "0x258444",
+            "0x258460",
+            "0x258454",
+            "0x258444",
+            "0x2584c4",
+            "0x258454",
+            "0x25846c",
+            "0x258444",
+            "0x258454"
+          ]
+        }
+      ],
+      "root_callback_wrapper_counts": {
+        "0x258430": 4,
+        "0x258444": 14,
+        "0x258454": 14,
+        "0x2584b8": 2,
+        "0x258478": 1,
+        "0x2584c4": 4,
+        "0x2584e0": 1,
+        "0x258460": 2,
+        "0x258500": 1,
+        "0x25846c": 1
+      },
+      "logger_vm_callback_count": 0,
+      "long_descriptor_trampoline_count": 0,
+      "logger_observation_count": 2,
+      "allocation_count": 310,
+      "free_count": 115,
+      "allocation_sequence_equal": true,
+      "free_sequence_equal": true,
+      "returned_core_graph_equal": true,
+      "core_object_spans": {
+        "singleton_wrapper": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "a25847c271d00a06ad1ae9c148b2b73d8c16a2ddfce53763d5cbf52f8a44dff6",
+          "python_sha256": "a25847c271d00a06ad1ae9c148b2b73d8c16a2ddfce53763d5cbf52f8a44dff6",
+          "address_equal": true
+        },
+        "singleton_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "outer_root": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "3c055e7ca3ce90cfcefb611f673916877076c576514dbcf51bd9f8d1a898dc25",
+          "python_sha256": "3c055e7ca3ce90cfcefb611f673916877076c576514dbcf51bd9f8d1a898dc25",
+          "address_equal": true
+        },
+        "internal_root": {
+          "size": 264,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "cc44745cf2f7f5308a42db424901136602a3d3090bec23d775b1446c623a2b24",
+          "python_sha256": "cc44745cf2f7f5308a42db424901136602a3d3090bec23d775b1446c623a2b24",
+          "address_equal": true
+        },
+        "internal_root_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "internal_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "004c3481f1972dd4d5b0d02568ca94ee9e131f37ab97d6a843eebb8b4e968473",
+          "python_sha256": "004c3481f1972dd4d5b0d02568ca94ee9e131f37ab97d6a843eebb8b4e968473",
+          "address_equal": true
+        },
+        "child_0": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "d1d833ac8b3994f2db09f6506eead9bf50aa05bf3c31c0c533f22ca1eecf7fd2",
+          "python_sha256": "d1d833ac8b3994f2db09f6506eead9bf50aa05bf3c31c0c533f22ca1eecf7fd2",
+          "address_equal": true
+        },
+        "child_0_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "d017f0fbe321922a11d35748e99e87f72e35ad71d82944cad62050236773ac66",
+          "python_sha256": "d017f0fbe321922a11d35748e99e87f72e35ad71d82944cad62050236773ac66",
+          "address_equal": true
+        },
+        "child_0_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "child_0_callback_pair": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "1ea4734d4f68d072c5cdd776c3f240107875e9425ce35c18dde487a3e5cbe458",
+          "python_sha256": "1ea4734d4f68d072c5cdd776c3f240107875e9425ce35c18dde487a3e5cbe458",
+          "address_equal": true
+        },
+        "child_0_handler": {
+          "size": 128,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "671ed327b7c6c3aff2a8ddf690bce969f2bdc22d1b123aee6dffd68eab4316e6",
+          "python_sha256": "671ed327b7c6c3aff2a8ddf690bce969f2bdc22d1b123aee6dffd68eab4316e6",
+          "address_equal": true
+        },
+        "child_0_configuration_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "python_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "address_equal": true
+        },
+        "child_1": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "5ec7cb44f7164683db17964d944595d7eabe2d5df6f0ea00edfe624943210c70",
+          "python_sha256": "5ec7cb44f7164683db17964d944595d7eabe2d5df6f0ea00edfe624943210c70",
+          "address_equal": true
+        },
+        "child_1_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "d017f0fbe321922a11d35748e99e87f72e35ad71d82944cad62050236773ac66",
+          "python_sha256": "d017f0fbe321922a11d35748e99e87f72e35ad71d82944cad62050236773ac66",
+          "address_equal": true
+        },
+        "child_1_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "child_1_callback_pair": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "4607d329d1dd076c227df4a8cd0083093a2cd00c16541d8a40bef2165423b750",
+          "python_sha256": "4607d329d1dd076c227df4a8cd0083093a2cd00c16541d8a40bef2165423b750",
+          "address_equal": true
+        },
+        "child_1_handler": {
+          "size": 232,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "e819e1c2e0be506e96f503f45c01ed9833320d115cb0b963ae79658b34841834",
+          "python_sha256": "e819e1c2e0be506e96f503f45c01ed9833320d115cb0b963ae79658b34841834",
+          "address_equal": true
+        },
+        "child_1_configuration_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "python_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "address_equal": true
+        },
+        "publication_recursive_mutex": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "e0392020b05a23844e085871026094e8da2f57a727cb25f2c2a15f730dc7323f",
+          "python_sha256": "e0392020b05a23844e085871026094e8da2f57a727cb25f2c2a15f730dc7323f",
+          "address_equal": true
+        },
+        "logger_record_container": {
+          "size": 64,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "420db6d17e88bbe12ebd1b510627e0e5dbf20999f11965894d11e711bc1dc352",
+          "python_sha256": "420db6d17e88bbe12ebd1b510627e0e5dbf20999f11965894d11e711bc1dc352",
+          "address_equal": true
+        }
+      },
+      "global_spans": {
+        "outer_slot_and_guard": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "ba8ffbda54ec33f182da4ba93b692a80387f1d3d56ac3d7fdcb63aeaeb200e04",
+          "python_sha256": "ba8ffbda54ec33f182da4ba93b692a80387f1d3d56ac3d7fdcb63aeaeb200e04"
+        },
+        "refresh_lazy_globals": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "fc9fed38954cc25a6eb8581ab71325095a1605fc7ba45788f7478ab391722232",
+          "python_sha256": "fc9fed38954cc25a6eb8581ab71325095a1605fc7ba45788f7478ab391722232"
+        },
+        "logger_sink": {
+          "size": 64,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "ef5ff4603f29ea38dcc173b1ecd403b50fde76d99e1eaf6d407a2d7e651038d5",
+          "python_sha256": "ef5ff4603f29ea38dcc173b1ecd403b50fde76d99e1eaf6d407a2d7e651038d5"
+        },
+        "publication_mutex_slot": {
+          "size": 8,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "6d44175e4085bf901a18b7c6d244882fa6b2034e463654017074f7cf367b3832",
+          "python_sha256": "6d44175e4085bf901a18b7c6d244882fa6b2034e463654017074f7cf367b3832"
+        },
+        "publication_once_and_chain": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "1109dff75cdb87aed622999498cceccf9eae4d870cb1538b0a03aad1c9c1f9cb",
+          "python_sha256": "1109dff75cdb87aed622999498cceccf9eae4d870cb1538b0a03aad1c9c1f9cb"
+        },
+        "logger_record_singleton": {
+          "size": 24,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "4bbba3fe638c3443a28d0990c6acd4a8d77edeb6263648a378882e8baf5bdf7b",
+          "python_sha256": "4bbba3fe638c3443a28d0990c6acd4a8d77edeb6263648a378882e8baf5bdf7b"
+        }
+      },
+      "additional_global_observations": {
+        "constructor_hash_input_and_result": {
+          "size": 8,
+          "equal": false,
+          "mismatch_offsets": [
+            "0x4",
+            "0x5",
+            "0x6",
+            "0x7"
+          ],
+          "native_sha256": "e476d99d8f3161f2546ee4afa6ee6f2c8191ff2f30a147b688e8e819f4645b37",
+          "python_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc"
+        },
+        "constructor_elapsed": {
+          "size": 8,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+          "python_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc"
+        },
+        "record_lazy_globals": {
+          "size": 272,
+          "equal": false,
+          "mismatch_offsets": [
+            "0xe0",
+            "0xe4",
+            "0xe8",
+            "0xec",
+            "0xf0",
+            "0xf4",
+            "0xf8",
+            "0xfc"
+          ],
+          "native_sha256": "e26d7278be5d5961086d37b40e573914f70272f7aeb5c26c7f12fb4ce9cb8b88",
+          "python_sha256": "b2c3debcdb817e6a86abacc54ca4d00e6ffe768754064718a1584a4d85f207ad"
+        }
+      },
+      "live_allocation_count": 195,
+      "live_allocation_mismatches": [
+        {
+          "allocation_index": 308,
+          "size": 96,
+          "equal": false,
+          "mismatch_offsets": [
+            "0x22",
+            "0x23",
+            "0x29",
+            "0x2a",
+            "0x2b",
+            "0x3a",
+            "0x3b",
+            "0x40",
+            "0x41",
+            "0x42",
+            "0x43",
+            "0x50",
+            "0x54",
+            "0x58",
+            "0x59",
+            "0x5a",
+            "0x5b",
+            "0x5c",
+            "0x5d",
+            "0x5e",
+            "0x5f"
+          ],
+          "native_sha256": "391f25ec12bd5e71e88cfcccbdf8f6150735b2e235ec9b5a0412e2aa450e2db5",
+          "python_sha256": "0a338a1227e80976a855edf49169318051b988259fd59a4e3e52dd0240a833f9"
+        }
+      ],
+      "logger_record_strings": [
+        {
+          "index": 0,
+          "length": 18,
+          "owned_bytes": {
+            "size": 20,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "1aa0db6ec601a4bb072ccd95a355d2de48183fe63b979f720a93a9476611b220",
+            "python_sha256": "1aa0db6ec601a4bb072ccd95a355d2de48183fe63b979f720a93a9476611b220"
+          },
+          "unused_padding_equal": true
+        },
+        {
+          "index": 1,
+          "length": 8,
+          "owned_bytes": {
+            "size": 10,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "2b30b7b0e0e66e45fcee303b89d89b00b08fa08066820956fe494e4712278675",
+            "python_sha256": "2b30b7b0e0e66e45fcee303b89d89b00b08fa08066820956fe494e4712278675"
+          },
+          "unused_padding_equal": false
+        },
+        {
+          "index": 2,
+          "length": 8,
+          "owned_bytes": {
+            "size": 10,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "8b937c0a38edc45dd04ded2cbb291bfd922f959f802e1c5c1cc3fb89e67c8602",
+            "python_sha256": "8b937c0a38edc45dd04ded2cbb291bfd922f959f802e1c5c1cc3fb89e67c8602"
+          },
+          "unused_padding_equal": false
+        },
+        {
+          "index": 3,
+          "length": 2,
+          "owned_bytes": {
+            "size": 4,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "5f7c648040ccd1970afedb367064c3273d901c4864b3751671f24709b32f2a53",
+            "python_sha256": "5f7c648040ccd1970afedb367064c3273d901c4864b3751671f24709b32f2a53"
+          },
+          "unused_padding_equal": false
+        }
+      ],
+      "default_logger_record_semantics_equal": true,
+      "complete_native_outer_state_equal": false,
+      "native_input_snapshot_used": false,
+      "python_executed_before_native": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "absent",
+      "python_constructor_returned": true,
+      "native_outer_getter_returned": true,
+      "native_warm_getter_reuses_wrapper": true,
+      "python_root_vm_runs": [
+        {
+          "entry_offset": "0x991c0",
+          "stop_offset": "0x99f04",
+          "steps": 716,
+          "callback_wrapper_offsets": [
+            "0x258430",
+            "0x258430",
+            "0x258430",
+            "0x258430",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x2584b8",
+            "0x258444",
+            "0x258454",
+            "0x2584b8",
+            "0x258478",
+            "0x2584c4",
+            "0x2584e0",
+            "0x258444",
+            "0x258460",
+            "0x258454",
+            "0x258444",
+            "0x2584c4",
+            "0x258454",
+            "0x2584c4",
+            "0x258500",
+            "0x258444",
+            "0x258460",
+            "0x258454",
+            "0x258444",
+            "0x2584c4",
+            "0x258454",
+            "0x25846c",
+            "0x258444",
+            "0x258454"
+          ]
+        }
+      ],
+      "root_callback_wrapper_counts": {
+        "0x258430": 4,
+        "0x258444": 14,
+        "0x258454": 14,
+        "0x2584b8": 2,
+        "0x258478": 1,
+        "0x2584c4": 4,
+        "0x2584e0": 1,
+        "0x258460": 2,
+        "0x258500": 1,
+        "0x25846c": 1
+      },
+      "logger_vm_callback_count": 0,
+      "long_descriptor_trampoline_count": 0,
+      "logger_observation_count": 2,
+      "allocation_count": 310,
+      "free_count": 115,
+      "allocation_sequence_equal": true,
+      "free_sequence_equal": true,
+      "returned_core_graph_equal": true,
+      "core_object_spans": {
+        "singleton_wrapper": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "a25847c271d00a06ad1ae9c148b2b73d8c16a2ddfce53763d5cbf52f8a44dff6",
+          "python_sha256": "a25847c271d00a06ad1ae9c148b2b73d8c16a2ddfce53763d5cbf52f8a44dff6",
+          "address_equal": true
+        },
+        "singleton_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "outer_root": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "3c055e7ca3ce90cfcefb611f673916877076c576514dbcf51bd9f8d1a898dc25",
+          "python_sha256": "3c055e7ca3ce90cfcefb611f673916877076c576514dbcf51bd9f8d1a898dc25",
+          "address_equal": true
+        },
+        "internal_root": {
+          "size": 264,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "93c902a693f4890ff6508d8d307735e7ead94cf7c3eef4e7203c3258c2b468cc",
+          "python_sha256": "93c902a693f4890ff6508d8d307735e7ead94cf7c3eef4e7203c3258c2b468cc",
+          "address_equal": true
+        },
+        "internal_root_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "internal_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "2e496059d68b7382071f7c9d5993d60bc81760f6514e3816ce63e2a19bc35d57",
+          "python_sha256": "2e496059d68b7382071f7c9d5993d60bc81760f6514e3816ce63e2a19bc35d57",
+          "address_equal": true
+        },
+        "child_0": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "d2259b1d47646d6a51b5fa94c2fa55bad28820f513e0eeb2ddb5ec6e5f0ce140",
+          "python_sha256": "d2259b1d47646d6a51b5fa94c2fa55bad28820f513e0eeb2ddb5ec6e5f0ce140",
+          "address_equal": true
+        },
+        "child_0_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "fb3a0af62ef8651d22dc105a29498db905e9879e4a122d8d1a25504b6ab3ce6e",
+          "python_sha256": "fb3a0af62ef8651d22dc105a29498db905e9879e4a122d8d1a25504b6ab3ce6e",
+          "address_equal": true
+        },
+        "child_0_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "child_0_callback_pair": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "a1ee22685cee988dcc44605efd6eb9440d176172f9165904cce53059f53bb55e",
+          "python_sha256": "a1ee22685cee988dcc44605efd6eb9440d176172f9165904cce53059f53bb55e",
+          "address_equal": true
+        },
+        "child_0_handler": {
+          "size": 128,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "0d618bdf3d9f7bd6a883506da2ded3e16bd094270e9bec9e200e6110e3cdbcc3",
+          "python_sha256": "0d618bdf3d9f7bd6a883506da2ded3e16bd094270e9bec9e200e6110e3cdbcc3",
+          "address_equal": true
+        },
+        "child_0_configuration_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "python_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "address_equal": true
+        },
+        "child_1": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "044a89ac600ad3e58cab3b97e81edfb3f80ec3a4512b8ffeab611a22c3e16f78",
+          "python_sha256": "044a89ac600ad3e58cab3b97e81edfb3f80ec3a4512b8ffeab611a22c3e16f78",
+          "address_equal": true
+        },
+        "child_1_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "fb3a0af62ef8651d22dc105a29498db905e9879e4a122d8d1a25504b6ab3ce6e",
+          "python_sha256": "fb3a0af62ef8651d22dc105a29498db905e9879e4a122d8d1a25504b6ab3ce6e",
+          "address_equal": true
+        },
+        "child_1_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "child_1_callback_pair": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "8a7cf60719eb5e9def60532ce4cfe3562488300eda0bdaab044748700f0c9cb4",
+          "python_sha256": "8a7cf60719eb5e9def60532ce4cfe3562488300eda0bdaab044748700f0c9cb4",
+          "address_equal": true
+        },
+        "child_1_handler": {
+          "size": 232,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "5fd6c76d36cfe286ec433f77314526e728da451538149d28664b8013a4739c04",
+          "python_sha256": "5fd6c76d36cfe286ec433f77314526e728da451538149d28664b8013a4739c04",
+          "address_equal": true
+        },
+        "child_1_configuration_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "python_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "address_equal": true
+        },
+        "publication_recursive_mutex": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "e0392020b05a23844e085871026094e8da2f57a727cb25f2c2a15f730dc7323f",
+          "python_sha256": "e0392020b05a23844e085871026094e8da2f57a727cb25f2c2a15f730dc7323f",
+          "address_equal": true
+        },
+        "logger_record_container": {
+          "size": 64,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "420db6d17e88bbe12ebd1b510627e0e5dbf20999f11965894d11e711bc1dc352",
+          "python_sha256": "420db6d17e88bbe12ebd1b510627e0e5dbf20999f11965894d11e711bc1dc352",
+          "address_equal": true
+        }
+      },
+      "global_spans": {
+        "outer_slot_and_guard": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "ba8ffbda54ec33f182da4ba93b692a80387f1d3d56ac3d7fdcb63aeaeb200e04",
+          "python_sha256": "ba8ffbda54ec33f182da4ba93b692a80387f1d3d56ac3d7fdcb63aeaeb200e04"
+        },
+        "refresh_lazy_globals": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "fc9fed38954cc25a6eb8581ab71325095a1605fc7ba45788f7478ab391722232",
+          "python_sha256": "fc9fed38954cc25a6eb8581ab71325095a1605fc7ba45788f7478ab391722232"
+        },
+        "logger_sink": {
+          "size": 64,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "d2919b327b24239cf378abc1c5fcb7437a10446e87b78f0046d3bc0feafe75d9",
+          "python_sha256": "d2919b327b24239cf378abc1c5fcb7437a10446e87b78f0046d3bc0feafe75d9"
+        },
+        "publication_mutex_slot": {
+          "size": 8,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "6d44175e4085bf901a18b7c6d244882fa6b2034e463654017074f7cf367b3832",
+          "python_sha256": "6d44175e4085bf901a18b7c6d244882fa6b2034e463654017074f7cf367b3832"
+        },
+        "publication_once_and_chain": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "4ce04bce20a2ec29bda33e859bcdb428a9ec753f8cae4563eb924416714ab883",
+          "python_sha256": "4ce04bce20a2ec29bda33e859bcdb428a9ec753f8cae4563eb924416714ab883"
+        },
+        "logger_record_singleton": {
+          "size": 24,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "c131c29f2ffb00599ace52ce13966de5ad1250f189d9112a0f9adc725af4283c",
+          "python_sha256": "c131c29f2ffb00599ace52ce13966de5ad1250f189d9112a0f9adc725af4283c"
+        }
+      },
+      "additional_global_observations": {
+        "constructor_hash_input_and_result": {
+          "size": 8,
+          "equal": false,
+          "mismatch_offsets": [
+            "0x4",
+            "0x5",
+            "0x6",
+            "0x7"
+          ],
+          "native_sha256": "e476d99d8f3161f2546ee4afa6ee6f2c8191ff2f30a147b688e8e819f4645b37",
+          "python_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc"
+        },
+        "constructor_elapsed": {
+          "size": 8,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+          "python_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc"
+        },
+        "record_lazy_globals": {
+          "size": 272,
+          "equal": false,
+          "mismatch_offsets": [
+            "0xe0",
+            "0xe4",
+            "0xe8",
+            "0xec",
+            "0xf0",
+            "0xf4",
+            "0xf8",
+            "0xfc"
+          ],
+          "native_sha256": "e26d7278be5d5961086d37b40e573914f70272f7aeb5c26c7f12fb4ce9cb8b88",
+          "python_sha256": "b2c3debcdb817e6a86abacc54ca4d00e6ffe768754064718a1584a4d85f207ad"
+        }
+      },
+      "live_allocation_count": 195,
+      "live_allocation_mismatches": [
+        {
+          "allocation_index": 308,
+          "size": 96,
+          "equal": false,
+          "mismatch_offsets": [
+            "0x22",
+            "0x23",
+            "0x29",
+            "0x2a",
+            "0x2b",
+            "0x3a",
+            "0x3b",
+            "0x40",
+            "0x41",
+            "0x42",
+            "0x43",
+            "0x50",
+            "0x54",
+            "0x58",
+            "0x59",
+            "0x5a",
+            "0x5b",
+            "0x5c",
+            "0x5d",
+            "0x5e",
+            "0x5f"
+          ],
+          "native_sha256": "391f25ec12bd5e71e88cfcccbdf8f6150735b2e235ec9b5a0412e2aa450e2db5",
+          "python_sha256": "0a338a1227e80976a855edf49169318051b988259fd59a4e3e52dd0240a833f9"
+        }
+      ],
+      "logger_record_strings": [
+        {
+          "index": 0,
+          "length": 18,
+          "owned_bytes": {
+            "size": 20,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "1aa0db6ec601a4bb072ccd95a355d2de48183fe63b979f720a93a9476611b220",
+            "python_sha256": "1aa0db6ec601a4bb072ccd95a355d2de48183fe63b979f720a93a9476611b220"
+          },
+          "unused_padding_equal": true
+        },
+        {
+          "index": 1,
+          "length": 8,
+          "owned_bytes": {
+            "size": 10,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "2b30b7b0e0e66e45fcee303b89d89b00b08fa08066820956fe494e4712278675",
+            "python_sha256": "2b30b7b0e0e66e45fcee303b89d89b00b08fa08066820956fe494e4712278675"
+          },
+          "unused_padding_equal": false
+        },
+        {
+          "index": 2,
+          "length": 8,
+          "owned_bytes": {
+            "size": 10,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "8b937c0a38edc45dd04ded2cbb291bfd922f959f802e1c5c1cc3fb89e67c8602",
+            "python_sha256": "8b937c0a38edc45dd04ded2cbb291bfd922f959f802e1c5c1cc3fb89e67c8602"
+          },
+          "unused_padding_equal": false
+        },
+        {
+          "index": 3,
+          "length": 2,
+          "owned_bytes": {
+            "size": 4,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "5f7c648040ccd1970afedb367064c3273d901c4864b3751671f24709b32f2a53",
+            "python_sha256": "5f7c648040ccd1970afedb367064c3273d901c4864b3751671f24709b32f2a53"
+          },
+          "unused_padding_equal": false
+        }
+      ],
+      "default_logger_record_semantics_equal": true,
+      "complete_native_outer_state_equal": false,
+      "native_input_snapshot_used": false,
+      "python_executed_before_native": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "sdk_30",
+      "python_constructor_returned": true,
+      "native_outer_getter_returned": true,
+      "native_warm_getter_reuses_wrapper": true,
+      "python_root_vm_runs": [
+        {
+          "entry_offset": "0x991c0",
+          "stop_offset": "0x99f04",
+          "steps": 716,
+          "callback_wrapper_offsets": [
+            "0x258430",
+            "0x258430",
+            "0x258430",
+            "0x258430",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x258444",
+            "0x258454",
+            "0x2584b8",
+            "0x258444",
+            "0x258454",
+            "0x2584b8",
+            "0x258478",
+            "0x2584c4",
+            "0x2584e0",
+            "0x258444",
+            "0x258460",
+            "0x258454",
+            "0x258444",
+            "0x2584c4",
+            "0x258454",
+            "0x2584c4",
+            "0x258500",
+            "0x258444",
+            "0x258460",
+            "0x258454",
+            "0x258444",
+            "0x2584c4",
+            "0x258454",
+            "0x25846c",
+            "0x258444",
+            "0x258454"
+          ]
+        }
+      ],
+      "root_callback_wrapper_counts": {
+        "0x258430": 4,
+        "0x258444": 14,
+        "0x258454": 14,
+        "0x2584b8": 2,
+        "0x258478": 1,
+        "0x2584c4": 4,
+        "0x2584e0": 1,
+        "0x258460": 2,
+        "0x258500": 1,
+        "0x25846c": 1
+      },
+      "logger_vm_callback_count": 0,
+      "long_descriptor_trampoline_count": 0,
+      "logger_observation_count": 2,
+      "allocation_count": 310,
+      "free_count": 115,
+      "allocation_sequence_equal": true,
+      "free_sequence_equal": true,
+      "returned_core_graph_equal": true,
+      "core_object_spans": {
+        "singleton_wrapper": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "a25847c271d00a06ad1ae9c148b2b73d8c16a2ddfce53763d5cbf52f8a44dff6",
+          "python_sha256": "a25847c271d00a06ad1ae9c148b2b73d8c16a2ddfce53763d5cbf52f8a44dff6",
+          "address_equal": true
+        },
+        "singleton_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "outer_root": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "3c055e7ca3ce90cfcefb611f673916877076c576514dbcf51bd9f8d1a898dc25",
+          "python_sha256": "3c055e7ca3ce90cfcefb611f673916877076c576514dbcf51bd9f8d1a898dc25",
+          "address_equal": true
+        },
+        "internal_root": {
+          "size": 264,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "93c902a693f4890ff6508d8d307735e7ead94cf7c3eef4e7203c3258c2b468cc",
+          "python_sha256": "93c902a693f4890ff6508d8d307735e7ead94cf7c3eef4e7203c3258c2b468cc",
+          "address_equal": true
+        },
+        "internal_root_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "internal_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "2e496059d68b7382071f7c9d5993d60bc81760f6514e3816ce63e2a19bc35d57",
+          "python_sha256": "2e496059d68b7382071f7c9d5993d60bc81760f6514e3816ce63e2a19bc35d57",
+          "address_equal": true
+        },
+        "child_0": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "d2259b1d47646d6a51b5fa94c2fa55bad28820f513e0eeb2ddb5ec6e5f0ce140",
+          "python_sha256": "d2259b1d47646d6a51b5fa94c2fa55bad28820f513e0eeb2ddb5ec6e5f0ce140",
+          "address_equal": true
+        },
+        "child_0_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "fb3a0af62ef8651d22dc105a29498db905e9879e4a122d8d1a25504b6ab3ce6e",
+          "python_sha256": "fb3a0af62ef8651d22dc105a29498db905e9879e4a122d8d1a25504b6ab3ce6e",
+          "address_equal": true
+        },
+        "child_0_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "child_0_callback_pair": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "a1ee22685cee988dcc44605efd6eb9440d176172f9165904cce53059f53bb55e",
+          "python_sha256": "a1ee22685cee988dcc44605efd6eb9440d176172f9165904cce53059f53bb55e",
+          "address_equal": true
+        },
+        "child_0_handler": {
+          "size": 128,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "0d618bdf3d9f7bd6a883506da2ded3e16bd094270e9bec9e200e6110e3cdbcc3",
+          "python_sha256": "0d618bdf3d9f7bd6a883506da2ded3e16bd094270e9bec9e200e6110e3cdbcc3",
+          "address_equal": true
+        },
+        "child_0_configuration_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "python_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "address_equal": true
+        },
+        "child_1": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "044a89ac600ad3e58cab3b97e81edfb3f80ec3a4512b8ffeab611a22c3e16f78",
+          "python_sha256": "044a89ac600ad3e58cab3b97e81edfb3f80ec3a4512b8ffeab611a22c3e16f78",
+          "address_equal": true
+        },
+        "child_1_state": {
+          "size": 152,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "fb3a0af62ef8651d22dc105a29498db905e9879e4a122d8d1a25504b6ab3ce6e",
+          "python_sha256": "fb3a0af62ef8651d22dc105a29498db905e9879e4a122d8d1a25504b6ab3ce6e",
+          "address_equal": true
+        },
+        "child_1_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "python_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+          "address_equal": true
+        },
+        "child_1_callback_pair": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "8a7cf60719eb5e9def60532ce4cfe3562488300eda0bdaab044748700f0c9cb4",
+          "python_sha256": "8a7cf60719eb5e9def60532ce4cfe3562488300eda0bdaab044748700f0c9cb4",
+          "address_equal": true
+        },
+        "child_1_handler": {
+          "size": 232,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "5fd6c76d36cfe286ec433f77314526e728da451538149d28664b8013a4739c04",
+          "python_sha256": "5fd6c76d36cfe286ec433f77314526e728da451538149d28664b8013a4739c04",
+          "address_equal": true
+        },
+        "child_1_configuration_count": {
+          "size": 4,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "python_sha256": "9d9f290527a6be626a8f5985b26e19b237b44872b03631811df4416fc1713178",
+          "address_equal": true
+        },
+        "publication_recursive_mutex": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "e0392020b05a23844e085871026094e8da2f57a727cb25f2c2a15f730dc7323f",
+          "python_sha256": "e0392020b05a23844e085871026094e8da2f57a727cb25f2c2a15f730dc7323f",
+          "address_equal": true
+        },
+        "logger_record_container": {
+          "size": 64,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "420db6d17e88bbe12ebd1b510627e0e5dbf20999f11965894d11e711bc1dc352",
+          "python_sha256": "420db6d17e88bbe12ebd1b510627e0e5dbf20999f11965894d11e711bc1dc352",
+          "address_equal": true
+        }
+      },
+      "global_spans": {
+        "outer_slot_and_guard": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "ba8ffbda54ec33f182da4ba93b692a80387f1d3d56ac3d7fdcb63aeaeb200e04",
+          "python_sha256": "ba8ffbda54ec33f182da4ba93b692a80387f1d3d56ac3d7fdcb63aeaeb200e04"
+        },
+        "refresh_lazy_globals": {
+          "size": 40,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "fc9fed38954cc25a6eb8581ab71325095a1605fc7ba45788f7478ab391722232",
+          "python_sha256": "fc9fed38954cc25a6eb8581ab71325095a1605fc7ba45788f7478ab391722232"
+        },
+        "logger_sink": {
+          "size": 64,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "b03e507bcdfeb4312fcae2d12b5759039799213be82e8ea2e844cad5e4088b4d",
+          "python_sha256": "b03e507bcdfeb4312fcae2d12b5759039799213be82e8ea2e844cad5e4088b4d"
+        },
+        "publication_mutex_slot": {
+          "size": 8,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "6d44175e4085bf901a18b7c6d244882fa6b2034e463654017074f7cf367b3832",
+          "python_sha256": "6d44175e4085bf901a18b7c6d244882fa6b2034e463654017074f7cf367b3832"
+        },
+        "publication_once_and_chain": {
+          "size": 16,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "4ce04bce20a2ec29bda33e859bcdb428a9ec753f8cae4563eb924416714ab883",
+          "python_sha256": "4ce04bce20a2ec29bda33e859bcdb428a9ec753f8cae4563eb924416714ab883"
+        },
+        "logger_record_singleton": {
+          "size": 24,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "c131c29f2ffb00599ace52ce13966de5ad1250f189d9112a0f9adc725af4283c",
+          "python_sha256": "c131c29f2ffb00599ace52ce13966de5ad1250f189d9112a0f9adc725af4283c"
+        }
+      },
+      "additional_global_observations": {
+        "constructor_hash_input_and_result": {
+          "size": 8,
+          "equal": false,
+          "mismatch_offsets": [
+            "0x4",
+            "0x5",
+            "0x6",
+            "0x7"
+          ],
+          "native_sha256": "e476d99d8f3161f2546ee4afa6ee6f2c8191ff2f30a147b688e8e819f4645b37",
+          "python_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc"
+        },
+        "constructor_elapsed": {
+          "size": 8,
+          "equal": true,
+          "mismatch_offsets": [],
+          "native_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+          "python_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc"
+        },
+        "record_lazy_globals": {
+          "size": 272,
+          "equal": false,
+          "mismatch_offsets": [
+            "0xe0",
+            "0xe4",
+            "0xe8",
+            "0xec",
+            "0xf0",
+            "0xf4",
+            "0xf8",
+            "0xfc"
+          ],
+          "native_sha256": "e26d7278be5d5961086d37b40e573914f70272f7aeb5c26c7f12fb4ce9cb8b88",
+          "python_sha256": "b2c3debcdb817e6a86abacc54ca4d00e6ffe768754064718a1584a4d85f207ad"
+        }
+      },
+      "live_allocation_count": 195,
+      "live_allocation_mismatches": [
+        {
+          "allocation_index": 308,
+          "size": 96,
+          "equal": false,
+          "mismatch_offsets": [
+            "0x22",
+            "0x23",
+            "0x29",
+            "0x2a",
+            "0x2b",
+            "0x3a",
+            "0x3b",
+            "0x40",
+            "0x41",
+            "0x42",
+            "0x43",
+            "0x50",
+            "0x54",
+            "0x58",
+            "0x59",
+            "0x5a",
+            "0x5b",
+            "0x5c",
+            "0x5d",
+            "0x5e",
+            "0x5f"
+          ],
+          "native_sha256": "391f25ec12bd5e71e88cfcccbdf8f6150735b2e235ec9b5a0412e2aa450e2db5",
+          "python_sha256": "0a338a1227e80976a855edf49169318051b988259fd59a4e3e52dd0240a833f9"
+        }
+      ],
+      "logger_record_strings": [
+        {
+          "index": 0,
+          "length": 18,
+          "owned_bytes": {
+            "size": 20,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "1aa0db6ec601a4bb072ccd95a355d2de48183fe63b979f720a93a9476611b220",
+            "python_sha256": "1aa0db6ec601a4bb072ccd95a355d2de48183fe63b979f720a93a9476611b220"
+          },
+          "unused_padding_equal": true
+        },
+        {
+          "index": 1,
+          "length": 8,
+          "owned_bytes": {
+            "size": 10,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "2b30b7b0e0e66e45fcee303b89d89b00b08fa08066820956fe494e4712278675",
+            "python_sha256": "2b30b7b0e0e66e45fcee303b89d89b00b08fa08066820956fe494e4712278675"
+          },
+          "unused_padding_equal": false
+        },
+        {
+          "index": 2,
+          "length": 8,
+          "owned_bytes": {
+            "size": 10,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "8b937c0a38edc45dd04ded2cbb291bfd922f959f802e1c5c1cc3fb89e67c8602",
+            "python_sha256": "8b937c0a38edc45dd04ded2cbb291bfd922f959f802e1c5c1cc3fb89e67c8602"
+          },
+          "unused_padding_equal": false
+        },
+        {
+          "index": 3,
+          "length": 2,
+          "owned_bytes": {
+            "size": 4,
+            "equal": true,
+            "mismatch_offsets": [],
+            "native_sha256": "5f7c648040ccd1970afedb367064c3273d901c4864b3751671f24709b32f2a53",
+            "python_sha256": "5f7c648040ccd1970afedb367064c3273d901c4864b3751671f24709b32f2a53"
+          },
+          "unused_padding_equal": false
+        }
+      ],
+      "default_logger_record_semantics_equal": true,
+      "complete_native_outer_state_equal": false,
+      "native_input_snapshot_used": false,
+      "python_executed_before_native": true
+    }
+  ],
+  "supersedes_current_boundary_claim": "vm9_outer_constructor_boundary_20261006.json",
+  "returned_core_graph_equal": true,
+  "default_logger_record_semantics_equal": true,
+  "complete_native_outer_state_equal": false,
+  "native_input_snapshot_used": false,
+  "actual_os_threads_created": false,
+  "explicit_virtual_os_and_jni": true,
+  "jvm_used": false,
+  "fresh_input_signer_output_verified": false,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false,
+  "limitations": [
+    "Core graph and default logger record semantics match; all native globals and stack effects are not covered.",
+    "JSON parser/formatter temporary buffer contents still reproduce the measured allocation ledger only.",
+    "Unused native short-string padding contains stack residue; Python generates zero padding and does not copy it.",
+    "Native JNI publication/cleanup runs in the native control; no Python publication equivalence is claimed.",
+    "Synthetic OS, clocks and virtual threads are explicit; no physical Android thread scheduling is tested.",
+    "A constructor return is not a fresh request signature or an online acceptance result."
+  ],
+  "negative_controls": [
+    {
+      "control": "nonzero_outer",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "control": "long_format",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "control": "existing_record",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "control": "busy_once",
+      "rejected": true,
+      "pages_unchanged": true
+    }
+  ]
+}
