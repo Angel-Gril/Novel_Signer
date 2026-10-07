@@ -124,12 +124,13 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                         native_input_snapshot_used=False))
                 def event_leaf_observer(p, **context):
                     diagnostic_scope.setdefault('request_event_leaf_prefixes', []).append(dict(
-                        **context, native_input_snapshot_used=False))
+                        **context, native_input_snapshot_used=False,
+                        whole_callback_transaction_committed=False))
                 def format_event(p, obj, x1, x2, x3, x4, mode):
                     return leaf.execute_event_formatter_prefix(p, image_base=image,
                         entry_stack_address=frame.native_stack_address - 0x270,
                         event_object_address=obj, argument_words=(x1, x2, x3, x4),
-                        mode=mode, observer=event_leaf_observer)
+                        mode=mode, observer=event_leaf_observer, allocate=allocate, free=free)
                 vm9_request_event.execute_request_event(vm.m.pages, image_base=image,
                     entry_stack_address=frame.native_stack_address - 0x180,
                     argument_words=(words[1], words[2], words[3], vm.m.u64(argument + 32)),

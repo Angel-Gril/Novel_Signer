@@ -581,7 +581,7 @@
   "current_online_header_matrix_verified": false,
   "limitations": [
     "Native stops before actual unresolved JNI acquisition and mode builder; no JNI result is supplied.",
-    "Only unsampled event path returns; sampled/event and evaluator transactions refuse without committing.",
+    "This prefix-only control omits allocator/free services and stops before mode construction; complete mode-body controls live in the separate mode-format verifier.",
     "Synthetic component inputs compare initialized input/encoded-pointer slots, global page and payload, not full stack/TLS/OS.",
     "Nonzero JNI stack-trace walk, string comparisons and request URL/headers/JNI conversions are not restored."
   ]

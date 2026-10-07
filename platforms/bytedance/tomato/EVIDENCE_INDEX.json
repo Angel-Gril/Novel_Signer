@@ -2501,7 +2501,7 @@
   "vm9_request_diagnostic_continuation_20261007": {
     "evidence_file": "evidence/vm9_request_diagnostic_continuation_20261007.json",
     "schema": "vm9-request-diagnostic-continuation-probe-v1",
-    "status": "same_session_sampled_mode_and_stack_evaluator_prefixes_real_leaves_open",
+    "status": "same_session_signed_mode_body_completed_event_five_argument_formatter_open",
     "controls": 2,
     "nested_getter_composition_controls": 1,
     "owning_allocator_session_used": true,
@@ -2518,9 +2518,12 @@
       "elapsed_monotonic_microseconds": 0,
       "elapsed_from_fixed_explicit_clock": true,
       "outer_callback_orchestration_component_verified": true,
-      "unresolved_leaf_target_offset": "0x28f0f4",
+      "unresolved_leaf_target_offset": "0x28e86c",
       "event_string_prefix_staged_without_commit": true,
-      "sampled_event_mode_prefix_staged_without_commit": true
+      "sampled_event_mode_prefix_staged_without_commit": true,
+      "bounded_mode_body_completed_in_parent_transaction": true,
+      "mode_cpp_output_utf8": "{\"x0\":0}",
+      "mode_temporary_allocations_cleaned": true
     },
     "high_image": {
       "image_base": "0x775c205000",
@@ -2554,7 +2557,8 @@
       "Explicit ELF memory imports are parsed to PLT services, not a full dynamic loader.",
       "Later callback bodies and whole-native request equivalence, real URL/header/JNI, fresh signatures and online matrix remain open.",
       "Event and boolean callback supported prefixes are observed in staged transactions; missing real leaf bodies refuse and no new callback body transaction is committed.",
-      "Native prefix evidence stops before real JNI/mode builder; same-session new inner prefixes are staged without commit and outer VM remains 945/965."
+      "Native prefix evidence stops before real JNI/mode builder; same-session new inner prefixes are staged without commit and outer VM remains 945/965.",
+      "Signed mode body completes in the staged parent using owning allocator/free; whole event callback still refuses at +0x28e86c without committing."
     ],
     "parsed_memory_import_relocations": 35,
     "signed_format_composition_controls": 1,
@@ -2573,7 +2577,8 @@
     "request_event_leaf_prefix_composition_controls": 1,
     "request_evaluator_prefix_composition_controls": 1,
     "native_jni_acquisition_stub_used": false,
-    "actual_jni_acquisition_body_executed": false
+    "actual_jni_acquisition_body_executed": false,
+    "request_mode_body_composition_controls": 1
   },
   "vm9_request_string_callbacks_fresh_20261007": {
     "evidence_file": "evidence/vm9_request_string_callbacks_fresh_20261007.json",
@@ -2683,6 +2688,35 @@
       "Original native stops before +0x26edc4/+0x28f0f4; no JNI return is supplied.",
       "Synthetic component inputs compare bounded windows, not full stack/TLS/OS.",
       "Full JNI stack traversal/comparison, signature and online paths remain open."
+    ],
+    "prefix_only_control_omits_allocator_free_services": true
+  },
+  "vm9_request_mode_format_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_mode_format_fresh_20261007.json",
+    "schema": "vm9-request-mode-format-fresh-differential-v1",
+    "status": "bounded_signed_int32_mode_constructor_renderer_converter_cleanup_native_verified",
+    "controls": 38,
+    "builder_controls": 12,
+    "mode_body_controls": 22,
+    "late_parameter_update_controls": 4,
+    "negative_controls": 14,
+    "bounded_mode_body_verified": true,
+    "signed_int32_live_parameter_reference_verified": true,
+    "native_input_snapshot_used": false,
+    "explicit_component_allocator_used": true,
+    "matching_libc_allocator_used": false,
+    "full_unmasked_builder_payload_equivalence_claimed": false,
+    "full_final_mode_payload_verified": true,
+    "complete_request_event_callback_verified": false,
+    "full_generic_format_grammar_recovered": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "limitations": [
+      "Builder excludes unspecified token padding; full mode final payload has no padding exclusion.",
+      "Matching libc executes string imports; malloc/free and memcpy/memset are explicit component services.",
+      "Supported literal/{0}, signed32 and inline conversion only; other grammar/types/growth refuse.",
+      "Whole request/fresh signing, actual JNI and online matrix remain open."
     ]
   }
 }

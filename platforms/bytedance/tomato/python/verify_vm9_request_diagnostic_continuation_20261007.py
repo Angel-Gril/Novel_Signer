@@ -93,7 +93,7 @@ def case(library, libc, image, label, property_value, vm_module):
         assert not reallocations, 'this composition must not silently substitute real realloc'
         if image == 0x122C0000:
             assert vm.steps == 945 and vm.pc - image == 0xFFB48
-            assert continuation_error == 'RefillUnsupported: request mode format builder +0x28f0f4 is not recovered'
+            assert continuation_error == 'RefillUnsupported: request event argument formatter +0x28e86c is not recovered'
             assert len(nested) == 1
             assert len(diag.get('formatted_strings', [])) == 1
             formatted = diag['formatted_strings'][0]
@@ -101,7 +101,7 @@ def case(library, libc, image, label, property_value, vm_module):
             assert formatted['format_bytes_hex'] == '25647c2573'
             assert len(diag.get('configuration_insertions', [])) == 1
             assert len(diag.get('string_cleanups', [])) == 1
-            assert len(frees) == 5
+            assert len(frees) == 10
             assert len(diag.get('request_event_prefixes', [])) == 1
             event_prefix = diag['request_event_prefixes'][0]
             assert event_prefix['phase'] == 'before_first_formatter'
@@ -110,8 +110,8 @@ def case(library, libc, image, label, property_value, vm_module):
             assert event_prefix['first_object_hex'][:2] == '22'
             assert event_prefix['second_object_hex'][:2] == '26'
             assert not event_prefix['body_transaction_committed']
-            assert len(diag.get('request_event_leaf_prefixes', [])) == 2
-            sampling, mode_prefix = diag['request_event_leaf_prefixes']
+            assert len(diag.get('request_event_leaf_prefixes', [])) == 4
+            sampling, mode_prefix, mode_body, event_arguments = diag['request_event_leaf_prefixes']
             assert sampling['phase'] == 'sampling_decision' and sampling['selected']
             assert sampling['divisor'] == 10 and sampling['sequence'] == 0
             assert sampling['argument_words'] == [0, 0, 0, 0]
@@ -120,6 +120,15 @@ def case(library, libc, image, label, property_value, vm_module):
             assert mode_prefix['mode'] == 0
             assert mode_prefix['format_address'] == image + 0x3E1AD0
             assert not mode_prefix['body_transaction_committed']
+            assert mode_body['phase'] == 'mode_body_completed'
+            assert mode_body['bounded_mode_body_completed'] and mode_body['rendered_length'] == 8
+            assert not mode_body['whole_request_callback_completed']
+            assert event_arguments['phase'] == 'before_event_arguments_formatter'
+            assert event_arguments['unresolved_leaf_target_offset'] == '0x28e86c'
+            assert event_arguments['mode_cpp_object_hex'].startswith('107b227830223a307d00')
+            assert not event_arguments['body_transaction_committed']
+            assert all(not row['whole_callback_transaction_committed'] for row in diag['request_event_leaf_prefixes'])
+            assert [size for size, _ in allocations][-5:] == [64, 128, 256, 8, 8]
             assert len(diag.get('elapsed_clocks', [])) == 1
             assert diag['elapsed_clocks'][0]['elapsed_microseconds'] == 0
             assert clock_reads == [[1, 0, 1791023800, 500000000]] * 2
@@ -284,6 +293,7 @@ def main():
         request_event_prefix_composition_controls=sum(bool(row['request_event_prefixes']) for row in rows),
         request_boolean_prefix_composition_controls=sum(bool(row['request_boolean_prefixes']) for row in rows),
         request_event_leaf_prefix_composition_controls=sum(bool(row['request_event_leaf_prefixes']) for row in rows),
+        request_mode_body_composition_controls=sum(any(item.get('bounded_mode_body_completed') for item in row['request_event_leaf_prefixes']) for row in rows),
         request_evaluator_prefix_composition_controls=sum(bool(row['request_evaluator_prefixes']) for row in rows),
         native_jni_acquisition_stub_used=False,
         actual_jni_acquisition_body_executed=False,

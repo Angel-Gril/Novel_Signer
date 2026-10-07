@@ -110,3 +110,12 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_diagnostic_contin
 真实 URL/headers/JNI 转换、fresh Medusa 签名、新的线上全头矩阵、无 JVM Rust
 下载链路、非空搜索与分页、抖音/起点闭环、最终 Pages/Actions 产品仍未完成。
 后续须恢复 formatter/转换和 TLS/JavaVM 获取，再回到真实请求验证。
+
+
+## 后续：mode完整组件
+
+上述 `+0x28f0f4` 是本页前导阶段的历史边界。后续有界mode构造/渲染/转换/
+清理已由38个原生控制验证，并接回同次owning allocator。低基址最新缺口
+为五参数 `+0x28e86c`，高基址仍`+0x26edc4`。本页30个前导控制刻意不提供
+allocator/free，在实际mode构造前停止；不把它们改称完整mode控制。
+当前详见 [REQUEST_MODE_FORMAT.md](REQUEST_MODE_FORMAT.md)。

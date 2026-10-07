@@ -33,7 +33,12 @@
         10,
         16,
         40,
-        48
+        48,
+        64,
+        128,
+        256,
+        8,
+        8
       ],
       "diagnostic_events": [
         [
@@ -240,7 +245,12 @@
         "0x136d8028",
         "0x136d9280",
         "0x136d7260",
-        "0x136d7250"
+        "0x136d7250",
+        "0x136df140",
+        "0x136d6180",
+        "0x136d8028",
+        "0x136e5000",
+        "0x136d8200"
       ],
       "request_reallocation_requests": [],
       "matching_libc_realloc_implemented": false,
@@ -318,7 +328,8 @@
           "mode_output_address": 1879364792,
           "unresolved_leaf_target_offset": "0x28e788",
           "body_transaction_committed": false,
-          "native_input_snapshot_used": false
+          "native_input_snapshot_used": false,
+          "whole_callback_transaction_committed": false
         },
         {
           "phase": "before_mode_format_builder",
@@ -339,7 +350,38 @@
           "conversion_object_address": 1879364448,
           "unresolved_leaf_target_offset": "0x28f0f4",
           "body_transaction_committed": false,
-          "native_input_snapshot_used": false
+          "native_input_snapshot_used": false,
+          "whole_callback_transaction_committed": false
+        },
+        {
+          "phase": "mode_body_completed",
+          "output_object_address": 1879364792,
+          "format_object_address": 1879364592,
+          "conversion_object_address": 1879364448,
+          "rendered_length": 8,
+          "mode": 0,
+          "bounded_mode_body_completed": true,
+          "whole_request_callback_completed": false,
+          "native_input_snapshot_used": false,
+          "whole_callback_transaction_committed": false
+        },
+        {
+          "phase": "before_event_arguments_formatter",
+          "format_address": 305332087,
+          "format_object_address": 1879364856,
+          "mode_output_address": 1879364792,
+          "mode_cpp_object_hex": "107b227830223a307d000000000000000000000000000000",
+          "argument_addresses": [
+            1879364848,
+            1879364840,
+            1879364832,
+            1879364824,
+            1879364820
+          ],
+          "unresolved_leaf_target_offset": "0x28e86c",
+          "body_transaction_committed": false,
+          "native_input_snapshot_used": false,
+          "whole_callback_transaction_committed": false
         }
       ],
       "request_evaluator_prefixes": [],
@@ -603,7 +645,7 @@
         "wrapper_offset": "0x285fb4",
         "bounded_callback_orchestration_component_verified": true,
         "supported_prefix_staged_without_transaction_commit": true,
-        "unresolved_leaf_target_offset": "0x28f0f4",
+        "unresolved_leaf_target_offset": "0x28e86c",
         "target_offset": "0x28dc38",
         "target_address": "0x1254dc38",
         "null_target": false,
@@ -904,7 +946,7 @@
           ]
         }
       ],
-      "continuation_error": "RefillUnsupported: request mode format builder +0x28f0f4 is not recovered",
+      "continuation_error": "RefillUnsupported: request event argument formatter +0x28e86c is not recovered",
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
@@ -1908,6 +1950,7 @@
   "request_event_prefix_composition_controls": 1,
   "request_boolean_prefix_composition_controls": 1,
   "request_event_leaf_prefix_composition_controls": 1,
+  "request_mode_body_composition_controls": 1,
   "request_evaluator_prefix_composition_controls": 1,
   "native_jni_acquisition_stub_used": false,
   "actual_jni_acquisition_body_executed": false,

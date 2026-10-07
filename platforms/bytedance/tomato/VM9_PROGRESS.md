@@ -2361,3 +2361,16 @@ online signing chain. Evidence: [fresh writer inputs](evidence/vm9_descriptor_wr
 同次 owning session 的外层仍945/+ffb48和965/+f8fd0，内部新缺口分别为
 `+0x28f0f4` 和 `+0x26edc4`。暂存前导等价不代表完整 callback，新增事务
 没有提交。无线上请求或签名输出。详见 [REQUEST_LEAF_PREFIXES.md](REQUEST_LEAF_PREFIXES.md)。
+
+
+## 2026-10-07 signed mode 完整组件：38个原生控制/14个负控制
+
+`28e788 → 28f0f4 → 1b40d4 → 1b414c → cleanup` 的有界完整路径已恢复：
+包括token/参数向量、live signed32渲染、inline转换和五次临时分配清理。
+12个builder控制只排除未指定token padding；22个完整mode控制比较完整
+最终payload/对象；另4个构造后参数更新控制验证live pointer。通用grammar/
+类型/扩容仍拒绝，组件allocator/free和memory imports的显式服务边界保持。
+
+同次owning allocator组合生成 `{"x0":0}`，低基址内部推进到五参数
+`+0x28e86c`；高基址仍`+0x26edc4`。外层945/965没有增加，event父事务
+没有提交。详见 [REQUEST_MODE_FORMAT.md](REQUEST_MODE_FORMAT.md)。

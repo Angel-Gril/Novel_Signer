@@ -311,3 +311,23 @@ remain open. See [REQUEST_LEAF_PREFIXES.md](../REQUEST_LEAF_PREFIXES.md).
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_request_leaf_prefixes_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --output platforms/bytedance/tomato/evidence/vm9_request_leaf_prefixes_fresh_20261007.json
 ```
+
+
+### Signed mode format body (2026-10-07)
+
+`vm9_request_format_objects.py` recovers the bounded `+0x28e788` mode path:
+token and borrowed parameter vectors, live signed32 rendering, 128-byte inline
+conversion, C++ string output and temporary cleanup. The verifier has 12 builder,
+22 full mode, 4 late-parameter native controls and 14 negative controls. Builder
+comparison excludes only unspecified token padding; full mode compares the full
+final payload and objects after cleanup. Explicit allocator/free/copy services
+remain component boundaries. Other format grammar/types/growth refuse.
+
+Same-session owning allocator composition produces `{"x0":0}` and stops at
+five-argument `+0x28e86c`; high image still stops at real JNI `+0x26edc4`.
+Outer steps remain 945/965 and the complete event parent transaction does not
+commit. See [REQUEST_MODE_FORMAT.md](../REQUEST_MODE_FORMAT.md).
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_mode_format_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_mode_format_fresh_20261007.json
+```

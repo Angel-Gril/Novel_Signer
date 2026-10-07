@@ -3,6 +3,7 @@
 +0x28b05c is a Java stack-trace evaluator, not the signature algorithm.
 +0x28ddd0 samples a diagnostic event by its fourth uint64 argument.
 No callback result, JNI environment or native snapshot is synthesized here.
+The mode body can run with explicit owning allocator/free services.
 """
 from __future__ import annotations
 import vm9_objects as objects
@@ -109,8 +110,8 @@ def execute_stack_evaluator_prefix(pages, *, image_base, entry_stack_address,
 
 
 def execute_event_mode_prefix(pages, *, image_base, entry_stack_address,
-        output_object_address, mode, observer=None):
-    """+0x28e788 prepares {\"x0\":{0}} and its uint32 argument for +0x28f0f4."""
+        output_object_address, mode, observer=None, allocate=None, free=None):
+    """Prepare mode prefix; allocator/free services enable the bounded body."""
     _stack(entry_stack_address, 0x140)
     _uint(mode, 32, 'event mode')
     _uint(output_object_address, 64, 'mode output address')
@@ -127,11 +128,18 @@ def execute_event_mode_prefix(pages, *, image_base, entry_stack_address,
             format_object_address=entry_stack_address - 0xB0,
             conversion_object_address=entry_stack_address - 0x140,
             unresolved_leaf_target_offset='0x28f0f4', body_transaction_committed=False)
-    raise RefillUnsupported('request mode format builder +0x28f0f4 is not recovered')
+    if allocate is None or free is None:
+        raise RefillUnsupported('request mode construction +0x28f0f4 requires allocator/free services')
+    import vm9_request_format_objects as formatting
+    result = formatting.execute_event_mode(p, image_base=image_base,
+        entry_stack_address=entry_stack_address, output_object_address=output_object_address,
+        mode=mode, allocate=allocate, free=free, observer=observer)
+    p.commit()
+    return result
 
 
 def execute_event_formatter_prefix(pages, *, image_base, entry_stack_address,
-        event_object_address, argument_words, mode, observer=None):
+        event_object_address, argument_words, mode, observer=None, allocate=None, free=None):
     """+0x28ddd0 sampling and locals; selected branch enters real mode prefix.
 
     AArch64 UDIV by zero produces zero, so the remainder is the sequence word.
@@ -169,6 +177,15 @@ def execute_event_formatter_prefix(pages, *, image_base, entry_stack_address,
     if selected:
         execute_event_mode_prefix(p, image_base=image_base,
             entry_stack_address=local, output_object_address=local + 0x18,
-            mode=mode, observer=observer)
+            mode=mode, observer=observer, allocate=allocate, free=free)
+        if observer:
+            observer(p, phase='before_event_arguments_formatter',
+                format_address=image_base+0x6FF77,
+                format_object_address=local+0x58,
+                mode_output_address=local+0x18,
+                mode_cpp_object_hex=_read_span(p,local+0x18,24).hex(),
+                argument_addresses=[local+n for n in (0x50,0x48,0x40,0x38,0x34)],
+                unresolved_leaf_target_offset='0x28e86c', body_transaction_committed=False)
+        raise RefillUnsupported('request event argument formatter +0x28e86c is not recovered')
     p.commit()
     return False

@@ -108,7 +108,7 @@ def formatter_case(library, image, divisor, sequence, mode, warm):
                 entry_stack_address=STACK, event_object_address=EVENT,
                 argument_words=words, mode=mode, observer=observe)
         except RefillUnsupported as exc:
-            assert str(exc) == 'request mode format builder +0x28f0f4 is not recovered'
+            assert str(exc) == 'request mode construction +0x28f0f4 requires allocator/free services'
         else:
             raise AssertionError('missing real mode builder was accepted')
         assert snapshot(model) == before
@@ -194,7 +194,7 @@ def main():
         complete_callback_body_verified=False,complete_python_medusa=False,
         fresh_input_signer_output_verified=False,current_online_header_matrix_verified=False,
         limitations=['Native stops before actual unresolved JNI acquisition and mode builder; no JNI result is supplied.',
-            'Only unsampled event path returns; sampled/event and evaluator transactions refuse without committing.',
+            'This prefix-only control omits allocator/free services and stops before mode construction; complete mode-body controls live in the separate mode-format verifier.',
             'Synthetic component inputs compare initialized input/encoded-pointer slots, global page and payload, not full stack/TLS/OS.',
             'Nonzero JNI stack-trace walk, string comparisons and request URL/headers/JNI conversions are not restored.'])
     args.output.parent.mkdir(parents=True,exist_ok=True)
