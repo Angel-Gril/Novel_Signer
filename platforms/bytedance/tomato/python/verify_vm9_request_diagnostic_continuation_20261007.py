@@ -50,6 +50,7 @@ def case(library, libc, image, label, property_value, vm_module):
         assert (list(session.tx.mappings), session.tx.next_address) == mapping_before
         del copied, before
         staged = _PageTransaction(pages)
+        memory_imports = prefix.resolve_request_memory_imports(staged, library, image)
         request = worker.TOP + 0x100
         _write_span(staged, request, bytes(0x800))
         pair = result.callback_pair_addresses[0]
@@ -59,16 +60,23 @@ def case(library, libc, image, label, property_value, vm_module):
             thread_pointer=fixture.TLS, image_base=image, argument_x0=handler,
             argument_x1=request, argument_x2=0, argument_x3=request + 0x200,
             output_x8=request + 0x400)
-        allocations = []
+        allocations, frees, reallocations = [], [], []
         def allocate(pages, size):
             pointer = session.allocate(pages, size)
             allocations.append((size, pointer))
             return pointer
+        def free(pages, pointer):
+            frees.append(pointer)
+            return session.free(pages, pointer)
+        def reallocate(pages, pointer, size):
+            reallocations.append((pointer, size))
+            return session.reallocate(pages, pointer, size)
         diag = {'thread_id': session.thread_id}
         try:
             state, frame, vm, ledger, decoded = prefix.execute_prefix(
                 staged, inputs, vm_module, 1791023800, 500000000,
-                allocate=allocate, diagnostic_scope=diag)
+                allocate=allocate, diagnostic_scope=diag,
+                reallocate=reallocate, free=free, prepare_format=session.prepare_format)
             continuation_error = None
         except prefix.RequestContinuationBoundary as exc:
             state, frame, vm, ledger, decoded = (exc.staged, exc.frame, exc.vm,
@@ -76,38 +84,40 @@ def case(library, libc, image, label, property_value, vm_module):
             continuation_error = f"{type(exc.cause).__name__}: {exc.cause}"
         print('request continuation', hex(image), vm.steps, hex(vm.pc - image), continuation_error, flush=True)
         nested = diag.get('nested_getters', [])
+        assert not reallocations, 'this composition must not silently substitute real realloc'
         if image == 0x122C0000:
-            assert vm.steps == 816 and vm.pc - image == 0xF85B4
-            assert continuation_error == 'RefillUnsupported: unknown request callback +0x285990 -> +0x248908'
-            assert len(nested) == 1 and nested[0]['vm_steps'] == 54
-            assert nested[0]['vm_exit_pc'] == image + 0x99150
-            assert nested[0]['declared_length'] == 8 and nested[0]['output_matches_receiver']
-            assert nested[0]['acquire_reader_count'] == nested[0]['released_reader_count'] + 1
-            assert allocations[-1][0] == 9
-            assert ledger[-1][:2] == (0x285990, 0x248908)
-            from vm9_objects import _cstring
-            next_words = [int.from_bytes(_read_span(state, ledger[-1][2] + 8*i, 8), 'little')
-                          for i in range(5)]
-            format_bytes = _cstring(state, next_words[2], 4096)[:-1]
-            next_callback = dict(wrapper_offset='0x285990', target_offset='0x248908',
-                packed_words=[hex(word) for word in next_words],
-                format_bytes_hex=format_bytes.hex(),
-                format_sha256=hashlib.sha256(format_bytes).hexdigest(),
-                first_variadic_int32=(next_words[3] & 0xFFFFFFFF) - (0x100000000 if next_words[3] & 0x80000000 else 0),
-                callback_body_implemented=False)
+            assert vm.steps == 919 and vm.pc - image == 0xFFAE0
+            assert continuation_error == 'RefillUnsupported: unknown request callback +0x285f60 -> +0x2914d0'
+            assert len(nested) == 1
+            assert len(diag.get('formatted_strings', [])) == 1
+            formatted = diag['formatted_strings'][0]
+            assert formatted['signed_int32'] == -5 and formatted['declared_length'] == 11
+            assert formatted['format_bytes_hex'] == '25647c2573'
+            assert len(diag.get('configuration_insertions', [])) == 1
+            assert len(diag.get('string_cleanups', [])) == 1
+            assert len(frees) == 5
         else:
-            # Expanded address coverage exposed an earlier *model* boundary.
-            # Preserve that failed continuation separately, rather than claiming
-            # this second outer control reached the getter or native agreed.
             assert image == 0x775C205000
-            assert vm.steps == 641 and vm.pc - image == 0xF812C
-            assert continuation_error == 'RefillUnsupported: unknown request callback +0x2858ec -> +0x24880c'
-            assert not nested and ledger[-1][:2] == (0x2858EC, 0x24880C)
-            next_callback = dict(wrapper_offset='0x2858ec', target_offset='0x24880c',
-                packed_words=[hex(word) for word in ledger[-1][3]],
-                static_abi_observation='wrapper stores low bit of boolean; target compares fields at object+8 via +0x247374',
-                callback_body_implemented=False,
-                native_outer_branch_equivalence_verified=False)
+            assert vm.steps == 793 and vm.pc - image == 0xF87BC
+            assert continuation_error == 'RefillUnsupported: unknown request callback +0x2859e0 -> +0x32a330'
+            assert not nested and not diag.get('formatted_strings')
+            assert len(diag.get('string_comparisons', [])) == 1
+            assert diag['string_comparisons'][0]['equal'] is False
+            assert len(diag.get('guard_acquires', [])) == 1 and diag['guard_acquires'][0]['acquired']
+            assert [item['length'] for item in diag.get('memory_fills', [])] == [160]
+            assert all(item['value'] == 0 for item in diag['memory_fills'])
+        assert any(item['symbol']=='memset' and item['relocation_offset']=='0x382c80'
+                   and item['target_offset']=='0x347f20' and item['relocation_kind']==257
+                   for item in memory_imports)
+        for getter in nested:
+            assert getter['vm_steps'] == 54 and getter['vm_exit_pc'] == image + 0x99150
+            assert getter['output_matches_receiver']
+            assert getter['acquire_reader_count'] == getter['released_reader_count'] + 1
+        next_callback = dict(wrapper_offset=hex(ledger[-1][0]),
+            target_offset=hex(ledger[-1][1]) if ledger[-1][3][0] else None,
+            target_address=hex(ledger[-1][3][0]), null_target=not bool(ledger[-1][3][0]),
+            packed_words=[hex(word) for word in ledger[-1][3]],
+            callback_body_implemented=False, native_outer_branch_equivalence_verified=False)
         assert any(item[:2] == (0x2858D0, 0x26C858) for item in ledger)
         assert [size for size, _ in allocations][:4] == [40, 40, 40, 4]
         descriptor = [item for item in ledger if item[:2] == (0x2858BC, 0x25C324)]
@@ -130,6 +140,19 @@ def case(library, libc, image, label, property_value, vm_module):
             nested_getters=diag.get('nested_getters', []),
             continued_after_nested_getter=bool(diag.get('nested_getters')),
             nested_getter_source_state_injected=False,
+            string_comparisons=diag.get('string_comparisons', []),
+            formatted_strings=diag.get('formatted_strings', []),
+            continued_after_string_comparison=bool(diag.get('string_comparisons')),
+            continued_after_signed_formatter=bool(diag.get('formatted_strings')),
+            request_free_addresses=[hex(pointer) for pointer in frees],
+            request_reallocation_requests=[[hex(pointer), size] for pointer, size in reallocations],
+            matching_libc_realloc_implemented=False,
+            string_cleanups=diag.get('string_cleanups', []),
+            cstring_constructors=diag.get('cstring_constructors', []),
+            guard_acquires=diag.get('guard_acquires', []),
+            memory_import_relocations=memory_imports,
+            memory_fills=diag.get('memory_fills', []),
+            configuration_insertions=diag.get('configuration_insertions', []),
             next_callback=next_callback,
             callback_ledger=[dict(wrapper=hex(item[0]), target=hex(item[1]), argument=hex(item[2]), words=[hex(x) for x in item[3]]) for item in ledger],
             continuation_error=continuation_error,
@@ -173,7 +196,10 @@ def main():
         sample_sha256=oracle.LIBRARY_SHA256, libc_sha256=worker.LIBC_SHA256, controls=len(rows), cases=rows,
         synthetic_request_nested_getter_composition_verified=any(row['continued_after_nested_getter'] for row in rows),
         nested_getter_composition_controls=sum(row['continued_after_nested_getter'] for row in rows),
-        high_image_outer_getter_continuation_verified=False,
+        high_image_outer_getter_continuation_verified=any(row['image_base']=='0x775c205000' and row['continued_after_nested_getter'] for row in rows),
+        signed_format_composition_controls=sum(row['continued_after_signed_formatter'] for row in rows),
+        equality_composition_controls=sum(row['continued_after_string_comparison'] for row in rows),
+        matching_libc_realloc_implemented=False,
         whole_handoff_native_differential_verified=False,
         real_url_headers_jni_conversion_verified=False,
         no_jvm_rust_signer_complete=False,
@@ -182,7 +208,7 @@ def main():
         limitations=['This is a same Python outer/request composition, not whole native handoff differential.',
             'Request URL/header/JNI conversion and later callback bodies remain unresolved.',
             'A continuation error marks the next callback boundary; it is not treated as a signature failure.',
-            'The high image control stops earlier at +0x2858ec -> +0x24880c; native outer branch equivalence is unverified.',
+            'Equality and signed format callbacks have component native differences; whole-native outer branch equivalence remains unverified.',
             'No JVM, server request or raw signature is used.'])
     args.output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     print('request diagnostic continuation probe written; next callback boundary is recorded')

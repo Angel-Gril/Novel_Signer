@@ -12,11 +12,13 @@
 在 bytecode `image+0x99150` 退出；原生 caller 的返回另有独立观察。
 28 组新增 native/Python 对照和 7 个负控制通过，没有把 native 快照作为模型输入。
 
-同次 Python outer/request 组合在低加载基址 `0x122c0000` 使用已构造的 receiver
-和原 allocator/OS session，推进至第 816 步、bytecode `+0xf85b4`；下一处是
-`+0x285990 → +0x248908`。高加载基址 `0x775c205000` 的外层控制在第 641 步
-停于更早的 `+0x2858ec → +0x24880c`，没有完成 getter 组合。
-这一外层分支差异尚无 whole-native 对照，不能当成原生必然不同的证明。
+当前同次 Python outer/request 已继续恢复相等性、signed 格式化、字符串清理、
+serial guard 和显式 memory imports。低加载基址 `0x122c0000` 推进至
+**919 / +0xffae0**，下一处 `+0x285f60 → +0x2914d0`；高加载基址
+`0x775c205000` 推进至 **793 / +0xf87bc**，下一处 `+0x2859e0 → +0x32a330`。
+新增 56 个组件原生对照、11 个负控制和 6 个 prefix 回归通过，详见
+[REQUEST_STRING_CALLBACKS.md](REQUEST_STRING_CALLBACKS.md)。高基址仍未完成 getter
+组合，外层分支差异仍无 whole-native 对照。
 
 整个 request VM、真实 URL/headers/JNI 转换、完整独立 Medusa、fresh 签名和当前
 线上矩阵仍未完成。Python 没有完整建模 native caller epilogue/ABI 返回；独立
@@ -267,16 +269,13 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_diagnostic_contin
 
 ## 6. 下一处边界与未验证内容
 
-低基址请求的下一 callback 是 `+0x285990 → +0x248908`，packed 输入记录了
-格式 `%d|%s`、int32 参数 `-5` 和本次 getter 输出 payload 指针。已有
-`format_string_object` 只覆盖 `%s/%%`，signed decimal 和该请求所需的 allocator
-增长/realloc 尚待恢复，不能借用 Python `printf` 输出或 native 格式化结果充数。
+此前 `%d|%s` 与 C-string equality 边界已恢复，并接回同次 owning allocator。
+低基址已推进到 `+0x285f60 → +0x2914d0`，高基址到
+`+0x2859e0 → +0x32a330`。当时高基址的 NULL memset target 已追到真实 ELF
+`+0x382c80` ABS64 relocation，并按解析出的 PLT service 绑定；不是填入 native
+输出以跳过函数。
 
-高基址外层先停在 `+0x2858ec → +0x24880c`。私有 ELF 静态指令显示 wrapper
-发布 boolean 的低 bit，target 调用 `+0x247374` 比较 object+8 的 fields；其 Python
-body 和 whole-native 外层分支对照未完成。本轮 12 getter 和 4 wrapper 对照都覆盖
-高基址，并不消除这个更早的外层缺口。
-
-后续应先恢复上述实际 callback 分支，再验证整个 request 返回和真实
-URL/headers/JNI 转换，最后验收 fresh Medusa、线上全头矩阵、无 JVM Rust 下载
-链路。当前非空搜索/分页、抖音/起点及最终 Pages/Actions 产品继续保持未完成。
+新的 ABI、正常和拒绝控制、resolver、原生/helper 返回差别及完整复现见
+[REQUEST_STRING_CALLBACKS.md](REQUEST_STRING_CALLBACKS.md)。matching-libc realloc
+仍未实现；本次低基址 growth 未触发该路径。真实请求转换、完整 request 返回和
+签名仍未完成，不能把两个不同 stop 合并成请求成功。

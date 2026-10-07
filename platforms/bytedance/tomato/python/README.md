@@ -22,14 +22,29 @@ nested-prefix controls also pass. Native caller/wrapper return is observed,
 while the Python full native caller ABI remains unmodeled.
 
 The same-session outer/request probe uses the constructed receiver and its
-own allocator/OS staging chain without string/reader fixture injection. Its
-low image case reaches step 816 / `+0xf85b4`, then stops at the `%d|%s`
-formatter `+0x285990 -> +0x248908`. The high image case stops earlier at
-step 641 / `+0xf812c`, `+0x2858ec -> +0x24880c`; the native outer branch
-has not been compared. These remain synthetic requests and Python composition,
-not URL/headers/JNI conversion, complete Medusa or online signature output.
-See [REQUEST_NESTED_VM.md](../REQUEST_NESTED_VM.md) for contracts, object/word
-layouts, allocation limits, evidence boundaries and reproduction commands.
+own allocator/OS staging chain. C-string equality, signed `%d` formatting,
+temporary string cleanup, serial guard acquire and parsed ELF memory imports
+now continue the low image case to step 919 / `+0xffae0` and the high image
+case to step 793 / `+0xf87bc`. The next callbacks are `+0x2914d0` and
+`+0x32a330` respectively. Neither entire native request branch is compared,
+and requests still use synthetic inputs.
+
+`vm9_configuration_init.format_string_object` supports only `%d/%s/%%` over
+raw ABI words. Native successful cleanup returns zero; the helper returns its
+destination address for API use. `vm9_startup.acquire_serial_guard` reuses the
+startup guard transition with its actual global normal mutex. New evidence
+covers 32 equality, 14 formatter and 10 guard differences plus 11 refusals.
+The formatter oracle executes real matching-libc vsnprintf with explicit
+allocator services; the integration uses the owning allocator model and
+performs no real realloc. `session.reallocate` remains unsupported.
+`resolve_request_memory_imports` parses 35 ELF symbol relocations to explicit
+memset/memcpy PLT services; it is a limited fixture loader contract.
+
+See [REQUEST_NESTED_VM.md](../REQUEST_NESTED_VM.md) for the getter and
+[REQUEST_STRING_CALLBACKS.md](../REQUEST_STRING_CALLBACKS.md) for callback ABI,
+comparison windows, loader dependencies, evidence use and commands. These
+results do not implement real URL/headers/JNI conversion, complete Medusa or
+online signature output.
 
 The Python files are research fixtures. They do not contain the private device configuration or raw online trial material.
 

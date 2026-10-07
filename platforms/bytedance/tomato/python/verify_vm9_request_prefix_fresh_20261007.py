@@ -29,7 +29,46 @@ class RequestContinuationBoundary(Exception):
         self.ledger, self.decoded, self.cause = ledger, decoded, cause
 
 
-def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None, diagnostic_scope=None):
+def resolve_request_memory_imports(pages, library, image):
+    """Resolve matching ELF memset/memcpy imports to explicit PLT services.
+
+    Derive PLT entries from this file's jump relocations, then bind matching
+    ABS64/GLOB_DAT/JUMP_SLOT sites. This is loader input, not native output.
+    The VM callback hooks implement the declared PLT services separately.
+    """
+    targets, relocations = {}, []
+    with library.open('rb') as stream:
+        elf = ELFFile(stream)
+        plt = elf.get_section_by_name('.plt')
+        jumps = elf.get_section_by_name('.rela.plt')
+        if plt is None or jumps is None:
+            raise RefillUnsupported('request ELF lacks the expected PLT relocations')
+        symbols = elf.get_section(jumps['sh_link'])
+        for index, relocation in enumerate(jumps.iter_relocations()):
+            name = symbols.get_symbol(relocation['r_info_sym']).name
+            if name in ('memset', 'memcpy'):
+                targets[name] = image + plt['sh_addr'] + 32 + index * 16
+        if targets != {'memset': image + 0x347F20, 'memcpy': image + 0x347F60}:
+            raise RefillUnsupported('request ELF memory import layout does not match this sample')
+        for section in elf.iter_sections():
+            if section['sh_type'] != 'SHT_RELA':
+                continue
+            symbols = elf.get_section(section['sh_link'])
+            for relocation in section.iter_relocations():
+                name = symbols.get_symbol(relocation['r_info_sym']).name
+                if relocation['r_info_type'] in (257, 1025, 1026) and name in targets:
+                    relocations.append((name, relocation['r_offset'],
+                        targets[name] + relocation['r_addend'], relocation['r_info_type']))
+    staged = _PageTransaction(pages)
+    for name, offset, target, kind in relocations:
+        _write_span(staged, image + offset, target.to_bytes(8, 'little'))
+    staged.commit()
+    return [dict(symbol=name, relocation_offset=hex(offset),
+        target_offset=hex(target-image), relocation_kind=kind) for name, offset, target, kind in relocations]
+
+
+def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None,
+                   diagnostic_scope=None, reallocate=None, free=None, prepare_format=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -98,6 +137,83 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     vtable_address=image + 0x34F5F8,
                     empty_descriptor_address=image + 0x6E168)
                 diagnostic_scope.setdefault('string_callbacks', []).append(words[1])
+            elif allocate is not None and (wrapper, target) == (0x2859CC, 0x347F20):
+                if diagnostic_scope is None:
+                    raise PrefixBoundary()
+                fill, size = words[2] & 255, words[3]
+                if size > 0x100000:
+                    raise RefillUnsupported('request memset exceeds the explicit bound')
+                _write_span(vm.m.pages, words[1], bytes([fill]) * size)
+                diagnostic_scope.setdefault('memory_fills', []).append(dict(
+                    destination_address=words[1], value=fill, length=size))
+            elif allocate is not None and (wrapper, target) == (0x2859B8, 0x25BF3C):
+                if diagnostic_scope is None or free is None:
+                    raise PrefixBoundary()
+                import vm9_registry
+                pair = vm9_registry.insert_configuration_pair(vm.m.pages,
+                    container_address=words[1], key_address=words[2], value_address=words[3],
+                    image_base=image, allocate=allocate, free=free)
+                diagnostic_scope.setdefault('configuration_insertions', []).append(dict(
+                    container_address=words[1], key_address=words[2],
+                    value_address=words[3], pair_address=pair))
+            elif allocate is not None and (wrapper, target) == (0x2859A8, 0x248344):
+                objects.construct_string_object(vm.m.pages, object_address=words[1],
+                    source_address=words[2], allocate=allocate,
+                    vtable_address=image + 0x34F5F8,
+                    empty_descriptor_address=image + 0x6E168)
+                diagnostic_scope.setdefault('cstring_constructors', []).append(dict(
+                    object_address=words[1], source_address=words[2],
+                    declared_length=vm.m.u32(words[1] + 12), native_input_snapshot_used=False))
+            elif allocate is not None and (wrapper, target) == (0x28591C, 0x2484B8):
+                if free is None or diagnostic_scope is None:
+                    raise PrefixBoundary()
+                pointer = vm.m.u64(words[1] + 16)
+                objects.destroy_string_object(vm.m.pages, object_address=words[1],
+                    image_base=image, free=free)
+                diagnostic_scope.setdefault('string_cleanups', []).append(dict(
+                    object_address=words[1], released_payload=pointer))
+            elif allocate is not None and (wrapper, target) == (0x285944, 0x32D3A0):
+                if diagnostic_scope is None:
+                    raise PrefixBoundary()
+                import vm9_startup
+                before = _read_span(vm.m.pages, words[1], 8)
+                acquired = vm9_startup.acquire_serial_guard(vm.m.pages,
+                    guard_address=words[1], image_base=image,
+                    thread_id=diagnostic_scope.get('thread_id'))
+                _write_span(vm.m.pages, argument + 16, int(acquired).to_bytes(4, 'little'))
+                diagnostic_scope.setdefault('guard_acquires', []).append(dict(
+                    guard_address=words[1], acquired=acquired,
+                    guard_before_hex=before.hex(),
+                    guard_after_hex=_read_span(vm.m.pages, words[1], 8).hex()))
+            elif allocate is not None and (wrapper, target) == (0x2858EC, 0x24880C):
+                import vm9_configuration_init
+                equal = vm9_configuration_init.string_equals_cstring(vm.m.pages,
+                    object_address=words[1], cstring_address=words[2])
+                # +0x285900 AND W8,W0,#1 and STRB at argument+0x18.
+                _write_span(vm.m.pages, argument + 0x18, bytes([int(equal)]))
+                diagnostic_scope.setdefault('string_comparisons', []).append(dict(
+                    object_address=words[1], cstring_address=words[2], equal=equal,
+                    argument_address=argument))
+            elif allocate is not None and (wrapper, target) == (0x285990, 0x248908):
+                if diagnostic_scope is None or reallocate is None or free is None:
+                    raise PrefixBoundary()
+                import vm9_configuration_init
+                string_word = vm.m.u64(argument + 0x20)
+                result = vm9_configuration_init.format_string_object(vm.m.pages,
+                    object_address=words[1], format_address=words[2],
+                    argument_addresses=(words[3] & 0xFFFFFFFF, string_word, words[0]),
+                    image_base=image, allocate=allocate, reallocate=reallocate,
+                    free=free, prepare_format=prepare_format)
+                length = vm.m.u32(result + 12)
+                pointer = vm.m.u64(result + 16)
+                payload = _read_span(vm.m.pages, pointer, length) if pointer else b''
+                diagnostic_scope.setdefault('formatted_strings', []).append(dict(
+                    object_address=result, format_address=words[2],
+                    signed_int32=objects._s32(words[3] & 0xFFFFFFFF),
+                    string_argument_address=string_word, declared_length=length,
+                    payload_sha256=hashlib.sha256(payload).hexdigest(),
+                    format_bytes_hex=objects._cstring(vm.m.pages, words[2], 4096)[:-1].hex(),
+                    native_input_snapshot_used=False))
             elif allocate is not None and (wrapper, target) == (0x285978, 0x256ED4):
                 if diagnostic_scope is None:
                     raise PrefixBoundary()
@@ -134,6 +250,8 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     source_state_injected=False, native_input_snapshot_used=False,
                     python_full_native_caller_abi_modeled=False))
             else:
+                if not words[0]:
+                    raise RefillUnsupported(f'NULL request callback target at wrapper +{wrapper:#x}')
                 raise RefillUnsupported(f'unknown request callback +{wrapper:#x} -> +{target:#x}')
         vm.native_hook = callback
         try:
@@ -154,16 +272,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
 def case(library, image, flag, seconds, nanoseconds, vm_module):
     pages = oracle.image_pages(library, image)
     pages.update(oracle.fresh_pages())
-    with library.open("rb") as stream:
-        elf = ELFFile(stream)
-        for section in elf.iter_sections():
-            if section["sh_type"] != "SHT_RELA":
-                continue
-            symbols = elf.get_section(section["sh_link"])
-            for relocation in section.iter_relocations():
-                if relocation["r_info_type"] in (257, 1025, 1026) and symbols.get_symbol(relocation["r_info_sym"]).name == "memcpy":
-                    _write_span(pages, image + relocation["r_offset"],
-                        (image + 0x347F60 + relocation["r_addend"]).to_bytes(8, "little"))
+    memory_imports = resolve_request_memory_imports(pages, library, image)
     inputs = dict(entry_stack_address=oracle.GUEST + 0xEF00,
         return_address=oracle.STOP, thread_pointer=oracle.GUEST + 0xD000,
         image_base=image, argument_x0=oracle.GUEST + 0x2000,
@@ -223,7 +332,9 @@ def case(library, image, flag, seconds, nanoseconds, vm_module):
         boundary_descriptor_equal=True, clock_calls=1,
         request_objects_are_synthetic=True,
         handler_profile='synthetic 128-byte handler with current service vtable',
-        memcpy_imports_resolved_to_explicit_plt_service=True)
+        memcpy_imports_resolved_to_explicit_plt_service=True,
+        memset_imports_resolved_to_explicit_plt_service=True,
+        memory_import_relocations=memory_imports)
 
 
 def outer_handoff(library, libc, image, label, value, vm_module):
@@ -284,6 +395,9 @@ def main():
         for flag, seconds, nanoseconds in ((0, 0, 0), (1, 1234, 567890123), (0xFFFFFFFF, 1791023800, 500000000)):
             rows.append(case(args.library, image, flag, seconds, nanoseconds, vm_full))
             print('request prefix', hex(image), flag, 'PASS', flush=True)
+    memory_imports = rows[0]['memory_import_relocations']
+    for row in rows:
+        assert row.pop('memory_import_relocations') == memory_imports
     handoffs = []
     if args.outer_libc is not None:
         import verify_vm9_worker_allocator as worker
@@ -294,6 +408,8 @@ def main():
                 print('same fresh outer/request prefix', hex(image), label, 'PASS', flush=True)
     report = dict(schema='vm9-request-prefix-fresh-differential-v1', evidence_date='2026-10-07',
         sample_sha256=oracle.LIBRARY_SHA256, controls=len(rows), cases=rows,
+        memory_import_relocations=memory_imports,
+        memory_import_resolution_kind='parsed matching ELF relocations to explicit PLT services',
         same_python_outer_handoff_controls=len(handoffs), same_python_outer_handoff_cases=handoffs,
         fresh_input_signer_output_verified=False, complete_python_medusa=False,
         current_online_header_matrix_verified=False,

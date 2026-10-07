@@ -1,5 +1,31 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07：请求相等性、signed 格式化和 ELF memset 输入接入
+
+此前 `%d|%s` 格式化与高基址相等性停止点已恢复，新增 **56 个 native 对照 /
+11 个负控制**：32 equality、14 signed format、10 serial guard。复用原有
+字符串 constructor/destructor、配置树插入和 guard transition，未创建重复语义。
+格式化执行 matching-libc `vsnprintf`；其分配/realloc/free 是明确的组件服务。
+native 成功返回 cleanup status 0，Python helper 的对象返回是另一层契约。
+
+同次 owning session 组合使用实际 receiver、原 allocator/free/locale 服务；本次
+两路径都未触发仍未恢复的 matching-libc realloc。低基址从 816 推进到 **919 /
++0xffae0**，完成 length=11 的 `%d|%s`、getter 临时字符串清理和配置 pair 插入；
+下一 callback `+0x285f60 → +0x2914d0`。高基址从 641 推进到 **793 / +0xf87bc**，
+完成相等性、cold guard acquire 和 160 字节清零；下一 `+0x2859e0 → +0x32a330`。
+
+高基址中途 NULL target 已定位为 `image+0x382c80` 对 memset 的 ABS64 外部重定位。
+resolver 从 matching ELF 推导 memset/memcpy 的 PLT，绑定 35 个限定 symbol 槽，
+没有用 native 输出填洞。六个 prefix 回归对照保持通过，仍验证 30 个 physical
+callback frame；这不是整个 loader 或 whole-native request 的验证。
+
+详细接口、位宽/NUL/guard 行为、观测窗口、证据用途和复现命令见
+[REQUEST_STRING_CALLBACKS.md](REQUEST_STRING_CALLBACKS.md)。下方较早记录保留各自
+当时边界；当前进度由本节与新证据为准。
+**真实 URL/headers/JNI、完整 request 返回、fresh Medusa 与新线上矩阵仍未完成**；
+Rust、当前搜索、其他平台和最终下载产品的完成状态没有改变。
+
+
 ## 2026-10-07：ORi、getter 返回链和同次请求接入
 
 `+0x16e32c` 的正常 OR immediate 已恢复。fresh caller 经已有 prefix、MOVhi、ORi

@@ -24,7 +24,16 @@
         48,
         24,
         8,
-        9
+        9,
+        16,
+        8,
+        32,
+        16,
+        24,
+        10,
+        16,
+        40,
+        48
       ],
       "diagnostic_events": [
         [
@@ -78,6 +87,30 @@
         [
           "pthread_mutex_unlock",
           325925368
+        ],
+        [
+          "pthread_mutex_lock",
+          325925320
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925320
+        ],
+        [
+          "pthread_mutex_lock",
+          325925464
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925464
+        ],
+        [
+          "pthread_mutex_lock",
+          325925464
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925464
         ]
       ],
       "diagnostic_scopes": [
@@ -89,6 +122,16 @@
         {
           "table_index": 197,
           "entry_address": "0x136d39f0",
+          "lock_result": 0
+        },
+        {
+          "table_index": 147,
+          "entry_address": "0x136d3a50",
+          "lock_result": 0
+        },
+        {
+          "table_index": 147,
+          "entry_address": "0x136d3a50",
           "lock_result": 0
         }
       ],
@@ -177,20 +220,279 @@
       ],
       "continued_after_nested_getter": true,
       "nested_getter_source_state_injected": false,
+      "string_comparisons": [],
+      "formatted_strings": [
+        {
+          "object_address": 325947616,
+          "format_address": 308940304,
+          "signed_int32": -5,
+          "string_argument_address": 325939792,
+          "declared_length": 11,
+          "payload_sha256": "efed150ccdc906b27d33491c12b414c1ad4f2f534935cd3fa8dfdbc5f4abce6b",
+          "format_bytes_hex": "25647c2573",
+          "native_input_snapshot_used": false
+        }
+      ],
+      "continued_after_string_comparison": false,
+      "continued_after_signed_formatter": true,
+      "request_free_addresses": [
+        "0x136d8200",
+        "0x136d8028",
+        "0x136d9280",
+        "0x136d7260",
+        "0x136d7250"
+      ],
+      "request_reallocation_requests": [],
+      "matching_libc_realloc_implemented": false,
+      "string_cleanups": [
+        {
+          "object_address": 1879371224,
+          "released_payload": 325939792
+        }
+      ],
+      "cstring_constructors": [
+        {
+          "object_address": 325948032,
+          "source_address": 308940316,
+          "declared_length": 9,
+          "native_input_snapshot_used": false
+        }
+      ],
+      "guard_acquires": [],
+      "memory_import_relocations": [
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x3797d0",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x379970",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x379a70",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x381f20",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382000",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x3820a0",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382170",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x3829e0",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a20",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a30",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a40",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a50",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a60",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a70",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382c80",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x383238",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x383680",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x379678",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x381f28",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382008",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x3820a8",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382178",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382948",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x3829e8",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a28",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a38",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a48",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a58",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a68",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a78",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382aa8",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382cb0",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x383230",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x375220",
+          "target_offset": "0x347f20",
+          "relocation_kind": 1026
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x375240",
+          "target_offset": "0x347f60",
+          "relocation_kind": 1026
+        }
+      ],
+      "memory_fills": [],
+      "configuration_insertions": [
+        {
+          "container_address": 325925168,
+          "key_address": 325948032,
+          "value_address": 325947616,
+          "pair_address": 325939808
+        }
+      ],
       "next_callback": {
-        "wrapper_offset": "0x285990",
-        "target_offset": "0x248908",
+        "wrapper_offset": "0x285f60",
+        "target_offset": "0x2914d0",
+        "target_address": "0x125514d0",
+        "null_target": false,
         "packed_words": [
-          "0x12508908",
-          "0x136d90e0",
-          "0x126a0e10",
-          "0xfffffffb",
-          "0x136d7250"
+          "0x125514d0",
+          "0x7004ec08",
+          "0x0",
+          "0x0"
         ],
-        "format_bytes_hex": "25647c2573",
-        "format_sha256": "802e5487e1427f529d7d7717fd604aa456934f75ccea9ef2884f0df9c9540553",
-        "first_variadic_int32": -5,
-        "callback_body_implemented": false
+        "callback_body_implemented": false,
+        "native_outer_branch_equivalence_verified": false
       },
       "callback_ledger": [
         {
@@ -368,17 +670,116 @@
             "0x126a0e10",
             "0xfffffffb"
           ]
+        },
+        {
+          "wrapper": "0x28591c",
+          "target": "0x2484b8",
+          "argument": "0x7004eb30",
+          "words": [
+            "0x125084b8",
+            "0x7004edd8",
+            "0x1250bcbc",
+            "0x7004ec50"
+          ]
+        },
+        {
+          "wrapper": "0x285928",
+          "target": "0x32a1f0",
+          "argument": "0x7004eb18",
+          "words": [
+            "0x125ea1f0",
+            "0x18",
+            "0x136d90e0",
+            "0x125084b8"
+          ]
+        },
+        {
+          "wrapper": "0x2859a8",
+          "target": "0x248344",
+          "argument": "0x7004ea88",
+          "words": [
+            "0x12508344",
+            "0x136d9280",
+            "0x126a0e1c",
+            "0x12508908"
+          ]
+        },
+        {
+          "wrapper": "0x2859b8",
+          "target": "0x25bf3c",
+          "argument": "0x7004ea68",
+          "words": [
+            "0x1251bf3c",
+            "0x136d3930",
+            "0x136d9280",
+            "0x136d90e0"
+          ]
+        },
+        {
+          "wrapper": "0x2858d0",
+          "target": "0x26c858",
+          "argument": "0x7004eb80",
+          "words": [
+            "0x1252c858",
+            "0x7004edd8",
+            "0x136d3930",
+            "0x1251c324"
+          ]
+        },
+        {
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0",
+          "argument": "0x7004eb70",
+          "words": [
+            "0x1252c9d0",
+            "0x7004edd8",
+            "0x1252c858",
+            "0x7004edd8"
+          ]
+        },
+        {
+          "wrapper": "0x2858d0",
+          "target": "0x26c858",
+          "argument": "0x7004eb80",
+          "words": [
+            "0x1252c858",
+            "0x7004edd8",
+            "0x136d3930",
+            "0x1251c324"
+          ]
+        },
+        {
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0",
+          "argument": "0x7004eb70",
+          "words": [
+            "0x1252c9d0",
+            "0x7004edd8",
+            "0x1252c858",
+            "0x7004edd8"
+          ]
+        },
+        {
+          "wrapper": "0x285f60",
+          "target": "0x2914d0",
+          "argument": "0x7004e470",
+          "words": [
+            "0x125514d0",
+            "0x7004ec08",
+            "0x0",
+            "0x0"
+          ]
         }
       ],
-      "continuation_error": "RefillUnsupported: unknown request callback +0x285990 -> +0x248908",
+      "continuation_error": "RefillUnsupported: unknown request callback +0x285f60 -> +0x2914d0",
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
       "request_objects_are_synthetic": true,
-      "steps": 816,
-      "stop_bytecode_offset": "0xf85b4",
-      "boundary_wrapper_offset": "0x285990",
-      "boundary_target_offset": "0x248908",
+      "steps": 919,
+      "stop_bytecode_offset": "0xffae0",
+      "boundary_wrapper_offset": "0x285f60",
+      "boundary_target_offset": "0x2914d0",
       "initial_diagnostic_wrapper_offset": "0x2858d0",
       "initial_diagnostic_target_offset": "0x26c858",
       "actual_jvm_used": false,
@@ -403,7 +804,9 @@
         4,
         48,
         2048,
-        48
+        48,
+        16,
+        160
       ],
       "diagnostic_events": [
         [
@@ -449,9 +852,22 @@
         [
           "pthread_mutex_unlock",
           325925368
+        ],
+        [
+          "pthread_mutex_lock",
+          325925368
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925368
         ]
       ],
       "diagnostic_scopes": [
+        {
+          "table_index": 197,
+          "entry_address": "0x136d39f0",
+          "lock_result": 0
+        },
         {
           "table_index": 197,
           "entry_address": "0x136d39f0",
@@ -461,16 +877,261 @@
       "nested_getters": [],
       "continued_after_nested_getter": false,
       "nested_getter_source_state_injected": false,
+      "string_comparisons": [
+        {
+          "object_address": 512650259536,
+          "cstring_address": 512647188068,
+          "equal": false,
+          "argument_address": 1879370576
+        }
+      ],
+      "formatted_strings": [],
+      "continued_after_string_comparison": true,
+      "continued_after_signed_formatter": false,
+      "request_free_addresses": [],
+      "request_reallocation_requests": [],
+      "matching_libc_realloc_implemented": false,
+      "string_cleanups": [],
+      "cstring_constructors": [],
+      "guard_acquires": [
+        {
+          "guard_address": 512650733480,
+          "acquired": true,
+          "guard_before_hex": "0000000000000000",
+          "guard_after_hex": "0002000089000000"
+        }
+      ],
+      "memory_import_relocations": [
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x3797d0",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x379970",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x379a70",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x381f20",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382000",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x3820a0",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382170",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x3829e0",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a20",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a30",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a40",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a50",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a60",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382a70",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x382c80",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x383238",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x383680",
+          "target_offset": "0x347f20",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x379678",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x381f28",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382008",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x3820a8",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382178",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382948",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x3829e8",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a28",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a38",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a48",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a58",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a68",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382a78",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382aa8",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x382cb0",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x383230",
+          "target_offset": "0x347f60",
+          "relocation_kind": 257
+        },
+        {
+          "symbol": "memset",
+          "relocation_offset": "0x375220",
+          "target_offset": "0x347f20",
+          "relocation_kind": 1026
+        },
+        {
+          "symbol": "memcpy",
+          "relocation_offset": "0x375240",
+          "target_offset": "0x347f60",
+          "relocation_kind": 1026
+        }
+      ],
+      "memory_fills": [
+        {
+          "destination_address": 325952768,
+          "value": 0,
+          "length": 160
+        }
+      ],
+      "configuration_insertions": [],
       "next_callback": {
-        "wrapper_offset": "0x2858ec",
-        "target_offset": "0x24880c",
+        "wrapper_offset": "0x2859e0",
+        "target_offset": "0x32a330",
+        "target_address": "0x775c52f330",
+        "null_target": false,
         "packed_words": [
-          "0x775c44d80c",
-          "0x775c562c50",
-          "0x775c274e64",
-          "0x775c45c250"
+          "0x775c52f330",
+          "0x136da500",
+          "0x775c54cf20",
+          "0x136da500"
         ],
-        "static_abi_observation": "wrapper stores low bit of boolean; target compares fields at object+8 via +0x247374",
         "callback_body_implemented": false,
         "native_outer_branch_equivalence_verified": false
       },
@@ -573,17 +1234,94 @@
             "0x775c274e64",
             "0x775c45c250"
           ]
+        },
+        {
+          "wrapper": "0x2858d0",
+          "target": "0x26c858",
+          "argument": "0x7004eb80",
+          "words": [
+            "0x775c471858",
+            "0x7004edd8",
+            "0x775c562c50",
+            "0x775c461324"
+          ]
+        },
+        {
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0",
+          "argument": "0x7004eb70",
+          "words": [
+            "0x775c4719d0",
+            "0x7004edd8",
+            "0x775c471858",
+            "0x7004edd8"
+          ]
+        },
+        {
+          "wrapper": "0x285944",
+          "target": "0x32d3a0",
+          "argument": "0x7004eb00",
+          "words": [
+            "0x775c5323a0",
+            "0x775c5d67a8",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "wrapper": "0x285928",
+          "target": "0x32a1f0",
+          "argument": "0x7004eb18",
+          "words": [
+            "0x775c52f1f0",
+            "0x10",
+            "0x7004ec50",
+            "0x775c368e1c"
+          ]
+        },
+        {
+          "wrapper": "0x285928",
+          "target": "0x32a1f0",
+          "argument": "0x7004eb18",
+          "words": [
+            "0x775c52f1f0",
+            "0xa0",
+            "0x136d7250",
+            "0x775c368e1c"
+          ]
+        },
+        {
+          "wrapper": "0x2859cc",
+          "target": "0x347f20",
+          "argument": "0x7004ea48",
+          "words": [
+            "0x775c54cf20",
+            "0x136da500",
+            "0x0",
+            "0xa0"
+          ]
+        },
+        {
+          "wrapper": "0x2859e0",
+          "target": "0x32a330",
+          "argument": "0x7004ea38",
+          "words": [
+            "0x775c52f330",
+            "0x136da500",
+            "0x775c54cf20",
+            "0x136da500"
+          ]
         }
       ],
-      "continuation_error": "RefillUnsupported: unknown request callback +0x2858ec -> +0x24880c",
+      "continuation_error": "RefillUnsupported: unknown request callback +0x2859e0 -> +0x32a330",
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
       "request_objects_are_synthetic": true,
-      "steps": 641,
-      "stop_bytecode_offset": "0xf812c",
-      "boundary_wrapper_offset": "0x2858ec",
-      "boundary_target_offset": "0x24880c",
+      "steps": 793,
+      "stop_bytecode_offset": "0xf87bc",
+      "boundary_wrapper_offset": "0x2859e0",
+      "boundary_target_offset": "0x32a330",
       "initial_diagnostic_wrapper_offset": "0x2858d0",
       "initial_diagnostic_target_offset": "0x26c858",
       "actual_jvm_used": false,
@@ -596,6 +1334,9 @@
   "synthetic_request_nested_getter_composition_verified": true,
   "nested_getter_composition_controls": 1,
   "high_image_outer_getter_continuation_verified": false,
+  "signed_format_composition_controls": 1,
+  "equality_composition_controls": 1,
+  "matching_libc_realloc_implemented": false,
   "whole_handoff_native_differential_verified": false,
   "real_url_headers_jni_conversion_verified": false,
   "no_jvm_rust_signer_complete": false,
@@ -606,7 +1347,7 @@
     "This is a same Python outer/request composition, not whole native handoff differential.",
     "Request URL/header/JNI conversion and later callback bodies remain unresolved.",
     "A continuation error marks the next callback boundary; it is not treated as a signature failure.",
-    "The high image control stops earlier at +0x2858ec -> +0x24880c; native outer branch equivalence is unverified.",
+    "Equality and signed format callbacks have component native differences; whole-native outer branch equivalence remains unverified.",
     "No JVM, server request or raw signature is used."
   ]
 }

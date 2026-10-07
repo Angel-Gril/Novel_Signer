@@ -28,7 +28,8 @@
       "clock_calls": 1,
       "request_objects_are_synthetic": true,
       "handler_profile": "synthetic 128-byte handler with current service vtable",
-      "memcpy_imports_resolved_to_explicit_plt_service": true
+      "memcpy_imports_resolved_to_explicit_plt_service": true,
+      "memset_imports_resolved_to_explicit_plt_service": true
     },
     {
       "image_base": "0x122c0000",
@@ -54,7 +55,8 @@
       "clock_calls": 1,
       "request_objects_are_synthetic": true,
       "handler_profile": "synthetic 128-byte handler with current service vtable",
-      "memcpy_imports_resolved_to_explicit_plt_service": true
+      "memcpy_imports_resolved_to_explicit_plt_service": true,
+      "memset_imports_resolved_to_explicit_plt_service": true
     },
     {
       "image_base": "0x122c0000",
@@ -80,7 +82,8 @@
       "clock_calls": 1,
       "request_objects_are_synthetic": true,
       "handler_profile": "synthetic 128-byte handler with current service vtable",
-      "memcpy_imports_resolved_to_explicit_plt_service": true
+      "memcpy_imports_resolved_to_explicit_plt_service": true,
+      "memset_imports_resolved_to_explicit_plt_service": true
     },
     {
       "image_base": "0x775c205000",
@@ -106,7 +109,8 @@
       "clock_calls": 1,
       "request_objects_are_synthetic": true,
       "handler_profile": "synthetic 128-byte handler with current service vtable",
-      "memcpy_imports_resolved_to_explicit_plt_service": true
+      "memcpy_imports_resolved_to_explicit_plt_service": true,
+      "memset_imports_resolved_to_explicit_plt_service": true
     },
     {
       "image_base": "0x775c205000",
@@ -132,7 +136,8 @@
       "clock_calls": 1,
       "request_objects_are_synthetic": true,
       "handler_profile": "synthetic 128-byte handler with current service vtable",
-      "memcpy_imports_resolved_to_explicit_plt_service": true
+      "memcpy_imports_resolved_to_explicit_plt_service": true,
+      "memset_imports_resolved_to_explicit_plt_service": true
     },
     {
       "image_base": "0x775c205000",
@@ -158,9 +163,223 @@
       "clock_calls": 1,
       "request_objects_are_synthetic": true,
       "handler_profile": "synthetic 128-byte handler with current service vtable",
-      "memcpy_imports_resolved_to_explicit_plt_service": true
+      "memcpy_imports_resolved_to_explicit_plt_service": true,
+      "memset_imports_resolved_to_explicit_plt_service": true
     }
   ],
+  "memory_import_relocations": [
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x3797d0",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x379970",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x379a70",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x381f20",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x382000",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x3820a0",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x382170",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x3829e0",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x382a20",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x382a30",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x382a40",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x382a50",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x382a60",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x382a70",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x382c80",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x383238",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x383680",
+      "target_offset": "0x347f20",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x379678",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x381f28",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382008",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x3820a8",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382178",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382948",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x3829e8",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382a28",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382a38",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382a48",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382a58",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382a68",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382a78",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382aa8",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x382cb0",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x383230",
+      "target_offset": "0x347f60",
+      "relocation_kind": 257
+    },
+    {
+      "symbol": "memset",
+      "relocation_offset": "0x375220",
+      "target_offset": "0x347f20",
+      "relocation_kind": 1026
+    },
+    {
+      "symbol": "memcpy",
+      "relocation_offset": "0x375240",
+      "target_offset": "0x347f60",
+      "relocation_kind": 1026
+    }
+  ],
+  "memory_import_resolution_kind": "parsed matching ELF relocations to explicit PLT services",
   "same_python_outer_handoff_controls": 0,
   "same_python_outer_handoff_cases": [],
   "fresh_input_signer_output_verified": false,

@@ -17,6 +17,18 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
+2026-10-07 当前检查点又向前推进：C-string equality、signed `%d|%s`、serial guard
+及 ELF memset 输入依赖新增 **56 个原生对照、11 个负控制**。同次 Python 请求低
+基址到 **919 / +0xffae0**，高基址到 **793 / +0xf87bc**；下一处分别为
+`+0x285f60 → +0x2914d0` 与 `+0x2859e0 → +0x32a330`。本次增长沿 owning
+allocator 的 malloc/copy/free，不等于已恢复真实 realloc；后者仍明确拒绝。
+高基址的中途 NULL 来自尚未绑定的 memset ABS64 relocation，已按原 ELF 解析
+PLT service 解决。详细调用、比较窗口、native/helper 返回差别及关键证据用途见
+[REQUEST_STRING_CALLBACKS.md](REQUEST_STRING_CALLBACKS.md)。完整 request/真实
+URL/headers/JNI、fresh Medusa、线上矩阵和下载产品仍未完成；下方旧条目保留当时
+的范围，不能作为本次新边界的成功证明。
+
+
 2026-10-07 当前请求检查点：`+0x16e32c` ORi 和 `+0x256ed4` 字符串 getter 的
 acquire/clone/release 与 VM 退出已有 **28 个新增原生对照、7 个负控制**；6 个
 外层 prefix 回归验证了 30 个物理 callback frame，36 个此前 nested 前缀对照也

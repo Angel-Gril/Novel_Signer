@@ -2490,36 +2490,42 @@
     "complete_python_medusa": false,
     "fresh_input_signer_output_verified": false,
     "current_online_header_matrix_verified": false,
-    "interpretation": "Actual outer-prefix callback entries match SP=caller stack-0x180, x29=caller stack-0x60, x28=backing and x19=backing-8.",
+    "interpretation": "Six actual prefix controls validate physical callback frame formulas and compare 32 slots/decodes/descriptors with matching ELF memset/memcpy symbol relocations bound to explicit PLT services.",
     "limitations": [
       "Stops before the allocating tree callback; native request objects are synthetic.",
       "These frame observations do not prove the complete outer/request composition."
-    ]
+    ],
+    "parsed_memory_import_relocations": 35,
+    "explicit_memset_and_memcpy_plt_services": true
   },
   "vm9_request_diagnostic_continuation_20261007": {
     "evidence_file": "evidence/vm9_request_diagnostic_continuation_20261007.json",
     "schema": "vm9-request-diagnostic-continuation-probe-v1",
-    "status": "same_session_low_image_getter_continued_high_image_earlier_boundary_open",
+    "status": "same_session_low_format_tree_high_equality_guard_memory_imports_continued",
     "controls": 2,
     "nested_getter_composition_controls": 1,
     "owning_allocator_session_used": true,
     "nested_getter_source_state_injected": false,
     "low_image": {
       "image_base": "0x122c0000",
-      "steps": 816,
-      "bytecode_offset": "0xf85b4",
-      "wrapper_offset": "0x285990",
-      "target_offset": "0x248908",
-      "format": "%d|%s",
-      "first_variadic_int32": -5
+      "steps": 919,
+      "bytecode_offset": "0xffae0",
+      "wrapper_offset": "0x285f60",
+      "target_offset": "0x2914d0",
+      "signed_formatter_completed": true,
+      "getter_cleanup_completed": true,
+      "new_configuration_pair_inserted": true
     },
     "high_image": {
       "image_base": "0x775c205000",
-      "steps": 641,
-      "bytecode_offset": "0xf812c",
-      "wrapper_offset": "0x2858ec",
-      "target_offset": "0x24880c",
-      "getter_reached": false
+      "steps": 793,
+      "bytecode_offset": "0xf87bc",
+      "wrapper_offset": "0x2859e0",
+      "target_offset": "0x32a330",
+      "getter_reached": false,
+      "cstring_equality_completed": true,
+      "serial_guard_acquired": true,
+      "memset_completed_bytes": 160
     },
     "native_input_snapshot_used": false,
     "whole_handoff_native_differential_verified": false,
@@ -2530,9 +2536,42 @@
     "current_online_header_matrix_verified": false,
     "no_jvm_rust_signer_complete": false,
     "limitations": [
-      "Same Python constructor/request/allocator composition on synthetic request inputs, not whole-native differential.",
-      "Only the low image case reaches the getter; high image stops at an earlier unknown callback.",
-      "Signed formatting, remaining request callbacks, real URL/headers/JNI and signature output remain open."
+      "Same owning Python constructor/request/allocator composition uses synthetic request inputs, not whole-native differential.",
+      "The two branches still differ; high image has not reached the getter or formatter.",
+      "Explicit ELF memory imports are parsed to PLT services, not a full dynamic loader.",
+      "Clock/state and later callbacks, real URL/header/JNI, fresh signatures and online matrix remain open."
+    ],
+    "parsed_memory_import_relocations": 35,
+    "signed_format_composition_controls": 1,
+    "equality_composition_controls": 1,
+    "matching_libc_realloc_implemented": false,
+    "reallocation_requests": 0
+  },
+  "vm9_request_string_callbacks_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_string_callbacks_fresh_20261007.json",
+    "schema": "vm9-request-string-callbacks-fresh-differential-v1",
+    "status": "cstring_equality_signed_format_and_serial_guard_component_pass",
+    "equality_controls": 32,
+    "formatting_controls": 14,
+    "guard_controls": 10,
+    "negative_controls": 11,
+    "native_input_snapshot_used": false,
+    "signed_int32_formatting_verified": true,
+    "matching_libc_vsnprintf_executed": true,
+    "matching_libc_mutexes_executed_in_guard_controls": true,
+    "explicit_component_allocator_service_used": true,
+    "matching_libc_realloc_implemented": false,
+    "native_format_cleanup_success_return": 0,
+    "python_format_helper_returns_output_object": true,
+    "whole_handoff_native_differential_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "Format scope is %d/%s/%%; width/precision/unsigned and other conversions are rejected.",
+      "Format memory differences compare payload 0xA000, main image pages, TLS 0xB00 and generation 0x800 windows, not entire OS state.",
+      "Malloc/realloc/free are component Effects; whole-native request, actual realloc, URL/header/JNI and signer output are not established."
     ]
   }
 }

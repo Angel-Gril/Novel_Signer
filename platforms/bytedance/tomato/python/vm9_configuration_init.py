@@ -493,7 +493,7 @@ def get_environment_constant(pages, *, image_base, entry_offset):
 
 
 def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
-    """Bounded printf %s/%% subset; read guest inputs on each formatter call."""
+    """Bounded printf %d/%s/%% over raw ABI words; read live inputs each call."""
     fmt=objects._cstring(pages,format_address,max_bytes)[:-1]
     result=bytearray();i=0;argument=0
     while i<len(fmt):
@@ -506,7 +506,16 @@ def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
                 if argument>=len(argument_addresses) or not argument_addresses[argument]:
                     raise RefillUnsupported('missing/NULL printf string argument')
                 result.extend(objects._cstring(pages,argument_addresses[argument],max_bytes)[:-1]);argument+=1
-            else:raise RefillUnsupported('printf conversion outside %s/%% is unsupported')
+            elif conversion==100:
+                if argument>=len(argument_addresses):
+                    raise RefillUnsupported('missing printf decimal argument')
+                raw=argument_addresses[argument]
+                if not isinstance(raw,int) or not 0<=raw<=MASK64:
+                    raise RefillUnsupported('printf decimal argument must be a uint64 ABI word')
+                # Unqualified %d consumes signed int32 from the GP varargs
+                # slot; the wrapper loads W2, so its upper bits are ignored.
+                result.extend(str(objects._s32(raw&0xFFFFFFFF)).encode('ascii'));argument+=1
+            else:raise RefillUnsupported('printf conversion outside %d/%s/%% is unsupported')
         if len(result)>max_bytes:raise RefillUnsupported('formatted string exceeds bound')
     return bytes(result)
 
@@ -514,7 +523,7 @@ def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
 def format_string_object(pages, *, object_address, format_address,
         argument_addresses, image_base, allocate, reallocate, free, max_bytes=0x100000,
         prepare_format=None):
-    """+0x248908 non-NULL %s/%% formatting, growth/retry/copy/cleanup.
+    """+0x248908 non-NULL %d/%s/%% formatting, growth/retry/copy/cleanup.
 
     Restore the 16-byte temporary capacity/length/pointer allocation, initial
     buffer, strict capacity rounding, truncated vsnprintf writes and retries.

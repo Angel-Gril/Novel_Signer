@@ -30,6 +30,26 @@ def _guard_acquire(p,address,thread_id):
 def _guard_release(p,address):_write_span(p,address,b'\1\1')
 
 
+def acquire_serial_guard(pages, *, guard_address, image_base, thread_id=None):
+    """+0x32d3a0 no-wait guard acquire with its actual global mutex.
+
+    Reuse the startup guard transition, including the whole first byte and
+    second-byte completed state. The cold thread id is an explicit provider
+    input. Recursive/contended guards and non-normal mutexes fail closed;
+    no native runtime abort, wait or OS thread is executed here.
+    """
+    staged=_PageTransaction(pages)
+    guard=_read_span(staged,guard_address,8)
+    if guard[0]:
+        return False
+    mutex=image_base+0x3E2F40
+    objects.lock_uncontended_mutex(staged,mutex_address=mutex)
+    acquired=_guard_acquire(staged,guard_address,thread_id)
+    objects.unlock_uncontended_mutex(staged,mutex_address=mutex)
+    staged.commit()
+    return acquired
+
+
 def move_callable(pages, *, destination_address, source_address, image_base):
     """+0x3259c4 move with two evidenced inline-copy vtables.
 
