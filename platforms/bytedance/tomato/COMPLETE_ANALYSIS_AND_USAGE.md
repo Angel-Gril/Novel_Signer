@@ -17,7 +17,13 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-07 最新内部callback检查点：新增76个组件对照/10个负控制，恢复事件
+2026-10-07 最新leaf前导检查点：新增30个原生对照/6个负控制，恢复采样和
+九组Java线程栈lazy初始化。同次组合仍945/965步，内部推进至mode builder
+`+0x28f0f4`和真实JNI acquisition `+0x26edc4`。10个未采样诊断路径返回，
+其余路径暂存后拒绝，完整callback/fresh signer未通过。本批原生在JNI调用
+前停止，没有使用既有env stub。详见 [REQUEST_LEAF_PREFIXES.md](REQUEST_LEAF_PREFIXES.md)。
+
+2026-10-07 此前内部callback检查点：新增76个组件对照/10个负控制，恢复事件
 包装、boolean gate的有界编排和24-byte C++ string。event formatter/evaluator/
 scope cleanup的原生body仍未恢复；组合生成暂存前导后明确拒绝，外层仍945/965步，
 下一缺口分别`+0x28ddd0`和`+0x28b05c`。此外修正realloc hook与旧控制误称：

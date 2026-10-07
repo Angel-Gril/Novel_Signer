@@ -93,7 +93,7 @@ def case(library, libc, image, label, property_value, vm_module):
         assert not reallocations, 'this composition must not silently substitute real realloc'
         if image == 0x122C0000:
             assert vm.steps == 945 and vm.pc - image == 0xFFB48
-            assert continuation_error == 'RefillUnsupported: request event formatter +0x28ddd0 is not recovered'
+            assert continuation_error == 'RefillUnsupported: request mode format builder +0x28f0f4 is not recovered'
             assert len(nested) == 1
             assert len(diag.get('formatted_strings', [])) == 1
             formatted = diag['formatted_strings'][0]
@@ -110,13 +110,23 @@ def case(library, libc, image, label, property_value, vm_module):
             assert event_prefix['first_object_hex'][:2] == '22'
             assert event_prefix['second_object_hex'][:2] == '26'
             assert not event_prefix['body_transaction_committed']
+            assert len(diag.get('request_event_leaf_prefixes', [])) == 2
+            sampling, mode_prefix = diag['request_event_leaf_prefixes']
+            assert sampling['phase'] == 'sampling_decision' and sampling['selected']
+            assert sampling['divisor'] == 10 and sampling['sequence'] == 0
+            assert sampling['argument_words'] == [0, 0, 0, 0]
+            assert mode_prefix['phase'] == 'before_mode_format_builder'
+            assert mode_prefix['unresolved_leaf_target_offset'] == '0x28f0f4'
+            assert mode_prefix['mode'] == 0
+            assert mode_prefix['format_address'] == image + 0x3E1AD0
+            assert not mode_prefix['body_transaction_committed']
             assert len(diag.get('elapsed_clocks', [])) == 1
             assert diag['elapsed_clocks'][0]['elapsed_microseconds'] == 0
             assert clock_reads == [[1, 0, 1791023800, 500000000]] * 2
         else:
             assert image == 0x775C205000
             assert vm.steps == 965 and vm.pc - image == 0xF8FD0
-            assert continuation_error == 'RefillUnsupported: request boolean evaluator +0x28b05c is not recovered'
+            assert continuation_error == 'RefillUnsupported: request JNI acquisition +0x26edc4 is not recovered'
             assert not nested and not diag.get('formatted_strings')
             assert len(diag.get('string_comparisons', [])) == 1
             assert diag['string_comparisons'][0]['equal'] is False
@@ -138,6 +148,14 @@ def case(library, libc, image, label, property_value, vm_module):
             assert boolean_prefix['addresses']['evaluator'] == image + 0x28B05C
             assert boolean_prefix['scope_hex'][16:18] == '01'
             assert not boolean_prefix['body_transaction_committed']
+            assert len(diag.get('request_evaluator_prefixes', [])) == 1
+            evaluator = diag['request_evaluator_prefixes'][0]
+            assert evaluator['phase'] == 'before_jni_acquisition'
+            assert evaluator['unresolved_leaf_target_offset'] == '0x26edc4'
+            assert len(evaluator['globals']) == 9 and evaluator['descriptor_count'] == 2
+            assert evaluator['descriptor_address'] == boolean_prefix['evaluator_argument_address']
+            assert evaluator['method_name_address'] == boolean_prefix['addresses']['second_name']
+            assert not evaluator['body_transaction_committed']
             assert len(diag.get('shared_state_pointers', [])) == 1
             getter = diag['shared_state_pointers'][0]
             assert getter['readers_before'] == getter['readers_after'] == 0
@@ -150,8 +168,8 @@ def case(library, libc, image, label, property_value, vm_module):
             assert getter['vm_steps'] == 54 and getter['vm_exit_pc'] == image + 0x99150
             assert getter['output_matches_receiver']
             assert getter['acquire_reader_count'] == getter['released_reader_count'] + 1
-        inner = (diag.get('request_event_prefixes') or diag.get('request_boolean_prefixes'))[-1]
-        leaf_target = inner.get('formatter_target_offset') or inner['unresolved_leaf_target_offset']
+        inner = (diag.get('request_event_leaf_prefixes') or diag.get('request_evaluator_prefixes'))[-1]
+        leaf_target = inner['unresolved_leaf_target_offset']
         next_callback = dict(wrapper_offset=hex(ledger[-1][0]),
             bounded_callback_orchestration_component_verified=True,
             supported_prefix_staged_without_transaction_commit=True,
@@ -198,6 +216,10 @@ def case(library, libc, image, label, property_value, vm_module):
             shared_state_pointers=diag.get('shared_state_pointers', []),
             request_event_prefixes=diag.get('request_event_prefixes', []),
             request_boolean_prefixes=diag.get('request_boolean_prefixes', []),
+            request_event_leaf_prefixes=diag.get('request_event_leaf_prefixes', []),
+            request_evaluator_prefixes=diag.get('request_evaluator_prefixes', []),
+            native_jni_acquisition_stub_used=False,
+            actual_jni_acquisition_body_executed=False,
             inner_callback_body_transaction_committed=False,
             clock_stores=diag.get('clock_stores', []),
             elapsed_clocks=diag.get('elapsed_clocks', []),
@@ -261,6 +283,10 @@ def main():
         actual_os_clock_executed=False,
         request_event_prefix_composition_controls=sum(bool(row['request_event_prefixes']) for row in rows),
         request_boolean_prefix_composition_controls=sum(bool(row['request_boolean_prefixes']) for row in rows),
+        request_event_leaf_prefix_composition_controls=sum(bool(row['request_event_leaf_prefixes']) for row in rows),
+        request_evaluator_prefix_composition_controls=sum(bool(row['request_evaluator_prefixes']) for row in rows),
+        native_jni_acquisition_stub_used=False,
+        actual_jni_acquisition_body_executed=False,
         inner_callback_body_transaction_committed=False,
         whole_handoff_native_differential_verified=False,
         real_url_headers_jni_conversion_verified=False,

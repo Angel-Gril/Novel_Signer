@@ -2349,3 +2349,15 @@ not a cross-seed entropy claim.
 The owner-frame continuation and callback body remain unresolved. This evidence
 closes a bounded fresh writer-input boundary, not the full Python Medusa or
 online signing chain. Evidence: [fresh writer inputs](evidence/vm9_descriptor_writer_fresh_inputs_20261006.json).
+
+
+## 2026-10-07 request 内部 leaf 前导：真实 JNI 与模式 builder 边界
+
+新增30个原生对照/6个负控制，恢复 `28ddd0 → 28e788` 的采样/参数槽和
+`28b05c` 的九组 lazy 全局。10个未采样路径自然返回；10个采样路径停在
+`28f0f4` 前。另10个 evaluator 控制停在 `26edc4` 前，没有使用 oracle 的
+既有 `env` stub；此前虚拟 env=0 的探查返回不能作为真实 JNI 获取证明。
+
+同次 owning session 的外层仍945/+ffb48和965/+f8fd0，内部新缺口分别为
+`+0x28f0f4` 和 `+0x26edc4`。暂存前导等价不代表完整 callback，新增事务
+没有提交。无线上请求或签名输出。详见 [REQUEST_LEAF_PREFIXES.md](REQUEST_LEAF_PREFIXES.md)。

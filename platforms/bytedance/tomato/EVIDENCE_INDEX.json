@@ -2501,7 +2501,7 @@
   "vm9_request_diagnostic_continuation_20261007": {
     "evidence_file": "evidence/vm9_request_diagnostic_continuation_20261007.json",
     "schema": "vm9-request-diagnostic-continuation-probe-v1",
-    "status": "same_session_event_boolean_supported_prefixes_staged_leaf_bodies_open",
+    "status": "same_session_sampled_mode_and_stack_evaluator_prefixes_real_leaves_open",
     "controls": 2,
     "nested_getter_composition_controls": 1,
     "owning_allocator_session_used": true,
@@ -2518,8 +2518,9 @@
       "elapsed_monotonic_microseconds": 0,
       "elapsed_from_fixed_explicit_clock": true,
       "outer_callback_orchestration_component_verified": true,
-      "unresolved_leaf_target_offset": "0x28ddd0",
-      "event_string_prefix_staged_without_commit": true
+      "unresolved_leaf_target_offset": "0x28f0f4",
+      "event_string_prefix_staged_without_commit": true,
+      "sampled_event_mode_prefix_staged_without_commit": true
     },
     "high_image": {
       "image_base": "0x775c205000",
@@ -2535,8 +2536,9 @@
       "serial_guard_released": true,
       "shared_state_pointer_getter_completed": true,
       "outer_callback_orchestration_component_verified": true,
-      "unresolved_leaf_target_offset": "0x28b05c",
-      "boolean_scope_parameter_prefix_staged_without_commit": true
+      "unresolved_leaf_target_offset": "0x26edc4",
+      "boolean_scope_parameter_prefix_staged_without_commit": true,
+      "stack_evaluator_prefix_staged_without_commit": true
     },
     "native_input_snapshot_used": false,
     "whole_handoff_native_differential_verified": false,
@@ -2551,7 +2553,8 @@
       "The two branches still differ; high image has not reached the StringObject getter or formatter.",
       "Explicit ELF memory imports are parsed to PLT services, not a full dynamic loader.",
       "Later callback bodies and whole-native request equivalence, real URL/header/JNI, fresh signatures and online matrix remain open.",
-      "Event and boolean callback supported prefixes are observed in staged transactions; missing real leaf bodies refuse and no new callback body transaction is committed."
+      "Event and boolean callback supported prefixes are observed in staged transactions; missing real leaf bodies refuse and no new callback body transaction is committed.",
+      "Native prefix evidence stops before real JNI/mode builder; same-session new inner prefixes are staged without commit and outer VM remains 945/965."
     ],
     "parsed_memory_import_relocations": 35,
     "signed_format_composition_controls": 1,
@@ -2566,7 +2569,11 @@
     "shared_state_pointer_composition_controls": 1,
     "request_event_prefix_composition_controls": 1,
     "request_boolean_prefix_composition_controls": 1,
-    "inner_callback_body_transaction_committed": false
+    "inner_callback_body_transaction_committed": false,
+    "request_event_leaf_prefix_composition_controls": 1,
+    "request_evaluator_prefix_composition_controls": 1,
+    "native_jni_acquisition_stub_used": false,
+    "actual_jni_acquisition_body_executed": false
   },
   "vm9_request_string_callbacks_fresh_20261007": {
     "evidence_file": "evidence/vm9_request_string_callbacks_fresh_20261007.json",
@@ -2651,6 +2658,31 @@
       "Payload, selected local windows and a global page are compared; full native stack/TLS/OS and C++ native return ABI remain unverified.",
       "Same-session request prefixes are staged and refuse missing leaves without committing callback body.",
       "Complete request, real URL/header/JNI, fresh signatures and online behavior remain unresolved."
+    ]
+  },
+  "vm9_request_leaf_prefixes_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_leaf_prefixes_fresh_20261007.json",
+    "schema": "vm9-request-leaf-prefixes-fresh-differential-v1",
+    "status": "original_native_prefixes_before_real_jni_acquisition_and_mode_builder",
+    "controls": 30,
+    "evaluator_prefix_controls": 10,
+    "event_formatter_controls": 20,
+    "negative_controls": 6,
+    "unsampled_event_native_return_controls": 10,
+    "sampled_event_mode_prefix_controls": 10,
+    "native_jni_acquisition_stub_used": false,
+    "actual_jni_acquisition_body_executed": false,
+    "actual_mode_format_builder_body_executed": false,
+    "native_input_snapshot_used": false,
+    "sampled_and_evaluator_transactions_committed": false,
+    "complete_callback_body_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "limitations": [
+      "Original native stops before +0x26edc4/+0x28f0f4; no JNI return is supplied.",
+      "Synthetic component inputs compare bounded windows, not full stack/TLS/OS.",
+      "Full JNI stack traversal/comparison, signature and online paths remain open."
     ]
   }
 }

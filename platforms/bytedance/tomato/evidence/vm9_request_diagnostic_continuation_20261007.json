@@ -300,6 +300,51 @@
         }
       ],
       "request_boolean_prefixes": [],
+      "request_event_leaf_prefixes": [
+        {
+          "phase": "sampling_decision",
+          "divisor": 10,
+          "sequence": 0,
+          "remainder": 0,
+          "selected": true,
+          "argument_words": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mode": 0,
+          "argument_slots_address": 1879364820,
+          "mode_output_address": 1879364792,
+          "unresolved_leaf_target_offset": "0x28e788",
+          "body_transaction_committed": false,
+          "native_input_snapshot_used": false
+        },
+        {
+          "phase": "before_mode_format_builder",
+          "globals": [
+            {
+              "name_address": 308943568,
+              "flag_address": 308943580,
+              "flag_before": 1,
+              "decode_performed": false,
+              "decoded_length": null
+            }
+          ],
+          "output_object_address": 1879364792,
+          "format_address": 308943568,
+          "argument_address": 1879364672,
+          "mode": 0,
+          "format_object_address": 1879364592,
+          "conversion_object_address": 1879364448,
+          "unresolved_leaf_target_offset": "0x28f0f4",
+          "body_transaction_committed": false,
+          "native_input_snapshot_used": false
+        }
+      ],
+      "request_evaluator_prefixes": [],
+      "native_jni_acquisition_stub_used": false,
+      "actual_jni_acquisition_body_executed": false,
       "inner_callback_body_transaction_committed": false,
       "clock_stores": [
         {
@@ -558,7 +603,7 @@
         "wrapper_offset": "0x285fb4",
         "bounded_callback_orchestration_component_verified": true,
         "supported_prefix_staged_without_transaction_commit": true,
-        "unresolved_leaf_target_offset": "0x28ddd0",
+        "unresolved_leaf_target_offset": "0x28f0f4",
         "target_offset": "0x28dc38",
         "target_address": "0x1254dc38",
         "null_target": false,
@@ -859,7 +904,7 @@
           ]
         }
       ],
-      "continuation_error": "RefillUnsupported: request event formatter +0x28ddd0 is not recovered",
+      "continuation_error": "RefillUnsupported: request mode format builder +0x28f0f4 is not recovered",
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
@@ -1134,6 +1179,152 @@
           "native_input_snapshot_used": false
         }
       ],
+      "request_event_leaf_prefixes": [],
+      "request_evaluator_prefixes": [
+        {
+          "phase": "before_jni_acquisition",
+          "globals": [
+            {
+              "name_address": 512650798368,
+              "flag_address": 512650798388,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 16
+            },
+            {
+              "name_address": 512650798392,
+              "flag_address": 512650798408,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 13
+            },
+            {
+              "name_address": 512650798416,
+              "flag_address": 512650798440,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 20
+            },
+            {
+              "name_address": 512650798444,
+              "flag_address": 512650798460,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 13
+            },
+            {
+              "name_address": 512650798464,
+              "flag_address": 512650798500,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 32
+            },
+            {
+              "name_address": 512650798512,
+              "flag_address": 512650798540,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 27
+            },
+            {
+              "name_address": 512650798544,
+              "flag_address": 512650798560,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 12
+            },
+            {
+              "name_address": 512650798576,
+              "flag_address": 512650798600,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 20
+            },
+            {
+              "name_address": 512650798604,
+              "flag_address": 512650798620,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 13
+            }
+          ],
+          "addresses": [
+            {
+              "name": 512650798368,
+              "flag": 512650798388,
+              "source": 512647903472,
+              "mask": 512647904000,
+              "encoded_name": 512661330632
+            },
+            {
+              "name": 512650798392,
+              "flag": 512650798408,
+              "source": 512647903492,
+              "mask": 512647903976,
+              "encoded_name": 512661330656
+            },
+            {
+              "name": 512650798416,
+              "flag": 512650798440,
+              "source": 512647903520,
+              "mask": 512647903952,
+              "encoded_name": 512661330680
+            },
+            {
+              "name": 512650798444,
+              "flag": 512650798460,
+              "source": 512647903544,
+              "mask": 512647903924,
+              "encoded_name": 512661330708
+            },
+            {
+              "name": 512650798464,
+              "flag": 512650798500,
+              "source": 512647903568,
+              "mask": 512647903888,
+              "encoded_name": 512661330728
+            },
+            {
+              "name": 512650798512,
+              "flag": 512650798540,
+              "source": 512647903616,
+              "mask": 512647903856,
+              "encoded_name": 512661330776
+            },
+            {
+              "name": 512650798544,
+              "flag": 512650798560,
+              "source": 512647903644,
+              "mask": 512647903832,
+              "encoded_name": 512661330808
+            },
+            {
+              "name": 512650798576,
+              "flag": 512650798600,
+              "source": 512647903664,
+              "mask": 512647903808,
+              "encoded_name": 512661330840
+            },
+            {
+              "name": 512650798604,
+              "flag": 512650798620,
+              "source": 512647903688,
+              "mask": 512647903784,
+              "encoded_name": 512661330868
+            }
+          ],
+          "descriptor_address": 1879365184,
+          "descriptor_count": 2,
+          "method_name_address": 512650798644,
+          "environment_pair_address": 1879364944,
+          "environment_slot_address": 1879364928,
+          "unresolved_leaf_target_offset": "0x26edc4",
+          "body_transaction_committed": false,
+          "native_input_snapshot_used": false
+        }
+      ],
+      "native_jni_acquisition_stub_used": false,
+      "actual_jni_acquisition_body_executed": false,
       "inner_callback_body_transaction_committed": false,
       "clock_stores": [
         {
@@ -1384,7 +1575,7 @@
         "wrapper_offset": "0x285a80",
         "bounded_callback_orchestration_component_verified": true,
         "supported_prefix_staged_without_transaction_commit": true,
-        "unresolved_leaf_target_offset": "0x28b05c",
+        "unresolved_leaf_target_offset": "0x26edc4",
         "target_offset": "0x28bb5c",
         "target_address": "0x775c490b5c",
         "null_target": false,
@@ -1685,7 +1876,7 @@
           ]
         }
       ],
-      "continuation_error": "RefillUnsupported: request boolean evaluator +0x28b05c is not recovered",
+      "continuation_error": "RefillUnsupported: request JNI acquisition +0x26edc4 is not recovered",
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
@@ -1716,6 +1907,10 @@
   "actual_os_clock_executed": false,
   "request_event_prefix_composition_controls": 1,
   "request_boolean_prefix_composition_controls": 1,
+  "request_event_leaf_prefix_composition_controls": 1,
+  "request_evaluator_prefix_composition_controls": 1,
+  "native_jni_acquisition_stub_used": false,
+  "actual_jni_acquisition_body_executed": false,
   "inner_callback_body_transaction_committed": false,
   "whole_handoff_native_differential_verified": false,
   "real_url_headers_jni_conversion_verified": false,

@@ -295,3 +295,19 @@ load length into X5; its entire 264-byte stack state is explicitly compared.
 See [STREAM_REFERENCE.md](../STREAM_REFERENCE.md). The same-run parser now
 reaches step 725 with 100 allocations and 26 frees; snapshots and serialized
 OS/guard boundaries remain explicit.
+
+
+### Request leaf prefixes (2026-10-07)
+
+`vm9_request_leaf_prefixes.py` recovers sampling/ABI locals in `+0x28ddd0`,
+mode global/input preparation in `+0x28e788`, and nine lazy Java stack names
+plus encoded/input slots in `+0x28b05c`. The fresh verifier has 30 original-body
+controls and 6 negative controls. Native stops before actual JNI acquisition
+`+0x26edc4` or mode builder `+0x28f0f4`; no JNI stub/result is used. Unsampled
+event paths return, while sampled/evaluator staged transactions refuse without
+commit. Same-session outer steps remain 945/965; full callbacks and fresh signing
+remain open. See [REQUEST_LEAF_PREFIXES.md](../REQUEST_LEAF_PREFIXES.md).
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_leaf_prefixes_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --output platforms/bytedance/tomato/evidence/vm9_request_leaf_prefixes_fresh_20261007.json
+```

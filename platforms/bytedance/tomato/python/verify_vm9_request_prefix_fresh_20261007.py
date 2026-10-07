@@ -112,6 +112,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if diagnostic_scope is None or free is None:
                     raise PrefixBoundary()
                 import vm9_request_event
+                import vm9_request_leaf_prefixes as leaf
                 def event_observer(p, *, phase, **context):
                     diagnostic_scope.setdefault('request_event_prefixes', []).append(dict(
                         phase=phase, **context,
@@ -121,14 +122,23 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                         formatter_target_offset='0x28ddd0',
                         supported_prefix_staged=True, body_transaction_committed=False,
                         native_input_snapshot_used=False))
+                def event_leaf_observer(p, **context):
+                    diagnostic_scope.setdefault('request_event_leaf_prefixes', []).append(dict(
+                        **context, native_input_snapshot_used=False))
+                def format_event(p, obj, x1, x2, x3, x4, mode):
+                    return leaf.execute_event_formatter_prefix(p, image_base=image,
+                        entry_stack_address=frame.native_stack_address - 0x270,
+                        event_object_address=obj, argument_words=(x1, x2, x3, x4),
+                        mode=mode, observer=event_leaf_observer)
                 vm9_request_event.execute_request_event(vm.m.pages, image_base=image,
                     entry_stack_address=frame.native_stack_address - 0x180,
                     argument_words=(words[1], words[2], words[3], vm.m.u64(argument + 32)),
-                    allocate=allocate, free=free, observer=event_observer)
+                    allocate=allocate, free=free, format_event=format_event, observer=event_observer)
             elif allocate is not None and (wrapper, target) == (0x285A80, 0x28BB5C):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()
                 import vm9_request_boolean_gate
+                import vm9_request_leaf_prefixes as leaf
                 def gate_observer(p, *, phase, **context):
                     diagnostic_scope.setdefault('request_boolean_prefixes', []).append(dict(
                         phase=phase, **context,
@@ -137,10 +147,18 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                         unresolved_leaf_target_offset='0x28b05c' if context['evaluator_needed'] else '0x28c09c',
                         supported_prefix_staged=True, body_transaction_committed=False,
                         native_input_snapshot_used=False))
+                def evaluator_observer(p, **context):
+                    diagnostic_scope.setdefault('request_evaluator_prefixes', []).append(dict(
+                        **context, native_input_snapshot_used=False))
+                def evaluate(p, descriptor, count, name):
+                    return leaf.execute_stack_evaluator_prefix(p, image_base=image,
+                        entry_stack_address=frame.native_stack_address - 0x290,
+                        descriptor_address=descriptor, descriptor_count=count,
+                        method_name_address=name, observer=evaluator_observer)
                 vm9_request_boolean_gate.execute_boolean_gate(vm.m.pages,
                     object_address=words[1], image_base=image,
                     entry_stack_address=frame.native_stack_address - 0x190,
-                    read_clock=read_clock, observer=gate_observer)
+                    read_clock=read_clock, evaluate=evaluate, observer=gate_observer)
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

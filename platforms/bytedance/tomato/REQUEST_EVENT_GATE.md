@@ -154,3 +154,10 @@ ELF import 与实际强制realloc控制。引用须带sample hash、入口、输
 完整 fresh Medusa、线上全头矩阵、真实URL/headers/JNI、无JVM Rust下载链路、
 非空搜索/分页、抖音/起点闭环与最终Pages/Actions产品仍未完成。本阶段没有
 服务器请求、签名输出或小说正文。
+
+
+## 后续状态：leaf 前导
+
+本页的 `+0x28ddd0` / `+0x28b05c` 停点是本阶段历史边界；后续30个原生
+前导控制已深入至 `+0x28f0f4` / `+0x26edc4`。外层仍945/965，新增事务仍不
+提交。当前证据与JNI stub边界见 [REQUEST_LEAF_PREFIXES.md](REQUEST_LEAF_PREFIXES.md)。
