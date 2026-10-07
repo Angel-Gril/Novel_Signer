@@ -3350,5 +3350,25 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_alternative_reader_native_20261008": {
+    "evidence_file": "evidence/vm9_alternative_reader_native_20261008.json",
+    "schema": "vm9-alternative-reader-native-v1",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_alternative_reader_20261008.py",
+    "evidence_date": "2026-10-07",
+    "evidence_timezone": "UTC",
+    "host_trial_label": "20261008",
+    "reader_native_return_observations": 2,
+    "controlled_allocation_calls_per_base": 1658,
+    "independent_Python_XOR_prefix_used": true,
+    "native_input_snapshot_used": false,
+    "Python_reader_implemented": false,
+    "Python_AST_output_compared": false,
+    "independent_Python_factory_implemented": false,
+    "complete_python_bootstrap_controls": 0,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

@@ -28,6 +28,7 @@
 | B 实际生成 root 的 lookup 组件对照 | 242 | 每个基址 121 个；Python 消费 native 生成 root，未实现 Python factory |
 | B 独立 Python blob XOR prefix | 82 | 80 个边界控制与 2 个实际 ELF blob；reader 前停止，不用 native 快照 |
 | B blob XOR 拒绝/回滚 | 8 | ABI/长度上限、codec 地址溢出/缺页、目的跨缺页等 |
+| Python XOR → 实际 B reader 自然返回 | 2 | 每次 1658 次受控分配，reader 返回 0；无 Python reader / AST 对照 |
 | 完整 Python bootstrap 对照 | **0** | 未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
 
 证据文件：
@@ -38,6 +39,7 @@
 - [B 合成 root 的短 selector](evidence/vm9_alternative_short_descriptor_20261008.json)
 - [B 实际 factory / 发布与生成 root 对照](evidence/vm9_alternative_factory_native_20261008.json)
 - [B 独立 blob XOR prefix](evidence/vm9_alternative_blob_xor_fresh_20261008.json)
+- [Python XOR 输入交接实际 reader](evidence/vm9_alternative_reader_native_20261008.json)
 
 原有 13 项 A 启动控制已重新回归通过；计数仍沿用各自证据，不另算新的控制。
 这些计数不与此前 once/mask 组件对照相加为完整 signer 对照。
@@ -191,7 +193,24 @@ key，覆盖 native 的 8/32 字节批处理与 tail。另两条实际 ELF blob 
 native root 的 242 条 lookup 证据分开。下一处为 `+0x31B360` reader，再到 `+0x2CD5A4`
 解析和 `+0x2CAFD0` root/descriptor 构建；完整 Python factory 与 B VM 仍未完成。
 
-## 6. 复现、证据用途与后续验收
+## 6. Python XOR 输入交接 actual reader
+
+后续两基址 native 观察从 fresh ELF 及 Python XOR 结果开始，直接调用 actual
+`+0x31B360` reader。reader 自己构造 callback/parser scratch，进入 `+0x324444` 包装
+和 `+0x324188` 内部解析；输出对象由 fixture 显式清零，分配器和 2 MiB 栈仍显式。
+两个观察都满足：1658 次受控分配，reader status=0，自然 ret 到 driver STOP，SP 恢复，
+没有 factory publication / destructor 注册或 B VM 执行。输出只导出 12 个 vector 的
+used/capacity 字节数，不导出 native node、原始 blob 或内存快照。
+
+这证明 Python XOR 结果可被该实际 reader 接受；不证明 Python reader、AST/node 构造
+或其 cleanup 已恢复。`native_input_snapshot_used=false` 只描述输入生成；native 输出
+没有作为独立 Python factory 的输入发布，也没有完整 Python AST 对照。完整 factory
+原观察在 reader extension 后回归通过，保持独立 242 个 root lookup 计数。
+
+下一步恢复 `+0x31B360 → +0x324444 → +0x324188` reader 的状态、节点和清理，随后
+`+0x2CD5A4 → +0x2CAFD0` 的解析/root 构建。完整 Python bootstrap 对照仍为 0。
+
+## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
 
@@ -200,6 +219,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_jni_A_default_worker_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_A_worker_stop_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <worker-stop-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_A_worker_exit_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <worker-exit-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_factory_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <factory-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_reader_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_blob_xor_20261008.py --library <private-metasec.so> --output <blob-xor-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_short_descriptor_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <B-evidence.json>
 ```
@@ -212,7 +232,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复 B `+0x31B360 → +0x2CD5A4 → +0x2CAFD0` reader/解析/root 生成，再把原始 JNI /
+下一步恢复 B `+0x31B360 → +0x324444 → +0x324188` 的 Python reader/node，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。

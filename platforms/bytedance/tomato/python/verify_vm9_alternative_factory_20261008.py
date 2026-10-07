@@ -2,7 +2,8 @@
 
 The factory runs natively from ELF inputs; Python lookup consumes the same
 run's generated root. That lookup comparison is not independent Python boot.
-No APK, native image, memory snapshot or original selector text is exported.
+Reader mode accepts independent Python ELF XOR input; no Python reader or
+AST comparison is claimed. No native image/snapshot or selector is exported.
 """
 from __future__ import annotations
 import argparse,collections,hashlib,json
@@ -23,8 +24,15 @@ ENTRY_SP=STACK+STACK_BYTES-0x1000
 PUBLISHED_COUNT=121
 
 
-def case(args,base):
+def case(args,base,*,mode='factory'):
+    assert mode in ('factory','reader')
     pages=fresh_pages();pages.update(image_pages(args.library,base))
+    if mode=='reader':
+        from verify_vm9_alternative_blob_xor_20261008 import constructor_codec_byte
+        _write_span(pages,GUEST+0x1000,bytes(0x180))
+        _write_span(pages,GUEST+0x4000+2*24+2,bytes([constructor_codec_byte(args.library)]))
+        alternative.decode_factory_blob_xor(pages,blob_address=base+0x387D20,blob_size=0x37FD0,
+            codec_table_address=GUEST+0x4000,codec_table_count=3)
     bound=collections.Counter()
     with args.library.open('rb') as stream:
         elf=ELFFile(stream)
@@ -104,19 +112,46 @@ def case(args,base):
                 progress.append(dict(loop_visits=loop_visits,remaining_items=(end-current)//12,
                     controlled_allocation_calls=len(allocations)))
         if off==0x2A0024:events.append('original_B_constructor_ret')
+        if mode=='reader' and off==0x31B360:events.append('actual_reader_enter')
+        if mode=='reader' and off==0x31B454:events.append('actual_reader_ret')
     oracle.Uc=observed_cpu
     try:
-        oracle.native(args.library,base,0x29ECAC,[],pages,libc=args.libc,malloc_handler=malloc,
+        function=0x29ECAC if mode=='factory' else 0x31B360
+        arguments=[] if mode=='factory' else [base+0x6FE64,0,base+0x387D20,0x37FD0,GUEST+0x1000]
+        ranges=((base+0x29ECAC,base+0x2A0024),(base+0x2A95E0,base+0x2A9800),
+            (base+0x2CBDC8,base+0x2CBE48),(base+0x347E00,base+0x348800),
+            (base+0x2DBF7C,base+0x2DBF7C)) if mode=='factory' else (
+            (base+0x31B360,base+0x31B458),(base+0x324444,base+0x3244F8),
+            (base+0x347E00,base+0x348800))
+        oracle.native(args.library,base,function,arguments,pages,libc=args.libc,malloc_handler=malloc,
             host_imports={0x347FA0:free,0x347FE0:compare,0x348310:gettid,0x347EA0:register},
             instruction_observer=observe,real_mutexes=True,
             extra_registers={arm.UC_ARM64_REG_SP:ENTRY_SP},instruction_limit=60000000,
-            code_hook_ranges=((base+0x29ECAC,base+0x2A0024),(base+0x2A95E0,base+0x2A9800),
-                (base+0x2CBDC8,base+0x2CBE48),(base+0x347E00,base+0x348800),
-                (base+0x2DBF7C,base+0x2DBF7C)))
+            code_hook_ranges=ranges)
     finally:oracle.Uc=original_cpu
     cpu=captured[0]
     assert cpu.reg_read(arm.UC_ARM64_REG_PC)==STOP
     assert cpu.reg_read(arm.UC_ARM64_REG_SP)==ENTRY_SP
+    if mode=='reader':
+        assert events==['actual_reader_enter','actual_reader_ret']
+        assert cpu.reg_read(arm.UC_ARM64_REG_X0)==0 and not lookups and not stores and not registrations
+        assert len(allocations)==1658
+        summaries=[]
+        for index in range(12):
+            begin,end,capacity=(read(cpu,GUEST+0x1000+index*24+j*8) for j in range(3))
+            assert (begin==end==capacity==0) or begin<=end<=capacity
+            if begin:assert begin in live
+            summaries.append(dict(index=index,allocated=bool(begin),used_bytes=end-begin,capacity_bytes=capacity-begin))
+        return dict(image_base_hex=hex(base),native_reader_return_verified=True,reader_status=0,
+            reader_offset_hex='0x31b360',core_parser_offset_hex='0x324188',
+            independent_Python_XOR_prefix_used=True,actual_ELF_blob_used=True,
+            controlled_allocation_calls=len(allocations),register_only_exit_calls=0,
+            actual_reader_output_vector_summaries=summaries,explicit_allocator_and_stack_used=True,
+            reader_invoked_directly=True,native_input_snapshot_used=False,
+            Python_reader_implemented=False,Python_AST_output_compared=False,
+            independent_Python_factory_implemented=False,B_VM_executed=False,
+            complete_python_bootstrap_controls=0,complete_python_medusa=False,
+            fresh_signer_output_verified=False,live_server_matrix_verified=False)
     assert events==['actual_factory_enter','actual_factory_return','factory_wrapper_return','original_B_constructor_ret']
     assert len(stores)==len(lookups)==PUBLISHED_COUNT
     assert [row[0] for row in stores]==list(range(PUBLISHED_COUNT))

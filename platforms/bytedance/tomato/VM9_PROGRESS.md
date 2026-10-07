@@ -25,6 +25,10 @@ count=0 时 row=size，以及两个实际 ELF blob 输入通过。Python/native 
 合成 codec 输入开始，不用 native 快照；停在 +2cbf24 的 reader 调用前。下一处为
 +31b360 reader、+2cd5a4 解析及 +2cafd0 构建，不等于完整 factory。
 
+后续 **2 个 native reader 观察**使用 fresh ELF 的 Python XOR 结果，直接调用 +31b360；
+每次 1658 次受控分配、status=0、自然返回和 SP 恢复通过。输出仅 vector 长度，Python
+reader / AST 对照仍 0。下一处 +324444→+324188 状态/node/清理，再接 +2cd5a4 / +2cafd0。
+
 B constructor 是直接调用，Python factory、原始 JNI B 组合和 B VM 未恢复。真实
 allocator/arena/OS 输入、独立 Medusa、fresh 签名/线上矩阵、Rust 下载链路、非空搜索 /
 分页、抖音/起点与最终下载产品仍未完成。下一步恢复 B factory blob 解析与独立输入，

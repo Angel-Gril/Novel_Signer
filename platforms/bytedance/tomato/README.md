@@ -14,7 +14,9 @@ generated roots, distinct from the earlier 50 synthetic-root controls and six
 negatives. Independent Python factory, original JNI B composition, B VM and
 full Python bootstrap (0 controls) remain open. The independent XOR prefix
 adds 82 native/Python controls (including two real ELF blobs) and eight
-rollback cases; it stops before the +31b360 reader, not a complete factory. Independent Medusa, fresh
+rollback cases; it stops before the +31b360 reader. Two subsequent native
+reader observations accept that Python XOR input and return 0 after 1658
+controlled allocations each. Python reader/AST construction remains open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).
 Older observations below are historical.

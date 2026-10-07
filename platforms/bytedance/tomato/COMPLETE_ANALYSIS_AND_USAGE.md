@@ -27,7 +27,9 @@ B 原始 constructor/factory 在两个基址自然返回，每次发布 121 个�
 原始 JNI B 组合与 B VM 尚未完成；完整 Python bootstrap 对照仍为 **0**。
 B factory 原地 XOR prefix 已独立恢复：82 个 native/Python 控制（含两个真实 ELF
 blob）和 8 个拒绝回滚通过，未使用 native 快照。仍停在 reader 调用前，下一处为
-+31b360 reader / +2cd5a4 解析 / +2cafd0 构建。
++31b360 reader / +2cd5a4 解析 / +2cafd0 构建。后续两基址 actual reader 在 Python
+XOR 输入下自然返回 0，每次 1658 次受控分配；Python reader / AST 对照仍 0，内部
++324444→+324188 状态/节点仍需恢复。
 详见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。
 下方 once/mask 与 cold caller 记录为此前证据，不能累加成完整初始化或 signer 证明。
 
