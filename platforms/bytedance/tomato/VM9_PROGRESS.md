@@ -62,12 +62,16 @@ python platforms/bytedance/tomato/python/verify_vm9_request_diagnostic_continuat
 0x3b0 字节 caller frame；`+0x168324` 通用前导的 descriptor、32 个 backing slot、
 TLS canary 和到 `+0x1684f0` 的临时栈字节与 native 相同。特别确认 descriptor 的
 第二个 word 是 `sp+0x380`（`ADD #0x28` 后又加 `#0x358`），不是简单的 `sp+0x28`。
-对照在 `+0x1684f0` 停止，尚未执行该入口选择的 nested VM body。
+对照在 `+0x1684f0` 停止，尚未执行该入口选择的 nested VM body。另用
+[dispatch observation](evidence/vm9_request_dispatch_fresh_20261007.json) 做了 6 组
+fresh 入口定位；两基址、三个对象/x8 profile 的首个 post-prelude handler 都是
+`+0x16d7d0`，这只是下一处 native handler 的位置证据，不等于已恢复该 handler。
 
 复现：
 
 ```powershell
 python platforms/bytedance/tomato/python/verify_vm9_request_vm_caller_fresh_20261007.py --output platforms/bytedance/tomato/evidence/vm9_request_vm_caller_fresh_20261007.json
+python platforms/bytedance/tomato/python/verify_vm9_request_dispatch_fresh_20261007.py --output platforms/bytedance/tomato/evidence/vm9_request_dispatch_fresh_20261007.json
 ```
 
 当前仍未完成：独立 fresh-input Python Medusa、whole native outer→request→allocator

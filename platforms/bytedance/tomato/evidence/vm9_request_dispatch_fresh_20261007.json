@@ -1,0 +1,123 @@
+{
+  "schema": "vm9-request-dispatch-fresh-observation-v1",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "controls": 6,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "object_offset": "0x1800",
+      "preserved_x8": "0x7004edd8",
+      "first_post_prelude_offset": "0x16d7d0",
+      "registers": {
+        "pc": "0x1242d7d0",
+        "sp": "0x7000e9d0",
+        "x0": "0x12517050",
+        "x1": "0x7000e9f0",
+        "x2": "0x1232e000",
+        "x3": "0x1232e000",
+        "x4": "0xff5f9ebbf5fe033c",
+        "x8": "0x7000ea60",
+        "x9": "0x1242d7d0"
+      },
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "object_offset": "0x1ff8",
+      "preserved_x8": "0x64000000",
+      "first_post_prelude_offset": "0x16d7d0",
+      "registers": {
+        "pc": "0x1242d7d0",
+        "sp": "0x7000e9d0",
+        "x0": "0x12517050",
+        "x1": "0x7000e9f0",
+        "x2": "0x1232e000",
+        "x3": "0x1232e000",
+        "x4": "0xff5f9ebbf5fe033c",
+        "x8": "0x7000ea60",
+        "x9": "0x1242d7d0"
+      },
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "object_offset": "0x2800",
+      "preserved_x8": "0x12517050",
+      "first_post_prelude_offset": "0x16d7d0",
+      "registers": {
+        "pc": "0x1242d7d0",
+        "sp": "0x7000e9d0",
+        "x0": "0x12517050",
+        "x1": "0x7000e9f0",
+        "x2": "0x1232e000",
+        "x3": "0x1232e000",
+        "x4": "0xff5f9ebbf5fe033c",
+        "x8": "0x7000ea60",
+        "x9": "0x1242d7d0"
+      },
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "object_offset": "0x1800",
+      "preserved_x8": "0x7004edd8",
+      "first_post_prelude_offset": "0x16d7d0",
+      "registers": {
+        "pc": "0x775c3727d0",
+        "sp": "0x7000e9d0",
+        "x0": "0x775c45c050",
+        "x1": "0x7000e9f0",
+        "x2": "0x775c273000",
+        "x3": "0x775c273000",
+        "x4": "0xff5f9ebbf5fe033c",
+        "x8": "0x7000ea60",
+        "x9": "0x775c3727d0"
+      },
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "object_offset": "0x1ff8",
+      "preserved_x8": "0x64000000",
+      "first_post_prelude_offset": "0x16d7d0",
+      "registers": {
+        "pc": "0x775c3727d0",
+        "sp": "0x7000e9d0",
+        "x0": "0x775c45c050",
+        "x1": "0x7000e9f0",
+        "x2": "0x775c273000",
+        "x3": "0x775c273000",
+        "x4": "0xff5f9ebbf5fe033c",
+        "x8": "0x7000ea60",
+        "x9": "0x775c3727d0"
+      },
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "object_offset": "0x2800",
+      "preserved_x8": "0x775c45c050",
+      "first_post_prelude_offset": "0x16d7d0",
+      "registers": {
+        "pc": "0x775c3727d0",
+        "sp": "0x7000e9d0",
+        "x0": "0x775c45c050",
+        "x1": "0x7000e9f0",
+        "x2": "0x775c273000",
+        "x3": "0x775c273000",
+        "x4": "0xff5f9ebbf5fe033c",
+        "x8": "0x7000ea60",
+        "x9": "0x775c3727d0"
+      },
+      "native_input_snapshot_used": false
+    }
+  ],
+  "complete_python_medusa": false,
+  "fresh_input_signer_output_verified": false,
+  "current_online_header_matrix_verified": false,
+  "limitations": [
+    "This locates the first native handler after +0x1684f0; it does not implement the handler or nested VM.",
+    "Fresh synthetic object/x8 inputs only; no URL/header/JNI conversion, JVM, server request or signature output."
+  ]
+}
