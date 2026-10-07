@@ -1,5 +1,25 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07 UTC：A 原始 JNI 返回与同次完整默认任务；B 短 selector
+
+文件名沿用本机试验标签 `20261008`。两个基址分别验证原始 A JNI_OnLoad 自然返回
+0x10006，以及同次 thread-create argument → 第一个 queue worker → +280554 入口。
+四条 memset ABS64 单变量控制定位并验证导入依赖；两个同次完整任务观察各执行六个
+caller/48 次嵌套返回/六次 once 完成 broadcast。另两个观察执行任务返回后的 +167310
+清理，停在 pthread_cond_wait PLT +3485b0 前；实际 wait/stop/worker 退出仍待接回。
+
+一个 allocator 碰撞控制保留原小块 pool，复现 16 KiB arena 覆盖 worker TLS 后的
+canary 失配；正控制仅隔离大块 arena，未绕过 stack-check 或替换 VM 结果。
+Thread-create 仍只发布 deferred guest handles，driver/JNI/OS/allocator/warm TLS 输入
+仍显式；主/worker 顺序复用物理栈。这些是 native 原始链观察，完整 Python bootstrap
+对照仍为 0，完整独立 Medusa/fresh 签名/线上矩阵及下载产品仍未完成。
+
+B descriptor producer 已静态定位到 .init_array +29ecac → factory +2cbdc8 →
++3e1eb0/+3e1eb8 发布。短 selector 哈希和 lookup 新增 20+30 native/Python 对照、
+6 项拒绝回滚；覆盖实际 ELF 的两字节 selector、uint32 shift、桶与 key/碰撞链。
+root/bucket 输入仍为合成数据，完整 factory、真实 descriptor publication 与 B VM 未恢复。
+见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。下列停止点是此前证据。
+
 ## 2026-10-08 Python once/getter/mask 与启动导入边界（本机 Asia/Shanghai）
 
 新增 34 组 native/Python 对照、9 项负控制：正常 once callback/完成/broadcast、

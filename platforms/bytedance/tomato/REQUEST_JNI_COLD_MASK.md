@@ -1,5 +1,9 @@
 # JNI cold once 控制、启动 mask 与导入依赖
 
+本报告保留 once/mask 与初期导入控制的原始计数。后续原始 JNI 返回、同次默认任务
+及 B selector 进展见 [启动/worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)；下文停止点
+不代表当前组合的最新停止点。
+
 > 本机验证记录：2026-10-08（Asia/Shanghai）。日期来自本机时钟，样本为既有 v7.1.3.32 ELF。
 > **34 组 native/Python 对照、9 项负控制通过；另 4 条原始启动前缀及 4 条导入对照观察通过。**
 > 完整 Python bootstrap 对照仍为 **0**；完整独立 Medusa、fresh 签名及线上全头矩阵未完成。

@@ -1,10 +1,15 @@
 # Tomato / Fanqie (ByteDance)
 
-Current boundary (2026-10-08, host Asia/Shanghai): constructor finalization and explicit JNI
-publication services have passed fresh native comparisons. The current request
-caller and bounded request VM prefix also pass; fresh request signatures and
-online acceptance remain open. See [VM9_PROGRESS.md](VM9_PROGRESS.md) for the
-verification scope and next callback; older stops below are historical evidence.
+Current boundary (2026-10-07 UTC; host trial label `20261008`): the original
+A JNI_OnLoad returns `0x10006` with explicit services. Two same-run native
+observations execute all six default task callers (48 nested returns each),
+and two further observations reach worker wait after actual task cleanup.
+Thread creation, OS/allocator/JNI inputs and warm TLS states remain explicit.
+B short-selector hash/lookup adds 50 native/Python controls and six negatives;
+its root/bucket data is synthetic and its factory/publication remains open.
+Full independent Python Medusa, fresh signatures and online acceptance remain
+unfinished. See [the startup/worker report](REQUEST_JNI_STARTUP_WORKERS.md) and
+[VM9_PROGRESS.md](VM9_PROGRESS.md). Older observations below are historical.
 
 Actual JNI dispatcher/exception handling now passes 54 native/Python controls
 and 10 negatives; Long conversion adds 34 controls and 11 negatives with an
@@ -74,3 +79,10 @@ The outer startup caller now passes four fresh-input controls (86 steps, 16 allo
 64 位 mask。另 4 条原始启动前缀及 4 条 memcpy ABS64 导入观察定位 A 的 pthread_create
 与 B 的 descriptor publication 缺口。完整 Python bootstrap 对照仍 0，fresh Medusa
 和下载产品尚未完成。详见 [本轮报告](REQUEST_JNI_COLD_MASK.md)。
+
+### 原始 JNI 与同次默认 worker 的后续检查点
+
+A 新增 2 个原始返回、2 个 worker 入口、4 个 memset 控制、2 个完整默认任务、
+2 个清理/wait 边界和 1 个 allocator 碰撞控制；B 新增 20 个短哈希、30 个查找
+对照及 6 个负控制。完整 Python bootstrap 对照仍 0，真实 wait/stop/exit、B factory
+与独立签名链仍待完成。详见 [后续报告](REQUEST_JNI_STARTUP_WORKERS.md)。

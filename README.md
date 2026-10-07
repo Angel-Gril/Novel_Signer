@@ -58,7 +58,9 @@ for reproducible checks and the exact boundary.
 
 Outer startup now independently reproduces the default main-thread caller and three deferred worker descriptors; worker TLS/support prefixes and executor context initialization are also verified. Condition/queue/executor scheduling now adds 256 native controls, including same-fresh-startup idle worker wait/stop/argument cleanup. All six default initialization callers now pass 24 fresh cold/hot controls. Their serial task composition passes four further controls, including 48 nested returns per cold execution and six distinct mapped regions. The earlier partial-arena once-completion claim is corrected. The same fresh startup now runs its nonempty default queue through all six task bodies, wait/stop, normal return and argument cleanup in four native controls; eight new rollback checks and eight idle-worker regressions pass. A further same-startup control runs the explicit bionic key cleanup phase and releases empty support/wrapper after argument cleanup; 20 key-dispatch and eight support-destructor controls pass. Emulated-TLS array cleanup, fallback chains, nonempty support loops and the actual registry tree destructor now add 62 native controls and 13 rollback checks, including fresh registration/key and actual registry init/exit compositions. Real executor shared/weak release and the matching-libc guest pthread_exit state machine add 70 native controls and 11 rollback checks. A same-fresh-startup nonempty worker now also completes the full guest joinable exit branch after its six default tasks. Detached list removal and owned guest mapping release are verified separately. Explicit allocator/TLS/OS services, unknown callbacks and support-associated state types, real thread creation/termination, real allocator boot and fresh request signing remain unfinished. See the [startup report](platforms/bytedance/tomato/STARTUP_INITIALIZATION.md).
 
-番茄 JNI 后续检查点新增 **34 组 once/getter/mask 对照、9 项负控制**，另有 4 条
-原始启动前缀及 4 条 memcpy ABS64 单变量导入观察；A 已定位到 pthread_create 边界，
-B 的 descriptor publication 待恢复。完整 Python bootstrap 对照仍为 0，详见
-[once/mask 与启动报告](platforms/bytedance/tomato/REQUEST_JNI_COLD_MASK.md)。
+番茄 JNI 后续检查点在原有 **34 组 once/getter/mask 对照、9 项负控制**之后，
+验证了两个基址的原始 A JNI_OnLoad 返回，以及同次默认 worker 的全部六个 caller
+和每次 48 个嵌套返回；实际任务清理后到达 wait 边界。另恢复 B 短 selector 的
+20 个哈希和 30 个 lookup 对照、6 项拒绝控制。真实 OS 线程/allocator/wait/exit、
+B factory 与完整独立 Medusa 仍未完成，完整 Python bootstrap 对照仍为 0。详见
+[原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。
