@@ -1,0 +1,964 @@
+{
+  "schema": "vm9-jni-cold-once-fresh-composition-v1",
+  "evidence_date": "2026-10-08",
+  "evidence_timezone": "Asia/Shanghai",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "caller_composition_controls": 14,
+  "negative_controls": 4,
+  "original_bootstrap_prefix_probes": 4,
+  "Python_full_bootstrap_comparison_controls": 0,
+  "composition_cases": [
+    {
+      "label": "cold_zero",
+      "image_base": "0x122c0000",
+      "profile": {},
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x0",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "cold_flag",
+      "image_base": "0x122c0000",
+      "profile": {
+        "long_word": 512
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x200",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "null_object",
+      "image_base": "0x122c0000",
+      "profile": {
+        "null_object": true
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x9911",
+      "object_deleted": false,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "missing_method",
+      "image_base": "0x122c0000",
+      "profile": {
+        "missing_method": true
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x0",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "dispatch_exception",
+      "image_base": "0x122c0000",
+      "profile": {
+        "checks": [
+          1,
+          0
+        ]
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x9911",
+      "object_deleted": false,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "warm_tls_high_word",
+      "image_base": "0x122c0000",
+      "profile": {
+        "warm_tls": true,
+        "long_word": 17375808098319191535
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0xf123456789abcdef",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "distinct_outer_dispatch_env",
+      "image_base": "0x122c0000",
+      "profile": {
+        "split_environments": true,
+        "long_word": 85
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x55",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "cold_zero",
+      "image_base": "0x775c205000",
+      "profile": {},
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x0",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "cold_flag",
+      "image_base": "0x775c205000",
+      "profile": {
+        "long_word": 512
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x200",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "null_object",
+      "image_base": "0x775c205000",
+      "profile": {
+        "null_object": true
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x9911",
+      "object_deleted": false,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "missing_method",
+      "image_base": "0x775c205000",
+      "profile": {
+        "missing_method": true
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x0",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "dispatch_exception",
+      "image_base": "0x775c205000",
+      "profile": {
+        "checks": [
+          1,
+          0
+        ]
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x9911",
+      "object_deleted": false,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "warm_tls_high_word",
+      "image_base": "0x775c205000",
+      "profile": {
+        "warm_tls": true,
+        "long_word": 17375808098319191535
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0xf123456789abcdef",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    },
+    {
+      "label": "distinct_outer_dispatch_env",
+      "image_base": "0x775c205000",
+      "profile": {
+        "split_environments": true,
+        "long_word": 85
+      },
+      "native_entries": [
+        "0x271940",
+        "0x26e19c",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x26e19c"
+        ],
+        [
+          "initializer_return_to",
+          "0x165658"
+        ]
+      ],
+      "guest_payload_match": true,
+      "all_main_image_pages_match": true,
+      "JNI_table_page_compared": true,
+      "caller_output_pair_and_live_consumed_variadic_windows_compared": true,
+      "allocator_VM_JNI_exit_effect_groups_match": true,
+      "unused_four_GP_words_and_full_physical_ABI_compared": false,
+      "switch_word_hex": "0x55",
+      "object_deleted": true,
+      "native_input_snapshot_used": false,
+      "whole_JNI_OnLoad_compared": false
+    }
+  ],
+  "negative_checks": [
+    {
+      "label": "unaligned_stack",
+      "pages_unchanged": true,
+      "external_JNI_events_retained": false
+    },
+    {
+      "label": "missing_acquisition",
+      "pages_unchanged": true,
+      "external_JNI_events_retained": false
+    },
+    {
+      "label": "missing_JNI",
+      "pages_unchanged": true,
+      "external_JNI_events_retained": false
+    },
+    {
+      "label": "late_object_delete",
+      "pages_unchanged": true,
+      "external_JNI_events_retained": true
+    }
+  ],
+  "bootstrap_prefix_cases": [
+    {
+      "image_base": "0x122c0000",
+      "long_word_hex": "0x0",
+      "stopped_before_offset": "0x28040c",
+      "cold_once_state_hex": "0xffffffffffffffff",
+      "cold_once_completed": true,
+      "native_entries": [
+        "0x271940",
+        "0x27b41c",
+        "0x27be88",
+        "0x26e19c",
+        "0x32a0a0",
+        "0x165648",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "original_JNI_OnLoad_invocation_executed": true,
+      "JNI_service_order": [
+        "FindClass",
+        "GetSuperclass",
+        "GetSuperclass",
+        "RegisterNatives",
+        "DeleteLocalRef",
+        "GetStaticMethodID",
+        "GetObjectRefType",
+        "NewGlobalRef",
+        "DeleteLocalRef",
+        "CallStaticObjectMethodV",
+        "ExceptionCheck",
+        "ExceptionCheck",
+        "FindClassLong",
+        "GetObjectRefType",
+        "NewGlobalRefLong",
+        "DeleteLocalRef",
+        "GetMethodID",
+        "CallLongMethodV",
+        "DeleteLocalRef"
+      ],
+      "GetEnv_calls": 4,
+      "allocator_effects": [
+        [
+          "malloc",
+          48,
+          0
+        ],
+        [
+          "malloc",
+          128,
+          0
+        ],
+        [
+          "malloc",
+          16,
+          0
+        ],
+        [
+          "malloc",
+          39,
+          0
+        ],
+        [
+          "malloc",
+          16,
+          0
+        ],
+        [
+          "malloc",
+          24,
+          0
+        ],
+        [
+          "malloc",
+          23,
+          0
+        ]
+      ],
+      "matching_libc_condition_broadcast_executed": true,
+      "no_waiter_futex_services": [
+        [
+          98,
+          308948704,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "once_condition_u32_after_broadcast": 4,
+      "cache_mutex_constructed_in_same_native_run": true,
+      "returned_object_deleted": true,
+      "defined_JNI_OnLoad_got_bound_from_ELF": true,
+      "actual_startup_VM_body_executed": false,
+      "warm_reference_and_TLS_global_OS_key_inputs_used": true,
+      "native_input_snapshot_used": false,
+      "Python_full_bootstrap_compared": false,
+      "full_JNI_OnLoad_return_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "long_word_hex": "0x200",
+      "stopped_before_offset": "0x2a0028",
+      "cold_once_state_hex": "0xffffffffffffffff",
+      "cold_once_completed": true,
+      "native_entries": [
+        "0x271940",
+        "0x27b41c",
+        "0x27be88",
+        "0x26e19c",
+        "0x32a0a0",
+        "0x165648",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "original_JNI_OnLoad_invocation_executed": true,
+      "JNI_service_order": [
+        "FindClass",
+        "GetSuperclass",
+        "GetSuperclass",
+        "RegisterNatives",
+        "DeleteLocalRef",
+        "GetStaticMethodID",
+        "GetObjectRefType",
+        "NewGlobalRef",
+        "DeleteLocalRef",
+        "CallStaticObjectMethodV",
+        "ExceptionCheck",
+        "ExceptionCheck",
+        "FindClassLong",
+        "GetObjectRefType",
+        "NewGlobalRefLong",
+        "DeleteLocalRef",
+        "GetMethodID",
+        "CallLongMethodV",
+        "DeleteLocalRef"
+      ],
+      "GetEnv_calls": 4,
+      "allocator_effects": [
+        [
+          "malloc",
+          48,
+          0
+        ],
+        [
+          "malloc",
+          128,
+          0
+        ],
+        [
+          "malloc",
+          16,
+          0
+        ],
+        [
+          "malloc",
+          39,
+          0
+        ],
+        [
+          "malloc",
+          16,
+          0
+        ],
+        [
+          "malloc",
+          24,
+          0
+        ],
+        [
+          "malloc",
+          23,
+          0
+        ]
+      ],
+      "matching_libc_condition_broadcast_executed": true,
+      "no_waiter_futex_services": [
+        [
+          98,
+          308948704,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "once_condition_u32_after_broadcast": 4,
+      "cache_mutex_constructed_in_same_native_run": true,
+      "returned_object_deleted": true,
+      "defined_JNI_OnLoad_got_bound_from_ELF": true,
+      "actual_startup_VM_body_executed": false,
+      "warm_reference_and_TLS_global_OS_key_inputs_used": true,
+      "native_input_snapshot_used": false,
+      "Python_full_bootstrap_compared": false,
+      "full_JNI_OnLoad_return_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "long_word_hex": "0x0",
+      "stopped_before_offset": "0x28040c",
+      "cold_once_state_hex": "0xffffffffffffffff",
+      "cold_once_completed": true,
+      "native_entries": [
+        "0x271940",
+        "0x27b41c",
+        "0x27be88",
+        "0x26e19c",
+        "0x32a0a0",
+        "0x165648",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "original_JNI_OnLoad_invocation_executed": true,
+      "JNI_service_order": [
+        "FindClass",
+        "GetSuperclass",
+        "GetSuperclass",
+        "RegisterNatives",
+        "DeleteLocalRef",
+        "GetStaticMethodID",
+        "GetObjectRefType",
+        "NewGlobalRef",
+        "DeleteLocalRef",
+        "CallStaticObjectMethodV",
+        "ExceptionCheck",
+        "ExceptionCheck",
+        "FindClassLong",
+        "GetObjectRefType",
+        "NewGlobalRefLong",
+        "DeleteLocalRef",
+        "GetMethodID",
+        "CallLongMethodV",
+        "DeleteLocalRef"
+      ],
+      "GetEnv_calls": 4,
+      "allocator_effects": [
+        [
+          "malloc",
+          48,
+          0
+        ],
+        [
+          "malloc",
+          128,
+          0
+        ],
+        [
+          "malloc",
+          16,
+          0
+        ],
+        [
+          "malloc",
+          39,
+          0
+        ],
+        [
+          "malloc",
+          16,
+          0
+        ],
+        [
+          "malloc",
+          24,
+          0
+        ],
+        [
+          "malloc",
+          23,
+          0
+        ]
+      ],
+      "matching_libc_condition_broadcast_executed": true,
+      "no_waiter_futex_services": [
+        [
+          98,
+          512650804960,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "once_condition_u32_after_broadcast": 4,
+      "cache_mutex_constructed_in_same_native_run": true,
+      "returned_object_deleted": true,
+      "defined_JNI_OnLoad_got_bound_from_ELF": true,
+      "actual_startup_VM_body_executed": false,
+      "warm_reference_and_TLS_global_OS_key_inputs_used": true,
+      "native_input_snapshot_used": false,
+      "Python_full_bootstrap_compared": false,
+      "full_JNI_OnLoad_return_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "long_word_hex": "0x200",
+      "stopped_before_offset": "0x2a0028",
+      "cold_once_state_hex": "0xffffffffffffffff",
+      "cold_once_completed": true,
+      "native_entries": [
+        "0x271940",
+        "0x27b41c",
+        "0x27be88",
+        "0x26e19c",
+        "0x32a0a0",
+        "0x165648",
+        "0x165658",
+        "0x26e70c",
+        "0x270854",
+        "0x224ff8",
+        "0x1656d0"
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "original_JNI_OnLoad_invocation_executed": true,
+      "JNI_service_order": [
+        "FindClass",
+        "GetSuperclass",
+        "GetSuperclass",
+        "RegisterNatives",
+        "DeleteLocalRef",
+        "GetStaticMethodID",
+        "GetObjectRefType",
+        "NewGlobalRef",
+        "DeleteLocalRef",
+        "CallStaticObjectMethodV",
+        "ExceptionCheck",
+        "ExceptionCheck",
+        "FindClassLong",
+        "GetObjectRefType",
+        "NewGlobalRefLong",
+        "DeleteLocalRef",
+        "GetMethodID",
+        "CallLongMethodV",
+        "DeleteLocalRef"
+      ],
+      "GetEnv_calls": 4,
+      "allocator_effects": [
+        [
+          "malloc",
+          48,
+          0
+        ],
+        [
+          "malloc",
+          128,
+          0
+        ],
+        [
+          "malloc",
+          16,
+          0
+        ],
+        [
+          "malloc",
+          39,
+          0
+        ],
+        [
+          "malloc",
+          16,
+          0
+        ],
+        [
+          "malloc",
+          24,
+          0
+        ],
+        [
+          "malloc",
+          23,
+          0
+        ]
+      ],
+      "matching_libc_condition_broadcast_executed": true,
+      "no_waiter_futex_services": [
+        [
+          98,
+          512650804960,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "once_condition_u32_after_broadcast": 4,
+      "cache_mutex_constructed_in_same_native_run": true,
+      "returned_object_deleted": true,
+      "defined_JNI_OnLoad_got_bound_from_ELF": true,
+      "actual_startup_VM_body_executed": false,
+      "warm_reference_and_TLS_global_OS_key_inputs_used": true,
+      "native_input_snapshot_used": false,
+      "Python_full_bootstrap_compared": false,
+      "full_JNI_OnLoad_return_verified": false
+    }
+  ],
+  "explicit_driver_continuations_used": true,
+  "explicit_allocator_VM_JNI_OS_exit_services_used": true,
+  "native_input_snapshot_used": false,
+  "legacy_acquisition_and_dispatch_stubs_disabled": true,
+  "all_ELF_constructors_recovered": false,
+  "full_cold_TLS_subsystem_boot_verified": false,
+  "full_JNI_OnLoad_recovered": false,
+  "actual_android_jvm_executed": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false
+}

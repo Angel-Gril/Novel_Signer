@@ -5,6 +5,9 @@
 
 ## 1. 本轮结果与样本边界
 
+后续2026-10-08的14个caller组合及四条原生cold once完成观察见
+[REQUEST_JNI_COLD_ONCE.md](REQUEST_JNI_COLD_ONCE.md)。本报告保留此前96/27及once1停止点。
+
 关闭 verifier 的 dispatcher oracle stub 后，新增 **54 个原生/Python 对照和10个负控制**：
 30个 `+0x26E70C` dispatcher、20个异常 helper、4个 actual TLS acquisition→dispatcher 组合。
 另新增 **34个 Long 转换对照和11个负控制**。后续cache mutex构造又增加 **8个对照、6个负控制**（第7节），本轮累计96/27。

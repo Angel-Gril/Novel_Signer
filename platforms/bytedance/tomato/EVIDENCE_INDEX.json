@@ -3125,5 +3125,47 @@
       "Nonzero exit registration status is not rejected by the original body; actual OS registration is not proved.",
       "Guest rollback does not reverse external allocator/registration effects; fresh signing and download product remain open."
     ]
+  },
+  "vm9_jni_cold_once_fresh_20261008": {
+    "evidence_file": "evidence/vm9_jni_cold_once_fresh_20261008.json",
+    "schema": "vm9-jni-cold-once-fresh-composition-v1",
+    "evidence_date": "2026-10-08",
+    "evidence_timezone": "Asia/Shanghai",
+    "status": "cold_getter_composition_verified_original_constructor_JNI_OnLoad_prefix_completes_once_before_startup_VM",
+    "caller_composition_controls": 14,
+    "negative_controls": 4,
+    "original_bootstrap_prefix_probes": 4,
+    "Python_full_bootstrap_comparison_controls": 0,
+    "native_input_snapshot_used": false,
+    "legacy_acquisition_and_dispatch_stubs_disabled": true,
+    "cold_once_completed_in_native_prefix_probes": true,
+    "cold_once_terminal_state_hex": "0xffffffffffffffff",
+    "startup_stop_before_offsets": [
+      "0x28040c",
+      "0x2a0028"
+    ],
+    "actual_startup_VM_body_executed": false,
+    "explicit_driver_continuations_used": true,
+    "component_driver_continuations": 2,
+    "bootstrap_prefix_driver_continuations": 1,
+    "matching_libc_condition_broadcast_executed": true,
+    "no_waiter_futex_services_supplied": true,
+    "condition_counter_after_broadcast": 4,
+    "full_cold_TLS_subsystem_boot_verified": false,
+    "all_ELF_constructors_recovered": false,
+    "full_JNI_OnLoad_recovered": false,
+    "actual_android_jvm_executed": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "14 component compositions and four native startup observations are separate; Python full-bootstrap comparisons remain zero.",
+      "Driver continuations explicitly connect native constructor/initializer entries; they are not an Android loader.",
+      "JNI/JavaVM/allocator/OS/exit/clock services and warm references/TLS subsystem keys remain explicit inputs.",
+      "Variadic windows are checked at live JNI consumption; full physical spills and unconsumed GP/SIMD/canary/FP/LR are excluded.",
+      "Native once completes before both VM entries; neither startup VM body nor full JNI_OnLoad return is verified.",
+      "Guest rollback cannot reverse external provider effects; fresh signer/online/Rust/search/download product remain open."
+    ]
   }
 }

@@ -12,10 +12,18 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 # 番茄（ByteDance Tomato）完整分析与使用报告
 
-> 截止：2026-10-07
+> 截止：2026-10-08（Asia/Shanghai，本机验证日期）
 > 结论：**本项目整体尚未完成，不能作为当前线上小说搜索下载器发布。**
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
+
+2026-10-08 最新cold JNI检查点：14个fresh caller组合、4个负控制通过，构造、
+JNI初始化、TLS、dispatcher、Long及对象清理在同组输入贯通。另4条同次原生启动
+前缀在显式ctor→JNI_OnLoad driver下完成cold once（FFFFFFFFFFFFFFFF），Long0/200
+分别到达两个startup VM入口前；两个VM body未执行，Python完整bootstrap对照0。
+warm reference/TLS全局/OS keys及外部服务仍为显式输入。下一步恢复/组合Python
+once/JNI_OnLoad及startup state/VM输入；fresh签名与下载产品仍未通过。见
+[REQUEST_JNI_COLD_ONCE.md](REQUEST_JNI_COLD_ONCE.md)。
 
 2026-10-07 后续cache mutex构造：`.init_array +271940` 的8个对照/6个负控制通过，
 恢复分配48、normal mutex、+3df0a8发布、+3df118 inline及exit注册。本轮JNI组件

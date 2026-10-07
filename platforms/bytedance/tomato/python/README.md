@@ -433,3 +433,15 @@ mutex is initialized; full once/bootstrap/fresh signer remains open. See
 and explicit exit registration. Cache fields are preserved. Full ELF init,
 actual destructor and same-fresh cold once integration remain open; see
 [JNI report section 7](../REQUEST_JNI_DISPATCH.md#7-后续init_array-0x271940-的-mutex-构造已恢复).
+
+
+### Cold JNI caller composition and native once completion (2026-10-08)
+
+`initialize_cold_java_switch` restores +0x165658 acquisition, independent getter
+env, Long/store and returned-object deletion. Fourteen compositions/four negatives
+compare fresh payload/image/JNI table/caller pair and live JNI argument windows;
+late deletion refusal rolls back guest pages while retaining external JNI events.
+Four separate original JNI_OnLoad prefixes complete cold once and stop before
+startup VM entries using one explicit constructor driver. Full Python bootstrap
+and actual startup VM execution are still open. See
+[REQUEST_JNI_COLD_ONCE.md](../REQUEST_JNI_COLD_ONCE.md) for commands and limits.

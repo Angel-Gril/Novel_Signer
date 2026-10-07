@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 cold getter组合与原生once完成（本机Asia/Shanghai）
+
+新增14个fresh caller组合对照、4个负控制：同次构造/JNI初始化/TLS/dispatcher/Long/
+word写入/object删除通过，包含不同outer/dispatch env。栈参数在JNI实际消费时比较，
+旧临时区在后续调用后不再作为有效终态；缺方法写0与NULL对象保留旧word均验证。
+另4条constructor→原始JNI_OnLoad观察（一个显式driver continuation）cold once自然
+完成到FFFFFFFFFFFFFFFF，Long0/200分别停在+28040c/+2a0028前；真实libc broadcast及
+无等待者futex服务贯通。完整Python bootstrap对照0，startup VM body未执行。
+下一处为Python once/JNI_OnLoad控制及A分支+168324、B分支+2a02d4状态/VM输入；
+warm reference/TLS全局/OS keys及外部服务仍显式，fresh签名、线上矩阵与下载产品未完成。
+见 [cold once报告](REQUEST_JNI_COLD_ONCE.md)。下列once1停止点为此前历史证据。
+
 ## 2026-10-07 后续cache mutex构造来源已恢复
 
 `.init_array +271940` 新增8个原生/Python对照、6个负控制：分配48、normal mutex

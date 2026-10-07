@@ -31,6 +31,12 @@ cache mutex constructor adds 8 controls/6 negatives. Its integration with the
 same fresh cold startup, once completion and fresh signer remain open;
 see the [JNI report](platforms/bytedance/tomato/REQUEST_JNI_DISPATCH.md).
 
+Cold JNI caller composition subsequently passes 14 native/Python controls and
+four negatives. Four constructor-to-original-JNI_OnLoad prefix probes naturally
+complete cold once and stop before startup VM entries, using an explicit driver
+and controlled services. Python full bootstrap and fresh signing remain open;
+see the [cold once report](platforms/bytedance/tomato/REQUEST_JNI_COLD_ONCE.md).
+
 ## Build and checks
 
 ```text

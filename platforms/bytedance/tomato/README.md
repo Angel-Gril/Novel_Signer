@@ -1,6 +1,6 @@
 # Tomato / Fanqie (ByteDance)
 
-Current boundary (2026-10-07): constructor finalization and explicit JNI
+Current boundary (2026-10-08, host Asia/Shanghai): constructor finalization and explicit JNI
 publication services have passed fresh native comparisons. The current request
 caller and bounded request VM prefix also pass; fresh request signatures and
 online acceptance remain open. See [VM9_PROGRESS.md](VM9_PROGRESS.md) for the
@@ -15,6 +15,12 @@ passes 8 controls/6 negatives; combining it with the same fresh cold startup
 and producing a fresh signer output remain open.
 See [REQUEST_JNI_DISPATCH.md](REQUEST_JNI_DISPATCH.md).
 
+
+The later cold getter composition adds 14 native/Python controls and four
+negatives. Four constructor-to-original-JNI_OnLoad prefix probes, with one
+explicit driver continuation, naturally complete cold once and stop before
+the two startup VM entries. VM bodies, all ELF constructors and Python full
+bootstrap remain open. See [REQUEST_JNI_COLD_ONCE.md](REQUEST_JNI_COLD_ONCE.md).
 
 This directory is limited to the `com.dragon.read` / Tomato material. Douyin and Qidian are documented in their own directories.
 

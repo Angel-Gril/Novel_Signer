@@ -624,3 +624,46 @@ def initialize_java_cache_mutexes(pages, *, image_base, allocate, register_exit)
         raise RefillUnsupported('exit registration status must fit signed/unsigned uint32')
     result=JavaCacheMutexInitializationResult(allocated,inline,status&0xFFFFFFFF)
     p.commit();return result
+
+
+@dataclass(frozen=True)
+class ColdJavaSwitchInitializationResult:
+    environment_pointer: int
+    object_reference: int
+    written_switch_word: int|None
+    object_deleted: bool
+
+
+def initialize_cold_java_switch(pages, *, image_base, entry_stack_address,
+        acquire_environment, invoke_jni):
+    """+0x165658: acquire -> actual getter -> Long -> store -> DeleteLocalRef.
+
+    This is the cold once initializer's caller body, not the +0x32a0a0 once
+    wrapper or whole JNI_OnLoad. It acquires the outer env at caller SP+8,
+    then the dispatcher independently acquires its own env. A NULL outer env
+    or returned object leaves the switch word untouched. Only a non-NULL
+    returned object is converted, stored to +0x3d1578 and locally deleted.
+    The acquired outer env is retained for conversion/cleanup, independently
+    of the dispatcher's env. Page rollback does not reverse provider effects.
+    """
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<0x1E0
+            or entry_stack_address&15):
+        raise RefillUnsupported('cold JNI switch caller stack must be aligned with scratch space')
+    if not isinstance(image_base,int) or not 0<=image_base<=MASK64:
+        raise RefillUnsupported('cold JNI switch image base must fit uint64')
+    if not callable(acquire_environment):
+        raise RefillUnsupported('cold JNI switch requires environment acquisition')
+    p=_PageTransaction(pages);stack=entry_stack_address-0x50;pair=stack+8
+    acquire_environment(p,entry_stack_address=stack,output_pair_address=pair)
+    env=_u(p,pair);reference=0;word=None;deleted=False
+    if env:
+        dispatch=invoke_java_dispatch(p,image_base=image_base,entry_stack_address=stack,
+            argument_words=(0x1000000E,0,0,0,0),acquire_environment=acquire_environment,invoke_jni=invoke_jni)
+        reference=dispatch.returned_reference
+        if reference:
+            conversion=convert_java_long(p,image_base=image_base,entry_stack_address=stack,
+                environment_pointer=env,object_reference=reference,invoke_jni=invoke_jni)
+            word=conversion.returned_word;_w(p,image_base+0x3D1578,word)
+            _invoke_jni(p,env,0xB8,(reference,),invoke_jni);deleted=True
+    result=ColdJavaSwitchInitializationResult(env,reference,word,deleted)
+    p.commit();return result
