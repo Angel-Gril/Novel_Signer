@@ -437,3 +437,42 @@ def publish_signer_handle(
     cleanup_jni_reference(environment=environment, reference=second,
         get_reference_type=get_reference_type, delete_reference=delete_reference)
     return first != 0
+
+
+@dataclass(frozen=True)
+class EncodedCallbackFrame:
+    entry_stack_address: int
+    native_frame_address: int
+    callback_address: int
+    argument_words: tuple[int, int, int]
+    callback_frame_pointer: int
+
+
+def prepare_encoded_callback_frame(pages, *, entry_stack_address, callback_address,
+        argument_block_address, saved_frame_pointer, return_address, saved_x6=0):
+    """+0x271998 adapter: RET into target with encoded original FP/LR.
+
+    Model the retained 80-byte local frame and arguments after the actual
+    adapter epilogue. Lower obfuscation spill frames and full native ABI are
+    outside this helper. Target validity belongs to the eventual callback.
+    """
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<0x100
+            or entry_stack_address&15):
+        raise RefillUnsupported('encoded callback stack must be aligned')
+    words=(callback_address,argument_block_address,saved_frame_pointer,return_address,saved_x6)
+    if any(not isinstance(v,int) or not 0<=v<1<<64 for v in words):
+        raise RefillUnsupported('encoded callback inputs must fit uint64')
+    if not callback_address or not argument_block_address:
+        raise RefillUnsupported('encoded callback requires target and argument block')
+    p=_PageTransaction(pages);stack=entry_stack_address-0x50;frame=entry_stack_address-0x10
+    _read_span(p,stack,0x50)
+    def write(a,v):_write_span(p,a,v.to_bytes(8,'little'))
+    # Prefix obfuscation spills leave caller FP at +0 and input X6 at +0x38.
+    for off,v in ((0,saved_frame_pointer),(8,return_address),(0x10,saved_frame_pointer),(0x18,frame),
+            (0x20,callback_address),(0x28,argument_block_address),(0x30,callback_address),
+            (0x38,saved_x6),(0x40,0),(0x48,callback_address)):
+        write(stack+off,v)
+    result=EncodedCallbackFrame(entry_stack_address,frame,callback_address,
+        (argument_block_address,(saved_frame_pointer+0xE9)&((1<<64)-1),
+            (return_address+0xD5)&((1<<64)-1)),0)
+    p.commit();return result

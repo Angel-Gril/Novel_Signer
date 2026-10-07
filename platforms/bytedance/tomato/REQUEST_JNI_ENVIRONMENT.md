@@ -1,5 +1,9 @@
 # TLS／JavaVM 环境获取与 Java 栈检查调用边界
 
+后续发布组件及原始JNI_OnLoad探针见
+[REQUEST_JNI_PUBLICATION.md](REQUEST_JNI_PUBLICATION.md)。本报告40/14组件证据
+范围保持；完整bootstrap、实际JNI服务与fresh签名仍未完成。
+
 2026-10-07。本阶段恢复 `+0x26EDC4`、`+0x17CAAC`、`+0x26EEEC` 和
 `+0x26EF2C` 的有界组件行为，以及 attach 成功分支。新增 **40 个原生对照、
 14 个负控制**。原生 oracle 显式启用 `real_jni_acquisition=True`，关闭旧的

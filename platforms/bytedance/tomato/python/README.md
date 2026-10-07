@@ -1,5 +1,13 @@
 # Tomato Python material
 
+2026-10-07 JavaVM publication checkpoint: 54 native/Python controls and 11
+negative controls, plus four separately counted original JNI_OnLoad probes.
+Recovered +0x271998/+0x27be88 and live X6 spill; six publication-to-acquisition
+controls execute consecutively in one native invocation. Bootstrap probes use
+explicit warm dependencies/services and stop after publication on success;
+full cold/Python JNI_OnLoad remains open. Same-session request still has no VM
+input. See [REQUEST_JNI_PUBLICATION.md](../REQUEST_JNI_PUBLICATION.md).
+
 2026-10-07 JNI environment checkpoint: 40 original-body controls and 14
 negative controls pass with the legacy acquisition stub disabled. Original
 TLS/destructor bodies execute; JavaVM/pthread/allocator service effects are

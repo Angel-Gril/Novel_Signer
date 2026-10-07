@@ -2877,5 +2877,43 @@
       "Failed page transactions cannot reverse external JavaVM/pthread/allocation provider effects.",
       "Same-session high branch has a zero JavaVM global and refuses; fresh signature/online/download product remain incomplete."
     ]
+  },
+  "vm9_jni_publication_fresh_20261007": {
+    "evidence_file": "evidence/vm9_jni_publication_fresh_20261007.json",
+    "schema": "vm9-jni-publication-fresh-differential-v1",
+    "status": "vm_publication_encoded_callback_and_continuous_tls_acquisition_verified_bootstrap_warm_probes_bounded",
+    "controls": 54,
+    "wrapper_controls": 28,
+    "adapter_controls": 10,
+    "callback_chain_controls": 10,
+    "composition_controls": 6,
+    "negative_controls": 11,
+    "original_bootstrap_probes": 4,
+    "native_input_snapshot_used": false,
+    "original_vm_write_body_executed": true,
+    "original_encoded_adapter_executed": true,
+    "live_getter_final_x6_word_verified": true,
+    "retained_frames_and_return_registers_compared": true,
+    "original_publication_then_acquisition_executed_in_one_native_run": true,
+    "bootstrap_warm_reference_fixtures_used": true,
+    "bootstrap_explicit_javavm_decimal_clock_services_used": true,
+    "defined_JNI_OnLoad_got_bound_from_elf_symbol_in_bootstrap_probes": true,
+    "bootstrap_success_stopped_before_offset": "0x27bca0",
+    "next_actual_initialization_call_offset": "0x26e19c",
+    "full_physical_spill_frame_abi_compared": false,
+    "full_JNI_OnLoad_recovered": false,
+    "actual_android_jvm_executed": false,
+    "whole_native_request_equivalence_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "54 differential controls and four original bootstrap probes are counted separately; the probes are not Python full-bootstrap comparisons.",
+      "Publication stores a caller-supplied VM pointer and restores bounded caller state; it does not construct a real JavaVM/JNI table.",
+      "Continuous controls use an explicit host continuation and JavaVM/pthread/allocation services; whole-native JNI_OnLoad/request are not claimed.",
+      "Success bootstrap probes stop at +0x27bca0 after publication; later +0x26e19c and actual startup/JNI behavior remain open.",
+      "Current owning-session high request still lacks VM input and refuses; no fixture VM/env was injected into that session."
+    ]
   }
 }

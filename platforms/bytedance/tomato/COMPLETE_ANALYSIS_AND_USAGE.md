@@ -17,7 +17,16 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-07 最新TLS/JavaVM环境获取检查点：新增40个原生对照/14个负控制，
+2026-10-07 最新JavaVM发布检查点：54个原生/Python对照、11个负控制，恢复
+`+0x271998 → +0x27be88` 的VM发布、caller编码/恢复和实际live X6 spill；六个
+同次原生调用的publication→TLS获取组合通过。另有四个原始JNI_OnLoad探针：
+warm依赖fixture下GetEnv失败返回-1，成功后真实publisher执行并停在+27bca0。
+这些探针未验证Python完整bootstrap；GetEnv/pthread/clock等服务仍为显式输入。
+下一处为+26e19c及其后的实际startup/JNI服务。当前owning session保持957返回/
+965缺少JavaVM拒绝，fresh签名和产品仍未完成。详见
+[REQUEST_JNI_PUBLICATION.md](REQUEST_JNI_PUBLICATION.md)。
+
+2026-10-07 此前TLS/JavaVM环境获取检查点：新增40个原生对照/14个负控制，
 关闭legacy acquisition stub，执行原始TLS、析构注册、GetEnv和attach/detach路径；
 六个evaluator控制到达FindClass `+0x28b71c`调用前，环境和类名参数与原生一致。
 JavaVM/pthread/分配仍为显式组件服务，真实Android JVM与完整JNI尚未验证。

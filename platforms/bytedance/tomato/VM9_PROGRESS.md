@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07 JavaVM publication 与原始 JNI_OnLoad 探针
+
+- 54个native/Python对照、11个负控制；publisher +27be88与adapter +271998
+  实际执行并返回，caller FP/LR、保留frame、live X6 word及image/payload匹配。
+- 六个同次原生publication→TLS acquisition组合通过；JavaVM与OS服务为显式
+  组件输入，global从0经原始writer发布，未使用native输入快照。
+- 四个原始JNI_OnLoad warm-dependency探针：GetEnv失败返回-1且VMglobal保持0；
+  成功后publication执行，停在+27bca0。定义JNI_OnLoad GOT来自ELF symbol绑定。
+- 完整cold/Python JNI_OnLoad仍未恢复，下一处+26e19c及之后的startup/JNI服务。
+  当前owning session仍957返回/965缺少VM拒绝；fresh签名/线上矩阵/产品未完成。
+- 详细范围见 [REQUEST_JNI_PUBLICATION.md](REQUEST_JNI_PUBLICATION.md)。
+
 ## 2026-10-07 TLS／JavaVM 环境获取与 FindClass 调用前对照
 
 - 新增40个原始body对照、14个负控制；legacy env stub 显式关闭。

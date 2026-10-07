@@ -179,3 +179,74 @@ def acquire_thread_environment(pages, *, image_base, entry_stack_address,
             complete_jni_verified=False)
     p.commit()
     return result
+
+
+@dataclass(frozen=True)
+class JavaVmPublicationResult:
+    storage_address: int
+    java_vm_pointer: int
+    frame_address: int
+    frame_rewritten: bool
+    restored_frame_pointer: int
+    continuation_address: int
+    native_return_x0: int
+
+
+def publish_java_vm_wrapper(pages, *, image_base, entry_stack_address,
+        argument_block_address, first_word, second_word, saved_frame_pointer,
+        return_address, saved_x20=0, saved_x19=0, saved_x6=0):
+    """+0x27be88: publish parameter word, optionally replace saved FP/LR.
+
+    JVM pointer may be NULL, as in the original store. The wrapper does not
+    initialize or validate a JavaVM table. A retained 32-byte frame is modeled;
+    the live X6 spill from +0x26ecb4 is retained too; its other deeper spill
+    words/ABI are not modeled. X0 is incidental but
+    measured for this component, not treated as a JNI return status.
+    """
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<0x100
+            or entry_stack_address&15):
+        raise RefillUnsupported('JavaVM publication stack must be aligned')
+    values=(first_word,second_word,saved_frame_pointer,return_address,saved_x20,saved_x19,saved_x6)
+    if any(not isinstance(v,int) or not 0<=v<1<<64 for v in values):
+        raise RefillUnsupported('JavaVM publication ABI inputs must fit uint64')
+    _address(argument_block_address,'JavaVM publication argument block')
+    p=_PageTransaction(pages);frame=entry_stack_address-0x20
+    _read_span(p,frame,32)
+    for offset,value in ((0,saved_frame_pointer),(8,return_address),(16,saved_x20),(24,saved_x19)):
+        _w(p,frame+offset,value)
+    # Load the parameter only after writing the prologue, matching native
+    # aliases involving that retained frame. Global storage aliases stay real.
+    storage=_u(p,image_base+0x374F90);_address(storage,'JavaVM publication storage')
+    vm=_u(p,argument_block_address)
+    _w(p,storage,vm)
+    rewritten=first_word>4096 and second_word>4096
+    if rewritten:
+        # The later +0x26ed3c STP X7,X6 overwrites the earlier X7 spill.
+        # Its final X6 word at getter entry SP -0x28 supplies temporary padding.
+        _w(p,frame-0x28,saved_x6)
+        _w(p,frame,first_word-0xE9);_w(p,frame+8,second_word-0xD5)
+    result=JavaVmPublicationResult(storage,vm,frame,rewritten,_u(p,frame),_u(p,frame+8),
+        frame if rewritten else argument_block_address)
+    p.commit();return result
+
+
+def publish_java_vm_callback(pages, *, image_base, entry_stack_address,
+        argument_block_address, saved_frame_pointer, return_address, saved_x20=0,saved_x19=0,saved_x6=0):
+    """Compose original +0x271998 -> +0x27be88 with a valid retained caller.
+
+    This is the measured publication callback, not all JNI_OnLoad. The caller
+    supplies a JavaVM pointer in the parameter block, never a native snapshot.
+    """
+    from vm9_callbacks import prepare_encoded_callback_frame
+    p=_PageTransaction(pages)
+    adapter=prepare_encoded_callback_frame(p,entry_stack_address=entry_stack_address,
+        callback_address=image_base+0x27BE88,argument_block_address=argument_block_address,
+        saved_frame_pointer=saved_frame_pointer,return_address=return_address,saved_x6=saved_x6)
+    _,first,second=adapter.argument_words
+    if first<=4096 or second<=4096:
+        raise RefillUnsupported('JavaVM publication callback requires encodable caller FP/LR')
+    result=publish_java_vm_wrapper(p,image_base=image_base,entry_stack_address=entry_stack_address,
+        argument_block_address=argument_block_address,first_word=first,second_word=second,
+        saved_frame_pointer=adapter.callback_frame_pointer,return_address=adapter.callback_address,
+        saved_x20=saved_x20,saved_x19=saved_x19,saved_x6=saved_x6)
+    p.commit();return result
