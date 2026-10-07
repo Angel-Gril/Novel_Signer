@@ -60,7 +60,8 @@ Outer startup now independently reproduces the default main-thread caller and th
 
 番茄 JNI 后续检查点在原有 **34 组 once/getter/mask 对照、9 项负控制**之后，
 验证了两个基址的原始 A JNI_OnLoad 返回，以及同次默认 worker 的全部六个 caller
-和每次 48 个嵌套返回；实际任务清理后到达 wait 边界。另恢复 B 短 selector 的
+和每次 48 个嵌套返回；实际任务清理后到达 wait 边界。后续两个同次观察由显式
+futex 中断/stop 服务驱动，worker 正常返回并释放 argument，support 仍保留在 TLS。另恢复 B 短 selector 的
 20 个哈希和 30 个 lookup 对照、6 项拒绝控制。真实 OS 线程/allocator/wait/exit、
 B factory 与完整独立 Medusa 仍未完成，完整 Python bootstrap 对照仍为 0。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

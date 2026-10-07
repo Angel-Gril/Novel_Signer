@@ -12,18 +12,22 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 # 番茄（ByteDance Tomato）完整分析与使用报告
 
-> 截止：2026-10-08（Asia/Shanghai，本机验证日期）
+> 截止：2026-10-07 UTC（文件沿用本机试验标签 20261008）
 > 结论：**本项目整体尚未完成，不能作为当前线上小说搜索下载器发布。**
 
-本机后续检查点：正常 Python once/getter/mask 已有 34 组差分及 9 项负控制；
-另 4 条原始启动前缀、4 条 memcpy ABS64 单变量观察分别推进 A 到 pthread_create 前、
-B 到构造器返回后。B descriptor publication、完整 Python bootstrap 和 fresh 签名
-仍待恢复；Python 完整 bootstrap 对照仍 0。详见 [后续报告](REQUEST_JNI_COLD_MASK.md)。
-下方 cold caller 14/4/4 记录为此前检查点，不能累加成完整初始化证明。
+最新检查点：两个基址的原始 A JNI_OnLoad 在显式服务下自然返回 0x10006；
+同次生成的 queue worker 执行六个实际默认 caller、每次 48 个嵌套 VM 返回、六次
+once 完成 broadcast。另两个延伸观察执行任务清理后到达 wait PLT；后续两个观察
+实际执行 libc wait，由显式 futex EINTR/queue stop 服务驱动，worker 正常返回并
+释放 argument。support 仍保留在 TLS，析构及 guest pthread_exit 未执行；完整 Python
+bootstrap 对照仍为 0。B 短 selector 哈希/lookup 新增 20+30 个 native/Python
+对照和 6 个拒绝回滚，root/bucket 数据仍为合成输入，factory/publication 未恢复。
+详见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。
+下方 once/mask 与 cold caller 记录为此前证据，不能累加成完整初始化或 signer 证明。
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-08 最新cold JNI检查点：14个fresh caller组合、4个负控制通过，构造、
+此前 cold JNI 检查点（本机试验标签 20261008）：14个fresh caller组合、4个负控制通过，构造、
 JNI初始化、TLS、dispatcher、Long及对象清理在同组输入贯通。另4条同次原生启动
 前缀在显式ctor→JNI_OnLoad driver下完成cold once（FFFFFFFFFFFFFFFF），Long0/200
 分别到达两个startup VM入口前；两个VM body未执行，Python完整bootstrap对照0。

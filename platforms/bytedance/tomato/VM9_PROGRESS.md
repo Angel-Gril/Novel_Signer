@@ -6,7 +6,9 @@
 0x10006，以及同次 thread-create argument → 第一个 queue worker → +280554 入口。
 四条 memset ABS64 单变量控制定位并验证导入依赖；两个同次完整任务观察各执行六个
 caller/48 次嵌套返回/六次 once 完成 broadcast。另两个观察执行任务返回后的 +167310
-清理，停在 pthread_cond_wait PLT +3485b0 前；实际 wait/stop/worker 退出仍待接回。
+清理，停在 pthread_cond_wait PLT +3485b0 前；边界观察未执行 wait。后续两个完整 worker 观察实际执行 matching-libc wait，由显式
+futex EINTR/queue stop 服务驱动，正常返回 0；argument 一次 free/poison 通过，support
+wrapper 保留在 TLS。TLS 析构/guest pthread_exit/真实 OS 线程退出仍待接回。
 
 一个 allocator 碰撞控制保留原小块 pool，复现 16 KiB arena 覆盖 worker TLS 后的
 canary 失配；正控制仅隔离大块 arena，未绕过 stack-check 或替换 VM 结果。

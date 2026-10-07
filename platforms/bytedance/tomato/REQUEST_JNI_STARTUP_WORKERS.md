@@ -15,6 +15,7 @@
 | memset 导入单变量控制 | 4 | 两个基址 × 未绑定/绑定，在相同 wrapper 停止点核对 callback 目标 |
 | 同次 worker 的完整默认任务 | 2 | 每次六个 caller、48 次嵌套 VM 返回、六块 arena、六次完成 broadcast |
 | 同次任务清理/worker wait 边界 | 2 | 实际 task cleanup 执行后到达 condition wait PLT 前 |
+| 同次 worker wait/stop/return/free | 2 | 实际 libc wait 后由显式 EINTR/stop 服务驱动，正常返回并释放 argument |
 | allocator 区域碰撞控制 | 1 | 原 pool 覆盖 TLS 后 canary 失配；停止于 fail 分支调用前 |
 | B 短输入哈希 native/Python 差分 | 20 | 两个基址 × 0..8 字节及高位移位控制 |
 | B 短 selector lookup 差分 | 30 | 桶/碰撞/空返回、short/long stored key、实际 ELF selector |
@@ -22,6 +23,7 @@
 | 完整 Python bootstrap 对照 | **0** | 尚未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
 
 A 证据：[vm9_jni_A_default_worker_20261008.json](evidence/vm9_jni_A_default_worker_20261008.json)。
+worker stop 证据：[vm9_jni_A_worker_stop_20261008.json](evidence/vm9_jni_A_worker_stop_20261008.json)。
 B 证据：[vm9_alternative_short_descriptor_20261008.json](evidence/vm9_alternative_short_descriptor_20261008.json)。
 这些计数不与此前 34 组 once/mask 组件对照相加为完整 signer 对照。
 
@@ -63,8 +65,19 @@ SP=guest+0xEF00；没有真实 OS 线程或并发。JNI table 保留在 guest+0x
 - 最终到达实际任务返回点 `+0x326620`；另两条延伸观察执行后续 task cleanup，停在 wait PLT `+0x3485B0` 前。
 
 默认任务及其清理/wait 观察均为原生执行观察，尚无完整 Python 启动的对应生成链。
-清理观察只执行一次任务返回后的 `+0x167310`；condition wait 本身、stop/exit、worker argument 释放和 TLS 析构仍未执行。allocator、JavaVM、JNI、
-clock、exit、OS 服务，以及 warm reference、TLS subsystem globals/OS keys 仍为显式输入。
+清理/wait 边界观察只执行一次任务返回后的 `+0x167310`，停在 wait PLT 前。
+后续两个完整 worker 观察继续执行 matching-libc `pthread_cond_wait`：在其 mutex 已释放时，
+显式 futex 服务核对 syscall 98、operation 128、expected 4、NULL timeout，并将 queue+0x88
+的 active byte 清零，返回 -4（EINTR）。实际 wait 返回后重新进入 queue 控制，worker
+自然返回 0。argument 恰好一次进入受控 free 服务，所属 block 被填入 0xD7 并从受控
+allocator 的 live blocks 移除；native terminal guest memory 核对该效果。
+
+这里主动发布 stop 的是显式 OS 服务，不证明真实线程并发或 kernel wait。worker support
+wrapper 仍保留在实际 TLS key slot；TLS key 析构、guest pthread_exit 和真实 OS 线程终止
+均未执行。任务清理只在 task return 与首次 wait 之间计数，后续 argument 的清理不能
+混作第二次 task cleanup。
+
+allocator、JavaVM、JNI、clock、exit、OS 服务，以及 warm reference、TLS subsystem globals/OS keys 仍为显式输入。
 
 ## 3. memset 导入与 allocator 碰撞的归因
 
@@ -94,6 +107,13 @@ App 崩溃或无限循环，也不能忽略 canary 检查来让验证通过。
 随后 `+0x29F2E8` 调 `+0x2A9620`，`+0x29F2F4` 将选择结果写入 `+0x3E1EB8`。
 这是发布来源的静态定位，尚未执行完整 factory/constructor 来产生实际 root。
 
+后续私有单基址 native 探针已经从实际 constructor 进入 factory 解析，逐项接入
+matching-libc memcmp/normal mutex，以及显式 gettid/exit 注册服务。原 64 KiB guest
+范围在 `+0x32A9C8` 的栈写入遇到未映射边界；改用独立 2 MiB 栈后，在 2000 万条
+指令预算内未再观察到未映射访问，但仍未观察 factory 返回或 descriptor 发布。
+这是继续分析的位置，不纳入上述正式 Python 对照计数，也不能用预算结束证明无限循环。
+
+
 新 owner：[vm9_alternative_startup.py](python/vm9_alternative_startup.py)。
 
 ```python
@@ -121,6 +141,7 @@ bucket 指向 predecessor，其 next 指向 node；node 保存 next、cached has
 
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_A_default_worker_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <A-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_A_worker_stop_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <worker-stop-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_short_descriptor_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <B-evidence.json>
 ```
 
@@ -133,6 +154,6 @@ caller 和 callback 边界。VM 指令仍由原生执行，不因减少观测 ho
 析构或独立 Python/Rust signer。完整无 JVM Rust、非空搜索/分页、抖音/起点闭环、最终
 Pages/Actions 搜索下载产品仍待完成。
 
-后续优先接回 `+0x3485B0` 的 queue wait/stop、worker argument 清理和退出，再继续完整
+后续优先接回 worker TLS key 清理与 guest pthread_exit，再继续完整
 Python 启动与 B `+0x2CBDC8` factory；真实 allocator/arena/OS 输入和 fresh 请求签名仍是
 独立 signer 的必要验收项。

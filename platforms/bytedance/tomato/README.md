@@ -4,6 +4,9 @@ Current boundary (2026-10-07 UTC; host trial label `20261008`): the original
 A JNI_OnLoad returns `0x10006` with explicit services. Two same-run native
 observations execute all six default task callers (48 nested returns each),
 and two further observations reach worker wait after actual task cleanup.
+Two additional same-run observations execute matching-libc wait, explicit
+futex EINTR/queue stop, normal worker return and controlled argument free.
+Support remains in TLS; TLS destructors and guest pthread_exit remain open.
 Thread creation, OS/allocator/JNI inputs and warm TLS states remain explicit.
 B short-selector hash/lookup adds 50 native/Python controls and six negatives;
 its root/bucket data is synthetic and its factory/publication remains open.
@@ -83,6 +86,6 @@ The outer startup caller now passes four fresh-input controls (86 steps, 16 allo
 ### 原始 JNI 与同次默认 worker 的后续检查点
 
 A 新增 2 个原始返回、2 个 worker 入口、4 个 memset 控制、2 个完整默认任务、
-2 个清理/wait 边界和 1 个 allocator 碰撞控制；B 新增 20 个短哈希、30 个查找
-对照及 6 个负控制。完整 Python bootstrap 对照仍 0，真实 wait/stop/exit、B factory
+2 个清理/wait 边界、2 个 wait/stop/return/free 和 1 个 allocator 碰撞控制；B 新增 20 个短哈希、30 个查找
+对照及 6 个负控制。完整 Python bootstrap 对照仍 0，真实 OS wait/exit、TLS 析构、B factory
 与独立签名链仍待完成。详见 [后续报告](REQUEST_JNI_STARTUP_WORKERS.md)。
