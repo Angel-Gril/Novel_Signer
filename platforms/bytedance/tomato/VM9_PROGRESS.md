@@ -1,6 +1,20 @@
 # Current VM9 progress checkpoint
 
-## 2026-10-07 JavaVM publication 与原始 JNI_OnLoad 探针
+## 2026-10-07 JNI dispatch 初始化、类引用与 cold switch once
+
+- 56个原生/Python对照、9个负控制；`+26e19c/+26f154` 原始body执行，
+  fresh payload/image、JNI顺序和24字节方法表匹配。注册状态实际被忽略，
+  最初FindClass类用于静态方法查找与引用保留，服务仍为显式fixture。
+- 四个publication→初始化组合在同次原生执行中返回，中间continuation明确。
+- 六个JNI_OnLoad原始探针单独计数；warm switch的四个停在+28040c/+2a0028；
+  cold switch两个经matching-libc真实mutex进入+165648/+165658，停在+26edc4前。
+  cold once仍1，initializer未完成、predicate未返回；136/320reference仍为warm输入。
+- owning session保持957 synthetic返回/965缺VM拒绝；未注入probe VM/env。
+  下一处是cold switch的TLS/JNI getter +26e70c/+270854，随后实际startup。
+- 完整Medusa、fresh签名、线上矩阵、Rust与下载产品仍未完成。
+  详见 [REQUEST_JNI_INITIALIZATION.md](REQUEST_JNI_INITIALIZATION.md)。
+
+## 2026-10-07 此前JavaVM publication 与原始 JNI_OnLoad 探针
 
 - 54个native/Python对照、11个负控制；publisher +27be88与adapter +271998
   实际执行并返回，caller FP/LR、保留frame、live X6 word及image/payload匹配。

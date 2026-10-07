@@ -1,6 +1,18 @@
 # Tomato Python material
 
-2026-10-07 JavaVM publication checkpoint: 54 native/Python controls and 11
+2026-10-07 JNI dispatch initialization: 56 native/Python controls, 9 negatives
+and six separately counted original JNI_OnLoad probes. Recovered +0x26e19c
+and +0x26f154 with explicit JNI services; four same-run publication compositions
+pass. Warm-switch probes stop at startup entries; cold-switch probes execute
+matching-libc mutex and stop before TLS acquisition, with once state still 1.
+Full bootstrap/JVM/fresh signing remain open. See
+[REQUEST_JNI_INITIALIZATION.md](../REQUEST_JNI_INITIALIZATION.md).
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_initialization_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_jni_initialization_fresh_20261007.json
+```
+
+2026-10-07 Previous JavaVM publication checkpoint: 54 native/Python controls and 11
 negative controls, plus four separately counted original JNI_OnLoad probes.
 Recovered +0x271998/+0x27be88 and live X6 spill; six publication-to-acquisition
 controls execute consecutively in one native invocation. Bootstrap probes use

@@ -2915,5 +2915,44 @@
       "Success bootstrap probes stop at +0x27bca0 after publication; later +0x26e19c and actual startup/JNI behavior remain open.",
       "Current owning-session high request still lacks VM input and refuses; no fixture VM/env was injected into that session."
     ]
+  },
+  "vm9_jni_initialization_fresh_20261007": {
+    "evidence_file": "evidence/vm9_jni_initialization_fresh_20261007.json",
+    "schema": "vm9-jni-initialization-fresh-differential-v1",
+    "status": "jni_dispatch_initializer_and_reference_retention_verified_original_bootstrap_and_cold_once_prefix_bounded",
+    "controls": 56,
+    "initialization_controls": 34,
+    "retention_controls": 18,
+    "composition_controls": 4,
+    "negative_controls": 9,
+    "original_bootstrap_probes": 6,
+    "native_input_snapshot_used": false,
+    "original_initialization_body_executed": true,
+    "original_reference_retention_body_executed": true,
+    "explicit_JNI_services_used": true,
+    "all_main_image_pages_and_guest_payload_compared": true,
+    "method_table_24_bytes_compared": true,
+    "warm_switch_bootstrap_probes": 4,
+    "cold_switch_bootstrap_probes": 2,
+    "cold_switch_matching_libc_mutex_bodies_executed": true,
+    "cold_switch_stop_before_offset": "0x26edc4",
+    "cold_once_control_at_boundary": 1,
+    "cold_once_initializer_completed": false,
+    "full_physical_stack_and_ABI_compared": false,
+    "full_JNI_OnLoad_recovered": false,
+    "actual_android_jvm_executed": false,
+    "whole_native_request_equivalence_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "56 differential controls and six original JNI_OnLoad probes are counted separately; no full Python bootstrap comparison.",
+      "JNI class handles and method services are explicit inputs, not Android class loading or Java registration proof.",
+      "Original entry probes use warm 136/320 reference fields and defined-symbol JNI_OnLoad relocation binding.",
+      "Four warm-switch probes provide cached switch/once state; two cold-switch probes stop before TLS acquisition with once still 1.",
+      "Registered callback body, complete cold getter/startup, whole-native request and fresh signing remain open.",
+      "No probe VM/env was injected into owning-session request; synthetic low return and missing-VM high refusal persist."
+    ]
   }
 }

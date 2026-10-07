@@ -250,3 +250,118 @@ def publish_java_vm_callback(pages, *, image_base, entry_stack_address,
         saved_frame_pointer=adapter.callback_frame_pointer,return_address=adapter.callback_address,
         saved_x20=saved_x20,saved_x19=saved_x19,saved_x6=saved_x6)
     p.commit();return result
+
+
+def _invoke_jni(pages, environment_pointer, slot, arguments, invoke_jni):
+    """Read the live environment table for each actual JNI call."""
+    _address(environment_pointer,'JNI environment')
+    table=_u(pages,environment_pointer);_address(table,'JNI environment table')
+    function=_u(pages,table+slot);_address(function,'JNI function')
+    if not callable(invoke_jni):
+        raise RefillUnsupported('explicit JNI service provider is required')
+    result=invoke_jni(pages,function,(environment_pointer,*arguments))
+    if not isinstance(result,int) or not -(1<<31)<=result<=MASK64:
+        raise RefillUnsupported('JNI service result must fit signed int32 or uint64')
+    return result&MASK64
+
+
+def retain_global_jni_reference(pages, *, environment_pointer, reference, invoke_jni):
+    """+0x26f154: preserve type 2; otherwise NewGlobalRef then DeleteLocalRef.
+
+    The original calls GetObjectRefType even for a NULL reference. Every other
+    type follows the same promotion branch, including 0/3/unknown values.
+    No Java object is invented, and the local is deleted even when promotion
+    returns NULL. A NULL environment returns NULL without a JNI call.
+    """
+    for value in (environment_pointer,reference):
+        if not isinstance(value,int) or not 0<=value<=MASK64:
+            raise RefillUnsupported('JNI retention pointers must fit uint64')
+    p=_PageTransaction(pages)
+    if not environment_pointer:return 0
+    kind=_invoke_jni(p,environment_pointer,0x740,(reference,),invoke_jni)&0xFFFFFFFF
+    if kind==2:result=reference
+    else:
+        result=_invoke_jni(p,environment_pointer,0xA8,(reference,),invoke_jni)
+        _invoke_jni(p,environment_pointer,0xB8,(reference,),invoke_jni)
+    p.commit();return result
+
+
+def _dispatch_delta(image_base):
+    entry=image_base+0x26E19C
+    folded=(((0x00A060400A021040 | (~entry&MASK64)) & 0x00A061440A061440)
+        +(entry&0x0000010400040400))&MASK64
+    return ((folded|0x01010104)^0xFF5F9EBBF4C6A63C)&MASK64
+
+
+@dataclass(frozen=True)
+class JavaDispatchInitializationResult:
+    methods_address: int
+    decoded_lengths: tuple[int|None, ...]
+    class_reference: int
+    superclass_reference: int
+    ancestor_reference: int
+    native_registration_attempted: bool
+    method_lookup_attempted: bool
+    static_method_id: int|None
+    retained_class_reference: int|None
+
+
+def initialize_java_dispatch(pages, *, image_base, entry_stack_address,
+        environment_pointer, class_name_address, invoke_jni):
+    """+0x26e19c initialization after JavaVM publication.
+
+    Decode guest constants from the encoded ELF table, then FindClass and
+    two GetSuperclass calls. Register one native callback on the ancestor if
+    present, delete that local, and publish a static method ID plus a retained
+    reference to the ORIGINAL FindClass class. RegisterNatives status is
+    ignored. Missing class/first superclass leave prior outputs untouched.
+
+    JNI services are explicit inputs. The registered +0x26e684 callback body,
+    Java class loading, VM exceptions, full stack spills and JNI_OnLoad remain
+    outside this component. Pages roll back on refusal; external JNI effects
+    do not. Only the consumed 24-byte JNINativeMethod table is modeled on stack.
+    """
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<0xA0
+            or entry_stack_address&15):
+        raise RefillUnsupported('JNI initialization stack must be aligned with scratch space')
+    for value in (image_base,environment_pointer,class_name_address):
+        if not isinstance(value,int) or not 0<=value<=MASK64:
+            raise RefillUnsupported('JNI initialization inputs must fit uint64')
+    p=_PageTransaction(pages);delta=_dispatch_delta(image_base)
+    def resolve(off):return (_u(p,image_base+off)+delta)&MASK64
+    # These three words are retained before any decode or JNI provider call.
+    native_name,signature,static_name=(resolve(off) for off in (0x382550,0x382558,0x382560))
+    lengths=[]
+    for flag_off,source_off,destination_off,mask_off in (
+            (0x382568,0x382570,0x382550,0x382578),
+            (0x382580,0x382588,0x382558,0x382590),
+            (0x382598,0x3825A0,0x382560,0x3825A8)):
+        length=None
+        if not _u(p,resolve(flag_off),4):
+            length=objects.decode_masked_bytes(p,source_address=resolve(source_off),
+                destination_address=resolve(destination_off),mask_address=resolve(mask_off))
+            # Reload the encoded flag word after decode, like native.
+            _w(p,resolve(flag_off),1,4)
+        lengths.append(length)
+    methods=entry_stack_address-0xA0
+    cls=parent=ancestor=0;registered=looked_up=False;method_id=retained=None
+    if class_name_address:
+        cls=_invoke_jni(p,environment_pointer,0x30,(class_name_address,),invoke_jni)
+        if cls:
+            parent=_invoke_jni(p,environment_pointer,0x50,(cls,),invoke_jni)
+            if parent:
+                ancestor=_invoke_jni(p,environment_pointer,0x50,(parent,),invoke_jni)
+                if ancestor:
+                    _write_span(p,methods,b''.join(value.to_bytes(8,'little')
+                        for value in (native_name,signature,image_base+0x26E684)))
+                    _invoke_jni(p,environment_pointer,0x6B8,(ancestor,methods,1),invoke_jni)
+                    registered=True
+                    _invoke_jni(p,environment_pointer,0xB8,(ancestor,),invoke_jni)
+                method_id=_invoke_jni(p,environment_pointer,0x388,(cls,static_name,signature),invoke_jni)
+                looked_up=True;_w(p,resolve(0x3825B0),method_id)
+                retained=retain_global_jni_reference(p,environment_pointer=environment_pointer,
+                    reference=cls,invoke_jni=invoke_jni)
+                _w(p,resolve(0x3825B8),retained)
+    result=JavaDispatchInitializationResult(methods,tuple(lengths),cls,parent,ancestor,
+        registered,looked_up,method_id,retained)
+    p.commit();return result

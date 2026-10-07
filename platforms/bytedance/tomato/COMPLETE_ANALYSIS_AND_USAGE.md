@@ -17,7 +17,16 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-07 最新JavaVM发布检查点：54个原生/Python对照、11个负控制，恢复
+2026-10-07 最新 JNI dispatch 初始化检查点：56个原生/Python对照、9个负控制，
+恢复 `+0x26e19c/+0x26f154` 的ELF解码、注册尝试、方法ID和类引用发布；四个
+publication→初始化同次组合通过。另有六个原始JNI_OnLoad探针：四个使用
+warm switch once状态停在两个startup入口，两个保留cold switch并经matching
+libc mutex到达TLS获取调用前 `+0x26edc4`。cold once仍为1，未完成初始化。
+完整Python bootstrap/真实Android JVM、fresh签名和产品均未通过。下一处为
+cold switch的TLS/JNI getter，再继续实际startup。详见
+[REQUEST_JNI_INITIALIZATION.md](REQUEST_JNI_INITIALIZATION.md)。
+
+2026-10-07 此前JavaVM发布检查点：54个原生/Python对照、11个负控制，恢复
 `+0x271998 → +0x27be88` 的VM发布、caller编码/恢复和实际live X6 spill；六个
 同次原生调用的publication→TLS获取组合通过。另有四个原始JNI_OnLoad探针：
 warm依赖fixture下GetEnv失败返回-1，成功后真实publisher执行并停在+27bca0。

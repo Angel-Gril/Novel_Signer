@@ -122,6 +122,8 @@ GetEnv失败返回和成功publication顺序。引用应保留样本hash、输�
 全头矩阵、小说搜索/正文下载或最终产品可用。
 
 当前同次owning session仍是低基址957步synthetic返回，高基址965步因缺少VM
-停在attach `+0x26EF7C`。本阶段没有向该组合注入探针的VM/env值。接下来继续
-`+0x26E19C`、实际startup与JNI服务闭环，再恢复真实请求输入和FindClass后续
-行为。fresh签名、无JVM Rust、搜索分页、其他平台及Pages/Actions产品仍待完成。
+停在attach `+0x26EF7C`。本阶段没有向该组合注入探针的VM/env值。
+本阶段截至的下一处 `+0x26E19C` 已在后续
+[JNI初始化报告](REQUEST_JNI_INITIALIZATION.md) 恢复并验证；后续cold switch
+TLS/JNI getter、真实startup和请求转换仍待贯通。fresh签名、无JVM Rust、
+搜索分页、其他平台及Pages/Actions产品仍待完成。
