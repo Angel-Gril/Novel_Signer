@@ -1,5 +1,16 @@
 # Tomato Python material
 
+2026-10-07 Additional cold-switch original-entry observations: two native probes,
+zero Python-bootstrap comparisons. The original JNI_OnLoad reaches +0x26e70c
+before its body/stub after actual TLS acquisition (three GetEnv calls, six
+explicit allocator requests). Thread storage starts empty; TLS subsystem/OS
+keys and reference fields remain explicit warm fixtures. Once remains 1.
+See [JNI initialization report section 6](../REQUEST_JNI_INITIALIZATION.md#6-后续原始-cold-switch-initializer-已经经过-tls-获取).
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_cold_switch_tls_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_jni_cold_switch_tls_fresh_20261007.json
+```
+
 2026-10-07 JNI dispatch initialization: 56 native/Python controls, 9 negatives
 and six separately counted original JNI_OnLoad probes. Recovered +0x26e19c
 and +0x26f154 with explicit JNI services; four same-run publication compositions

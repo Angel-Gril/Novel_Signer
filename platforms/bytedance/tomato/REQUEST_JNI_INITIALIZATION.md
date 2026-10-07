@@ -4,6 +4,7 @@
 解码方法元数据，经显式 JNI 服务完成注册尝试、静态方法查找及类引用发布。
 **56 个原生/Python 对照、9 个负控制通过**。另有 **6 个原始 JNI_OnLoad
 探针**，单独计数，没有执行完整 Python bootstrap 对照。
+后续另追加两个经过实际TLS获取的原始入口探针，范围和复现见第6节。
 
 原始入口探针已经观察到 `+0x26E19C` 返回。四个受控 warm-switch 探针停在
 后续 startup 入口；两个保留 cold-switch 的探针经匹配 libc 的真实 mutex
@@ -144,3 +145,40 @@ JNI分支、真实请求 FindClass/URL/headers转换仍未贯通。
 高基址仍965步缺 JavaVM 拒绝。完整独立 Medusa、fresh请求签名、线上全头
 矩阵、无JVM Rust、搜索非空和分页、抖音/起点闭环及最终 Pages/Actions
 下载产品仍未完成。
+
+
+## 6. 后续：原始 cold switch initializer 已经经过 TLS 获取
+
+另两个原始 JNI_OnLoad 探针在同一次 native invocation 内自然执行 publication、
+JNI初始化、A/B call_once、实际 TLS acquisition，停在 `+0x26E70C` 前。
+它们没有 host continuation，没有执行该地址既有 oracle 返回 stub；它们的
+**完整 Python bootstrap 对照数为0**，与此前56个组件对照／6个入口观察分开。
+
+前导为 `+0x27B41C → +0x27BE88 → +0x26E19C → +0x32A0A0
+→ +0x165648/+0x165658 → +0x26EDC4`。随后真实 emulated-TLS、
+`+0x26EEEC/+0x17CAAC/+0x34265C` 构造、环境获取和析构注册执行。
+OS thread-specific slot开始为空，从实际 native 分配得到 array；每次执行共有
+6个显式 allocator malloc请求，大小为128、16、39、16、24、23字节。三次
+GetEnv为 JNI_OnLoad 的初始获取、TLS owner构造和获取完成前的调用。
+
+此时 once `+0x3D1570` 仍为1；getter在 `+0x1656A0` 传入的前五个register
+words为 `0x1000000E, 0, 0, 0, 0`。尚未调用 dispatcher、取得 Java getter结果、
+执行 `+0x270854` 的转换，或完成 once并进入后续startup VM。
+
+JNI/JavaVM返回值、pthread OS服务、allocator仍为显式fixture。136/320 reference
+依旧warm；emulated-TLS subsystem 的全局状态和OS keys也预先提供，只有当前
+线程的TLS slot从空开始。**不是完整 TLS全局/OS/arena 冷启动，也不是 Android
+JVM或纯Python完整bootstrap。**没有向现有owning-session注入这些输入。
+
+复现与机器证据：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_cold_switch_tls_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_jni_cold_switch_tls_fresh_20261007.json
+```
+
+- [cold switch TLS原始入口探针](python/verify_vm9_jni_cold_switch_tls_fresh_20261007.py)
+- [两条原生观察证据](evidence/vm9_jni_cold_switch_tls_fresh_20261007.json)
+
+后续需恢复 `+0x26E70C → +0x26E944` 的实际 JNI dispatcher、variadic参数与
+异常处理，再恢复 `+0x270854` 的返回值转换和缓存依赖。对该调用使用旧oracle
+stub不能证明getter恢复、once完成或fresh签名。

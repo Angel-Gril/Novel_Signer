@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07 原始 cold switch startup 接过实际 TLS acquisition
+
+两条额外原生入口观察（Python bootstrap对照数0）：原始JNI_OnLoad经
+publisher/initializer/cold call_once和实际TLS获取，到达+26e70c前。
+三次GetEnv，六个显式allocator请求；OS thread slot初始为空，subsystem globals/
+OS keys及136/320reference仍为显式warm输入。once仍1，getter输入的前五个
+words为0x1000000e,0,0,0,0；dispatcher body及旧stub都没有执行。
+
+下一处为+26e70c/+26e944实际JNI调用、异常处理与+270854转换/缓存依赖。
+完整Python bootstrap、真实全局OS/arena冷启动、fresh签名和下载产品仍未完成。
+见 [JNI初始化报告第6节](REQUEST_JNI_INITIALIZATION.md#6-后续原始-cold-switch-initializer-已经经过-tls-获取)
+及 [cold switch TLS证据](evidence/vm9_jni_cold_switch_tls_fresh_20261007.json)。
+
 ## 2026-10-07 JNI dispatch 初始化、类引用与 cold switch once
 
 - 56个原生/Python对照、9个负控制；`+26e19c/+26f154` 原始body执行，
