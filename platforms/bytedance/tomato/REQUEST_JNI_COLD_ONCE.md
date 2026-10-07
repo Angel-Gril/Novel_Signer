@@ -135,3 +135,11 @@ Long34/11、dispatcher54/10、JNI initializer56/9另6入口观察。
 永久JNI table放到独立区域：当前`GUEST+0xA000`在B分支大栈区范围内，不可直接沿用来
 判定B分支的真实失败原因。完整ELF/global TLS/arena/OS启动、真实请求URL/headers/JNI、
 fresh Medusa、新线上全头矩阵、无JVM Rust、搜索非空/分页、抖音/起点及最终下载产品仍待完成。
+
+## 后续检查点
+
+后续已恢复正常 Python once/getter/mask 控制（34 对照/9 负控制），并增加 4 条
+原始启动前缀及 4 条 memcpy 导入单变量观察。A 到 pthread_create 前，B 的构造器
+返回后 descriptor publication 仍待恢复；完整 Python bootstrap 对照仍为 0。
+见 [后续报告](REQUEST_JNI_COLD_MASK.md)。本文中“下一步恢复 Python once”的表述
+记录本轮之前的边界；原始 14/4/4 证据仍独立保留。

@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 Python once/getter/mask 与启动导入边界（本机 Asia/Shanghai）
+
+新增 34 组 native/Python 对照、9 项负控制：正常 once callback/完成/broadcast、
+完整 64 位 mask、零 mask 仍初始化、cache fast path、共享条件和 u32 回绕通过。
+caller pair 在实际消费时比较；原有 14/4/4 回归也通过。另 4 条同次原始入口前缀
+到达 A 的 VM prelude 末端和 B 的构造器返回；4 条单变量 memcpy ABS64 导入观察
+把 A 推进到 pthread_create +348000 前（部分 VM 已执行，完整 VM 返回未验证）。
+B +3e1eb8 descriptor 仍 NULL；JNI table/线程存储已移出大栈区域。Python 完整
+bootstrap 对照仍 0，外部服务/warm reference/TLS globals/OS keys 仍显式。
+下一步接 A thread-create/startup worker，追 B descriptor publication；完整独立
+Medusa、fresh 签名、线上矩阵及下载产品未完成。
+见 [本轮 once/mask 与启动报告](REQUEST_JNI_COLD_MASK.md)。以下记录为此前检查点。
+
 ## 2026-10-08 cold getter组合与原生once完成（本机Asia/Shanghai）
 
 新增14个fresh caller组合对照、4个负控制：同次构造/JNI初始化/TLS/dispatcher/Long/

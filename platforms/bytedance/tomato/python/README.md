@@ -445,3 +445,13 @@ Four separate original JNI_OnLoad prefixes complete cold once and stop before
 startup VM entries using one explicit constructor driver. Full Python bootstrap
 and actual startup VM execution are still open. See
 [REQUEST_JNI_COLD_ONCE.md](../REQUEST_JNI_COLD_ONCE.md) for commands and limits.
+
+### Cold once getter/mask and original startup input boundaries
+
+`read_cold_java_switch` and `check_cold_java_switch_mask` add 34 native/Python
+controls and nine negatives. They restore normal once/cache/broadcast flow and
+the full uint64 predicate, including the fixed startup mask 0x200. Waiting and
+C++ unwind remain rejected. Four original startup prefixes and four single-variable
+memcpy ABS64 binding observations locate A's next pthread_create boundary and B's
+missing descriptor publication. Full Python bootstrap comparisons remain zero.
+See [REQUEST_JNI_COLD_MASK.md](../REQUEST_JNI_COLD_MASK.md) for APIs and reproduction.

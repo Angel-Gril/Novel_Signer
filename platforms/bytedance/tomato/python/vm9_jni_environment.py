@@ -667,3 +667,98 @@ def initialize_cold_java_switch(pages, *, image_base, entry_stack_address,
             _invoke_jni(p,env,0xB8,(reference,),invoke_jni);deleted=True
     result=ColdJavaSwitchInitializationResult(env,reference,word,deleted)
     p.commit();return result
+
+
+@dataclass(frozen=True)
+class ColdJavaSwitchReadResult:
+    switch_word: int
+    once_state_before: int
+    initialized: bool
+    initializer: ColdJavaSwitchInitializationResult | None
+
+
+@dataclass(frozen=True)
+class ColdJavaSwitchMaskResult:
+    switch: ColdJavaSwitchReadResult
+    requested_mask: int
+    matched: bool
+
+
+def read_cold_java_switch(pages, *, image_base, entry_stack_address,
+        acquire_environment, invoke_jni, wake_condition):
+    """+0x165588 -> +0x1655e0 -> normal +0x32a0a0 -> +0x165644.
+
+    The all-ones once value skips the once mutex; other nonzero values except
+    the waiting value 1 enter then leave the mutex without initialization.
+    Cold state 0 publishes 1, runs the actual JNI caller outside the lock,
+    publishes all-ones under the lock, and executes no-waiter broadcast.
+    Explicit wake_condition(pages, address, operation, count) supplies the OS
+    result. Waiting, C++ unwind and host concurrency are not implemented.
+    Page rollback cannot undo JNI/OS/allocator effects already performed.
+    """
+    if (not isinstance(entry_stack_address, int) or entry_stack_address < 0x210
+            or entry_stack_address & 15 or entry_stack_address > MASK64):
+        raise RefillUnsupported('cold JNI switch getter stack must be aligned with scratch space')
+    if not isinstance(image_base, int) or not 0 <= image_base <= MASK64 - 0x3E2EE4:
+        raise RefillUnsupported('cold JNI switch getter image range must fit uint64')
+    p = _PageTransaction(pages)
+    once = image_base + 0x3D1570
+    mutex = image_base + 0x3E2EB8
+    before = _u(p, once)
+    initializer = None
+    if before != MASK64:
+        # +0x165588's frame becomes x1 for +0x1655e0; preserve both live links.
+        frame = entry_stack_address - 0x30
+        wrapper = frame - 0x40
+        _w(p, wrapper + 8, wrapper + 0x10)
+        _w(p, wrapper + 0x10, frame)
+        objects.lock_uncontended_mutex(p, mutex_address=mutex)
+        state = _u(p, once)
+        if state == 1:
+            raise RefillUnsupported('cold JNI switch once requires pthread_cond_wait')
+        if state == 0:
+            _w(p, once, 1)
+            objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+            # The two thin wrappers tail-call +0x165658 with this dereferenced
+            # value; that body replaces x0 before acquiring the outer env.
+            _u(p, _u(p, wrapper + 8))
+            initializer = initialize_cold_java_switch(p, image_base=image_base,
+                entry_stack_address=wrapper - 0x40,
+                acquire_environment=acquire_environment, invoke_jni=invoke_jni)
+            objects.lock_uncontended_mutex(p, mutex_address=mutex)
+            _w(p, once, MASK64)
+            objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+            if not callable(wake_condition):
+                raise RefillUnsupported('cold JNI switch once requires a condition wake service')
+            objects.broadcast_condition_no_waiters(p,
+                condition_address=image_base + 0x3E2EE0, wake=wake_condition)
+        else:
+            objects.unlock_uncontended_mutex(p, mutex_address=mutex)
+    result = ColdJavaSwitchReadResult(_u(p, image_base + 0x3D1578), before,
+                                     initializer is not None, initializer)
+    p.commit()
+    return result
+
+
+def check_cold_java_switch_mask(pages, *, image_base, entry_stack_address,
+        mask, acquire_environment, invoke_jni, wake_condition):
+    """+0x165560: initialize/read the word, then test (mask & ~word) == 0.
+
+    A zero mask still runs the getter. Both operands are full uint64. The
+    startup predicate +0x1658dc tail-calls this body with the fixed mask 0x200.
+    The diagnostic dataclass exposes the observed W0 bool and getter outcome;
+    it does not represent the complete physical return ABI.
+    """
+    if not isinstance(mask, int) or not 0 <= mask <= MASK64:
+        raise RefillUnsupported('cold JNI switch mask must fit uint64')
+    if (not isinstance(entry_stack_address, int) or entry_stack_address < 0x230
+            or entry_stack_address & 15 or entry_stack_address > MASK64):
+        raise RefillUnsupported('cold JNI switch mask stack must be aligned with scratch space')
+    p = _PageTransaction(pages)
+    switch = read_cold_java_switch(p, image_base=image_base,
+        entry_stack_address=entry_stack_address - 0x20,
+        acquire_environment=acquire_environment, invoke_jni=invoke_jni,
+        wake_condition=wake_condition)
+    result = ColdJavaSwitchMaskResult(switch, mask, (mask & (MASK64 ^ switch.switch_word)) == 0)
+    p.commit()
+    return result

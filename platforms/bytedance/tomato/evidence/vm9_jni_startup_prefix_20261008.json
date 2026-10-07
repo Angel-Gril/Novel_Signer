@@ -1,0 +1,488 @@
+{
+  "schema": "vm9-jni-original-startup-prefix-v1",
+  "evidence_date": "2026-10-08",
+  "evidence_timezone": "Asia/Shanghai",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "original_startup_prefix_observations": 4,
+  "Python_full_bootstrap_comparison_controls": 0,
+  "cases": [
+    {
+      "image_base_hex": "0x122c0000",
+      "java_switch_word_hex": "0x0",
+      "native_stop_offset_hex": "0x1684f0",
+      "native_stop_reached": true,
+      "startup_entries": [
+        {
+          "offset_hex": "0x28040c",
+          "stack_address_hex": "0x7000ed00",
+          "x0_x4_hex": [
+            "0x0",
+            "0x81",
+            "0x7fffffff",
+            "0x0",
+            "0x0"
+          ],
+          "return_address_hex": "0x1253bcc0"
+        },
+        {
+          "offset_hex": "0x168324",
+          "stack_address_hex": "0x7000e900",
+          "x0_x4_hex": [
+            "0x12367050",
+            "0x0",
+            "0x1261d670",
+            "0x1261d690",
+            "0x7000e900"
+          ],
+          "return_address_hex": "0x12540468"
+        }
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "once_completed": true,
+      "same_native_execution": true,
+      "JNI_table_and_thread_storage_avoid_large_stack": true,
+      "details": {
+        "bytecode_offset_hex": "0xa7050",
+        "metadata_offset_hex": "0x35d670",
+        "callbacks_offset_hex": "0x35d690",
+        "defined_prelude_slot_values_verified": true,
+        "first_VM_instruction_executed": false
+      },
+      "controlled_allocation_sizes": [
+        48,
+        128,
+        16,
+        39,
+        16,
+        24,
+        23
+      ],
+      "no_waiter_futex_events": [
+        [
+          98,
+          308948704,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "native_input_snapshot_used": false,
+      "Python_full_bootstrap_compared": false,
+      "full_JNI_OnLoad_return_verified": false,
+      "all_startup_VM_bodies_executed": false
+    },
+    {
+      "image_base_hex": "0x122c0000",
+      "java_switch_word_hex": "0x200",
+      "native_stop_offset_hex": "0x2a0050",
+      "native_stop_reached": true,
+      "startup_entries": [
+        {
+          "offset_hex": "0x2a0028",
+          "stack_address_hex": "0x7000ed00",
+          "x0_x4_hex": [
+            "0x1",
+            "0x81",
+            "0x7fffffff",
+            "0x0",
+            "0x0"
+          ],
+          "return_address_hex": "0x1253bcb8"
+        },
+        {
+          "offset_hex": "0x2a02d4",
+          "stack_address_hex": "0x700089f0",
+          "x0_x4_hex": [
+            "0x700089f0",
+            "0x81",
+            "0x7fffffff",
+            "0x0",
+            "0x0"
+          ],
+          "return_address_hex": "0x12560050"
+        }
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "once_completed": true,
+      "same_native_execution": true,
+      "JNI_table_and_thread_storage_avoid_large_stack": true,
+      "details": {
+        "state_address_hex": "0x700089f0",
+        "actual_constructor_returned": true,
+        "constructor_u32_and_u64_fields_verified": true,
+        "zeroed_tail_size": 640,
+        "tail_saved_pointer_delta_hex": "0x6010",
+        "explicit_memset_service_used": true,
+        "next_descriptor_global_offset_hex": "0x3e1eb8",
+        "descriptor_NULL_in_current_fixture": true,
+        "descriptor_dispatch_body_executed": false
+      },
+      "controlled_allocation_sizes": [
+        48,
+        128,
+        16,
+        39,
+        16,
+        24,
+        23
+      ],
+      "no_waiter_futex_events": [
+        [
+          98,
+          308948704,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "native_input_snapshot_used": false,
+      "Python_full_bootstrap_compared": false,
+      "full_JNI_OnLoad_return_verified": false,
+      "all_startup_VM_bodies_executed": false
+    },
+    {
+      "image_base_hex": "0x775c205000",
+      "java_switch_word_hex": "0x0",
+      "native_stop_offset_hex": "0x1684f0",
+      "native_stop_reached": true,
+      "startup_entries": [
+        {
+          "offset_hex": "0x28040c",
+          "stack_address_hex": "0x7000ed00",
+          "x0_x4_hex": [
+            "0x0",
+            "0x81",
+            "0x7fffffff",
+            "0x0",
+            "0x0"
+          ],
+          "return_address_hex": "0x775c480cc0"
+        },
+        {
+          "offset_hex": "0x168324",
+          "stack_address_hex": "0x7000e900",
+          "x0_x4_hex": [
+            "0x775c2ac050",
+            "0x0",
+            "0x775c562670",
+            "0x775c562690",
+            "0x7000e900"
+          ],
+          "return_address_hex": "0x775c485468"
+        }
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "once_completed": true,
+      "same_native_execution": true,
+      "JNI_table_and_thread_storage_avoid_large_stack": true,
+      "details": {
+        "bytecode_offset_hex": "0xa7050",
+        "metadata_offset_hex": "0x35d670",
+        "callbacks_offset_hex": "0x35d690",
+        "defined_prelude_slot_values_verified": true,
+        "first_VM_instruction_executed": false
+      },
+      "controlled_allocation_sizes": [
+        48,
+        128,
+        16,
+        39,
+        16,
+        24,
+        23
+      ],
+      "no_waiter_futex_events": [
+        [
+          98,
+          512650804960,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "native_input_snapshot_used": false,
+      "Python_full_bootstrap_compared": false,
+      "full_JNI_OnLoad_return_verified": false,
+      "all_startup_VM_bodies_executed": false
+    },
+    {
+      "image_base_hex": "0x775c205000",
+      "java_switch_word_hex": "0x200",
+      "native_stop_offset_hex": "0x2a0050",
+      "native_stop_reached": true,
+      "startup_entries": [
+        {
+          "offset_hex": "0x2a0028",
+          "stack_address_hex": "0x7000ed00",
+          "x0_x4_hex": [
+            "0x1",
+            "0x81",
+            "0x7fffffff",
+            "0x0",
+            "0x0"
+          ],
+          "return_address_hex": "0x775c480cb8"
+        },
+        {
+          "offset_hex": "0x2a02d4",
+          "stack_address_hex": "0x700089f0",
+          "x0_x4_hex": [
+            "0x700089f0",
+            "0x81",
+            "0x7fffffff",
+            "0x0",
+            "0x0"
+          ],
+          "return_address_hex": "0x775c4a5050"
+        }
+      ],
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "once_completed": true,
+      "same_native_execution": true,
+      "JNI_table_and_thread_storage_avoid_large_stack": true,
+      "details": {
+        "state_address_hex": "0x700089f0",
+        "actual_constructor_returned": true,
+        "constructor_u32_and_u64_fields_verified": true,
+        "zeroed_tail_size": 640,
+        "tail_saved_pointer_delta_hex": "0x6010",
+        "explicit_memset_service_used": true,
+        "next_descriptor_global_offset_hex": "0x3e1eb8",
+        "descriptor_NULL_in_current_fixture": true,
+        "descriptor_dispatch_body_executed": false
+      },
+      "controlled_allocation_sizes": [
+        48,
+        128,
+        16,
+        39,
+        16,
+        24,
+        23
+      ],
+      "no_waiter_futex_events": [
+        [
+          98,
+          512650804960,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "native_input_snapshot_used": false,
+      "Python_full_bootstrap_compared": false,
+      "full_JNI_OnLoad_return_verified": false,
+      "all_startup_VM_bodies_executed": false
+    }
+  ],
+  "unbound_vs_memcpy_bound_observations": 4,
+  "binding_cases": [
+    {
+      "image_base_hex": "0x122c0000",
+      "memcpy_ABS64_bound": false,
+      "ABS64_binding_count": 16,
+      "resolved_service_plt_offset_hex": "0x347f60",
+      "ELF_import_slot_offsets_hex": [
+        "0x379678",
+        "0x381f28",
+        "0x382008",
+        "0x3820a8",
+        "0x382178",
+        "0x382948",
+        "0x3829e8",
+        "0x382a28",
+        "0x382a38",
+        "0x382a48",
+        "0x382a58",
+        "0x382a68",
+        "0x382a78",
+        "0x382aa8",
+        "0x382cb0",
+        "0x383230"
+      ],
+      "next_stop_offset_hex": "0x2813e8",
+      "native_stop_reached": true,
+      "same_native_execution": true,
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "copied_packet_calls": 0,
+      "packet_arguments_verified": true,
+      "zero_unresolved_callback_target_observed": true,
+      "pthread_create_PLT_reached": false,
+      "pthread_create_executed": false,
+      "startup_VM_prefix_executed": true,
+      "entire_startup_VM_return_verified": false,
+      "explicit_memory_copy_service_used": false,
+      "Python_full_bootstrap_compared": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base_hex": "0x122c0000",
+      "memcpy_ABS64_bound": true,
+      "ABS64_binding_count": 16,
+      "resolved_service_plt_offset_hex": "0x347f60",
+      "ELF_import_slot_offsets_hex": [
+        "0x379678",
+        "0x381f28",
+        "0x382008",
+        "0x3820a8",
+        "0x382178",
+        "0x382948",
+        "0x3829e8",
+        "0x382a28",
+        "0x382a38",
+        "0x382a48",
+        "0x382a58",
+        "0x382a68",
+        "0x382a78",
+        "0x382aa8",
+        "0x382cb0",
+        "0x383230"
+      ],
+      "next_stop_offset_hex": "0x348000",
+      "native_stop_reached": true,
+      "same_native_execution": true,
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "copied_packet_calls": 2,
+      "packet_arguments_verified": true,
+      "zero_unresolved_callback_target_observed": false,
+      "pthread_create_PLT_reached": true,
+      "pthread_create_executed": false,
+      "startup_VM_prefix_executed": true,
+      "entire_startup_VM_return_verified": false,
+      "explicit_memory_copy_service_used": true,
+      "Python_full_bootstrap_compared": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base_hex": "0x775c205000",
+      "memcpy_ABS64_bound": false,
+      "ABS64_binding_count": 16,
+      "resolved_service_plt_offset_hex": "0x347f60",
+      "ELF_import_slot_offsets_hex": [
+        "0x379678",
+        "0x381f28",
+        "0x382008",
+        "0x3820a8",
+        "0x382178",
+        "0x382948",
+        "0x3829e8",
+        "0x382a28",
+        "0x382a38",
+        "0x382a48",
+        "0x382a58",
+        "0x382a68",
+        "0x382a78",
+        "0x382aa8",
+        "0x382cb0",
+        "0x383230"
+      ],
+      "next_stop_offset_hex": "0x2813e8",
+      "native_stop_reached": true,
+      "same_native_execution": true,
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "copied_packet_calls": 0,
+      "packet_arguments_verified": true,
+      "zero_unresolved_callback_target_observed": true,
+      "pthread_create_PLT_reached": false,
+      "pthread_create_executed": false,
+      "startup_VM_prefix_executed": true,
+      "entire_startup_VM_return_verified": false,
+      "explicit_memory_copy_service_used": false,
+      "Python_full_bootstrap_compared": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base_hex": "0x775c205000",
+      "memcpy_ABS64_bound": true,
+      "ABS64_binding_count": 16,
+      "resolved_service_plt_offset_hex": "0x347f60",
+      "ELF_import_slot_offsets_hex": [
+        "0x379678",
+        "0x381f28",
+        "0x382008",
+        "0x3820a8",
+        "0x382178",
+        "0x382948",
+        "0x3829e8",
+        "0x382a28",
+        "0x382a38",
+        "0x382a48",
+        "0x382a58",
+        "0x382a68",
+        "0x382a78",
+        "0x382aa8",
+        "0x382cb0",
+        "0x383230"
+      ],
+      "next_stop_offset_hex": "0x348000",
+      "native_stop_reached": true,
+      "same_native_execution": true,
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ]
+      ],
+      "copied_packet_calls": 2,
+      "packet_arguments_verified": true,
+      "zero_unresolved_callback_target_observed": false,
+      "pthread_create_PLT_reached": true,
+      "pthread_create_executed": false,
+      "startup_VM_prefix_executed": true,
+      "entire_startup_VM_return_verified": false,
+      "explicit_memory_copy_service_used": true,
+      "Python_full_bootstrap_compared": false,
+      "complete_python_medusa": false
+    }
+  ],
+  "JNI_table_offset_hex": "0x6000",
+  "thread_pointer_offset_hex": "0x3000",
+  "explicit_driver_continuations_used": true,
+  "explicit_allocator_VM_JNI_OS_exit_services_used": true,
+  "warm_reference_and_TLS_global_OS_key_inputs_used": true,
+  "matching_libc_condition_broadcast_executed": true,
+  "native_input_snapshot_used": false,
+  "all_ELF_constructors_recovered": false,
+  "full_cold_TLS_subsystem_boot_verified": false,
+  "full_JNI_OnLoad_recovered": false,
+  "all_startup_VM_bodies_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false
+}

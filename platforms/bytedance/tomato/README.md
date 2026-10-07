@@ -67,3 +67,10 @@ input and allocator/OS boundary. Complete current Medusa and the final
 search/download product remain open.
 
 The outer startup caller now passes four fresh-input controls (86 steps, 16 allocations, three deferred worker creations). Worker TLS/support prefixes pass 16 cold/warm controls; executor context initialization adds eight controls with the actual emulated-TLS model. New condition/queue/executor scheduler controls pass 92/94/62 native differences; eight same-fresh-startup controls now run idle workers through wait, stop and argument cleanup. The older native-only probe remains boundary evidence. The shared OP45 register decode is corrected with 308 native differences and fresh root/parser regressions. Read [STARTUP_INITIALIZATION.md](STARTUP_INITIALIZATION.md) for the exact thread and allocator boundary. Default initialization task bodies, OS thread-exit cleanup, real allocator boot and independent Medusa signing remain open.
+
+### Python once/mask 与原始启动导入边界
+
+新增 34 组原生/Python 差分、9 项负控制，恢复正常 cold once、缓存 getter 和完整
+64 位 mask。另 4 条原始启动前缀及 4 条 memcpy ABS64 导入观察定位 A 的 pthread_create
+与 B 的 descriptor publication 缺口。完整 Python bootstrap 对照仍 0，fresh Medusa
+和下载产品尚未完成。详见 [本轮报告](REQUEST_JNI_COLD_MASK.md)。
