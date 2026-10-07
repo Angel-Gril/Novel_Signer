@@ -142,3 +142,29 @@ formatter ABI/layout、index 分派、borrowed pointer 生命周期、unsigned/s
 
 无 JVM Rust、非空搜索与分页、抖音/起点闭环及最终 Pages/Actions 下载产品
 仍待完成。上一阶段见 [REQUEST_MODE_FORMAT.md](REQUEST_MODE_FORMAT.md)。
+
+
+## 7. 发布入口的原生受控探针
+
+后续新增4个**仅原生探针**：两个基址各测试warm logger vector容量1和2，
+输入已有一个内容为空的96字节record；新输入包含29字节heap event JSON。
+原始`+0x28ff44` body在四个控制里自然返回。matching libc实际执行
+uncontended mutex lock/unlock，allocator/free仍为显式Effects。
+
+`+0x17f5bc → +0x180ce4`在这里执行move assignment：复制24字节object并
+仅清零source的前两个字节，其余22字节保持；输入event JSON的heap pointer
+原样进入新record。vector有空余容量时无分配/free；容量1时分配192字节，
+移动旧record并释放原96字节vector。最终count/capacity都是2，旧空record
+保留，JSON内容和heap pointer均通过断言。
+
+[探针证据](evidence/vm9_request_event_emission_probe_20261007.json) 与
+[复现脚本](python/verify_vm9_request_event_emission_probe_20261007.py) 已归档。
+这是受控warm状态原生行为观察；**没有恢复Python emission owner，也没有
+把受控singleton fixture称为同次自然启动状态或完整request callback**。
+非空旧record、drop阈值、冷singleton、其他发布分支和完整回接尚待验证。
+后续实现须遵循move ownership，避免在caller cleanup中重复释放已转交record
+的heap存储。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_event_emission_probe_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_event_emission_probe_20261007.json
+```

@@ -2761,5 +2761,30 @@
       "Matching libc executes string imports; component allocation/free and memcpy/memset are explicit services.",
       "Same-session Python composition uses its owning allocator and synthetic requests; whole-native outer/request equivalence, real JNI/URL/headers, signatures and online behavior remain open."
     ]
+  },
+  "vm9_request_event_emission_probe_20261007": {
+    "evidence_file": "evidence/vm9_request_event_emission_probe_20261007.json",
+    "schema": "vm9-request-event-emission-native-probe-v1",
+    "status": "native_only_controlled_warm_logger_move_and_vector_append_observed",
+    "controls": 4,
+    "native_input_snapshot_used": false,
+    "controlled_warm_singleton_input": true,
+    "explicit_component_allocator_used": true,
+    "matching_libc_allocator_used": false,
+    "matching_libc_mutexes_executed": true,
+    "source_first_two_bytes_zeroed": true,
+    "event_json_heap_pointer_moved_unchanged": true,
+    "original_native_emission_body_returned": true,
+    "python_emission_owner_verified": false,
+    "whole_request_callback_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "limitations": [
+      "These are original-native probes without a Python emission implementation or differential comparison.",
+      "Controlled warm singleton inputs contain one empty old record, with capacity 1 or 2; no natural cold singleton or same-session emission is claimed.",
+      "Explicit allocator/free Effects are not matching-libc allocator equivalence.",
+      "Nonempty old records, drop thresholds, other publication branches and whole-native request/fresh signing remain open."
+    ]
   }
 }

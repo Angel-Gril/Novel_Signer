@@ -2389,3 +2389,13 @@ builder-only仍只排除未指定token padding。双全局页对照补齐了sign
 仍真实TLS/JNI `+0x26edc4`。外层仍945/965，完整event父事务未提交，
 whole-native outer/request与fresh签名尚未通过。详见
 [REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。
+
+
+### 发布入口：四个原生受控probe
+
+四个原生warm logger控制已自然返回，确认`17f5bc → 180ce4`执行move
+assignment，只清零source头两个字节，heap JSON pointer不复制、不改变。
+96字节record vector有空位时无新分配，容量1时扩容192并释放旧vector。
+这些控制使用warm singleton与一个旧空record，Python emission owner仍未
+实现，当前同次请求停止点没有改变。复现和边界见
+[REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。
