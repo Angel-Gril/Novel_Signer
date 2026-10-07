@@ -1,5 +1,27 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07：请求 nested VM dispatcher `+0x16d7d0`
+
+`+0x16d7d0` 已从“入口定位”推进为一个可独立复现的 bounded dispatcher transition。
+`python/vm9_request_dispatcher.py` 从显式 fresh caller/frame 输入生成 nested VM 的
+寄存器地址布局，不复制 native stack 或 page snapshot；`dispatch_request_word` 恢复
+正常解码路径的字段重排、两个 backing-slot 访问、stream pointer 推进、`x22/x23/x30`
+scratch 发布和 relocated dispatch-table 下一跳计算。当前 verified word 是
+`image+0x99020 = 0xff7bdc0f`，解码得到 slot `29`、signed displacement `-144`、
+next-word selector `0x1a`，下一跳为 image-relative `+0x171138`。
+
+[6 组 fresh native differential](evidence/vm9_request_dispatcher_fresh_20261007.json)
+覆盖两 image base × 三个对象/保留 x8 profile。每组均比较 dispatcher 入口寄存器、
+`x19/x22/x23/x28/x29/x30` 相关写入和首个下一 handler 的 PC，全部通过。
+这只完成 `+0x16d7d0` 的正常路径和状态恢复；repair path、`+0x171138` handler、
+后续 nested VM、完整 Medusa 和签名仍未完成。
+
+复现：
+
+```powershell
+python platforms/bytedance/tomato/python/verify_vm9_request_dispatcher_fresh_20261007.py --library C:\AI\6\libmetasec_ml_71332.so --output platforms/bytedance/tomato/evidence/vm9_request_dispatcher_fresh_20261007.json
+```
+
 ## 2026-10-07：请求配置树 x8 输出与同次 allocator 接入
 
 当前请求诊断边界进一步推进到 **第 611 步、`+0xf80a8`**。

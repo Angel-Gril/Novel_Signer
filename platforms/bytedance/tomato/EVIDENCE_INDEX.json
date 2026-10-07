@@ -2346,5 +2346,27 @@
       "No current online request or server acceptance is tested.",
       "Full current Medusa initialization and parameterization remain open."
     ]
+  },
+  "vm9_request_dispatcher_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_dispatcher_fresh_20261007.json",
+    "schema": "vm9-request-dispatcher-fresh-differential-v1",
+    "status": "request_nested_vm_dispatcher_fresh_differential_pass",
+    "dispatcher_offset": "0x16d7d0",
+    "next_handler_offset": "0x171138",
+    "controls": 6,
+    "all_native_controls_pass": true,
+    "dispatcher_transition_verified": true,
+    "nested_vm_next_handler_verified": true,
+    "repair_path_verified": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "complete_python_medusa": false,
+    "no_jvm_rust_signer_complete": false,
+    "interpretation": "The normal +0x16d7d0 request nested-VM dispatcher path decodes the verified fresh word, publishes slot/scratch state, advances the stream pointer and selects +0x171138 on two relocated image bases.",
+    "limitations": [
+      "Only the normal decode path is modeled; the repair path is not independently recovered.",
+      "The +0x171138 handler and later nested VM body remain open.",
+      "No URL/header/JNI conversion, current online request, fresh Medusa output or Rust signer is established."
+    ]
   }
 }
