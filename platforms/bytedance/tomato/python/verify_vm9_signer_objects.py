@@ -88,11 +88,13 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            real_mutexes=False, host_imports=None, instruction_limit=10000,
            instruction_observer=None, syscall_handler=None, malloc_handler=None,
            memory_write_observer=None, code_hook_ranges=None, real_malloc=False,
-           real_recursive_mutexes=False):
+           real_recursive_mutexes=False, real_diagnostics=False):
     if real_malloc and (libc is None or malloc_handler is not None or allocation_effect is not None):
         raise ValueError("real malloc requires libc and no substituted allocation provider")
     if real_recursive_mutexes and (libc is None or not real_mutexes):
         raise ValueError("recursive mutex oracle requires matching libc and real_mutexes")
+    if real_diagnostics and (libc is None or not real_singletons or not real_recursive_mutexes):
+        raise ValueError("real diagnostic scopes require matching libc, guards and recursive mutexes")
     cpu = Uc(UC_ARCH_ARM64, UC_MODE_ARM)
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -129,7 +131,9 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
                     for symbol in section.iter_symbols():
                         if symbol.name == "malloc" and symbol["st_value"] and symbol["st_shndx"] != "SHN_UNDEF":
                             malloc_entry = libc_base + symbol["st_value"]
-                        if symbol.name in ("pthread_mutex_init", "pthread_mutex_lock", "pthread_mutex_unlock"):
+                        if symbol.name in ("pthread_mutex_init", "pthread_mutex_lock", "pthread_mutex_unlock",
+                                           "pthread_mutexattr_init", "pthread_mutexattr_settype",
+                                           "pthread_mutexattr_destroy"):
                             mutex_entries[symbol.name] = libc_base + symbol["st_value"]
                 elif section["sh_type"] == "SHT_RELA":
                     symbols = elf.get_section(section["sh_link"])
@@ -187,6 +191,11 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             if memory_write_observer:
                 memory_write_observer(cpu, target, width)
             result = target
+        elif real_diagnostics and offset in (0x347EC0, 0x347ED0, 0x347EF0):
+            name = {0x347EC0: "pthread_mutexattr_init", 0x347ED0: "pthread_mutexattr_settype",
+                    0x347EF0: "pthread_mutexattr_destroy"}[offset]
+            cpu.reg_write(UC_ARM64_REG_PC, mutex_entries[name])
+            return
         elif offset == 0x347EE0:
             assert "pthread_mutex_init" in mutex_entries
             attribute = cpu.reg_read(UC_ARM64_REG_X1)
@@ -250,7 +259,7 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             raise RefillUnsupported("condition broadcast/wait or runtime abort is outside the oracle")
         elif offset in (0x15F094, 0x264158) and not real_singletons:
             result = service_references[0 if offset == 0x15F094 else 1]
-        elif offset in (0x26C858, 0x26C9D0):
+        elif offset in (0x26C858, 0x26C9D0) and not real_diagnostics:
             # Logging scope effects are outside the object-memory contract.
             result = 0
         elif offset == 0x26EDC4:

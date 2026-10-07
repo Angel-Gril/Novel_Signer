@@ -22,7 +22,14 @@ class PrefixBoundary(Exception):
     pass
 
 
-def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None):
+class RequestContinuationBoundary(Exception):
+    def __init__(self, *, staged, frame, vm, ledger, decoded, cause):
+        super().__init__(str(cause))
+        self.staged, self.frame, self.vm = staged, frame, vm
+        self.ledger, self.decoded, self.cause = ledger, decoded, cause
+
+
+def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None, diagnostic_scope=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -62,7 +69,35 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 registry.construct_configuration_tree_reference(vm.m.pages,
                     output_reference_address=words[1], image_base=image, allocate=allocate)
             elif allocate is not None and (wrapper, target) == (0x2858D0, 0x26C858):
-                raise PrefixBoundary()
+                if diagnostic_scope is None:
+                    raise PrefixBoundary()
+                import vm9_diagnostics
+                scope = vm9_diagnostics.enter_diagnostic_scope(vm.m.pages,
+                    object_address=words[1], input_word=words[2], image_base=image,
+                    thread_pointer=inputs['thread_pointer'],
+                    thread_id=diagnostic_scope.get('thread_id'), allocate=allocate,
+                    observer=lambda *event: diagnostic_scope.setdefault('events', []).append(list(event)))
+                diagnostic_scope.setdefault('scopes', []).append(scope)
+            elif allocate is not None and (wrapper, target) == (0x2858E0, 0x26C9D0):
+                if diagnostic_scope is None:
+                    raise PrefixBoundary()
+                import vm9_diagnostics
+                result = vm9_diagnostics.leave_diagnostic_scope(vm.m.pages,
+                    object_address=words[1], image_base=image,
+                    thread_pointer=inputs['thread_pointer'],
+                    observer=lambda *event: diagnostic_scope.setdefault('events', []).append(list(event)))
+                diagnostic_scope.setdefault('leaves', []).append(result)
+            elif allocate is not None and (wrapper, target) == (0x285928, 0x32A1F0):
+                pointer = allocate(vm.m.pages, words[1])
+                _write_span(vm.m.pages, argument + 0x10, pointer.to_bytes(8, 'little'))
+                diagnostic_scope.setdefault('allocation_callbacks', []).append([words[1], pointer])
+            elif allocate is not None and (wrapper, target) == (0x28591C, 0x2481AC):
+                import vm9_objects
+                vm9_objects.construct_string_object(vm.m.pages, object_address=words[1],
+                    source_address=0, allocate=allocate,
+                    vtable_address=image + 0x34F5F8,
+                    empty_descriptor_address=image + 0x6E168)
+                diagnostic_scope.setdefault('string_callbacks', []).append(words[1])
             else:
                 raise RefillUnsupported(f'unknown request callback +{wrapper:#x} -> +{target:#x}')
         vm.native_hook = callback
@@ -70,7 +105,10 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
             vm.run()
         except PrefixBoundary:
             return staged, frame, vm, ledger, decoded
-        except Exception:
+        except Exception as exc:
+            if diagnostic_scope is not None:
+                raise RequestContinuationBoundary(staged=staged, frame=frame, vm=vm,
+                    ledger=ledger, decoded=decoded, cause=exc) from exc
             print("prefix failed at",vm.steps,hex(vm.pc-image),flush=True)
             raise
         raise AssertionError('request prefix did not reach the allocation boundary')

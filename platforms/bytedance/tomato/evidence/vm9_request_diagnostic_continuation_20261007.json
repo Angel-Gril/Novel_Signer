@@ -1,0 +1,286 @@
+{
+  "schema": "vm9-request-diagnostic-continuation-probe-v1",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "controls": 1,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "absent",
+      "same_python_outer_output_used": true,
+      "native_input_snapshot_used": false,
+      "owning_allocator_session_used": true,
+      "allocator_returns_substituted": false,
+      "detached_page_copy_rejected_without_page_or_mapping_changes": true,
+      "actual_matching_libc_allocation_model_used": true,
+      "request_allocation_sizes": [
+        40,
+        40,
+        40,
+        4,
+        48,
+        2048,
+        48,
+        24,
+        8
+      ],
+      "diagnostic_events": [
+        [
+          "pthread_mutex_lock",
+          308948800
+        ],
+        [
+          "gettid",
+          137
+        ],
+        [
+          "pthread_mutex_unlock",
+          308948800
+        ],
+        [
+          "pthread_mutex_lock",
+          308948800
+        ],
+        [
+          "pthread_mutex_unlock",
+          308948800
+        ],
+        [
+          "pthread_mutex_lock",
+          325925320
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925320
+        ],
+        [
+          "pthread_mutex_lock",
+          325925320
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925320
+        ],
+        [
+          "pthread_mutex_lock",
+          325925368
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925368
+        ],
+        [
+          "pthread_mutex_lock",
+          325925368
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925368
+        ]
+      ],
+      "diagnostic_scopes": [
+        {
+          "table_index": 197,
+          "entry_address": "0x136d39f0",
+          "lock_result": 0
+        },
+        {
+          "table_index": 197,
+          "entry_address": "0x136d39f0",
+          "lock_result": 0
+        }
+      ],
+      "callback_ledger": [
+        {
+          "wrapper": "0x285888",
+          "target": "0x167e54",
+          "argument": "0x7004ebd8",
+          "words": [
+            "0x12427e54",
+            "0x123b2600",
+            "0x126a0d50",
+            "0x123b28e0"
+          ]
+        },
+        {
+          "wrapper": "0x285888",
+          "target": "0x167e54",
+          "argument": "0x7004ebd8",
+          "words": [
+            "0x12427e54",
+            "0x123b2620",
+            "0x126a0d70",
+            "0x123b28b0"
+          ]
+        },
+        {
+          "wrapper": "0x285888",
+          "target": "0x167e54",
+          "argument": "0x7004ebd8",
+          "words": [
+            "0x12427e54",
+            "0x123b2764",
+            "0x126a0f68",
+            "0x123b2780"
+          ]
+        },
+        {
+          "wrapper": "0x28589c",
+          "target": "0x291440",
+          "argument": "0x7004ebc8",
+          "words": [
+            "0x12551440",
+            "0x7004ec08",
+            "0x12427e54",
+            "0x123b2764"
+          ]
+        },
+        {
+          "wrapper": "0x2858a8",
+          "target": "0x347f60",
+          "argument": "0x7004eba8",
+          "words": [
+            "0x12607f60",
+            "0x7004ec10",
+            "0x7004edd8",
+            "0x18"
+          ]
+        },
+        {
+          "wrapper": "0x2858bc",
+          "target": "0x25c324",
+          "argument": "0x7004eb98",
+          "words": [
+            "0x1251c324",
+            "0x7004ec30",
+            "0x12607f60",
+            "0x7004ec10"
+          ]
+        },
+        {
+          "wrapper": "0x2858d0",
+          "target": "0x26c858",
+          "argument": "0x7004eb80",
+          "words": [
+            "0x1252c858",
+            "0x7004edd8",
+            "0x1261dc50",
+            "0x1251c324"
+          ]
+        },
+        {
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0",
+          "argument": "0x7004eb70",
+          "words": [
+            "0x1252c9d0",
+            "0x7004edd8",
+            "0x1252c858",
+            "0x7004edd8"
+          ]
+        },
+        {
+          "wrapper": "0x2858d0",
+          "target": "0x26c858",
+          "argument": "0x7004eb80",
+          "words": [
+            "0x1252c858",
+            "0x7004edd8",
+            "0x1261dc50",
+            "0x1251c324"
+          ]
+        },
+        {
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0",
+          "argument": "0x7004eb70",
+          "words": [
+            "0x1252c9d0",
+            "0x7004edd8",
+            "0x1252c858",
+            "0x7004edd8"
+          ]
+        },
+        {
+          "wrapper": "0x285888",
+          "target": "0x167e54",
+          "argument": "0x7004ebd8",
+          "words": [
+            "0x12427e54",
+            "0x123b2680",
+            "0x126a0e10",
+            "0x123b2864"
+          ]
+        },
+        {
+          "wrapper": "0x285888",
+          "target": "0x167e54",
+          "argument": "0x7004ebd8",
+          "words": [
+            "0x12427e54",
+            "0x123b2688",
+            "0x126a0e1c",
+            "0x123b2858"
+          ]
+        },
+        {
+          "wrapper": "0x285928",
+          "target": "0x32a1f0",
+          "argument": "0x7004eb18",
+          "words": [
+            "0x125ea1f0",
+            "0x18",
+            "0x7004ec50",
+            "0x12423e1c"
+          ]
+        },
+        {
+          "wrapper": "0x28591c",
+          "target": "0x2481ac",
+          "argument": "0x7004eb30",
+          "words": [
+            "0x125081ac",
+            "0x136d90e0",
+            "0x1250bcbc",
+            "0x7004ec50"
+          ]
+        },
+        {
+          "wrapper": "0x285978",
+          "target": "0x256ed4",
+          "argument": "0x7004eac8",
+          "words": [
+            "0x12516ed4",
+            "0x7004edd8",
+            "0x136e0000",
+            "0x1269e6f8"
+          ]
+        }
+      ],
+      "continuation_error": "RefillUnsupported: unknown request callback +0x285978 -> +0x256ed4",
+      "x8_reference_output_generated": true,
+      "reference_count_initial_value": 1,
+      "allocated_spans_inside_owned_os_mappings": true,
+      "request_objects_are_synthetic": true,
+      "steps": 803,
+      "stop_bytecode_offset": "0xf8580",
+      "boundary_wrapper_offset": "0x2858d0",
+      "boundary_target_offset": "0x26c858",
+      "actual_jvm_used": false,
+      "actual_os_threads_created": false,
+      "whole_handoff_native_differential_verified": false,
+      "request_diagnostic_transaction_committed": true,
+      "continued_after_diagnostic": true
+    }
+  ],
+  "complete_python_medusa": false,
+  "fresh_input_signer_output_verified": false,
+  "current_online_header_matrix_verified": false,
+  "limitations": [
+    "This is a same Python outer/request composition, not whole native handoff differential.",
+    "Request URL/header/JNI conversion and later callback bodies remain unresolved.",
+    "A continuation error marks the next callback boundary; it is not treated as a signature failure.",
+    "No JVM, server request or raw signature is used."
+  ]
+}

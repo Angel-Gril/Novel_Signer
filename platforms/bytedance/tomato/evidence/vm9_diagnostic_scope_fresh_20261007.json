@@ -1,0 +1,386 @@
+{
+  "schema": "vm9-diagnostic-scope-fresh-differential-v1",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "controls": 18,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "profile": "cold_zero",
+      "table_index": 0,
+      "allocation_sizes": [
+        48,
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "cold_last",
+      "table_index": 255,
+      "allocation_sizes": [
+        48,
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "cold_high_bits",
+      "table_index": 85,
+      "allocation_sizes": [
+        48,
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "cold_cross_page",
+      "table_index": 51,
+      "allocation_sizes": [
+        48,
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "warm_no_table",
+      "table_index": 85,
+      "allocation_sizes": [
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "warm_missing_entry",
+      "table_index": 85,
+      "allocation_sizes": [
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "warm_existing",
+      "table_index": 85,
+      "allocation_sizes": [],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "warm_nested",
+      "table_index": 85,
+      "allocation_sizes": [],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "warm_saturated",
+      "table_index": 85,
+      "allocation_sizes": [],
+      "lock_result": 11,
+      "exit_unlock_performed": false,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "cold_zero",
+      "table_index": 0,
+      "allocation_sizes": [
+        48,
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "cold_last",
+      "table_index": 255,
+      "allocation_sizes": [
+        48,
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "cold_high_bits",
+      "table_index": 85,
+      "allocation_sizes": [
+        48,
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "cold_cross_page",
+      "table_index": 51,
+      "allocation_sizes": [
+        48,
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "warm_no_table",
+      "table_index": 85,
+      "allocation_sizes": [
+        2048,
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "warm_missing_entry",
+      "table_index": 85,
+      "allocation_sizes": [
+        48
+      ],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "warm_existing",
+      "table_index": 85,
+      "allocation_sizes": [],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "warm_nested",
+      "table_index": 85,
+      "allocation_sizes": [],
+      "lock_result": 0,
+      "exit_unlock_performed": true,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "warm_saturated",
+      "table_index": 85,
+      "allocation_sizes": [],
+      "lock_result": 11,
+      "exit_unlock_performed": false,
+      "enter_and_exit_guest_memory_equal": true,
+      "all_image_pages_equal": true,
+      "ordered_mutex_and_gettid_events_equal": true,
+      "allocation_order_equal": true,
+      "original_diagnostic_bodies_executed": true,
+      "actual_matching_libc_mutex_bodies_executed": true,
+      "native_input_snapshot_used": false,
+      "scope_padding_preserved": true
+    }
+  ],
+  "negative_controls": [
+    {
+      "control": "unmapped_object",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "control": "invalid_word",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "control": "busy_guard",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "control": "global_lock_contention",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "control": "entry_contention",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "control": "allocation_failure",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    },
+    {
+      "control": "unmapped_table",
+      "rejected": true,
+      "guest_pages_unchanged": true
+    }
+  ],
+  "complete_python_medusa": false,
+  "fresh_input_signer_output_verified": false,
+  "current_online_header_matrix_verified": false,
+  "limitations": [
+    "Allocation is an explicit nonreusing provider in these component comparisons.",
+    "Guest lock memory and return codes are serial; host concurrency/wait/futex is unsupported.",
+    "Physical stack scratch is excluded; image and object/heap memory are compared.",
+    "This diagnostic scope is not signer state or whole outer/request native evidence.",
+    "No actual JVM, live server request or signature output is used."
+  ]
+}

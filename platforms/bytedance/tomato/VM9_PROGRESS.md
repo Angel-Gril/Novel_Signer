@@ -33,12 +33,33 @@ python platforms/bytedance/tomato/python/verify_vm9_request_allocator_handoff_fr
 注册表既有回归另外通过 96 组原生差分／11 项拒绝控制；请求前段的 6 组
 原生回归保持通过。142 个 Python 文件语法检查、公共材料扫描和 diff 检查通过。
 
-**下一处是 `+0x2858d0 → +0x26c858` 的诊断 scope 及后续请求 callback。**
-当前四组为 Python 状态组合，整个 outer→request→allocator 尚未作独立 native 对照；
-请求对象仍为显式合成输入，真实 URL/headers/JNI 转换没有恢复。诊断事务未作为 signer
-状态提交；JSON 临时 buffer 正文、其余 native 全局和物理栈仍有明确边界。
-fresh Medusa、线上全头矩阵、无 JVM Rust、非空搜索/分页、抖音/起点和最终
-Pages/Actions 下载产品仍未完成。
+**诊断 scope 已完成一个独立组件对照，并已接回请求组合。**
+`+0x2858d0 → +0x26c858` 现在由 [diagnostic scope model](python/vm9_diagnostics.py)
+恢复：对象 vtable/错误码字段、按 `(input >> 4) & 0xff` 的表项选择、全局普通锁、
+0x800 字节表、0x30 字节 entry、递归锁和 `+0x26c9d0` 退出解锁都已实现。
+[18 组 native 对照与 7 项回滚控制](evidence/vm9_diagnostic_scope_fresh_20261007.json)
+覆盖两基址、cold/warm、跨页输入、嵌套递归和饱和错误码；matching libc 的
+`pthread_mutex_*` 实体路径参与对照，未导入 native 页或签名快照。
+
+请求组合进一步从诊断 scope 继续到：`+0x2858e0 → +0x26c9d0`、
+`+0x285928 → +0x32a1f0` 的 24 字节分配、`+0x28591c → +0x2481ac` 的空字符串对象
+和 8 字节 payload 分配。一次 fresh outer → owning allocator → request 组合到第
+803 步、`+0xf8580`，记录的下一个未恢复 callback 是
+`+0x285978 → +0x256ed4`；后者进入 `+0x168324` VM，尚未把该 VM 的输入对象图、
+真实 URL/headers/JNI 转换和后续正文处理接通。[组合探针证据](evidence/vm9_request_diagnostic_continuation_20261007.json)
+只证明 Python 组合和边界定位，不证明 whole native handoff 或 signer 输出。
+
+复现新增边界：
+
+```powershell
+python platforms/bytedance/tomato/python/verify_vm9_diagnostic_scope_fresh_20261007.py --output platforms/bytedance/tomato/evidence/vm9_diagnostic_scope_fresh_20261007.json
+python platforms/bytedance/tomato/python/verify_vm9_request_diagnostic_continuation_20261007.py --output platforms/bytedance/tomato/evidence/vm9_request_diagnostic_continuation_20261007.json
+```
+
+当前仍未完成：独立 fresh-input Python Medusa、whole native outer→request→allocator
+对照、JSON 临时 buffer 正文、真实 URL/headers/JNI 输入、fresh Medusa 输出、线上全头
+矩阵（含 Perseus）和时间戳冻结实测；无 JVM Rust、非空搜索/分页、抖音/起点闭环以及
+最终 Pages/Actions 下载产品也仍未完成。
 
 ## 2026-10-07：构造器收尾与当前请求 caller／VM 前段
 
