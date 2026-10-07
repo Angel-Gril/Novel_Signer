@@ -88,7 +88,7 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            real_mutexes=False, host_imports=None, instruction_limit=10000,
            instruction_observer=None, syscall_handler=None, malloc_handler=None,
            memory_write_observer=None, code_hook_ranges=None, real_malloc=False,
-           real_recursive_mutexes=False, real_diagnostics=False):
+           real_recursive_mutexes=False, real_diagnostics=False, real_jni_acquisition=False):
     if real_malloc and (libc is None or malloc_handler is not None or allocation_effect is not None):
         raise ValueError("real malloc requires libc and no substituted allocation provider")
     if real_recursive_mutexes and (libc is None or not real_mutexes):
@@ -262,7 +262,7 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
         elif offset in (0x26C858, 0x26C9D0) and not real_diagnostics:
             # Logging scope effects are outside the object-memory contract.
             result = 0
-        elif offset == 0x26EDC4:
+        elif offset == 0x26EDC4 and not real_jni_acquisition:
             cpu.mem_write(cpu.reg_read(UC_ARM64_REG_X0), env.to_bytes(8, "little"))
             result = 0
         elif offset == 0x26E70C:

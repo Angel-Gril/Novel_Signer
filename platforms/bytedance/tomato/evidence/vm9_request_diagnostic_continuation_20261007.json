@@ -448,6 +448,7 @@
         }
       ],
       "request_evaluator_prefixes": [],
+      "jni_environment_acquisitions": [],
       "native_jni_acquisition_stub_used": false,
       "actual_jni_acquisition_body_executed": false,
       "inner_callback_body_transaction_committed": true,
@@ -1441,6 +1442,23 @@
           "native_input_snapshot_used": false
         }
       ],
+      "jni_environment_acquisitions": [
+        {
+          "component_entry_offset": "0x26edc4",
+          "java_vm_storage_offset": "0x3deed8",
+          "java_vm_pointer": 0,
+          "owning_tls_allocator_provider_used": true,
+          "java_vm_service_configured": false,
+          "component_completed": false,
+          "parent_request_transaction_committed": false,
+          "failure": "JavaVM unavailable for AttachCurrentThread +0x26ef7c",
+          "unresolved_leaf_target_offset": "0x26ef7c",
+          "owning_tls_allocation_sizes": [
+            16,
+            39
+          ]
+        }
+      ],
       "native_jni_acquisition_stub_used": false,
       "actual_jni_acquisition_body_executed": false,
       "inner_callback_body_transaction_committed": false,
@@ -1693,7 +1711,7 @@
         "wrapper_offset": "0x285a80",
         "bounded_callback_orchestration_component_verified": true,
         "supported_prefix_staged_without_transaction_commit": true,
-        "unresolved_leaf_target_offset": "0x26edc4",
+        "unresolved_leaf_target_offset": "0x26ef7c",
         "target_offset": "0x28bb5c",
         "target_address": "0x775c490b5c",
         "null_target": false,
@@ -1998,7 +2016,7 @@
           ]
         }
       ],
-      "continuation_error": "RefillUnsupported: request JNI acquisition +0x26edc4 is not recovered",
+      "continuation_error": "RefillUnsupported: JavaVM unavailable for AttachCurrentThread +0x26ef7c",
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
@@ -2035,6 +2053,8 @@
   "request_evaluator_prefix_composition_controls": 1,
   "native_jni_acquisition_stub_used": false,
   "actual_jni_acquisition_body_executed": false,
+  "python_jni_acquisition_started_composition_controls": 1,
+  "java_vm_service_configured": false,
   "inner_callback_body_transaction_committed": true,
   "request_event_return_composition_controls": 1,
   "request_vm_model_return_composition_controls": 1,

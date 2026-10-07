@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07 TLS／JavaVM 环境获取与 FindClass 调用前对照
+
+- 新增40个原始body对照、14个负控制；legacy env stub 显式关闭。
+- 恢复 `+0x26edc4/+0x17caac/+0x26eeec/+0x26ef2c` 和attach成功分支；
+  original TLS／本地析构注册及matching-libc normal mutex实际执行。
+- 六个evaluator组合到达 `+0x28b71c` FindClass调用前，参数和相关内存匹配。
+  JavaVM/pthread/allocator仍为显式组件服务，FindClass没有执行。
+- 同次owning session：低基址957步返回；高基址965步，在 `+0x26ef7c` attach
+  因JavaVM global `+0x3deed8` 为0而拒绝，TLS分配16/39字节，父事务未提交。
+- 完整独立Medusa、fresh签名、线上矩阵、Rust、搜索分页及下载产品仍未完成。
+  当前边界和复现见 [REQUEST_JNI_ENVIRONMENT.md](REQUEST_JNI_ENVIRONMENT.md)。
+
 ## 2026-10-07：事件/boolean callback 编排、C++ string 与 realloc 纠正
 
 新增 **76 个组件控制/10 个负控制**：52个24-byte C++ string构造/复制/析构、

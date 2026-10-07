@@ -1,5 +1,10 @@
 # Request leaf prefixes: sampled diagnostics and stack evaluator
 
+后续TLS／JNI组件及六个组合控制已通过，详见
+[REQUEST_JNI_ENVIRONMENT.md](REQUEST_JNI_ENVIRONMENT.md)。本报告的30/6前导证据
+仍停在acquisition入口；新增路径使用显式provider继续至FindClass调用前，
+不扩大本报告旧控制的证据范围。
+
 2026-10-07。本阶段恢复 `+0x28ddd0 → +0x28e788` 的采样/参数初始化，以及
 `+0x28b05c` 的九组 lazy 全局和调用前状态。新增 **30 个原生对照、6 个负控制**。
 未采样的诊断路径可自然返回；其余路径只验证实际调用前导，事务明确不提交。

@@ -2501,7 +2501,7 @@
   "vm9_request_diagnostic_continuation_20261007": {
     "evidence_file": "evidence/vm9_request_diagnostic_continuation_20261007.json",
     "schema": "vm9-request-diagnostic-continuation-probe-v1",
-    "status": "same_session_low_synthetic_request_vm_returned_warm_event_published_high_jni_open",
+    "status": "same_session_low_synthetic_return_high_recovered_tls_acquisition_refuses_missing_java_vm",
     "controls": 2,
     "nested_getter_composition_controls": 1,
     "owning_allocator_session_used": true,
@@ -2552,9 +2552,18 @@
       "serial_guard_released": true,
       "shared_state_pointer_getter_completed": true,
       "outer_callback_orchestration_component_verified": true,
-      "unresolved_leaf_target_offset": "0x26edc4",
+      "unresolved_leaf_target_offset": "0x26ef7c",
       "boolean_scope_parameter_prefix_staged_without_commit": true,
-      "stack_evaluator_prefix_staged_without_commit": true
+      "stack_evaluator_prefix_staged_without_commit": true,
+      "python_jni_acquisition_started": true,
+      "java_vm_pointer": 0,
+      "java_vm_storage_offset": "0x3deed8",
+      "owning_tls_allocation_sizes": [
+        16,
+        39
+      ],
+      "jni_acquisition_completed": false,
+      "request_parent_transaction_committed_to_owning_session": false
     },
     "native_input_snapshot_used": false,
     "whole_handoff_native_differential_verified": false,
@@ -2571,7 +2580,8 @@
       "The high branch still refuses real JNI acquisition +0x26edc4 and has not reached the StringObject getter or formatter.",
       "Startup logger record remains the separately declared bounded default model; warm emission does not prove general cold logger initialization.",
       "Explicit ELF memory imports and virtual clocks are services, not a full native loader/OS equivalence proof.",
-      "Whole-native request/caller stack-canary epilogue and native X0 return ABI, fresh signatures and online matrix remain open."
+      "Whole-native request/caller stack-canary epilogue and native X0 return ABI, fresh signatures and online matrix remain open.",
+      "High same-session Python acquisition uses owning TLS allocation but global +0x3deed8 is zero; refuses at AttachCurrentThread +0x26ef7c. No JavaVM test result is injected."
     ],
     "parsed_memory_import_relocations": 35,
     "signed_format_composition_controls": 1,
@@ -2594,7 +2604,9 @@
     "request_mode_body_composition_controls": 1,
     "request_event_arguments_body_composition_controls": 1,
     "request_event_return_composition_controls": 1,
-    "request_vm_model_return_composition_controls": 1
+    "request_vm_model_return_composition_controls": 1,
+    "python_jni_acquisition_started_composition_controls": 1,
+    "java_vm_service_configured": false
   },
   "vm9_request_string_callbacks_fresh_20261007": {
     "evidence_file": "evidence/vm9_request_string_callbacks_fresh_20261007.json",
@@ -2832,6 +2844,38 @@
       "Cold singleton +0x295de8, alternate publication +0x290610, contention, overlap and oversized vectors refuse.",
       "The four VM return controls execute native +0x168324 dispatch/handler/epilogue on explicit single-instruction fixtures; they do not execute the full native request.",
       "Low same-session Python synthetic request returns at 957/+0xffb78; high branch actual JNI, real request conversion/signing and online behavior remain unresolved."
+    ]
+  },
+  "vm9_jni_environment_fresh_20261007": {
+    "evidence_file": "evidence/vm9_jni_environment_fresh_20261007.json",
+    "schema": "vm9-jni-environment-fresh-differential-v1",
+    "status": "original_acquisition_tls_destructor_and_evaluator_find_class_boundary_verified_with_explicit_javavm_services",
+    "controls": 40,
+    "acquisition_return_controls": 26,
+    "destructor_return_controls": 8,
+    "evaluator_boundary_controls": 6,
+    "negative_controls": 14,
+    "native_input_snapshot_used": false,
+    "legacy_acquisition_stub_disabled": true,
+    "original_native_acquisition_body_executed": true,
+    "original_emulated_tls_body_executed": true,
+    "original_local_destructor_registration_executed": true,
+    "matching_libc_normal_mutex_body_executed": true,
+    "actual_android_jvm_executed": false,
+    "explicit_allocator_pthread_javavm_services_used": true,
+    "attach_failure_diagnostics_recovered": false,
+    "same_session_high_tls_acquisition_started_composition_controls": 1,
+    "full_jni_request_chain_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "GetEnv/Attach/Detach results and OS pthread/allocation services are explicit controlled inputs, not an Android JVM.",
+      "Compare fresh guest payload and all main image pages; full physical stack/canary/register ABI and whole-native request are not compared.",
+      "Evaluator controls stop before FindClass +0x28b71c; attach-failure diagnostics refuse.",
+      "Failed page transactions cannot reverse external JavaVM/pthread/allocation provider effects.",
+      "Same-session high branch has a zero JavaVM global and refuses; fresh signature/online/download product remain incomplete."
     ]
   }
 }

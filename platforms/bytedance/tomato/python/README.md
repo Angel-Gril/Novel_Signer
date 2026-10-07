@@ -1,5 +1,14 @@
 # Tomato Python material
 
+2026-10-07 JNI environment checkpoint: 40 original-body controls and 14
+negative controls pass with the legacy acquisition stub disabled. Original
+TLS/destructor bodies execute; JavaVM/pthread/allocator service effects are
+explicit fixtures. Six evaluator controls reach the unexecuted FindClass
+callsite +0x28b71c. Same-session low synthetic request still returns at 957;
+high reaches recovered Python acquisition but refuses at attach +0x26ef7c
+because the JavaVM global is zero. Fresh signing and real JNI remain open.
+See [REQUEST_JNI_ENVIRONMENT.md](../REQUEST_JNI_ENVIRONMENT.md).
+
 `fq_crypto.py`, `helios_vm.py`, and `medusa_f13.py` contain the pure primitives and sample checks extracted during the analysis.
 
 `medusa_body.py` and `medusa_body_legacy_snapshot.py` are deliberately labelled as the old 225-byte snapshot implementation. The current online VM produces different branches and is only available through the Java/Unidbg bridge in the original isolated workspace. Do not import this module into a current downloader and infer online compatibility from a local 225-byte match.

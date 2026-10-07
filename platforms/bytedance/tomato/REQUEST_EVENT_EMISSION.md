@@ -129,7 +129,8 @@ object move、heap ownership、record迁移/增长/drop、caller cleanup和retur
 的逆向结论。引用时须保留样本hash、输入、比较窗口和服务边界；不能拿组件
 自然返回作为线上签名、API可用或小说正文成功的证据。
 
-下一步是恢复真实`+0x26edc4`的TLS guard/environment对象、JavaVM GetEnv与
-attach/清理分支，继续真实request转换及签名输出。无JVM Rust、非空搜索/分页、
+后续TLS环境组件已通过原生对照，见
+[REQUEST_JNI_ENVIRONMENT.md](REQUEST_JNI_ENVIRONMENT.md)。当前下一处是实际JavaVM
+初始化与JNI服务／FindClass后续行为，再继续真实request转换及签名输出。无JVM Rust、非空搜索/分页、
 抖音/起点与最终Pages/Actions下载产品仍未完成。
 上一阶段见 [REQUEST_EVENT_FORMAT.md](REQUEST_EVENT_FORMAT.md)。

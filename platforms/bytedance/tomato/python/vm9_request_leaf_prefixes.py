@@ -72,12 +72,15 @@ def resolve_stack_evaluator_globals(pages, *, image_base):
 
 
 def execute_stack_evaluator_prefix(pages, *, image_base, entry_stack_address,
-        descriptor_address, descriptor_count, method_name_address, observer=None):
+        descriptor_address, descriptor_count, method_name_address, observer=None,
+        acquire_environment=None):
     """+0x28b05c through actual +0x26edc4 acquisition call; no fake env.
 
     Native saves encoded pointers and input slots, then initializes nine lazy
     names in order. The environment output pair is still untouched at this
-    call boundary. Observer sees staged pages only; this body never commits.
+    call boundary. With an explicit acquisition provider, continue through
+    environment storage to the original FindClass callsite +0x28b71c.
+    Observer sees staged pages only; this incomplete body never commits.
     """
     _stack(entry_stack_address, 0xF0)
     _uint(image_base, 64, 'image base')
@@ -106,7 +109,27 @@ def execute_stack_evaluator_prefix(pages, *, image_base, entry_stack_address,
             environment_pair_address=environment_pair,
             environment_slot_address=entry_stack_address - 0xF0,
             unresolved_leaf_target_offset='0x26edc4', body_transaction_committed=False)
-    raise RefillUnsupported('request JNI acquisition +0x26edc4 is not recovered')
+    if acquire_environment is None:
+        raise RefillUnsupported('request JNI acquisition +0x26edc4 is not recovered')
+    acquire_environment(p,entry_stack_address=entry_stack_address-0xF0,
+        output_pair_address=environment_pair)
+    environment = _u(p,environment_pair)
+    if not environment:
+        raise RefillUnsupported('request JNI null-environment continuation +0x28b7c8 is not recovered')
+    _w(p,entry_stack_address-0xF0,environment)
+    table = _u(p,environment)
+    if not table:
+        raise RefillUnsupported('request JNI environment table is missing')
+    target = _u(p,table+0x30)
+    if not target:
+        raise RefillUnsupported('request JNI FindClass function is missing')
+    if observer:
+        observer(p,phase='before_jni_find_class',globals=ledger,addresses=addresses,
+            environment_pair_address=environment_pair,environment_slot_address=entry_stack_address-0xF0,
+            environment=environment,jni_vtable_slot=0x30,jni_call_target=target,
+            jni_call_arguments=(environment,addresses[0]['name']),
+            native_callsite_offset='0x28b71c',body_transaction_committed=False)
+    raise RefillUnsupported('request JNI FindClass +0x28b71c is not recovered')
 
 
 def execute_event_mode_prefix(pages, *, image_base, entry_stack_address,

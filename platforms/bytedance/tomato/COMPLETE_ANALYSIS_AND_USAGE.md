@@ -17,7 +17,16 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-07 最新warm event发布检查点：新增40个原生控制/14个负控制，恢复
+2026-10-07 最新TLS/JavaVM环境获取检查点：新增40个原生对照/14个负控制，
+关闭legacy acquisition stub，执行原始TLS、析构注册、GetEnv和attach/detach路径；
+六个evaluator控制到达FindClass `+0x28b71c`调用前，环境和类名参数与原生一致。
+JavaVM/pthread/分配仍为显式组件服务，真实Android JVM与完整JNI尚未验证。
+同次owning session低基址保持957步返回；高基址保持965步，在恢复的acquisition
+内部因 `+0x3deed8` 的JavaVM指针为0而停于attach `+0x26ef7c`，父事务未提交。
+fresh Medusa、线上矩阵和下载产品仍未完成。详见
+[REQUEST_JNI_ENVIRONMENT.md](REQUEST_JNI_ENVIRONMENT.md)。
+
+2026-10-07 此前warm event发布检查点：新增40个原生控制/14个负控制，恢复
 string所有权移动、非空record迁移、vector增长/200条丢弃和caller清理。
 低基址同次owning session的合成请求模型在957/+ffb78返回，event record
 增至2条，33次分配/18次free与输出引用通过；页状态已提交。高基址仍

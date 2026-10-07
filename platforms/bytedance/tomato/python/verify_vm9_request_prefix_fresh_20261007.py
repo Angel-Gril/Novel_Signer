@@ -69,7 +69,7 @@ def resolve_request_memory_imports(pages, library, image):
 
 def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None,
                    diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
-                   read_clock=None):
+                   read_clock=None, acquire_environment=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -160,7 +160,8 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     return leaf.execute_stack_evaluator_prefix(p, image_base=image,
                         entry_stack_address=frame.native_stack_address - 0x290,
                         descriptor_address=descriptor, descriptor_count=count,
-                        method_name_address=name, observer=evaluator_observer)
+                        method_name_address=name, observer=evaluator_observer,
+                        acquire_environment=acquire_environment)
                 vm9_request_boolean_gate.execute_boolean_gate(vm.m.pages,
                     object_address=words[1], image_base=image,
                     entry_stack_address=frame.native_stack_address - 0x190,

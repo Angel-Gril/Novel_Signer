@@ -76,7 +76,28 @@ def case(library, libc, image, label, property_value, vm_module):
         def reallocate(pages, pointer, size):
             reallocations.append((pointer, size))
             return session.reallocate(pages, pointer, size)
+        import vm9_jni_environment
         diag = {'thread_id': session.thread_id}
+        def acquire_environment(pages, **inputs):
+            storage=int.from_bytes(_read_span(pages,image+0x374F90,8),'little')
+            receipt=dict(component_entry_offset='0x26edc4',java_vm_storage_offset=hex(storage-image),
+                java_vm_pointer=int.from_bytes(_read_span(pages,storage,8),'little'),
+                owning_tls_allocator_provider_used=True,java_vm_service_configured=False,
+                component_completed=False,parent_request_transaction_committed=False)
+            diag.setdefault('jni_environment_acquisitions',[]).append(receipt)
+            allocation_sequence=unused['allocation_sequence']
+            before=len(allocation_sequence)
+            try:
+                result=vm9_jni_environment.acquire_thread_environment(pages,image_base=image,**inputs,
+                    get_tls=session.get_tls,register_destructor=session.thread_destructor,invoke_javavm=None)
+            except RefillUnsupported as exc:
+                receipt.update(failure=str(exc),unresolved_leaf_target_offset='0x26ef7c')
+                raise
+            else:
+                receipt.update(component_completed=True,environment=result.environment)
+                return result
+            finally:
+                receipt['owning_tls_allocation_sizes']=[size for size,_ in allocation_sequence[before:]]
         clock_reads = []
         def read_clock(pages, clock_id):
             result = session.read_clock(pages, clock_id)
@@ -87,7 +108,7 @@ def case(library, libc, image, label, property_value, vm_module):
                 staged, inputs, vm_module, 1791023800, 500000000,
                 allocate=allocate, diagnostic_scope=diag,
                 reallocate=reallocate, free=free, prepare_format=session.prepare_format,
-                read_clock=read_clock)
+                read_clock=read_clock,acquire_environment=acquire_environment)
             continuation_error = None
         except prefix.RequestContinuationBoundary as exc:
             state, frame, vm, ledger, decoded = (exc.staged, exc.frame, exc.vm,
@@ -178,7 +199,7 @@ def case(library, libc, image, label, property_value, vm_module):
         else:
             assert image == 0x775C205000
             assert vm.steps == 965 and vm.pc - image == 0xF8FD0
-            assert continuation_error == 'RefillUnsupported: request JNI acquisition +0x26edc4 is not recovered'
+            assert continuation_error == 'RefillUnsupported: JavaVM unavailable for AttachCurrentThread +0x26ef7c'
             assert not nested and not diag.get('formatted_strings')
             assert len(diag.get('string_comparisons', [])) == 1
             assert diag['string_comparisons'][0]['equal'] is False
@@ -204,6 +225,12 @@ def case(library, libc, image, label, property_value, vm_module):
             evaluator = diag['request_evaluator_prefixes'][0]
             assert evaluator['phase'] == 'before_jni_acquisition'
             assert evaluator['unresolved_leaf_target_offset'] == '0x26edc4'
+            assert len(diag.get('jni_environment_acquisitions',[]))==1
+            acquisition=diag['jni_environment_acquisitions'][0]
+            assert acquisition['owning_tls_allocator_provider_used'] and acquisition['java_vm_pointer']==0
+            assert acquisition['java_vm_storage_offset']=='0x3deed8'
+            assert acquisition['unresolved_leaf_target_offset']=='0x26ef7c'
+            assert not acquisition['component_completed'] and not acquisition['parent_request_transaction_committed']
             assert len(evaluator['globals']) == 9 and evaluator['descriptor_count'] == 2
             assert evaluator['descriptor_address'] == boolean_prefix['evaluator_argument_address']
             assert evaluator['method_name_address'] == boolean_prefix['addresses']['second_name']
@@ -227,7 +254,7 @@ def case(library, libc, image, label, property_value, vm_module):
             next_callback=dict(wrapper_offset=hex(ledger[-1][0]),
                 bounded_callback_orchestration_component_verified=True,
                 supported_prefix_staged_without_transaction_commit=True,
-                unresolved_leaf_target_offset=inner['unresolved_leaf_target_offset'],
+                unresolved_leaf_target_offset=diag.get('jni_environment_acquisitions',[inner])[-1]['unresolved_leaf_target_offset'],
                 target_offset=hex(ledger[-1][1]) if ledger[-1][3][0] else None,
                 target_address=hex(ledger[-1][3][0]),null_target=not bool(ledger[-1][3][0]),
                 packed_words=[hex(word) for word in ledger[-1][3]],
@@ -271,6 +298,7 @@ def case(library, libc, image, label, property_value, vm_module):
             request_boolean_prefixes=diag.get('request_boolean_prefixes', []),
             request_event_leaf_prefixes=diag.get('request_event_leaf_prefixes', []),
             request_evaluator_prefixes=diag.get('request_evaluator_prefixes', []),
+            jni_environment_acquisitions=diag.get('jni_environment_acquisitions',[]),
             native_jni_acquisition_stub_used=False,
             actual_jni_acquisition_body_executed=False,
             inner_callback_body_transaction_committed=bool(diag.get('request_event_completed')),
@@ -346,6 +374,8 @@ def main():
         request_evaluator_prefix_composition_controls=sum(bool(row['request_evaluator_prefixes']) for row in rows),
         native_jni_acquisition_stub_used=False,
         actual_jni_acquisition_body_executed=False,
+        python_jni_acquisition_started_composition_controls=sum(bool(row['jni_environment_acquisitions']) for row in rows),
+        java_vm_service_configured=False,
         inner_callback_body_transaction_committed=any(bool(row['request_event_completed']) for row in rows),
         request_event_return_composition_controls=sum(bool(row['request_event_completed']) for row in rows),
         request_vm_model_return_composition_controls=sum(bool(row['request_vm_return']) for row in rows),
