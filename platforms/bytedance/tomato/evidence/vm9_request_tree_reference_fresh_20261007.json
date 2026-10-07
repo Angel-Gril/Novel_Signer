@@ -1,0 +1,167 @@
+{
+  "schema": "vm9-request-tree-reference-fresh-differential-v1",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "controls": 8,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "output_reference_address": "0x70001800",
+      "x8_output_equal": true,
+      "synthetic_x0_is_not_output": true,
+      "allocation_sizes": [
+        40,
+        40,
+        40,
+        4
+      ],
+      "allocation_and_memory_equal": true,
+      "count_initial_value": 1,
+      "output_crosses_page": false,
+      "output_overlaps_allocated_container": false,
+      "original_native_constructor_executed": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "output_reference_address": "0x70001ff8",
+      "x8_output_equal": true,
+      "synthetic_x0_is_not_output": true,
+      "allocation_sizes": [
+        40,
+        40,
+        40,
+        4
+      ],
+      "allocation_and_memory_equal": true,
+      "count_initial_value": 1,
+      "output_crosses_page": true,
+      "output_overlaps_allocated_container": false,
+      "original_native_constructor_executed": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "output_reference_address": "0x70002800",
+      "x8_output_equal": true,
+      "synthetic_x0_is_not_output": true,
+      "allocation_sizes": [
+        40,
+        40,
+        40,
+        4
+      ],
+      "allocation_and_memory_equal": true,
+      "count_initial_value": 1,
+      "output_crosses_page": false,
+      "output_overlaps_allocated_container": false,
+      "original_native_constructor_executed": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "output_reference_address": "0x70003ff8",
+      "x8_output_equal": true,
+      "synthetic_x0_is_not_output": true,
+      "allocation_sizes": [
+        40,
+        40,
+        40,
+        4
+      ],
+      "allocation_and_memory_equal": true,
+      "count_initial_value": 1,
+      "output_crosses_page": true,
+      "output_overlaps_allocated_container": true,
+      "original_native_constructor_executed": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "output_reference_address": "0x70001800",
+      "x8_output_equal": true,
+      "synthetic_x0_is_not_output": true,
+      "allocation_sizes": [
+        40,
+        40,
+        40,
+        4
+      ],
+      "allocation_and_memory_equal": true,
+      "count_initial_value": 1,
+      "output_crosses_page": false,
+      "output_overlaps_allocated_container": false,
+      "original_native_constructor_executed": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "output_reference_address": "0x70001ff8",
+      "x8_output_equal": true,
+      "synthetic_x0_is_not_output": true,
+      "allocation_sizes": [
+        40,
+        40,
+        40,
+        4
+      ],
+      "allocation_and_memory_equal": true,
+      "count_initial_value": 1,
+      "output_crosses_page": true,
+      "output_overlaps_allocated_container": false,
+      "original_native_constructor_executed": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "output_reference_address": "0x70002800",
+      "x8_output_equal": true,
+      "synthetic_x0_is_not_output": true,
+      "allocation_sizes": [
+        40,
+        40,
+        40,
+        4
+      ],
+      "allocation_and_memory_equal": true,
+      "count_initial_value": 1,
+      "output_crosses_page": false,
+      "output_overlaps_allocated_container": false,
+      "original_native_constructor_executed": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "output_reference_address": "0x70003ff8",
+      "x8_output_equal": true,
+      "synthetic_x0_is_not_output": true,
+      "allocation_sizes": [
+        40,
+        40,
+        40,
+        4
+      ],
+      "allocation_and_memory_equal": true,
+      "count_initial_value": 1,
+      "output_crosses_page": true,
+      "output_overlaps_allocated_container": true,
+      "original_native_constructor_executed": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "negative_controls": [
+    {
+      "control": "unmapped_output",
+      "rejected": true,
+      "pages_unchanged": true
+    }
+  ],
+  "fresh_input_signer_output_verified": false,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false,
+  "limitations": [
+    "Allocator is a nonreusing explicit service in this component differential.",
+    "Real allocator and full request callback composition are not verified by this report.",
+    "Physical stack scratch and diagnostic scopes are excluded; no server request."
+  ]
+}

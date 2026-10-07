@@ -1,5 +1,45 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07：请求配置树 x8 输出与同次 allocator 接入
+
+当前请求诊断边界进一步推进到 **第 611 步、`+0xf80a8`**。
+上一节的第 599 步／`+0x25c324` 为此前检查点；其输入布局仍由原生前段对照证明。
+
+`construct_configuration_tree_reference` 复用已有 controller/sentinel/reference
+模型，恢复 `+0x25c324`：分配 40 字节容器、40 字节 controller、40 字节 sentinel
+和 4 字节 count，初值 1，将 owning reference 写入调用者的 **x8 输出槽**。
+[8 组原生组件差分](evidence/vm9_request_tree_reference_fresh_20261007.json)
+覆盖两基址与四输出位置，包括跨页和输出／新容器重叠控制；比较范围内的字节
+与分配序列相同。重叠控制验证 native 写入顺序，不表示重叠后的容器图仍可使用。
+缺页输出在分配前拒绝，guest pages 不变。该组件对照使用显式 allocator 服务，
+不能单独证明 actual allocator 组合完成。
+
+[4 组同次 Python allocator 组合](evidence/vm9_request_allocator_handoff_fresh_20261007.json)
+则从 fresh outer 的 child A pair/handler 继续运行，按 **pages 对象身份**选择
+持有这些页的现有 allocator session，保持 GuestOS staging chain。
+请求中的四次分配均由匹配 libc 的 Python allocator 模型生成，没有返回地址替代；
+x8 reference、count 和 owned OS mapping 的包含关系通过。
+每组还验证：脱离 owner 的普通页拷贝会在分配前明确拒绝，页、mapping 和 cursor 不变。
+先前诊断用复制页适合只读前段，不能交给 actual allocator 继续分配；不得用 ready
+flag、预置指针或新的独立 allocator 绕过这个 owner 边界。
+
+复现新增组件与组合：
+
+```powershell
+python platforms/bytedance/tomato/python/verify_vm9_request_tree_reference_fresh_20261007.py --output platforms/bytedance/tomato/evidence/vm9_request_tree_reference_fresh_20261007.json
+python platforms/bytedance/tomato/python/verify_vm9_request_allocator_handoff_fresh_20261007.py --output platforms/bytedance/tomato/evidence/vm9_request_allocator_handoff_fresh_20261007.json
+```
+
+注册表既有回归另外通过 96 组原生差分／11 项拒绝控制；请求前段的 6 组
+原生回归保持通过。142 个 Python 文件语法检查、公共材料扫描和 diff 检查通过。
+
+**下一处是 `+0x2858d0 → +0x26c858` 的诊断 scope 及后续请求 callback。**
+当前四组为 Python 状态组合，整个 outer→request→allocator 尚未作独立 native 对照；
+请求对象仍为显式合成输入，真实 URL/headers/JNI 转换没有恢复。诊断事务未作为 signer
+状态提交；JSON 临时 buffer 正文、其余 native 全局和物理栈仍有明确边界。
+fresh Medusa、线上全头矩阵、无 JVM Rust、非空搜索/分页、抖音/起点和最终
+Pages/Actions 下载产品仍未完成。
+
 ## 2026-10-07：构造器收尾与当前请求 caller／VM 前段
 
 最新构造器状态见 [finalization evidence](evidence/vm9_outer_finalize_fresh_20261007.json)。
@@ -61,7 +101,7 @@ python platforms/bytedance/tomato/python/verify_vm9_request_caller_fresh_2026100
 python platforms/bytedance/tomato/python/verify_vm9_request_prefix_fresh_20261007.py --outer-libc C:\AI\6\_vlibc.so --output platforms/bytedance/tomato/evidence/vm9_request_prefix_fresh_20261007.json
 ```
 
-**下一处已确认：`+0x2858bc → +0x25c324` 的配置树 reference 构造。**
+**此前下一处：`+0x2858bc → +0x25c324` 的配置树 reference 构造；现已按上节继续恢复。**
 该 wrapper 使用 descriptor 的第 2 个 word 作为 x8 输出；不能把它作为普通 x0
 参数处理。随后还需恢复真实 URL/headers/JNI 输入构造与其余请求 callback，
 把请求分配接回同次 actual allocator，再验证 fresh Medusa 输出与新的线上矩阵。

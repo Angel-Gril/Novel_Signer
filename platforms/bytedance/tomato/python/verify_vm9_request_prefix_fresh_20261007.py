@@ -22,7 +22,7 @@ class PrefixBoundary(Exception):
     pass
 
 
-def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds):
+def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -56,6 +56,12 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds):
             elif (wrapper, target) == (0x2858A8, 0x347F60):
                 _write_span(vm.m.pages, words[1], _read_span(vm.m.pages, words[2], words[3]))
             elif (wrapper, target) == (0x2858BC, 0x25C324):
+                if allocate is None:
+                    raise PrefixBoundary()
+                import vm9_registry as registry
+                registry.construct_configuration_tree_reference(vm.m.pages,
+                    output_reference_address=words[1], image_base=image, allocate=allocate)
+            elif allocate is not None and (wrapper, target) == (0x2858D0, 0x26C858):
                 raise PrefixBoundary()
             else:
                 raise RefillUnsupported(f'unknown request callback +{wrapper:#x} -> +{target:#x}')

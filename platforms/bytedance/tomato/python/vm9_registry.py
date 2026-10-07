@@ -24,6 +24,28 @@ def construct_configuration_tree(pages, *, container_address: int, descriptor_ad
     return controller
 
 
+def construct_configuration_tree_reference(pages, *, output_reference_address: int,
+        image_base: int, allocate: Callable) -> int:
+    """Model +0x25c324: a 40-byte tree and owning reference returned via x8.
+
+    Reuse the controller/sentinel and reference primitives. The native caller
+    supplies the output slot; x0 is not the output pointer for this function.
+    Physical constructor stack spills and diagnostic scopes are separate.
+    """
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, output_reference_address, 16)
+    address = lambda offset: objects._image_address(image_base, offset)
+    container = objects._allocate(transaction, allocate, 40)
+    objects._callback_container(transaction, container,
+        (address(0x182D6C), address(0x182D6C), address(0x188A94)),
+        image_base, allocate, vtable_offset=0x35B7C0, hook_offset=0x24B560)
+    objects.construct_reference_wrapper(transaction,
+        object_address=output_reference_address, referenced_address=container,
+        allocate=allocate)
+    transaction.commit()
+    return container
+
+
 def compare_string_fields(pages, *, first_address: int, second_address: int,
                           max_bytes: int = 0x100000) -> int:
     """Model +0x2473dc, including invalid -32768 and equal-NUL early return."""
