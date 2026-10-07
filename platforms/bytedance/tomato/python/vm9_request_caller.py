@@ -78,3 +78,64 @@ def prepare_request_caller(pages, *, entry_stack_address, return_address,
     staged.commit()
     return RequestCallerFrame(0xF7720, stack, stack + 8, stack + 0x30,
                               backing, registers, vm_arguments)
+
+
+@dataclass(frozen=True)
+class RequestVmCallerFrame:
+    native_stack_address: int
+    bytecode_offset: int
+    packed_arguments_address: int
+    descriptor_address: int
+    register_backing_address: int
+    registers: tuple[int, ...]
+    vm_call_registers: tuple[int, ...]
+
+
+def prepare_request_vm_caller(pages, *, entry_stack_address, return_address,
+        thread_pointer, image_base, object_address, preserved_x8,
+        saved_frame_pointer=0, saved_x28=0, saved_x19=0) -> RequestVmCallerFrame:
+    """Generate +0x256ed4's caller and defined +0x168324 prelude slots.
+
+    Incoming x8 is saved in [sp], x0 in [sp+8]. Descriptor+8 points to
+    sp+0x380: ADD #0x28 then ADD #0x358, not just sp+0x28. Undefined VM
+    backing words retain the caller's memory. No native frame is copied.
+    """
+    values = (entry_stack_address, return_address, thread_pointer, image_base,
+              object_address, preserved_x8, saved_frame_pointer, saved_x28, saved_x19)
+    if any(not isinstance(v, int) or not 0 <= v < 1 << 64 for v in values):
+        raise RefillUnsupported("request VM caller inputs must fit uint64")
+    if entry_stack_address & 15:
+        raise RefillUnsupported("request VM caller stack must be aligned")
+    if return_address >= 1 << 56:
+        raise RefillUnsupported("PAC-tagged request VM caller return is unsupported")
+    tx = _PageTransaction(pages)
+    local = entry_stack_address - 0x3B0
+    _read_span(tx, local, 0x3B0)
+    _read_span(tx, image_base + 0x99020, 4)
+    def word(address, value):
+        _write_span(tx, address, value.to_bytes(8, "little"))
+    for address, value in (
+        (entry_stack_address - 0x20, saved_frame_pointer),
+        (entry_stack_address - 0x18, return_address),
+        (entry_stack_address - 0x10, saved_x28),
+        (entry_stack_address - 8, saved_x19),
+        (local, preserved_x8), (local + 8, object_address),
+        (local + 0x10, image_base + 0x257050),
+        (local + 0x18, local + 0x380), (local + 0x20, return_address),
+    ):
+        word(address, value)
+    _write_span(tx, entry_stack_address - 0x28, _read_span(tx, thread_pointer + 0x28, 8))
+    top = local + 0x380
+    backing = top - 0x118
+    word(top - 0x120, image_base + 0x99020)
+    for slot, value in ((0, 0), (4, local), (5, image_base + 0x35B650),
+        (6, image_base + 0x35B660), (7, image_base + 0x257050),
+        (29, (top - 0x130) & ~15), (31, return_address)):
+        word(backing + slot * 8, value)
+    registers = tuple(int.from_bytes(_read_span(tx, backing + i * 8, 8), "little")
+                      for i in range(32))
+    vm_arguments = (image_base + 0x99020, local, image_base + 0x35B650,
+                    image_base + 0x35B660, local + 0x10)
+    tx.commit()
+    return RequestVmCallerFrame(local, 0x99020, local, local + 0x10,
+        backing, registers, vm_arguments)

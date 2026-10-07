@@ -56,10 +56,24 @@ python platforms/bytedance/tomato/python/verify_vm9_diagnostic_scope_fresh_20261
 python platforms/bytedance/tomato/python/verify_vm9_request_diagnostic_continuation_20261007.py --output platforms/bytedance/tomato/evidence/vm9_request_diagnostic_continuation_20261007.json
 ```
 
+`+0x285978 → +0x256ed4` 的 caller 也已完成 bounded fresh 对照：
+[6 组 caller/prelude 差分](evidence/vm9_request_vm_caller_fresh_20261007.json)覆盖两基址、
+三个对象位置和三个 incoming x8 值。Python 从显式 `entry_stack/x0/x8/TLS` 生成
+0x3b0 字节 caller frame；`+0x168324` 通用前导的 descriptor、32 个 backing slot、
+TLS canary 和到 `+0x1684f0` 的临时栈字节与 native 相同。特别确认 descriptor 的
+第二个 word 是 `sp+0x380`（`ADD #0x28` 后又加 `#0x358`），不是简单的 `sp+0x28`。
+对照在 `+0x1684f0` 停止，尚未执行该入口选择的 nested VM body。
+
+复现：
+
+```powershell
+python platforms/bytedance/tomato/python/verify_vm9_request_vm_caller_fresh_20261007.py --output platforms/bytedance/tomato/evidence/vm9_request_vm_caller_fresh_20261007.json
+```
+
 当前仍未完成：独立 fresh-input Python Medusa、whole native outer→request→allocator
-对照、JSON 临时 buffer 正文、真实 URL/headers/JNI 输入、fresh Medusa 输出、线上全头
-矩阵（含 Perseus）和时间戳冻结实测；无 JVM Rust、非空搜索/分页、抖音/起点闭环以及
-最终 Pages/Actions 下载产品也仍未完成。
+对照、`+0x168324` 之后的 nested VM、JSON 临时 buffer 正文、真实 URL/headers/JNI 输入、
+fresh Medusa 输出、线上全头矩阵（含 Perseus）和时间戳冻结实测；无 JVM Rust、非空搜索/分页、
+抖音/起点闭环以及最终 Pages/Actions 下载产品也仍未完成。
 
 ## 2026-10-07：构造器收尾与当前请求 caller／VM 前段
 
