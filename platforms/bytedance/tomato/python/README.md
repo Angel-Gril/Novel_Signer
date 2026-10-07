@@ -24,10 +24,11 @@ while the Python full native caller ABI remains unmodeled.
 The same-session outer/request probe uses the constructed receiver and its
 own allocator/OS staging chain. C-string equality, signed `%d` formatting,
 temporary string cleanup, serial guard acquire and parsed ELF memory imports
-now continue the low image case to step 919 / `+0xffae0` and the high image
-case to step 793 / `+0xf87bc`. The next callbacks are `+0x2914d0` and
-`+0x32a330` respectively. Neither entire native request branch is compared,
-and requests still use synthetic inputs.
+now continue through the additional monotonic clock, raw state and guard
+release components. The low image case reaches step 945 / `+0xffb48`, stopping
+at `+0x28dc38`; the high image case reaches step 965 / `+0xf8fd0`, stopping
+at `+0x28bb5c`. Neither entire native request branch is compared, and requests
+still use synthetic inputs.
 
 `vm9_configuration_init.format_string_object` supports only `%d/%s/%%` over
 raw ABI words. Native successful cleanup returns zero; the helper returns its
@@ -39,6 +40,18 @@ allocator services; the integration uses the owning allocator model and
 performs no real realloc. `session.reallocate` remains unsupported.
 `resolve_request_memory_imports` parses 35 ELF symbol relocations to explicit
 memset/memcpy PLT services; it is a limited fixture loader contract.
+
+`vm9_callbacks.store_monotonic_start` and `elapsed_monotonic_microseconds`
+use the same explicit owning clock provider with clock id 1. Subtraction wraps
+at 64 bits and signed division by 1000 truncates toward zero. Fixed-clock zero
+elapsed in this probe is not an online timestamp-freeze result.
+`vm9_objects.initialize_mutex_storage` clears raw 140-byte state without the
+outer constructor's vtable/flag. `vm9_startup.release_serial_guard` supports
+the serial no-waiter branch. The new verifier checks 48 clock, 8 raw state,
+6 guard release and 20 shared pointer differences, 18 refusals and 4 outer
+constructor regressions. `read_shared_state_pointer` acquires a shared reader,
+loads receiver+0x90 and releases it; it does not dereference the return word.
+See [REQUEST_CLOCK_STATE.md](../REQUEST_CLOCK_STATE.md) for ABI and commands.
 
 See [REQUEST_NESTED_VM.md](../REQUEST_NESTED_VM.md) for the getter and
 [REQUEST_STRING_CALLBACKS.md](../REQUEST_STRING_CALLBACKS.md) for callback ABI,

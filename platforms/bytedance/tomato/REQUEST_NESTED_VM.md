@@ -279,3 +279,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_diagnostic_contin
 [REQUEST_STRING_CALLBACKS.md](REQUEST_STRING_CALLBACKS.md)。matching-libc realloc
 仍未实现；本次低基址 growth 未触发该路径。真实请求转换、完整 request 返回和
 签名仍未完成，不能把两个不同 stop 合并成请求成功。
+
+后续 clock/raw state/guard release/shared pointer getter 已继续推进 outer 请求；
+最新 stop 和证据见 [REQUEST_CLOCK_STATE.md](REQUEST_CLOCK_STATE.md)。本文的
+StringObject getter 证据范围不变，pointer getter 不代表该 StringObject getter。

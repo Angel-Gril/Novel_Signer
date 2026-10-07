@@ -2501,31 +2501,36 @@
   "vm9_request_diagnostic_continuation_20261007": {
     "evidence_file": "evidence/vm9_request_diagnostic_continuation_20261007.json",
     "schema": "vm9-request-diagnostic-continuation-probe-v1",
-    "status": "same_session_low_format_tree_high_equality_guard_memory_imports_continued",
+    "status": "same_session_low_elapsed_high_raw_state_guard_release_shared_pointer_continued",
     "controls": 2,
     "nested_getter_composition_controls": 1,
     "owning_allocator_session_used": true,
     "nested_getter_source_state_injected": false,
     "low_image": {
       "image_base": "0x122c0000",
-      "steps": 919,
-      "bytecode_offset": "0xffae0",
-      "wrapper_offset": "0x285f60",
-      "target_offset": "0x2914d0",
+      "steps": 945,
+      "bytecode_offset": "0xffb48",
+      "wrapper_offset": "0x285fb4",
+      "target_offset": "0x28dc38",
       "signed_formatter_completed": true,
       "getter_cleanup_completed": true,
-      "new_configuration_pair_inserted": true
+      "new_configuration_pair_inserted": true,
+      "elapsed_monotonic_microseconds": 0,
+      "elapsed_from_fixed_explicit_clock": true
     },
     "high_image": {
       "image_base": "0x775c205000",
-      "steps": 793,
-      "bytecode_offset": "0xf87bc",
-      "wrapper_offset": "0x2859e0",
-      "target_offset": "0x32a330",
+      "steps": 965,
+      "bytecode_offset": "0xf8fd0",
+      "wrapper_offset": "0x285a80",
+      "target_offset": "0x28bb5c",
       "getter_reached": false,
       "cstring_equality_completed": true,
       "serial_guard_acquired": true,
-      "memset_completed_bytes": 160
+      "memset_completed_bytes": 160,
+      "raw_mutex_state_cleared_bytes": 140,
+      "serial_guard_released": true,
+      "shared_state_pointer_getter_completed": true
     },
     "native_input_snapshot_used": false,
     "whole_handoff_native_differential_verified": false,
@@ -2537,15 +2542,21 @@
     "no_jvm_rust_signer_complete": false,
     "limitations": [
       "Same owning Python constructor/request/allocator composition uses synthetic request inputs, not whole-native differential.",
-      "The two branches still differ; high image has not reached the getter or formatter.",
+      "The two branches still differ; high image has not reached the StringObject getter or formatter.",
       "Explicit ELF memory imports are parsed to PLT services, not a full dynamic loader.",
-      "Clock/state and later callbacks, real URL/header/JNI, fresh signatures and online matrix remain open."
+      "Later callback bodies and whole-native request equivalence, real URL/header/JNI, fresh signatures and online matrix remain open."
     ],
     "parsed_memory_import_relocations": 35,
     "signed_format_composition_controls": 1,
     "equality_composition_controls": 1,
     "matching_libc_realloc_implemented": false,
-    "reallocation_requests": 0
+    "reallocation_requests": 0,
+    "elapsed_clock_composition_controls": 1,
+    "raw_mutex_state_composition_controls": 1,
+    "serial_guard_release_composition_controls": 1,
+    "owning_clock_provider_used": true,
+    "actual_os_clock_executed": false,
+    "shared_state_pointer_composition_controls": 1
   },
   "vm9_request_string_callbacks_fresh_20261007": {
     "evidence_file": "evidence/vm9_request_string_callbacks_fresh_20261007.json",
@@ -2573,5 +2584,34 @@
       "Format memory differences compare payload 0xA000, main image pages, TLS 0xB00 and generation 0x800 windows, not entire OS state.",
       "Malloc/realloc/free are component Effects; whole-native request, actual realloc, URL/header/JNI and signer output are not established."
     ]
+  },
+  "vm9_request_clock_state_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_clock_state_fresh_20261007.json",
+    "schema": "vm9-request-clock-state-fresh-differential-v1",
+    "status": "monotonic_signed_elapsed_raw_state_serial_release_and_shared_pointer_component_pass",
+    "clock_controls": 48,
+    "storage_controls": 8,
+    "guard_release_controls": 6,
+    "outer_constructor_regression_controls": 4,
+    "negative_controls": 18,
+    "native_input_snapshot_used": false,
+    "monotonic_clock_id": 1,
+    "signed_subtract_and_truncating_divide_verified": true,
+    "raw_state_bytes": 140,
+    "actual_os_clock_executed": false,
+    "matching_libc_mutex_executed_in_guard_release_controls": true,
+    "whole_handoff_native_differential_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "Successful clock uses explicit status/sec/nsec provider, not Android OS clock.",
+      "Clock error/abort, serial release waiter/broadcast, shared pointer writer/saturation and contended mutex branches refuse.",
+      "Payload and relevant global mutex are compared; full native stack/TLS/image/OS state is not compared.",
+      "Fixed synthetic elapsed=0 is not f13 timestamp-freeze evidence.",
+      "Complete request, real URL/header/JNI and signature output remain unverified."
+    ],
+    "shared_pointer_controls": 20
   }
 }

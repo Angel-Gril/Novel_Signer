@@ -1,5 +1,28 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07：请求 monotonic clock、raw state、guard release 与 pointer getter
+
+新增 **82 个 native 组件控制、18 个负控制**及 **4 个既有 outer constructor
+回归**全部通过。`+0x3294b0` 使用显式 clock_gettime(1)；`+0x2914d0` 按
+wrapped int64 SUB 后 signed divide 1000，输出 microseconds。raw `+0x32a330`
+只清零 140 字节，和外层 `+0x17d7e0` 共享清零 helper，保留各自 vtable/flag
+契约。`+0x32d4f8` 无 waiter release 的 byte0-before-lock 顺序和 padding
+已有 matching-libc 对照；broadcast/contended 分支仍拒绝。另有 20 个 pointer getter 对照恢复
+`+0x172ca4 → +0x1727e0` 的 shared acquire / read +0x90 / release，返回 word
+不解引用，writer/saturated/contended 状态拒绝。
+
+同次 owning clock/allocator 组合现在低基址到 **945 / +0xffb48**，下一
+`+0x285fb4 → +0x28dc38`；高基址到 **965 / +0xf8fd0**，下一
+`+0x285a80 → +0x28bb5c`。两条 request 仍为 synthetic，whole-native 分支
+一致性未验证。低基址 elapsed=0 来自两次显式固定 clock 输入，不能当成 f13
+时间戳冻结实测。六个外层 prefix 回归继续通过。
+
+接口、单位/位宽、构造器区别、复现与证据用途见
+[REQUEST_CLOCK_STATE.md](REQUEST_CLOCK_STATE.md)。真实 URL/headers/JNI、完整
+request 返回、fresh Medusa、新线上矩阵及后续下载产品仍未完成。下方保留较早
+阶段记录，不能混作当前 stop。
+
+
 ## 2026-10-07：请求相等性、signed 格式化和 ELF memset 输入接入
 
 此前 `%d|%s` 格式化与高基址相等性停止点已恢复，新增 **56 个 native 对照 /

@@ -72,11 +72,17 @@ def case(library, libc, image, label, property_value, vm_module):
             reallocations.append((pointer, size))
             return session.reallocate(pages, pointer, size)
         diag = {'thread_id': session.thread_id}
+        clock_reads = []
+        def read_clock(pages, clock_id):
+            result = session.read_clock(pages, clock_id)
+            clock_reads.append([clock_id, *result])
+            return result
         try:
             state, frame, vm, ledger, decoded = prefix.execute_prefix(
                 staged, inputs, vm_module, 1791023800, 500000000,
                 allocate=allocate, diagnostic_scope=diag,
-                reallocate=reallocate, free=free, prepare_format=session.prepare_format)
+                reallocate=reallocate, free=free, prepare_format=session.prepare_format,
+                read_clock=read_clock)
             continuation_error = None
         except prefix.RequestContinuationBoundary as exc:
             state, frame, vm, ledger, decoded = (exc.staged, exc.frame, exc.vm,
@@ -86,8 +92,8 @@ def case(library, libc, image, label, property_value, vm_module):
         nested = diag.get('nested_getters', [])
         assert not reallocations, 'this composition must not silently substitute real realloc'
         if image == 0x122C0000:
-            assert vm.steps == 919 and vm.pc - image == 0xFFAE0
-            assert continuation_error == 'RefillUnsupported: unknown request callback +0x285f60 -> +0x2914d0'
+            assert vm.steps == 945 and vm.pc - image == 0xFFB48
+            assert continuation_error == 'RefillUnsupported: unknown request callback +0x285fb4 -> +0x28dc38'
             assert len(nested) == 1
             assert len(diag.get('formatted_strings', [])) == 1
             formatted = diag['formatted_strings'][0]
@@ -96,16 +102,33 @@ def case(library, libc, image, label, property_value, vm_module):
             assert len(diag.get('configuration_insertions', [])) == 1
             assert len(diag.get('string_cleanups', [])) == 1
             assert len(frees) == 5
+            assert len(diag.get('elapsed_clocks', [])) == 1
+            assert diag['elapsed_clocks'][0]['elapsed_microseconds'] == 0
+            assert clock_reads == [[1, 0, 1791023800, 500000000]] * 2
         else:
             assert image == 0x775C205000
-            assert vm.steps == 793 and vm.pc - image == 0xF87BC
-            assert continuation_error == 'RefillUnsupported: unknown request callback +0x2859e0 -> +0x32a330'
+            assert vm.steps == 965 and vm.pc - image == 0xF8FD0
+            assert continuation_error == 'RefillUnsupported: unknown request callback +0x285a80 -> +0x28bb5c'
             assert not nested and not diag.get('formatted_strings')
             assert len(diag.get('string_comparisons', [])) == 1
             assert diag['string_comparisons'][0]['equal'] is False
             assert len(diag.get('guard_acquires', [])) == 1 and diag['guard_acquires'][0]['acquired']
             assert [item['length'] for item in diag.get('memory_fills', [])] == [160]
             assert all(item['value'] == 0 for item in diag['memory_fills'])
+            assert len(diag.get('raw_mutex_states', [])) == 1
+            assert diag['raw_mutex_states'][0]['cleared_bytes'] == 140
+            assert len(diag.get('guard_releases', [])) == 1
+            release = diag['guard_releases'][0]
+            assert release['guard_before_hex'][:4] == '0002'
+            assert release['guard_after_hex'][:4] == '0101'
+            assert release['guard_before_hex'][4:] == release['guard_after_hex'][4:]
+            assert not release['broadcast_executed']
+            assert clock_reads == [[1, 0, 1791023800, 500000000]]
+            assert len(diag.get('shared_state_pointers', [])) == 1
+            getter = diag['shared_state_pointers'][0]
+            assert getter['readers_before'] == getter['readers_after'] == 0
+            assert getter['object_address'] == diag['raw_mutex_states'][0]['storage_address']
+            assert not getter['pointed_value_dereferenced']
         assert any(item['symbol']=='memset' and item['relocation_offset']=='0x382c80'
                    and item['target_offset']=='0x347f20' and item['relocation_kind']==257
                    for item in memory_imports)
@@ -150,6 +173,14 @@ def case(library, libc, image, label, property_value, vm_module):
             string_cleanups=diag.get('string_cleanups', []),
             cstring_constructors=diag.get('cstring_constructors', []),
             guard_acquires=diag.get('guard_acquires', []),
+            guard_releases=diag.get('guard_releases', []),
+            raw_mutex_states=diag.get('raw_mutex_states', []),
+            shared_state_pointers=diag.get('shared_state_pointers', []),
+            clock_stores=diag.get('clock_stores', []),
+            elapsed_clocks=diag.get('elapsed_clocks', []),
+            request_clock_reads=clock_reads,
+            owning_clock_provider_used=True,
+            actual_os_clock_executed=False,
             memory_import_relocations=memory_imports,
             memory_fills=diag.get('memory_fills', []),
             configuration_insertions=diag.get('configuration_insertions', []),
@@ -200,6 +231,11 @@ def main():
         signed_format_composition_controls=sum(row['continued_after_signed_formatter'] for row in rows),
         equality_composition_controls=sum(row['continued_after_string_comparison'] for row in rows),
         matching_libc_realloc_implemented=False,
+        elapsed_clock_composition_controls=sum(bool(row['elapsed_clocks']) for row in rows),
+        raw_mutex_state_composition_controls=sum(bool(row['raw_mutex_states']) for row in rows),
+        serial_guard_release_composition_controls=sum(bool(row['guard_releases']) for row in rows),
+        shared_state_pointer_composition_controls=sum(bool(row['shared_state_pointers']) for row in rows),
+        actual_os_clock_executed=False,
         whole_handoff_native_differential_verified=False,
         real_url_headers_jni_conversion_verified=False,
         no_jvm_rust_signer_complete=False,

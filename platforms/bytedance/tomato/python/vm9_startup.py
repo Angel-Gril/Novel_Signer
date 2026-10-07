@@ -50,6 +50,25 @@ def acquire_serial_guard(pages, *, guard_address, image_base, thread_id=None):
     return acquired
 
 
+def release_serial_guard(pages, *, guard_address, image_base):
+    """+0x32d4f8 serial release with no condition-variable waiters.
+
+    Publish byte0 before mutex lock, then complete byte1 under the mutex.
+    The waiter/broadcast branch remains unsupported and rolls guest pages back.
+    """
+    staged = _PageTransaction(pages)
+    _read_span(staged, guard_address, 8)
+    _write_span(staged, guard_address, b'\1')
+    mutex = image_base + 0x3E2F40
+    objects.lock_uncontended_mutex(staged, mutex_address=mutex)
+    previous = _read_span(staged, guard_address + 1, 1)[0]
+    if previous & 4:
+        raise RefillUnsupported('serial guard release broadcast branch is unsupported')
+    _write_span(staged, guard_address + 1, b'\1')
+    objects.unlock_uncontended_mutex(staged, mutex_address=mutex)
+    staged.commit()
+
+
 def move_callable(pages, *, destination_address, source_address, image_base):
     """+0x3259c4 move with two evidenced inline-copy vtables.
 

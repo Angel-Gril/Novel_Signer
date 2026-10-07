@@ -144,6 +144,49 @@ def clock_gettime(
     return 0
 
 
+def read_monotonic_nanoseconds(pages, *, read_clock: Callable) -> int:
+    """+0x3294b0 successful clock_gettime(1) with an explicit provider.
+
+    Preserve the 64-bit MADD wrap. Clock errors enter a native abort path,
+    which this component refuses instead of fabricating a time value.
+    """
+    result = read_clock(pages, 1)
+    if not isinstance(result, (tuple, list)) or len(result) != 3:
+        raise RefillUnsupported("monotonic provider must return status/sec/nsec")
+    status, seconds, nanoseconds = result
+    if not isinstance(status, int) or status != 0:
+        raise RefillUnsupported("monotonic clock error/abort path is unsupported")
+    if (not isinstance(seconds, int) or not -(1 << 63) <= seconds < (1 << 63)
+            or not isinstance(nanoseconds, int) or not 0 <= nanoseconds < 1_000_000_000):
+        raise RefillUnsupported("invalid monotonic timespec")
+    return (seconds * 1_000_000_000 + nanoseconds) & ((1 << 64) - 1)
+
+
+def store_monotonic_start(pages, *, object_address: int, read_clock: Callable) -> int:
+    """+0x291440 stores the raw nanoseconds word and returns that word."""
+    transaction = _PageTransaction(pages)
+    value = read_monotonic_nanoseconds(transaction, read_clock=read_clock)
+    _write_span(transaction, object_address, value.to_bytes(8, "little"))
+    transaction.commit()
+    return value
+
+
+def elapsed_monotonic_microseconds(pages, *, object_address: int, read_clock: Callable) -> int:
+    """+0x2914d0: wrapped SUB then signed SDIV 1000, truncating toward zero.
+
+    Load the stored start after the provider call as +0x291488 does. This
+    reads an explicit virtual clock; it does not prove Android clock behavior.
+    """
+    transaction = _PageTransaction(pages)
+    current = read_monotonic_nanoseconds(transaction, read_clock=read_clock)
+    start = int.from_bytes(_read_span(transaction, object_address, 8), "little")
+    delta = (current - start) & ((1 << 64) - 1)
+    signed = delta if delta < (1 << 63) else delta - (1 << 64)
+    quotient = abs(signed) // 1000
+    transaction.commit()
+    return -quotient if signed < 0 else quotient
+
+
 def clock_callback(
     pages,
     *,

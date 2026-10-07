@@ -145,9 +145,9 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_diagnostic_contin
 [同次 composition](evidence/vm9_request_diagnostic_continuation_20261007.json)。
 之前的 getter 字段/返回证据见 [REQUEST_NESTED_VM.md](REQUEST_NESTED_VM.md)。
 
-## 5. 新边界与如何引用关键证据
+## 5. 本字符串阶段边界与如何引用关键证据
 
-| 加载基址 | 当前 stop | 下一 callback |
+| 加载基址 | 本字符串阶段 stop | 下一 callback |
 | --- | --- | --- |
 | `0x122c0000` | 919 / `+0xffae0` | `+0x285f60 → +0x2914d0`；原生经 `+0x291488` 做时间差，再 signed divide by 1000；时间单位和 clock/provider 需继续核对 |
 | `0x775c205000` | 793 / `+0xf87bc` | `+0x2859e0 → +0x32a330`；原生连续写零覆盖 140 字节状态；应分清 raw state 和外层对象 constructor |
@@ -164,3 +164,6 @@ resolver 填槽或字符串摘要证明线上 signer 完成。
 完整 request 返回、真实 URL/headers/JNI、fresh Medusa、新线上全头矩阵、无 JVM
 Rust、非空搜索/分页、抖音/起点闭环与最终 Pages/Actions 产品仍未完成。本轮没有
 服务器请求、真实正文或签名输出；不同平台仍按独立目录与证据维护。
+
+后续 clock/raw state/guard release 已继续推进这些边界；最新 stop 与证据见
+[REQUEST_CLOCK_STATE.md](REQUEST_CLOCK_STATE.md)。上述字符串控制的范围不变。

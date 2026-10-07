@@ -108,6 +108,20 @@ def release_uncontended_shared_reader(pages, *, mutex_address: int) -> int:
     return _shared_reader_transition(pages, mutex_address, acquire=False)
 
 
+def read_shared_state_pointer(pages, *, object_address: int) -> int:
+    """+0x172ca4/+0x1727e0 serial shared-reader getter of receiver+0x90.
+
+    Reuse the proven reader transitions; the pointed-to value is returned
+    without dereferencing it. Writer/wait/saturated mutex paths still refuse.
+    """
+    transaction = _PageTransaction(pages)
+    acquire_uncontended_shared_reader(transaction, mutex_address=object_address)
+    pointer = int.from_bytes(_read_span(transaction, object_address + 0x90, 8), "little")
+    release_uncontended_shared_reader(transaction, mutex_address=object_address)
+    transaction.commit()
+    return pointer
+
+
 def clone_string_object(
     pages, *, object_address: int, source_object_address: int,
     allocate: Callable, image_base: int, max_payload_bytes: int = 0x100000,
@@ -1682,16 +1696,29 @@ def construct_signer_root(
     return SignerRoot(object_address, configuration_a, configuration_b, child_a, child_b)
 
 
+def _zero_mutex_storage(pages, object_address):
+    # +0x32a330 writes 0x00..0x8b only; overlapping vector stores end at +0x8c.
+    _read_span(pages, object_address, 0x8C)
+    _write_span(pages, object_address, bytes(0x8C))
+
+
+def initialize_mutex_storage(pages, *, storage_address: int) -> None:
+    """Model +0x32a330 raw 140-byte state, without an outer vtable/flag."""
+    transaction = _PageTransaction(pages)
+    _zero_mutex_storage(transaction, storage_address)
+    transaction.commit()
+
+
 def _mutex_state(pages, object_address, image_base):
     _read_span(pages, object_address, 0x98)
     vtable = _image_address(image_base, 0x34D838)
     _write_span(pages, object_address, _word(vtable))
-    _write_span(pages, object_address + 8, bytes(0x8C))
+    _zero_mutex_storage(pages, object_address + 8)
     _write_span(pages, object_address + 0x94, bytes(1))
 
 
 def construct_mutex_state(pages, *, object_address: int, image_base: int) -> None:
-    """Model +0x17d7e0 and +0x32a330; preserve the last three padding bytes."""
+    """Model +0x17d7e0 outer object; preserve the last three padding bytes."""
     transaction = _PageTransaction(pages)
     _mutex_state(transaction, object_address, image_base)
     transaction.commit()

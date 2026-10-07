@@ -68,7 +68,8 @@ def resolve_request_memory_imports(pages, library, image):
 
 
 def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None,
-                   diagnostic_scope=None, reallocate=None, free=None, prepare_format=None):
+                   diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
+                   read_clock=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -97,8 +98,43 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     source_address=words[1], destination_address=words[2], mask_address=words[3])
                 decoded.append((words[2], length))
             elif (wrapper, target) == (0x28589C, 0x291440):
-                _write_span(vm.m.pages, words[1],
-                    ((seconds * 1_000_000_000 + nanoseconds) & ((1 << 64) - 1)).to_bytes(8, 'little'))
+                import vm9_callbacks
+                provider = read_clock
+                if provider is None:
+                    provider = lambda _p, clock_id: (0, seconds, nanoseconds)
+                value = vm9_callbacks.store_monotonic_start(vm.m.pages,
+                    object_address=words[1], read_clock=provider)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('clock_stores', []).append(dict(
+                        object_address=words[1], clock_id=1, stored_nanoseconds=value,
+                        owning_clock_provider_used=read_clock is not None))
+            elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
+                if diagnostic_scope is None or read_clock is None:
+                    raise PrefixBoundary()
+                import vm9_callbacks
+                value = vm9_callbacks.elapsed_monotonic_microseconds(vm.m.pages,
+                    object_address=words[1], read_clock=read_clock)
+                _write_span(vm.m.pages, argument + 16, (value & ((1 << 64) - 1)).to_bytes(8, 'little'))
+                diagnostic_scope.setdefault('elapsed_clocks', []).append(dict(
+                    object_address=words[1], clock_id=1, elapsed_microseconds=value,
+                    owning_clock_provider_used=True))
+            elif allocate is not None and (wrapper, target) == (0x2859EC, 0x172CA4):
+                if diagnostic_scope is None:
+                    raise PrefixBoundary()
+                readers = vm.m.u32(words[1] + 0x88)
+                pointer = objects.read_shared_state_pointer(vm.m.pages, object_address=words[1])
+                _write_span(vm.m.pages, argument + 16, pointer.to_bytes(8, 'little'))
+                diagnostic_scope.setdefault('shared_state_pointers', []).append(dict(
+                    object_address=words[1], pointer=pointer, readers_before=readers,
+                    readers_after=vm.m.u32(words[1] + 0x88),
+                    pointer_field_offset='0x90', pointed_value_dereferenced=False))
+            elif allocate is not None and (wrapper, target) == (0x2859E0, 0x32A330):
+                if diagnostic_scope is None:
+                    raise PrefixBoundary()
+                objects.initialize_mutex_storage(vm.m.pages, storage_address=words[1])
+                diagnostic_scope.setdefault('raw_mutex_states', []).append(dict(
+                    storage_address=words[1], cleared_bytes=140,
+                    outer_vtable_and_flag_written=False))
             elif (wrapper, target) == (0x2858A8, 0x347F60):
                 _write_span(vm.m.pages, words[1], _read_span(vm.m.pages, words[2], words[3]))
             elif (wrapper, target) == (0x2858BC, 0x25C324):
@@ -172,6 +208,17 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     image_base=image, free=free)
                 diagnostic_scope.setdefault('string_cleanups', []).append(dict(
                     object_address=words[1], released_payload=pointer))
+            elif allocate is not None and (wrapper, target) == (0x28596C, 0x32D4F8):
+                if diagnostic_scope is None:
+                    raise PrefixBoundary()
+                import vm9_startup
+                before = _read_span(vm.m.pages, words[1], 8)
+                vm9_startup.release_serial_guard(vm.m.pages,
+                    guard_address=words[1], image_base=image)
+                diagnostic_scope.setdefault('guard_releases', []).append(dict(
+                    guard_address=words[1], guard_before_hex=before.hex(),
+                    guard_after_hex=_read_span(vm.m.pages, words[1], 8).hex(),
+                    broadcast_executed=False))
             elif allocate is not None and (wrapper, target) == (0x285944, 0x32D3A0):
                 if diagnostic_scope is None:
                     raise PrefixBoundary()

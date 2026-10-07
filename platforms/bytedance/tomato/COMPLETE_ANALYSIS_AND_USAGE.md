@@ -17,7 +17,16 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-07 当前检查点又向前推进：C-string equality、signed `%d|%s`、serial guard
+2026-10-07 最新请求检查点：monotonic clock、140 字节 raw state 和无 waiter
+serial guard release 及 shared pointer getter 新增 **82 个原生控制、18 个负控制**及 **4 个 outer
+constructor 回归**。同次 owning clock/allocator 组合低基址推进到 **945 /
++0xffb48** 的 `+0x28dc38`，高基址到 **965 / +0xf8fd0** 的 `+0x28bb5c`。
+clock id 1、nanoseconds 到 microseconds 的 signed divide、raw/outer constructor
+区别已有组件对照；仍无 whole-native request、真实 URL/headers/JNI 或 fresh
+签名。固定虚拟 clock 所得 elapsed=0 不是线上时间戳冻结证明。完整接口与复现
+见 [REQUEST_CLOCK_STATE.md](REQUEST_CLOCK_STATE.md)。下方是各较早阶段的边界。
+
+2026-10-07 此前字符串阶段检查点：C-string equality、signed `%d|%s`、serial guard
 及 ELF memset 输入依赖新增 **56 个原生对照、11 个负控制**。同次 Python 请求低
 基址到 **919 / +0xffae0**，高基址到 **793 / +0xf87bc**；下一处分别为
 `+0x285f60 → +0x2914d0` 与 `+0x2859e0 → +0x32a330`。本次增长沿 owning
