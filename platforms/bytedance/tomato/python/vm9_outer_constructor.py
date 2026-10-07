@@ -37,6 +37,8 @@ class OuterConstructorResult:
     callback_pair_addresses: tuple[int, int]
     events: tuple[str, ...]
     logger_callback_required: bool
+    publication_result: bool | None
+    constructor_hash: int
 
 
 
@@ -185,6 +187,7 @@ def _model_logger_state_allocations(pages, *, image_base: int,
     The final default record/vector and publication mutex are generated below;
     their semantic fields have a separate native differential.
     """
+    initialize_logger_json_globals(pages, image_base=image_base)
     published: list[int] = []
     for _ in range(2):
         first = allocate(pages, 64)
@@ -216,6 +219,53 @@ def _model_logger_state_allocations(pages, *, image_base: int,
         outer_root_address=outer_root_address, container=published[1],
         record=published[2])
     return tuple(published)
+
+
+def update_outer_constructor_hash(pages, *, image_base: int,
+                                  caller_storage_address: int) -> int:
+    """Recover +0x27cdf0 through +0x27ce44 from the current u32 global.
+
+    LDR W11 zero-extends and STUR X11 writes all eight caller bytes. Each
+    W-register operation below wraps to u32, including BFI's low-20-bit
+    source and EON's complement. No observed output constant is used.
+    """
+    transaction = _PageTransaction(pages)
+    value = int.from_bytes(_read_span(transaction, image_base + 0x3D1994, 4), "little")
+    raw = value.to_bytes(8, "little")
+    _write_span(transaction, caller_storage_address, raw)
+    current = 0x201507
+    for index, byte in enumerate(_read_span(transaction, caller_storage_address, 8)):
+        if index & 1:
+            inserted = byte | ((current & 0xFFFFF) << 12)
+            current = (current ^ (current >> 7) ^ ~inserted) & 0xFFFFFFFF
+        else:
+            current = (current ^ ((current << 6) & 0xFFFFFFFF)
+                       ^ (current >> 4) ^ byte) & 0xFFFFFFFF
+    _write_span(transaction, image_base + 0x3D1998, current.to_bytes(4, "little"))
+    transaction.commit()
+    return current
+
+
+def initialize_logger_json_globals(pages, *, image_base: int) -> None:
+    """Recover +0x28e9f8 through +0x28eabc's four lazy decode/guard pairs.
+
+    The eight differing u32 locations comprise four decoded constants and
+    four guards, not eight guards. Nonzero guards retain existing contents.
+    """
+    transaction = _PageTransaction(pages)
+    for source, mask, destination, guard in (
+        (0x11F1BC, 0x11F1F0, 0x3E1AB0, 0x3E1AB4),
+        (0x11F1C0, 0x11F1EC, 0x3E1AB8, 0x3E1ABC),
+        (0x11F1C4, 0x11F1E8, 0x3E1AC0, 0x3E1AC4),
+        (0x11F1C8, 0x11F1E4, 0x3E1AC8, 0x3E1ACC),
+    ):
+        if not int.from_bytes(_read_span(transaction, image_base + guard, 4), "little"):
+            objects.decode_masked_bytes(transaction,
+                source_address=image_base + source,
+                destination_address=image_base + destination,
+                mask_address=image_base + mask)
+            _write_span(transaction, image_base + guard, (1).to_bytes(4, "little"))
+    transaction.commit()
 
 
 def _publish_default_logger_record(pages, *, image_base: int,
@@ -288,6 +338,8 @@ def construct_default_outer(
     logger_callback_required: bool = False,
     root_output_address: int | None = None,
     singleton_wrapper_address: int | None = None,
+    publication_callback: Callable | None = None,
+    publication_required: bool = False,
 ) -> OuterConstructorResult:
     """Compose the recovered default outer constructor in native call order.
 
@@ -311,6 +363,8 @@ def construct_default_outer(
         raise RefillUnsupported("outer constructor thread id must fit uint32")
     if logger_callback_required and logger_callback is None:
         raise RefillUnsupported("native +0x26e9e0 logger callback is unrecovered")
+    if publication_required and publication_callback is None:
+        raise RefillUnsupported("outer publication requires explicit JNI services")
 
     events: list[str] = []
     staged = _PageTransaction(pages)
@@ -448,6 +502,8 @@ def construct_default_outer(
     objects.construct_signer_child(
         pages, object_address=child_b, image_base=image_base, allocate=allocate)
     events.append(NATIVE_ORDER[13])
+    _publish_outer_children(pages, outer_root_address=outer_root_address,
+                            child_a=child_a, child_b=child_b)
 
     config_reference = objects.construct_configuration_reference(
         pages, image_base=image_base, allocate=allocate,
@@ -531,6 +587,13 @@ def construct_default_outer(
         image_base=image_base, kind="service_refs")
     events.append(NATIVE_ORDER[16])
 
+    # +0x27cd9c publishes the completed outer graph before the final append.
+    publication_result = None
+    if publication_callback is not None:
+        publication_result = bool(publication_callback(
+            pages, root_address=outer_root_address))
+        events.append("+0x28c268:publication-and-JNI-cleanup")
+
     # +0x27cdbc repeats the getter/append path for the decoded global "59".
     registry_temp_59 = temporary
     objects.construct_string_object(
@@ -564,11 +627,12 @@ def construct_default_outer(
     state_flags = int.from_bytes(_read_span(pages, registry_object + 0x130, 8), "little")
     flags = int.from_bytes(_read_span(pages, state_flags + 8, 8), "little")
     _write_span(pages, state_flags + 8, _word(flags | 0x10))
+    constructor_hash = update_outer_constructor_hash(
+        pages, image_base=image_base,
+        caller_storage_address=entry_stack_address - 0x90)
+    events.append("+0x27ce44:constructor-hash")
     stream.release_string_reference(pages, reference_address=second_reference,
                                   image_base=image_base, free=free)
-    _publish_outer_children(pages, outer_root_address=outer_root_address,
-                            child_a=child_a, child_b=child_b)
-
     logger_state_addresses = _model_logger_state_allocations(
         pages, image_base=image_base, outer_root_address=outer_root_address,
         allocate=allocate, free=free)
@@ -609,4 +673,6 @@ def construct_default_outer(
         callback_pair_addresses=(pair_b, pair_a),
         events=tuple(events),
         logger_callback_required=logger_callback_required,
+        publication_result=publication_result,
+        constructor_hash=constructor_hash,
     )

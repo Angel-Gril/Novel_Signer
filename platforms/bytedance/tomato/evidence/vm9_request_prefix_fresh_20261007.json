@@ -1,0 +1,253 @@
+{
+  "schema": "vm9-request-prefix-fresh-differential-v1",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "controls": 6,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "input_w2": 0,
+      "explicit_monotonic_seconds": 0,
+      "explicit_monotonic_nanoseconds": 0,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "native_input_snapshot_used": false,
+      "callback_ledger_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "decoded_global_bytes_equal": true,
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "boundary_descriptor_equal": true,
+      "clock_calls": 1,
+      "request_objects_are_synthetic": true,
+      "handler_profile": "synthetic 128-byte handler with current service vtable",
+      "memcpy_imports_resolved_to_explicit_plt_service": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "input_w2": 1,
+      "explicit_monotonic_seconds": 1234,
+      "explicit_monotonic_nanoseconds": 567890123,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "native_input_snapshot_used": false,
+      "callback_ledger_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "decoded_global_bytes_equal": true,
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "boundary_descriptor_equal": true,
+      "clock_calls": 1,
+      "request_objects_are_synthetic": true,
+      "handler_profile": "synthetic 128-byte handler with current service vtable",
+      "memcpy_imports_resolved_to_explicit_plt_service": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "input_w2": 4294967295,
+      "explicit_monotonic_seconds": 1791023800,
+      "explicit_monotonic_nanoseconds": 500000000,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "native_input_snapshot_used": false,
+      "callback_ledger_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "decoded_global_bytes_equal": true,
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "boundary_descriptor_equal": true,
+      "clock_calls": 1,
+      "request_objects_are_synthetic": true,
+      "handler_profile": "synthetic 128-byte handler with current service vtable",
+      "memcpy_imports_resolved_to_explicit_plt_service": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "input_w2": 0,
+      "explicit_monotonic_seconds": 0,
+      "explicit_monotonic_nanoseconds": 0,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "native_input_snapshot_used": false,
+      "callback_ledger_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "decoded_global_bytes_equal": true,
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "boundary_descriptor_equal": true,
+      "clock_calls": 1,
+      "request_objects_are_synthetic": true,
+      "handler_profile": "synthetic 128-byte handler with current service vtable",
+      "memcpy_imports_resolved_to_explicit_plt_service": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "input_w2": 1,
+      "explicit_monotonic_seconds": 1234,
+      "explicit_monotonic_nanoseconds": 567890123,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "native_input_snapshot_used": false,
+      "callback_ledger_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "decoded_global_bytes_equal": true,
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "boundary_descriptor_equal": true,
+      "clock_calls": 1,
+      "request_objects_are_synthetic": true,
+      "handler_profile": "synthetic 128-byte handler with current service vtable",
+      "memcpy_imports_resolved_to_explicit_plt_service": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "input_w2": 4294967295,
+      "explicit_monotonic_seconds": 1791023800,
+      "explicit_monotonic_nanoseconds": 500000000,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "native_input_snapshot_used": false,
+      "callback_ledger_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "decoded_global_bytes_equal": true,
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "boundary_descriptor_equal": true,
+      "clock_calls": 1,
+      "request_objects_are_synthetic": true,
+      "handler_profile": "synthetic 128-byte handler with current service vtable",
+      "memcpy_imports_resolved_to_explicit_plt_service": true
+    }
+  ],
+  "same_python_outer_handoff_controls": 4,
+  "same_python_outer_handoff_cases": [
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "absent",
+      "same_python_outer_output_used": true,
+      "child_a_callback_pair_used": true,
+      "native_input_snapshot_used": false,
+      "fresh_elf_inputs": true,
+      "virtual_jni_publication_applied": true,
+      "request_objects_are_synthetic": true,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "actual_allocator_request_callback_executed": false,
+      "native_whole_handoff_differential_verified": false,
+      "prefix_state_committed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "property_profile": "sdk_30",
+      "same_python_outer_output_used": true,
+      "child_a_callback_pair_used": true,
+      "native_input_snapshot_used": false,
+      "fresh_elf_inputs": true,
+      "virtual_jni_publication_applied": true,
+      "request_objects_are_synthetic": true,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "actual_allocator_request_callback_executed": false,
+      "native_whole_handoff_differential_verified": false,
+      "prefix_state_committed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "absent",
+      "same_python_outer_output_used": true,
+      "child_a_callback_pair_used": true,
+      "native_input_snapshot_used": false,
+      "fresh_elf_inputs": true,
+      "virtual_jni_publication_applied": true,
+      "request_objects_are_synthetic": true,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "actual_allocator_request_callback_executed": false,
+      "native_whole_handoff_differential_verified": false,
+      "prefix_state_committed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "sdk_30",
+      "same_python_outer_output_used": true,
+      "child_a_callback_pair_used": true,
+      "native_input_snapshot_used": false,
+      "fresh_elf_inputs": true,
+      "virtual_jni_publication_applied": true,
+      "request_objects_are_synthetic": true,
+      "steps": 599,
+      "stop_bytecode_offset": "0xf8078",
+      "boundary_wrapper_offset": "0x2858bc",
+      "boundary_target_offset": "0x25c324",
+      "decoded_lengths": [
+        19,
+        32,
+        9
+      ],
+      "actual_allocator_request_callback_executed": false,
+      "native_whole_handoff_differential_verified": false,
+      "prefix_state_committed": false
+    }
+  ],
+  "fresh_input_signer_output_verified": false,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false,
+  "limitations": [
+    "Request ABI objects are synthetic; URL/header/JNI conversion is not verified.",
+    "Stops before allocating +0x25c324; later request callbacks are unsupported.",
+    "Original native VM is expected-only; Python does not import native memory.",
+    "Defined decodes/registers/callback descriptors are compared; physical scratch is not.",
+    "No actual JVM, OS thread or server request is used."
+  ]
+}

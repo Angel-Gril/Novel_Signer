@@ -1,6 +1,74 @@
 # Current VM9 progress checkpoint
 
-## 2026-10-07：fresh outer 返回对象图与默认记录差分
+## 2026-10-07：构造器收尾与当前请求 caller／VM 前段
+
+最新构造器状态见 [finalization evidence](evidence/vm9_outer_finalize_fresh_20261007.json)。
+此前对象图报告中仍存在的构造器哈希、格式化全局差异以及 publication/JNI 对照缺口，
+已被本次验证取代；旧证据保留为历史记录，不表示当前代码仍缺这些有界分支。
+
+- **8 字节哈希输入来自 u32 零扩展。** `+0x27cdf4` 的 `LDR W11` 零扩展后，
+  `+0x27ce00` 的 `STUR X11` 写完整 8 字节；高 4 字节为零，不是未知栈残留。
+  `update_outer_constructor_hash` 从当前 `image+0x3D1994` 生成输入，以
+  `0x201507` 为初值恢复 8 轮 W-register 运算，再写 `+0x3D1998`。
+  10 组原始指令差分覆盖两基址、5 种 counter、A5 poison 和跨页 caller slot。
+  零输入的 `0xA99E2E98` 仅是对照结果，没有写成输出常量。
+- **8 个全局位置是 4 个解码常量和 4 个 guard。** `+0x28e9f8…+0x28eabc`
+  的 source/mask 对从 fresh ELF 解码 `N/n/D/d`，并发布各 guard=1。
+  前一节“8 个初始化标记”不应解释为 8 个 guard。
+- **publication 接回真实顺序。** 在 `+0x27cd9c → +0x28c268`、最后一次
+  registry `"59"` append 之前发布，入口计数为 293 次分配／99 次释放。
+  两个 tag `0x2000001/0x2000002` 均传同一 outer、int=0、string/object=NULL；
+  两次 invoke 完成后才查询并删除 global/weak-global 返回引用。
+  root、children、callback pair、JNI ledger 和入口 allocator 计数两侧相同。
+  使用的是显式虚拟 JNI 服务，没有实际 JVM；需要 publication 却未提供服务时明确拒绝。
+
+两基址 × absent/SDK30/changed-counter 共 **6 组独立 Python/native 差分**通过。
+20 个对象跨度、310 次分配／115 次释放及选定全局相同；195 个存活分配仍仅
+allocation #308 的 short-string 未使用 padding 不同，已限制差异只位于 padding。
+5 个拒绝控制通过，并验证 guest pages 不变。
+JSON parser/formatter 临时 buffer 的正文仍只恢复 allocator ledger，完整 native
+writable globals、物理栈 scratch 和并发线程没有整体对照。
+
+当前请求的 [离线 bridge reference](evidence/current_request_entry_reference_20261007.json)
+也已修正：12 条 ARRBUILD/ARRBUILD2 对应 6 次 `+0x27152c`、6 次 `+0x271548`，
+它们是 **SetObjectArrayElement 调用后的返回点**，不是 signer entry。
+`VM_ENTRY` 仅打印每种 bytecode 首次命中；本次有 15 种、footer 共 34 次命中，
+不能用首次日志替代完整调用序列。签名轮次首次新出现的 VM 为 `+0xf7720`，
+由 child A pair 的 caller `+0x2830c4` 在 `+0x283130` 调用，返回到 `+0x283134`。
+bridge 对合成 example.invalid URL 生成 1072 字符／802 原始字节的 Medusa 参考，
+只公开摘要、长度和偏移；这次使用 JVM，没有请求服务器，也未证明独立 Python 签名。
+
+新增 [request caller](python/vm9_request_caller.py) 从显式 x0/x1/w2/x3/x8、TLS、
+栈与 fresh ELF 生成 packed inputs、descriptor 和 VM 32 槽前导状态。
+[20 组原生差分](evidence/vm9_request_caller_fresh_20261007.json)覆盖两基址、
+两栈位置、5 种 x2；验证 STR W2 保留 slot 高 4 字节，以及 4 项拒绝／回滚。
+
+[请求 VM 前段差分](evidence/vm9_request_prefix_fresh_20261007.json)进一步执行
+`+0xf7720` 至第 599 步、`+0xf8078`：三次 `+0x285888 → +0x167e54`
+解码 19/32/9 字节，`+0x28589c → +0x291440` 读取显式单调时钟，
+`+0x2858a8 → memcpy` 复制 24 字节。
+6 组原始 native VM 对照验证 callback 输入 ledger、解码字节、全部 32 个 VM 槽和
+最终 descriptor 一致。另有两基址 × absent/SDK30 的 4 组 Python 同次组合，
+直接使用 fresh outer 生成的 child A pair/handler 接入该前段，没有 native 内存补页。
+组合中的请求对象仍是显式合成输入，prefix 状态停在诊断事务中；不是 whole-handoff
+native 对照，也没有执行请求分配 callback。
+
+复现（需要本地匹配样本和 libc；这些私有输入不在 Git 中）：
+
+```powershell
+python platforms/bytedance/tomato/python/verify_vm9_outer_finalize_fresh_20261007.py --output platforms/bytedance/tomato/evidence/vm9_outer_finalize_fresh_20261007.json
+python platforms/bytedance/tomato/python/verify_vm9_request_caller_fresh_20261007.py --output platforms/bytedance/tomato/evidence/vm9_request_caller_fresh_20261007.json
+python platforms/bytedance/tomato/python/verify_vm9_request_prefix_fresh_20261007.py --outer-libc C:\AI\6\_vlibc.so --output platforms/bytedance/tomato/evidence/vm9_request_prefix_fresh_20261007.json
+```
+
+**下一处已确认：`+0x2858bc → +0x25c324` 的配置树 reference 构造。**
+该 wrapper 使用 descriptor 的第 2 个 word 作为 x8 输出；不能把它作为普通 x0
+参数处理。随后还需恢复真实 URL/headers/JNI 输入构造与其余请求 callback，
+把请求分配接回同次 actual allocator，再验证 fresh Medusa 输出与新的线上矩阵。
+完整独立 Python Medusa、无 JVM Rust、非空搜索/分页、抖音/起点和最终
+Pages/Actions 下载产品仍未完成；Rust current Medusa 仍保持 unavailable。
+
+## 此前 2026-10-07：fresh outer 返回对象图与默认记录差分
 
 当前状态以 [fresh object-graph evidence](evidence/vm9_outer_graph_fresh_20261007.json)
 为准。此前 `vm9_outer_constructor_boundary_20261006.json` 的“当前停在

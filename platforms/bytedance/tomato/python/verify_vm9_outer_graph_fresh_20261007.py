@@ -21,6 +21,7 @@ import verify_vm9_signer_objects as oracle
 import verify_vm9_worker_allocator as worker
 import verify_vm9_root_allocator as root_fixture
 import vm9_outer_constructor as outer
+from unicorn.arm64_const import UC_ARM64_REG_X0, UC_ARM64_REG_X10
 
 BASES = (0x122C0000, 0x775C205000)
 GLOBALS = (
@@ -115,8 +116,27 @@ def _comparison(expected, actual):
                 python_sha256=hashlib.sha256(actual).hexdigest())
 
 
-def case(library, libc, image, label, value, vm_module):
+def case(library, libc, image, label, value, vm_module, *,
+         constructor_counter=None, apply_publication=False):
     snapshots = {}
+    entry_observations = {}
+    native_counts = Counter()
+    def execution_observer(cpu, pc):
+        offset = pc - image
+        if offset in (0x347FD0, 0x347FA0):
+            native_counts["alloc" if offset == 0x347FD0 else "free"] += 1
+        if offset == 0x27CE04 and "hash_caller_bytes" not in entry_observations:
+            entry_observations["hash_caller_bytes"] = bytes(cpu.mem_read(
+                cpu.reg_read(UC_ARM64_REG_X10), 8))
+        if offset == 0x28C268:
+            root = cpu.reg_read(UC_ARM64_REG_X0)
+            def u(address):
+                return int.from_bytes(cpu.mem_read(address, 8), "little")
+            children = [u(root + delta) for delta in (0x18, 0x20)]
+            entry_observations["publication"] = dict(
+                root_address=root, children=children,
+                callback_pairs=[bytes(cpu.mem_read(u(child + 0x20), 16)) for child in children],
+                allocation_count=native_counts["alloc"], free_count=native_counts["free"])
     def python_terminal(pages, *, result, singleton_wrapper,
                         allocation_sequence, free_sequence, allocator_events):
         snapshots["python"] = _snapshot(
@@ -125,7 +145,9 @@ def case(library, libc, image, label, value, vm_module):
             allocation_sequence=allocation_sequence, allocator_events=allocator_events)
     # Do not move native before this call: independence is part of the contract.
     python_result = boundary.case(library, libc, image, label, value, vm_module,
-                                  terminal_observer=python_terminal)
+                                  terminal_observer=python_terminal,
+                                  constructor_counter=constructor_counter,
+                                  apply_publication=apply_publication)
     assert python_result["python_constructor_returned"]
     assert not python_result["rejected_at_boundary"] and python_result["rejection"] is None
     def native_terminal(cpu, *, wrapper, root, allocation_sequence,
@@ -135,7 +157,9 @@ def case(library, libc, image, label, value, vm_module):
             image=image, wrapper=wrapper,
             allocation_sequence=allocation_sequence, allocator_events=allocator_events)
     native_result = native.case(library, libc, image, value,
-                                terminal_observer=native_terminal)
+                                terminal_observer=native_terminal,
+                                execution_observer=execution_observer,
+                                constructor_counter=constructor_counter)
     actual, expected = snapshots["python"], snapshots["native"]
     assert actual["allocations"] == expected["allocations"]
     assert [int(pointer, 16) for pointer in python_result["free_calls"]] == native_result["free_sequence"]
@@ -171,7 +195,27 @@ def case(library, libc, image, label, value, vm_module):
                        for offset in run["callback_wrapper_offsets"])
     root_runs = [run for run in python_result["python_vm_runs"] if run["entry_offset"] == "0x991c0"]
     assert len(root_runs) == 1 and root_runs[0]["stop_offset"] == "0x99f04"
+    generated_hash_input = (0 if constructor_counter is None else constructor_counter).to_bytes(8, "little")
+    assert entry_observations["hash_caller_bytes"] == generated_hash_input
+    publication_checks = None
+    if apply_publication:
+        assert python_result["publication_applied"] and python_result["publication_result"] is True
+        assert python_result["publication_ledger"] == native_result["publication_ledger"]
+        assert python_result["publication_observations"] == [entry_observations["publication"]]
+        publication_checks = dict(explicit_jni_services=True, actual_jvm_used=False,
+            invocation_count=2, reference_type_query_count=2,
+            deletion_count=2, callback_and_cleanup_order_equal=True,
+            root_and_children_equal_at_publication=True,
+            callback_pairs_equal_at_publication=True,
+            allocation_and_free_counts_equal_at_publication=True,
+            opaque_first_reference_boolean_result_equal=True,
+            allocation_count_at_publication=entry_observations["publication"]["allocation_count"],
+            free_count_at_publication=entry_observations["publication"]["free_count"])
     return dict(image_base=hex(image), property_profile=label,
+                constructor_counter=constructor_counter,
+                native_hash_caller_matches_zero_extended_u32=True,
+                hash_caller_span_sha256=hashlib.sha256(generated_hash_input).hexdigest(),
+                publication_checks=publication_checks,
                 python_constructor_returned=True, native_outer_getter_returned=True,
                 native_warm_getter_reuses_wrapper=native_result["warm_getter_reuses_wrapper_without_allocator_or_provider_effects"],
                 python_root_vm_runs=root_runs,

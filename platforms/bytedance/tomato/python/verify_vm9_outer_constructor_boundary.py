@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 
 import vm9_objects as objects
+import vm9_callbacks as callbacks
 import vm9_configuration_init as configuration
 import vm9_outer_allocator as outer_allocator
 import vm9_outer_constructor as outer_constructor
@@ -41,8 +42,13 @@ def _hex(value):
 
 def case(library: Path, libc: Path, image: int, label: str, property_value: bytes | None,
          vm_module, apply_logger_model=False, capture_logger_handoff=False,
-         apply_handoff_model=False, logger_observer=None, terminal_observer=None):
+         apply_handoff_model=False, logger_observer=None, terminal_observer=None,
+         constructor_counter=None, apply_publication=False):
     pages, _, _ = root_fixture.fresh(library, libc, image, property_value)
+    if constructor_counter is not None:
+        if not isinstance(constructor_counter, int) or not 0 <= constructor_counter <= 0xFFFFFFFF:
+            raise ValueError("constructor counter must fit u32")
+        _w(pages, image + 0x3D1994, constructor_counter, 4)
     environment = worker_fixture.Environment(pages, 2)
     threads: list[list[int]] = []
     destructor_calls: list[list[int]] = []
@@ -61,6 +67,35 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
     python_vm_runs: list[dict] = []
     logger_applied: list[bool] = []
     constructor_result = None
+    publication_ledger: list[list] = []
+    publication_observations: list[dict] = []
+
+    def publish(staged, *, root_address):
+        # Services match the native control's explicit opaque reference profile.
+        refs = iter((io.GUEST + 0x8000, io.GUEST + 0x8010))
+        types = {io.GUEST + 0x8000: 2, io.GUEST + 0x8010: 3}
+        def invoke(*values):
+            publication_ledger.append(["invoke", *values])
+            return next(refs)
+        def get_type(environment, reference):
+            publication_ledger.append(["get_type", environment, reference])
+            return types[reference]
+        def delete(kind, environment, reference):
+            publication_ledger.append(["delete", kind, environment, reference])
+        def u(address):
+            return int.from_bytes(_read_span(staged, address, 8), "little")
+        children = [u(root_address + offset) for offset in (0x18, 0x20)]
+        publication_observations.append({
+            "root_address": root_address,
+            "children": children,
+            "callback_pairs": [
+                _read_span(staged, u(child + 0x20), 16) for child in children],
+            "allocation_count": len(allocation_calls),
+            "free_count": len(free_calls),
+        })
+        return callbacks.publish_signer_handle(root_address=root_address,
+            environment=io.GUEST + 0x7800, invoke=invoke,
+            get_reference_type=get_type, delete_reference=delete)
 
     def create_thread(staged, output, _attr, entry, argument):
         handle = io.GUEST + 0xC800 + len(threads) * 0x100
@@ -296,7 +331,9 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
                 root_output_address=io.GUEST + 0x1800,
                 singleton_wrapper_address=singleton_wrapper,
                 logger_handoff_callback=(capture_logger_handoff if capture_logger_handoff else None),
-                logger_observer=observe_logger)
+                logger_observer=observe_logger,
+                publication_callback=publish if apply_publication else None,
+                publication_required=apply_publication)
         except RefillUnsupported as exc:
             error = str(exc)
         else:
@@ -319,6 +356,11 @@ def case(library: Path, libc: Path, image: int, label: str, property_value: byte
         "rejected_at_boundary": error is not None,
         "python_constructor_returned": constructor_result is not None,
         "python_outer_native_state_complete": False,
+        "constructor_hash_generated": None if constructor_result is None else constructor_result.constructor_hash,
+        "publication_applied": bool(publication_observations),
+        "publication_result": None if constructor_result is None else constructor_result.publication_result,
+        "publication_ledger": publication_ledger,
+        "publication_observations": publication_observations,
         "logger_record_state_complete": False,
         "rejection": error,
         "logger_calls": logger_calls,

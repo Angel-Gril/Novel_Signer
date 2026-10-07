@@ -1,0 +1,236 @@
+{
+  "schema": "current-request-entry-reference-v2",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "bridge_class_sha256": "86440c51197d5ce6c5e092037c83533701e39b35f4428ab50c353edde6cb0f08",
+  "input_profile": "synthetic example.invalid URL; aid1967/query synthetic/offset0",
+  "input_sha256": "ea2cdac6ffbf3404dcf20aae9f683a445fd2f0d3643824ed3dcecbe9ec8677d7",
+  "bridge_used": true,
+  "jvm_used": true,
+  "server_request_performed": false,
+  "medusa_base64_characters": 1072,
+  "medusa_raw_bytes": 802,
+  "medusa_value_sha256": "5155d76a5a1f0468cae2f23fca9dd3e3de69888195708d35838bdf6acfa580d9",
+  "jni_array_observations": [
+    {
+      "marker": "ARRBUILD",
+      "observation_offset": "0x27152c",
+      "link_register_offset": "0x27152c",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement",
+      "observed_w2": 0
+    },
+    {
+      "marker": "ARRBUILD2",
+      "observation_offset": "0x271548",
+      "link_register_offset": "0x271548",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement"
+    },
+    {
+      "marker": "ARRBUILD",
+      "observation_offset": "0x27152c",
+      "link_register_offset": "0x27152c",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement",
+      "observed_w2": 2
+    },
+    {
+      "marker": "ARRBUILD2",
+      "observation_offset": "0x271548",
+      "link_register_offset": "0x271548",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement"
+    },
+    {
+      "marker": "ARRBUILD",
+      "observation_offset": "0x27152c",
+      "link_register_offset": "0x27152c",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement",
+      "observed_w2": 4
+    },
+    {
+      "marker": "ARRBUILD2",
+      "observation_offset": "0x271548",
+      "link_register_offset": "0x271548",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement"
+    },
+    {
+      "marker": "ARRBUILD",
+      "observation_offset": "0x27152c",
+      "link_register_offset": "0x27152c",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement",
+      "observed_w2": 6
+    },
+    {
+      "marker": "ARRBUILD2",
+      "observation_offset": "0x271548",
+      "link_register_offset": "0x271548",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement"
+    },
+    {
+      "marker": "ARRBUILD",
+      "observation_offset": "0x27152c",
+      "link_register_offset": "0x27152c",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement",
+      "observed_w2": 8
+    },
+    {
+      "marker": "ARRBUILD2",
+      "observation_offset": "0x271548",
+      "link_register_offset": "0x271548",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement"
+    },
+    {
+      "marker": "ARRBUILD",
+      "observation_offset": "0x27152c",
+      "link_register_offset": "0x27152c",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement",
+      "observed_w2": 10
+    },
+    {
+      "marker": "ARRBUILD2",
+      "observation_offset": "0x271548",
+      "link_register_offset": "0x271548",
+      "sign_round": 0,
+      "classification": "return_after_SetObjectArrayElement"
+    }
+  ],
+  "jni_array_observation_counts": {
+    "0x27152c": 6,
+    "0x271548": 6
+  },
+  "vm_first_hit_observations": [
+    {
+      "bytecode_offset": "0xa7050",
+      "caller_return_offset": "0x280468",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0x8a040",
+      "caller_return_offset": "0x204eac",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0x8a4f0",
+      "caller_return_offset": "0x204f30",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0x76b30",
+      "caller_return_offset": "0x17a658",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0x991c0",
+      "caller_return_offset": "0x257368",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0x9a6f0",
+      "caller_return_offset": "0x26266c",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0xa46a0",
+      "caller_return_offset": "0x2699e8",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0x706c0",
+      "caller_return_offset": "0x15f29c",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0x98d50",
+      "caller_return_offset": "0x256eb0",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0x7ca60",
+      "caller_return_offset": "0x17a6e0",
+      "sign_round": null,
+      "phase": "initialization"
+    },
+    {
+      "bytecode_offset": "0xf7720",
+      "caller_return_offset": "0x283134",
+      "sign_round": 0,
+      "phase": "sign_round"
+    },
+    {
+      "bytecode_offset": "0x118570",
+      "caller_return_offset": "0x28755c",
+      "sign_round": 0,
+      "phase": "sign_round"
+    },
+    {
+      "bytecode_offset": "0x118f50",
+      "caller_return_offset": "0x288224",
+      "sign_round": 0,
+      "phase": "sign_round"
+    },
+    {
+      "bytecode_offset": "0x102bb0",
+      "caller_return_offset": "0x2874d8",
+      "sign_round": 0,
+      "phase": "sign_round"
+    },
+    {
+      "bytecode_offset": "0xa71d0",
+      "caller_return_offset": "0x2804f0",
+      "sign_round": 0,
+      "phase": "sign_round"
+    }
+  ],
+  "vm_hit_counts": {
+    "0x706c0": 1,
+    "0x76b30": 1,
+    "0x7ca60": 1,
+    "0x8a040": 3,
+    "0x8a4f0": 1,
+    "0x98d50": 8,
+    "0x991c0": 2,
+    "0x9a6f0": 3,
+    "0xa46a0": 6,
+    "0xa7050": 2,
+    "0xa71d0": 1,
+    "0xf7720": 1,
+    "0x102bb0": 1,
+    "0x118570": 1,
+    "0x118f50": 2
+  },
+  "observed_total_vm_hits": 34,
+  "vm_logging_semantics": "first hit per distinct bytecode; footer counts all instrumented hits",
+  "first_new_vm_in_sign_round": {
+    "bytecode_offset": "0xf7720",
+    "caller_entry_offset": "0x2830c4",
+    "caller_vm_call_offset": "0x283130",
+    "caller_return_offset": "0x283134"
+  },
+  "independent_python_signature_verified": false,
+  "current_online_header_matrix_verified": false,
+  "limitations": [
+    "This is an offline JVM-backed bridge reference, not a standalone Python signer.",
+    "VM_ENTRY does not print repeated hits; absence in a round does not prove non-execution.",
+    "The first newly observed request VM is not proven to be the only request entry.",
+    "ARRBUILD hooks observe post-call JNI array returns, not signature generation entries.",
+    "Only offsets/counts/hashes/lengths are exported; raw memory, logs and header values remain private."
+  ]
+}

@@ -1,0 +1,281 @@
+{
+  "schema": "vm9-request-caller-fresh-differential-v1",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "controls": 20,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0x0",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0x1",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0x12345678",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0xffffffff",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0xfedcba9876543210",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0x0",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0x1",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0x12345678",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0xffffffff",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0xfedcba9876543210",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0x0",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0x1",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0x12345678",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0xffffffff",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ef00",
+      "input_x2": "0xfedcba9876543210",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0x0",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0x1",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0x12345678",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0xffffffff",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry_stack_address": "0x7000ec00",
+      "input_x2": "0xfedcba9876543210",
+      "original_elf_instructions_executed": true,
+      "native_input_snapshot_used": false,
+      "caller_vm_arguments_equal": true,
+      "packed_and_saved_frame_spans_equal": true,
+      "all_32_backing_words_equal": true,
+      "w2_upper_word_preserved": true,
+      "request_bytecode_executed": false
+    }
+  ],
+  "negative_controls": [
+    {
+      "control": "unaligned_stack",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "control": "tagged_return",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "control": "negative_word",
+      "rejected": true,
+      "pages_unchanged": true
+    },
+    {
+      "control": "unmapped_stack",
+      "rejected": true,
+      "pages_unchanged": true
+    }
+  ],
+  "native_caller_entry_offset": "0x2830c4",
+  "request_vm_offset": "0xf7720",
+  "original_prelude_stop_offset": "0x1684f0",
+  "fresh_input_signer_output_verified": false,
+  "complete_python_medusa": false,
+  "current_online_header_matrix_verified": false,
+  "limitations": [
+    "Native request arguments are explicit ABI words; URL/header conversion is unresolved.",
+    "Only defined caller/VM backing spans are compared, not physical prelude scratch.",
+    "This does not execute request bytecode, produce headers or contact a server."
+  ]
+}

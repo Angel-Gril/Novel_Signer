@@ -1,8 +1,6 @@
-> **2026-10-07 当前状态：** fresh Python outer 已返回，4 组 native 差分通过
-> 20 个对象跨度、allocator/free ledger 与默认 logger record 的语义字段。
-> 此前“当前仍停在 `+0x2584ac`”是历史结论，已被新运行取代。
-> 构造器哈希、JSON 初始化标记、完整 publication/JNI 和 fresh 请求签名仍待恢复。
-> 最新验证范围、复现入口和剩余缺口由 [VM9_PROGRESS.md](VM9_PROGRESS.md) 统一记录。
+> **2026-10-07 当前状态：** 构造器收尾、显式 JNI publication 服务、当前请求 caller
+> 与有界请求 VM 前段已有 fresh 对照；独立 fresh Medusa 签名仍未完成。
+> 验证范围、下一处 callback 与历史结论的更新由 [VM9_PROGRESS.md](VM9_PROGRESS.md) 统一记录。
 
 
 ## 2026-10-06: f13 clock input boundary

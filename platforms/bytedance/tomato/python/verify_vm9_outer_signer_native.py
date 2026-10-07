@@ -65,9 +65,13 @@ def bind_native_imports(library, libc, redirect, imports):
     return exports
 
 
-def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None, terminal_observer=None, execution_observer=None):
+def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None, terminal_observer=None, execution_observer=None, constructor_counter=None):
     pages, sdk_name = fresh(library, libc, image, property_value)
     if canary is not None: _w(pages, root_fixture.TLS + 0x28, canary)
+    if constructor_counter is not None:
+        if not isinstance(constructor_counter, int) or not 0 <= constructor_counter <= 0xFFFFFFFF:
+            raise ValueError("constructor counter must fit u32")
+        _w(pages, image + 0x3D1994, constructor_counter, 4)
     environment = h.Environment(pages, 2)
     if mapping_address is not None: environment.os.next_address = mapping_address
     observed = io.observed_spans()
@@ -333,7 +337,8 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
         actual_allocator_counts=dict(counts), actual_entry_counts=dict(entries), **root_inputs, **returned_graph,
         virtual_thread_entry_offsets=[hex(entry - image) for _, entry, _ in virtual_threads],
         explicit_service_counts=dict(services), allocation_sequence=allocation_sequence, allocation_unwind=allocation_unwind, string_allocations=string_allocations, bss_writes=bss_writes, bss_changes=bss_changes, allocator_events=allocator_events,
-        free_sequence=free_sequence, ordered_callback_publication_and_jni_cleanup_verified=True,
+        free_sequence=free_sequence, publication_ledger=invokes + references,
+        ordered_callback_publication_and_jni_cleanup_verified=True,
         virtual_descriptors_not_executed=True, physical_stack_compared=False, substituted_allocations=0,
         native_input_snapshot_used=False, python_outer_comparison_passed=False)
 
