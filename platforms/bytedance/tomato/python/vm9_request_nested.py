@@ -239,3 +239,48 @@ def movhi_request_word(pages, *, image_base, x19, x20, x22, x23, x28, x29, x30):
         "register_updates": {"x8": target, "x9": word, "x10": scratch_field,
             "x11": immediate, "x12": return_key, "x13": dst, "x14": next_word,
             "x15": 0x01010104}, "writes": writes}
+
+
+def ori_request_word(pages, *, image_base, x19, x20, x22, x23, x28, x29, x30):
+    """Execute normal +0x16e32c op48, including scratch/stream write order."""
+    values = (image_base, x19, x20, x22, x23, x28, x29, x30)
+    if any(not isinstance(v, int) or not 0 <= v <= MASK64 for v in values):
+        raise RefillUnsupported("ORi inputs must fit uint64")
+    _guard(image_base, 0x21280021, 0x040000109BB64956, 0x044F5590)
+    staged = _PageTransaction(pages)
+    writes = []
+
+    def read(address, width):
+        return int.from_bytes(_read_span(staged, address, width), "little")
+
+    def write(address, value, width):
+        _write_span(staged, address, value.to_bytes(width, "little"))
+        writes.append((address, width))
+
+    current = read(x19, 8)
+    word = read(current, 4)
+    if word & 0x3F != 48:
+        raise RefillUnsupported("ORi word is not VM op48")
+    src = word >> 27
+    dst = (word >> 22) & 31
+    immediate = ((word >> 16) & 31) | ((word >> 1) & 0x7FE0) | ((word >> 6) & 0x8000)
+    value = read(x28 + src * 8, 8) | immediate
+    write(x22, src, 4)
+    write(x28 + dst * 8, value, 8)
+    write(x23, dst, 4)
+    write(x30, immediate, 2)
+    next_pointer = (current + 4) & MASK64
+    next_word = read(next_pointer, 4)
+    write(x19, next_pointer, 8)
+    table_base = read(x20 + 0x8D8, 8)
+    entry = (table_base + _dispatch_mask(image_base) + (next_word & 63) * 8) & MASK64
+    return_key = read(x29 - 8, 8)
+    encoded = read(entry, 8)
+    target = (encoded - return_key) & MASK64
+    staged.commit()
+    return {"word_address": current, "word": word, "next_word": next_word,
+        "src": src, "dst": dst, "immediate": immediate, "value": value,
+        "next_handler": target, "next_handler_offset": target - image_base,
+        "register_updates": {"x8": target, "x9": return_key, "x10": dst,
+            "x11": immediate, "x12": src, "x13": next_word & 63,
+            "x14": next_word, "x15": 0x01010104}, "writes": writes}

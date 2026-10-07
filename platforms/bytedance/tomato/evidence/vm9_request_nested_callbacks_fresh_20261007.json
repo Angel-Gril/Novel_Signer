@@ -1,0 +1,803 @@
+{
+  "schema": "vm9-request-nested-callbacks-fresh-differential-v1",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "ori_controls": 12,
+  "ori_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "ELF_sample",
+      "src": 19,
+      "dst": 1,
+      "immediate": "0x6560",
+      "word": "0x9840caf0",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x16f8e0",
+      "dispatch_table_kind": "relocated_ELF",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "zero",
+      "src": 0,
+      "dst": 31,
+      "immediate": "0x0",
+      "word": "0x7c00030",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x160060",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "max",
+      "src": 31,
+      "dst": 0,
+      "immediate": "0xffff",
+      "word": "0xf83ffff0",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x160060",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "self_alias",
+      "src": 31,
+      "dst": 31,
+      "immediate": "0x8000",
+      "word": "0xffe00030",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x160060",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "scratch_alias_source",
+      "src": 1,
+      "dst": 2,
+      "immediate": "0x7fff",
+      "word": "0x89ffff0",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x160060",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "current_word_alias_destination",
+      "src": 31,
+      "dst": 16,
+      "immediate": "0x1234",
+      "word": "0xfc142470",
+      "next_word": "0xe3d2c5b",
+      "next_handler_offset": "0x16006c",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "ELF_sample",
+      "src": 19,
+      "dst": 1,
+      "immediate": "0x6560",
+      "word": "0x9840caf0",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x16f8e0",
+      "dispatch_table_kind": "relocated_ELF",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero",
+      "src": 0,
+      "dst": 31,
+      "immediate": "0x0",
+      "word": "0x7c00030",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x160060",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "max",
+      "src": 31,
+      "dst": 0,
+      "immediate": "0xffff",
+      "word": "0xf83ffff0",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x160060",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "self_alias",
+      "src": 31,
+      "dst": 31,
+      "immediate": "0x8000",
+      "word": "0xffe00030",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x160060",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "scratch_alias_source",
+      "src": 1,
+      "dst": 2,
+      "immediate": "0x7fff",
+      "word": "0x89ffff0",
+      "next_word": "0x11600218",
+      "next_handler_offset": "0x160060",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "current_word_alias_destination",
+      "src": 31,
+      "dst": 16,
+      "immediate": "0x1234",
+      "word": "0xfc142470",
+      "next_word": "0xe3d2c5b",
+      "next_handler_offset": "0x16006c",
+      "dispatch_table_kind": "explicit_synthetic",
+      "full_guest_bytes_compared": 65536,
+      "full_guest_memory_match": true,
+      "registers_match": true,
+      "ordered_writes_match": true,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "getter_controls": 12,
+  "getter_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "object_offset": "0x1800",
+      "output_offset": "0x8000",
+      "fresh_fill": "0xa5",
+      "declared_length": "0x0",
+      "fixture_payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "malloc_null": false,
+      "allocation_sizes": [
+        1
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "embedded_nul_cross_page",
+      "object_offset": "0x1ff8",
+      "output_offset": "0x8ff8",
+      "fresh_fill": "0x5a",
+      "declared_length": "0x5",
+      "fixture_payload_sha256": "1bd95cf6379b94fd3b6ceb1390b70b822c76442c4bfb8273b941e09d8dfd9b56",
+      "malloc_null": false,
+      "allocation_sizes": [
+        6
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "utf8",
+      "object_offset": "0x2800",
+      "output_offset": "0x9000",
+      "fresh_fill": "0x3c",
+      "declared_length": "0xc",
+      "fixture_payload_sha256": "2bb9b61c521a4e0f9a9be3c9018d24a9a46a370e9ded6785906c5c260bbde1a7",
+      "malloc_null": false,
+      "allocation_sizes": [
+        13
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "long_high_reader",
+      "object_offset": "0x1800",
+      "output_offset": "0x8000",
+      "fresh_fill": "0x0",
+      "declared_length": "0x41",
+      "fixture_payload_sha256": "9537c5fdf120482f7d58d25e9ed583f52c02b4e304ea814db1633ad565aed7e9",
+      "malloc_null": false,
+      "allocation_sizes": [
+        66
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "malloc_null",
+      "object_offset": "0x2900",
+      "output_offset": "0x8100",
+      "fresh_fill": "0xcc",
+      "declared_length": "0x12",
+      "fixture_payload_sha256": "e420def855088f67aa029bc6342ebf6715180ebac47d6a2a0375345b26f6506c",
+      "malloc_null": true,
+      "allocation_sizes": [
+        19
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_length",
+      "object_offset": "0x1800",
+      "output_offset": "0x8000",
+      "fresh_fill": "0x11",
+      "declared_length": "0xffffffff",
+      "fixture_payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "malloc_null": false,
+      "allocation_sizes": [],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "object_offset": "0x1800",
+      "output_offset": "0x8000",
+      "fresh_fill": "0xa5",
+      "declared_length": "0x0",
+      "fixture_payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "malloc_null": false,
+      "allocation_sizes": [
+        1
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "embedded_nul_cross_page",
+      "object_offset": "0x1ff8",
+      "output_offset": "0x8ff8",
+      "fresh_fill": "0x5a",
+      "declared_length": "0x5",
+      "fixture_payload_sha256": "1bd95cf6379b94fd3b6ceb1390b70b822c76442c4bfb8273b941e09d8dfd9b56",
+      "malloc_null": false,
+      "allocation_sizes": [
+        6
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "utf8",
+      "object_offset": "0x2800",
+      "output_offset": "0x9000",
+      "fresh_fill": "0x3c",
+      "declared_length": "0xc",
+      "fixture_payload_sha256": "2bb9b61c521a4e0f9a9be3c9018d24a9a46a370e9ded6785906c5c260bbde1a7",
+      "malloc_null": false,
+      "allocation_sizes": [
+        13
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "long_high_reader",
+      "object_offset": "0x1800",
+      "output_offset": "0x8000",
+      "fresh_fill": "0x0",
+      "declared_length": "0x41",
+      "fixture_payload_sha256": "9537c5fdf120482f7d58d25e9ed583f52c02b4e304ea814db1633ad565aed7e9",
+      "malloc_null": false,
+      "allocation_sizes": [
+        66
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "malloc_null",
+      "object_offset": "0x2900",
+      "output_offset": "0x8100",
+      "fresh_fill": "0xcc",
+      "declared_length": "0x12",
+      "fixture_payload_sha256": "e420def855088f67aa029bc6342ebf6715180ebac47d6a2a0375345b26f6506c",
+      "malloc_null": true,
+      "allocation_sizes": [
+        19
+      ],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_length",
+      "object_offset": "0x1800",
+      "output_offset": "0x8000",
+      "fresh_fill": "0x11",
+      "declared_length": "0xffffffff",
+      "fixture_payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "malloc_null": false,
+      "allocation_sizes": [],
+      "semantic_vm_steps": 54,
+      "vm_exit_offset": "0x99150",
+      "callback_pairs": [
+        [
+          "0x25705c",
+          "0x32a444"
+        ],
+        [
+          "0x257068",
+          "0x2483e0"
+        ],
+        [
+          "0x25705c",
+          "0x32a4fc"
+        ]
+      ],
+      "callback_inputs_and_32_slots_match": true,
+      "final_backing_and_virtual_stack_match": true,
+      "stream_slot_match": true,
+      "payload_bytes_compared": 40960,
+      "full_payload_memory_match": true,
+      "allocation_sequence_match": true,
+      "matching_libc_mutexes_executed": true,
+      "reader_count_restored": true,
+      "native_caller_returned": true,
+      "python_vm_exited": true,
+      "native_caller_abi_return_python_modeled": false,
+      "explicit_allocator_service_used": true,
+      "native_input_snapshot_used": false,
+      "real_url_headers_jni_conversion_verified": false
+    }
+  ],
+  "wrapper_controls": 4,
+  "wrapper_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "wrapper_offset": "0x285978",
+      "derived_caller_abi_matches_native_entry": true,
+      "native_wrapper_returned": true,
+      "native_wrapper_restored_sp_lr_and_callee_saved_registers": true,
+      "model_payload_matches_native_wrapper": true,
+      "allocation_sequence_matches": true,
+      "model_inputs_from_native_snapshot": false,
+      "explicit_request_frame_inputs": true,
+      "semantic_vm_steps": 54,
+      "python_full_native_caller_abi_modeled": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "embedded_nul_cross_page",
+      "wrapper_offset": "0x285978",
+      "derived_caller_abi_matches_native_entry": true,
+      "native_wrapper_returned": true,
+      "native_wrapper_restored_sp_lr_and_callee_saved_registers": true,
+      "model_payload_matches_native_wrapper": true,
+      "allocation_sequence_matches": true,
+      "model_inputs_from_native_snapshot": false,
+      "explicit_request_frame_inputs": true,
+      "semantic_vm_steps": 54,
+      "python_full_native_caller_abi_modeled": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "wrapper_offset": "0x285978",
+      "derived_caller_abi_matches_native_entry": true,
+      "native_wrapper_returned": true,
+      "native_wrapper_restored_sp_lr_and_callee_saved_registers": true,
+      "model_payload_matches_native_wrapper": true,
+      "allocation_sequence_matches": true,
+      "model_inputs_from_native_snapshot": false,
+      "explicit_request_frame_inputs": true,
+      "semantic_vm_steps": 54,
+      "python_full_native_caller_abi_modeled": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "embedded_nul_cross_page",
+      "wrapper_offset": "0x285978",
+      "derived_caller_abi_matches_native_entry": true,
+      "native_wrapper_returned": true,
+      "native_wrapper_restored_sp_lr_and_callee_saved_registers": true,
+      "model_payload_matches_native_wrapper": true,
+      "allocation_sequence_matches": true,
+      "model_inputs_from_native_snapshot": false,
+      "explicit_request_frame_inputs": true,
+      "semantic_vm_steps": 54,
+      "python_full_native_caller_abi_modeled": false
+    }
+  ],
+  "request_wrapper_caller_abi_verified": true,
+  "negative_cases": [
+    "nonpositive_budget_refused_without_page_or_allocation_changes",
+    "exhausted_budget_refused_without_page_or_allocation_changes",
+    "output_unmapped_refused_without_page_or_allocation_changes",
+    "oversized_source_refused_without_page_or_allocation_changes",
+    "unmapped_source_refused_without_page_or_allocation_changes",
+    "reader_wait_required_refused_without_page_or_allocation_changes",
+    "unknown_callback_target_refused_without_page_or_allocation_changes"
+  ],
+  "ori_python_implementation_verified": true,
+  "nested_getter_callback_cycle_verified": true,
+  "native_caller_return_verified": true,
+  "python_semantic_vm_exit_verified": true,
+  "python_full_native_caller_abi_modeled": false,
+  "real_request_outer_composition_verified": false,
+  "real_url_headers_jni_conversion_verified": false,
+  "complete_python_medusa": false,
+  "fresh_input_signer_output_verified": false,
+  "current_online_header_matrix_verified": false,
+  "no_jvm_rust_signer_complete": false,
+  "limitations": [
+    "Reader and source StringObject states are explicit fixtures, not recovered Java/URL/header inputs.",
+    "Allocation is an explicit service; the native side executes actual matching-libc mutexes, not real malloc boot.",
+    "Remaining VM semantics reuse vm_full with guest-backed slots. Other physical frame spills and repair paths are outside the contract.",
+    "Native caller return and Python VM exit are proved; the full native caller ABI return is not modeled in Python.",
+    "No JVM, captured input snapshot, online request or signature output is used."
+  ]
+}

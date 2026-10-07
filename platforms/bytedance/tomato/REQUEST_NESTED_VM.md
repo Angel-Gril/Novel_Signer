@@ -1,4 +1,4 @@
-# 番茄 request nested VM：fresh 前缀、字段和调用证据
+# 番茄 request nested VM：fresh 前缀、字符串 getter 和调用证据
 
 更新：2026-10-07。范围严格绑定到私有样本 SHA-256：
 
@@ -6,15 +6,22 @@
 712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c
 ```
 
-本轮可复核结论：在显式 native object/x8、fresh guest 页和 ELF 重定位输入下，
-Python 已恢复 request dispatcher 的正常路径，执行 10 次 STORE64、op17
-sub-dispatch、OR64 和 signed MOVhi，并与原生 ARM64 对照到 `image+0x16e32c`。
-没有使用 native 前导页、堆或寄存器快照作为 Python 输入。
+当前可复核结论：Python 已恢复 `+0x16e32c` 的正常 OR immediate，并在
+独立生成的 caller、ELF 重定位和显式 reader/string 输入上，执行完整的
+`+0x256ed4 / VM +0x99020` 字符串 getter。它完成 acquire → clone → release，
+在 bytecode `image+0x99150` 退出；原生 caller 的返回另有独立观察。
+28 组新增 native/Python 对照和 7 个负控制通过，没有把 native 快照作为模型输入。
 
-这是一段研究组件链。真实 URL、headers 和 JNI 对象转换、整个 request VM 返回、
-完整独立 Medusa、当前线上验签和无 JVM Rust 下载器仍未完成。对应公开证据的
-`complete_python_medusa`、`fresh_input_signer_output_verified`、
-`current_online_header_matrix_verified` 和 `no_jvm_rust_signer_complete` 均为 `false`。
+同次 Python outer/request 组合在低加载基址 `0x122c0000` 使用已构造的 receiver
+和原 allocator/OS session，推进至第 816 步、bytecode `+0xf85b4`；下一处是
+`+0x285990 → +0x248908`。高加载基址 `0x775c205000` 的外层控制在第 641 步
+停于更早的 `+0x2858ec → +0x24880c`，没有完成 getter 组合。
+这一外层分支差异尚无 whole-native 对照，不能当成原生必然不同的证明。
+
+整个 request VM、真实 URL/headers/JNI 转换、完整独立 Medusa、fresh 签名和当前
+线上矩阵仍未完成。Python 没有完整建模 native caller epilogue/ABI 返回；独立
+getter 对照使用显式 malloc 服务和 matching-libc 的真实 mutex，外层使用现有
+matching-libc allocator 模型。这两个证据范围必须分别引用。
 
 ## 1. 原生边界与已验证行为
 
@@ -26,7 +33,11 @@ sub-dispatch、OR64 和 signed MOVhi，并与原生 ARM64 对照到 `image+0x16e
 | `+0x16855c` | 从当前 stream 加载 `w21`，取 sub 字段 | 当前 word `0x01c10b11` 为 op17/sub44，选择 `+0x16a5a8` |
 | `+0x16a5a8` | 使用 `x21` 的 source/destination 字段 | `R[16] = R[7] | R[0]`，下一跳 `+0x16e158` |
 | `+0x16e158` | VM op52，signed MOVhi | word `0x58f30ff4`；`R[19] = 0xfffffffffed30000` |
-| `+0x16e32c` | 下一条 word 已位于 `image+0x99054` | 已定位并验证到达；body 尚未恢复 |
+| `+0x16e32c` | op48 OR immediate，word `0x9840caf0` | `R[1] = R[19] \| 0x6560`；推进 stream 至 `+0x99058`，下一 handler 为 `+0x16f8e0` |
+| `+0x25705c → +0x32a444` | shared reader acquire | receiver `+0x88` 的 reader；无竞争 count 加 1 |
+| `+0x257068 → +0x2483e0` | clone 24-byte StringObject | 复制 receiver `+0x118` 的声明长度，保留嵌入 NUL，追加终止零字节 |
+| `+0x25705c → +0x32a4fc` | shared reader release | count 和 mutex 状态恢复；release 同样使用 `+0x25705c` |
+| `image+0x99150` | getter VM exit word | Python VM 退出；原生 caller 确实返回，但 Python 完整 native ABI 尚未建模 |
 
 OR64 的间接出口指令是 `+0x16a610: br x8`。之前未提交实验的观察器通过异常
 停止 native 执行，绕过了 `oracle.native` 的 normal-return 内存导出，留下空的
@@ -99,6 +110,41 @@ MOVhi 先写 destination scratch 和 backing slot，再加载 next word、推进
 发布 immediate/scratch 字段并选择下一 handler。立即数 `0x8000`、`0xffff` 的
 高位扩展必须保留，不能把结果当作 zero-extended uint32。
 
+### OR immediate：op48 / `+0x16e32c`
+
+```text
+src   = (word >> 27) & 31
+dst   = (word >> 22) & 31
+imm16 = ((word >> 16) & 31) | ((word >> 1) & 0x7fe0)
+      | ((word >> 6) & 0x8000)
+R[dst] = R[src] | imm16
+```
+
+正常分支出口是 `+0x16e47c: br x8`；本轮不恢复 repair 路径。当前 word 解码为
+src=19、dst=1、imm=0x6560。原生先读 source、发布 source scratch、写 destination，
+再发布 destination/immediate scratch 和 stream；别名控制按这一顺序比较。
+
+getter 的第一 target 并不直接取自 `image+0x35b650`。`+0x99058` 加载
+`+0x35b658` 的地址基值，结合 signed MOVhi 和 ORi，最终在 `+0x99060` 解引用
+`image+0x381c50`，取得 `image+0x32a444`。未知 target 负控制修改这个实际槽位
+为 `image+0x32a445`，确认模型在分配前拒绝、guest 页不发布。
+
+### receiver 与 StringObject 布局
+
+| 地址 | 字段 |
+| --- | --- |
+| `receiver+0x88` | shared reader/mutex 起点 |
+| `receiver+0x110` | reader count，uint32；即 reader 起点再加 `0x88` |
+| `receiver+0x118` | source StringObject 起点 |
+| `StringObject+0x00` | uint64 vtable，当前为 `image+0x34f5f8` |
+| `StringObject+0x08` | uint32 capacity |
+| `StringObject+0x0c` | uint32 declared length |
+| `StringObject+0x10` | uint64 payload pointer |
+
+clone 使用声明长度而非 C-string 长度。正常分配 length+1，空串也分配 1；负 int32
+length 不分配，malloc NULL 的结果有单独原生控制。native X0 返回保留的
+`image+0x257050` marker，Python virtual R0 为 0，不能把二者混作同一返回值。
+
 ## 3. Python 调用边界
 
 | 模块/函数 | 用途 | 返回/停止范围 |
@@ -110,6 +156,9 @@ MOVhi 先写 destination scratch 和 backing slot，再加载 next word、推进
 | `vm9_request_nested.store_request_word` | 独立一条正常 STORE64 | 返回写入顺序、字段和 target |
 | `vm9_request_nested.subdispatch_request_word` | 独立 sub-dispatch | 返回加载的 word、寄存器更新和 target；无写入 |
 | `vm9_request_or64.apply_or64` | 独立 OR64 | 消费显式 `word_register`；返回写入和 target |
+| `vm9_request_nested.ori_request_word` | 独立 OR immediate | 返回字段、写入、寄存器更新和下一 handler |
+| `vm9_request_nested_callbacks.nested_getter_inputs_from_request` | 解码 `+0x285978` packed ABI，计算 native frame 输入 | 生成 getter inputs；未知 target 拒绝 |
+| `vm9_request_nested_callbacks.execute_nested_string_getter` | fresh caller/prefix、ORi 和剩余 semantic VM、三个回调 | 返回 callback ledger、32 slots、word trace 和 exit；只在全部成功后提交 guest 页 |
 
 pages 为现有 `page_number -> bytearray(4096)` 映射。模型本身不调用 native/JVM；
 native 只用于验证。对照运行器依赖项目已有的 Unicorn、pyelftools 环境，以及上述
@@ -119,6 +168,32 @@ SHA-256 的私有 `.so`。仓库不分发该样本或捕获状态。
 生成 loop 读取的 `frame-0x38` 和 `frame-0x10` 指针。其他 generic prelude spills
 没有借助快照补齐，也没有声称恢复。未知下一跳或 store budget 耗尽时，整个
 helper 的 staged pages 不发布；单条 handler 的缺页失败同样不发布部分写入。
+
+`nested_getter_inputs_from_request` 读取 packed 的 function/output/receiver 三个
+uint64。原生 wrapper 在 `+0x285978` 加载 x9/x8，设置 x0，压入 16 字节 LR frame。
+由 outer frame 计算 nested 输入：
+
+```text
+entry_stack_address = request_frame.native_stack_address - 0x190
+return_address      = image + 0x285988
+saved_frame_pointer = request_frame.native_stack_address - 0x60
+saved_x28           = request_frame.register_backing_address
+saved_x19           = request_frame.register_backing_address - 8
+```
+
+这些物理 frame 公式另由 6 个真实 outer-prefix 控制、30 个 callback 入口观察验证；
+4 个独立 wrapper 控制验证 packed 传参与原生返回。Python 未复制 oracle 输出作为
+inputs，也未恢复完整 wrapper/caller epilogue。
+
+剩余 VM 复用 `vm_full.VM`，但所有 virtual slots 直接读写同一 guest backing，
+不能用与间接内存写入失同步的独立 R 列表；jump base 保留 `+0x99020`，执行 PC
+从 `+0x99058` 开始，常规控制执行 54 步。执行结束或失败时恢复模块的临时 image
+base。guest 事务回滚不等于任意外部分配服务的副作用也回滚。
+
+外层 hook 沿原 `_PageTransaction` 链调用 owning session 的 allocate；不复制出
+脱离 session 的页，也不向实际 receiver 注入 reader 或 source string。低基址
+控制复制了该轮 constructor 的 8 字节字符串，分配 9 字节，核对输出摘要、
+终止零字节及 reader count 恢复。整个 outer/request 组合仍不是 native 差分。
 
 ## 4. 对照矩阵和复现
 
@@ -140,13 +215,34 @@ direct component 控制比较完整 65,536 字节 guest 内存、规定的寄存
 
 PowerShell 中用环境变量指定匹配的私有样本路径：
 
+本轮新增矩阵：
+
+| 证据组 | 数量 | 主要比较 |
+| --- | --- | --- |
+| ORi | 12 | 两 image base、立即数、source/destination/scratch 别名；寄存器、有序写入和完整 guest 页 |
+| getter | 12 | 空串、UTF-8、嵌入 NUL、跨页、高 reader count、malloc NULL、负 length；三 callback 的参数和 32 slots、stream、virtual stack、0xA000 字节 payload |
+| request wrapper | 4 | 两基址 × 空串/嵌入 NUL；实际 caller ABI、原生返回、payload 和分配序列 |
+| 拒绝/回滚 | 7 | budget、output/source 缺页、超长 source、reader wait、实际 target 槽变异 |
+| outer-prefix frame 回归 | 6 | 两基址 × 三请求控制，30 个物理 callback frame 入口 |
+| same-session continuation probe | 2 | 低基址 getter 完成并停在 816；高基址更早停在 641，仍未贯通 |
+
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_request_or64_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --output platforms/bytedance/tomato/evidence/vm9_request_or64_fresh_20261007.json
 python -B platforms/bytedance/tomato/python/verify_vm9_request_nested_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --output platforms/bytedance/tomato/evidence/vm9_request_nested_fresh_20261007.json
+python -B platforms/bytedance/tomato/python/verify_vm9_request_nested_callbacks_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_nested_callbacks_fresh_20261007.json
+python -B platforms/bytedance/tomato/python/verify_vm9_request_prefix_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --output platforms/bytedance/tomato/evidence/vm9_request_prefix_callback_abi_fresh_20261007.json
+python -B platforms/bytedance/tomato/python/verify_vm9_request_diagnostic_continuation_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_diagnostic_continuation_20261007.json
 ```
+
+`TOMATO_MATCHING_LIBC` 指向 matching 私有 libc；SHA-256 必须为
+`d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db`。
+每个 runner 在执行前校验对应样本。仓库不包含这两个二进制。
 
 公开证据：
 
+- [ORi/getter/wrapper fresh differential](evidence/vm9_request_nested_callbacks_fresh_20261007.json)
+- [outer-prefix 物理 callback frame](evidence/vm9_request_prefix_callback_abi_fresh_20261007.json)
+- [same-session 两条未完成的 continuation](evidence/vm9_request_diagnostic_continuation_20261007.json)
 - [OR64 fresh differential](evidence/vm9_request_or64_fresh_20261007.json)
 - [STORE64/sub-dispatch/MOVhi 和 fresh caller 组合](evidence/vm9_request_nested_fresh_20261007.json)
 - [此前 dispatcher 对照](evidence/vm9_request_dispatcher_fresh_20261007.json)
@@ -160,9 +256,27 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_nested_fresh_2026
 1. 区分 caller 初始化、opcode handler、op17 sub-dispatch 与最终 signer 输出。
 2. 从源码公式复建当前 ABI 字段，验证重定位后 table/return-key 的计算。
 3. 判断 register alias 和读取时序导致的差异，避免把 native 轨迹值注入模型。
-4. 在同一组 independently generated pages 上继续 `+0x16e32c`，无需拿原生入口
-   快照填补本轮已经恢复的正常路径。
+4. 用独立生成的 guest backing 完成 acquire/clone/release，并从 constructor 的
+   actual receiver 接回 owning allocator，避免用 captured source 或返回值补洞。
+5. 将完整 getter 的局部原生差分与外层未完成的组合分开，定位剩余分支，而不把
+   VM entry 数量、退出 marker 或单个字符串输出当作 Medusa 签名。
 
 后续每次延伸都要保留本轮对照作为回归，并以新的 target、寄存器/写入差分和
 未知分支拒绝为验收条件。这组证据不能用于宣称完整 request VM、Medusa、当前
 服务器接受或其他平台算法已经完成；抖音与起点必须用各自样本和目录验证。
+
+## 6. 下一处边界与未验证内容
+
+低基址请求的下一 callback 是 `+0x285990 → +0x248908`，packed 输入记录了
+格式 `%d|%s`、int32 参数 `-5` 和本次 getter 输出 payload 指针。已有
+`format_string_object` 只覆盖 `%s/%%`，signed decimal 和该请求所需的 allocator
+增长/realloc 尚待恢复，不能借用 Python `printf` 输出或 native 格式化结果充数。
+
+高基址外层先停在 `+0x2858ec → +0x24880c`。私有 ELF 静态指令显示 wrapper
+发布 boolean 的低 bit，target 调用 `+0x247374` 比较 object+8 的 fields；其 Python
+body 和 whole-native 外层分支对照未完成。本轮 12 getter 和 4 wrapper 对照都覆盖
+高基址，并不消除这个更早的外层缺口。
+
+后续应先恢复上述实际 callback 分支，再验证整个 request 返回和真实
+URL/headers/JNI 转换，最后验收 fresh Medusa、线上全头矩阵、无 JVM Rust 下载
+链路。当前非空搜索/分页、抖音/起点及最终 Pages/Actions 产品继续保持未完成。

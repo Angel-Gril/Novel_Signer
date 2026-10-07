@@ -1,5 +1,38 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07：ORi、getter 返回链和同次请求接入
+
+`+0x16e32c` 的正常 OR immediate 已恢复。fresh caller 经已有 prefix、MOVhi、ORi
+进入 `+0x99058..+0x99150` 的 VM，完整执行三次 callback：
+
+```text
++0x25705c -> +0x32a444 acquire
++0x257068 -> +0x2483e0 clone
++0x25705c -> +0x32a4fc release
+```
+
+新增 28 个原生对照（12 ORi / 12 getter / 4 request wrapper）和 7 个负控制通过。
+比较 callback 参数与全部 32 slots、guest backing、stream、virtual saved stack、
+0xA000 字节 payload 和分配序列。原生 caller 与 wrapper 确实返回，Python VM
+退出；Python 完整 native epilogue/ABI 仍未建模。native mutex 使用 matching libc，
+malloc 是显式服务，不把这组结果描述成 real allocator boot 的整体对照。
+未知 target 负控制确认修改的是实际函数槽 `image+0x381c50`，而非 `+0x35b650`。
+6 个 outer-prefix 回归另在 30 个实际 callback 入口验证 physical SP/x29/x28/x19；
+此前 STORE64/sub-dispatch/MOVhi/caller 的 36 个对照和 5 个负控制也通过。
+
+同次 Python outer/request 使用原 allocator/OS session 和 constructor 的 receiver，
+未注入字符串/reader fixture。低基址 `0x122c0000` 从第 803 步推进到第 816 步、
+bytecode `+0xf85b4`，getter 复制声明长度 8 的字符串，实际分配 9 字节，reader
+count 恢复。新停止点 `+0x285990 → +0x248908` 的格式是 `%d|%s`，int32 为 -5。
+高基址 `0x775c205000` 的外层控制在 641 / `+0xf812c` 提前停于
+`+0x2858ec → +0x24880c`；没有达到 getter，外层分支尚无 whole-native 对照。
+
+字段、调用、复现及证据用途见 [REQUEST_NESTED_VM.md](REQUEST_NESTED_VM.md)。
+当前结论由本节及其新证据为准，下方前缀记录保留当时边界。
+**整个 request、真实 URL/headers/JNI、fresh Medusa 和新线上矩阵未完成**；
+Rust 下载链路、非空搜索/分页、其他平台和 Pages/Actions 产品也仍未完成。
+
+
 ## 2026-10-07：fresh caller 的 nested VM 前缀已推进到 `+0x16e32c`
 
 本轮恢复了正常路径的 `+0x171138` STORE64 循环、`+0x16855c` sub-dispatch、

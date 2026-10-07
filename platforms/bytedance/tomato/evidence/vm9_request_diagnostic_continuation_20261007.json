@@ -3,7 +3,7 @@
   "evidence_date": "2026-10-07",
   "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
-  "controls": 1,
+  "controls": 2,
   "cases": [
     {
       "image_base": "0x122c0000",
@@ -23,7 +23,8 @@
         2048,
         48,
         24,
-        8
+        8,
+        9
       ],
       "diagnostic_events": [
         [
@@ -91,6 +92,106 @@
           "lock_result": 0
         }
       ],
+      "nested_getters": [
+        {
+          "caller_inputs": {
+            "image_base": 304873472,
+            "object_address": 325976064,
+            "preserved_x8": 1879371224,
+            "return_address": 307517832,
+            "entry_stack_address": 1879365424,
+            "saved_frame_pointer": 1879365728,
+            "saved_x28": 1879371448,
+            "saved_x19": 1879371440,
+            "thread_pointer": 1879089152
+          },
+          "source_address": 325976344,
+          "output_address": 1879371224,
+          "declared_length": 8,
+          "vm_steps": 54,
+          "vm_exit_pc": 305500496,
+          "callbacks": [
+            {
+              "kind": "acquire",
+              "wrapper": 2453596,
+              "target": 3318852,
+              "words": [
+                308192324,
+                325976200
+              ]
+            },
+            {
+              "kind": "clone",
+              "wrapper": 2453608,
+              "target": 2393056,
+              "words": [
+                307266528,
+                1879371224,
+                325976344
+              ]
+            },
+            {
+              "kind": "release",
+              "wrapper": 2453596,
+              "target": 3319036,
+              "words": [
+                308192508,
+                325976200
+              ]
+            }
+          ],
+          "output_bytes": [
+            248,
+            245,
+            96,
+            18,
+            0,
+            0,
+            0,
+            0,
+            9,
+            0,
+            0,
+            0,
+            8,
+            0,
+            0,
+            0,
+            80,
+            114,
+            109,
+            19,
+            0,
+            0,
+            0,
+            0
+          ],
+          "payload_sha256": "81c5280700cd8c80c68a269605761967b81e131264160a6dccf452ea93f6451d",
+          "output_matches_receiver": true,
+          "acquire_reader_count": 1,
+          "released_reader_count": 0,
+          "source_state_injected": false,
+          "native_input_snapshot_used": false,
+          "python_full_native_caller_abi_modeled": false
+        }
+      ],
+      "continued_after_nested_getter": true,
+      "nested_getter_source_state_injected": false,
+      "next_callback": {
+        "wrapper_offset": "0x285990",
+        "target_offset": "0x248908",
+        "packed_words": [
+          "0x12508908",
+          "0x136d90e0",
+          "0x126a0e10",
+          "0xfffffffb",
+          "0x136d7250"
+        ],
+        "format_bytes_hex": "25647c2573",
+        "format_sha256": "802e5487e1427f529d7d7717fd604aa456934f75ccea9ef2884f0df9c9540553",
+        "first_variadic_int32": -5,
+        "callback_body_implemented": false
+      },
       "callback_ledger": [
         {
           "wrapper": "0x285888",
@@ -256,17 +357,235 @@
             "0x136e0000",
             "0x1269e6f8"
           ]
+        },
+        {
+          "wrapper": "0x285990",
+          "target": "0x248908",
+          "argument": "0x7004eaa0",
+          "words": [
+            "0x12508908",
+            "0x136d90e0",
+            "0x126a0e10",
+            "0xfffffffb"
+          ]
         }
       ],
-      "continuation_error": "RefillUnsupported: unknown request callback +0x285978 -> +0x256ed4",
+      "continuation_error": "RefillUnsupported: unknown request callback +0x285990 -> +0x248908",
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
       "request_objects_are_synthetic": true,
-      "steps": 803,
-      "stop_bytecode_offset": "0xf8580",
-      "boundary_wrapper_offset": "0x2858d0",
-      "boundary_target_offset": "0x26c858",
+      "steps": 816,
+      "stop_bytecode_offset": "0xf85b4",
+      "boundary_wrapper_offset": "0x285990",
+      "boundary_target_offset": "0x248908",
+      "initial_diagnostic_wrapper_offset": "0x2858d0",
+      "initial_diagnostic_target_offset": "0x26c858",
+      "actual_jvm_used": false,
+      "actual_os_threads_created": false,
+      "whole_handoff_native_differential_verified": false,
+      "request_diagnostic_transaction_committed": true,
+      "continued_after_diagnostic": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "property_profile": "absent",
+      "same_python_outer_output_used": true,
+      "native_input_snapshot_used": false,
+      "owning_allocator_session_used": true,
+      "allocator_returns_substituted": false,
+      "detached_page_copy_rejected_without_page_or_mapping_changes": true,
+      "actual_matching_libc_allocation_model_used": true,
+      "request_allocation_sizes": [
+        40,
+        40,
+        40,
+        4,
+        48,
+        2048,
+        48
+      ],
+      "diagnostic_events": [
+        [
+          "pthread_mutex_lock",
+          512650805056
+        ],
+        [
+          "gettid",
+          137
+        ],
+        [
+          "pthread_mutex_unlock",
+          512650805056
+        ],
+        [
+          "pthread_mutex_lock",
+          512650805056
+        ],
+        [
+          "pthread_mutex_unlock",
+          512650805056
+        ],
+        [
+          "pthread_mutex_lock",
+          325925320
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925320
+        ],
+        [
+          "pthread_mutex_lock",
+          325925320
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925320
+        ],
+        [
+          "pthread_mutex_lock",
+          325925368
+        ],
+        [
+          "pthread_mutex_unlock",
+          325925368
+        ]
+      ],
+      "diagnostic_scopes": [
+        {
+          "table_index": 197,
+          "entry_address": "0x136d39f0",
+          "lock_result": 0
+        }
+      ],
+      "nested_getters": [],
+      "continued_after_nested_getter": false,
+      "nested_getter_source_state_injected": false,
+      "next_callback": {
+        "wrapper_offset": "0x2858ec",
+        "target_offset": "0x24880c",
+        "packed_words": [
+          "0x775c44d80c",
+          "0x775c562c50",
+          "0x775c274e64",
+          "0x775c45c250"
+        ],
+        "static_abi_observation": "wrapper stores low bit of boolean; target compares fields at object+8 via +0x247374",
+        "callback_body_implemented": false,
+        "native_outer_branch_equivalence_verified": false
+      },
+      "callback_ledger": [
+        {
+          "wrapper": "0x285888",
+          "target": "0x167e54",
+          "argument": "0x7004ebd8",
+          "words": [
+            "0x775c36ce54",
+            "0x775c2f7600",
+            "0x775c5e5d50",
+            "0x775c2f78e0"
+          ]
+        },
+        {
+          "wrapper": "0x285888",
+          "target": "0x167e54",
+          "argument": "0x7004ebd8",
+          "words": [
+            "0x775c36ce54",
+            "0x775c2f7620",
+            "0x775c5e5d70",
+            "0x775c2f78b0"
+          ]
+        },
+        {
+          "wrapper": "0x285888",
+          "target": "0x167e54",
+          "argument": "0x7004ebd8",
+          "words": [
+            "0x775c36ce54",
+            "0x775c2f7764",
+            "0x775c5e5f68",
+            "0x775c2f7780"
+          ]
+        },
+        {
+          "wrapper": "0x28589c",
+          "target": "0x291440",
+          "argument": "0x7004ebc8",
+          "words": [
+            "0x775c496440",
+            "0x7004ec08",
+            "0x775c36ce54",
+            "0x775c2f7764"
+          ]
+        },
+        {
+          "wrapper": "0x2858a8",
+          "target": "0x347f60",
+          "argument": "0x7004eba8",
+          "words": [
+            "0x775c54cf60",
+            "0x7004ec10",
+            "0x7004edd8",
+            "0x18"
+          ]
+        },
+        {
+          "wrapper": "0x2858bc",
+          "target": "0x25c324",
+          "argument": "0x7004eb98",
+          "words": [
+            "0x775c461324",
+            "0x7004ec30",
+            "0x775c54cf60",
+            "0x7004ec10"
+          ]
+        },
+        {
+          "wrapper": "0x2858d0",
+          "target": "0x26c858",
+          "argument": "0x7004eb80",
+          "words": [
+            "0x775c471858",
+            "0x7004edd8",
+            "0x775c562c50",
+            "0x775c461324"
+          ]
+        },
+        {
+          "wrapper": "0x2858e0",
+          "target": "0x26c9d0",
+          "argument": "0x7004eb70",
+          "words": [
+            "0x775c4719d0",
+            "0x7004edd8",
+            "0x775c471858",
+            "0x7004edd8"
+          ]
+        },
+        {
+          "wrapper": "0x2858ec",
+          "target": "0x24880c",
+          "argument": "0x7004eb50",
+          "words": [
+            "0x775c44d80c",
+            "0x775c562c50",
+            "0x775c274e64",
+            "0x775c45c250"
+          ]
+        }
+      ],
+      "continuation_error": "RefillUnsupported: unknown request callback +0x2858ec -> +0x24880c",
+      "x8_reference_output_generated": true,
+      "reference_count_initial_value": 1,
+      "allocated_spans_inside_owned_os_mappings": true,
+      "request_objects_are_synthetic": true,
+      "steps": 641,
+      "stop_bytecode_offset": "0xf812c",
+      "boundary_wrapper_offset": "0x2858ec",
+      "boundary_target_offset": "0x24880c",
+      "initial_diagnostic_wrapper_offset": "0x2858d0",
+      "initial_diagnostic_target_offset": "0x26c858",
       "actual_jvm_used": false,
       "actual_os_threads_created": false,
       "whole_handoff_native_differential_verified": false,
@@ -274,6 +593,12 @@
       "continued_after_diagnostic": true
     }
   ],
+  "synthetic_request_nested_getter_composition_verified": true,
+  "nested_getter_composition_controls": 1,
+  "high_image_outer_getter_continuation_verified": false,
+  "whole_handoff_native_differential_verified": false,
+  "real_url_headers_jni_conversion_verified": false,
+  "no_jvm_rust_signer_complete": false,
   "complete_python_medusa": false,
   "fresh_input_signer_output_verified": false,
   "current_online_header_matrix_verified": false,
@@ -281,6 +606,7 @@
     "This is a same Python outer/request composition, not whole native handoff differential.",
     "Request URL/header/JNI conversion and later callback bodies remain unresolved.",
     "A continuation error marks the next callback boundary; it is not treated as a signature failure.",
+    "The high image control stops earlier at +0x2858ec -> +0x24880c; native outer branch equivalence is unverified.",
     "No JVM, server request or raw signature is used."
   ]
 }

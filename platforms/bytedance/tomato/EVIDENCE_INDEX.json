@@ -2449,6 +2449,90 @@
       "Other generic prelude spills, repair paths and +0x16e32c remain outside the recovered prefix.",
       "Caller object/x8 inputs are synthetic, not URL/header/JNI conversion.",
       "No complete Medusa, current online matrix, Rust downloader or other platform closure is established."
+    ],
+    "implementation_followup": "vm9_request_nested_callbacks_fresh_20261007"
+  },
+  "vm9_request_nested_callbacks_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_nested_callbacks_fresh_20261007.json",
+    "schema": "vm9-request-nested-callbacks-fresh-differential-v1",
+    "status": "normal_ori_and_bounded_string_getter_native_differential_pass",
+    "ori_controls": 12,
+    "getter_controls": 12,
+    "wrapper_controls": 4,
+    "negative_controls": 7,
+    "ori_offset": "0x16e32c",
+    "getter_exit_word_offset": "0x99150",
+    "all_native_controls_pass": true,
+    "native_input_snapshot_used": false,
+    "native_caller_return_verified": true,
+    "request_wrapper_caller_abi_verified": true,
+    "python_semantic_vm_exit_verified": true,
+    "python_full_native_caller_abi_modeled": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "interpretation": "Fresh getter completes acquire/clone/release, preserving guest-backed VM slots, payloads, reader state and allocation sequence; native caller return is observed separately.",
+    "limitations": [
+      "Independent reader/string controls use explicit fixtures and a malloc service, with actual matching-libc mutex execution.",
+      "Other physical spills, repair paths and full native caller epilogue/ABI are not modeled.",
+      "This does not prove URL/headers/JNI conversion, full request completion or online signing."
+    ]
+  },
+  "vm9_request_prefix_callback_abi_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_prefix_callback_abi_fresh_20261007.json",
+    "schema": "vm9-request-prefix-fresh-differential-v1",
+    "status": "outer_prefix_physical_callback_frame_differential_pass",
+    "controls": 6,
+    "physical_callback_frame_observations": 30,
+    "request_vm_physical_callback_frame_verified": true,
+    "native_input_snapshot_used": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "interpretation": "Actual outer-prefix callback entries match SP=caller stack-0x180, x29=caller stack-0x60, x28=backing and x19=backing-8.",
+    "limitations": [
+      "Stops before the allocating tree callback; native request objects are synthetic.",
+      "These frame observations do not prove the complete outer/request composition."
+    ]
+  },
+  "vm9_request_diagnostic_continuation_20261007": {
+    "evidence_file": "evidence/vm9_request_diagnostic_continuation_20261007.json",
+    "schema": "vm9-request-diagnostic-continuation-probe-v1",
+    "status": "same_session_low_image_getter_continued_high_image_earlier_boundary_open",
+    "controls": 2,
+    "nested_getter_composition_controls": 1,
+    "owning_allocator_session_used": true,
+    "nested_getter_source_state_injected": false,
+    "low_image": {
+      "image_base": "0x122c0000",
+      "steps": 816,
+      "bytecode_offset": "0xf85b4",
+      "wrapper_offset": "0x285990",
+      "target_offset": "0x248908",
+      "format": "%d|%s",
+      "first_variadic_int32": -5
+    },
+    "high_image": {
+      "image_base": "0x775c205000",
+      "steps": 641,
+      "bytecode_offset": "0xf812c",
+      "wrapper_offset": "0x2858ec",
+      "target_offset": "0x24880c",
+      "getter_reached": false
+    },
+    "native_input_snapshot_used": false,
+    "whole_handoff_native_differential_verified": false,
+    "high_image_outer_getter_continuation_verified": false,
+    "real_url_headers_jni_conversion_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "Same Python constructor/request/allocator composition on synthetic request inputs, not whole-native differential.",
+      "Only the low image case reaches the getter; high image stops at an earlier unknown callback.",
+      "Signed formatting, remaining request callbacks, real URL/headers/JNI and signature output remain open."
     ]
   }
 }

@@ -74,8 +74,40 @@ def case(library, libc, image, label, property_value, vm_module):
             state, frame, vm, ledger, decoded = (exc.staged, exc.frame, exc.vm,
                 exc.ledger, exc.decoded)
             continuation_error = f"{type(exc.cause).__name__}: {exc.cause}"
-        assert vm.steps > 611
-        assert any(item[:2] == (0x2858D0, 0x26C858) for item in ledger)
+        print('request continuation', hex(image), vm.steps, hex(vm.pc - image), continuation_error, flush=True)
+        nested = diag.get('nested_getters', [])
+        if image == 0x122C0000:
+            assert vm.steps == 816 and vm.pc - image == 0xF85B4
+            assert continuation_error == 'RefillUnsupported: unknown request callback +0x285990 -> +0x248908'
+            assert len(nested) == 1 and nested[0]['vm_steps'] == 54
+            assert nested[0]['vm_exit_pc'] == image + 0x99150
+            assert nested[0]['declared_length'] == 8 and nested[0]['output_matches_receiver']
+            assert nested[0]['acquire_reader_count'] == nested[0]['released_reader_count'] + 1
+            assert allocations[-1][0] == 9
+            assert ledger[-1][:2] == (0x285990, 0x248908)
+            from vm9_objects import _cstring
+            next_words = [int.from_bytes(_read_span(state, ledger[-1][2] + 8*i, 8), 'little')
+                          for i in range(5)]
+            format_bytes = _cstring(state, next_words[2], 4096)[:-1]
+            next_callback = dict(wrapper_offset='0x285990', target_offset='0x248908',
+                packed_words=[hex(word) for word in next_words],
+                format_bytes_hex=format_bytes.hex(),
+                format_sha256=hashlib.sha256(format_bytes).hexdigest(),
+                first_variadic_int32=(next_words[3] & 0xFFFFFFFF) - (0x100000000 if next_words[3] & 0x80000000 else 0),
+                callback_body_implemented=False)
+        else:
+            # Expanded address coverage exposed an earlier *model* boundary.
+            # Preserve that failed continuation separately, rather than claiming
+            # this second outer control reached the getter or native agreed.
+            assert image == 0x775C205000
+            assert vm.steps == 641 and vm.pc - image == 0xF812C
+            assert continuation_error == 'RefillUnsupported: unknown request callback +0x2858ec -> +0x24880c'
+            assert not nested and ledger[-1][:2] == (0x2858EC, 0x24880C)
+            next_callback = dict(wrapper_offset='0x2858ec', target_offset='0x24880c',
+                packed_words=[hex(word) for word in ledger[-1][3]],
+                static_abi_observation='wrapper stores low bit of boolean; target compares fields at object+8 via +0x247374',
+                callback_body_implemented=False,
+                native_outer_branch_equivalence_verified=False)
         assert any(item[:2] == (0x2858D0, 0x26C858) for item in ledger)
         assert [size for size, _ in allocations][:4] == [40, 40, 40, 4]
         descriptor = [item for item in ledger if item[:2] == (0x2858BC, 0x25C324)]
@@ -95,13 +127,20 @@ def case(library, libc, image, label, property_value, vm_module):
             actual_matching_libc_allocation_model_used=True,
             request_allocation_sizes=[size for size, _ in allocations], diagnostic_events=diag.get('events', []),
             diagnostic_scopes=[dict(table_index=s.table_index, entry_address=hex(s.entry_address), lock_result=s.lock_result) for s in diag.get('scopes', [])],
+            nested_getters=diag.get('nested_getters', []),
+            continued_after_nested_getter=bool(diag.get('nested_getters')),
+            nested_getter_source_state_injected=False,
+            next_callback=next_callback,
             callback_ledger=[dict(wrapper=hex(item[0]), target=hex(item[1]), argument=hex(item[2]), words=[hex(x) for x in item[3]]) for item in ledger],
             continuation_error=continuation_error,
             x8_reference_output_generated=True, reference_count_initial_value=1,
             allocated_spans_inside_owned_os_mappings=True,
             request_objects_are_synthetic=True, steps=vm.steps,
             stop_bytecode_offset=hex(vm.pc - image),
-            boundary_wrapper_offset='0x2858d0', boundary_target_offset='0x26c858',
+            boundary_wrapper_offset=next_callback['wrapper_offset'],
+            boundary_target_offset=next_callback['target_offset'],
+            initial_diagnostic_wrapper_offset='0x2858d0',
+            initial_diagnostic_target_offset='0x26c858',
             actual_jvm_used=False, actual_os_threads_created=False,
             whole_handoff_native_differential_verified=False,
             request_diagnostic_transaction_committed=bool(diag.get('scopes')),
@@ -128,14 +167,22 @@ def main():
     assert hashlib.sha256(args.libc.read_bytes()).hexdigest() == worker.LIBC_SHA256
     os.environ['TOMATO_LIBMETASEC'] = str(args.library.resolve())
     import vm_full
-    rows = [case(args.library, args.libc, 0x122C0000, 'absent', None, vm_full)]
+    rows = [case(args.library, args.libc, image, 'absent', None, vm_full)
+            for image in (0x122C0000, 0x775C205000)]
     report = dict(schema='vm9-request-diagnostic-continuation-probe-v1', evidence_date='2026-10-07',
         sample_sha256=oracle.LIBRARY_SHA256, libc_sha256=worker.LIBC_SHA256, controls=len(rows), cases=rows,
+        synthetic_request_nested_getter_composition_verified=any(row['continued_after_nested_getter'] for row in rows),
+        nested_getter_composition_controls=sum(row['continued_after_nested_getter'] for row in rows),
+        high_image_outer_getter_continuation_verified=False,
+        whole_handoff_native_differential_verified=False,
+        real_url_headers_jni_conversion_verified=False,
+        no_jvm_rust_signer_complete=False,
         complete_python_medusa=False, fresh_input_signer_output_verified=False,
         current_online_header_matrix_verified=False,
         limitations=['This is a same Python outer/request composition, not whole native handoff differential.',
             'Request URL/header/JNI conversion and later callback bodies remain unresolved.',
             'A continuation error marks the next callback boundary; it is not treated as a signature failure.',
+            'The high image control stops earlier at +0x2858ec -> +0x24880c; native outer branch equivalence is unverified.',
             'No JVM, server request or raw signature is used.'])
     args.output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     print('request diagnostic continuation probe written; next callback boundary is recorded')

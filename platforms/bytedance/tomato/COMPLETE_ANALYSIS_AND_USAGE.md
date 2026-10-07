@@ -17,6 +17,19 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
+2026-10-07 当前请求检查点：`+0x16e32c` ORi 和 `+0x256ed4` 字符串 getter 的
+acquire/clone/release 与 VM 退出已有 **28 个新增原生对照、7 个负控制**；6 个
+外层 prefix 回归验证了 30 个物理 callback frame，36 个此前 nested 前缀对照也
+通过。原生 caller/wrapper 返回已观察，Python 完整 native ABI 仍未建模。
+低基址同次 Python constructor/request 使用实际 receiver 与 owning allocator，
+推进到 **816 / +0xf85b4**，下一 callback 为 `+0x285990 → +0x248908`，格式
+`%d|%s`、首参 -5。高基址外层更早停在 **641 / +0xf812c** 的字符串比较 callback
+`+0x2858ec → +0x24880c`，whole-native 分支一致性未验证。两者不能合并为完整
+request 成功。详细字段、调用、复现与关键证据引用见
+[REQUEST_NESTED_VM.md](REQUEST_NESTED_VM.md)；此前条目按各自日期和输入边界理解。
+这些结果不构成 fresh Medusa、当前线上验签、无 JVM Rust 或最终下载产品完成。
+
+
 最新纠正：初始化回调 `0x1000000e` 返回 `MSC.GetABSwitch()`，旧桥接器误传冻结时间。恢复 APK 默认值 `2` 后，三个旧失败时间输入成功，未取整时间的详情请求也被线上接受。Python 已独立恢复这一全局和 bit-5 分支，18 个字节码对照通过；默认 A/B=2 的 publisher 是 `+0x28c268`，两个 child/handler、root 已观测字段装配、callback pair 绑定、引用计数和 JNI 清理已有 92 个新建内存对照。2026-10-04 又恢复了 0x2d0-byte service 配置图、完整无竞争 guard 状态和真实 getter → handler 构造，72 个 native 对照、15 个拒绝/回滚例通过；root 前段的 264-byte 配置及全局启动仍未完成。此前“时间取整稳定”的结论只适用于旧误配桥接器，不能作为 native 时间约束。详见 [BRIDGE_INITIALIZATION.md](BRIDGE_INITIALIZATION.md) 与 [SIGNER_CONSTRUCTION.md](SIGNER_CONSTRUCTION.md)。修正后当前搜索在 b/c 两个主机仍为空。
 
 2026-10-04 的后续恢复包括 guest-table cipher（256 组 native 差分 / 11 个回滚例）及完整 mode-0 配置解密 callback（200 / 12）。后续又恢复了流状态和 reference 生命周期（174 / 9）。四次 fresh 控制中的 parser 已在 3318 步 / `+0x9c95c` 退出，165 字节消息成功解包，119 次分配、47 次 free、TLS/generation/有序副作用及 32 个虚拟槽均一致。新增字符串重填为 190 / 5，消息解包/清理为 208 / 6；60 条完整子树对照包括四次 `+0x262608` caller 验证：所需 parser 前导由 Python 生成，7 个拒绝/回滚案例通过；caller 之前的 root/堆/TLS 状态仍由同次 native 输入提供，完整 Python 冷启动和88-byte其它初始化分支仍未完成。接口、用法与证据用途见 [CIPHER_CALLBACK.md](CIPHER_CALLBACK.md) 、[STREAM_REFERENCE.md](STREAM_REFERENCE.md) 与 [PARSER_UNPACK.md](PARSER_UNPACK.md)。

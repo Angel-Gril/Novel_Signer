@@ -10,7 +10,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
-from unicorn.arm64_const import UC_ARM64_REG_SP, UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X8
+from unicorn.arm64_const import UC_ARM64_REG_SP, UC_ARM64_REG_X0, UC_ARM64_REG_X1, UC_ARM64_REG_X8, UC_ARM64_REG_X19, UC_ARM64_REG_X28, UC_ARM64_REG_X29
 import verify_vm9_signer_objects as oracle
 import vm9_objects as objects
 from elftools.elf.elffile import ELFFile
@@ -98,6 +98,41 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     vtable_address=image + 0x34F5F8,
                     empty_descriptor_address=image + 0x6E168)
                 diagnostic_scope.setdefault('string_callbacks', []).append(words[1])
+            elif allocate is not None and (wrapper, target) == (0x285978, 0x256ED4):
+                if diagnostic_scope is None:
+                    raise PrefixBoundary()
+                from vm9_request_nested_callbacks import (execute_nested_string_getter,
+                    nested_getter_inputs_from_request)
+                nested_inputs = nested_getter_inputs_from_request(vm.m.pages,
+                    request_frame=frame, callback_argument_address=argument,
+                    thread_pointer=inputs['thread_pointer'], image_base=image)
+                result = execute_nested_string_getter(vm.m.pages, nested_inputs,
+                    vm_module, allocate=allocate)
+                output = result['output_address']
+                source_length = result['declared_length']
+                output_pointer = int.from_bytes(_read_span(vm.m.pages, output + 16, 8), 'little')
+                source_pointer = int.from_bytes(_read_span(vm.m.pages, result['source_address'] + 16, 8), 'little')
+                if source_length < 0x80000000 and output_pointer:
+                    source_bytes = _read_span(vm.m.pages, source_pointer, source_length)
+                    output_bytes = _read_span(vm.m.pages, output_pointer, source_length)
+                    if source_bytes != output_bytes or _read_span(vm.m.pages, output_pointer + source_length, 1) != b'\0':
+                        raise RefillUnsupported('nested getter output does not match its owning receiver')
+                    payload_digest = hashlib.sha256(output_bytes).hexdigest()
+                else:
+                    payload_digest = None
+                diagnostic_scope.setdefault('nested_getters', []).append(dict(
+                    caller_inputs=nested_inputs,
+                    source_address=result['source_address'], output_address=output,
+                    declared_length=result['declared_length'], vm_steps=result['vm_steps'],
+                    vm_exit_pc=result['vm_exit_pc'],
+                    callbacks=[dict(kind=c['kind'], wrapper=c['wrapper_offset'],
+                        target=c['target_offset'], words=list(c['words'])) for c in result['callbacks']],
+                    output_bytes=list(_read_span(vm.m.pages, output, 24)),
+                    payload_sha256=payload_digest, output_matches_receiver=payload_digest is not None,
+                    acquire_reader_count=result['callbacks'][0]['reader_count'],
+                    released_reader_count=result['callbacks'][2]['reader_count'],
+                    source_state_injected=False, native_input_snapshot_used=False,
+                    python_full_native_caller_abi_modeled=False))
             else:
                 raise RefillUnsupported(f'unknown request callback +{wrapper:#x} -> +{target:#x}')
         vm.native_hook = callback
@@ -142,13 +177,20 @@ def case(library, image, flag, seconds, nanoseconds, vm_module):
     observed = {(address, length): None for address, length in decoded}
     observed[frame.register_backing_address, 0x100] = None
     observed[ledger[-1][2], 0x20] = None
-    native_ledger, clock_calls = [], []
+    native_ledger, clock_calls, physical_frames = [], [], []
     def observe(cpu, address):
         offset = address - image
         if offset in (0x285888, 0x28589C, 0x2858A8):
             argument = cpu.reg_read(UC_ARM64_REG_X0)
             words = tuple(int.from_bytes(cpu.mem_read(argument + i * 8, 8), 'little') for i in range(4))
             native_ledger.append((offset, words[0] - image, argument, words))
+            physical = tuple(cpu.reg_read(reg) for reg in (UC_ARM64_REG_SP,
+                UC_ARM64_REG_X29, UC_ARM64_REG_X28, UC_ARM64_REG_X19))
+            expected = (frame.native_stack_address - 0x180,
+                frame.native_stack_address - 0x60,
+                frame.register_backing_address, frame.register_backing_address - 8)
+            assert physical == expected, (offset, physical, expected)
+            physical_frames.append(physical)
     def clock(cpu):
         assert cpu.reg_read(UC_ARM64_REG_X0) == 1
         pointer = cpu.reg_read(UC_ARM64_REG_X1)
@@ -175,6 +217,8 @@ def case(library, image, flag, seconds, nanoseconds, vm_module):
         boundary_wrapper_offset='0x2858bc', boundary_target_offset='0x25c324',
         native_input_snapshot_used=False, callback_ledger_equal=True,
         all_32_virtual_registers_equal=True, decoded_global_bytes_equal=True,
+        request_vm_physical_callback_frame_verified=bool(physical_frames),
+        physical_callback_frame_observations=len(physical_frames),
         decoded_lengths=[length for _, length in decoded],
         boundary_descriptor_equal=True, clock_calls=1,
         request_objects_are_synthetic=True,

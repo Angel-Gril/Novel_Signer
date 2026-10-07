@@ -7,17 +7,29 @@
 `vm_full.py` is the sanitized current-VM diagnostic interpreter used to replay
 captured VM9 traces. It requires the private `libmetasec_ml_71332.so` supplied
 outside this repository (`TOMATO_LIBMETASEC` may point to it) and captured
-memory/trace inputs. It is not a current online signer: the constructor,
-allocator, and host handoff path still depend on captured state.
+memory/trace inputs for replay. The fresh component models below can also drive
+its semantics without captured input. It is not a current online signer; the
+complete fresh request and host handoff remain unresolved.
 
-`vm9_request_nested.py` and `vm9_request_or64.py` recover a bounded fresh
-request prefix through STORE64, sub-dispatch, OR64 and signed MOVhi. The
-verifiers build caller inputs from explicit synthetic objects/x8 and fresh ELF
-pages, and compare with native ARM64 without importing captured input state.
-The composed prefix reaches `+0x16e32c`; it does not complete the request VM,
-convert URL/headers/JNI inputs, or generate Medusa. See
-[REQUEST_NESTED_VM.md](../REQUEST_NESTED_VM.md) for 48 differential controls,
-8 refusal/rollback controls, bit layouts and reproduction commands.
+`vm9_request_nested.py` and `vm9_request_or64.py` recover the fresh request
+prefix through STORE64, sub-dispatch, OR64, signed MOVhi and normal ORi.
+`vm9_request_nested_callbacks.py` composes the caller and the complete bounded
+string getter: shared-reader acquire, declared-length StringObject clone and
+release, then VM exit at `+0x99150`. Remaining VM semantics reuse `vm_full`
+with guest-backed registers, not captured input state. The 28 new native
+controls, 7 refusals and 6 outer-prefix frame controls pass; the original 36
+nested-prefix controls also pass. Native caller/wrapper return is observed,
+while the Python full native caller ABI remains unmodeled.
+
+The same-session outer/request probe uses the constructed receiver and its
+own allocator/OS staging chain without string/reader fixture injection. Its
+low image case reaches step 816 / `+0xf85b4`, then stops at the `%d|%s`
+formatter `+0x285990 -> +0x248908`. The high image case stops earlier at
+step 641 / `+0xf812c`, `+0x2858ec -> +0x24880c`; the native outer branch
+has not been compared. These remain synthetic requests and Python composition,
+not URL/headers/JNI conversion, complete Medusa or online signature output.
+See [REQUEST_NESTED_VM.md](../REQUEST_NESTED_VM.md) for contracts, object/word
+layouts, allocation limits, evidence boundaries and reproduction commands.
 
 The Python files are research fixtures. They do not contain the private device configuration or raw online trial material.
 
