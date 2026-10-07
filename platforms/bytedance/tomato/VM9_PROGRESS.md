@@ -1,5 +1,24 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07：事件/boolean callback 编排、C++ string 与 realloc 纠正
+
+新增 **76 个组件控制/10 个负控制**：52个24-byte C++ string构造/复制/析构、
+16个boolean gate、8个event wrapper。外围原生代码执行，evaluator、scope
+cleanup和event formatter仍是显式测试服务；不等于这些叶函数body已恢复。
+
+同次request现可生成两个callback内部前导，再严格停止。低基址仍 **945 /
++0xffb48**，进入`+0x28dc38`，下一缺口为`+0x28ddd0` formatter；高基址仍
+**965 / +0xf8fd0**，进入`+0x28bb5c`，counter=0/receiver[1]=0时下一缺口为
+`+0x28b05c` evaluator。observer读取暂存页，新增内部body事务没有提交；
+whole-native request、真实URL/headers/JNI和fresh签名仍未验证。
+
+已纠正旧formatter verifier：`+0x347fe0`是memcmp，realloc PLT为`+0x348320`。
+旧truncation控制实际没有realloc，不能作为其证据。新增两个强制控制各调用1次
+显式realloc；格式化由14到16、该组总计58，matching-libc realloc仍未实现。
+完整ABI、输入、窗口和复现见 [REQUEST_EVENT_GATE.md](REQUEST_EVENT_GATE.md)。
+下方保留较早阶段原值，不把旧组件数量或停止点当成当前结论。
+
+
 ## 2026-10-07：请求 monotonic clock、raw state、guard release 与 pointer getter
 
 新增 **82 个 native 组件控制、18 个负控制**及 **4 个既有 outer constructor

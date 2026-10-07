@@ -34,7 +34,7 @@ still use synthetic inputs.
 raw ABI words. Native successful cleanup returns zero; the helper returns its
 destination address for API use. `vm9_startup.acquire_serial_guard` reuses the
 startup guard transition with its actual global normal mutex. New evidence
-covers 32 equality, 14 formatter and 10 guard differences plus 11 refusals.
+covers 32 equality, 16 formatter and 10 guard differences plus 11 refusals.
 The formatter oracle executes real matching-libc vsnprintf with explicit
 allocator services; the integration uses the owning allocator model and
 performs no real realloc. `session.reallocate` remains unsupported.
@@ -58,6 +58,18 @@ See [REQUEST_NESTED_VM.md](../REQUEST_NESTED_VM.md) for the getter and
 comparison windows, loader dependencies, evidence use and commands. These
 results do not implement real URL/headers/JNI conversion, complete Medusa or
 online signature output.
+
+`vm9_cpp_strings` models the tagged 24-byte inline/heap C++ layout used by
+request event wrappers. `vm9_request_event` and `vm9_request_boolean_gate`
+restore bounded outer orchestration; their formatter/evaluator/scope cleanup
+leaves require explicit providers. The 52 string, 16 gate and 8 event controls
+pass with 10 refusals. Native outer code executes with those leaves intercepted;
+this is not proof of the leaf bodies. The same-session probe stages prefixes
+and rejects at event formatter +0x28ddd0 / boolean evaluator +0x28b05c without
+committing the new callback body transaction. Outer VM steps remain 945/965.
+The formatter verifier now resolves realloc at +0x348320 from ELF and includes
+two forced realloc controls; the old truncation control used malloc/copy/free
+and never exercised realloc. See [REQUEST_EVENT_GATE.md](../REQUEST_EVENT_GATE.md).
 
 The Python files are research fixtures. They do not contain the private device configuration or raw online trial material.
 

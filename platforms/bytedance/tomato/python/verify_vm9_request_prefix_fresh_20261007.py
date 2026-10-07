@@ -108,6 +108,39 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     diagnostic_scope.setdefault('clock_stores', []).append(dict(
                         object_address=words[1], clock_id=1, stored_nanoseconds=value,
                         owning_clock_provider_used=read_clock is not None))
+            elif allocate is not None and (wrapper, target) == (0x285FB4, 0x28DC38):
+                if diagnostic_scope is None or free is None:
+                    raise PrefixBoundary()
+                import vm9_request_event
+                def event_observer(p, *, phase, **context):
+                    diagnostic_scope.setdefault('request_event_prefixes', []).append(dict(
+                        phase=phase, **context,
+                        first_object_hex=_read_span(p, context['first_object_address'], 24).hex(),
+                        second_object_hex=_read_span(p, context['second_object_address'], 24).hex(),
+                        first_copy_hex=_read_span(p, context['first_copy_address'], 24).hex(),
+                        formatter_target_offset='0x28ddd0',
+                        supported_prefix_staged=True, body_transaction_committed=False,
+                        native_input_snapshot_used=False))
+                vm9_request_event.execute_request_event(vm.m.pages, image_base=image,
+                    entry_stack_address=frame.native_stack_address - 0x180,
+                    argument_words=(words[1], words[2], words[3], vm.m.u64(argument + 32)),
+                    allocate=allocate, free=free, observer=event_observer)
+            elif allocate is not None and (wrapper, target) == (0x285A80, 0x28BB5C):
+                if diagnostic_scope is None or read_clock is None:
+                    raise PrefixBoundary()
+                import vm9_request_boolean_gate
+                def gate_observer(p, *, phase, **context):
+                    diagnostic_scope.setdefault('request_boolean_prefixes', []).append(dict(
+                        phase=phase, **context,
+                        scope_hex=_read_span(p, context['scope_address'], 16).hex(),
+                        evaluator_descriptor_hex=_read_span(p, context['evaluator_argument_address'], 16).hex(),
+                        unresolved_leaf_target_offset='0x28b05c' if context['evaluator_needed'] else '0x28c09c',
+                        supported_prefix_staged=True, body_transaction_committed=False,
+                        native_input_snapshot_used=False))
+                vm9_request_boolean_gate.execute_boolean_gate(vm.m.pages,
+                    object_address=words[1], image_base=image,
+                    entry_stack_address=frame.native_stack_address - 0x190,
+                    read_clock=read_clock, observer=gate_observer)
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

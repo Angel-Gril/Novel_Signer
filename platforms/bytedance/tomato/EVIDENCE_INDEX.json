@@ -2501,7 +2501,7 @@
   "vm9_request_diagnostic_continuation_20261007": {
     "evidence_file": "evidence/vm9_request_diagnostic_continuation_20261007.json",
     "schema": "vm9-request-diagnostic-continuation-probe-v1",
-    "status": "same_session_low_elapsed_high_raw_state_guard_release_shared_pointer_continued",
+    "status": "same_session_event_boolean_supported_prefixes_staged_leaf_bodies_open",
     "controls": 2,
     "nested_getter_composition_controls": 1,
     "owning_allocator_session_used": true,
@@ -2516,7 +2516,10 @@
       "getter_cleanup_completed": true,
       "new_configuration_pair_inserted": true,
       "elapsed_monotonic_microseconds": 0,
-      "elapsed_from_fixed_explicit_clock": true
+      "elapsed_from_fixed_explicit_clock": true,
+      "outer_callback_orchestration_component_verified": true,
+      "unresolved_leaf_target_offset": "0x28ddd0",
+      "event_string_prefix_staged_without_commit": true
     },
     "high_image": {
       "image_base": "0x775c205000",
@@ -2530,7 +2533,10 @@
       "memset_completed_bytes": 160,
       "raw_mutex_state_cleared_bytes": 140,
       "serial_guard_released": true,
-      "shared_state_pointer_getter_completed": true
+      "shared_state_pointer_getter_completed": true,
+      "outer_callback_orchestration_component_verified": true,
+      "unresolved_leaf_target_offset": "0x28b05c",
+      "boolean_scope_parameter_prefix_staged_without_commit": true
     },
     "native_input_snapshot_used": false,
     "whole_handoff_native_differential_verified": false,
@@ -2544,7 +2550,8 @@
       "Same owning Python constructor/request/allocator composition uses synthetic request inputs, not whole-native differential.",
       "The two branches still differ; high image has not reached the StringObject getter or formatter.",
       "Explicit ELF memory imports are parsed to PLT services, not a full dynamic loader.",
-      "Later callback bodies and whole-native request equivalence, real URL/header/JNI, fresh signatures and online matrix remain open."
+      "Later callback bodies and whole-native request equivalence, real URL/header/JNI, fresh signatures and online matrix remain open.",
+      "Event and boolean callback supported prefixes are observed in staged transactions; missing real leaf bodies refuse and no new callback body transaction is committed."
     ],
     "parsed_memory_import_relocations": 35,
     "signed_format_composition_controls": 1,
@@ -2556,14 +2563,17 @@
     "serial_guard_release_composition_controls": 1,
     "owning_clock_provider_used": true,
     "actual_os_clock_executed": false,
-    "shared_state_pointer_composition_controls": 1
+    "shared_state_pointer_composition_controls": 1,
+    "request_event_prefix_composition_controls": 1,
+    "request_boolean_prefix_composition_controls": 1,
+    "inner_callback_body_transaction_committed": false
   },
   "vm9_request_string_callbacks_fresh_20261007": {
     "evidence_file": "evidence/vm9_request_string_callbacks_fresh_20261007.json",
     "schema": "vm9-request-string-callbacks-fresh-differential-v1",
     "status": "cstring_equality_signed_format_and_serial_guard_component_pass",
     "equality_controls": 32,
-    "formatting_controls": 14,
+    "formatting_controls": 16,
     "guard_controls": 10,
     "negative_controls": 11,
     "native_input_snapshot_used": false,
@@ -2582,8 +2592,12 @@
     "limitations": [
       "Format scope is %d/%s/%%; width/precision/unsigned and other conversions are rejected.",
       "Format memory differences compare payload 0xA000, main image pages, TLS 0xB00 and generation 0x800 windows, not entire OS state.",
-      "Malloc/realloc/free are component Effects; whole-native request, actual realloc, URL/header/JNI and signer output are not established."
-    ]
+      "Malloc/realloc/free are component Effects; whole-native request, actual realloc, URL/header/JNI and signer output are not established.",
+      "Earlier truncation control had zero realloc calls and old realloc hook was incorrectly memcmp; new forced controls each execute one explicit realloc service."
+    ],
+    "component_realloc_plt_offset": "0x348320",
+    "component_realloc_import_verified_from_elf": true,
+    "forced_realloc_controls": 2
   },
   "vm9_request_clock_state_fresh_20261007": {
     "evidence_file": "evidence/vm9_request_clock_state_fresh_20261007.json",
@@ -2613,5 +2627,30 @@
       "Complete request, real URL/header/JNI and signature output remain unverified."
     ],
     "shared_pointer_controls": 20
+  },
+  "vm9_request_event_gate_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_event_gate_fresh_20261007.json",
+    "schema": "vm9-request-event-gate-fresh-differential-v1",
+    "status": "cpp_strings_and_explicit_leaf_request_event_boolean_orchestration_pass",
+    "cpp_string_controls": 52,
+    "boolean_gate_controls": 16,
+    "event_wrapper_controls": 8,
+    "negative_controls": 10,
+    "native_input_snapshot_used": false,
+    "actual_evaluator_body_executed": false,
+    "actual_event_formatter_body_executed": false,
+    "actual_elapsed_logger_body_executed": false,
+    "whole_handoff_native_differential_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "limitations": [
+      "Evaluator, elapsed scope cleanup and event formatter are explicit component services; their native bodies do not execute in this verifier.",
+      "C++ allocator/free Effects are not matching-libc allocator equivalence.",
+      "Payload, selected local windows and a global page are compared; full native stack/TLS/OS and C++ native return ABI remain unverified.",
+      "Same-session request prefixes are staged and refuse missing leaves without committing callback body.",
+      "Complete request, real URL/header/JNI, fresh signatures and online behavior remain unresolved."
+    ]
   }
 }

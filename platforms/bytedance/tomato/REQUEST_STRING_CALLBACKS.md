@@ -6,7 +6,7 @@ libc 为 `d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db`。
 二进制、实际设备资料和线上请求均不在仓库内。
 
 本轮完成了此前两个请求停止点的正常路径：C-string 相等性 callback 和
-`%d|%s` 格式化 callback。新增 **56 个原生对照、11 个负控制**；同次 Python
+`%d|%s` 格式化 callback。当前 **58 个原生对照、11 个负控制**（后续增加2个强制realloc控制）；同次 Python
 outer/request 组合低基址推进至 **919 / +0xffae0**，高基址推进至
 **793 / +0xf87bc**。组件对照与外层组合必须分别引用：后者仍不是整个原生请求
 对照，请求输入仍是合成对象，没有真实 URL/headers/JNI 或 Medusa 输出。
@@ -98,7 +98,7 @@ imports/callback 继续拒绝。resolver 保留 `_PageTransaction` 链，不能�
 | 组 | 数量 | 控制与比较 |
 | --- | --- | --- |
 | C-string equality target / wrapper | 32 | 两 image base；空串、相同、prefix、提前 NUL、嵌入 NUL、负 length、NULL payload/source；布尔槽及 0xA000 字节 payload |
-| signed format wrapper | 14 | 两基址；-5、0、int32 极值、忽略高 32 位、截断重试/realloc、转义百分号 |
+| signed format wrapper | 16 | 两基址；-5、0、int32 极值、忽略高 32 位、截断重试/growth、强制realloc、转义百分号 |
 | serial guard wrapper | 10 | 两基址；冷状态、byte0/byte1 completed、非零 byte0、shared normal mutex；全部 guard/padding、global mutex 和 gettid ledger |
 | 拒绝/回滚 | 11 | 未知格式、缺参数、NULL `%s`、超限、无效 ABI word；递归/等待 guard、缺少/溢出 thread id、contended mutex |
 | outer prefix 回归 | 6 | 两基址 × 三 flag/clock profile；32 virtual slots、callback descriptor、30 个 physical frame 入口和解析出的 memory imports |
@@ -109,8 +109,10 @@ format oracle 执行 matching-libc 的真实 `vsnprintf`，malloc/realloc/free �
 bytes、payload 0xA000 字节、已加载主 image 页、TLS 0xB00 字节，以及 generation
 0x800 字节的观测窗口。不要把窗口比较扩大成整个 OS/TLS 状态已证明。
 
-重试控制覆盖了非空目标的 realloc；这证明调用顺序和显式服务契约，**不证明
-matching-libc realloc 实现**。主组合使用真正的 owning allocator 模型及其 free；
+旧重试控制实际 realloc_calls=0，已更名为 growth；旧hook误指向memcmp也已
+按ELF纠正到realloc `+0x348320`。新增forced_destination_realloc在两个基址
+各调用1次显式服务。这证明组件调用顺序，**不证明matching-libc realloc实现**。
+纠正详情见 [REQUEST_EVENT_GATE.md](REQUEST_EVENT_GATE.md)。主组合使用真正的 owning allocator 模型及其 free；
 低基址本次增长走 malloc/copy/free，reallocation 请求数为零。进入其他 realloc
 路径仍会由 session 明确拒绝。
 

@@ -17,7 +17,15 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-07 最新请求检查点：monotonic clock、140 字节 raw state 和无 waiter
+2026-10-07 最新内部callback检查点：新增76个组件对照/10个负控制，恢复事件
+包装、boolean gate的有界编排和24-byte C++ string。event formatter/evaluator/
+scope cleanup的原生body仍未恢复；组合生成暂存前导后明确拒绝，外层仍945/965步，
+下一缺口分别`+0x28ddd0`和`+0x28b05c`。此外修正realloc hook与旧控制误称：
+原truncation路径realloc=0，新强制控制在两基址各1次；formatter证据现在16条。
+matching-libc realloc、完整request/真实URL/headers/JNI/fresh签名仍未通过。
+详见 [REQUEST_EVENT_GATE.md](REQUEST_EVENT_GATE.md)。
+
+2026-10-07 此前时钟检查点：monotonic clock、140 字节 raw state 和无 waiter
 serial guard release 及 shared pointer getter 新增 **82 个原生控制、18 个负控制**及 **4 个 outer
 constructor 回归**。同次 owning clock/allocator 组合低基址推进到 **945 /
 +0xffb48** 的 `+0x28dc38`，高基址到 **965 / +0xf8fd0** 的 `+0x28bb5c`。

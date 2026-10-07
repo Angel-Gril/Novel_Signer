@@ -387,7 +387,7 @@
       "native_input_snapshot_used": false
     }
   ],
-  "formatting_controls": 14,
+  "formatting_controls": 16,
   "formatting_cases": [
     {
       "image_base": "0x122c0000",
@@ -491,7 +491,7 @@
     },
     {
       "image_base": "0x122c0000",
-      "case": "truncation_retry_and_realloc",
+      "case": "truncation_retry_and_growth",
       "raw_integer": "0xfffffffb",
       "rendered_length": 68,
       "rendered_sha256": "b7e31ef16f6410ee7628ddd21027883190c110eb729419cca120bad313f5826a",
@@ -506,6 +506,26 @@
       "python_helper_returns_output_object": true,
       "native_abi_return_and_python_helper_return_are_distinct": true,
       "realloc_calls": 0,
+      "matching_libc_vsnprintf_executed": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "forced_destination_realloc",
+      "raw_integer": "0xfffffffb",
+      "rendered_length": 68,
+      "rendered_sha256": "b7e31ef16f6410ee7628ddd21027883190c110eb729419cca120bad313f5826a",
+      "payload_image_and_observed_tls_generation_windows_match": true,
+      "payload_bytes_compared": 40960,
+      "tls_bytes_compared": 2816,
+      "generation_bytes_compared": 2048,
+      "ordered_allocation_free_reallocation_and_wake_match": true,
+      "pre_free_bytes_match": true,
+      "explicit_allocator_service_used": true,
+      "native_success_cleanup_status": 0,
+      "python_helper_returns_output_object": true,
+      "native_abi_return_and_python_helper_return_are_distinct": true,
+      "realloc_calls": 1,
       "matching_libc_vsnprintf_executed": true,
       "native_input_snapshot_used": false
     },
@@ -631,7 +651,7 @@
     },
     {
       "image_base": "0x775c205000",
-      "case": "truncation_retry_and_realloc",
+      "case": "truncation_retry_and_growth",
       "raw_integer": "0xfffffffb",
       "rendered_length": 68,
       "rendered_sha256": "b7e31ef16f6410ee7628ddd21027883190c110eb729419cca120bad313f5826a",
@@ -646,6 +666,26 @@
       "python_helper_returns_output_object": true,
       "native_abi_return_and_python_helper_return_are_distinct": true,
       "realloc_calls": 0,
+      "matching_libc_vsnprintf_executed": true,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "forced_destination_realloc",
+      "raw_integer": "0xfffffffb",
+      "rendered_length": 68,
+      "rendered_sha256": "b7e31ef16f6410ee7628ddd21027883190c110eb729419cca120bad313f5826a",
+      "payload_image_and_observed_tls_generation_windows_match": true,
+      "payload_bytes_compared": 40960,
+      "tls_bytes_compared": 2816,
+      "generation_bytes_compared": 2048,
+      "ordered_allocation_free_reallocation_and_wake_match": true,
+      "pre_free_bytes_match": true,
+      "explicit_allocator_service_used": true,
+      "native_success_cleanup_status": 0,
+      "python_helper_returns_output_object": true,
+      "native_abi_return_and_python_helper_return_are_distinct": true,
+      "realloc_calls": 1,
       "matching_libc_vsnprintf_executed": true,
       "native_input_snapshot_used": false
     },
@@ -686,6 +726,10 @@
   "callback_wrappers_native_differential_verified": true,
   "signed_int32_formatting_verified": true,
   "matching_libc_realloc_implemented": false,
+  "component_realloc_plt_offset": "0x348320",
+  "component_realloc_import_verified_from_elf": true,
+  "forced_realloc_controls": 2,
+  "negative_controls": 11,
   "complete_python_medusa": false,
   "fresh_input_signer_output_verified": false,
   "current_online_header_matrix_verified": false,

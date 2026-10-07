@@ -128,7 +128,7 @@ def formatting_case(library, libc, image, control, exports):
         return 0
     returned, memory, _, _ = native(library, image, 0x285990, [PACKED], pages,
         libc=libc, malloc_handler=malloc, extra_registers={arm.UC_ARM64_REG_TPIDR_EL0: TLS},
-        host_imports={0x347FA0: free, 0x347FE0: realloc, 0x347F70: vsnprintf},
+        host_imports={0x347FA0: free, 0x348320: realloc, 0x347F70: vsnprintf},
         syscall_handler=syscall, observed_memory=observed, instruction_limit=300000)
     def amalloc(p, size):
         model_events.append(['malloc', size])
@@ -157,6 +157,10 @@ def formatting_case(library, libc, image, control, exports):
     for (address, width), observed_bytes in observed.items():
         assert _read_span(model_pages, address, width) == observed_bytes, hex(address)
     assert model_events == native_events, (model_events, native_events)
+    if control['name'] == 'forced_destination_realloc':
+        assert sum(e[0] == 'realloc' for e in model_events) == 1
+    if control['name'] == 'truncation_retry_and_growth':
+        assert not any(e[0] == 'realloc' for e in model_events)
     assert actual.calls == expected.calls and actual.blocks == expected.blocks
     assert model_freed == native_freed
     final_length = int.from_bytes(_read_span(model_pages, OBJECT + 12, 4), 'little')
@@ -229,6 +233,13 @@ def main():
     args = parser.parse_args()
     assert hashlib.sha256(args.library.read_bytes()).hexdigest() == LIBRARY_SHA256
     assert hashlib.sha256(args.libc.read_bytes()).hexdigest() == LIBC_SHA256
+    with args.library.open('rb') as stream:
+        elf = ELFFile(stream)
+        plt, jumps = elf.get_section_by_name('.plt'), elf.get_section_by_name('.rela.plt')
+        symbols = elf.get_section(jumps['sh_link'])
+        import_entries = {symbols.get_symbol(r['r_info_sym']).name:
+            plt['sh_addr'] + 32 + index * 16 for index, r in enumerate(jumps.iter_relocations())}
+        assert import_entries['realloc'] == 0x348320 and import_entries['memcmp'] == 0x347FE0
     exports = {}
     with args.libc.open('rb') as stream:
         for section in ELFFile(stream).iter_sections():
@@ -251,7 +262,8 @@ def main():
         dict(name='int32_min', integer=0x80000000, string=b'seed', expected=b'-2147483648|seed'),
         dict(name='int32_max', integer=0x7FFFFFFF, string=b'seed', expected=b'2147483647|seed'),
         dict(name='high_bits_ignored', integer=0x12345678FFFFFFFF, string=b'seed', expected=b'-1|seed'),
-        dict(name='truncation_retry_and_realloc', integer=0xFFFFFFFB, string=b'x'*65, capacity=8, length=7, expected=b'-5|'+b'x'*65),
+        dict(name='truncation_retry_and_growth', integer=0xFFFFFFFB, string=b'x'*65, capacity=8, length=7, expected=b'-5|'+b'x'*65),
+        dict(name='forced_destination_realloc', integer=0xFFFFFFFB, string=b'x'*65, capacity=8, length=8, expected=b'-5|'+b'x'*65),
         dict(name='escaped_percent', integer=0xFFFFFFFF, string=b'ignored', format=b'%%:%d', expected=b'%:-1'),
     ]
     guard_controls = [
@@ -280,6 +292,9 @@ def main():
         formatting_controls=len(formatting), formatting_cases=formatting, negative_cases=negative,
         callback_wrappers_native_differential_verified=True,
         signed_int32_formatting_verified=True, matching_libc_realloc_implemented=False,
+        component_realloc_plt_offset='0x348320', component_realloc_import_verified_from_elf=True,
+        forced_realloc_controls=sum(c['case'] == 'forced_destination_realloc' for c in formatting),
+        negative_controls=len(negative),
         complete_python_medusa=False, fresh_input_signer_output_verified=False,
         current_online_header_matrix_verified=False, no_jvm_rust_signer_complete=False,
         limitations=['Synthetic component fixtures use explicit malloc/realloc/free services; matching-libc vsnprintf itself executes natively.',

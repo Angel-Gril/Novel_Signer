@@ -262,6 +262,45 @@
       "guard_releases": [],
       "raw_mutex_states": [],
       "shared_state_pointers": [],
+      "request_event_prefixes": [
+        {
+          "phase": "before_first_formatter",
+          "globals": [
+            {
+              "flag_address": 308943268,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 17
+            },
+            {
+              "flag_address": 308943300,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 19
+            }
+          ],
+          "first_object_address": 1879365296,
+          "second_object_address": 1879365264,
+          "first_copy_address": 1879365232,
+          "second_copy_address": 1879365200,
+          "argument_words": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "emit_error_event": 0,
+          "first_object_hex": "22687474705f7369676e5f67656e5f616c6c00046194f295",
+          "second_object_hex": "26687474705f7369676e5f67656e5f6572726f72000157d5",
+          "first_copy_hex": "22687474705f7369676e5f67656e5f616c6c00046194f295",
+          "formatter_target_offset": "0x28ddd0",
+          "supported_prefix_staged": true,
+          "body_transaction_committed": false,
+          "native_input_snapshot_used": false
+        }
+      ],
+      "request_boolean_prefixes": [],
+      "inner_callback_body_transaction_committed": false,
       "clock_stores": [
         {
           "object_address": 1879370760,
@@ -517,6 +556,9 @@
       ],
       "next_callback": {
         "wrapper_offset": "0x285fb4",
+        "bounded_callback_orchestration_component_verified": true,
+        "supported_prefix_staged_without_transaction_commit": true,
+        "unresolved_leaf_target_offset": "0x28ddd0",
         "target_offset": "0x28dc38",
         "target_address": "0x1254dc38",
         "null_target": false,
@@ -817,7 +859,7 @@
           ]
         }
       ],
-      "continuation_error": "RefillUnsupported: unknown request callback +0x285fb4 -> +0x28dc38",
+      "continuation_error": "RefillUnsupported: request event formatter +0x28ddd0 is not recovered",
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
@@ -1039,6 +1081,60 @@
           "pointed_value_dereferenced": false
         }
       ],
+      "request_event_prefixes": [],
+      "request_boolean_prefixes": [
+        {
+          "phase": "before_evaluator",
+          "addresses": {
+            "first_name": 512650798632,
+            "second_name": 512650798644,
+            "counter": 512650798624,
+            "first_flag": 512650798640,
+            "first_source": 512647903704,
+            "first_mask": 512647903776,
+            "second_flag": 512650798660,
+            "second_source": 512647903712,
+            "second_mask": 512647903760,
+            "scope_constructor": 512649400456,
+            "evaluator": 512649396316,
+            "scope_destructor": 512649400476
+          },
+          "globals": [
+            {
+              "name": "first",
+              "flag_address": 512650798640,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 6
+            },
+            {
+              "name": "second",
+              "flag_address": 512650798660,
+              "flag_before": 0,
+              "decode_performed": true,
+              "decoded_length": 14
+            }
+          ],
+          "clock_word": 1791023800500000000,
+          "start_address": 1879365248,
+          "scope_address": 1879365232,
+          "scope_source_address": 1879365216,
+          "evaluator_argument_address": 1879365184,
+          "second_name_slot_address": 1879365200,
+          "boolean_slot": 1879365168,
+          "duplicated_first_address": 1879365184,
+          "counter_value": 0,
+          "original_cached_byte": 0,
+          "evaluator_needed": true,
+          "scope_hex": "80d604700000000001d6047000000000",
+          "evaluator_descriptor_hex": "28665e5c7700000028665e5c77000000",
+          "unresolved_leaf_target_offset": "0x28b05c",
+          "supported_prefix_staged": true,
+          "body_transaction_committed": false,
+          "native_input_snapshot_used": false
+        }
+      ],
+      "inner_callback_body_transaction_committed": false,
       "clock_stores": [
         {
           "object_address": 1879370760,
@@ -1049,6 +1145,12 @@
       ],
       "elapsed_clocks": [],
       "request_clock_reads": [
+        [
+          1,
+          0,
+          1791023800,
+          500000000
+        ],
         [
           1,
           0,
@@ -1280,6 +1382,9 @@
       "configuration_insertions": [],
       "next_callback": {
         "wrapper_offset": "0x285a80",
+        "bounded_callback_orchestration_component_verified": true,
+        "supported_prefix_staged_without_transaction_commit": true,
+        "unresolved_leaf_target_offset": "0x28b05c",
         "target_offset": "0x28bb5c",
         "target_address": "0x775c490b5c",
         "null_target": false,
@@ -1580,7 +1685,7 @@
           ]
         }
       ],
-      "continuation_error": "RefillUnsupported: unknown request callback +0x285a80 -> +0x28bb5c",
+      "continuation_error": "RefillUnsupported: request boolean evaluator +0x28b05c is not recovered",
       "x8_reference_output_generated": true,
       "reference_count_initial_value": 1,
       "allocated_spans_inside_owned_os_mappings": true,
@@ -1609,6 +1714,9 @@
   "serial_guard_release_composition_controls": 1,
   "shared_state_pointer_composition_controls": 1,
   "actual_os_clock_executed": false,
+  "request_event_prefix_composition_controls": 1,
+  "request_boolean_prefix_composition_controls": 1,
+  "inner_callback_body_transaction_committed": false,
   "whole_handoff_native_differential_verified": false,
   "real_url_headers_jni_conversion_verified": false,
   "no_jvm_rust_signer_complete": false,

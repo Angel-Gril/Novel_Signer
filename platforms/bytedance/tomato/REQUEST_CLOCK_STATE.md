@@ -150,3 +150,7 @@ matching-libc realloc 仍明确拒绝；本次组合没有 realloc 请求。完�
 真实 URL/headers/JNI、fresh Medusa、新线上全头矩阵、无 JVM Rust、非空搜索/分页、
 抖音/起点闭环，以及最终 Pages/Actions 下载产品仍未完成。本阶段没有服务器
 请求、签名输出或小说正文。
+
+后续已恢复event/boolean外围编排与C++字符串；内部未提交前导和下一叶函数
+缺口见 [REQUEST_EVENT_GATE.md](REQUEST_EVENT_GATE.md)。本文的时钟/state组件
+范围不变，外层步数仍945/965，不能将内部阶段计作VM成功返回。

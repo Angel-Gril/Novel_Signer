@@ -93,7 +93,7 @@ def case(library, libc, image, label, property_value, vm_module):
         assert not reallocations, 'this composition must not silently substitute real realloc'
         if image == 0x122C0000:
             assert vm.steps == 945 and vm.pc - image == 0xFFB48
-            assert continuation_error == 'RefillUnsupported: unknown request callback +0x285fb4 -> +0x28dc38'
+            assert continuation_error == 'RefillUnsupported: request event formatter +0x28ddd0 is not recovered'
             assert len(nested) == 1
             assert len(diag.get('formatted_strings', [])) == 1
             formatted = diag['formatted_strings'][0]
@@ -102,13 +102,21 @@ def case(library, libc, image, label, property_value, vm_module):
             assert len(diag.get('configuration_insertions', [])) == 1
             assert len(diag.get('string_cleanups', [])) == 1
             assert len(frees) == 5
+            assert len(diag.get('request_event_prefixes', [])) == 1
+            event_prefix = diag['request_event_prefixes'][0]
+            assert event_prefix['phase'] == 'before_first_formatter'
+            assert event_prefix['emit_error_event'] == 0
+            assert event_prefix['first_object_hex'] == event_prefix['first_copy_hex']
+            assert event_prefix['first_object_hex'][:2] == '22'
+            assert event_prefix['second_object_hex'][:2] == '26'
+            assert not event_prefix['body_transaction_committed']
             assert len(diag.get('elapsed_clocks', [])) == 1
             assert diag['elapsed_clocks'][0]['elapsed_microseconds'] == 0
             assert clock_reads == [[1, 0, 1791023800, 500000000]] * 2
         else:
             assert image == 0x775C205000
             assert vm.steps == 965 and vm.pc - image == 0xF8FD0
-            assert continuation_error == 'RefillUnsupported: unknown request callback +0x285a80 -> +0x28bb5c'
+            assert continuation_error == 'RefillUnsupported: request boolean evaluator +0x28b05c is not recovered'
             assert not nested and not diag.get('formatted_strings')
             assert len(diag.get('string_comparisons', [])) == 1
             assert diag['string_comparisons'][0]['equal'] is False
@@ -123,7 +131,13 @@ def case(library, libc, image, label, property_value, vm_module):
             assert release['guard_after_hex'][:4] == '0101'
             assert release['guard_before_hex'][4:] == release['guard_after_hex'][4:]
             assert not release['broadcast_executed']
-            assert clock_reads == [[1, 0, 1791023800, 500000000]]
+            assert clock_reads == [[1, 0, 1791023800, 500000000]] * 2
+            assert len(diag.get('request_boolean_prefixes', [])) == 1
+            boolean_prefix = diag['request_boolean_prefixes'][0]
+            assert boolean_prefix['phase'] == 'before_evaluator' and boolean_prefix['evaluator_needed']
+            assert boolean_prefix['addresses']['evaluator'] == image + 0x28B05C
+            assert boolean_prefix['scope_hex'][16:18] == '01'
+            assert not boolean_prefix['body_transaction_committed']
             assert len(diag.get('shared_state_pointers', [])) == 1
             getter = diag['shared_state_pointers'][0]
             assert getter['readers_before'] == getter['readers_after'] == 0
@@ -136,7 +150,13 @@ def case(library, libc, image, label, property_value, vm_module):
             assert getter['vm_steps'] == 54 and getter['vm_exit_pc'] == image + 0x99150
             assert getter['output_matches_receiver']
             assert getter['acquire_reader_count'] == getter['released_reader_count'] + 1
+        inner = (diag.get('request_event_prefixes') or diag.get('request_boolean_prefixes'))[-1]
+        leaf_target = inner.get('formatter_target_offset') or inner['unresolved_leaf_target_offset']
         next_callback = dict(wrapper_offset=hex(ledger[-1][0]),
+            bounded_callback_orchestration_component_verified=True,
+            supported_prefix_staged_without_transaction_commit=True,
+            unresolved_leaf_target_offset=leaf_target,
+
             target_offset=hex(ledger[-1][1]) if ledger[-1][3][0] else None,
             target_address=hex(ledger[-1][3][0]), null_target=not bool(ledger[-1][3][0]),
             packed_words=[hex(word) for word in ledger[-1][3]],
@@ -176,6 +196,9 @@ def case(library, libc, image, label, property_value, vm_module):
             guard_releases=diag.get('guard_releases', []),
             raw_mutex_states=diag.get('raw_mutex_states', []),
             shared_state_pointers=diag.get('shared_state_pointers', []),
+            request_event_prefixes=diag.get('request_event_prefixes', []),
+            request_boolean_prefixes=diag.get('request_boolean_prefixes', []),
+            inner_callback_body_transaction_committed=False,
             clock_stores=diag.get('clock_stores', []),
             elapsed_clocks=diag.get('elapsed_clocks', []),
             request_clock_reads=clock_reads,
@@ -236,6 +259,9 @@ def main():
         serial_guard_release_composition_controls=sum(bool(row['guard_releases']) for row in rows),
         shared_state_pointer_composition_controls=sum(bool(row['shared_state_pointers']) for row in rows),
         actual_os_clock_executed=False,
+        request_event_prefix_composition_controls=sum(bool(row['request_event_prefixes']) for row in rows),
+        request_boolean_prefix_composition_controls=sum(bool(row['request_boolean_prefixes']) for row in rows),
+        inner_callback_body_transaction_committed=False,
         whole_handoff_native_differential_verified=False,
         real_url_headers_jni_conversion_verified=False,
         no_jvm_rust_signer_complete=False,
