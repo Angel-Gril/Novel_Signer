@@ -12,7 +12,7 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 # 番茄（ByteDance Tomato）完整分析与使用报告
 
-> 截止：2026-10-04
+> 截止：2026-10-07
 > 结论：**本项目整体尚未完成，不能作为当前线上小说搜索下载器发布。**
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
@@ -46,6 +46,20 @@ The public callback model keeps these boundaries explicit through `vm9_callbacks
 ### Medusa f13 clock input status
 
 `python/verify_medusa_f13_clock_parameter_20261006.py` can reproduce the f13 core with private snapshots supplied through `MEDUSA_F13_SNAPSHOT_DIR`. Its evidence records identical output for multiple explicit timestamps and no syscall 113. Use this as a negative control when reviewing timestamp work: the Python API accepts time, but the current snapshot path does not consume it, so live timestamp freezing and online Medusa acceptance remain open.
+
+### 2026-10-07：fresh request nested VM 前缀恢复
+
+新增 [REQUEST_NESTED_VM.md](REQUEST_NESTED_VM.md) 集中说明本轮字段解码、
+调用方式和证据边界。`+0x16d7d0` 的 dispatcher 已接到 10 次 STORE64、op17
+sub-dispatch、OR64 和 signed MOVhi；6 组 fresh caller 对照到达 `+0x16e32c`。
+这些输入由显式对象/x8、fresh 页和 ELF 重定位生成，没有使用 native 前导快照。
+新增组件/组合共 48 组 native/Python 对照与 8 组拒绝/回滚控制通过；每组组合
+比较从 store loop 开始的 61 次写入顺序和规定内存范围。
+
+该结果可作为 VM word 解码、内存顺序、寄存器恢复和 dispatch table 定位的原生
+差分证据；它仍不证明真实 URL/header/JNI 转换、整个 request callback 返回、
+完整 Medusa 输出、当前线上验签或无 JVM Rust 下载器。下一处是 `+0x16e32c`。
+
 
 ## Callback result writeback
 

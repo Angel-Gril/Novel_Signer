@@ -2390,6 +2390,65 @@
       "The +0x171138 loop is not implemented in Python.",
       "The +0x16855c body remains open.",
       "No URL/header/JNI conversion, current online request, fresh Medusa output or Rust signer is established."
+    ],
+    "implementation_followup": "vm9_request_nested_fresh_20261007"
+  },
+  "vm9_request_or64_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_or64_fresh_20261007.json",
+    "schema": "vm9-request-or64-fresh-differential-v1",
+    "status": "request_or64_fresh_differential_pass",
+    "handler_offset": "0x16a5a8",
+    "branch_offset": "0x16a610",
+    "controls": 12,
+    "negative_controls": 3,
+    "all_native_controls_pass": true,
+    "handler_python_implementation_verified": true,
+    "ordered_writes_verified": true,
+    "full_guest_memory_verified": true,
+    "complete_python_medusa": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "interpretation": "OR64 consumes x21, preserves native alias/load/store order, advances the stream and selects the indirect next handler on fresh inputs.",
+    "limitations": [
+      "Two controls use the relocated ELF dispatch table; ten use explicitly generated component tables.",
+      "The next handler body is outside this component.",
+      "No URL/headers/JNI conversion or online signature acceptance is established."
+    ]
+  },
+  "vm9_request_nested_fresh_20261007": {
+    "evidence_file": "evidence/vm9_request_nested_fresh_20261007.json",
+    "schema": "vm9-request-nested-fresh-differential-v1",
+    "status": "request_nested_store_subdispatch_movhi_and_composition_pass",
+    "store_offset": "0x171138",
+    "subdispatch_offset": "0x16855c",
+    "or64_offset": "0x16a5a8",
+    "movhi_offset": "0x16e158",
+    "next_handler_offset": "0x16e32c",
+    "store_controls": 12,
+    "subdispatch_controls": 6,
+    "movhi_controls": 12,
+    "composed_controls": 6,
+    "negative_controls": 5,
+    "all_native_controls_pass": true,
+    "store_loop_python_implementation_verified": true,
+    "subdispatch_python_implementation_verified": true,
+    "movhi_python_implementation_verified": true,
+    "fresh_caller_to_post_movhi_prefix_verified": true,
+    "native_input_snapshot_used": false,
+    "all_generic_vm_prelude_spills_recovered": false,
+    "real_url_headers_jni_inputs_verified": false,
+    "request_callback_completed": false,
+    "repair_paths_verified": false,
+    "complete_python_medusa": false,
+    "fresh_medusa_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false,
+    "interpretation": "Six independently generated fresh caller controls use the unmodified relocated ELF tables, execute ten stores, sub-dispatch, OR64 and signed MOVhi, and reach +0x16e32c. Each compares 61 ordered writes from the store loop, component registers and defined memory ranges.",
+    "limitations": [
+      "Other generic prelude spills, repair paths and +0x16e32c remain outside the recovered prefix.",
+      "Caller object/x8 inputs are synthetic, not URL/header/JNI conversion.",
+      "No complete Medusa, current online matrix, Rust downloader or other platform closure is established."
     ]
   }
 }

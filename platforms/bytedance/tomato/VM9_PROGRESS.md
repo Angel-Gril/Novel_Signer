@@ -1,5 +1,44 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07：fresh caller 的 nested VM 前缀已推进到 `+0x16e32c`
+
+本轮恢复了正常路径的 `+0x171138` STORE64 循环、`+0x16855c` sub-dispatch、
+`+0x16a5a8` OR64 和 `+0x16e158` signed MOVhi，并把它们接到已验证的
+`+0x16d7d0` dispatcher。Python 输入由 ELF/重定位、显式对象/x8 和 fresh 页生成，
+没有读取 native 前导快照作为输入。组合链为：
+
+```text
++0x256ed4 caller / defined prelude
+  -> +0x16d7d0
+  -> +0x171138 STORE64 × 10
+  -> +0x16855c
+  -> +0x16a5a8 OR64
+  -> +0x16e158 MOVhi
+  -> +0x16e32c（下一处尚未恢复）
+```
+
+新增 **48 组 fresh native/Python 对照全部通过**：OR64 12 组、STORE64 12 组、
+sub-dispatch 6 组、MOVhi 12 组，以及使用原 ELF dispatch table 的 caller 组合 6 组。
+另有 8 组拒绝/回滚控制通过，已有 dispatcher 的 6 组回归通过。
+组合覆盖两 image base、三对象/保留 x8 profile 和三种 fresh page fill；每组核对
+各组件输出寄存器、从 store loop 开始的 **61 次写入顺序**、25 个规定内存范围，
+最终 stream 为 `image+0x99054`，PC 为 `image+0x16e32c`。
+
+OR64 使用 `x21`，并按原生顺序处理槽位和 scratch 别名；STORE64 覆盖正负及
+极值 signed displacement，以及覆盖下一条 word 的控制；MOVhi 覆盖正、负、
+零立即数和 signed 32→64 扩展。验证器在 bounded 分支出口直接读取 emulator
+内存，修正了异常停止时 normal-return 内存导出没有执行的问题。
+
+证据与字段/调用说明见 [REQUEST_NESTED_VM.md](REQUEST_NESTED_VM.md)、
+[OR64 对照](evidence/vm9_request_or64_fresh_20261007.json) 和
+[nested 组合对照](evidence/vm9_request_nested_fresh_20261007.json)。
+下方较早记录保留当时的边界；本节记录当前实现进度。
+
+**这仍是合成 native request 输入下的 bounded 前缀。** 其他 generic VM frame spills、
+repair paths、`+0x16e32c` 后续 body、真实 URL/headers/JNI 转换和 callback 返回链
+尚未贯通；完整独立 Medusa、fresh 签名和线上全头矩阵仍未通过。Rust、当前搜索、
+抖音/起点以及最终 Pages/Actions 下载产品继续保持未完成状态。
+
 ## 2026-10-07：请求 nested VM dispatcher `+0x16d7d0`
 
 `+0x16d7d0` 已从“入口定位”推进为一个可独立复现的 bounded dispatcher transition。

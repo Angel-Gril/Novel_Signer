@@ -10,6 +10,15 @@ outside this repository (`TOMATO_LIBMETASEC` may point to it) and captured
 memory/trace inputs. It is not a current online signer: the constructor,
 allocator, and host handoff path still depend on captured state.
 
+`vm9_request_nested.py` and `vm9_request_or64.py` recover a bounded fresh
+request prefix through STORE64, sub-dispatch, OR64 and signed MOVhi. The
+verifiers build caller inputs from explicit synthetic objects/x8 and fresh ELF
+pages, and compare with native ARM64 without importing captured input state.
+The composed prefix reaches `+0x16e32c`; it does not complete the request VM,
+convert URL/headers/JNI inputs, or generate Medusa. See
+[REQUEST_NESTED_VM.md](../REQUEST_NESTED_VM.md) for 48 differential controls,
+8 refusal/rollback controls, bit layouts and reproduction commands.
+
 The Python files are research fixtures. They do not contain the private device configuration or raw online trial material.
 
 `vm9_callbacks.py` also initializes the A/B global from an explicit
