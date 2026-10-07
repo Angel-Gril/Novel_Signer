@@ -22,6 +22,16 @@ next-word selector `0x1a`，下一跳为 image-relative `+0x171138`。
 python platforms/bytedance/tomato/python/verify_vm9_request_dispatcher_fresh_20261007.py --library C:\AI\6\libmetasec_ml_71332.so --output platforms/bytedance/tomato/evidence/vm9_request_dispatcher_fresh_20261007.json
 ```
 
+## 2026-10-07：`+0x171138` handler loop 出口定位
+
+沿着 dispatcher 的 `+0x171138` 下一跳继续做 native-only fresh probe。该入口会
+在自身范围内重复处理 VM words；6 组同样的两基址 × 三个对象/保留 x8 profile
+均在 **1001 条 native 指令**后第一次离开 loop，统一进入 `+0x16855c`。
+
+[evidence/vm9_request_nested_handler_exit_fresh_20261007.json](evidence/vm9_request_nested_handler_exit_fresh_20261007.json)
+只记录 handler entry/exit 边界和指令计数，尚未把 `+0x171138` loop 或
+`+0x16855c` 转成 Python；因此不能把该边界当成 nested VM 已完成。
+
 ## 2026-10-07：请求配置树 x8 输出与同次 allocator 接入
 
 当前请求诊断边界进一步推进到 **第 611 步、`+0xf80a8`**。

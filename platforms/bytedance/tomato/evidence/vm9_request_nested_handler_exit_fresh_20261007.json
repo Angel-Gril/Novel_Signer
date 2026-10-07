@@ -1,0 +1,73 @@
+{
+  "schema": "vm9-request-nested-handler-exit-fresh-observation-v1",
+  "evidence_date": "2026-10-07",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "controls": 6,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "object_offset": "0x1800",
+      "preserved_x8": "0x7004edd8",
+      "handler_entry": "0x171138",
+      "first_post_handler": "0x16855c",
+      "handler_instruction_count": 1001,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "object_offset": "0x1ff8",
+      "preserved_x8": "0x64000000",
+      "handler_entry": "0x171138",
+      "first_post_handler": "0x16855c",
+      "handler_instruction_count": 1001,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "object_offset": "0x2800",
+      "preserved_x8": "0x12517050",
+      "handler_entry": "0x171138",
+      "first_post_handler": "0x16855c",
+      "handler_instruction_count": 1001,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "object_offset": "0x1800",
+      "preserved_x8": "0x7004edd8",
+      "handler_entry": "0x171138",
+      "first_post_handler": "0x16855c",
+      "handler_instruction_count": 1001,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "object_offset": "0x1ff8",
+      "preserved_x8": "0x64000000",
+      "handler_entry": "0x171138",
+      "first_post_handler": "0x16855c",
+      "handler_instruction_count": 1001,
+      "native_input_snapshot_used": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "object_offset": "0x2800",
+      "preserved_x8": "0x775c45c050",
+      "handler_entry": "0x171138",
+      "first_post_handler": "0x16855c",
+      "handler_instruction_count": 1001,
+      "native_input_snapshot_used": false
+    }
+  ],
+  "handler_entry_located": true,
+  "handler_exit_located": true,
+  "handler_python_implementation_verified": false,
+  "complete_python_medusa": false,
+  "fresh_input_signer_output_verified": false,
+  "current_online_header_matrix_verified": false,
+  "limitations": [
+    "This is a native boundary observation for +0x171138's normal loop.",
+    "The handler loop and +0x16855c body are not implemented in Python.",
+    "No URL/header/JNI conversion, JVM, server request or signature output is used."
+  ]
+}
