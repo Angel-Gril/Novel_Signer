@@ -45,7 +45,10 @@ def bindings(library):
 
 
 def case(args,base,mode,*,bind_memset=False,isolated_arena=True):
-    assert mode in ('return','worker_entry','memset_packet','task_return','arena_collision','worker_wait','worker_stop')
+    stop_worker=mode in ('worker_stop','worker_tls_cleanup','worker_pthread_exit')
+    cleanup_keys=mode in ('worker_tls_cleanup','worker_pthread_exit')
+    pthread_exit=mode=='worker_pthread_exit'
+    assert mode in ('return','worker_entry','memset_packet','task_return','arena_collision','worker_wait','worker_stop','worker_tls_cleanup','worker_pthread_exit')
     slots,plt=bindings(args.library)
     with args.libc.open('rb') as stream:
         elf=ELFFile(stream)
@@ -57,10 +60,13 @@ def case(args,base,mode,*,bind_memset=False,isolated_arena=True):
     arenas=[];default_wakes=[];callers=[];nested_returns=[];canary_pairs=[]
     task_return_points=[];task_cleanup_points=[];worker_wait_events=[];worker_frees=[];worker_free_sizes=[];wait_entered=[]
 
+    exit_events=[];support={};cleanup_state={'started':False,'returned':False,'pthread_exit_started':False}
+
     def fixture(library,image,profile,**options):
         pages,blocks=original_fixture(library,image,profile,**options)
         _write_span(pages,TABLE,_read_span(pages,cold.TABLE,4096))
         cold.w(pages,cold.ENV,TABLE);cold.w(pages,cold.INNER_ENV,TABLE)
+        if pthread_exit:cold.w(pages,GUEST+0xBC80,0)  # Explicit empty libc __cxa thread list.
         _write_span(pages,MAIN_THREAD,_read_span(pages,GUEST+0xD000,0x50))
         for name in ('memcpy','memset'):
             for offset in slots[name]:
@@ -70,23 +76,26 @@ def case(args,base,mode,*,bind_memset=False,isolated_arena=True):
 
     def execute(library,image,function,arguments,pages,**options):
         previous=options['instruction_observer'];original_syscall=options['syscall_handler']
-        options['stop_offset']={'return':None,'worker_entry':0x280554,'memset_packet':0x281620,'task_return':0x326620,'arena_collision':0x280A70,'worker_wait':0x3485B0,'worker_stop':None}[mode]
-        options['instruction_limit']=900000000 if mode in ('task_return','arena_collision','worker_wait','worker_stop') else 1000000
+        options['stop_offset']={'return':None,'worker_entry':0x280554,'memset_packet':0x281620,'task_return':0x326620,'arena_collision':0x280A70,'worker_wait':0x3485B0,'worker_stop':None,'worker_tls_cleanup':None,'worker_pthread_exit':None}[mode]
+        options['instruction_limit']=900000000 if mode in ('task_return','arena_collision','worker_wait','worker_stop','worker_tls_cleanup','worker_pthread_exit') else 1000000
         options['code_hook_ranges']=tuple((image+a,image+b) for a,b in
             ((0x165388,0x1684F0),(0x26C858,0x271940),(0x27B41C,0x281800),
              (0x326000,0x326B00),(0x347E00,0x348800)))+((GUEST+0xF000,GUEST+0xFF00),)
+        if cleanup_keys:
+            options['code_hook_ranges']+=((LIBC_BASE+0x68138,LIBC_BASE+0x68670),(LIBC_BASE+0x9BE24,LIBC_BASE+0x9BE24),(LIBC_BASE+0x6B2A4,LIBC_BASE+0x6B2F0))
         previous_malloc=options['malloc_handler']
         def allocate(cpu,size):
             if size!=0x4000 or not isolated_arena:return previous_malloc(cpu,size)
             assert len(arenas)<6
             pointer=ARENAS+len(arenas)*0x4000;arenas.append(pointer);return pointer
         options['malloc_handler']=allocate
-        if mode=='worker_stop':
+        if stop_worker:
             effects=next(cell.cell_contents for cell in previous_malloc.__closure__
                 if isinstance(cell.cell_contents,cold.Effects))
         def free(cpu):
             pointer=cpu.reg_read(arm.UC_ARM64_REG_X0)
             worker_frees.append(pointer);worker_free_sizes.append(effects.blocks[pointer])
+            exit_events.append(['free',pointer,effects.blocks[pointer]])
             return effects.native(cpu,'free',pointer=pointer)
         options['extra_registers']={arm.UC_ARM64_REG_TPIDR_EL0:MAIN_THREAD}
         imports=options['host_imports']
@@ -106,7 +115,11 @@ def case(args,base,mode,*,bind_memset=False,isolated_arena=True):
                 assert number==98 and values[1:]==[129,0x7FFFFFFF]
                 default_wakes.append([number,*values,0]);return 0
             values=[cpu.reg_read(getattr(arm,'UC_ARM64_REG_X'+str(i))) for i in range(3)]
-            if mode=='worker_stop' and number==98 and values[1]&0x7F==0:
+            if pthread_exit and number==93:
+                assert cleanup_state['pthread_exit_started'] and cleanup_state['returned']
+                assert cpu.reg_read(arm.UC_ARM64_REG_X0)==0
+                exit_events.append(['explicit_OS_exit',0]);cpu.reg_write(arm.UC_ARM64_REG_PC,cold.STOP);return 0
+            if stop_worker and number==98 and values[1]&0x7F==0:
                 queue=int.from_bytes(cpu.mem_read(threads[1][4]+0x18,8),'little')
                 assert values[0]==queue+0x58
                 assert int.from_bytes(cpu.mem_read(queue+0x30,2),'little')==0
@@ -116,8 +129,13 @@ def case(args,base,mode,*,bind_memset=False,isolated_arena=True):
             assert number==98 and values[1]==129 and values[2]==1
             signals.append([number,*values,0]);return 0
         imports.update({0x348000:create,0x348590:signal});options['syscall_handler']=syscall
-        if mode=='worker_stop':
+        if stop_worker:
             imports.update({0x3485B0:lambda cpu:actual(cpu,'pthread_cond_wait'),0x347FA0:free})
+        if pthread_exit:
+            def libc_exit_tls(cpu):
+                assert cpu.reg_read(arm.UC_ARM64_REG_X0)==LIBC_BASE+0xDB3A8
+                exit_events.append(['explicit_get_libc_TLS']);return GUEST+0xBC80
+            imports[LIBC_BASE+0x9BE24-image]=libc_exit_tls
         prior_exit=imports[0x347EA0]
         def exiting(cpu):
             result=prior_exit(cpu)
@@ -156,6 +174,33 @@ def case(args,base,mode,*,bind_memset=False,isolated_arena=True):
             0x348580:set_specific,0x348620:key_create,0x3486B0:once})
         def observe(cpu,address):
             previous(cpu,address);off=address-image
+            def read(a,n=8):return int.from_bytes(cpu.mem_read(a,n),'little')
+            if cleanup_keys and off==0x326108:
+                assert not support and cpu.reg_read(arm.UC_ARM64_REG_X0)==0
+                key=read(image+0x3E2F30,4)&0x7FFFFFFF
+                slot=read(WORKER_THREAD+8)+0xF0+key*16
+                wrapper=read(slot);payload=read(wrapper)
+                assert worker_frees==[threads[1][4]] and wrapper and payload
+                assert wrapper in effects.blocks and payload in effects.blocks
+                support.update(key=key,slot=slot,wrapper=wrapper,payload=payload)
+                exit_events.append(['worker_normal_return',0])
+                if pthread_exit:
+                    cleanup_state['pthread_exit_started']=True
+                    cpu.reg_write(arm.UC_ARM64_REG_PC,LIBC_BASE+0x68138)
+                    switches.append('worker_return_to_guest_pthread_exit')
+                    exit_events.append(['guest_pthread_exit_enter'])
+                else:
+                    cpu.reg_write(arm.UC_ARM64_REG_PC,LIBC_BASE+0x685A0)
+                    switches.append('worker_return_to_matching_libc_key_cleanup')
+                cpu.reg_write(arm.UC_ARM64_REG_X30,cold.STOP);return
+            if cleanup_keys and address==LIBC_BASE+0x685A0:
+                assert support and not cleanup_state['started']
+                cleanup_state['started']=True;exit_events.append(['key_cleanup_enter'])
+            if cleanup_keys and address==LIBC_BASE+0x6866C:
+                assert cleanup_state['started'] and not cleanup_state['returned']
+                assert read(support['slot'])==0
+                assert worker_frees==[threads[1][4],support['payload'],support['wrapper']]
+                cleanup_state['returned']=True;exit_events.append(['key_cleanup_return'])
             if off in (0x28040C,0x280468,0x280484,0x3260A4,0x326578,0x280554,0x280590):entries.append(hex(off))
             if off in tuple(0x280590+i*0x80 for i in range(6)):callers.append(off)
             if off in tuple(0x2809D4+i*0x1E4 for i in range(6))+tuple(0x280A50+i*0x1E4 for i in range(6)):
@@ -184,26 +229,35 @@ def case(args,base,mode,*,bind_memset=False,isolated_arena=True):
     if mode=='return':
         assert terminal['x0']==0x10006 and not switches and not jni_returns
     else:
-        assert jni_returns==[0x10006] and len(switches)==1 and '0x3260a4' in entries
-    if mode in ('task_return','worker_wait','worker_stop'):
+        assert jni_returns==[0x10006] and len(switches)==(2 if cleanup_keys else 1) and '0x3260a4' in entries
+    if mode in ('task_return','worker_wait','worker_stop','worker_tls_cleanup','worker_pthread_exit'):
         assert callers==[0x280590+i*0x80 for i in range(6)]
         assert len(nested_returns)==48 and len(default_wakes)==6 and len(arenas)==6
         assert all(a==b for a,b in canary_pairs)
         assert all(int.from_bytes(out[9][base+0x3E09E8+i*0x48 & ~4095,4096][(base+0x3E09E8+i*0x48)&4095:((base+0x3E09E8+i*0x48)&4095)+8],'little')==(1<<64)-1 for i in range(6))
-    if mode in ('worker_wait','worker_stop'):
+    if mode in ('worker_wait','worker_stop','worker_tls_cleanup','worker_pthread_exit'):
         assert len(task_return_points)==1 and len(task_cleanup_points)==1
     support_retained=False
-    if mode=='worker_stop':
-        assert terminal['x0']==0 and len(worker_wait_events)==1 and worker_frees==[threads[1][4]]
-        start=worker_frees[0]-GUEST
-        assert out[10][start:start+worker_free_sizes[0]]==b'\xD7'*worker_free_sizes[0]
+    if stop_worker:
+        assert terminal['x0']==0 and len(worker_wait_events)==1
+        assert worker_frees==([threads[1][4],support['payload'],support['wrapper']] if cleanup_keys else [threads[1][4]])
+        for pointer,size in zip(worker_frees,worker_free_sizes):
+            start=pointer-GUEST
+            assert out[10][start:start+size]==b'\xD7'*size
         def read(address,n=8):
             if GUEST<=address<GUEST+0xA000:return int.from_bytes(out[10][address-GUEST:address-GUEST+n],'little')
             return int.from_bytes(out[9][address&~4095,4096][address&4095:(address&4095)+n],'little')
         key=read(base+0x3E2F30,4)&0x7FFFFFFF
         wrapper=read(read(WORKER_THREAD+8)+0xF0+key*16)
-        assert wrapper and wrapper not in worker_frees
-        support_retained=True
+        if cleanup_keys:
+            assert wrapper==0 and cleanup_state['returned']
+            assert sum(event[0]=='explicit_OS_exit' for event in exit_events)==int(pthread_exit)
+            if pthread_exit:
+                assert read(read(WORKER_THREAD+8)+0x50,4)==1
+                assert read(read(WORKER_THREAD+8)+0x38)==0
+        else:
+            assert wrapper and wrapper not in worker_frees
+            support_retained=True
     if mode=='arena_collision':
         assert len(canary_pairs)==6 and canary_pairs[-1][0]!=canary_pairs[-1][1]
         assert not arenas and not default_wakes
@@ -223,20 +277,26 @@ def case(args,base,mode,*,bind_memset=False,isolated_arena=True):
         deferred_guest_handles_only=True,real_OS_threads_created=False,
         worker_uses_explicit_TLS=mode!='return',worker_reuses_main_physical_stack=mode!='return',
         default_task_entry_reached=mode!='return',default_task_body_entered=mode not in ('return','worker_entry'),
-        default_task_body_return_verified=mode in ('task_return','worker_wait','worker_stop'),
+        default_task_body_return_verified=mode in ('task_return','worker_wait','worker_stop','worker_tls_cleanup','worker_pthread_exit'),
         task_cleanup_after_return_observed=bool(task_cleanup_points),
-        worker_condition_wait_boundary_reached=mode in ('worker_wait','worker_stop'),
-        worker_condition_wait_executed=mode=='worker_stop',
-        worker_normal_return_verified=mode=='worker_stop',
-        worker_futex_wait_events=worker_wait_events,explicit_stop_during_wait=mode=='worker_stop',
-        argument_free_calls=len(worker_frees),argument_poison_verified=mode=='worker_stop',
+        worker_condition_wait_boundary_reached=mode in ('worker_wait','worker_stop','worker_tls_cleanup','worker_pthread_exit'),
+        worker_condition_wait_executed=stop_worker,
+        worker_normal_return_verified=stop_worker,
+        worker_futex_wait_events=worker_wait_events,explicit_stop_during_wait=stop_worker,
+        argument_free_calls=worker_frees.count(threads[1][4]),argument_poison_verified=stop_worker,
+        total_owned_free_calls=len(worker_frees),all_freed_blocks_poison_verified=stop_worker,
+        same_run_exit_events=exit_events,worker_TLS_destructors_executed=cleanup_keys,
+        support_payload_and_wrapper_released=cleanup_keys,actual_support_TLS_slot_cleared=cleanup_keys,
+        full_guest_pthread_exit_executed=pthread_exit,joinable_thread_exit_state_published=pthread_exit,
+        explicit_OS_exit_service_used=pthread_exit,explicit_empty_cxa_thread_list=pthread_exit,
+        actual_OS_thread_termination=False,actual_thread_stack_mapping_reclaimed=False,
         support_wrapper_retained_in_TLS=support_retained,worker_exit_verified=False,
         default_caller_entries_hex=[hex(v) for v in callers],nested_VM_returns=len(nested_returns),
         all_observed_canaries_match=all(a==b for a,b in canary_pairs),
         isolated_arena_service_used=isolated_arena and mode!='return',
         isolated_arena_allocations=len(arenas),default_task_no_waiter_broadcasts=len(default_wakes),
         allocator_overlap_reproduced=mode=='arena_collision',memset_packet_words_hex=[[hex(v) for v in row] for row in packets],
-        memset_callback_executed=mode in ('task_return','arena_collision','worker_wait','worker_stop'),Python_full_bootstrap_compared=False,
+        memset_callback_executed=mode in ('task_return','arena_collision','worker_wait','worker_stop','worker_tls_cleanup','worker_pthread_exit'),Python_full_bootstrap_compared=False,
         native_input_snapshot_used=False,complete_python_medusa=False)
 
 

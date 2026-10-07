@@ -1,0 +1,1366 @@
+{
+  "schema": "vm9-jni-A-worker-exit-v1",
+  "evidence_date": "2026-10-07",
+  "evidence_timezone": "UTC",
+  "host_trial_label": "20261008",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base_hex": "0x122c0000",
+      "mode": "worker_tls_cleanup",
+      "memset_ABS64_bound": true,
+      "native_terminal_reached": true,
+      "full_original_JNI_OnLoad_return_verified": true,
+      "original_JNI_return_hex": "0x10006",
+      "same_native_execution": true,
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ],
+        "JNI_return_to_same_run_queue_worker",
+        "worker_return_to_matching_libc_key_cleanup"
+      ],
+      "thread_create_requests": 3,
+      "thread_start_offsets_hex": [
+        "0x326a2c",
+        "0x3260a4",
+        "0x3260a4"
+      ],
+      "queue_signal_no_waiter_events": [
+        [
+          98,
+          1879065128,
+          129,
+          1,
+          0
+        ],
+        [
+          98,
+          1879065416,
+          129,
+          1,
+          0
+        ]
+      ],
+      "original_cold_once_broadcast_events": [
+        [
+          98,
+          308948704,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "startup_entries": [
+        "0x28040c",
+        {
+          "vm_bytecode_offset_hex": "0xa7050"
+        },
+        "0x280468",
+        "0x280484",
+        "0x3260a4",
+        "0x326578",
+        "0x280554",
+        "0x280590",
+        {
+          "vm_bytecode_offset_hex": "0xedcf0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee3b0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xede10"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeee60"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xedf30"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef910"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee050"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf03c0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee170"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0e40"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee290"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf18f0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        }
+      ],
+      "same_run_worker_argument_used": true,
+      "deferred_guest_handles_only": true,
+      "real_OS_threads_created": false,
+      "worker_uses_explicit_TLS": true,
+      "worker_reuses_main_physical_stack": true,
+      "default_task_entry_reached": true,
+      "default_task_body_entered": true,
+      "default_task_body_return_verified": true,
+      "task_cleanup_after_return_observed": true,
+      "worker_condition_wait_boundary_reached": true,
+      "worker_condition_wait_executed": true,
+      "worker_normal_return_verified": true,
+      "worker_futex_wait_events": [
+        [
+          1879065128,
+          128,
+          4,
+          -4
+        ]
+      ],
+      "explicit_stop_during_wait": true,
+      "argument_free_calls": 1,
+      "argument_poison_verified": true,
+      "total_owned_free_calls": 3,
+      "all_freed_blocks_poison_verified": true,
+      "same_run_exit_events": [
+        [
+          "free",
+          1879065264,
+          64
+        ],
+        [
+          "worker_normal_return",
+          0
+        ],
+        [
+          "key_cleanup_enter"
+        ],
+        [
+          "free",
+          1879065216,
+          48
+        ],
+        [
+          "free",
+          1879065200,
+          8
+        ],
+        [
+          "key_cleanup_return"
+        ]
+      ],
+      "worker_TLS_destructors_executed": true,
+      "support_payload_and_wrapper_released": true,
+      "actual_support_TLS_slot_cleared": true,
+      "full_guest_pthread_exit_executed": false,
+      "joinable_thread_exit_state_published": false,
+      "explicit_OS_exit_service_used": false,
+      "explicit_empty_cxa_thread_list": false,
+      "actual_OS_thread_termination": false,
+      "actual_thread_stack_mapping_reclaimed": false,
+      "support_wrapper_retained_in_TLS": false,
+      "worker_exit_verified": false,
+      "default_caller_entries_hex": [
+        "0x280590",
+        "0x280610",
+        "0x280690",
+        "0x280710",
+        "0x280790",
+        "0x280810"
+      ],
+      "nested_VM_returns": 48,
+      "all_observed_canaries_match": true,
+      "isolated_arena_service_used": true,
+      "isolated_arena_allocations": 6,
+      "default_task_no_waiter_broadcasts": 6,
+      "allocator_overlap_reproduced": false,
+      "memset_packet_words_hex": [
+        [
+          "0x12607f20",
+          "0x7000e6d0",
+          "0x7000eb00",
+          "0x10"
+        ],
+        [
+          "0x12607f20",
+          "0x7000e6c0",
+          "0x7000eb00",
+          "0x10"
+        ],
+        [
+          "0x12607f20",
+          "0x7000e5c0",
+          "0x7000eb00",
+          "0x100"
+        ],
+        [
+          "0x12607f20",
+          "0x7000e598",
+          "0x7000eb00",
+          "0x8"
+        ]
+      ],
+      "memset_callback_executed": true,
+      "Python_full_bootstrap_compared": false,
+      "native_input_snapshot_used": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base_hex": "0x122c0000",
+      "mode": "worker_pthread_exit",
+      "memset_ABS64_bound": true,
+      "native_terminal_reached": true,
+      "full_original_JNI_OnLoad_return_verified": true,
+      "original_JNI_return_hex": "0x10006",
+      "same_native_execution": true,
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ],
+        "JNI_return_to_same_run_queue_worker",
+        "worker_return_to_guest_pthread_exit"
+      ],
+      "thread_create_requests": 3,
+      "thread_start_offsets_hex": [
+        "0x326a2c",
+        "0x3260a4",
+        "0x3260a4"
+      ],
+      "queue_signal_no_waiter_events": [
+        [
+          98,
+          1879065128,
+          129,
+          1,
+          0
+        ],
+        [
+          98,
+          1879065416,
+          129,
+          1,
+          0
+        ]
+      ],
+      "original_cold_once_broadcast_events": [
+        [
+          98,
+          308948704,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "startup_entries": [
+        "0x28040c",
+        {
+          "vm_bytecode_offset_hex": "0xa7050"
+        },
+        "0x280468",
+        "0x280484",
+        "0x3260a4",
+        "0x326578",
+        "0x280554",
+        "0x280590",
+        {
+          "vm_bytecode_offset_hex": "0xedcf0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee3b0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xede10"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeee60"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xedf30"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef910"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee050"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf03c0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee170"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0e40"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee290"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf18f0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        }
+      ],
+      "same_run_worker_argument_used": true,
+      "deferred_guest_handles_only": true,
+      "real_OS_threads_created": false,
+      "worker_uses_explicit_TLS": true,
+      "worker_reuses_main_physical_stack": true,
+      "default_task_entry_reached": true,
+      "default_task_body_entered": true,
+      "default_task_body_return_verified": true,
+      "task_cleanup_after_return_observed": true,
+      "worker_condition_wait_boundary_reached": true,
+      "worker_condition_wait_executed": true,
+      "worker_normal_return_verified": true,
+      "worker_futex_wait_events": [
+        [
+          1879065128,
+          128,
+          4,
+          -4
+        ]
+      ],
+      "explicit_stop_during_wait": true,
+      "argument_free_calls": 1,
+      "argument_poison_verified": true,
+      "total_owned_free_calls": 3,
+      "all_freed_blocks_poison_verified": true,
+      "same_run_exit_events": [
+        [
+          "free",
+          1879065264,
+          64
+        ],
+        [
+          "worker_normal_return",
+          0
+        ],
+        [
+          "guest_pthread_exit_enter"
+        ],
+        [
+          "explicit_get_libc_TLS"
+        ],
+        [
+          "key_cleanup_enter"
+        ],
+        [
+          "free",
+          1879065216,
+          48
+        ],
+        [
+          "free",
+          1879065200,
+          8
+        ],
+        [
+          "key_cleanup_return"
+        ],
+        [
+          "explicit_OS_exit",
+          0
+        ]
+      ],
+      "worker_TLS_destructors_executed": true,
+      "support_payload_and_wrapper_released": true,
+      "actual_support_TLS_slot_cleared": true,
+      "full_guest_pthread_exit_executed": true,
+      "joinable_thread_exit_state_published": true,
+      "explicit_OS_exit_service_used": true,
+      "explicit_empty_cxa_thread_list": true,
+      "actual_OS_thread_termination": false,
+      "actual_thread_stack_mapping_reclaimed": false,
+      "support_wrapper_retained_in_TLS": false,
+      "worker_exit_verified": false,
+      "default_caller_entries_hex": [
+        "0x280590",
+        "0x280610",
+        "0x280690",
+        "0x280710",
+        "0x280790",
+        "0x280810"
+      ],
+      "nested_VM_returns": 48,
+      "all_observed_canaries_match": true,
+      "isolated_arena_service_used": true,
+      "isolated_arena_allocations": 6,
+      "default_task_no_waiter_broadcasts": 6,
+      "allocator_overlap_reproduced": false,
+      "memset_packet_words_hex": [
+        [
+          "0x12607f20",
+          "0x7000e6d0",
+          "0x7000eb00",
+          "0x10"
+        ],
+        [
+          "0x12607f20",
+          "0x7000e6c0",
+          "0x7000eb00",
+          "0x10"
+        ],
+        [
+          "0x12607f20",
+          "0x7000e5c0",
+          "0x7000eb00",
+          "0x100"
+        ],
+        [
+          "0x12607f20",
+          "0x7000e598",
+          "0x7000eb00",
+          "0x8"
+        ]
+      ],
+      "memset_callback_executed": true,
+      "Python_full_bootstrap_compared": false,
+      "native_input_snapshot_used": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base_hex": "0x775c205000",
+      "mode": "worker_tls_cleanup",
+      "memset_ABS64_bound": true,
+      "native_terminal_reached": true,
+      "full_original_JNI_OnLoad_return_verified": true,
+      "original_JNI_return_hex": "0x10006",
+      "same_native_execution": true,
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ],
+        "JNI_return_to_same_run_queue_worker",
+        "worker_return_to_matching_libc_key_cleanup"
+      ],
+      "thread_create_requests": 3,
+      "thread_start_offsets_hex": [
+        "0x326a2c",
+        "0x3260a4",
+        "0x3260a4"
+      ],
+      "queue_signal_no_waiter_events": [
+        [
+          98,
+          1879065128,
+          129,
+          1,
+          0
+        ],
+        [
+          98,
+          1879065416,
+          129,
+          1,
+          0
+        ]
+      ],
+      "original_cold_once_broadcast_events": [
+        [
+          98,
+          512650804960,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "startup_entries": [
+        "0x28040c",
+        {
+          "vm_bytecode_offset_hex": "0xa7050"
+        },
+        "0x280468",
+        "0x280484",
+        "0x3260a4",
+        "0x326578",
+        "0x280554",
+        "0x280590",
+        {
+          "vm_bytecode_offset_hex": "0xedcf0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee3b0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xede10"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeee60"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xedf30"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef910"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee050"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf03c0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee170"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0e40"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee290"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf18f0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        }
+      ],
+      "same_run_worker_argument_used": true,
+      "deferred_guest_handles_only": true,
+      "real_OS_threads_created": false,
+      "worker_uses_explicit_TLS": true,
+      "worker_reuses_main_physical_stack": true,
+      "default_task_entry_reached": true,
+      "default_task_body_entered": true,
+      "default_task_body_return_verified": true,
+      "task_cleanup_after_return_observed": true,
+      "worker_condition_wait_boundary_reached": true,
+      "worker_condition_wait_executed": true,
+      "worker_normal_return_verified": true,
+      "worker_futex_wait_events": [
+        [
+          1879065128,
+          128,
+          4,
+          -4
+        ]
+      ],
+      "explicit_stop_during_wait": true,
+      "argument_free_calls": 1,
+      "argument_poison_verified": true,
+      "total_owned_free_calls": 3,
+      "all_freed_blocks_poison_verified": true,
+      "same_run_exit_events": [
+        [
+          "free",
+          1879065264,
+          64
+        ],
+        [
+          "worker_normal_return",
+          0
+        ],
+        [
+          "key_cleanup_enter"
+        ],
+        [
+          "free",
+          1879065216,
+          48
+        ],
+        [
+          "free",
+          1879065200,
+          8
+        ],
+        [
+          "key_cleanup_return"
+        ]
+      ],
+      "worker_TLS_destructors_executed": true,
+      "support_payload_and_wrapper_released": true,
+      "actual_support_TLS_slot_cleared": true,
+      "full_guest_pthread_exit_executed": false,
+      "joinable_thread_exit_state_published": false,
+      "explicit_OS_exit_service_used": false,
+      "explicit_empty_cxa_thread_list": false,
+      "actual_OS_thread_termination": false,
+      "actual_thread_stack_mapping_reclaimed": false,
+      "support_wrapper_retained_in_TLS": false,
+      "worker_exit_verified": false,
+      "default_caller_entries_hex": [
+        "0x280590",
+        "0x280610",
+        "0x280690",
+        "0x280710",
+        "0x280790",
+        "0x280810"
+      ],
+      "nested_VM_returns": 48,
+      "all_observed_canaries_match": true,
+      "isolated_arena_service_used": true,
+      "isolated_arena_allocations": 6,
+      "default_task_no_waiter_broadcasts": 6,
+      "allocator_overlap_reproduced": false,
+      "memset_packet_words_hex": [
+        [
+          "0x775c54cf20",
+          "0x7000e6d0",
+          "0x7000eb00",
+          "0x10"
+        ],
+        [
+          "0x775c54cf20",
+          "0x7000e6c0",
+          "0x7000eb00",
+          "0x10"
+        ],
+        [
+          "0x775c54cf20",
+          "0x7000e5c0",
+          "0x7000eb00",
+          "0x100"
+        ],
+        [
+          "0x775c54cf20",
+          "0x7000e598",
+          "0x7000eb00",
+          "0x8"
+        ]
+      ],
+      "memset_callback_executed": true,
+      "Python_full_bootstrap_compared": false,
+      "native_input_snapshot_used": false,
+      "complete_python_medusa": false
+    },
+    {
+      "image_base_hex": "0x775c205000",
+      "mode": "worker_pthread_exit",
+      "memset_ABS64_bound": true,
+      "native_terminal_reached": true,
+      "full_original_JNI_OnLoad_return_verified": true,
+      "original_JNI_return_hex": "0x10006",
+      "same_native_execution": true,
+      "explicit_driver_continuations": [
+        [
+          "ctor_exit_to",
+          "0x27b41c"
+        ],
+        "JNI_return_to_same_run_queue_worker",
+        "worker_return_to_guest_pthread_exit"
+      ],
+      "thread_create_requests": 3,
+      "thread_start_offsets_hex": [
+        "0x326a2c",
+        "0x3260a4",
+        "0x3260a4"
+      ],
+      "queue_signal_no_waiter_events": [
+        [
+          98,
+          1879065128,
+          129,
+          1,
+          0
+        ],
+        [
+          98,
+          1879065416,
+          129,
+          1,
+          0
+        ]
+      ],
+      "original_cold_once_broadcast_events": [
+        [
+          98,
+          512650804960,
+          129,
+          2147483647,
+          0
+        ]
+      ],
+      "startup_entries": [
+        "0x28040c",
+        {
+          "vm_bytecode_offset_hex": "0xa7050"
+        },
+        "0x280468",
+        "0x280484",
+        "0x3260a4",
+        "0x326578",
+        "0x280554",
+        "0x280590",
+        {
+          "vm_bytecode_offset_hex": "0xedcf0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee3b0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeea70"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xede10"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeee60"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef520"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xedf30"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xef910"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xeffd0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee050"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf03c0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0a50"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee170"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf0e40"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1500"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xee290"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf18f0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        },
+        {
+          "vm_bytecode_offset_hex": "0xf1fb0"
+        }
+      ],
+      "same_run_worker_argument_used": true,
+      "deferred_guest_handles_only": true,
+      "real_OS_threads_created": false,
+      "worker_uses_explicit_TLS": true,
+      "worker_reuses_main_physical_stack": true,
+      "default_task_entry_reached": true,
+      "default_task_body_entered": true,
+      "default_task_body_return_verified": true,
+      "task_cleanup_after_return_observed": true,
+      "worker_condition_wait_boundary_reached": true,
+      "worker_condition_wait_executed": true,
+      "worker_normal_return_verified": true,
+      "worker_futex_wait_events": [
+        [
+          1879065128,
+          128,
+          4,
+          -4
+        ]
+      ],
+      "explicit_stop_during_wait": true,
+      "argument_free_calls": 1,
+      "argument_poison_verified": true,
+      "total_owned_free_calls": 3,
+      "all_freed_blocks_poison_verified": true,
+      "same_run_exit_events": [
+        [
+          "free",
+          1879065264,
+          64
+        ],
+        [
+          "worker_normal_return",
+          0
+        ],
+        [
+          "guest_pthread_exit_enter"
+        ],
+        [
+          "explicit_get_libc_TLS"
+        ],
+        [
+          "key_cleanup_enter"
+        ],
+        [
+          "free",
+          1879065216,
+          48
+        ],
+        [
+          "free",
+          1879065200,
+          8
+        ],
+        [
+          "key_cleanup_return"
+        ],
+        [
+          "explicit_OS_exit",
+          0
+        ]
+      ],
+      "worker_TLS_destructors_executed": true,
+      "support_payload_and_wrapper_released": true,
+      "actual_support_TLS_slot_cleared": true,
+      "full_guest_pthread_exit_executed": true,
+      "joinable_thread_exit_state_published": true,
+      "explicit_OS_exit_service_used": true,
+      "explicit_empty_cxa_thread_list": true,
+      "actual_OS_thread_termination": false,
+      "actual_thread_stack_mapping_reclaimed": false,
+      "support_wrapper_retained_in_TLS": false,
+      "worker_exit_verified": false,
+      "default_caller_entries_hex": [
+        "0x280590",
+        "0x280610",
+        "0x280690",
+        "0x280710",
+        "0x280790",
+        "0x280810"
+      ],
+      "nested_VM_returns": 48,
+      "all_observed_canaries_match": true,
+      "isolated_arena_service_used": true,
+      "isolated_arena_allocations": 6,
+      "default_task_no_waiter_broadcasts": 6,
+      "allocator_overlap_reproduced": false,
+      "memset_packet_words_hex": [
+        [
+          "0x775c54cf20",
+          "0x7000e6d0",
+          "0x7000eb00",
+          "0x10"
+        ],
+        [
+          "0x775c54cf20",
+          "0x7000e6c0",
+          "0x7000eb00",
+          "0x10"
+        ],
+        [
+          "0x775c54cf20",
+          "0x7000e5c0",
+          "0x7000eb00",
+          "0x100"
+        ],
+        [
+          "0x775c54cf20",
+          "0x7000e598",
+          "0x7000eb00",
+          "0x8"
+        ]
+      ],
+      "memset_callback_executed": true,
+      "Python_full_bootstrap_compared": false,
+      "native_input_snapshot_used": false,
+      "complete_python_medusa": false
+    }
+  ],
+  "same_JNI_TLS_cleanup_observations": 2,
+  "same_JNI_guest_pthread_exit_observations": 2,
+  "base_startup_evidence_file": "vm9_jni_A_default_worker_20261008.json",
+  "no_cleanup_control_evidence_file": "vm9_jni_A_worker_stop_20261008.json",
+  "original_JNI_return_six_default_callers_and_exit_in_same_run_verified": true,
+  "actual_support_TLS_clear_and_ordered_three_frees_verified": true,
+  "explicit_allocator_JNI_OS_and_virtual_worker_services_used": true,
+  "explicit_worker_return_to_exit_driver_used": true,
+  "explicit_empty_cxa_thread_list_used": true,
+  "joinable_guest_state_zero_to_one_verified": true,
+  "explicit_syscall_93_exit_used": true,
+  "real_OS_threads_created": false,
+  "actual_OS_thread_termination": false,
+  "actual_thread_stack_mapping_reclaimed": false,
+  "detached_exit_path_verified": false,
+  "complete_python_bootstrap_controls": 0,
+  "complete_python_medusa": false,
+  "native_input_snapshot_used": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false
+}

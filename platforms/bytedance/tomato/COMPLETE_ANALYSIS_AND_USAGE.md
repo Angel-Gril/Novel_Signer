@@ -15,13 +15,19 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 > 截止：2026-10-07 UTC（文件沿用本机试验标签 20261008）
 > 结论：**本项目整体尚未完成，不能作为当前线上小说搜索下载器发布。**
 
-最新检查点：两个基址的原始 A JNI_OnLoad 在显式服务下自然返回 0x10006；
-同次生成的 queue worker 执行六个实际默认 caller、每次 48 个嵌套 VM 返回、六次
-once 完成 broadcast。另两个延伸观察执行任务清理后到达 wait PLT；后续两个观察
-实际执行 libc wait，由显式 futex EINTR/queue stop 服务驱动，worker 正常返回并
-释放 argument。support 仍保留在 TLS，析构及 guest pthread_exit 未执行；完整 Python
-bootstrap 对照仍为 0。B 短 selector 哈希/lookup 新增 20+30 个 native/Python
-对照和 6 个拒绝回滚，root/bucket 数据仍为合成输入，factory/publication 未恢复。
+最新检查点：原始 A JNI_OnLoad 在两个基址自然返回 0x10006，同次 worker 执行六个
+默认 caller / 48 嵌套返回并经过 task cleanup、wait、stop、argument free。新增两个
+同次 TLS cleanup 和两个 guest pthread_exit 观察，实际 slot 清零，argument / payload /
+wrapper 顺序 free/poison 通过；guest joinable 状态 0→1 到显式 syscall 93 exit。
+真实线程创建/终止、非空 cxa 链、allocator/arena/OS 服务仍为独立边界。
+
+B 原始 constructor/factory 在两个基址自然返回，每次发布 121 个非空 descriptor，
+2330 次受控分配、4 次 exit 注册。242 个 Python lookup 控制使用 native 生成的 root，
+不证明独立 Python factory；原有合成 root 的 20+30 控制和 6 个回滚单列。Python factory、
+原始 JNI B 组合与 B VM 尚未完成；完整 Python bootstrap 对照仍为 **0**。
+B factory 原地 XOR prefix 已独立恢复：82 个 native/Python 控制（含两个真实 ELF
+blob）和 8 个拒绝回滚通过，未使用 native 快照。仍停在 reader 调用前，下一处为
++31b360 reader / +2cd5a4 解析 / +2cafd0 构建。
 详见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。
 下方 once/mask 与 cold caller 记录为此前证据，不能累加成完整初始化或 signer 证明。
 

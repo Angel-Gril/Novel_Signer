@@ -1,0 +1,2204 @@
+{
+  "schema": "vm9-alternative-factory-native-v1",
+  "evidence_date": "2026-10-07",
+  "evidence_timezone": "UTC",
+  "host_trial_label": "20261008",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "constructor_factory_publication_observations": 2,
+  "generated_root_lookup_controls": 242,
+  "cases": [
+    {
+      "image_base_hex": "0x122c0000",
+      "native_constructor_return_verified": true,
+      "native_factory_return_verified": true,
+      "actual_ELF_factory_blob_used": true,
+      "factory_blob_offset_hex": "0x387d20",
+      "factory_blob_length": 229328,
+      "constructor_generated_callback_count": 16,
+      "constructor_generated_prototype_count": 22,
+      "controlled_allocation_calls": 2330,
+      "register_only_exit_calls": 4,
+      "bound_ABS64_import_counts": {
+        "memset": 17,
+        "memcpy": 16
+      },
+      "native_normal_mutexes_used": true,
+      "native_memcmp_used": true,
+      "actual_generated_root_bucket_count": 163,
+      "all_121_descriptors_published_nonzero": true,
+      "generated_root_lookup_controls": 121,
+      "lookup_comparisons": [
+        {
+          "index": 0,
+          "publication_slot_offset_hex": "0x3e1eb8",
+          "query_length": 2,
+          "bucket_index": 120,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 1,
+          "publication_slot_offset_hex": "0x3e1ec0",
+          "query_length": 2,
+          "bucket_index": 138,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 2,
+          "publication_slot_offset_hex": "0x3e1ec8",
+          "query_length": 2,
+          "bucket_index": 23,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 3,
+          "publication_slot_offset_hex": "0x3e1ed0",
+          "query_length": 2,
+          "bucket_index": 111,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 4,
+          "publication_slot_offset_hex": "0x3e1ed8",
+          "query_length": 2,
+          "bucket_index": 25,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 5,
+          "publication_slot_offset_hex": "0x3e1ee0",
+          "query_length": 2,
+          "bucket_index": 86,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 6,
+          "publication_slot_offset_hex": "0x3e1ee8",
+          "query_length": 2,
+          "bucket_index": 8,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 7,
+          "publication_slot_offset_hex": "0x3e1ef0",
+          "query_length": 2,
+          "bucket_index": 83,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 8,
+          "publication_slot_offset_hex": "0x3e1ef8",
+          "query_length": 2,
+          "bucket_index": 46,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 9,
+          "publication_slot_offset_hex": "0x3e1f00",
+          "query_length": 2,
+          "bucket_index": 85,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 10,
+          "publication_slot_offset_hex": "0x3e1f08",
+          "query_length": 2,
+          "bucket_index": 78,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 11,
+          "publication_slot_offset_hex": "0x3e1f10",
+          "query_length": 2,
+          "bucket_index": 66,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 12,
+          "publication_slot_offset_hex": "0x3e1f18",
+          "query_length": 2,
+          "bucket_index": 27,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 13,
+          "publication_slot_offset_hex": "0x3e1f20",
+          "query_length": 2,
+          "bucket_index": 112,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 14,
+          "publication_slot_offset_hex": "0x3e1f28",
+          "query_length": 2,
+          "bucket_index": 78,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 15,
+          "publication_slot_offset_hex": "0x3e1f30",
+          "query_length": 2,
+          "bucket_index": 161,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 16,
+          "publication_slot_offset_hex": "0x3e1f38",
+          "query_length": 3,
+          "bucket_index": 135,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 17,
+          "publication_slot_offset_hex": "0x3e1f40",
+          "query_length": 3,
+          "bucket_index": 104,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 18,
+          "publication_slot_offset_hex": "0x3e1f48",
+          "query_length": 3,
+          "bucket_index": 110,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 19,
+          "publication_slot_offset_hex": "0x3e1f50",
+          "query_length": 3,
+          "bucket_index": 66,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 20,
+          "publication_slot_offset_hex": "0x3e1f58",
+          "query_length": 3,
+          "bucket_index": 92,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 21,
+          "publication_slot_offset_hex": "0x3e1f60",
+          "query_length": 3,
+          "bucket_index": 27,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 22,
+          "publication_slot_offset_hex": "0x3e1f68",
+          "query_length": 3,
+          "bucket_index": 121,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 23,
+          "publication_slot_offset_hex": "0x3e1f70",
+          "query_length": 3,
+          "bucket_index": 23,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 24,
+          "publication_slot_offset_hex": "0x3e1f78",
+          "query_length": 3,
+          "bucket_index": 144,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 25,
+          "publication_slot_offset_hex": "0x3e1f80",
+          "query_length": 3,
+          "bucket_index": 146,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 26,
+          "publication_slot_offset_hex": "0x3e1f88",
+          "query_length": 3,
+          "bucket_index": 70,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 27,
+          "publication_slot_offset_hex": "0x3e1f90",
+          "query_length": 3,
+          "bucket_index": 158,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 28,
+          "publication_slot_offset_hex": "0x3e1f98",
+          "query_length": 3,
+          "bucket_index": 133,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 29,
+          "publication_slot_offset_hex": "0x3e1fa0",
+          "query_length": 3,
+          "bucket_index": 79,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 30,
+          "publication_slot_offset_hex": "0x3e1fa8",
+          "query_length": 3,
+          "bucket_index": 158,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 31,
+          "publication_slot_offset_hex": "0x3e1fb0",
+          "query_length": 3,
+          "bucket_index": 24,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 32,
+          "publication_slot_offset_hex": "0x3e1fb8",
+          "query_length": 3,
+          "bucket_index": 156,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 33,
+          "publication_slot_offset_hex": "0x3e1fc0",
+          "query_length": 3,
+          "bucket_index": 110,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 34,
+          "publication_slot_offset_hex": "0x3e21f0",
+          "query_length": 3,
+          "bucket_index": 161,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 35,
+          "publication_slot_offset_hex": "0x3e21f8",
+          "query_length": 3,
+          "bucket_index": 44,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 36,
+          "publication_slot_offset_hex": "0x3e2200",
+          "query_length": 3,
+          "bucket_index": 143,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 37,
+          "publication_slot_offset_hex": "0x3e2208",
+          "query_length": 3,
+          "bucket_index": 101,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 38,
+          "publication_slot_offset_hex": "0x3e2210",
+          "query_length": 3,
+          "bucket_index": 148,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 39,
+          "publication_slot_offset_hex": "0x3e2218",
+          "query_length": 3,
+          "bucket_index": 137,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 40,
+          "publication_slot_offset_hex": "0x3e2220",
+          "query_length": 3,
+          "bucket_index": 65,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 41,
+          "publication_slot_offset_hex": "0x3e2228",
+          "query_length": 3,
+          "bucket_index": 127,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 42,
+          "publication_slot_offset_hex": "0x3e2230",
+          "query_length": 3,
+          "bucket_index": 41,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 43,
+          "publication_slot_offset_hex": "0x3e2238",
+          "query_length": 3,
+          "bucket_index": 3,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 44,
+          "publication_slot_offset_hex": "0x3e2240",
+          "query_length": 3,
+          "bucket_index": 150,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 45,
+          "publication_slot_offset_hex": "0x3e2248",
+          "query_length": 3,
+          "bucket_index": 24,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 46,
+          "publication_slot_offset_hex": "0x3e2250",
+          "query_length": 3,
+          "bucket_index": 93,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 47,
+          "publication_slot_offset_hex": "0x3e2258",
+          "query_length": 3,
+          "bucket_index": 41,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 48,
+          "publication_slot_offset_hex": "0x3e2260",
+          "query_length": 3,
+          "bucket_index": 13,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 49,
+          "publication_slot_offset_hex": "0x3e2268",
+          "query_length": 3,
+          "bucket_index": 52,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 50,
+          "publication_slot_offset_hex": "0x3e2270",
+          "query_length": 3,
+          "bucket_index": 3,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 51,
+          "publication_slot_offset_hex": "0x3e2278",
+          "query_length": 3,
+          "bucket_index": 96,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 52,
+          "publication_slot_offset_hex": "0x3e1fc8",
+          "query_length": 3,
+          "bucket_index": 134,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 53,
+          "publication_slot_offset_hex": "0x3e1fd0",
+          "query_length": 3,
+          "bucket_index": 83,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 54,
+          "publication_slot_offset_hex": "0x3e1fd8",
+          "query_length": 3,
+          "bucket_index": 106,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 55,
+          "publication_slot_offset_hex": "0x3e1fe0",
+          "query_length": 3,
+          "bucket_index": 26,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 56,
+          "publication_slot_offset_hex": "0x3e1fe8",
+          "query_length": 3,
+          "bucket_index": 123,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 57,
+          "publication_slot_offset_hex": "0x3e1ff0",
+          "query_length": 3,
+          "bucket_index": 44,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 58,
+          "publication_slot_offset_hex": "0x3e1ff8",
+          "query_length": 3,
+          "bucket_index": 85,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 59,
+          "publication_slot_offset_hex": "0x3e2000",
+          "query_length": 3,
+          "bucket_index": 3,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 60,
+          "publication_slot_offset_hex": "0x3e2008",
+          "query_length": 3,
+          "bucket_index": 21,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 61,
+          "publication_slot_offset_hex": "0x3e2010",
+          "query_length": 3,
+          "bucket_index": 58,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 62,
+          "publication_slot_offset_hex": "0x3e2018",
+          "query_length": 3,
+          "bucket_index": 21,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 63,
+          "publication_slot_offset_hex": "0x3e2020",
+          "query_length": 3,
+          "bucket_index": 114,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 64,
+          "publication_slot_offset_hex": "0x3e2028",
+          "query_length": 3,
+          "bucket_index": 58,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 65,
+          "publication_slot_offset_hex": "0x3e2030",
+          "query_length": 3,
+          "bucket_index": 16,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 66,
+          "publication_slot_offset_hex": "0x3e2038",
+          "query_length": 3,
+          "bucket_index": 73,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 67,
+          "publication_slot_offset_hex": "0x3e2040",
+          "query_length": 3,
+          "bucket_index": 52,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 68,
+          "publication_slot_offset_hex": "0x3e2048",
+          "query_length": 3,
+          "bucket_index": 68,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 69,
+          "publication_slot_offset_hex": "0x3e2050",
+          "query_length": 3,
+          "bucket_index": 29,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 70,
+          "publication_slot_offset_hex": "0x3e2058",
+          "query_length": 3,
+          "bucket_index": 98,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 71,
+          "publication_slot_offset_hex": "0x3e2060",
+          "query_length": 3,
+          "bucket_index": 49,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 72,
+          "publication_slot_offset_hex": "0x3e2068",
+          "query_length": 3,
+          "bucket_index": 83,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 73,
+          "publication_slot_offset_hex": "0x3e2070",
+          "query_length": 3,
+          "bucket_index": 57,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 74,
+          "publication_slot_offset_hex": "0x3e2078",
+          "query_length": 3,
+          "bucket_index": 22,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 75,
+          "publication_slot_offset_hex": "0x3e2080",
+          "query_length": 3,
+          "bucket_index": 30,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 76,
+          "publication_slot_offset_hex": "0x3e2088",
+          "query_length": 3,
+          "bucket_index": 111,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 77,
+          "publication_slot_offset_hex": "0x3e2090",
+          "query_length": 3,
+          "bucket_index": 143,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 78,
+          "publication_slot_offset_hex": "0x3e2098",
+          "query_length": 3,
+          "bucket_index": 158,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 79,
+          "publication_slot_offset_hex": "0x3e20a0",
+          "query_length": 3,
+          "bucket_index": 139,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 80,
+          "publication_slot_offset_hex": "0x3e20a8",
+          "query_length": 3,
+          "bucket_index": 117,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 81,
+          "publication_slot_offset_hex": "0x3e20b0",
+          "query_length": 3,
+          "bucket_index": 110,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 82,
+          "publication_slot_offset_hex": "0x3e20b8",
+          "query_length": 3,
+          "bucket_index": 79,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 83,
+          "publication_slot_offset_hex": "0x3e20c0",
+          "query_length": 3,
+          "bucket_index": 17,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 84,
+          "publication_slot_offset_hex": "0x3e20c8",
+          "query_length": 3,
+          "bucket_index": 94,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 85,
+          "publication_slot_offset_hex": "0x3e20d0",
+          "query_length": 3,
+          "bucket_index": 61,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 86,
+          "publication_slot_offset_hex": "0x3e20d8",
+          "query_length": 3,
+          "bucket_index": 54,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 87,
+          "publication_slot_offset_hex": "0x3e20e0",
+          "query_length": 3,
+          "bucket_index": 126,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 88,
+          "publication_slot_offset_hex": "0x3e20e8",
+          "query_length": 3,
+          "bucket_index": 139,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 89,
+          "publication_slot_offset_hex": "0x3e20f0",
+          "query_length": 3,
+          "bucket_index": 8,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 90,
+          "publication_slot_offset_hex": "0x3e20f8",
+          "query_length": 3,
+          "bucket_index": 115,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 91,
+          "publication_slot_offset_hex": "0x3e2100",
+          "query_length": 3,
+          "bucket_index": 145,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 92,
+          "publication_slot_offset_hex": "0x3e2108",
+          "query_length": 3,
+          "bucket_index": 85,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 93,
+          "publication_slot_offset_hex": "0x3e2110",
+          "query_length": 3,
+          "bucket_index": 23,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 94,
+          "publication_slot_offset_hex": "0x3e2118",
+          "query_length": 3,
+          "bucket_index": 133,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 95,
+          "publication_slot_offset_hex": "0x3e2120",
+          "query_length": 3,
+          "bucket_index": 62,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 96,
+          "publication_slot_offset_hex": "0x3e2128",
+          "query_length": 3,
+          "bucket_index": 14,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 97,
+          "publication_slot_offset_hex": "0x3e2130",
+          "query_length": 3,
+          "bucket_index": 81,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 98,
+          "publication_slot_offset_hex": "0x3e2138",
+          "query_length": 3,
+          "bucket_index": 10,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 99,
+          "publication_slot_offset_hex": "0x3e2140",
+          "query_length": 3,
+          "bucket_index": 76,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 100,
+          "publication_slot_offset_hex": "0x3e2148",
+          "query_length": 3,
+          "bucket_index": 59,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 101,
+          "publication_slot_offset_hex": "0x3e2150",
+          "query_length": 3,
+          "bucket_index": 49,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 102,
+          "publication_slot_offset_hex": "0x3e2158",
+          "query_length": 3,
+          "bucket_index": 71,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 103,
+          "publication_slot_offset_hex": "0x3e2160",
+          "query_length": 3,
+          "bucket_index": 94,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 104,
+          "publication_slot_offset_hex": "0x3e2168",
+          "query_length": 3,
+          "bucket_index": 38,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 105,
+          "publication_slot_offset_hex": "0x3e2170",
+          "query_length": 3,
+          "bucket_index": 107,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 106,
+          "publication_slot_offset_hex": "0x3e2178",
+          "query_length": 3,
+          "bucket_index": 40,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 107,
+          "publication_slot_offset_hex": "0x3e2180",
+          "query_length": 3,
+          "bucket_index": 57,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 108,
+          "publication_slot_offset_hex": "0x3e2188",
+          "query_length": 3,
+          "bucket_index": 154,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 109,
+          "publication_slot_offset_hex": "0x3e2190",
+          "query_length": 3,
+          "bucket_index": 34,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 110,
+          "publication_slot_offset_hex": "0x3e2198",
+          "query_length": 3,
+          "bucket_index": 126,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 111,
+          "publication_slot_offset_hex": "0x3e21a0",
+          "query_length": 3,
+          "bucket_index": 0,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 112,
+          "publication_slot_offset_hex": "0x3e21a8",
+          "query_length": 3,
+          "bucket_index": 149,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 113,
+          "publication_slot_offset_hex": "0x3e21b0",
+          "query_length": 3,
+          "bucket_index": 90,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 114,
+          "publication_slot_offset_hex": "0x3e21b8",
+          "query_length": 3,
+          "bucket_index": 125,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 115,
+          "publication_slot_offset_hex": "0x3e21c0",
+          "query_length": 3,
+          "bucket_index": 89,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 116,
+          "publication_slot_offset_hex": "0x3e21c8",
+          "query_length": 3,
+          "bucket_index": 96,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 117,
+          "publication_slot_offset_hex": "0x3e21d0",
+          "query_length": 3,
+          "bucket_index": 118,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 118,
+          "publication_slot_offset_hex": "0x3e21d8",
+          "query_length": 3,
+          "bucket_index": 75,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 119,
+          "publication_slot_offset_hex": "0x3e21e0",
+          "query_length": 3,
+          "bucket_index": 18,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 120,
+          "publication_slot_offset_hex": "0x3e21e8",
+          "query_length": 3,
+          "bucket_index": 74,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        }
+      ],
+      "actual_publication_sites_decoded_from_ELF": true,
+      "unique_final_publication_slots": 121,
+      "all_final_publication_slots_verified": true,
+      "vector_stride_bytes": 12,
+      "vector_loop_visits": 54533,
+      "bounded_vector_progress": [
+        {
+          "loop_visits": 1,
+          "remaining_items": 34,
+          "controlled_allocation_calls": 1967
+        },
+        {
+          "loop_visits": 2,
+          "remaining_items": 33,
+          "controlled_allocation_calls": 1967
+        },
+        {
+          "loop_visits": 3,
+          "remaining_items": 32,
+          "controlled_allocation_calls": 1967
+        },
+        {
+          "loop_visits": 4096,
+          "remaining_items": 63,
+          "controlled_allocation_calls": 1977
+        },
+        {
+          "loop_visits": 8192,
+          "remaining_items": 196,
+          "controlled_allocation_calls": 2009
+        },
+        {
+          "loop_visits": 12288,
+          "remaining_items": 291,
+          "controlled_allocation_calls": 2023
+        },
+        {
+          "loop_visits": 16384,
+          "remaining_items": 37,
+          "controlled_allocation_calls": 2045
+        },
+        {
+          "loop_visits": 20480,
+          "remaining_items": 12,
+          "controlled_allocation_calls": 2105
+        },
+        {
+          "loop_visits": 24576,
+          "remaining_items": 110,
+          "controlled_allocation_calls": 2155
+        },
+        {
+          "loop_visits": 28672,
+          "remaining_items": 2371,
+          "controlled_allocation_calls": 2169
+        },
+        {
+          "loop_visits": 32768,
+          "remaining_items": 1997,
+          "controlled_allocation_calls": 2179
+        },
+        {
+          "loop_visits": 36864,
+          "remaining_items": 1592,
+          "controlled_allocation_calls": 2181
+        },
+        {
+          "loop_visits": 40960,
+          "remaining_items": 1238,
+          "controlled_allocation_calls": 2191
+        },
+        {
+          "loop_visits": 45056,
+          "remaining_items": 827,
+          "controlled_allocation_calls": 2193
+        },
+        {
+          "loop_visits": 49152,
+          "remaining_items": 445,
+          "controlled_allocation_calls": 2203
+        },
+        {
+          "loop_visits": 53248,
+          "remaining_items": 39,
+          "controlled_allocation_calls": 2205
+        }
+      ],
+      "native_instruction_budget": 60000000,
+      "terminal": "natural_constructor_return_to_driver_STOP",
+      "explicit_allocator_gettid_exit_registration_and_stack_used": true,
+      "diagnostic_scopes_substituted_by_oracle": true,
+      "constructor_invoked_directly": true,
+      "Android_loader_executed": false,
+      "original_JNI_B_run_composed": false,
+      "native_generated_root_used_as_lookup_component_input": true,
+      "native_input_snapshot_used": true,
+      "Python_factory_implemented": false,
+      "complete_Python_B_bootstrap_controls": 0,
+      "B_VM_executed": false,
+      "complete_python_medusa": false,
+      "fresh_signer_output_verified": false,
+      "live_server_matrix_verified": false
+    },
+    {
+      "image_base_hex": "0x775c205000",
+      "native_constructor_return_verified": true,
+      "native_factory_return_verified": true,
+      "actual_ELF_factory_blob_used": true,
+      "factory_blob_offset_hex": "0x387d20",
+      "factory_blob_length": 229328,
+      "constructor_generated_callback_count": 16,
+      "constructor_generated_prototype_count": 22,
+      "controlled_allocation_calls": 2330,
+      "register_only_exit_calls": 4,
+      "bound_ABS64_import_counts": {
+        "memset": 17,
+        "memcpy": 16
+      },
+      "native_normal_mutexes_used": true,
+      "native_memcmp_used": true,
+      "actual_generated_root_bucket_count": 163,
+      "all_121_descriptors_published_nonzero": true,
+      "generated_root_lookup_controls": 121,
+      "lookup_comparisons": [
+        {
+          "index": 0,
+          "publication_slot_offset_hex": "0x3e1eb8",
+          "query_length": 2,
+          "bucket_index": 120,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 1,
+          "publication_slot_offset_hex": "0x3e1ec0",
+          "query_length": 2,
+          "bucket_index": 138,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 2,
+          "publication_slot_offset_hex": "0x3e1ec8",
+          "query_length": 2,
+          "bucket_index": 23,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 3,
+          "publication_slot_offset_hex": "0x3e1ed0",
+          "query_length": 2,
+          "bucket_index": 111,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 4,
+          "publication_slot_offset_hex": "0x3e1ed8",
+          "query_length": 2,
+          "bucket_index": 25,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 5,
+          "publication_slot_offset_hex": "0x3e1ee0",
+          "query_length": 2,
+          "bucket_index": 86,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 6,
+          "publication_slot_offset_hex": "0x3e1ee8",
+          "query_length": 2,
+          "bucket_index": 8,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 7,
+          "publication_slot_offset_hex": "0x3e1ef0",
+          "query_length": 2,
+          "bucket_index": 83,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 8,
+          "publication_slot_offset_hex": "0x3e1ef8",
+          "query_length": 2,
+          "bucket_index": 46,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 9,
+          "publication_slot_offset_hex": "0x3e1f00",
+          "query_length": 2,
+          "bucket_index": 85,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 10,
+          "publication_slot_offset_hex": "0x3e1f08",
+          "query_length": 2,
+          "bucket_index": 78,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 11,
+          "publication_slot_offset_hex": "0x3e1f10",
+          "query_length": 2,
+          "bucket_index": 66,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 12,
+          "publication_slot_offset_hex": "0x3e1f18",
+          "query_length": 2,
+          "bucket_index": 27,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 13,
+          "publication_slot_offset_hex": "0x3e1f20",
+          "query_length": 2,
+          "bucket_index": 112,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 14,
+          "publication_slot_offset_hex": "0x3e1f28",
+          "query_length": 2,
+          "bucket_index": 78,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 15,
+          "publication_slot_offset_hex": "0x3e1f30",
+          "query_length": 2,
+          "bucket_index": 161,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 16,
+          "publication_slot_offset_hex": "0x3e1f38",
+          "query_length": 3,
+          "bucket_index": 135,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 17,
+          "publication_slot_offset_hex": "0x3e1f40",
+          "query_length": 3,
+          "bucket_index": 104,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 18,
+          "publication_slot_offset_hex": "0x3e1f48",
+          "query_length": 3,
+          "bucket_index": 110,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 19,
+          "publication_slot_offset_hex": "0x3e1f50",
+          "query_length": 3,
+          "bucket_index": 66,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 20,
+          "publication_slot_offset_hex": "0x3e1f58",
+          "query_length": 3,
+          "bucket_index": 92,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 21,
+          "publication_slot_offset_hex": "0x3e1f60",
+          "query_length": 3,
+          "bucket_index": 27,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 22,
+          "publication_slot_offset_hex": "0x3e1f68",
+          "query_length": 3,
+          "bucket_index": 121,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 23,
+          "publication_slot_offset_hex": "0x3e1f70",
+          "query_length": 3,
+          "bucket_index": 23,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 24,
+          "publication_slot_offset_hex": "0x3e1f78",
+          "query_length": 3,
+          "bucket_index": 144,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 25,
+          "publication_slot_offset_hex": "0x3e1f80",
+          "query_length": 3,
+          "bucket_index": 146,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 26,
+          "publication_slot_offset_hex": "0x3e1f88",
+          "query_length": 3,
+          "bucket_index": 70,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 27,
+          "publication_slot_offset_hex": "0x3e1f90",
+          "query_length": 3,
+          "bucket_index": 158,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 28,
+          "publication_slot_offset_hex": "0x3e1f98",
+          "query_length": 3,
+          "bucket_index": 133,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 29,
+          "publication_slot_offset_hex": "0x3e1fa0",
+          "query_length": 3,
+          "bucket_index": 79,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 30,
+          "publication_slot_offset_hex": "0x3e1fa8",
+          "query_length": 3,
+          "bucket_index": 158,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 31,
+          "publication_slot_offset_hex": "0x3e1fb0",
+          "query_length": 3,
+          "bucket_index": 24,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 32,
+          "publication_slot_offset_hex": "0x3e1fb8",
+          "query_length": 3,
+          "bucket_index": 156,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 33,
+          "publication_slot_offset_hex": "0x3e1fc0",
+          "query_length": 3,
+          "bucket_index": 110,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 34,
+          "publication_slot_offset_hex": "0x3e21f0",
+          "query_length": 3,
+          "bucket_index": 161,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 35,
+          "publication_slot_offset_hex": "0x3e21f8",
+          "query_length": 3,
+          "bucket_index": 44,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 36,
+          "publication_slot_offset_hex": "0x3e2200",
+          "query_length": 3,
+          "bucket_index": 143,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 37,
+          "publication_slot_offset_hex": "0x3e2208",
+          "query_length": 3,
+          "bucket_index": 101,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 38,
+          "publication_slot_offset_hex": "0x3e2210",
+          "query_length": 3,
+          "bucket_index": 148,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 39,
+          "publication_slot_offset_hex": "0x3e2218",
+          "query_length": 3,
+          "bucket_index": 137,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 40,
+          "publication_slot_offset_hex": "0x3e2220",
+          "query_length": 3,
+          "bucket_index": 65,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 41,
+          "publication_slot_offset_hex": "0x3e2228",
+          "query_length": 3,
+          "bucket_index": 127,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 42,
+          "publication_slot_offset_hex": "0x3e2230",
+          "query_length": 3,
+          "bucket_index": 41,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 43,
+          "publication_slot_offset_hex": "0x3e2238",
+          "query_length": 3,
+          "bucket_index": 3,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 44,
+          "publication_slot_offset_hex": "0x3e2240",
+          "query_length": 3,
+          "bucket_index": 150,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 45,
+          "publication_slot_offset_hex": "0x3e2248",
+          "query_length": 3,
+          "bucket_index": 24,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 46,
+          "publication_slot_offset_hex": "0x3e2250",
+          "query_length": 3,
+          "bucket_index": 93,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 47,
+          "publication_slot_offset_hex": "0x3e2258",
+          "query_length": 3,
+          "bucket_index": 41,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 48,
+          "publication_slot_offset_hex": "0x3e2260",
+          "query_length": 3,
+          "bucket_index": 13,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 49,
+          "publication_slot_offset_hex": "0x3e2268",
+          "query_length": 3,
+          "bucket_index": 52,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 50,
+          "publication_slot_offset_hex": "0x3e2270",
+          "query_length": 3,
+          "bucket_index": 3,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 51,
+          "publication_slot_offset_hex": "0x3e2278",
+          "query_length": 3,
+          "bucket_index": 96,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 52,
+          "publication_slot_offset_hex": "0x3e1fc8",
+          "query_length": 3,
+          "bucket_index": 134,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 53,
+          "publication_slot_offset_hex": "0x3e1fd0",
+          "query_length": 3,
+          "bucket_index": 83,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 54,
+          "publication_slot_offset_hex": "0x3e1fd8",
+          "query_length": 3,
+          "bucket_index": 106,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 55,
+          "publication_slot_offset_hex": "0x3e1fe0",
+          "query_length": 3,
+          "bucket_index": 26,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 56,
+          "publication_slot_offset_hex": "0x3e1fe8",
+          "query_length": 3,
+          "bucket_index": 123,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 57,
+          "publication_slot_offset_hex": "0x3e1ff0",
+          "query_length": 3,
+          "bucket_index": 44,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 58,
+          "publication_slot_offset_hex": "0x3e1ff8",
+          "query_length": 3,
+          "bucket_index": 85,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 59,
+          "publication_slot_offset_hex": "0x3e2000",
+          "query_length": 3,
+          "bucket_index": 3,
+          "visited_nodes": 3,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 60,
+          "publication_slot_offset_hex": "0x3e2008",
+          "query_length": 3,
+          "bucket_index": 21,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 61,
+          "publication_slot_offset_hex": "0x3e2010",
+          "query_length": 3,
+          "bucket_index": 58,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 62,
+          "publication_slot_offset_hex": "0x3e2018",
+          "query_length": 3,
+          "bucket_index": 21,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 63,
+          "publication_slot_offset_hex": "0x3e2020",
+          "query_length": 3,
+          "bucket_index": 114,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 64,
+          "publication_slot_offset_hex": "0x3e2028",
+          "query_length": 3,
+          "bucket_index": 58,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 65,
+          "publication_slot_offset_hex": "0x3e2030",
+          "query_length": 3,
+          "bucket_index": 16,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 66,
+          "publication_slot_offset_hex": "0x3e2038",
+          "query_length": 3,
+          "bucket_index": 73,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 67,
+          "publication_slot_offset_hex": "0x3e2040",
+          "query_length": 3,
+          "bucket_index": 52,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 68,
+          "publication_slot_offset_hex": "0x3e2048",
+          "query_length": 3,
+          "bucket_index": 68,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 69,
+          "publication_slot_offset_hex": "0x3e2050",
+          "query_length": 3,
+          "bucket_index": 29,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 70,
+          "publication_slot_offset_hex": "0x3e2058",
+          "query_length": 3,
+          "bucket_index": 98,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 71,
+          "publication_slot_offset_hex": "0x3e2060",
+          "query_length": 3,
+          "bucket_index": 49,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 72,
+          "publication_slot_offset_hex": "0x3e2068",
+          "query_length": 3,
+          "bucket_index": 83,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 73,
+          "publication_slot_offset_hex": "0x3e2070",
+          "query_length": 3,
+          "bucket_index": 57,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 74,
+          "publication_slot_offset_hex": "0x3e2078",
+          "query_length": 3,
+          "bucket_index": 22,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 75,
+          "publication_slot_offset_hex": "0x3e2080",
+          "query_length": 3,
+          "bucket_index": 30,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 76,
+          "publication_slot_offset_hex": "0x3e2088",
+          "query_length": 3,
+          "bucket_index": 111,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 77,
+          "publication_slot_offset_hex": "0x3e2090",
+          "query_length": 3,
+          "bucket_index": 143,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 78,
+          "publication_slot_offset_hex": "0x3e2098",
+          "query_length": 3,
+          "bucket_index": 158,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 79,
+          "publication_slot_offset_hex": "0x3e20a0",
+          "query_length": 3,
+          "bucket_index": 139,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 80,
+          "publication_slot_offset_hex": "0x3e20a8",
+          "query_length": 3,
+          "bucket_index": 117,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 81,
+          "publication_slot_offset_hex": "0x3e20b0",
+          "query_length": 3,
+          "bucket_index": 110,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 82,
+          "publication_slot_offset_hex": "0x3e20b8",
+          "query_length": 3,
+          "bucket_index": 79,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 83,
+          "publication_slot_offset_hex": "0x3e20c0",
+          "query_length": 3,
+          "bucket_index": 17,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 84,
+          "publication_slot_offset_hex": "0x3e20c8",
+          "query_length": 3,
+          "bucket_index": 94,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 85,
+          "publication_slot_offset_hex": "0x3e20d0",
+          "query_length": 3,
+          "bucket_index": 61,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 86,
+          "publication_slot_offset_hex": "0x3e20d8",
+          "query_length": 3,
+          "bucket_index": 54,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 87,
+          "publication_slot_offset_hex": "0x3e20e0",
+          "query_length": 3,
+          "bucket_index": 126,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 88,
+          "publication_slot_offset_hex": "0x3e20e8",
+          "query_length": 3,
+          "bucket_index": 139,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 89,
+          "publication_slot_offset_hex": "0x3e20f0",
+          "query_length": 3,
+          "bucket_index": 8,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 90,
+          "publication_slot_offset_hex": "0x3e20f8",
+          "query_length": 3,
+          "bucket_index": 115,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 91,
+          "publication_slot_offset_hex": "0x3e2100",
+          "query_length": 3,
+          "bucket_index": 145,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 92,
+          "publication_slot_offset_hex": "0x3e2108",
+          "query_length": 3,
+          "bucket_index": 85,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 93,
+          "publication_slot_offset_hex": "0x3e2110",
+          "query_length": 3,
+          "bucket_index": 23,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 94,
+          "publication_slot_offset_hex": "0x3e2118",
+          "query_length": 3,
+          "bucket_index": 133,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 95,
+          "publication_slot_offset_hex": "0x3e2120",
+          "query_length": 3,
+          "bucket_index": 62,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 96,
+          "publication_slot_offset_hex": "0x3e2128",
+          "query_length": 3,
+          "bucket_index": 14,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 97,
+          "publication_slot_offset_hex": "0x3e2130",
+          "query_length": 3,
+          "bucket_index": 81,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 98,
+          "publication_slot_offset_hex": "0x3e2138",
+          "query_length": 3,
+          "bucket_index": 10,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 99,
+          "publication_slot_offset_hex": "0x3e2140",
+          "query_length": 3,
+          "bucket_index": 76,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 100,
+          "publication_slot_offset_hex": "0x3e2148",
+          "query_length": 3,
+          "bucket_index": 59,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 101,
+          "publication_slot_offset_hex": "0x3e2150",
+          "query_length": 3,
+          "bucket_index": 49,
+          "visited_nodes": 2,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 102,
+          "publication_slot_offset_hex": "0x3e2158",
+          "query_length": 3,
+          "bucket_index": 71,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 103,
+          "publication_slot_offset_hex": "0x3e2160",
+          "query_length": 3,
+          "bucket_index": 94,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 104,
+          "publication_slot_offset_hex": "0x3e2168",
+          "query_length": 3,
+          "bucket_index": 38,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 105,
+          "publication_slot_offset_hex": "0x3e2170",
+          "query_length": 3,
+          "bucket_index": 107,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 106,
+          "publication_slot_offset_hex": "0x3e2178",
+          "query_length": 3,
+          "bucket_index": 40,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 107,
+          "publication_slot_offset_hex": "0x3e2180",
+          "query_length": 3,
+          "bucket_index": 57,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 108,
+          "publication_slot_offset_hex": "0x3e2188",
+          "query_length": 3,
+          "bucket_index": 154,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 109,
+          "publication_slot_offset_hex": "0x3e2190",
+          "query_length": 3,
+          "bucket_index": 34,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 110,
+          "publication_slot_offset_hex": "0x3e2198",
+          "query_length": 3,
+          "bucket_index": 126,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 111,
+          "publication_slot_offset_hex": "0x3e21a0",
+          "query_length": 3,
+          "bucket_index": 0,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 112,
+          "publication_slot_offset_hex": "0x3e21a8",
+          "query_length": 3,
+          "bucket_index": 149,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 113,
+          "publication_slot_offset_hex": "0x3e21b0",
+          "query_length": 3,
+          "bucket_index": 90,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 114,
+          "publication_slot_offset_hex": "0x3e21b8",
+          "query_length": 3,
+          "bucket_index": 125,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 115,
+          "publication_slot_offset_hex": "0x3e21c0",
+          "query_length": 3,
+          "bucket_index": 89,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 116,
+          "publication_slot_offset_hex": "0x3e21c8",
+          "query_length": 3,
+          "bucket_index": 96,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 117,
+          "publication_slot_offset_hex": "0x3e21d0",
+          "query_length": 3,
+          "bucket_index": 118,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 118,
+          "publication_slot_offset_hex": "0x3e21d8",
+          "query_length": 3,
+          "bucket_index": 75,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 119,
+          "publication_slot_offset_hex": "0x3e21e0",
+          "query_length": 3,
+          "bucket_index": 18,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        },
+        {
+          "index": 120,
+          "publication_slot_offset_hex": "0x3e21e8",
+          "query_length": 3,
+          "bucket_index": 74,
+          "visited_nodes": 1,
+          "native_Python_descriptor_match": true
+        }
+      ],
+      "actual_publication_sites_decoded_from_ELF": true,
+      "unique_final_publication_slots": 121,
+      "all_final_publication_slots_verified": true,
+      "vector_stride_bytes": 12,
+      "vector_loop_visits": 54533,
+      "bounded_vector_progress": [
+        {
+          "loop_visits": 1,
+          "remaining_items": 34,
+          "controlled_allocation_calls": 1967
+        },
+        {
+          "loop_visits": 2,
+          "remaining_items": 33,
+          "controlled_allocation_calls": 1967
+        },
+        {
+          "loop_visits": 3,
+          "remaining_items": 32,
+          "controlled_allocation_calls": 1967
+        },
+        {
+          "loop_visits": 4096,
+          "remaining_items": 63,
+          "controlled_allocation_calls": 1977
+        },
+        {
+          "loop_visits": 8192,
+          "remaining_items": 196,
+          "controlled_allocation_calls": 2009
+        },
+        {
+          "loop_visits": 12288,
+          "remaining_items": 291,
+          "controlled_allocation_calls": 2023
+        },
+        {
+          "loop_visits": 16384,
+          "remaining_items": 37,
+          "controlled_allocation_calls": 2045
+        },
+        {
+          "loop_visits": 20480,
+          "remaining_items": 12,
+          "controlled_allocation_calls": 2105
+        },
+        {
+          "loop_visits": 24576,
+          "remaining_items": 110,
+          "controlled_allocation_calls": 2155
+        },
+        {
+          "loop_visits": 28672,
+          "remaining_items": 2371,
+          "controlled_allocation_calls": 2169
+        },
+        {
+          "loop_visits": 32768,
+          "remaining_items": 1997,
+          "controlled_allocation_calls": 2179
+        },
+        {
+          "loop_visits": 36864,
+          "remaining_items": 1592,
+          "controlled_allocation_calls": 2181
+        },
+        {
+          "loop_visits": 40960,
+          "remaining_items": 1238,
+          "controlled_allocation_calls": 2191
+        },
+        {
+          "loop_visits": 45056,
+          "remaining_items": 827,
+          "controlled_allocation_calls": 2193
+        },
+        {
+          "loop_visits": 49152,
+          "remaining_items": 445,
+          "controlled_allocation_calls": 2203
+        },
+        {
+          "loop_visits": 53248,
+          "remaining_items": 39,
+          "controlled_allocation_calls": 2205
+        }
+      ],
+      "native_instruction_budget": 60000000,
+      "terminal": "natural_constructor_return_to_driver_STOP",
+      "explicit_allocator_gettid_exit_registration_and_stack_used": true,
+      "diagnostic_scopes_substituted_by_oracle": true,
+      "constructor_invoked_directly": true,
+      "Android_loader_executed": false,
+      "original_JNI_B_run_composed": false,
+      "native_generated_root_used_as_lookup_component_input": true,
+      "native_input_snapshot_used": true,
+      "Python_factory_implemented": false,
+      "complete_Python_B_bootstrap_controls": 0,
+      "B_VM_executed": false,
+      "complete_python_medusa": false,
+      "fresh_signer_output_verified": false,
+      "live_server_matrix_verified": false
+    }
+  ],
+  "independent_Python_factory_implemented": false,
+  "complete_python_bootstrap_controls": 0,
+  "native_generated_root_is_component_input_only": true,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false
+}

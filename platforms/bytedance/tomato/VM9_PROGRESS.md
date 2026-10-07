@@ -1,26 +1,35 @@
 # Current VM9 progress checkpoint
 
-## 2026-10-07 UTC：A 原始 JNI 返回与同次完整默认任务；B 短 selector
+## 2026-10-07 UTC：原始 JNI 同次 worker TLS/exit 与 B 实际 factory
 
-文件名沿用本机试验标签 `20261008`。两个基址分别验证原始 A JNI_OnLoad 自然返回
-0x10006，以及同次 thread-create argument → 第一个 queue worker → +280554 入口。
-四条 memset ABS64 单变量控制定位并验证导入依赖；两个同次完整任务观察各执行六个
-caller/48 次嵌套返回/六次 once 完成 broadcast。另两个观察执行任务返回后的 +167310
-清理，停在 pthread_cond_wait PLT +3485b0 前；边界观察未执行 wait。后续两个完整 worker 观察实际执行 matching-libc wait，由显式
-futex EINTR/queue stop 服务驱动，正常返回 0；argument 一次 free/poison 通过，support
-wrapper 保留在 TLS。TLS 析构/guest pthread_exit/真实 OS 线程退出仍待接回。
+文件名沿用本机试验标签 `20261008`。原有两个基址的 A JNI_OnLoad 0x10006 自然返回、
+同次六个默认 caller / 48 嵌套返回、task cleanup / wait / stop / argument free 已验证。
+新增 **2 个同次 TLS cleanup 观察和 2 个 guest pthread_exit 观察**，清空实际 support
+slot，恰好按 argument(64)→payload(48)→wrapper(8) 释放并核对 poison。guest joinable
+状态由实际 libc body 0→1，到显式 syscall 93 exit；原 13 项启动控制回归通过。
 
-一个 allocator 碰撞控制保留原小块 pool，复现 16 KiB arena 覆盖 worker TLS 后的
-canary 失配；正控制仅隔离大块 arena，未绕过 stack-check 或替换 VM 结果。
-Thread-create 仍只发布 deferred guest handles，driver/JNI/OS/allocator/warm TLS 输入
-仍显式；主/worker 顺序复用物理栈。这些是 native 原始链观察，完整 Python bootstrap
-对照仍为 0，完整独立 Medusa/fresh 签名/线上矩阵及下载产品仍未完成。
+exit 增加 worker normal-return→cleanup/exit driver；此前 ctor→JNI、JNI→虚拟 worker
+driver 保留。libc TLS getter、空 cxa 线程链、deferred thread-create、受控 allocator /
+arena、JNI/OS 和 warm TLS 输入仍显式。未证明真实 OS 线程终止、非空 cxa 链、detached
+退出或 stack region 回收；完整 Python bootstrap 对照仍 **0**。
 
-B descriptor producer 已静态定位到 .init_array +29ecac → factory +2cbdc8 →
-+3e1eb0/+3e1eb8 发布。短 selector 哈希和 lookup 新增 20+30 native/Python 对照、
-6 项拒绝回滚；覆盖实际 ELF 的两字节 selector、uint32 shift、桶与 key/碰撞链。
-root/bucket 输入仍为合成数据，完整 factory、真实 descriptor publication 与 B VM 未恢复。
-见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。下列停止点是此前证据。
+B 新增 **2 个原始 +29ecac constructor / +2cbdc8 factory 观察**，每次自然返回、121 个
+非空 descriptor 发布、2330 次受控分配、4 次 exit 注册；actual root bucket count 163。
+预算末端 +2dbf80 由 12 字节步长的有限 vector 推进解释，54533 次边界后自然返回。
+发布地址按 ELF str 的立即数偏移解码；不把 #imm 漏算的 probe 错误归因于 lookup。
+另 **242 个 Python lookup 对照消费 native 生成 root**，与此前 20+30 合成 root 控制和
+6 个回滚控制单列；新 lookup evidence 的 native_input_snapshot_used=true。
+
+B XOR 前导新增 **82 个 native/Python 控制、8 个回滚**：0/8/32/tail、零 key 和
+count=0 时 row=size，以及两个实际 ELF blob 输入通过。Python/native 都从 fresh ELF /
+合成 codec 输入开始，不用 native 快照；停在 +2cbf24 的 reader 调用前。下一处为
++31b360 reader、+2cd5a4 解析及 +2cafd0 构建，不等于完整 factory。
+
+B constructor 是直接调用，Python factory、原始 JNI B 组合和 B VM 未恢复。真实
+allocator/arena/OS 输入、独立 Medusa、fresh 签名/线上矩阵、Rust 下载链路、非空搜索 /
+分页、抖音/起点与最终下载产品仍未完成。下一步恢复 B factory blob 解析与独立输入，
+把 JNI / worker / cleanup 接回 Python / actual allocator 组合。
+见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。下列记录为此前证据。
 
 ## 2026-10-08 Python once/getter/mask 与启动导入边界（本机 Asia/Shanghai）
 

@@ -1,18 +1,23 @@
 # Tomato / Fanqie (ByteDance)
 
-Current boundary (2026-10-07 UTC; host trial label `20261008`): the original
-A JNI_OnLoad returns `0x10006` with explicit services. Two same-run native
-observations execute all six default task callers (48 nested returns each),
-and two further observations reach worker wait after actual task cleanup.
-Two additional same-run observations execute matching-libc wait, explicit
-futex EINTR/queue stop, normal worker return and controlled argument free.
-Support remains in TLS; TLS destructors and guest pthread_exit remain open.
-Thread creation, OS/allocator/JNI inputs and warm TLS states remain explicit.
-B short-selector hash/lookup adds 50 native/Python controls and six negatives;
-its root/bucket data is synthetic and its factory/publication remains open.
-Full independent Python Medusa, fresh signatures and online acceptance remain
-unfinished. See [the startup/worker report](REQUEST_JNI_STARTUP_WORKERS.md) and
-[VM9_PROGRESS.md](VM9_PROGRESS.md). Older observations below are historical.
+Current boundary (2026-10-07 UTC; host trial label `20261008`): original A
+JNI_OnLoad returns `0x10006`; its same-run queue worker executes six default
+callers / 48 nested returns, cleanup, matching-libc wait, explicit stop and
+argument free. Two new TLS cleanup and two guest joinable exit observations
+clear the actual support slot and free argument/payload/wrapper in order.
+Guest state 0→1 reaches explicit syscall 93 exit. Thread creation/termination,
+allocator/OS/JNI/warm TLS and the empty cxa thread list remain explicit inputs.
+
+Two original B constructor/factory observations now return naturally and each
+publish 121 nonzero descriptors. 242 Python lookup comparisons consume native
+generated roots, distinct from the earlier 50 synthetic-root controls and six
+negatives. Independent Python factory, original JNI B composition, B VM and
+full Python bootstrap (0 controls) remain open. The independent XOR prefix
+adds 82 native/Python controls (including two real ELF blobs) and eight
+rollback cases; it stops before the +31b360 reader, not a complete factory. Independent Medusa, fresh
+signatures and online acceptance remain unfinished. See [the startup/worker
+report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).
+Older observations below are historical.
 
 Actual JNI dispatcher/exception handling now passes 54 native/Python controls
 and 10 negatives; Long conversion adds 34 controls and 11 negatives with an
@@ -85,7 +90,9 @@ The outer startup caller now passes four fresh-input controls (86 steps, 16 allo
 
 ### 原始 JNI 与同次默认 worker 的后续检查点
 
-A 新增 2 个原始返回、2 个 worker 入口、4 个 memset 控制、2 个完整默认任务、
-2 个清理/wait 边界、2 个 wait/stop/return/free 和 1 个 allocator 碰撞控制；B 新增 20 个短哈希、30 个查找
-对照及 6 个负控制。完整 Python bootstrap 对照仍 0，真实 OS wait/exit、TLS 析构、B factory
-与独立签名链仍待完成。详见 [后续报告](REQUEST_JNI_STARTUP_WORKERS.md)。
+原有 A 原始启动/六个 caller/wait-stop 控制回归通过；新增 2 个同次 TLS cleanup、
+2 个 guest joinable exit 观察，实际 support 清零及三次 free/poison 通过。B 新增两个
+原始 constructor/factory 自然返回与 121 个 descriptor 发布观察，另 242 个 Python
+lookup 控制使用 native 生成 root。另 82 个独立 XOR prefix 控制和 8 个回滚通过，
+仍停在 reader 前。Python factory / 完整 bootstrap 对照仍 0，真实 OS
+线程与独立签名链仍待完成。详见 [后续报告](REQUEST_JNI_STARTUP_WORKERS.md)。

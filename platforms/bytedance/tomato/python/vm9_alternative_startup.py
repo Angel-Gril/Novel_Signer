@@ -1,8 +1,10 @@
-"""Bounded +0x2a9620 descriptor selection and +0x2aa744 short hash.
+"""B short hash/descriptor selection and the factory blob XOR prefix.
 
-The module root/array/hash buckets are explicit inputs. The actual module
-factory +0x2cbdc8, constructor publication and complete B VM remain open.
-Only selector lengths 0..8 are implemented; unsupported branches fail closed.
+The module root/array/hash buckets are explicit inputs. Native factory and
+publication observations are verified separately; independent Python factory
++0x2cbdc8, constructor input generation and complete B VM remain open.
+Only selector lengths 0..8 and the XOR pre-reader prefix are implemented;
+unsupported branches fail closed.
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -101,3 +103,42 @@ def lookup_short_descriptor(pages, *, root_address, name_address,
             node=_u(p,node)
     result=ShortDescriptorLookupResult(descriptor,hashed,bucket,len(query),tuple(visited))
     p.commit();return result
+
+
+@dataclass(frozen=True)
+class FactoryBlobXorResult:
+    blob_size: int
+    selected_codec_row: int | None
+    key_was_zero: bool | None
+
+
+def decode_factory_blob_xor(pages, *, blob_address, blob_size,
+        codec_table_address, codec_table_count, max_blob_bytes=16*1024*1024):
+    """Bounded +0x2cbdc8 entry through +0x2cbf24, before the reader call.
+
+    The extra stack arguments select row size % count from 24-byte codec
+    records, using byte +2. For count zero the native unsigned division leaves
+    quotient zero, selecting row size. Size zero skips the table entirely.
+    This is only the in-place XOR prefix, not parsing or a module factory.
+    Pages commit together; missing input/destination pages fail closed.
+    """
+    if (not isinstance(blob_address,int) or not 0<blob_address<=MASK64
+            or not isinstance(blob_size,int) or not 0<=blob_size<=MASK64
+            or not isinstance(max_blob_bytes,int) or not 0<=max_blob_bytes<=MASK64
+            or blob_size>max_blob_bytes or blob_address+blob_size>MASK64+1):
+        raise RefillUnsupported('factory XOR blob exceeds the explicit address/size bound')
+    if (not isinstance(codec_table_count,int) or not 0<=codec_table_count<=MASK64
+            or not isinstance(codec_table_address,int) or not 0<=codec_table_address<=MASK64):
+        raise RefillUnsupported('factory XOR codec metadata is outside the guest ABI')
+    if not blob_size:return FactoryBlobXorResult(0,None,None)
+    row=blob_size%codec_table_count if codec_table_count else blob_size
+    key_address=codec_table_address+row*24+2
+    if not codec_table_address or key_address>MASK64:
+        raise RefillUnsupported('factory XOR codec row address overflows or is null')
+    p=_PageTransaction(pages)
+    key=_u(p,key_address,1)
+    if key:
+        payload=_read_span(p,blob_address,blob_size)
+        _write_span(p,blob_address,bytes(value^key for value in payload))
+    p.commit()
+    return FactoryBlobXorResult(blob_size,row,key==0)
