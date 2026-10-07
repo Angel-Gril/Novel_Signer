@@ -149,6 +149,9 @@ JNI分支、真实请求 FindClass/URL/headers转换仍未贯通。
 
 ## 6. 后续：原始 cold switch initializer 已经经过 TLS 获取
 
+本节保留此前停在dispatcher前的证据；后续actual dispatcher与独立Long转换组件见
+[REQUEST_JNI_DISPATCH.md](REQUEST_JNI_DISPATCH.md)，原始入口尚未完成Long/once。
+
 另两个原始 JNI_OnLoad 探针在同一次 native invocation 内自然执行 publication、
 JNI初始化、A/B call_once、实际 TLS acquisition，停在 `+0x26E70C` 前。
 它们没有 host continuation，没有执行该地址既有 oracle 返回 stub；它们的

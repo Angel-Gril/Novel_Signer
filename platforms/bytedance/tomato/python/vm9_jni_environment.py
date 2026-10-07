@@ -286,8 +286,8 @@ def retain_global_jni_reference(pages, *, environment_pointer, reference, invoke
     p.commit();return result
 
 
-def _dispatch_delta(image_base):
-    entry=image_base+0x26E19C
+def _dispatch_delta(image_base,entry_offset=0x26E19C):
+    entry=image_base+entry_offset
     folded=(((0x00A060400A021040 | (~entry&MASK64)) & 0x00A061440A061440)
         +(entry&0x0000010400040400))&MASK64
     return ((folded|0x01010104)^0xFF5F9EBBF4C6A63C)&MASK64
@@ -364,4 +364,229 @@ def initialize_java_dispatch(pages, *, image_base, entry_stack_address,
                 _w(p,resolve(0x3825B8),retained)
     result=JavaDispatchInitializationResult(methods,tuple(lengths),cls,parent,ancestor,
         registered,looked_up,method_id,retained)
+    p.commit();return result
+
+
+def check_and_clear_java_exception(pages, *, environment_pointer, invoke_jni):
+    """+0x27184c: low-byte check, occurred/clear/delete, boolean result.
+
+    A NULL environment returns false. DeleteLocalRef is executed even if
+    ExceptionOccurred returns NULL. JNI side effects are explicit services.
+    """
+    if not isinstance(environment_pointer,int) or not 0<=environment_pointer<=MASK64:
+        raise RefillUnsupported('exception environment must fit uint64')
+    if not environment_pointer:return False
+    p=_PageTransaction(pages)
+    found=bool(_invoke_jni(p,environment_pointer,0x720,(),invoke_jni)&0xFF)
+    if found:
+        exception=_invoke_jni(p,environment_pointer,0x78,(),invoke_jni)
+        _invoke_jni(p,environment_pointer,0x88,(),invoke_jni)
+        _invoke_jni(p,environment_pointer,0xB8,(exception,),invoke_jni)
+    p.commit();return found
+
+
+def clear_java_exception(pages, *, environment_pointer, invoke_jni):
+    """+0x26f258: independent low-byte check and conditional ExceptionClear."""
+    if not isinstance(environment_pointer,int) or not 0<=environment_pointer<=MASK64:
+        raise RefillUnsupported('exception environment must fit uint64')
+    if not environment_pointer:return
+    p=_PageTransaction(pages)
+    if _invoke_jni(p,environment_pointer,0x720,(),invoke_jni)&0xFF:
+        _invoke_jni(p,environment_pointer,0x88,(),invoke_jni)
+    p.commit()
+
+
+@dataclass(frozen=True)
+class IntegerJavaVariadicFrame:
+    copied_va_list_address: int
+    original_va_list_address: int
+    general_registers_address: int
+    integer_words: tuple[int, ...]
+
+
+def prepare_integer_java_variadic_frame(pages, *, entry_stack_address, argument_words):
+    """+0x26e944 integer-only ABI consumed by this (IIJ...Object) signature.
+
+    Preserve the two actual va_list structures, five GP save slots and offsets.
+    The 128-byte SIMD save area, stack canary, FP/LR and full physical spill ABI
+    are outside this helper. The recovered signature consumes no FP arguments.
+    Callers must not use it for a different/floating-point JNI signature.
+    """
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<0x120
+            or entry_stack_address&15):
+        raise RefillUnsupported('JNI variadic stack must be aligned with scratch space')
+    words=tuple(argument_words)
+    if len(words)!=5 or any(not isinstance(v,int) or not 0<=v<=MASK64 for v in words):
+        raise RefillUnsupported('JNI variadic call requires five uint64 raw words')
+    p=_PageTransaction(pages);gp=entry_stack_address-0x98
+    original=entry_stack_address-0x48;copied=entry_stack_address-0x70
+    _write_span(p,gp,b''.join(v.to_bytes(8,'little') for v in words))
+    # va_list: stack, gr_top, vr_top, int32 gr_offs, int32 vr_offs.
+    raw=b''.join(v.to_bytes(8,'little') for v in
+        (entry_stack_address,copied,entry_stack_address-0xA0))
+    raw+=(-40).to_bytes(4,'little',signed=True)+(-128).to_bytes(4,'little',signed=True)
+    _write_span(p,original,raw);_write_span(p,copied,_read_span(p,original,32))
+    result=IntegerJavaVariadicFrame(copied,original,gp,words)
+    p.commit();return result
+
+
+@dataclass(frozen=True)
+class JavaDispatchResult:
+    environment_pointer: int
+    returned_reference: int
+    static_call_attempted: bool
+    exception_seen: bool
+    variadic_frame: IntegerJavaVariadicFrame|None
+
+
+def invoke_java_dispatch(pages, *, image_base, entry_stack_address, argument_words,
+        acquire_environment, invoke_jni):
+    """+0x26e70c -> +0x26e944, preserving original lookup/call/cleanup order.
+
+    Acquisition writes the real output pair at query SP+8. The caller may use
+    the recovered TLS owner or an explicit component provider. JNI still comes
+    from explicit services, never an invented Android VM. Exceptions clear the
+    returned reference without inventing deletion of that result. The second
+    exception check is independent and does not change the chosen result.
+    """
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<0x190
+            or entry_stack_address&15):
+        raise RefillUnsupported('JNI dispatcher stack must be aligned with scratch space')
+    if not isinstance(image_base,int) or not 0<=image_base<=MASK64:
+        raise RefillUnsupported('JNI dispatcher image base must fit uint64')
+    words=tuple(argument_words)
+    if len(words)!=5 or any(not isinstance(v,int) or not 0<=v<=MASK64 for v in words):
+        raise RefillUnsupported('JNI dispatcher requires five uint64 raw argument words')
+    if not callable(acquire_environment):
+        raise RefillUnsupported('JNI dispatcher requires an explicit environment acquisition provider')
+    # W24/W23 are latched before acquisition; X2/X3/X4 remain full raw words.
+    arguments=(words[0]&0xFFFFFFFF,words[1]&0xFFFFFFFF,*words[2:])
+    p=_PageTransaction(pages);stack=entry_stack_address-0x70;pair=stack+8
+    acquire_environment(p,entry_stack_address=stack,output_pair_address=pair)
+    env=_u(p,pair);reference=0;called=False;exception=False;frame=None
+    if env:
+        delta=_dispatch_delta(image_base,0x26E70C)
+        def resolve(off):return (_u(p,image_base+off)+delta)&MASK64
+        if _u(p,resolve(0x3825B8)) and _u(p,resolve(0x3825B0)):
+            # Re-read the slots at the actual call, after the ordered checks.
+            cls=_u(p,resolve(0x3825B8));method=_u(p,resolve(0x3825B0))
+            frame=prepare_integer_java_variadic_frame(p,entry_stack_address=stack,argument_words=arguments)
+            reference=_invoke_jni(p,env,0x398,(cls,method,frame.copied_va_list_address),invoke_jni)
+            called=True
+        exception=check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni)
+        if exception:reference=0
+        clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni)
+    result=JavaDispatchResult(env,reference,called,exception,frame)
+    p.commit();return result
+
+
+@dataclass(frozen=True)
+class NoArgumentJavaVariadicFrame:
+    copied_va_list_address: int
+    original_va_list_address: int
+    redundant_object_spill_address: int
+
+
+def prepare_no_argument_java_variadic_frame(pages, *, entry_stack_address, object_reference):
+    """+0x224ff8 structures for the known ()J signature only.
+
+    The caller places its object reference in X3 as well as X1; preserve that
+    redundant GP spill. The other four saved GP words are unconsumed registers,
+    so do not invent their values. SIMD saves/canary/FP/LR remain outside this
+    semantic frame. This helper is not an arbitrary JNI variadic ABI.
+    """
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<0x120
+            or entry_stack_address&15):
+        raise RefillUnsupported('no-argument JNI variadic stack must be aligned')
+    if not isinstance(object_reference,int) or not 0<=object_reference<=MASK64:
+        raise RefillUnsupported('JNI object reference must fit uint64')
+    p=_PageTransaction(pages);original=entry_stack_address-0x48;copied=entry_stack_address-0x70
+    spill=entry_stack_address-0x98;_w(p,spill,object_reference)
+    raw=b''.join(v.to_bytes(8,'little') for v in
+        (entry_stack_address,copied,entry_stack_address-0xA0))
+    raw+=(-40).to_bytes(4,'little',signed=True)+(-128).to_bytes(4,'little',signed=True)
+    _write_span(p,original,raw);_write_span(p,copied,_read_span(p,original,32))
+    result=NoArgumentJavaVariadicFrame(copied,original,spill)
+    p.commit();return result
+
+
+@dataclass(frozen=True)
+class JavaLongConversionResult:
+    returned_word: int
+    decoded_lengths: tuple[int|None, ...]
+    class_reference: int
+    method_id: int
+    cache_lock_taken: bool
+    long_call_attempted: bool
+    variadic_frame: NoArgumentJavaVariadicFrame|None
+
+
+def convert_java_long(pages, *, image_base, entry_stack_address,
+        environment_pointer, object_reference, invoke_jni,
+        lock_mutex=objects.lock_uncontended_mutex,unlock_mutex=objects.unlock_uncontended_mutex):
+    """+0x270854 -> cached java/lang/Long.longValue()J -> +0x224ff8.
+
+    Decode three strings before the NULL-env branch. A warm class/method pair
+    bypasses the cache mutex; otherwise use the already constructed mutex at
+    +0x3df0a8, recheck under its serialized lock, retain the FindClass result,
+    and cache GetMethodID. The cache constructor is not supplied here.
+
+    NULL object references are passed to CallLongMethodV when the cache/env
+    allow a call, as in the original body. No exception check is added: this
+    component does not contain one. Only uncontended successful mutex status
+    is supported. Page rollback does not reverse external JNI/lock effects.
+    """
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<0x190
+            or entry_stack_address&15):
+        raise RefillUnsupported('JNI Long stack must be aligned with scratch space')
+    for value in (image_base,environment_pointer,object_reference):
+        if not isinstance(value,int) or not 0<=value<=MASK64:
+            raise RefillUnsupported('JNI Long inputs must fit uint64')
+    p=_PageTransaction(pages);lengths=[]
+    for flag,source,dest,mask in (
+            (0x3DEF7C,0xA5828,0x3DEF6C,0xA5A1C),
+            (0x3DEFB4,0xA5854,0x3DEFA8,0xA59E8),
+            (0x3DEFBC,0xA5860,0x3DEFB8,0xA59E4)):
+        length=None
+        if not _u(p,image_base+flag,4):
+            length=objects.decode_masked_bytes(p,source_address=image_base+source,
+                destination_address=image_base+dest,mask_address=image_base+mask)
+            _w(p,image_base+flag,1,4)
+        lengths.append(length)
+    scope=entry_stack_address-0x70;cls=method=word=0;locked=called=False;frame=None
+    if environment_pointer:
+        method=_u(p,image_base+0x3DF0C8)
+        cls=_u(p,image_base+0x3DF0C0) if method else 0
+        if not cls or not method:
+            mutex=_u(p,image_base+0x3DF0A8)
+            _address(mutex,'JNI Long cache mutex object',48)
+            _w(p,scope,image_base+0x34C778);_w(p,scope+8,mutex)
+            if not callable(lock_mutex) or not callable(unlock_mutex):
+                raise RefillUnsupported('JNI Long requires explicit lock services')
+            status=lock_mutex(p,mutex_address=mutex+8)
+            if status!=0:raise RefillUnsupported('JNI Long only supports successful uncontended cache locks')
+            _w(p,scope+16,status,4);locked=True
+            method=_u(p,image_base+0x3DF0C8)
+            cls=_u(p,image_base+0x3DF0C0) if method else 0
+            if not cls or not method:
+                local=_invoke_jni(p,environment_pointer,0x30,(image_base+0x3DEF6C,),invoke_jni)
+                cls=retain_global_jni_reference(p,environment_pointer=environment_pointer,
+                    reference=local,invoke_jni=invoke_jni)
+                _w(p,image_base+0x3DF0C0,cls)
+                if cls:
+                    method=_invoke_jni(p,environment_pointer,0x108,
+                        (cls,image_base+0x3DEFA8,image_base+0x3DEFB8),invoke_jni)
+                    _w(p,image_base+0x3DF0C8,method)
+            # +0x15f778 overwrites the scope vtable, then uses its saved mutex.
+            _w(p,scope,image_base+0x34C778)
+            if unlock_mutex(p,mutex_address=_u(p,scope+8)+8)!=0:
+                raise RefillUnsupported('JNI Long cache unlock failure is unrecovered')
+            cls=_u(p,image_base+0x3DF0C0);method=_u(p,image_base+0x3DF0C8)
+        if cls and method:
+            frame=prepare_no_argument_java_variadic_frame(p,entry_stack_address=scope,
+                object_reference=object_reference)
+            word=_invoke_jni(p,environment_pointer,0x1A8,
+                (object_reference,method,frame.copied_va_list_address),invoke_jni)
+            called=True
+    result=JavaLongConversionResult(word,tuple(lengths),cls,method,locked,called,frame)
     p.commit();return result

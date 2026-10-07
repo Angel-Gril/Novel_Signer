@@ -414,3 +414,15 @@ See [REQUEST_EVENT_EMISSION.md](../REQUEST_EVENT_EMISSION.md).
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_request_event_emission_fresh_20261007.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output platforms/bytedance/tomato/evidence/vm9_request_event_emission_fresh_20261007.json
 ```
+
+
+### Actual JNI dispatcher and Long conversion (2026-10-07)
+
+`vm9_jni_environment.invoke_java_dispatch` restores the actual getter,
+integer GP va_list and two distinct exception checks (54 controls/10 negatives).
+`convert_java_long` restores lazy Long strings, cached lookup/normal lock scope
+and the no-argument CallLongMethodV path (34 controls/11 negatives). JNI services
+and cache mutex inputs remain explicit; unused GP/SIMD/physical spill ABI is
+excluded. Two original JNI_OnLoad observations reach +0x270854 before the cache
+mutex is initialized; full once/bootstrap/fresh signer remains open. See
+[REQUEST_JNI_DISPATCH.md](../REQUEST_JNI_DISPATCH.md) for API and reproduction.

@@ -3007,5 +3007,96 @@
       "Stop before +0x26e70c: neither the actual dispatcher nor its legacy stub executes; getter/unboxing/once completion remain open.",
       "No fixture VM/env is inserted into owning-session request; fresh signing, online matrix and download product remain incomplete."
     ]
+  },
+  "vm9_jni_dispatch_fresh_20261007": {
+    "evidence_file": "evidence/vm9_jni_dispatch_fresh_20261007.json",
+    "schema": "vm9-jni-dispatch-fresh-differential-v1",
+    "status": "actual_dispatch_integer_variadic_exception_helpers_and_TLS_compositions_verified",
+    "controls": 54,
+    "dispatcher_controls": 30,
+    "exception_controls": 20,
+    "composition_controls": 4,
+    "negative_controls": 10,
+    "legacy_dispatch_stub_disabled": true,
+    "explicit_JNI_services_used": true,
+    "full_SIMD_variadic_and_physical_stack_ABI_compared": false,
+    "limitations": [
+      "Known integer signature only; SIMD/canary/FP/LR/full physical stack excluded.",
+      "Two exception checks are distinct; no invented returned-object deletion.",
+      "Explicit JNI services are not an Android JVM; whole bootstrap/request and fresh signing remain open."
+    ],
+    "native_input_snapshot_used": false,
+    "actual_android_jvm_executed": false,
+    "full_JNI_OnLoad_recovered": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false
+  },
+  "vm9_jni_long_fresh_20261007": {
+    "evidence_file": "evidence/vm9_jni_long_fresh_20261007.json",
+    "schema": "vm9-jni-long-fresh-differential-v1",
+    "status": "Long_lazy_decode_cache_lookup_uncontended_scope_and_CallLongMethodV_verified",
+    "controls": 34,
+    "negative_controls": 11,
+    "explicit_cache_mutex_and_JNI_services_used": true,
+    "cache_mutex_constructor_recovered": false,
+    "unused_four_GP_words_compared": false,
+    "limitations": [
+      "Cache mutex/global pointer are explicit fixture inputs; constructor/publication not recovered.",
+      "Known ()J consumes no variadic arguments; compare two va_list structures and redundant object spill only.",
+      "Injected lock-recheck publication is controlled input, not host concurrency evidence.",
+      "Guest rollback cannot reverse external JNI effects; full original bootstrap/once remains open."
+    ],
+    "native_input_snapshot_used": false,
+    "actual_android_jvm_executed": false,
+    "full_JNI_OnLoad_recovered": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false
+  },
+  "vm9_jni_cold_switch_dispatch_fresh_20261007": {
+    "evidence_file": "evidence/vm9_jni_cold_switch_dispatch_fresh_20261007.json",
+    "schema": "vm9-jni-cold-switch-dispatch-original-prefix-v1",
+    "status": "two_original_JNI_OnLoad_prefixes_execute_actual_dispatcher_before_Long_conversion",
+    "original_bootstrap_probes": 2,
+    "Python_bootstrap_comparison_controls": 0,
+    "same_original_JNI_OnLoad_invocation_used": true,
+    "explicit_host_continuation_used": false,
+    "original_switch_getter_Java_dispatch_body_executed": true,
+    "legacy_26e70c_stub_executed": false,
+    "GetEnv_calls_per_probe": 4,
+    "malloc_requests_per_probe": 6,
+    "malloc_request_sizes": [
+      128,
+      16,
+      39,
+      16,
+      24,
+      23
+    ],
+    "cold_once_control_at_boundary": 1,
+    "stopped_before_offset": "0x270854",
+    "original_long_conversion_executed": false,
+    "cache_mutex_object_pointer_at_boundary": 0,
+    "cache_class_and_method_at_boundary": [
+      0,
+      0
+    ],
+    "full_cold_TLS_subsystem_boot_verified": false,
+    "limitations": [
+      "Original-code observations are not Python full-bootstrap comparisons.",
+      "Warm references/TLS globals/OS keys and JNI/JavaVM/allocator services remain explicit.",
+      "Long component controls do not prove these entry probes completed conversion/once.",
+      "No fixture VM/env injected into owning-session request; fresh signing, online matrix and download product remain open."
+    ],
+    "native_input_snapshot_used": false,
+    "actual_android_jvm_executed": false,
+    "full_JNI_OnLoad_recovered": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "no_jvm_rust_signer_complete": false
   }
 }

@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-07 actual JNI dispatcher 与 Long 转换组件
+
+- Dispatcher新增54个原生/Python对照、10个负控制：30 dispatcher、20异常helper、
+  4 actual-TLS组合；旧+26e70c oracle stub关闭，GP frame/live JNI顺序和返回引用通过。
+- Long转换+270854/+224ff8新增34个对照、11个负控制：三组lazy decode、cache/锁内
+  复查、global retention、GetMethodID和64位返回通过；cache mutex为显式已构造输入。
+  ()J只比较两份va_list及冗余object spill，不补造其余未消费GP/SIMD/physical ABI。
+- 另两条原始JNI_OnLoad观察（Python完整bootstrap对照0）自然经过actual dispatcher，
+  四次GetEnv、六次malloc，caller把env/opaque object传至+270854前。once仍1。
+  正确+3df0a8/+3df0c0/+3df0c8处的mutex/class/method仍全0，未在此探针执行Long转换。
+- 下一处是cache mutex构造/发布来源，再接回同次fresh启动、object清理和cold once。
+  完整bootstrap、fresh签名/线上全头矩阵、Rust、搜索分页/其他平台及下载产品未完成。
+  见 [JNI dispatcher与Long转换报告](REQUEST_JNI_DISPATCH.md)。下列旧停止点保留为历史证据。
+
 ## 2026-10-07 原始 cold switch startup 接过实际 TLS acquisition
 
 两条额外原生入口观察（Python bootstrap对照数0）：原始JNI_OnLoad经

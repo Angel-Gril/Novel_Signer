@@ -6,6 +6,13 @@ caller and bounded request VM prefix also pass; fresh request signatures and
 online acceptance remain open. See [VM9_PROGRESS.md](VM9_PROGRESS.md) for the
 verification scope and next callback; older stops below are historical evidence.
 
+Actual JNI dispatcher/exception handling now passes 54 native/Python controls
+and 10 negatives; Long conversion adds 34 controls and 11 negatives with an
+explicit cache mutex. Two original JNI_OnLoad observations execute the actual
+dispatcher and stop before Long conversion; once remains 1 and the cache mutex
+global is zero. Its constructor/publication and full fresh signer remain open.
+See [REQUEST_JNI_DISPATCH.md](REQUEST_JNI_DISPATCH.md).
+
 
 This directory is limited to the `com.dragon.read` / Tomato material. Douyin and Qidian are documented in their own directories.
 

@@ -23,6 +23,13 @@ effects. Serialized guard and virtual OS boundaries remain explicit, and full
 Python startup is unfinished; see the
 [constructor report](platforms/bytedance/tomato/SIGNER_CONSTRUCTION.md).
 
+JNI continuation now compares the actual dispatcher, its integer variadic frame,
+and exception order (54 controls/10 negatives), plus Long conversion with an
+explicit cache mutex (34 controls/11 negatives). Two original JNI_OnLoad probes
+execute the dispatcher in the same run and stop before Long conversion. The
+mutex constructor/publication, cold once completion and fresh signer remain open;
+see the [JNI report](platforms/bytedance/tomato/REQUEST_JNI_DISPATCH.md).
+
 ## Build and checks
 
 ```text

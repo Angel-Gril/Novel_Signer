@@ -17,7 +17,14 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 这份报告把已经获得的接口、签名、解密、运行时和证据边界集中到一处。它是研究归档和后续开发的使用说明，不把桥接实验、旧快照复现或捕获状态回放描述成独立的线上实现。
 
-2026-10-07 最新cold switch前缀观察：另两条原始JNI_OnLoad在同次执行中经过
+2026-10-07 最新JNI检查点：actual dispatcher/异常/TLS组合54个对照、10个负控制，
+Long转换34个对照、11个负控制通过。另两条同次原始JNI_OnLoad自然执行dispatcher，
+四次GetEnv后停在+270854前；once仍1，正确cache mutex/class/method地址仍全0。
+Long组件使用显式已构造cache mutex，不能拼接成原始入口已完成Long/once的证据。
+下一处是mutex构造/发布来源，再接回同次fresh启动。完整bootstrap、fresh签名、
+线上矩阵、Rust和下载产品仍未完成。见 [REQUEST_JNI_DISPATCH.md](REQUEST_JNI_DISPATCH.md)。
+
+2026-10-07 此前cold switch前缀观察：另两条原始JNI_OnLoad在同次执行中经过
 实际TLS获取，到达+26e70c前；三次GetEnv、六个显式allocator请求，once仍1。
 线程TLS slot从空开始，subsystem globals/OS keys、JNI服务和136/320reference
 仍为显式输入；没有完整Python bootstrap对照，没有执行dispatcher旧stub。
