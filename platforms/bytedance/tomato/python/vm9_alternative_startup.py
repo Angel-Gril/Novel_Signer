@@ -338,13 +338,15 @@ def run_reader_sections(pages, *, state_address, image_base,
         enable_global_section=False, global_scratch_address=None,
         max_initializer_ops=4096, enable_code_section=False, max_code_words=65536,
         enable_element_section=False, enable_data_section=False,
-        expression_scratch_address=None, max_expression_ops=4096):
+        expression_scratch_address=None, max_expression_ops=4096,
+        enable_special_custom_sections=False, custom_scratch_address=None,
+        max_custom_records=4096):
     """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/9/10/11/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
     previous nonzero section at +0x88, import counts at +0x90/94/98/9c,
     function count at +0xa4, data count at +0xac. Generic custom sections
-    skip unrecognized payload; dylink/linking/reloc/target_features reject.
+    skip unrecognized payload; special custom handlers require explicit opt-in.
 
     callback receives immutable numeric arguments and current parser state,
     and returns an explicit uint32 status. It must be a pure status service;
@@ -394,6 +396,16 @@ def run_reader_sections(pages, *, state_address, image_base,
     callbacks without writing a result word. Section 9 supports only empty
     element vectors: the native nonempty-vector abort remains unsupported.
     Section 11 sends +0x158(index, payload_pointer) without a length argument.
+
+    enable_special_custom_sections opts into dylink/dylink.0/linking,
+    target_features and reloc prefixes. These parse metadata without AST callbacks.
+    A mapped, aligned, disjoint eight-byte custom_scratch_address holds integer
+    reads; decoder storage, the opcode table pointer and active expression
+    opcode tables are retained.
+    max_custom_records bounds the sum of subsections, list entries and
+    nested pairs in EACH custom section. Unknown subsections skip opaque bytes;
+    known subsections must consume their exact size. Temporary limits and the
+    custom flag are restored on parse failure as well as success.
     """
     if (not isinstance(state_address, int) or not 0 < state_address <= MASK64-0xAF
             or state_address & 7 or not isinstance(image_base, int)
@@ -415,7 +427,9 @@ def run_reader_sections(pages, *, state_address, image_base,
             or not isinstance(max_code_words, int) or not 1 <= max_code_words <= 1048576
             or not isinstance(enable_element_section, bool)
             or not isinstance(enable_data_section, bool)
-            or not isinstance(max_expression_ops, int) or not 1 <= max_expression_ops <= 65536):
+            or not isinstance(max_expression_ops, int) or not 1 <= max_expression_ops <= 65536
+            or not isinstance(enable_special_custom_sections, bool)
+            or not isinstance(max_custom_records, int) or not 1 <= max_custom_records <= 65536):
         raise RefillUnsupported('reader section service or traversal limits are invalid')
     p = _PageTransaction(pages)
     data, total, initial_limit, initial_cursor = (_u(p, state_address+offset)
@@ -468,6 +482,25 @@ def run_reader_sections(pages, *, state_address, image_base,
             raise RefillUnsupported('reader expression scratch overlaps retained storage')
         _read_span(p, expression_scratch_address, 8)
         regions.append((expression_scratch_address, scratch_end))
+    if enable_special_custom_sections:
+        if (not isinstance(custom_scratch_address, int) or custom_scratch_address & 7
+                or not 0 < custom_scratch_address <= MASK64-7):
+            raise RefillUnsupported('reader custom handlers need an aligned eight-byte scratch region')
+        scratch_end = custom_scratch_address+8
+        retained = (*regions, (varuint_scratch_address, varuint_scratch_address+4),
+                    (image_base+0x3750B0, image_base+0x3750B8),
+                    (image_base+0x121110, image_base+0x121218),
+                    (image_base+0x3E2CFC, image_base+0x3E2D74))
+        if enable_global_section or enable_element_section or enable_data_section:
+            table = _u(p, image_base+0x3750B0)
+            retained += ((table, table+512),)
+        for offset in (0x28, 0x40):
+            begin, _, capacity_end = _reader_vector_words(p, state_address+offset, max_entries, retained)
+            retained += ((begin, capacity_end),)
+        if any(start < scratch_end and custom_scratch_address < end for start, end in retained):
+            raise RefillUnsupported('reader custom scratch overlaps retained storage')
+        _read_span(p, custom_scratch_address, 8)
+        regions.append((custom_scratch_address, scratch_end))
     entered = []
     events = []
     vector_effects = []
@@ -701,6 +734,120 @@ def run_reader_sections(pages, *, state_address, image_base,
             raise _ReaderParseFailure()
         raise RefillUnsupported('reader expression operation bound reached')
 
+    def special_custom(kind):
+        if not enable_special_custom_sections:
+            raise RefillUnsupported('reader special custom-section handler needs explicit opt-in')
+        records = 0
+
+        def record():
+            nonlocal records
+            if records >= max_custom_records:
+                raise RefillUnsupported('reader custom record bound reached')
+            records += 1
+
+        def u32():
+            return read_u32(custom_scratch_address)
+
+        def string():
+            size = u32()
+            start = cursor()
+            if start+size > limit():
+                raise _ReaderParseFailure()
+            store(24, start+size)
+
+        if kind == 'dylink':
+            for _ in range(4):
+                u32()
+            for _ in range(u32()):
+                record()
+                string()
+        elif kind == 'target_features':
+            for _ in range(u32()):
+                record()
+                if cursor()+1 > limit():
+                    raise _ReaderParseFailure()
+                store(24, cursor()+1)
+                string()
+        elif kind == 'reloc':
+            u32()
+            count = u32()
+            if count > limit()-cursor():
+                raise _ReaderParseFailure()
+            for _ in range(count):
+                record()
+                relocation = u32()
+                u32()
+                u32()
+                if relocation > 34:
+                    raise _ReaderParseFailure()
+                if not (1 << relocation) & 0x7F81C34C7:
+                    if not (1 << relocation) & 0x63CB38:
+                        raise _ReaderParseFailure()
+                    result = read_reader_varint64(p, start_address=data+cursor(),
+                        end_address=data+limit(), output_address=custom_scratch_address)
+                    if not result.bytes_consumed:
+                        raise _ReaderParseFailure()
+                    store(24, cursor()+result.bytes_consumed)
+        else:
+            linking = kind == 'linking'
+            if linking and u32() != 2:
+                raise _ReaderParseFailure()
+            while cursor() < limit():
+                record()
+                tag, size = u32(), u32()
+                end = cursor()+size
+                old_limit = limit()
+                if end > old_limit:
+                    raise _ReaderParseFailure()
+                store(0, end)
+                try:
+                    if not linking and tag == 1:
+                        for _ in range(4):
+                            u32()
+                    elif (not linking and tag in (2, 3, 4)) or (linking and tag in (5, 6, 7, 8)):
+                        for _ in range(u32()):
+                            record()
+                            if not linking:
+                                string()
+                                if tag == 4:
+                                    string()
+                                if tag in (3, 4):
+                                    u32()
+                            elif tag == 5:
+                                string()
+                                if u32() >= 32:
+                                    raise _ReaderParseFailure()
+                                u32()
+                            elif tag == 6:
+                                u32()
+                                u32()
+                            elif tag == 7:
+                                string()
+                                u32()
+                                for _ in range(u32()):
+                                    record()
+                                    u32()
+                                    u32()
+                            else:
+                                symbol, flags = u32(), u32()
+                                if symbol in (0, 2, 4, 5):
+                                    u32()
+                                    if flags & 0x50 != 0x10:
+                                        string()
+                                elif symbol == 1:
+                                    string()
+                                    if not flags & 0x10:
+                                        for _ in range(3):
+                                            u32()
+                                elif symbol == 3:
+                                    u32()
+                    else:
+                        store(24, end)
+                    if cursor() != end:
+                        raise _ReaderParseFailure()
+                finally:
+                    store(0, old_limit)
+
     def handler(number):
         if number == 0:
             size = read_u32()
@@ -717,11 +864,20 @@ def run_reader_sections(pages, *, state_address, image_base,
                 7: (0x12117F, 27, 8, 0x3E2D2C, 0x3E2D34),
                 15: (0x121154, 27, 16, 0x3E2D18, 0x3E2D28),
             }
-            marker = decode(*markers[size])[:-1] if size in markers else None
-            if name == marker or (size >= 5 and name[:5] == b'reloc'):
-                raise RefillUnsupported('reader special custom-section handler is unrecovered')
-            store(24, limit())
-            store(0x8C, old_flag, 1)
+            try:
+                kind = None
+                if size in (6, 8) and name == decode(*markers[size])[:-1]:
+                    kind = 'dylink' if size == 6 else 'dylink.0'
+                elif size >= 5 and name[:5] == b'reloc':
+                    kind = 'reloc'
+                elif size in (7, 15) and name == decode(*markers[size])[:-1]:
+                    kind = 'linking' if size == 7 else 'target_features'
+                if kind is None:
+                    store(24, limit())
+                else:
+                    special_custom(kind)
+            finally:
+                store(0x8C, old_flag, 1)
         elif number == 1:
             if not callable(vector_allocate):
                 raise RefillUnsupported('reader type section needs an explicit vector allocation service')

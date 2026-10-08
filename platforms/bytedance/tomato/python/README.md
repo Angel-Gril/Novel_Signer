@@ -9,7 +9,7 @@ two bases; type vectors and function/global imports are verified separately belo
 `run_reader_sections` restores +0x324188 envelope/order/partial state and section
 0 (generic custom), 3, 7, 8 and 12 (202 controls/12 rollback checks, including
 eight actual ELF sections from independent Python XOR). Callbacks are explicit
-pure status services; actual node/AST allocation, special custom,
+pure status services; special custom progress is documented below. Actual node/AST allocation,
 wrapper cleanup and a complete Python reader/factory remain open. See
 [startup/reader report](../REQUEST_JNI_STARTUP_WORKERS.md#62-section-状态与部分-handler2026-10-08-utc).
 
@@ -80,6 +80,19 @@ Data payloads are opaque spans; +0x158 receives only index/pointer. Six controls
 contain actual ELF data, including full 1/2/3/6/7/12/10/11 with 55369 callbacks.
 See the [segment report](../REQUEST_JNI_STARTUP_WORKERS.md#610-section-911-与独立-expression-helper2026-10-08-utc).
 
+Section 0 special custom metadata adds 860 comparisons and 32 rollback checks,
+including ten actual ELF controls. Use `enable_special_custom_sections=True`
+with a mapped, aligned, disjoint eight-byte `custom_scratch_address` and
+`max_custom_records=4096` per custom section. Dylink, dylink.0, linking,
+target_features and reloc prefixes parse fields without AST callbacks. Known
+subsections consume their exact size; unknown tags skip opaque content. Temporary
+limits and the custom flag are restored on success and parse failure. The work
+region also protects decoder storage, the opcode table pointer and active
+expression opcode tables.
+All actual sections match 55369 callbacks per base. Actual AST, bootstrap and
+signing remain open. See the
+[custom report](../REQUEST_JNI_STARTUP_WORKERS.md#611-section-0-特殊-custom-元数据2026-10-08-utc).
+
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint32_20261008.py --library "$env:TOMATO_LIBMETASEC" --output <reader-i32-evidence.json>
@@ -92,6 +105,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint64_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_globals_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-globals-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_code_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-code-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_segments_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-segments-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_custom_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-custom-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

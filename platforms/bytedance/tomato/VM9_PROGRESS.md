@@ -1,5 +1,31 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B section 0 特殊 custom 元数据
+
+同一 reader owner 恢复 dylink/dylink.0/linking/target_features/reloc 前缀：
+**860 个原生/Python 对照、32 个保护/回滚**；850 项合成、10 项含真实 ELF custom。
+三个实际 custom payload 为 1758/3240/177 字节；两个基址的全部实际 section
+组合均正常返回，匹配 55369 次 callback、4 次计划分配和 2 次逻辑 free。
+Import counts 保持 18/0/0/22，121 个 body、54533 个原始指令字和三段 data 均一致。
+
+默认关闭的 `enable_special_custom_sections` 要求独立八字节
+`custom_scratch_address`；`max_custom_records=4096` 汇总每个 custom 的子段、
+列表条目与内部数对。已知子段严格消费，未知 tag 跳过；解析失败恢复临时 limit
+及原 custom flag。名称匹配按原生顺序先判断长度 6/8 的 dylink，再判断 reloc
+前缀，最后处理长度 7/15 的 linking/target_features，避免额外懒解码写入。
+保护现有/后续 type storage、其他 scratch、decoder 区、opcode 表指针和启用的
+expression opcode 表。五类最小输入修改前 RED、修改后 GREEN；opcode 表及
+GOT 指针重叠也先复现再修复。
+94 项对照到达 linking 的符号 mask 再检查；本批未到达 abort，不宣称全局不可达。
+
+旧 globals/code/segments/sections/import limits 回归全部通过，五份新 JSON 与
+既有证据逐字节一致；语法、隐私、链接、CLI 与十文件范围检查通过。
+
+Special custom 不发送 AST callback。实际 AST/callback/cleanup、指令执行、
+parse/root、完整 reader/factory/B VM/bootstrap、独立 signer 与线上矩阵仍未完成。
+见 [custom 证据](evidence/vm9_alternative_reader_custom_fresh_20261008.json)与
+[第 6.11 节报告](REQUEST_JNI_STARTUP_WORKERS.md#611-section-0-特殊-custom-元数据2026-10-08-utc)。
+
 ## 2026-10-08 UTC：B section 9/11 与独立 expression helper
 
 同一 owner 独立启用 section 9 空元素列表和 section 11 data：**450 个原生/Python

@@ -87,7 +87,9 @@ section 10 又通过 **228 个对照、15 个回滚**，包含 6 项真实 code 
 section 9 空元素列表、section 11 data 与独立 expression helper 又通过 **450 个对照、
 33 个回滚、16 个 abort 边界检查**，其中 6 项含真实 ELF data；完整选取组合每基址
 55369 次回调。两类 section 独立启用；非空元素列表的原生 abort 分支仍拒绝。
-特殊 custom、实际 AST 和完整 reader 未恢复。
+section 0 的五类特殊 custom 又通过 **860 个对照、32 个回滚**，含 10 项真实 ELF
+custom 输入；全部实际 section 组合每基址匹配 55369 次回调。特殊 custom 默认关闭，
+要求独立八字节工作区和每段记录预算。实际 AST 和完整 reader 未恢复。
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

@@ -29,6 +29,7 @@ VTABLE, SCRATCH, CALLBACK = sections.VTABLE, sections.SCRATCH, sections.CALLBACK
 IMPORT_SCRATCH = oracle.GUEST+0xB100
 GLOBAL_SCRATCH = oracle.GUEST+0xB200
 EXPRESSION_SCRATCH = oracle.GUEST+0xB300
+CUSTOM_SCRATCH = oracle.GUEST+0xB400
 SLOTS = {**imports0.SLOTS, 0x30: 8, 0x38: 7}
 
 
@@ -150,7 +151,7 @@ def limits_tuple(data):
 
 
 def compare(args, base, spec, *, definition_sections=False, global_sections=False,
-            code_sections=False, segment_sections=False, model_options=None):
+            code_sections=False, segment_sections=False, custom_sections=False, model_options=None):
     # Code inputs can exceed the guest fixture region. Keep them in the mapped
     # ELF blob span, independently supplied to both implementations.
     pages = prepare(args, base, {**spec, 'blob': b'A'*8} if code_sections else spec)
@@ -187,8 +188,17 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
     model = {key: bytearray(value) for key, value in pages.items()}
     native_events, model_events, descriptors = [], [], []
     native_alloc, native_effects, observe, allocate, free = types.services()
+    custom_entries, symbol_rechecks = [], []
     def observe_native(cpu, address):
         observe(cpu, address, base)
+        if custom_sections:
+            offset = address-base
+            if offset in (0x321990, 0x321B2C, 0x321F08, 0x322060, 0x322130):
+                assert bytes(cpu.mem_read(STATE+0x8C, 1)) == b'\1'
+                custom_entries.append(hex(offset))
+            if offset == 0x3225C8:
+                symbol_rechecks.append(cpu.reg_read(arm.UC_ARM64_REG_W28))
+            assert offset != 0x3226FC, 'linking symbol abort boundary reached'
         if global_sections and address == base+0x323464:
             # Undefined caller-local bytes are an explicit synthetic ABI input.
             # Original count/type reads subsequently overwrite their own fields.
@@ -323,6 +333,16 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
                       data_payload_bytes_match=True,
                       actual_ELF_data_section_input=spec.get('actual_ELF_data_section_input', False),
                       actual_ELF_element_section_input=spec.get('actual_ELF_element_section_input', False))
+    if custom_sections:
+        flag = int.from_bytes(_read_span(model, STATE+0x8C, 1), 'little')
+        assert flag == spec.get('custom_flag', 0), (spec['label'], 'custom flag restoration')
+        assert all(kind in (0, 2, 4, 5) for kind in symbol_rechecks)
+        record.update(custom_flag_restored=True, final_custom_flag=flag,
+                      native_custom_handler_entries=custom_entries,
+                      native_symbol_mask_recheck_kinds=symbol_rechecks,
+                      native_linking_symbol_abort_reached=False,
+                      actual_ELF_custom_section_input=spec.get('actual_ELF_custom_section_input', False),
+                      actual_ELF_complete_section_composition=spec.get('actual_ELF_complete_section_composition', False))
     return record
 
 

@@ -60,7 +60,14 @@ per base. Each section requires its own opt-in and an eight-byte expression
 scratch region. Section 9 supports empty element vectors; nonempty vectors reach
 native abort and remain unsupported. See the
 [segment report](REQUEST_JNI_STARTUP_WORKERS.md#610-section-911-与独立-expression-helper2026-10-08-utc).
-Allocation/free remain explicit services. Special custom,
+Section 0 special custom handlers add 860 comparisons and 32 rollback checks,
+including ten actual ELF custom controls. All actual sections, including three
+custom payloads, match 55369 callbacks per base. Enable these metadata parsers
+with `enable_special_custom_sections=True`, an independent eight-byte
+`custom_scratch_address` and `max_custom_records=4096` per custom section.
+Subsection limits and the custom flag are restored on parse failure. See the
+[custom report](REQUEST_JNI_STARTUP_WORKERS.md#611-section-0-特殊-custom-元数据2026-10-08-utc).
+Allocation/free remain explicit services;
 actual AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

@@ -49,6 +49,7 @@
 | B reader import 拒绝/回滚 | 14 | 默认关闭、坏服务、缺页/重叠/上限、table/memory 和晚到的未恢复分支均全页回滚 |
 | B reader u64 原语差分/回滚 | 1438 / 10 | 两个基址各 719 项；两种前缀的第十字节全值、失败输出写入语义和 guest 输入/输出区一致 |
 | B reader element/data 与 expression 对照/回滚/abort 边界 | 450 / 33 / 16 | 444 项合成、6 项含真实 ELF data；非空元素列表仅观察 abort 调用边界 |
+| B reader 特殊 custom 元数据对照/回滚 | 860 / 32 | 850 项合成、10 项真实 ELF custom；含两个全部实际 section 组合 |
 | B reader table/memory import 差分/回滚 | 234 / 15 | 228 项合成输入、6 项实际 function/global 输入加合成 limits；19 字节 descriptor 与回调时状态一致 |
 | B reader section 4/5 定义差分/回滚 | 266 / 18 | 260 项合成输入、6 项实际 function/global 输入加合成定义；数量/条目回调、索引回绕与 19 字节 descriptor 一致 |
 | 完整 Python bootstrap 对照 | **0** | 未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
@@ -632,8 +633,64 @@ stack/TLS。旧 globals、code、sections、import limits 回归重新通过，�
 与既有证据逐字节一致。
 
 证据见 [element/data 对照](evidence/vm9_alternative_reader_segments_fresh_20261008.json)。
-Special custom、实际 AST/callback/cleanup、指令执行与 parse/root、完整 reader/factory/
+Special custom 后续进展见第 6.11 节。实际 AST/callback/cleanup、指令执行与 parse/root、完整 reader/factory/
 B VM/bootstrap、独立 signer 和线上矩阵仍未完成。
+
+### 6.11 Section 0 特殊 custom 元数据（2026-10-08 UTC）
+
+同一 `run_reader_sections` owner 新增默认关闭的
+`enable_special_custom_sections`。五类最小输入在修改前原生正常返回、Python
+明确拒绝，修改后同一对照通过。独立、已映射、八字节对齐的
+`custom_scratch_address` 保护 input/state、其他 scratch、现有与后续 type
+storage、lazy decoder 源/目标、opcode 表的 GOT 指针及启用的 expression opcode 表。表重定位到 custom
+工作区或直接覆盖 GOT 指针的负控制先复现旧代码错误放行，再修复；表尾部分重叠也回滚。
+`max_custom_records=4096` 按每个 custom section 汇总子段、列表条目和内部数对，
+新 section 重置预算，超限明确拒绝且所有 model pages 不变。
+
+`+0x322700` 的名称匹配先处理长度 6/8 的 dylink/dylink.0，再判断 reloc 前缀，
+最后处理长度 7/15 的 linking/target_features。长度 7/15 的 reloc 不应写对应
+marker 的懒解码状态。所有特殊处理器均不发送 AST callback；无论成功或解析
+失败，state `+0x8c` 恢复原 flag。已知子段失败也恢复外层 limit；普通解析失败
+提交原生可观察的部分 cursor/state，guard 失败回滚。
+
+| 类型 / 原生入口 | 已恢复的元数据规则 |
+| --- | --- |
+| dylink / `+0x321f08` | 四个 u32，随后字符串数量及长度/opaque span |
+| dylink.0 / `+0x321b2c` | u32 tag/size 子段；tag 1 为四个 u32，2 为字符串列表，3 为字符串/u32，4 为两个字符串/u32 |
+| target_features / `+0x322060` | 数量、每项一个不校验的 prefix byte、长度/opaque span |
+| reloc 前缀 / `+0x321990` | section index、数量及 kind/offset/index；数量先检查剩余字节，部分 kind 另读 signed i64 addend |
+| linking / `+0x322130` | 版本必须为 2；tag 5/6/7/8 分别解析 segment info、init pairs、comdat 与 symbol records |
+
+Reloc 无 addend mask 为 `0x7f81c34c7`，signed i64 mask 为 `0x63cb38`；kind
+大于 34 或未命中任一 mask 时失败。Linking tag 5 alignment 小于 32，tag 6
+每项两个 u32，tag 7 每项字符串/flags/内部数量及 u32 数对。Tag 8 的 symbol
+kind 0/2/4/5 读 index，`flags & 0x50 != 0x10` 时读 name；kind 1 读 name，
+bit 4 未设置时再读三个 u32；kind 3 读一个 u32；kind 大于 5 只消费 kind/flags。
+两种子段处理器均跳过未知 tag，并要求已知 tag 准确消费到声明末尾。
+
+私有反编译把 linking 的 abort 后相邻 section 0 函数误并入结果，原始 Capstone
+确认函数边界。`+0x3226fc` 的 abort 条件与前面的 kind mask 判定矛盾；**94 项**
+动态对照到达 `+0x3225c8` 再检查，均保持 kind 0/2/4/5，本批没有到达 abort。
+这是本批观察，不构成全局不可达证明。
+
+两个基址各 430 项，共 **860 个原生/Python 对照、32 个保护/回滚**：850 项合成，
+10 项包含独立 Python XOR 后的真实 ELF custom。三个 payload 分别为
+**1758/3240/177 字节**；分别、三个 custom 组合以及全部实际 section 组合均通过。
+全部实际组合顺序为 **1/2/3/6/7/12/10/11/0/0/0**，每基址匹配 **55369** 次
+callback、4 次计划分配、2 次逻辑 free、import counts 18/0/0/22、121 个 body、
+54533 个原始指令字及 data lengths 3632/352/0。仅含 global 的组合使用此前已
+说明的合成 caller-local 初值；custom 不增加 AST 回调。Opcode 表保护增加后，
+两个完整组合重跑结果不变。
+
+覆盖各类截断、子段长度、未知 tag、alignment、symbol kind/flags、全部 0..34
+reloc 类型及非法类型、i64 addend 边界、名称匹配顺序、flag 恢复、记录预算和
+scratch 别名/缺页。全项核对返回、guest/input、rank/custom decoder memory、
+callback 参数/状态/type cells/limits 与逻辑分配效果；不比较整个 stack/TLS，
+不发布真实名称/正文。旧 globals/code/segments/sections/import limits 回归全部
+通过，五份新 JSON 与既有证据逐字节一致。证据见
+[custom 对照](evidence/vm9_alternative_reader_custom_fresh_20261008.json)。
+实际 AST/callback/cleanup、指令执行与 parse/root、完整 reader/factory/B VM/
+bootstrap、独立 signer 和线上矩阵仍未完成。
 
 ## 7. 复现、证据用途与后续验收
 
@@ -659,6 +716,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint64_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_globals_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-globals-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_code_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-code-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_segments_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-segments-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_custom_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-custom-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。
@@ -669,7 +727,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复 B reader 的其余 handler、special custom 和实际 node/callback，随后解析/root 生成，再把原始 JNI /
+下一步恢复 B reader 的实际 node/AST callback 和 cleanup，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。
