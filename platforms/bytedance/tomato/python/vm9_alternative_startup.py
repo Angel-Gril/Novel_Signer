@@ -4,9 +4,10 @@ The module root/array/hash buckets are explicit inputs. Native factory and
 publication observations are verified separately; independent Python factory
 +0x2cbdc8, constructor input generation and complete B VM remain open.
 Reader sections 0 (generic), 1, 3, 7, 8 and 12, plus opted-in section 2
-imports, section 4/5/6 definitions and section 10 code words, run with explicit
+imports, section 4/5/6 definitions, section 9 empty element vectors,
+section 10 code words and section 11 data segments, run with explicit
 status-only callbacks.
-Other handlers,
+Special custom handlers, nonempty element vectors,
 actual callbacks and AST remain open; unsupported
 branches fail closed. These components do not implement a full factory.
 """
@@ -335,8 +336,10 @@ def run_reader_sections(pages, *, state_address, image_base,
         enable_function_global_imports=False, enable_table_memory_imports=False,
         import_scratch_address=None, enable_table_memory_sections=False,
         enable_global_section=False, global_scratch_address=None,
-        max_initializer_ops=4096, enable_code_section=False, max_code_words=65536):
-    """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/10/12.
+        max_initializer_ops=4096, enable_code_section=False, max_code_words=65536,
+        enable_element_section=False, enable_data_section=False,
+        expression_scratch_address=None, max_expression_ops=4096):
+    """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/9/10/11/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
     previous nonzero section at +0x88, import counts at +0x90/94/98/9c,
@@ -383,6 +386,14 @@ def run_reader_sections(pages, *, state_address, image_base,
     groups and emits raw 32-bit code words. It does not execute instructions.
     max_code_words bounds all word callbacks, including native zero-word retries
     when fewer than four input bytes remain and the cursor does not advance.
+
+    enable_element_section and enable_data_section independently opt into
+    sections 9/11. Their distinct +0x3215f0 expression helper uses a mapped,
+    aligned, disjoint eight-byte expression_scratch_address and a per-expression
+    max_expression_ops bound. Kind zero emits +0xf0; constants emit status
+    callbacks without writing a result word. Section 9 supports only empty
+    element vectors: the native nonempty-vector abort remains unsupported.
+    Section 11 sends +0x158(index, payload_pointer) without a length argument.
     """
     if (not isinstance(state_address, int) or not 0 < state_address <= MASK64-0xAF
             or state_address & 7 or not isinstance(image_base, int)
@@ -401,7 +412,10 @@ def run_reader_sections(pages, *, state_address, image_base,
             or not isinstance(max_initializer_ops, int)
             or not 1 <= max_initializer_ops <= 65536
             or not isinstance(enable_code_section, bool)
-            or not isinstance(max_code_words, int) or not 1 <= max_code_words <= 1048576):
+            or not isinstance(max_code_words, int) or not 1 <= max_code_words <= 1048576
+            or not isinstance(enable_element_section, bool)
+            or not isinstance(enable_data_section, bool)
+            or not isinstance(max_expression_ops, int) or not 1 <= max_expression_ops <= 65536):
         raise RefillUnsupported('reader section service or traversal limits are invalid')
     p = _PageTransaction(pages)
     data, total, initial_limit, initial_cursor = (_u(p, state_address+offset)
@@ -441,6 +455,19 @@ def run_reader_sections(pages, *, state_address, image_base,
             raise RefillUnsupported('reader global scratch overlaps retained storage')
         _read_span(p, global_scratch_address, 16)
         regions.append((global_scratch_address, scratch_end))
+    if enable_element_section or enable_data_section:
+        if (not isinstance(expression_scratch_address, int) or expression_scratch_address & 7
+                or not 0 < expression_scratch_address <= MASK64-7):
+            raise RefillUnsupported('reader segment expressions need an aligned eight-byte scratch region')
+        scratch_end = expression_scratch_address+8
+        retained = (*regions, (varuint_scratch_address, varuint_scratch_address+4))
+        for offset in (0x28, 0x40):
+            begin, _, capacity_end = _reader_vector_words(p, state_address+offset, max_entries, retained)
+            retained += ((begin, capacity_end),)
+        if any(start < scratch_end and expression_scratch_address < end for start, end in retained):
+            raise RefillUnsupported('reader expression scratch overlaps retained storage')
+        _read_span(p, expression_scratch_address, 8)
+        regions.append((expression_scratch_address, scratch_end))
     entered = []
     events = []
     vector_effects = []
@@ -624,6 +651,56 @@ def run_reader_sections(pages, *, state_address, image_base,
             raise _ReaderParseFailure()
         raise RefillUnsupported('reader initializer operation bound reached')
 
+    def segment_expression():
+        if cursor() >= limit():
+            raise _ReaderParseFailure()
+        table = _u(p, image_base+0x3750B0)
+        if not table or table > MASK64-511 or table & 3:
+            raise RefillUnsupported('reader expression opcode table pointer is invalid')
+        if any(start < table+512 and table < end for start, end in
+               ((expression_scratch_address, expression_scratch_address+8),
+                (varuint_scratch_address, varuint_scratch_address+4))):
+            raise RefillUnsupported('reader expression opcode table overlaps scratch')
+        for _ in range(max_expression_ops):
+            if cursor() >= limit():
+                raise _ReaderParseFailure()
+            opcode = _u(p, data+cursor(), 1)
+            store(24, cursor()+1)
+            if opcode in (0xFC, 0xFD, 0xFE):
+                subopcode = read_u32(expression_scratch_address)
+                kind = -((opcode << 9) | min(subopcode, 511)) & 0xFFFFFFFF
+            else:
+                kind = _u(p, table+opcode*4, 4) if opcode < 128 else 0
+                if opcode and not kind:
+                    kind = -opcode & 0xFFFFFFFF
+            emit(0xC0, kind)
+            if kind == 0:
+                emit(0xF0)
+            elif kind == 1:
+                emit(0xC8)
+                return
+            elif kind == 2:
+                emit(0xE0, read_i32(expression_scratch_address) & 0xFFFFFFFF)
+            elif kind == 3:
+                result = read_reader_varint64(p, start_address=data+cursor(),
+                    end_address=data+limit(), output_address=expression_scratch_address)
+                if not result.bytes_consumed:
+                    raise _ReaderParseFailure()
+                store(24, cursor()+result.bytes_consumed)
+                emit(0xE8, result.value & MASK64)
+            elif kind in (4, 5):
+                width = 4 if kind == 4 else 8
+                if cursor()+width > limit():
+                    raise _ReaderParseFailure()
+                bits = _u(p, data+cursor(), width)
+                store(24, cursor()+width)
+                emit(0xD0 if kind == 4 else 0xD8, bits)
+            else:
+                raise _ReaderParseFailure()
+        if cursor() >= limit():
+            raise _ReaderParseFailure()
+        raise RefillUnsupported('reader expression operation bound reached')
+
     def handler(number):
         if number == 0:
             size = read_u32()
@@ -791,6 +868,65 @@ def run_reader_sections(pages, *, state_address, image_base,
                 if kind == 4:
                     raise _ReaderParseFailure()
                 emit(0x98, index, kind, target, data+start, size)
+        elif number == 9:
+            if not enable_element_section:
+                raise RefillUnsupported('reader element section needs explicit opt-in')
+            count = read_u32()
+            bounded_count(count)
+            emit(0x100, count)
+            for index in range(count):
+                flags = read_u32()
+                if flags > 7:
+                    raise _ReaderParseFailure()
+                table_index = read_u32() if flags & 3 == 2 else 0
+                emit(0x108, index, table_index, flags)
+                if not flags & 1:
+                    emit(0x110, index)
+                    segment_expression()
+                    emit(0x118, index)
+                value = -16
+                if flags & 3:
+                    if flags & 4:
+                        value = read_i32()
+                        if value not in (-21, -17, -16):
+                            raise _ReaderParseFailure()
+                    else:
+                        if cursor()+1 > limit():
+                            raise _ReaderParseFailure()
+                        element_kind = _u(p, data+cursor(), 1)
+                        store(24, cursor()+1)
+                        if element_kind:
+                            raise _ReaderParseFailure()
+                emit(0x120, index, value & MASK64)
+                size = read_u32()
+                bounded_count(size)
+                emit(0x128, index, size)
+                if size:
+                    raise RefillUnsupported('reader nonempty element vector native abort is unsupported')
+        elif number == 11:
+            if not enable_data_section:
+                raise RefillUnsupported('reader data section needs explicit opt-in')
+            count = read_u32()
+            bounded_count(count)
+            expected = _u(p, state_address+0xAC, 4)
+            if expected != 0xFFFFFFFF and expected != count:
+                raise _ReaderParseFailure()
+            for index in range(count):
+                flags = read_u32()
+                if flags > 7:
+                    raise _ReaderParseFailure()
+                memory_index = read_u32() if flags & 2 else 0
+                emit(0x140, index, memory_index, flags)
+                if not flags & 1:
+                    emit(0x148, index)
+                    segment_expression()
+                    emit(0x150, index)
+                size = read_u32()
+                start = cursor()
+                if start+size > limit():
+                    raise _ReaderParseFailure()
+                store(24, start+size)
+                emit(0x158, index, data+start)
         elif number == 10:
             if not enable_code_section:
                 raise RefillUnsupported('reader code section needs explicit opt-in')

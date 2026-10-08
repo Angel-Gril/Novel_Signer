@@ -70,6 +70,16 @@ The sample has 121 bodies and 54533 words; full 1/2/3/6/7/12/10 matches 55351
 callbacks per base. Words are read, not executed; actual AST remains open. See the
 [code report](../REQUEST_JNI_STARTUP_WORKERS.md#69-section-10-元数据局部类型与指令字读取2026-10-08-utc).
 
+Sections 9/11 add 450 comparisons, 33 rollback checks and 16 native abort boundary
+checks. Use independent `enable_element_section=True` / `enable_data_section=True`
+with mapped, aligned, disjoint eight-byte `expression_scratch_address` and
+`max_expression_ops=4096` per expression. Their +0x3215f0 helper emits +0xf0 for
+kind zero and produces constant callbacks without a result word. Element vectors
+must be empty; native nonempty vectors reach abort and the model rolls back.
+Data payloads are opaque spans; +0x158 receives only index/pointer. Six controls
+contain actual ELF data, including full 1/2/3/6/7/12/10/11 with 55369 callbacks.
+See the [segment report](../REQUEST_JNI_STARTUP_WORKERS.md#610-section-911-与独立-expression-helper2026-10-08-utc).
+
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint32_20261008.py --library "$env:TOMATO_LIBMETASEC" --output <reader-i32-evidence.json>
@@ -81,6 +91,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_table_memory_
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint64_20261008.py --library "$env:TOMATO_LIBMETASEC" --output <reader-i64-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_globals_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-globals-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_code_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-code-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_segments_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-segments-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

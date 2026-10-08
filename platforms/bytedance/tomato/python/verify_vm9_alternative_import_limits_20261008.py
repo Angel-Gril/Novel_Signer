@@ -28,6 +28,7 @@ STATE, DATA, OBJECT = sections.STATE, sections.DATA, sections.OBJECT
 VTABLE, SCRATCH, CALLBACK = sections.VTABLE, sections.SCRATCH, sections.CALLBACK
 IMPORT_SCRATCH = oracle.GUEST+0xB100
 GLOBAL_SCRATCH = oracle.GUEST+0xB200
+EXPRESSION_SCRATCH = oracle.GUEST+0xB300
 SLOTS = {**imports0.SLOTS, 0x30: 8, 0x38: 7}
 
 
@@ -149,7 +150,7 @@ def limits_tuple(data):
 
 
 def compare(args, base, spec, *, definition_sections=False, global_sections=False,
-            code_sections=False, model_options=None):
+            code_sections=False, segment_sections=False, model_options=None):
     # Code inputs can exceed the guest fixture region. Keep them in the mapped
     # ELF blob span, independently supplied to both implementations.
     pages = prepare(args, base, {**spec, 'blob': b'A'*8} if code_sections else spec)
@@ -161,10 +162,12 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
         sections.put(pages, STATE+0xA4, spec.get('function_count', 0), 4)
     active_slots = {**SLOTS, 0x58: 1, 0x60: 3, 0x68: 1, 0x70: 2} if definition_sections else SLOTS
     descriptor_slots = (0x30, 0x38, 0x60, 0x70) if definition_sections else (0x30, 0x38)
-    if global_sections:
+    if global_sections or segment_sections:
         active_slots = {**active_slots, 0x78: 1, 0x80: 3, 0x88: 1, 0x90: 2,
                         0xC0: 1, 0xC8: 0, 0xD0: 1, 0xD8: 1, 0xE0: 1, 0xE8: 1}
+    if global_sections:
         sections.put(pages, GLOBAL_SCRATCH, spec.get('global_word_seed', 0xC0DE123489ABCDEF))
+    if global_sections or segment_sections:
         if spec.get('relocated_opcode_table'):
             pointer = oracle.GUEST+0xA800
             source = int.from_bytes(_read_span(pages, base+0x3750B0, 8), 'little')
@@ -174,6 +177,11 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
                 sections.put(pages, pointer+opcode*4, kind, 4)
     if code_sections:
         active_slots = {**active_slots, 0xA8: 4, 0xB0: 1, 0xB8: 3, 0xF8: 2, 0x168: 1}
+    if segment_sections:
+        active_slots = {**active_slots, 0xF0: 0, 0x100: 1, 0x108: 3, 0x110: 1,
+                        0x118: 1, 0x120: 2, 0x128: 2, 0x140: 3,
+                        0x148: 1, 0x150: 1, 0x158: 2}
+        sections.put(pages, STATE+0xAC, spec.get('data_count', 0xFFFFFFFF), 4)
     for slot in active_slots:
         sections.put(pages, VTABLE+slot, CALLBACK+slot)
     model = {key: bytearray(value) for key, value in pages.items()}
@@ -223,6 +231,10 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
                 event = (*event[:-1], names)
             value = status(slot, len(native_events))
             native_events.append((*event, limits))
+            if segment_sections:
+                payload = bytes(cpu.mem_read(arguments[1], event[2]-(arguments[1]-
+                    int.from_bytes(cpu.mem_read(STATE+8, 8), 'little')))) if slot == 0x158 else b''
+                native_events[-1] += (payload,)
             return value
         host[CALLBACK+slot-base] = service
     observed = {(base+offset, 64): None for offset in sections.GLOBALS}
@@ -241,6 +253,11 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
         value = status(event.slot_offset, len(model_events))
         model_events.append((event.slot_offset, event.arguments, event.cursor, event.section_end,
                              event.type_vectors, event.import_counts, names, event.import_limits))
+        if segment_sections:
+            input_start = int.from_bytes(_read_span(model, STATE+8, 8), 'little')
+            payload = _read_span(model, event.arguments[1], event.cursor-(event.arguments[1]-input_start)) \
+                if event.slot_offset == 0x158 else b''
+            model_events[-1] += (payload,)
         return value
     options = dict(state_address=STATE, image_base=base,
         varuint_scratch_address=SCRATCH, callback=callback, vector_allocate=planned,
@@ -295,6 +312,17 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
                       final_code_body_count=int.from_bytes(_read_span(model, STATE+0xA8, 4), 'little'),
                       input_bytes_compared=len(spec['blob']), full_supplied_input_region_match=True,
                       actual_ELF_code_section_input=spec.get('actual_ELF_code_section_input', False))
+    if segment_sections:
+        record.update(element_callback_counts=[sum(e[0] == slot for e in native_events)
+                                               for slot in (0x100, 0x108, 0x110, 0x118, 0x120, 0x128)],
+                      data_callback_counts=[sum(e[0] == slot for e in native_events)
+                                            for slot in (0x140, 0x148, 0x150, 0x158)],
+                      expression_callback_counts=[sum(e[0] == slot for e in native_events)
+                                                  for slot in (0xC0, 0xC8, 0xD0, 0xD8, 0xE0, 0xE8, 0xF0)],
+                      data_payload_lengths=[len(e[-1]) for e in native_events if e[0] == 0x158],
+                      data_payload_bytes_match=True,
+                      actual_ELF_data_section_input=spec.get('actual_ELF_data_section_input', False),
+                      actual_ELF_element_section_input=spec.get('actual_ELF_element_section_input', False))
     return record
 
 

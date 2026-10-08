@@ -53,7 +53,14 @@ matches 55351 callbacks per base. Use the independent `enable_code_section=True`
 `max_code_words` bounds all word callbacks, including native retries without cursor
 progress. This reads words; instruction execution and actual AST remain open. See
 the [code report](REQUEST_JNI_STARTUP_WORKERS.md#69-section-10-元数据局部类型与指令字读取2026-10-08-utc).
-Allocation/free remain explicit services. Remaining handlers, special custom,
+Sections 9/11 and their distinct +0x3215f0 expression helper add 450 comparisons,
+33 rollback checks and 16 native abort boundary checks. Six controls contain
+actual ELF data (three segments); full 1/2/3/6/7/12/10/11 matches 55369 callbacks
+per base. Each section requires its own opt-in and an eight-byte expression
+scratch region. Section 9 supports empty element vectors; nonempty vectors reach
+native abort and remain unsupported. See the
+[segment report](REQUEST_JNI_STARTUP_WORKERS.md#610-section-911-与独立-expression-helper2026-10-08-utc).
+Allocation/free remain explicit services. Special custom,
 actual AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

@@ -48,6 +48,7 @@
 | B reader function/global import 差分 | 254 | 248 项合成输入、6 项实际 ELF 输入；含混排计数、回调失败和完整 1/2/3/7/12 组合 |
 | B reader import 拒绝/回滚 | 14 | 默认关闭、坏服务、缺页/重叠/上限、table/memory 和晚到的未恢复分支均全页回滚 |
 | B reader u64 原语差分/回滚 | 1438 / 10 | 两个基址各 719 项；两种前缀的第十字节全值、失败输出写入语义和 guest 输入/输出区一致 |
+| B reader element/data 与 expression 对照/回滚/abort 边界 | 450 / 33 / 16 | 444 项合成、6 项含真实 ELF data；非空元素列表仅观察 abort 调用边界 |
 | B reader table/memory import 差分/回滚 | 234 / 15 | 228 项合成输入、6 项实际 function/global 输入加合成 limits；19 字节 descriptor 与回调时状态一致 |
 | B reader section 4/5 定义差分/回滚 | 266 / 18 | 260 项合成输入、6 项实际 function/global 输入加合成定义；数量/条目回调、索引回绕与 19 字节 descriptor 一致 |
 | 完整 Python bootstrap 对照 | **0** | 未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
@@ -578,8 +579,61 @@ global 验证模式；只有实际含 section 6 的组合注入已说明的八�
 import limits 回归重新通过，四份 JSON 与既有证据逐字节一致。
 
 证据见 [code section 对照](evidence/vm9_alternative_reader_code_fresh_20261008.json)。
-Section 9/11、special custom、实际 AST/callback/cleanup、指令执行与 parse/root
-仍待恢复；完整 reader/factory/B VM/bootstrap、独立 signer 和线上矩阵仍未完成。
+Section 9/11 后续进展见第 6.10 节；special custom、实际 AST/callback/cleanup、
+指令执行与 parse/root、完整 reader/factory/B VM/bootstrap、独立 signer 和线上矩阵仍未完成。
+
+### 6.10 Section 9/11 与独立 expression helper（2026-10-08 UTC）
+
+同一 owner 新增默认关闭的独立 `enable_element_section` / `enable_data_section`，
+恢复 section 9 `+0x323a04` 的空元素列表和 section 11 `+0x323fb4` 的 data 段。
+修改前，原生空 section 9 和单个 passive data 正常返回，旧 Python 拒绝对应
+handler，随后最小实现通过同一对照。两类 section 使用独立的已映射、八字节对齐、
+不重叠 `expression_scratch_address`；保护现有和后续 type storage 以及其他工作区。
+
+它们调用的 `+0x3215f0` 与 global initializer `+0x32365c` 不同：从 GOT
+`image+0x3750b0` 取得 opcode 表，每次先发送 `+0xC0(kind)`，kind 0 发送
+`+0xF0()` 后继续，kind 1 发送 `+0xC8()` 并结束；kind 2/3/4/5 对应
+`+0xE0(i32 bits)` / `+0xE8(i64 bits)` / `+0xD0(raw f32)` / `+0xD8(raw f64)`。
+此 helper 不写结果字，也不要求 global 的合成 caller-local 初值。非零未映射 opcode
+和 FC/FD/FE subopcode 仍按 uint32 kind 编码并拒绝不支持的 kind。
+`max_expression_ops=4096` 按每个 expression 限制；超限或缺页/服务异常整页回滚。
+普通解析或 callback 拒绝保留原生可观察的部分状态。
+
+Section 9 先发 `+0x100(count)`，flags 只接受 0..7，低两位等于 2 时读取 table
+index，发送 `+0x108(index,table_index,flags)`；bit 0 为零时使用
+`+0x110(index)` / expression / `+0x118(index)`。低两位非零且 bit 2 为零
+时只接受 elemkind byte 0；bit 2 为一时读取 signed type，只接受 -21/-17/-16，
+其中 -21 不读取 secondary。低两位为零时使用 -16。随后发送
+`+0x120(index,type uint64 bits)` 与 `+0x128(index,element_count)`。
+非空列表在原生 `+0x323ca4` 调用 `abort`（PLT `+0x347f50`），不是普通解析失败。
+两个基址、全部八种 flags 共 **16 项**到达该调用边界；只拦截边界，不执行 abort。
+Python 对照前序 callback 参数/cursor，然后明确拒绝并保持所有页面不变。
+
+Section 11 的 segment count 与 state `+0xac` data count 比较，0xffffffff 为未指定；
+没有数量 callback。Flags bit 1 为一时读取 memory index，发送
+`+0x140(index,memory_index,flags)`；bit 0 为零时使用
+`+0x148(index)` / expression / `+0x150(index)`。读取 u32 payload size，
+检查 section limit 后先推进 cursor，再发送 `+0x158(index,payload_pointer)`；
+此 callback 没有 length 参数。Payload 内容保持 opaque，验证器比较完整字节。
+索引从零开始，不加 function/table/memory import count。
+
+两个基址各 225 项，共 **450 个原生/Python 对照、33 个保护/回滚**；444 项合成，
+6 项含独立 Python XOR 后的真实 ELF data。真实 section 11 为 **4001 字节、3 段**，
+payload lengths **3632/352/0**。11、12/11、1/2/3/6/7/12/10/11 组合每基址
+**18/19/55369** 次 callback；完整组合保持 4 次计划分配、2 次逻辑 free，
+import counts 18/0/0/22、121 个 code body 和 54533 个原始指令字。
+样本没有 section 9，实际 ELF element 输入对照为 0。
+
+覆盖 flags、索引、reference types、各种常量、kind 0、非法/prefixed opcode、
+GOT 重定位/覆写、截断、数量/长度不一致、callback 拒绝、排序/重复、独立开关、
+scratch 别名/缺页、预算、现有及后续 type storage 冲突。只在含 section 6 的完整
+组合注入 global 已说明的合成八字节初值，不发布真实 payload 或名称，不比较整个
+stack/TLS。旧 globals、code、sections、import limits 回归重新通过，四份 JSON
+与既有证据逐字节一致。
+
+证据见 [element/data 对照](evidence/vm9_alternative_reader_segments_fresh_20261008.json)。
+Special custom、实际 AST/callback/cleanup、指令执行与 parse/root、完整 reader/factory/
+B VM/bootstrap、独立 signer 和线上矩阵仍未完成。
 
 ## 7. 复现、证据用途与后续验收
 
@@ -604,6 +658,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_table_memory_
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint64_20261008.py --library <private-metasec.so> --output <reader-i64-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_globals_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-globals-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_code_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-code-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_segments_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-segments-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

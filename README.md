@@ -84,7 +84,10 @@ section 4/5 定义又通过 **266 个对照、18 个回滚**，复用 limits 解
 section 10 又通过 **228 个对照、15 个回滚**，包含 6 项真实 code 输入：121 个
 函数体、54533 个原始指令字，完整选取组合每基址 55351 次回调。独立启用开关
 和回调预算已验证；这里只读取指令字，尚未执行指令或构造实际 AST。
-其余 handler、特殊 custom、实际 AST 和完整 reader 未恢复。
+section 9 空元素列表、section 11 data 与独立 expression helper 又通过 **450 个对照、
+33 个回滚、16 个 abort 边界检查**，其中 6 项含真实 ELF data；完整选取组合每基址
+55369 次回调。两类 section 独立启用；非空元素列表的原生 abort 分支仍拒绝。
+特殊 custom、实际 AST 和完整 reader 未恢复。
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

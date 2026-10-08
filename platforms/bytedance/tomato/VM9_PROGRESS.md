@@ -1,5 +1,27 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B section 9/11 与独立 expression helper
+
+同一 owner 独立启用 section 9 空元素列表和 section 11 data：**450 个原生/Python
+对照、33 个保护/回滚、16 个 abort 边界检查**；444 项合成、6 项含真实 ELF data。
+实际 section 11 有 4001 字节、3 段，payload lengths 3632/352/0；11、12/11、
+1/2/3/6/7/12/10/11 每基址 18/19/55369 次 callback。完整组合保持 4 次计划分配、
+2 次逻辑 free 和 import counts 18/0/0/22。
+
+`+0x3215f0` 独立于 global initializer：kind 0 发 +f0 后继续；常量只发送 callback，
+不写结果字。两个 section 开关默认关闭，八字节 `expression_scratch_address` 与
+input/state、其他 scratch、现有及后续 type storage 分离；每个 expression 有独立
+预算。Section 9 非空列表到达 native abort，模型明确拒绝并回滚；样本无实际
+section 9，相关真实输入对照为 0。Section 11 的 +158 只有 index/pointer 参数。
+
+修改前最小失败对照、完整 callback 参数/状态/input 和回滚均验证；未使用 native
+输入快照，未执行实际 AST callback 或指令。旧 globals/code/sections/import limits
+回归全部通过，四份 JSON 与既有证据逐字节一致；语法/隐私/链接和 CLI 检查通过。
+下一处为 special custom、实际 AST/callback/
+cleanup 与 parse/root；完整 reader/factory/B VM/bootstrap、独立 signer、线上矩阵
+仍未完成。见 [segment 证据](evidence/vm9_alternative_reader_segments_fresh_20261008.json)
+与[第 6.10 节报告](REQUEST_JNI_STARTUP_WORKERS.md#610-section-911-与独立-expression-helper2026-10-08-utc)。
+
 ## 2026-10-08 UTC：B section 10 元数据、局部类型与指令字
 
 同一 owner 通过独立 `enable_code_section=True` 恢复 section 10 `+0x323ca8`：
