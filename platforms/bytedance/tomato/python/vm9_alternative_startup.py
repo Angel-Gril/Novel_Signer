@@ -7,9 +7,11 @@ Reader sections 0 (generic), 1, 3, 7, 8 and 12, plus opted-in section 2
 imports, section 4/5/6 definitions, section 9 empty element vectors,
 section 10 code words and section 11 data segments, run with explicit
 status-only callbacks.
-Special custom handlers, nonempty element vectors,
-actual callbacks and AST remain open; unsupported
-branches fail closed. These components do not implement a full factory.
+Opted-in special custom handlers parse metadata. Actual type/start/local-count/
+raw-word callbacks and temporary callback cleanup have separate bounded APIs;
+they are not yet composed with the section parser. Other AST callbacks,
+nonempty element vectors and complete AST/reader/factory remain open.
+Unsupported branches fail closed.
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -328,6 +330,341 @@ class ReaderSectionsResult:
 
 class _ReaderParseFailure(Exception):
     pass
+
+
+@dataclass(frozen=True)
+class ReaderAstEffect:
+    kind: str
+    address: int
+    size: int
+    owner_address: int
+    owner_bytes: bytes
+
+
+@dataclass(frozen=True)
+class ReaderAstResult:
+    status: int | None
+    effects: tuple[ReaderAstEffect, ...]
+
+
+_AST_NODE_TABLES = {0x3724F0: (64, 0x321260), 0x372518: (48, 0x321368),
+                    0x372540: (40, 0x321368), 0x372568: (24, 0x321368),
+                    0x372590: (40, 0x321308)}
+
+
+class _ReaderAstMemory:
+    """One transaction and ownership graph for the recovered native objects."""
+    def __init__(self, pages, base, root, width, max_nodes, max_vector_bytes, reserved):
+        if (not isinstance(base, int) or not 0 < base <= MASK64-0x400000 or base & 4095
+                or not isinstance(max_nodes, int) or not 1 <= max_nodes <= 65536
+                or not isinstance(max_vector_bytes, int) or not 1 <= max_vector_bytes <= 16*1024*1024):
+            raise RefillUnsupported('AST image or resource bounds are invalid')
+        self.p = _PageTransaction(pages)
+        self.base, self.root, self.width = base, root, width
+        self.max_nodes, self.max_bytes = max_nodes, max_vector_bytes
+        self.regions, self.pointers, self.effects, self.nodes = [], set(), [], 0
+        self.reserved = [(base, base+0x400000)]
+        for start, stop in reserved:
+            if (not isinstance(start, int) or not isinstance(stop, int)
+                    or not 0 <= start <= stop <= MASK64+1):
+                raise RefillUnsupported('AST retained region is invalid')
+            self.reserved.append((start, stop))
+
+    def claim(self, address, size, *, alignment=8):
+        if (not isinstance(address, int) or not 0 < address <= MASK64-size
+                or address & (alignment-1) or address in self.pointers):
+            raise RefillUnsupported('AST storage pointer is invalid or shared')
+        for begin, end in (*self.reserved, *self.regions):
+            if (address < end and begin < address+size) or begin <= address < end:
+                raise RefillUnsupported('AST owned storage overlaps retained memory')
+        _read_span(self.p, address, size)
+        self.pointers.add(address); self.regions.append((address, address+size))
+
+    def vector(self, address, stride=1, *, own=True):
+        begin, end, cap = (_u(self.p, address+offset) for offset in (0, 8, 16))
+        if (not 0 <= begin <= end <= cap <= MASK64 or (not begin and cap)
+                or begin & 7 or (end-begin) % stride or (cap-begin) % stride
+                or cap-begin > self.max_bytes):
+            raise RefillUnsupported('AST vector has invalid or unbounded pointers')
+        if begin:
+            if own: self.claim(begin, cap-begin)
+            else: _read_span(self.p, begin, cap-begin)
+        return begin, end, cap
+
+    def node(self, address, stride):
+        self.nodes += 1
+        if self.nodes > self.max_nodes:
+            raise RefillUnsupported('AST node bound reached')
+        table = _u(self.p, address)-self.base
+        if table not in _AST_NODE_TABLES or _AST_NODE_TABLES[table][0] != stride:
+            raise RefillUnsupported('AST node vtable is unsupported')
+        if _u(self.p, self.base+table) != self.base+_AST_NODE_TABLES[table][1]:
+            raise RefillUnsupported('AST node destructor relocation is unsupported')
+        if table == 0x3724F0:
+            self.vector(address+0x10, 8); self.vector(address+0x28, 8)
+        elif table == 0x372590:
+            self.vector(address+0x10, 8)
+
+    def tree(self, root):
+        # Native postorder is left, right, payload, node. A stack avoids host
+        # recursion limits; claiming nodes rejects cycles and shared subtrees.
+        pending = [(root, False)]; order = []
+        while pending:
+            address, visited = pending.pop()
+            if not address: continue
+            if visited:
+                order.append(address); continue
+            self.nodes += 1
+            if self.nodes > self.max_nodes:
+                raise RefillUnsupported('AST tree node bound reached')
+            self.claim(address, 64); self.vector(address+0x28, 8)
+            pending.extend(((address, True), (_u(self.p, address+8), False),
+                            (_u(self.p, address), False)))
+        return order
+
+    def callback(self, address, *, output=True):
+        self.claim(address, 0x108)
+        if _u(self.p, address) != self.base+0x372370:
+            raise RefillUnsupported('AST callback requires its actual vtable')
+        if _u(self.p, address+8):
+            raise RefillUnsupported('AST callback attached parser state remains unsupported')
+        ast = _u(self.p, address+0x18)
+        if output:
+            self.claim(ast, 0x120)
+            if _u(self.p, address+0x20) != ast+0x108:
+                raise RefillUnsupported('AST raw-word target is inconsistent')
+            for offset in range(0, 0x120, 24):
+                if offset not in (0,0xC0,0x108) and any(
+                        _u(self.p,ast+offset+word) for word in (0,8,16)):
+                    raise RefillUnsupported('AST unrecovered output containers must be empty')
+                stride = 64 if offset == 0 else 4 if offset == 0xC0 else 1
+                begin, end, _ = self.vector(ast+offset, stride)
+                if offset == 0:
+                    for node in range(begin, end, 64): self.node(node, 64)
+        records = _u(self.p, address+0x10)
+        if records:
+            self.claim(records, 24)
+            begin, end, _ = self.vector(records, 64)
+            if (end-begin)//64 > self.max_nodes:
+                raise RefillUnsupported('AST retained record bound reached')
+            for record in range(begin, end, 64):
+                flags = _u(self.p, record+40)
+                if flags & 1:
+                    capacity = flags & ~1
+                    if capacity > self.max_bytes or _u(self.p, record+48) >= capacity:
+                        raise RefillUnsupported('AST retained string is unbounded')
+                    self.claim(_u(self.p, record+56), capacity)
+        self.vector(address+0x30)
+        lists = []
+        for offset, stride in ((0xE0,40),(0xC8,24),(0xB0,40),(0x98,48),(0x80,64)):
+            begin, end, cap = self.vector(address+offset, stride)
+            for node in range(begin, end, stride): self.node(node, stride)
+            lists.append((address+offset, stride, begin, end, cap))
+        trees = [self.tree(_u(self.p, address+offset)) for offset in (0x68,0x50)]
+        return ast, lists, trees
+
+    def emit(self, kind, address, size):
+        self.effects.append(ReaderAstEffect(kind, address, size, self.root,
+                                           _read_span(self.p, self.root, self.width)))
+
+    def allocate(self, size, service):
+        if not 0 < size <= self.max_bytes or not callable(service):
+            raise RefillUnsupported('AST requires a bounded pure allocation plan')
+        pointer = service(size)
+        self.claim(pointer, size); self.emit('allocate', pointer, size)
+        return pointer
+
+    def free_vector(self, address):
+        begin, _, cap = self.vector(address, own=False)
+        if begin:
+            _write_span(self.p, address+8, begin.to_bytes(8, 'little'))
+            self.emit('free', begin, cap-begin)
+
+    def destroy(self, address, stride):
+        self.emit('destroy', address, stride)
+        table = _u(self.p, address)-self.base
+        if table == 0x3724F0:
+            _write_span(self.p, address, (self.base+0x3724F0).to_bytes(8, 'little'))
+            self.free_vector(address+0x28); self.free_vector(address+0x10)
+        elif table == 0x372590:
+            _write_span(self.p, address, (self.base+0x372590).to_bytes(8, 'little'))
+            self.free_vector(address+0x10)
+
+    def publish(self, address, words):
+        _write_span(self.p, address, b''.join(value.to_bytes(8,'little') for value in words))
+
+    def move_types(self, begin, end, destination):
+        for source in range(end-64, begin-1, -64):
+            target = destination+source-begin
+            _write_span(self.p, target, (self.base+0x3724F0).to_bytes(8,'little'))
+            _write_span(self.p, target+8, _read_span(self.p, source+8, 4))
+            _write_span(self.p, target+0x10, _read_span(self.p, source+0x10, 48))
+            _write_span(self.p, source+0x10, bytes(48))
+
+
+def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
+        arguments, allocate=None, max_nodes=4096, max_vector_bytes=16*1024*1024,
+        reserved_regions=()):
+    """Actual slots 18/20/a0/b0/168, with explicit allocation and free effects.
+
+    Type count reserves capacity without resizing. Type entry ignores its
+    index, duplicates the two input u64 vectors into temporaries, copies them
+    again into an owned 64-byte node, then frees results/params temporaries.
+    Growth moves old nodes backwards and publishes before destroying them.
+    Start appends u32; local group count writes callback+78 and clears +7c;
+    raw word appends four
+    bytes to callback+20, including unaligned byte lengths. Arguments use
+    uint64 registers and native w-register truncation. Other slots fail closed.
+
+    allocate(size) must only plan an aligned address in mapped pages. It must
+    not mutate pages or allocate externally. Frees are logical effects: pages
+    stay mapped and unpoisoned. Guard failures roll back all model writes;
+    allocator exceptions/abort, allocator boot and complete reader remain open.
+    The callback must be detached (helper pointer +8 is zero); unrecovered
+    output containers must be empty so their nested ownership cannot alias.
+    The section parser still uses its separately supplied status service.
+    """
+    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x168:1}
+    if (not isinstance(slot_offset,int) or slot_offset not in counts
+            or not isinstance(arguments, (tuple,list))
+            or len(arguments) != counts[slot_offset]
+            or any(not isinstance(value,int) or not 0 <= value <= MASK64 for value in arguments)):
+        raise RefillUnsupported('AST callback slot or uint64 arguments are unsupported')
+    if not isinstance(callback_address,int) or not 0 < callback_address <= MASK64-0x108:
+        raise RefillUnsupported('AST callback address is invalid')
+    # Local group count has no output-object access in the native function.
+    root, width = (callback_address,0x108) if slot_offset == 0xB0 else (
+        _u(pages,callback_address+0x18),0x120)
+    m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
+    ast, _, _ = m.callback(callback_address, output=slot_offset != 0xB0)
+    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0xA0:0x31D6D4,
+               0xB0:0x31D974,0x168:0x31E5D8}
+    if _u(m.p,image_base+0x372370+slot_offset) != image_base+entries[slot_offset]:
+        raise RefillUnsupported('AST callback slot relocation is unsupported')
+    if slot_offset in (0x18,0x20):
+        if _u(m.p,image_base+0x375090) != image_base+0x3724E0:
+            raise RefillUnsupported('AST type move vtable source is unsupported')
+        begin,end,cap = m.vector(ast,64,own=False)
+        size,capacity = (end-begin)//64,(cap-begin)//64
+        if slot_offset == 0x18:
+            count = arguments[0]&0xFFFFFFFF
+            if count > max_nodes:
+                raise RefillUnsupported('AST type reserve exceeds the node bound')
+            if count > capacity:
+                new = m.allocate(count*64,allocate)
+                m.move_types(begin,end,new)
+                m.publish(ast,(new,new+size*64,new+count*64))
+                for node in range(end-64,begin-1,-64): m.destroy(node,64)
+                if begin: m.emit('free',begin,cap-begin)
+        else:
+            if m.nodes+1 > max_nodes or size+1 > max_nodes:
+                raise RefillUnsupported('AST type append exceeds the node bound')
+            sources=[]
+            for count,pointer in ((arguments[1]&0xFFFFFFFF,arguments[2]),
+                                  (arguments[3]&0xFFFFFFFF,arguments[4])):
+                if count*8 > max_vector_bytes:
+                    raise RefillUnsupported('AST type input exceeds the vector bound')
+                if count:
+                    if not pointer or pointer > MASK64-count*8:
+                        raise RefillUnsupported('AST type input pointer is invalid')
+                    # Input spans are retained through all allocation plans.
+                    m.reserved.append((pointer,pointer+count*8))
+                sources.append(_read_span(m.p,pointer,count*8))
+            temporary=[]; children=[]
+            for payload in sources:
+                pointer = m.allocate(len(payload),allocate) if payload else 0
+                if payload: _write_span(m.p,pointer,payload)
+                temporary.append(pointer)
+            for payload in sources:
+                pointer = m.allocate(len(payload),allocate) if payload else 0
+                if payload: _write_span(m.p,pointer,payload)
+                children.extend((pointer,pointer+len(payload) if pointer else 0,
+                                 pointer+len(payload) if pointer else 0))
+            if size == capacity:
+                new_capacity = max(size+1,capacity*2)
+                if new_capacity > max_nodes:
+                    raise RefillUnsupported('AST type growth exceeds the node bound')
+                new = m.allocate(new_capacity*64,allocate); target = new+size*64
+            else: new,new_capacity,target = begin,capacity,end
+            _write_span(m.p,target,(image_base+0x3724F0).to_bytes(8,'little'))
+            _write_span(m.p,target+8,bytes(4))
+            _write_span(m.p,target+0x10,b''.join(value.to_bytes(8,'little') for value in children))
+            if size == capacity:
+                m.move_types(begin,end,new)
+                m.publish(ast,(new,new+(size+1)*64,new+new_capacity*64))
+                for node in range(end-64,begin-1,-64): m.destroy(node,64)
+                if begin: m.emit('free',begin,cap-begin)
+            else: _write_span(m.p,ast+8,(end+64).to_bytes(8,'little'))
+            for pointer,payload in reversed(list(zip(temporary,sources))):
+                if pointer: m.emit('free',pointer,len(payload))
+    elif slot_offset == 0xB0:
+        _write_span(m.p,callback_address+0x78,(arguments[0]&0xFFFFFFFF).to_bytes(4,'little')+bytes(4))
+    else:
+        vector = ast+0xC0 if slot_offset == 0xA0 else ast+0x108
+        begin,end,cap = m.vector(vector,4 if slot_offset == 0xA0 else 1,own=False)
+        size,capacity = end-begin,cap-begin
+        if size+4 > max_vector_bytes or (slot_offset == 0x168 and size+4 >= 1<<32):
+            raise RefillUnsupported('AST word append exceeds the byte bound')
+        if cap-end < 4:
+            new_capacity = max(size+4,capacity*2)
+            new = m.allocate(new_capacity,allocate)
+            _write_span(m.p,new+size, (arguments[0]&0xFFFFFFFF).to_bytes(4,'little')
+                        if slot_offset == 0xA0 else bytes(4))
+            _write_span(m.p,new,_read_span(m.p,begin,size))
+            m.publish(vector,(new,new+size+4,new+new_capacity))
+            if begin: m.emit('free',begin,capacity)
+            begin = new
+        else:
+            if slot_offset == 0x168: _write_span(m.p,end,bytes(4))
+            # The raw helper publishes its zero-filled extension before the
+            # caller stores the word; start publishes after storing its word.
+            if slot_offset == 0x168: _write_span(m.p,vector+8,(end+4).to_bytes(8,'little'))
+        _write_span(m.p,begin+size,(arguments[0]&0xFFFFFFFF).to_bytes(4,'little'))
+        if slot_offset == 0xA0 and cap-end >= 4:
+            _write_span(m.p,vector+8,(end+4).to_bytes(8,'little'))
+    m.p.commit()
+    return ReaderAstResult(0,tuple(m.effects))
+
+
+def destroy_reader_ast_type_node(pages, *, node_address, image_base,
+        max_nodes=4096, max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Actual +321260 non-deleting destructor: results, then params free.
+
+    Begin/capacity remain unchanged and end resets to begin. This does not
+    free the 64-byte node itself. Consume the effects once; destroyed storage
+    must not be reused as a live object. Incidental native void X0 is ignored.
+    """
+    m = _ReaderAstMemory(pages,image_base,node_address,64,max_nodes,max_vector_bytes,reserved_regions)
+    m.claim(node_address,64); m.node(node_address,64); m.destroy(node_address,64)
+    m.p.commit()
+    return ReaderAstResult(None,tuple(m.effects))
+
+
+def cleanup_reader_callback(pages, *, callback_address, image_base,
+        max_nodes=4096, max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Actual +31b458 cleanup: five reverse node lists, two trees, buffer.
+
+    The five strides are 40/24/40/48/64 at e0/c8/b0/98/80. Supported node
+    destructors execute their owned-vector resets/frees. Trees use left/right
+    postorder +3202f0; payload end resets before its free, then node is freed.
+    Begin/capacity and tree roots remain dangling as in native destruction.
+    The caller consumes logical free effects once. The independent record
+    list and output AST are retained; wrapper +31b360 cleanup remains open.
+    """
+    m = _ReaderAstMemory(pages,image_base,callback_address,0x108,max_nodes,max_vector_bytes,reserved_regions)
+    _,lists,trees = m.callback(callback_address)
+    _write_span(m.p,callback_address,(image_base+0x372370).to_bytes(8,'little'))
+    for header,stride,begin,end,cap in lists:
+        if begin:
+            for node in range(end-stride,begin-1,-stride): m.destroy(node,stride)
+            _write_span(m.p,header+8,begin.to_bytes(8,'little'))
+            m.emit('free',begin,cap-begin)
+    for tree in trees:
+        for node in tree:
+            m.free_vector(node+0x28); m.emit('free',node,64)
+    m.free_vector(callback_address+0x30)
+    m.p.commit()
+    return ReaderAstResult(None,tuple(m.effects))
 
 
 def run_reader_sections(pages, *, state_address, image_base,

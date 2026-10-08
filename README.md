@@ -64,8 +64,8 @@ exit 观察**，实际 support slot 清零并依次释放 argument/payload/wrapp
 exit 服务。B 在两个基址运行原始 constructor/factory，自然返回并各发布 **121 个
 非空 descriptor**；另 242 个 Python lookup 控制消费 native 生成 root，不能作为独立
 Python factory 证明。独立 XOR prefix 另有 82 个对照（含两个实际 ELF blob）及 8 个回滚
-通过，仍停在 reader 前；另两次 actual reader 在 Python XOR 输入下返回 0，Python
-AST 对照仍 0。独立 u32 原语新增 258 个对照/7 个回滚；有符号 i32 原语另通过
+通过，仍停在 reader 前；另两次 actual reader 在 Python XOR 输入下返回 0；
+当时完整 Python reader AST 对照为 0。独立 u32 原语新增 258 个对照/7 个回滚；有符号 i32 原语另通过
 1336 个对照/10 个回滚，失败时保留输出。section envelope/排序与
 通用 custom/function/export/start/data count 新增 202 个对照/12 个回滚（含 8 项
 实际 ELF section 输入）。后续 vector 扩容与 type section 又通过 102 / 372 个对照、
@@ -89,7 +89,13 @@ section 9 空元素列表、section 11 data 与独立 expression helper 又通�
 55369 次回调。两类 section 独立启用；非空元素列表的原生 abort 分支仍拒绝。
 section 0 的五类特殊 custom 又通过 **860 个对照、32 个回滚**，含 10 项真实 ELF
 custom 输入；全部实际 section 组合每基址匹配 55369 次回调。特殊 custom 默认关闭，
-要求独立八字节工作区和每段记录预算。实际 AST 和完整 reader 未恢复。
+要求独立八字节工作区和每段记录预算。全量 AST 和完整 reader 仍未恢复。
+实际 type/start/local group 数量/raw-word 五个 callback 与临时 callback 清理又通过
+**308 个原生/Python 对照、54 个回滚**，含 32 项真实 ELF 类型输入。原生实际
+vtable 执行，核对节点内容、分配/析构/free 顺序与每个副作用时的容器状态。
+这些独立有界入口尚未接入 parser；其余 AST callback、wrapper、parse/root、
+完整 reader/factory/bootstrap 和 signer 仍未完成。见
+[AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

@@ -2,6 +2,7 @@
 
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
+2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
 同日追加 section dispatcher 与部分 handler 的 202 个对照、12 个回滚，见第 6.2 节。
 同日追加有符号 i32 原语的 1336 个对照、10 个回滚，见第 6.3 节。
 同日追加 vector/type 的 102 / 372 个对照、34 个回滚，见第 6.4 节。
@@ -36,6 +37,8 @@
 | B 独立 Python blob XOR prefix | 82 | 80 个边界控制与 2 个实际 ELF blob；reader 前停止，不用 native 快照 |
 | B blob XOR 拒绝/回滚 | 8 | ABI/长度上限、codec 地址溢出/缺页、目的跨缺页等 |
 | Python XOR → 实际 B reader 自然返回 | 2 | 每次 1658 次受控分配，reader 返回 0；无 Python reader / AST 对照 |
+| B 实际 AST callback / 临时清理差分 | 308 | 两个基址各 154 项；实际 vtable 执行，32 项使用真实 ELF 类型输入 |
+| B 实际 AST callback / 清理保护回滚 | 54 | slot/relocation、未知 ownership、别名、循环、缺页及资源限制，全页不变 |
 | B reader u32 原语 native/Python 差分 | 258 | 两个基址各 129 项；自然返回和整个 guest 内存一致 |
 | B reader u32 拒绝/回滚 | 7 | ABI/地址上限、输入缺页和部分输出跨缺页；原页保持不变 |
 | B reader section/部分 handler 差分 | 202 | 194 项合成输入、8 项实际 ELF section 输入；返回、guest/global 状态、回调参数与时机一致 |
@@ -692,6 +695,62 @@ callback 参数/状态/type cells/limits 与逻辑分配效果；不比较整个
 实际 AST/callback/cleanup、指令执行与 parse/root、完整 reader/factory/B VM/
 bootstrap、独立 signer 和线上矩阵仍未完成。
 
+## 6.12 实际 AST callback 与临时清理（2026-10-09 Asia/Shanghai）
+
+同一 `vm9_alternative_startup.py` 增加三个独立有界入口：
+`run_reader_ast_callback`、`destroy_reader_ast_type_node`、`cleanup_reader_callback`。
+**308 个原生/Python 对照、54 个保护/回滚**通过；两个基址各 154 项，276 项
+合成、32 项使用独立 Python XOR 后的真实 ELF 类型输入。原生调用从 fresh ELF
+重定位后的实际 vtable 取出地址，每次函数自然返回到合成驱动并恢复 SP。
+原生节点的间接析构调用也实际执行。仅 malloc/free 和 memcpy/memset 是显式
+主机服务；此次没有把 AST callback 替换成状态服务。
+
+| Slot / 入口 | 已恢复的行为 |
+|---|---|
+| +18 / +31b6b0 → +31e75c | 预留 64 字节 type 容量，不增加 size；容量足够时不改 header |
+| +20 / +31b6d0 | 忽略 index，复制 params/results 两个 u64 输入到临时 vector，再复制到 owned type node；释放临时 results/params |
+| +a0 / +31d6d4 | 向 output+c0 追加 u32 start index；扩容为 max(size+1, capacity×2) |
+| +b0 / +31d974 | 写 callback+78 的 u32 local group 数量，清零 +7c word |
+| +168 / +31e5d8 → +32136c | 向 output+108 byte buffer 追加四字节，保留非四字节对齐的旧长度 |
+| +321260 | 64 字节 type node 的非 deleting 析构：先 results，再 params；重置 end 后 free，不释放节点本身 |
+| +31b458 / +3202f0 | 五组临时节点反向析构/释放，两棵树按 left/right/payload/node 后序释放，最后清理 byte buffer |
+
+Type 扩容反向移动旧节点，清零旧节点的六个 owned vector 指针，保留 index，
+不复制 padding；先发布新 header，再反向析构旧节点并 free 旧块。Type entry
+新节点的 index 字段为零。Start 扩容在发布/free 前写入新 word；raw-word helper
+先 zero-fill 和发布扩展，再由 caller 写 word。所有 w-register 参数按 u32 截断。
+
+临时列表按 callback+e0/c8/b0/98/80 的 40/24/40/48/64 字节 stride 清理；
+支持实际 +372590/+372568/+372540/+372518/+3724f0 节点 vtable。两棵树按
+callback+68、+50 的顺序处理，使用有界 64 字节节点和 u64 payload vectors。
+Buffer 为 callback+30。原生清理留下 dangling begin/capacity/tree root，模型
+保留相同行为，调用者只能消费 free 效果一次。独立 64 字节记录列表与输出 AST
+仍由外层 owner 保留；`+31b360` 的完整 wrapper 清理尚未恢复。
+
+每个结果保存 allocation/destruction/free 逻辑效果及该时刻的容器内存。
+全部 guest 对象、输入与分配内容（含 padding）、每次副作用的容器状态和顺序
+一致；不比较整个 native stack/TLS。分配服务只计划已映射、对齐、互不覆盖的
+地址，不修改内存或真实分配；free 不 poison/unmap，不证明 allocator boot。
+
+Callback 必须使用实际 vtable、+8 helper 为零，+18 指向 0x120 字节输出 header
+前缀，+20 等于 output+108。仅 type/start/raw-word 容器可以持有存储；其它
+输出容器需要保持空。Local group count 入口不访问 output。`max_nodes=4096` 限制节点
+和新增 type capacity；`max_vector_bytes=16*1024*1024` 限制每个 buffer。
+显式 `reserved_regions` 保护其它借用存储；树循环、共享子树/列表、未知 vtable、
+错误 relocation、缺页、别名和超限均全页回滚。非法 slot 类型、attached parser
+指针及未恢复输出容器三个保护先复现 RED，再收紧入口；最初四个行为 RED 来自
+状态服务缺少实际 reserve/type/start/cleanup 写入。
+最终审查再复现两个错误 slot 绑定，并增加 requested-slot relocation 校验；
+完整 308 项对照和 54 项保护重跑通过。旧 type/vector 102/372 个对照与 34 个
+回滚、section 202 个对照与 12 个回滚全部通过，两份新 JSON 与既有证据逐字节一致。
+
+这批实际输入由独立 fixture 解码得到类型参数，再驱动实际 callback；不构成完整
+reader AST 对照，不导出真实类型内容或原生内存快照。五个 callback 尚未接入
+`run_reader_sections`。其余 AST callback（含 +160 的非空 176 字节节点移动）、
+wrapper/parser composition、parse/root、完整 reader/factory/B VM/bootstrap、
+独立 signer 和线上矩阵仍未完成。证据见
+[实际 AST/清理](evidence/vm9_alternative_ast_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -717,6 +776,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_globals_20261
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_code_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-code-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_segments_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-segments-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_custom_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-custom-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_20261009.py --library <private-metasec.so> --output <reader-ast-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。
@@ -727,7 +787,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复 B reader 的实际 node/AST callback 和 cleanup，随后解析/root 生成，再把原始 JNI /
+下一步恢复其余 B reader AST callback 并接入 parser/wrapper，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。

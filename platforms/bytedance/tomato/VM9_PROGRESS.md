@@ -1,5 +1,33 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：实际 AST callback 与临时清理
+
+同一 owner 增加五个实际 callback 的独立有界入口和对应析构/清理：
+**308 个原生/Python 对照、54 个保护/回滚**；276 项合成、32 项使用独立
+Python XOR 后的真实 ELF 类型输入。两个基址各 154 项，实际 vtable 与函数
+执行；全部 guest 对象/输入/分配内容（含 padding）、分配/析构/free 顺序，
+以及每个副作用时的容器内存均一致。修改前四个状态服务 RED，修改后 GREEN；
+非法 slot、attached parser 和未恢复输出容器三个保护也先复现后收紧。
+最终审查另复现两个错误 callback slot 绑定，再补 relocation 拒绝；完整 308 项
+重跑通过。旧 type/vector 102/372 个对照与 34 个回滚、section 202 个对照与
+12 个回滚全部通过，两份新回归 JSON 与既有证据逐字节一致。
+
+Slots +18/+20/+a0/+b0/+168 分别预留 type 容量、追加带两组 owned u64 vector
+的 64 字节 type node、写入 u32 start、写入 local group 数量并清零 +7c、追加原始
+u32 字。预留容量不增加 size；type entry 忽略 index，先复制到两个临时 vector，
+再复制到 owned node，最后释放临时 results/params。扩容反向移动旧节点，发布
+新 header 后析构旧节点并 free。`+321260` 先释放 results，再释放 params。
+`+31b458` 按 e0/c8/b0/98/80 倒序析构五组节点，随后对 68/50 两棵树做
+left/right/payload/node 后序释放，最后清理 +30 buffer。
+
+这些入口要求 detached callback（+8 为零）和空的未恢复输出容器。分配为
+显式纯计划，free 为逻辑效果，不 poison/unmap；节点/字节预算、未知 vtable、
+缺页和存储重叠均拒绝并全页回滚。未接入 section parser，未比较整个 native
+stack/TLS，未发布实际类型内容或原生快照。完整 AST/callback、wrapper
+`+31b360`、parse/root、reader/factory/B VM/bootstrap、独立 signer 和线上矩阵
+仍未完成。见 [AST 证据](evidence/vm9_alternative_ast_fresh_20261009.json)与
+[第 6.12 节报告](REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
+
 ## 2026-10-08 UTC：B section 0 特殊 custom 元数据
 
 同一 reader owner 恢复 dylink/dylink.0/linking/target_features/reloc 前缀：

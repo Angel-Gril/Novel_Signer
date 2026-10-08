@@ -9,8 +9,8 @@ two bases; type vectors and function/global imports are verified separately belo
 `run_reader_sections` restores +0x324188 envelope/order/partial state and section
 0 (generic custom), 3, 7, 8 and 12 (202 controls/12 rollback checks, including
 eight actual ELF sections from independent Python XOR). Callbacks are explicit
-pure status services; special custom progress is documented below. Actual node/AST allocation,
-wrapper cleanup and a complete Python reader/factory remain open. See
+pure status services; special custom and separate actual AST callbacks are documented below.
+Full AST, wrapper cleanup and a complete Python reader/factory remain open. See
 [startup/reader report](../REQUEST_JNI_STARTUP_WORKERS.md#62-section-状态与部分-handler2026-10-08-utc).
 
 Subsequent `grow_reader_word_vector` and section 1 type vectors pass 102 / 372
@@ -93,6 +93,31 @@ All actual sections match 55369 callbacks per base. Actual AST, bootstrap and
 signing remain open. See the
 [custom report](../REQUEST_JNI_STARTUP_WORKERS.md#611-section-0-特殊-custom-元数据2026-10-08-utc).
 
+2026-10-09 actual AST components add 308 comparisons and 54 rollback checks,
+including 32 actual ELF type inputs. `run_reader_ast_callback` recovers slots
++0x18/+0x20/+0xa0/+0xb0/+0x168: reserve type capacity, append an owned 64-byte
+type node, append u32 start index, write local group count and clear +7c, append a raw
+u32 word. `destroy_reader_ast_type_node` frees results then parameters without
+deleting the node. `cleanup_reader_callback` destroys five temporary node
+lists backwards, releases two trees in left/right postorder, then its buffer.
+Each result records logical allocation/destruction/free effects and owner bytes
+at that effect. Native functions and vtables execute, with explicit malloc/free
+plans; memory stays mapped and unpoisoned. No allocator boot is implemented.
+
+The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
+at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
+only type/start/raw-word containers may hold storage. Caller-supplied
+`reserved_regions` retain other borrowed memory. `max_nodes=4096` bounds nodes
+and new type capacities; `max_vector_bytes=16*1024*1024` bounds each buffer.
+The pure `allocate(size)` service returns an aligned mapped address and must
+not mutate pages or perform external allocation. Consume free effects once;
+destruction leaves native dangling begin/capacity/tree pointers. Unsupported
+slots, attached parser state, opaque output ownership, aliasing and bounds
+fail closed with full model-page rollback. These APIs are separate from
+`run_reader_sections`, whose callback remains a status service. Full AST,
+reader/factory/bootstrap and signer remain open. See the
+[AST/cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai).
+
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint32_20261008.py --library "$env:TOMATO_LIBMETASEC" --output <reader-i32-evidence.json>
@@ -106,6 +131,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_globals_20261
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_code_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-code-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_segments_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-segments-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_custom_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-custom-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

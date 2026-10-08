@@ -1,6 +1,6 @@
 # Tomato / Fanqie (ByteDance)
 
-Current boundary (2026-10-08 UTC; host trial label `20261008`): original A
+Current boundary (2026-10-09 Asia/Shanghai; earlier host trial label `20261008`): original A
 JNI_OnLoad returns `0x10006`; its same-run queue worker executes six default
 callers / 48 nested returns, cleanup, matching-libc wait, explicit stop and
 argument free. Two new TLS cleanup and two guest joinable exit observations
@@ -67,8 +67,17 @@ with `enable_special_custom_sections=True`, an independent eight-byte
 `custom_scratch_address` and `max_custom_records=4096` per custom section.
 Subsection limits and the custom flag are restored on parse failure. See the
 [custom report](REQUEST_JNI_STARTUP_WORKERS.md#611-section-0-特殊-custom-元数据2026-10-08-utc).
+Actual type/start/local group count/raw-word callbacks and temporary callback cleanup
+add 308 native/Python comparisons and 54 rollback checks, including 32 actual
+ELF type inputs. Actual vtables run naturally; node bytes, pointer publication,
+allocation/destruction/free ordering and owner state at every effect match.
+The five callback slots are +18/+20/+a0/+b0/+168; cleanup covers five reverse
+node lists, two bounded trees and a byte buffer. These separate APIs require a
+detached callback and empty unrecovered output containers. Parser composition,
+other AST callbacks and wrapper cleanup remain open. See the
+[AST/cleanup report](REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai).
 Allocation/free remain explicit services;
-actual AST construction and complete Python reader remain open. Independent Medusa, fresh
+complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).
 Older observations below are historical.
