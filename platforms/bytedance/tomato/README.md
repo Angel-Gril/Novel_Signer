@@ -17,7 +17,8 @@ adds 82 native/Python controls (including two real ELF blobs) and eight
 rollback cases; it stops before the +31b360 reader. Two subsequent native
 reader observations accept that Python XOR input and return 0 after 1658
 controlled allocations each. The independent u32 helper adds 258 comparisons/seven rollback
-checks. Reader envelope/order and generic-custom/function/export/start/data-count
+checks. The signed i32 helper adds 1336 comparisons/10 rollback checks; failed
+reads preserve output. Reader envelope/order and generic-custom/function/export/start/data-count
 handlers add 202 comparisons/12 rollback checks, including eight actual ELF
 section controls from fresh Python XOR. Callback arguments and state match;
 callbacks remain explicit status services. Type/import, special custom handlers,

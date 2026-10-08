@@ -3417,5 +3417,30 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_alternative_reader_varint32_fresh_20261008": {
+    "evidence_file": "evidence/vm9_alternative_reader_varint32_fresh_20261008.json",
+    "schema": "vm9-alternative-reader-varint32-fresh-v1",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_alternative_varint32_20261008.py",
+    "evidence_date": "2026-10-08",
+    "evidence_timezone": "UTC",
+    "host_trial_label": "20261008",
+    "native_function_offset_hex": "0x324e0c",
+    "native_Python_helper_controls": 1336,
+    "rollback_negative_controls": 10,
+    "native_unused_output_controls": 30,
+    "guest_input_output_bytes_compared": 40960,
+    "fifth_byte_all_256_values_checked_per_base": true,
+    "failure_preserves_output": true,
+    "native_input_snapshot_used": false,
+    "section_1_type_vectors_implemented": false,
+    "reader_AST_native_Python_controls": 0,
+    "complete_python_reader_implemented": false,
+    "independent_Python_factory_implemented": false,
+    "complete_python_bootstrap_controls": 0,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

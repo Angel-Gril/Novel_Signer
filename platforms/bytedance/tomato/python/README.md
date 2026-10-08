@@ -2,6 +2,10 @@
 
 2026-10-08 B reader components: `vm9_alternative_startup.read_reader_varuint32`
 restores +0x324870 (258 fresh controls/seven rollback checks).
+`read_reader_varint32` restores signed +0x324e0c (1336 controls/10 rollback
+checks). It preserves output on failure and checks every fifth-byte value at
+two bases; type vectors and import handlers remain open. See the
+[signed reader report](../REQUEST_JNI_STARTUP_WORKERS.md#63-有符号-i32-读取2026-10-08-utc).
 `run_reader_sections` restores +0x324188 envelope/order/partial state and section
 0 (generic custom), 3, 7, 8 and 12 (202 controls/12 rollback checks, including
 eight actual ELF sections from independent Python XOR). Callbacks are explicit
@@ -11,6 +15,7 @@ wrapper cleanup and a complete Python reader/factory remain open. See
 
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint32_20261008.py --library "$env:TOMATO_LIBMETASEC" --output <reader-i32-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

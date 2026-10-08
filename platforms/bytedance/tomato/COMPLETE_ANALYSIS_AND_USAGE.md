@@ -30,6 +30,7 @@ blob）和 8 个拒绝回滚通过，未使用 native 快照。仍停在 reader 
 +31b360 reader / +2cd5a4 解析 / +2cafd0 构建。后续两基址 actual reader 在 Python
 XOR 输入下自然返回 0，每次 1658 次受控分配；Python reader / AST 对照仍 0，内部
 +324444 包装、完整节点仍需恢复。reader u32 原语已独立通过 258 个对照/7 个回滚；
+有符号 i32 原语 `+324e0c` 另通过 1336 个对照/10 个回滚，失败时保留输出。
 +324188 envelope/排序及 section 0（通用）/3/7/8/12 新增 202 个对照/12 个回滚，
 含 8 项 fresh ELF 独立 Python XOR 后的实际 section 输入。callback 参数/时机和
 guest/global 状态一致；回调返回仍为受控纯状态服务，实际 AST 没有构造。type/import、

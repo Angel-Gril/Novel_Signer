@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B reader 的有符号 i32 读取
+
+`read_reader_varint32` 独立恢复 `+0x324e0c`，两个基址各 668 项、共 1336 个
+native/Python 对照及 10 个拒绝/回滚通过。全部 256 种第五字节分别核对：第五
+终止字节只接受 `0x00..0x07` 或 `0x78..0x7f`。冗余编码接受，截断、连续五个
+continuation 或非法第五字节返回 0 且保留输出；30 个原生控制使用 NULL、未映射
+或超出 word 边界的未使用输出地址。成功读取写入 int32，输入/输出重叠与跨页通过。
+自然返回和 guest 输入/输出区的 0xA000 字节一致，输入为合成字节，不使用 native 快照。
+
+这只是 type/import handler 的读取依赖。section 1 type vector、vector resize
+`+0x324540`、section 2 import、实际 AST 和完整 reader/factory/bootstrap 仍未恢复。
+下一步先恢复 vector resize 与 section 1，再恢复 section 2。
+见 [i32 证据](evidence/vm9_alternative_reader_varint32_fresh_20261008.json)与
+[第 6.3 节报告](REQUEST_JNI_STARTUP_WORKERS.md#63-有符号-i32-读取2026-10-08-utc)。
+
 ## 2026-10-08 UTC：B section 状态与部分 handler
 
 `run_reader_sections` 恢复 core `+0x324188` 的 envelope/排序/重复/精确消费和失败状态，

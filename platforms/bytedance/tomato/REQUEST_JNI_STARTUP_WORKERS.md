@@ -3,6 +3,7 @@
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 同日追加 section dispatcher 与部分 handler 的 202 个对照、12 个回滚，见第 6.2 节。
+同日追加有符号 i32 原语的 1336 个对照、10 个回滚，见第 6.3 节。
 
 本检查点验证了 **A 原始 JNI_OnLoad 返回、同次 worker 的六个默认 caller、TLS 析构
 及 guest joinable pthread_exit**。B 原始 constructor/factory 在两个基址自然返回并各
@@ -35,6 +36,8 @@
 | B reader u32 拒绝/回滚 | 7 | ABI/地址上限、输入缺页和部分输出跨缺页；原页保持不变 |
 | B reader section/部分 handler 差分 | 202 | 194 项合成输入、8 项实际 ELF section 输入；返回、guest/global 状态、回调参数与时机一致 |
 | B reader 未恢复分支/guard 回滚 | 12 | type/import、五类 special custom、缺页/重叠/遍历上限和坏服务结果明确拒绝 |
+| B reader i32 原语 native/Python 差分 | 1336 | 两个基址各 668 项；第五字节全值、正负边界、失败保留输出和 guest 输入/输出区一致 |
+| B reader i32 拒绝/回滚 | 10 | 有界 ABI、缺页、成功输出地址无效；部分输出跨缺页仍保持原页 |
 | 完整 Python bootstrap 对照 | **0** | 未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
 
 证据文件：
@@ -48,6 +51,7 @@
 - [Python XOR 输入交接实际 reader](evidence/vm9_alternative_reader_native_20261008.json)
 - [独立 Python reader u32 原语](evidence/vm9_alternative_reader_varuint32_fresh_20261008.json)
 - [独立 Python section 与部分 handler](evidence/vm9_alternative_reader_sections_fresh_20261008.json)
+- [独立 Python reader i32 原语](evidence/vm9_alternative_reader_varint32_fresh_20261008.json)
 
 原有 13 项 A 启动控制已重新回归通过；计数仍沿用各自证据，不另算新的控制。
 这些计数不与此前 once/mask 组件对照相加为完整 signer 对照。
@@ -267,8 +271,28 @@ Callback vtable 是**显式的纯状态服务**：Python/native 同样接收受�
 实际节点构造 callback 尚未执行。Python 不使用 native node、内存快照或输出作输入；
 证据 `native_input_snapshot_used=false`。12 项拒绝/回滚单独记录，未宣称 native 的
 未恢复 handler 已被对照。完整 reader、AST、factory/B VM 与 Python bootstrap 仍
-未完成。下一步恢复 section 1 `+0x32298C` 的 type vector/有符号读取、section 2
+未完成。后续 i32 读取已恢复，见第 6.3 节；下一步恢复 section 1 `+0x32298C` 的 type vector、section 2
 `+0x322CF8` 的 import，再接 special custom、实际节点/callback/cleanup。
+
+### 6.3 有符号 i32 读取（2026-10-08 UTC）
+
+同一 owner 新增 `read_reader_varint32`，恢复原生 `+0x324e0c`。返回值描述消费
+字节数、有符号值和是否写入输出；原生输出仍是 little-endian 32-bit word。
+接受 1..5 字节与冗余编码，第五终止字节仅允许 `0x00..0x07` 或 `0x78..0x7f`。
+截断、连续五个 continuation 或非法第五字节返回 0，**不访问或清零输出**。
+这与 u32 原语的部分失败路径不同，不能共用其失败写入规则。
+
+两个基址各 668 项，共 1336 个对照：每基址覆盖全部 128 种单字节终止值、全部
+256 种第五字节、int32 正负边界与各编码宽度边界、截断、冗余编码、确定性生成
+输入、后续字节、输入/输出重叠及跨页。30 个原生控制在失败路径使用 NULL、未
+映射或超出 word 边界的输出地址，证实输出未访问。所有自然返回和 guest 输入/
+输出比较区的 0xA000 字节一致，不使用 native 输出或内存快照。10 个 guard/缺页拒绝检查保持所有原页，
+包括输出跨缺页时已经暂存的部分写入。扫描会发生 uint64 地址回绕的输入明确拒绝。
+
+首轮差分全部通过，但验证脚本漏接底层缺页 `ValueError`，在拒绝检查中结束；
+修正验证脚本后重新运行正式批次。没有修改原生函数、跳过失败样例或改变读取语义。
+该原语没有构造 type vector 或节点；section 1、section 2、完整 AST/factory/bootstrap
+仍未完成。下一处为 vector resize `+0x324540`，随后 section 1 `+0x32298c`。
 
 ## 7. 复现、证据用途与后续验收
 
@@ -284,6 +308,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_blob_xor_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_short_descriptor_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <B-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varuint32_20261008.py --library <private-metasec.so> --output <reader-u32-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-section-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint32_20261008.py --library <private-metasec.so> --output <reader-i32-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

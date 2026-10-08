@@ -84,6 +84,50 @@ def read_reader_varuint32(pages, *, start_address, end_address, output_address):
 
 
 @dataclass(frozen=True)
+class ReaderVarint32Result:
+    bytes_consumed: int
+    value: int | None
+    output_written: bool
+
+
+def read_reader_varint32(pages, *, start_address, end_address, output_address):
+    """Actual +0x324e0c signed word reader, preserving output on failure.
+
+    Accept redundant encodings through five bytes. A fifth terminator must
+    be 0x00..0x07 or 0x78..0x7f, with the upper bits extending its sign.
+    Missing/invalid termination returns zero without accessing output.
+    The bounded ABI excludes input pointers whose five-byte scan wraps.
+    """
+    if any(not isinstance(address, int) or not 0 <= address <= MASK64
+           for address in (start_address, end_address, output_address)):
+        raise RefillUnsupported('reader i32 helper requires uint64 addresses')
+    if start_address > MASK64 - 4:
+        raise RefillUnsupported('reader i32 scan address wraps the bounded guest ABI')
+    p = _PageTransaction(pages)
+    bits = 0
+    for index in range(5):
+        address = start_address + index
+        if address >= end_address:
+            return ReaderVarint32Result(0, None, False)
+        byte = _read_span(p, address, 1)[0]
+        bits |= (byte & 127) << (index * 7)
+        if byte & 128:
+            continue
+        if index == 4 and not (byte <= 7 or byte >= 0x78):
+            return ReaderVarint32Result(0, None, False)
+        if byte & 64:
+            bits |= -(1 << ((index + 1) * 7))
+        bits &= 0xFFFFFFFF
+        if not output_address or output_address > MASK64 - 3:
+            raise RefillUnsupported('reader i32 output word address overflows or is null')
+        _write_span(p, output_address, bits.to_bytes(4, 'little'))
+        p.commit()
+        value = bits if bits < 0x80000000 else bits - (1 << 32)
+        return ReaderVarint32Result(index + 1, value, True)
+    return ReaderVarint32Result(0, None, False)
+
+
+@dataclass(frozen=True)
 class ReaderCallbackEvent:
     slot_offset: int
     arguments: tuple[int, ...]
