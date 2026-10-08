@@ -65,6 +65,9 @@ exit 服务。B 在两个基址运行原始 constructor/factory，自然返回�
 非空 descriptor**；另 242 个 Python lookup 控制消费 native 生成 root，不能作为独立
 Python factory 证明。独立 XOR prefix 另有 82 个对照（含两个实际 ELF blob）及 8 个回滚
 通过，仍停在 reader 前；另两次 actual reader 在 Python XOR 输入下返回 0，Python
-reader/AST 对照仍 0。真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
+AST 对照仍 0。独立 u32 原语新增 258 个对照/7 个回滚；section envelope/排序与
+通用 custom/function/export/start/data count 新增 202 个对照/12 个回滚（含 8 项
+实际 ELF section 输入）。回调参数/状态已核对，返回仍是受控服务；type/import、
+特殊 custom、实际 AST 和完整 reader 未恢复。真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

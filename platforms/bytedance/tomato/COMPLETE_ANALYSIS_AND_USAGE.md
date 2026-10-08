@@ -12,7 +12,7 @@ VM 使用的直接 branch ABI；`+0x2584ac` pre-dispatch、packed callback objec
 
 # 番茄（ByteDance Tomato）完整分析与使用报告
 
-> 截止：2026-10-07 UTC（文件沿用本机试验标签 20261008）
+> 截止：2026-10-08 UTC（文件沿用本机试验标签 20261008）
 > 结论：**本项目整体尚未完成，不能作为当前线上小说搜索下载器发布。**
 
 最新检查点：原始 A JNI_OnLoad 在两个基址自然返回 0x10006，同次 worker 执行六个
@@ -29,7 +29,11 @@ B factory 原地 XOR prefix 已独立恢复：82 个 native/Python 控制（含�
 blob）和 8 个拒绝回滚通过，未使用 native 快照。仍停在 reader 调用前，下一处为
 +31b360 reader / +2cd5a4 解析 / +2cafd0 构建。后续两基址 actual reader 在 Python
 XOR 输入下自然返回 0，每次 1658 次受控分配；Python reader / AST 对照仍 0，内部
-+324444→+324188 状态/节点仍需恢复。
++324444 包装、完整节点仍需恢复。reader u32 原语已独立通过 258 个对照/7 个回滚；
++324188 envelope/排序及 section 0（通用）/3/7/8/12 新增 202 个对照/12 个回滚，
+含 8 项 fresh ELF 独立 Python XOR 后的实际 section 输入。callback 参数/时机和
+guest/global 状态一致；回调返回仍为受控纯状态服务，实际 AST 没有构造。type/import、
+特殊 custom、实际节点/callback/cleanup 与完整 reader 仍未恢复。
 详见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。
 下方 once/mask 与 cold caller 记录为此前证据，不能累加成完整初始化或 signer 证明。
 

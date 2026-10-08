@@ -1,6 +1,6 @@
 # Tomato / Fanqie (ByteDance)
 
-Current boundary (2026-10-07 UTC; host trial label `20261008`): original A
+Current boundary (2026-10-08 UTC; host trial label `20261008`): original A
 JNI_OnLoad returns `0x10006`; its same-run queue worker executes six default
 callers / 48 nested returns, cleanup, matching-libc wait, explicit stop and
 argument free. Two new TLS cleanup and two guest joinable exit observations
@@ -16,7 +16,12 @@ full Python bootstrap (0 controls) remain open. The independent XOR prefix
 adds 82 native/Python controls (including two real ELF blobs) and eight
 rollback cases; it stops before the +31b360 reader. Two subsequent native
 reader observations accept that Python XOR input and return 0 after 1658
-controlled allocations each. Python reader/AST construction remains open. Independent Medusa, fresh
+controlled allocations each. The independent u32 helper adds 258 comparisons/seven rollback
+checks. Reader envelope/order and generic-custom/function/export/start/data-count
+handlers add 202 comparisons/12 rollback checks, including eight actual ELF
+section controls from fresh Python XOR. Callback arguments and state match;
+callbacks remain explicit status services. Type/import, special custom handlers,
+actual AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).
 Older observations below are historical.

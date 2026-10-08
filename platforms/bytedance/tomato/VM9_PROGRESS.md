@@ -1,5 +1,22 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B section 状态与部分 handler
+
+`run_reader_sections` 恢复 core `+0x324188` 的 envelope/排序/重复/精确消费和失败状态，
+以及通用 custom、function index、export、start index、data count。两个基址共
+**202 个 native/Python 对照、12 个拒绝回滚**；194 项合成输入，8 项独立 Python XOR
+后的实际 ELF section 输入。全 guest/global 写入和 callback 参数/时机一致，真实
+section 3/7 分别包含 121 个索引/导出项；fixture imported-count 仍显式为 0。
+
+section 0 可重复且不更新 previous；实际 rank 将 section 12 排在 section 10 前。
+回调是显式纯状态服务，实际 AST 构造没有执行；type/import、特殊 custom 与完整
+reader 尚未恢复。unsupported/guard 回滚全部页，普通解析失败保留 native 部分状态。
+完整 Python bootstrap 仍 0，Medusa/fresh 签名/线上矩阵、Rust 与最终下载产品未完成。
+下一处为 section 1 `+32298c` 的 type vector/有符号读取，随后 section 2 `+322cf8`
+import 和实际节点/callback/cleanup。见
+[section 证据](evidence/vm9_alternative_reader_sections_fresh_20261008.json)与
+[第 6.2 节报告](REQUEST_JNI_STARTUP_WORKERS.md#62-section-状态与部分-handler2026-10-08-utc)。
+
 ## 2026-10-08 UTC：B reader 的独立 Python u32 读取
 
 在既有 B startup owner 中恢复 `+0x324870`：允许 1..5 字节冗长编码，截断或第五

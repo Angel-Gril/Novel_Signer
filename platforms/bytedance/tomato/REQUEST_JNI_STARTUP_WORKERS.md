@@ -2,6 +2,7 @@
 
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
+同日追加 section dispatcher 与部分 handler 的 202 个对照、12 个回滚，见第 6.2 节。
 
 本检查点验证了 **A 原始 JNI_OnLoad 返回、同次 worker 的六个默认 caller、TLS 析构
 及 guest joinable pthread_exit**。B 原始 constructor/factory 在两个基址自然返回并各
@@ -32,6 +33,8 @@
 | Python XOR → 实际 B reader 自然返回 | 2 | 每次 1658 次受控分配，reader 返回 0；无 Python reader / AST 对照 |
 | B reader u32 原语 native/Python 差分 | 258 | 两个基址各 129 项；自然返回和整个 guest 内存一致 |
 | B reader u32 拒绝/回滚 | 7 | ABI/地址上限、输入缺页和部分输出跨缺页；原页保持不变 |
+| B reader section/部分 handler 差分 | 202 | 194 项合成输入、8 项实际 ELF section 输入；返回、guest/global 状态、回调参数与时机一致 |
+| B reader 未恢复分支/guard 回滚 | 12 | type/import、五类 special custom、缺页/重叠/遍历上限和坏服务结果明确拒绝 |
 | 完整 Python bootstrap 对照 | **0** | 未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
 
 证据文件：
@@ -44,6 +47,7 @@
 - [B 独立 blob XOR prefix](evidence/vm9_alternative_blob_xor_fresh_20261008.json)
 - [Python XOR 输入交接实际 reader](evidence/vm9_alternative_reader_native_20261008.json)
 - [独立 Python reader u32 原语](evidence/vm9_alternative_reader_varuint32_fresh_20261008.json)
+- [独立 Python section 与部分 handler](evidence/vm9_alternative_reader_sections_fresh_20261008.json)
 
 原有 13 项 A 启动控制已重新回归通过；计数仍沿用各自证据，不另算新的控制。
 这些计数不与此前 once/mask 组件对照相加为完整 signer 对照。
@@ -232,6 +236,40 @@ used/capacity 字节数，不导出 native node、原始 blob 或内存快照。
 对象或 factory 快照。这只是读取原语，`+0x324188` section 状态/排序/handler、
 节点/AST/callback 和 cleanup 仍未恢复；完整 Python bootstrap 对照仍为 0。
 
+### 6.2 Section 状态与部分 handler（2026-10-08 UTC）
+
+同一 owner 新增 `run_reader_sections`，恢复 `+0x324188` 的 section id/长度读取、
+重复非零 id 拒绝、排序、临时 payload end、精确消费检查，以及成功/失败时的游标
+和 limit 恢复。普通解析失败返回 1，并保留 native 可观察的部分状态；未恢复分支
+或 guard 失败抛出异常、全部页回滚。所有读取均有 section/input 边界与遍历上限。
+
+排序表从 fresh ELF 独立解码，在实际 native rank 函数写入的同一地址核对：
+`[0,1,2,3,4,5,7,8,9,10,12,13,11,6]`。section 12 排在 section 10 前；非零 id
+必须严格递增，section 0 可重复且不更新 previous id。id 13 虽有 rank，实际 dispatch
+仍拒绝。没有替换为标准格式解析器，也没有凭 section 外观假定兼容性。
+
+已恢复的 handler 范围：section 0 的通用 custom 跳过与 marker 解码、section 3 的
+function type-index 列表和 imported-count 加法、section 7 的 export name/kind/index、
+section 8 的 start index、section 12 的 data count。section 7 的 kind=4 仍读取其
+index 后拒绝；kind>4 在读取 index 前拒绝。保留 uint32 索引回绕和 data-count 写入
+发生在 callback 成功后的实际顺序。长度 6/8/7/15 的 custom marker 使用实际 ELF
+输入解码，原生比較执行 matching libc `memcmp`；`dylink`、`dylink.0`、`linking`、
+`target_features` 与 `reloc` 开头的特殊处理明确未恢复，遇到时拒绝。
+
+202 项对照为两个基址各 101 项：各 97 个合成控制，加 4 个从 fresh ELF 独立 Python
+XOR 提取的实际 section 输入（3/7/12 分别及三者组合）。真实 section 3 含 121 个
+函数索引、section 7 含 121 个导出项；fixture imported-count 显式为 0，不证明完整
+模块的 import/type 语义。全项核对自然返回、整个 guest 区域、rank/custom decoder
+全局写入及每次 callback 的所有参数、当时 cursor 和 section end。包括输出错误、
+非规范长度、重复/乱序、截断、越界、callback 失败、uint32 回绕与 warm rank 输入。
+
+Callback vtable 是**显式的纯状态服务**：Python/native 同样接收受控 uint32 返回值，
+实际节点构造 callback 尚未执行。Python 不使用 native node、内存快照或输出作输入；
+证据 `native_input_snapshot_used=false`。12 项拒绝/回滚单独记录，未宣称 native 的
+未恢复 handler 已被对照。完整 reader、AST、factory/B VM 与 Python bootstrap 仍
+未完成。下一步恢复 section 1 `+0x32298C` 的 type vector/有符号读取、section 2
+`+0x322CF8` 的 import，再接 special custom、实际节点/callback/cleanup。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -245,6 +283,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_reader_202610
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_blob_xor_20261008.py --library <private-metasec.so> --output <blob-xor-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_short_descriptor_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <B-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varuint32_20261008.py --library <private-metasec.so> --output <reader-u32-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-section-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。
@@ -255,7 +294,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复 B `+0x31B360 → +0x324444 → +0x324188` 的 Python reader/node，随后解析/root 生成，再把原始 JNI /
+下一步恢复 B reader 的 type/import、special custom 和实际 node/callback，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。

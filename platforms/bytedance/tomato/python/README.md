@@ -1,5 +1,18 @@
 # Tomato Python material
 
+2026-10-08 B reader components: `vm9_alternative_startup.read_reader_varuint32`
+restores +0x324870 (258 fresh controls/seven rollback checks).
+`run_reader_sections` restores +0x324188 envelope/order/partial state and section
+0 (generic custom), 3, 7, 8 and 12 (202 controls/12 rollback checks, including
+eight actual ELF sections from independent Python XOR). Callbacks are explicit
+pure status services; actual node/AST allocation, type/import/special custom,
+wrapper cleanup and a complete Python reader/factory remain open. See
+[startup/reader report](../REQUEST_JNI_STARTUP_WORKERS.md#62-section-状态与部分-handler2026-10-08-utc).
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
+```
+
 2026-10-07 Additional cold-switch original-entry observations: two native probes,
 zero Python-bootstrap comparisons. The original JNI_OnLoad reaches +0x26e70c
 before its body/stub after actual TLS acquisition (three GetEnv calls, six
