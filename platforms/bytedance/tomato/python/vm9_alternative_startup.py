@@ -3,8 +3,9 @@
 The module root/array/hash buckets are explicit inputs. Native factory and
 publication observations are verified separately; independent Python factory
 +0x2cbdc8, constructor input generation and complete B VM remain open.
-Reader sections 0 (generic), 1, 3, 7, 8 and 12 run with explicit status-only
-callbacks. Other handlers, actual callbacks and AST remain open; unsupported
+Reader sections 0 (generic), 1, 3, 7, 8 and 12, plus opted-in section 2
+function/global imports, run with explicit status-only callbacks. Other handlers,
+actual callbacks and AST remain open; unsupported
 branches fail closed. These components do not implement a full factory.
 """
 from __future__ import annotations
@@ -223,6 +224,7 @@ class ReaderCallbackEvent:
     cursor: int
     section_end: int
     type_vectors: tuple[tuple[int, ...], ...] = ()
+    import_counts: tuple[int, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -241,11 +243,12 @@ class _ReaderParseFailure(Exception):
 
 def run_reader_sections(pages, *, state_address, image_base,
         varuint_scratch_address, callback, max_sections=512, max_entries=4096,
-        max_input_bytes=16*1024*1024, vector_allocate=None):
+        max_input_bytes=16*1024*1024, vector_allocate=None,
+        enable_function_global_imports=False):
     """Bounded +0x324188 dispatch with actual handlers 0/1/3/7/8/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
-    previous nonzero section at +0x88, imported function count at +0x90,
+    previous nonzero section at +0x88, import counts at +0x90/94/98/9c,
     function count at +0xa4, data count at +0xac. Generic custom sections
     skip unrecognized payload; dylink/linking/reloc/target_features reject.
 
@@ -258,6 +261,11 @@ def run_reader_sections(pages, *, state_address, image_base,
     Section 1 requires vector_allocate(size), a pure allocation plan into
     already mapped pages. Recorded allocation/free effects are logical service
     boundaries; actual allocator boot/free and AST callbacks remain open.
+
+    enable_function_global_imports=True opts into section 2 kinds 0 and 3.
+    Table/memory imports remain unsupported. Events snapshot all four import
+    counts before each callback; successful import callbacks increment their
+    uint32 count afterward. Import names are opaque guest spans in arguments.
     """
     if (not isinstance(state_address, int) or not 0 < state_address <= MASK64-0xAF
             or state_address & 7 or not isinstance(image_base, int)
@@ -268,7 +276,8 @@ def run_reader_sections(pages, *, state_address, image_base,
     if (not callable(callback) or not isinstance(max_sections, int)
             or not 1 <= max_sections <= 4096 or not isinstance(max_entries, int)
             or not 1 <= max_entries <= 65536 or not isinstance(max_input_bytes, int)
-            or not 0 <= max_input_bytes <= 16*1024*1024):
+            or not 0 <= max_input_bytes <= 16*1024*1024
+            or not isinstance(enable_function_global_imports, bool)):
         raise RefillUnsupported('reader section service or traversal limits are invalid')
     p = _PageTransaction(pages)
     data, total, initial_limit, initial_cursor = (_u(p, state_address+offset)
@@ -313,7 +322,8 @@ def run_reader_sections(pages, *, state_address, image_base,
         return result.value
 
     def emit(slot, *arguments, type_vectors=()):
-        event = ReaderCallbackEvent(slot, tuple(arguments), cursor(), limit(), type_vectors)
+        counts = tuple(_u(p, state_address+offset, 4) for offset in (0x90, 0x94, 0x98, 0x9C))
+        event = ReaderCallbackEvent(slot, tuple(arguments), cursor(), limit(), type_vectors, counts)
         status = callback(event)
         if not isinstance(status, int) or not 0 <= status <= 0xFFFFFFFF:
             raise RefillUnsupported('reader callback must return an explicit uint32 status')
@@ -421,6 +431,49 @@ def run_reader_sections(pages, *, state_address, image_base,
                 nresults, results, result_values = type_vector(0x40)
                 emit(0x20, index, nparams, params, nresults, results,
                      type_vectors=(param_values, result_values))
+        elif number == 2:
+            if not enable_function_global_imports:
+                raise RefillUnsupported('reader imports need explicit function/global opt-in')
+            count = read_u32()
+            bounded_count(count)
+            for index in range(count):
+                names = []
+                for _ in range(2):
+                    size = read_u32()
+                    start = cursor()
+                    if start+size > limit():
+                        raise _ReaderParseFailure()
+                    store(24, start+size)
+                    names.extend((data+start, size))
+                if cursor()+1 > limit():
+                    raise _ReaderParseFailure()
+                kind = _u(p, data+cursor(), 1)
+                store(24, cursor()+1)
+                if kind > 3:
+                    raise _ReaderParseFailure()
+                if kind == 0:
+                    type_index = read_u32()
+                    imported = _u(p, state_address+0x90, 4)
+                    emit(0x28, index, *names, imported, type_index)
+                    store(0x90, (imported+1) & 0xFFFFFFFF, 4)
+                elif kind == 3:
+                    value = read_i32()
+                    if value == -21:
+                        read_i32()
+                        raise _ReaderParseFailure()
+                    if value not in (-5, -4, -3, -2, -1, -17, -16):
+                        raise _ReaderParseFailure()
+                    if cursor()+1 > limit():
+                        raise _ReaderParseFailure()
+                    mutable = _u(p, data+cursor(), 1)
+                    store(24, cursor()+1)
+                    if mutable > 1:
+                        raise _ReaderParseFailure()
+                    imported = _u(p, state_address+0x9C, 4)
+                    emit(0x40, index, *names, imported, value & MASK64, mutable)
+                    store(0x9C, (imported+1) & 0xFFFFFFFF, 4)
+                else:
+                    raise RefillUnsupported('reader table/memory import handler is unrecovered')
         elif number == 3:
             count = read_u32()
             store(0xA4, count, 4)

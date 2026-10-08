@@ -1,5 +1,26 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B section 2 函数与全局变量 import
+
+`run_reader_sections` 通过显式 `enable_function_global_imports=True` 恢复 section 2
+`+0x322cf8` 的 kind 0 function 与 kind 3 global。两个基址共 **254 个 native/Python
+对照、14 个拒绝/回滚**，其中 248 项合成输入、6 项 fresh ELF 独立 Python XOR 输入。
+真实 import payload 为 316 bytes、40 项：18 个函数、22 个全局变量。1/2/3/7/12
+组合每基址 300 次回调一致，section 3 使用已更新的 imported function count。
+
+回调参数、cursor/end、名称字节、四种 import count 与 type cells，以及 guest 输入/
+输出区的 0xA000 字节和 rank globals 一致。计数只在对应 callback 成功后递增，
+按 uint32 回绕；普通解析失败保留部分状态。全局变量回调第九参数在 native caller
+栈上，`+0x323024` 仅写一个 bool 字节，填充字节不属于参数。未恢复分支/guard
+全页回滚，旧 section 与 type/vector 批次均通过且 JSON 逐字节一致。
+
+旧 API 默认仍拒绝 import，table/memory 两类仍未恢复；没有执行实际 AST callback。
+下一处为 table helper `+0x321844`、memory 所需 u64 `+0x3249b0`，再恢复其余
+handler、special custom、实际 AST/callback/cleanup 和 parse/root 构建。完整 reader/
+factory/B VM/bootstrap、fresh 签名与线上矩阵仍未完成。
+见 [import 证据](evidence/vm9_alternative_reader_imports_fresh_20261008.json)与
+[第 6.5 节报告](REQUEST_JNI_STARTUP_WORKERS.md#65-section-2-函数与全局变量-import2026-10-08-utc)。
+
 ## 2026-10-08 UTC：B type vector 与 section 1
 
 同一 owner 新增 `grow_reader_word_vector`，并通过显式 `vector_allocate` 将 section 1

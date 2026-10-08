@@ -24,7 +24,10 @@ section controls from fresh Python XOR. Callback arguments and state match;
 callbacks remain explicit status services. Word-vector grow and section 1 types
 add 102 / 372 comparisons and 34 rollback checks, including four fresh ELF
 input controls; type cells at each callback and pointer publication match.
-Allocation/free remain explicit services. Import, remaining handlers, special custom,
+Function/global imports in section 2 add 254 comparisons and 14 rollback checks,
+including six fresh ELF inputs; the 1/2/3/7/12 composition matches 300 callbacks
+per base. Parsing requires explicit `enable_function_global_imports=True`.
+Allocation/free remain explicit services. Table/memory imports, remaining handlers, special custom,
 actual AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

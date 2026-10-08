@@ -36,7 +36,10 @@ XOR 输入下自然返回 0，每次 1658 次受控分配；Python reader / AST 
 guest/global 状态一致；回调返回仍为受控纯状态服务，实际 AST 没有构造。
 后续 vector grow `+324540` / type section `+32298c` 另通过 102 / 372 个对照及 34 个
 回滚，包含 4 个 fresh ELF 输入控制；回调时的 type cells 和指针发布顺序一致。
-malloc/free 仍是显式服务，真实 allocator boot 尚未恢复。import、其余 handler、
+后续 section 2 function/global import 另通过 254 个对照及 14 个回滚，含 6 项实际
+ELF 输入；40 个 import 为 18 个函数与 22 个全局变量，1/2/3/7/12 组合每基址 300 次
+回调一致。需显式启用 `enable_function_global_imports=True`，table/memory import
+仍未恢复。malloc/free 仍是显式服务，真实 allocator boot 尚未恢复。其余 handler、
 特殊 custom、实际节点/callback/cleanup 与完整 reader 仍未恢复。
 详见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。
 下方 once/mask 与 cold caller 记录为此前证据，不能累加成完整初始化或 signer 证明。
