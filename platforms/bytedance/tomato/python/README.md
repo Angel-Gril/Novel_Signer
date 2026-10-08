@@ -25,14 +25,27 @@ Section 2 function/global imports require `enable_function_global_imports=True`
 and pass 254 native/Python controls plus 14 rollback checks, including six fresh
 ELF inputs. Events snapshot the four import counts before each callback; names
 remain opaque guest spans. The global callback's ninth argument is a bool byte
-on the native stack. Actual AST callbacks and table/memory imports remain open.
+on the native stack. Actual AST callbacks remain open.
 See the [import report](../REQUEST_JNI_STARTUP_WORKERS.md#65-section-2-函数与全局变量-import2026-10-08-utc).
+
+`read_reader_varuint64` restores +0x3249b0 with 1438 controls/10 rollback checks:
+terminating tenth-byte overflow preserves output; missing termination clears it.
+Table/memory imports require `enable_table_memory_imports=True` and a mapped,
+aligned, disjoint 32-byte `import_scratch_address`. Their 234 controls/15 rollback
+checks compare all 19 descriptor bytes after normalizing only its transient
+native stack pointer to model scratch. `event.import_limits` snapshots minimum,
+maximum, `has_maximum`, `flag_bit1` and `flag_bit2` values. Six compositions combine
+fresh ELF function/global inputs with synthetic table/memory imports; the sample
+has no real ELF table/memory import inputs. Actual AST/allocator remain open.
+See the [u64/limits report](../REQUEST_JNI_STARTUP_WORKERS.md#66-u64-与-tablememory-import2026-10-08-utc).
 
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint32_20261008.py --library "$env:TOMATO_LIBMETASEC" --output <reader-i32-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_types_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-type-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_imports_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-import-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varuint64_20261008.py --library "$env:TOMATO_LIBMETASEC" --output <reader-u64-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_import_limits_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-import-limits-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

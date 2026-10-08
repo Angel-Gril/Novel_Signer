@@ -39,7 +39,11 @@ guest/global 状态一致；回调返回仍为受控纯状态服务，实际 AST
 后续 section 2 function/global import 另通过 254 个对照及 14 个回滚，含 6 项实际
 ELF 输入；40 个 import 为 18 个函数与 22 个全局变量，1/2/3/7/12 组合每基址 300 次
 回调一致。需显式启用 `enable_function_global_imports=True`，table/memory import
-仍未恢复。malloc/free 仍是显式服务，真实 allocator boot 尚未恢复。其余 handler、
+后续通过显式 `enable_table_memory_imports` 与 32 字节 `import_scratch_address` 恢复，
+另有 234 个对照/15 个回滚；u64 读取通过 1438 个对照/10 个回滚。6 项组合为实际
+function/global 输入加合成 table/memory，实际 ELF 不含这两类 import；19 字节
+descriptor 内容一致，原生临时栈指针转换到模型工作区。malloc/free 仍是显式服务，
+真实 allocator boot 尚未恢复。其余 handler、
 特殊 custom、实际节点/callback/cleanup 与完整 reader 仍未恢复。
 详见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。
 下方 once/mask 与 cold caller 记录为此前证据，不能累加成完整初始化或 signer 证明。

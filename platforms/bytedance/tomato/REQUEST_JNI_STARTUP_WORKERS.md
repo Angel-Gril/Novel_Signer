@@ -6,6 +6,7 @@
 同日追加有符号 i32 原语的 1336 个对照、10 个回滚，见第 6.3 节。
 同日追加 vector/type 的 102 / 372 个对照、34 个回滚，见第 6.4 节。
 同日追加 function/global import 的 254 个对照、14 个回滚，见第 6.5 节。
+同日追加 u64 的 1438 个对照/10 个回滚、table/memory 的 234 个对照/15 个回滚，见第 6.6 节。
 
 本检查点验证了 **A 原始 JNI_OnLoad 返回、同次 worker 的六个默认 caller、TLS 析构
 及 guest joinable pthread_exit**。B 原始 constructor/factory 在两个基址自然返回并各
@@ -45,6 +46,8 @@
 | B reader vector/type 拒绝/回滚 | 34 | 23 项 vector、11 项 parser guard；所有原页保持不变 |
 | B reader function/global import 差分 | 254 | 248 项合成输入、6 项实际 ELF 输入；含混排计数、回调失败和完整 1/2/3/7/12 组合 |
 | B reader import 拒绝/回滚 | 14 | 默认关闭、坏服务、缺页/重叠/上限、table/memory 和晚到的未恢复分支均全页回滚 |
+| B reader u64 原语差分/回滚 | 1438 / 10 | 两个基址各 719 项；两种前缀的第十字节全值、失败输出写入语义和 guest 输入/输出区一致 |
+| B reader table/memory import 差分/回滚 | 234 / 15 | 228 项合成输入、6 项实际 function/global 输入加合成 limits；19 字节 descriptor 与回调时状态一致 |
 | 完整 Python bootstrap 对照 | **0** | 未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
 
 证据文件：
@@ -61,6 +64,8 @@
 - [独立 Python reader i32 原语](evidence/vm9_alternative_reader_varint32_fresh_20261008.json)
 - [独立 Python type/vector](evidence/vm9_alternative_reader_types_fresh_20261008.json)
 - [独立 Python function/global import](evidence/vm9_alternative_reader_imports_fresh_20261008.json)
+- [独立 Python reader u64 原语](evidence/vm9_alternative_reader_varuint64_fresh_20261008.json)
+- [独立 Python table/memory import](evidence/vm9_alternative_reader_import_limits_fresh_20261008.json)
 
 原有 13 项 A 启动控制已重新回归通过；计数仍沿用各自证据，不另算新的控制。
 这些计数不与此前 once/mask 组件对照相加为完整 signer 对照。
@@ -378,6 +383,49 @@ callback 仍为纯状态服务，实际 AST/callback/cleanup、真实 allocator�
 factory/B VM/bootstrap 未恢复。下一处为 table helper `+0x321844` 与 memory 所需
 u64 reader `+0x3249b0`，再接其余 handler 和 parse/root 构建。
 
+### 6.6 U64 与 table/memory import（2026-10-08 UTC）
+
+`read_reader_varuint64` 独立恢复 `+0x3249b0`。最多消费十字节，接受冗余编码；
+第十终止字节只允许 0/1，其他终止值返回 0 且不访问输出地址。截断或十个连续
+continuation 则返回 0 并清零 8 字节输出。两个基址各 719 项，共 **1438 个对照、
+10 个 guard/回滚**，包含 `80`/`ff` 两种九字节前缀下的全部 256 种第十字节。
+覆盖各宽度边界、截断、尾随字节、输入/输出别名及失败时未映射/null/顶端输出。
+比较 guest 输入/输出区的 0xA000 字节；地址回绕和缺页 guard 不作为原生故障对照。
+
+`run_reader_sections` 新增 `enable_table_memory_imports=True` 和显式
+`import_scratch_address`。工作区须映射 32 字节、8 字节对齐，且不与 input/state、
+u32 scratch、现有 type vector 或后续计划分配重叠。前 19 字节暂存 limits，末尾
+8 字节供 u64 读取；`ReaderCallbackEvent.import_limits` 从暂存内容读取并冻结为
+`(minimum, maximum, has_maximum, flag_bit1, flag_bit2)`。未启用时，旧 API 仍拒绝
+table/memory。function/global 的启用开关保持独立；本阶段仍使用纯状态 callbacks。
+
+Table 使用 `+0x321844` 路径：i32 type 仅接受 **-21/-17/-16**，其中 -21 直接作为
+type，不消费第二个 i32。flag 只接受 0/1/4/5，minimum 与可选 maximum 用 u32
+读取并零扩展成 64-bit 字段；位 2 被忽略。Memory 使用 u64 读取两界限，接受相同
+flag 范围，将位 2 写入 descriptor 的 `+18` 字节。两条路径都拒绝位 1，`+17`
+字节为 0；`+16` 表示有 maximum。这里记录字节行为，未据此宣称标准格式兼容。
+parser 在纯状态服务下接受 minimum 大于 maximum，实际 AST 是否拒绝尚未验证。
+
+Table slot `+0x30` 共九参数，最后一个 descriptor pointer 从 caller SP 读取完整
+8 字节；memory slot `+0x38` 共八参数，pointer 在 X7。验证器仅把这个临时原生栈
+指针转换为模型工作区指针，并核对全部 **19 字节 descriptor 内容**、其余参数、
+名称字节、cursor/end、四类 import count、type cells 和 vector effects。未宣称
+临时栈地址相同，未比较整个 stack/TLS，也未执行实际 AST callbacks。成功 callback
+之后，对应 table/memory uint32 count 才递增，并按 uint32 回绕。
+
+两个基址各 117 项，共 **234 个对照、15 个拒绝/回滚**；228 项为合成输入，6 项
+把独立 Python XOR 后的实际 function/global 输入与两个合成 table/memory 项组合。
+样本没有真实 ELF table/memory import，相关实际输入对照数明确为 **0**。每基址
+import 单独、2/3/7/12、1/2/3/7/12 组合分别有 42 / 285 / 302 次 callback，四类
+import count 为 18/1/1/22；完整选取组合有 4 次计划分配、2 次逻辑 free。失败、
+非法类型/flags、各界限截断/溢出、四类混排、回调拒绝、计数回绕和临时区重叠均覆盖。
+
+旧 section 202/12、function/global import 254/14 与 vector/type 102/372/34 回归
+全部通过，JSON 与原证据逐字节一致。首轮并发的 vector/type 回归在 600 秒限时
+结束，确认没有残留进程后单独重跑，314.28 秒完成全部控制；未修改解析逻辑。
+实际 AST/callback/cleanup、真实 allocator、其余 sections/special custom 和完整
+reader/factory/B VM/bootstrap 仍待恢复，完整 signer 与线上矩阵尚未完成。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -395,6 +443,8 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint32_20261008.py --library <private-metasec.so> --output <reader-i32-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_types_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-type-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_imports_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-import-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varuint64_20261008.py --library <private-metasec.so> --output <reader-u64-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_import_limits_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-import-limits-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。
@@ -405,7 +455,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复 B reader 的 table/memory import、其余 handler、special custom 和实际 node/callback，随后解析/root 生成，再把原始 JNI /
+下一步恢复 B reader 的其余 handler、special custom 和实际 node/callback，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。

@@ -1,5 +1,28 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B u64 与 table/memory import
+
+同一 owner 新增 `read_reader_varuint64`，恢复 `+0x3249b0`：**1438 个 native/Python
+对照、10 个回滚**。两个基址各 719 项，第十字节全 256 值分别在 `80`/`ff` 前缀下
+核对；终止字节大于 1 不访问输出，缺少终止字节则清零输出。冗余编码接受。
+
+section 2 table/memory 又通过 **234 个对照、15 个拒绝/回滚**，涵盖四类混排、
+计数回绕、回调失败和部分状态。需显式 `enable_table_memory_imports=True` 与
+已映射、对齐、不重叠的 32 字节 `import_scratch_address`。回调时 19 字节 limits
+内容、参数、名称、cursor/end、四类计数和 type cells 一致；只将原生临时 descriptor
+指针转换为模型工作区指针，未比较整个原生 stack/TLS。`import_limits` 从暂存页
+读取并提供不可变字段值，旧 API 默认和以前的回滚控制保持。
+
+其中 228 项是合成输入，6 项是 fresh ELF function/global 输入加合成 table/memory；
+实际 ELF table/memory import 输入为 0。完整选取的 1/2/3/7/12 组合每基址 302 次
+回调、4 次计划分配、2 次逻辑 free。旧 section、function/global import、vector/type
+均重新通过，JSON 逐字节一致。实际 AST、真实 allocator 和完整 reader 尚未恢复。
+下一处为 section 4/5/6 等剩余 handler、special custom、实际 node/callback/cleanup，
+随后 parse/root 构建；完整 signer 和线上矩阵仍未完成。
+见 [u64 证据](evidence/vm9_alternative_reader_varuint64_fresh_20261008.json)、
+[import limits 证据](evidence/vm9_alternative_reader_import_limits_fresh_20261008.json)与
+[第 6.6 节报告](REQUEST_JNI_STARTUP_WORKERS.md#66-u64-与-tablememory-import2026-10-08-utc)。
+
 ## 2026-10-08 UTC：B section 2 函数与全局变量 import
 
 `run_reader_sections` 通过显式 `enable_function_global_imports=True` 恢复 section 2

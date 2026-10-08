@@ -27,7 +27,13 @@ input controls; type cells at each callback and pointer publication match.
 Function/global imports in section 2 add 254 comparisons and 14 rollback checks,
 including six fresh ELF inputs; the 1/2/3/7/12 composition matches 300 callbacks
 per base. Parsing requires explicit `enable_function_global_imports=True`.
-Allocation/free remain explicit services. Table/memory imports, remaining handlers, special custom,
+The u64 reader adds 1438 comparisons/10 rollback checks; table/memory imports
+add 234 comparisons/15 rollback checks. Six compositions combine fresh ELF
+function/global inputs with synthetic table/memory imports; actual ELF table/memory
+import inputs remain absent. Their 19-byte descriptors match after normalizing
+the transient native stack pointer to model scratch. Parsing requires
+`enable_table_memory_imports=True` and a mapped 32-byte `import_scratch_address`.
+Allocation/free remain explicit services. Remaining handlers, special custom,
 actual AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).
