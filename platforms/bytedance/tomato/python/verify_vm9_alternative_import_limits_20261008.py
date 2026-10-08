@@ -27,6 +27,7 @@ from vm9_allocator import RefillUnsupported, _read_span, _write_span
 STATE, DATA, OBJECT = sections.STATE, sections.DATA, sections.OBJECT
 VTABLE, SCRATCH, CALLBACK = sections.VTABLE, sections.SCRATCH, sections.CALLBACK
 IMPORT_SCRATCH = oracle.GUEST+0xB100
+GLOBAL_SCRATCH = oracle.GUEST+0xB200
 SLOTS = {**imports0.SLOTS, 0x30: 8, 0x38: 7}
 
 
@@ -147,15 +148,33 @@ def limits_tuple(data):
     return int.from_bytes(data[:8], 'little'), int.from_bytes(data[8:16], 'little'), *data[16:19]
 
 
-def compare(args, base, spec, *, definition_sections=False, model_options=None):
+def compare(args, base, spec, *, definition_sections=False, global_sections=False, model_options=None):
     pages = prepare(args, base, spec)
     active_slots = {**SLOTS, 0x58: 1, 0x60: 3, 0x68: 1, 0x70: 2} if definition_sections else SLOTS
     descriptor_slots = (0x30, 0x38, 0x60, 0x70) if definition_sections else (0x30, 0x38)
+    if global_sections:
+        active_slots = {**active_slots, 0x78: 1, 0x80: 3, 0x88: 1, 0x90: 2,
+                        0xC0: 1, 0xC8: 0, 0xD0: 1, 0xD8: 1, 0xE0: 1, 0xE8: 1}
+        sections.put(pages, GLOBAL_SCRATCH, spec.get('global_word_seed', 0xC0DE123489ABCDEF))
+        if spec.get('relocated_opcode_table'):
+            pointer = oracle.GUEST+0xA800
+            source = int.from_bytes(_read_span(pages, base+0x3750B0, 8), 'little')
+            _write_span(pages, pointer, _read_span(pages, source, 128*4))
+            sections.put(pages, base+0x3750B0, pointer)
+            for opcode, kind in spec.get('opcode_overrides', {}).items():
+                sections.put(pages, pointer+opcode*4, kind, 4)
     for slot in active_slots:
         sections.put(pages, VTABLE+slot, CALLBACK+slot)
     model = {key: bytearray(value) for key, value in pages.items()}
     native_events, model_events, descriptors = [], [], []
     native_alloc, native_effects, observe, allocate, free = types.services()
+    def observe_native(cpu, address):
+        observe(cpu, address, base)
+        if global_sections and address == base+0x323464:
+            # Undefined caller-local bytes are an explicit synthetic ABI input.
+            # Original count/type reads subsequently overwrite their own fields.
+            cpu.mem_write(cpu.reg_read(arm.UC_ARM64_REG_SP)-0x40,
+                          bytes(_read_span(pages, GLOBAL_SCRATCH, 8)))
     def status(slot, call):
         return 0xFFFFFFFF if slot == spec.get('failure_slot') and call == spec.get('failure_call', 0) else 0
     host = {0x347FA0: free}
@@ -199,7 +218,7 @@ def compare(args, base, spec, *, definition_sections=False, model_options=None):
     returned, guest, calls, ledger = oracle.native(args.library, base, 0x324188, [STATE], pages,
         host_imports=host, libc=args.libc, observed_memory=observed, instruction_limit=150000,
         malloc_handler=lambda cpu, size: allocate(size, cpu),
-        instruction_observer=lambda cpu, address: observe(cpu, address, base))
+        instruction_observer=observe_native)
     assert not calls and not ledger
     model_alloc, _, _, planned, _ = types.services()
     def callback(event):
@@ -209,10 +228,12 @@ def compare(args, base, spec, *, definition_sections=False, model_options=None):
         model_events.append((event.slot_offset, event.arguments, event.cursor, event.section_end,
                              event.type_vectors, event.import_counts, names, event.import_limits))
         return value
-    result = alternative.run_reader_sections(model, state_address=STATE, image_base=base,
+    options = dict(state_address=STATE, image_base=base,
         varuint_scratch_address=SCRATCH, callback=callback, vector_allocate=planned,
         enable_function_global_imports=True, enable_table_memory_imports=True,
-        import_scratch_address=IMPORT_SCRATCH, **(model_options or {}))
+        import_scratch_address=IMPORT_SCRATCH)
+    options.update(model_options or {})
+    result = alternative.run_reader_sections(model, **options)
     assert result.status == returned, (spec['label'], 'return')
     assert native_events == model_events, (spec['label'], 'callback state/arguments/descriptor/counts/names')
     assert native_alloc == model_alloc, (spec['label'], 'allocation plan')
@@ -241,6 +262,17 @@ def compare(args, base, spec, *, definition_sections=False, model_options=None):
                       actual_ELF_table_memory_section_input=spec.get('actual_ELF_table_memory_section_input', False),
                       fresh_ELF_function_global_plus_synthetic_definitions=spec.get(
                           'fresh_ELF_function_global_plus_synthetic_definitions', False))
+    if global_sections:
+        record.update(global_callback_counts=[sum(e[0] == slot for e in native_events)
+                                              for slot in (0x78, 0x80, 0x88, 0x90)],
+                      initializer_callback_counts=[sum(e[0] == slot for e in native_events)
+                          for slot in (0xC0, 0xC8, 0xD0, 0xD8, 0xE0, 0xE8)],
+                      global_entry_indices=[e[1][0] for e in native_events if e[0] == 0x80],
+                      actual_ELF_global_section_input=spec.get('actual_ELF_global_section_input', False),
+                      native_caller_global_local_word_seeded=True, native_local_word_seed_bytes=8,
+                      global_local_seed_is_explicit_synthetic_ABI_input=True,
+                      global_local_seed_hex=hex(spec.get('global_word_seed', 0xC0DE123489ABCDEF)),
+                      relocated_opcode_table_checked=spec.get('relocated_opcode_table', False))
     return record
 
 

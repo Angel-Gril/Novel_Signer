@@ -77,6 +77,10 @@ AST 对照仍 0。独立 u32 原语新增 258 个对照/7 个回滚；有符号 
 section 4/5 定义又通过 **266 个对照、18 个回滚**，复用 limits 解析并独立启用；
 数量/条目回调、import 索引偏移和 uint32 回绕一致。样本没有真实 section 4/5，
 6 项组合使用实际 function/global 输入加合成定义，完整选取组合每基址 306 次回调。
+有符号 i64 又通过 **1480 个对照、10 个回滚**；section 6 与初始化表达式通过
+**390 个对照、26 个回滚**，其中 10 项含真实 ELF global 输入。独立 global 开关
+与 16 字节显式工作区保留 end-only 的局部高字语义；GOT 操作码表重定位已对照。
+真实 section 6 有 22 项，完整 1/2/3/6/7/12 组合每基址 455 次回调一致。
 其余 handler、特殊 custom、实际 AST 和完整 reader 未恢复。
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见

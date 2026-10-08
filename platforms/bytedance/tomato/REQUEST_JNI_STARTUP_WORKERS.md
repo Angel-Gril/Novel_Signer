@@ -468,9 +468,65 @@ vector/type 102/372/34 均重新通过，四份 JSON 与此前正式证据逐字
 本轮同时最多运行两个 native 验证进程，均在各自限时内自然结束。
 
 证据见 [section 4/5 对照](evidence/vm9_alternative_reader_table_memory_sections_fresh_20261008.json)。
-下一处为 section 6 `+0x323464`，随后 instruction/data/special custom、实际
+当时下一处为 section 6 `+0x323464`，其恢复结果见下节。随后 instruction/data/special custom、实际
 AST/callback/cleanup 和 parse/root 构建。完整 reader、factory、B VM、Python
 bootstrap、独立 signer 与线上矩阵仍未完成。
+
+### 6.8 有符号 i64 与 section 6 初始化表达式（2026-10-08 UTC）
+
+同一 owner 的 `read_reader_varint64` 恢复 `+0x324f6c`。最多十字节，接受冗余编码；
+第十终止字节只接受 **0/127**。截断、十个 continuation 或非法终止均返回零，
+不访问也不修改输出。两个基址各 740 项，共 **1480 个原生/Python 对照、10 个
+保护/回滚检查**，包括两种九字节前缀下全部 256 个第十字节、符号宽度边界、
+冗余编码、截断、尾随字节、输入/输出别名及失败时未映射输出。扫描回绕、缺页
+和输出越界按模型保护边界拒绝，不宣称原生故障路径一致。
+
+`run_reader_sections` 新增默认关闭的独立 `enable_global_section=True`，恢复
+section 6 `+0x323464`。`global_scratch_address` 须映射 16 字节、8 字节对齐，
+与 input/state、u32/import scratch、现有和未来 type storage 不重叠。前八字节
+作为显式 caller local/result 初值，后八字节用于表达式临时读取；启用 global
+不启用 imports 或 section 4/5，反向亦同。保护和服务异常全页回滚，普通解析/
+callback 拒绝提交原生可见的部分 parser 状态。
+
+Section 6 读取 u32 count 并检查剩余字节，即使 count 为零也调用 `+0x78`。
+条目 type 接受 -5..-1、-17/-16；-21 消费第二个 i32 后拒绝，mutable 仅接受
+0/1。回调依次为 `+0x80(index, sign-extended type, mutable)`、`+0x88(index)`、
+初始化表达式 callbacks、`+0x90(index, final uint64 bits)`。index 加 state
+`+0x9c` 的 imported global count 并按 uint32 回绕；定义不递增 import count。
+
+表达式 `+0x32365c` 跟随 **GOT `image+0x3750b0` 的实际指针**读取操作码 kind，
+不把该样本 relocated table 地址当作固定 owner。每个 opcode 先调用 `+0xC0`
+发送 kind 的 uint32 字值。kind 1 是 end（`+0xC8`），2/3 是 i32/i64
+（`+0xE0/+0xE8`），4/5 是原始四/八字节位值（`+0xD0/+0xD8`）。i32 和四字节
+常量的最终结果零扩展至 uint64。未映射的非零普通 opcode 使用 `-opcode`；
+`FC/FD/FE` 消费 u32 subopcode 并发送
+`-((opcode << 9) | min(subopcode, 511)) & 0xffffffff`，随后拒绝不支持的 kind。
+允许多个常量，最后一个成功常量保留到 end；缺少 end 失败。独立
+`max_initializer_ops` 限制表达式操作数，与 global entry 上限分开。
+
+**End-only 表达式不写结果。** Caller 逐项先仅写 type 的低四字节，高四字节保留
+此前 local 内容。验证器在原生 section 6 入口、栈调整前为该 local 注入明确的
+八字节合成 ABI 初值，Python 使用同值。覆盖不同初值以及 i64 后接 end-only；
+这不证明自然栈初始化，也不比较整个 stack/TLS。实际 AST callbacks 仍为纯状态服务。
+
+两个基址各 195 项，共 **390 个原生/Python 对照、26 个保护/回滚检查**；380 项
+纯合成，10 项包含独立 Python XOR 后的真实 section 6。实际 payload 133 字节、
+22 个定义，均使用 i64 常量；单独 section 6、2/6、2/3/6/7/12、1/2/3/6/7/12
+每基址分别 **155 / 195 / 438 / 455** 次 callback。最后一组有 4 次计划分配、
+2 次逻辑 free，import counts 为 18/0/0/22。另有两项把真实选取组合加上合成
+section 4/5，459 次 callback；样本仍没有真实 section 4/5。
+
+合成覆盖各 type/mutable、count/type/常量截断和非法终止、所有表达式 callback
+拒绝、多常量、end-only、非法 opcode、prefix 截断和 subopcode 上限 511、
+GOT table 重定位及条目覆写、重复/排序、uint32 索引回绕与服务异常。旧 section、
+两类 imports、section 4/5 和 vector/type 回归重新通过，五份 JSON 与既有证据
+逐字节一致。最小 i64 和 section 6 在生产修改前先取得原生成功/Python 缺失的
+失败对照，恢复后相同控制通过。最多同时运行两个重型 native 验证器。
+
+证据见 [i64 对照](evidence/vm9_alternative_reader_varint64_fresh_20261008.json)和
+[global/initializer 对照](evidence/vm9_alternative_reader_globals_fresh_20261008.json)。
+剩余 instruction/data/special custom、实际 AST/callback/cleanup、parse/root、
+完整 reader/factory/B VM/bootstrap、独立 signer 和线上矩阵仍未完成。
 
 ## 7. 复现、证据用途与后续验收
 
@@ -492,6 +548,8 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_imports_20261
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varuint64_20261008.py --library <private-metasec.so> --output <reader-u64-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_import_limits_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-import-limits-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_table_memory_sections_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-table-memory-sections-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint64_20261008.py --library <private-metasec.so> --output <reader-i64-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_globals_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-globals-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

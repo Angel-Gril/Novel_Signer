@@ -39,6 +39,14 @@ Count/entry callbacks and indices offset by imports match; definitions do not
 increment import counts. The sample has no real sections 4/5. Six compositions
 add synthetic definitions to fresh ELF function/global input; the full selected
 composition matches 306 callbacks per base. See [section 4/5 evidence](evidence/vm9_alternative_reader_table_memory_sections_fresh_20261008.json).
+Signed i64 adds 1480 comparisons/10 rollback checks; section 6 and initializers
+add 390 comparisons/26 rollback checks, including ten fresh ELF global inputs.
+Globals require the independent `enable_global_section=True` and a mapped,
+aligned, disjoint 16-byte `global_scratch_address` with an explicit caller-local
+seed. End-only retains its high word; i32 results zero-extend; opcode kinds
+follow the actual GOT table pointer, with relocation/overrides checked. The
+actual section has 22 definitions, and 1/2/3/6/7/12 matches 455 callbacks per base.
+See the [global/initializer report](REQUEST_JNI_STARTUP_WORKERS.md#68-有符号-i64-与-section-6-初始化表达式2026-10-08-utc).
 Allocation/free remain explicit services. Remaining handlers, special custom,
 actual AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker

@@ -4,7 +4,7 @@ The module root/array/hash buckets are explicit inputs. Native factory and
 publication observations are verified separately; independent Python factory
 +0x2cbdc8, constructor input generation and complete B VM remain open.
 Reader sections 0 (generic), 1, 3, 7, 8 and 12, plus opted-in section 2
-imports and section 4/5 definitions, run with explicit status-only callbacks.
+imports and section 4/5/6 definitions, run with explicit status-only callbacks.
 Other handlers,
 actual callbacks and AST remain open; unsupported
 branches fail closed. These components do not implement a full factory.
@@ -172,6 +172,49 @@ def read_reader_varint32(pages, *, start_address, end_address, output_address):
 
 
 @dataclass(frozen=True)
+class ReaderVarint64Result:
+    bytes_consumed: int
+    value: int | None
+    output_written: bool
+
+
+def read_reader_varint64(pages, *, start_address, end_address, output_address):
+    """Actual +0x324f6c signed64 helper, preserving unused output on failure.
+
+    Redundant encodings through ten bytes are accepted. The tenth terminator
+    must be 0 or 127. Truncation, ten continuations and invalid termination
+    return zero without accessing output. The scan cannot wrap uint64.
+    """
+    if any(not isinstance(address, int) or not 0 <= address <= MASK64
+           for address in (start_address, end_address, output_address)):
+        raise RefillUnsupported('reader i64 helper requires uint64 addresses')
+    if start_address > MASK64-9:
+        raise RefillUnsupported('reader i64 scan address wraps the bounded guest ABI')
+    p = _PageTransaction(pages)
+    bits = 0
+    for index in range(10):
+        address = start_address+index
+        if address >= end_address:
+            return ReaderVarint64Result(0, None, False)
+        byte = _read_span(p, address, 1)[0]
+        bits |= (byte & 127) << (index*7)
+        if byte & 128:
+            continue
+        if index == 9 and byte not in (0, 127):
+            return ReaderVarint64Result(0, None, False)
+        if byte & 64:
+            bits |= -(1 << ((index+1)*7))
+        bits &= MASK64
+        if not output_address or output_address > MASK64-7:
+            raise RefillUnsupported('reader i64 output word address overflows or is null')
+        _write_span(p, output_address, bits.to_bytes(8, 'little'))
+        p.commit()
+        value = bits if bits < (1 << 63) else bits-(1 << 64)
+        return ReaderVarint64Result(index+1, value, True)
+    return ReaderVarint64Result(0, None, False)
+
+
+@dataclass(frozen=True)
 class ReaderVectorEffect:
     kind: str
     address: int
@@ -289,8 +332,10 @@ def run_reader_sections(pages, *, state_address, image_base,
         varuint_scratch_address, callback, max_sections=512, max_entries=4096,
         max_input_bytes=16*1024*1024, vector_allocate=None,
         enable_function_global_imports=False, enable_table_memory_imports=False,
-        import_scratch_address=None, enable_table_memory_sections=False):
-    """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/7/8/12.
+        import_scratch_address=None, enable_table_memory_sections=False,
+        enable_global_section=False, global_scratch_address=None,
+        max_initializer_ops=4096):
+    """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
     previous nonzero section at +0x88, import counts at +0x90/94/98/9c,
@@ -323,6 +368,14 @@ def run_reader_sections(pages, *, state_address, image_base,
     Count callbacks use slots +0x58/+0x68; entry callbacks +0x60/+0x70 snapshot
     import_limits and add existing imports to the uint32 definition index.
     Definition callbacks do not increment the import counts.
+
+    enable_global_section=True independently opts into section 6. Its mapped,
+    aligned, disjoint 16-byte global_scratch_address holds an explicit caller
+    local/result word followed by initializer read scratch. The caller writes
+    only the low four bytes before each expression; end alone retains its high
+    bytes. Initializer kinds follow the GOT pointer at image+0x3750b0, accept
+    end/i32/i64/f32/f64 and stop after max_initializer_ops. This is not an AST
+    interpreter or a reconstruction of naturally initialized native stack bytes.
     """
     if (not isinstance(state_address, int) or not 0 < state_address <= MASK64-0xAF
             or state_address & 7 or not isinstance(image_base, int)
@@ -336,7 +389,10 @@ def run_reader_sections(pages, *, state_address, image_base,
             or not 0 <= max_input_bytes <= 16*1024*1024
             or not isinstance(enable_function_global_imports, bool)
             or not isinstance(enable_table_memory_imports, bool)
-            or not isinstance(enable_table_memory_sections, bool)):
+            or not isinstance(enable_table_memory_sections, bool)
+            or not isinstance(enable_global_section, bool)
+            or not isinstance(max_initializer_ops, int)
+            or not 1 <= max_initializer_ops <= 65536):
         raise RefillUnsupported('reader section service or traversal limits are invalid')
     p = _PageTransaction(pages)
     data, total, initial_limit, initial_cursor = (_u(p, state_address+offset)
@@ -363,6 +419,19 @@ def run_reader_sections(pages, *, state_address, image_base,
             raise RefillUnsupported('reader import scratch overlaps retained storage')
         _read_span(p, import_scratch_address, 32)
         regions.append((import_scratch_address, scratch_end))
+    if enable_global_section:
+        if (not isinstance(global_scratch_address, int) or global_scratch_address & 7
+                or not 0 < global_scratch_address <= MASK64-15):
+            raise RefillUnsupported('reader globals need an aligned 16-byte scratch region')
+        scratch_end = global_scratch_address+16
+        retained = (*regions, (varuint_scratch_address, varuint_scratch_address+4))
+        for offset in (0x28, 0x40):
+            begin, _, capacity_end = _reader_vector_words(p, state_address+offset, max_entries, retained)
+            retained += ((begin, capacity_end),)
+        if any(start < scratch_end and global_scratch_address < end for start, end in retained):
+            raise RefillUnsupported('reader global scratch overlaps retained storage')
+        _read_span(p, global_scratch_address, 16)
+        regions.append((global_scratch_address, scratch_end))
     entered = []
     events = []
     vector_effects = []
@@ -377,17 +446,17 @@ def run_reader_sections(pages, *, state_address, image_base,
     def limit():
         return _u(p, state_address)
 
-    def read_u32():
+    def read_u32(output_address=varuint_scratch_address):
         result = read_reader_varuint32(p, start_address=data+cursor(),
-            end_address=data+limit(), output_address=varuint_scratch_address)
+            end_address=data+limit(), output_address=output_address)
         if not result.bytes_consumed:
             raise _ReaderParseFailure()
         store(24, cursor()+result.bytes_consumed)
         return result.value
 
-    def read_i32():
+    def read_i32(output_address=varuint_scratch_address):
         result = read_reader_varint32(p, start_address=data+cursor(),
-            end_address=data+limit(), output_address=varuint_scratch_address)
+            end_address=data+limit(), output_address=output_address)
         if not result.bytes_consumed:
             raise _ReaderParseFailure()
         store(24, cursor()+result.bytes_consumed)
@@ -494,6 +563,57 @@ def run_reader_sections(pages, *, state_address, image_base,
         descriptor = minimum.to_bytes(8, 'little')+maximum.to_bytes(8, 'little')+flag_bytes
         _write_span(p, import_scratch_address, descriptor)
         return value
+
+    def initializer():
+        if cursor() >= limit():
+            raise _ReaderParseFailure()
+        table = _u(p, image_base+0x3750B0)
+        if not table or table > MASK64-511 or table & 3:
+            raise RefillUnsupported('reader initializer opcode table pointer is invalid')
+        if any(start < table+512 and table < end for start, end in
+               ((global_scratch_address, global_scratch_address+16),
+                (varuint_scratch_address, varuint_scratch_address+4))):
+            raise RefillUnsupported('reader initializer opcode table overlaps scratch')
+        for _ in range(max_initializer_ops):
+            if cursor() >= limit():
+                raise _ReaderParseFailure()
+            opcode = _u(p, data+cursor(), 1)
+            store(24, cursor()+1)
+            if opcode in (0xFC, 0xFD, 0xFE):
+                subopcode = read_u32(global_scratch_address+8)
+                kind = -((opcode << 9) | min(subopcode, 511)) & 0xFFFFFFFF
+            else:
+                kind = _u(p, table+opcode*4, 4) if opcode < 128 else 0
+                if opcode and not kind:
+                    kind = -opcode & 0xFFFFFFFF
+            emit(0xC0, kind)
+            if kind == 1:
+                emit(0xC8)
+                return
+            if kind == 2:
+                bits = read_i32(global_scratch_address+8) & 0xFFFFFFFF
+                emit(0xE0, bits)
+            elif kind == 3:
+                result = read_reader_varint64(p, start_address=data+cursor(),
+                    end_address=data+limit(), output_address=global_scratch_address+8)
+                if not result.bytes_consumed:
+                    raise _ReaderParseFailure()
+                store(24, cursor()+result.bytes_consumed)
+                bits = result.value & MASK64
+                emit(0xE8, bits)
+            elif kind in (4, 5):
+                width = 4 if kind == 4 else 8
+                if cursor()+width > limit():
+                    raise _ReaderParseFailure()
+                bits = _u(p, data+cursor(), width)
+                store(24, cursor()+width)
+                emit(0xD0 if kind == 4 else 0xD8, bits)
+            else:
+                raise _ReaderParseFailure()
+            _write_span(p, global_scratch_address, bits.to_bytes(8, 'little'))
+        if cursor() >= limit():
+            raise _ReaderParseFailure()
+        raise RefillUnsupported('reader initializer operation bound reached')
 
     def handler(number):
         if number == 0:
@@ -617,6 +737,32 @@ def run_reader_sections(pages, *, state_address, image_base,
                     emit(0x60, entry_index, value & MASK64, import_scratch_address)
                 else:
                     emit(0x70, entry_index, import_scratch_address)
+        elif number == 6:
+            if not enable_global_section:
+                raise RefillUnsupported('reader global section needs explicit opt-in')
+            count = read_u32(global_scratch_address)
+            bounded_count(count)
+            emit(0x78, count)
+            for index in range(count):
+                imported = _u(p, state_address+0x9C, 4)
+                _write_span(p, global_scratch_address, bytes(4))
+                value = read_i32(global_scratch_address)
+                if value == -21:
+                    read_i32()
+                    raise _ReaderParseFailure()
+                if value not in (-5, -4, -3, -2, -1, -17, -16):
+                    raise _ReaderParseFailure()
+                if cursor()+1 > limit():
+                    raise _ReaderParseFailure()
+                mutable = _u(p, data+cursor(), 1)
+                store(24, cursor()+1)
+                if mutable > 1:
+                    raise _ReaderParseFailure()
+                entry_index = (index+imported) & 0xFFFFFFFF
+                emit(0x80, entry_index, value & MASK64, mutable)
+                emit(0x88, entry_index)
+                initializer()
+                emit(0x90, entry_index, _u(p, global_scratch_address))
         elif number == 7:
             count = read_u32()
             bounded_count(count)

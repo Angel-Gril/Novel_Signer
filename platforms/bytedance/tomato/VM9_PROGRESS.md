@@ -1,5 +1,31 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B signed i64、section 6 与初始化表达式
+
+同一 owner 恢复 `read_reader_varint64`（`+0x324f6c`）：**1480 个原生/Python
+对照、10 个保护/回滚**。第十终止字节只接受 0/127，所有失败不访问/修改输出。
+两种九字节前缀的全部 256 个第十字节在两个基址核对，冗余、别名和截断通过。
+
+独立 `enable_global_section=True` 与 16 字节 `global_scratch_address` 恢复
+section 6 `+0x323464` 和表达式 `+0x32365c`：**390 个对照、26 个保护/回滚**。
+380 项纯合成，10 项含独立 Python XOR 后的真实 global section（133 字节、
+22 项，均为 i64 常量）。单独与 2/6、2/3/6/7/12、1/2/3/6/7/12 组合分别
+155/195/438/455 次 callback；加合成 section 4/5 后 459 次。完整选取组合有
+4 次计划分配、2 次逻辑 free，import counts 保持 18/0/0/22。
+
+操作码 kind 跟随 GOT 指针，重定位与条目覆写已对照；i32/f32 bits 零扩展，
+end-only 保留 caller local 高四字节，支持连续常量并要求 end。原生 local 的
+八字节初值是明确注入的合成 ABI 输入，不证明自然栈初始化，不比较整个 stack/TLS。
+global/import/section 4/5 开关独立，scratch 与 input/state、已有及后续 type storage
+分离。旧 section、两类 imports、section 4/5、vector/type 全部重新通过，五份
+JSON 与旧证据逐字节一致。最小失败对照在生产修改前取得；无子代理。
+
+剩余 instruction/data/special custom、实际 AST/callback/cleanup、parse/root、
+完整 reader/factory/B VM/bootstrap、独立 signer 与线上矩阵仍未完成。见
+[i64 证据](evidence/vm9_alternative_reader_varint64_fresh_20261008.json)、
+[global 证据](evidence/vm9_alternative_reader_globals_fresh_20261008.json)与
+[第 6.8 节报告](REQUEST_JNI_STARTUP_WORKERS.md#68-有符号-i64-与-section-6-初始化表达式2026-10-08-utc)。
+
 ## 2026-10-08 UTC：B section 4/5 table/memory 定义
 
 同一 owner 通过独立 `enable_table_memory_sections=True` 与已有 32 字节
