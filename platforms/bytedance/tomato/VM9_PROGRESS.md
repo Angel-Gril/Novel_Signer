@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B reader 的独立 Python u32 读取
+
+在既有 B startup owner 中恢复 `+0x324870`：允许 1..5 字节冗长编码，截断或第五
+字节仍无终止时返回 0 并清零输出；第五字节已终止但大于 0x0f 时返回 0，保留输出
+且不访问该指针。两个基址各 129 项，**258 个 native/Python 对照、7 个拒绝/回滚**
+通过。对照核对自然返回值与整个 guest 区域；包含两个未映射但无需访问的输出指针。
+Python 仅消费合成输入，不使用 native 输出快照。跨缺页写入失败后原页保持不变。
+
+这是 core reader `+0x324188` 的一个原语；section 排序/边界、节点、回调、AST 和
+cleanup 尚未实现，完整 Python bootstrap 对照仍 0。下一步使用该原语恢复 section
+状态与实际 handler，再接独立 factory/root 构建。完整 Medusa/fresh 签名/线上矩阵、
+Rust 下载链路及最终产品仍未完成。证据见
+[reader u32 对照](evidence/vm9_alternative_reader_varuint32_fresh_20261008.json)，复现与
+边界见[本轮报告](REQUEST_JNI_STARTUP_WORKERS.md#61-reader-u32-原语2026-10-08-utc)。
+
 ## 2026-10-07 UTC：原始 JNI 同次 worker TLS/exit 与 B 实际 factory
 
 文件名沿用本机试验标签 `20261008`。原有两个基址的 A JNI_OnLoad 0x10006 自然返回、

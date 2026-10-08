@@ -1,6 +1,7 @@
 # 原始 JNI 返回、同次 worker 析构与 B factory / descriptor 发布
 
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
+2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 
 本检查点验证了 **A 原始 JNI_OnLoad 返回、同次 worker 的六个默认 caller、TLS 析构
 及 guest joinable pthread_exit**。B 原始 constructor/factory 在两个基址自然返回并各
@@ -29,6 +30,8 @@
 | B 独立 Python blob XOR prefix | 82 | 80 个边界控制与 2 个实际 ELF blob；reader 前停止，不用 native 快照 |
 | B blob XOR 拒绝/回滚 | 8 | ABI/长度上限、codec 地址溢出/缺页、目的跨缺页等 |
 | Python XOR → 实际 B reader 自然返回 | 2 | 每次 1658 次受控分配，reader 返回 0；无 Python reader / AST 对照 |
+| B reader u32 原语 native/Python 差分 | 258 | 两个基址各 129 项；自然返回和整个 guest 内存一致 |
+| B reader u32 拒绝/回滚 | 7 | ABI/地址上限、输入缺页和部分输出跨缺页；原页保持不变 |
 | 完整 Python bootstrap 对照 | **0** | 未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
 
 证据文件：
@@ -40,6 +43,7 @@
 - [B 实际 factory / 发布与生成 root 对照](evidence/vm9_alternative_factory_native_20261008.json)
 - [B 独立 blob XOR prefix](evidence/vm9_alternative_blob_xor_fresh_20261008.json)
 - [Python XOR 输入交接实际 reader](evidence/vm9_alternative_reader_native_20261008.json)
+- [独立 Python reader u32 原语](evidence/vm9_alternative_reader_varuint32_fresh_20261008.json)
 
 原有 13 项 A 启动控制已重新回归通过；计数仍沿用各自证据，不另算新的控制。
 这些计数不与此前 once/mask 组件对照相加为完整 signer 对照。
@@ -210,6 +214,24 @@ used/capacity 字节数，不导出 native node、原始 blob 或内存快照。
 下一步恢复 `+0x31B360 → +0x324444 → +0x324188` reader 的状态、节点和清理，随后
 `+0x2CD5A4 → +0x2CAFD0` 的解析/root 构建。完整 Python bootstrap 对照仍为 0。
 
+### 6.1 Reader u32 原语（2026-10-08 UTC）
+
+同一个 Python owner 新增 `read_reader_varuint32`，恢复实际 `+0x324870`；输入为
+有界 guest 地址区间和输出 word 地址。成功写入 uint32，结果包含消费字节数和
+输出写入标志。接受冗长编码；截断或五个 continuation byte 返回 0 并写零。第五
+字节已终止但大于 0x0f 时返回 0 且不触碰输出地址，结果 value 为 None，保留
+已有输出。不能把这两种失败都处理成清零，也不能读取本来不访问的输出指针。
+
+两个基址各 129 条合成输入控制覆盖各整数宽度、uint32 上界、所有边界值截断、
+冗长编码、第五字节溢出、忽略第六字节、后随字节、反向区间、输出与输入重叠，
+以及 64 个固定 seed 的字节序列。每项比较真实函数自然返回和整个 guest 区域，
+包含两个未映射的不用输出指针。7 条拒绝/回滚控制覆盖 ABI、地址上界、缺页及
+部分输出跨缺页；页面事务只有成功写入时提交。
+
+证据 `native_input_snapshot_used=false`；Python 不使用 native 输出、reader/AST
+对象或 factory 快照。这只是读取原语，`+0x324188` section 状态/排序/handler、
+节点/AST/callback 和 cleanup 仍未恢复；完整 Python bootstrap 对照仍为 0。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -222,6 +244,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_factory_20261
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_reader_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_blob_xor_20261008.py --library <private-metasec.so> --output <blob-xor-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_short_descriptor_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <B-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varuint32_20261008.py --library <private-metasec.so> --output <reader-u32-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

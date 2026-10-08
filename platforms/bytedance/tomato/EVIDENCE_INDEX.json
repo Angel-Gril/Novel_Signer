@@ -3370,5 +3370,26 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_alternative_reader_varuint32_fresh_20261008": {
+    "evidence_file": "evidence/vm9_alternative_reader_varuint32_fresh_20261008.json",
+    "schema": "vm9-alternative-reader-varuint32-fresh-v1",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_alternative_varuint32_20261008.py",
+    "evidence_date": "2026-10-08",
+    "evidence_timezone": "UTC",
+    "host_trial_label": "20261008",
+    "native_function_offset_hex": "0x324870",
+    "native_Python_helper_controls": 258,
+    "rollback_negative_controls": 7,
+    "native_unmapped_unused_output_controls": 2,
+    "native_input_snapshot_used": false,
+    "reader_324188_implemented": false,
+    "reader_AST_native_Python_controls": 0,
+    "independent_Python_factory_implemented": false,
+    "complete_python_bootstrap_controls": 0,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

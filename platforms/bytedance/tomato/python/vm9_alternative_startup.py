@@ -1,10 +1,10 @@
-"""B short hash/descriptor selection and the factory blob XOR prefix.
+"""B short descriptor selection, factory blob XOR and reader u32 helper.
 
 The module root/array/hash buckets are explicit inputs. Native factory and
 publication observations are verified separately; independent Python factory
 +0x2cbdc8, constructor input generation and complete B VM remain open.
-Only selector lengths 0..8 and the XOR pre-reader prefix are implemented;
-unsupported branches fail closed.
+Only selector lengths 0..8, the XOR pre-reader prefix and +0x324870 are
+implemented; the core reader/AST remains open. Unsupported branches fail closed.
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -37,6 +37,49 @@ def hash_short_descriptor_name(payload):
 
 
 def _u(p,a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
+
+
+@dataclass(frozen=True)
+class ReaderVaruint32Result:
+    bytes_consumed: int
+    value: int | None
+    output_written: bool
+
+
+def read_reader_varuint32(pages, *, start_address, end_address, output_address):
+    """Actual +0x324870 bounded u32 helper, including failure-side writes.
+
+    Accept redundant encodings through five bytes. A terminating fifth byte
+    above 0x0f returns zero without accessing the output pointer; value is then
+    None. Truncation or five continuation bytes returns zero and writes zero.
+    This primitive does not parse sections or construct reader nodes/ASTs.
+    """
+    if any(not isinstance(address, int) or not 0 <= address <= MASK64
+           for address in (start_address, end_address, output_address)):
+        raise RefillUnsupported('reader u32 helper requires uint64 addresses')
+    p = _PageTransaction(pages)
+    value = 0
+    consumed = 0
+    for index in range(5):
+        address = start_address + index
+        if address >= end_address:
+            value = 0
+            break
+        byte = _read_span(p, address, 1)[0]
+        if byte < 128:
+            if index == 4 and byte > 15:
+                return ReaderVaruint32Result(0, None, False)
+            value |= byte << (index * 7)
+            consumed = index + 1
+            break
+        value |= (byte & 127) << (index * 7)
+    if not consumed:
+        value = 0
+    if not output_address or output_address > MASK64 - 3:
+        raise RefillUnsupported('reader u32 output word address overflows or is null')
+    _write_span(p, output_address, value.to_bytes(4, 'little'))
+    p.commit()
+    return ReaderVaruint32Result(consumed, value, True)
 
 
 @dataclass(frozen=True)
