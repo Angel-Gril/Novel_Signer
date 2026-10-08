@@ -33,6 +33,12 @@ function/global inputs with synthetic table/memory imports; actual ELF table/mem
 import inputs remain absent. Their 19-byte descriptors match after normalizing
 the transient native stack pointer to model scratch. Parsing requires
 `enable_table_memory_imports=True` and a mapped 32-byte `import_scratch_address`.
+Sections 4/5 add 266 comparisons/18 rollback checks with the independent
+`enable_table_memory_sections=True`, reusing that scratch and descriptor parser.
+Count/entry callbacks and indices offset by imports match; definitions do not
+increment import counts. The sample has no real sections 4/5. Six compositions
+add synthetic definitions to fresh ELF function/global input; the full selected
+composition matches 306 callbacks per base. See [section 4/5 evidence](evidence/vm9_alternative_reader_table_memory_sections_fresh_20261008.json).
 Allocation/free remain explicit services. Remaining handlers, special custom,
 actual AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker

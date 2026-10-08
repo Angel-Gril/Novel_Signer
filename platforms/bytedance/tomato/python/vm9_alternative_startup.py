@@ -4,7 +4,8 @@ The module root/array/hash buckets are explicit inputs. Native factory and
 publication observations are verified separately; independent Python factory
 +0x2cbdc8, constructor input generation and complete B VM remain open.
 Reader sections 0 (generic), 1, 3, 7, 8 and 12, plus opted-in section 2
-imports, run with explicit status-only callbacks. Other handlers,
+imports and section 4/5 definitions, run with explicit status-only callbacks.
+Other handlers,
 actual callbacks and AST remain open; unsupported
 branches fail closed. These components do not implement a full factory.
 """
@@ -288,8 +289,8 @@ def run_reader_sections(pages, *, state_address, image_base,
         varuint_scratch_address, callback, max_sections=512, max_entries=4096,
         max_input_bytes=16*1024*1024, vector_allocate=None,
         enable_function_global_imports=False, enable_table_memory_imports=False,
-        import_scratch_address=None):
-    """Bounded +0x324188 dispatch with actual handlers 0/1/3/7/8/12.
+        import_scratch_address=None, enable_table_memory_sections=False):
+    """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/7/8/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
     previous nonzero section at +0x88, import counts at +0x90/94/98/9c,
@@ -316,6 +317,12 @@ def run_reader_sections(pages, *, state_address, image_base,
     transient descriptor pointer there and immutable import_limits values
     (minimum, maximum, has_maximum, flag_bit1, flag_bit2). This explicit model
     work region is not the original native caller's stack address.
+
+    enable_table_memory_sections=True independently opts into sections 4/5,
+    using the same scratch and descriptor contract as table/memory imports.
+    Count callbacks use slots +0x58/+0x68; entry callbacks +0x60/+0x70 snapshot
+    import_limits and add existing imports to the uint32 definition index.
+    Definition callbacks do not increment the import counts.
     """
     if (not isinstance(state_address, int) or not 0 < state_address <= MASK64-0xAF
             or state_address & 7 or not isinstance(image_base, int)
@@ -328,7 +335,8 @@ def run_reader_sections(pages, *, state_address, image_base,
             or not 1 <= max_entries <= 65536 or not isinstance(max_input_bytes, int)
             or not 0 <= max_input_bytes <= 16*1024*1024
             or not isinstance(enable_function_global_imports, bool)
-            or not isinstance(enable_table_memory_imports, bool)):
+            or not isinstance(enable_table_memory_imports, bool)
+            or not isinstance(enable_table_memory_sections, bool)):
         raise RefillUnsupported('reader section service or traversal limits are invalid')
     p = _PageTransaction(pages)
     data, total, initial_limit, initial_cursor = (_u(p, state_address+offset)
@@ -342,7 +350,7 @@ def run_reader_sections(pages, *, state_address, image_base,
         raise RefillUnsupported('reader varuint scratch overlaps retained input or state')
     if regions[0][0] < regions[1][1] and regions[1][0] < regions[0][1]:
         raise RefillUnsupported('reader input and state must be disjoint')
-    if enable_table_memory_imports:
+    if enable_table_memory_imports or enable_table_memory_sections:
         if (not isinstance(import_scratch_address, int) or import_scratch_address & 7
                 or not 0 < import_scratch_address <= MASK64-31):
             raise RefillUnsupported('reader table/memory imports need an aligned scratch region')
@@ -396,7 +404,7 @@ def run_reader_sections(pages, *, state_address, image_base,
     def emit(slot, *arguments, type_vectors=()):
         counts = tuple(_u(p, state_address+offset, 4) for offset in (0x90, 0x94, 0x98, 0x9C))
         import_limits = ()
-        if slot in (0x30, 0x38):
+        if slot in (0x30, 0x38, 0x60, 0x70):
             descriptor = _read_span(p, import_scratch_address, 19)
             import_limits = (int.from_bytes(descriptor[:8], 'little'),
                              int.from_bytes(descriptor[8:16], 'little'), *descriptor[16:])
@@ -465,6 +473,27 @@ def run_reader_sections(pages, *, state_address, image_base,
             _write_span(p, begin+index*8, word.to_bytes(8, 'little'))
             values.append(word)
         return count, begin, tuple(values)
+
+    def table_memory_descriptor(kind):
+        _write_span(p, import_scratch_address, bytes(19))
+        value = None
+        if kind == 1:
+            value = read_i32()
+            if value not in (-21, -17, -16):
+                raise _ReaderParseFailure()
+        if cursor()+1 > limit():
+            raise _ReaderParseFailure()
+        flags = _u(p, data+cursor(), 1)
+        store(24, cursor()+1)
+        if flags > 7 or flags & 2:
+            raise _ReaderParseFailure()
+        read_bound = read_u32 if kind == 1 else read_u64
+        minimum = read_bound()
+        maximum = read_bound() if flags & 1 else 0
+        flag_bytes = bytes((flags & 1, 0, (flags >> 2) & 1 if kind == 2 else 0))
+        descriptor = minimum.to_bytes(8, 'little')+maximum.to_bytes(8, 'little')+flag_bytes
+        _write_span(p, import_scratch_address, descriptor)
+        return value
 
     def handler(number):
         if number == 0:
@@ -557,23 +586,7 @@ def run_reader_sections(pages, *, state_address, image_base,
                 else:
                     if not enable_table_memory_imports:
                         raise RefillUnsupported('reader table/memory imports need explicit opt-in')
-                    _write_span(p, import_scratch_address, bytes(19))
-                    if kind == 1:
-                        value = read_i32()
-                        if value not in (-21, -17, -16):
-                            raise _ReaderParseFailure()
-                    if cursor()+1 > limit():
-                        raise _ReaderParseFailure()
-                    flags = _u(p, data+cursor(), 1)
-                    store(24, cursor()+1)
-                    if flags > 7 or flags & 2:
-                        raise _ReaderParseFailure()
-                    read_bound = read_u32 if kind == 1 else read_u64
-                    minimum = read_bound()
-                    maximum = read_bound() if flags & 1 else 0
-                    limits = (minimum, maximum, flags & 1, 0, (flags >> 2) & 1 if kind == 2 else 0)
-                    descriptor = minimum.to_bytes(8, 'little')+maximum.to_bytes(8, 'little')+bytes(limits[2:])
-                    _write_span(p, import_scratch_address, descriptor)
+                    value = table_memory_descriptor(kind)
                     offset = 0x94 if kind == 1 else 0x98
                     imported = _u(p, state_address+offset, 4)
                     if kind == 1:
@@ -590,6 +603,20 @@ def run_reader_sections(pages, *, state_address, image_base,
                 imported = _u(p, state_address+0x90, 4)
                 type_index = read_u32()
                 emit(0x50, (index+imported) & 0xFFFFFFFF, type_index)
+        elif number in (4, 5):
+            if not enable_table_memory_sections:
+                raise RefillUnsupported('reader table/memory sections need explicit opt-in')
+            count = read_u32()
+            bounded_count(count)
+            emit(0x58 if number == 4 else 0x68, count)
+            for index in range(count):
+                imported = _u(p, state_address+(0x94 if number == 4 else 0x98), 4)
+                value = table_memory_descriptor(1 if number == 4 else 2)
+                entry_index = (index+imported) & 0xFFFFFFFF
+                if number == 4:
+                    emit(0x60, entry_index, value & MASK64, import_scratch_address)
+                else:
+                    emit(0x70, entry_index, import_scratch_address)
         elif number == 7:
             count = read_u32()
             bounded_count(count)

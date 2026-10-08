@@ -1,5 +1,28 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B section 4/5 table/memory 定义
+
+同一 owner 通过独立 `enable_table_memory_sections=True` 与已有 32 字节
+`import_scratch_address` 恢复 section 4 `+0x3231e4`、section 5 `+0x3232dc`。
+私有交接曾错把已恢复的 section 3 `+0x323108` 当作 section 4，本轮从原生
+dispatcher 修正。数量 slots `+0x58/+0x68`，条目 slots `+0x60/+0x70`；条目索引
+加对应 import count 并按 uint32 回绕，定义本身不递增 import counts。空定义仍
+发送数量回调。table/memory 复用同一 descriptor 解析，回调冻结 19 字节 limits。
+
+两个基址通过 **266 个 native/Python 对照、18 个拒绝/回滚**。260 项纯合成，
+6 项为 fresh ELF function/global 输入加合成定义；样本没有真实 section 4/5，
+相关真实输入对照为 **0**。完整选取组合每基址 306 次回调、4 次计划分配、
+2 次逻辑 free，import counts 保持 18/0/0/22。仅转换临时 descriptor 指针，
+未比较整个 stack/TLS；callbacks、allocator/free 仍为显式服务。
+
+启用定义与启用 import 独立，旧 API 默认拒绝仍经过检查。旧 section、
+function/global import、table/memory import、vector/type 回归全部
+通过，四份 JSON 与旧证据逐字节一致。下一处为 section 6
+`+0x323464`，随后其余 instruction/data/custom 与实际 AST、parse/root。完整
+reader/factory/B VM/bootstrap、独立 signer 与线上矩阵仍未完成。见
+[定义证据](evidence/vm9_alternative_reader_table_memory_sections_fresh_20261008.json)与
+[第 6.7 节报告](REQUEST_JNI_STARTUP_WORKERS.md#67-section-45-tablememory-定义2026-10-08-utc)。
+
 ## 2026-10-08 UTC：B u64 与 table/memory import
 
 同一 owner 新增 `read_reader_varuint64`，恢复 `+0x3249b0`：**1438 个 native/Python

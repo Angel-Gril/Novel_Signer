@@ -147,8 +147,12 @@ def limits_tuple(data):
     return int.from_bytes(data[:8], 'little'), int.from_bytes(data[8:16], 'little'), *data[16:19]
 
 
-def compare(args, base, spec):
+def compare(args, base, spec, *, definition_sections=False, model_options=None):
     pages = prepare(args, base, spec)
+    active_slots = {**SLOTS, 0x58: 1, 0x60: 3, 0x68: 1, 0x70: 2} if definition_sections else SLOTS
+    descriptor_slots = (0x30, 0x38, 0x60, 0x70) if definition_sections else (0x30, 0x38)
+    for slot in active_slots:
+        sections.put(pages, VTABLE+slot, CALLBACK+slot)
     model = {key: bytearray(value) for key, value in pages.items()}
     native_events, model_events, descriptors = [], [], []
     native_alloc, native_effects, observe, allocate, free = types.services()
@@ -163,7 +167,7 @@ def compare(args, base, spec):
     def compare_bytes(cpu):
         cpu.reg_write(arm.UC_ARM64_REG_PC, memcmp)
     host[0x347FE0] = compare_bytes
-    for slot, argc in SLOTS.items():
+    for slot, argc in active_slots.items():
         def service(cpu, slot=slot, argc=argc):
             values = [cpu.reg_read(getattr(arm, 'UC_ARM64_REG_X'+str(i))) for i in range(min(argc+1, 8))]
             if argc+1 > 8:
@@ -172,7 +176,7 @@ def compare(args, base, spec):
             assert values[0] == OBJECT
             arguments = list(values[1:])
             limits = ()
-            if slot in (0x30, 0x38):
+            if slot in descriptor_slots:
                 descriptor = bytes(cpu.mem_read(arguments[-1], 19))
                 descriptors.append(descriptor)
                 limits = limits_tuple(descriptor)
@@ -208,7 +212,7 @@ def compare(args, base, spec):
     result = alternative.run_reader_sections(model, state_address=STATE, image_base=base,
         varuint_scratch_address=SCRATCH, callback=callback, vector_allocate=planned,
         enable_function_global_imports=True, enable_table_memory_imports=True,
-        import_scratch_address=IMPORT_SCRATCH)
+        import_scratch_address=IMPORT_SCRATCH, **(model_options or {}))
     assert result.status == returned, (spec['label'], 'return')
     assert native_events == model_events, (spec['label'], 'callback state/arguments/descriptor/counts/names')
     assert native_alloc == model_alloc, (spec['label'], 'allocation plan')
@@ -216,10 +220,10 @@ def compare(args, base, spec):
     assert _read_span(model, oracle.GUEST, 0xA000) == guest, (spec['label'], 'guest input/output')
     for (address, size), data in observed.items():
         assert _read_span(model, address, size) == data, (spec['label'], 'rank globals')
-    limits_calls = [e for e in native_events if e[0] in (0x30, 0x38)]
+    limits_calls = [e for e in native_events if e[0] in descriptor_slots]
     if limits_calls and result.status == 0:
         assert _read_span(model, IMPORT_SCRATCH, 19) == descriptors[-1], (spec['label'], 'final model scratch')
-    return dict(label=spec['label'], image_base_hex=hex(base), status=result.status, cursor=result.cursor,
+    record = dict(label=spec['label'], image_base_hex=hex(base), status=result.status, cursor=result.cursor,
         last_section=result.last_section, sections_entered=list(result.sections_entered), callback_count=len(native_events),
         import_callback_counts=[sum(e[0] == slot for e in native_events) for slot in (0x28, 0x30, 0x38, 0x40)],
         final_import_counts=[int.from_bytes(_read_span(model, STATE+o, 4), 'little') for o in imports0.COUNT_OFFSETS],
@@ -230,6 +234,14 @@ def compare(args, base, spec):
         descriptor_bytes_compared_per_callback=19, native_stack_or_TLS_as_a_whole_compared=False,
         fresh_ELF_function_global_plus_synthetic_limits=spec.get('fresh_ELF_function_global_plus_synthetic_limits', False),
         actual_ELF_table_memory_import_input=False, native_input_snapshot_used=False)
+    if definition_sections:
+        record.update(definition_callback_counts=[sum(e[0] == slot for e in native_events)
+                                                  for slot in (0x58, 0x60, 0x68, 0x70)],
+                      definition_entry_indices=[e[1][0] for e in native_events if e[0] in (0x60, 0x70)],
+                      actual_ELF_table_memory_section_input=spec.get('actual_ELF_table_memory_section_input', False),
+                      fresh_ELF_function_global_plus_synthetic_definitions=spec.get(
+                          'fresh_ELF_function_global_plus_synthetic_definitions', False))
+    return record
 
 
 def negatives(args):

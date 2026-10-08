@@ -39,6 +39,15 @@ fresh ELF function/global inputs with synthetic table/memory imports; the sample
 has no real ELF table/memory import inputs. Actual AST/allocator remain open.
 See the [u64/limits report](../REQUEST_JNI_STARTUP_WORKERS.md#66-u64-与-tablememory-import2026-10-08-utc).
 
+Sections 4/5 require the independent `enable_table_memory_sections=True` and
+reuse the same mapped 32-byte `import_scratch_address`. Their 266 comparisons/18
+rollback checks cover count/entry callbacks, indices offset by imports, uint32
+wrap and all 19 descriptor bytes. Definitions do not increment import counts.
+The sample contains no real sections 4/5; six compositions add synthetic
+definitions to fresh ELF function/global inputs. Full selected composition
+matches 306 callbacks per base. Actual AST/allocator remain open. See the
+[section 4/5 report](../REQUEST_JNI_STARTUP_WORKERS.md#67-section-45-tablememory-定义2026-10-08-utc).
+
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint32_20261008.py --library "$env:TOMATO_LIBMETASEC" --output <reader-i32-evidence.json>
@@ -46,6 +55,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_types_2026100
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_imports_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-import-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varuint64_20261008.py --library "$env:TOMATO_LIBMETASEC" --output <reader-u64-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_import_limits_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-import-limits-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_table_memory_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-table-memory-sections-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

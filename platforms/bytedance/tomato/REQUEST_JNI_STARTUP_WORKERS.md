@@ -7,6 +7,7 @@
 同日追加 vector/type 的 102 / 372 个对照、34 个回滚，见第 6.4 节。
 同日追加 function/global import 的 254 个对照、14 个回滚，见第 6.5 节。
 同日追加 u64 的 1438 个对照/10 个回滚、table/memory 的 234 个对照/15 个回滚，见第 6.6 节。
+同日追加 section 4/5 定义的 266 个对照、18 个回滚，见第 6.7 节。
 
 本检查点验证了 **A 原始 JNI_OnLoad 返回、同次 worker 的六个默认 caller、TLS 析构
 及 guest joinable pthread_exit**。B 原始 constructor/factory 在两个基址自然返回并各
@@ -48,6 +49,7 @@
 | B reader import 拒绝/回滚 | 14 | 默认关闭、坏服务、缺页/重叠/上限、table/memory 和晚到的未恢复分支均全页回滚 |
 | B reader u64 原语差分/回滚 | 1438 / 10 | 两个基址各 719 项；两种前缀的第十字节全值、失败输出写入语义和 guest 输入/输出区一致 |
 | B reader table/memory import 差分/回滚 | 234 / 15 | 228 项合成输入、6 项实际 function/global 输入加合成 limits；19 字节 descriptor 与回调时状态一致 |
+| B reader section 4/5 定义差分/回滚 | 266 / 18 | 260 项合成输入、6 项实际 function/global 输入加合成定义；数量/条目回调、索引回绕与 19 字节 descriptor 一致 |
 | 完整 Python bootstrap 对照 | **0** | 未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
 
 证据文件：
@@ -426,6 +428,50 @@ import count 为 18/1/1/22；完整选取组合有 4 次计划分配、2 次逻�
 实际 AST/callback/cleanup、真实 allocator、其余 sections/special custom 和完整
 reader/factory/B VM/bootstrap 仍待恢复，完整 signer 与线上矩阵尚未完成。
 
+### 6.7 Section 4/5 table/memory 定义（2026-10-08 UTC）
+
+`run_reader_sections` 新增独立的 `enable_table_memory_sections=True`，复用已有
+32 字节 `import_scratch_address` 和 table/memory descriptor 解析。此开关默认
+关闭，与两类 import 开关独立。启用定义不会启用 import，启用 import 也不会启用
+定义；单独解析定义不要求启用 import。未启用及 guard/服务异常仍全页回滚。
+
+原始 dispatcher 和指令核对修正了私有交接的地址错位：`+0x323108` 是已恢复的
+section 3，section 4 实际为 **`+0x3231e4`**，section 5 为 **`+0x3232dc`**。
+section 4 先读取 u32 count、检查剩余字节，调用数量 slot `+0x58`；逐项复用
+`+0x321844` 的 table 语义，调用 slot `+0x60`，参数是 import table count 加
+entry index（uint32 回绕）、type（符号扩展至 uint64）和 descriptor pointer。
+section 5 的数量/条目 slots 是 `+0x68` / `+0x70`，逐项使用同一 u64 memory
+界限解析，索引加 import memory count。空定义也发送数量回调；成功的定义回调
+不递增任何 import count。callback 拒绝或解析失败提交原生可见的部分 parser 状态。
+
+Table 仍接受 -21/-17/-16，界限使用 u32 零扩展；-21 不消费第二个 i32。Memory
+界限使用 u64。两者 flags 仍接受 0/1/4/5，table 忽略位 2，memory 把它保存在
+descriptor offset 18。`ReaderCallbackEvent.import_limits` 也在定义条目回调冻结
+19 字节暂存内容。仅转换临时原生 descriptor 指针，比较全部内容与其余参数，
+不宣称模型工作区等于原生栈地址，也不比较整个 stack/TLS。实际 AST 规则仍未知。
+
+两个基址各 133 项，共 **266 个 native/Python 对照、18 个拒绝/回滚**。260 项
+为合成输入，6 项把独立 Python XOR 后的真实 function/global 输入与合成定义组合。
+原样本既没有 section 4/5，也没有 table/memory import，真实定义输入对照数为
+**0**。组合 2/4/5、2/3/4/5/7/12、1/2/3/4/5/7/12 每基址分别 46 / 289 / 306
+次回调，import counts 为 18/0/0/22；最后一组 4 次计划分配、2 次逻辑 free。
+四类合成 import 后的定义也验证了索引从 1 起算，且保留四个 import counts。
+
+覆盖缺失/截断/溢出 count、type、界限、非法 flags、冗余编码、min 大于 max、
+空数量回调失败、条目回调失败、前项成功后解析失败、精确消费、重复与排序拒绝，
+以及 scratch 缺页/重叠、计划 type 分配重叠和 callback 异常的全页回滚。独立
+开关与旧 API 默认关闭经过检查；最小用例先观察到原生接受而旧 Python handler
+拒绝，随后通过相同对照。allocator/free 与 callbacks 仍是显式服务。
+
+旧 section 202/12、function/global import 254/14、table/memory import 234/15、
+vector/type 102/372/34 均重新通过，四份 JSON 与此前正式证据逐字节一致。
+本轮同时最多运行两个 native 验证进程，均在各自限时内自然结束。
+
+证据见 [section 4/5 对照](evidence/vm9_alternative_reader_table_memory_sections_fresh_20261008.json)。
+下一处为 section 6 `+0x323464`，随后 instruction/data/special custom、实际
+AST/callback/cleanup 和 parse/root 构建。完整 reader、factory、B VM、Python
+bootstrap、独立 signer 与线上矩阵仍未完成。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -445,6 +491,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_types_2026100
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_imports_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-import-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varuint64_20261008.py --library <private-metasec.so> --output <reader-u64-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_import_limits_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-import-limits-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_table_memory_sections_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-table-memory-sections-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。
