@@ -4,6 +4,7 @@
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 同日追加 section dispatcher 与部分 handler 的 202 个对照、12 个回滚，见第 6.2 节。
 同日追加有符号 i32 原语的 1336 个对照、10 个回滚，见第 6.3 节。
+同日追加 vector/type 的 102 / 372 个对照、34 个回滚，见第 6.4 节。
 
 本检查点验证了 **A 原始 JNI_OnLoad 返回、同次 worker 的六个默认 caller、TLS 析构
 及 guest joinable pthread_exit**。B 原始 constructor/factory 在两个基址自然返回并各
@@ -38,6 +39,9 @@
 | B reader 未恢复分支/guard 回滚 | 12 | type/import、五类 special custom、缺页/重叠/遍历上限和坏服务结果明确拒绝 |
 | B reader i32 原语 native/Python 差分 | 1336 | 两个基址各 668 项；第五字节全值、正负边界、失败保留输出和 guest 输入/输出区一致 |
 | B reader i32 拒绝/回滚 | 10 | 有界 ABI、缺页、成功输出地址无效；部分输出跨缺页仍保持原页 |
+| B reader word-vector 扩容差分 | 102 | 两个基址各 51 项；新增元素、容量、复制、分配/free 与指针发布顺序一致 |
+| B reader type section 差分 | 372 | 368 项合成输入、4 项实际 ELF 输入；回调参数与当时的 type cells 一致 |
+| B reader vector/type 拒绝/回滚 | 34 | 23 项 vector、11 项 parser guard；所有原页保持不变 |
 | 完整 Python bootstrap 对照 | **0** | 未验证全部构造器、全局/TLS/allocator/JNI/worker 的独立生成 |
 
 证据文件：
@@ -52,6 +56,7 @@
 - [独立 Python reader u32 原语](evidence/vm9_alternative_reader_varuint32_fresh_20261008.json)
 - [独立 Python section 与部分 handler](evidence/vm9_alternative_reader_sections_fresh_20261008.json)
 - [独立 Python reader i32 原语](evidence/vm9_alternative_reader_varint32_fresh_20261008.json)
+- [独立 Python type/vector](evidence/vm9_alternative_reader_types_fresh_20261008.json)
 
 原有 13 项 A 启动控制已重新回归通过；计数仍沿用各自证据，不另算新的控制。
 这些计数不与此前 once/mask 组件对照相加为完整 signer 对照。
@@ -291,8 +296,45 @@ Callback vtable 是**显式的纯状态服务**：Python/native 同样接收受�
 
 首轮差分全部通过，但验证脚本漏接底层缺页 `ValueError`，在拒绝检查中结束；
 修正验证脚本后重新运行正式批次。没有修改原生函数、跳过失败样例或改变读取语义。
-该原语没有构造 type vector 或节点；section 1、section 2、完整 AST/factory/bootstrap
-仍未完成。下一处为 vector resize `+0x324540`，随后 section 1 `+0x32298c`。
+该原语没有构造 type vector 或节点；后续 vector 和 section 1 见第 6.4 节。
+section 2、完整 AST/factory/bootstrap 仍未完成。
+
+### 6.4 Type vector 与 section 1（2026-10-08 UTC）
+
+同一 owner 新增 `grow_reader_word_vector`，恢复 `+0x324540` 的有界追加语义：
+header 为 begin/end/capacity 三个指针。空间足够时只清零新增单元并移动 end；
+空间不足时请求 `max(size + additional, 2 * capacity)` 个 8-byte 单元，清零新增
+区间、复制旧元素、发布三个指针后记录旧块 free。闲置容量与旧块内容保持原样。
+原生为 void helper，其偶然的 X0 返回不作为语义比较；验证其自然返回、内存和效果。
+
+`run_reader_sections` 通过可选、显式的 `vector_allocate(size)` 服务恢复 section 1
+`+0x32298c`。服务提供已映射、对齐且不与保留区域重叠的分配地址；Python 不执行
+真实 malloc/free，free 只记录逻辑效果，不 poison/unmap 页。缺少该服务时，type
+分支继续明确拒绝；此前 12 项 section 拒绝控制的旧名称和计数保留为历史证据。
+
+Type handler 先核对 count/剩余字节，再调用 slot `+0x18`。每项读取 form `0x60`，
+resize state `+0x28` 的 parameter vector 与 `+0x40` 的 result vector，再调用
+slot `+0x20`，传入 type index、两组 count/pointer。缩小时只改 end；count=0 仍保留
+容量，但传给 callback 的 pointer 为 NULL。值仅接受 -5..-1 与 -17..-16，存为
+符号扩展的 64-bit word。`-21` 前缀会消费第二个 i32，随后拒绝；第二个值正负、
+截断或缺失都经过实际 native 对照，没有假定标准类型格式兼容性。
+
+两个基址各 51 个 standalone vector 控制、186 个 core/type 控制，共 102 / 372 项。
+Type 其中 368 项为合成输入，4 项为独立 Python XOR 提取的实际 ELF section 输入：
+section 1 单独及与 3/7/12 组合。真实 type payload 为 102 bytes、含 16 个定义；
+单独每基址 17 次 callback，组合 260 次；各 4 次受控分配、2 次逻辑 free。
+fixture imported-count 显式为 0，不证明完整 import/type/AST 语义。
+
+全项比较自然返回、guest 输入/输出区的 0xA000 字节、rank globals、每次回调的
+全部参数、cursor/end 和当时的两组 type cells，以及分配/free 时的 header 与效果
+顺序。覆盖全部 128 种单字节 type 终止值、复用/收缩/重分配、空 vector、冗余
+编码、非法类型、截断、回调失败、重复 section 和组合排序。34 项 guard/未恢复
+分支拒绝保持原页，其中包括 type 已解析后遇到 import 的整批回滚；这些 guard
+不宣称与原生异常/故障路径对照。证据不导出真实类型正文、名称、blob 或内存。
+
+callback 仍为显式纯状态服务，type cells 以不可变值交接；实际 AST callbacks、
+真实 allocator boot、wrapper cleanup、完整 reader/factory/B VM/bootstrap 尚未
+完成。下一处为 section 2 `+0x322cf8` 的 import，再接其余 handler 和实际 AST。
 
 ## 7. 复现、证据用途与后续验收
 
@@ -309,6 +351,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_short_descrip
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varuint32_20261008.py --library <private-metasec.so> --output <reader-u32-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-section-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint32_20261008.py --library <private-metasec.so> --output <reader-i32-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_types_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-type-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。
@@ -319,7 +362,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复 B reader 的 type/import、special custom 和实际 node/callback，随后解析/root 生成，再把原始 JNI /
+下一步恢复 B reader 的 import、其余 handler、special custom 和实际 node/callback，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。

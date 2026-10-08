@@ -3,7 +3,7 @@
 The module root/array/hash buckets are explicit inputs. Native factory and
 publication observations are verified separately; independent Python factory
 +0x2cbdc8, constructor input generation and complete B VM remain open.
-Reader sections 0 (generic), 3, 7, 8 and 12 run with explicit status-only
+Reader sections 0 (generic), 1, 3, 7, 8 and 12 run with explicit status-only
 callbacks. Other handlers, actual callbacks and AST remain open; unsupported
 branches fail closed. These components do not implement a full factory.
 """
@@ -128,11 +128,101 @@ def read_reader_varint32(pages, *, start_address, end_address, output_address):
 
 
 @dataclass(frozen=True)
+class ReaderVectorEffect:
+    kind: str
+    address: int
+    size: int
+    vector_address: int
+    vector_words: tuple[int, int, int]
+
+
+@dataclass(frozen=True)
+class ReaderVectorResult:
+    begin: int
+    end: int
+    capacity_end: int
+    effects: tuple[ReaderVectorEffect, ...]
+
+
+def _reader_vector_words(pages, address, max_elements, reserved_regions=()):
+    if (not isinstance(address, int) or not 0 < address <= MASK64-23
+            or address & 7 or not isinstance(max_elements, int)
+            or not 1 <= max_elements <= 65536):
+        raise RefillUnsupported('reader vector header or capacity bound is invalid')
+    begin, end, capacity_end = (_u(pages, address+offset) for offset in (0, 8, 16))
+    if (not 0 <= begin <= end <= capacity_end <= MASK64
+            or (begin | end | capacity_end) & 7 or (not begin and capacity_end)
+            or (capacity_end-begin)//8 > max_elements):
+        raise RefillUnsupported('reader vector requires coherent bounded word pointers')
+    for start, stop in ((address, address+24), *reserved_regions):
+        if begin < stop and start < capacity_end:
+            raise RefillUnsupported('reader vector storage overlaps retained state')
+    _read_span(pages, begin, capacity_end-begin)
+    return begin, end, capacity_end
+
+
+def grow_reader_word_vector(pages, *, vector_address, additional_count,
+        allocate=None, max_elements=4096, reserved_regions=()):
+    """Bounded +0x324540 append, with pure allocation planning and free effects.
+
+    allocate(size) returns an aligned pointer into already mapped pages; it
+    must not mutate memory or perform real allocation. Reallocation publishes
+    begin/end/capacity before recording the old block's free effect. Free does
+    not poison or unmap pages. Exception/allocator boot paths remain unsupported.
+    This native void helper's incidental X0 return value is not an API result.
+    """
+    p = _PageTransaction(pages)
+    reserved_regions = tuple(reserved_regions)
+    if any(not isinstance(start, int) or not isinstance(stop, int)
+           or not 0 <= start <= stop <= MASK64+1 for start, stop in reserved_regions):
+        raise RefillUnsupported('reader vector retained regions are invalid')
+    begin, end, capacity_end = _reader_vector_words(
+        p, vector_address, max_elements, reserved_regions)
+    size, capacity = (end-begin)//8, (capacity_end-begin)//8
+    if (not isinstance(additional_count, int) or additional_count < 0
+            or size+additional_count > max_elements):
+        raise RefillUnsupported('reader vector append exceeds the element bound')
+    effects = []
+    if additional_count <= capacity-size:
+        _write_span(p, end, bytes(additional_count*8))
+        end += additional_count*8
+        _write_span(p, vector_address+8, end.to_bytes(8, 'little'))
+    else:
+        new_capacity = max(size+additional_count, capacity*2)
+        if new_capacity > max_elements or not callable(allocate):
+            raise RefillUnsupported('reader vector needs a bounded explicit allocation service')
+        new_begin = allocate(new_capacity*8)
+        if (not isinstance(new_begin, int) or not 0 < new_begin <= MASK64-new_capacity*8
+                or new_begin & 7):
+            raise RefillUnsupported('reader vector allocation pointer is invalid')
+        new_capacity_end = new_begin+new_capacity*8
+        for start, stop in ((vector_address, vector_address+24),
+                            (begin, capacity_end), *reserved_regions):
+            if new_begin < stop and start < new_capacity_end:
+                raise RefillUnsupported('reader vector allocation overlaps retained storage')
+        _read_span(p, new_begin, new_capacity*8)
+        effects.append(ReaderVectorEffect('allocate', new_begin, new_capacity*8,
+                                         vector_address, (begin, end, capacity_end)))
+        _write_span(p, new_begin+size*8, bytes(additional_count*8))
+        _write_span(p, new_begin, _read_span(p, begin, size*8))
+        new_end = new_begin+(size+additional_count)*8
+        _write_span(p, vector_address, b''.join(value.to_bytes(8, 'little')
+                    for value in (new_begin, new_end, new_capacity_end)))
+        if begin:
+            effects.append(ReaderVectorEffect('free', begin, capacity*8,
+                vector_address, (new_begin, new_end, new_capacity_end)))
+        begin, end, capacity_end = new_begin, new_end, new_capacity_end
+    p.commit()
+    return ReaderVectorResult(begin, end, capacity_end, tuple(effects))
+
+
+@dataclass(frozen=True)
 class ReaderCallbackEvent:
     slot_offset: int
     arguments: tuple[int, ...]
     cursor: int
     section_end: int
+    type_vectors: tuple[tuple[int, ...], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -142,6 +232,7 @@ class ReaderSectionsResult:
     last_section: int
     sections_entered: tuple[int, ...]
     callback_events: tuple[ReaderCallbackEvent, ...]
+    vector_effects: tuple[ReaderVectorEffect, ...] = ()
 
 
 class _ReaderParseFailure(Exception):
@@ -150,8 +241,8 @@ class _ReaderParseFailure(Exception):
 
 def run_reader_sections(pages, *, state_address, image_base,
         varuint_scratch_address, callback, max_sections=512, max_entries=4096,
-        max_input_bytes=16*1024*1024):
-    """Bounded +0x324188 dispatch with actual handlers 0/3/7/8/12.
+        max_input_bytes=16*1024*1024, vector_allocate=None):
+    """Bounded +0x324188 dispatch with actual handlers 0/1/3/7/8/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
     previous nonzero section at +0x88, imported function count at +0x90,
@@ -163,6 +254,10 @@ def run_reader_sections(pages, *, state_address, image_base,
     actual AST allocation/callback effects are not modeled here. Parse errors
     commit native-observable partial state with status 1. Unsupported branches
     and guard failures leave the original pages unchanged.
+
+    Section 1 requires vector_allocate(size), a pure allocation plan into
+    already mapped pages. Recorded allocation/free effects are logical service
+    boundaries; actual allocator boot/free and AST callbacks remain open.
     """
     if (not isinstance(state_address, int) or not 0 < state_address <= MASK64-0xAF
             or state_address & 7 or not isinstance(image_base, int)
@@ -189,6 +284,7 @@ def run_reader_sections(pages, *, state_address, image_base,
         raise RefillUnsupported('reader input and state must be disjoint')
     entered = []
     events = []
+    vector_effects = []
     seen = set()
 
     def store(offset, value, width=8):
@@ -208,8 +304,16 @@ def run_reader_sections(pages, *, state_address, image_base,
         store(24, cursor()+result.bytes_consumed)
         return result.value
 
-    def emit(slot, *arguments):
-        event = ReaderCallbackEvent(slot, tuple(arguments), cursor(), limit())
+    def read_i32():
+        result = read_reader_varint32(p, start_address=data+cursor(),
+            end_address=data+limit(), output_address=varuint_scratch_address)
+        if not result.bytes_consumed:
+            raise _ReaderParseFailure()
+        store(24, cursor()+result.bytes_consumed)
+        return result.value
+
+    def emit(slot, *arguments, type_vectors=()):
+        event = ReaderCallbackEvent(slot, tuple(arguments), cursor(), limit(), type_vectors)
         status = callback(event)
         if not isinstance(status, int) or not 0 <= status <= 0xFFFFFFFF:
             raise RefillUnsupported('reader callback must return an explicit uint32 status')
@@ -239,6 +343,41 @@ def run_reader_sections(pages, *, state_address, image_base,
         if count > max_entries:
             raise RefillUnsupported('reader section entry bound reached')
 
+    def resize_types(offset, count):
+        other = state_address+(0x40 if offset == 0x28 else 0x28)
+        other_begin, _, other_cap = _reader_vector_words(p, other, max_entries, regions)
+        retained = (*regions, (varuint_scratch_address, varuint_scratch_address+4),
+                    (other_begin, other_cap))
+        address = state_address+offset
+        begin, end, cap = _reader_vector_words(p, address, max_entries, retained)
+        size = (end-begin)//8
+        if count > size:
+            result = grow_reader_word_vector(p, vector_address=address,
+                additional_count=count-size, allocate=vector_allocate,
+                max_elements=max_entries, reserved_regions=retained)
+            vector_effects.extend(result.effects)
+            begin = result.begin
+        elif count < size:
+            store(offset+8, begin+count*8)
+        return begin if count else 0
+
+    def type_vector(offset):
+        count = read_u32()
+        bounded_count(count)
+        begin = resize_types(offset, count)
+        values = []
+        for index in range(count):
+            value = read_i32()
+            if value == -21:
+                read_i32()
+                raise _ReaderParseFailure()
+            if value not in (-5, -4, -3, -2, -1, -17, -16):
+                raise _ReaderParseFailure()
+            word = value & MASK64
+            _write_span(p, begin+index*8, word.to_bytes(8, 'little'))
+            values.append(word)
+        return count, begin, tuple(values)
+
     def handler(number):
         if number == 0:
             size = read_u32()
@@ -260,6 +399,28 @@ def run_reader_sections(pages, *, state_address, image_base,
                 raise RefillUnsupported('reader special custom-section handler is unrecovered')
             store(24, limit())
             store(0x8C, old_flag, 1)
+        elif number == 1:
+            if not callable(vector_allocate):
+                raise RefillUnsupported('reader type section needs an explicit vector allocation service')
+            retained = (*regions, (varuint_scratch_address, varuint_scratch_address+4))
+            params_begin, _, params_cap = _reader_vector_words(
+                p, state_address+0x28, max_entries, retained)
+            _reader_vector_words(p, state_address+0x40, max_entries,
+                                 (*retained, (params_begin, params_cap)))
+            count = read_u32()
+            bounded_count(count)
+            emit(0x18, count)
+            for index in range(count):
+                if cursor()+1 > limit():
+                    raise _ReaderParseFailure()
+                form = _u(p, data+cursor(), 1)
+                store(24, cursor()+1)
+                if form != 0x60:
+                    raise _ReaderParseFailure()
+                nparams, params, param_values = type_vector(0x28)
+                nresults, results, result_values = type_vector(0x40)
+                emit(0x20, index, nparams, params, nresults, results,
+                     type_vectors=(param_values, result_values))
         elif number == 3:
             count = read_u32()
             store(0xA4, count, 4)
@@ -330,7 +491,7 @@ def run_reader_sections(pages, *, state_address, image_base,
     except _ReaderParseFailure:
         status = 1
     result = ReaderSectionsResult(status, cursor(), _u(p, state_address+0x88, 4),
-                                  tuple(entered), tuple(events))
+                                  tuple(entered), tuple(events), tuple(vector_effects))
     p.commit()
     return result
 

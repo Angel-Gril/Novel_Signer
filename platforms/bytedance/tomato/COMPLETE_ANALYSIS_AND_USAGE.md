@@ -33,7 +33,10 @@ XOR 输入下自然返回 0，每次 1658 次受控分配；Python reader / AST 
 有符号 i32 原语 `+324e0c` 另通过 1336 个对照/10 个回滚，失败时保留输出。
 +324188 envelope/排序及 section 0（通用）/3/7/8/12 新增 202 个对照/12 个回滚，
 含 8 项 fresh ELF 独立 Python XOR 后的实际 section 输入。callback 参数/时机和
-guest/global 状态一致；回调返回仍为受控纯状态服务，实际 AST 没有构造。type/import、
+guest/global 状态一致；回调返回仍为受控纯状态服务，实际 AST 没有构造。
+后续 vector grow `+324540` / type section `+32298c` 另通过 102 / 372 个对照及 34 个
+回滚，包含 4 个 fresh ELF 输入控制；回调时的 type cells 和指针发布顺序一致。
+malloc/free 仍是显式服务，真实 allocator boot 尚未恢复。import、其余 handler、
 特殊 custom、实际节点/callback/cleanup 与完整 reader 仍未恢复。
 详见 [原始 JNI 与同次 worker 报告](REQUEST_JNI_STARTUP_WORKERS.md)。
 下方 once/mask 与 cold caller 记录为此前证据，不能累加成完整初始化或 signer 证明。

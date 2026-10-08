@@ -68,7 +68,9 @@ Python factory 证明。独立 XOR prefix 另有 82 个对照（含两个实际 
 AST 对照仍 0。独立 u32 原语新增 258 个对照/7 个回滚；有符号 i32 原语另通过
 1336 个对照/10 个回滚，失败时保留输出。section envelope/排序与
 通用 custom/function/export/start/data count 新增 202 个对照/12 个回滚（含 8 项
-实际 ELF section 输入）。回调参数/状态已核对，返回仍是受控服务；type/import、
-特殊 custom、实际 AST 和完整 reader 未恢复。真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
+实际 ELF section 输入）。后续 vector 扩容与 type section 又通过 102 / 372 个对照、
+34 个回滚，包含 4 个实际 ELF 输入控制。回调参数/状态/type cells 已核对，返回仍是
+受控服务；import、其余 handler、特殊 custom、实际 AST 和完整 reader 未恢复。
+真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

@@ -1,5 +1,26 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B type vector 与 section 1
+
+同一 owner 新增 `grow_reader_word_vector`，并通过显式 `vector_allocate` 将 section 1
+接入 `run_reader_sections`。两个基址共 **102 个 vector 对照、372 个 type 对照、34 个
+拒绝/回滚**。type 对照为 368 项合成输入和 4 项独立 Python XOR 后的实际 ELF 输入；
+真实 type section 含 16 个定义，分别及与 3/7/12 组合时通过，组合每基址 260 次回调。
+fixture imported-count 显式为 0，实际 AST callbacks 尚未执行。
+
+扩容保留 native 的新增单元清零、容量加倍/满足新增长度、旧元素复制、指针先发布后
+记录旧块 free 的顺序；收缩只修改 end，空 vector 的 callback 指针为 NULL。
+type 值接受 -5..-1 和 -17..-16，存为符号扩展的 64-bit word；-21 前缀消费第二个
+i32 后拒绝。所有回调参数、cursor/end、当时的 type cells、分配/free 效果与顺序、
+guest 输入/输出区的 0xA000 字节和 rank globals 一致，不使用 native 快照。
+
+分配地址和 free 是显式受控服务；没有执行真实 allocator boot、实际 AST callbacks
+或完整 wrapper cleanup。普通解析失败保留部分状态，未恢复分支/guard 全页回滚。
+下一处为 section 2 `+0x322cf8` import；其余 handler、special custom、AST/factory/B VM、
+完整 bootstrap、Medusa/fresh 签名/线上矩阵与最终下载产品仍未完成。
+见 [type/vector 证据](evidence/vm9_alternative_reader_types_fresh_20261008.json)与
+[第 6.4 节报告](REQUEST_JNI_STARTUP_WORKERS.md#64-type-vector-与-section-12026-10-08-utc)。
+
 ## 2026-10-08 UTC：B reader 的有符号 i32 读取
 
 `read_reader_varint32` 独立恢复 `+0x324e0c`，两个基址各 668 项、共 1336 个

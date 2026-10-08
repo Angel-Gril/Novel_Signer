@@ -21,7 +21,10 @@ checks. The signed i32 helper adds 1336 comparisons/10 rollback checks; failed
 reads preserve output. Reader envelope/order and generic-custom/function/export/start/data-count
 handlers add 202 comparisons/12 rollback checks, including eight actual ELF
 section controls from fresh Python XOR. Callback arguments and state match;
-callbacks remain explicit status services. Type/import, special custom handlers,
+callbacks remain explicit status services. Word-vector grow and section 1 types
+add 102 / 372 comparisons and 34 rollback checks, including four fresh ELF
+input controls; type cells at each callback and pointer publication match.
+Allocation/free remain explicit services. Import, remaining handlers, special custom,
 actual AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).
