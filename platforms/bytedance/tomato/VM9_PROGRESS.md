@@ -1,5 +1,32 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-08 UTC：B section 10 元数据、局部类型与指令字
+
+同一 owner 通过独立 `enable_code_section=True` 恢复 section 10 `+0x323ca8`：
+**228 个原生/Python 对照、15 个保护/回滚**；222 项合成，6 项包含独立 Python
+XOR 后的真实 ELF code。实际 payload 218682 字节、121 个 body、54533 个原始
+指令字；10、3/10、1/2/3/6/7/12/10 组合每基址 54896/55017/55351 次 callback。
+完整选取组合有 4 次计划分配、2 次逻辑 free，import counts 为 18/0/0/22。
+
+原始指令纠正了私有反编译把 section 10 并入 section 9 的错误。Body count
+写入 state 并要求匹配 function count；group count、body metadata、local groups、
+raw words、body end callbacks 和部分状态均对照。Remaining body bytes 是声明
+长度减头部字节数，uint32 回绕，随后不再扣 local groups。第二个 u32 的业务含义
+未知。样本 local groups 为零，非空 groups 用合成输入验证。
+
+Raw read 受 section limit 限制，可能跨过 body end 后失败；不足四字节时 native
+重复发送零、cursor 不推进。独立 `max_code_words` 对整个 section 的所有字回调
+计数，含重试，超限回滚。完整 supplied input、guest/rank state、callback 参数、
+计数/type cells/vector effects 均核对。只在含 section 6 的组合启用 global 合成
+local 初值，不发布真实 code/metadata/names，不比较整个 stack/TLS。
+
+旧 global、type/vector、section 和 import limits 回归重新通过，四份 JSON 与
+旧证据逐字节一致。修改前先取得空 section/单字 body 的失败对照；无子代理。
+Section 9/11、special custom、实际 AST/callback/cleanup、指令执行、parse/root、
+完整 reader/factory/B VM/bootstrap、独立 signer 与线上矩阵仍未完成。见
+[code 证据](evidence/vm9_alternative_reader_code_fresh_20261008.json)与
+[第 6.9 节报告](REQUEST_JNI_STARTUP_WORKERS.md#69-section-10-元数据局部类型与指令字读取2026-10-08-utc)。
+
 ## 2026-10-08 UTC：B signed i64、section 6 与初始化表达式
 
 同一 owner 恢复 `read_reader_varint64`（`+0x324f6c`）：**1480 个原生/Python

@@ -47,6 +47,12 @@ seed. End-only retains its high word; i32 results zero-extend; opcode kinds
 follow the actual GOT table pointer, with relocation/overrides checked. The
 actual section has 22 definitions, and 1/2/3/6/7/12 matches 455 callbacks per base.
 See the [global/initializer report](REQUEST_JNI_STARTUP_WORKERS.md#68-有符号-i64-与-section-6-初始化表达式2026-10-08-utc).
+Section 10 adds 228 comparisons/15 rollback checks, including six actual ELF code
+inputs. Its 121 bodies contain 54533 raw words; the full selected composition
+matches 55351 callbacks per base. Use the independent `enable_code_section=True`;
+`max_code_words` bounds all word callbacks, including native retries without cursor
+progress. This reads words; instruction execution and actual AST remain open. See
+the [code report](REQUEST_JNI_STARTUP_WORKERS.md#69-section-10-元数据局部类型与指令字读取2026-10-08-utc).
 Allocation/free remain explicit services. Remaining handlers, special custom,
 actual AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker

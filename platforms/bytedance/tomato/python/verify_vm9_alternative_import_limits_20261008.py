@@ -148,8 +148,17 @@ def limits_tuple(data):
     return int.from_bytes(data[:8], 'little'), int.from_bytes(data[8:16], 'little'), *data[16:19]
 
 
-def compare(args, base, spec, *, definition_sections=False, global_sections=False, model_options=None):
-    pages = prepare(args, base, spec)
+def compare(args, base, spec, *, definition_sections=False, global_sections=False,
+            code_sections=False, model_options=None):
+    # Code inputs can exceed the guest fixture region. Keep them in the mapped
+    # ELF blob span, independently supplied to both implementations.
+    pages = prepare(args, base, {**spec, 'blob': b'A'*8} if code_sections else spec)
+    if code_sections:
+        input_address = base+0x387D20
+        _write_span(pages, input_address, spec['blob'])
+        for offset, value in ((0, len(spec['blob'])), (8, input_address), (16, len(spec['blob']))):
+            sections.put(pages, STATE+offset, value)
+        sections.put(pages, STATE+0xA4, spec.get('function_count', 0), 4)
     active_slots = {**SLOTS, 0x58: 1, 0x60: 3, 0x68: 1, 0x70: 2} if definition_sections else SLOTS
     descriptor_slots = (0x30, 0x38, 0x60, 0x70) if definition_sections else (0x30, 0x38)
     if global_sections:
@@ -163,6 +172,8 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
             sections.put(pages, base+0x3750B0, pointer)
             for opcode, kind in spec.get('opcode_overrides', {}).items():
                 sections.put(pages, pointer+opcode*4, kind, 4)
+    if code_sections:
+        active_slots = {**active_slots, 0xA8: 4, 0xB0: 1, 0xB8: 3, 0xF8: 2, 0x168: 1}
     for slot in active_slots:
         sections.put(pages, VTABLE+slot, CALLBACK+slot)
     model = {key: bytearray(value) for key, value in pages.items()}
@@ -215,8 +226,11 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
             return value
         host[CALLBACK+slot-base] = service
     observed = {(base+offset, 64): None for offset in sections.GLOBALS}
+    if code_sections:
+        observed[input_address, len(spec['blob'])] = None
     returned, guest, calls, ledger = oracle.native(args.library, base, 0x324188, [STATE], pages,
-        host_imports=host, libc=args.libc, observed_memory=observed, instruction_limit=150000,
+        host_imports=host, libc=args.libc, observed_memory=observed,
+        instruction_limit=spec.get('instruction_limit', 150000),
         malloc_handler=lambda cpu, size: allocate(size, cpu),
         instruction_observer=observe_native)
     assert not calls and not ledger
@@ -273,6 +287,14 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
                       global_local_seed_is_explicit_synthetic_ABI_input=True,
                       global_local_seed_hex=hex(spec.get('global_word_seed', 0xC0DE123489ABCDEF)),
                       relocated_opcode_table_checked=spec.get('relocated_opcode_table', False))
+    if code_sections:
+        record.update(code_callback_counts=[sum(e[0] == slot for e in native_events)
+                                           for slot in (0xA8, 0xB0, 0xB8, 0xF8)],
+                      instruction_word_callback_count=sum(e[0] == 0x168 for e in native_events),
+                      code_entry_indices=[e[1][0] for e in native_events if e[0] == 0xA8],
+                      final_code_body_count=int.from_bytes(_read_span(model, STATE+0xA8, 4), 'little'),
+                      input_bytes_compared=len(spec['blob']), full_supplied_input_region_match=True,
+                      actual_ELF_code_section_input=spec.get('actual_ELF_code_section_input', False))
     return record
 
 

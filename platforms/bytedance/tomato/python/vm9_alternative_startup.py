@@ -4,7 +4,8 @@ The module root/array/hash buckets are explicit inputs. Native factory and
 publication observations are verified separately; independent Python factory
 +0x2cbdc8, constructor input generation and complete B VM remain open.
 Reader sections 0 (generic), 1, 3, 7, 8 and 12, plus opted-in section 2
-imports and section 4/5/6 definitions, run with explicit status-only callbacks.
+imports, section 4/5/6 definitions and section 10 code words, run with explicit
+status-only callbacks.
 Other handlers,
 actual callbacks and AST remain open; unsupported
 branches fail closed. These components do not implement a full factory.
@@ -334,8 +335,8 @@ def run_reader_sections(pages, *, state_address, image_base,
         enable_function_global_imports=False, enable_table_memory_imports=False,
         import_scratch_address=None, enable_table_memory_sections=False,
         enable_global_section=False, global_scratch_address=None,
-        max_initializer_ops=4096):
-    """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/12.
+        max_initializer_ops=4096, enable_code_section=False, max_code_words=65536):
+    """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/10/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
     previous nonzero section at +0x88, import counts at +0x90/94/98/9c,
@@ -376,6 +377,12 @@ def run_reader_sections(pages, *, state_address, image_base,
     bytes. Initializer kinds follow the GOT pointer at image+0x3750b0, accept
     end/i32/i64/f32/f64 and stop after max_initializer_ops. This is not an AST
     interpreter or a reconstruction of naturally initialized native stack bytes.
+
+    enable_code_section=True independently opts into section 10 +0x323ca8.
+    It checks the body count against the function count, reads metadata/local
+    groups and emits raw 32-bit code words. It does not execute instructions.
+    max_code_words bounds all word callbacks, including native zero-word retries
+    when fewer than four input bytes remain and the cursor does not advance.
     """
     if (not isinstance(state_address, int) or not 0 < state_address <= MASK64-0xAF
             or state_address & 7 or not isinstance(image_base, int)
@@ -392,7 +399,9 @@ def run_reader_sections(pages, *, state_address, image_base,
             or not isinstance(enable_table_memory_sections, bool)
             or not isinstance(enable_global_section, bool)
             or not isinstance(max_initializer_ops, int)
-            or not 1 <= max_initializer_ops <= 65536):
+            or not 1 <= max_initializer_ops <= 65536
+            or not isinstance(enable_code_section, bool)
+            or not isinstance(max_code_words, int) or not 1 <= max_code_words <= 1048576):
         raise RefillUnsupported('reader section service or traversal limits are invalid')
     p = _PageTransaction(pages)
     data, total, initial_limit, initial_cursor = (_u(p, state_address+offset)
@@ -782,6 +791,53 @@ def run_reader_sections(pages, *, state_address, image_base,
                 if kind == 4:
                     raise _ReaderParseFailure()
                 emit(0x98, index, kind, target, data+start, size)
+        elif number == 10:
+            if not enable_code_section:
+                raise RefillUnsupported('reader code section needs explicit opt-in')
+            payload_start = cursor()
+            count = read_u32()
+            store(0xA8, count, 4)
+            bounded_count(count)
+            if count != _u(p, state_address+0xA4, 4):
+                raise _ReaderParseFailure()
+            word_callbacks = 0
+            for index in range(count):
+                imported = _u(p, state_address+0x90, 4)
+                body_size = read_u32()
+                body_start = cursor()
+                metadata = read_u32()
+                groups = read_u32()
+                bounded_count(groups)
+                emit(0xB0, groups)
+                entry_index = (index+imported) & 0xFFFFFFFF
+                remaining_body_bytes = (body_size-(cursor()-body_start)) & 0xFFFFFFFF
+                emit(0xA8, entry_index, cursor()-payload_start, remaining_body_bytes, metadata)
+                total_locals = 0
+                for group in range(groups):
+                    local_count = read_u32()
+                    total_locals += local_count
+                    if total_locals > 0xFFFFFFFF:
+                        raise _ReaderParseFailure()
+                    value = read_i32()
+                    if value == -21:
+                        read_i32()
+                        raise _ReaderParseFailure()
+                    if value not in (-5, -4, -3, -2, -1, -17, -16):
+                        raise _ReaderParseFailure()
+                    emit(0xB8, group, local_count, value & MASK64)
+                body_end = body_start+body_size
+                while cursor() < body_end:
+                    if word_callbacks >= max_code_words:
+                        raise RefillUnsupported('reader code word callback bound reached')
+                    word_callbacks += 1
+                    bits = 0
+                    if cursor()+4 <= limit():
+                        bits = _u(p, data+cursor(), 4)
+                        store(24, cursor()+4)
+                    emit(0x168, bits)
+                if cursor() != body_end:
+                    raise _ReaderParseFailure()
+                emit(0xF8, entry_index, remaining_body_bytes)
         elif number in (8, 12):
             value = read_u32()
             emit(0xA0 if number == 8 else 0x160, value)

@@ -528,6 +528,59 @@ GOT table 重定位及条目覆写、重复/排序、uint32 索引回绕与服�
 剩余 instruction/data/special custom、实际 AST/callback/cleanup、parse/root、
 完整 reader/factory/B VM/bootstrap、独立 signer 和线上矩阵仍未完成。
 
+### 6.9 Section 10 元数据、局部类型与指令字读取（2026-10-08 UTC）
+
+同一 owner 通过默认关闭的独立 `enable_code_section=True` 恢复 section 10
+`+0x323ca8`。原始 dispatcher 和实际指令确认了边界；旧私有反编译曾把这个
+入口误并入 section 9，因此本轮不沿用其错误的函数归属。修改前，空 section 与
+单字函数体先取得原生完成、旧 Python handler 拒绝的最小失败对照。
+
+读取 u32 body count 后先写 state `+0xa8`，随后检查剩余字节和 state `+0xa4`
+的 function count 是否一致。空 code section 没有数量回调。逐体读取 body size、
+第二个 u32 元数据和 local group count；先调用 `+0xb0(groups)`，再调用
+`+0xa8(index, offset, remaining_body_bytes, metadata)`。index 加 imported function
+count，按 uint32 回绕；offset 相对本 section 的 count 起点，remaining body
+bytes 是声明 body size 减去读取这两个头字段的字节数，按 uint32 回绕。
+
+逐组读取 local count 与 signed type，发送 `+0xb8(group_index, count, type)`。
+local counts 的累计和大于 uint32 时，在读取该组 type 前拒绝。Type 符号扩展
+至 uint64，只接受 -5..-1、-17/-16；-21 消费第二个 i32 后拒绝。接着用
+`+0x168(uint32_bits)` 顺序发送原始四字节指令字，要求最终 cursor 精确等于
+body end，最后调用 `+0xf8(index, remaining_body_bytes)`。这个长度值包含 local
+groups 的编码字节，后续并不再扣减。第二个 u32 的业务含义仍未确认。
+
+**这里读取指令字，不执行指令。** Native 使用 section limit 而非 body end
+检查四字节是否可读；因此可能跨过声明 body end 再拒绝。若 section 剩余不足
+四字节，native 发送零字、保持 cursor，并重复直到 callback 拒绝。合成控制
+在首个或第三个零字拒绝，核对不推进的部分状态。模型的 `max_code_words`
+默认 65536，按整个 code section 计算，包含这些不推进的重试；超过预算则
+明确拒绝并全页回滚，避免纯成功 callback 无限循环。缺页、服务异常、未启用
+和 traversal guards 同样全页回滚；普通解析/callback 失败提交部分状态。
+
+两个基址各 114 项，共 **228 个原生/Python 对照、15 个保护/回滚**，其中 222
+项纯合成、6 项含独立 Python XOR 后的真实 ELF code。实际 payload **218682
+字节、121 个 body、54533 个指令字**；样本 code 的 local groups 均为零，非空
+groups 用合成输入证明。单独 code 的 function count 121 是显式状态输入；
+与真实 section 3 组合时从函数 section 读取。10、3/10、1/2/3/6/7/12/10
+组合每基址分别 **54896 / 55017 / 55351** 次 callback，code slots 均为
+121 次 `+0xb0`、121 次 `+0xa8`、0 次 `+0xb8`、121 次 `+0xf8`。完整选取
+组合有 4 次计划分配、2 次逻辑 free，import counts 为 18/0/0/22。
+
+验证器把输入放到已映射的 ELF blob 工作区，避开小型 guest state/stack 区，
+逐字节比较完整选取输入；仍核对 guest 的 0xa000 字节、rank globals、全部
+callback 参数/状态/计数/type cells 和 vector effects。纯 code 用例不启用
+global 验证模式；只有实际含 section 6 的组合注入已说明的八字节合成 local
+初值。输出不发布真实元数据、指令字或名称，不比较整个 stack/TLS。
+
+合成控制覆盖 count 不一致、各字段截断/冗余编码、全部有效类型、非法/扩展
+类型、locals 累计溢出、body end 越界与长度回绕、各 callback 拒绝、跨 body
+预算、索引回绕、重复/排序和独立开关。旧 global、type/vector、section 和
+import limits 回归重新通过，四份 JSON 与既有证据逐字节一致。
+
+证据见 [code section 对照](evidence/vm9_alternative_reader_code_fresh_20261008.json)。
+Section 9/11、special custom、实际 AST/callback/cleanup、指令执行与 parse/root
+仍待恢复；完整 reader/factory/B VM/bootstrap、独立 signer 和线上矩阵仍未完成。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -550,6 +603,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_import_limits
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_table_memory_sections_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-table-memory-sections-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_varint64_20261008.py --library <private-metasec.so> --output <reader-i64-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_globals_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-globals-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_code_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-code-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。
