@@ -1147,6 +1147,53 @@ driver 只新增 fixture 显式期望 status，默认仍断言 0；旧 unsupport
 其余 AST、完整 reader/factory/bootstrap、独立 signer 和线上矩阵仍未完成。见
 [instruction 证据](evidence/vm9_alternative_ast_instruction_fresh_20261009.json)。
 
+## 6.20 Local group 与函数结束回调（2026-10-09 Asia/Shanghai）
+
+同一 AST owner 恢复两个槽位，新增 **252 个原生/Python 对照、37 个保护/回滚**。
+每基址 126 项，全为合成输入；实际 relocated vtable `+372370` 共执行 348 次
+callback。三项行为 RED 在生产修改前取得：原生 spare append、growth append 和
+end 均自然返回 0，Python 当时拒绝槽位。实现后同三项 GREEN，完整正向对照通过。
+另补五个 guard：两个 nested spare active、扩容后的容量预算和两种晚期发布失败；
+37 项 guard 全部重新验证，252 项原生正向结果保留不变。
+
+| Slot / 原生入口 | 参数与结果 |
+| --- | --- |
+| `+b8 → +31d984` | `(ignored_group_index, count, type_bits)`；先将低 u32 count 回绕加至 `callback+7c`，再向 active `+50` 追加 u64 type/u32 count/u32 cumulative，共 16 字节 |
+| `+f8 → +31dbb4` | `(ignored_index, length)`；先清除 `callback+28` active，再向原 active `+70` 写低 u32 length，返回 0 |
+
+原生 local group 不解释 type bits，也不根据 count 展开多个条目；零 count 仍追加
+一条，完整 u64 类型位保留。spare 直接写 entry 并推进 end；容量满时分配
+`max(size+1,capacity*2)*16` 字节，写入新条目、复制旧条目、发布 header 后释放
+旧块。既有 `+b0` 只重置 declared groups 和累计 count，不清空 local vector。
+end 保留 frame、修补树与 raw buffer，长度高位截断，邻接 padding 保持原值。
+
+这两槽原用于 code 回调。本检查点仅接受当前 ownership 已识别的三类兼容布局：
+data inline `record+20`、element inline `record+28`、element nested 144 字节
+节点。active 必须准确指向 logical entry；已映射的 nested spare capacity 仍拒绝。
+未接入 `+a8` code-begin 或 `output+30` 独立 function 容器；不宣称完整 code AST
+或 parser/AST composition。实现只改 `run_reader_ast_callback`，复用现有 ownership
+class；其它函数、parser、共享 native driver 均保持不变。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节、分配/析构/free 顺序及每个
+副作用时的 owner 字节。独立预期另外核对 local bytes、declared/cumulative、
+active/length、frame/tree 不变及纯 end 的全页预期。覆盖三个布局、第二个
+nested、容量边界、零 count、u32 高位截断/累计回绕、完整类型高位、重复扩容、
+reset/append/end、常量/predicate 和后续析构组合。local buffer 仍由既有
+data/element/nested 析构释放，没有新增 destructor 或 ownership owner。
+
+37 个 guard 覆盖错误绑定/attached 状态/参数、非法或 spare active、local header、
+节点/字节预算、分配缺失与别名地址、late local publication 和先清 active 后写入
+失败。全部原始页面回滚，未执行无效 native 内存路径。分配仍是纯地址计划，
+free 仍为待消费的逻辑副作用；完整 stack/TLS 不在字节比较范围。
+
+旧 AST **308/54**、data **176/30**、create **148/105**、payload **104 AST /
+34 ABI / 30 回滚**、expression **148/36**、element **282/159**、nested
+**230/133**、instruction **398/122** 全部重新通过，八份 JSON 与历史证据
+逐字节一致。旧 unsupported guard 从 `+b8` 移至仍未恢复的 `+a8`。
+其余 AST、attached parser/wrapper、完整 reader/factory/bootstrap、独立 signer
+和线上矩阵仍未完成。见
+[local group 证据](evidence/vm9_alternative_ast_local_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1180,6 +1227,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_expr
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_20261009.py --library <private-metasec.so> --output <reader-ast-element-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_nested_20261009.py --library <private-metasec.so> --output <reader-ast-element-nested-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_instruction_20261009.py --library <private-metasec.so> --output <reader-ast-instruction-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_20261009.py --library <private-metasec.so> --output <reader-ast-local-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

@@ -750,6 +750,10 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     Instruction end retains the last frame; inner frames share fixup/erase.
     Typed constants append a u32 tag, then the raw u32/u64 bits, with separate
     resize/publication/free stages. Floating values are preserved as bits.
+    Local groups append u64 type/u32 count/u32 cumulative count to an owned
+    active 144-byte layout. Function end clears active and stores u32 length.
+    Data/element inline and element nested layouts are supported; code begin
+    and the separate function output container remain unsupported.
     Data payload ignores index and uses the full u64 length. Zero length
     leaves existing storage/size intact; nonzero resizes the last record's
     byte vector, then copies a disjoint borrowed span. Growth zero-fills the
@@ -767,7 +771,8 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
+    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
+              0xF8:2,
               0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
               0x120:2,0x128:2,0x130:1,0x138:1,
               0x140:3,0x148:1,0x150:1,0x158:3,0x160:1,0x168:1}
@@ -784,6 +789,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
     entries = {0x18:0x31B6B0,0x20:0x31B6D0,0xA0:0x31D6D4,
+               0xB8:0x31D984,0xF8:0x31DBB4,
                0xC0:0x31DA9C,0xC8:0x31DAB4,0xD0:0x31DB04,0xD8:0x31DB28,
                0xE0:0x31DB4C,0xE8:0x31DB70,
                0xB0:0x31D974,0xF0:0x31DB94,0x100:0x31DBCC,0x108:0x31DBF0,
@@ -801,6 +807,42 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         if (cap-begin)//16 > max_nodes:
             raise RefillUnsupported('AST instruction frame capacity exceeds its node bound')
         status = int(not _u(m.p,callback_address+0x28) or begin == end)
+    elif slot_offset in (0xB8,0xF8):
+        target = _u(m.p,callback_address+0x28)
+        active = False
+        for header,stride,inline in ((ast+0xF0,176,0x20),(ast+0xD8,184,0x28)):
+            begin,end,_ = m.vector(header,stride,own=False)
+            for record in range(begin,end,stride):
+                active |= target == record+inline
+                if stride == 184:
+                    first,last,_ = m.vector(record,144,own=False)
+                    active |= first <= target < last and (target-first)%144 == 0
+        if not active:
+            raise RefillUnsupported('AST local/end callback requires an owned active 144-byte layout')
+        if slot_offset == 0xF8:
+            _write_span(m.p,callback_address+0x28,bytes(8))
+            _write_span(m.p,target+0x70,(arguments[1]&0xFFFFFFFF).to_bytes(4,'little'))
+        else:
+            count = arguments[1]&0xFFFFFFFF
+            cumulative = (_u(m.p,callback_address+0x7C,4)+count)&0xFFFFFFFF
+            _write_span(m.p,callback_address+0x7C,cumulative.to_bytes(4,'little'))
+            value = arguments[2].to_bytes(8,'little')+count.to_bytes(4,'little')+cumulative.to_bytes(4,'little')
+            begin,end,cap = m.vector(target+0x50,16,own=False)
+            size,capacity = (end-begin)//16,(cap-begin)//16
+            if size+1 > max_nodes or capacity > max_nodes:
+                raise RefillUnsupported('AST local group capacity exceeds its node bound')
+            if size == capacity:
+                new_capacity = max(size+1,capacity*2)
+                if new_capacity > max_nodes:
+                    raise RefillUnsupported('AST local group growth exceeds its node bound')
+                new = m.allocate(new_capacity*16,allocate)
+                _write_span(m.p,new+size*16,value)
+                _write_span(m.p,new,_read_span(m.p,begin,size*16))
+                m.publish(target+0x50,(new,new+(size+1)*16,new+new_capacity*16))
+                if begin: m.emit('free',begin,cap-begin)
+            else:
+                _write_span(m.p,end,value)
+                _write_span(m.p,target+0x58,(end+16).to_bytes(8,'little'))
     elif slot_offset in (0x18,0x20):
         begin,end,cap = m.vector(ast,64,own=False)
         size,capacity = (end-begin)//64,(cap-begin)//64

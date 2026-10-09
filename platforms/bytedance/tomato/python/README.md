@@ -199,6 +199,21 @@ publication and free effects. All fixtures are synthetic; seven old evidence
 files match byte for byte. Parser composition remains open. See the
 [instruction report](../REQUEST_JNI_STARTUP_WORKERS.md#619-instruction-predicate-与带类型常量2026-10-09-asiashanghai).
 
+Slots +0xb8/+0xf8 pass 252 comparisons and 37 full-page rollback checks.
+Active +28 must exactly select an existing data inline, element inline or
+element nested 144-byte layout; unused nested capacity is rejected. Local
+group accepts `(ignored_index, count, type_bits)`: append 16 bytes containing
+full u64 type, low u32 count and cumulative u32 count after wrapping addition
+to callback+7c. Count zero still appends; +b0 resets the declared group count
+and cumulative count while preserving existing local storage. Growth copies
+old entries, publishes, then frees the old buffer. End accepts
+`(ignored_index, length)`, clears active and writes low u32 length at record+70;
+frames and trees remain intact. Later data/element destruction owns the local
+buffer. All fixtures are synthetic; eight old evidence files match byte for
+byte. Code-begin +a8, separate function output and parser composition remain
+open. See the
+[local group report](../REQUEST_JNI_STARTUP_WORKERS.md#620-local-group-与函数结束回调2026-10-09-asiashanghai).
+
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
 only type/start/element/data/raw-word containers may hold storage. Caller-supplied
@@ -238,6 +253,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_expr
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-element-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_nested_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-element-nested-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_instruction_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-instruction-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-local-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

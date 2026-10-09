@@ -1,0 +1,5413 @@
+{
+  "schema": "vm9-alternative-ast-local-fresh-v1",
+  "evidence_date": "2026-10-09",
+  "evidence_timezone": "Asia/Shanghai",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "generated_fixture_seed": 3266948,
+  "native_Python_AST_local_controls": 252,
+  "rollback_negative_controls": 37,
+  "pre_change_behavior_RED_controls": 3,
+  "recovered_callback_slots_hex": [
+    "0xb8",
+    "0xf8"
+  ],
+  "actual_native_vtable_offset_hex": "0x372370",
+  "local_group_offset_hex": "0x31d984",
+  "function_end_offset_hex": "0x31dbb4",
+  "active_layout_stride": 144,
+  "local_record_stride": 16,
+  "type_width": 8,
+  "count_and_cumulative_width": 4,
+  "active_layouts": [
+    "data_inline",
+    "element_inline",
+    "element_nested"
+  ],
+  "all_fixtures_synthetic": true,
+  "native_input_snapshot_used": false,
+  "private_payloads_published": false,
+  "local_group_and_end_callbacks_implemented": true,
+  "code_begin_callback_implemented": false,
+  "function_output_container_implemented": false,
+  "parser_AST_composition_implemented": false,
+  "attached_parser_implemented": false,
+  "complete_AST_callbacks_implemented": false,
+  "complete_python_reader_implemented": false,
+  "independent_Python_factory_implemented": false,
+  "complete_python_bootstrap_controls": 0,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "cases": [
+    {
+      "label": "local_group_spare",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_group_growth",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 0,
+      "free_count": 1,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "function_end",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_data_0_0_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_0",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_1",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_4294967295",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_4294967297",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_18446744069720004216",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "groups_reset_append_end_cleanup_data",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 5,
+      "allocation_count": 2,
+      "destructor_count": 1,
+      "free_count": 9,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_element_0_0_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_0",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_1",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_4294967295",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_4294967297",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_18446744069720004216",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "groups_reset_append_end_cleanup_element",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 5,
+      "allocation_count": 2,
+      "destructor_count": 3,
+      "free_count": 21,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_nested_0_0_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_0_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_0_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_1_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_1_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_0",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_1",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_4294967295",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_4294967297",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_18446744069720004216",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "groups_reset_append_end_cleanup_nested",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 5,
+      "allocation_count": 2,
+      "destructor_count": 3,
+      "free_count": 21,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "second_nested_active",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 2,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "nonnull_zero_capacity",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_constants_then_end_predicate",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 3,
+      "destructor_count": 1,
+      "free_count": 11,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "generated_local_groups_0",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 2,
+      "destructor_count": 0,
+      "free_count": 2,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "generated_local_groups_1",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 3,
+      "destructor_count": 0,
+      "free_count": 3,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "generated_local_groups_2",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 2,
+      "destructor_count": 0,
+      "free_count": 2,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "generated_local_groups_3",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 2,
+      "destructor_count": 0,
+      "free_count": 2,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "generated_local_groups_4",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 1,
+      "destructor_count": 0,
+      "free_count": 1,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "generated_local_groups_5",
+      "image_base_hex": "0x122c0000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 2,
+      "destructor_count": 0,
+      "free_count": 2,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_group_spare",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_group_growth",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 0,
+      "free_count": 1,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "function_end",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_data_0_0_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_0_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_0_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_1_1_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_data_2_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 1,
+      "free_count": 7,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_0",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_1",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_4294967295",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_4294967297",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "end_data_18446744069720004216",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "groups_reset_append_end_cleanup_data",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 5,
+      "allocation_count": 2,
+      "destructor_count": 1,
+      "free_count": 9,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_element_0_0_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_0_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_0_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_1_1_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_element_2_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_0",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_1",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_4294967295",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_4294967297",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "end_element_18446744069720004216",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "groups_reset_append_end_cleanup_element",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 5,
+      "allocation_count": 2,
+      "destructor_count": 3,
+      "free_count": 21,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "local_nested_0_0_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_0_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_0_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_1_1_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_0_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_0_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_1_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_1_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_4294967295_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_4294967295_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_4294967298_18446744073709551615",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "local_nested_2_3_4294967298_9223372037160195704",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 3,
+      "free_count": 19,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_0",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_1",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_4294967295",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_4294967297",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "end_nested_18446744069720004216",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 0,
+      "destructor_count": 0,
+      "free_count": 0,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "groups_reset_append_end_cleanup_nested",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 5,
+      "allocation_count": 2,
+      "destructor_count": 3,
+      "free_count": 21,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "second_nested_active",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 2,
+      "allocation_count": 1,
+      "destructor_count": 3,
+      "free_count": 20,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0
+      ],
+      "active_layout": "nested"
+    },
+    {
+      "label": "nonnull_zero_capacity",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 1,
+      "allocation_count": 1,
+      "destructor_count": 1,
+      "free_count": 8,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "local_constants_then_end_predicate",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 3,
+      "destructor_count": 1,
+      "free_count": 11,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "generated_local_groups_0",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 2,
+      "destructor_count": 0,
+      "free_count": 2,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "generated_local_groups_1",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 3,
+      "destructor_count": 0,
+      "free_count": 3,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "generated_local_groups_2",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 2,
+      "destructor_count": 0,
+      "free_count": 2,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "generated_local_groups_3",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 2,
+      "destructor_count": 0,
+      "free_count": 2,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    },
+    {
+      "label": "generated_local_groups_4",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 1,
+      "destructor_count": 0,
+      "free_count": 1,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "element"
+    },
+    {
+      "label": "generated_local_groups_5",
+      "image_base_hex": "0x775c205000",
+      "actual_native_vtable_executed": true,
+      "natural_native_return_verified": true,
+      "native_Python_guest_memory_match": true,
+      "allocation_destruction_free_order_match": true,
+      "owner_memory_at_every_effect_match": true,
+      "callback_count": 6,
+      "allocation_count": 2,
+      "destructor_count": 0,
+      "free_count": 2,
+      "synthetic_fixture": true,
+      "native_input_snapshot_used": false,
+      "independent_local_cumulative_end_and_frame_expectation_match": true,
+      "callback_statuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "active_layout": "data"
+    }
+  ],
+  "negative_cases": [
+    {
+      "label": "b8_binding",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "b8_active_null",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "b8_active_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "b8_active_callback",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "b8_active_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "b8_active_unaligned",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "b8_active_nested_spare",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "f8_binding",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "f8_active_null",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "f8_active_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "f8_active_callback",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "f8_active_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "f8_active_unaligned",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "f8_active_nested_spare",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "attached",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "local_arity",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "local_register_overflow",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "end_arity",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "local_partial",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "local_capacity_budget",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "local_doubled_capacity_budget",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "local_growth_budget",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "missing_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "inactive_after_end",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "late_end_write",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "late_local_publication_1_1",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "late_local_publication_1_3",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_unaligned",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_partial",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_callback",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_record",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_frame",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_retained",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_image",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    },
+    {
+      "label": "allocation_old",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "allocation_plans_before_rejection": 1,
+      "native_invalid_memory_path_compared": false
+    }
+  ]
+}

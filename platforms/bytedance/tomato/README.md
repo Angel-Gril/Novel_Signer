@@ -127,6 +127,14 @@ append tag and raw value separately, preserving floating bits and both
 allocation/publication/free stages. All fixtures are synthetic; seven old
 evidence files match byte for byte. See the
 [instruction report](REQUEST_JNI_STARTUP_WORKERS.md#619-instruction-predicate-与带类型常量2026-10-09-asiashanghai).
+Slots +b8/+f8 add 252 comparisons and 37 rollback checks on existing owned
+data/element inline and element nested 144-byte layouts. Local groups append
+full u64 type, u32 count and wrapping cumulative count; end clears active
+and stores a u32 length while preserving frames and trees. Growth publication,
+copying, free and later destruction match. All fixtures are synthetic; eight
+old evidence files match byte for byte. The +a8 code-begin and separate function
+output container remain open. See the
+[local group report](REQUEST_JNI_STARTUP_WORKERS.md#620-local-group-与函数结束回调2026-10-09-asiashanghai).
 Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker

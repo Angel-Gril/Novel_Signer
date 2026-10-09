@@ -113,6 +113,9 @@ vtable 执行，核对节点内容、分配/析构/free 顺序与每个副作用
 随后 slots `+c0/+c8/+d0/+d8/+e0/+e8` 的 instruction predicate、结束和
 四种带类型常量通过 **398 个对照、122 个回滚**。返回 0/1、保留最外层 frame、
 tag/数值分步扩容与原始浮点位一致；七组旧回归 JSON 逐字节一致。
+随后 slots `+b8/+f8` 在已有 144 字节布局上追加 local group、结束并保存长度，
+通过 **252 个对照、37 个回滚**。完整 u64 类型、u32 累计回绕、扩容与释放一致；
+八组旧回归 JSON 逐字节一致。`+a8` code-begin 与独立 function 容器仍未恢复。
 这些独立有界入口尚未接入 parser；其余 AST callback、wrapper、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
@@ -123,6 +126,7 @@ tag/数值分步扩容与原始浮点位一致；七组旧回归 JSON 逐字节�
 [Element 回调与清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#617-element-回调与嵌套记录清理2026-10-09-asiashanghai)。
 [Element 嵌套表达式报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#618-element-结果类型与嵌套表达式2026-10-09-asiashanghai)。
 [Instruction 与常量报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#619-instruction-predicate-与带类型常量2026-10-09-asiashanghai)。
+[Local group 与结束报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#620-local-group-与函数结束回调2026-10-09-asiashanghai)。
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

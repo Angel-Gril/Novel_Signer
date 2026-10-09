@@ -1,5 +1,34 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：local group 与函数结束回调
+
+同一 AST owner 恢复 `+b8 → +31d984` 和 `+f8 → +31dbb4`：**252 个原生/Python
+对照、37 个回滚**，每基址 126 项，全为合成输入。真实 vtable 共执行 348 次
+callback。三项行为 RED 在生产修改前成立，实现后同三项 GREEN；完整正向验证
+通过后增加五个有具体风险的 guard，重新验证全部 37 项，保留全部正向结果。
+
+`+b8` 忽略 group index，向 active 的 `+50` local vector 追加 16 字节：完整
+u64 type、低 u32 count 和 u32 累计 count。`callback+7c` 先回绕相加；count 零
+仍追加。容量满时按 `max(size+1,capacity*2)` 扩容，复制、发布后释放旧块。
+`+f8` 忽略 index，先清除 active，再将低 u32 length 写入原 active `+70`，
+保留 frame 和树。复用现有 ownership class，仅接受 data/element inline 或
+element nested 的既有 144 字节布局；nested spare capacity 不能作为 active。
+
+核对自然返回/SP、guest 前 `0xa000` 字节、分配/析构/free 顺序和各副作用时
+owner 字节；独立断言 local 原始内容、累计回绕、active/length、frame/tree。
+覆盖三个布局、第二个 nested、零计数、完整高位类型、连续追加扩容、group reset、
+end/predicate/常量与析构组合。晚期写入和所有权/分配/预算错误全页回滚，
+无效 native 内存路径未执行。
+
+旧 AST 308/54、data 176/30、create 148/105、payload 104 AST/34 ABI/30
+回滚、expression 148/36、element 282/159、nested 230/133、instruction 398/122
+全部重新通过；八份 JSON 与历史证据逐字节一致。旧 unsupported guard 从
+`+b8` 移至 `+a8`；共享 driver、parser、ownership class 与其它函数保持不变。
+`+a8` code-begin、独立 function output 容器、attached parser/wrapper、完整
+reader/factory/bootstrap/signer 和线上矩阵仍未完成。见
+[local group 证据](evidence/vm9_alternative_ast_local_fresh_20261009.json)与
+[第 6.20 节报告](REQUEST_JNI_STARTUP_WORKERS.md#620-local-group-与函数结束回调2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：instruction predicate 与带类型常量
 
 同一 AST owner 恢复 slots `+c0/+c8/+d0/+d8/+e0/+e8`，**398 个原生/Python
