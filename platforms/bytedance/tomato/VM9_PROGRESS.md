@@ -1,5 +1,27 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：memory 预留、创建与独立缓存
+
+同一 AST owner 恢复 `+68/+70`、`output+60` 与 `callback+b0` 的 40 字节记录：
+**272 个原生/Python 对照、65 个回滚**，每基址 136 项，全部合成输入，共 304 次
+实际回调、248 次创建。五项行为 RED 在生产修改前成立，同一输入在两基址通过。
+
+完整 24 字节 descriptor 复制至 record+10；destination +0c 的 4 字节 padding
+保留。maximum flag 为零时，按 memory64 flag 选择 `0x10000` 或
+`0x1000000000000`；显式 maximum 保留。reserve 截为 u32、保持 size；两容器
+独立增长，发布后 output 只 free，cache 另倒序析构旧节点。无需未初始化栈字。
+
+自然返回/SP、guest 前 0xa000（无屏蔽）、副作用顺序和每次 owner 字节一致。
+独立预期另核对容量、descriptor、两种 maximum、padding、搬移、分配与借用
+输入。65 项 guard 含 25 项分配别名、12 项晚期写入；五项预算拒绝有正常预算
+对照，两个字节上限明确发生于 memory 分配。原始页面全部回滚。
+
+十二组历史 AST 回归全部通过，十二份 JSON 逐字节一致。parser、其它回调、
+现有 API 默认值及共享 driver 不变；unsupported guard 移至仍未恢复的 +78。
+完整 output wrapper、剩余 AST/import、attached parser、reader/factory/bootstrap/
+signer 与线上矩阵仍未完成。见 [memory 证据](evidence/vm9_alternative_ast_memory_fresh_20261009.json)与
+[第 6.24 节报告](REQUEST_JNI_STARTUP_WORKERS.md#624-memory-预留创建与独立缓存2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：table 预留、创建与显式栈 padding
 
 同一 AST owner 恢复 `+58/+60` 和 `output+48` table 所有权：**184 个原生/Python

@@ -153,7 +153,13 @@ old evidence files match byte for byte. Entry requires its actual stack
 address to preserve the unwritten temporary word copied into +14 padding.
 Guest bytes are compared without masking. See the
 [table report](REQUEST_JNI_STARTUP_WORKERS.md#623-table-预留创建与显式栈-padding2026-10-09-asiashanghai).
-Memory +68/+70 and parser composition remain open. Allocation/free remain explicit services;
+Memory +68/+70 reserve output+60 and append independent 40-byte output/cache
+records. All 272 comparisons and 65 rollback checks pass; twelve old evidence
+files match byte for byte. Full 24-byte descriptors, both default maxima and
+destination padding match without a copied stack word. Cache growth destroys
+old records after publication; output growth only frees the old block. See the
+[memory report](REQUEST_JNI_STARTUP_WORKERS.md#624-memory-预留创建与独立缓存2026-10-09-asiashanghai).
+Parser composition and remaining callbacks remain open. Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

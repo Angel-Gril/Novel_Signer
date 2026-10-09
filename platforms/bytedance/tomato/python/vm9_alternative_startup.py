@@ -617,10 +617,10 @@ class _ReaderAstMemory:
             if _u(self.p, address+0x20) != ast+0x108:
                 raise RefillUnsupported('AST raw-word target is inconsistent')
             for offset in range(0, 0x120, 24):
-                if offset not in (0,0x30,0x48,0xC0,0xD8,0xF0,0x108) and any(
+                if offset not in (0,0x30,0x48,0x60,0xC0,0xD8,0xF0,0x108) and any(
                         _u(self.p,ast+offset+word) for word in (0,8,16)):
                     raise RefillUnsupported('AST unrecovered output containers must be empty')
-                stride = (64 if offset == 0 else 144 if offset == 0x30 else 48 if offset == 0x48 else 4 if offset == 0xC0 else
+                stride = (64 if offset == 0 else 144 if offset == 0x30 else 48 if offset == 0x48 else 40 if offset == 0x60 else 4 if offset == 0xC0 else
                           184 if offset == 0xD8 else 176 if offset == 0xF0 else 1)
                 begin, end, cap = self.vector(ast+offset, stride)
                 if offset == 0:
@@ -633,6 +633,10 @@ class _ReaderAstMemory:
                     if (cap-begin)//48 > self.max_nodes:
                         raise RefillUnsupported('AST table capacity exceeds its node bound')
                     for record in range(begin,end,48): self.node(record,48)
+                elif offset == 0x60:
+                    if (cap-begin)//40 > self.max_nodes:
+                        raise RefillUnsupported('AST memory capacity exceeds its node bound')
+                    for record in range(begin,end,40): self.node(record,40)
                 elif offset == 0xF0:
                     for record in range(begin, end, 176): self.data_record(record)
                 elif offset == 0xD8:
@@ -703,6 +707,13 @@ class _ReaderAstMemory:
             _write_span(self.p,target,(self.base+0x372518).to_bytes(8,'little'))
             _write_span(self.p,target+8,_read_span(self.p,source+8,4))
             _write_span(self.p,target+0xC,_read_span(self.p,source+0xC,31))
+
+    def move_memories(self, begin, end, destination):
+        for source in range(end-40,begin-1,-40):
+            target = destination+source-begin
+            _write_span(self.p,target,(self.base+0x372540).to_bytes(8,'little'))
+            _write_span(self.p,target+8,_read_span(self.p,source+8,4))
+            _write_span(self.p,target+0x10,_read_span(self.p,source+0x10,24))
 
     def move_data(self, begin, end, destination):
         for source in range(end-176, begin-1, -176):
@@ -828,6 +839,12 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     mapped b0-byte frame through allocation. No stack value is invented;
     other stack effects are outside this model. Cache growth destroys old
     nodes after publication; output growth does not. Five tail bytes remain.
+    Memory reserve/entry use output+60 and callback+b0 with 40-byte records.
+    Entry ignores index and copies all 24 descriptor bytes to record+10;
+    record+c padding retains its destination bytes. A zero maximum flag at
+    descriptor+10 selects u64 10000, or 1000000000000 when +12 is nonzero.
+    No unwritten stack bytes enter the records. Both containers grow
+    independently; only cache growth destroys old nodes after publication.
     Data/element inline, element nested and function layouts are supported;
     Code begin selects a logical function after subtracting cache/function
     count difference from its u32 index. It stores metadata/raw start, clears
@@ -851,7 +868,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0x50:2,0x58:1,0x60:3,0xA0:1,0xA8:4,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
+    counts = {0x18:1,0x20:5,0x50:2,0x58:1,0x60:3,0x68:1,0x70:2,0xA0:1,0xA8:4,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
               0xF8:2,
               0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
               0x120:2,0x128:2,0x130:1,0x138:1,
@@ -868,7 +885,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         _u(pages,callback_address+0x18),0x120)
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
-    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x50:0x31C7B8,0x58:0x31C9F4,0x60:0x31CABC,0xA0:0x31D6D4,0xA8:0x31D7D8,
+    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x50:0x31C7B8,0x58:0x31C9F4,0x60:0x31CABC,0x68:0x31CCEC,0x70:0x31CDB4,0xA0:0x31D6D4,0xA8:0x31D7D8,
                0xB8:0x31D984,0xF8:0x31DBB4,
                0xC0:0x31DA9C,0xC8:0x31DAB4,0xD0:0x31DB04,0xD8:0x31DB28,
                0xE0:0x31DB4C,0xE8:0x31DB70,
@@ -1083,6 +1100,51 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                         for record in range(last-48,first-1,-48): m.destroy(record,48)
                     if first: m.emit('free',first,limit-first)
                 else: _write_span(m.p,header+8,(last+48).to_bytes(8,'little'))
+    elif slot_offset in (0x68,0x70):
+        begin,end,cap = m.vector(ast+0x60,40,own=False)
+        size,capacity = (end-begin)//40,(cap-begin)//40
+        if slot_offset == 0x68:
+            count = arguments[0]&0xFFFFFFFF
+            if count > max_nodes:
+                raise RefillUnsupported('AST memory reserve exceeds its node bound')
+            if count > capacity:
+                new = m.allocate(count*40,allocate)
+                m.move_memories(begin,end,new)
+                m.publish(ast+0x60,(new,new+size*40,new+count*40))
+                if begin: m.emit('free',begin,cap-begin)
+        else:
+            if _u(m.p,image_base+0x3750A0) != image_base+0x372530:
+                raise RefillUnsupported('AST memory node vtable relocation is unsupported')
+            pointer = arguments[1]
+            if not pointer or pointer > MASK64-23 or max_vector_bytes < 24:
+                raise RefillUnsupported('AST memory descriptor pointer or byte bound is invalid')
+            if any(pointer < stop and start < pointer+24 for start,stop in m.regions):
+                raise RefillUnsupported('AST memory descriptor overlaps owned state')
+            descriptor = bytearray(_read_span(m.p,pointer,24))
+            m.reserved.append((pointer,pointer+24))
+            if not descriptor[16]:
+                descriptor[8:16]=(0x1000000000000 if descriptor[18] else 0x10000).to_bytes(8,'little')
+            cache_begin,cache_end,cache_cap = m.vector(callback_address+0xB0,40,own=False)
+            cache_size,cache_capacity = (cache_end-cache_begin)//40,(cache_cap-cache_begin)//40
+            new_capacity = max(size+1,capacity*2) if size == capacity else capacity
+            new_cache_capacity = max(cache_size+1,cache_capacity*2) if cache_size == cache_capacity else cache_capacity
+            if m.nodes+2 > max_nodes or max(new_capacity,new_cache_capacity) > max_nodes:
+                raise RefillUnsupported('AST memory/cache append exceeds its node bound')
+            for header,first,last,limit,count,old_capacity,new_count,is_cache in (
+                    (ast+0x60,begin,end,cap,size,capacity,new_capacity,False),
+                    (callback_address+0xB0,cache_begin,cache_end,cache_cap,cache_size,cache_capacity,new_cache_capacity,True)):
+                new = m.allocate(new_count*40,allocate) if count == old_capacity else first
+                target = new+count*40
+                _write_span(m.p,target,(image_base+0x372540).to_bytes(8,'little'))
+                _write_span(m.p,target+8,(2).to_bytes(4,'little'))
+                _write_span(m.p,target+0x10,descriptor)
+                if count == old_capacity:
+                    m.move_memories(first,last,new)
+                    m.publish(header,(new,new+(count+1)*40,new+new_count*40))
+                    if is_cache:
+                        for record in range(last-40,first-1,-40): m.destroy(record,40)
+                    if first: m.emit('free',first,limit-first)
+                else: _write_span(m.p,header+8,(last+40).to_bytes(8,'little'))
     elif slot_offset == 0xA8:
         first,last,_ = m.vector(ast+0x30,144,own=False)
         cache_begin,cache_end,_ = m.vector(callback_address+0x80,64,own=False)

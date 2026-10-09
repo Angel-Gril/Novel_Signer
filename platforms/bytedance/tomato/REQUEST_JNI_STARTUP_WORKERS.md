@@ -1360,6 +1360,55 @@ nested **230/133**、instruction **398/122**、local **252/37**、function
 attached parser、reader/factory/bootstrap、独立 signer、fresh 签名和线上矩阵
 仍未完成。见 [table 证据](evidence/vm9_alternative_ast_table_fresh_20261009.json)。
 
+## 6.24 Memory 预留、创建与独立缓存（2026-10-09 Asia/Shanghai）
+
+同一生产 owner 恢复实际 vtable `+68 → +31ccec` 和 `+70 → +31cdb4`，新增
+**272 个原生/Python 对照、65 个保护/回滚**。每基址 136 项，全部为合成输入，
+执行真实 relocated vtable，共 304 次回调、248 次 memory 创建。生产修改前五项
+行为 RED：reserve 增长、高 u32 count no-op、spare/default32、output/cache 同时
+增长且显式 maximum、spare/default64。原生自然返回 0，Python 拒绝缺失槽位；
+实现后完全相同的五项输入在两个基址通过。
+
+| 入口 / 布局 | 已恢复行为 |
+| --- | --- |
+| `+68` | count 截为 u32；预留 `output+60` 的 40 字节记录，保持 size，倒序复制、发布后释放旧块，没有旧记录析构 |
+| `+70` | `(ignored_index, descriptor_pointer)`；向 output 与 `callback+b0` 缓存各追加独立 40 字节记录，kind 2、vtable `+372540` |
+| descriptor | 实际读取并复制完整 24 字节至 record `+10`；保留输入的 flags 与尾部字节，支持未对齐输入 |
+| maximum | input `+10` 非零时保留显式 u64 maximum；为零时按 input `+12` 选择 `0x10000` 或 `0x1000000000000`，写 descriptor `+08` |
+| padding | record `+0c..+0f` 保留 destination 原值；descriptor 全部初始化，创建不依赖未写入的栈字 |
+| 两容器增长 | 各按 `max(size+1,capacity*2)` 扩容，倒序复制旧记录并发布；output 只 free，cache `+31f130` 另倒序调用旧节点 `+321368` 后 free |
+
+唯一 owner 仍是 `_ReaderAstMemory`，新增 `move_memories`，扩展 output `+60`
+的 stride、节点和容量验证。缓存的节点析构和 callback cleanup 复用既有 owner；
+输出容器保留，完整 output wrapper 清理尚未恢复。memory API 无需显式入口栈
+参数；三组旧 stack marker 对照均获得相同 descriptor。没有原生输入快照，
+没有 guest 字节屏蔽。此 API 没有整体模拟 native stack/TLS、真实分配器或 abort。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节（含所有 padding）、分配/析构/
+free 顺序及每次副作用的 owner 字节。独立预期核对 size/capacity、完整 descriptor、
+两种默认 maximum、旧记录搬移、destination padding、分配尺寸序列、借用输入
+与旧块字节保留。覆盖 null/spare/full/non-null-zero、maximum flag 0/1/9 与生成值、
+memory64 flag 0/255 与生成值、高位 count/index、未对齐输入、连续 reserve/append、
+两容器独立增长、已有 function/data/element 的析构和 cache cleanup，以及精确
+节点预算 5/12 的四项两基址对照。
+
+65 项 guard 包含 28 项绑定/attached/参数、descriptor/header/节点/容量/预算及
+allocator 检查，25 项两次分配的地址与别名检查，12 项晚期写入失败，包括已有
+容量下的 end 发布。五项预算拒绝配有相同输入在正常预算下的对照；两个字节
+guard 明确断言 memory 分配上限。所有原始页面回滚，不执行非法原生内存路径。
+分配仅为纯地址计划；free 为逻辑副作用，页面继续映射。
+
+十二组旧回归全部通过：table **184/77**、AST **308/54**、data **176/30**、
+create **148/105**、payload **104 AST / 34 ABI / 30 回滚**、expression **148/36**、
+element **282/159**、nested **230/133**、instruction **398/122**、local **252/37**、
+function **188/136**、code-begin **284/100**；十二份 JSON 与历史证据逐字节一致。
+其它生产函数、现有 callback 分支、class methods、API 默认值、parser 和共享
+native driver 不变；旧 unsupported guard 从 `+68` 移至未恢复的 `+78`。
+
+下一步恢复剩余 AST/import callback 与 output wrapper，再接入 attached
+`31b360 → 324444 → 324188` parser/AST/root。完整 reader/factory/bootstrap、独立
+signer、fresh 签名和线上矩阵仍未完成。见 [memory 证据](evidence/vm9_alternative_ast_memory_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1397,6 +1446,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_202
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_function_20261009.py --library <private-metasec.so> --output <reader-ast-function-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_code_begin_20261009.py --library <private-metasec.so> --output <reader-ast-code-begin-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_table_20261009.py --library <private-metasec.so> --output <reader-ast-table-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_memory_20261009.py --library <private-metasec.so> --output <reader-ast-memory-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

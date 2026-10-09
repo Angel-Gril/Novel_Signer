@@ -263,11 +263,21 @@ comparisons and 77 rollback checks pass; eleven old evidence files match byte
 for byte. The shared driver only forwards this optional entry context. See the
 [table report](../REQUEST_JNI_STARTUP_WORKERS.md#623-table-预留创建与显式栈-padding2026-10-09-asiashanghai).
 
+Slots +68/+70 reserve output+60 and append independent 40-byte records to
+output and callback+b0. Entry arguments are ignored index and a borrowed
+24-byte descriptor pointer. All descriptor bytes copy to record+10; four
+destination bytes at +0c retain their values. A zero maximum flag selects
+u64 10000 or 1000000000000 according to the memory64 flag. Output growth
+only frees; cache growth destroys old nodes backwards after publication.
+Memory entry requires no explicit stack context. All 272 native/Python
+comparisons and 65 rollback checks pass; twelve old evidence files match
+byte for byte. See the [memory report](../REQUEST_JNI_STARTUP_WORKERS.md#624-memory-预留创建与独立缓存2026-10-09-asiashanghai).
+
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
-only type/function/table/start/element/data/raw-word containers may hold storage. Caller-supplied
+only type/function/table/memory/start/element/data/raw-word containers may hold storage. Caller-supplied
 `reserved_regions` retain other borrowed memory. `max_nodes=4096` bounds nodes
-and new type/function/table/cache/element/data capacities (nested records and children also count);
+and new type/function/table/memory/cache/element/data capacities (nested records and children also count);
 `max_vector_bytes=16*1024*1024` bounds each buffer.
 The pure `allocate(size)` service returns an aligned mapped address and must
 not mutate pages or perform external allocation. Consume free effects once;
@@ -306,6 +316,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_202
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_function_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-function-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_code_begin_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-code-begin-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_table_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-table-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_memory_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-memory-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,
