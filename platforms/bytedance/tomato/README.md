@@ -112,6 +112,13 @@ padding, nested destructor/free order and image constants match. The same
 frame/raw/tree owner handles both data and element expressions. All inputs
 are synthetic; parser composition remains open. See the
 [element report](REQUEST_JNI_STARTUP_WORKERS.md#617-element-回调与嵌套记录清理2026-10-09-asiashanghai).
+Slots +120/+128/+130/+138 add 230 comparisons and 133 rollback checks for
+the full u64 element result type, nested capacity and nested expression
+creation/end. The 144-byte records transfer type results, preserve padding
+and reuse the existing frame/raw/tree owner. Six old evidence files match
+byte for byte. All fixtures are synthetic; the section 9 nonempty-vector
+native abort and parser composition remain open. See the
+[nested expression report](REQUEST_JNI_STARTUP_WORKERS.md#618-element-结果类型与嵌套表达式2026-10-09-asiashanghai).
 Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker

@@ -68,7 +68,7 @@ def prepare(library, base, spec):
                 owned(address+offset,stride,0 if mode == 'empty' else size,cap,0xD1+index)
             children(address+0xA0,spec.get('child_count',2),mode)
             n = spec.get('nested_count',2)
-            nested_begin = owned(address,144,n,n+1,0xD6)
+            nested_begin = owned(address,144,n,spec.get('nested_capacity',n+1),0xD6)
             for j in range(n): nested(nested_begin+j*144,'null' if mode=='mixed' and j%2 else mode,j)
     if 'element_constant' in spec: put(pages,base+0x6E210,spec['element_constant'])
     return pages,sizes

@@ -688,6 +688,23 @@ class _ReaderAstMemory:
             _write_span(self.p, header+8, begin.to_bytes(8,'little'))
             self.emit('free',begin,cap-begin)
 
+    def move_nested(self, begin, end, destination):
+        for source in range(end-144,begin-1,-144):
+            target = destination+source-begin
+            _write_span(self.p,target,(self.base+0x3724F0).to_bytes(8,'little'))
+            for offset in (0x10,0x28,0x50,0x78):
+                _write_span(self.p,target+offset,_read_span(self.p,source+offset,24))
+                _write_span(self.p,source+offset,bytes(24))
+            for offset,size in ((8,4),(0x40,8),(0x48,4),(0x68,8),(0x70,4)):
+                _write_span(self.p,target+offset,_read_span(self.p,source+offset,size))
+
+    def destroy_nested(self, address):
+        self.emit('destroy',address,144)
+        self.destroy_element_children(address+0x78)
+        self.free_vector(address+0x50)
+        _write_span(self.p,address,(self.base+0x3724F0).to_bytes(8,'little'))
+        self.free_vector(address+0x28); self.free_vector(address+0x10)
+
     def destroy_element(self, address):
         self.emit('destroy',address,184)
         self.destroy_element_children(address+0xA0)
@@ -696,12 +713,7 @@ class _ReaderAstMemory:
         self.free_vector(address+0x50); self.free_vector(address+0x38)
         begin, end, cap = self.vector(address,144,own=False)
         if begin:
-            for nested in range(end-144,begin-1,-144):
-                self.emit('destroy',nested,144)
-                self.destroy_element_children(nested+0x78)
-                self.free_vector(nested+0x50)
-                _write_span(self.p,nested,(self.base+0x3724F0).to_bytes(8,'little'))
-                self.free_vector(nested+0x28); self.free_vector(nested+0x10)
+            for nested in range(end-144,begin-1,-144): self.destroy_nested(nested)
             _write_span(self.p,address+8,begin.to_bytes(8,'little'))
             self.emit('free',begin,cap-begin)
 
@@ -729,6 +741,10 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     type-copy sequence, an image-supplied +18 constant and five owned vectors.
     Element expression begin/end use the shared frame/raw/tree owner. The
     first vector owns 144-byte nested records with their own type/locals/children.
+    Element result type stores a full u64 at +18. Nested reserve keeps size;
+    nested begin copies that type into a temporary result, moves the result
+    into a new 144-byte record, frees the original result and begins its frame.
+    Nested end shares the same raw fixup/tree/pop implementation.
     Data payload ignores index and uses the full u64 length. Zero length
     leaves existing storage/size intact; nonzero resizes the last record's
     byte vector, then copies a disjoint borrowed span. Growth zero-fills the
@@ -747,6 +763,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     The section parser still uses its separately supplied status service.
     """
     counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
+              0x120:2,0x128:2,0x130:1,0x138:1,
               0x140:3,0x148:1,0x150:1,0x158:3,0x160:1,0x168:1}
     if (not isinstance(slot_offset,int) or slot_offset not in counts
             or not isinstance(arguments, (tuple,list))
@@ -762,11 +779,12 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
     entries = {0x18:0x31B6B0,0x20:0x31B6D0,0xA0:0x31D6D4,
                0xB0:0x31D974,0xF0:0x31DB94,0x100:0x31DBCC,0x108:0x31DBF0,
+               0x120:0x31DEE0,0x128:0x31DEF4,0x130:0x31DF1C,0x138:0x31E18C,
                0x110:0x31DE48,0x118:0x31DE98,0x140:0x31E1D4,0x148:0x31E4A4,0x150:0x31E4F4,
                0x158:0x31E53C,0x160:0x31E5B4,0x168:0x31E5D8}
     if _u(m.p,image_base+0x372370+slot_offset) != image_base+entries[slot_offset]:
         raise RefillUnsupported('AST callback slot relocation is unsupported')
-    if slot_offset in (0x18,0x20,0x108,0x140):
+    if slot_offset in (0x18,0x20,0x108,0x128,0x130,0x140):
         if _u(m.p,image_base+0x375090) != image_base+0x3724E0:
             raise RefillUnsupported('AST type move vtable source is unsupported')
     if slot_offset in (0x18,0x20):
@@ -866,17 +884,67 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         # 108 calls the real stack element destructor; 140 inlines it. Stack
         # temporaries are outside guest ownership; their frees remain effects.
         m.emit('free',temporary_data,8); m.emit('free',temporary_type,8)
-    elif slot_offset in (0x110,0x118,0x148,0x150):
+    elif slot_offset in (0x120,0x128):
+        record_begin,record_end,_ = m.vector(ast+0xD8,184,own=False)
+        if record_begin == record_end:
+            raise RefillUnsupported('AST nested operation requires an active element')
+        record = record_end-184
+        if slot_offset == 0x120:
+            _write_span(m.p,record+0x18,arguments[1].to_bytes(8,'little'))
+        else:
+            begin,end,cap = m.vector(record,144,own=False)
+            size,capacity = (end-begin)//144,(cap-begin)//144
+            count = arguments[1]&0xFFFFFFFF
+            if count > max_nodes:
+                raise RefillUnsupported('AST nested reserve exceeds the node bound')
+            if count > capacity:
+                new = m.allocate(count*144,allocate)
+                m.move_nested(begin,end,new)
+                m.publish(record,(new,new+size*144,new+count*144))
+                for node in range(end-144,begin-1,-144): m.destroy_nested(node)
+                if begin: m.emit('free',begin,cap-begin)
+    elif slot_offset in (0x110,0x118,0x130,0x138,0x148,0x150):
         begin,end,cap = m.vector(callback_address+0x30,16,own=False)
         if (cap-begin)//16 > max_nodes:
             raise RefillUnsupported('AST expression frame capacity exceeds its node bound')
-        if slot_offset in (0x110,0x148):
+        if slot_offset in (0x110,0x130,0x148):
             header,stride = (ast+0xD8,184) if slot_offset == 0x110 else (ast+0xF0,176)
+            if slot_offset == 0x130: header,stride = ast+0xD8,184
             record_begin,record_end,_ = m.vector(header,stride,own=False)
             if record_begin == record_end:
                 raise RefillUnsupported('AST expression requires an active record')
+            if slot_offset == 0x130:
+                header = record_end-184
+                nested_begin,nested_end,nested_cap = m.vector(header,144,own=False)
+                size,capacity = (nested_end-nested_begin)//144,(nested_cap-nested_begin)//144
+                if m.nodes+1 > max_nodes or size+1 > max_nodes:
+                    raise RefillUnsupported('AST nested append exceeds the node bound')
+                value = _read_span(m.p,header+0x18,8)
+                original = m.allocate(8,allocate); _write_span(m.p,original,value)
+                result = m.allocate(8,allocate); _write_span(m.p,result,value)
+                if size == capacity:
+                    new_capacity = max(size+1,capacity*2)
+                    if new_capacity > max_nodes:
+                        raise RefillUnsupported('AST nested growth exceeds the node bound')
+                    new = m.allocate(new_capacity*144,allocate); target = new+size*144
+                else: new,new_capacity,target = nested_begin,capacity,nested_end
+                _write_span(m.p,target,(image_base+0x3724F0).to_bytes(8,'little'))
+                for offset in (8,0x48,0x70): _write_span(m.p,target+offset,bytes(4))
+                for offset in (0x10,0x50,0x78): m.publish(target+offset,(0,0,0))
+                m.publish(target+0x28,(result,result+8,result+8))
+                _write_span(m.p,target+0x40,bytes(8))
+                _write_span(m.p,target+0x68,(0xFFFFFFFF).to_bytes(8,'little'))
+                if size == capacity:
+                    m.move_nested(nested_begin,nested_end,new)
+                    m.publish(header,(new,new+(size+1)*144,new+new_capacity*144))
+                    for node in range(nested_end-144,nested_begin-1,-144): m.destroy_nested(node)
+                    if nested_begin: m.emit('free',nested_begin,nested_cap-nested_begin)
+                else: _write_span(m.p,header+8,(nested_end+144).to_bytes(8,'little'))
+                # The temporary type's result was moved into the new node.
+                # Its destructor owns no storage; only the original is freed.
+                m.emit('free',original,8)
+            else: target = record_end-0x90
             raw_begin,raw_end,_ = m.vector(ast+0x108,own=False)
-            target = record_end-0x90
             _write_span(m.p,callback_address+0x38,begin.to_bytes(8,'little'))
             _write_span(m.p,callback_address+0x28,target.to_bytes(8,'little'))
             _write_span(m.p,target+0x68,((raw_end-raw_begin)&0xFFFFFFFF).to_bytes(4,'little'))

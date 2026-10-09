@@ -1,5 +1,29 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：element 结果类型与嵌套表达式
+
+同一 AST owner 恢复 slots `+120/+128/+130/+138`，**230 个原生/Python 对照、
+133 个保护/回滚**通过，两个基址各 115 项，全部合成。四个修改前 RED 均由
+实际槽位自然返回与 Python 未支持边界取得。+120 保存完整 u64 结果类型；
++128 将 count 截断 u32、预留 144 字节 nested vector，保持 logical size。
+倒序移动四组 vectors，保留 padding，发布后倒序析构和释放旧 block。
+
++130 为 element 的结果类型创建 original/temporary result 两份八字节存储，
+把临时 result 转移至新的 nested 记录；spare 或按倍增容量扩容。原记录移动/
+发布/析构之后 free original，然后指向新记录、保存 raw 字节长度并开始 frame。
++138 复用现有 frame/raw/u32 fixup/libc++ erase owner。Nested destructor 从原
+element 清理中提取为共享内部 helper；没有第二套树或新的公开析构 API。
+
+独立类型/记录/容量/frame/raw 断言、预填非零 guest 字节、自然返回/SP 和所有
+效果时的根 owner 状态通过。逐次创建/扩容/frame/end 分配失败和晚期错误全部
+回滚。旧 AST 308/54、data 176/30、create 148/105、payload 104 AST/34 ABI/30
+回滚、expression 148/36、element 282/159 均重跑，六份 JSON 逐字节一致。
+Parser AST 未改；section 9 非空 vector 仍原生 abort，不发出 +130/+138。
+两槽的一个忽略参数为当前独立 API 约定，不宣称 parser ABI 验证。其余 AST、
+attached parser/wrapper、完整 reader/factory/bootstrap、signer 与线上验收仍未完成。
+见 [nested 证据](evidence/vm9_alternative_ast_element_nested_fresh_20261009.json)与
+[第 6.18 节报告](REQUEST_JNI_STARTUP_WORKERS.md#618-element-结果类型与嵌套表达式2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：element 回调与嵌套记录清理
 
 同一 AST owner 恢复 slots `+f0/+100/+108/+110/+118`，**282 个原生/Python 对照、
