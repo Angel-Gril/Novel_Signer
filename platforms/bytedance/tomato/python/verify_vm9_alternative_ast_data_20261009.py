@@ -81,6 +81,10 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             begin = int.from_bytes(cpu.mem_read(AST+0xF0, 8), 'little')
             end = int.from_bytes(cpu.mem_read(AST+0xF8, 8), 'little')
             for address in range(end-176, begin-1, -176): yield 'record', 0, (address,)
+        if spec.get('destroy_element'):
+            begin = int.from_bytes(cpu.mem_read(AST+0xD8, 8), 'little')
+            end = int.from_bytes(cpu.mem_read(AST+0xE0, 8), 'little')
+            for address in range(end-184, begin-1, -184): yield 'element', 0, (address,)
         if spec.get('cleanup'): yield 'cleanup', 0, ()
     iterator = None
     def advance(cpu):
@@ -98,6 +102,8 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             argv = [CB, *values]
         elif kind == 'record':
             root, width = values[0], 176; target = base+0x2CC1EC; argv = list(values)
+        elif kind == 'element':
+            root, width = values[0], 184; target = base+0x2CC2B8; argv = list(values)
         else:
             root, width = CB, 0x108; target = base+0x31B458; argv = [CB]
         for index, value in enumerate(argv):
@@ -127,6 +133,12 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
         offset = address-base
         if offset == 0x2CC1EC:
             effect(cpu, 'destroy', cpu.reg_read(arm.UC_ARM64_REG_X0), 176)
+        elif offset in (0x2CC2B8, 0x2CC470):
+            # 108 also calls the stack temporary's real destructor. Its frees
+            # remain observed; stack-local destruction is outside guest ownership.
+            node = cpu.reg_read(arm.UC_ARM64_REG_X0 if offset == 0x2CC2B8 else arm.UC_ARM64_REG_X1)
+            if oracle.GUEST <= node < oracle.GUEST+0xA000:
+                effect(cpu, 'destroy', node, 184 if offset == 0x2CC2B8 else 144)
         elif offset in (0x321260, 0x321308, 0x321368):
             node = cpu.reg_read(arm.UC_ARM64_REG_X0)
             table = int.from_bytes(cpu.mem_read(node, 8), 'little')-base
@@ -155,6 +167,13 @@ def model_case(args, base, spec, *, prepare_case=None):
         assert callable(getattr(alternative, 'destroy_reader_ast_data_record', None)), '176-byte destructor missing'
         for address in range(end-176, begin-1, -176):
             effects.extend(alternative.destroy_reader_ast_data_record(pages, record_address=address,
+                image_base=base).effects)
+    if spec.get('destroy_element'):
+        begin = int.from_bytes(_read_span(pages, AST+0xD8, 8), 'little')
+        end = int.from_bytes(_read_span(pages, AST+0xE0, 8), 'little')
+        assert callable(getattr(alternative, 'destroy_reader_ast_element_record', None)), '184-byte destructor missing'
+        for address in range(end-184, begin-1, -184):
+            effects.extend(alternative.destroy_reader_ast_element_record(pages, record_address=address,
                 image_base=base).effects)
     if spec.get('cleanup'):
         effects.extend(alternative.cleanup_reader_callback(pages, callback_address=CB, image_base=base).effects)

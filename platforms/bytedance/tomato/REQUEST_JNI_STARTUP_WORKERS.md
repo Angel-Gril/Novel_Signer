@@ -6,6 +6,7 @@
 同日追加 data record 创建/追加的 148 个对照与 105 个回滚，见第 6.14 节。
 同日追加 data payload 的 104 个 AST 对照、34 个 length 参数对照与 30 个回滚，见第 6.15 节。
 同日追加 data expression/tree 的 148 个对照与 36 个回滚，见第 6.16 节。
+同日追加 element 回调/嵌套清理的 282 个对照与 159 个回滚，见第 6.17 节。
 同日追加 section dispatcher 与部分 handler 的 202 个对照、12 个回滚，见第 6.2 节。
 同日追加有符号 i32 原语的 1336 个对照、10 个回滚，见第 6.3 节。
 同日追加 vector/type 的 102 / 372 个对照、34 个回滚，见第 6.4 节。
@@ -971,6 +972,70 @@ payload **104 AST / 34 ABI / 30 回滚** 全量回归通过，四份新 JSON 与
 reader/factory/B VM/bootstrap、独立 signer 与线上矩阵尚未完成。
 证据见 [data expression/tree](evidence/vm9_alternative_ast_data_expression_fresh_20261009.json)。
 
+## 6.17 Element 回调与嵌套记录清理（2026-10-09 Asia/Shanghai）
+
+同一 `run_reader_ast_callback` owner 恢复以下实际槽位；**282 个原生/Python
+对照、159 个保护/回滚**通过，两个基址各 141 项，全部输入合成。修改前五个
+实际 callback 均自然返回 0，Python 拒绝；实际 element/嵌套析构正常完成而
+Python API 缺失，合计六个行为 RED。修改后同一最小 fixture 在两个基址 GREEN。
+
+| Slot | 原生入口 | 恢复行为 |
+| --- | --- | --- |
+| +f0 | +31db94 | **零参数**，向 raw buffer 追加 u32 零 |
+| +100 | +31dbcc | u32 count，为 output+d8 的 184 字节记录预留容量 |
+| +108 | +31dbf0 | 忽略 index，截断 table index/flags，创建并追加 element |
+| +110 | +31de48 | 保存 raw 起始字节长度，重置并追加 expression frame |
+| +118 | +31de98 | 按最后 frame key 修补 raw、删树节点、弹出 frame |
+
+Element header 在 output+d8/e0/e8，步长 **184**。+00 vector 拥有 **144** 字节
+嵌套记录；+18 u64 来自 image+6e210；+20 低字为 flags 分类（低两位为 3 时
+取 2，否则 flags&1），高字为 table index。+28 为实际内嵌 type，+38/+50 分别
+拥有 params/results u64 vectors，+78 为 16 字节 locals，+a0 为 56 字节 children。
+每个 child 的 +10 拥有 u64 vector。+90 初始为 u64 0x00000000ffffffff。
+
+Reserve 容量足够时不变；不足则分配 count×184，+3205e8 倒序转移五组 vector，
+清空源 header，复制标量和实际 type vtable，保留目标 +34/+74/+9c padding。
+发布新 header 后倒序析构旧记录，再 free 旧 block。创建与 data 共享 sentinel
+拷贝流程：original/type/temporary-element/final-results 各分配八字节；original
+在临时 element 前释放。满容量时先分配 max(size+1,capacity×2)×184，再复制最终
+results。发布、旧记录析构完成后，清理 temporary-element 和 temporary-type。
+原生明确调用栈上临时 element 的 +2cc2b8；验证器让其自然执行，比较全部 free，
+仅对 guest 拥有的记录记录 destroy 事件，不建模临时栈地址或整个 stack/TLS。
+
+`destroy_reader_ast_element_record` 恢复非 deleting +2cc2b8：倒序释放 +a0 children
+的内部 vectors，再释放 child block、+78 locals、内嵌 type results/params，最后
+倒序执行 +00 的嵌套记录 +2cc470 并释放 nested block。嵌套布局为 +00 内嵌 type、
++50 locals、+78 children；自身依次释放 children/locals/type results/type params。
+Vector end 在原生相同的时点 reset，vtable 恢复 +3724f0，record 自身保留。
+
+Begin 忽略 index，callback+28 指向最后 element 的 type（end-0x90），保存 raw
+u32 字节长度到 element+90 低字并保留高字；frame 常量来自 image+6e188。
+End 复用已经恢复的 u32 fixup/实际 libc++ erase owner。两类表达式共享 frame、
+raw/tree，不增加第二份树实现。非空 element 指令列表的 parser 原生 abort 边界
+仍保留；本轮恢复的是 detached AST 入口，没有接入 parser status service。
+
+280 项执行实际 vtable callback，2 项直接执行 element/嵌套析构。核对 guest
+前 0xa000 字节（含 padding、移动源和删树遗留内容）、自然返回/SP、全部
+allocation/destruction/free 顺序及每个效果时的根 owner 内容。独立断言另外核对
+记录布局/分类/sentinel、两处 image 常量、frame 和起始长度、零字和 raw 修补。
+覆盖 null/empty-owned/rich/mixed、多级嵌套、空 owned block、spare/full、连续
+reserve/create、u32 截断、全部树旋转/后继转移以及 data/element 共享表达式组合。
+
+159 项保护覆盖 slot/attached/参数/预算、未知 type、部分 element/nested/child、
+嵌套共享/自别名与缺页；逐次破坏创建的五个或四个分配边界，并验证 reserve/
+零字/begin/end 的分配失败，包括已经改写 active pointer 或 raw patch 后的失败。
+所有原页面逐字节回滚；非法原生内存路径不执行。分配是纯地址计划，free 为逻辑效果。
+
+旧 AST **308/54**、data **176/30**、create **148/105**、payload **104 AST / 34 ABI /
+30 回滚**、data expression **148/36** 重新通过，五份 JSON 与旧公开证据逐字节
+一致。原 unsupported-slot guard 从 +f0 迁移至仍未支持的 +120；历史证据保留。
+Parser owner AST 未改，其余既有 ownership 方法除 callback 的 element 预检外未改。
+语法、文档链接、隐私、CLI、精确十一文件和提交字节检查通过。
+
+Remaining AST callbacks、attached parser/wrapper、parse/root、完整 reader/factory/
+bootstrap、独立 signer 与线上矩阵尚未完成。见
+[element 证据](evidence/vm9_alternative_ast_element_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1001,6 +1066,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_create_20261009.py --library <private-metasec.so> --output <reader-ast-data-create-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_payload_20261009.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-ast-data-payload-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_expression_20261009.py --library <private-metasec.so> --output <reader-ast-data-expression-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_20261009.py --library <private-metasec.so> --output <reader-ast-element-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

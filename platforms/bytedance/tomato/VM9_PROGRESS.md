@@ -1,5 +1,30 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：element 回调与嵌套记录清理
+
+同一 AST owner 恢复 slots `+f0/+100/+108/+110/+118`，**282 个原生/Python 对照、
+159 个保护/回滚**通过，两个基址各 141 项，全部合成。五个实际槽位与直接
+element 析构在修改前取得六个行为 RED，修改后同一最小输入 GREEN。
+F0 为零参数、追加 u32 零；element count/entry 预留/创建 184 字节记录。
+记录读取 image+6e210 常量，table index/flags 截断 u32，结果含一项 u64 -1。
+倒序搬移转移五组 ownership，保留 padding，发布后析构旧记录并释放旧 block。
+
+`destroy_reader_ast_element_record` 恢复 +2cc2b8，先倒序释放 children、locals、
+内嵌 type，随后通过 +2cc470 倒序清理拥有的 144 字节 nested records。每个
+nested record 自有 type/locals/children。Element begin/end 与 data 使用同一
+frame/raw/tree owner；保存起始字节长度至 +90，16 字节 frame、u32 patch、
+libc++ 树删除及所有释放顺序与原生一致。原生临时栈析构自然执行，全部 free
+对照；仅 guest ownership 的 destroy 事件与前 0xa000 guest 字节进入比较。
+
+独立布局、image 常量、frame/raw 断言通过；159 项参数/所有权/预算/每次分配
+失败均全页回滚，包含已经写入 active pointer 或第一处 raw patch 后的失败。
+旧 AST 308/54、data 176/30、create 148/105、payload 104 AST/34 ABI/30 回滚、
+expression 148/36 全部重跑，五份 JSON 逐字节一致。Parser owner 未改；其
+nonempty element vector 的原生 abort 边界仍保留。完整 AST/reader/factory/
+bootstrap、attached parser/wrapper、signer 与线上矩阵尚未完成。见
+[element 证据](evidence/vm9_alternative_ast_element_fresh_20261009.json)与
+[第 6.17 节报告](REQUEST_JNI_STARTUP_WORKERS.md#617-element-回调与嵌套记录清理2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：data expression frame、u32 修补与树节点删除
 
 同一 owner 恢复 slots `+148/+150 → +31e4a4/+31e4f4`：**148 个原生/Python

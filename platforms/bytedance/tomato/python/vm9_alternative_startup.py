@@ -547,6 +547,24 @@ class _ReaderAstMemory:
                 raise RefillUnsupported('AST data child bound reached')
             self.vector(child+0x10, 8)
 
+    def element_children(self, header):
+        begin, end, _ = self.vector(header, 56)
+        for child in range(begin, end, 56):
+            self.nodes += 1
+            if self.nodes > self.max_nodes:
+                raise RefillUnsupported('AST element child bound reached')
+            self.vector(child+0x10, 8)
+
+    def element_record(self, address):
+        begin, end, _ = self.vector(address, 144)
+        self.node(address+0x28, 64)
+        self.vector(address+0x78, 16)
+        self.element_children(address+0xA0)
+        for nested in range(begin, end, 144):
+            self.node(nested, 64)
+            self.vector(nested+0x50, 16)
+            self.element_children(nested+0x78)
+
     def callback(self, address, *, output=True):
         self.claim(address, 0x108)
         if _u(self.p, address) != self.base+0x372370:
@@ -559,15 +577,18 @@ class _ReaderAstMemory:
             if _u(self.p, address+0x20) != ast+0x108:
                 raise RefillUnsupported('AST raw-word target is inconsistent')
             for offset in range(0, 0x120, 24):
-                if offset not in (0,0xC0,0xF0,0x108) and any(
+                if offset not in (0,0xC0,0xD8,0xF0,0x108) and any(
                         _u(self.p,ast+offset+word) for word in (0,8,16)):
                     raise RefillUnsupported('AST unrecovered output containers must be empty')
-                stride = 64 if offset == 0 else 4 if offset == 0xC0 else 176 if offset == 0xF0 else 1
+                stride = (64 if offset == 0 else 4 if offset == 0xC0 else
+                          184 if offset == 0xD8 else 176 if offset == 0xF0 else 1)
                 begin, end, _ = self.vector(ast+offset, stride)
                 if offset == 0:
                     for node in range(begin, end, 64): self.node(node, 64)
                 elif offset == 0xF0:
                     for record in range(begin, end, 176): self.data_record(record)
+                elif offset == 0xD8:
+                    for record in range(begin, end, 184): self.element_record(record)
         records = _u(self.p, address+0x10)
         if records:
             self.claim(records, 24)
@@ -650,11 +671,45 @@ class _ReaderAstMemory:
         self.free_vector(address+0x48); self.free_vector(address+0x30)
         self.free_vector(address)
 
+    def move_element(self, begin, end, destination):
+        for source in range(end-184, begin-1, -184):
+            target = destination+source-begin
+            for offset in (0,0x38,0x50,0x78,0xA0):
+                _write_span(self.p, target+offset, _read_span(self.p, source+offset, 24))
+                _write_span(self.p, source+offset, bytes(24))
+            _write_span(self.p, target+0x28, (self.base+0x3724F0).to_bytes(8,'little'))
+            for offset, size in ((0x18,16),(0x30,4),(0x68,8),(0x70,4),(0x90,8),(0x98,4)):
+                _write_span(self.p, target+offset, _read_span(self.p, source+offset, size))
+
+    def destroy_element_children(self, header):
+        begin, end, cap = self.vector(header, 56, own=False)
+        if begin:
+            for child in range(end-56, begin-1, -56): self.free_vector(child+0x10)
+            _write_span(self.p, header+8, begin.to_bytes(8,'little'))
+            self.emit('free',begin,cap-begin)
+
+    def destroy_element(self, address):
+        self.emit('destroy',address,184)
+        self.destroy_element_children(address+0xA0)
+        self.free_vector(address+0x78)
+        _write_span(self.p,address+0x28,(self.base+0x3724F0).to_bytes(8,'little'))
+        self.free_vector(address+0x50); self.free_vector(address+0x38)
+        begin, end, cap = self.vector(address,144,own=False)
+        if begin:
+            for nested in range(end-144,begin-1,-144):
+                self.emit('destroy',nested,144)
+                self.destroy_element_children(nested+0x78)
+                self.free_vector(nested+0x50)
+                _write_span(self.p,nested,(self.base+0x3724F0).to_bytes(8,'little'))
+                self.free_vector(nested+0x28); self.free_vector(nested+0x10)
+            _write_span(self.p,address+8,begin.to_bytes(8,'little'))
+            self.emit('free',begin,cap-begin)
+
 
 def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         arguments, allocate=None, max_nodes=4096, max_vector_bytes=16*1024*1024,
         reserved_regions=()):
-    """Actual slots 18/20/a0/b0/140/148/150/158/160/168 with owned effects.
+    """Recovered actual B vtable callbacks with transactional owned effects.
 
     Type count reserves capacity without resizing. Type entry ignores its
     index, duplicates the two input u64 vectors into temporaries, copies them
@@ -670,13 +725,17 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     16-byte frame stack before appending its image-supplied sentinel. End uses
     the last frame index to patch raw bytes from a u32-offset tree, erases the
     matching node with native links/colors, frees payload/node and pops a frame.
+    Element count/entry operate on 184-byte records with the same sentinel
+    type-copy sequence, an image-supplied +18 constant and five owned vectors.
+    Element expression begin/end use the shared frame/raw/tree owner. The
+    first vector owns 144-byte nested records with their own type/locals/children.
     Data payload ignores index and uses the full u64 length. Zero length
     leaves existing storage/size intact; nonzero resizes the last record's
     byte vector, then copies a disjoint borrowed span. Growth zero-fills the
     extension, copies old bytes, publishes and frees before the payload copy.
     Start appends u32; local group count writes callback+78 and clears +7c;
-    raw word appends four
-    bytes to callback+20, including unaligned byte lengths. Arguments use
+    raw word appends four bytes to callback+20, including unaligned byte
+    lengths. F0 takes no arguments and appends a zero word. Arguments use
     uint64 registers and native w-register truncation. Other slots fail closed.
 
     allocate(size) must only plan an aligned address in mapped pages. It must
@@ -687,7 +746,8 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x140:3,0x148:1,0x150:1,0x158:3,0x160:1,0x168:1}
+    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
+              0x140:3,0x148:1,0x150:1,0x158:3,0x160:1,0x168:1}
     if (not isinstance(slot_offset,int) or slot_offset not in counts
             or not isinstance(arguments, (tuple,list))
             or len(arguments) != counts[slot_offset]
@@ -701,11 +761,12 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
     entries = {0x18:0x31B6B0,0x20:0x31B6D0,0xA0:0x31D6D4,
-               0xB0:0x31D974,0x140:0x31E1D4,0x148:0x31E4A4,0x150:0x31E4F4,
+               0xB0:0x31D974,0xF0:0x31DB94,0x100:0x31DBCC,0x108:0x31DBF0,
+               0x110:0x31DE48,0x118:0x31DE98,0x140:0x31E1D4,0x148:0x31E4A4,0x150:0x31E4F4,
                0x158:0x31E53C,0x160:0x31E5B4,0x168:0x31E5D8}
     if _u(m.p,image_base+0x372370+slot_offset) != image_base+entries[slot_offset]:
         raise RefillUnsupported('AST callback slot relocation is unsupported')
-    if slot_offset in (0x18,0x20,0x140):
+    if slot_offset in (0x18,0x20,0x108,0x140):
         if _u(m.p,image_base+0x375090) != image_base+0x3724E0:
             raise RefillUnsupported('AST type move vtable source is unsupported')
     if slot_offset in (0x18,0x20):
@@ -764,9 +825,12 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                 if pointer: m.emit('free',pointer,len(payload))
     elif slot_offset == 0xB0:
         _write_span(m.p,callback_address+0x78,(arguments[0]&0xFFFFFFFF).to_bytes(4,'little')+bytes(4))
-    elif slot_offset == 0x140:
-        begin,end,cap = m.vector(ast+0xF0,176,own=False)
-        size,capacity = (end-begin)//176,(cap-begin)//176
+    elif slot_offset in (0x108,0x140):
+        element = slot_offset == 0x108
+        header,stride = (ast+0xD8,184) if element else (ast+0xF0,176)
+        shift = 8 if element else 0
+        begin,end,cap = m.vector(header,stride,own=False)
+        size,capacity = (end-begin)//stride,(cap-begin)//stride
         if m.nodes+1 > max_nodes or size+1 > max_nodes:
             raise RefillUnsupported('AST data append exceeds the node bound')
         sentinel = MASK64.to_bytes(8,'little')
@@ -778,33 +842,39 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
             new_capacity = max(size+1,capacity*2)
             if new_capacity > max_nodes:
                 raise RefillUnsupported('AST data growth exceeds the node bound')
-            new = m.allocate(new_capacity*176,allocate); target = new+size*176
+            new = m.allocate(new_capacity*stride,allocate); target = new+size*stride
         else: new,new_capacity,target = begin,capacity,end
         result = m.allocate(8,allocate); _write_span(m.p,result,sentinel)
         flags = arguments[2]&0xFFFFFFFF
         classification = 2 if flags&3 == 3 else flags&1
-        for offset in (0,0x30,0x70,0x98): m.publish(target+offset,(0,0,0))
-        m.publish(target+0x48,(result,result+8,result+8))
+        m.publish(target,(0,0,0))
+        for offset in (0x30,0x70,0x98): m.publish(target+offset+shift,(0,0,0))
+        m.publish(target+0x48+shift,(result,result+8,result+8))
+        if element: _write_span(m.p,target+0x18,_read_span(m.p,image_base+0x6E210,8))
         for offset,value in ((0x18,classification | ((arguments[1]&0xFFFFFFFF)<<32)),
                              (0x20,image_base+0x3724F0),(0x60,0),(0x88,0xFFFFFFFF)):
+            offset += shift
             _write_span(m.p,target+offset,value.to_bytes(8,'little'))
-        for offset in (0x28,0x68,0x90): _write_span(m.p,target+offset,bytes(4))
+        for offset in (0x28,0x68,0x90): _write_span(m.p,target+offset+shift,bytes(4))
         if size == capacity:
-            m.move_data(begin,end,new)
-            m.publish(ast+0xF0,(new,new+(size+1)*176,new+new_capacity*176))
-            for record in range(end-176,begin-1,-176): m.destroy_data(record)
+            (m.move_element if element else m.move_data)(begin,end,new)
+            m.publish(header,(new,new+(size+1)*stride,new+new_capacity*stride))
+            for record in range(end-stride,begin-1,-stride):
+                (m.destroy_element if element else m.destroy_data)(record)
             if begin: m.emit('free',begin,cap-begin)
-        else: _write_span(m.p,ast+0xF8,(end+176).to_bytes(8,'little'))
-        # Native temporary destructors are inlined; only their frees are effects.
+        else: _write_span(m.p,header+8,(end+stride).to_bytes(8,'little'))
+        # 108 calls the real stack element destructor; 140 inlines it. Stack
+        # temporaries are outside guest ownership; their frees remain effects.
         m.emit('free',temporary_data,8); m.emit('free',temporary_type,8)
-    elif slot_offset in (0x148,0x150):
+    elif slot_offset in (0x110,0x118,0x148,0x150):
         begin,end,cap = m.vector(callback_address+0x30,16,own=False)
         if (cap-begin)//16 > max_nodes:
             raise RefillUnsupported('AST expression frame capacity exceeds its node bound')
-        if slot_offset == 0x148:
-            record_begin,record_end,_ = m.vector(ast+0xF0,176,own=False)
+        if slot_offset in (0x110,0x148):
+            header,stride = (ast+0xD8,184) if slot_offset == 0x110 else (ast+0xF0,176)
+            record_begin,record_end,_ = m.vector(header,stride,own=False)
             if record_begin == record_end:
-                raise RefillUnsupported('AST expression requires an active data record')
+                raise RefillUnsupported('AST expression requires an active record')
             raw_begin,raw_end,_ = m.vector(ast+0x108,own=False)
             target = record_end-0x90
             _write_span(m.p,callback_address+0x38,begin.to_bytes(8,'little'))
@@ -887,39 +957,44 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                 if length > size: _write_span(m.p,end,bytes(length-size))
                 _write_span(m.p,target+8,(begin+length).to_bytes(8,'little'))
             _write_span(m.p,begin,payload)
-    elif slot_offset == 0x160:
-        begin,end,cap = m.vector(ast+0xF0,176,own=False)
-        size,capacity = (end-begin)//176,(cap-begin)//176
+    elif slot_offset in (0x100,0x160):
+        element = slot_offset == 0x100
+        header,stride = (ast+0xD8,184) if element else (ast+0xF0,176)
+        begin,end,cap = m.vector(header,stride,own=False)
+        size,capacity = (end-begin)//stride,(cap-begin)//stride
         count = arguments[0]&0xFFFFFFFF
         if count > max_nodes:
             raise RefillUnsupported('AST data reserve exceeds the node bound')
         if count > capacity:
-            new = m.allocate(count*176,allocate)
-            m.move_data(begin,end,new)
-            m.publish(ast+0xF0,(new,new+size*176,new+count*176))
-            for record in range(end-176,begin-1,-176): m.destroy_data(record)
+            new = m.allocate(count*stride,allocate)
+            (m.move_element if element else m.move_data)(begin,end,new)
+            m.publish(header,(new,new+size*stride,new+count*stride))
+            for record in range(end-stride,begin-1,-stride):
+                (m.destroy_element if element else m.destroy_data)(record)
             if begin: m.emit('free',begin,cap-begin)
     else:
+        word = 0 if slot_offset == 0xF0 else arguments[0]&0xFFFFFFFF
+        raw = slot_offset in (0xF0,0x168)
         vector = ast+0xC0 if slot_offset == 0xA0 else ast+0x108
         begin,end,cap = m.vector(vector,4 if slot_offset == 0xA0 else 1,own=False)
         size,capacity = end-begin,cap-begin
-        if size+4 > max_vector_bytes or (slot_offset == 0x168 and size+4 >= 1<<32):
+        if size+4 > max_vector_bytes or (raw and size+4 >= 1<<32):
             raise RefillUnsupported('AST word append exceeds the byte bound')
         if cap-end < 4:
             new_capacity = max(size+4,capacity*2)
             new = m.allocate(new_capacity,allocate)
-            _write_span(m.p,new+size, (arguments[0]&0xFFFFFFFF).to_bytes(4,'little')
+            _write_span(m.p,new+size, word.to_bytes(4,'little')
                         if slot_offset == 0xA0 else bytes(4))
             _write_span(m.p,new,_read_span(m.p,begin,size))
             m.publish(vector,(new,new+size+4,new+new_capacity))
             if begin: m.emit('free',begin,capacity)
             begin = new
         else:
-            if slot_offset == 0x168: _write_span(m.p,end,bytes(4))
+            if raw: _write_span(m.p,end,bytes(4))
             # The raw helper publishes its zero-filled extension before the
             # caller stores the word; start publishes after storing its word.
-            if slot_offset == 0x168: _write_span(m.p,vector+8,(end+4).to_bytes(8,'little'))
-        _write_span(m.p,begin+size,(arguments[0]&0xFFFFFFFF).to_bytes(4,'little'))
+            if raw: _write_span(m.p,vector+8,(end+4).to_bytes(8,'little'))
+        _write_span(m.p,begin+size,word.to_bytes(4,'little'))
         if slot_offset == 0xA0 and cap-end >= 4:
             _write_span(m.p,vector+8,(end+4).to_bytes(8,'little'))
     m.p.commit()
@@ -952,6 +1027,22 @@ def destroy_reader_ast_data_record(pages, *, record_address, image_base,
     """
     m = _ReaderAstMemory(pages,image_base,record_address,176,max_nodes,max_vector_bytes,reserved_regions)
     m.claim(record_address,176); m.data_record(record_address); m.destroy_data(record_address)
+    m.p.commit()
+    return ReaderAstResult(None,tuple(m.effects))
+
+
+def destroy_reader_ast_element_record(pages, *, record_address, image_base,
+        max_nodes=4096, max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Actual +2cc2b8 non-deleting destructor for one 184-byte element.
+
+    Free +a0 children backwards, +78 locals and inline type results/params,
+    then destroy +00 nested 144-byte records backwards through +2cc470.
+    Each nested record frees children, locals, type results and type params.
+    Reset vector ends and type vtables exactly; retain the element itself.
+    Consume logical effects once; native void X0 is ignored.
+    """
+    m = _ReaderAstMemory(pages,image_base,record_address,184,max_nodes,max_vector_bytes,reserved_regions)
+    m.claim(record_address,184); m.element_record(record_address); m.destroy_element(record_address)
     m.p.commit()
     return ReaderAstResult(None,tuple(m.effects))
 

@@ -157,11 +157,26 @@ count/begin, parent links, key order, colors and black heights. 148 comparisons
 and 36 full-page rollback checks pass; all inputs are synthetic. See the
 [expression/tree report](../REQUEST_JNI_STARTUP_WORKERS.md#616-data-expression-frameu32-修补与树节点删除2026-10-09-asiashanghai).
 
+Slots +0xf0/+0x100/+0x108/+0x110/+0x118 add 282 comparisons and 159 full-page
+rollback checks. F0 takes zero arguments and appends a u32 zero. Count reserves
+184-byte element records; entry ignores index, truncates table index/flags,
+copies an image+6e210 constant and appends one -1 type result. Reverse movement
+transfers five vectors and preserves padding. Begin/end share the existing
+16-byte frame, raw byte-length and u32 fixup/tree owner, storing the starting
+length at element+90. `destroy_reader_ast_element_record` restores +2cc2b8;
+it frees children/locals/type, then destroys the owned 144-byte nested records
+backwards through +2cc470. Nested records own their own type/locals/children.
+Actual stack temporary destruction executes; its frees are compared, while
+stack-local destroy events and whole stack/TLS bytes are outside the comparison.
+All fixtures are synthetic. See the
+[element report](../REQUEST_JNI_STARTUP_WORKERS.md#617-element-回调与嵌套记录清理2026-10-09-asiashanghai).
+
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
-only type/start/data/raw-word containers may hold storage. Caller-supplied
+only type/start/element/data/raw-word containers may hold storage. Caller-supplied
 `reserved_regions` retain other borrowed memory. `max_nodes=4096` bounds nodes
-and new type/data capacities (data children also count); `max_vector_bytes=16*1024*1024` bounds each buffer.
+and new type/element/data capacities (nested records and children also count);
+`max_vector_bytes=16*1024*1024` bounds each buffer.
 The pure `allocate(size)` service returns an aligned mapped address and must
 not mutate pages or perform external allocation. Consume free effects once;
 destruction leaves native dangling begin/capacity/tree pointers. Unsupported
@@ -172,7 +187,7 @@ must also be mapped; that guard was reproduced RED before its fix. These APIs ar
 reader/factory/bootstrap and signer remain open. See the
 [AST/cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai).
 The +158 length ABI is repaired. This checkpoint keeps parser and AST callback
-execution separate; other expression callbacks and attached parsing remain open.
+execution separate; remaining AST callbacks and attached parsing remain open.
 
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
@@ -192,6 +207,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_create_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-create-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_payload_20261009.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-data-payload-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_expression_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-expression-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-element-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

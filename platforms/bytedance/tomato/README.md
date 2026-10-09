@@ -105,6 +105,13 @@ frees its payload/node and pops one frame. Tree payload validation now uses
 four-byte elements, with a separate pre-change cleanup failure reproduced.
 See the
 [expression/tree report](REQUEST_JNI_STARTUP_WORKERS.md#616-data-expression-frameu32-修补与树节点删除2026-10-09-asiashanghai).
+Slots +f0/+100/+108/+110/+118 add 282 comparisons and 159 rollback checks
+for a zero raw word and element reserve/create/expression callbacks. Element
+records have stride 184 and own nested 144-byte records; reverse movement,
+padding, nested destructor/free order and image constants match. The same
+frame/raw/tree owner handles both data and element expressions. All inputs
+are synthetic; parser composition remains open. See the
+[element report](REQUEST_JNI_STARTUP_WORKERS.md#617-element-回调与嵌套记录清理2026-10-09-asiashanghai).
 Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
