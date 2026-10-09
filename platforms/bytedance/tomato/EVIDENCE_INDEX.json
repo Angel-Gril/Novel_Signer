@@ -4497,5 +4497,26 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_alternative_ast_string_fresh_20261010": {
+    "evidence_file": "evidence/vm9_alternative_ast_string_fresh_20261010.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_alternative_ast_string_20261010.py",
+    "schema": "vm9-alternative-ast-string-fresh-v1",
+    "evidence_date": "2026-10-10",
+    "evidence_timezone": "Asia/Shanghai",
+    "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "native_Python_AST_string_controls": 68,
+    "rollback_negative_controls": 12,
+    "string_copy_offset_hex": "0x32a9c4",
+    "string_header_size": 24,
+    "pre_change_behavior_RED_controls": 2,
+    "native_input_snapshot_used": false,
+    "private_payloads_published": false,
+    "import_export_callbacks_implemented": false,
+    "complete_python_reader_implemented": false,
+    "independent_Python_factory_implemented": false,
+    "complete_python_bootstrap_controls": 0,
+    "fresh_signer_output_verified": false
   }
 }

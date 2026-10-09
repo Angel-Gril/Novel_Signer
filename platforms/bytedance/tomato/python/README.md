@@ -292,6 +292,8 @@ global inline layouts. All 212 comparisons and 54 rollback checks pass;
 fourteen historical evidence files match byte for byte. Attached parsing
 remains open. See the [global expression report](../REQUEST_JNI_STARTUP_WORKERS.md#626-global-expression-与内联-ast-回调2026-10-10-asiashanghai).
 
+`copy_reader_ast_string` constructs a disjoint 24-byte string destination. It copies inline padding, converts heap strings of length <=22 to inline, and clones longer payloads into rounded storage. Its status is the native X0 return address. The source is borrowed; the destination must own no previous heap allocation. All 68 comparisons and 12 rollback checks pass. Import/export composition remains open. See the [string report](../REQUEST_JNI_STARTUP_WORKERS.md#627-ast-字符串复制基础2026-10-10-asiashanghai).
+
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
 only type/function/table/memory/global/start/element/data/raw-word containers may hold storage. Caller-supplied

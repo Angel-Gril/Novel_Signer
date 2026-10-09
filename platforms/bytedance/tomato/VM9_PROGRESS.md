@@ -1,5 +1,9 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-10 Asia/Shanghai：AST 字符串复制基础
+
+AST 字符串复制基础 `+32a9c4` 通过 **68 个对照、12 个回滚**；两组相关旧回归 JSON 逐字节一致。import/export 回调尚待接入。见 [字符串复制报告](REQUEST_JNI_STARTUP_WORKERS.md#627-ast-字符串复制基础2026-10-10-asiashanghai)。
+
 ## 2026-10-10 Asia/Shanghai：global expression 与内联 AST 回调
 
 同一 AST owner 恢复 `+88/+90`，通过 **212 个原生/Python 对照、54 个回滚**，

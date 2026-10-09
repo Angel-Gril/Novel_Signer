@@ -169,6 +169,7 @@ end values while retaining active. Existing local/function-end callbacks
 also accept owned global inline layouts. All 212 comparisons and 54 rollback
 checks pass; fourteen historical evidence files match byte for byte.
 See the [global expression report](REQUEST_JNI_STARTUP_WORKERS.md#626-global-expression-与内联-ast-回调2026-10-10-asiashanghai).
+AST string copy +32a9c4 passes 68 comparisons and 12 rollback checks, including full inline padding and heap-to-inline conversion. See the [string report](REQUEST_JNI_STARTUP_WORKERS.md#627-ast-字符串复制基础2026-10-10-asiashanghai).
 Remaining import/export callbacks and parser composition remain open. Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker

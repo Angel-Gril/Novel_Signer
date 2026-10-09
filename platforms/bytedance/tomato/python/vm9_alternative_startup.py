@@ -682,6 +682,30 @@ class _ReaderAstMemory:
         self.claim(pointer, size); self.emit('allocate', pointer, size)
         return pointer
 
+    def copy_string(self, destination, source, service):
+        """Actual +32a9c4 copy; the source representation selects the path."""
+        self.claim(source,24)
+        header = _read_span(self.p,source,24)
+        if not header[0]&1:
+            _write_span(self.p,destination,header)
+            return destination
+        length = int.from_bytes(header[8:16],'little')
+        if length >= MASK64-15 or length+1 > self.max_bytes:
+            raise RefillUnsupported('AST string copy length exceeds its byte bound')
+        pointer = int.from_bytes(header[16:24],'little')
+        self.claim(pointer,length+1,alignment=1)
+        payload = _read_span(self.p,pointer,length+1)
+        if length <= 22:
+            _write_span(self.p,destination,bytes([length*2]))
+            target = destination+1
+        else:
+            capacity = (length+16)&~15
+            target = self.allocate(capacity,service)
+            _write_span(self.p,destination+8,length.to_bytes(8,'little')+target.to_bytes(8,'little'))
+            _write_span(self.p,destination,(capacity|1).to_bytes(8,'little'))
+        _write_span(self.p,target,payload)
+        return target
+
     def free_vector(self, address):
         begin, _, cap = self.vector(address, own=False)
         if begin:
@@ -1506,6 +1530,29 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
             _write_span(m.p,vector+8,(end+4).to_bytes(8,'little'))
     m.p.commit()
     return ReaderAstResult(status,tuple(m.effects))
+
+
+def copy_reader_ast_string(pages, *, destination_address, source_address, image_base,
+                           allocate=None, max_vector_bytes=16*1024*1024,
+                           reserved_regions=()):
+    """Copy the actual B +32a9c4 string representation into fresh storage.
+
+    Headers are disjoint mapped 24-byte spans. Borrowed long payloads retain
+    length+1 bytes through allocation; the source capacity word is ignored.
+    Inline sources copy every header byte, including padding. Long sources
+    of length <=22 become inline and retain unused destination bytes. Other
+    copies own a new rounded buffer; the source remains borrowed. This is
+    construction, so the destination must own no existing heap allocation.
+    The caller must release the resulting buffer through its owning object.
+    status contains the native X0 return address. Allocation is a pure plan;
+    any guard/write failure rolls back all pages. Full import/export callbacks
+    and their object/string destruction remain separate unfinished boundaries.
+    """
+    m = _ReaderAstMemory(pages,image_base,destination_address,24,4096,max_vector_bytes,reserved_regions)
+    m.claim(destination_address,24)
+    value = m.copy_string(destination_address,source_address,allocate)
+    m.p.commit()
+    return ReaderAstResult(value,tuple(m.effects))
 
 
 def destroy_reader_ast_type_node(pages, *, node_address, image_base,

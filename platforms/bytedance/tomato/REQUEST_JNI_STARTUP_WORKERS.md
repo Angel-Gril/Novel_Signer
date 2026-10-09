@@ -1503,6 +1503,42 @@ code-begin **284/100**。本节更新 global expression 的当前状态；前文
 attached parser/AST/root、reader/factory/bootstrap、独立 signer、fresh 签名及
 线上矩阵仍未完成。见 [global expression 证据](evidence/vm9_alternative_ast_global_expression_fresh_20261010.json)。
 
+## 6.27 AST 字符串复制基础（2026-10-10 Asia/Shanghai）
+
+import/export AST 入口共用 `+32a9c4` 字符串复制。本轮先恢复同一 owner 的
+`copy_reader_ast_string` 与 `_ReaderAstMemory.copy_string`，通过 **68 个原生/Python
+对照、12 个回滚**，每基址 34 项。修改前两项实际行为 RED 覆盖 22 字节 inline
+和 23 字节 heap 输入：原生自然返回，Python 缺失入口。
+
+source 首字节低位为零时直接复制全部 24 字节，包括 padding；低位为一时读取
+完整 u64 length 和 data 指针，忽略 source capacity word。length <=22 时转为
+inline，只写首字节和 length+1 字节 payload，保留其余 destination padding。
+length >22 时分配 `(length+16)&~15`，写 capacity|1、length、pointer，再复制
+length+1 字节。复制不会额外检查 payload 的最后一个字节。X0 返回值也与原生
+一致：inline source 返回 destination，heap 转 inline 返回 destination+1，
+新 heap 返回新 buffer。源存储为借用，目标为构造用的新存储；目标已有 heap
+资源的释放不属于此入口，调用方必须通过所属对象释放复制结果。
+
+两基址核对自然返回/SP、guest 前 `0xa000`（无屏蔽）、分配尺寸与副作用时
+24 字节目标状态。独立预期验证返回地址、padding、容量与 payload；覆盖
+长度 0/1/7/21/22/23/24/31/32/63/64/127、两种目标 padding、非零尾字节和
+不相关的 source capacity。12 项 guard 覆盖 header/payload 重叠、分配与
+source/destination/payload/image 别名、未映射/未对齐计划、缺失 allocator、
+payload/分配字节预算及写入失败；全部原始页面回滚，未执行非法原生路径。
+
+所有既有生产函数、class methods、callback、析构与 parser 经 AST 比较保持
+一致；新方法尚未被旧回调调用。基础 AST **308/54** 与 global expression
+**212/54** 两组回归通过，两份 JSON 逐字节一致。此批只证明字符串复制基础；
+import/export 回调、字符串/对象析构组合、完整 output wrapper、attached parser、
+reader/factory/bootstrap/signer、fresh 签名和线上验收仍未完成。分配为纯计划，
+真实 allocator、异常和整体 stack/TLS/OS 未验证。
+
+见 [字符串证据](evidence/vm9_alternative_ast_string_fresh_20261010.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_string_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-string-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

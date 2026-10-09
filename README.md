@@ -134,6 +134,8 @@ padding 与扩容释放一致；十组旧回归 JSON 逐字节一致。
 随后 global expression `+88/+90` 恢复 frame、raw fixup 与完整 64 位 end，
 并支持 global 内联 AST 的 local/结束回调，通过 **212 个对照、54 个回滚**；
 十四组旧回归 JSON 逐字节一致。
+AST 字符串复制基础另通过 **68 个对照、12 个回滚**，供后续 import/export 回调复用。
+见 [字符串复制报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#627-ast-字符串复制基础2026-10-10-asiashanghai)。
 这些独立有界入口尚未接入 parser；其余 AST callback、wrapper、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
