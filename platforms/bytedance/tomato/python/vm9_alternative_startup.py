@@ -876,7 +876,12 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     native stages. Output growth transfers four owned vectors and destroys
     old records backwards after publication. Cache growth also destroys old
     nodes after publication. Padding stays in the destination; tail+a8 is 0.
-    Data/element inline, element nested and function layouts are supported;
+    Global expression begin selects the last global's inline AST at +18,
+    resets/appends the shared frame and saves raw byte length at record+80.
+    End stores the full u64 second argument at record+a8, applies frame
+    fixups and pops the frame, retaining active. Global inline layouts also
+    support the existing local-group and function-end consumers.
+    Data/global/element inline, element nested and function layouts are supported;
     Code begin selects a logical function after subtracting cache/function
     count difference from its u32 index. It stores metadata/raw start, clears
     the frame fixup tree, applies the function fixup tree, resets/appends one
@@ -899,7 +904,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0x50:2,0x58:1,0x60:3,0x68:1,0x70:2,0x78:1,0x80:3,0xA0:1,0xA8:4,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
+    counts = {0x18:1,0x20:5,0x50:2,0x58:1,0x60:3,0x68:1,0x70:2,0x78:1,0x80:3,0x88:1,0x90:2,0xA0:1,0xA8:4,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
               0xF8:2,
               0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
               0x120:2,0x128:2,0x130:1,0x138:1,
@@ -916,7 +921,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         _u(pages,callback_address+0x18),0x120)
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
-    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x50:0x31C7B8,0x58:0x31C9F4,0x60:0x31CABC,0x68:0x31CCEC,0x70:0x31CDB4,0x78:0x31D004,0x80:0x31D028,0xA0:0x31D6D4,0xA8:0x31D7D8,
+    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x50:0x31C7B8,0x58:0x31C9F4,0x60:0x31CABC,0x68:0x31CCEC,0x70:0x31CDB4,0x78:0x31D004,0x80:0x31D028,0x88:0x31D45C,0x90:0x31D4AC,0xA0:0x31D6D4,0xA8:0x31D7D8,
                0xB8:0x31D984,0xF8:0x31DBB4,
                0xC0:0x31DA9C,0xC8:0x31DAB4,0xD0:0x31DB04,0xD8:0x31DB28,
                0xE0:0x31DB4C,0xE8:0x31DB70,
@@ -939,7 +944,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         target = _u(m.p,callback_address+0x28)
         first,last,_ = m.vector(ast+0x30,144,own=False)
         active = first <= target < last and (target-first)%144 == 0
-        for header,stride,inline in ((ast+0xF0,176,0x20),(ast+0xD8,184,0x28)):
+        for header,stride,inline in ((ast+0x78,176,0x18),(ast+0xF0,176,0x20),(ast+0xD8,184,0x28)):
             begin,end,_ = m.vector(header,stride,own=False)
             for record in range(begin,end,stride):
                 active |= target == record+inline
@@ -1353,13 +1358,14 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                 m.publish(record,(new,new+size*144,new+count*144))
                 for node in range(end-144,begin-1,-144): m.destroy_nested(node)
                 if begin: m.emit('free',begin,cap-begin)
-    elif slot_offset in (0xC8,0x110,0x118,0x130,0x138,0x148,0x150):
+    elif slot_offset in (0x88,0x90,0xC8,0x110,0x118,0x130,0x138,0x148,0x150):
         begin,end,cap = m.vector(callback_address+0x30,16,own=False)
         if (cap-begin)//16 > max_nodes:
             raise RefillUnsupported('AST expression frame capacity exceeds its node bound')
-        if slot_offset in (0x110,0x130,0x148):
+        if slot_offset in (0x88,0x110,0x130,0x148):
             header,stride = (ast+0xD8,184) if slot_offset == 0x110 else (ast+0xF0,176)
             if slot_offset == 0x130: header,stride = ast+0xD8,184
+            if slot_offset == 0x88: header,stride = ast+0x78,176
             record_begin,record_end,_ = m.vector(header,stride,own=False)
             if record_begin == record_end:
                 raise RefillUnsupported('AST expression requires an active record')
@@ -1393,7 +1399,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                 # The temporary type's result was moved into the new node.
                 # Its destructor owns no storage; only the original is freed.
                 m.emit('free',original,8)
-            else: target = record_end-0x90
+            else: target = record_end-(0x98 if slot_offset == 0x88 else 0x90)
             raw_begin,raw_end,_ = m.vector(ast+0x108,own=False)
             _write_span(m.p,callback_address+0x38,begin.to_bytes(8,'little'))
             _write_span(m.p,callback_address+0x28,target.to_bytes(8,'little'))
@@ -1415,6 +1421,11 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         else:
             if begin == end:
                 raise RefillUnsupported('AST expression frame stack is empty')
+            if slot_offset == 0x90:
+                record_begin,record_end,_ = m.vector(ast+0x78,176,own=False)
+                if record_begin == record_end:
+                    raise RefillUnsupported('AST global expression end requires a global record')
+                _write_span(m.p,record_end-8,arguments[1].to_bytes(8,'little'))
             m.apply_fixup(callback_address+0x48,trees[1],(end-begin)//16-1,allocate)
             _write_span(m.p,callback_address+0x38,(end-16).to_bytes(8,'little'))
     elif slot_offset == 0x158:

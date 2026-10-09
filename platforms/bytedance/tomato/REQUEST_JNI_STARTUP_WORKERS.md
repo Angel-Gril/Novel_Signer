@@ -1459,6 +1459,50 @@ expression **148/36**、element **282/159**、nested **230/133**、instruction
 完整 output wrapper、attached parser/AST/root、reader/factory/bootstrap、独立
 signer、fresh 签名及线上矩阵仍未完成。见 [global 证据](evidence/vm9_alternative_ast_global_fresh_20261009.json)。
 
+## 6.26 Global expression 与内联 AST 回调（2026-10-10 Asia/Shanghai）
+
+同一生产 owner 恢复 `+88 → +31d45c`、`+90 → +31d4ac`，并在已有 local group /
+function-end 的 active 验证中接纳 global 的内联 AST。新增 **212 个原生/Python
+对照、54 个保护/回滚**，每基址 106 项，全部合成输入。共 414 次实际回调；
+200 项包含 global 输出记录的独立析构。生产修改前五项行为 RED：begin 分配
+frame、重置已有 frame、full-u64 end 与 fixup 增长、global active 的 local、
+global active 的 function-end。原生均自然返回；Python 拒绝缺失槽位或未支持的
+active 布局。实现后相同五项输入在两个基址通过。
+
+| 入口 | 已恢复行为 |
+| --- | --- |
+| `+88` | 仅一个 ignored index 参数；选择最后一个 global 的 `+18` 内联 AST，保存在 `callback+28`。frame end 重置为 begin，当前 raw 字节长度截为 u32 写入 global `+80`，调用 `+31fee4` 添加哨兵 frame |
+| frame | stride 16，前 8 字节来自 image `+6e188`，后 8 字节为全 ff；已有容量复用，零容量分配、发布再释放旧块。begin 不改 global `+a8` |
+| `+90` | 参数为 `(ignored_index, full_u64_value)`；第二个参数完整写入最后一个 global `+a8`，调用 `+32000c` 修补当前 frame index 的 raw offsets、擦除树节点，然后 pop 16 字节 frame；保留 active |
+| global active | 已有 `+b8/+f8` 接纳 global `+18` 的 144 字节内联布局；local 保留完整 u64 type、u32 count 和累计值，function-end 清 active、写 u32 length。原生消费者已有该行为，本轮只扩展验证边界 |
+
+共享 frame/raw/fixup owner 继续承担 sentinel、raw 增长、树删除和释放；无第二份
+语义实现。所有其它生产函数、class methods、API 参数默认值和 parser 不变，
+原生共享 driver 不变；旧 unsupported guard 移至已核对仍未恢复的 `+98`。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节（无屏蔽）、有序分配/析构/free
+及每次副作用的 owner 字节。独立预期核对 frame 数量/容量/sentinel、raw 内容、
+u32 起点、full-u64 end、active 保留与清除、local count/type/累计值及剩余树数量。
+覆盖 raw 长度 0/1/3/4/11/32、frame 空/spare/full 与重置、六种 end 位值、
+不匹配 key、所有既有树删除形状和连续删除、raw 多次增长、覆盖 image constant、
+四类 global 子所有权、完整创建/常量/结束/析构、连续 begin/end、已有其它输出。
+精确节点预算 2 在两个基址通过。
+
+54 项 guard 包含 28 项绑定、参数、attached、布局、树、所有权别名、预算与
+allocator 检查，20 项 frame/raw 分配地址或别名保护，6 项晚期写入失败回滚。
+三项预算拒绝配有相同输入的正常预算对照。全部原始页面不变；非法原生内存
+路径没有执行。分配仍为纯计划、free 为逻辑效果；真实 allocator/abort/整体
+stack/TLS/OS 不在此批证据内。
+
+十四组历史回归通过，十四份 JSON 逐字节一致：global **328/120**、memory
+**272/65**、table **184/77**、AST **308/54**、data **176/30**、create **148/105**、
+payload **104 AST / 34 ABI / 30 回滚**、expression **148/36**、element **282/159**、
+nested **230/133**、instruction **398/122**、local **252/37**、function **188/136**、
+code-begin **284/100**。本节更新 global expression 的当前状态；前文旧批次
+保留其验证时范围。其余 import/export AST callbacks、完整 output wrapper、
+attached parser/AST/root、reader/factory/bootstrap、独立 signer、fresh 签名及
+线上矩阵仍未完成。见 [global expression 证据](evidence/vm9_alternative_ast_global_expression_fresh_20261010.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1498,6 +1542,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_code_begi
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_table_20261009.py --library <private-metasec.so> --output <reader-ast-table-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_memory_20261009.py --library <private-metasec.so> --output <reader-ast-memory-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_global_20261009.py --library <private-metasec.so> --output <reader-ast-global-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_global_expression_20261010.py --library <private-metasec.so> --output <reader-ast-global-expression-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

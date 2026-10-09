@@ -131,6 +131,9 @@ padding 与扩容释放一致；十组旧回归 JSON 逐字节一致。
 随后 global `+78/+80` 恢复 176 字节记录、24 字节独立缓存与记录析构，通过
 **328 个对照、120 个回滚**。完整 type、mutable 低位、vector 转移与清理
 顺序一致；十三组旧回归 JSON 逐字节一致。
+随后 global expression `+88/+90` 恢复 frame、raw fixup 与完整 64 位 end，
+并支持 global 内联 AST 的 local/结束回调，通过 **212 个对照、54 个回滚**；
+十四组旧回归 JSON 逐字节一致。
 这些独立有界入口尚未接入 parser；其余 AST callback、wrapper、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
@@ -147,6 +150,7 @@ padding 与扩容释放一致；十组旧回归 JSON 逐字节一致。
 [Table 与栈 padding 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#623-table-预留创建与显式栈-padding2026-10-09-asiashanghai)。
 [Memory 与独立缓存报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#624-memory-预留创建与独立缓存2026-10-09-asiashanghai)。
 [Global 与记录清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#625-global-预留创建与记录清理2026-10-09-asiashanghai)。
+[Global expression 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#626-global-expression-与内联-ast-回调2026-10-10-asiashanghai)。
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

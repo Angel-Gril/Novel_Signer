@@ -164,7 +164,12 @@ record destruction. All 328 comparisons and 120 rollback checks pass; thirteen
 old evidence files match byte for byte. Full u64 type, mutable low bit,
 destination padding and vector transfers match actual native effects.
 See the [global report](REQUEST_JNI_STARTUP_WORKERS.md#625-global-预留创建与记录清理2026-10-09-asiashanghai).
-Global expression, imports and parser composition remain open. Allocation/free remain explicit services;
+Global expression +88/+90 restore shared frames, raw fixups and full-u64
+end values while retaining active. Existing local/function-end callbacks
+also accept owned global inline layouts. All 212 comparisons and 54 rollback
+checks pass; fourteen historical evidence files match byte for byte.
+See the [global expression report](REQUEST_JNI_STARTUP_WORKERS.md#626-global-expression-与内联-ast-回调2026-10-10-asiashanghai).
+Remaining import/export callbacks and parser composition remain open. Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

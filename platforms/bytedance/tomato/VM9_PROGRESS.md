@@ -1,5 +1,25 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-10 Asia/Shanghai：global expression 与内联 AST 回调
+
+同一 AST owner 恢复 `+88/+90`，通过 **212 个原生/Python 对照、54 个回滚**，
+每基址 106 项，全部合成输入；414 次回调，200 项包含 global 记录的独立析构。
+五项行为 RED 在生产修改前成立，相同输入在两基址通过。begin 选择 global
+`+18`，重置 frame 并记录 u32 raw 起点；end 保存完整 u64 于 `+a8`，修补树/raw，
+pop frame 并保留 active。global active 的 local/function-end 原生行为也已对照。
+
+自然返回/SP、guest `0xa000`（无屏蔽）、副作用顺序和每次 owner 字节一致。
+54 项 guard 包含 20 项分配别名和 6 项晚期写入回滚；三项预算拒绝有正常预算
+对照，精确节点预算 2 的两基址对照通过。十四组历史 AST 回归均通过，十四份
+JSON 逐字节一致。共享原生 driver、其它生产函数、class methods、API 默认值
+和 parser 不变；unsupported guard 移至 `+98`。
+
+其余 import/export AST、完整 wrapper、attached parser/AST/root、reader/factory/
+bootstrap/signer 尚未完成。见 [global expression 证据](evidence/vm9_alternative_ast_global_expression_fresh_20261010.json)
+和 [第 6.26 节报告](REQUEST_JNI_STARTUP_WORKERS.md#626-global-expression-与内联-ast-回调2026-10-10-asiashanghai)。
+
+以下为历史批次，其范围以当时验证为准。
+
 ## 2026-10-09 Asia/Shanghai：global 预留、创建与记录清理
 
 同一 AST owner 恢复 `+78/+80`、`output+78` 的 176 字节记录、`callback+c8`

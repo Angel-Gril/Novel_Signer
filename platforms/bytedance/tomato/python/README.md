@@ -283,6 +283,15 @@ results/params cleanup, retaining the record and scalar/padding bytes.
 All 328 comparisons and 120 rollback checks pass; thirteen old evidence
 files match byte for byte. See the [global report](../REQUEST_JNI_STARTUP_WORKERS.md#625-global-预留创建与记录清理2026-10-09-asiashanghai).
 
+Slot +88 takes one ignored index, selects the last global inline AST at
++18, stores its u32 raw byte start at +80 and resets/appends a sentinel
+frame. Slot +90 takes (ignored index, full u64 end value), writes the
+second argument at global+a8, applies frame-index raw fixups and pops
+the frame while retaining active. Existing +b8/+f8 also accept owned
+global inline layouts. All 212 comparisons and 54 rollback checks pass;
+fourteen historical evidence files match byte for byte. Attached parsing
+remains open. See the [global expression report](../REQUEST_JNI_STARTUP_WORKERS.md#626-global-expression-与内联-ast-回调2026-10-10-asiashanghai).
+
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
 only type/function/table/memory/global/start/element/data/raw-word containers may hold storage. Caller-supplied
@@ -328,6 +337,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_code_begi
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_table_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-table-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_memory_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-memory-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_global_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-global-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_global_expression_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-global-expression-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,
