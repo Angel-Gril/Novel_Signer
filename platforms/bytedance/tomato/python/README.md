@@ -225,9 +225,23 @@ reverse child payloads, child block, locals, type results, then type params.
 It resets ends/vtable and retains the record. Existing +b8/+f8 accept a logical
 function record as active and reject its spare capacity. All 188 comparisons
 and 136 rollback checks pass; nine old evidence files match byte for byte.
-Code-begin +a8 and parser composition remain open. +58/+60 are table callbacks;
+Parser composition remains open. +58/+60 are table callbacks;
 section 3 emits +50 entries without a separate function reserve/count callback.
 See the [function report](../REQUEST_JNI_STARTUP_WORKERS.md#621-function-创建类型缓存与清理2026-10-09-asiashanghai).
+
+Slot +a8 selects a logical function using the low-u32 index minus the
+cache/function count difference. It sets active, stores u32 metadata, the raw
+length before fixup and u32 cursor offset, ignoring body length. It frees the
+frame fixup tree, applies/removes the matching function fixup node, resets
+frames and appends one 16-byte frame and one owned 56-byte child. Child fields
+retain destination padding and record the raw length after fixup and local
+entry count. Growth moves existing child payload vectors backwards, clears
+source headers, publishes and frees the old block. Shared `apply_fixup` also
+serves expression end. All 284 comparisons and 100 rollback checks pass;
+ten old evidence files match byte for byte. Two budget RED controls caught
+double-counting existing children; exact budgets 6/10 now pass. Parser, other
+production APIs and the shared native driver are unchanged. See the
+[code-begin report](../REQUEST_JNI_STARTUP_WORKERS.md#622-code-begin双修补树与-child-追加2026-10-09-asiashanghai).
 
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
@@ -270,6 +284,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_n
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_instruction_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-instruction-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-local-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_function_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-function-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_code_begin_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-code-begin-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

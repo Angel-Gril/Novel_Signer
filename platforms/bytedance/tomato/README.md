@@ -141,7 +141,13 @@ copies own separate params/results; scalar truncation, padding, growth and
 reverse destruction match. Function records also support existing local/end
 callbacks. Nine old evidence files match byte for byte. See the
 [function report](REQUEST_JNI_STARTUP_WORKERS.md#621-function-创建类型缓存与清理2026-10-09-asiashanghai).
-The +a8 code-begin remains open. Allocation/free remain explicit services;
+Slot +a8 restores code begin: logical function selection, metadata/raw start,
+frame-tree cleanup, function-tree fixup and owned 56-byte child append.
+All 284 native/Python comparisons and 100 rollback checks pass. Frame/child
+growth, padding, ordered effects and exact node budgets match; ten old
+evidence files match byte for byte. All fixtures are synthetic. See the
+[code-begin report](REQUEST_JNI_STARTUP_WORKERS.md#622-code-begin双修补树与-child-追加2026-10-09-asiashanghai).
+Table +58/+60 and parser composition remain open. Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

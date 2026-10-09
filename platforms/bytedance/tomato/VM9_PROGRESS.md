@@ -1,5 +1,37 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：code-begin、双修补树与 child 追加
+
+同一 AST owner 恢复 `+a8 → +31d7d8`：**284 个原生/Python 对照、100 个回滚**，
+每基址 142 项，全为合成输入。全部通过真实 relocated vtable，共 338 次回调、
+310 次 code-begin。三项槽位缺失 RED 在生产修改前成立；另两项预算 RED 在
+最后修正前成立，不能合并描述为五项生产修改前 RED。
+
+按低 u32 function index 减去 cache/function 数量差选择 logical function，设置
+active，保存 metadata、修补前 raw 长度和 cursor offset，忽略 body length。
+后序释放 frame 修补树、重置 frame end，再使用 function 修补树修补 raw 并删除
+匹配节点。追加 16 字节 frame 与 56 字节 child；后者保存修补后 raw 长度和
+local 条目数，保留 padding。child 扩容倒序转移 vectors、清源、发布后释放旧块。
+共享 `apply_fixup` 同时服务既有 expression end；没有第二个所有权 owner。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节、分配/析构/free 顺序和各副作用
+时的 owner 字节；独立预期核对 function 选择、metadata/raw/cursor、双树、frame、
+child、local 数量与 padding。覆盖导入数量差回绕、spare/full/null/non-null-zero
+容量、修补增长/旋转/连续删除、重复 begin，以及创建/local/常量/end/析构组合。
+预算修正避免重复计算旧 child；预算 6/10 的四项两基址对照通过。100 项 guard
+含 63 项分配地址/别名检查和 8 项晚期写入失败，全页回滚，不执行无效 native 路径。
+
+十组旧回归重新通过：AST 308/54、data 176/30、create 148/105、payload 104 AST/
+34 ABI/30 回滚、expression 148/36、element 282/159、nested 230/133、instruction
+398/122、local 252/37、function 188/136；十份 JSON 与历史证据逐字节一致。
+最后只修正 `+a8` 的预算条件，旧原生 suites 不执行该槽位。旧 unsupported guard
+从 `+a8` 移至仍未恢复的 `+58`。parser、其它生产函数/API、共享 native driver 不变。
+
+下一候选为 table `+58/+60` 与 `output+48` 所有权；先核对原生契约并取得 RED。
+其余 AST、attached parser/wrapper、完整 reader/factory/bootstrap/signer 和线上
+矩阵仍未完成。见 [code-begin 证据](evidence/vm9_alternative_ast_code_begin_fresh_20261009.json)与
+[第 6.22 节报告](REQUEST_JNI_STARTUP_WORKERS.md#622-code-begin双修补树与-child-追加2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：function 创建、类型缓存与清理
 
 同一 AST owner 恢复 `+50 → +31c7b8`：**188 个原生/Python 对照、136 个回滚**，

@@ -534,6 +534,42 @@ class _ReaderAstMemory:
             _write_span(self.p,end,bytes(length-size))
             _write_span(self.p,header+8,(begin+length).to_bytes(8,'little'))
 
+    def apply_fixup(self, header, order, key, service):
+        """Actual +32000c: patch one key's raw positions, then erase/free it."""
+        self.fixup_tree(header,order)
+        root = _u(self.p,header+8); node = root; found = 0
+        while node:
+            value = _u(self.p,node+0x20,4)
+            if value >= key: found,node = node,_u(self.p,node)
+            else: node = _u(self.p,node+8)
+        if found and _u(self.p,found+0x20,4) == key:
+            payload,stop,_ = self.vector(found+0x28,4,own=False)
+            raw_header = self.root+0x108
+            for position in range(payload,stop,4):
+                offset = _u(self.p,position,4)
+                if offset > self.max_bytes-4:
+                    raise RefillUnsupported('AST fixup offset exceeds the byte bound')
+                # All fixups in callbacks target the output's shared raw vector.
+                raw_begin,raw_end,_ = self.vector(raw_header,own=False)
+                size = raw_end-raw_begin
+                if size < offset+4:
+                    self.grow_bytes(raw_header,offset+4,service)
+                    raw_begin = _u(self.p,raw_header)
+                _write_span(self.p,raw_begin+offset,(size&0xFFFFFFFF).to_bytes(4,'little'))
+            right = _u(self.p,found+8)
+            if right:
+                successor = right
+                while _u(self.p,successor): successor = _u(self.p,successor)
+            else:
+                child = found; successor = _u(self.p,child+0x10)
+                while _u(self.p,successor) != child:
+                    child,successor = successor,_u(self.p,successor+0x10)
+            if _u(self.p,header) == found:
+                _write_span(self.p,header,successor.to_bytes(8,'little'))
+            _write_span(self.p,header+16,(len(order)-1).to_bytes(8,'little'))
+            self.erase_fixup(root,found)
+            self.free_vector(found+0x28); self.emit('free',found,64)
+
     def data_record(self, address):
         # The inline type counts as one record; each 56-byte child owns only
         # its +10 u64 vector. Its other fields are copied as scalars by 31fdb4.
@@ -706,6 +742,14 @@ class _ReaderAstMemory:
             for offset,size in ((8,4),(0x40,8),(0x48,4),(0x68,8),(0x70,4)):
                 _write_span(self.p,target+offset,_read_span(self.p,source+offset,size))
 
+    def move_children(self, begin, end, destination):
+        for source in range(end-56,begin-1,-56):
+            target = destination+source-begin
+            _write_span(self.p,target+0x10,_read_span(self.p,source+0x10,24))
+            _write_span(self.p,source+0x10,bytes(24))
+            for offset,size in ((0,8),(8,4),(0x28,8),(0x30,4)):
+                _write_span(self.p,target+offset,_read_span(self.p,source+offset,size))
+
     def destroy_nested(self, address):
         self.emit('destroy',address,144)
         self.destroy_element_children(address+0x78)
@@ -765,7 +809,11 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     to u32; type index must select a logical output type. The two containers
     grow independently and destroy their moved records after publication.
     Data/element inline, element nested and function layouts are supported;
-    code begin remains unsupported.
+    Code begin selects a logical function after subtracting cache/function
+    count difference from its u32 index. It stores metadata/raw start, clears
+    the frame fixup tree, applies the function fixup tree, resets/appends one
+    frame, then appends an owned 56-byte child. The body-length argument is
+    ignored; cursor offset and metadata truncate to u32. Existing locals remain.
     Data payload ignores index and uses the full u64 length. Zero length
     leaves existing storage/size intact; nonzero resizes the last record's
     byte vector, then copies a disjoint borrowed span. Growth zero-fills the
@@ -783,7 +831,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0x50:2,0xA0:1,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
+    counts = {0x18:1,0x20:5,0x50:2,0xA0:1,0xA8:4,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
               0xF8:2,
               0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
               0x120:2,0x128:2,0x130:1,0x138:1,
@@ -800,7 +848,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         _u(pages,callback_address+0x18),0x120)
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
-    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x50:0x31C7B8,0xA0:0x31D6D4,
+    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x50:0x31C7B8,0xA0:0x31D6D4,0xA8:0x31D7D8,
                0xB8:0x31D984,0xF8:0x31DBB4,
                0xC0:0x31DA9C,0xC8:0x31DAB4,0xD0:0x31DB04,0xD8:0x31DB28,
                0xE0:0x31DB4C,0xE8:0x31DB70,
@@ -965,6 +1013,58 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
             for node in range(cache_end-64,cache_begin-1,-64): m.destroy(node,64)
             if cache_begin: m.emit('free',cache_begin,cache_cap-cache_begin)
         else: _write_span(m.p,callback_address+0x88,(cache_end+64).to_bytes(8,'little'))
+    elif slot_offset == 0xA8:
+        first,last,_ = m.vector(ast+0x30,144,own=False)
+        cache_begin,cache_end,_ = m.vector(callback_address+0x80,64,own=False)
+        size = (last-first)//144
+        imported = ((cache_end-cache_begin)//64-size)&0xFFFFFFFF
+        index = (arguments[0]-imported)&0xFFFFFFFF
+        if index >= size:
+            raise RefillUnsupported('AST code begin requires a logical function index')
+        begin,end,cap = m.vector(callback_address+0x30,16,own=False)
+        if (cap-begin)//16 > max_nodes:
+            raise RefillUnsupported('AST code frame capacity exceeds its node bound')
+        target = first+index*144
+        _write_span(m.p,callback_address+0x28,target.to_bytes(8,'little'))
+        _write_span(m.p,target+0x48,(arguments[3]&0xFFFFFFFF).to_bytes(4,'little'))
+        raw_begin,raw_end,_ = m.vector(ast+0x108,own=False)
+        _write_span(m.p,target+0x68,((raw_end-raw_begin)&0xFFFFFFFF).to_bytes(4,'little')+
+                    (arguments[1]&0xFFFFFFFF).to_bytes(4,'little'))
+        for node in trees[1]:
+            m.free_vector(node+0x28); m.emit('free',node,64)
+        m.publish(callback_address+0x48,(callback_address+0x50,0,0))
+        _write_span(m.p,callback_address+0x38,begin.to_bytes(8,'little'))
+        m.apply_fixup(callback_address+0x60,trees[0],index,allocate)
+        child_begin,child_end,child_cap = m.vector(target+0x78,56,own=False)
+        child_size,child_capacity = (child_end-child_begin)//56,(child_cap-child_begin)//56
+        value = _read_span(m.p,image_base+0x6E188,8)+(0xFFFFFFFF).to_bytes(4,'little')+child_size.to_bytes(4,'little')
+        if begin < cap:
+            _write_span(m.p,begin,value)
+            _write_span(m.p,callback_address+0x38,(begin+16).to_bytes(8,'little'))
+        else:
+            capacity = max(1,(cap-begin)//8)
+            if capacity > max_nodes:
+                raise RefillUnsupported('AST code frame growth exceeds the node bound')
+            new = m.allocate(capacity*16,allocate); _write_span(m.p,new,value)
+            m.publish(callback_address+0x30,(new,new+16,new+capacity*16))
+            if begin: m.emit('free',begin,cap-begin)
+        new_capacity = max(child_size+1,child_capacity*2) if child_size == child_capacity else child_capacity
+        if m.nodes+1 > max_nodes or new_capacity > max_nodes:
+            raise RefillUnsupported('AST code child append exceeds the node bound')
+        new = m.allocate(new_capacity*56,allocate) if child_size == child_capacity else child_begin
+        child = new+child_size*56
+        raw_begin,raw_end,_ = m.vector(ast+0x108,own=False)
+        locals_begin,locals_end,_ = m.vector(target+0x50,16,own=False)
+        _write_span(m.p,child,(((raw_end-raw_begin)&0xFFFFFFFF)<<32).to_bytes(8,'little'))
+        _write_span(m.p,child+8,(0xFFFFFFFF).to_bytes(4,'little'))
+        m.publish(child+0x10,(0,0,0))
+        _write_span(m.p,child+0x28,(0xFFFFFFFF|(((locals_end-locals_begin)//16)<<32)).to_bytes(8,'little'))
+        _write_span(m.p,child+0x30,bytes(4))
+        if child_size == child_capacity:
+            m.move_children(child_begin,child_end,new)
+            m.publish(target+0x78,(new,new+(child_size+1)*56,new+new_capacity*56))
+            if child_begin: m.emit('free',child_begin,child_cap-child_begin)
+        else: _write_span(m.p,target+0x80,(child_end+56).to_bytes(8,'little'))
     elif slot_offset == 0xB0:
         _write_span(m.p,callback_address+0x78,(arguments[0]&0xFFFFFFFF).to_bytes(4,'little')+bytes(4))
     elif slot_offset in (0x108,0x140):
@@ -1089,39 +1189,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         else:
             if begin == end:
                 raise RefillUnsupported('AST expression frame stack is empty')
-            header = callback_address+0x48
-            m.fixup_tree(header,trees[1])
-            key = (end-begin)//16-1
-            root = _u(m.p,header+8); node = root; found = 0
-            while node:
-                value = _u(m.p,node+0x20,4)
-                if value >= key: found,node = node,_u(m.p,node)
-                else: node = _u(m.p,node+8)
-            if found and _u(m.p,found+0x20,4) == key:
-                payload,stop,_ = m.vector(found+0x28,4,own=False)
-                for position in range(payload,stop,4):
-                    offset = _u(m.p,position,4)
-                    if offset > max_vector_bytes-4:
-                        raise RefillUnsupported('AST fixup offset exceeds the byte bound')
-                    raw_begin,raw_end,_ = m.vector(ast+0x108,own=False)
-                    size = raw_end-raw_begin
-                    if size < offset+4:
-                        m.grow_bytes(ast+0x108,offset+4,allocate)
-                        raw_begin = _u(m.p,ast+0x108)
-                    _write_span(m.p,raw_begin+offset,(size&0xFFFFFFFF).to_bytes(4,'little'))
-                right = _u(m.p,found+8)
-                if right:
-                    successor = right
-                    while _u(m.p,successor): successor = _u(m.p,successor)
-                else:
-                    child = found; successor = _u(m.p,child+0x10)
-                    while _u(m.p,successor) != child:
-                        child,successor = successor,_u(m.p,successor+0x10)
-                if _u(m.p,header) == found:
-                    _write_span(m.p,header,successor.to_bytes(8,'little'))
-                _write_span(m.p,header+16,(len(trees[1])-1).to_bytes(8,'little'))
-                m.erase_fixup(root,found)
-                m.free_vector(found+0x28); m.emit('free',found,64)
+            m.apply_fixup(callback_address+0x48,trees[1],(end-begin)//16-1,allocate)
             _write_span(m.p,callback_address+0x38,(end-16).to_bytes(8,'little'))
     elif slot_offset == 0x158:
         _,pointer,length = arguments

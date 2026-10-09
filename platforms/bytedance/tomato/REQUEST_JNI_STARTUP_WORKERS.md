@@ -1251,6 +1251,56 @@ table。下一步是 `+a8` code-begin。其余 AST、attached parser/wrapper、�
 reader/factory/bootstrap、独立 signer 和线上矩阵仍未完成。见
 [function 证据](evidence/vm9_alternative_ast_function_fresh_20261009.json)。
 
+## 6.22 Code-begin、双修补树与 child 追加（2026-10-09 Asia/Shanghai）
+
+同一生产 owner 恢复实际 vtable `+a8 → +31d7d8`，新增 **284 个原生/Python
+对照、100 个保护/回滚**，每基址 142 项。输入全部合成，全部执行真实 relocated
+vtable，共 338 次回调、310 次 code-begin。生产修改前三项行为 RED 分别为
+spare、frame/child 增长、双修补树：原生自然返回 0，Python 拒绝未恢复槽位。
+相同三项实现后 GREEN。初版完整对照通过后，另两项精确预算 RED 发现重复计算
+旧 child 的问题；修正后预算 6/10 的四项两基址对照和最终完整批次通过。
+
+| 入口 / 布局 | 已恢复行为 |
+| --- | --- |
+| `+a8` 参数 | `(function_index, cursor_offset, ignored_body_bytes, metadata)`；按低 u32 index 减去 cache count 与 function count 的差，要求选择 logical function |
+| active / function | 设置 `callback+28`；写 function `+48` metadata、`+68` 修补前 raw 长度、`+6c` cursor offset，均截为 u32；保留 `+70` |
+| 两棵修补树 | 后序释放 `callback+48` 树及 payload，重置 header/frame end；经 `+32000c` 使用 `callback+60` 树修补 raw，再经 `+2695c0` 删除匹配相对索引的节点 |
+| 16 字节 frame | image `+6e188` 的 8 字节常量、u32 `ffffffff`、旧 child 条目数；reset 后在既有容量内写入，或经 `+31fee4` 增长 |
+| 56 字节 child | `+00 = 修补后 raw 长度 << 32`，`+08 = ffffffff`，`+10` 空 vector，`+28 = local 条目数 << 32 \| ffffffff`，`+30 = 0`；保留 `+0c/+34` padding |
+| `+320340` 增长 | 按 `max(size+1,capacity*2)` 分配 child block；倒序转移旧 payload vectors 并清源、发布后释放旧块 |
+
+复用 `_ReaderAstMemory`、function output、raw/frame/tree ownership。抽取
+`apply_fixup` 供 code-begin 与既有 expression end 共用；`move_children` 转移
+既有 56 字节 child。新增 child 的节点预算只加一，另检查新容量，避免再次计入
+已经验证过的旧条目。生产 parser、其它函数/方法/API 和共享 native driver 不变。
+旧 AST verifier 的 unsupported guard 从 `+a8` 移到仍未恢复的 `+58`。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节（含预填 padding）、所有分配/
+析构/free 顺序与每次副作用时的 owner 字节。独立预期另核对相对 function
+选择、metadata、修补前后 raw 长度、cursor、frame/child 原始字段、locals、active、
+双树数量与 padding。覆盖 cache/function 数量差的 u32 回绕、高位截断、各类
+空/满/spare/null/non-null-zero 容量、修补 payload 重复/未对齐/增长、红黑树旋转
+与连续删除、重复 begin、已有 locals、可变 image frame 常量，以及创建/local/
+常量/end、其它已恢复 output 和析构/cleanup 组合。
+
+100 项 guard 包括 29 项绑定/attached/参数、logical function、headers、双树、
+容量/节点/字节预算与 allocator 缺失，63 项在四个分配位置逐一检查非法地址、
+所有权别名与 prior plan 重用，8 项注入晚期写入失败。四项预算 guard 还核对
+相同输入在正常预算下可运行。全部原始页面回滚；不执行无效 native 内存路径。
+分配为纯地址计划，free 为逻辑副作用；完整 native stack/TLS、真实 allocator/
+abort 不在本对照范围内。
+
+十组旧回归通过：AST **308/54**、data **176/30**、create **148/105**、payload
+**104 AST / 34 ABI / 30 回滚**、expression **148/36**、element **282/159**、
+nested **230/133**、instruction **398/122**、local **252/37**、function
+**188/136**。十份 JSON 与历史证据逐字节一致。随后生产修改仅为 `+a8` 预算
+条件；只读核对证明其它代码相同，旧原生 suites 没有执行 `+a8`，因此保留该
+回归证据；最终 284/100 包含预算修正。
+
+下一候选为 table `+58/+60` 和 `output+48` 所有权。其余 AST、attached parser/
+wrapper、完整 reader/factory/bootstrap、独立 signer、fresh 签名与线上矩阵仍未
+完成。见 [code-begin 证据](evidence/vm9_alternative_ast_code_begin_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1286,6 +1336,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_n
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_instruction_20261009.py --library <private-metasec.so> --output <reader-ast-instruction-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_20261009.py --library <private-metasec.so> --output <reader-ast-local-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_function_20261009.py --library <private-metasec.so> --output <reader-ast-function-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_code_begin_20261009.py --library <private-metasec.so> --output <reader-ast-code-begin-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。
