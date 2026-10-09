@@ -1103,6 +1103,50 @@ nested vectors、总节点/容量/字节预算，以及逐次失败的四个 gro
 独立 signer 与线上矩阵尚未完成。见
 [nested expression 证据](evidence/vm9_alternative_ast_element_nested_fresh_20261009.json)。
 
+## 6.19 Instruction predicate 与带类型常量（2026-10-09 Asia/Shanghai）
+
+同一 AST owner 恢复六个槽位，新增 **398 个原生/Python 对照、122 个保护/回滚**。
+全部输入合成，每基址 199 项，实际 relocated vtable `+372370` 执行原始入口。
+八项行为 RED 在生产修改前确认；原生自然返回（包含 predicate 返回 1），Python
+当时拒绝这些槽位。实现后同八入口 GREEN，完整验证和七组旧回归均通过。
+
+| Slot / 原生入口 | 参数与结果 |
+| --- | --- |
+| `+c0 → +31da9c` | 一个忽略的 kind；active `callback+28` 为零或 frame 为空返回 1，否则 0；不解引用 active 指针 |
+| `+c8 → +31dab4` | 无参数；仅一层 frame 时不操作，多层复用既有修补/树删除/pop；模型拒绝空 frame |
+| `+d0 → +31db04` | 一个 u64 寄存器参数；追加 u32 tag 4，再追加低 u32 浮点原始位 |
+| `+d8 → +31db28` | 一个 u64 寄存器参数；追加 u32 tag 5，再追加完整 u64 浮点原始位 |
+| `+e0 → +31db4c` | 一个 u64 寄存器参数；追加 u32 tag 2，再追加低 u32 整数位 |
+| `+e8 → +31db70` | 一个 u64 寄存器参数；追加 u32 tag 3，再追加完整 u64 整数位 |
+
+原生 typed helpers `+32140c/+321490` 先追加四字节 tag，再分别追加四/八字节
+value。两次增长可能分别分配、发布、释放，不能合成一次追加。实现复用既有
+`_ReaderAstMemory.grow_bytes`；inner end 复用 `+118/+138/+150` 的同一 frame/raw/tree
+修补与删除 owner。浮点只保留原始位，没有数值转换或 NaN 规范化。
+
+两基址核对自然返回与 SP、guest 前 `0xa000` 字节（含预填充 padding）、
+分配/析构/free 顺序及每个副作用时的 owner 字节。独立预期另外核对 0/1 status、
+frame 数量、raw 内容、树节点数量及纯 predicate/单 frame end 的全页不变。
+22 项对照包含返回 1。覆盖 active 为零、未映射非零指针、frame 空/非空、
+未对齐 raw 长度、容量边界、高位截断、符号位/NaN bits、连续常量和各树删除形态，
+以及 data/nested begin、常量、end 与析构组合。
+
+122 个拒绝/回滚检查覆盖槽位绑定、attached 状态、参数/容量/所有权约束、
+typed 常量和 inner end 的两次分配、重复/未映射/部分映射/别名地址以及晚期
+修补写入失败。全页回滚，未执行无效 native 内存路径。分配仍为纯地址计划，
+free 仍为待消费的逻辑副作用。完整 stack/TLS 不在字节比较范围。
+
+旧 AST **308/54**、data **176/30**、create **148/105**、payload **104 AST /
+34 ABI / 30 回滚**、expression **148/36**、element **282/159**、nested
+**230/133** 全部重新通过；七份 JSON 与历史公开证据逐字节一致。共享 native
+driver 只新增 fixture 显式期望 status，默认仍断言 0；旧 unsupported guard
+从 `+c0` 移至仍未恢复的 `+b8`。生产 owner 中只有 `run_reader_ast_callback`
+改变，ownership class、parser 与其它函数保持 AST 一致。
+
+本检查点仍为独立 detached callback API；未接入 attached parser/wrapper。
+其余 AST、完整 reader/factory/bootstrap、独立 signer 和线上矩阵仍未完成。见
+[instruction 证据](evidence/vm9_alternative_ast_instruction_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1135,6 +1179,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_payl
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_expression_20261009.py --library <private-metasec.so> --output <reader-ast-data-expression-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_20261009.py --library <private-metasec.so> --output <reader-ast-element-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_nested_20261009.py --library <private-metasec.so> --output <reader-ast-element-nested-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_instruction_20261009.py --library <private-metasec.so> --output <reader-ast-instruction-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

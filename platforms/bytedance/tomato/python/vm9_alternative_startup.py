@@ -745,6 +745,11 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     nested begin copies that type into a temporary result, moves the result
     into a new 144-byte record, frees the original result and begins its frame.
     Nested end shares the same raw fixup/tree/pop implementation.
+    Instruction predicate ignores kind, returns 1 when the active pointer
+    is null or frames are empty, and never dereferences that pointer.
+    Instruction end retains the last frame; inner frames share fixup/erase.
+    Typed constants append a u32 tag, then the raw u32/u64 bits, with separate
+    resize/publication/free stages. Floating values are preserved as bits.
     Data payload ignores index and uses the full u64 length. Zero length
     leaves existing storage/size intact; nonzero resizes the last record's
     byte vector, then copies a disjoint borrowed span. Growth zero-fills the
@@ -762,7 +767,8 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
+    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
+              0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
               0x120:2,0x128:2,0x130:1,0x138:1,
               0x140:3,0x148:1,0x150:1,0x158:3,0x160:1,0x168:1}
     if (not isinstance(slot_offset,int) or slot_offset not in counts
@@ -778,6 +784,8 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
     entries = {0x18:0x31B6B0,0x20:0x31B6D0,0xA0:0x31D6D4,
+               0xC0:0x31DA9C,0xC8:0x31DAB4,0xD0:0x31DB04,0xD8:0x31DB28,
+               0xE0:0x31DB4C,0xE8:0x31DB70,
                0xB0:0x31D974,0xF0:0x31DB94,0x100:0x31DBCC,0x108:0x31DBF0,
                0x120:0x31DEE0,0x128:0x31DEF4,0x130:0x31DF1C,0x138:0x31E18C,
                0x110:0x31DE48,0x118:0x31DE98,0x140:0x31E1D4,0x148:0x31E4A4,0x150:0x31E4F4,
@@ -787,7 +795,13 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     if slot_offset in (0x18,0x20,0x108,0x128,0x130,0x140):
         if _u(m.p,image_base+0x375090) != image_base+0x3724E0:
             raise RefillUnsupported('AST type move vtable source is unsupported')
-    if slot_offset in (0x18,0x20):
+    status = 0
+    if slot_offset == 0xC0:
+        begin,end,cap = m.vector(callback_address+0x30,16,own=False)
+        if (cap-begin)//16 > max_nodes:
+            raise RefillUnsupported('AST instruction frame capacity exceeds its node bound')
+        status = int(not _u(m.p,callback_address+0x28) or begin == end)
+    elif slot_offset in (0x18,0x20):
         begin,end,cap = m.vector(ast,64,own=False)
         size,capacity = (end-begin)//64,(cap-begin)//64
         if slot_offset == 0x18:
@@ -903,7 +917,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                 m.publish(record,(new,new+size*144,new+count*144))
                 for node in range(end-144,begin-1,-144): m.destroy_nested(node)
                 if begin: m.emit('free',begin,cap-begin)
-    elif slot_offset in (0x110,0x118,0x130,0x138,0x148,0x150):
+    elif slot_offset in (0xC8,0x110,0x118,0x130,0x138,0x148,0x150):
         begin,end,cap = m.vector(callback_address+0x30,16,own=False)
         if (cap-begin)//16 > max_nodes:
             raise RefillUnsupported('AST expression frame capacity exceeds its node bound')
@@ -960,6 +974,8 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                 _write_span(m.p,new,value)
                 m.publish(callback_address+0x30,(new,new+16,new+capacity*16))
                 if begin: m.emit('free',begin,cap-begin)
+        elif slot_offset == 0xC8 and end-begin == 16:
+            pass
         else:
             if begin == end:
                 raise RefillUnsupported('AST expression frame stack is empty')
@@ -1040,6 +1056,14 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
             for record in range(end-stride,begin-1,-stride):
                 (m.destroy_element if element else m.destroy_data)(record)
             if begin: m.emit('free',begin,cap-begin)
+    elif slot_offset in (0xD0,0xD8,0xE0,0xE8):
+        tag,width = {0xD0:(4,4),0xD8:(5,8),0xE0:(2,4),0xE8:(3,8)}[slot_offset]
+        for value,size in ((tag,4),(arguments[0]&((1<<(width*8))-1),width)):
+            begin,end,_ = m.vector(ast+0x108,own=False)
+            length = end-begin
+            m.grow_bytes(ast+0x108,length+size,allocate)
+            begin = _u(m.p,ast+0x108)
+            _write_span(m.p,begin+length,value.to_bytes(size,'little'))
     else:
         word = 0 if slot_offset == 0xF0 else arguments[0]&0xFFFFFFFF
         raw = slot_offset in (0xF0,0x168)
@@ -1066,7 +1090,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         if slot_offset == 0xA0 and cap-end >= 4:
             _write_span(m.p,vector+8,(end+4).to_bytes(8,'little'))
     m.p.commit()
-    return ReaderAstResult(0,tuple(m.effects))
+    return ReaderAstResult(status,tuple(m.effects))
 
 
 def destroy_reader_ast_type_node(pages, *, node_address, image_base,

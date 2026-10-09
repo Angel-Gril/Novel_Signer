@@ -283,7 +283,7 @@ def negatives(args):
     cases=[]
     def add(label,changes=None,setup=None,spec=None,operation='callback'):
         cases.append((label,changes or {},setup,spec or standard,operation))
-    add('unsupported_slot',dict(slot_offset=0xC0))
+    add('unsupported_slot',dict(slot_offset=0xB8))
     add('noninteger_slot',dict(slot_offset=[]))
     add('wrong_argument_count',dict(arguments=()))
     add('negative_register',dict(arguments=(-1,)))

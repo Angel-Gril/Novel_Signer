@@ -1,5 +1,33 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：instruction predicate 与带类型常量
+
+同一 AST owner 恢复 slots `+c0/+c8/+d0/+d8/+e0/+e8`，**398 个原生/Python
+对照、122 个回滚**，每基址 199 项，全部合成输入、真实 vtable 入口执行。
+八项行为 RED 在生产修改前成立。两基址均核对自然返回/SP、guest 前 `0xa000`
+字节、分配/析构/free 顺序与每个副作用时的 owner 字节；另有独立 status、
+frame、raw 字节断言。22 项对照包含 predicate 返回 1。
+
+`+c0` 忽略 kind，active 指针为零或 frame 为空返回 1，否则 0；不解引用
+active 指针。`+c8` 保留唯一外层 frame，多层共享现有 u32 修补/树删除/pop；
+模型拒绝空 frame。f32/f64/i32/i64 分别写入 u32 tag `4/5/2/3`，随后追加
+`4/8/4/8` 字节原始位；浮点不经转换。原生 `+32140c/+321490` 的两步增长
+分别发布、释放，复用既有 `grow_bytes`，未引入第二个 owner。
+
+覆盖未对齐 raw 长度、容量边界、u32 高位截断、NaN/符号位、连续常量、
+各类树旋转与连续 inner end，以及 data/nested begin/常量/end/析构组合。
+五类两次分配的失败与晚期写入失败均全页回滚；无效 native 路径未执行。
+旧 AST 308/54、data 176/30、create 148/105、payload 104 AST/34 ABI/30
+回滚、expression 148/36、element 282/159、nested 230/133 全部重新通过，
+七份 JSON 与历史证据逐字节一致。旧 unsupported guard 移至 `+b8`。
+
+生产修改仅 `run_reader_ast_callback`；ownership class、parser、其它函数
+未改。共享原生 driver 只增加显式期望 status，默认仍检查 0。Detached callback、
+纯地址计划与逻辑 free 仍为边界。其余 AST、attached parser/wrapper、完整
+reader/factory/bootstrap/signer 和线上矩阵仍未完成。见
+[instruction 证据](evidence/vm9_alternative_ast_instruction_fresh_20261009.json)与
+[第 6.19 节报告](REQUEST_JNI_STARTUP_WORKERS.md#619-instruction-predicate-与带类型常量2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：element 结果类型与嵌套表达式
 
 同一 AST owner 恢复 slots `+120/+128/+130/+138`，**230 个原生/Python 对照、

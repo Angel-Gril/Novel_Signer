@@ -119,6 +119,14 @@ and reuse the existing frame/raw/tree owner. Six old evidence files match
 byte for byte. All fixtures are synthetic; the section 9 nonempty-vector
 native abort and parser composition remain open. See the
 [nested expression report](REQUEST_JNI_STARTUP_WORKERS.md#618-element-结果类型与嵌套表达式2026-10-09-asiashanghai).
+Slots +c0/+c8/+d0/+d8/+e0/+e8 add 398 comparisons and 122 rollback checks
+for instruction predicate/end and typed f32/f64/i32/i64 constants. Predicate
+returns 0/1 without dereferencing the active pointer. End retains the outer
+frame and reuses existing fixup/tree erasure for inner frames. Constants
+append tag and raw value separately, preserving floating bits and both
+allocation/publication/free stages. All fixtures are synthetic; seven old
+evidence files match byte for byte. See the
+[instruction report](REQUEST_JNI_STARTUP_WORKERS.md#619-instruction-predicate-与带类型常量2026-10-09-asiashanghai).
 Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker

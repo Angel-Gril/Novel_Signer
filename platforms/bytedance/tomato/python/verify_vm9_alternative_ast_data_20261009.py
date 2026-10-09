@@ -128,7 +128,9 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             assert cpu.reg_read(arm.UC_ARM64_REG_SP) == oracle.GUEST+0xEF00
             if kind == 'callback':
                 status = cpu.reg_read(arm.UC_ARM64_REG_X0)
-                assert status == 0; statuses.append(status)
+                expected = spec.get('callback_statuses')
+                assert status == (expected[len(statuses)] if expected is not None else 0)
+                statuses.append(status)
             advance(cpu)
         offset = address-base
         if offset == 0x2CC1EC:
