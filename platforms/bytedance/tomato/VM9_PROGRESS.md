@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-10 Asia/Shanghai：Import AST 回调与专属输出清理
+
+五类 `+28/+30/+38/+40/+48` import AST 回调和仅含 import 的实际 `+2cbadc`
+输出清理已恢复，通过 **858 个对照、410 个回滚**。output 两个名称/节点
+独立复制，cache 在临时释放后独立追加；旧 cache 向量在增长时转移。
+table import 默认 max 为 zero-extended u32 `ffffffff`；table/global 栈参数
+与显式 frame padding 已核对。17 组旧回归 JSON 逐字节一致，包含 export。
+完整 AST/output wrapper、attached parser/root、reader/factory/bootstrap/signer
+仍未完成。见 [import 报告](REQUEST_JNI_STARTUP_WORKERS.md#629-import-ast-回调与专属输出清理2026-10-10-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-10 Asia/Shanghai：Export AST 回调与专属输出清理
 
 实际 `+98 → +31d500` export 回调、五类 virtual clone/deleting destructor 和

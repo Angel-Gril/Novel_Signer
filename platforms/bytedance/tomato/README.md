@@ -171,7 +171,8 @@ checks pass; fourteen historical evidence files match byte for byte.
 See the [global expression report](REQUEST_JNI_STARTUP_WORKERS.md#626-global-expression-与内联-ast-回调2026-10-10-asiashanghai).
 AST string copy +32a9c4 passes 68 comparisons and 12 rollback checks, including full inline padding and heap-to-inline conversion. See the [string report](REQUEST_JNI_STARTUP_WORKERS.md#627-ast-字符串复制基础2026-10-10-asiashanghai).
 Export +98 now owns independent names and cloned nodes, including backwards cloning on growth. Export-only output cleanup is recovered; 362 comparisons and 247 rollback checks pass, with sixteen historical JSON files byte-identical. See the [export report](REQUEST_JNI_STARTUP_WORKERS.md#628-export-ast-回调与专属输出清理2026-10-10-asiashanghai).
-Remaining import callbacks and parser composition remain open. Allocation/free remain explicit services;
+Five import AST callbacks now own two independent names and cloned nodes, followed by separate cache append. Import-only output cleanup is recovered; 858 comparisons and 410 rollback checks pass, including real table/global stack arguments. Seventeen historical JSON files match byte for byte. See the [import report](REQUEST_JNI_STARTUP_WORKERS.md#629-import-ast-回调与专属输出清理2026-10-10-asiashanghai).
+Complete output wrapper and parser composition remain open. Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

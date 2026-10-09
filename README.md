@@ -139,7 +139,10 @@ AST 字符串复制基础另通过 **68 个对照、12 个回滚**，供后续 i
 Export AST 回调、五类节点克隆/删除与仅含 export 的输出清理另通过
 **362 个对照、247 个回滚**，16 组旧回归 JSON 逐字节一致。
 见 [export 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#628-export-ast-回调与专属输出清理2026-10-10-asiashanghai)。
-这些独立有界入口尚未接入 parser；其余 AST callback、wrapper、parse/root、
+五类 Import AST 回调与仅含 import 的输出清理另通过 **858 个对照、410 个回滚**；
+17 组旧回归 JSON 逐字节一致。
+见 [import 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#629-import-ast-回调与专属输出清理2026-10-10-asiashanghai)。
+这些独立有界入口尚未接入 parser；完整 output wrapper、parser/AST 组合、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

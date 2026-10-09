@@ -94,6 +94,7 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             end = int.from_bytes(cpu.mem_read(AST+0x80, 8), 'little')
             for address in range(end-176, begin-1, -176): yield 'global', 0, (address,)
         if spec.get('destroy_exports'): yield 'exports', 0, ()
+        if spec.get('destroy_imports'): yield 'imports', 0, ()
         if spec.get('cleanup'): yield 'cleanup', 0, ()
     iterator = None
     def advance(cpu):
@@ -109,6 +110,10 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             target = int.from_bytes(cpu.mem_read(table+slot, 8), 'little')
             assert target == base+functions[slot]
             argv = [CB, *values]
+            if spec.get('entry_stack_fixture_size'):
+                stack = cpu.reg_read(arm.UC_ARM64_REG_SP)
+                cpu.mem_write(stack-spec['entry_stack_fixture_size'],
+                    bytes([spec['stack_pattern']])*spec['entry_stack_fixture_size'])
         elif kind == 'record':
             root, width = values[0], 176; target = base+0x2CC1EC; argv = list(values)
         elif kind == 'element':
@@ -117,12 +122,16 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             root, width = values[0], 144; target = base+0x2CC470; argv = [0, values[0]]
         elif kind == 'global':
             root, width = values[0], 176; target = base+0x2CC3B4; argv = [0, values[0]]
-        elif kind == 'exports':
+        elif kind in ('exports','imports'):
             root, width = AST, 0x120; target = base+0x2CBADC; argv = [AST]
         else:
             root, width = CB, 0x108; target = base+0x31B458; argv = [CB]
         for index, value in enumerate(argv):
-            cpu.reg_write(getattr(arm, 'UC_ARM64_REG_X'+str(index)), value)
+            if index < 8:
+                cpu.reg_write(getattr(arm, 'UC_ARM64_REG_X'+str(index)), value)
+            else:
+                stack = cpu.reg_read(arm.UC_ARM64_REG_SP)
+                cpu.mem_write(stack+(index-8)*8, value.to_bytes(8,'little'))
         cpu.reg_write(arm.UC_ARM64_REG_X16, target)
     def effect(cpu, event, address, size):
         effects.append((event, address, size, root, bytes(cpu.mem_read(root, width))))
@@ -178,6 +187,9 @@ def model_case(args, base, spec, *, prepare_case=None):
         nonlocal allocation_index
         pointer = HEAP+allocation_index; allocation_index += (size+15)&~15; return pointer
     for slot, arguments in spec.get('callbacks', []):
+        if spec.get('entry_stack_fixture_size'):
+            _write_span(pages,spec['entry_stack_address']-spec['entry_stack_fixture_size'],
+                bytes([spec['stack_pattern']])*spec['entry_stack_fixture_size'])
         result = alternative.run_reader_ast_callback(pages, callback_address=CB,
             image_base=base, slot_offset=slot, arguments=arguments, allocate=allocate,
             **({'entry_stack_address':spec['entry_stack_address']} if 'entry_stack_address' in spec else {}))
@@ -212,6 +224,8 @@ def model_case(args, base, spec, *, prepare_case=None):
                 image_base=base).effects)
     if spec.get('destroy_exports'):
         effects.extend(alternative.cleanup_reader_ast_export_output(pages, output_address=AST, image_base=base).effects)
+    if spec.get('destroy_imports'):
+        effects.extend(alternative.cleanup_reader_ast_import_output(pages, output_address=AST, image_base=base).effects)
     if spec.get('cleanup'):
         effects.extend(alternative.cleanup_reader_callback(pages, callback_address=CB, image_base=base).effects)
     return pages, [(e.kind,e.address,e.size,e.owner_address,e.owner_bytes) for e in effects], statuses

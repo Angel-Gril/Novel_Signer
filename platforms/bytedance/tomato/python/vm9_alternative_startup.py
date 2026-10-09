@@ -621,10 +621,10 @@ class _ReaderAstMemory:
             if _u(self.p, address+0x20) != ast+0x108:
                 raise RefillUnsupported('AST raw-word target is inconsistent')
             for offset in range(0, 0x120, 24):
-                if offset not in (0,0x30,0x48,0x60,0x78,0xA8,0xC0,0xD8,0xF0,0x108) and any(
+                if offset not in (0,0x18,0x30,0x48,0x60,0x78,0xA8,0xC0,0xD8,0xF0,0x108) and any(
                         _u(self.p,ast+offset+word) for word in (0,8,16)):
                     raise RefillUnsupported('AST unrecovered output containers must be empty')
-                stride = (64 if offset == 0 else 144 if offset == 0x30 else 48 if offset == 0x48 else 40 if offset in (0x60,0xA8) else 4 if offset == 0xC0 else
+                stride = (64 if offset in (0,0x18) else 144 if offset == 0x30 else 48 if offset == 0x48 else 40 if offset in (0x60,0xA8) else 4 if offset == 0xC0 else
                           184 if offset == 0xD8 else 176 if offset in (0x78,0xF0) else 1)
                 begin, end, cap = self.vector(ast+offset, stride)
                 if offset == 0:
@@ -649,6 +649,10 @@ class _ReaderAstMemory:
                     if (cap-begin)//40 > self.max_nodes:
                         raise RefillUnsupported('AST export capacity exceeds its node bound')
                     for record in range(begin,end,40): self.export_record(record)
+                elif offset == 0x18:
+                    if (cap-begin)//64 > self.max_nodes:
+                        raise RefillUnsupported('AST import capacity exceeds its node bound')
+                    for record in range(begin,end,64): self.import_record(record)
                 elif offset == 0xF0:
                     for record in range(begin, end, 176): self.data_record(record)
                 elif offset == 0xD8:
@@ -754,6 +758,11 @@ class _ReaderAstMemory:
         self.nodes += 1
         stride = _AST_NODE_TABLES[table][0]
         target = self.allocate(stride,service)
+        self.copy_node(target,source,table,service)
+        return target
+
+    def copy_node(self, target, source, table, service):
+        # The caller retains the source and chooses the actual node family.
         _write_span(self.p,target,(self.base+table).to_bytes(8,'little'))
         _write_span(self.p,target+8,_read_span(self.p,source+8,4 if table != 0x372590 else 8))
         if table in (0x3724F0,0x372590):
@@ -768,7 +777,6 @@ class _ReaderAstMemory:
         else:
             offset,size = (0xC,31) if table == 0x372518 else (0x10,24) if table == 0x372540 else (0xC,12)
             _write_span(self.p,target+offset,_read_span(self.p,source+offset,size))
-        return target
 
     def delete_node(self, address):
         table = _u(self.p,address)-self.base
@@ -807,6 +815,64 @@ class _ReaderAstMemory:
         _write_span(self.p,address+24,bytes(8))
         if node: self.delete_node(node)
         self.free_string_value(_read_span(self.p,address,24))
+
+    def import_record(self, address):
+        # The field string and node share the recovered export-record prefix.
+        self.export_record(address+24)
+        header = _read_span(self.p,address,24)
+        if header[0]&1:
+            capacity = int.from_bytes(header[:8],'little')&~1
+            length = int.from_bytes(header[8:16],'little')
+            if not length < capacity <= self.max_bytes:
+                raise RefillUnsupported('AST import module length/capacity is unsupported')
+            self.claim(int.from_bytes(header[16:24],'little'),capacity)
+        elif header[0]>>1 > 22:
+            raise RefillUnsupported('AST import inline module length is unsupported')
+
+    def destroy_import(self, address):
+        self.destroy_export(address+24)
+        self.free_string_value(_read_span(self.p,address,24))
+
+    def construct_string(self, address, pointer, length, service):
+        header = bytearray(_read_span(self.p,address,24))
+        if length >= MASK64-15 or length+1 > self.max_bytes:
+            raise RefillUnsupported('AST import name exceeds its byte bound')
+        payload = _read_span(self.p,pointer,length)+b'\0' if length else b'\0'
+        if length > 22:
+            capacity = (length+16)&~15
+            data = self.allocate(capacity,service); _write_span(self.p,data,payload)
+            header[:] = (capacity|1).to_bytes(8,'little')+length.to_bytes(8,'little')+data.to_bytes(8,'little')
+        else:
+            header[0] = length*2; header[1:length+2] = payload
+        _write_span(self.p,address,header)
+        return header
+
+    def append_import_cache(self, header, source, table, service):
+        stride = _AST_NODE_TABLES[table][0]
+        begin,end,cap = self.vector(header,stride,own=False)
+        size,capacity = (end-begin)//stride,(cap-begin)//stride
+        new_capacity = max(size+1,capacity*2) if size == capacity else capacity
+        if self.nodes+1 > self.max_nodes or new_capacity > self.max_nodes:
+            raise RefillUnsupported('AST import cache append exceeds its node bound')
+        self.nodes += 1
+        new = self.allocate(new_capacity*stride,service) if size == capacity else begin
+        self.copy_node(new+size*stride,source,table,service)
+        if size == capacity:
+            if table == 0x3724F0: self.move_types(begin,end,new)
+            elif table == 0x372518: self.move_tables(begin,end,new)
+            elif table == 0x372540: self.move_memories(begin,end,new)
+            else:
+                for old in range(end-stride,begin-1,-stride):
+                    target = new+old-begin
+                    _write_span(self.p,target,(self.base+table).to_bytes(8,'little'))
+                    _write_span(self.p,target+8,_read_span(self.p,old+8,16 if table == 0x372568 else 8))
+                    if table == 0x372590:
+                        _write_span(self.p,target+0x10,_read_span(self.p,old+0x10,24))
+                        _write_span(self.p,old+0x10,bytes(24))
+            self.publish(header,(new,new+(size+1)*stride,new+new_capacity*stride))
+            for old in range(end-stride,begin-1,-stride): self.destroy(old,stride)
+            if begin: self.emit('free',begin,cap-begin)
+        else: _write_span(self.p,header+8,(end+stride).to_bytes(8,'little'))
 
     def publish(self, address, words):
         _write_span(self.p, address, b''.join(value.to_bytes(8,'little') for value in words))
@@ -998,6 +1064,17 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     retain unwritten padding from the explicit entry_stack_address-0x90;
     other stack effects are outside this model. Temporary nodes/names are
     released at their native stages; callback caches remain borrowed.
+    Five import callbacks append 64-byte records owning module/field names,
+    a cloned node and two u32 words. Only function imports retain type/function
+    indexes; the others store zero. Growth copies both names and clones old
+    nodes backwards, then publishes/deletes them. Cache append follows all
+    temporary name/node cleanup; old cache vectors transfer ownership on growth.
+    All entries require explicit native frame padding. Table/global arguments
+    beyond X7 are supplied in arguments and retain their incoming stack word.
+    Table import defaults to zero-extended u32 ffffffff; memory shares its
+    recovered default rules. Kind4 copies a selected type's params vector.
+    Original/second temporary string headers and constructed temporary nodes
+    occupy their actual frame positions; whole stack effects remain unmodeled.
     Data/global/element inline, element nested and function layouts are supported;
     Code begin selects a logical function after subtracting cache/function
     count difference from its u32 index. It stores metadata/raw start, clears
@@ -1021,7 +1098,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0x50:2,0x58:1,0x60:3,0x68:1,0x70:2,0x78:1,0x80:3,0x88:1,0x90:2,0x98:5,0xA0:1,0xA8:4,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
+    counts = {0x18:1,0x20:5,0x28:7,0x30:8,0x38:7,0x40:8,0x48:7,0x50:2,0x58:1,0x60:3,0x68:1,0x70:2,0x78:1,0x80:3,0x88:1,0x90:2,0x98:5,0xA0:1,0xA8:4,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
               0xF8:2,
               0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
               0x120:2,0x128:2,0x130:1,0x138:1,
@@ -1038,7 +1115,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         _u(pages,callback_address+0x18),0x120)
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
-    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x50:0x31C7B8,0x58:0x31C9F4,0x60:0x31CABC,0x68:0x31CCEC,0x70:0x31CDB4,0x78:0x31D004,0x80:0x31D028,0x88:0x31D45C,0x90:0x31D4AC,0x98:0x31D500,0xA0:0x31D6D4,0xA8:0x31D7D8,
+    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x28:0x31B870,0x30:0x31BB48,0x38:0x31BE3C,0x40:0x31C144,0x48:0x31C414,0x50:0x31C7B8,0x58:0x31C9F4,0x60:0x31CABC,0x68:0x31CCEC,0x70:0x31CDB4,0x78:0x31D004,0x80:0x31D028,0x88:0x31D45C,0x90:0x31D4AC,0x98:0x31D500,0xA0:0x31D6D4,0xA8:0x31D7D8,
                0xB8:0x31D984,0xF8:0x31DBB4,
                0xC0:0x31DA9C,0xC8:0x31DAB4,0xD0:0x31DB04,0xD8:0x31DB28,
                0xE0:0x31DB4C,0xE8:0x31DB70,
@@ -1052,7 +1129,99 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         if _u(m.p,image_base+0x375090) != image_base+0x3724E0:
             raise RefillUnsupported('AST type move vtable source is unsupported')
     status = 0
-    if slot_offset == 0x98:
+    if slot_offset in (0x28,0x30,0x38,0x40,0x48):
+        kind = (slot_offset-0x28)//8
+        frame_size = (0xE0,0x110,0x100,0xF0,0x100)[kind]
+        if (not isinstance(entry_stack_address,int) or not frame_size <= entry_stack_address <= MASK64-8
+                or entry_stack_address&15):
+            raise RefillUnsupported('AST import requires its aligned native entry stack address')
+        frame = entry_stack_address-frame_size
+        m.claim(frame,frame_size+(8 if kind in (1,3) else 0),alignment=16)
+        for pointer,length in ((arguments[1],arguments[2]),(arguments[3],arguments[4])):
+            if length >= MASK64-15 or length+1 > max_vector_bytes:
+                raise RefillUnsupported('AST import name exceeds its byte bound')
+            if length:
+                if any(pointer < stop and start < pointer+length for start,stop in m.regions):
+                    raise RefillUnsupported('AST import name overlaps retained state')
+                _read_span(m.p,pointer,length); m.reserved.append((pointer,pointer+length))
+        offset,stride,table = ((0x80,64,0x3724F0),(0x98,48,0x372518),(0xB0,40,0x372540),
+                               (0xC8,24,0x372568),(0xE0,40,0x372590))[kind]
+        got = (0x375090,0x375098,0x3750A0,0x3750A8,0x375088)[kind]
+        if _u(m.p,image_base+got) != image_base+table-16:
+            raise RefillUnsupported('AST import node vtable source is unsupported')
+        cache_begin,cache_end,_ = m.vector(callback_address+offset,stride,own=False)
+        if any(_u(m.p,node) != image_base+table for node in range(cache_begin,cache_end,stride)):
+            raise RefillUnsupported('AST import cache contains an incompatible node family')
+        if kind in (0,4):
+            first,last,_ = m.vector(ast,64,own=False)
+            index = arguments[6]&0xFFFFFFFF
+            if index >= (last-first)//64:
+                raise RefillUnsupported('AST import requires a logical output type')
+            source = first+index*64
+        else:
+            source = frame+0x78
+        if kind in (1,2):
+            pointer = arguments[7] if kind == 1 else arguments[6]
+            if not pointer or pointer > MASK64-23 or max_vector_bytes < 24:
+                raise RefillUnsupported('AST import descriptor pointer or byte bound is invalid')
+            if any(pointer < stop and start < pointer+24 for start,stop in m.regions):
+                raise RefillUnsupported('AST import descriptor overlaps retained state')
+            descriptor = bytearray(_read_span(m.p,pointer,24)); m.reserved.append((pointer,pointer+24))
+            if not descriptor[16]:
+                descriptor[8:16]=(0xFFFFFFFF if kind == 1 else 0x1000000000000 if descriptor[18] else 0x10000).to_bytes(8,'little')
+            _write_span(m.p,source,(image_base+table).to_bytes(8,'little'))
+            _write_span(m.p,source+8,kind.to_bytes(4,'little'))
+            if kind == 1: _write_span(m.p,source+0xC,arguments[6].to_bytes(8,'little'))
+            _write_span(m.p,source+(0x18 if kind == 1 else 0x10),descriptor)
+        elif kind == 3:
+            _write_span(m.p,source,(image_base+table).to_bytes(8,'little'))
+            _write_span(m.p,source+8,(3).to_bytes(4,'little'))
+            _write_span(m.p,source+0xC,arguments[6].to_bytes(8,'little')+(arguments[7]&1).to_bytes(4,'little'))
+        elif kind == 4:
+            first,last,_ = m.vector(source+0x10,8,own=False)
+            payload = _read_span(m.p,first,last-first)
+            source = frame+0x78
+            _write_span(m.p,source,(image_base+table).to_bytes(8,'little'))
+            _write_span(m.p,source+8,(4).to_bytes(8,'little'))
+            m.publish(source+0x10,(0,0,0))
+            if payload:
+                pointer = m.allocate(len(payload),allocate); _write_span(m.p,pointer,payload)
+                m.publish(source+0x10,(pointer,pointer+len(payload),pointer+len(payload)))
+        original_offsets = (0x28,0x10) if kind == 0 else (0x20,8)
+        originals = [m.construct_string(frame+n,pointer,length,allocate) for n,pointer,length in
+            zip(original_offsets,(arguments[1],arguments[3]),(arguments[2],arguments[4]))]
+        temporary = m.clone_node(source,allocate)
+        second = frame+(0x40 if kind == 0 else 0x38)
+        for n,header in enumerate(originals): m.copy_string_value(second+n*24,header,allocate)
+        begin,end,cap = m.vector(ast+0x18,64,own=False)
+        size,capacity = (end-begin)//64,(cap-begin)//64
+        new_capacity = max(size+1,capacity*2) if size == capacity else capacity
+        if new_capacity > max_nodes:
+            raise RefillUnsupported('AST import output growth exceeds its node bound')
+        new = m.allocate(new_capacity*64,allocate) if size == capacity else begin
+        target = new+size*64
+        for n in (0,24): m.copy_string_value(target+n,_read_span(m.p,second+n,24),allocate)
+        _write_span(m.p,target+0x30,m.clone_node(temporary,allocate).to_bytes(8,'little'))
+        indexes = (arguments[6]&0xFFFFFFFF).to_bytes(4,'little')+(arguments[5]&0xFFFFFFFF).to_bytes(4,'little') if kind == 0 else bytes(8)
+        _write_span(m.p,target+0x38,indexes)
+        if size == capacity:
+            for old in range(end-64,begin-1,-64):
+                destination = new+old-begin
+                for n in (0,24): m.copy_string_value(destination+n,_read_span(m.p,old+n,24),allocate)
+                _write_span(m.p,destination+0x30,m.clone_node(_u(m.p,old+0x30),allocate).to_bytes(8,'little'))
+                _write_span(m.p,destination+0x38,_read_span(m.p,old+0x38,8))
+            m.publish(ast+0x18,(new,new+(size+1)*64,new+new_capacity*64))
+            for old in range(end-64,begin-1,-64): m.destroy_import(old)
+            if begin: m.emit('free',begin,cap-begin)
+        else: _write_span(m.p,ast+0x20,(end+64).to_bytes(8,'little'))
+        m.delete_node(temporary)
+        for n in (24,0): m.free_string_value(_read_span(m.p,second+n,24))
+        for header in reversed(originals): m.free_string_value(header)
+        m.append_import_cache(callback_address+offset,source,table,allocate)
+        if kind == 4:
+            _write_span(m.p,source,(image_base+table).to_bytes(8,'little'))
+            m.free_vector(source+0x10)
+    elif slot_offset == 0x98:
         _,kind,index,name,length = arguments
         kind &= 0xFFFFFFFF; index &= 0xFFFFFFFF
         selections = ((0x80,64),(0x98,48),(0xB0,40),(0xC8,24),(0xE0,40))
@@ -1702,6 +1871,32 @@ def cleanup_reader_ast_export_output(pages, *, output_address, image_base,
     for address in range(end-40,begin-1,-40): m.destroy_export(address)
     if begin:
         _write_span(m.p,output_address+0xB0,begin.to_bytes(8,'little'))
+        m.emit('free',begin,cap-begin)
+    m.p.commit()
+    return ReaderAstResult(None,tuple(m.effects))
+
+
+def cleanup_reader_ast_import_output(pages, *, output_address, image_base,
+                                     max_nodes=4096, max_vector_bytes=16*1024*1024,
+                                     reserved_regions=()):
+    """Actual +2cbadc cleanup for an output owning only 64-byte imports.
+
+    Delete each node, then release field and module names, backwards. Reset
+    end and free the outer block, retaining dangling begin/capacity. Every
+    other output header must be zero; complete output-wrapper cleanup is open.
+    """
+    m = _ReaderAstMemory(pages,image_base,output_address,0x120,max_nodes,max_vector_bytes,reserved_regions)
+    m.claim(output_address,0x120)
+    for offset in range(0,0x120,24):
+        if offset != 0x18 and any(_u(m.p,output_address+offset+n) for n in (0,8,16)):
+            raise RefillUnsupported('AST import-only cleanup requires other output containers empty')
+    begin,end,cap = m.vector(output_address+0x18,64)
+    if (cap-begin)//64 > max_nodes:
+        raise RefillUnsupported('AST import cleanup capacity exceeds its node bound')
+    for address in range(begin,end,64): m.import_record(address)
+    for address in range(end-64,begin-1,-64): m.destroy_import(address)
+    if begin:
+        _write_span(m.p,output_address+0x20,begin.to_bytes(8,'little'))
         m.emit('free',begin,cap-begin)
     m.p.commit()
     return ReaderAstResult(None,tuple(m.effects))

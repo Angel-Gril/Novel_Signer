@@ -4564,5 +4564,51 @@
     "fresh_signer_output_verified": false,
     "private_payloads_published": false,
     "rollback_negative_controls": 247
+  },
+  "vm9_alternative_ast_import_fresh_20261010": {
+    "evidence_file": "evidence/vm9_alternative_ast_import_fresh_20261010.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_alternative_ast_import_20261010.py",
+    "schema": "vm9-alternative-ast-import-fresh-v1",
+    "evidence_date": "2026-10-10",
+    "evidence_timezone": "Asia/Shanghai",
+    "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "native_Python_AST_import_controls": 858,
+    "pre_change_behavior_RED_controls": 6,
+    "import_callback_slots_hex": [
+      "0x28",
+      "0x30",
+      "0x38",
+      "0x40",
+      "0x48"
+    ],
+    "import_callback_offsets_hex": [
+      "0x31b870",
+      "0x31bb48",
+      "0x31be3c",
+      "0x31c144",
+      "0x31c414"
+    ],
+    "import_growth_offset_hex": "0x31eb34",
+    "import_only_wrapper_cleanup_offset_hex": "0x2cbadc",
+    "import_output_offset_hex": "0x18",
+    "import_record_stride": 64,
+    "table_import_default_maximum_hex": "0xffffffff",
+    "explicit_entry_stack_padding_required": true,
+    "stack_arguments_follow_AArch64_ABI": true,
+    "cache_append_after_temporary_cleanup": true,
+    "all_fixtures_synthetic": true,
+    "native_input_snapshot_used": false,
+    "guest_bytes_masked": false,
+    "import_AST_callbacks_implemented": true,
+    "import_only_wrapper_cleanup_implemented": true,
+    "complete_output_wrapper_cleanup_implemented": false,
+    "attached_parser_implemented": false,
+    "complete_python_reader_implemented": false,
+    "independent_Python_factory_implemented": false,
+    "complete_python_bootstrap_controls": 0,
+    "fresh_signer_output_verified": false,
+    "private_payloads_published": false,
+    "rollback_negative_controls": 410
   }
 }

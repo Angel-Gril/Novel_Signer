@@ -1595,6 +1595,82 @@ attached parser、reader/factory/bootstrap/signer、fresh 签名与线上验收�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_export_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-export-evidence.json>
 ```
 
+## 6.29 Import AST 回调与专属输出清理（2026-10-10 Asia/Shanghai）
+
+本轮恢复五类实际 import AST 回调 `+28/+30/+38/+40/+48`，入口分别为
+`+31b870/+31bb48/+31be3c/+31c144/+31c414`，并恢复仅拥有 import 的
+`cleanup_reader_ast_import_output`，直接对照原生 `+2cbadc`。
+**858 个原生/Python 对照、410 个回滚检查**通过，每基址 429 项。修改前
+6 项实际行为 RED 覆盖五类回调与已有多类 import 的专属输出清理；原生
+自然返回，Python 缺失对应行为。所有生产实现仍在同一 owner。
+
+共同参数为 ignored index、module 指针/完整 u64 length、field 指针/完整
+u64 length、一个 index/unused 参数，以及各入口的类型/descriptor 参数：
+
+| slot | 最后参数 | 原生行为 |
+|---|---|---|
+| `+28` | function index / type index | 两者取低 u32；从 output type 选择源节点，保存 type/function index |
+| `+30` | full u64 type / 栈上的 descriptor 指针 | table；无 maximum 时使用 **zero-extended u32 `ffffffff`** |
+| `+38` | X7 的 descriptor 指针 | memory；无 maximum 时选择 `10000` 或 memory64 的 `1000000000000` |
+| `+40` | full u64 type / 栈上的 mutable | global；mutable 读取低字节并保留 `&1` |
+| `+48` | low u32 output type index | kind4；只复制所选 type 的 params 向量 |
+
+输出 `+18` 为 64 字节记录：module string24、field string24、独立节点指针、
+两个 u32 words。只有 `+28` 保存 indexes，其余四类 words 为零。名称先构造
+原始存储，再复制到第二临时，最后复制到输出；两个长名称各自拥有三份
+分配。length=0 不读取名称指针。节点同样先克隆到临时，再克隆到输出，
+释放临时节点和第二/原始名称之后，才独立追加 callback cache。
+type/kind4 的输出节点与 cache 向量均独立于借用的 output type；type 的
+params/results 深拷贝，kind4 仅复制 params，capacity=size。
+
+实际增长 `+31eb34` 先构造新项，再倒序复制旧名称并重新克隆旧节点，发布
+新 vector 后倒序清理旧 import。清理先清零节点指针，调用 deleting
+destructor，再释放 field 和 module 名称。cache 则独立扩容，并转移旧
+type/kind4 向量所有权，发布后析构旧 cache 记录、释放旧外块；不会重新
+分配旧 cache 的 nested vectors。table/memory/global 的实际复制字段与
+padding 规则继续沿用所属节点 owner。
+
+入口 frame 分别为 `e0/110/100/f0/100`；短名称与 table padding 必须来自
+显式 `entry_stack_address`。table/global 超过 X7 的参数实际写入入口 SP，
+模型保留该 incoming word 所占存储。原始/第二临时字符串与临时节点按
+实际 frame 位置写入。混合 kind 的一组 fixture 在每次回调前显式初始化
+入口 frame；它是合成输入，没有使用原生 snapshot。整个 stack/TLS/OS
+仍未比较，也没有恢复未观察的寄存器保存等 stack 效果。
+
+两基址核对自然返回/SP、完整 guest 前 `0xa000`（无屏蔽）、分配/析构/
+释放顺序和每次副作用时 AST header owner bytes。独立预期核对名称与容量、
+indexes、五类节点字段与 owned vectors、旧 cache 指针转移，以及借用
+type/descriptor 不变。覆盖名称长度 0/1/22/23/24/31/32/64/128、四种 output
+与四种 cache 状态、两种 stack padding、连续/混合回调、unaligned descriptor、
+非零空容量指针、拥有非零容量的空节点向量、旧 heap 短名称转 inline，
+以及五类各自精确 node budget 10。858 项中执行 868 次回调、48 次专属
+输出清理，334 项含实际栈参数，2 项显式初始化每次调用的 frame。
+
+410 项 guard 覆盖实际 entry/GOT/clone/delete/destructor 绑定、参数、所有权/
+别名、逻辑 type index、frame/栈参数、节点与分配预算、callback cache 的
+节点类别。21 次分配分别注入 15 类非法地址/别名，共 314 项（首项不含
+prior plan）；另有 11 处写入失败和 9 组解除预算后正常通过的配对输入。
+全部原始页面回滚，包含已经发布 output 后才失败的 cache append；非法
+原生路径均未执行。分配为纯计划，释放为一次消费的逻辑效果。
+
+专属清理要求其余所有 output headers 为零，倒序处理 import、重置 end
+后释放外块，保留 dangling begin/capacity；完整 output wrapper 尚未恢复。
+共享 driver 增加正确 ARM64 栈传参、显式 frame fixture 和 import 专属 wrapper；
+生产 owner 抽取 `copy_node` 供既有 virtual clone 与新 cache copy 复用。
+**17 组旧回归、17 份已发布 JSON 全部逐字节一致**，包含上一轮 export。
+原 callback 分支、其它已有 class methods、API 和 parser 的 AST 保持一致；
+unsupported guard 改为 callback API 未接纳的 `+10`。
+
+全部使用 synthetic fixture 和 fresh ELF，不发布私有 payload，不使用原生
+输入 snapshot。真实 allocator/异常、完整 AST/output wrapper、attached
+parser/AST/root、reader/factory/bootstrap/signer、fresh 签名及线上验收仍未完成。
+
+见 [import 证据](evidence/vm9_alternative_ast_import_fresh_20261010.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_import_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-import-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1645,7 +1721,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复其余 B reader AST callback 并接入 parser/wrapper，随后解析/root 生成，再把原始 JNI /
+下一步完成 B output wrapper 与 attached parser/AST 组合，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。
