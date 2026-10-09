@@ -1,5 +1,27 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：global 预留、创建与记录清理
+
+同一 AST owner 恢复 `+78/+80`、`output+78` 的 176 字节记录、`callback+c8`
+独立 24 字节缓存及 `+2cc3b4` 记录析构：**328 个原生/Python 对照、120 个回滚**，
+每基址 164 项，全部合成输入。原生批次完成于 10 月 9 日，十三组回归完成于
+10 月 10 日。共 334 次回调、182 次创建；192 项控制包含输出
+记录的独立析构。五项行为 RED 在生产修改前成立，同一输入在两基址通过。
+
+完整 u64 type、mutable 低位、单个 owned result 和 destination 的 12 字节
+padding 与原生一致。两容器独立增长；输出转移四个 vector，发布后倒序析构
+旧记录并 free，cache 也在发布后倒序清理。独立析构释放 children、locals、
+type results/params，保留外层记录。自然返回/SP、guest 0xa000（无屏蔽）、
+副作用顺序和每次 owner 字节一致；精确节点预算 7/12 的四项对照通过。
+
+120 项 guard 含 64 项五次分配别名、21 项晚期写入及 9 项独立析构保护；
+七项预算拒绝有正常预算对照，三个字节上限明确发生于分配。页面全部回滚。
+十三组历史 AST 回归通过，十三份 JSON 逐字节一致。共享 driver 只增加 global
+析构，既有 callback 分支/API 默认值/parser 不变；unsupported guard 移至 +88。
+global expression/imports、完整 wrapper、attached parser、reader/factory/bootstrap/
+signer 仍未完成。见 [global 证据](evidence/vm9_alternative_ast_global_fresh_20261009.json)与
+[第 6.25 节报告](REQUEST_JNI_STARTUP_WORKERS.md#625-global-预留创建与记录清理2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：memory 预留、创建与独立缓存
 
 同一 AST owner 恢复 `+68/+70`、`output+60` 与 `callback+b0` 的 40 字节记录：

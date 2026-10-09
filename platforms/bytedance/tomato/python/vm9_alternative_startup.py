@@ -605,6 +605,10 @@ class _ReaderAstMemory:
         self.vector(address+0x50, 16)
         self.element_children(address+0x78)
 
+    def global_record(self, address):
+        self.node(address,24)
+        self.function_record(address+0x18)
+
     def callback(self, address, *, output=True):
         self.claim(address, 0x108)
         if _u(self.p, address) != self.base+0x372370:
@@ -617,11 +621,11 @@ class _ReaderAstMemory:
             if _u(self.p, address+0x20) != ast+0x108:
                 raise RefillUnsupported('AST raw-word target is inconsistent')
             for offset in range(0, 0x120, 24):
-                if offset not in (0,0x30,0x48,0x60,0xC0,0xD8,0xF0,0x108) and any(
+                if offset not in (0,0x30,0x48,0x60,0x78,0xC0,0xD8,0xF0,0x108) and any(
                         _u(self.p,ast+offset+word) for word in (0,8,16)):
                     raise RefillUnsupported('AST unrecovered output containers must be empty')
                 stride = (64 if offset == 0 else 144 if offset == 0x30 else 48 if offset == 0x48 else 40 if offset == 0x60 else 4 if offset == 0xC0 else
-                          184 if offset == 0xD8 else 176 if offset == 0xF0 else 1)
+                          184 if offset == 0xD8 else 176 if offset in (0x78,0xF0) else 1)
                 begin, end, cap = self.vector(ast+offset, stride)
                 if offset == 0:
                     for node in range(begin, end, 64): self.node(node, 64)
@@ -637,6 +641,10 @@ class _ReaderAstMemory:
                     if (cap-begin)//40 > self.max_nodes:
                         raise RefillUnsupported('AST memory capacity exceeds its node bound')
                     for record in range(begin,end,40): self.node(record,40)
+                elif offset == 0x78:
+                    if (cap-begin)//176 > self.max_nodes:
+                        raise RefillUnsupported('AST global capacity exceeds its node bound')
+                    for record in range(begin,end,176): self.global_record(record)
                 elif offset == 0xF0:
                     for record in range(begin, end, 176): self.data_record(record)
                 elif offset == 0xD8:
@@ -724,6 +732,22 @@ class _ReaderAstMemory:
             _write_span(self.p, target+0x20, (self.base+0x3724F0).to_bytes(8,'little'))
             for offset, size in ((0x18,8),(0x28,4),(0x60,8),(0x68,4),(0x88,8),(0x90,4)):
                 _write_span(self.p, target+offset, _read_span(self.p, source+offset, size))
+
+    def move_globals(self, begin, end, destination):
+        for source in range(end-176,begin-1,-176):
+            target = destination+source-begin
+            _write_span(self.p,target,(self.base+0x372568).to_bytes(8,'little'))
+            _write_span(self.p,target+8,_read_span(self.p,source+8,4))
+            _write_span(self.p,target+0xC,_read_span(self.p,source+0xC,12))
+            self.move_nested(source+0x18,source+0x18+144,target+0x18)
+            _write_span(self.p,target+0xA8,_read_span(self.p,source+0xA8,8))
+
+    def destroy_global(self, address):
+        self.emit('destroy',address,176)
+        self.destroy_element_children(address+0x90)
+        self.free_vector(address+0x68)
+        _write_span(self.p,address+0x18,(self.base+0x3724F0).to_bytes(8,'little'))
+        self.free_vector(address+0x40); self.free_vector(address+0x28)
 
     def destroy_data(self, address):
         self.emit('destroy', address, 176)
@@ -845,6 +869,13 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     descriptor+10 selects u64 10000, or 1000000000000 when +12 is nonzero.
     No unwritten stack bytes enter the records. Both containers grow
     independently; only cache growth destroys old nodes after publication.
+    Global reserve/entry use output+78 with 176-byte records and a separate
+    callback+c8 cache of 24-byte global nodes. Entry ignores index, stores
+    full u64 type and mutable&1, builds three 8-byte result copies, transfers
+    the last to the output inline type, and releases the other two at their
+    native stages. Output growth transfers four owned vectors and destroys
+    old records backwards after publication. Cache growth also destroys old
+    nodes after publication. Padding stays in the destination; tail+a8 is 0.
     Data/element inline, element nested and function layouts are supported;
     Code begin selects a logical function after subtracting cache/function
     count difference from its u32 index. It stores metadata/raw start, clears
@@ -868,7 +899,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0x50:2,0x58:1,0x60:3,0x68:1,0x70:2,0xA0:1,0xA8:4,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
+    counts = {0x18:1,0x20:5,0x50:2,0x58:1,0x60:3,0x68:1,0x70:2,0x78:1,0x80:3,0xA0:1,0xA8:4,0xB0:1,0xB8:3,0xC0:1,0xC8:0,0xD0:1,0xD8:1,0xE0:1,0xE8:1,
               0xF8:2,
               0xF0:0,0x100:1,0x108:3,0x110:1,0x118:1,
               0x120:2,0x128:2,0x130:1,0x138:1,
@@ -885,7 +916,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         _u(pages,callback_address+0x18),0x120)
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
-    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x50:0x31C7B8,0x58:0x31C9F4,0x60:0x31CABC,0x68:0x31CCEC,0x70:0x31CDB4,0xA0:0x31D6D4,0xA8:0x31D7D8,
+    entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x50:0x31C7B8,0x58:0x31C9F4,0x60:0x31CABC,0x68:0x31CCEC,0x70:0x31CDB4,0x78:0x31D004,0x80:0x31D028,0xA0:0x31D6D4,0xA8:0x31D7D8,
                0xB8:0x31D984,0xF8:0x31DBB4,
                0xC0:0x31DA9C,0xC8:0x31DAB4,0xD0:0x31DB04,0xD8:0x31DB28,
                0xE0:0x31DB4C,0xE8:0x31DB70,
@@ -1145,6 +1176,69 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                         for record in range(last-40,first-1,-40): m.destroy(record,40)
                     if first: m.emit('free',first,limit-first)
                 else: _write_span(m.p,header+8,(last+40).to_bytes(8,'little'))
+    elif slot_offset in (0x78,0x80):
+        if (_u(m.p,image_base+0x3750A8) != image_base+0x372558
+                or _u(m.p,image_base+0x375090) != image_base+0x3724E0):
+            raise RefillUnsupported('AST global/type vtable relocation is unsupported')
+        begin,end,cap = m.vector(ast+0x78,176,own=False)
+        size,capacity = (end-begin)//176,(cap-begin)//176
+        if slot_offset == 0x78:
+            count = arguments[0]&0xFFFFFFFF
+            if count > max_nodes:
+                raise RefillUnsupported('AST global reserve exceeds its node bound')
+            if count > capacity:
+                new = m.allocate(count*176,allocate)
+                m.move_globals(begin,end,new)
+                m.publish(ast+0x78,(new,new+size*176,new+count*176))
+                for record in range(end-176,begin-1,-176): m.destroy_global(record)
+                if begin: m.emit('free',begin,cap-begin)
+        else:
+            cache_begin,cache_end,cache_cap = m.vector(callback_address+0xC8,24,own=False)
+            cache_size,cache_capacity = (cache_end-cache_begin)//24,(cache_cap-cache_begin)//24
+            new_capacity = max(size+1,capacity*2) if size == capacity else capacity
+            new_cache_capacity = max(cache_size+1,cache_capacity*2) if cache_size == cache_capacity else cache_capacity
+            if m.nodes+3 > max_nodes or max(new_capacity,new_cache_capacity) > max_nodes:
+                raise RefillUnsupported('AST global/cache append exceeds its node bound')
+            result_bytes = arguments[1].to_bytes(8,'little')
+            original = m.allocate(8,allocate); _write_span(m.p,original,result_bytes)
+            temporary = m.allocate(8,allocate); _write_span(m.p,temporary,result_bytes)
+            m.emit('free',original,8)
+            result = m.allocate(8,allocate); _write_span(m.p,result,result_bytes)
+            new = m.allocate(new_capacity*176,allocate) if size == capacity else begin
+            target = new+size*176
+            value = result_bytes+(arguments[2]&1).to_bytes(4,'little')
+            _write_span(m.p,target,(image_base+0x372568).to_bytes(8,'little'))
+            _write_span(m.p,target+8,(3).to_bytes(4,'little'))
+            _write_span(m.p,target+0xC,value)
+            _write_span(m.p,target+0x18,(image_base+0x3724F0).to_bytes(8,'little'))
+            _write_span(m.p,target+0x20,bytes(4))
+            m.publish(target+0x28,(0,0,0)); m.publish(target+0x40,(result,result+8,result+8))
+            _write_span(m.p,target+0x58,bytes(8)); _write_span(m.p,target+0x60,bytes(4))
+            m.publish(target+0x68,(0,0,0))
+            _write_span(m.p,target+0x80,(0xFFFFFFFF).to_bytes(8,'little'))
+            _write_span(m.p,target+0x88,bytes(4)); m.publish(target+0x90,(0,0,0))
+            _write_span(m.p,target+0xA8,bytes(8))
+            if size == capacity:
+                m.move_globals(begin,end,new)
+                m.publish(ast+0x78,(new,new+(size+1)*176,new+new_capacity*176))
+                for record in range(end-176,begin-1,-176): m.destroy_global(record)
+                if begin: m.emit('free',begin,cap-begin)
+            else: _write_span(m.p,ast+0x80,(end+176).to_bytes(8,'little'))
+            cache_new = m.allocate(new_cache_capacity*24,allocate) if cache_size == cache_capacity else cache_begin
+            target = cache_new+cache_size*24
+            _write_span(m.p,target,(image_base+0x372568).to_bytes(8,'little'))
+            _write_span(m.p,target+8,(3).to_bytes(4,'little'))
+            _write_span(m.p,target+0xC,value)
+            if cache_size == cache_capacity:
+                for source in range(cache_end-24,cache_begin-1,-24):
+                    destination = cache_new+source-cache_begin
+                    _write_span(m.p,destination,(image_base+0x372568).to_bytes(8,'little'))
+                    _write_span(m.p,destination+8,_read_span(m.p,source+8,16))
+                m.publish(callback_address+0xC8,(cache_new,cache_new+(cache_size+1)*24,cache_new+new_cache_capacity*24))
+                for record in range(cache_end-24,cache_begin-1,-24): m.destroy(record,24)
+                if cache_begin: m.emit('free',cache_begin,cache_cap-cache_begin)
+            else: _write_span(m.p,callback_address+0xD0,(cache_end+24).to_bytes(8,'little'))
+            m.emit('free',temporary,8)
     elif slot_offset == 0xA8:
         first,last,_ = m.vector(ast+0x30,144,own=False)
         cache_begin,cache_end,_ = m.vector(callback_address+0x80,64,own=False)
@@ -1429,6 +1523,20 @@ def destroy_reader_ast_data_record(pages, *, record_address, image_base,
     """
     m = _ReaderAstMemory(pages,image_base,record_address,176,max_nodes,max_vector_bytes,reserved_regions)
     m.claim(record_address,176); m.data_record(record_address); m.destroy_data(record_address)
+    m.p.commit()
+    return ReaderAstResult(None,tuple(m.effects))
+
+
+def destroy_reader_ast_global_record(pages, *, record_address, image_base,
+        max_nodes=4096, max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Actual +2cc3b4 non-deleting destructor, with the record in native X1.
+
+    Free child payloads/block, locals, type results and params. Reset ends
+    and inline type vtable; retain the outer record, scalars and padding.
+    Logical free effects must be consumed once; native void X0 is ignored.
+    """
+    m = _ReaderAstMemory(pages,image_base,record_address,176,max_nodes,max_vector_bytes,reserved_regions)
+    m.claim(record_address,176); m.global_record(record_address); m.destroy_global(record_address)
     m.p.commit()
     return ReaderAstResult(None,tuple(m.effects))
 

@@ -1409,6 +1409,56 @@ native driver 不变；旧 unsupported guard 从 `+68` 移至未恢复的 `+78`�
 `31b360 → 324444 → 324188` parser/AST/root。完整 reader/factory/bootstrap、独立
 signer、fresh 签名和线上矩阵仍未完成。见 [memory 证据](evidence/vm9_alternative_ast_memory_fresh_20261009.json)。
 
+## 6.25 Global 预留、创建与记录清理（2026-10-09 Asia/Shanghai）
+
+同一生产 owner 恢复实际 vtable `+78 → +31d004`、`+80 → +31d028` 和独立记录
+析构 `+2cc3b4`，新增 **328 个原生/Python 对照、120 个保护/回滚**，每基址 164
+项，全部合成输入。共 334 次实际回调、182 次 global 创建，192 项控制包含
+输出 global 的独立析构。生产修改前五项行为 RED：rich reserve 增长、高 u32
+count no-op、spare/full-u64-type/mutable entry、output/cache 同时增长、rich
+记录析构；原生自然返回，Python 拒绝缺失槽位或析构 API。实现后同一五项输入
+在两个基址通过。global 原生批次完成于 10 月 9 日，十三组历史回归完成于
+10 月 10 日；文件名中的 `20261009` 沿用原生批次标记。
+
+| 入口 / 布局 | 已恢复行为 |
+| --- | --- |
+| `+78` | count 截为 u32，调用 `+31f90c` 预留 `output+78` 的 176 字节记录，保持 size；转移所有权、发布，再倒序析构旧记录并释放旧块 |
+| `+80` | `(ignored_index, full_u64_type, mutable)`；新 global kind 3、vtable `+372568`，type 保存在 record `+0c`，mutable 只取低位并保存为 `+14` 的 u32 |
+| 输出记录 | `+18` 拥有 inline type，`+28/+40` 为 params/results，`+68` 为 locals，`+90` 为 children；新 results 拥有一个完整 u64 type，末尾 `+a8` 初始化为零 |
+| 创建分配 | 先建立三份 8 字节结果；原始份在第二份完成后释放，第三份转移给输出，第二份在 cache 追加后释放；两份临时数据均有真实副作用对照 |
+| padding | destination `+24/+64/+8c` 各保留 4 字节；旧记录的标量和四个 vector header 转移，新位置保留自己的 padding |
+| cache | `callback+c8` 独立拥有 24 字节 global 节点；全 u64 type/mutable 低位一致。输出与 cache 各按 `max(size+1,capacity*2)` 增长；cache `+31f2c4` 发布后倒序析构旧节点并释放 |
+| `+2cc3b4` | 记录地址在原生 X1；倒序释放 child payload、child block、locals、type results、params；重置各 end 和 inline type vtable，保留外层记录及标量/padding |
+
+唯一 owner 仍为 `_ReaderAstMemory`。新增 global 的记录验证、搬移和析构，搬移
+复用已有 144 字节布局的 vector 所有权转移；新增
+`destroy_reader_ast_global_record` 有界 API。output `+78` 检查节点、stride 与
+容量。原生 driver 增加该析构入口、序列和观察，并保持旧控制行为；旧 unsupported
+guard 从 `+78` 移至仍未恢复的 `+88`。其它生产函数、既有 callback 分支、API
+默认值与 parser 不变；原有 class methods 仅调整 callback 的输出验证。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节（含所有 padding）、分配/析构/
+free 顺序及每次副作用的 owner 字节。独立预期核对 size/capacity、完整 type、
+mutable 低位、单结果、旧记录标量与 vector 转移、源 vector 清零、padding 和
+分配尺寸。覆盖 null/spare/full、拥有空存储/rich/mixed 子节点、child 数量
+0/1/3、高位 count/index/type/mutable、非空零容量指针、连续 reserve/append、
+两容器独立增长、已有其它输出及其清理，精确节点预算 7/12 的两基址正向对照。
+
+120 项 guard 包含 26 项绑定/attached/参数、布局/节点/别名/预算与 allocator
+检查，64 项逐个验证五次分配计划的非法地址/owner/保留区/先前计划别名，
+16 项 callback 晚期写入、9 项独立析构保护及 5 项析构晚期写入。七项预算
+拒绝配有相同输入在正常预算下的对照；三个字节 guard 明确验证 reserve/output/
+cache 的分配上限。全部原始页面回滚，无非法原生内存路径。纯分配计划与逻辑
+free 保留映射；真实分配器、abort、整体 stack/TLS/OS 尚未纳入。
+
+十三组历史回归全部通过：memory **272/65**、table **184/77**、AST **308/54**、
+data **176/30**、create **148/105**、payload **104 AST / 34 ABI / 30 回滚**、
+expression **148/36**、element **282/159**、nested **230/133**、instruction
+**398/122**、local **252/37**、function **188/136**、code-begin **284/100**。
+十三份 JSON 与历史证据逐字节一致。global expression `+88/+90`、imports、
+完整 output wrapper、attached parser/AST/root、reader/factory/bootstrap、独立
+signer、fresh 签名及线上矩阵仍未完成。见 [global 证据](evidence/vm9_alternative_ast_global_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1447,6 +1497,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_function_
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_code_begin_20261009.py --library <private-metasec.so> --output <reader-ast-code-begin-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_table_20261009.py --library <private-metasec.so> --output <reader-ast-table-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_memory_20261009.py --library <private-metasec.so> --output <reader-ast-memory-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_global_20261009.py --library <private-metasec.so> --output <reader-ast-global-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

@@ -159,7 +159,12 @@ files match byte for byte. Full 24-byte descriptors, both default maxima and
 destination padding match without a copied stack word. Cache growth destroys
 old records after publication; output growth only frees the old block. See the
 [memory report](REQUEST_JNI_STARTUP_WORKERS.md#624-memory-预留创建与独立缓存2026-10-09-asiashanghai).
-Parser composition and remaining callbacks remain open. Allocation/free remain explicit services;
+Global +78/+80 restore 176-byte output records, a separate 24-byte cache and
+record destruction. All 328 comparisons and 120 rollback checks pass; thirteen
+old evidence files match byte for byte. Full u64 type, mutable low bit,
+destination padding and vector transfers match actual native effects.
+See the [global report](REQUEST_JNI_STARTUP_WORKERS.md#625-global-预留创建与记录清理2026-10-09-asiashanghai).
+Global expression, imports and parser composition remain open. Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).
