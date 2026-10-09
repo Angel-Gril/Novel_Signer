@@ -77,6 +77,10 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
     root, width, kind, started = AST, 0x120, None, False
     def sequence(cpu):
         for slot, arguments in spec.get('callbacks', []): yield 'callback', slot, arguments
+        if spec.get('destroy_function'):
+            begin = int.from_bytes(cpu.mem_read(AST+0x30, 8), 'little')
+            end = int.from_bytes(cpu.mem_read(AST+0x38, 8), 'little')
+            for address in range(end-144, begin-1, -144): yield 'function', 0, (address,)
         if spec.get('destroy_data'):
             begin = int.from_bytes(cpu.mem_read(AST+0xF0, 8), 'little')
             end = int.from_bytes(cpu.mem_read(AST+0xF8, 8), 'little')
@@ -104,6 +108,8 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             root, width = values[0], 176; target = base+0x2CC1EC; argv = list(values)
         elif kind == 'element':
             root, width = values[0], 184; target = base+0x2CC2B8; argv = list(values)
+        elif kind == 'function':
+            root, width = values[0], 144; target = base+0x2CC470; argv = [0, values[0]]
         else:
             root, width = CB, 0x108; target = base+0x31B458; argv = [CB]
         for index, value in enumerate(argv):
@@ -163,6 +169,13 @@ def model_case(args, base, spec, *, prepare_case=None):
         result = alternative.run_reader_ast_callback(pages, callback_address=CB,
             image_base=base, slot_offset=slot, arguments=arguments, allocate=allocate)
         effects.extend(result.effects); statuses.append(result.status)
+    if spec.get('destroy_function'):
+        begin = int.from_bytes(_read_span(pages, AST+0x30, 8), 'little')
+        end = int.from_bytes(_read_span(pages, AST+0x38, 8), 'little')
+        assert callable(getattr(alternative, 'destroy_reader_ast_function_record', None)), '144-byte function destructor missing'
+        for address in range(end-144, begin-1, -144):
+            effects.extend(alternative.destroy_reader_ast_function_record(pages, record_address=address,
+                image_base=base).effects)
     if spec.get('destroy_data'):
         begin = int.from_bytes(_read_span(pages, AST+0xF0, 8), 'little')
         end = int.from_bytes(_read_span(pages, AST+0xF8, 8), 'little')

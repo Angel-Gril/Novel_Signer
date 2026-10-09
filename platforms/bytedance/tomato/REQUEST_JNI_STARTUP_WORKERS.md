@@ -1194,6 +1194,63 @@ free 仍为待消费的逻辑副作用；完整 stack/TLS 不在字节比较范�
 和线上矩阵仍未完成。见
 [local group 证据](evidence/vm9_alternative_ast_local_fresh_20261009.json)。
 
+## 6.21 Function 创建、类型缓存与清理（2026-10-09 Asia/Shanghai）
+
+同一生产 owner 恢复实际 vtable `+50` function entry、`output+30` 所有权与
+非删除式 function 析构，新增 **188 个原生/Python 对照、136 个保护/回滚**。
+每基址 94 项，全为合成输入；162 项执行真实 relocated vtable，26 项只执行
+真实 function 析构，共 286 次回调、238 个 function 创建。三项生产修改前行为
+RED：原生 spare/full 创建自然返回 0，Python 拒绝槽位；原生 rich 析构成功，
+Python 缺少接口。实现后相同三项 GREEN，完整对照通过。
+
+| 入口 / 布局 | 已恢复行为 |
+| --- | --- |
+| `+50 → +31c7b8` | `(function_index, type_index)` 均截为 u32；从 output 类型数组选择 logical entry，向 `output+30` 追加 144 字节 function，并向 `callback+80` 追加独立 64 字节类型拷贝 |
+| `+31eea4` | 复制类型 `+08` 的 u32、按 params/results 实际长度分配并复制；不复制 spare capacity 或 `+0c` padding |
+| `+31f690` / `+31ed20` | function/cache 各自按 `max(size+1,capacity*2)` 扩容；向后转移旧 vectors，清源、发布，再倒序析构并释放旧块 |
+| `+2cc470` | 记录地址在 X1；倒序释放 children 内部 vectors、child block、locals、results、params；重置 ends/type vtable，保留记录 |
+
+新 function 的 `+40/+44` 保存 type/function index，`+48` 为零；locals `+50`
+和 children `+78` 初始为空，`+68` 为 `0x00000000ffffffff`，`+70` 为零。
+`+0c/+4c/+74` 保留 destination padding。function 与 cache 的两份类型各自
+拥有 params/results，原 source 类型和容量空闲字节保持不变。两容器都满且
+params/results 非空时，分配顺序是 function params、function results、function
+block、cache block、cache params、cache results；原生临时 function 转移所有权后
+不再释放这些 vectors。
+
+复用原 `_ReaderAstMemory` 的 `move_nested/destroy_nested` 与
+`move_types`/type destructor；抽取共享的 144 字节记录验证，供 function 和
+元素嵌套记录使用。新增 `destroy_reader_ast_function_record` 仍在同一 owner，
+不释放记录本身。现有 `+b8/+f8` 可使用 logical function active，拒绝已映射的
+spare capacity。callback cleanup 释放 type cache，保留 output function 容器；
+完整 output wrapper 清理仍待恢复。共享 native driver 仅增加可选 function 析构
+序列，既有调用和证据不变，parser 及其它生产函数保持不变。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节（含预填 padding）、分配/析构/
+free 顺序与每次副作用的 owner 字节。独立预期另核对源类型、params/results
+字节、标量/索引/padding、两份独立指针、实际长度容量、分配尺寸序列，以及 local
+累计/条数、active/end 和析构后的 vector ends。覆盖两容器的 spare/full/null/
+nonnull-zero-capacity、空与非空类型、rich/empty/mixed children、u32 高位截断、
+重复独立扩容、local/end、其它已恢复 output 与后续 cache cleanup。
+
+136 项 guard 中，39 项覆盖绑定/attached/参数、logical type、headers、容量与
+字节预算、record/children 别名、直接析构与 function spare active；89 项在六个
+分配位置逐一验证非法地址、所有权别名与 prior plan 重用，8 项注入晚期写入
+失败。所有原始页面回滚；不执行无效 native 内存路径。分配仍为纯地址计划，
+free 为待消费的逻辑副作用；完整 native stack/TLS、真实 allocator/abort 不在对照内。
+
+九组旧回归重新通过：AST **308/54**、data **176/30**、create **148/105**、
+payload **104 AST / 34 ABI / 30 回滚**、expression **148/36**、element
+**282/159**、nested **230/133**、instruction **398/122**、local **252/37**。
+九份 JSON 与历史证据逐字节一致；旧 unsupported guard 仍为未恢复的 `+a8`。
+
+同时纠正交接候选槽位：`+58 → +31c9f4` 是 table 容量预留（stride 48，output
+`+48`），`+60 → +31cabc` 使用 descriptor 创建 table。Section 3 实际只发
+`+50` entries，没有单独的 function reserve/count callback；本检查点没有恢复
+table。下一步是 `+a8` code-begin。其余 AST、attached parser/wrapper、完整
+reader/factory/bootstrap、独立 signer 和线上矩阵仍未完成。见
+[function 证据](evidence/vm9_alternative_ast_function_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1228,6 +1285,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_2
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_nested_20261009.py --library <private-metasec.so> --output <reader-ast-element-nested-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_instruction_20261009.py --library <private-metasec.so> --output <reader-ast-instruction-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_20261009.py --library <private-metasec.so> --output <reader-ast-local-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_function_20261009.py --library <private-metasec.so> --output <reader-ast-function-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

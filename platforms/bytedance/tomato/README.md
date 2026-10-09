@@ -132,10 +132,16 @@ data/element inline and element nested 144-byte layouts. Local groups append
 full u64 type, u32 count and wrapping cumulative count; end clears active
 and stores a u32 length while preserving frames and trees. Growth publication,
 copying, free and later destruction match. All fixtures are synthetic; eight
-old evidence files match byte for byte. The +a8 code-begin and separate function
-output container remain open. See the
+old evidence files match byte for byte. See the
 [local group report](REQUEST_JNI_STARTUP_WORKERS.md#620-local-group-与函数结束回调2026-10-09-asiashanghai).
-Allocation/free remain explicit services;
+Slot +50 subsequently restores function creation at output+30, an independent
+64-byte type cache at callback+80 and the shared 144-byte record destructor.
+All 188 native/Python comparisons and 136 rollback checks pass. Both type
+copies own separate params/results; scalar truncation, padding, growth and
+reverse destruction match. Function records also support existing local/end
+callbacks. Nine old evidence files match byte for byte. See the
+[function report](REQUEST_JNI_STARTUP_WORKERS.md#621-function-创建类型缓存与清理2026-10-09-asiashanghai).
+The +a8 code-begin remains open. Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

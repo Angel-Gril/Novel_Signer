@@ -210,15 +210,30 @@ old entries, publishes, then frees the old buffer. End accepts
 `(ignored_index, length)`, clears active and writes low u32 length at record+70;
 frames and trees remain intact. Later data/element destruction owns the local
 buffer. All fixtures are synthetic; eight old evidence files match byte for
-byte. Code-begin +a8, separate function output and parser composition remain
-open. See the
+byte. See the
 [local group report](../REQUEST_JNI_STARTUP_WORKERS.md#620-local-group-与函数结束回调2026-10-09-asiashanghai).
+
+Slot +0x50 now recovers +31c7b8 with `(function_index, type_index)`, both
+truncated to u32. Type index selects a logical output type. Clone params/results
+by their actual lengths into an owned 144-byte function at output+30, then
+clone them independently into the 64-byte cache at callback+80. Two full
+containers allocate in this order: function params/results, function block,
+cache block, cache params/results. Growth transfers old vectors backwards,
+publishes, destroys moved records backwards and frees the old block.
+`destroy_reader_ast_function_record` implements +2cc470 (native address in X1):
+reverse child payloads, child block, locals, type results, then type params.
+It resets ends/vtable and retains the record. Existing +b8/+f8 accept a logical
+function record as active and reject its spare capacity. All 188 comparisons
+and 136 rollback checks pass; nine old evidence files match byte for byte.
+Code-begin +a8 and parser composition remain open. +58/+60 are table callbacks;
+section 3 emits +50 entries without a separate function reserve/count callback.
+See the [function report](../REQUEST_JNI_STARTUP_WORKERS.md#621-function-创建类型缓存与清理2026-10-09-asiashanghai).
 
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
-only type/start/element/data/raw-word containers may hold storage. Caller-supplied
+only type/function/start/element/data/raw-word containers may hold storage. Caller-supplied
 `reserved_regions` retain other borrowed memory. `max_nodes=4096` bounds nodes
-and new type/element/data capacities (nested records and children also count);
+and new type/function/cache/element/data capacities (nested records and children also count);
 `max_vector_bytes=16*1024*1024` bounds each buffer.
 The pure `allocate(size)` service returns an aligned mapped address and must
 not mutate pages or perform external allocation. Consume free effects once;
@@ -254,6 +269,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_2
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_element_nested_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-element-nested-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_instruction_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-instruction-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-local-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_function_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-function-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

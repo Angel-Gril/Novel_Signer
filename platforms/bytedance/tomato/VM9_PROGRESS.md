@@ -1,5 +1,36 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：function 创建、类型缓存与清理
+
+同一 AST owner 恢复 `+50 → +31c7b8`：**188 个原生/Python 对照、136 个回滚**，
+每基址 94 项，全部输入合成。162 项经实际 relocated vtable 执行，另 26 项直接
+验证 function 析构；共执行 286 次回调、创建 238 个 function。三项生产修改前
+行为 RED 在实现后转为 GREEN。
+
+两索引截为 u32，type index 必须选中 logical 类型。先将源 params/results 按
+实际长度深拷贝至 `output+30` 的 144 字节 function，再独立拷贝至
+`callback+80` 的 64 字节 type cache。两边各自扩容，向后搬移、清空源 headers、
+发布后倒序析构并释放旧块。复用现有 nested/type 搬移与析构；新增 function
+记录析构 API 仍归同一 owner。`+b8/+f8` 可使用 logical function active，拒绝
+spare capacity。源类型、两份独立所有权、u32 标量、padding 和实际长度容量均验证。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节、所有分配/析构/free 顺序及
+每个副作用时的 owner 字节；独立预期另核对类型字节、标量/索引/padding、独立
+指针、分配尺寸序列、local/end 和析构后的 ends。136 个 guard 包括 89 个分配
+位置/别名检查及 8 个晚期写入失败，全部原始页面回滚，无效 native 内存路径未执行。
+
+旧 AST 308/54、data 176/30、create 148/105、payload 104 AST/34 ABI/30 回滚、
+expression 148/36、element 282/159、nested 230/133、instruction 398/122、local
+252/37 重新通过，九份 JSON 与历史证据逐字节一致。parser 与其它生产函数不变；
+共享 driver 只增加可选 function 析构步骤。
+
+纠正上一交接的候选槽位：`+58 → +31c9f4` 预留 table，`+60 → +31cabc` 创建
+table；Section 3 只发 `+50`，没有单独的 function reserve/count callback。
+下一步恢复 `+a8` code-begin。table 等其余 AST、attached parser/wrapper、完整
+reader/factory/bootstrap/signer 和线上矩阵仍未完成。见
+[function 证据](evidence/vm9_alternative_ast_function_fresh_20261009.json)与
+[第 6.21 节报告](REQUEST_JNI_STARTUP_WORKERS.md#621-function-创建类型缓存与清理2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：local group 与函数结束回调
 
 同一 AST owner 恢复 `+b8 → +31d984` 和 `+f8 → +31dbb4`：**252 个原生/Python
