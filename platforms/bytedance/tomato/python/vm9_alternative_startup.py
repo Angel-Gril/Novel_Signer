@@ -8,7 +8,7 @@ imports, section 4/5/6 definitions, section 9 empty element vectors,
 section 10 code words and section 11 data segments, run with explicit
 status-only callbacks.
 Opted-in special custom handlers parse metadata. Actual type/start/local-count/
-raw-word callbacks and temporary callback cleanup have separate bounded APIs;
+raw-word/data reserve/create callbacks and cleanup have separate bounded APIs;
 they are not yet composed with the section parser. Other AST callbacks,
 nonempty element vectors and complete AST/reader/factory remain open.
 Unsupported branches fail closed.
@@ -544,7 +544,7 @@ class _ReaderAstMemory:
 def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         arguments, allocate=None, max_nodes=4096, max_vector_bytes=16*1024*1024,
         reserved_regions=()):
-    """Actual slots 18/20/a0/b0/160/168, with allocation and free effects.
+    """Actual slots 18/20/a0/b0/140/160/168, with allocation and free effects.
 
     Type count reserves capacity without resizing. Type entry ignores its
     index, duplicates the two input u64 vectors into temporaries, copies them
@@ -553,6 +553,9 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     Data count reserves 176-byte records without resizing. Growth transfers
     their five owned vectors, preserves destination padding, publishes the
     new header, then destroys old records backwards before freeing the block.
+    Data entry ignores index, truncates memory index/flags to u32 and appends
+    a record with one -1 type result. It copies that result through three
+    temporaries, releases the first before append, and the last two after it.
     Start appends u32; local group count writes callback+78 and clears +7c;
     raw word appends four
     bytes to callback+20, including unaligned byte lengths. Arguments use
@@ -566,7 +569,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x160:1,0x168:1}
+    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x140:3,0x160:1,0x168:1}
     if (not isinstance(slot_offset,int) or slot_offset not in counts
             or not isinstance(arguments, (tuple,list))
             or len(arguments) != counts[slot_offset]
@@ -580,12 +583,13 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, _ = m.callback(callback_address, output=slot_offset != 0xB0)
     entries = {0x18:0x31B6B0,0x20:0x31B6D0,0xA0:0x31D6D4,
-               0xB0:0x31D974,0x160:0x31E5B4,0x168:0x31E5D8}
+               0xB0:0x31D974,0x140:0x31E1D4,0x160:0x31E5B4,0x168:0x31E5D8}
     if _u(m.p,image_base+0x372370+slot_offset) != image_base+entries[slot_offset]:
         raise RefillUnsupported('AST callback slot relocation is unsupported')
-    if slot_offset in (0x18,0x20):
+    if slot_offset in (0x18,0x20,0x140):
         if _u(m.p,image_base+0x375090) != image_base+0x3724E0:
             raise RefillUnsupported('AST type move vtable source is unsupported')
+    if slot_offset in (0x18,0x20):
         begin,end,cap = m.vector(ast,64,own=False)
         size,capacity = (end-begin)//64,(cap-begin)//64
         if slot_offset == 0x18:
@@ -641,6 +645,39 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                 if pointer: m.emit('free',pointer,len(payload))
     elif slot_offset == 0xB0:
         _write_span(m.p,callback_address+0x78,(arguments[0]&0xFFFFFFFF).to_bytes(4,'little')+bytes(4))
+    elif slot_offset == 0x140:
+        begin,end,cap = m.vector(ast+0xF0,176,own=False)
+        size,capacity = (end-begin)//176,(cap-begin)//176
+        if m.nodes+1 > max_nodes or size+1 > max_nodes:
+            raise RefillUnsupported('AST data append exceeds the node bound')
+        sentinel = MASK64.to_bytes(8,'little')
+        original = m.allocate(8,allocate); _write_span(m.p,original,sentinel)
+        temporary_type = m.allocate(8,allocate); _write_span(m.p,temporary_type,sentinel)
+        m.emit('free',original,8)
+        temporary_data = m.allocate(8,allocate); _write_span(m.p,temporary_data,sentinel)
+        if size == capacity:
+            new_capacity = max(size+1,capacity*2)
+            if new_capacity > max_nodes:
+                raise RefillUnsupported('AST data growth exceeds the node bound')
+            new = m.allocate(new_capacity*176,allocate); target = new+size*176
+        else: new,new_capacity,target = begin,capacity,end
+        result = m.allocate(8,allocate); _write_span(m.p,result,sentinel)
+        flags = arguments[2]&0xFFFFFFFF
+        classification = 2 if flags&3 == 3 else flags&1
+        for offset in (0,0x30,0x70,0x98): m.publish(target+offset,(0,0,0))
+        m.publish(target+0x48,(result,result+8,result+8))
+        for offset,value in ((0x18,classification | ((arguments[1]&0xFFFFFFFF)<<32)),
+                             (0x20,image_base+0x3724F0),(0x60,0),(0x88,0xFFFFFFFF)):
+            _write_span(m.p,target+offset,value.to_bytes(8,'little'))
+        for offset in (0x28,0x68,0x90): _write_span(m.p,target+offset,bytes(4))
+        if size == capacity:
+            m.move_data(begin,end,new)
+            m.publish(ast+0xF0,(new,new+(size+1)*176,new+new_capacity*176))
+            for record in range(end-176,begin-1,-176): m.destroy_data(record)
+            if begin: m.emit('free',begin,cap-begin)
+        else: _write_span(m.p,ast+0xF8,(end+176).to_bytes(8,'little'))
+        # Native temporary destructors are inlined; only their frees are effects.
+        m.emit('free',temporary_data,8); m.emit('free',temporary_type,8)
     elif slot_offset == 0x160:
         begin,end,cap = m.vector(ast+0xF0,176,own=False)
         size,capacity = (end-begin)//176,(cap-begin)//176

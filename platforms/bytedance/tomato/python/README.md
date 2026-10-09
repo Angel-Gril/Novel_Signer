@@ -111,8 +111,19 @@ padding, publishes the header, then destroys old records and frees the block.
 `destroy_reader_ast_data_record` implements +2cc1ec: reverse +98 children
 (each owns a +10 u64 vector), child block, +70 locals, inline type
 results/params, then byte payload. It retains the record itself. All new
-fixtures are synthetic; data record creation remains open. See the
+fixtures are synthetic. See the
 [data report](../REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai).
+
+Slot +0x140 subsequently restores data record creation/append with
+`arguments=(index,memory_index,flags)`: index is ignored, the other values
+truncate to u32. The classification is 2 when flags&3 equals 3, otherwise
+flags&1; +18 packs memory_index in the high word. Inline type results own one
+u64 -1, and record +88 is 0x00000000ffffffff. Four sentinel allocations and
+three temporary frees follow native order; growth publishes before old record
+destruction. Destination padding remains intact. All 148 native/Python controls
+and 105 full-page rollback checks pass. Old AST 308/54 and data 176/30 evidence
+remains byte-identical. See the
+[creation report](../REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai).
 
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
@@ -128,6 +139,9 @@ must also be mapped; that guard was reproduced RED before its fix. These APIs ar
 `run_reader_sections`, whose callback remains a status service. Full AST,
 reader/factory/bootstrap and signer remain open. See the
 [AST/cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai).
+Before composing slot +158, repair its parser ABI: the actual callback takes
+index/pointer/length, while the legacy status-only event omits length. This
+checkpoint does not compose the parser with AST callbacks.
 
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
@@ -144,6 +158,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_segments_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_custom_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-custom-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_create_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-create-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

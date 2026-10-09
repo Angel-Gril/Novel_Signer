@@ -69,7 +69,8 @@ def prepare(library, base, spec):
     return pages, sizes
 
 
-def native_case(args, base, spec):
+def native_case(args, base, spec, *, functions=None):
+    functions = {0x160:0x31E5B4} if functions is None else functions
     pages, sizes = prepare(args.library, base, spec)
     effects, statuses = [], []; allocation_index = 0
     _write_span(pages, DRIVER, bytes.fromhex('00023fd6ffffff17'))
@@ -93,7 +94,7 @@ def native_case(args, base, spec):
             root, width = AST, 0x120
             table = int.from_bytes(cpu.mem_read(CB, 8), 'little')
             target = int.from_bytes(cpu.mem_read(table+slot, 8), 'little')
-            assert target == base+0x31E5B4
+            assert target == base+functions[slot]
             argv = [CB, *values]
         elif kind == 'record':
             root, width = values[0], 176; target = base+0x2CC1EC; argv = list(values)
@@ -160,8 +161,8 @@ def model_case(args, base, spec):
     return pages, [(e.kind,e.address,e.size,e.owner_address,e.owner_bytes) for e in effects], statuses
 
 
-def compare(args, base, spec):
-    native, ne, ns = native_case(args, base, spec)
+def compare(args, base, spec, *, functions=None):
+    native, ne, ns = native_case(args, base, spec, functions=functions)
     model, me, ms = model_case(args, base, spec)
     assert ms == ns, (spec['label'], 'statuses')
     assert me == ne, (spec['label'], 'effects and owner state', [e[:4] for e in me], [e[:4] for e in ne])

@@ -81,8 +81,14 @@ Slot +160 subsequently adds 176 comparisons and 30 rollback checks for
 All fixtures are synthetic and run at two bases. Nested vectors transfer,
 destination padding remains intact, and publication/destruction/free match.
 Data storage at output+f0 is now validated in the shared ownership graph;
-record creation and attached parser composition remain open. See the
+attached parser composition remains open. See the
 [data reserve/destructor report](REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai).
+Slot +140 data record creation/append adds 148 comparisons and 105 rollback
+checks, all synthetic at two bases. Flag classification, u32 truncation,
+owned result sentinel, growth/padding and temporary cleanup match native.
+Old AST 308/54 and data reserve/destructor 176/30 regressions pass with
+byte-identical evidence. See the
+[data creation report](REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai).
 Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker

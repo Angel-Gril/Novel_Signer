@@ -3,6 +3,7 @@
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
+同日追加 data record 创建/追加的 148 个对照与 105 个回滚，见第 6.14 节。
 同日追加 section dispatcher 与部分 handler 的 202 个对照、12 个回滚，见第 6.2 节。
 同日追加有符号 i32 原语的 1336 个对照、10 个回滚，见第 6.3 节。
 同日追加 vector/type 的 102 / 372 个对照、34 个回滚，见第 6.4 节。
@@ -39,6 +40,8 @@
 | Python XOR → 实际 B reader 自然返回 | 2 | 每次 1658 次受控分配，reader 返回 0；无 Python reader / AST 对照 |
 | B 实际 AST callback / 临时清理差分 | 308 | 两个基址各 154 项；实际 vtable 执行，32 项使用真实 ELF 类型输入 |
 | B 实际 AST callback / 清理保护回滚 | 54 | slot/relocation、未知 ownership、别名、循环、缺页及资源限制，全页不变 |
+| B data record 容量预留/搬移/析构 | 176 / 30 | 两个基址，合成嵌套 ownership、反向搬移与非 deleting 析构 |
+| B data record 创建/追加 | 148 / 105 | 两个基址，合成 flags/u32/容量/释放组合，字段断言与全页回滚 |
 | B reader u32 原语 native/Python 差分 | 258 | 两个基址各 129 项；自然返回和整个 guest 内存一致 |
 | B reader u32 拒绝/回滚 | 7 | ABI/地址上限、输入缺页和部分输出跨缺页；原页保持不变 |
 | B reader section/部分 handler 差分 | 202 | 194 项合成输入、8 项实际 ELF section 输入；返回、guest/global 状态、回调参数与时机一致 |
@@ -808,6 +811,55 @@ reader/factory/B VM/bootstrap、独立 signer 和线上矩阵未完成。
 旧 AST 验证器的未恢复 slot 保护转到 +158；旧证据的计数与验证范围不变。
 证据见 [data reserve/析构](evidence/vm9_alternative_ast_data_fresh_20261009.json)。
 
+## 6.14 Data record 创建与追加（2026-10-09 Asia/Shanghai）
+
+`run_reader_ast_callback` 恢复实际 slot `+140 → +31e1d4`：**148 个原生/Python
+对照、105 个保护/回滚**，两个基址各 74 项。全部输入合成，原始 ELF 仅提供
+代码/vtable；不使用 native 输入快照。最小空容器创建先复现原生正常返回而
+Python 拒绝的 RED，随后实现；空容器/spare capacity/丰富旧记录扩容三项 GREEN。
+
+参数为 `(index,memory_index,flags)`，index 忽略，后两项按 w-register 截断为
+u32。分类值为 `(flags&3)==3` 时的 2，否则 `flags&1`；+18 u64 等于分类值与
+`memory_index<<32` 的组合。新记录内嵌 type vtable 为 +3724f0，index 0、params
+空、results 含一个 owned u64 `0xffffffffffffffff`。+88 u64 为
+`0x00000000ffffffff`；00/30/70/98 vectors、60 u64、68/90 u32 清零，
+2c/6c/94 padding 保留目标原值。构造/复制的 GOT +375090 必须绑定 +3724e0。
+
+| 阶段 | 原生分配与释放顺序 |
+|---|---|
+| A / B | allocate 8 原始 results，再由 +31e888 allocate 8 临时 type results；两块均写 -1，然后 free A |
+| C | +31eea4 allocate 8 临时 data 内嵌 results，写 -1 |
+| D（满容量） | +320c24 allocate max(size+1,capacity×2)×176 新记录块 |
+| E | +320d5c → +31eea4 allocate 8 最终 record results，写 -1 |
+| 发布与旧块清理 | 扩容反向搬移旧记录并清零源 vectors，发布新 header，倒序 +2cc1ec、free 旧块；spare 仅增加 end |
+| 临时清理 | free C，再 free B；原生内联清理不额外 emit destroy |
+
+创建入口复用已验证的搬移/析构/事务 owner。原生使用实际 vtable BLR dispatch，
+同一 Unicorn 内连续执行 callbacks、最终 data 析构及临时 callback cleanup；
+每次核对 SP 与自然返回。guest 前 0xa000 字节、allocation/destruction/free
+顺序及每个副作用时的根 owner 内容与 Python 一致；独立字段断言另外核对所有
+新建记录，不依赖原生快照。未比较整个 native stack/TLS。
+
+覆盖 flags 0..7、高字截断、忽略 index、空/有 spare/满容量、丰富/已分配但空/
+混合旧 ownership、非空零容量、连续创建、reserve/create 组合、创建后倒序析构、
+保留 data 的 callback cleanup。105 个保护包括 slot/GOT/attached/未知 type/
+共享 child/部分记录/节点与字节预算/错误参数，并在 growth 的五次分配和 spare
+的四次分配逐次检查缺页、未对齐、部分映射、callback/output/旧块/child/borrowed/
+image 别名和重复地址。70 项到达第二次或更晚的计划分配才拒绝，所有原页不变；
+不执行非法原生内存路径。分配必须纯地址计划；free 是只能消费一次的逻辑效果。
+
+旧 AST **308/54** 和 data reserve/析构 **176/30** 回归通过，两份 JSON 与旧
+证据逐字节一致。此次只有 `run_reader_ast_callback` 行为改变；共享 ownership
+方法、parser 函数和旧 AST 验证器未改。旧 data 验证 helper 仅增加可选函数绑定，
+默认仍校验 slot +160；旧证据中的创建未实现标志描述该历史批次的验证范围。
+
+剩余 +148/+150 expression/tree 路径、+158 payload、其它 AST callbacks、attached
+parser/wrapper、parse/root、完整 reader/factory/B VM/bootstrap、独立 signer 和
+线上矩阵尚未完成。特别是实际 +323fb4 data parser 在 +32415c 向 +158 传入
+index/pointer/length，现有 status-only parser/event 省略第三项；恢复 +158 或接入
+AST 前必须取得独立 RED 并修复 ABI。本批未接入 parser。
+证据见 [data 创建/追加](evidence/vm9_alternative_ast_data_create_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -835,6 +887,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_segments_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_custom_20261008.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-custom-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_20261009.py --library <private-metasec.so> --output <reader-ast-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_20261009.py --library <private-metasec.so> --output <reader-ast-data-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_create_20261009.py --library <private-metasec.so> --output <reader-ast-data-create-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

@@ -1,5 +1,32 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：data record 创建与追加
+
+同一 AST owner 恢复 slot `+140 → +31e1d4`：**148 个原生/Python 对照、
+105 个保护/回滚**，两个基址各 74 项，全部合成。实际 vtable、构造、复制、
+扩容和析构自然执行；guest 前 0xa000 字节（含 padding）、效果顺序和每个效果
+时的根 owner 内容一致。独立字段断言核对新记录布局。空容器创建在 owner 修改前
+原生正常返回而 Python 拒绝，RED 后实现，三种基础场景 GREEN。
+
+Index 忽略；memory_index/flags 截断至 u32，分类为 flags 低两位等于 3 时的 2，
+否则 flags&1。+18 高字保存 memory_index；内嵌 type index 为零、params 空，
+results 为一个 owned u64 -1；+88 为 0x00000000ffffffff，其余标量与 vectors 清零。
+结果依次复制到原始/临时 type/临时 data/最终 record 四块 8 字节存储；第一块在
+临时 data 创建前释放，后两块在 append 完成后倒序释放，不额外生成临时 destroy。
+满容量扩至 max(size+1,capacity*2)，搬移旧 ownership，发布后倒序析构并 free 旧块。
+
+flags 0..7/u32 截断、spare/full、丰富/空/混合 ownership、连续创建、reserve 组合、
+最终析构与保留 data 的 callback cleanup 均通过。所有分配边界的别名/缺页/重复地址
+检查包括晚期失败，全页不变。旧 AST **308/54**、data **176/30** 重新通过，
+两份 JSON 与既有证据逐字节一致；共享 ownership 方法和 parser owner 未改。
+
+Detached callback、纯地址分配与逻辑 free 仍为边界。其它 AST callbacks、attached
+parser/wrapper、parse/root、完整 reader/factory/bootstrap、独立 signer 和线上验收
+未完成。Slot +158 的实际 ABI 有第三个 length 参数，旧 status parser 省略它；
+接入前必须单独修复并取得 RED。见
+[创建证据](evidence/vm9_alternative_ast_data_create_fresh_20261009.json)与
+[第 6.14 节报告](REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：data record 容量预留、搬移与析构
 
 同一 AST owner 恢复 slot `+160 → +31e5b4 → +320fb0` 和 176 字节记录
