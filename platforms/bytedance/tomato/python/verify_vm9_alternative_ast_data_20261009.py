@@ -69,9 +69,9 @@ def prepare(library, base, spec):
     return pages, sizes
 
 
-def native_case(args, base, spec, *, functions=None):
+def native_case(args, base, spec, *, functions=None, prepare_case=None):
     functions = {0x160:0x31E5B4} if functions is None else functions
-    pages, sizes = prepare(args.library, base, spec)
+    pages, sizes = (prepare_case or prepare)(args.library, base, spec)
     effects, statuses = [], []; allocation_index = 0
     _write_span(pages, DRIVER, bytes.fromhex('00023fd6ffffff17'))
     root, width, kind, started = AST, 0x120, None, False
@@ -139,8 +139,8 @@ def native_case(args, base, spec, *, functions=None):
     return pages, effects, statuses
 
 
-def model_case(args, base, spec):
-    pages, _ = prepare(args.library, base, spec)
+def model_case(args, base, spec, *, prepare_case=None):
+    pages, _ = (prepare_case or prepare)(args.library, base, spec)
     effects, statuses = [], []; allocation_index = 0
     def allocate(size):
         nonlocal allocation_index
@@ -161,9 +161,9 @@ def model_case(args, base, spec):
     return pages, [(e.kind,e.address,e.size,e.owner_address,e.owner_bytes) for e in effects], statuses
 
 
-def compare(args, base, spec, *, functions=None):
-    native, ne, ns = native_case(args, base, spec, functions=functions)
-    model, me, ms = model_case(args, base, spec)
+def compare(args, base, spec, *, functions=None, prepare_case=None):
+    native, ne, ns = native_case(args, base, spec, functions=functions, prepare_case=prepare_case)
+    model, me, ms = model_case(args, base, spec, prepare_case=prepare_case)
     assert ms == ns, (spec['label'], 'statuses')
     assert me == ne, (spec['label'], 'effects and owner state', [e[:4] for e in me], [e[:4] for e in ne])
     nm, mm = (_read_span(p, oracle.GUEST, 0xA000) for p in (native, model))

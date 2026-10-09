@@ -8,7 +8,7 @@ imports, section 4/5/6 definitions, section 9 empty element vectors,
 section 10 code words and section 11 data segments, run with explicit
 status-only callbacks.
 Opted-in special custom handlers parse metadata. Actual type/start/local-count/
-raw-word/data reserve/create callbacks and cleanup have separate bounded APIs;
+raw-word/data reserve/create/payload callbacks and cleanup have separate bounded APIs;
 they are not yet composed with the section parser. Other AST callbacks,
 nonempty element vectors and complete AST/reader/factory remain open.
 Unsupported branches fail closed.
@@ -544,7 +544,7 @@ class _ReaderAstMemory:
 def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         arguments, allocate=None, max_nodes=4096, max_vector_bytes=16*1024*1024,
         reserved_regions=()):
-    """Actual slots 18/20/a0/b0/140/160/168, with allocation and free effects.
+    """Actual slots 18/20/a0/b0/140/158/160/168, with allocation and free effects.
 
     Type count reserves capacity without resizing. Type entry ignores its
     index, duplicates the two input u64 vectors into temporaries, copies them
@@ -556,6 +556,10 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     Data entry ignores index, truncates memory index/flags to u32 and appends
     a record with one -1 type result. It copies that result through three
     temporaries, releases the first before append, and the last two after it.
+    Data payload ignores index and uses the full u64 length. Zero length
+    leaves existing storage/size intact; nonzero resizes the last record's
+    byte vector, then copies a disjoint borrowed span. Growth zero-fills the
+    extension, copies old bytes, publishes and frees before the payload copy.
     Start appends u32; local group count writes callback+78 and clears +7c;
     raw word appends four
     bytes to callback+20, including unaligned byte lengths. Arguments use
@@ -569,7 +573,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x140:3,0x160:1,0x168:1}
+    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x140:3,0x158:3,0x160:1,0x168:1}
     if (not isinstance(slot_offset,int) or slot_offset not in counts
             or not isinstance(arguments, (tuple,list))
             or len(arguments) != counts[slot_offset]
@@ -583,7 +587,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, _ = m.callback(callback_address, output=slot_offset != 0xB0)
     entries = {0x18:0x31B6B0,0x20:0x31B6D0,0xA0:0x31D6D4,
-               0xB0:0x31D974,0x140:0x31E1D4,0x160:0x31E5B4,0x168:0x31E5D8}
+               0xB0:0x31D974,0x140:0x31E1D4,0x158:0x31E53C,0x160:0x31E5B4,0x168:0x31E5D8}
     if _u(m.p,image_base+0x372370+slot_offset) != image_base+entries[slot_offset]:
         raise RefillUnsupported('AST callback slot relocation is unsupported')
     if slot_offset in (0x18,0x20,0x140):
@@ -678,6 +682,34 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         else: _write_span(m.p,ast+0xF8,(end+176).to_bytes(8,'little'))
         # Native temporary destructors are inlined; only their frees are effects.
         m.emit('free',temporary_data,8); m.emit('free',temporary_type,8)
+    elif slot_offset == 0x158:
+        _,pointer,length = arguments
+        if length:
+            record_begin,record_end,_ = m.vector(ast+0xF0,176,own=False)
+            if record_end == record_begin:
+                raise RefillUnsupported('AST data payload requires an active record')
+            if length > max_vector_bytes or not pointer or pointer > MASK64-length:
+                raise RefillUnsupported('AST data input exceeds the bounded guest span')
+            if any(pointer < stop and start < pointer+length or pointer <= start < pointer+length
+                   for start,stop in m.regions):
+                raise RefillUnsupported('AST data input overlaps owned storage')
+            payload = _read_span(m.p,pointer,length)
+            m.reserved.append((pointer,pointer+length))
+            target = record_end-176
+            begin,end,cap = m.vector(target,own=False)
+            size,capacity = end-begin,cap-begin
+            if length > capacity:
+                new_capacity = max(length,capacity*2)
+                new = m.allocate(new_capacity,allocate)
+                _write_span(m.p,new+size,bytes(length-size))
+                _write_span(m.p,new,_read_span(m.p,begin,size))
+                m.publish(target,(new,new+length,new+new_capacity))
+                if begin: m.emit('free',begin,capacity)
+                begin = new
+            elif length != size:
+                if length > size: _write_span(m.p,end,bytes(length-size))
+                _write_span(m.p,target+8,(begin+length).to_bytes(8,'little'))
+            _write_span(m.p,begin,payload)
     elif slot_offset == 0x160:
         begin,end,cap = m.vector(ast+0xF0,176,own=False)
         size,capacity = (end-begin)//176,(cap-begin)//176
@@ -839,7 +871,7 @@ def run_reader_sections(pages, *, state_address, image_base,
     max_expression_ops bound. Kind zero emits +0xf0; constants emit status
     callbacks without writing a result word. Section 9 supports only empty
     element vectors: the native nonempty-vector abort remains unsupported.
-    Section 11 sends +0x158(index, payload_pointer) without a length argument.
+    Section 11 sends +0x158(index, payload_pointer, payload_length).
 
     enable_special_custom_sections opts into dylink/dylink.0/linking,
     target_features and reloc prefixes. These parse metadata without AST callbacks.
@@ -1526,7 +1558,7 @@ def run_reader_sections(pages, *, state_address, image_base,
                 if start+size > limit():
                     raise _ReaderParseFailure()
                 store(24, start+size)
-                emit(0x158, index, data+start)
+                emit(0x158, index, data+start, size)
         elif number == 10:
             if not enable_code_section:
                 raise RefillUnsupported('reader code section needs explicit opt-in')

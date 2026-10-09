@@ -181,7 +181,7 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
     if segment_sections:
         active_slots = {**active_slots, 0xF0: 0, 0x100: 1, 0x108: 3, 0x110: 1,
                         0x118: 1, 0x120: 2, 0x128: 2, 0x140: 3,
-                        0x148: 1, 0x150: 1, 0x158: 2}
+                        0x148: 1, 0x150: 1, 0x158: 3}
         sections.put(pages, STATE+0xAC, spec.get('data_count', 0xFFFFFFFF), 4)
     for slot in active_slots:
         sections.put(pages, VTABLE+slot, CALLBACK+slot)
@@ -242,8 +242,10 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
             value = status(slot, len(native_events))
             native_events.append((*event, limits))
             if segment_sections:
-                payload = bytes(cpu.mem_read(arguments[1], event[2]-(arguments[1]-
-                    int.from_bytes(cpu.mem_read(STATE+8, 8), 'little')))) if slot == 0x158 else b''
+                if slot == 0x158:
+                    assert arguments[2] == event[2]-(arguments[1]-int.from_bytes(cpu.mem_read(STATE+8,8),'little'))
+                    payload = bytes(cpu.mem_read(arguments[1],arguments[2]))
+                else: payload = b''
                 native_events[-1] += (payload,)
             return value
         host[CALLBACK+slot-base] = service
@@ -265,8 +267,10 @@ def compare(args, base, spec, *, definition_sections=False, global_sections=Fals
                              event.type_vectors, event.import_counts, names, event.import_limits))
         if segment_sections:
             input_start = int.from_bytes(_read_span(model, STATE+8, 8), 'little')
-            payload = _read_span(model, event.arguments[1], event.cursor-(event.arguments[1]-input_start)) \
-                if event.slot_offset == 0x158 else b''
+            if event.slot_offset == 0x158:
+                assert len(event.arguments) == 3 and event.arguments[2] == event.cursor-(event.arguments[1]-input_start)
+                payload = _read_span(model,event.arguments[1],event.arguments[2])
+            else: payload = b''
             model_events[-1] += (payload,)
         return value
     options = dict(state_address=STATE, image_base=base,

@@ -1,5 +1,33 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：data payload 写入与 parser length 参数修复
+
+同一 owner 恢复 slot `+158 → +31e53c` 并补齐 section 11 的 length 参数：
+**104 个 AST 原生/Python 对照、34 个 parser 参数对照、30 个保护/回滚**。
+两个基址各 52/17 项；含 6 项实际 ELF payload、2 项实际 section 输入，均由
+独立 Python XOR/envelope/LEB 提取，不使用 native 输入快照。修改前分别取得
+原生参数与模型不一致、Python 不支持 payload callback 的两个 RED，随后 GREEN。
+
+Index 忽略，length 使用完整 u64；零长度保留已有 payload，不读 source，也不要求
+活动 data record，但仍执行 callback/ownership 预检。非零写入最后一条 176 字节
+记录，扩容至 max(length,capacity*2)，清零新增长度区、复制旧内容、发布 header、
+free 旧块，再复制 payload。Source 必须映射、有界、与 owned storage 分离，
+并保留至分配完成；非法参数、长度/预算、缺页、别名与分配计划全部回滚。
+实际 payload lengths 3632/352/0；guest 内容、自然返回/SP、效果顺序与每个效果
+时的 owner 内容一致，另有独立 payload 内容/长度断言。
+
+旧 AST **308/54**、data reserve/析构 **176/30**、data create **148/105**、
+segments **450/33** 与 **16** 个 abort 边界重新通过，四份 JSON 逐字节一致。
+两个基址的全部实际 section custom 组合记录亦与旧证据一致。旧证据未捕获 +158
+第三项；新原生 oracle 明确核对 index/pointer/length 和已推进 cursor。
+共享 ownership 方法未改；parser 行为仅补 length，不代表接入实际 AST callbacks。
+
+Detached callback、纯地址分配和逻辑 free 仍为边界；+148/+150 expression/tree、
+其它 AST callbacks、attached parser/wrapper、parse/root、完整 reader/factory/
+bootstrap、独立 signer 与线上验收仍未完成。见
+[payload 证据](evidence/vm9_alternative_ast_data_payload_fresh_20261009.json)与
+[第 6.15 节报告](REQUEST_JNI_STARTUP_WORKERS.md#615-data-payload-写入与-parser-length-参数修复2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：data record 创建与追加
 
 同一 AST owner 恢复 slot `+140 → +31e1d4`：**148 个原生/Python 对照、
@@ -22,8 +50,8 @@ flags 0..7/u32 截断、spare/full、丰富/空/混合 ownership、连续创建�
 
 Detached callback、纯地址分配与逻辑 free 仍为边界。其它 AST callbacks、attached
 parser/wrapper、parse/root、完整 reader/factory/bootstrap、独立 signer 和线上验收
-未完成。Slot +158 的实际 ABI 有第三个 length 参数，旧 status parser 省略它；
-接入前必须单独修复并取得 RED。见
+未完成。本批当时发现 slot +158 的实际 ABI 有第三个 length 参数，旧 status parser
+省略它；后续独立 RED 与修复见第 6.15 节，创建证据仅描述本批范围。见
 [创建证据](evidence/vm9_alternative_ast_data_create_fresh_20261009.json)与
 [第 6.14 节报告](REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai)。
 
@@ -118,7 +146,8 @@ parse/root、完整 reader/factory/B VM/bootstrap、独立 signer 与线上矩�
 不写结果字。两个 section 开关默认关闭，八字节 `expression_scratch_address` 与
 input/state、其他 scratch、现有及后续 type storage 分离；每个 expression 有独立
 预算。Section 9 非空列表到达 native abort，模型明确拒绝并回滚；样本无实际
-section 9，相关真实输入对照为 0。Section 11 的 +158 只有 index/pointer 参数。
+section 9，相关真实输入对照为 0。本批旧 oracle 只捕获 +158 的 index/pointer，
+遗漏实际第三项 length；修复和新增参数对照见第 6.15 节。
 
 修改前最小失败对照、完整 callback 参数/状态/input 和回滚均验证；未使用 native
 输入快照，未执行实际 AST callback 或指令。旧 globals/code/sections/import limits

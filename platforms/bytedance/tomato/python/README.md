@@ -76,7 +76,9 @@ with mapped, aligned, disjoint eight-byte `expression_scratch_address` and
 `max_expression_ops=4096` per expression. Their +0x3215f0 helper emits +0xf0 for
 kind zero and produces constant callbacks without a result word. Element vectors
 must be empty; native nonempty vectors reach abort and the model rolls back.
-Data payloads are opaque spans; +0x158 receives only index/pointer. Six controls
+Data payloads are opaque spans; +0x158 receives index/pointer/u64 length. The
+original status-only controls omitted length; the repair and fresh ABI checks
+are documented below. Six controls
 contain actual ELF data, including full 1/2/3/6/7/12/10/11 with 55369 callbacks.
 See the [segment report](../REQUEST_JNI_STARTUP_WORKERS.md#610-section-911-与独立-expression-helper2026-10-08-utc).
 
@@ -125,6 +127,21 @@ and 105 full-page rollback checks pass. Old AST 308/54 and data 176/30 evidence
 remains byte-identical. See the
 [creation report](../REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai).
 
+Slot +0x158 now restores +0x31e53c with
+`arguments=(index,payload_pointer,payload_length)`. Index is ignored; length
+uses all 64 bits. Zero length keeps the existing payload and does not read the
+source or require an active data record; callback/ownership prechecks still
+apply. Nonzero length resizes the last 176-byte record's byte vector, growing
+to max(length,capacity*2). It zeroes newly added bytes, copies old contents,
+publishes the header, frees the old block and then copies the source payload.
+The mapped source must be bounded and disjoint from owned storage; it is
+retained through allocation. The parser now includes length in the +158 event.
+104 AST comparisons, 34 parser ABI comparisons and 30 rollback checks pass,
+including six actual ELF payloads and two actual ELF data-section controls.
+Old AST/data/create/segments JSON remains byte-identical; two complete actual
+section composition records match. See the
+[payload/length report](../REQUEST_JNI_STARTUP_WORKERS.md#615-data-payload-写入与-parser-length-参数修复2026-10-09-asiashanghai).
+
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
 only type/start/data/raw-word containers may hold storage. Caller-supplied
@@ -139,9 +156,8 @@ must also be mapped; that guard was reproduced RED before its fix. These APIs ar
 `run_reader_sections`, whose callback remains a status service. Full AST,
 reader/factory/bootstrap and signer remain open. See the
 [AST/cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai).
-Before composing slot +158, repair its parser ABI: the actual callback takes
-index/pointer/length, while the legacy status-only event omits length. This
-checkpoint does not compose the parser with AST callbacks.
+The +158 length ABI is repaired. This checkpoint keeps parser and AST callback
+execution separate; +148/+150 expression/tree handling remains open.
 
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
@@ -159,6 +175,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_custom_202610
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_create_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-create-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_payload_20261009.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-data-payload-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

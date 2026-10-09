@@ -89,6 +89,14 @@ owned result sentinel, growth/padding and temporary cleanup match native.
 Old AST 308/54 and data reserve/destructor 176/30 regressions pass with
 byte-identical evidence. See the
 [data creation report](REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai).
+Slot +158 payload writes and the parser's missing length argument now pass
+104 AST comparisons, 34 parser ABI comparisons and 30 rollback checks.
+Six AST controls use actual ELF payloads; two ABI controls use the actual data
+section. Zero length preserves existing payload; nonzero length resizes and
+writes the last record. AST/data/create/segments regressions and two complete
+actual section compositions remain unchanged. Parser/AST composition remains
+open. See the
+[payload/length report](REQUEST_JNI_STARTUP_WORKERS.md#615-data-payload-写入与-parser-length-参数修复2026-10-09-asiashanghai).
 Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker

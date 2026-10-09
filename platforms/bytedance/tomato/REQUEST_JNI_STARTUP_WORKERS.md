@@ -4,6 +4,7 @@
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
 同日追加 data record 创建/追加的 148 个对照与 105 个回滚，见第 6.14 节。
+同日追加 data payload 的 104 个 AST 对照、34 个 length 参数对照与 30 个回滚，见第 6.15 节。
 同日追加 section dispatcher 与部分 handler 的 202 个对照、12 个回滚，见第 6.2 节。
 同日追加有符号 i32 原语的 1336 个对照、10 个回滚，见第 6.3 节。
 同日追加 vector/type 的 102 / 372 个对照、34 个回滚，见第 6.4 节。
@@ -620,8 +621,10 @@ Section 11 的 segment count 与 state `+0xac` data count 比较，0xffffffff �
 没有数量 callback。Flags bit 1 为一时读取 memory index，发送
 `+0x140(index,memory_index,flags)`；bit 0 为零时使用
 `+0x148(index)` / expression / `+0x150(index)`。读取 u32 payload size，
-检查 section limit 后先推进 cursor，再发送 `+0x158(index,payload_pointer)`；
-此 callback 没有 length 参数。Payload 内容保持 opaque，验证器比较完整字节。
+检查 section limit 后先推进 cursor，再发送
+`+0x158(index,payload_pointer,payload_length)`。本批旧 status-only parser/oracle
+遗漏实际第三项 length；旧证据不能证明完整 ABI。修复及新增参数对照见第 6.15 节。
+Payload 内容保持 opaque，验证器比较完整字节。
 索引从零开始，不加 function/table/memory import count。
 
 两个基址各 225 项，共 **450 个原生/Python 对照、33 个保护/回滚**；444 项合成，
@@ -808,7 +811,8 @@ Callback 仍必须 detached（+8 为零），使用实际 vtable、0x120 字节�
 分配服务仍为纯地址计划，free 不 poison/unmap；allocator 异常/boot、其余
 AST callback、data record 创建、attached parser/wrapper、parse/root、完整
 reader/factory/B VM/bootstrap、独立 signer 和线上矩阵未完成。
-旧 AST 验证器的未恢复 slot 保护转到 +158；旧证据的计数与验证范围不变。
+本批旧 AST 验证器的未恢复 slot 保护当时转到 +158；后续恢复 +158 后改为
++148（见第 6.15 节），旧证据的计数与验证范围不变。
 证据见 [data reserve/析构](evidence/vm9_alternative_ast_data_fresh_20261009.json)。
 
 ## 6.14 Data record 创建与追加（2026-10-09 Asia/Shanghai）
@@ -853,12 +857,62 @@ image 别名和重复地址。70 项到达第二次或更晚的计划分配才�
 方法、parser 函数和旧 AST 验证器未改。旧 data 验证 helper 仅增加可选函数绑定，
 默认仍校验 slot +160；旧证据中的创建未实现标志描述该历史批次的验证范围。
 
-剩余 +148/+150 expression/tree 路径、+158 payload、其它 AST callbacks、attached
+本批结束时剩余 +148/+150 expression/tree 路径、+158 payload、其它 AST callbacks、attached
 parser/wrapper、parse/root、完整 reader/factory/B VM/bootstrap、独立 signer 和
 线上矩阵尚未完成。特别是实际 +323fb4 data parser 在 +32415c 向 +158 传入
-index/pointer/length，现有 status-only parser/event 省略第三项；恢复 +158 或接入
-AST 前必须取得独立 RED 并修复 ABI。本批未接入 parser。
+index/pointer/length，当时 status-only parser/event 省略第三项；后续独立 RED、
+payload 与 ABI 修复见第 6.15 节。本批未接入 parser。
 证据见 [data 创建/追加](evidence/vm9_alternative_ast_data_create_fresh_20261009.json)。
+
+## 6.15 Data payload 写入与 parser length 参数修复（2026-10-09 Asia/Shanghai）
+
+同一 `vm9_alternative_startup.py` owner 恢复实际 slot `+158 → +31e53c`，并修复
+section 11 在 `+32415c` 调用时遗漏的第三项 length。先用最小输入分别取得
+parser 参数不匹配、Python 拒绝实际 payload callback 的两个行为 RED；生产修改
+后相同入口 GREEN。两个基址各 **52 个 AST 对照、17 个 parser ABI 对照**，
+共 **104 / 34 个原生/Python 对照、30 个保护/回滚**。
+
+参数为 `(index,payload_pointer,payload_length)`，index 忽略，length 使用完整
+u64。长度为零时原生直接成功，保留原 payload 的 size/capacity/内容，不读 source，
+也不要求存在 data record；模型仍执行已有 callback、vtable 和 ownership 预检。
+非零时写入 output+f0 的最后一条 176 字节记录，调用 byte-vector helper
+`+2db2b4` 调整长度：容量不足时 allocate max(length,capacity×2)，清零新增
+长度区、复制旧内容、发布 begin/end/capacity、free 旧块，随后 memcpy payload。
+容量足够时只调整 end，并在增长时清零新增字节；最终 payload 覆盖到新长度。
+
+Source 必须是有界、完整映射的 guest span，并与全部 owned storage 分离；
+在纯分配计划期间保留该 span，拒绝分配地址与 source（含尾部）重叠。复用已有
+事务/ownership owner，不改共享 `_ReaderAstMemory` 方法。Free 仍为逻辑效果，
+不 poison/unmap。Length 的高 32 位不截断；超出预算的 u64 长度直接拒绝。
+零长度的非法 source/无活动记录、忽略 index、缩短/不变/原容量增长/重新分配、
+丰富旧 ownership、reserve/create/write 连续组合及最终析构/临时清理均已对照。
+
+**98 项 AST 输入合成、6 项使用真实 ELF payload；32 项 ABI 输入合成、2 项
+使用真实 ELF section 11**。实际三段长度为 **3632/352/0**，由独立 Python
+XOR、envelope 和 LEB 解码提取，不由模型 parser 或 native 快照提供 fixture。
+实际 vtable/函数自然执行并核对 SP/返回；guest 前 0xa000 字节（含 padding）、
+allocation/destruction/free 顺序与每个效果时的根 owner 内容一致。另有独立
+payload size/capacity/内容断言；不比较整个 native stack/TLS，不公开实际字节。
+
+Parser 现在发出 `+158(index,pointer,length)`，先推进 cursor。原生 oracle 捕获
+三个参数，双方明确核对 length 与 pointer/cursor 的关系，按 length 比较 payload。
+覆盖 0/1/127/128/257 字节、flags 0/1/3、callback 拒绝与实际 ELF 三段。
+本次只修复参数，parser 仍调用显式 status service，尚未执行实际 AST callbacks。
+
+30 个保护覆盖错误绑定/attached/无活动记录/部分 header、错误参数、u64 超限、
+节点/字节预算、source 缺页或别名，以及分配计划的缺页、未对齐、owned/source/
+borrowed/image 冲突；最后一项在已成功 create/write 后再次失败，仍保留该检查点
+的全部页面。所有拒绝都全页回滚，不执行非法原生内存路径。
+
+旧 AST **308/54**、data reserve/析构 **176/30**、data create **148/105**、
+segments **450/33** 与 **16** 个 abort 边界重新通过，四份 JSON 与旧公开证据
+逐字节一致；两个基址的全部实际 section custom 组合记录逐字段一致。旧历史
+记录遗漏 length 的验证范围不变；旧 AST unsupported-slot guard 从 +158 转到
++148。旧 data helper 仅新增可选 fixture prepare 参数，默认行为不变。
+
++148/+150 expression/tree、其它 AST callbacks、attached parser/wrapper、
+parse/root、完整 reader/factory/B VM/bootstrap、独立 signer 与线上矩阵尚未完成。
+证据见 [payload 与 length ABI](evidence/vm9_alternative_ast_data_payload_fresh_20261009.json)。
 
 ## 7. 复现、证据用途与后续验收
 
@@ -888,6 +942,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_custom_202610
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_20261009.py --library <private-metasec.so> --output <reader-ast-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_20261009.py --library <private-metasec.so> --output <reader-ast-data-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_create_20261009.py --library <private-metasec.so> --output <reader-ast-data-create-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_payload_20261009.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-ast-data-payload-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。
