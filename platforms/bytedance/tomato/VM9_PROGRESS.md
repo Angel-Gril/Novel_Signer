@@ -1,5 +1,34 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：data expression frame、u32 修补与树节点删除
+
+同一 owner 恢复 slots `+148/+150 → +31e4a4/+31e4f4`：**148 个原生/Python
+对照、36 个保护/回滚**，两个基址各 74 项，全部合成。三个修改前 RED 分别为
+两个回调不支持，以及合法 u32 tree payload 在原生可清理、模型却按八字节拒绝。
+相同最小对照随后 GREEN；共享树 payload 检查宽度改为四字节，原 ownership
+规则保留。146 项执行实际 vtable callback，2 项直接执行 cleanup。
+
+Begin 忽略 index，指向最后记录的内嵌 type，保存原始指令 buffer 的 u32 字节
+长度到 record+88 低字，清空当前 frame 数量并追加 16 字节 image 常量/sentinel。
+End 忽略 index，按 frame_count-1 查找树 key；逐个 u32 byte offset 写入每次修补
+前的 raw 字节长度，必要时清零扩容。随后更新 begin/count，以原生 libc++ 布局
+删除并平衡树，free payload/node，最后弹出 frame。未找到 key 时只弹出。
+
+核对 guest 前 0xa000 字节（含 padding 和删除节点遗留链接）、自然返回/SP、
+分配/析构/free 顺序及每个效果时的 owner 内容；另有独立 frame/raw 修补断言。
+左右旋转、红 sibling、近/远子节点、双子节点 successor、逐个删除至空、未对齐/
+重复 patch、连续扩容、create/word/cleanup 组合均通过。非法 frames、树元数据/
+键/颜色/黑高、u32 offset 越界、分配缺页/别名和晚期重复分配全部回滚。
+旧 AST **308/54**、data reserve/析构 **176/30**、data create **148/105** 和
+payload **104 AST / 34 ABI / 30 回滚** 重新通过，四份 JSON 与旧公开证据
+逐字节一致；parser owner 行为未改。
+
+Detached callback、纯地址计划、逻辑 free 仍为边界。其余 expression/AST callbacks、
+attached parser/wrapper、parse/root、完整 reader/factory/bootstrap、独立 signer
+与线上矩阵尚未完成。见
+[expression 证据](evidence/vm9_alternative_ast_data_expression_fresh_20261009.json)与
+[第 6.16 节报告](REQUEST_JNI_STARTUP_WORKERS.md#616-data-expression-frameu32-修补与树节点删除2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：data payload 写入与 parser length 参数修复
 
 同一 owner 恢复 slot `+158 → +31e53c` 并补齐 section 11 的 length 参数：
@@ -22,7 +51,7 @@ segments **450/33** 与 **16** 个 abort 边界重新通过，四份 JSON 逐字
 第三项；新原生 oracle 明确核对 index/pointer/length 和已推进 cursor。
 共享 ownership 方法未改；parser 行为仅补 length，不代表接入实际 AST callbacks。
 
-Detached callback、纯地址分配和逻辑 free 仍为边界；+148/+150 expression/tree、
+本批结束时 detached callback、纯地址分配和逻辑 free 仍为边界；+148/+150 expression/tree、
 其它 AST callbacks、attached parser/wrapper、parse/root、完整 reader/factory/
 bootstrap、独立 signer 与线上验收仍未完成。见
 [payload 证据](evidence/vm9_alternative_ast_data_payload_fresh_20261009.json)与

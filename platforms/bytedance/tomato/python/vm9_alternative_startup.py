@@ -8,7 +8,7 @@ imports, section 4/5/6 definitions, section 9 empty element vectors,
 section 10 code words and section 11 data segments, run with explicit
 status-only callbacks.
 Opted-in special custom handlers parse metadata. Actual type/start/local-count/
-raw-word/data reserve/create/payload callbacks and cleanup have separate bounded APIs;
+raw-word/data reserve/create/payload/expression callbacks and cleanup have separate bounded APIs;
 they are not yet composed with the section parser. Other AST callbacks,
 nonempty element vectors and complete AST/reader/factory remain open.
 Unsupported branches fail closed.
@@ -419,10 +419,120 @@ class _ReaderAstMemory:
             self.nodes += 1
             if self.nodes > self.max_nodes:
                 raise RefillUnsupported('AST tree node bound reached')
-            self.claim(address, 64); self.vector(address+0x28, 8)
+            self.claim(address, 64); self.vector(address+0x28, 4)
             pending.extend(((address, True), (_u(self.p, address+8), False),
                             (_u(self.p, address), False)))
         return order
+
+    def fixup_tree(self, header, order):
+        """Validate the libc++ links before +32000c can erase a keyed node."""
+        root, sentinel = _u(self.p,header+8), header+8
+        if _u(self.p,header+16) != len(order):
+            raise RefillUnsupported('AST fixup tree count is inconsistent')
+        if not root:
+            if _u(self.p,header) != sentinel:
+                raise RefillUnsupported('AST empty fixup tree begin is inconsistent')
+            return
+        if _u(self.p,root+0x10) != sentinel or _u(self.p,root+0x18,1) != 1:
+            raise RefillUnsupported('AST fixup tree root is invalid')
+        heights, ranges = {0:0}, {}
+        for node in order:
+            left,right = _u(self.p,node),_u(self.p,node+8)
+            key,black = _u(self.p,node+0x20,4),_u(self.p,node+0x18,1)
+            if black not in (0,1) or heights[left] != heights[right]:
+                raise RefillUnsupported('AST fixup tree colors or black heights are invalid')
+            for child in (left,right):
+                if child and (_u(self.p,child+0x10) != node
+                        or not black and not _u(self.p,child+0x18,1)):
+                    raise RefillUnsupported('AST fixup tree parent or red links are invalid')
+            if left and ranges[left][1] >= key or right and ranges[right][0] <= key:
+                raise RefillUnsupported('AST fixup tree keys are unordered or duplicated')
+            ranges[node] = (ranges[left][0] if left else key,ranges[right][1] if right else key)
+            heights[node] = heights[left]+black
+        first = root
+        while _u(self.p,first): first = _u(self.p,first)
+        if _u(self.p,header) != first:
+            raise RefillUnsupported('AST fixup tree begin is inconsistent')
+
+    def erase_fixup(self, root, node):
+        """Actual +2695c0 links/colors, including the erased node's stale bytes."""
+        def read(address): return _u(self.p,address)
+        def put(address,value): _write_span(self.p,address,value.to_bytes(8,'little'))
+        def black(address): return not address or bool(_u(self.p,address+0x18,1))
+        def paint(address,color): _write_span(self.p,address+0x18,bytes([color]))
+        def rotate(address,left):
+            nonlocal root
+            outer,inner = (8,0) if left else (0,8)
+            other = read(address+outer); child = read(other+inner)
+            put(address+outer,child)
+            if child: put(child+0x10,address)
+            parent = read(address+0x10); put(other+0x10,parent)
+            put(parent+(0 if read(parent)==address else 8),other)
+            put(other+inner,address); put(address+0x10,other)
+            if root == address: root = other
+        removed = node
+        if read(node) and read(node+8):
+            removed = read(node+8)
+            while read(removed): removed = read(removed)
+        child = read(removed) or read(removed+8)
+        parent = read(removed+0x10)
+        if child: put(child+0x10,parent)
+        if read(parent) == removed:
+            put(parent,child)
+            if removed == root: sibling,root = 0,child
+            else: sibling = read(parent+8)
+        else:
+            put(parent+8,child); sibling = read(parent)
+        removed_black = black(removed)
+        if removed != node:
+            parent = read(node+0x10); put(removed+0x10,parent)
+            put(parent+(0 if read(parent)==node else 8),removed)
+            left,right = read(node),read(node+8)
+            put(left+0x10,removed); put(removed,left); put(removed+8,right)
+            if right: put(right+0x10,removed)
+            if root == node: root = removed
+            paint(removed,int(black(node)))
+        if not removed_black or not root: return
+        if child:
+            paint(child,1); return
+        for _ in range(self.max_nodes+1):
+            parent = read(sibling+0x10)
+            right_sibling = read(parent) != sibling
+            near,far = (0,8) if right_sibling else (8,0)
+            if not black(sibling):
+                paint(sibling,1); paint(parent,0); rotate(parent,right_sibling)
+                sibling = read(parent+far)
+            if black(read(sibling+near)) and black(read(sibling+far)):
+                paint(sibling,0); parent = read(sibling+0x10)
+                if parent == root or not black(parent):
+                    paint(parent,1); return
+                grand = read(parent+0x10)
+                sibling = read(grand+(8 if read(grand)==parent else 0))
+                continue
+            if black(read(sibling+far)):
+                paint(read(sibling+near),1); paint(sibling,0)
+                rotate(sibling,not right_sibling)
+                sibling = read(sibling+0x10)
+            parent = read(sibling+0x10)
+            paint(sibling,int(black(parent))); paint(parent,1); paint(read(sibling+far),1)
+            rotate(parent,right_sibling); return
+        raise RefillUnsupported('AST fixup tree erase exceeds its node bound')
+
+    def grow_bytes(self, header, length, service):
+        begin,end,cap = self.vector(header,own=False)
+        size,capacity = end-begin,cap-begin
+        if not size <= length <= self.max_bytes:
+            raise RefillUnsupported('AST fixup raw buffer growth is unbounded')
+        if length > capacity:
+            new_capacity = max(length,capacity*2)
+            new = self.allocate(new_capacity,service)
+            _write_span(self.p,new+size,bytes(length-size))
+            _write_span(self.p,new,_read_span(self.p,begin,size))
+            self.publish(header,(new,new+length,new+new_capacity))
+            if begin: self.emit('free',begin,capacity)
+        else:
+            _write_span(self.p,end,bytes(length-size))
+            _write_span(self.p,header+8,(begin+length).to_bytes(8,'little'))
 
     def data_record(self, address):
         # The inline type counts as one record; each 56-byte child owns only
@@ -544,7 +654,7 @@ class _ReaderAstMemory:
 def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         arguments, allocate=None, max_nodes=4096, max_vector_bytes=16*1024*1024,
         reserved_regions=()):
-    """Actual slots 18/20/a0/b0/140/158/160/168, with allocation and free effects.
+    """Actual slots 18/20/a0/b0/140/148/150/158/160/168 with owned effects.
 
     Type count reserves capacity without resizing. Type entry ignores its
     index, duplicates the two input u64 vectors into temporaries, copies them
@@ -556,6 +666,10 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     Data entry ignores index, truncates memory index/flags to u32 and appends
     a record with one -1 type result. It copies that result through three
     temporaries, releases the first before append, and the last two after it.
+    Data expression begin ignores index, saves raw BYTE length and resets the
+    16-byte frame stack before appending its image-supplied sentinel. End uses
+    the last frame index to patch raw bytes from a u32-offset tree, erases the
+    matching node with native links/colors, frees payload/node and pops a frame.
     Data payload ignores index and uses the full u64 length. Zero length
     leaves existing storage/size intact; nonzero resizes the last record's
     byte vector, then copies a disjoint borrowed span. Growth zero-fills the
@@ -573,7 +687,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x140:3,0x158:3,0x160:1,0x168:1}
+    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x140:3,0x148:1,0x150:1,0x158:3,0x160:1,0x168:1}
     if (not isinstance(slot_offset,int) or slot_offset not in counts
             or not isinstance(arguments, (tuple,list))
             or len(arguments) != counts[slot_offset]
@@ -585,9 +699,10 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     root, width = (callback_address,0x108) if slot_offset == 0xB0 else (
         _u(pages,callback_address+0x18),0x120)
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
-    ast, _, _ = m.callback(callback_address, output=slot_offset != 0xB0)
+    ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
     entries = {0x18:0x31B6B0,0x20:0x31B6D0,0xA0:0x31D6D4,
-               0xB0:0x31D974,0x140:0x31E1D4,0x158:0x31E53C,0x160:0x31E5B4,0x168:0x31E5D8}
+               0xB0:0x31D974,0x140:0x31E1D4,0x148:0x31E4A4,0x150:0x31E4F4,
+               0x158:0x31E53C,0x160:0x31E5B4,0x168:0x31E5D8}
     if _u(m.p,image_base+0x372370+slot_offset) != image_base+entries[slot_offset]:
         raise RefillUnsupported('AST callback slot relocation is unsupported')
     if slot_offset in (0x18,0x20,0x140):
@@ -682,6 +797,68 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         else: _write_span(m.p,ast+0xF8,(end+176).to_bytes(8,'little'))
         # Native temporary destructors are inlined; only their frees are effects.
         m.emit('free',temporary_data,8); m.emit('free',temporary_type,8)
+    elif slot_offset in (0x148,0x150):
+        begin,end,cap = m.vector(callback_address+0x30,16,own=False)
+        if (cap-begin)//16 > max_nodes:
+            raise RefillUnsupported('AST expression frame capacity exceeds its node bound')
+        if slot_offset == 0x148:
+            record_begin,record_end,_ = m.vector(ast+0xF0,176,own=False)
+            if record_begin == record_end:
+                raise RefillUnsupported('AST expression requires an active data record')
+            raw_begin,raw_end,_ = m.vector(ast+0x108,own=False)
+            target = record_end-0x90
+            _write_span(m.p,callback_address+0x38,begin.to_bytes(8,'little'))
+            _write_span(m.p,callback_address+0x28,target.to_bytes(8,'little'))
+            _write_span(m.p,target+0x68,((raw_end-raw_begin)&0xFFFFFFFF).to_bytes(4,'little'))
+            value = _read_span(m.p,image_base+0x6E188,8)+bytes([255])*8
+            if begin < cap:
+                _write_span(m.p,begin,value)
+                _write_span(m.p,callback_address+0x38,(begin+16).to_bytes(8,'little'))
+            else:
+                capacity = max(1,(cap-begin)//8)
+                if capacity > max_nodes:
+                    raise RefillUnsupported('AST expression frame growth exceeds its node bound')
+                new = m.allocate(capacity*16,allocate)
+                _write_span(m.p,new,value)
+                m.publish(callback_address+0x30,(new,new+16,new+capacity*16))
+                if begin: m.emit('free',begin,cap-begin)
+        else:
+            if begin == end:
+                raise RefillUnsupported('AST expression frame stack is empty')
+            header = callback_address+0x48
+            m.fixup_tree(header,trees[1])
+            key = (end-begin)//16-1
+            root = _u(m.p,header+8); node = root; found = 0
+            while node:
+                value = _u(m.p,node+0x20,4)
+                if value >= key: found,node = node,_u(m.p,node)
+                else: node = _u(m.p,node+8)
+            if found and _u(m.p,found+0x20,4) == key:
+                payload,stop,_ = m.vector(found+0x28,4,own=False)
+                for position in range(payload,stop,4):
+                    offset = _u(m.p,position,4)
+                    if offset > max_vector_bytes-4:
+                        raise RefillUnsupported('AST fixup offset exceeds the byte bound')
+                    raw_begin,raw_end,_ = m.vector(ast+0x108,own=False)
+                    size = raw_end-raw_begin
+                    if size < offset+4:
+                        m.grow_bytes(ast+0x108,offset+4,allocate)
+                        raw_begin = _u(m.p,ast+0x108)
+                    _write_span(m.p,raw_begin+offset,(size&0xFFFFFFFF).to_bytes(4,'little'))
+                right = _u(m.p,found+8)
+                if right:
+                    successor = right
+                    while _u(m.p,successor): successor = _u(m.p,successor)
+                else:
+                    child = found; successor = _u(m.p,child+0x10)
+                    while _u(m.p,successor) != child:
+                        child,successor = successor,_u(m.p,successor+0x10)
+                if _u(m.p,header) == found:
+                    _write_span(m.p,header,successor.to_bytes(8,'little'))
+                _write_span(m.p,header+16,(len(trees[1])-1).to_bytes(8,'little'))
+                m.erase_fixup(root,found)
+                m.free_vector(found+0x28); m.emit('free',found,64)
+            _write_span(m.p,callback_address+0x38,(end-16).to_bytes(8,'little'))
     elif slot_offset == 0x158:
         _,pointer,length = arguments
         if length:
@@ -786,6 +963,7 @@ def cleanup_reader_callback(pages, *, callback_address, image_base,
     The five strides are 40/24/40/48/64 at e0/c8/b0/98/80. Supported node
     destructors execute their owned-vector resets/frees. Trees use left/right
     postorder +3202f0; payload end resets before its free, then node is freed.
+    Tree payload vectors contain u32 offsets with four-byte element widths.
     Begin/capacity and tree roots remain dangling as in native destruction.
     The caller consumes logical free effects once. The independent record
     list and output AST are retained; wrapper +31b360 cleanup remains open.

@@ -142,6 +142,21 @@ Old AST/data/create/segments JSON remains byte-identical; two complete actual
 section composition records match. See the
 [payload/length report](../REQUEST_JNI_STARTUP_WORKERS.md#615-data-payload-写入与-parser-length-参数修复2026-10-09-asiashanghai).
 
+Slots +0x148/+0x150 restore +0x31e4a4/+0x31e4f4 with one ignored index
+argument each. Begin points callback+28 to the last record's inline type,
+stores the raw buffer's u32 byte length in record+88, resets callback+38 to
++30 begin and appends a 16-byte frame with its first word read from image+6e188
+and two u32 -1 values. End selects the tree key (frame_count-1), reads u32
+patch byte offsets and writes the raw buffer's length before each patch.
+It grows/zeroes the raw buffer when needed, erases the matched node with the
+actual libc++ parent/link/color changes, frees payload then node and pops a
+frame. No match still pops a frame. Empty stacks are rejected.
+Tree payloads use four-byte elements; the old eight-byte precheck rejected a
+valid native cleanup, reproduced RED before repair. End additionally validates
+count/begin, parent links, key order, colors and black heights. 148 comparisons
+and 36 full-page rollback checks pass; all inputs are synthetic. See the
+[expression/tree report](../REQUEST_JNI_STARTUP_WORKERS.md#616-data-expression-frameu32-修补与树节点删除2026-10-09-asiashanghai).
+
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
 only type/start/data/raw-word containers may hold storage. Caller-supplied
@@ -157,7 +172,7 @@ must also be mapped; that guard was reproduced RED before its fix. These APIs ar
 reader/factory/bootstrap and signer remain open. See the
 [AST/cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai).
 The +158 length ABI is repaired. This checkpoint keeps parser and AST callback
-execution separate; +148/+150 expression/tree handling remains open.
+execution separate; other expression callbacks and attached parsing remain open.
 
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_sections_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-section-evidence.json>
@@ -176,6 +191,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_20261009.
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_create_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-create-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_payload_20261009.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-data-payload-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_expression_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-expression-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

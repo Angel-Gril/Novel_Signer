@@ -101,12 +101,16 @@ vtable 执行，核对节点内容、分配/析构/free 顺序与每个副作用
 随后 slot `+158` 的 payload 写入与 parser length 参数修复通过 **104 个 AST 对照、
 34 个参数对照、30 个回滚**，含 6 项实际 ELF payload 与 2 项实际 section 输入。
 零长度保留原 payload；非零写入最后记录，扩容发布和释放顺序与原生一致。
+随后 slot `+148/+150` 的 data expression frame、u32 修补和树节点删除通过
+**148 个对照、36 个回滚**，全部输入合成。保存原始字节长度、左右旋转、释放顺序
+及连续删除与原生一致；树 payload 的检查宽度修正为 4 字节。
 这些独立有界入口尚未接入 parser；其余 AST callback、wrapper、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
 [Data 创建报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai)。
 [Data payload 与 length 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#615-data-payload-写入与-parser-length-参数修复2026-10-09-asiashanghai)。
+[Data expression 与树删除报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#616-data-expression-frameu32-修补与树节点删除2026-10-09-asiashanghai)。
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

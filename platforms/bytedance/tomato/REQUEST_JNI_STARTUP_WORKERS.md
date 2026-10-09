@@ -5,6 +5,7 @@
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
 同日追加 data record 创建/追加的 148 个对照与 105 个回滚，见第 6.14 节。
 同日追加 data payload 的 104 个 AST 对照、34 个 length 参数对照与 30 个回滚，见第 6.15 节。
+同日追加 data expression/tree 的 148 个对照与 36 个回滚，见第 6.16 节。
 同日追加 section dispatcher 与部分 handler 的 202 个对照、12 个回滚，见第 6.2 节。
 同日追加有符号 i32 原语的 1336 个对照、10 个回滚，见第 6.3 节。
 同日追加 vector/type 的 102 / 372 个对照、34 个回滚，见第 6.4 节。
@@ -910,9 +911,65 @@ segments **450/33** 与 **16** 个 abort 边界重新通过，四份 JSON 与旧
 记录遗漏 length 的验证范围不变；旧 AST unsupported-slot guard 从 +158 转到
 +148。旧 data helper 仅新增可选 fixture prepare 参数，默认行为不变。
 
-+148/+150 expression/tree、其它 AST callbacks、attached parser/wrapper、
+本批结束时 +148/+150 expression/tree、其它 AST callbacks、attached parser/wrapper、
 parse/root、完整 reader/factory/B VM/bootstrap、独立 signer 与线上矩阵尚未完成。
 证据见 [payload 与 length ABI](evidence/vm9_alternative_ast_data_payload_fresh_20261009.json)。
+
+## 6.16 Data expression frame、u32 修补与树节点删除（2026-10-09 Asia/Shanghai）
+
+`run_reader_ast_callback` 恢复 slots `+148 → +31e4a4`、`+150 → +31e4f4`，
+共 **148 个原生/Python 对照、36 个保护/回滚**，两个基址各 74 项，全部输入
+合成。修改前分别观察到两个实际 callback 正常返回而 Python 拒绝；另有合法
+u32 tree payload 的原生 cleanup 正常返回，Python 因旧八字节宽度拒绝，合计
+三个行为 RED。修改后同一最小对照在两个基址 GREEN。
+
+两个 callback 的单个 index 参数均忽略。Begin 设置 callback+28 为最后记录
+内嵌 type（output.end-0x90），重置 +38 到 +30 begin，通过 +321570 得到
+**u32 字节长度**（不除以 4），写入 record+88 低 32 位并保留高字。+31fee4
+追加一个 16 字节 frame：前八字节来自 image+6e188，后两项为 u32 -1。
+重置后有容量时直接写入；无容量时分配一项、发布 header、free 旧存储。
+Begin 要求有活动 data record；不清除旧 frame 存储中的其它字节。
+
+End 将 frame_count-1 作为 u32 key 交给 +32000c；在 callback+48 的树中按
+key 寻找完全匹配节点。Node+28 payload 以 **4 字节步长**读取 u32 byte offsets。
++32151c 在每个 offset 写入修补前 raw buffer 的 u32 字节长度；长度不足时先
+扩至 offset+4，新增区清零，容量不足则按 max(new_length,capacity×2) 分配，
+复制/发布后释放旧块。未对齐 offsets、重复 offsets 和多次扩容均已对照。
+
+删除前更新树 begin 和 count，再自然执行 +2695c0。模型恢复相同的 successor
+转移、parent/left/right 链接、颜色和左右旋转，保留被删节点的原生遗留字节；
+不使用 allocator 的另一种树布局。随后 reset payload end、free payload、free
+64 字节 node，最后 callback+38 减 16。未匹配 key 时不删节点，仍弹出 frame。
+模型要求非空 frame，并验证树 count/begin、root/parent、严格 key 顺序、0/1
+颜色、无红色父子和一致黑高；结构/节点/字节预算、共享/循环、映射均有界。
+
+共享 `_ReaderAstMemory.tree` 的 payload 检查宽度从 8 修正为 4，允许原生可
+释放的奇数 u32 列表；已有按八字节构造的历史 fixture 仍是合法四字节倍数。
+树 cleanup 的 left/right/payload/node 顺序不变。新增 erase/字节增长 helper
+归属同一 AST owner，parser 函数及其它既有 ownership 方法未改。
+
+146 项执行实际 vtable callbacks，2 项直接执行 +31b458 cleanup。验证所有
+guest 前 0xa000 字节（含 padding）、SP/自然返回、allocation/destruction/free
+顺序和每个效果时的根 owner 内容；独立断言另外计算 frame 数量、frame 常量、
+record 起始字节长度及 raw 修补内容。测试包含完整黑树、红叶、红 sibling、
+近/远子节点旋转、双子节点 successor、连续删除至空、create/raw-word/end/
+data 析构和临时 cleanup；image 常量覆写也作为显式输入对照。未比较整个 stack/TLS。
+
+36 个保护包括空记录/空 frame、slot/attached/参数、部分 frame/u32 payload、
+tree count/begin/root parent/颜色/黑高/子 parent/重复 key、循环/共享/别名，
+offset 预算和 u32 回绕，以及分配地址与 callback/output/frame/tree/payload/
+image 冲突、未对齐、缺页、缺少计划和第二次分配重复地址。所有页面回滚，
+包括已经完成第一处修补或扩容之后的失败；非法原生内存路径不执行。
+
+旧 AST **308/54**、data reserve/析构 **176/30**、data create **148/105** 和
+payload **104 AST / 34 ABI / 30 回滚** 全量回归通过，四份新 JSON 与旧公开
+证据逐字节一致。旧 AST unsupported-slot guard 从 +148 改到仍未恢复的 +f0；
+历史证据保留其原始验证范围。语法、隐私、链接、CLI 和精确十文件范围检查通过。
+
+这些仍是 detached callback 的独立有界入口，parser 继续使用显式 status service。
+其它 expression/AST callbacks、attached parser/wrapper、parse/root、完整
+reader/factory/B VM/bootstrap、独立 signer 与线上矩阵尚未完成。
+证据见 [data expression/tree](evidence/vm9_alternative_ast_data_expression_fresh_20261009.json)。
 
 ## 7. 复现、证据用途与后续验收
 
@@ -943,6 +1000,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_20261009.
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_20261009.py --library <private-metasec.so> --output <reader-ast-data-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_create_20261009.py --library <private-metasec.so> --output <reader-ast-data-create-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_payload_20261009.py --library <private-metasec.so> --libc <matching-libc.so> --output <reader-ast-data-payload-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_expression_20261009.py --library <private-metasec.so> --output <reader-ast-data-expression-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

@@ -97,6 +97,14 @@ writes the last record. AST/data/create/segments regressions and two complete
 actual section compositions remain unchanged. Parser/AST composition remains
 open. See the
 [payload/length report](REQUEST_JNI_STARTUP_WORKERS.md#615-data-payload-写入与-parser-length-参数修复2026-10-09-asiashanghai).
+Slots +148/+150 now pass 148 comparisons and 36 rollback checks for data
+expression frames, u32 raw-buffer fixups and actual libc++ tree erasure.
+All fixtures are synthetic at two bases. Begin stores raw byte length and
+resets the frame stack; end patches offsets, erases a matching keyed node,
+frees its payload/node and pops one frame. Tree payload validation now uses
+four-byte elements, with a separate pre-change cleanup failure reproduced.
+See the
+[expression/tree report](REQUEST_JNI_STARTUP_WORKERS.md#616-data-expression-frameu32-修补与树节点删除2026-10-09-asiashanghai).
 Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
