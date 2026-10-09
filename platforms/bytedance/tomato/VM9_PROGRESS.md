@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-10 Asia/Shanghai：Export AST 回调与专属输出清理
+
+实际 `+98 → +31d500` export 回调、五类 virtual clone/deleting destructor 和
+仅含 export 的 `+2cbadc` 输出清理已恢复，通过 **362 个对照、247 个回滚**。
+扩容复制名称并重新克隆旧节点；短名称显式使用入口栈 padding。
+16 组旧回归 JSON 逐字节一致。unsupported guard 移至未恢复的 `+28`。
+import `+28/+30/+38/+40/+48`、完整 wrapper/AST/parser/reader/factory/bootstrap/signer
+仍未完成。见 [export 报告](REQUEST_JNI_STARTUP_WORKERS.md#628-export-ast-回调与专属输出清理2026-10-10-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-10 Asia/Shanghai：AST 字符串复制基础
 
 AST 字符串复制基础 `+32a9c4` 通过 **68 个对照、12 个回滚**；两组相关旧回归 JSON 逐字节一致。import/export 回调尚待接入。见 [字符串复制报告](REQUEST_JNI_STARTUP_WORKERS.md#627-ast-字符串复制基础2026-10-10-asiashanghai)。

@@ -136,6 +136,9 @@ padding 与扩容释放一致；十组旧回归 JSON 逐字节一致。
 十四组旧回归 JSON 逐字节一致。
 AST 字符串复制基础另通过 **68 个对照、12 个回滚**，供后续 import/export 回调复用。
 见 [字符串复制报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#627-ast-字符串复制基础2026-10-10-asiashanghai)。
+Export AST 回调、五类节点克隆/删除与仅含 export 的输出清理另通过
+**362 个对照、247 个回滚**，16 组旧回归 JSON 逐字节一致。
+见 [export 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#628-export-ast-回调与专属输出清理2026-10-10-asiashanghai)。
 这些独立有界入口尚未接入 parser；其余 AST callback、wrapper、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。

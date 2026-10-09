@@ -1539,6 +1539,62 @@ reader/factory/bootstrap/signer、fresh 签名和线上验收仍未完成。分�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_string_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-string-evidence.json>
 ```
 
+## 6.28 Export AST 回调与专属输出清理（2026-10-10 Asia/Shanghai）
+
+本轮恢复实际 `+98 → +31d500` export AST 回调，以及仅拥有 export 的
+`cleanup_reader_ast_export_output`，直接对照原生 `+2cbadc`。**362 个原生/Python
+对照、247 个回滚检查**通过，每基址 181 项。修改前 3 项实际行为 RED
+覆盖短名称 spare append、长名称 type growth、已有多类 export 的输出清理；
+原生自然返回，Python 缺失对应行为。
+
+五个参数为 ignored index、kind、cache index、借用名称指针和完整 u64 length。
+kind/index 取低 u32；kind 0..4 分别选择 callback `+80/+98/+b0/+c8/+e0`，
+stride 为 `64/48/40/24/40`。独立节点克隆分别执行 `+321090/+3210d0/
++321120/+321170/+3211c0`：type 两个向量与 kind4 的向量深拷贝，capacity=size；
+table 复制 `+c` 的 31 字节，memory 复制 `+10` 的 24 字节，global 复制
+`+c` 的 12 字节。type/memory 的 `+c` padding、table 尾部 5 字节保持
+目标原字节。kind4 的 `+8` 8 字节完整保留。
+
+输出 `+a8` 为 40 字节记录：名称 24 字节、独立节点指针、u32 cache index，
+最后 4 字节 padding 保留目标原字节。长名称有原始、第二临时、输出三份
+独立分配。短名称保留入口栈未写入 padding，必须显式传入
+`entry_stack_address`，读取 SP-90 的原始 header，并保留整个 90 字节 frame。
+length=0 跳过名称指针读取；callback cache 保持不变。
+
+扩容 `+320118` 先构造新项，再倒序复制旧名称并重新克隆旧节点，发布新
+vector 后倒序清理旧记录，最后释放旧外块。记录清理先清零节点指针，调用
+virtual deleting destructor，再释放 heap 名称。五类删除入口为
+`+3212b0/+3212fc/+321300/+321304/+32132c`；回调最后删除临时节点，释放
+第二临时名称与原始名称。export 专属输出清理同样倒序删除记录，重置 end
+后释放外块，保留原 begin/capacity 的 dangling 值；逻辑释放只能消费一次。
+该 API 要求其他输出 headers 全零，完整 output wrapper 尚未恢复。
+
+两基址核对自然返回/SP、完整 guest 前 `0xa000`（无屏蔽）、每次分配/
+析构/释放顺序及副作用时 owner bytes。独立预期覆盖五类节点、名称长度
+0/1/22/23/24/31/32/64、spare/growth、连续混合 kind、两种 stack padding、
+非零空容量指针、空向量/拥有空 buffer，以及精确 node budget 12/18。
+247 项 guard 包括参数与实际绑定、所有权、名称/栈别名、预算、每次分配
+分别注入无效地址/别名，以及 7 处晚期写入失败；全部原始页面回滚。
+kind>4 的原生无效路径及其他非法原生路径均未执行。
+
+共享原生 driver 新增 export 专属 wrapper 与五类 deleting destructor 的
+观察；同一生产 owner 抽取字符串复制与节点存储释放，供新组合复用。
+**16 组既有回归通过，16 份已发布 JSON 逐字节一致**：global、memory、table、
+基础 AST、data、data create/payload/expression、element/nested、instruction、
+local、function、code begin、global expression、string。unsupported guard 移至
+尚未恢复的 `+28`。其余既有分支与 parser 的 AST 保持一致。
+
+这批全部使用 synthetic fixture 和 fresh ELF，不使用原生输入 snapshot，
+未发布私有 payload。分配为纯计划和逻辑效果；真实 allocator、异常以及
+整体 stack/TLS/OS 未验证。import `+28/+30/+38/+40/+48`、完整 AST/output wrapper、
+attached parser、reader/factory/bootstrap/signer、fresh 签名与线上验收仍未完成。
+
+见 [export 证据](evidence/vm9_alternative_ast_export_fresh_20261010.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_export_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-export-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -4518,5 +4518,51 @@
     "independent_Python_factory_implemented": false,
     "complete_python_bootstrap_controls": 0,
     "fresh_signer_output_verified": false
+  },
+  "vm9_alternative_ast_export_fresh_20261010": {
+    "evidence_file": "evidence/vm9_alternative_ast_export_fresh_20261010.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_alternative_ast_export_20261010.py",
+    "schema": "vm9-alternative-ast-export-fresh-v1",
+    "evidence_date": "2026-10-10",
+    "evidence_timezone": "Asia/Shanghai",
+    "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "native_Python_AST_export_controls": 362,
+    "pre_change_behavior_RED_controls": 3,
+    "export_callback_slot_hex": "0x98",
+    "export_callback_offset_hex": "0x31d500",
+    "export_growth_offset_hex": "0x320118",
+    "export_only_wrapper_cleanup_offset_hex": "0x2cbadc",
+    "export_output_offset_hex": "0xa8",
+    "export_record_stride": 40,
+    "node_clone_offsets_hex": [
+      "0x321090",
+      "0x3210d0",
+      "0x321120",
+      "0x321170",
+      "0x3211c0"
+    ],
+    "node_deleting_destructor_offsets_hex": [
+      "0x3212b0",
+      "0x3212fc",
+      "0x321300",
+      "0x321304",
+      "0x32132c"
+    ],
+    "explicit_entry_stack_padding_required": true,
+    "all_fixtures_synthetic": true,
+    "native_input_snapshot_used": false,
+    "guest_bytes_masked": false,
+    "export_callback_implemented": true,
+    "export_only_wrapper_cleanup_implemented": true,
+    "complete_output_wrapper_cleanup_implemented": false,
+    "import_AST_callbacks_implemented": false,
+    "attached_parser_implemented": false,
+    "complete_python_reader_implemented": false,
+    "independent_Python_factory_implemented": false,
+    "complete_python_bootstrap_controls": 0,
+    "fresh_signer_output_verified": false,
+    "private_payloads_published": false,
+    "rollback_negative_controls": 247
   }
 }

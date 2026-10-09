@@ -93,6 +93,7 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             begin = int.from_bytes(cpu.mem_read(AST+0x78, 8), 'little')
             end = int.from_bytes(cpu.mem_read(AST+0x80, 8), 'little')
             for address in range(end-176, begin-1, -176): yield 'global', 0, (address,)
+        if spec.get('destroy_exports'): yield 'exports', 0, ()
         if spec.get('cleanup'): yield 'cleanup', 0, ()
     iterator = None
     def advance(cpu):
@@ -116,6 +117,8 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             root, width = values[0], 144; target = base+0x2CC470; argv = [0, values[0]]
         elif kind == 'global':
             root, width = values[0], 176; target = base+0x2CC3B4; argv = [0, values[0]]
+        elif kind == 'exports':
+            root, width = AST, 0x120; target = base+0x2CBADC; argv = [AST]
         else:
             root, width = CB, 0x108; target = base+0x31B458; argv = [CB]
         for index, value in enumerate(argv):
@@ -153,6 +156,9 @@ def native_case(args, base, spec, *, functions=None, prepare_case=None):
             node = cpu.reg_read(arm.UC_ARM64_REG_X0 if offset == 0x2CC2B8 else arm.UC_ARM64_REG_X1)
             if oracle.GUEST <= node < oracle.GUEST+0xA000:
                 effect(cpu, 'destroy', node, {0x2CC2B8:184,0x2CC470:144,0x2CC3B4:176}[offset])
+        elif offset in (0x3212B0, 0x3212FC, 0x321300, 0x321304, 0x32132C):
+            node = cpu.reg_read(arm.UC_ARM64_REG_X0)
+            effect(cpu, 'delete', node, {0x3212B0:64,0x3212FC:48,0x321300:40,0x321304:24,0x32132C:40}[offset])
         elif offset in (0x321260, 0x321308, 0x321368):
             node = cpu.reg_read(arm.UC_ARM64_REG_X0)
             table = int.from_bytes(cpu.mem_read(node, 8), 'little')-base
@@ -204,6 +210,8 @@ def model_case(args, base, spec, *, prepare_case=None):
         for address in range(end-176, begin-1, -176):
             effects.extend(alternative.destroy_reader_ast_global_record(pages, record_address=address,
                 image_base=base).effects)
+    if spec.get('destroy_exports'):
+        effects.extend(alternative.cleanup_reader_ast_export_output(pages, output_address=AST, image_base=base).effects)
     if spec.get('cleanup'):
         effects.extend(alternative.cleanup_reader_callback(pages, callback_address=CB, image_base=base).effects)
     return pages, [(e.kind,e.address,e.size,e.owner_address,e.owner_bytes) for e in effects], statuses
