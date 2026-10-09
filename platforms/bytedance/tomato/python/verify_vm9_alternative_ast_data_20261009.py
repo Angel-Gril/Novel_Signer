@@ -167,7 +167,8 @@ def model_case(args, base, spec, *, prepare_case=None):
         pointer = HEAP+allocation_index; allocation_index += (size+15)&~15; return pointer
     for slot, arguments in spec.get('callbacks', []):
         result = alternative.run_reader_ast_callback(pages, callback_address=CB,
-            image_base=base, slot_offset=slot, arguments=arguments, allocate=allocate)
+            image_base=base, slot_offset=slot, arguments=arguments, allocate=allocate,
+            **({'entry_stack_address':spec['entry_stack_address']} if 'entry_stack_address' in spec else {}))
         effects.extend(result.effects); statuses.append(result.status)
     if spec.get('destroy_function'):
         begin = int.from_bytes(_read_span(pages, AST+0x30, 8), 'little')

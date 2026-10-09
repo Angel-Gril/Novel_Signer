@@ -1,5 +1,41 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：table 预留、创建与显式栈 padding
+
+同一 AST owner 恢复 `+58/+60` 和 `output+48` table 所有权：**184 个原生/Python
+对照、77 个回滚**，每基址 92 项，全部合成输入与实际 relocated vtable；共
+216 次回调、160 次 table 创建。生产修改前四项真实行为 RED，原生自然返回 0，
+Python 拒绝槽位；后来新增的错误 vtable GOT guard 另取得 RED 后修复。
+
+`+58` 将容量预留至低 u32 count，保留 size。`+60` 忽略 index，向输出和
+`callback+98` 缓存各追加 48 字节记录：kind 1、完整 u64 type 和 19 字节
+descriptor，原生实际读取 24 字节。flag 为零时将 maximum 改为 u64 ffffffff。
+输出增长倒序复制、发布后释放；缓存增长另在发布后倒序调用旧节点析构。
+保留 destination 尾部 5 字节，callback cleanup 只拥有临时缓存。
+
+三项独立原生实验确认 record `+14` 复制未初始化的 temporary stack word；
+实际 table clone 也继续复制这一字段。因此 `+60` 要求显式 `entry_stack_address`，
+读取映射 frame 中 SP-7c 的真实 4 字节，并保留整个 b0-byte frame 的所有权边界。
+缺少、非法或别名栈上下文拒绝执行；没有固定填充值，也没有屏蔽 guest 字节。
+此有界入口没有整体模拟 native stack/TLS；后续组合必须提供每次真实入口上下文。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节、分配/析构/free 顺序和每次
+副作用的 owner 字节。独立预期另核对容量、完整 type、descriptor、stack padding、
+分配尺寸和借用输入；精确节点预算 5/12 的两基址正向对照通过。77 项 guard
+含 27 项两次分配的地址/别名检查、9 项晚期写入失败、5 项有正常预算对照的
+预算拒绝，所有原始页面回滚；两个字节 guard 明确触发 table 分配上限。
+
+十一组旧回归全部通过：AST 308/54、data 176/30、create 148/105、payload
+104 AST/34 ABI/30 回滚、expression 148/36、element 282/159、nested 230/133、
+instruction 398/122、local 252/37、function 188/136、code-begin 284/100。
+十一份 JSON 与历史证据逐字节一致。生产 parser/其它函数不变；共享 driver
+只转发可选入口栈地址，旧 unsupported guard 从 `+58` 移到未恢复的 `+68`。
+
+下一候选为 memory `+68/+70` 与 `output+60` 所有权；先核对原生契约并取得 RED。
+其余 AST、完整 output wrapper、attached parser、reader/factory/bootstrap/signer
+与线上矩阵仍未完成。见 [table 证据](evidence/vm9_alternative_ast_table_fresh_20261009.json)与
+[第 6.23 节报告](REQUEST_JNI_STARTUP_WORKERS.md#623-table-预留创建与显式栈-padding2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：code-begin、双修补树与 child 追加
 
 同一 AST owner 恢复 `+a8 → +31d7d8`：**284 个原生/Python 对照、100 个回滚**，

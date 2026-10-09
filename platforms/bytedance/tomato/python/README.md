@@ -243,11 +243,31 @@ double-counting existing children; exact budgets 6/10 now pass. Parser, other
 production APIs and the shared native driver are unchanged. See the
 [code-begin report](../REQUEST_JNI_STARTUP_WORKERS.md#622-code-begin双修补树与-child-追加2026-10-09-asiashanghai).
 
+Slots +58/+60 reserve output+48 and append 48-byte table records to that output
+and a separate callback+98 cache. Entry arguments are ignored index, full u64
+type and borrowed descriptor pointer. The native callback reads 24 descriptor
+bytes and copies 19; a zero maximum flag replaces descriptor+08 with u64
+ffffffff. New kind is 1. Growth copies old records backwards, retaining five
+destination tail bytes. Output growth frees the old block; cache growth also
+calls old destructors backwards after publication. Callback cleanup owns the
+cache; full output wrapper cleanup remains open.
+
+For +60, pass `entry_stack_address` as the actual aligned entry SP. The mapped
+frame [SP-b0, SP) must be disjoint from owned/input/allocation storage. The
+model reads the unwritten temporary word at SP-7c into record+14, where native
+code also copies it. Native-only controls with three different stack words
+and inspection of the actual +3210d0 clone confirm this dependency; no padding bytes are
+masked or invented. Other native stack writes and complete parser composition
+remain outside this API. Omitted/invalid stack context fails closed. All 184
+comparisons and 77 rollback checks pass; eleven old evidence files match byte
+for byte. The shared driver only forwards this optional entry context. See the
+[table report](../REQUEST_JNI_STARTUP_WORKERS.md#623-table-预留创建与显式栈-padding2026-10-09-asiashanghai).
+
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
-only type/function/start/element/data/raw-word containers may hold storage. Caller-supplied
+only type/function/table/start/element/data/raw-word containers may hold storage. Caller-supplied
 `reserved_regions` retain other borrowed memory. `max_nodes=4096` bounds nodes
-and new type/function/cache/element/data capacities (nested records and children also count);
+and new type/function/table/cache/element/data capacities (nested records and children also count);
 `max_vector_bytes=16*1024*1024` bounds each buffer.
 The pure `allocate(size)` service returns an aligned mapped address and must
 not mutate pages or perform external allocation. Consume free effects once;
@@ -285,6 +305,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_instructi
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-local-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_function_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-function-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_code_begin_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-code-begin-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_table_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-table-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

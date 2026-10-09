@@ -147,7 +147,13 @@ All 284 native/Python comparisons and 100 rollback checks pass. Frame/child
 growth, padding, ordered effects and exact node budgets match; ten old
 evidence files match byte for byte. All fixtures are synthetic. See the
 [code-begin report](REQUEST_JNI_STARTUP_WORKERS.md#622-code-begin双修补树与-child-追加2026-10-09-asiashanghai).
-Table +58/+60 and parser composition remain open. Allocation/free remain explicit services;
+Table +58/+60 now reserve output capacity and append separate 48-byte output
+and cache records. All 184 comparisons and 77 rollback checks pass; eleven
+old evidence files match byte for byte. Entry requires its actual stack
+address to preserve the unwritten temporary word copied into +14 padding.
+Guest bytes are compared without masking. See the
+[table report](REQUEST_JNI_STARTUP_WORKERS.md#623-table-预留创建与显式栈-padding2026-10-09-asiashanghai).
+Memory +68/+70 and parser composition remain open. Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

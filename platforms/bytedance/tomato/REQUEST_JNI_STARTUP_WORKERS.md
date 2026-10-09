@@ -1301,6 +1301,65 @@ nested **230/133**、instruction **398/122**、local **252/37**、function
 wrapper、完整 reader/factory/bootstrap、独立 signer、fresh 签名与线上矩阵仍未
 完成。见 [code-begin 证据](evidence/vm9_alternative_ast_code_begin_fresh_20261009.json)。
 
+## 6.23 Table 预留、创建与显式栈 padding（2026-10-09 Asia/Shanghai）
+
+同一生产 owner 恢复实际 vtable `+58 → +31c9f4` 和 `+60 → +31cabc`，新增
+**184 个原生/Python 对照、77 个保护/回滚**。每基址 92 项，全部输入合成，
+全部执行真实 relocated vtable，共 216 次回调、160 次 table 创建。生产修改前
+四项行为 RED：既有记录 reserve 增长、高 u32 reserve no-op、spare/no-maximum
+entry、output/cache 同时增长；原生自然返回 0，Python 拒绝槽位。实现后同一
+四项在两基址 GREEN。后来新加错误 vtable GOT guard 另取得 RED，并修复绑定检查。
+
+| 入口 / 布局 | 已恢复行为 |
+| --- | --- |
+| `+58` | count 截为 u32；仅在大于容量时按 count 分配 `output+48` 的 48 字节记录块，倒序复制、发布后释放旧块，无旧节点析构 |
+| `+60` | `(ignored_index, full_u64_type, descriptor_pointer)`；新 kind 为 1、vtable 为 `+372518`，向 output 和 `callback+98` 缓存各追加独立 48 字节记录 |
+| descriptor | 实际读取 24 字节，复制前 19 字节至 record `+18`；input `+10` flag 为零时，将 descriptor `+08` 改为 u64 `00000000ffffffff` |
+| record 字段 | `+0c` 保存完整 u64 type；`+14` 保存 temporary stack padding；复制结束于 `+2a`，保留 destination `+2b..+2f` 五字节 |
+| output/cache 增长 | 各按 `max(size+1,capacity*2)` 增长，倒序复制旧 records 并发布；output 只释放旧块，cache `+31ef9c` 另倒序调用旧节点 `+321368` 析构后释放 |
+
+此前发现的 padding 依赖不能用固定 `a5a5a5a5` 替代。实际 `+31cabc` 从 entry
+SP 减去 `b0`，临时 record 位于新 SP `+20`；type 写入新 SP `+2c`，descriptor
+写入 `+38`，但 `+34` 的 4 字节没有初始化。两次重叠 SIMD load 仍将它复制到
+两个新 record 的 `+14`。三项独立原生实验只改变该栈字为 `0/11223344/88776655`，
+两个新 record 都保留相同值，type 和 destination 尾部不变。table vtable 的
+实际 clone `+3210d0` 也复制这 31 字节，包括 padding；这是已观察的输入依赖。
+
+因此 `run_reader_ast_callback` 新增可选 `entry_stack_address=None`；仅 `+60`
+要求提供实际、16 字节对齐的 entry SP，并从映射 frame 的 SP-7c 读取 4 字节。
+整个 `[SP-b0,SP)` frame 与借用的 24 字节 descriptor 在分配期间保留，不允许
+与已有 owner、彼此或分配计划别名。缺少上下文拒绝执行。没有原生输入快照，
+没有 guest 字节屏蔽，也没有虚构填充值。其它 native stack writes/TLS 不在此
+API 的整体对照范围；parser/worker 组合必须为每次调用提供真实入口上下文。
+
+唯一 owner 仍是 `_ReaderAstMemory`，新增 `move_tables`；callback 验证允许
+`output+48` table 容器并检查 vtable/节点/容量。callback cleanup 已有 table
+缓存所有权，output table 容器保留，完整 output wrapper 清理尚未恢复。共享
+native driver 只在 fixture 明确提供 entry SP 时转发该可选参数；其它生产函数、
+class methods、parser 和现有 API 默认行为不变。旧 AST unsupported guard 移至 `+68`。
+
+两基址核对自然返回/SP、guest 前 `0xa000` 字节（含所有 padding）、分配/析构/
+free 顺序和每次副作用的 owner 字节。独立预期核对 capacity/size、完整 u64
+type、descriptor、stack padding、分配尺寸序列及借用输入。覆盖 null/spare/full/
+non-null-zero、flag 0/1/9/生成值、高位 count/index/type、未对齐 descriptor、
+连续 reserve/append、两容器独立增长、已有其它 output、函数/数据/element
+析构和 cache cleanup，以及精确节点预算 5/12 的四项两基址对照。
+
+77 项 guard 中，41 项覆盖绑定/attached/参数、缺失/非法/别名/部分映射栈、
+descriptor/headers/节点/容量/节点及字节预算和 allocator；27 项逐个验证两次
+分配的非法地址、frame/descriptor/owner/保留区/prior-plan 别名，9 项注入晚期
+写入失败。五项预算 guard 配有正常预算下相同输入的正向对照；两个字节 guard
+明确断言失败发生于 table 分配上限。所有原始页面回滚，不执行无效 native
+内存路径。分配为纯地址计划，free 为逻辑副作用，真实 allocator/abort 未纳入。
+
+十一组旧回归通过：AST **308/54**、data **176/30**、create **148/105**、payload
+**104 AST / 34 ABI / 30 回滚**、expression **148/36**、element **282/159**、
+nested **230/133**、instruction **398/122**、local **252/37**、function
+**188/136**、code-begin **284/100**；十一份 JSON 与历史证据逐字节一致。
+下一候选为 memory `+68/+70` 和 `output+60` 所有权；其余 AST、完整 wrapper、
+attached parser、reader/factory/bootstrap、独立 signer、fresh 签名和线上矩阵
+仍未完成。见 [table 证据](evidence/vm9_alternative_ast_table_fresh_20261009.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1337,6 +1396,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_instructi
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_local_20261009.py --library <private-metasec.so> --output <reader-ast-local-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_function_20261009.py --library <private-metasec.so> --output <reader-ast-function-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_code_begin_20261009.py --library <private-metasec.so> --output <reader-ast-code-begin-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_table_20261009.py --library <private-metasec.so> --output <reader-ast-table-evidence.json>
 ```
 
 A observation ranges 跳过 VM dispatcher 热点，只保留服务、启动/caller/callback 边界。

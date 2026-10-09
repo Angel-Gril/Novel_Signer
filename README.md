@@ -122,6 +122,9 @@ tag/数值分步扩容与原始浮点位一致；七组旧回归 JSON 逐字节�
 随后 `+a8` 恢复 code-begin、双修补树处理和 56 字节 child 追加，通过
 **284 个对照、100 个回滚**。logical function 选择、metadata、raw 起点、frame、
 padding 与扩容释放一致；十组旧回归 JSON 逐字节一致。
+随后 table `+58/+60` 恢复容量预留、48 字节记录与独立缓存，通过
+**184 个对照、77 个回滚**。实际入口栈提供被复制的 padding；guest 字节没有
+屏蔽，十一组旧回归 JSON 逐字节一致。
 这些独立有界入口尚未接入 parser；其余 AST callback、wrapper、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
@@ -135,6 +138,7 @@ padding 与扩容释放一致；十组旧回归 JSON 逐字节一致。
 [Local group 与结束报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#620-local-group-与函数结束回调2026-10-09-asiashanghai)。
 [Function 创建与清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#621-function-创建类型缓存与清理2026-10-09-asiashanghai)。
 [Code-begin 与修补树报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#622-code-begin双修补树与-child-追加2026-10-09-asiashanghai)。
+[Table 与栈 padding 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#623-table-预留创建与显式栈-padding2026-10-09-asiashanghai)。
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。
