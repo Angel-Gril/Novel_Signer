@@ -93,9 +93,13 @@ custom 输入；全部实际 section 组合每基址匹配 55369 次回调。特
 实际 type/start/local group 数量/raw-word 五个 callback 与临时 callback 清理又通过
 **308 个原生/Python 对照、54 个回滚**，含 32 项真实 ELF 类型输入。原生实际
 vtable 执行，核对节点内容、分配/析构/free 顺序与每个副作用时的容器状态。
+随后恢复 slot `+160` 的 176 字节 data record 容量预留、反向搬移和 `+2cc1ec`
+非 deleting 析构：新增 **176 个对照、30 个回滚**，合成输入在两个基址均通过。
+嵌套 vector 转移、目标 padding、发布和倒序释放一致；data record 创建尚未恢复。
 这些独立有界入口尚未接入 parser；其余 AST callback、wrapper、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
+[Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。

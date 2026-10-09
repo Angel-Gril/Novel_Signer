@@ -377,7 +377,9 @@ class _ReaderAstMemory:
         for begin, end in (*self.reserved, *self.regions):
             if (address < end and begin < address+size) or begin <= address < end:
                 raise RefillUnsupported('AST owned storage overlaps retained memory')
-        _read_span(self.p, address, size)
+        # A nonnull zero-capacity pointer can still reach free. Require its
+        # address to be mapped even though the owned byte span is empty.
+        _read_span(self.p, address, max(size, 1))
         self.pointers.add(address); self.regions.append((address, address+size))
 
     def vector(self, address, stride=1, *, own=True):
@@ -422,6 +424,19 @@ class _ReaderAstMemory:
                             (_u(self.p, address), False)))
         return order
 
+    def data_record(self, address):
+        # The inline type counts as one record; each 56-byte child owns only
+        # its +10 u64 vector. Its other fields are copied as scalars by 31fdb4.
+        self.vector(address)
+        self.node(address+0x20, 64)
+        self.vector(address+0x70, 16)
+        begin, end, _ = self.vector(address+0x98, 56)
+        for child in range(begin, end, 56):
+            self.nodes += 1
+            if self.nodes > self.max_nodes:
+                raise RefillUnsupported('AST data child bound reached')
+            self.vector(child+0x10, 8)
+
     def callback(self, address, *, output=True):
         self.claim(address, 0x108)
         if _u(self.p, address) != self.base+0x372370:
@@ -434,13 +449,15 @@ class _ReaderAstMemory:
             if _u(self.p, address+0x20) != ast+0x108:
                 raise RefillUnsupported('AST raw-word target is inconsistent')
             for offset in range(0, 0x120, 24):
-                if offset not in (0,0xC0,0x108) and any(
+                if offset not in (0,0xC0,0xF0,0x108) and any(
                         _u(self.p,ast+offset+word) for word in (0,8,16)):
                     raise RefillUnsupported('AST unrecovered output containers must be empty')
-                stride = 64 if offset == 0 else 4 if offset == 0xC0 else 1
+                stride = 64 if offset == 0 else 4 if offset == 0xC0 else 176 if offset == 0xF0 else 1
                 begin, end, _ = self.vector(ast+offset, stride)
                 if offset == 0:
                     for node in range(begin, end, 64): self.node(node, 64)
+                elif offset == 0xF0:
+                    for record in range(begin, end, 176): self.data_record(record)
         records = _u(self.p, address+0x10)
         if records:
             self.claim(records, 24)
@@ -501,16 +518,41 @@ class _ReaderAstMemory:
             _write_span(self.p, target+0x10, _read_span(self.p, source+0x10, 48))
             _write_span(self.p, source+0x10, bytes(48))
 
+    def move_data(self, begin, end, destination):
+        for source in range(end-176, begin-1, -176):
+            target = destination+source-begin
+            for offset in (0,0x30,0x48,0x70,0x98):
+                _write_span(self.p, target+offset, _read_span(self.p, source+offset, 24))
+                _write_span(self.p, source+offset, bytes(24))
+            _write_span(self.p, target+0x20, (self.base+0x3724F0).to_bytes(8,'little'))
+            for offset, size in ((0x18,8),(0x28,4),(0x60,8),(0x68,4),(0x88,8),(0x90,4)):
+                _write_span(self.p, target+offset, _read_span(self.p, source+offset, size))
+
+    def destroy_data(self, address):
+        self.emit('destroy', address, 176)
+        begin, end, cap = self.vector(address+0x98, 56, own=False)
+        if begin:
+            for child in range(end-56, begin-1, -56): self.free_vector(child+0x10)
+            _write_span(self.p, address+0xA0, begin.to_bytes(8,'little'))
+            self.emit('free', begin, cap-begin)
+        self.free_vector(address+0x70)
+        _write_span(self.p, address+0x20, (self.base+0x3724F0).to_bytes(8,'little'))
+        self.free_vector(address+0x48); self.free_vector(address+0x30)
+        self.free_vector(address)
+
 
 def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         arguments, allocate=None, max_nodes=4096, max_vector_bytes=16*1024*1024,
         reserved_regions=()):
-    """Actual slots 18/20/a0/b0/168, with explicit allocation and free effects.
+    """Actual slots 18/20/a0/b0/160/168, with allocation and free effects.
 
     Type count reserves capacity without resizing. Type entry ignores its
     index, duplicates the two input u64 vectors into temporaries, copies them
     again into an owned 64-byte node, then frees results/params temporaries.
     Growth moves old nodes backwards and publishes before destroying them.
+    Data count reserves 176-byte records without resizing. Growth transfers
+    their five owned vectors, preserves destination padding, publishes the
+    new header, then destroys old records backwards before freeing the block.
     Start appends u32; local group count writes callback+78 and clears +7c;
     raw word appends four
     bytes to callback+20, including unaligned byte lengths. Arguments use
@@ -524,7 +566,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     output containers must be empty so their nested ownership cannot alias.
     The section parser still uses its separately supplied status service.
     """
-    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x168:1}
+    counts = {0x18:1,0x20:5,0xA0:1,0xB0:1,0x160:1,0x168:1}
     if (not isinstance(slot_offset,int) or slot_offset not in counts
             or not isinstance(arguments, (tuple,list))
             or len(arguments) != counts[slot_offset]
@@ -538,7 +580,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
     ast, _, _ = m.callback(callback_address, output=slot_offset != 0xB0)
     entries = {0x18:0x31B6B0,0x20:0x31B6D0,0xA0:0x31D6D4,
-               0xB0:0x31D974,0x168:0x31E5D8}
+               0xB0:0x31D974,0x160:0x31E5B4,0x168:0x31E5D8}
     if _u(m.p,image_base+0x372370+slot_offset) != image_base+entries[slot_offset]:
         raise RefillUnsupported('AST callback slot relocation is unsupported')
     if slot_offset in (0x18,0x20):
@@ -599,6 +641,18 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
                 if pointer: m.emit('free',pointer,len(payload))
     elif slot_offset == 0xB0:
         _write_span(m.p,callback_address+0x78,(arguments[0]&0xFFFFFFFF).to_bytes(4,'little')+bytes(4))
+    elif slot_offset == 0x160:
+        begin,end,cap = m.vector(ast+0xF0,176,own=False)
+        size,capacity = (end-begin)//176,(cap-begin)//176
+        count = arguments[0]&0xFFFFFFFF
+        if count > max_nodes:
+            raise RefillUnsupported('AST data reserve exceeds the node bound')
+        if count > capacity:
+            new = m.allocate(count*176,allocate)
+            m.move_data(begin,end,new)
+            m.publish(ast+0xF0,(new,new+size*176,new+count*176))
+            for record in range(end-176,begin-1,-176): m.destroy_data(record)
+            if begin: m.emit('free',begin,cap-begin)
     else:
         vector = ast+0xC0 if slot_offset == 0xA0 else ast+0x108
         begin,end,cap = m.vector(vector,4 if slot_offset == 0xA0 else 1,own=False)
@@ -636,6 +690,22 @@ def destroy_reader_ast_type_node(pages, *, node_address, image_base,
     """
     m = _ReaderAstMemory(pages,image_base,node_address,64,max_nodes,max_vector_bytes,reserved_regions)
     m.claim(node_address,64); m.node(node_address,64); m.destroy(node_address,64)
+    m.p.commit()
+    return ReaderAstResult(None,tuple(m.effects))
+
+
+def destroy_reader_ast_data_record(pages, *, record_address, image_base,
+        max_nodes=4096, max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Actual +2cc1ec non-deleting destructor for one 176-byte data record.
+
+    Free +98 children backwards (each +10 u64 vector), the child block,
+    +70 locals, inline type results/params, then +00 payload. Each vector end
+    resets to begin before free; the inline type vtable resets to +3724f0.
+    The record itself is retained. Consume logical effects once and do not
+    reuse destroyed storage as a live object. Native void X0 is ignored.
+    """
+    m = _ReaderAstMemory(pages,image_base,record_address,176,max_nodes,max_vector_bytes,reserved_regions)
+    m.claim(record_address,176); m.data_record(record_address); m.destroy_data(record_address)
     m.p.commit()
     return ReaderAstResult(None,tuple(m.effects))
 

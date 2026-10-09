@@ -104,16 +104,27 @@ Each result records logical allocation/destruction/free effects and owner bytes
 at that effect. Native functions and vtables execute, with explicit malloc/free
 plans; memory stays mapped and unpoisoned. No allocator boot is implemented.
 
+Slot +0x160 adds 176 comparisons and 30 rollback checks for 176-byte data
+record capacity reserve at output+f0. It does not increase size. Growth moves
+five owned vectors backwards, clears their source pointers, preserves target
+padding, publishes the header, then destroys old records and frees the block.
+`destroy_reader_ast_data_record` implements +2cc1ec: reverse +98 children
+(each owns a +10 u64 vector), child block, +70 locals, inline type
+results/params, then byte payload. It retains the record itself. All new
+fixtures are synthetic; data record creation remains open. See the
+[data report](../REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai).
+
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
 at +18 and output+108 at +20. The output is a 0x120-byte vector-header prefix;
-only type/start/raw-word containers may hold storage. Caller-supplied
+only type/start/data/raw-word containers may hold storage. Caller-supplied
 `reserved_regions` retain other borrowed memory. `max_nodes=4096` bounds nodes
-and new type capacities; `max_vector_bytes=16*1024*1024` bounds each buffer.
+and new type/data capacities (data children also count); `max_vector_bytes=16*1024*1024` bounds each buffer.
 The pure `allocate(size)` service returns an aligned mapped address and must
 not mutate pages or perform external allocation. Consume free effects once;
 destruction leaves native dangling begin/capacity/tree pointers. Unsupported
 slots, attached parser state, opaque output ownership, aliasing and bounds
-fail closed with full model-page rollback. These APIs are separate from
+fail closed with full model-page rollback. Nonnull zero-capacity pointers
+must also be mapped; that guard was reproduced RED before its fix. These APIs are separate from
 `run_reader_sections`, whose callback remains a status service. Full AST,
 reader/factory/bootstrap and signer remain open. See the
 [AST/cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai).
@@ -132,6 +143,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_code_20261008
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_segments_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-segments-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_custom_20261008.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-custom-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_data_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-data-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

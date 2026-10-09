@@ -1,5 +1,30 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-09 Asia/Shanghai：data record 容量预留、搬移与析构
+
+同一 AST owner 恢复 slot `+160 → +31e5b4 → +320fb0` 和 176 字节记录
+`+2cc1ec` 非 deleting 析构：**176 个原生/Python 对照、30 个保护/回滚**，
+两个基址各 88 项，全部合成。原生实际 vtable 与析构入口自然执行并恢复 SP；
+guest 内容（含 padding）、分配/析构/free 顺序、每个副作用的 owner 状态均一致。
+两个原生成功/Python 缺失的行为在 owner 修改前 RED，修改后 GREEN。
+
+`output+f0` 仅预留容量，不增加 size。扩容反向转移记录的 00/30/48/70/98
+五组 vector，清零源端指针，复制标量并保留目标 padding；发布 header 后倒序
+析构旧记录并释放旧块。实际析构倒序释放 +98 的 56 字节子记录 payload 与列表，
+随后 +70 locals、内嵌 type 的 results/params、+00 byte payload；不释放记录自身。
+Data storage 加入共享 ownership graph，子记录 +10 为 owned u64 vector，其余
+字段按实际复制路径视为标量；节点/字节界限、共享指针、重叠、缺页与错误绑定均回滚。
+审查复现非空零容量指针未映射却生成 free 的 RED；共用 claim 现要求该地址映射。
+修复后完整重跑 176/30，全部原生正向记录与首次完整运行一致。旧 AST 308/54、
+type/vector 102/372 与 34 个回滚、section 202 与 12 个回滚通过；三份回归 JSON
+与既有证据逐字节一致，未涉及的 owner 函数与旧 AST 方法保持一致。
+
+Detached callback、纯地址分配计划和仅逻辑 free 的边界保持。Data record 创建、
+其它 AST callback、attached parser/wrapper、parse/root、完整 reader/factory/B VM/
+bootstrap、独立 signer 和线上矩阵仍未完成。见
+[data 证据](evidence/vm9_alternative_ast_data_fresh_20261009.json)与
+[第 6.13 节报告](REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
+
 ## 2026-10-09 Asia/Shanghai：实际 AST callback 与临时清理
 
 同一 owner 增加五个实际 callback 的独立有界入口和对应析构/清理：

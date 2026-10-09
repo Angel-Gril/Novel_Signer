@@ -76,6 +76,13 @@ node lists, two bounded trees and a byte buffer. These separate APIs require a
 detached callback and empty unrecovered output containers. Parser composition,
 other AST callbacks and wrapper cleanup remain open. See the
 [AST/cleanup report](REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai).
+Slot +160 subsequently adds 176 comparisons and 30 rollback checks for
+176-byte data record reserve/move and the +2cc1ec non-deleting destructor.
+All fixtures are synthetic and run at two bases. Nested vectors transfer,
+destination padding remains intact, and publication/destruction/free match.
+Data storage at output+f0 is now validated in the shared ownership graph;
+record creation and attached parser composition remain open. See the
+[data reserve/destructor report](REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai).
 Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
