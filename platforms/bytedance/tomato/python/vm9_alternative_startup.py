@@ -4027,3 +4027,56 @@ def run_parser_conversion(pages, *, image_base, ast_address, codec_pair_address,
         _write_span(m.p,cursor,_read_span(m.p,begin,end-begin));cursor+=end-begin
         m.put(output_address+0x70,cursor)
     return finish(1)
+
+
+def cleanup_parser_conversion(pages, *, output_address, image_base,
+        max_nodes=4096, max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Actual +2cb968 destructor for the 128-byte converted module.
+
+    Validate disjoint ownership, then release data, globals, exports, imports
+    and functions. Records are consumed backwards; a function releases its
+    decoded vector before its name. Each vector end resets to begin before
+    the block is freed. The scalar count, begin/capacity and string headers
+    retain native dangling bytes. Consume logical frees once and never reuse
+    destroyed storage as a live object. The output object, error string and
+    builtin catalog remain owned by their callers. Any guard/write failure
+    rolls back all pages; actual allocator and native stack are not outputs.
+    """
+    m=_ReaderAstMemory(pages,image_base,output_address,128,max_nodes,max_vector_bytes,reserved_regions)
+    m.claim(output_address,128)
+    def string(address):
+        header=_read_span(m.p,address,24)
+        if header[0]&1:
+            capacity=int.from_bytes(header[:8],'little')&~1
+            length=int.from_bytes(header[8:16],'little')
+            if not length<capacity<=max_vector_bytes:
+                raise RefillUnsupported('converted cleanup string length/capacity is invalid')
+            m.claim(int.from_bytes(header[16:24],'little'),capacity)
+        elif header[0]>>1>22:
+            raise RefillUnsupported('converted cleanup inline string length is invalid')
+    containers=[];nodes=0
+    for offset,stride in ((8,64),(0x20,64),(0x38,32),(0x50,4),(0x68,1)):
+        begin,end,cap=m.vector(output_address+offset,stride)
+        if offset in (8,0x20,0x38):
+            nodes+=(cap-begin)//stride
+            if nodes>max_nodes:
+                raise RefillUnsupported('converted cleanup record bound exceeded')
+            for record in range(begin,end,stride):
+                if offset==8:
+                    string(record+16);m.vector(record+40,12)
+                elif offset==0x20:
+                    string(record);string(record+24)
+                else:string(record)
+        containers.append((offset,stride,begin,end))
+    for offset,stride,begin,end in reversed(containers):
+        if offset in (8,0x20,0x38):
+            for record in range(end-stride,begin-1,-stride):
+                if offset==8:
+                    m.free_vector(record+40);m.free_string_value(_read_span(m.p,record+16,24))
+                elif offset==0x20:
+                    m.free_string_value(_read_span(m.p,record+24,24))
+                    m.free_string_value(_read_span(m.p,record,24))
+                else:m.free_string_value(_read_span(m.p,record,24))
+        m.free_vector(output_address+offset)
+    m.p.commit()
+    return ReaderAstResult(None,tuple(m.effects))

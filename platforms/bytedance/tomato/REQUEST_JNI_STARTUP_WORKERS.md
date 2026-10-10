@@ -2505,6 +2505,34 @@ descriptor builders、factory/bootstrap、独立 signer、新鲜输出与线上�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_parse_conversion_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <parse-conversion-evidence.json>
 ```
 
+## 6.45 converted module 清理（2026-10-11 Asia/Shanghai）
+
+`cleanup_parser_conversion` 恢复 `+2cb968`：依次释放 data、globals、
+exports、imports、functions；记录按逆序销毁。function 先释放 decoded
+vector 再释放名称；import 先 field name 再 module name。每个 vector
+在释放前将 end 重置为 begin，保留原生 dangling begin/capacity、string
+headers 和 scalar function count。output 对象、error string 和 builtin
+catalog 仍由调用方拥有，逻辑 frees 只消费一次。
+
+修改前干净 `bafac90` 绑定 **16 项真实原生 RED**。最终通过
+**146 项原生/Python 对照、21 项回滚检查**：118 项独立 Python parse
+生成的合成模块（包括部分失败对象），16 项非空零容量指针、空预留
+vector、短内容的 long string 表示，2 项完整实际 ELF、4 项 SP 移位、
+6 项高位 guest。完整实际输入每基址从 fresh ELF 经 Python reader/parse
+独立生成；检查所有 guest、额外 heap、image pages、释放顺序/大小和
+每次释放时的 128 字节 owner。无原生快照输入。
+
+共享或重叠的 ownership、未映射/image/reserved 指针、非法 string/vector、
+预算耗尽、早期及末期写入失败均拒绝并全页回滚。原生完整栈/TLS/OS、
+真实 allocator 不属于此接口输出。去掉新增函数后，整个已有 owner AST
+（含 parse/codec）保持一致；未宣称旧独立套件重跑。当前继续 root/
+descriptor builders、factory/bootstrap、独立 signer、新鲜输出和线上验收。
+见 [converted cleanup 证据](evidence/vm9_alternative_converted_cleanup_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_converted_cleanup_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <converted-cleanup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

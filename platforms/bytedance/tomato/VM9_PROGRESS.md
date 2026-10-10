@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：converted module 清理
+
+`+2cb968` 的 Python 清理通过 **146 项原生对照、21 项回滚检查**。
+含 2 项独立 reader/parse 生成的完整实际 ELF、4 项 SP 移位、6 项高位
+guest；完整 guest/heap/image pages 和有序释放一致。原有 owner AST
+未变。继续 root/descriptor builders、factory/bootstrap、独立 signer、
+新鲜输出与线上验收。见 [converted cleanup 报告](REQUEST_JNI_STARTUP_WORKERS.md#645-converted-module-清理2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：parse 模块转换
 
 `+2cd5a4` 的 Python 模块转换通过 **170 项原生对照、25 项回滚检查**。

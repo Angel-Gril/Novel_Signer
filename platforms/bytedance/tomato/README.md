@@ -191,6 +191,8 @@ With both `enable_function_imports=True` and `enable_inline_function_imports=Tru
 
 `run_parser_conversion` now transforms the independent reader AST into the native converted-module layout, including cold/warm builtin catalogs, error paths and ordered ownership effects. 170 fresh native/Python controls and 25 rollback checks pass. Four complete actual ELF controls each match 128 allocations, 139 functions and 54533 decoded words across full guest, extra heap and image pages. Prior owner code, including the codec, remains AST-identical. Converted cleanup, root/descriptor, factory/bootstrap and signer remain unfinished. See the [parse conversion report](REQUEST_JNI_STARTUP_WORKERS.md#644-parse-模块转换与-builtin-catalog2026-10-11-asiashanghai).
 
+`cleanup_parser_conversion` now releases the converted module in native reverse ownership order, retaining native dangling headers. 146 fresh native/Python controls and 21 rollback checks pass, including two complete actual ELF modules generated independently through Python reader/parse. Full guest, extra heap, image pages and every ordered free match. Existing owner code remains AST-identical. Root/descriptor builders, factory/bootstrap and signer remain unfinished. See the [converted cleanup report](REQUEST_JNI_STARTUP_WORKERS.md#645-converted-module-清理2026-10-11-asiashanghai).
+
 
 
 
