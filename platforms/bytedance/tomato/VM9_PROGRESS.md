@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：长名称 export 的 attached 组合
+
+`enable_exports=True` 默认关闭，支持至少 23 字节名称、kind 0..3 的实际
+export AST 与清理。**294 项合成对照、46 项回滚**通过，含 12 项 SP 移位、
+12 项高位 guest 和 618 个完整 export/clone 检查。callback SP=`state-0xd0`，
+名称 header=`state-0x160`；保留映射且独立的 `[state-0x210,state)`。
+三组旧回归 **832/372** 通过，三份历史 JSON 逐字节一致。
+短名称继承的 caller 字节仍待恢复；实际 ELF 的 121 个 export 名称全部为
+短名称，因此实际非空 export 原生/Python 对照仍为 0。一个实际短名称拒绝
+并全页面回滚。其余 attached handlers、parse/root、完整 reader/factory/
+bootstrap、独立 signer 与线上验收仍未完成。
+见 [长名称 export 报告](REQUEST_JNI_STARTUP_WORKERS.md#639-长名称-export-的-attached-ast-组合2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：code definitions 的 attached 组合
 
 section 10 的 metadata/local/raw-word/begin/end 实际 AST 与清理另通过

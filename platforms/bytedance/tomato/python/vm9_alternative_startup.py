@@ -1111,7 +1111,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
 
     attached_state_address explicitly opts into verified slots +18/+20/+28/
     +30/+38/+40/+50/+58/+60/+68/+70/+78/+80/+88/+90/+a0/+c0/+c8/+d0/+d8/
-    +e0/+e8/+a8/+b0/+b8/+f8/+160/+168. Import slots also need entry_stack_address and mapped
+    +e0/+e8/+98/+a8/+b0/+b8/+f8/+160/+168. Import/export slots also need entry_stack_address and mapped
     callback frame bytes; the module bridge admits inline names only with
     its additional enable_inline_function_imports opt-in.
     The attached pointer must equal state+8 and state+20 must bind
@@ -1138,7 +1138,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         raise RefillUnsupported('AST callback slot or uint64 arguments are unsupported')
     if not isinstance(callback_address,int) or not 0 < callback_address <= MASK64-0x108:
         raise RefillUnsupported('AST callback address is invalid')
-    if attached_state_address is not None and slot_offset not in (0x18,0x20,0x28,0x30,0x38,0x40,0x50,0x58,0x60,0x68,0x70,0x78,0x80,0x88,0x90,0xA0,0xA8,0xB0,0xB8,0xC0,0xC8,0xD0,0xD8,0xE0,0xE8,0xF8,0x160,0x168):
+    if attached_state_address is not None and slot_offset not in (0x18,0x20,0x28,0x30,0x38,0x40,0x50,0x58,0x60,0x68,0x70,0x78,0x80,0x88,0x90,0x98,0xA0,0xA8,0xB0,0xB8,0xC0,0xC8,0xD0,0xD8,0xE0,0xE8,0xF8,0x160,0x168):
         raise RefillUnsupported('AST attached callback slot has not been verified')
     # Local group count has no output-object access in the native function.
     root, width = (callback_address,0x108) if slot_offset == 0xB0 else (
@@ -3055,7 +3055,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         enable_inline_function_imports=False, enable_table_memory_global_imports=False,
         enable_inline_table_memory_global_imports=False, enable_table_memory_definitions=False,
         enable_global_definitions=False, max_initializer_ops=4096,
-        enable_code_definitions=False, max_code_words=65536):
+        enable_code_definitions=False, max_code_words=65536, enable_exports=False):
     """Bounded actual +31b360 / +324444 with real AST effects and cleanup.
 
     Supports generic custom, type, function, start, data-count and empty export
@@ -3086,8 +3086,11 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     function end. It requires matching function definitions. Raw words are
     stored without interpretation. max_code_words bounds all word callbacks
     across this section, including nonadvancing zero words on short input.
-    All opt-ins default False. Remaining handlers and
-    nonempty exports fail closed. The output starts empty.
+    enable_exports=True independently composes section 7 slot +98 for names
+    of at least 23 bytes and export kinds 0..3. Each index must name an existing
+    logical callback cache entry. Short names need further caller-frame recovery
+    and are rejected. Invalid kind 4 remains a native parse failure.
+    All opt-ins default False. Remaining handlers fail closed. The output starts empty.
     Eight prefix bytes are skipped without checking their magic.
     Parse errors return 1 and commit partial AST output. Guard failures roll
     back all pages. Function/code count mismatch returns 1 after dispatch.
@@ -3119,6 +3122,10 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     The code opt-in retains [state-0x210,state) (or the larger global frame).
     Its handler frame is 0x70 bytes below the dispatcher, so all code callbacks
     enter at state-0xe0; code begin's direct 0x70 frame ends at state-0x150.
+    The export opt-in also retains [state-0x210,state) (or the global frame).
+    Export handler +3238b0 has a 0x60 frame: callback entry SP is state-0xd0,
+    and +31d500's direct 0x90 frame starts at state-0x160. Heap names overwrite
+    all 24 header bytes, so no native stack snapshot or inline padding is used.
     allocate must be a pure plan for distinct aligned blocks, including freed
     temporaries: this bounded contract does not support address reuse. Effects
     include parser vectors, AST callbacks, parser cleanup then callback cleanup.
@@ -3149,13 +3156,14 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             or not isinstance(max_initializer_ops,int) or not 1 <= max_initializer_ops <= 65536
             or not isinstance(enable_code_definitions,bool)
             or not isinstance(max_code_words,int) or not 1 <= max_code_words <= 1048576
+            or not isinstance(enable_exports,bool)
             or enable_inline_function_imports and not enable_function_imports
             or enable_inline_table_memory_global_imports and not enable_table_memory_global_imports
             or not callable(allocate)):
         raise RefillUnsupported('AST module requires bounded input, output and native frames')
     cb, state = entry_stack_address-0x150, entry_stack_address-0x220
-    import_frame_size = 0x2A0 if enable_global_definitions else 0x210 if enable_table_memory_global_imports or enable_table_memory_definitions or enable_code_definitions else 0x1E0
-    retain_frame = enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions or enable_global_definitions or enable_code_definitions
+    import_frame_size = 0x2A0 if enable_global_definitions else 0x210 if enable_table_memory_global_imports or enable_table_memory_definitions or enable_code_definitions or enable_exports else 0x1E0
+    retain_frame = enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions or enable_global_definitions or enable_code_definitions or enable_exports
     if retain_frame and state <= import_frame_size:
         raise RefillUnsupported('AST module import frame address is invalid')
     retained = [(image_base,image_base+0x400000), (input_address,input_address+input_size),
@@ -3233,6 +3241,9 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         elif event.slot_offset in (0xA8,0xB0,0xB8,0xF8,0x168):
             if not enable_code_definitions:
                 raise RefillUnsupported('AST module code definitions need explicit opt-in')
+        elif event.slot_offset == 0x98:
+            if not enable_exports or event.arguments[4] <= 22:
+                raise RefillUnsupported('AST module exports require explicit opt-in and heap names')
         elif event.slot_offset not in (0x18,0x20,0x50,0xA0,0x160):
             raise RefillUnsupported('AST module callback needs further native frame verification')
         if enable_inline_table_memory_global_imports and event.slot_offset in (0x28,0x40):
@@ -3241,7 +3252,8 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         result = run_reader_ast_callback(current,callback_address=cb,image_base=image_base,
             slot_offset=event.slot_offset,arguments=event.arguments,allocate=plan,
             entry_stack_address=(state-0x100 if event.slot_offset in (0x28,0x30,0x38,0x40)
-                else state-0xC0 if event.slot_offset == 0x60 else None),
+                else state-0xC0 if event.slot_offset == 0x60
+                else state-0xD0 if event.slot_offset == 0x98 else None),
             attached_state_address=state,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,
             reserved_regions=((input_address,input_address+input_size),
                 (varuint_scratch_address,varuint_scratch_address+4),*reserved_regions))

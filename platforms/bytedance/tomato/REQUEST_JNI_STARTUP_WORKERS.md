@@ -2220,6 +2220,65 @@ stack/TLS/OS、真实 allocator/异常、独立 signer 和线上验收仍未完�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_code_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-code-evidence.json>
 ```
 
+## 6.39 长名称 export 的 attached AST 组合（2026-10-11 Asia/Shanghai）
+
+`run_reader_ast_module(..., enable_exports=True)` 现在贯通 section 7 的
+`+98 → +31d500` export AST、克隆、扩容及 module/parser/callback 清理。
+本阶段支持 **名称长度至少 23 字节**、kind 0/1/2/3 的 function/table/memory/
+global export；每个 index 必须位于已有逻辑 cache。新开关默认 `False`，
+不隐式启用 import、definition、global 或 code。kind 4 保持原生解析失败。
+
+**294 项原生/Python 对照、46 项回滚检查**通过，含 12 项 SP 移位、
+12 项整个 guest 移至高位地址的对照、618 个独立完整 export records
+及 618 个完整克隆节点检查。修改前绑定 `928ba4d` 的 16 项真实 RED：
+实际 module 自然返回 0，旧 Python 拒绝 export callback，全部页面回滚。
+
+| 实际原生来源 | 恢复行为 |
+| --- | --- |
+| `3238b0` 的 `0x60` handler frame；`3239e0/3239e4` | dispatcher SP=`state-0x70`，export callback 在 `state-0xd0` 进入 |
+| `31d500` 的 `0x90` frame | 直接 frame 起点与名称临时 header 均为 `state-0x160` |
+| `31d5b4` 的长度 23 分支 | 23 字节起使用 heap string；短名称只覆盖长度标记、正文和终止零，未覆盖的 header 尾部保留 |
+| `31d5ec/31d5f0` | heap 路径完整覆盖 24-byte header，无需把原生栈 snapshot 作为输入 |
+| `31d644` 与既有虚表 clone | 输出拥有独立 node/type vectors，cache 仍由 callback 拥有 |
+
+export 开关保留映射且独立的 `[state-0x210,state)`，与 globals 组合时保留
+较大的 `[state-0x2a0,state)`。名称、output record、克隆节点和 type vectors
+均验证独立所有权。输出 vector 按 40 字节记录增长；已生成输出在普通解析
+错误后保留，guard 或中途写入故障则回滚全部页面。
+
+全部对照为合成输入，覆盖四类 imports 和 definitions、混合长短 import
+名称、23/24/31/32/33/63/64/127/128/255 字节 export 名称、内嵌零字节、
+spare/growth、type vectors、table/global types、memory64/default maximum、
+global initializer 与 code、warm rank、generic custom、截断/非法 kind/index
+编码、重复/逆序/envelope、partial AST 和 function count mismatch。
+生成种子为 `3238b0`。未将无效逻辑 index 送入不安全的原生 cache 路径。
+
+完整未屏蔽 guest `0xa000`、ordered effects/owner bytes、parser exit、callback
+cleanup、image globals、arguments/cursor/limit、自然 return/SP 均匹配。
+独立构造整个 40-byte export record、名称容量/内容/index，核对完整 cloned
+node 与 borrowed cache，并从输入独立推导 type vectors、types/mutable 和
+limits。观察到 10816 次 allocation、730 次 owned
+destructor、1658 次 deleting destructor 和 7042 次 free。
+46 项回滚包含 6 项中途写入故障，以及开关、短名称、逻辑 index、虚表、
+frame/mapping、allocation alias 和预算检查。
+
+**短名称 export 尚未恢复。** 前置 import/definition/global 会把不同的 caller
+字节留在 `[state-0x160,state-0x148)`；目前不能用统一零值或固定 padding
+代替。运行时从私有 ELF 读取的 121 个实际 export 名称全部不超过 22 字节；
+一个实际短名称进入合成边界用例，确认拒绝并完整回滚。实际 ELF 非空 export
+原生/Python 对照数仍为 **0**，未公开名称或 payload。
+
+三组旧回归（module、attached code、standalone export AST）共 **832 项
+对照、372 项回滚**通过，三份历史 JSON 逐字节一致。生产修改仍限于
+`vm9_alternative_startup.py` 的两个现有函数，section parser 未修改。
+下一步恢复短名称 caller 来源，再推进其余 attached handlers、parse/root、
+完整 reader/factory/bootstrap、整个 stack/TLS/OS、真实 allocator/异常、独立 signer 与线上验收。
+见 [export module 证据](evidence/vm9_alternative_ast_module_exports_fresh_20261011.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_exports_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-exports-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -2270,7 +2329,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复其余 attached handlers；零条目 type 的 caller 寄存器仍需独立输入证明，随后解析/root 生成，再把原始 JNI /
+下一步恢复短名称 export 与其余 attached handlers；零条目 type 的 caller 寄存器仍需独立输入证明，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。
