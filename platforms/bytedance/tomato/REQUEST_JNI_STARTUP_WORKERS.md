@@ -2047,6 +2047,62 @@ reader/factory/bootstrap、独立 signer 和线上验收仍未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_inline_other_imports_20261010.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-inline-other-imports-evidence.json>
 ```
 
+## 6.36 Table/memory definitions 的 attached AST 组合（2026-10-11 Asia/Shanghai）
+
+`run_reader_ast_module(..., enable_table_memory_definitions=True)` 现在贯通
+section 4/5、真实 table/memory AST reserve/entry 和 callback cache 清理。
+**470 项原生/Python 对照、32 项回滚检查**通过；含 12 项 SP 移位、
+12 项整个 guest 搬到高位地址的对照，以及 1142 个独立完整 record 检查。
+本阶段 fixture 均为合成输入，没有实际 ELF definitions payload 对照。
+修改前绑定 `43ed463` 的 10 项实际 module 入口 RED：原生自然返回 0，
+旧 Python 拒绝 definitions 并回滚全部页面。
+
+新开关默认 `False`，不依赖 import 开关。需要 imports 的组合仍分别开启
+已有 import/inline 选项。definition index 加上已有同类 import 数量，
+definitions 不增加 import counts。零条目 type section 后的 definitions
+已验证；此前零条目 type 后其他 import 的寄存器限制继续适用。
+
+table callback entry SP 与 descriptor 均为 `state-0xc0`，memory 均为
+`state-0xe0`；两者 callback frame 均为 `0xb0` 字节。新开关保留映射、
+独立的 `[state-0x210,state)`。table padding 取自 `state-0x13c`；table
+复制 descriptor 的 19 字节，memory 复制全部 24 字节，尾五字节保留 caller
+的真实保存。下面的值来自独立 caller/AST 输入，未使用原生 frame snapshot。
+
+| 原生来源 | 恢复的来源与用途 |
+| --- | --- |
+| `322704/32270c`、`32298c/322994`、`322cfc/322d04` | generic custom/type/import 保存 dispatcher FP 和输入 limit，进入 descriptor 尾字节 |
+| `31b7b8` | type 的 moved parameter clone 清零，进入 table padding |
+| `31b87c/31bb54/31be48/31c150` | import 的 X26 为 descriptor pointer；memory 的 flag bit 1 已拒绝，保存零 |
+| `31c7c0/31c7c8/31f798` | function definition 保存 dispatcher X24=1/local index，清空 moved local vector |
+| `31c9fc` | table reserve 保存 section count，进入后续 memory 尾字节 |
+
+空/多条目、reserve/cache 增长与剩余容量、三个 table 类型、四种 flags、
+u32/u64 边界、memory64 与默认 maximum、type 向量形状、四类 imports、
+function definitions、generic custom 插入、start/data-count、warm rank、
+部分输出、截断、非法 flags、重复/逆序/envelope 和固定种子 `3231e4`
+生成组合均核对。高位 guest 对照覆盖 descriptor pointer、FP 的高字节，
+以及 custom/function 后的 caller 传递。
+
+全部未屏蔽 guest `0xa000`、ordered effects/每次 owner bytes、parser exit、
+callback cleanup、image globals、arguments/cursor/limit、自然 return/SP
+均匹配。独立推导 descriptor、尾字节、table padding、完整 owned record、
+默认 maximum 和 import index；没有把原生观察数据作为模型输入。
+观察 3854 次 allocation、2066 次 owned destructor、
+224 次 deleting destructor、2432 次 free。
+32 项 guard 含 7 项模型中途写入故障，均回滚全部页面。
+
+五组旧 module/import 回归及 standalone section/table AST/memory AST 共
+**2,582 项对照、463 项回滚**通过，八份历史 JSON 逐字节一致。
+唯一生产 owner 仍为 `vm9_alternative_startup.py`，修改限于 attached allowlist、
+私有 definition frame binding 与 module opt-in；其他运行函数 AST 不变。
+整个 stack、其他 saved GPR、TLS/OS、真实 allocator/异常、global expression/
+code 的 attached 组合、parse/root、完整 reader/factory/bootstrap、独立 signer
+和线上验收仍未完成。见 [definitions 证据](evidence/vm9_alternative_ast_module_definitions_fresh_20261011.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_definitions_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-definitions-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

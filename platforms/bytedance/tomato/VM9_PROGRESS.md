@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：table/memory definitions 的 attached 组合
+
+section 4/5 的实际 AST reserve/entry、imports 后的 definition index 和清理
+另通过 **470 项对照、32 项回滚**，含 12 项 SP 移位、12 项高位 guest
+与 1142 个独立完整 record 检查。新开关默认关闭，不依赖 import 选项。
+descriptor 的真实 caller 地址、尾五字节、table padding 和 custom/type/
+import/function caller stores 由独立输入推导，未使用原生栈 snapshot。
+零条目 type 后 definitions 已验证；旧的零 type 后其他 import 限制继续适用。
+八组旧回归 **2,582/463** 通过，八份 JSON 逐字节一致。
+global expression/code 的 attached 组合、parse/root、完整 reader/factory/
+bootstrap、真实 allocator/异常、独立 signer 与线上验收仍未完成。
+见 [definitions 报告](REQUEST_JNI_STARTUP_WORKERS.md#636-tablememory-definitions-的-attached-ast-组合2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：短名称其他 import 与 caller 栈传递
 
 table/memory/global 的空名称、短名称、长短混用和四类 import 连续组合
