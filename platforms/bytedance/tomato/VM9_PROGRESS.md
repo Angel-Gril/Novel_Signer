@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-10 Asia/Shanghai：heap 名称函数 import 的 attached 组合
+
+真实 module/parser/function-import AST 与清理另通过 **180 项对照、43 项回滚**。
+`enable_function_imports` 默认关闭，开启后两名称均需至少 23 字节；额外
+caller frame 必须映射且独立。旧 module/import 两组 **1072/493** 通过，
+JSON 逐字节一致。解析失败保留已生成 AST，guard 全页面回滚。
+短名称 caller 栈、其他 import/definition/expression/code、parse/root、完整
+reader/factory/bootstrap、独立 signer 和线上验收仍未完成。
+见 [函数 import module 报告](REQUEST_JNI_STARTUP_WORKERS.md#632-heap-名称函数-import-的-attached-ast-组合2026-10-10-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-10 Asia/Shanghai：有界 attached parser 与真实 AST
 
 `run_reader_ast_module` 贯通真实 `+31b360/+324444` 的 generic/type/function/
