@@ -155,8 +155,12 @@ opt-in；恢复真实 caller helper 写入。旧 module/heap 两组（394/126）
 逐字节一致。见 [inline import 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#633-inline-名称函数-import-与真实-caller-栈写入2026-10-10-asiashanghai)。
 Table/memory/global 的长名称 attached import 另通过 **406 项对照、72 项回滚**，
 恢复真实 descriptor、ABI 参数、AST 与 cache 清理；新开关默认关闭。旧三组
-（842/190）JSON 逐字节一致；短名称其他 import 与完整 signer 仍待恢复。
+（842/190）JSON 逐字节一致；短名称的后续恢复见下方。
 见 [其他 import 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#634-tablememoryglobal-import-的-attached-ast-组合2026-10-10-asiashanghai)。
+Table/memory/global 的短名称和空名称组合另通过 **612 项对照、41 项回滚**，
+需开启额外 inline other-import 开关；恢复 caller padding，默认关闭。旧四组
+（1,248/262）JSON 逐字节一致，完整 signer 仍未完成。
+见 [短名称其他 import 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#635-短名称其他-import-与-caller-栈传递2026-10-11-asiashanghai)。
 其余 attached handlers、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。

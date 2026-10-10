@@ -1,5 +1,21 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：短名称其他 import 与 caller 栈传递
+
+table/memory/global 的空名称、短名称、长短混用和四类 import 连续组合
+另通过 **612 项对照、41 项回滚**，含 12 项 SP 移位、436 项独立完整
+inline padding 检查。新 inline other-import 开关默认关闭，需要原有
+table/memory/global 开关；短 function 名称仍需两个 function 开关。
+恢复 type-copy FP/LR、import helper 保存和临时 clone 清零，值均从
+独立 caller/AST 输入推导，没有喂入原生栈 snapshot。零条目 type section
+仍依赖未建模的 caller 寄存器，继续回滚；空 type 向量已经支持。
+旧四组 **1,248/262** 通过，四份 JSON 逐字节一致。
+definitions/expression/code 的 attached 组合、parse/root、完整 reader/
+factory/bootstrap、真实 allocator/异常、独立 signer 与线上验收仍未完成。
+本轮验证跨越 10 月 10 日至 11 日。见 [短名称其他 import 报告](REQUEST_JNI_STARTUP_WORKERS.md#635-短名称其他-import-与-caller-栈传递2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-10 Asia/Shanghai：table/memory/global attached imports
 
 真实 module/parser 的长名称 table/memory/global import、descriptor、第九

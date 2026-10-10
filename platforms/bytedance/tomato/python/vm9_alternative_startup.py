@@ -2999,7 +2999,8 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         context_address=0, context_size=0, max_sections=512, max_entries=4096,
         max_input_bytes=16*1024*1024, max_nodes=4096,
         max_vector_bytes=16*1024*1024, reserved_regions=(), enable_function_imports=False,
-        enable_inline_function_imports=False, enable_table_memory_global_imports=False):
+        enable_inline_function_imports=False, enable_table_memory_global_imports=False,
+        enable_inline_table_memory_global_imports=False):
     """Bounded actual +31b360 / +324444 with real AST effects and cleanup.
 
     Supports generic custom, type, function, start, data-count and empty export
@@ -3011,9 +3012,12 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     enable_table_memory_global_imports=True independently opts into slots
     +30/+38/+40 with the actual descriptor and ninth ABI argument. In this
     combined scope all import names must be at least 23 bytes, including
-    function names. Other imports after a zero-count type section require
+    function names. enable_inline_table_memory_global_imports=True restores
+    caller/helper stores retained by shorter names in this combined scope;
+    it requires enable_table_memory_global_imports=True. Short function names
+    still require both function opt-ins. Other imports after a zero-count type section require
     unrecovered incoming registers and fail closed. Empty type vectors work.
-    All three opt-ins default False. Remaining handlers and
+    All four opt-ins default False. Remaining handlers and
     nonempty exports fail closed. The output starts empty.
     Eight prefix bytes are skipped without checking their magic.
     Parse errors return 1 and commit partial AST output. Guard failures roll
@@ -3021,7 +3025,9 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
 
     Explicit mapped native frames retain untouched callback/state padding.
     Their callback/retained headers and parser object fields are modeled.
-    Inline imports also model three helper save stores that feed string padding;
+    Inline function imports model three type-helper saves. The combined inline
+    opt-in also restores vector-copy FP/LR, import-helper saves and clone clears
+    that feed later string padding;
     other saved registers and stack/TLS bytes remain outside the contract.
     Function imports retain the additional [state-0x1e0, state) caller frame:
     callback entry SP is state-0x100, with a 0xe0-byte callback frame below it.
@@ -3057,7 +3063,9 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             or not isinstance(enable_function_imports,bool)
             or not isinstance(enable_inline_function_imports,bool)
             or not isinstance(enable_table_memory_global_imports,bool)
+            or not isinstance(enable_inline_table_memory_global_imports,bool)
             or enable_inline_function_imports and not enable_function_imports
+            or enable_inline_table_memory_global_imports and not enable_table_memory_global_imports
             or not callable(allocate)):
         raise RefillUnsupported('AST module requires bounded input, output and native frames')
     cb, state = entry_stack_address-0x150, entry_stack_address-0x220
@@ -3122,14 +3130,19 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             if not enable_function_imports or (not enable_inline_function_imports
                     and min(event.arguments[2],event.arguments[4]) <= 22):
                 raise RefillUnsupported('AST module function imports require two heap names')
-            if enable_table_memory_global_imports and min(event.arguments[2],event.arguments[4]) <= 22:
+            if (enable_table_memory_global_imports and not enable_inline_table_memory_global_imports
+                    and min(event.arguments[2],event.arguments[4]) <= 22):
                 raise RefillUnsupported('AST module combined import kinds require two heap names')
         elif event.slot_offset in (0x30,0x38,0x40):
             if (not enable_table_memory_global_imports or empty_type_section
-                    or min(event.arguments[2],event.arguments[4]) <= 22):
+                    or not enable_inline_table_memory_global_imports
+                    and min(event.arguments[2],event.arguments[4]) <= 22):
                 raise RefillUnsupported('AST module other imports require verified type caller and two heap names')
         elif event.slot_offset not in (0x18,0x20,0x50,0xA0,0x160):
             raise RefillUnsupported('AST module callback needs further native frame verification')
+        if enable_inline_table_memory_global_imports and event.slot_offset in (0x28,0x40):
+            prior_import_end = _u(current,output_address+0x20)
+            prior_function_end, prior_function_cap = _u(current,cb+0x88), _u(current,cb+0x90)
         result = run_reader_ast_callback(current,callback_address=cb,image_base=image_base,
             slot_offset=event.slot_offset,arguments=event.arguments,allocate=plan,
             entry_stack_address=state-0x100 if event.slot_offset in (0x28,0x30,0x38,0x40) else None,
@@ -3149,7 +3162,35 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             # +31c2e0/+31c2fc release the temporary clone and clear its word;
             # the next table import retains the high half as node padding.
             _write_span(current,state-0x188,bytes(8))
-        if enable_inline_function_imports and event.slot_offset == 0x20:
+        if enable_inline_table_memory_global_imports and event.slot_offset == 0x28:
+            # +31ed20/+31eea4 save the function caller's FP/LR, type index,
+            # previous cache end, source type and callback pointer. The LR
+            # distinguishes cache growth from an append into spare capacity.
+            # +31b8b8 saves the field input pointer; +31ba74 clears its clone.
+            words = (state-0x160,
+                image_base+(0x31BB14 if prior_function_end == prior_function_cap else 0x31BAB0),
+                event.arguments[6]&0xFFFFFFFF,prior_function_end,
+                _u(current,output_address)+(event.arguments[6]&0xFFFFFFFF)*64,
+                cb,event.arguments[3],0)
+            _write_span(current,state-0x210,b''.join(word.to_bytes(8,'little') for word in words))
+        if enable_inline_table_memory_global_imports and event.slot_offset == 0x30:
+            # +31bd0c/+31bd28 clear the released second temporary clone.
+            _write_span(current,state-0x1A8,bytes(8))
+        if enable_inline_table_memory_global_imports and event.slot_offset == 0x38:
+            # +32a9d4/+31f140 save x19; +31c058 clears the temporary clone.
+            _write_span(current,state-0x208,cb.to_bytes(8,'little')+bytes(8))
+        if enable_inline_table_memory_global_imports and event.slot_offset == 0x40:
+            # +32a9d4/+31f2d0/+31f2d4 retain the second field header pointer,
+            # previous output end and callback pointer in later name padding.
+            _write_span(current,state-0x208,(state-0x1A0).to_bytes(8,'little')
+                +prior_import_end.to_bytes(8,'little')+cb.to_bytes(8,'little'))
+        if enable_inline_table_memory_global_imports and event.slot_offset == 0x20:
+            if event.arguments[1]&0xFFFFFFFF or event.arguments[3]&0xFFFFFFFF:
+                # +32a1f4 in +31e888's last nonempty vector copy saves its
+                # FP/LR. Empty vectors leave earlier caller bytes untouched.
+                _write_span(current,state-0x1E0,(state-0x1C0).to_bytes(8,'little')
+                    +(image_base+(0x31E93C if event.arguments[3]&0xFFFFFFFF else 0x31E8E0)).to_bytes(8,'little'))
+        if (enable_inline_function_imports or enable_inline_table_memory_global_imports) and event.slot_offset == 0x20:
             # +31e888 saves the type callback FP/LR and x23 in bytes later
             # copied by inline import strings. +32a1f8 saves its node pointer
             # when either type vector is copied. Recover these stores from
