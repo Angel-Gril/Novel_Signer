@@ -266,7 +266,7 @@ def negatives(args):
     pages,result,_=model(args,base,spec)
     for label,op,changes in (
         ('default_attached_callback','callback',{}),('wrong_attached_callback','callback',dict(attached_state_address=STATE+16)),
-        ('unverified_attached_slot','callback',dict(attached_state_address=STATE,slot_offset=0xB0,arguments=(0,))),
+        ('unverified_attached_slot','callback',dict(attached_state_address=STATE,slot_offset=0x100,arguments=(0,))),
         ('default_attached_cleanup','cleanup',{}),('wrong_attached_cleanup','cleanup',dict(attached_state_address=STATE+16))):
         before={k:bytes(v) for k,v in pages.items()}
         params=dict(callback_address=CB,image_base=base)

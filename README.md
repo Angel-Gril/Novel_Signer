@@ -169,6 +169,11 @@ Global definitions 与初始化表达式的实际 AST 组合另通过 **398 项�
 含 12 项 SP 移位、12 项高位 guest 与 780 个完整 global record 检查。
 五组旧回归（1,614/315）JSON 逐字节一致。
 见 [global module 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#637-global-definitions-与初始化表达式的-attached-ast-组合2026-10-11-asiashanghai)。
+Code definitions 的实际 AST 组合另通过 **256 项对照、42 项回滚**，
+含 8 项完整实际 ELF body 对照、12 项 SP 移位、12 项高位 guest；
+另有 8 项主动截停的原生观察确认短输入不前进，原始指令字只保存不执行。
+四组旧回归（1,124/235）JSON 逐字节一致。
+见 [code module 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#638-code-definitions-的-attached-ast-组合2026-10-11-asiashanghai)。
 其余 attached handlers、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。

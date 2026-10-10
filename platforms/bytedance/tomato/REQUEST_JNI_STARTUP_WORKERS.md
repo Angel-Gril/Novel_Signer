@@ -2160,6 +2160,66 @@ attached handlers、parse/root、完整 reader/factory/bootstrap、独立 signer
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_globals_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-globals-evidence.json>
 ```
 
+## 6.38 Code definitions 的 attached AST 组合（2026-10-11 Asia/Shanghai）
+
+`run_reader_ast_module(..., enable_code_definitions=True)` 贯通 section 10 的
+metadata、local groups、raw words、function begin/end 与实际 AST 清理。
+**256 项原生/Python 对照、42 项回滚检查**通过，包含 12 项 SP 移位、
+12 项整个 guest 移至高位地址的对照、362 个独立完整 function records
+和 340 个独立完整 child records。原始指令字只保存，不执行。
+
+修改前绑定 `052c54b` 的 10 项真实 RED：实际 module 自然返回 0，旧 Python
+拒绝 section 10 并回滚全部页面。新开关默认 `False`，可独立启用；混合
+imports、table/memory definitions、globals 时仍需各自开关。code count
+必须等于 function definition count，body index 加已有 function imports。
+
+| 实际原生来源 | 恢复行为 |
+| --- | --- |
+| `323ca8` 的 `0x70` handler frame | dispatcher SP 为 `state-0x70`，五个 code callback 均在 `state-0xe0` 进入 |
+| `31d7d8` 的 `0x70` frame | slot `+a8` 选择 function、写 metadata/raw offset，建立 56-byte child |
+| `31d97c` | slot `+b0` 保存 group count，同时清零 cumulative locals |
+| `31d984` 的 `0x60` frame | slot `+b8` 追加完整 type/count/cumulative local record |
+| `31dbc0/31dbc4` | slot `+f8` 清空 active function 指针，保存 body remaining length |
+| `31e5e4` 调用 `32136c` | slot `+168` 将 u32 原始指令字追加到 raw vector |
+
+保留映射且独立的 `[state-0x210,state)`；启用 globals 时沿用较大的
+`[state-0x2a0,state)`。`max_code_words` 默认 65536，允许 1 至 1048576，
+预算跨整个 code section 的所有 bodies。输入只剩 0 至 3 字节而 body
+尚未结束时，原生反复产生零且游标不前进。另有 **8 项原生观察**在第 4 次
+word callback 入口主动截停，确认零值、游标和剩余字节数；这些观察没有
+自然返回或清理验证，未计入上述 256 项对照。Python 达到预算时全部页面回滚。
+
+248 项合成对照覆盖七种 locals types、u32 metadata/count 边界、空 bodies、
+向量增长、累计溢出、四类 imports 与长短名称、table/memory/global/custom
+组合、warm rank、重复与逆序 section、截断/非法 metadata/groups/type、
+body 长度错位和部分 AST 保留。固定生成种子为 `323ca8`。
+8 项实际输入对照从私有 ELF 的 218682-byte / 121-body code section 中
+选择三个完整小 body：各自独立运行，并组成带合成 global 前缀的组合。
+声明和前缀为合成输入；未运行完整实际 code section 的 attached AST，
+未发布实际 payload、metadata 或 raw word 值。
+
+完整未屏蔽 guest `0xa000`、ordered effects/owner bytes、parser exit、callback
+cleanup、image globals、callback arguments/cursor/limit、自然 return/SP 均匹配。
+独立构造完整 144-byte function record、56-byte child、type vectors、locals、
+metadata、code offset、body length 与 raw bytes。观察到 6458 次
+allocation、780 次 owned destructor、104 次 deleting
+destructor 和 3560 次 free。42 项回滚含 7 项中途写入故障，
+覆盖 local group/reset、cumulative locals、frame/raw publication、end/cleanup。
+
+四组旧回归（module、attached globals、standalone code、code-begin AST）共
+**1,124 项对照、235 项回滚**通过，四份历史 JSON 逐字节一致。
+旧 module verifier 的 unsupported attached slot guard 从 `+b0` 改为仍关闭的
+`+100`，因为本阶段已验证并开放 `+b0`；guard 标签和回滚断言不变。
+唯一生产 owner 仍为 `vm9_alternative_startup.py`，修改限于两个现有函数。
+
+其余 attached handlers、parse/root、完整 reader/factory/bootstrap、整个
+stack/TLS/OS、真实 allocator/异常、独立 signer 和线上验收仍未完成。
+见 [code module 证据](evidence/vm9_alternative_ast_module_code_fresh_20261011.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_code_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-code-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -2210,7 +2270,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复 definitions/expressions/code 的 attached 组合；零条目 type 的 caller 寄存器仍需独立输入证明，随后解析/root 生成，再把原始 JNI /
+下一步恢复其余 attached handlers；零条目 type 的 caller 寄存器仍需独立输入证明，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。

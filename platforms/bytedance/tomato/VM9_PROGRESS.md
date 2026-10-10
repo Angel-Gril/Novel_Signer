@@ -1,5 +1,22 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：code definitions 的 attached 组合
+
+section 10 的 metadata/local/raw-word/begin/end 实际 AST 与清理另通过
+**256 项对照、42 项回滚**，含 8 项完整实际 ELF body 对照、12 项 SP
+移位、12 项高位 guest、362 个完整 function records 和 340 个
+完整 child records。新开关默认关闭，可独立使用。callback SP=`state-0xe0`，
+保留映射且独立的 `[state-0x210,state)`，globals 组合沿用更大 frame。
+raw words 只保存不执行；section 总预算约束短输入反复产生零的路径。
+8 项主动截停的原生观察单独记录，未声称其自然返回或清理通过。
+四组旧回归 **1,124/235** 通过，四份 JSON 逐字节一致；旧 unsupported
+slot guard 从已开放的 `+b0` 移至仍关闭的 `+100`。
+其余 attached handlers、parse/root、完整 reader/factory/bootstrap、真实
+allocator/异常、独立 signer 与线上验收仍未完成。
+见 [code module 报告](REQUEST_JNI_STARTUP_WORKERS.md#638-code-definitions-的-attached-ast-组合2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：global definitions 与初始化表达式的 attached 组合
 
 section 6 的实际 global/constant-expression AST 回调、完整 u64 result 与清理
