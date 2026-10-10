@@ -150,6 +150,9 @@ Export AST 回调、五类节点克隆/删除与仅含 export 的输出清理另
 函数 import 的 heap 名称组合另通过 **180 项对照、43 项回滚**；默认关闭，
 两名称均需至少 23 字节。旧 module/import 两组（1072/493）JSON 逐字节一致。
 见 [函数 import module 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#632-heap-名称函数-import-的-attached-ast-组合2026-10-10-asiashanghai)。
+短名称/空名称和长短混用另通过 **448 项对照、64 项回滚**，需开启额外 inline
+opt-in；恢复真实 caller helper 写入。旧 module/heap 两组（394/126）JSON
+逐字节一致。见 [inline import 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#633-inline-名称函数-import-与真实-caller-栈写入2026-10-10-asiashanghai)。
 其余 attached handlers、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。

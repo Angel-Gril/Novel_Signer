@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-10 Asia/Shanghai：inline 函数 import 与 caller 栈写入
+
+函数 import 的短名称/空名称/长短混用组合另通过 **448 项对照、64 项回滚**。
+需同时开启 function-import 与 inline opt-ins；两者默认关闭。按 caller
+state/image/type 数量恢复三处影响 padding 的 helper save stores，未喂入
+原生栈 snapshot。含 12 项 SP 移位、282 项独立完整 inline padding 检查。
+旧默认 module/heap-only 两组 **394/126** 通过，历史 JSON 逐字节一致。
+其他 import/definition/expression/code、parse/root、完整 reader/factory/
+bootstrap、真实 allocator/异常、独立 signer 和线上验收仍未完成。
+见 [inline import 报告](REQUEST_JNI_STARTUP_WORKERS.md#633-inline-名称函数-import-与真实-caller-栈写入2026-10-10-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-10 Asia/Shanghai：heap 名称函数 import 的 attached 组合
 
 真实 module/parser/function-import AST 与清理另通过 **180 项对照、43 项回滚**。

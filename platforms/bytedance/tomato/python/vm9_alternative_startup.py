@@ -1111,7 +1111,8 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
 
     attached_state_address explicitly opts into verified slots +18/+20/+28/
     +50/+a0/+160. Import slot +28 also needs entry_stack_address and mapped
-    callback frame bytes; the module bridge admits only two heap names.
+    callback frame bytes; the module bridge admits inline names only with
+    its additional enable_inline_function_imports opt-in.
     The attached pointer must equal state+8 and state+20 must bind
     this callback. Parser vectors and input are retained through allocation.
     The default continues to reject nonzero attached pointers.
@@ -2980,21 +2981,25 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         output_address, entry_stack_address, varuint_scratch_address, allocate,
         context_address=0, context_size=0, max_sections=512, max_entries=4096,
         max_input_bytes=16*1024*1024, max_nodes=4096,
-        max_vector_bytes=16*1024*1024, reserved_regions=(), enable_function_imports=False):
+        max_vector_bytes=16*1024*1024, reserved_regions=(), enable_function_imports=False,
+        enable_inline_function_imports=False):
     """Bounded actual +31b360 / +324444 with real AST effects and cleanup.
 
     Supports generic custom, type, function, start, data-count and empty export
     sections. enable_function_imports=False preserves that default scope.
     True also composes function imports at slot +28 when both module and field
-    names are at least 23 bytes. Short names, other import kinds, remaining
-    handlers and nonempty exports fail closed. The output must start empty.
+    names are at least 23 bytes. enable_inline_function_imports=True additionally
+    restores type-callback stack stores retained by inline names and permits
+    shorter names; it requires enable_function_imports=True. Other import kinds,
+    remaining handlers and nonempty exports fail closed. The output starts empty.
     Eight prefix bytes are skipped without checking their magic.
     Parse errors return 1 and commit partial AST output. Guard failures roll
     back all pages. Function/code count mismatch returns 1 after dispatch.
 
     Explicit mapped native frames retain untouched callback/state padding.
-    Only their callback/retained headers and parser object fields are modeled;
-    saved registers and other stack/TLS bytes remain outside the contract.
+    Their callback/retained headers and parser object fields are modeled.
+    Inline imports also model three helper save stores that feed string padding;
+    other saved registers and stack/TLS bytes remain outside the contract.
     Function imports retain the additional [state-0x1e0, state) caller frame:
     callback entry SP is state-0x100, with a 0xe0-byte callback frame below it.
     Input/output/scratch/reservations/allocations cannot overlap that range.
@@ -3021,6 +3026,8 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             or any(not isinstance(v,int) or not 0 <= v <= MASK64
                    for v in (context_address,context_size))
             or not isinstance(enable_function_imports,bool)
+            or not isinstance(enable_inline_function_imports,bool)
+            or enable_inline_function_imports and not enable_function_imports
             or not callable(allocate)):
         raise RefillUnsupported('AST module requires bounded input, output and native frames')
     cb, state = entry_stack_address-0x150, entry_stack_address-0x220
@@ -3077,7 +3084,8 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     def callback(current,event,vectors):
         collect(vectors)
         if event.slot_offset == 0x28:
-            if not enable_function_imports or min(event.arguments[2],event.arguments[4]) <= 22:
+            if not enable_function_imports or (not enable_inline_function_imports
+                    and min(event.arguments[2],event.arguments[4]) <= 22):
                 raise RefillUnsupported('AST module function imports require two heap names')
         elif event.slot_offset not in (0x18,0x20,0x50,0xA0,0x160):
             raise RefillUnsupported('AST module callback needs further native frame verification')
@@ -3087,6 +3095,18 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             attached_state_address=state,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,
             reserved_regions=((input_address,input_address+input_size),
                 (varuint_scratch_address,varuint_scratch_address+4),*reserved_regions))
+        if enable_inline_function_imports and event.slot_offset == 0x20:
+            # +31e888 saves the type callback FP/LR and x23 in bytes later
+            # copied by inline import strings. +32a1f8 saves its node pointer
+            # when either type vector is copied. Recover these stores from
+            # this caller's frame/counts, never a captured native stack.
+            frame = state-0x1E0
+            _write_span(current,frame+0x20,(state-0x110).to_bytes(8,'little')
+                +(image_base+0x31B778).to_bytes(8,'little'))
+            params = event.arguments[1]&0xFFFFFFFF
+            _write_span(current,frame+0x30,(params*8 if params else state+0x40).to_bytes(8,'little'))
+            if params or event.arguments[3]&0xFFFFFFFF:
+                _write_span(current,frame+0x10,(state-0x150).to_bytes(8,'little'))
         effects.extend(result.effects); return result.status
     sections = None
     status = 1

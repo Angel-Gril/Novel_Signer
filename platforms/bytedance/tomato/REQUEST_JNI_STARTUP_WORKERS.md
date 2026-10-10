@@ -1864,6 +1864,72 @@ reader/factory/bootstrap、独立 signer、fresh 签名与线上验收仍未完�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_function_imports_20261010.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-function-imports-evidence.json>
 ```
 
+## 6.33 Inline 名称函数 import 与真实 caller 栈写入（2026-10-10 Asia/Shanghai）
+
+`run_reader_ast_module(..., enable_function_imports=True,
+enable_inline_function_imports=True)` 现在贯通短名称、空名称和长短名称混用的
+真实函数 import AST 路径。**448 项原生/Python 对照、64 项回滚检查**通过，
+其中 12 项移动 module entry SP；282 项还独立推导并检查全部 inline padding。
+修改前绑定 `c32ac6d` 的 12 项实际入口 RED 覆盖空/1/7/22 字节、连续扩容和
+长短混用；真实 module 自然返回，原有 Python 组合拒绝并完全回滚。
+
+新增开关默认 `False`，必须同时开启 `enable_function_imports`。原有
+heap-only 模式及默认 module 行为不变。生产 owner 仍只有
+`vm9_alternative_startup.py`；没有将 native frame snapshot 作为 Python 输入。
+
+短名称只覆盖 24 字节 header 的长度、内容和终止字节，尾部 padding 会带入
+caller 先前写过的栈字节。实际写入观测结合指令证明以下三处来源，生产按
+当前 parser state、image base 和 type params/results 数量恢复它们：
+
+| 原生写入 | 后续进入 import header 的值 |
+|---|---|
+| `+31e888` | type callback FP 为 state-`110`，LR 为 image+`31b778`；保存到 import frame+`20/+28` |
+| `+31e88c` | 保存 x23 到 frame+`30`；params 非空时为 params 字节数，否则为 parser result-vector header（state+`40`） |
+| `+32a1f8` | type params/results 至少一个非空时，allocator 包装器保存其 node pointer（state-`150`）到 frame+`10` |
+
+连续 import 原本已经保留同一 caller frame，因此后续短名称继续保留前一条
+名称未覆盖的字节。type 回调完成后补齐上述保存写入，再由既有真实字符串
+构造/复制及节点克隆实现消费。附加 `[state-1e0, state)` 映射、地址别名和
+allocation 限制继续适用。只恢复影响当前输出 padding 的 helper save stores；
+整个 stack、其余 saved registers 与 TLS/OS 仍不属于模型。
+
+448 次 module 共观测 **9508 次 allocation、1292 次 owned destructor、1106 次
+ deleting destructor、6076 次 free**。真实 parser、AST vtables、临时和 cache
+清理执行，未替换为 AST status stub。自然 return/SP、未屏蔽 guest 前
+`0xa000`、有序 effects 和逐次 owner bytes、parser 退出字段、callback 清理、
+image globals、arguments/cursor/limit 全部一致。另独立核对名称、节点及类型
+向量克隆、type/import indexes、部分 AST、defined function 数量与 cache 清理。
+
+输入覆盖 `0/1/7/8/15/16/21/22/23/24/32` 字节边界、三种 frame padding、
+空/params/results/rich 类型、type 数量及向量增减、1..6 条 import、名称
+增长/缩短/长短交替、output/cache 扩容与 spare capacity、后续 defined
+functions、generic custom/start/data-count、截断/重复/逆序/非法 envelope
+以及固定种子生成组合。两种额外 entry SP（含 frame 跨页）各在两个 image
+base 上执行，证明 frame 指针来自当前 caller 布局。另 6 项私有原生对照验证
+空 type 前后不同长度 generic custom，不计入上述公开 448 项。
+
+64 项回滚包含原有 43 项 guard，以及 21 项 inline opt-in 类型/依赖、资源
+预算、地址别名、下层独立页面缺失、其他 import kind/非法 type index 和
+6 个实际写入失败。新增写失败覆盖三处 type helper saves、两个原始名称
+headers 和 spare-capacity end 发布；所有页面逐字节回滚。非法原生内存路径
+不执行。解析失败仍返回 1 并保留已完成 AST，output 所有权保留。
+
+AST 结构检查只移除新增 opt-in、条件及 helper save stores，证明默认和
+heap-only 可执行分支与 `c32ac6d` 相同。旧默认 module 与 heap-name import
+两组串行重跑，**394 项对照、126 项回滚通过，两份历史 JSON 逐字节一致**。
+未重复声称其他未重跑历史批次。原生批次之后仅澄清 docstring 模型边界，
+可执行 AST 未改变。
+
+其他 import 种类、definitions、其余 expressions/code 的 attached 组合、
+parse/root、完整 reader/factory/bootstrap、真实 allocator/异常、独立 signer、
+fresh 签名与线上验收仍未完成。
+
+见 [inline 函数 import 证据](evidence/vm9_alternative_ast_module_inline_function_imports_fresh_20261010.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_inline_function_imports_20261010.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-inline-function-imports-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1914,7 +1980,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复 B attached parser 的短名称/其他 imports、definitions/expressions/code 与 caller frame 组合，随后解析/root 生成，再把原始 JNI /
+下一步恢复 B attached parser 的其他 import 种类、definitions/expressions/code 与 caller frame 组合，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。
