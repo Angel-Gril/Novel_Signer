@@ -4424,3 +4424,268 @@ def initialize_instruction_builder_catalog(pages, *, image_base, thread_id,
     finalizer=(image_base+0x2CC0BC,global_address,image_base+0x34C700)
     m.p.commit()
     return InstructionBuilderCatalogResult(pointer,tuple(m.effects),(finalizer,))
+
+
+# Native leaf builder: (variant tag, operand form, clear root pointer).
+# Operand forms: fields=0, low16 immediate=1, signed target=2.
+_RUNTIME_INSTRUCTION_RULES = {
+    0x2f69e4: (0x2a, 0, False),
+    0x2f6a74: (0xa6, 0, False),
+    0x2f6a90: (0x30, 0, False),
+    0x2f6aac: (0x69, 0, False),
+    0x2f6ac8: (0x39, 0, False),
+    0x2f6ae4: (0x1a, 0, False),
+    0x2f6b00: (0x9d, 0, False),
+    0x2f6b1c: (0x32, 0, False),
+    0x2f6b38: (0x3c, 0, False),
+    0x2f6b54: (0xad, 0, False),
+    0x2f6bec: (0x71, 0, False),
+    0x2f6c08: (0x8a, 0, False),
+    0x2f6c24: (0x75, 0, False),
+    0x2f6c40: (0x3d, 0, False),
+    0x2f6c5c: (0x7b, 0, False),
+    0x2f6c78: (0x6, 0, False),
+    0x2f6c94: (0x5d, 0, False),
+    0x2f6cb0: (0x9c, 0, False),
+    0x2f6d34: (0x55, 0, False),
+    0x2f6d84: (0xbd, 0, False),
+    0x2f6da0: (0x81, 0, False),
+    0x2f6dbc: (0xb5, 0, False),
+    0x2f6dd8: (0x31, 0, False),
+    0x2f6df4: (0x47, 0, False),
+    0x2f6e10: (0x95, 0, False),
+    0x2f6e2c: (0x92, 0, False),
+    0x2f6e48: (0x27, 0, False),
+    0x2f6e64: (0x44, 0, False),
+    0x2f6e80: (0x97, 0, False),
+    0x2f6e9c: (0x90, 0, False),
+    0x2f6eb8: (0x50, 0, False),
+    0x2f6ed4: (0x40, 0, False),
+    0x2f6ef0: (0x4a, 0, False),
+    0x2f6f0c: (0x59, 0, False),
+    0x2f6f98: (0x15, 0, False),
+    0x2f6fb4: (0x7a, 0, False),
+    0x2f6fd0: (0xb6, 0, False),
+    0x2f6fec: (0xb9, 0, False),
+    0x2f7008: (0x6a, 0, False),
+    0x2f7024: (0x9b, 0, False),
+    0x2f7040: (0x82, 0, False),
+    0x3133b4: (0x61, 0, False),
+    0x3133d0: (0x3a, 0, False),
+    0x3133ec: (0x87, 0, False),
+    0x313408: (0x56, 0, False),
+    0x313424: (0x70, 0, False),
+    0x313440: (0x5a, 0, False),
+    0x31345c: (0x14, 0, False),
+    0x313478: (0x2d, 0, False),
+    0x313494: (0xa4, 0, False),
+    0x3134b0: (0x1c, 0, False),
+    0x3134cc: (0x17, 0, False),
+    0x3134e8: (0xb7, 0, False),
+    0x313504: (0x1d, 0, False),
+    0x313520: (0x18, 0, False),
+    0x31353c: (0x8d, 0, False),
+    0x313558: (0x8f, 0, False),
+    0x313574: (0x28, 0, False),
+    0x313590: (0x7, 0, False),
+    0x3135ac: (0x4f, 0, False),
+    0x3135c8: (0xb4, 0, False),
+    0x3135e4: (0xa1, 0, False),
+    0x313600: (0x16, 0, False),
+    0x31361c: (0xa2, 0, False),
+    0x313638: (0x45, 0, False),
+    0x313654: (0x9e, 0, False),
+    0x313670: (0x9a, 0, False),
+    0x31368c: (0x26, 0, False),
+    0x3136a8: (0x13, 0, False),
+    0x3136c4: (0x72, 0, False),
+    0x3136e0: (0x8c, 0, False),
+    0x3136fc: (0xab, 0, False),
+    0x313718: (0x80, 0, False),
+    0x313734: (0x24, 0, False),
+    0x313750: (0xe, 0, False),
+    0x31376c: (0x68, 0, False),
+    0x313788: (0xa7, 0, False),
+    0x3137a4: (0x4b, 0, False),
+    0x3137c0: (0xf, 0, False),
+    0x3137dc: (0x43, 0, False),
+    0x3137f8: (0x4e, 0, False),
+    0x313814: (0xaf, 0, False),
+    0x313830: (0xa8, 0, False),
+    0x31384c: (0xaa, 0, False),
+    0x313868: (0x1b, 0, False),
+    0x31388c: (0x34, 1, False),
+    0x3138b0: (0x2e, 1, False),
+    0x3138d4: (0xb8, 1, False),
+    0x31a74c: (0x73, 0, False),
+    0x31a768: (0x67, 0, False),
+    0x31a784: (0x54, 0, False),
+    0x31a7a0: (0x0, 0, False),
+    0x31a7b8: (0x3f, 0, False),
+    0x31a7d4: (0xd, 0, False),
+    0x31a7f0: (0x7c, 0, False),
+    0x31a80c: (0xba, 0, False),
+    0x31a828: (0x19, 0, False),
+    0x31a844: (0x6b, 0, False),
+    0x31a860: (0x25, 0, False),
+    0x31a87c: (0x6d, 0, False),
+    0x31a898: (0xac, 0, False),
+    0x31a8b4: (0x99, 0, False),
+    0x31a8d0: (0xb2, 0, False),
+    0x31a8ec: (0x98, 0, False),
+    0x31a908: (0xae, 0, False),
+    0x31a924: (0xb3, 0, False),
+    0x31a940: (0x84, 0, False),
+    0x31a95c: (0x9f, 0, False),
+    0x31a978: (0x1, 0, False),
+    0x31a990: (0x49, 0, False),
+    0x31a9ac: (0xa9, 0, False),
+    0x31a9c8: (0x4d, 0, False),
+    0x31a9e4: (0x60, 0, False),
+    0x31aa00: (0x7e, 0, False),
+    0x31aa1c: (0x38, 0, False),
+    0x31aa38: (0x77, 0, False),
+    0x31aa54: (0x29, 0, False),
+    0x31aa70: (0x79, 0, False),
+    0x31aa8c: (0x1f, 0, False),
+    0x31aaa8: (0x2f, 0, False),
+    0x31aac4: (0x3b, 0, False),
+    0x31aae0: (0x88, 0, False),
+    0x31aafc: (0x4, 0, False),
+    0x31ab18: (0x10, 0, False),
+    0x31ab34: (0x6c, 0, False),
+    0x31ab50: (0xa0, 0, False),
+    0x31ab6c: (0x36, 0, False),
+    0x31ab88: (0x11, 0, False),
+    0x31aba4: (0x2c, 0, False),
+    0x31abc0: (0x94, 0, False),
+    0x31abdc: (0x65, 0, False),
+    0x31abf8: (0x96, 0, False),
+    0x31ac14: (0x64, 0, False),
+    0x31ac30: (0x53, 0, False),
+    0x31ac4c: (0x52, 0, False),
+    0x31ac68: (0x35, 0, False),
+    0x31ac84: (0x48, 0, False),
+    0x31aca0: (0x21, 0, False),
+    0x31acbc: (0x3, 0, False),
+    0x31acd8: (0xa, 0, False),
+    0x31acf4: (0xb, 0, False),
+    0x31ad10: (0x12, 0, False),
+    0x31ad2c: (0x8, 0, False),
+    0x31ad48: (0x6e, 0, False),
+    0x31ad64: (0x7d, 0, False),
+    0x31ad80: (0x5b, 1, False),
+    0x31ada4: (0x20, 1, False),
+    0x31adc8: (0x4c, 0, False),
+    0x31ade4: (0x76, 0, False),
+    0x31ae00: (0x2b, 0, False),
+    0x31ae1c: (0x5e, 0, False),
+    0x31ae38: (0x41, 0, False),
+    0x31ae54: (0x91, 0, False),
+    0x31ae70: (0x85, 0, False),
+    0x31ae8c: (0x22, 0, False),
+    0x31aea8: (0xb1, 1, False),
+    0x31aecc: (0x58, 1, False),
+    0x31aef0: (0xa5, 1, False),
+    0x31af14: (0x42, 1, False),
+    0x31af38: (0x93, 1, False),
+    0x31af5c: (0x5f, 1, False),
+    0x31af80: (0xbb, 1, False),
+    0x31afa4: (0xb0, 1, False),
+    0x31afc8: (0x2, 1, False),
+    0x31afec: (0x86, 1, False),
+    0x31b010: (0x83, 1, False),
+    0x31b034: (0x5, 1, False),
+    0x31b058: (0x6f, 1, False),
+    0x31b07c: (0x5c, 1, False),
+    0x31b0a0: (0x33, 1, False),
+    0x31b0c4: (0x51, 1, False),
+    0x31b0e8: (0x46, 1, False),
+    0x31b10c: (0x66, 1, True),
+    0x31b134: (0x3e, 1, False),
+    0x31b158: (0x8e, 1, False),
+    0x31b17c: (0x7f, 1, False),
+    0x31b1d4: (0xa3, 2, False),
+    0x31b1f8: (0x78, 1, False),
+    0x31b21c: (0x37, 1, False),
+    0x31b240: (0x9, 1, False),
+    0x31b264: (0x62, 1, False),
+    0x31b288: (0xc, 1, False),
+    0x31b2ac: (0x8b, 1, False),
+    0x31b2d0: (0x23, 1, False),
+    0x31b2f4: (0x1e, 1, False),
+    0x31b318: (0x74, 1, False),
+    0x31b33c: (0x316, 2, False),
+}
+
+
+def build_parser_runtime_instruction(pages, *, image_base, catalog_address,
+        decoded_address, output_address, max_dispatch=16, reserved_regions=()):
+    """Run the recovered virtual builder for one decoded 12-byte instruction.
+
+    The caller supplies an initialized catalog and fresh 49-byte optional
+    variant storage. 187 leaf functions use three operand forms, while the
+    recovered dispatch methods select nested tables or their fallback. The
+    variant tag is uint64 at +40 and its validity byte is +48. Other bytes
+    retain their initial contents except the operand and any root pointer.
+    A missing nested entry writes only bytes +0/+48 to zero and returns
+    status 0; successful construction returns status 1. Native void X0 is
+    incidental. These builders never allocate or consume an existing value.
+
+    Catalog nodes/vtables and selected table bounds are checked on the path.
+    The original +2ecce0 diagnostic trap, unsupported methods, cycles, aliases
+    and guard/write failures reject with all pages unchanged. This does not
+    move the optional value into its 48-byte runtime vector, perform the
+    root-linking second pass, execute VM instructions, or model native stack.
+    """
+    if type(max_dispatch) is not int or not 1<=max_dispatch<=64:
+        raise RefillUnsupported('runtime instruction dispatch bound is invalid')
+    m=_ReaderAstMemory(pages,image_base,output_address,49,4096,16*1024*1024,reserved_regions)
+    m.claim(catalog_address,0x8A18);m.claim(decoded_address,12,alignment=1);m.claim(output_address,49)
+    data=_read_span(m.p,decoded_address,12);word=int.from_bytes(data[:4],'little')
+    if data[4]>=64:
+        raise RefillUnsupported('runtime instruction opcode is outside the primary table')
+    known={offset:table for offset,table,_ in _INSTRUCTION_BUILDER_NODES}
+    tables={start:size for start,size,_ in _INSTRUCTION_BUILDER_TABLES}
+    def select(node,depth):
+        if depth>=max_dispatch:
+            raise RefillUnsupported('runtime instruction dispatch bound exhausted')
+        offset=node-catalog_address;table=known.get(offset)
+        if table is None or _u(m.p,node)!=image_base+table:
+            raise RefillUnsupported('runtime instruction builder node/vtable is unsupported')
+        function=_u(m.p,image_base+table)-image_base
+        if function in _RUNTIME_INSTRUCTION_RULES:return _RUNTIME_INSTRUCTION_RULES[function]
+        if function==0x2F6940:
+            return (42,0,False) if word==0 else select(node+32,depth+1)
+        if function in (0x2F6A00,0x2F6B70):
+            getter=_u(m.p,image_base+table+8)-image_base
+            field={0x2F6A6C:9,0x2F6BDC:5,0x2F6BE4:8,0x313884:6}.get(getter)
+            size=tables.get(offset+16)
+            if field is None or size is None or data[field]*8>=size:
+                raise RefillUnsupported('runtime instruction selector/table bound is unsupported')
+            child=_u(m.p,node+16+data[field]*8)
+            return select(child,depth+1) if child else None
+        if function==0x2F6F28:return select(node+16,depth+1)
+        if function==0x2F705C:
+            return select(node+0x220,depth+1) or select(node+16,depth+1)
+        if function==0x2F6CCC and not data[7]:return (85,0,False)
+        if function in (0x2F6CCC,0x2F6D50):
+            raise RefillUnsupported('runtime instruction builder would enter the native diagnostic trap')
+        if function==0x31B1A0:return (188,2,True)
+        raise RefillUnsupported('runtime instruction builder method is unsupported')
+    node=_u(m.p,catalog_address+data[4]*8)
+    rule=select(node,0)
+    if rule is None:
+        _write_span(m.p,output_address,b'\0');_write_span(m.p,output_address+48,b'\0')
+        status=0
+    else:
+        tag,mode,zero=rule
+        value=(int.from_bytes(data[5:9],'little') if mode==0 else
+            int.from_bytes(data[5:7],'little')|((word&65535)<<16) if mode==1 else
+            (word&0x3FFFFFF)|(0xFC000000 if word&(1<<17) else 0))
+        _write_span(m.p,output_address,value.to_bytes(4,'little'))
+        if zero:_write_span(m.p,output_address+8,bytes(8))
+        _write_span(m.p,output_address+40,tag.to_bytes(8,'little'));_write_span(m.p,output_address+48,b'\1')
+        status=1
+    m.p.commit()
+    return ReaderAstResult(status,())

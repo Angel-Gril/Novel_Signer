@@ -192,6 +192,9 @@ converted module 清理通过 **146 项对照、21 项回滚检查**。见
 [converted cleanup 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#645-converted-module-清理2026-10-11-asiashanghai)。
 instruction builder catalog 初始化通过 **40 项对照、22 项回滚检查**。见
 [builder catalog 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#646-instruction-builder-catalog2026-10-11-asiashanghai)。
+decoded instruction 构造通过 **116422 次原生对照、24 项回滚检查**，
+含两份完整实际模块的全部指令。见
+[runtime builder 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#647-decoded-instruction-运行时构造2026-10-11-asiashanghai)。
 root/descriptor、factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

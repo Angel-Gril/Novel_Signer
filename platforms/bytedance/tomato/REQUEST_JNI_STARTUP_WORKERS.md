@@ -2566,6 +2566,41 @@ finalizers；Python 不改初始 stack。未比较整个原生栈/TLS/OS。
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_builder_catalog_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <builder-catalog-evidence.json>
 ```
 
+## 6.47 decoded instruction 运行时构造（2026-10-11 Asia/Shanghai）
+
+`build_parser_runtime_instruction` 从 12 字节 decoded record 经实际 builder
+分发表构造 49 字节 optional variant：187 个线性叶子方法使用 fields、
+low16 immediate、signed target 三种 operand 形式，另有嵌套分发、零字
+特例、fallback 和 root-pointer 初始化。uint64 variant tag 位于 +40，
+validity byte 位于 +48；不写的 padding 保持调用方初值。未命中 nested
+entry 仅清零 +0/+48，返回 status 0；成功返回 status 1。原生 void X0
+不是本接口状态。已有值的销毁和向 48 字节 vector 的 move 不在此入口。
+
+修改前干净 `5fba7eb` 绑定 **12 项真实原生 RED**。最终公开 verifier
+在 **22 个 native driver batches** 内通过 **116422 次原生/Python
+指令构造对照、24 项回滚检查**。其中 **109066 次**来自两基址各自
+fresh ELF → 独立 Python reader/parse 生成的完整实际模块（各 54533
+条）；其余 7356 次覆盖两基址的 422 条 graph paths、全部 187 个线性
+方法各六种 bit/field 输入、48 次 nested misses、6 个 padding batch、
+4 个 SP 移位 batch。线性方法测试通过显式调整 primary slot 指向现有
+typed node，仍执行原生虚函数体。driver 只负责循环和调用，不替换方法。
+
+每项比较 64 字节存储（49 字节 optional 和相邻未写字节）、validity，
+并检查完整 guest/heap/image pages、自然返回/SP；Python stack 不变。
+无原生快照输入，实际名称与 payload 不导出。完整实际模块使用 62 种
+规则、分发深度最高 4；没有触发 `+2ecce0` 的原生 diagnostic trap。
+该 trap、非法节点/vtable/getter/selector、cycle/深度、别名、未映射/
+reserved storage、operand/tag/validity 写入失败均拒绝并全页回滚。
+
+去掉新增 rule table 和 API 后，已有 owner AST 完全一致。尚需恢复
+向 runtime vector 的 move、特殊指令第二次转换和 root linking、完整
+descriptor/root、factory/bootstrap、独立 signer、新鲜输出及线上验收。
+未比较完整原生 stack/TLS/OS。见 [runtime builder 证据](evidence/vm9_alternative_runtime_builder_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_runtime_builder_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <runtime-builder-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

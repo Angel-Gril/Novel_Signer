@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：decoded instruction 运行时构造
+
+生产 builder 通过 **116422 次原生对照、24 项回滚检查**，22 个 batch
+含 109066 次完整实际 ELF 指令调用，覆盖 187 个叶子方法和 graph/
+padding/SP 变化。独立 reader/parse 输入、全部 64 字节输出和 guest/
+heap/image pages 一致；已有 owner AST 未变。继续 runtime vector
+move、二次转换/root linking、descriptor/root、factory/bootstrap、
+独立 signer、新鲜输出和线上验收。见 [runtime builder 报告](REQUEST_JNI_STARTUP_WORKERS.md#647-decoded-instruction-运行时构造2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：instruction builder catalog
 
 `+2cc038` 的 Python 初始化通过 **40 项原生对照、22 项回滚检查**，
