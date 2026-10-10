@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：instruction builder catalog
+
+`+2cc038` 的 Python 初始化通过 **40 项原生对照、22 项回滚检查**，
+含 cold/warm、padding、两基址及 heap/SP/thread 变化。主表 529 个
+节点/99 张分发表，副表 600 个节点；源自静态 ELF stores，无原生
+快照输入。原有 owner AST 未变。继续 opcode builders 执行、root/
+descriptor、factory/bootstrap、独立 signer、新鲜输出和线上验收。
+见 [builder catalog 报告](REQUEST_JNI_STARTUP_WORKERS.md#646-instruction-builder-catalog2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：converted module 清理
 
 `+2cb968` 的 Python 清理通过 **146 项原生对照、21 项回滚检查**。

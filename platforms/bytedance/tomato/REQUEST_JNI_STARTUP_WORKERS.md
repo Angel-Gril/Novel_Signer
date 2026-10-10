@@ -2533,6 +2533,39 @@ descriptor builders、factory/bootstrap、独立 signer、新鲜输出和线上�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_converted_cleanup_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <converted-cleanup-evidence.json>
 ```
 
+## 6.46 instruction builder catalog（2026-10-11 Asia/Shanghai）
+
+`initialize_instruction_builder_catalog` 恢复 `+2cc038` 的 serial guard、
+`+2f67b4/+2f1488/+2ecd8c` 分配与构造：主表 `0x8a18` 字节，包含
+529 个 typed nodes 和 99 张分发表；副表 `0x3840` 字节，包含 600 个
+连续节点与指针表。节点的 4 字节 padding 保留 allocator 初始内容。
+ready guard 返回已有表，不分配或写页；冷 pointer/guard 必须全零。
+显式 thread ID 决定完成 guard，finalizer registration 作为逻辑 effect。
+
+布局来自 fresh ELF 构造代码的 **5059 次静态 stores**，再整理为 typed
+nodes、分发表和副表循环；未用原生快照初始化 Python。私有独立静态
+求值与 typed layout 在两基址、0/A5 填充共 4 项对照一致，静态求值的
+完整两块内存也分别与实际原生构造器一致。公开 verifier 直接执行
+原生 `+2cc038` 验证生产接口，不依赖私有静态求值脚本。
+
+修改前干净 `95c36f9` 绑定 **8 项真实原生 RED**。最终通过
+**40 项原生/Python 对照、22 项回滚检查**：20 cold/20 warm，覆盖
+0/39/A5/FF 填充、两 image bases、8 项 heap 地址变化（含高位地址）、
+8 项 SP 移位、8 项 thread ID 变化。检查自然返回和 SP、完整 guest/
+两块 heap/所有 image pages、有序分配和每次分配时的 global pointer、
+finalizers；Python 不改初始 stack。未比较整个原生栈/TLS/OS。
+
+忙 guard、冷残留指针、无效 warm ownership、分配缺失/别名/重叠/
+未映射/image/reserved 地址、资源边界与初始/副表/发布/guard 写入故障
+均拒绝并全页回滚。已有 owner AST 去掉本次两张 metadata 表、result
+类型和 API 后完全一致。当前仅初始化 builder catalog；opcode builders
+执行、root/descriptor、factory/bootstrap、独立 signer、新鲜输出和线上
+验收仍待完成。见 [builder catalog 证据](evidence/vm9_alternative_builder_catalog_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_builder_catalog_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <builder-catalog-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
