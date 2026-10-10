@@ -1110,7 +1110,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     uint64 registers and native w-register truncation. Other slots fail closed.
 
     attached_state_address explicitly opts into verified slots +18/+20/+28/
-    +50/+a0/+160. Import slot +28 also needs entry_stack_address and mapped
+    +30/+38/+40/+50/+a0/+160. Import slots also need entry_stack_address and mapped
     callback frame bytes; the module bridge admits inline names only with
     its additional enable_inline_function_imports opt-in.
     The attached pointer must equal state+8 and state+20 must bind
@@ -1137,7 +1137,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         raise RefillUnsupported('AST callback slot or uint64 arguments are unsupported')
     if not isinstance(callback_address,int) or not 0 < callback_address <= MASK64-0x108:
         raise RefillUnsupported('AST callback address is invalid')
-    if attached_state_address is not None and slot_offset not in (0x18,0x20,0x28,0x50,0xA0,0x160):
+    if attached_state_address is not None and slot_offset not in (0x18,0x20,0x28,0x30,0x38,0x40,0x50,0xA0,0x160):
         raise RefillUnsupported('AST attached callback slot has not been verified')
     # Local group count has no output-object access in the native function.
     root, width = (callback_address,0x108) if slot_offset == 0xB0 else (
@@ -2126,7 +2126,7 @@ def run_reader_sections(pages, *, state_address, image_base,
         enable_element_section=False, enable_data_section=False,
         expression_scratch_address=None, max_expression_ops=4096,
         enable_special_custom_sections=False, custom_scratch_address=None,
-        max_custom_records=4096, _ast_callback=None):
+        max_custom_records=4096, _ast_callback=None, _attached_import_stack_address=None):
     """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/9/10/11/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
@@ -2143,6 +2143,9 @@ def run_reader_sections(pages, *, state_address, image_base,
     The private _ast_callback bridge is used by run_reader_ast_module to run
     verified AST callbacks inside this transaction and preserve interleaved
     vector effects. The ordinary callback contract remains a status service.
+    Its private attached-import stack binding retains the real ninth ABI word:
+    table writes the descriptor pointer, global writes only its low byte.
+    It requires the verified caller SP and descriptor at SP+8.
 
     Section 1 requires vector_allocate(size), a pure allocation plan into
     already mapped pages. Recorded allocation/free effects are logical service
@@ -2234,6 +2237,12 @@ def run_reader_sections(pages, *, state_address, image_base,
         raise RefillUnsupported('reader varuint scratch overlaps retained input or state')
     if regions[0][0] < regions[1][1] and regions[1][0] < regions[0][1]:
         raise RefillUnsupported('reader input and state must be disjoint')
+    if _attached_import_stack_address is not None:
+        if (_ast_callback is None or _attached_import_stack_address != state_address-0x100
+                or not enable_table_memory_imports
+                or import_scratch_address != _attached_import_stack_address+8):
+            raise RefillUnsupported('reader attached import caller frame is inconsistent')
+        _read_span(p, _attached_import_stack_address, 8)
     if enable_table_memory_imports or enable_table_memory_sections:
         if (not isinstance(import_scratch_address, int) or import_scratch_address & 7
                 or not 0 < import_scratch_address <= MASK64-31):
@@ -2331,6 +2340,14 @@ def run_reader_sections(pages, *, state_address, image_base,
         return result.value
 
     def emit(slot, *arguments, type_vectors=()):
+        if _attached_import_stack_address is not None:
+            if slot == 0x30:
+                # +322f18 publishes the descriptor as the ninth ABI argument.
+                _write_span(p,_attached_import_stack_address,import_scratch_address.to_bytes(8,'little'))
+            elif slot == 0x40:
+                # +323024 only replaces the low byte of the incoming word.
+                _write_span(p,_attached_import_stack_address,bytes((arguments[-1],)))
+                arguments = (*arguments[:-1],_u(p,_attached_import_stack_address))
         counts = tuple(_u(p, state_address+offset, 4) for offset in (0x90, 0x94, 0x98, 0x9C))
         import_limits = ()
         if slot in (0x30, 0x38, 0x60, 0x70):
@@ -2982,7 +2999,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         context_address=0, context_size=0, max_sections=512, max_entries=4096,
         max_input_bytes=16*1024*1024, max_nodes=4096,
         max_vector_bytes=16*1024*1024, reserved_regions=(), enable_function_imports=False,
-        enable_inline_function_imports=False):
+        enable_inline_function_imports=False, enable_table_memory_global_imports=False):
     """Bounded actual +31b360 / +324444 with real AST effects and cleanup.
 
     Supports generic custom, type, function, start, data-count and empty export
@@ -2990,8 +3007,14 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     True also composes function imports at slot +28 when both module and field
     names are at least 23 bytes. enable_inline_function_imports=True additionally
     restores type-callback stack stores retained by inline names and permits
-    shorter names; it requires enable_function_imports=True. Other import kinds,
-    remaining handlers and nonempty exports fail closed. The output starts empty.
+    shorter names; it requires enable_function_imports=True.
+    enable_table_memory_global_imports=True independently opts into slots
+    +30/+38/+40 with the actual descriptor and ninth ABI argument. In this
+    combined scope all import names must be at least 23 bytes, including
+    function names. Other imports after a zero-count type section require
+    unrecovered incoming registers and fail closed. Empty type vectors work.
+    All three opt-ins default False. Remaining handlers and
+    nonempty exports fail closed. The output starts empty.
     Eight prefix bytes are skipped without checking their magic.
     Parse errors return 1 and commit partial AST output. Guard failures roll
     back all pages. Function/code count mismatch returns 1 after dispatch.
@@ -3002,8 +3025,14 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     other saved registers and stack/TLS bytes remain outside the contract.
     Function imports retain the additional [state-0x1e0, state) caller frame:
     callback entry SP is state-0x100, with a 0xe0-byte callback frame below it.
+    Table/memory/global imports retain [state-0x210, state), covering their
+    0x110/0x100/0xf0-byte callback frames. Descriptor scratch is at state-0xf8;
+    its last five bytes remain from the caller. Type callbacks save their
+    parameter count and type index into bytes consumed by subsequent imports.
+    Their copy helper saves the output pointer retained by table node padding.
     Input/output/scratch/reservations/allocations cannot overlap that range.
-    Caller scratch is explicit model storage, not native stack scratch.
+    Varuint scratch is explicit model storage; the import descriptor uses
+    the verified native caller address. Other native stack writes stay open.
     allocate must be a pure plan for distinct aligned blocks, including freed
     temporaries: this bounded contract does not support address reuse. Effects
     include parser vectors, AST callbacks, parser cleanup then callback cleanup.
@@ -3027,17 +3056,19 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
                    for v in (context_address,context_size))
             or not isinstance(enable_function_imports,bool)
             or not isinstance(enable_inline_function_imports,bool)
+            or not isinstance(enable_table_memory_global_imports,bool)
             or enable_inline_function_imports and not enable_function_imports
             or not callable(allocate)):
         raise RefillUnsupported('AST module requires bounded input, output and native frames')
     cb, state = entry_stack_address-0x150, entry_stack_address-0x220
-    if enable_function_imports and state <= 0x1E0:
+    import_frame_size = 0x210 if enable_table_memory_global_imports else 0x1E0
+    if (enable_function_imports or enable_table_memory_global_imports) and state <= import_frame_size:
         raise RefillUnsupported('AST module import frame address is invalid')
     retained = [(image_base,image_base+0x400000), (input_address,input_address+input_size),
                 (output_address,output_address+0x120), (state,entry_stack_address),
                 (varuint_scratch_address,varuint_scratch_address+4), *reserved_regions]
-    if enable_function_imports:
-        retained.append((state-0x1E0,state))
+    if enable_function_imports or enable_table_memory_global_imports:
+        retained.append((state-import_frame_size,state))
     if any(not isinstance(a,int) or not isinstance(b,int) or not 0 <= a <= b <= MASK64+1
            for a,b in retained):
         raise RefillUnsupported('AST module retained region is invalid')
@@ -3046,8 +3077,8 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         raise RefillUnsupported('AST module retained regions overlap')
     p = _PageTransaction(pages)
     _read_span(p,input_address,input_size); _read_span(p,state,0x220)
-    if enable_function_imports:
-        _read_span(p,state-0x1E0,0x1E0)
+    if enable_function_imports or enable_table_memory_global_imports:
+        _read_span(p,state-import_frame_size,import_frame_size)
     _read_span(p,varuint_scratch_address,4)
     if any(_read_span(p,output_address,0x120)):
         raise RefillUnsupported('AST module requires empty output containers')
@@ -3070,6 +3101,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     m = _ReaderAstMemory(p,image_base,output_address,0x120,max_nodes,max_vector_bytes,reserved_regions)
     m.callback(cb,attached_state_address=state)
     blocks, effects, vector_count = [], [], 0
+    empty_type_section = False
     def plan(size):
         if not isinstance(size,int) or not 0 < size <= max_vector_bytes:
             raise RefillUnsupported('AST module allocation exceeds its byte bound')
@@ -3082,19 +3114,41 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         nonlocal vector_count
         effects.extend(vectors[vector_count:]); vector_count=len(vectors)
     def callback(current,event,vectors):
+        nonlocal empty_type_section
         collect(vectors)
+        if event.slot_offset == 0x18:
+            empty_type_section = event.arguments[0] == 0
         if event.slot_offset == 0x28:
             if not enable_function_imports or (not enable_inline_function_imports
                     and min(event.arguments[2],event.arguments[4]) <= 22):
                 raise RefillUnsupported('AST module function imports require two heap names')
+            if enable_table_memory_global_imports and min(event.arguments[2],event.arguments[4]) <= 22:
+                raise RefillUnsupported('AST module combined import kinds require two heap names')
+        elif event.slot_offset in (0x30,0x38,0x40):
+            if (not enable_table_memory_global_imports or empty_type_section
+                    or min(event.arguments[2],event.arguments[4]) <= 22):
+                raise RefillUnsupported('AST module other imports require verified type caller and two heap names')
         elif event.slot_offset not in (0x18,0x20,0x50,0xA0,0x160):
             raise RefillUnsupported('AST module callback needs further native frame verification')
         result = run_reader_ast_callback(current,callback_address=cb,image_base=image_base,
             slot_offset=event.slot_offset,arguments=event.arguments,allocate=plan,
-            entry_stack_address=state-0x100 if event.slot_offset == 0x28 else None,
+            entry_stack_address=state-0x100 if event.slot_offset in (0x28,0x30,0x38,0x40) else None,
             attached_state_address=state,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,
             reserved_regions=((input_address,input_address+input_size),
                 (varuint_scratch_address,varuint_scratch_address+4),*reserved_regions))
+        if enable_table_memory_global_imports and event.slot_offset == 0x20:
+            # +31b6d8/+31b6dc retain the caller's parameter count/type index.
+            # Later imports consume this saved parameter word and the high
+            # five type-index bytes as ABI/descriptor padding.
+            _write_span(current,state-0x100,(event.arguments[1]&0xFFFFFFFF).to_bytes(8,'little'))
+            _write_span(current,state-0xE8,(event.arguments[0]&0xFFFFFFFF).to_bytes(8,'little'))
+            # +31e894 saves the output pointer in the type-copy helper;
+            # table imports later retain its high word as node padding.
+            _write_span(current,state-0x188,output_address.to_bytes(8,'little'))
+        if enable_table_memory_global_imports and event.slot_offset == 0x40:
+            # +31c2e0/+31c2fc release the temporary clone and clear its word;
+            # the next table import retains the high half as node padding.
+            _write_span(current,state-0x188,bytes(8))
         if enable_inline_function_imports and event.slot_offset == 0x20:
             # +31e888 saves the type callback FP/LR and x23 in bytes later
             # copied by inline import strings. +32a1f8 saves its node pointer
@@ -3115,7 +3169,10 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             varuint_scratch_address=varuint_scratch_address,callback=lambda event: 0,
             vector_allocate=plan,max_sections=max_sections,max_entries=max_entries,
             max_input_bytes=max_input_bytes,_ast_callback=callback,
-            enable_function_global_imports=enable_function_imports)
+            enable_function_global_imports=enable_function_imports or enable_table_memory_global_imports,
+            enable_table_memory_imports=enable_table_memory_global_imports,
+            import_scratch_address=state-0xF8 if enable_table_memory_global_imports else None,
+            _attached_import_stack_address=state-0x100 if enable_table_memory_global_imports else None)
         collect(sections.vector_effects)
         status = int(sections.status == 1 or _u(p,state+0xA4,4) != _u(p,state+0xA8,4))
     for offset in (0x70,0x58,0x40,0x28):

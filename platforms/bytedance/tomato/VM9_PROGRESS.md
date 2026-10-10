@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-10 Asia/Shanghai：table/memory/global attached imports
+
+真实 module/parser 的长名称 table/memory/global import、descriptor、第九
+ABI 参数、AST 与清理另通过 **406 项对照、72 项回滚**，含 12 项 SP 移位。
+新开关默认关闭，全部 import 名称需至少 23 字节；函数仍需原有 opt-in。
+恢复 type/helper stores 与 global 临时清空，未使用原生 frame snapshot。
+零条目 type section 后的其他 import 依赖未建模的入口寄存器，继续回滚；
+空 type 向量已支持。旧三组 **842/190** 通过，JSON 逐字节一致。
+其他 import 的短名称、definitions/expression/code、parse/root、完整 reader/
+factory/bootstrap、真实 allocator/异常、独立 signer 与线上验收仍未完成。
+见 [其他 import 报告](REQUEST_JNI_STARTUP_WORKERS.md#634-tablememoryglobal-import-的-attached-ast-组合2026-10-10-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-10 Asia/Shanghai：inline 函数 import 与 caller 栈写入
 
 函数 import 的短名称/空名称/长短混用组合另通过 **448 项对照、64 项回滚**。
