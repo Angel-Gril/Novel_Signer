@@ -165,6 +165,10 @@ Table/memory definitions 的实际 AST 组合另通过 **470 项对照、32 项�
 新开关默认关闭，含 12 项 SP 移位、12 项高位 guest 和完整 record 检查。
 八组旧回归（2,582/463）JSON 逐字节一致。
 见 [definitions 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#636-tablememory-definitions-的-attached-ast-组合2026-10-11-asiashanghai)。
+Global definitions 与初始化表达式的实际 AST 组合另通过 **398 项对照、37 项回滚**，
+含 12 项 SP 移位、12 项高位 guest 与 780 个完整 global record 检查。
+五组旧回归（1,614/315）JSON 逐字节一致。
+见 [global module 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#637-global-definitions-与初始化表达式的-attached-ast-组合2026-10-11-asiashanghai)。
 其余 attached handlers、parse/root、
 完整 reader/factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。

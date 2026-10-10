@@ -2103,6 +2103,63 @@ code 的 attached 组合、parse/root、完整 reader/factory/bootstrap、独立
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_definitions_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-definitions-evidence.json>
 ```
 
+## 6.37 Global definitions 与初始化表达式的 attached AST 组合（2026-10-11 Asia/Shanghai）
+
+`run_reader_ast_module(..., enable_global_definitions=True)` 现在贯通 section 6、
+global reserve/entry、expression begin/end，以及 end/i32/i64/f32/f64 的实际
+AST 回调与清理。**398 项原生/Python 对照、37 项回滚检查**通过，含 12 项
+SP 移位、12 项整个 guest 移至高位地址的对照及 780 个独立完整 global
+record 检查。包含 394 项合成输入和 4 项实际 ELF global payload 对照；
+实际 section 6 为 133 字节、22 个 globals，由私有样本运行时读取，未发布 payload。
+
+修改前绑定 `829e458` 的 18 项实际 module 入口 RED：原生自然返回 0，
+旧 Python 拒绝 section 6 并回滚全部页面。新开关默认 `False`，独立使用；
+组合 imports 或 table/memory definitions 时仍分别启用已有开关。
+定义索引加已有 global import 数量，definitions 不增加 import counts。
+`max_initializer_ops` 默认 4096，按每个表达式计数，包含 end。
+
+| 实际原生来源 | 恢复行为 |
+| --- | --- |
+| `323464` global handler 的 `0x40` frame | callback entry SP 与 caller result 均为 `state-0xb0` |
+| `32365c` initializer 的 `0x60` frame，`3236f0/32376c/3237b8` | 指令 callback entry SP 为 `state-0x110`；整数读取 scratch 为 `state-0x108` |
+| `323510/323524` 与 `3235e0` | type 只改 caller word 的低 4 字节；expression end 传完整 64 位结果 |
+| `3237ac/3237f8/3236a8` | 成功常量替换全部 8 字节；i32/f32 为零扩展，f32/f64 保留原始 bits |
+| `3241cc/3241d0` 与 `3232e4` | memory handler 将 dispatcher X25=`image_base+0x1210f8` 保存到 caller result；后续 end-only global 保留其高 32 位 |
+| 既有 custom/type/import/function caller stores | 继续提供 end-only global 的高位来源，不注入原生 snapshot |
+
+新开关保留映射且与输入、输出、scratch、reservations、allocation 分离的
+`[state-0x2a0,state)`，覆盖 global entry callback 的 `0x1f0` frame。
+私有 section bridge 使用真实 caller/result 和 initializer read 地址；
+前置 descriptor 与 global result 的复用仅在已验证 attached 组合中开放。
+standalone section parser 的显式 16 字节 scratch/status-service 合同保持有效。
+
+检查覆盖七种 global types、mutable 0/1、u32/u64 与浮点原始位边界、空和
+多条目、缓存增长与剩余容量、四类 imports 的短/长名称、type 向量、
+function/table/memory definitions、generic custom、start/data-count、warm rank、
+多常量与 end-only 高位继承，以及截断 count/type/constant、非法 mutable/
+opcode/prefix、重复、逆序和 envelope。固定生成种子为 `32365c`。
+
+完整未屏蔽 guest `0xa000`、ordered effects/owner bytes、parser exit、callback
+cleanup、image globals、callback arguments/cursor/limit、自然 return/SP 均匹配。
+独立推导完整 176-byte global record、type result vector、raw 常量串、
+global index、caller high word 和最终 full-u64 result。观察到
+6122 次 allocation、1538 次 owned destructor、
+192 次 deleting destructor、4120 次 free。
+37 项 guard 含 7 项中途写入故障，均回滚全部页面。
+
+五组受影响旧回归（module、table/memory definitions、global AST、global
+expression AST、standalone globals）共 **1,614 项对照、315 项回滚**
+通过，五份历史 JSON 逐字节一致。唯一生产 owner 仍为
+`vm9_alternative_startup.py`，修改限于三个现有函数。
+
+整个 stack、其他 saved GPR、TLS/OS、真实 allocator/异常、code/其他剩余
+attached handlers、parse/root、完整 reader/factory/bootstrap、独立 signer 和
+线上验收仍未完成。见 [global module 证据](evidence/vm9_alternative_ast_module_globals_fresh_20261011.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_globals_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-globals-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

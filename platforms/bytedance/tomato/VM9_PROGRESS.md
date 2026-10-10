@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：global definitions 与初始化表达式的 attached 组合
+
+section 6 的实际 global/constant-expression AST 回调、完整 u64 result 与清理
+另通过 **398 项对照、37 项回滚**，含 12 项 SP 移位、12 项高位 guest 和
+780 个独立完整 global record 检查。新开关默认关闭，可独立使用。
+caller result=`state-0xb0`，initializer integer scratch=`state-0x108`；
+end-only 保留高 32 位，包含前置 memory handler 保存的 ELF dispatcher 指针。
+映射且独立保留 `[state-0x2a0,state)`，未使用原生 snapshot 作为模型输入。
+五组受影响旧回归 **1,614/315** 通过，五份 JSON 逐字节一致。
+code/其他剩余 attached handlers、parse/root、完整 reader/factory/bootstrap、
+真实 allocator/异常、独立 signer 与线上验收仍未完成。
+见 [global module 报告](REQUEST_JNI_STARTUP_WORKERS.md#637-global-definitions-与初始化表达式的-attached-ast-组合2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：table/memory definitions 的 attached 组合
 
 section 4/5 的实际 AST reserve/entry、imports 后的 definition index 和清理

@@ -1110,7 +1110,8 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     uint64 registers and native w-register truncation. Other slots fail closed.
 
     attached_state_address explicitly opts into verified slots +18/+20/+28/
-    +30/+38/+40/+50/+58/+60/+68/+70/+a0/+160. Import slots also need entry_stack_address and mapped
+    +30/+38/+40/+50/+58/+60/+68/+70/+78/+80/+88/+90/+a0/+c0/+c8/+d0/+d8/
+    +e0/+e8/+160. Import slots also need entry_stack_address and mapped
     callback frame bytes; the module bridge admits inline names only with
     its additional enable_inline_function_imports opt-in.
     The attached pointer must equal state+8 and state+20 must bind
@@ -1137,7 +1138,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         raise RefillUnsupported('AST callback slot or uint64 arguments are unsupported')
     if not isinstance(callback_address,int) or not 0 < callback_address <= MASK64-0x108:
         raise RefillUnsupported('AST callback address is invalid')
-    if attached_state_address is not None and slot_offset not in (0x18,0x20,0x28,0x30,0x38,0x40,0x50,0x58,0x60,0x68,0x70,0xA0,0x160):
+    if attached_state_address is not None and slot_offset not in (0x18,0x20,0x28,0x30,0x38,0x40,0x50,0x58,0x60,0x68,0x70,0x78,0x80,0x88,0x90,0xA0,0xC0,0xC8,0xD0,0xD8,0xE0,0xE8,0x160):
         raise RefillUnsupported('AST attached callback slot has not been verified')
     # Local group count has no output-object access in the native function.
     root, width = (callback_address,0x108) if slot_offset == 0xB0 else (
@@ -2127,7 +2128,7 @@ def run_reader_sections(pages, *, state_address, image_base,
         expression_scratch_address=None, max_expression_ops=4096,
         enable_special_custom_sections=False, custom_scratch_address=None,
         max_custom_records=4096, _ast_callback=None, _attached_import_stack_address=None,
-        _attached_definition_stack_address=None):
+        _attached_definition_stack_address=None, _attached_global_stack_address=None):
     """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/9/10/11/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
@@ -2150,6 +2151,9 @@ def run_reader_sections(pages, *, state_address, image_base,
     The private definition binding selects the actual table SP=state-0xc0
     and memory SP=state-0xe0, with descriptors at SP. It also retains the
     type/import caller saves consumed by subsequent definition padding.
+    The private global binding uses caller result=state-0xb0 and integer read
+    scratch=state-0x108. Its result may reuse prior descriptor storage; saved
+    dispatcher X25 from a preceding memory handler supplies its upper half.
 
     Section 1 requires vector_allocate(size), a pure allocation plan into
     already mapped pages. Recorded allocation/free effects are logical service
@@ -2274,6 +2278,15 @@ def run_reader_sections(pages, *, state_address, image_base,
         regions.append((_attached_definition_stack_address-0x20,
                         _attached_definition_stack_address+32))
     if enable_global_section:
+        global_read_scratch = global_scratch_address+8 if isinstance(global_scratch_address,int) else None
+        if _attached_global_stack_address is not None:
+            if (_ast_callback is None or _attached_global_stack_address != state_address-0xB0
+                    or global_scratch_address != _attached_global_stack_address
+                    or _attached_global_stack_address & 15):
+                raise RefillUnsupported('reader attached global caller frame is inconsistent')
+            # +32365c's 0x60-byte frame; integer reads use SP+8.
+            global_read_scratch = _attached_global_stack_address-0x58
+            _read_span(p,global_read_scratch,8)
         if (not isinstance(global_scratch_address, int) or global_scratch_address & 7
                 or not 0 < global_scratch_address <= MASK64-15):
             raise RefillUnsupported('reader globals need an aligned 16-byte scratch region')
@@ -2282,10 +2295,20 @@ def run_reader_sections(pages, *, state_address, image_base,
         for offset in (0x28, 0x40):
             begin, _, capacity_end = _reader_vector_words(p, state_address+offset, max_entries, retained)
             retained += ((begin, capacity_end),)
-        if any(start < scratch_end and global_scratch_address < end for start, end in retained):
+        if any(start < scratch_end and global_scratch_address < end for start, end in retained
+               if not (_attached_global_stack_address is not None
+                   and _attached_definition_stack_address is not None
+                   and (start,end) in ((import_scratch_address,import_scratch_address+32),
+                       (_attached_definition_stack_address-0x20,_attached_definition_stack_address+32)))):
             raise RefillUnsupported('reader global scratch overlaps retained storage')
+        if _attached_global_stack_address is not None:
+            if any(start < global_read_scratch+8 and global_read_scratch < end for start,end in retained):
+                raise RefillUnsupported('reader global read scratch overlaps retained storage')
+            regions.append((global_read_scratch,global_read_scratch+8))
         _read_span(p, global_scratch_address, 16)
         regions.append((global_scratch_address, scratch_end))
+    elif _attached_global_stack_address is not None:
+        raise RefillUnsupported('reader attached globals require the global section opt-in')
     if enable_element_section or enable_data_section:
         if (not isinstance(expression_scratch_address, int) or expression_scratch_address & 7
                 or not 0 < expression_scratch_address <= MASK64-7):
@@ -2467,6 +2490,7 @@ def run_reader_sections(pages, *, state_address, image_base,
             raise RefillUnsupported('reader initializer opcode table pointer is invalid')
         if any(start < table+512 and table < end for start, end in
                ((global_scratch_address, global_scratch_address+16),
+                (global_read_scratch, global_read_scratch+8),
                 (varuint_scratch_address, varuint_scratch_address+4))):
             raise RefillUnsupported('reader initializer opcode table overlaps scratch')
         for _ in range(max_initializer_ops):
@@ -2475,7 +2499,7 @@ def run_reader_sections(pages, *, state_address, image_base,
             opcode = _u(p, data+cursor(), 1)
             store(24, cursor()+1)
             if opcode in (0xFC, 0xFD, 0xFE):
-                subopcode = read_u32(global_scratch_address+8)
+                subopcode = read_u32(global_read_scratch)
                 kind = -((opcode << 9) | min(subopcode, 511)) & 0xFFFFFFFF
             else:
                 kind = _u(p, table+opcode*4, 4) if opcode < 128 else 0
@@ -2486,11 +2510,11 @@ def run_reader_sections(pages, *, state_address, image_base,
                 emit(0xC8)
                 return
             if kind == 2:
-                bits = read_i32(global_scratch_address+8) & 0xFFFFFFFF
+                bits = read_i32(global_read_scratch) & 0xFFFFFFFF
                 emit(0xE0, bits)
             elif kind == 3:
                 result = read_reader_varint64(p, start_address=data+cursor(),
-                    end_address=data+limit(), output_address=global_scratch_address+8)
+                    end_address=data+limit(), output_address=global_read_scratch)
                 if not result.bytes_consumed:
                     raise _ReaderParseFailure()
                 store(24, cursor()+result.bytes_consumed)
@@ -2676,11 +2700,15 @@ def run_reader_sections(pages, *, state_address, image_base,
 
     def handler(number):
         nonlocal import_scratch_address
-        if _attached_definition_stack_address is not None and number in (0,1,2):
+        if (_attached_definition_stack_address is not None or _attached_global_stack_address is not None) and number in (0,1,2):
             # +322704/+32270c, +32298c/+322994 and +322cfc/+322d04 save the dispatcher's
             # FP and x26 (the input limit) in later descriptor tail bytes.
             _write_span(p,state_address-0xD0,(state_address-0x50).to_bytes(8,'little'))
             _write_span(p,state_address-0xB0,initial_limit.to_bytes(8,'little'))
+        if _attached_global_stack_address is not None and number == 5:
+            # +3232e4 saves dispatcher X25 (+3241cc/+3241d0) here.
+            # A following end-only global retains this word's upper half.
+            _write_span(p,state_address-0xB0,(image_base+0x1210F8).to_bytes(8,'little'))
         if number == 0:
             size = read_u32()
             start = cursor()
@@ -3025,7 +3053,8 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         max_input_bytes=16*1024*1024, max_nodes=4096,
         max_vector_bytes=16*1024*1024, reserved_regions=(), enable_function_imports=False,
         enable_inline_function_imports=False, enable_table_memory_global_imports=False,
-        enable_inline_table_memory_global_imports=False, enable_table_memory_definitions=False):
+        enable_inline_table_memory_global_imports=False, enable_table_memory_definitions=False,
+        enable_global_definitions=False, max_initializer_ops=4096):
     """Bounded actual +31b360 / +324444 with real AST effects and cleanup.
 
     Supports generic custom, type, function, start, data-count and empty export
@@ -3046,6 +3075,11 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     and slots +58/+60/+68/+70, including existing imported indexes. The table
     descriptor is at state-0xc0; the memory descriptor is at state-0xe0.
     Their five tail bytes and table node padding retain verified caller stores.
+    enable_global_definitions=True independently composes section 6, global
+    reserve/entry/expression callbacks and end/i32/i64/f32/f64 initializers.
+    max_initializer_ops bounds each expression. The actual caller result is
+    at state-0xb0; integer read scratch is state-0x108. End-only expressions
+    retain the caller result's high four bytes; constants replace all eight.
     All opt-ins default False. Remaining handlers and
     nonempty exports fail closed. The output starts empty.
     Eight prefix bytes are skipped without checking their magic.
@@ -3072,6 +3106,10 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     callbacks have 0xb0-byte frames below state-0xc0/state-0xe0; table padding
     comes from state-0x13c. Type/import parser FP/input-limit saves, type clone
     clear, import descriptor-pointer saves and table count save are restored.
+    The global opt-in retains [state-0x2a0,state), including the global entry's
+    0x1f0-byte frame below state-0xb0. Its result word can reuse preceding
+    descriptor storage. The memory handler's saved dispatcher X25 is restored
+    from image_base+0x1210f8; custom/type/import/function saves also feed it.
     allocate must be a pure plan for distinct aligned blocks, including freed
     temporaries: this bounded contract does not support address reuse. Effects
     include parser vectors, AST callbacks, parser cleanup then callback cleanup.
@@ -3098,18 +3136,20 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             or not isinstance(enable_table_memory_global_imports,bool)
             or not isinstance(enable_inline_table_memory_global_imports,bool)
             or not isinstance(enable_table_memory_definitions,bool)
+            or not isinstance(enable_global_definitions,bool)
+            or not isinstance(max_initializer_ops,int) or not 1 <= max_initializer_ops <= 65536
             or enable_inline_function_imports and not enable_function_imports
             or enable_inline_table_memory_global_imports and not enable_table_memory_global_imports
             or not callable(allocate)):
         raise RefillUnsupported('AST module requires bounded input, output and native frames')
     cb, state = entry_stack_address-0x150, entry_stack_address-0x220
-    import_frame_size = 0x210 if enable_table_memory_global_imports or enable_table_memory_definitions else 0x1E0
-    if (enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions) and state <= import_frame_size:
+    import_frame_size = 0x2A0 if enable_global_definitions else 0x210 if enable_table_memory_global_imports or enable_table_memory_definitions else 0x1E0
+    if (enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions or enable_global_definitions) and state <= import_frame_size:
         raise RefillUnsupported('AST module import frame address is invalid')
     retained = [(image_base,image_base+0x400000), (input_address,input_address+input_size),
                 (output_address,output_address+0x120), (state,entry_stack_address),
                 (varuint_scratch_address,varuint_scratch_address+4), *reserved_regions]
-    if enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions:
+    if enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions or enable_global_definitions:
         retained.append((state-import_frame_size,state))
     if any(not isinstance(a,int) or not isinstance(b,int) or not 0 <= a <= b <= MASK64+1
            for a,b in retained):
@@ -3119,7 +3159,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         raise RefillUnsupported('AST module retained regions overlap')
     p = _PageTransaction(pages)
     _read_span(p,input_address,input_size); _read_span(p,state,0x220)
-    if enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions:
+    if enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions or enable_global_definitions:
         _read_span(p,state-import_frame_size,import_frame_size)
     _read_span(p,varuint_scratch_address,4)
     if any(_read_span(p,output_address,0x120)):
@@ -3175,6 +3215,9 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         elif event.slot_offset in (0x58,0x60,0x68,0x70):
             if not enable_table_memory_definitions:
                 raise RefillUnsupported('AST module table/memory definitions need explicit opt-in')
+        elif event.slot_offset in (0x78,0x80,0x88,0x90,0xC0,0xC8,0xD0,0xD8,0xE0,0xE8):
+            if not enable_global_definitions:
+                raise RefillUnsupported('AST module global definitions need explicit opt-in')
         elif event.slot_offset not in (0x18,0x20,0x50,0xA0,0x160):
             raise RefillUnsupported('AST module callback needs further native frame verification')
         if enable_inline_table_memory_global_imports and event.slot_offset in (0x28,0x40):
@@ -3187,7 +3230,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             attached_state_address=state,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,
             reserved_regions=((input_address,input_address+input_size),
                 (varuint_scratch_address,varuint_scratch_address+4),*reserved_regions))
-        if enable_table_memory_definitions:
+        if enable_table_memory_definitions or enable_global_definitions:
             if event.slot_offset == 0x20:
                 # +31b7b8 clears the moved parameter clone. The type section
                 # reserves all entries, so its appends use spare capacity.
@@ -3274,7 +3317,11 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             import_scratch_address=(state-0xF8 if enable_table_memory_global_imports
                 else state-0xC0 if enable_table_memory_definitions else None),
             _attached_import_stack_address=state-0x100 if enable_table_memory_global_imports else None,
-            _attached_definition_stack_address=state-0xC0 if enable_table_memory_definitions else None)
+            _attached_definition_stack_address=state-0xC0 if enable_table_memory_definitions else None,
+            enable_global_section=enable_global_definitions,
+            global_scratch_address=state-0xB0 if enable_global_definitions else None,
+            _attached_global_stack_address=state-0xB0 if enable_global_definitions else None,
+            max_initializer_ops=max_initializer_ops)
         collect(sections.vector_effects)
         status = int(sections.status == 1 or _u(p,state+0xA4,4) != _u(p,state+0xA8,4))
     for offset in (0x70,0x58,0x40,0x28):
