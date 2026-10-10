@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：runtime 二次转换与 root linking
+
+3918 个原生/Python descriptor 对照、27 项回滚检查通过；18 个 batch
+覆盖全部 600 种副表规则和两份完整实际模块。共比较 138454 条记录、
+23490 次副表重写、1246 次 root 指针写入。全部 guest/heap/image
+pages 一致，已有 owner AST 未变。继续 defined descriptor 构造与
+清理、完整 root、factory/bootstrap、独立 signer、新鲜输出和线上验收。
+见 [runtime linking 报告](REQUEST_JNI_STARTUP_WORKERS.md#648-runtime-descriptor-二次转换与-root-linking2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：decoded instruction 运行时构造
 
 生产 builder 通过 **116422 次原生对照、24 项回滚检查**，22 个 batch

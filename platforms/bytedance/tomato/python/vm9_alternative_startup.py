@@ -4689,3 +4689,89 @@ def build_parser_runtime_instruction(pages, *, image_base, catalog_address,
         status=1
     m.p.commit()
     return ReaderAstResult(status,())
+
+
+# +3138f8 onward: 600 consecutive operand-pointer builders, tags 190..789.
+_SECONDARY_INSTRUCTION_ARITIES = (
+    3, 5, 2, 2, 3, 2, 4, 5, 2, 2, 3, 2, 4, 2, 4, 5, 2, 5, 3, 4, 3, 2, 3, 2, 2, 3, 3, 2, 3, 4,
+    2, 2, 4, 3, 2, 3, 4, 2, 2, 2, 3, 2, 2, 2, 3, 4, 4, 2, 5, 5, 2, 2, 2, 4, 2, 2, 3, 4, 2, 2,
+    2, 4, 2, 2, 4, 3, 3, 4, 5, 3, 2, 3, 3, 5, 3, 3, 3, 5, 3, 3, 4, 2, 3, 3, 3, 5, 2, 2, 4, 3,
+    2, 3, 4, 4, 3, 3, 2, 3, 3, 4, 2, 3, 3, 4, 2, 4, 3, 3, 3, 2, 2, 5, 2, 3, 5, 2, 5, 3, 3, 4,
+    2, 4, 3, 3, 3, 3, 2, 2, 3, 2, 4, 3, 4, 5, 3, 2, 5, 3, 2, 2, 3, 2, 2, 4, 2, 2, 4, 4, 5, 3,
+    3, 4, 3, 2, 2, 2, 3, 2, 3, 2, 2, 2, 4, 4, 2, 5, 2, 5, 4, 3, 2, 3, 2, 4, 3, 3, 3, 2, 2, 3,
+    3, 3, 3, 2, 4, 3, 3, 2, 3, 3, 5, 3, 2, 4, 2, 4, 3, 2, 4, 4, 3, 2, 2, 3, 5, 5, 2, 2, 4, 4,
+    3, 4, 4, 3, 2, 3, 2, 3, 2, 4, 2, 3, 2, 3, 5, 3, 2, 3, 3, 4, 4, 2, 3, 5, 3, 4, 2, 4, 3, 5,
+    3, 3, 3, 2, 3, 4, 4, 3, 3, 2, 4, 3, 4, 2, 3, 2, 4, 4, 2, 3, 4, 2, 2, 4, 5, 3, 5, 4, 3, 4,
+    3, 5, 2, 4, 5, 3, 4, 4, 3, 2, 4, 3, 3, 2, 3, 3, 2, 2, 5, 4, 4, 3, 5, 5, 4, 5, 2, 3, 4, 5,
+    2, 3, 5, 2, 3, 3, 2, 2, 3, 2, 3, 3, 3, 4, 3, 3, 4, 4, 2, 4, 3, 3, 3, 2, 3, 2, 4, 3, 3, 3,
+    2, 4, 2, 3, 2, 3, 3, 2, 2, 3, 5, 2, 4, 2, 2, 2, 5, 3, 3, 2, 4, 2, 3, 3, 3, 3, 4, 2, 4, 2,
+    2, 4, 4, 3, 2, 3, 4, 5, 4, 2, 3, 2, 3, 2, 3, 2, 4, 2, 5, 3, 5, 2, 3, 4, 2, 3, 3, 3, 2, 3,
+    3, 3, 3, 5, 3, 2, 3, 2, 4, 3, 3, 3, 2, 2, 2, 4, 2, 3, 4, 2, 2, 2, 3, 2, 3, 5, 2, 2, 3, 3,
+    2, 3, 3, 3, 2, 3, 4, 2, 3, 4, 3, 5, 4, 2, 3, 2, 5, 3, 2, 2, 3, 3, 2, 3, 2, 3, 5, 4, 2, 4,
+    3, 3, 5, 4, 3, 3, 4, 3, 4, 4, 4, 3, 5, 3, 5, 5, 5, 3, 2, 3, 3, 5, 3, 4, 3, 3, 4, 2, 3, 4,
+    2, 2, 5, 4, 3, 3, 2, 2, 3, 2, 4, 3, 5, 3, 3, 5, 4, 2, 2, 4, 4, 3, 2, 4, 5, 3, 2, 3, 3, 5,
+    2, 5, 3, 5, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 2, 3, 4, 5, 3, 3, 2, 3, 2, 4, 2, 4, 3, 3, 5,
+    2, 3, 3, 2, 2, 5, 3, 5, 3, 3, 2, 2, 3, 2, 5, 3, 3, 2, 5, 2, 4, 4, 5, 4, 3, 3, 3, 4, 2, 4,
+    3, 2, 3, 3, 5, 3, 3, 2, 2, 5, 2, 2, 3, 2, 2, 4, 2, 5, 3, 2, 4, 4, 4, 4, 2, 5, 4, 2, 2, 2,
+)
+
+
+def link_parser_runtime_descriptor(pages, *, image_base, descriptor_address,
+        root_address, max_instructions=1048576, max_vector_bytes=16*1024*1024,
+        reserved_regions=()):
+    """Actual +2dbe20 root linking and +2f67e4 secondary instruction rewrite.
+
+    A 64-byte descriptor contains its 48-byte instruction vector at +8. Tags
+    0x66, 0x89 and 0xbc receive root+72, root and root at their +8 pointer.
+    Tag 0x316 uses its uint32 selector to choose one of 600 secondary builders;
+    the replacement tag is selector+190 and its 2..5 pointer operands refer
+    backwards to consecutive following records. Unwritten bytes, other tags
+    and descriptor/root/catalog storage retain their original contents.
+
+    Secondary rewrites require the ready global builder catalog. Its owned
+    blocks, selected nodes/vtables and actual method addresses are checked.
+    Every operand must fit the descriptor's used vector; native constructors
+    merely form addresses, so malformed out-of-vector operands fail closed.
+    No allocations, finalizers or runtime execution occur. Guard/write failure
+    rolls back all pages. Native temporary variants and stack are not outputs.
+    """
+    if type(max_instructions) is not int or not 0<=max_instructions<=1048576:
+        raise RefillUnsupported('runtime descriptor instruction budget is invalid')
+    m=_ReaderAstMemory(pages,image_base,descriptor_address,64,4096,max_vector_bytes,reserved_regions)
+    m.claim(descriptor_address,64);m.claim(root_address,96)
+    begin,end,_=m.vector(descriptor_address+8,48);count=(end-begin)//48
+    if count>max_instructions:
+        raise RefillUnsupported('runtime descriptor instruction budget exhausted')
+    actions=[];secondary_records=[]
+    for index,address in enumerate(range(begin,end,48)):
+        tag=_u(m.p,address+40)
+        if tag in (0x66,0x89,0xBC):actions.append((address,root_address+(72 if tag==0x66 else 0),None))
+        elif tag==0x316:
+            selector=_u(m.p,address,4)
+            if selector>=600:
+                raise RefillUnsupported('secondary instruction selector is outside its catalog')
+            arity=_SECONDARY_INSTRUCTION_ARITIES[selector]
+            if index+arity>=count:
+                raise RefillUnsupported('secondary operands escape the used instruction vector')
+            actions.append((address,selector,arity));secondary_records.append(selector)
+    if secondary_records:
+        if not _u(m.p,image_base+0x3E2718)&1:
+            raise RefillUnsupported('runtime linking requires a ready instruction builder catalog')
+        catalog=_u(m.p,image_base+0x3E2710);m.claim(catalog,0x8A18)
+        secondary=_u(m.p,catalog+0x200);m.claim(secondary,0x3840)
+        methods=[];offset=0x3138F8
+        for arity in _SECONDARY_INSTRUCTION_ARITIES:
+            methods.append(offset);offset+={2:40,3:48,4:52,5:56}[arity]
+        for selector in set(secondary_records):
+            node=secondary+selector*16;table=image_base+0x36E1D0+selector*24
+            if (_u(m.p,secondary+0x2580+selector*8)!=node or _u(m.p,node)!=table
+                    or _u(m.p,table)!=image_base+methods[selector]):
+                raise RefillUnsupported('secondary instruction builder node/vtable/method is unsupported')
+    for address,value,arity in actions:
+        if arity is None:_write_span(m.p,address+8,value.to_bytes(8,'little'))
+        else:
+            for index in range(arity):
+                _write_span(m.p,address+index*8,(address+(arity-index)*48).to_bytes(8,'little'))
+            _write_span(m.p,address+40,(value+190).to_bytes(8,'little'))
+    m.p.commit()
+    return ReaderAstResult(None,())

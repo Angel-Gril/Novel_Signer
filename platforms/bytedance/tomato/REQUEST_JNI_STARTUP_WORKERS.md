@@ -2601,6 +2601,35 @@ descriptor/root、factory/bootstrap、独立 signer、新鲜输出及线上验�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_runtime_builder_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <runtime-builder-evidence.json>
 ```
 
+## 6.48 runtime descriptor 二次转换与 root linking（2026-10-11 Asia/Shanghai）
+
+`link_parser_runtime_descriptor` 恢复实际 +2dbe20/+2f67e4：遍历 descriptor
+的 48 字节 runtime vector，为 tag 102 写入 root+72，为 tag 137/188
+写入 root；tag 790 按 selector 选择 600 个副表 builder，将 tag 改为
+selector+190，并倒序写入后续 2..5 条记录的地址。其他字节保留。
+副表需要已初始化的 builder catalog；校验 ownership、node/vtable/
+method 和 operand 位于所属函数的 used vector 内。此阶段不分配内存。
+
+修改前干净 `9ffeeac` 绑定 **16 项真实原生 RED**。最终 verifier 通过
+**3918 个原生/Python descriptor 对照、18 个 native driver batches、
+27 项回滚检查**，比较 **138454 条记录、23490 次副表重写、1246 次
+root 指针写入**。两基址各自 fresh ELF → 独立 Python reader/parse/
+builder 构造完整实际模块输入，共 242 个函数、109066 条记录、19818
+次副表重写和 1224 次 root 指针写入。所有 600 种副表规则另有三种
+padding 的完整覆盖，并含四组 SP 移位、空 vector 和混合 tag。
+
+完整 guest/heap/image pages、自然返回/SP 一致，Python stack 保持
+不变；不使用原生快照输入。非法 selector、catalog/指针/容量/别名、
+越界 operand、预算和写入失败均拒绝且全页回滚。这些 malformed 输入
+是 Python 防护检查，不声称比较原生崩溃路径。去掉新增 arity 表和 API
+后，旧 owner AST 完全一致。原生 vector move、完整 descriptor/root、
+factory/bootstrap、独立 signer、新鲜输出和线上验收仍待完成；未比较
+完整原生 stack/TLS/OS。见 [runtime linking 证据](evidence/vm9_alternative_runtime_link_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_runtime_link_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <runtime-link-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
