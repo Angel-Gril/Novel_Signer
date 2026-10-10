@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：完整实际 module 的 reader AST
+
+element/data/special-custom attached 组合通过 **406 项原生/Python 对照、
+36 项回滚**，包含 12 项 SP 移位、6 项高位 guest、12 项实际 custom。
+完整实际 ELF 的 229328 字节 module 在两个基址自然返回 0，每次 121 个
+code bodies、54533 个 raw words、55369 次 callbacks；完整 input/guest/
+额外 1 MiB heap/effects/cleanup/image globals 一致，无原生快照输入。
+连续 raw words 的 ownership 校验避免重复扫描全 AST；所有字仍逐个处理。
+前一版本的三组旧回归 **1502/99** JSON 逐字节一致，最终 X28 padding
+修复对其执行范围的 AST 等价检查通过。非空 element abort、
+零条目 type 的 incoming X22、parse/root、独立 factory/bootstrap、signer
+及线上验收仍未完成。见 [完整模块 reader AST 报告](REQUEST_JNI_STARTUP_WORKERS.md#641-完整实际-module-的-reader-ast2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：短名称 export 的 attached 组合
 
 `enable_inline_exports=True` 要求 `enable_exports=True` 和显式 `entry_x28`。

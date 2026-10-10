@@ -174,12 +174,13 @@ Code definitions 的实际 AST 组合另通过 **256 项对照、42 项回滚**�
 另有 8 项主动截停的原生观察确认短输入不前进，原始指令字只保存不执行。
 四组旧回归（1,124/235）JSON 逐字节一致。
 见 [code module 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#638-code-definitions-的-attached-ast-组合2026-10-11-asiashanghai)。
-短名称 export 的实际 AST 组合通过 **386 项对照、25 项回滚**，
-含两个基址下完整实际 ELF 的 121 条 export payload；声明与 code 仍为合成输入。
-入口 X28 显式提供；两组旧回归 **656/293** 的 JSON 逐字节一致。
-见 [短名称 export 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#640-短名称-export-的-attached-ast-组合2026-10-11-asiashanghai)。
-其余 attached handlers、parse/root、
-完整 reader/factory/bootstrap 和 signer 仍未完成。见
+完整实际 ELF 的 reader AST 已在两个基址通过：229328 字节输入、121 个
+code bodies、54533 个 raw words、55369 次回调，input/guest/1 MiB heap/
+effects/cleanup/globals 全量一致。本阶段共 **406 项对照、36 项回滚**；
+前一版本的三组旧回归 **1502/99** JSON 逐字节一致，最终修复对其
+实际执行范围的 AST 等价检查通过。见
+[完整模块 reader AST 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#641-完整实际-module-的-reader-ast2026-10-11-asiashanghai)。
+零条目 type 的 incoming X22、parse/root、factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
 [Data 创建报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai)。

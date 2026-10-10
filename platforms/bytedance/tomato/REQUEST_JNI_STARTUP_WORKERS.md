@@ -2335,6 +2335,74 @@ incoming X22、parse/root、完整 reader/factory/bootstrap、独立 signer 和�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_inline_exports_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-inline-exports-evidence.json>
 ```
 
+## 6.41 完整实际 module 的 reader AST（2026-10-11 Asia/Shanghai）
+
+`run_reader_ast_module` 新增默认关闭的 `enable_element_section`、
+`enable_data_section`、`enable_special_custom_sections`。段表达式和 custom
+分别要求显式八字节对齐且互不重叠的 scratch，并受 `max_expression_ops`
+和 `max_custom_records` 限制；scratch 纳入 retained regions 和全页事务。
+复用已有 parser、实际 AST callbacks 和清理，非空 element 列表仍在原生
+abort 边界明确拒绝。
+
+修改前 `12c0c09` 绑定的 **26 项真实 RED**：两个基址各 8 个段表达式和
+5 类特殊 custom，原生自然返回 0，旧 Python 拒绝并全页回滚。冻结后
+**406 项原生/Python 对照、36 项回滚检查**通过，含 12 项 SP 移位、
+6 项高位 guest、12 项实际 custom payload 前置组合和两个完整实际 module。
+
+完整输入直接从新鲜 ELF 的 `+387d20` 读取并独立 XOR，长度 **229328**，
+section IDs 为 `[1,2,3,6,7,12,10,11,0,0,0]`。两个 image base 均自然
+返回 0；每次 **55369 个实际 AST callbacks、121 个 code bodies、54533
+个 raw words**，data payload 长度为 3632、352、0。完整 input、未屏蔽
+guest `0xa000`、额外 1 MiB heap、ordered effects/owner bytes、parser exit、
+callback cleanup、image globals、全部回调参数/cursor/limit 均逐字节一致。
+模型没有使用原生快照作为输入，实际名称与 payload 未公开。
+
+| 新恢复的原生来源 | 消费它的后续行为 |
+| --- | --- |
+| `322130/322134` | linking 的 0x90-byte frame，saved caller FP 进入 export header+16 |
+| `32215c/3221b0/3221c8/322230` | version、tag、size、count 写入 header+8/+4/+12/+0 |
+| `322338/3223ac/322494` | linking tags 6/7 的 count 在成功后保留 `0xffffffff` |
+| `322264/3223bc/322590/3225f8/322680` | name length/条目字段在 header+12 清零后读取 |
+| `321f10/322064` | dylink/target_features 保存 state，后续 global import 只覆盖低字节 |
+| `321b3c/322148/3219a0` | 其余三类 helper 保存 custom name length 到相同 ABI word |
+| `322138 → 31cb34` | linking 保存 X28 到 state-0x140，其高四字节被后续 table node 当作 padding 读取 |
+
+custom 的栈写入由现有 parser 在解析时生成，无重复 parser。验证覆盖五类
+custom 在四种 import 前后、linking 全部 tags/symbol 分支、空 count、连续
+inline exports 和实际 custom。另有五类 custom 与 table/memory/global
+definitions 的 15 个组合，以及关闭 inline exports 的 linking→table；
+两个基址合计 32 项。custom 与 table/memory definitions 同时开启时，
+必须显式提供 `entry_x28`，包括关闭 inline exports 的情形。
+新测试器补齐旧 export harness 未记录的
+data/element/global record 析构事件，内存与事件均完整对照。
+
+完整 code 的性能测量暴露了逐字重新遍历整个 AST 的成本：原实现的有界
+预览在 60 秒只完成 1050 个 raw words，未声称完整通过。现在每个连续
+`+168` run 的首字执行完整 ownership 校验，后续字复用同一 append 实现，
+逐字验证 vtable binding、vector、映射、预算及纯分配计划。其它 callback
+会重置该状态；分配地址不得复用。完整实际模块已在两个基址完成，无跳过
+raw words、回调、内存或清理。代码存储完成不等于指令执行完成。
+
+回滚覆盖独立 opt-in、缺失/未对齐/未映射/别名 scratch、预算、原生非空
+element abort 边界、错误 vtable，以及 custom 保存、element publication
+和连续第二个 raw word 的中途写入失败。观察到 allocation 9364、
+destroy 1510、delete 1318、free 5466。
+三组必要旧回归（attached code、inline exports、standalone custom）共
+**1502/99**，在最终 X28 padding 修复前的 owner
+`3cb2cd6e461d059d84c4bcd27b73206581280d3474eefed16876410795a5022f` 上执行，历史 JSON 逐字节一致。
+最终 owner 为 `7b53c24ad6bbdaa06301ff00fc8012f2a887f90a8229f6fe32f656c7b1ca9719`。三组回归分别关闭 attached
+custom binding 或 special custom；按这些实际条件投影后，两版完整代码
+AST 相同。该范围等价检查通过，不表示旧套件已在最终版全部重跑。
+
+下一步恢复零条目 type 的 incoming X22，再推进 `+2cd5a4` 解析、
+`+2cafd0` root/descriptor、factory/bootstrap、独立 signer 与线上验收。
+整个 native stack/TLS/OS、真实 allocator/异常仍不在本次验证范围。
+见 [完整模块 reader AST 证据](evidence/vm9_alternative_ast_module_segments_custom_fresh_20261011.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_segments_custom_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-segments-custom-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

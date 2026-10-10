@@ -9,9 +9,9 @@ section 10 code words and section 11 data segments, run with explicit
 status-only callbacks.
 Opted-in special custom handlers parse metadata. Recovered actual AST callbacks,
 including imports/exports and owned output cleanup, have separate bounded APIs.
-A bounded module wrapper composes generic/type/function/start/data-count sections
-with real AST callbacks and parser/callback cleanup. Remaining attached handlers,
-nonempty element vectors and complete AST/reader/factory remain open.
+A bounded module wrapper composes these sections with real AST callbacks and
+parser/callback cleanup, including the complete actual ELF module. Nonempty
+element vectors, zero-type incoming registers and independent factory remain open.
 Unsupported branches fail closed.
 """
 from __future__ import annotations
@@ -708,6 +708,33 @@ class _ReaderAstMemory:
         self.claim(pointer, size); self.emit('allocate', pointer, size)
         return pointer
 
+    def append_word(self, ast, slot_offset, word, allocate):
+        """Native start/raw word append; callers retain the ownership graph."""
+        word = 0 if slot_offset == 0xF0 else word&0xFFFFFFFF
+        raw = slot_offset in (0xF0,0x168)
+        vector = ast+0xC0 if slot_offset == 0xA0 else ast+0x108
+        begin,end,cap = self.vector(vector,4 if slot_offset == 0xA0 else 1,own=False)
+        size,capacity = end-begin,cap-begin
+        if size+4 > self.max_bytes or (raw and size+4 >= 1<<32):
+            raise RefillUnsupported('AST word append exceeds the byte bound')
+        if cap-end < 4:
+            new_capacity = max(size+4,capacity*2)
+            new = self.allocate(new_capacity,allocate)
+            _write_span(self.p,new+size, word.to_bytes(4,'little')
+                        if slot_offset == 0xA0 else bytes(4))
+            _write_span(self.p,new,_read_span(self.p,begin,size))
+            self.publish(vector,(new,new+size+4,new+new_capacity))
+            if begin: self.emit('free',begin,capacity)
+            begin = new
+        else:
+            if raw: _write_span(self.p,end,bytes(4))
+            # The raw helper publishes its zero-filled extension before the
+            # caller stores the word; start publishes after storing its word.
+            if raw: _write_span(self.p,vector+8,(end+4).to_bytes(8,'little'))
+        _write_span(self.p,begin+size,word.to_bytes(4,'little'))
+        if slot_offset == 0xA0 and cap-end >= 4:
+            _write_span(self.p,vector+8,(end+4).to_bytes(8,'little'))
+
     def copy_string(self, destination, source, service):
         """Actual +32a9c4 copy; the source representation selects the path."""
         self.claim(source,24)
@@ -1138,7 +1165,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         raise RefillUnsupported('AST callback slot or uint64 arguments are unsupported')
     if not isinstance(callback_address,int) or not 0 < callback_address <= MASK64-0x108:
         raise RefillUnsupported('AST callback address is invalid')
-    if attached_state_address is not None and slot_offset not in (0x18,0x20,0x28,0x30,0x38,0x40,0x50,0x58,0x60,0x68,0x70,0x78,0x80,0x88,0x90,0x98,0xA0,0xA8,0xB0,0xB8,0xC0,0xC8,0xD0,0xD8,0xE0,0xE8,0xF8,0x160,0x168):
+    if attached_state_address is not None and slot_offset not in (0x18,0x20,0x28,0x30,0x38,0x40,0x50,0x58,0x60,0x68,0x70,0x78,0x80,0x88,0x90,0x98,0xA0,0xA8,0xB0,0xB8,0xC0,0xC8,0xD0,0xD8,0xE0,0xE8,0xF0,0xF8,0x100,0x108,0x110,0x118,0x120,0x128,0x130,0x138,0x140,0x148,0x150,0x158,0x160,0x168):
         raise RefillUnsupported('AST attached callback slot has not been verified')
     # Local group count has no output-object access in the native function.
     root, width = (callback_address,0x108) if slot_offset == 0xB0 else (
@@ -1856,30 +1883,7 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
             begin = _u(m.p,ast+0x108)
             _write_span(m.p,begin+length,value.to_bytes(size,'little'))
     else:
-        word = 0 if slot_offset == 0xF0 else arguments[0]&0xFFFFFFFF
-        raw = slot_offset in (0xF0,0x168)
-        vector = ast+0xC0 if slot_offset == 0xA0 else ast+0x108
-        begin,end,cap = m.vector(vector,4 if slot_offset == 0xA0 else 1,own=False)
-        size,capacity = end-begin,cap-begin
-        if size+4 > max_vector_bytes or (raw and size+4 >= 1<<32):
-            raise RefillUnsupported('AST word append exceeds the byte bound')
-        if cap-end < 4:
-            new_capacity = max(size+4,capacity*2)
-            new = m.allocate(new_capacity,allocate)
-            _write_span(m.p,new+size, word.to_bytes(4,'little')
-                        if slot_offset == 0xA0 else bytes(4))
-            _write_span(m.p,new,_read_span(m.p,begin,size))
-            m.publish(vector,(new,new+size+4,new+new_capacity))
-            if begin: m.emit('free',begin,capacity)
-            begin = new
-        else:
-            if raw: _write_span(m.p,end,bytes(4))
-            # The raw helper publishes its zero-filled extension before the
-            # caller stores the word; start publishes after storing its word.
-            if raw: _write_span(m.p,vector+8,(end+4).to_bytes(8,'little'))
-        _write_span(m.p,begin+size,word.to_bytes(4,'little'))
-        if slot_offset == 0xA0 and cap-end >= 4:
-            _write_span(m.p,vector+8,(end+4).to_bytes(8,'little'))
+        m.append_word(ast,slot_offset,0 if slot_offset == 0xF0 else arguments[0],allocate)
     m.p.commit()
     return ReaderAstResult(status,tuple(m.effects))
 
@@ -2132,7 +2136,8 @@ def run_reader_sections(pages, *, state_address, image_base,
         expression_scratch_address=None, max_expression_ops=4096,
         enable_special_custom_sections=False, custom_scratch_address=None,
         max_custom_records=4096, _ast_callback=None, _attached_import_stack_address=None,
-        _attached_definition_stack_address=None, _attached_global_stack_address=None):
+        _attached_definition_stack_address=None, _attached_global_stack_address=None,
+        _attached_custom_stack_address=None, _attached_custom_entry_x28=None):
     """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/9/10/11/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
@@ -2211,6 +2216,12 @@ def run_reader_sections(pages, *, state_address, image_base,
     nested pairs in EACH custom section. Unknown subsections skip opaque bytes;
     known subsections must consume their exact size. Temporary limits and the
     custom flag are restored on parse failure as well as success.
+    The private attached-custom binding requires caller SP=state-0xf0 and
+    retains linking's local fields/saved FP in [state-0x160,state-0x148),
+    where subsequent inline exports consume them. It models those stores
+    during the existing parse, without a second parser or native snapshots.
+    With attached table/memory definitions, explicit incoming X28 is also
+    required: linking saves it at state-0x140, later table node padding.
     """
     if (not isinstance(state_address, int) or not 0 < state_address <= MASK64-0xAF
             or state_address & 7 or not isinstance(image_base, int)
@@ -2313,6 +2324,25 @@ def run_reader_sections(pages, *, state_address, image_base,
         regions.append((global_scratch_address, scratch_end))
     elif _attached_global_stack_address is not None:
         raise RefillUnsupported('reader attached globals require the global section opt-in')
+    if _attached_custom_stack_address is not None:
+        if (_ast_callback is None or not enable_special_custom_sections
+                or _attached_custom_stack_address != state_address-0xF0
+                or _attached_custom_stack_address & 15):
+            raise RefillUnsupported('reader attached custom caller frame is inconsistent')
+        if _attached_custom_entry_x28 is not None and (isinstance(_attached_custom_entry_x28,bool)
+                or not isinstance(_attached_custom_entry_x28,int) or not 0 <= _attached_custom_entry_x28 <= MASK64):
+            raise RefillUnsupported('reader attached custom saved X28 is invalid')
+        if _attached_definition_stack_address is not None and _attached_custom_entry_x28 is None:
+            raise RefillUnsupported('reader custom/table composition needs explicit incoming X28')
+        # +322130's 0x90-byte linking frame: these locals and saved FP
+        # become the first inline export string at state-0x160.
+        header = _attached_custom_stack_address-0x70
+        for start,end in ((header,header+24),(_attached_custom_stack_address-0x10,_attached_custom_stack_address-8),
+                          (_attached_custom_stack_address-0x50,_attached_custom_stack_address-0x48)):
+            if any(a < end and start < b for a,b in (*regions,(varuint_scratch_address,varuint_scratch_address+4))):
+                raise RefillUnsupported('reader attached custom caller saves overlap retained storage')
+            _read_span(p,start,end-start)
+            regions.append((start,end))
     if enable_element_section or enable_data_section:
         if (not isinstance(expression_scratch_address, int) or expression_scratch_address & 7
                 or not 0 < expression_scratch_address <= MASK64-7):
@@ -2588,10 +2618,28 @@ def run_reader_sections(pages, *, state_address, image_base,
             raise _ReaderParseFailure()
         raise RefillUnsupported('reader expression operation bound reached')
 
-    def special_custom(kind):
+    def special_custom(kind,name_size):
         if not enable_special_custom_sections:
             raise RefillUnsupported('reader special custom-section handler needs explicit opt-in')
         records = 0
+        if _attached_custom_stack_address is not None:
+            # +321f10/+322064 save x19=state; +321b3c/+322148/+3219a0
+            # save x20=name size. A later global import replaces only byte 0.
+            saved = state_address if kind in ('dylink','target_features') else name_size
+            _write_span(p,_attached_custom_stack_address-0x10,saved.to_bytes(8,'little'))
+        linking = kind == 'linking'
+        if linking and _attached_custom_stack_address is not None and _attached_custom_entry_x28 is not None:
+            # +322138 retains X28 at state-0x140; its high word becomes
+            # table definition node padding at state-0x13c (+31cb34).
+            _write_span(p,_attached_custom_stack_address-0x50,_attached_custom_entry_x28.to_bytes(8,'little'))
+        header = _attached_custom_stack_address-0x70 if linking and _attached_custom_stack_address is not None else None
+
+        def header_store(offset,value,width=4):
+            if header is not None:
+                _write_span(p,header+offset,value.to_bytes(width,'little'))
+
+        # +322134 saves the caller FP before the version read.
+        header_store(16,state_address-0xD0,8)
 
         def record():
             nonlocal records
@@ -2599,11 +2647,16 @@ def run_reader_sections(pages, *, state_address, image_base,
                 raise RefillUnsupported('reader custom record bound reached')
             records += 1
 
-        def u32():
-            return read_u32(custom_scratch_address)
+        def u32(offset=None,clear=False):
+            if offset is not None and clear:
+                header_store(offset,0)
+            value = read_u32(custom_scratch_address)
+            if offset is not None:
+                header_store(offset,value)
+            return value
 
         def string():
-            size = u32()
+            size = u32(12 if linking else None,clear=True)
             start = cursor()
             if start+size > limit():
                 raise _ReaderParseFailure()
@@ -2643,12 +2696,11 @@ def run_reader_sections(pages, *, state_address, image_base,
                         raise _ReaderParseFailure()
                     store(24, cursor()+result.bytes_consumed)
         else:
-            linking = kind == 'linking'
-            if linking and u32() != 2:
+            if linking and u32(8) != 2:
                 raise _ReaderParseFailure()
             while cursor() < limit():
                 record()
-                tag, size = u32(), u32()
+                tag, size = u32(4 if linking else None), u32(12 if linking else None)
                 end = cursor()+size
                 old_limit = limit()
                 if end > old_limit:
@@ -2659,7 +2711,11 @@ def run_reader_sections(pages, *, state_address, image_base,
                         for _ in range(4):
                             u32()
                     elif (not linking and tag in (2, 3, 4)) or (linking and tag in (5, 6, 7, 8)):
-                        for _ in range(u32()):
+                        count = u32(0 if linking else None)
+                        countdown = linking and tag in (6,7)
+                        if countdown:
+                            header_store(0,(count-1)&0xFFFFFFFF)
+                        for index in range(count):
                             record()
                             if not linking:
                                 string()
@@ -2669,18 +2725,18 @@ def run_reader_sections(pages, *, state_address, image_base,
                                     u32()
                             elif tag == 5:
                                 string()
-                                if u32() >= 32:
+                                if u32(12) >= 32:
                                     raise _ReaderParseFailure()
                                 u32()
                             elif tag == 6:
-                                u32()
+                                u32(12)
                                 u32()
                             elif tag == 7:
                                 string()
                                 u32()
                                 for _ in range(u32()):
                                     record()
-                                    u32()
+                                    u32(12)
                                     u32()
                             else:
                                 symbol, flags = u32(), u32()
@@ -2694,7 +2750,11 @@ def run_reader_sections(pages, *, state_address, image_base,
                                         for _ in range(3):
                                             u32()
                                 elif symbol == 3:
-                                    u32()
+                                    u32(12,clear=True)
+                            if countdown:
+                                # +322338/+3223ac/+322494 decrement before
+                                # the next test, retaining -1 on completion.
+                                header_store(0,(count-index-2)&0xFFFFFFFF)
                     else:
                         store(24, end)
                     if cursor() != end:
@@ -2739,7 +2799,7 @@ def run_reader_sections(pages, *, state_address, image_base,
                 if kind is None:
                     store(24, limit())
                 else:
-                    special_custom(kind)
+                    special_custom(kind,size)
             finally:
                 store(0x8C, old_flag, 1)
         elif number == 1:
@@ -3060,7 +3120,11 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         enable_inline_table_memory_global_imports=False, enable_table_memory_definitions=False,
         enable_global_definitions=False, max_initializer_ops=4096,
         enable_code_definitions=False, max_code_words=65536, enable_exports=False,
-        enable_inline_exports=False, entry_x28=None):
+        enable_inline_exports=False, entry_x28=None,
+        enable_element_section=False, enable_data_section=False,
+        expression_scratch_address=None, max_expression_ops=4096,
+        enable_special_custom_sections=False, custom_scratch_address=None,
+        max_custom_records=4096):
     """Bounded actual +31b360 / +324444 with real AST effects and cleanup.
 
     Supports generic custom, type, function, start, data-count and empty export
@@ -3091,6 +3155,11 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     function end. It requires matching function definitions. Raw words are
     stored without interpretation. max_code_words bounds all word callbacks
     across this section, including nonadvancing zero words on short input.
+    The first word in each consecutive run validates the entire ownership
+    graph. Following words use the same append implementation and validate
+    their slot, vector, mapped storage, allocation plan and byte bounds. Only
+    the module's raw vector changes within such a run; any other callback
+    resets this state. This relies on allocate being a pure allocation plan.
     enable_exports=True independently composes section 7 slot +98 for names
     of at least 23 bytes and export kinds 0..3. Each index must name an existing
     logical callback cache entry. Short names require enable_inline_exports=True.
@@ -3098,6 +3167,20 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     an explicit entry_x28 (the incoming callee-saved register); import callbacks
     can retain it in the inline string tail. Invalid kind 4 remains a native
     parse failure.
+    enable_element_section and enable_data_section independently compose the
+    section 9/11 AST and expression callbacks. Nonempty element vectors retain
+    their bounded rejection at the native abort boundary. Segment expressions
+    require a mapped, aligned, disjoint eight-byte expression_scratch_address;
+    it is explicit model scratch, not a native caller pointer. Likewise,
+    enable_special_custom_sections composes the five metadata handlers using
+    an explicit eight-byte custom_scratch_address. The two scratch regions
+    cannot alias each other, input, output, frames, allocations or other state.
+    max_expression_ops and max_custom_records bound their existing parsers.
+    With inline exports, linking restores version/tag/size/count and field
+    reads plus the saved caller FP; tags 6/7 leave their countdown at -1.
+    Combining custom sections with table/memory definitions requires explicit
+    entry_x28 as well, including when inline exports are disabled: linking's
+    saved X28 supplies the high padding word of subsequent table nodes.
     All opt-ins default False. Remaining handlers fail closed. The output starts empty.
     Eight prefix bytes are skipped without checking their magic.
     Parse errors return 1 and commit partial AST output. Guard failures roll
@@ -3169,6 +3252,11 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             or not isinstance(enable_code_definitions,bool)
             or not isinstance(max_code_words,int) or not 1 <= max_code_words <= 1048576
             or not isinstance(enable_exports,bool)
+            or not isinstance(enable_element_section,bool)
+            or not isinstance(enable_data_section,bool)
+            or not isinstance(enable_special_custom_sections,bool)
+            or not isinstance(max_expression_ops,int) or not 1 <= max_expression_ops <= 65536
+            or not isinstance(max_custom_records,int) or not 1 <= max_custom_records <= 65536
             or not isinstance(enable_inline_exports,bool)
             or enable_inline_exports and (not enable_exports or not isinstance(entry_x28,int)
                 or isinstance(entry_x28,bool) or not 0 <= entry_x28 <= MASK64)
@@ -3178,14 +3266,21 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             or enable_inline_table_memory_global_imports and not enable_table_memory_global_imports
             or not callable(allocate)):
         raise RefillUnsupported('AST module requires bounded input, output and native frames')
+    extra_scratch = []
+    for enabled,address in ((enable_element_section or enable_data_section,expression_scratch_address),
+                            (enable_special_custom_sections,custom_scratch_address)):
+        if enabled:
+            if not isinstance(address,int) or address&7 or not 0 < address <= MASK64-7:
+                raise RefillUnsupported('AST module segment/custom scratch must be an aligned eight-byte region')
+            extra_scratch.append((address,address+8))
     cb, state = entry_stack_address-0x150, entry_stack_address-0x220
-    import_frame_size = 0x2A0 if enable_global_definitions else 0x210 if enable_table_memory_global_imports or enable_table_memory_definitions or enable_code_definitions or enable_exports else 0x1E0
-    retain_frame = enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions or enable_global_definitions or enable_code_definitions or enable_exports
+    import_frame_size = 0x2A0 if enable_global_definitions or enable_element_section or enable_data_section else 0x210 if enable_table_memory_global_imports or enable_table_memory_definitions or enable_code_definitions or enable_exports else 0x1E0
+    retain_frame = enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions or enable_global_definitions or enable_code_definitions or enable_exports or enable_element_section or enable_data_section
     if retain_frame and state <= import_frame_size:
         raise RefillUnsupported('AST module import frame address is invalid')
     retained = [(image_base,image_base+0x400000), (input_address,input_address+input_size),
                 (output_address,output_address+0x120), (state,entry_stack_address),
-                (varuint_scratch_address,varuint_scratch_address+4), *reserved_regions]
+                (varuint_scratch_address,varuint_scratch_address+4), *extra_scratch, *reserved_regions]
     if retain_frame:
         retained.append((state-import_frame_size,state))
     if any(not isinstance(a,int) or not isinstance(b,int) or not 0 <= a <= b <= MASK64+1
@@ -3199,6 +3294,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     if retain_frame:
         _read_span(p,state-import_frame_size,import_frame_size)
     _read_span(p,varuint_scratch_address,4)
+    for start,end in extra_scratch: _read_span(p,start,end-start)
     if any(_read_span(p,output_address,0x120)):
         raise RefillUnsupported('AST module requires empty output containers')
     # Match constructor stores rather than zeroing unwritten +28/+78 padding.
@@ -3222,6 +3318,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     blocks, effects, vector_count = [], [], 0
     empty_type_section = False
     import_x28 = entry_x28
+    word_run = False
     def plan(size):
         if not isinstance(size,int) or not 0 < size <= max_vector_bytes:
             raise RefillUnsupported('AST module allocation exceeds its byte bound')
@@ -3234,7 +3331,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         nonlocal vector_count
         effects.extend(vectors[vector_count:]); vector_count=len(vectors)
     def callback(current,event,vectors):
-        nonlocal empty_type_section, import_x28
+        nonlocal empty_type_section, import_x28, word_run
         collect(vectors)
         if event.slot_offset == 0x18:
             empty_type_section = event.arguments[0] == 0
@@ -3253,9 +3350,21 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         elif event.slot_offset in (0x58,0x60,0x68,0x70):
             if not enable_table_memory_definitions:
                 raise RefillUnsupported('AST module table/memory definitions need explicit opt-in')
-        elif event.slot_offset in (0x78,0x80,0x88,0x90,0xC0,0xC8,0xD0,0xD8,0xE0,0xE8):
+        elif event.slot_offset in (0x78,0x80,0x88,0x90):
             if not enable_global_definitions:
                 raise RefillUnsupported('AST module global definitions need explicit opt-in')
+        elif event.slot_offset in (0xC0,0xC8,0xD0,0xD8,0xE0,0xE8):
+            if not (enable_global_definitions or enable_element_section or enable_data_section):
+                raise RefillUnsupported('AST module expressions need an enabled owning section')
+        elif event.slot_offset == 0xF0:
+            if not (enable_element_section or enable_data_section):
+                raise RefillUnsupported('AST module segment zero words need explicit opt-in')
+        elif event.slot_offset in (0x100,0x108,0x110,0x118,0x120,0x128,0x130,0x138):
+            if not enable_element_section:
+                raise RefillUnsupported('AST module elements need explicit opt-in')
+        elif event.slot_offset in (0x140,0x148,0x150,0x158):
+            if not enable_data_section:
+                raise RefillUnsupported('AST module data segments need explicit opt-in')
         elif event.slot_offset in (0xA8,0xB0,0xB8,0xF8,0x168):
             if not enable_code_definitions:
                 raise RefillUnsupported('AST module code definitions need explicit opt-in')
@@ -3267,14 +3376,31 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         if enable_inline_table_memory_global_imports and event.slot_offset in (0x28,0x40):
             prior_import_end = _u(current,output_address+0x20)
             prior_function_end, prior_function_cap = _u(current,cb+0x88), _u(current,cb+0x90)
-        result = run_reader_ast_callback(current,callback_address=cb,image_base=image_base,
-            slot_offset=event.slot_offset,arguments=event.arguments,allocate=plan,
-            entry_stack_address=(state-0x100 if event.slot_offset in (0x28,0x30,0x38,0x40)
-                else state-0xC0 if event.slot_offset == 0x60
-                else state-0xD0 if event.slot_offset == 0x98 else None),
-            attached_state_address=state,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,
-            reserved_regions=((input_address,input_address+input_size),
-                (varuint_scratch_address,varuint_scratch_address+4),*reserved_regions))
+        if event.slot_offset == 0x168 and word_run:
+            # The module owns every mutation, and plan retains all earlier
+            # allocation extents. Between consecutive raw words only this
+            # vector can change; rebuilding the whole graph per word would
+            # scan every function/import/export repeatedly on actual code.
+            if (_u(current,cb) != image_base+0x372370 or _u(current,cb+0x18) != output_address
+                    or _u(current,cb+0x20) != output_address+0x108
+                    or _u(current,image_base+0x372370+0x168) != image_base+0x31E5D8):
+                raise RefillUnsupported('AST module raw-word binding is inconsistent')
+            raw = _ReaderAstMemory(current,image_base,output_address,0x120,
+                max_nodes,max_vector_bytes,retained)
+            raw.vector(output_address+0x108)
+            raw.append_word(output_address,0x168,event.arguments[0],plan)
+            raw.p.commit()
+            result = ReaderAstResult(0,tuple(raw.effects))
+        else:
+            result = run_reader_ast_callback(current,callback_address=cb,image_base=image_base,
+                slot_offset=event.slot_offset,arguments=event.arguments,allocate=plan,
+                entry_stack_address=(state-0x100 if event.slot_offset in (0x28,0x30,0x38,0x40)
+                    else state-0xC0 if event.slot_offset == 0x60
+                    else state-0xD0 if event.slot_offset == 0x98 else None),
+                attached_state_address=state,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,
+                reserved_regions=((input_address,input_address+input_size),
+                    (varuint_scratch_address,varuint_scratch_address+4),*extra_scratch,*reserved_regions))
+        word_run = event.slot_offset == 0x168
         if enable_inline_exports:
             # Recover stores into +31d500's first string at state-0x160.
             # Each source is an earlier native store, not an oracle snapshot.
@@ -3422,7 +3548,14 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             global_scratch_address=state-0xB0 if enable_global_definitions else None,
             _attached_global_stack_address=state-0xB0 if enable_global_definitions else None,
             max_initializer_ops=max_initializer_ops,
-            enable_code_section=enable_code_definitions,max_code_words=max_code_words)
+            enable_code_section=enable_code_definitions,max_code_words=max_code_words,
+            enable_element_section=enable_element_section,enable_data_section=enable_data_section,
+            expression_scratch_address=expression_scratch_address,max_expression_ops=max_expression_ops,
+            enable_special_custom_sections=enable_special_custom_sections,
+            custom_scratch_address=custom_scratch_address,max_custom_records=max_custom_records,
+            _attached_custom_stack_address=state-0xF0 if enable_special_custom_sections and
+                (enable_inline_exports or enable_table_memory_global_imports or enable_table_memory_definitions) else None,
+            _attached_custom_entry_x28=entry_x28)
         collect(sections.vector_effects)
         status = int(sections.status == 1 or _u(p,state+0xA4,4) != _u(p,state+0xA8,4))
     for offset in (0x70,0x58,0x40,0x28):
