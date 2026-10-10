@@ -2470,6 +2470,41 @@ factory/bootstrap、独立 signer、新鲜输出或线上验收。
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_parse_codec_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <parse-codec-evidence.json>
 ```
 
+## 6.44 parse 模块转换与 builtin catalog（2026-10-11 Asia/Shanghai）
+
+`run_parser_conversion` 恢复 `+2cd5a4` 的 AST 到 128 字节 converted
+module 转换：imports、functions、exports、global uint32 values 和拼接
+data，包含原生分配/释放顺序、部分失败对象、错误字符串、冷/热 builtin
+catalog、显式 serial thread ID 和 finalizer registrations。所有输入由
+Python reader 和 fresh ELF 独立构造；原生输出只用于断言。
+
+修改前干净 `8ca8c37` 绑定 **12 项真实原生 RED**。最终验证通过
+**170 项原生/Python 对照、25 项回滚检查**：59 组合成输入/基址，
+共两基址；另有 42 项 padding/SP/thread 变化、4 项完整实际 ELF
+模块和 6 项高位 guest。完整实际模块每次有 **128 次分配、139 个函数
+（18 imports + 121 definitions）、54533 个 decoded words**，分别
+以初始栈 0/A5 在两基址运行。对照完整 guest、额外 2 MiB heap、全部
+样本 image pages、每次分配/释放时的 converted owner bytes 及 finalizers。
+实际模块同时包含 40 imports、22 globals、121 exports、3984 data bytes。
+
+global definitions 数量须等于 global imports 数量。global 数量不符、
+越界 function export、最后一个 raw word 不完整时返回原生失败 0，
+保留相应部分对象；raw reader 会读取 end/capacity 之外的已映射 padding，
+模型保留有界完整四字节输入。直接导出 imported function 的原生路径会
+访问非法位置，模型拒绝。guard、资源边界、别名、未映射输入或写入故障
+均全页回滚。输出和 error 必须分别是全零 128/24 字节新对象。
+
+entry SP 显式输入；仅表示 C++ temporary records 和 builtin source
+frame，未声称比较完整原生栈、TLS 或 OS。allocator 是纯地址计划；调用方
+消费逻辑 effects。旧 owner（含 codec）去掉新增两类与 API 后 AST
+完全一致；未将历史独立套件描述为本轮重跑。converted cleanup、root、
+descriptor builders、factory/bootstrap、独立 signer、新鲜输出与线上验收
+仍待完成。见 [parse conversion 证据](evidence/vm9_alternative_parse_conversion_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_parse_conversion_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <parse-conversion-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

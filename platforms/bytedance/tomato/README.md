@@ -189,6 +189,8 @@ With both `enable_function_imports=True` and `enable_inline_function_imports=Tru
 
 `convert_parser_instruction_word` now recovers the native parse codec helper, including scalar/SIMD shift differences and ignored metadata bytes. 434 fresh native/Python controls and 10 rejection checks pass, including 198 actual constructor codec controls, 16 moved SP and 12 high guest. Existing owner code is AST-identical after removing the new function. Complete parse/root, factory/bootstrap and signer remain unfinished. See the [parse codec report](REQUEST_JNI_STARTUP_WORKERS.md#643-parse-指令格式转换2026-10-11-asiashanghai).
 
+`run_parser_conversion` now transforms the independent reader AST into the native converted-module layout, including cold/warm builtin catalogs, error paths and ordered ownership effects. 170 fresh native/Python controls and 25 rollback checks pass. Four complete actual ELF controls each match 128 allocations, 139 functions and 54533 decoded words across full guest, extra heap and image pages. Prior owner code, including the codec, remains AST-identical. Converted cleanup, root/descriptor, factory/bootstrap and signer remain unfinished. See the [parse conversion report](REQUEST_JNI_STARTUP_WORKERS.md#644-parse-模块转换与-builtin-catalog2026-10-11-asiashanghai).
+
 
 
 

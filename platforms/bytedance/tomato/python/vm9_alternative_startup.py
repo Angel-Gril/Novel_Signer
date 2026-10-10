@@ -3766,3 +3766,264 @@ def decode_factory_blob_xor(pages, *, blob_address, blob_size,
         _write_span(p,blob_address,bytes(value^key for value in payload))
     p.commit()
     return FactoryBlobXorResult(blob_size,row,key==0)
+
+
+@dataclass(frozen=True)
+class ParserConversionResult:
+    status: int
+    effects: tuple[ReaderAstEffect, ...]
+    finalizers: tuple[tuple[int, int, int], ...]
+    function_count: int
+    decoded_word_count: int
+
+
+class _ParserConversionMemory(_ReaderAstMemory):
+    def put(self, address, value, width=8):
+        _write_span(self.p,address,value.to_bytes(width,'little'))
+
+    def decoded_literal(self, source, destination, size, period, guard):
+        if _u(self.p,self.base+guard,4)!=1:
+            encoded=_read_span(self.p,self.base+source,period+size)
+            _write_span(self.p,self.base+destination,
+                bytes(encoded[i%period]^encoded[period+i] for i in range(size)))
+            self.put(self.base+guard,1,4)
+        return _read_span(self.p,self.base+destination,size)
+
+    def assign_string(self, destination, source, allocate):
+        # +32b49c, including retained capacity and +32a884 growth.
+        old=_read_span(self.p,destination,24)
+        header=_read_span(self.p,source,24)
+        if not (old[0]|header[0])&1:
+            _write_span(self.p,destination,header);return
+        length=int.from_bytes(header[8:16],'little') if header[0]&1 else header[0]>>1
+        pointer=int.from_bytes(header[16:24],'little') if header[0]&1 else source+1
+        if length+1>self.max_bytes:
+            raise RefillUnsupported('converted string exceeds the byte bound')
+        payload=_read_span(self.p,pointer,length)
+        capacity=int.from_bytes(old[:8],'little')&~1 if old[0]&1 else 23
+        if capacity>length:
+            target=int.from_bytes(old[16:24],'little') if old[0]&1 else destination+1
+            self.put(destination+8,length) if old[0]&1 else self.put(destination,length*2,1)
+            _write_span(self.p,target,payload+b'\0');return
+        capacity=(max(length,2*(capacity-1))+16)&~15
+        target=self.allocate(capacity,allocate)
+        _write_span(self.p,target,payload+b'\0')
+        self.free_string_value(old)
+        self.put(destination,capacity|1)
+        self.put(destination+8,length);self.put(destination+16,target)
+
+    def builtin_catalog(self, entry_sp, thread_id, allocate):
+        # +2ab500 under explicit serial guard/gettid/finalizer services.
+        finalizers=[]
+        def cold(offset):
+            value=_u(self.p,self.base+offset)
+            if value&1:return False
+            if value:
+                raise RefillUnsupported('parser catalog guard is busy or unsupported')
+            return True
+        def released(offset):self.put(self.base+offset,(thread_id<<32)|0x101)
+        for guard,destination,literal,tail in (
+                (0x3E2548,0x3E25B0,(0x6E4B0,16),b'\x1a\x06'),
+                (0x3E2550,0x3E2570,(0x6E1B0,8),b'\x05\x03\x10\x10'),
+                (0x3E2558,0x3E2530,None,b'\x00\x00\x06\x01\x06\x1a')):
+            if cold(guard):
+                data=(_read_span(self.p,self.base+literal[0],literal[1]) if literal else b'')+tail
+                _write_span(self.p,self.base+destination,data);released(guard)
+        created=False
+        if cold(0x3E2560):
+            frame=entry_sp-0x68
+            if frame<=0 or frame+72>MASK64:
+                raise RefillUnsupported('parser catalog frame is outside the guest ABI')
+            self.claim(frame,72)
+            for index,(tag,pointer,count) in enumerate(((0x52,0x3E25B0,6),(0x49,0x3E2570,4),(0x4A,0x3E2530,2))):
+                address=frame+index*24
+                self.put(address,tag,2);self.put(address+2,0,1)
+                self.put(address+8,self.base+pointer);self.put(address+16,count,4)
+            address=self.allocate(72,allocate)
+            _write_span(self.p,address,_read_span(self.p,frame,72))
+            self.publish(self.base+0x3E25E0,(address,address+72,address+72))
+            finalizers.append((self.base+0x2AB7B4,self.base+0x3E25E0,self.base+0x34C700))
+            released(0x3E2560);created=True
+        if cold(0x3E2568):
+            begin,end,cap=(_u(self.p,self.base+0x3E25E0+n) for n in (0,8,16))
+            if not begin or end!=begin+72 or cap!=end:
+                raise RefillUnsupported('parser builtin catalog vector is inconsistent')
+            self.put(self.base+0x3E2580,begin);self.put(self.base+0x3E2588,3)
+            released(0x3E2568)
+        address,count=_u(self.p,self.base+0x3E2580),_u(self.p,self.base+0x3E2588)
+        if count!=3 or not address:
+            raise RefillUnsupported('parser builtin catalog must contain three records')
+        if not created:self.claim(address,72)
+        return address,count,finalizers
+
+
+def run_parser_conversion(pages, *, image_base, ast_address, codec_pair_address,
+        output_address, error_address, entry_stack_address, thread_id, allocate=None,
+        max_nodes=4096, max_vector_bytes=16*1024*1024, max_code_words=1048576,
+        reserved_regions=()):
+    """Bounded actual +2cd5a4 AST-to-converted-module transformation.
+
+    The AST and codec pointer/count pair are independent caller inputs. Output
+    is fresh zeroed 128-byte storage and error is a fresh zeroed 24-byte string.
+    Imports, functions, exports, global values and concatenated data retain
+    native layout and allocation order. Global-count mismatch and out-of-range
+    function exports return native failure (0) with the partial converted
+    object and error string. Imported-function exports, native codec aborts,
+    malformed graphs and exhausted budgets reject with all pages rolled back.
+    The native word reader ignores vector end/capacity. Bounded mapped trailing
+    bytes are retained as inputs; a final partial word returns native failure
+    after destroying its temporary converted function.
+
+    entry_stack_address supplies the actual incoming aligned SP. Only consumed
+    C++ temporary records and the builtin catalog source frame are represented;
+    native flattened control cells and other incidental stack stores are not
+    outputs. Cold catalog guards require zero words and an explicit positive
+    thread_id from the serial gettid service; ready guards skip initialization.
+    Finalizer registrations and allocations/frees are returned as logical
+    effects. Allocation is a pure address plan, never a real allocator call.
+    This entry does not execute root construction, VM code, TLS or OS services.
+    """
+    if type(entry_stack_address) is not int or not 0x2000<entry_stack_address<=MASK64 or entry_stack_address&15:
+        raise RefillUnsupported('parser conversion requires an aligned incoming SP')
+    if type(thread_id) is not int or not 1<=thread_id<=0x7FFFFFFF:
+        raise RefillUnsupported('parser conversion requires a positive serial thread ID')
+    if type(max_code_words) is not int or not 0<=max_code_words<=0xFFFFFFFF:
+        raise RefillUnsupported('parser conversion word budget is invalid')
+    m=_ParserConversionMemory(pages,image_base,output_address,128,max_nodes,max_vector_bytes,reserved_regions)
+    for address,width in ((ast_address,0x120),(codec_pair_address,16),(output_address,128),(error_address,24)):
+        m.claim(address,width)
+    if any(_read_span(m.p,output_address,128)) or any(_read_span(m.p,error_address,24)):
+        raise RefillUnsupported('parser conversion requires fresh output and error objects')
+    temporaries=(entry_stack_address-0xA58,entry_stack_address-0xA98,entry_stack_address-0xAB8)
+    for address,width in zip(temporaries,(64,64,32)):m.claim(address,width)
+    containers={}
+    for offset in range(0,0x120,24):
+        stride={0:64,0x18:64,0x30:144,0x48:48,0x60:40,0x78:176,0x90:40,
+            0xA8:40,0xC0:4,0xD8:184,0xF0:176,0x108:1}[offset]
+        begin,end,cap=m.vector(ast_address+offset,stride)
+        if offset not in (0xC0,0x108) and (cap-begin)//stride>max_nodes:
+            raise RefillUnsupported('parser AST container exceeds the node bound')
+        if offset==0x90 and cap!=begin:
+            raise RefillUnsupported('parser auxiliary AST nodes remain unsupported')
+        containers[offset]=(begin,end,cap,stride)
+        for record in range(begin,end,stride) if offset not in (0x48,0x60,0xC0,0x90,0x108) else ():
+            if offset==0:m.node(record,64)
+            elif offset==0x18:m.import_record(record)
+            elif offset==0x30:m.function_record(record)
+            elif offset==0x78:m.global_record(record)
+            elif offset==0xA8:m.export_record(record)
+            elif offset==0xD8:m.element_record(record)
+            elif offset==0xF0:m.data_record(record)
+    source_table,source_count=_u(m.p,codec_pair_address),_u(m.p,codec_pair_address+8)
+    if source_count>max_nodes:
+        raise RefillUnsupported('parser source codec count exceeds the node bound')
+    if source_count:
+        m.claim(source_table,source_count*24)
+        for index in range(source_count):
+            record=source_table+index*24;pointer,count=_u(m.p,record+8),_u(m.p,record+16,4)
+            if count>1024:raise RefillUnsupported('parser source codec field count exceeds its bound')
+            if count:m.claim(pointer,count*3,alignment=1)
+    def records(offset):
+        begin,end,_,stride=containers[offset];return range(begin,end,stride)
+    raw_begin,raw_end,raw_capacity,_=containers[0x108]
+    for record in records(0x30):
+        start,size=_u(m.p,record+0x68,4),_u(m.p,record+0x70,4);width=((size+3)//4)*4
+        if start+width>max_vector_bytes or start+size>0xFFFFFFFF:
+            raise RefillUnsupported('parser function raw range exceeds its byte bound')
+        if width:
+            begin,end=raw_begin+start,raw_begin+start+width
+            if not raw_begin or end>MASK64+1:
+                raise RefillUnsupported('parser function raw pointer is invalid')
+            for destination,length in ((output_address,128),(error_address,24),*zip(temporaries,(64,64,32))):
+                if begin<destination+length and destination<end:
+                    raise RefillUnsupported('parser raw input overlaps converted storage')
+            _read_span(m.p,begin,width);m.reserved.append((begin,end))
+    def reserve(offset,count,stride):
+        pointer=m.allocate(count*stride,allocate) if count else 0
+        m.publish(output_address+offset,(pointer,pointer,pointer+count*stride));return pointer
+    def kind(node):
+        native=_u(m.p,node+8,4)
+        if native>3:raise RefillUnsupported('parser import/export kind is unsupported')
+        ranks=m.decoded_literal(0x1206E0,0x3E275C,20,30,0x3E2770)
+        mapped=int.from_bytes(ranks[native*4:native*4+4],'little')
+        if mapped!=native:raise RefillUnsupported('parser kind mapping is unsupported')
+        return native
+    imported_functions=imported_globals=0;decoded_words=0;finalizers=[]
+    def finish(status):
+        if not status:
+            message=m.decoded_literal(0x120600,0x3E2750,6,26,0x3E2758)
+            if message[-1] or b'\0' in message[:-1]:
+                raise RefillUnsupported('parser error literal is malformed')
+            m.construct_string(error_address,image_base+0x3E2750,5,allocate)
+        result=ParserConversionResult(status,tuple(m.effects),tuple(finalizers),
+            _u(m.p,output_address,4),decoded_words)
+        m.p.commit();return result
+    imports=list(records(0x18));cursor=reserve(0x20,len(imports),64);temporary=temporaries[0]
+    parser_sp=entry_stack_address-0x1600
+    for record in imports:
+        for offset in (0,24):m.copy_string_value(temporary+offset,_read_span(m.p,record+offset,24),allocate)
+        tag=kind(_u(m.p,record+48));m.put(temporary+48,tag,4)
+        _write_span(m.p,temporary+52,_read_span(m.p,record+56,8) if tag==0 else b'\xff'*8)
+        if tag in (0,3):
+            _write_span(m.p,cursor,_read_span(m.p,temporary,60));cursor+=64
+            m.put(output_address+0x28,cursor);_write_span(m.p,temporary,bytes(48))
+        m.free_string_value(_read_span(m.p,temporary+24,24));m.free_string_value(_read_span(m.p,temporary,24))
+        imported_functions+=tag==0;imported_globals+=tag==3
+        parser_sp-=(0x270,0x1C0,0x1C0,0x1E0)[tag]
+    functions=list(records(0x30));cursor=reserve(8,len(functions),64);temporary=temporaries[1]
+    builtin=None
+    for record in functions:
+        _write_span(m.p,temporary,_read_span(m.p,record+0x40,8)+_read_span(m.p,record+0x6C,4)+_read_span(m.p,record+0x48,4))
+        name=m.decoded_literal(0x120720,0x3E2774,8,20,0x3E277C)
+        _write_span(m.p,temporary+16,b'\x0e'+name[:7]+b'\0');m.publish(temporary+40,(0,0,0))
+        if builtin is None:
+            table,count,registrations=m.builtin_catalog(parser_sp-0x90,thread_id,allocate)
+            builtin=(table,count);finalizers.extend(registrations)
+        start,size=_u(m.p,record+0x68,4),_u(m.p,record+0x70,4)
+        word_count=(size+3)//4
+        if decoded_words+word_count>max_code_words:
+            raise RefillUnsupported('parser decoded word budget exhausted')
+        first=m.allocate((size//4+1)*12,allocate);m.publish(temporary+40,(first,first,first+(size//4+1)*12))
+        index=0
+        for offset in range(0,size,4):
+            if index>=source_count or index>=builtin[1]:
+                raise RefillUnsupported('parser codec index would reach native abort')
+            word=convert_parser_instruction_word(m.p,source_codec_address=source_table+index*24,
+                target_codec_address=builtin[0]+index*24,word=_u(m.p,raw_begin+start+offset,4))
+            decoded=word.to_bytes(4,'little')+bytes([word>>26,*((word>>shift)&31 for shift in (21,16,11,6)),word&63])
+            _write_span(m.p,first+offset//4*12,decoded);m.put(temporary+48,first+(offset//4+1)*12)
+            index=word%source_count;decoded_words+=1
+        if size%4:
+            m.free_vector(temporary+40);m.free_string_value(_read_span(m.p,temporary+16,24))
+            return finish(0)
+        _write_span(m.p,cursor,_read_span(m.p,temporary,64));cursor+=64;m.put(output_address+16,cursor)
+        _write_span(m.p,temporary+16,bytes(48))
+    m.put(output_address,imported_functions+len(functions),4)
+    globals_=list(records(0x78))
+    if len(globals_)!=imported_globals:return finish(0)
+    cursor=reserve(0x50,len(globals_),4)
+    for record in globals_:
+        m.put(cursor,_u(m.p,record+0xA8,4),4);cursor+=4;m.put(output_address+0x58,cursor)
+    exports=list(records(0xA8));cursor=reserve(0x38,len(exports),32);temporary=temporaries[2]
+    for record in exports:
+        m.copy_string_value(temporary,_read_span(m.p,record,24),allocate)
+        tag=kind(_u(m.p,record+24));index=_u(m.p,record+32,4) if tag==0 else 0xFFFFFFFF
+        m.put(temporary+24,tag,4);m.put(temporary+28,index,4)
+        if tag==0:
+            if index>=imported_functions+len(functions):
+                m.free_string_value(_read_span(m.p,temporary,24));return finish(0)
+            if index<imported_functions:
+                raise RefillUnsupported('parser imported-function export has no defined destination')
+            destination=_u(m.p,output_address+8)+(index-imported_functions)*64+16
+            m.assign_string(destination,temporary,allocate)
+            _write_span(m.p,cursor,_read_span(m.p,temporary,32));cursor+=32;m.put(output_address+0x40,cursor)
+            _write_span(m.p,temporary,bytes(24))
+        m.free_string_value(_read_span(m.p,temporary,24))
+    spans=[(_u(m.p,record),_u(m.p,record+8)) for record in records(0xF0)]
+    size=sum(end-begin for begin,end in spans)
+    if size>max_vector_bytes:raise RefillUnsupported('parser concatenated data exceeds the byte bound')
+    cursor=reserve(0x68,size,1)
+    for begin,end in spans:
+        _write_span(m.p,cursor,_read_span(m.p,begin,end-begin));cursor+=end-begin
+        m.put(output_address+0x70,cursor)
+    return finish(1)

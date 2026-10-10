@@ -185,7 +185,10 @@ effects/cleanup/globals 全量一致。本阶段共 **406 项对照、36 项回�
 [零条目 type 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#642-零条目-type-与-incoming-x222026-10-11-asiashanghai)。
 parse 指令格式转换已恢复，**434 项对照、10 项拒绝检查**通过。见
 [parse codec 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#643-parse-指令格式转换2026-10-11-asiashanghai)。
-parse/root、factory/bootstrap 和 signer 仍未完成。见
+parse 模块转换通过 **170 项对照、25 项回滚检查**，其中 4 项完整实际 ELF
+每次匹配 139 个函数、54533 个 decoded words。见
+[parse conversion 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#644-parse-模块转换与-builtin-catalog2026-10-11-asiashanghai)。
+converted cleanup、root/descriptor、factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
 [Data 创建报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai)。

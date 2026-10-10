@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：parse 模块转换
+
+`+2cd5a4` 的 Python 模块转换通过 **170 项原生对照、25 项回滚检查**。
+4 项完整实际 ELF 每次匹配 128 分配、139 函数、54533 decoded words，
+覆盖完整 guest/额外 heap/image pages 与有序 effects/finalizers。输入
+独立生成；原有 owner AST 未变。当前继续 converted cleanup、root/
+descriptor、factory/bootstrap、独立 signer、新鲜输出与线上验收。
+见 [parse conversion 报告](REQUEST_JNI_STARTUP_WORKERS.md#644-parse-模块转换与-builtin-catalog2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：parse 指令格式转换
 
 `+2db778` 的 Python 指令格式转换通过 **434 项原生对照、10 项拒绝检查**，
