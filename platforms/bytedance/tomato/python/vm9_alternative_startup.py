@@ -5101,3 +5101,126 @@ def initialize_builtin_function_catalog(pages, *, image_base, entry_stack_addres
     put(temporary,entry_stack_address-0x50);put(temporary+8,image_base+0x32D524)
     m.p.commit()
     return BuiltinFunctionCatalogResult(root,73,tuple(m.effects),((image_base+0x2CC17C,root,image_base+0x34C700),))
+
+
+@dataclass(frozen=True)
+class ParserImportedDescriptorResult:
+    address: int
+    function_pointer: int
+    source: str
+    effects: tuple[ReaderAstEffect, ...]
+    finalizers: tuple[tuple[int, int, int], ...]
+
+
+def construct_parser_imported_descriptor(pages, *, image_base, import_address,
+        bindings_address, names_address, output_address, entry_stack_address,
+        thread_id, allocate=None, max_bindings=4096,
+        max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Actual +2dc3e4 kind-0 path with empty registry and name filter.
+
+    Initialize the serial global registry, resolve a borrowed-name function
+    binding, then consult the builtin catalog when no binding exists. A found
+    function owns a copied name in a 64-byte descriptor; bytes 32..55 retain
+    allocator padding. Missing names publish zero after catalog initialization.
+    Keys use the recovered 0..32-byte hash. Nonempty registry/filter paths,
+    concurrent locking and exception unwinding remain outside this entry.
+
+    Allocation is a pure address plan; ordered frees/finalizers are logical
+    effects. The consumed name-copy temporary and nested catalog stack bytes
+    use the incoming SP and original caller padding. This does not reproduce
+    the flattened control cells or the whole native stack/TLS/OS. Unsupported
+    input, aliasing, bounds or write failures roll back the whole transaction.
+    """
+    if type(entry_stack_address) is not int or not 0x1100<=entry_stack_address<=MASK64 or entry_stack_address&15:
+        raise RefillUnsupported('imported descriptor requires an aligned incoming SP')
+    if type(thread_id) is not int or not 1<=thread_id<=0x7FFFFFFF:
+        raise RefillUnsupported('imported descriptor requires a positive serial thread ID')
+    if type(max_bindings) is not int or not 0<=max_bindings<=65536:
+        raise RefillUnsupported('imported descriptor binding bound is invalid')
+    m=_ReaderAstMemory(pages,image_base,output_address,8,4096,max_vector_bytes,reserved_regions)
+    temporary=entry_stack_address-0x600
+    for address,size in ((import_address,64),(bindings_address,40),(names_address,40),(output_address,8),(temporary,48)):
+        m.claim(address,size)
+    if any(_read_span(m.p,names_address,32)) or _u(m.p,names_address+32,4)!=0x3F800000:
+        raise RefillUnsupported('imported descriptor requires an empty name filter')
+    header=_read_span(m.p,import_address+24,24)
+    if header[0]&1:
+        capacity=int.from_bytes(header[:8],'little')&~1;length=int.from_bytes(header[8:16],'little')
+        if not length<capacity<=max_vector_bytes:
+            raise RefillUnsupported('imported descriptor name capacity is invalid')
+        pointer=int.from_bytes(header[16:24],'little');m.claim(pointer,capacity)
+    else:
+        length=header[0]>>1;pointer=import_address+25
+        if length>22:raise RefillUnsupported('imported descriptor inline name is invalid')
+    payload=_read_span(m.p,pointer,length);hashed=hash_descriptor_name(payload)
+    registry=image_base+0x3E2780;guard=image_base+0x3E27D0;mutex=image_base+0x3E27A8
+    guard_value=_u(m.p,guard);cold=not guard_value&1
+    if (any(_read_span(m.p,registry,32)) or any(_read_span(m.p,mutex,40))
+            or (cold and guard_value) or (not cold and _u(m.p,registry+32,4)!=0x3F800000)):
+        raise RefillUnsupported('imported descriptor registry is nonempty, busy or invalid')
+    def put(address,value,width=8):_write_span(m.p,address,value.to_bytes(width,'little'))
+    finalizers=[]
+    if cold:
+        _write_span(m.p,registry,bytes(32));put(registry+32,0x3F800000,4);_write_span(m.p,mutex,bytes(40))
+        finalizers.append((image_base+0x2E2BE0,registry,image_base+0x34C700));put(guard,(thread_id<<32)|0x101)
+    put(temporary,pointer);put(temporary+8,length)
+    buckets,count,head,size=(_u(m.p,bindings_address+o) for o in (0,8,16,24))
+    if size>max_bindings or count*8>max_vector_bytes or (not count and (buckets or head or size)):
+        raise RefillUnsupported('imported function bindings exceed their bounds')
+    if _u(m.p,bindings_address+32,4)!=0x3F800000:
+        raise RefillUnsupported('imported function binding load factor is invalid')
+    if count:m.claim(buckets,count*8)
+    def bucket(value):return value&(count-1) if count and not count&(count-1) else value%count
+    predecessors={};keys=set();previous=bindings_address+16;previous_bucket=None;seen=0;function=0;found=False
+    while head:
+        if seen>=size:raise RefillUnsupported('imported function binding chain is cyclic or too long')
+        m.claim(head,40);seen+=1
+        key_hash=_u(m.p,head+8);key_pointer=_u(m.p,head+16);key_length=_u(m.p,head+24)
+        if key_length>32:raise RefillUnsupported('imported function binding key is too long')
+        key=_read_span(m.p,key_pointer,key_length)
+        if key_length:m.reserved.append((key_pointer,key_pointer+key_length))
+        if hash_descriptor_name(key)!=key_hash or key in keys:
+            raise RefillUnsupported('imported function binding hash or key is invalid')
+        keys.add(key);index=bucket(key_hash)
+        if index!=previous_bucket:
+            if index in predecessors:raise RefillUnsupported('imported function binding bucket chain is split')
+            predecessors[index]=previous
+        if key_hash==hashed and key==payload:found=True;function=_u(m.p,head+32)
+        previous_bucket=index;previous=head;head=_u(m.p,head)
+    if seen!=size or any(_u(m.p,buckets+i*8)!=predecessors.get(i,0) for i in range(count)):
+        raise RefillUnsupported('imported function binding predecessors or size are invalid')
+    source='binding'
+    if not found:
+        catalog_sp=entry_stack_address-0xF50-(16 if cold else 0)
+        initialized=initialize_builtin_function_catalog(m.p,image_base=image_base,entry_stack_address=catalog_sp,
+            thread_id=thread_id,allocate=allocate,max_vector_bytes=max_vector_bytes,
+            reserved_regions=(*m.reserved[1:],*m.regions))
+        for effect in initialized.effects:m.emit(effect.kind,effect.address,effect.size)
+        finalizers.extend(initialized.finalizers)
+        # Retain every live owned catalog allocation before allocating the
+        # descriptor. Freed construction scratch also stays unavailable to
+        # this monotonic address-plan contract within the same call.
+        allocations={e.address:e.size for e in initialized.effects if e.kind=='allocate'}
+        m.claim(catalog_sp-0x70,24);m.claim(catalog_sp-0x38,8)
+        root=initialized.address;catalog_buckets=_u(m.p,root)
+        if catalog_buckets not in allocations:allocations[catalog_buckets]=1024
+        head=_u(m.p,root+16)
+        while head:
+            allocations[head]=48;name=_read_span(m.p,head+16,24)
+            if name[0]&1:
+                capacity=int.from_bytes(name[:8],'little')&~1;name_length=int.from_bytes(name[8:16],'little')
+                name_pointer=int.from_bytes(name[16:24],'little');allocations[name_pointer]=capacity
+            else:name_length=name[0]>>1;name_pointer=head+17
+            if _u(m.p,head+8)==hashed and _read_span(m.p,name_pointer,name_length)==payload:
+                found=True;function=_u(m.p,head+40)
+            head=_u(m.p,head)
+        for address,width in allocations.items():m.claim(address,width)
+        source='builtin' if found else 'missing'
+    descriptor=0
+    if found:
+        put(temporary,function);m.copy_string_value(temporary+8,header,allocate)
+        _write_span(m.p,temporary+32,_read_span(m.p,temporary+9,15))
+        descriptor=m.allocate(64,allocate)
+        _write_span(m.p,descriptor,_read_span(m.p,temporary,32));put(descriptor+56,0)
+    put(output_address,descriptor);m.p.commit()
+    return ParserImportedDescriptorResult(descriptor,function,source,tuple(m.effects),tuple(finalizers))

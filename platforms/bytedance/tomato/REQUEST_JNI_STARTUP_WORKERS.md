@@ -2697,6 +2697,40 @@ factory/bootstrap、独立 signer、新鲜输出及线上验收仍待完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_builtin_functions_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <builtin-catalog-evidence.json>
 ```
 
+## 6.51 imported descriptor 解析与构造（2026-10-11 Asia/Shanghai）
+
+`construct_parser_imported_descriptor` 恢复实际 +2dc3e4 的空 registry /
+name-filter 路径：初始化全局注册表，查询 borrowed-name 外部函数 map，
+找不到绑定时按需构造 builtin catalog。找到函数后复制名称，发布
+kind=0 的 descriptor64；+32..55 保留 allocator padding。未找到名称
+则发布空指针。注册表和 catalog 的 finalizer 按实际顺序返回。
+
+外部 map 支持 power-of-two 和 prime 桶、碰撞链及 predecessor 校验。
+短名复制完整 string24，长名按容量分配；heap 短名按原生规则转换为
+inline。名称副本使用 SP-0x600 的 47 字节临时存储；builtin getter
+incoming SP 在 cold registry 路径额外下降 16 字节。未声称重建全部
+flattened control cells、原生 stack/TLS/OS 或非空注册表/过滤器路径。
+
+干净 `aee6ad6` 绑定 **16 项修改前真实原生 RED**。正式验证通过
+**106 个原生/Python descriptor 对照、72 个 batch、36 项回滚检查**。
+两基址各从 fresh ELF 经独立 Python reader/parse 得到完整实际模块，
+连续构造全部 18 项函数导入：16 项外部绑定、2 项 builtin。16 个外部
+回调地址和名称来源直接从原始构造器 ADRP/ADD/STR 指令恢复；没有
+以原生输出或快照作为输入。每组实际导入 **117 次分配、12 次释放、
+2 个 finalizer** 一致。
+
+合成用例覆盖 0..32 字节边界、heap 短名、四种 padding、冷/热 registry
+和 builtin、桶碰撞、绑定优先级、空回调、缺失名称、SP 和 thread ID。
+完整 guest/heap/image pages、输出、已用名称临时存储、分配/释放顺序、
+每次 owner 发布字节及 finalizers 均一致；异常输入、预算、别名和
+写入失败均全页回滚。移除新增结果类型和 API 后旧 owner AST 不变。
+完整 root、factory/bootstrap、独立 signer、新鲜输出及线上验收仍待完成。
+见 [imported descriptor 证据](evidence/vm9_alternative_imported_descriptor_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_imported_descriptor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <imported-descriptor-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

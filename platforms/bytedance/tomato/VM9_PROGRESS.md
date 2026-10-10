@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：imported descriptor 解析与构造
+
+106 个原生/Python descriptor 对照、72 个 batch、36 项回滚检查通过。
+两份 fresh 实际模块全部 36 项导入使用 ELF 构造器回调引用；完整
+页面、名称临时存储和有序效果一致，旧 owner AST 未变。继续完整
+root、factory/bootstrap、独立 signer、新鲜输出及线上验收。
+见 [imported descriptor 报告](REQUEST_JNI_STARTUP_WORKERS.md#651-imported-descriptor-解析与构造2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：builtin function catalog 与名称哈希
 
 32 个原生/Python catalog 对照、198 个名称哈希对照、34 项回滚/类型
