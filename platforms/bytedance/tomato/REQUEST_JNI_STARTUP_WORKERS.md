@@ -2664,6 +2664,39 @@ imported descriptor、factory/bootstrap、独立 signer、新鲜输出及线上�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_defined_descriptor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <defined-descriptor-evidence.json>
 ```
 
+## 6.50 builtin function catalog 与名称哈希（2026-10-11 Asia/Shanghai）
+
+`initialize_builtin_function_catalog` 恢复实际 +2cc0f8/+2e8c68：
+构造 73 个 owned string/function 节点和 128 个哈希桶，保留 libc++
+bucket predecessor 链。名称从 61 处受 guard 保护的 ELF XOR 源和
+12 组 literal instruction 引用生成；代码和证据不包含解码名称。
+`hash_descriptor_name` 支持 0..32 字节，实际最长名称为 29 字节；
+0..8 字节委托现有短名哈希。
+
+冷启动按序分配 98 次、释放 12 次长名称临时存储，返回一个 finalizer。
+ready 路径检查节点、hash、function target 和桶链后保持全部页面不变。
+已建模的 32 字节临时存储保留 caller padding、SP 派生指针和 matching
+libc mutex 写入的半字/返回地址；这些字节会进入 inline string padding。
+分配器为纯地址计划，释放和 finalizer 注册作为逻辑效果返回。
+
+修改前干净 `a206f53` 绑定 **20 项真实原生 RED**。正式验证通过
+**32 项原生/Python catalog 对照、198 项哈希对照、34 项回滚/类型检查**。
+两基址覆盖冷/热 catalog、已解码 guard、四种 padding、SP、thread ID
+和 heap 地址变化；hash 覆盖每个 0..32 长度的三种字节模式。
+完整 guest/heap/image pages、名称、自然返回/SP、分配/释放顺序、
+每次效果的 owner 发布字节、finalizers 和已用临时存储均一致。
+静态独立 lowering 从原始 ELF 复核全部 73 项名称来源和函数引用。
+移除四个新增定义后旧 owner AST 完全一致。
+
+无原生快照输入；异常图、预算、别名、源指令和写入失败拒绝并全页
+回滚。未比较完整原生 stack/TLS/OS。imported descriptor、完整 root、
+factory/bootstrap、独立 signer、新鲜输出及线上验收仍待完成。
+见 [builtin catalog 证据](evidence/vm9_alternative_builtin_functions_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_builtin_functions_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <builtin-catalog-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

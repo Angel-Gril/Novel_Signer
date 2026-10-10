@@ -201,6 +201,8 @@ With both `enable_function_imports=True` and `enable_inline_function_imports=Tru
 
 `construct_parser_defined_descriptor` now composes decoded builders, native variant moves, name copies and failure cleanup for an empty name filter. 288 native/Python descriptor controls in 48 batches, 113762 runtime instructions and 35 rollback checks pass. Two fresh actual modules contribute 242 functions and 109066 instructions; full guest/heap/image pages, consumed temporary bytes and ordered effects match. Imported descriptors, complete root, factory/bootstrap and signer remain unfinished. See the [defined descriptor report](REQUEST_JNI_STARTUP_WORKERS.md#649-defined-descriptor-构造与失败清理2026-10-11-asiashanghai).
 
+`initialize_builtin_function_catalog` now constructs 73 owned-name function entries in 128 buckets from ELF source references. 32 native/Python catalog controls, 198 name-hash controls and 34 rollback/type guards pass. Ordered effects, owner publication bytes and consumed temporary storage match; decoded names stay private. Imported descriptors, complete root, factory/bootstrap and signer remain unfinished. See the [builtin catalog report](REQUEST_JNI_STARTUP_WORKERS.md#650-builtin-function-catalog-与名称哈希2026-10-11-asiashanghai).
+
 
 
 

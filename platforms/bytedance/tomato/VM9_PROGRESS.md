@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：builtin function catalog 与名称哈希
+
+32 个原生/Python catalog 对照、198 个名称哈希对照、34 项回滚/类型
+检查通过。恢复 73 项 owned name/function 和 128 桶 predecessor 链。
+完整 guest/heap/image pages、32 字节临时存储和有序效果一致；名称
+来源由原始 ELF 静态独立复核，旧 owner AST 未变。继续 imported
+descriptor、完整 root、factory/bootstrap、独立 signer、新鲜输出和线上验收。
+见 [builtin catalog 报告](REQUEST_JNI_STARTUP_WORKERS.md#650-builtin-function-catalog-与名称哈希2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：defined descriptor 构造与失败清理
 
 288 个原生/Python descriptor 对照、35 项回滚检查通过。48 个 batch

@@ -199,6 +199,8 @@ runtime 二次转换/root linking 通过 **3918 个 descriptor 对照、27 项�
 覆盖全部 600 种副表规则。见 [runtime linking 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#648-runtime-descriptor-二次转换与-root-linking2026-10-11-asiashanghai)。
 defined descriptor 构造与失败清理通过 **288 个原生对照、35 项回滚检查**，
 含两份实际模块全部 109066 条指令。见 [defined descriptor 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#649-defined-descriptor-构造与失败清理2026-10-11-asiashanghai)。
+builtin function catalog 通过 **32 个原生对照、198 个哈希对照、34 项检查**，
+恢复 73 项名称/函数绑定。见 [builtin catalog 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#650-builtin-function-catalog-与名称哈希2026-10-11-asiashanghai)。
 root/descriptor、factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

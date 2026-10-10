@@ -4874,3 +4874,230 @@ def construct_parser_defined_descriptor(pages, *, image_base, function_address,
     put(temporary,pointer);put(temporary+8,length)
     m.p.commit()
     return ParserDefinedDescriptorResult(descriptor,built,tuple(m.effects),tuple(finalizers))
+
+
+def hash_descriptor_name(payload):
+    """Actual +2aa744 length 0..32 branches for descriptor and builtin keys.
+
+    Lengths 0..8 use the existing short-name implementation. Longer keys use
+    the native rotations and uint64 products; lengths above 32 remain outside
+    this bounded entry. The actual builtin catalog's longest key is 29 bytes.
+    """
+    if not isinstance(payload,(bytes,bytearray)) or len(payload)>32:
+        raise RefillUnsupported('descriptor hash supports only 0..32 byte inputs')
+    length=len(payload)
+    if length<=8:return hash_short_descriptor_name(payload)
+    def fetch(offset):return int.from_bytes(payload[offset:offset+8],'little')
+    def rotate(value,shift):
+        value&=MASK64
+        return ((value>>shift)|(value<<(64-shift)))&MASK64
+    def pair(first,last):
+        value=((first^last)*0x9DDFEA08EB382D69)&MASK64
+        value=((last^value^(value>>47))*0x9DDFEA08EB382D69)&MASK64
+        return ((value^(value>>47))*0x9DDFEA08EB382D69)&MASK64
+    if length<=16:
+        last=fetch(length-8)
+        return pair(fetch(0),rotate(last+length,length))^last
+    first=(fetch(0)*0xB492B66FBE98F273)&MASK64;second=fetch(8)
+    last=(fetch(length-8)*0x9AE16A3B2F90404F)&MASK64
+    prior=(fetch(length-16)*0xC3A5C85C97CB3127)&MASK64
+    return pair((rotate(first-second,43)+rotate(last,30)+prior)&MASK64,
+                (first+rotate(second^0xC949D7C7509E6557,20)-last+length)&MASK64)
+
+
+# Builtin keys are read from ELF sources; no decoded names are embedded.
+_BUILTIN_FUNCTION_ENTRIES = (
+    (0x2ea89c, 6, (0x120740, 0x3e27d8, 0x14, 0x3e27e0), ()),
+    (0x2ea8c4, 6, (0x12075b, 0x3e27e4, 0x13, 0x3e27ec), ()),
+    (0x2ea8f0, 7, (0x120775, 0x3e27f0, 0x1e, 0x3e27f8), ()),
+    (0x2ea91c, 4, (), ((0, 0x2e8dc0, 0), (0, 0x2e8dc0, 1), (0, 0x2e8dc8, 0), (0, 0x2e8dc8, 1),)),
+    (0x2ea924, 6, (0x12079b, 0x3e27fc, 0x15, 0x3e2804), ()),
+    (0x2ea958, 7, (0x1207b7, 0x3e2808, 0x19, 0x3e2810), ()),
+    (0x2ea98c, 6, (0x1207d8, 0x3e2814, 0x17, 0x3e281c), ()),
+    (0x2ea9c4, 6, (0x1207f6, 0x3e2820, 0x10, 0x3e2828), ()),
+    (0x2ea9ec, 6, (0x12080d, 0x3e282c, 0x14, 0x3e2834), ()),
+    (0x2eaa18, 7, (0x120828, 0x3e2838, 0x1d, 0x3e2840), ()),
+    (0x2eaa48, 8, (), ((0, 0x2e905c, 0), (0, 0x2e905c, 1), (0, 0x2e9064, 0), (0, 0x2e9064, 1), (0, 0x2e9070, 0), (0, 0x2e9070, 1), (0, 0x2e9074, 0), (0, 0x2e9074, 1),)),
+    (0x2eaa74, 8, (), ((0, 0x2e90ac, 0), (0, 0x2e90ac, 1), (0, 0x2e90b8, 0), (0, 0x2e90b8, 1), (0, 0x2e90bc, 0), (0, 0x2e90bc, 1), (0, 0x2e90c4, 0), (0, 0x2e90c4, 1),)),
+    (0x2eaaa4, 8, (), ((0, 0x2e90f8, 0), (0, 0x2e90f8, 1), (0, 0x2e9100, 0), (0, 0x2e9100, 1), (0, 0x2e910c, 0), (0, 0x2e910c, 1), (0, 0x2e9110, 0), (0, 0x2e9110, 1),)),
+    (0x2eaad8, 8, (), ((0, 0x2e9148, 0), (0, 0x2e9148, 1), (0, 0x2e9154, 0), (0, 0x2e9154, 1), (0, 0x2e9158, 0), (0, 0x2e9158, 1), (0, 0x2e9160, 0), (0, 0x2e9160, 1),)),
+    (0x2eab10, 8, (), ((0, 0x2e9194, 0), (0, 0x2e9194, 1), (0, 0x2e919c, 0), (0, 0x2e919c, 1), (0, 0x2e91a8, 0), (0, 0x2e91a8, 1), (0, 0x2e91ac, 0), (0, 0x2e91ac, 1),)),
+    (0x2eab4c, 8, (), ((0, 0x2e91e4, 0), (0, 0x2e91e4, 1), (0, 0x2e91f0, 0), (0, 0x2e91f0, 1), (0, 0x2e91f4, 0), (0, 0x2e91f4, 1), (0, 0x2e91fc, 0), (0, 0x2e91fc, 1),)),
+    (0x2eab8c, 8, (), ((0, 0x2e9230, 0), (0, 0x2e9230, 1), (0, 0x2e9238, 0), (0, 0x2e9238, 1), (0, 0x2e9244, 0), (0, 0x2e9244, 1), (0, 0x2e9248, 0), (0, 0x2e9248, 1),)),
+    (0x2eabd0, 8, (), ((0, 0x2e9280, 0), (0, 0x2e9280, 1), (0, 0x2e928c, 0), (0, 0x2e928c, 1), (0, 0x2e9290, 0), (0, 0x2e9290, 1), (0, 0x2e9298, 0), (0, 0x2e9298, 1),)),
+    (0x2eac18, 10, (0x12084d, 0x3e2844, 0x19, 0x3e2850), ()),
+    (0x2eac50, 10, (0x120871, 0x3e2854, 0x1a, 0x3e2860), ()),
+    (0x2eac8c, 10, (0x120896, 0x3e2864, 0x12, 0x3e2870), ()),
+    (0x2eaccc, 10, (0x1208b3, 0x3e2874, 0x10, 0x3e2880), ()),
+    (0x2ead10, 10, (0x1208ce, 0x3e2884, 0x1f, 0x3e2890), ()),
+    (0x2ead58, 10, (0x1208f8, 0x3e2894, 0x13, 0x3e28a0), ()),
+    (0x2eadb0, 5, (0x120916, 0x3e28a4, 0x1d, 0x3e28ac), ()),
+    (0x2eadbc, 29, (0x120939, 0x3e28b0, 0x1d, 0x3e28d0), ()),
+    (0x2eadf8, 29, (0x120974, 0x3e28d4, 0x1d, 0x3e28f4), ()),
+    (0x2eae34, 29, (0x1209af, 0x3e28f8, 0x1b, 0x3e2918), ()),
+    (0x2eae70, 29, (0x1209e8, 0x3e291c, 0x1c, 0x3e293c), ()),
+    (0x2eaea0, 26, (0x120a22, 0x3e2940, 0x14, 0x3e295c), ()),
+    (0x2eaed4, 26, (0x120a51, 0x3e2960, 0x12, 0x3e297c), ()),
+    (0x2eaf08, 26, (0x120a7e, 0x3e2980, 0x17, 0x3e299c), ()),
+    (0x2eaf3c, 26, (0x120ab0, 0x3e29a0, 0x15, 0x3e29bc), ()),
+    (0x2eaf68, 22, (0x120ae0, 0x3e29c0, 0x17, 0x3e29d8), ()),
+    (0x2eaf9c, 22, (0x120b0e, 0x3e29dc, 0x17, 0x3e29f4), ()),
+    (0x2eafd0, 22, (0x120b3c, 0x3e29f8, 0x15, 0x3e2a10), ()),
+    (0x2eb004, 22, (0x120b68, 0x3e2a14, 0x19, 0x3e2a2c), ()),
+    (0x2eb030, 22, (0x120b98, 0x3e2a30, 0x1e, 0x3e2a48), ()),
+    (0x2eb068, 22, (0x120bcd, 0x3e2a4c, 0x1c, 0x3e2a64), ()),
+    (0x2eb0a0, 22, (0x120c00, 0x3e2a68, 0x18, 0x3e2a80), ()),
+    (0x2eb0d8, 22, (0x120c2f, 0x3e2a84, 0x16, 0x3e2a9c), ()),
+    (0x2eb108, 22, (0x120c5c, 0x3e2aa0, 0x14, 0x3e2ab8), ()),
+    (0x2eb140, 22, (0x120c87, 0x3e2abc, 0x1f, 0x3e2ad4), ()),
+    (0x2eb178, 22, (0x120cbd, 0x3e2ad8, 0x14, 0x3e2af0), ()),
+    (0x2eb1b0, 22, (0x120ce8, 0x3e2af4, 0x15, 0x3e2b0c), ()),
+    (0x2eb1e0, 21, (0x120d14, 0x3e2b10, 0x10, 0x3e2b28), ()),
+    (0x2eb214, 21, (0x120d3a, 0x3e2b2c, 0x16, 0x3e2b44), ()),
+    (0x2eb248, 21, (0x120d66, 0x3e2b48, 0x11, 0x3e2b60), ()),
+    (0x2eb27c, 21, (0x120d8d, 0x3e2b64, 0x1b, 0x3e2b7c), ()),
+    (0x2eb2a8, 22, (0x120dbe, 0x3e2b80, 0x11, 0x3e2b98), ()),
+    (0x2eb2dc, 22, (0x120de6, 0x3e2b9c, 0x1e, 0x3e2bb4), ()),
+    (0x2eb310, 22, (0x120e1b, 0x3e2bb8, 0x1f, 0x3e2bd0), ()),
+    (0x2eb344, 22, (0x120e51, 0x3e2bd4, 0x12, 0x3e2bec), ()),
+    (0x2eb370, 23, (0x120e7a, 0x3e2bf0, 0x1c, 0x3e2c08), ()),
+    (0x2eb398, 23, (0x120eae, 0x3e2c0c, 0x18, 0x3e2c24), ()),
+    (0x2eb3c0, 23, (0x120ede, 0x3e2c28, 0x1f, 0x3e2c40), ()),
+    (0x2eb3e8, 23, (0x120f15, 0x3e2c44, 0x1f, 0x3e2c5c), ()),
+    (0x2eb40c, 5, (0x120f4c, 0x3e2c60, 0x1b, 0x3e2c68), ()),
+    (0x2eb424, 4, (), ((0, 0x2ea304, 0), (0, 0x2ea304, 1), (0, 0x2ea30c, 0), (0, 0x2ea30c, 1),)),
+    (0x2eb434, 6, (0x120f6d, 0x3e2c6c, 0x14, 0x3e2c74), ()),
+    (0x2eb44c, 5, (0x120f88, 0x3e2c78, 0x1e, 0x3e2c80), ()),
+    (0x2eb45c, 6, (0x120fac, 0x3e2c84, 0x17, 0x3e2c8c), ()),
+    (0x2eb474, 5, (0x120fca, 0x3e2c90, 0x1a, 0x3e2c98), ()),
+    (0x2eb484, 6, (0x120fea, 0x3e2c9c, 0x10, 0x3e2ca4), ()),
+    (0x2eb49c, 5, (0x121001, 0x3e2ca8, 0x1c, 0x3e2cb0), ()),
+    (0x2eb4ac, 5, (0x121023, 0x3e2cb4, 0x18, 0x3e2cbc), ()),
+    (0x2eb4c4, 4, (), ((0, 0x2ea604, 0), (0, 0x2ea604, 1), (0, 0x2ea60c, 0), (0, 0x2ea60c, 1),)),
+    (0x2eb4d8, 5, (0x121041, 0x3e2cc0, 0x1d, 0x3e2cc8), ()),
+    (0x2eb4f0, 4, (), ((0, 0x2ea6b0, 0), (0, 0x2ea6b0, 1), (0, 0x2ea6b8, 0), (0, 0x2ea6b8, 1),)),
+    (0x2eb504, 5, (0x121064, 0x3e2ccc, 0x1e, 0x3e2cd4), ()),
+    (0x2eb52c, 6, (0x121088, 0x3e2cd8, 0x18, 0x3e2ce0), ()),
+    (0x2eb534, 5, (0x1210a7, 0x3e2ce4, 0x12, 0x3e2cec), ()),
+    (0x2eb55c, 6, (0x1210bf, 0x3e2cf0, 0x16, 0x3e2cf8), ()),
+)
+
+
+@dataclass(frozen=True)
+class BuiltinFunctionCatalogResult:
+    address: int
+    entry_count: int
+    effects: tuple[ReaderAstEffect, ...]
+    finalizers: tuple[tuple[int, int, int], ...]
+
+
+def initialize_builtin_function_catalog(pages, *, image_base, entry_stack_address,
+        thread_id, allocate=None, max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Actual +2cc0f8/+2e8c68 builtin function catalog under serial services.
+
+    Build 73 owned string/function nodes in 128 fixed hash buckets. Names come
+    from 61 guarded ELF XOR sources and 12 literal instruction references.
+    Cold allocation order includes temporary and copied long names; frees are
+    logical effects. Inline string padding retains the consumed caller frame.
+    The modeled guard-acquire/matching-libc mutex frame contributes its zero
+    scratch halfword and saved FP; final guard release overwrites two temporary
+    words. These consumed bytes are explicit SP-derived values, not snapshots.
+
+    A ready catalog is checked for bounded ownership, hashes, function targets
+    and bucket predecessors, then returned unchanged. Cold pointer fields and
+    the guard must be empty. allocate is a pure address plan; finalizer
+    registration is returned as an effect. Unsupported graphs, instruction
+    references, serial guards or write failures roll back all pages. This does
+    not model the whole native stack/TLS/OS or execute any builtin function.
+    """
+    if type(entry_stack_address) is not int or not 0x100<=entry_stack_address<=MASK64 or entry_stack_address&15:
+        raise RefillUnsupported('builtin function catalog requires an aligned incoming SP')
+    if type(thread_id) is not int or not 1<=thread_id<=0x7FFFFFFF:
+        raise RefillUnsupported('builtin function catalog requires a positive serial thread ID')
+    root=image_base+0x3E2728;guard=image_base+0x3E2720
+    m=_ReaderAstMemory(pages,image_base,root,40,4096,max_vector_bytes,reserved_regions)
+    if max_vector_bytes<1024:
+        raise RefillUnsupported('builtin function buckets exceed the byte bound')
+    def put(address,value,width=8):_write_span(m.p,address,value.to_bytes(width,'little'))
+    guard_value=_u(m.p,guard)
+    if guard_value&1:
+        buckets,count,head,size=(_u(m.p,root+offset) for offset in (0,8,16,24))
+        if count!=128 or size!=73 or _u(m.p,root+32,4)!=0x3F800000:
+            raise RefillUnsupported('ready builtin function catalog header is invalid')
+        m.claim(buckets,1024);seen=set();predecessors={};previous=root+16;previous_bucket=None
+        targets={method for method,_,_,_ in _BUILTIN_FUNCTION_ENTRIES}
+        while head:
+            if len(seen)>=73:raise RefillUnsupported('builtin function chain exceeds its entry bound')
+            m.claim(head,48);seen.add(head);header=_read_span(m.p,head+16,24)
+            if header[0]&1:
+                capacity=int.from_bytes(header[:8],'little')&~1;length=int.from_bytes(header[8:16],'little')
+                if not 22<length<=32 or not length<capacity<=max_vector_bytes:
+                    raise RefillUnsupported('builtin function owned name is invalid')
+                pointer=int.from_bytes(header[16:24],'little');m.claim(pointer,capacity)
+            else:
+                length=header[0]>>1;pointer=head+17
+                if length>22:raise RefillUnsupported('builtin function inline name is invalid')
+            payload=_read_span(m.p,pointer,length)
+            if _u(m.p,head+8)!=hash_descriptor_name(payload) or _u(m.p,head+40)-image_base not in targets:
+                raise RefillUnsupported('builtin function hash or target is invalid')
+            bucket=_u(m.p,head+8)&127
+            if bucket!=previous_bucket:
+                if bucket in predecessors:raise RefillUnsupported('builtin function bucket chain is split')
+                predecessors[bucket]=previous
+            previous_bucket=bucket;previous=head;head=_u(m.p,head)
+        if len(seen)!=73 or any(_u(m.p,buckets+index*8)!=predecessors.get(index,0) for index in range(128)):
+            raise RefillUnsupported('builtin function bucket predecessor links are invalid')
+        return BuiltinFunctionCatalogResult(root,73,(),())
+    if guard_value or any(_read_span(m.p,root,32)):
+        raise RefillUnsupported('builtin function catalog is busy or has stale cold storage')
+    temporary=entry_stack_address-0x70;function_slot=entry_stack_address-0x38
+    m.claim(temporary,24);m.claim(function_slot,8)
+    # +32d3a4 saves the getter FP. Matching libc +68d28 writes this halfword.
+    put(temporary+14,0,2);put(temporary+16,entry_stack_address-0x20)
+    _write_span(m.p,root,bytes(32));put(root+32,0x3F800000,4)
+    buckets=m.allocate(1024,allocate);_write_span(m.p,buckets,bytes(1024))
+    put(root,buckets);put(root+8,128)
+    keys=set()
+    for method,length,decoder,literal in _BUILTIN_FUNCTION_ENTRIES:
+        owned=0
+        if length>22:
+            owned=m.allocate(32,allocate)
+            _write_span(m.p,temporary,(33).to_bytes(8,'little')+length.to_bytes(8,'little')+owned.to_bytes(8,'little'))
+        else:put(temporary,length*2,1)
+        if decoder:
+            source,destination,period,flag=decoder
+            if _u(m.p,image_base+flag,4)!=1:
+                encoded=_read_span(m.p,image_base+source,period+length+1)
+                _write_span(m.p,image_base+destination,
+                    bytes(encoded[i%period]^encoded[period+i] for i in range(length+1)))
+                put(image_base+flag,1,4)
+            payload=_read_span(m.p,image_base+destination,length)
+            if _u(m.p,image_base+destination+length,1):
+                raise RefillUnsupported('builtin decoded source lacks its native terminator')
+        else:
+            values=[]
+            for kind,offset,byte in literal:
+                word=_u(m.p,image_base+offset,4 if kind==0 else 1)
+                if kind==0:
+                    if word&0x7F800000 not in (0x52800000,0x72800000):
+                        raise RefillUnsupported('builtin literal MOVZ/MOVK source is unsupported')
+                    word=(word>>(5+byte*8))&255
+                values.append(word)
+            payload=bytes(values)
+        if payload in keys:raise RefillUnsupported('builtin function source keys are duplicated')
+        keys.add(payload)
+        _write_span(m.p,owned or temporary+1,payload+b'\0');put(function_slot,image_base+method)
+        node=m.allocate(48,allocate);put(node,0);hashed=hash_descriptor_name(payload);put(node+8,hashed)
+        m.copy_string_value(node+16,_read_span(m.p,temporary,24),allocate);put(node+40,image_base+method)
+        cell=buckets+(hashed&127)*8;previous=_u(m.p,cell)
+        if previous:put(node,_u(m.p,previous));put(previous,node)
+        else:
+            following=_u(m.p,root+16);put(node,following);put(root+16,node);put(cell,root+16)
+            if following:put(buckets+(_u(m.p,following+8)&127)*8,node)
+        put(root+24,_u(m.p,root+24)+1)
+        if owned:m.emit('free',owned,32)
+    put(guard,(thread_id<<32)|0x101)
+    # Matching libc mutex frame after +32d520; only consumed temporary bytes.
+    put(temporary,entry_stack_address-0x50);put(temporary+8,image_base+0x32D524)
+    m.p.commit()
+    return BuiltinFunctionCatalogResult(root,73,tuple(m.effects),((image_base+0x2CC17C,root,image_base+0x34C700),))
