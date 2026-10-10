@@ -2279,6 +2279,62 @@ frame/mapping、allocation alias 和预算检查。
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_exports_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-exports-evidence.json>
 ```
 
+## 6.40 短名称 export 的 attached AST 组合（2026-10-11 Asia/Shanghai）
+
+`run_reader_ast_module(..., enable_exports=True, enable_inline_exports=True,
+entry_x28=...)` 恢复 section 7 的 0..22 字节名称。`enable_inline_exports`
+默认 `False`，要求显式传入原生入口 X28；其余开关保持独立。
+四类 export 继续验证逻辑 cache index，输出克隆和 cleanup 自然执行。
+
+绑定修改前 `9e8ac9f` 的 **16 项真实 RED**：原生自然返回 0，旧 Python
+拒绝短名称并回滚所有页面。冻结代码后 **386 项原生/Python 对照、25 项
+回滚检查**通过，含 12 项 SP 移位、6 项高位 guest、884 个完整
+40-byte export records 和 884 个完整 cloned nodes。
+
+| 原生写入来源 | 恢复的 header 字节 |
+| --- | --- |
+| `31b6f4/31b724/31b72c/31b84c/31b7ac` | type 临时参数 vector 的 begin/capacity 与 vtable |
+| `31b874/31bb4c/31be40/31c148` | import FP/LR；前三类保存 X28，global 保存 X27 |
+| `322f40/3230bc` | memory import 用 flags 改写 X28；X27 恢复为 image+1210ef |
+| `31f778/31f794` | function 移动后清空 type vector |
+| `31cb44/31cb10` | table descriptor[4:19] 与 vtable；byte 15 保留 |
+| `31cdec/31ce0c/31ce3c` | memory kind、min/max 与默认上限 |
+| `31d0b8/31d0c0/31d0c4` | global 嵌套 function 初始字段 |
+| `32140c/321494/3214b4/2db2c4` | initializer FP、raw opcode 与 32-bit 参数保存 |
+| `31d5c8/31d5ec/31d5f0/31d60c` | export 名称及终止零；后续名称继承未覆盖尾部 |
+
+名称 header 仍为 `[state-0x160,state-0x148)`。模型只根据输入、显式入口
+寄存器及上述原生 stores 恢复内容；每次 callback 前把模型 header 与原生
+header 作完整断言，原生快照从未作为模型输入。inline record 尾部再与
+原生 entry header 对照；名称、index、capacity、type vectors 与 limits
+独立从输入检查。完整未屏蔽 guest、ordered effects/owner bytes、parser
+exit、callback cleanup、image globals、arguments/cursor/limit 和自然返回/SP
+一致。观察到 allocation 9092、destroy 2016、
+delete 1990、free 5350。
+
+**实际 ELF 的完整 121 条 export payload** 在两个基址通过；名称和 index
+保持原样，声明与 code 为合成输入。测试器为此增加独立 1 MiB guest heap，
+全区域逐字节比较。首次试验发现原有 oracle 仅返回前 `0xa000` 字节，已用
+`observed_memory` 显式读回扩展 heap；生产代码无需为该测试器问题修改。
+这不代表实际完整 module/code 已恢复。实际名称与 payload 未进入公开 Git。
+
+合成对照覆盖每种 kind 的全部 0..22 名称长度、内嵌零、非零/全一 X28、
+memory 后不同 import、连续长短名称、type/function/table/memory/global、
+generic custom、空 section、部分输出后的解析失败与生成场景。25 项
+回滚覆盖 opt-in、入口寄存器类型/范围、逻辑 index、frame alias、预算和
+6 项中途写入失败。两组旧回归（heap export module、standalone export AST）
+共 **656/293**，历史 JSON 逐字节一致。生产修改仅两个现有函数；
+section parser 未改。
+
+接下来推进 element/data/special-custom attached 组合、零条目 type 的
+incoming X22、parse/root、完整 reader/factory/bootstrap、独立 signer 和线上验收。
+整个 native stack/TLS/OS、真实 allocator/异常仍不在本轮验证范围。
+见 [短名称 export 证据](evidence/vm9_alternative_ast_module_inline_exports_fresh_20261011.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_inline_exports_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-inline-exports-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

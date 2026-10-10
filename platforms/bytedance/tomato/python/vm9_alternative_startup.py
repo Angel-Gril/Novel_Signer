@@ -1285,6 +1285,10 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
             second = header[:]; second[16:24] = second_pointer.to_bytes(8,'little')
         else:
             header[0] = length*2; header[1:length+2] = payload; second = header[:]
+        if attached_state_address is not None:
+            # +31d5c8/+31d5ec/+31d5f0/+31d60c leave the first string
+            # header in this caller frame for the next export.
+            _write_span(m.p,frame,header)
         begin,end,cap = m.vector(ast+0xA8,40,own=False)
         size,capacity = (end-begin)//40,(cap-begin)//40
         new_capacity = max(size+1,capacity*2) if size == capacity else capacity
@@ -3055,7 +3059,8 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         enable_inline_function_imports=False, enable_table_memory_global_imports=False,
         enable_inline_table_memory_global_imports=False, enable_table_memory_definitions=False,
         enable_global_definitions=False, max_initializer_ops=4096,
-        enable_code_definitions=False, max_code_words=65536, enable_exports=False):
+        enable_code_definitions=False, max_code_words=65536, enable_exports=False,
+        enable_inline_exports=False, entry_x28=None):
     """Bounded actual +31b360 / +324444 with real AST effects and cleanup.
 
     Supports generic custom, type, function, start, data-count and empty export
@@ -3088,8 +3093,11 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     across this section, including nonadvancing zero words on short input.
     enable_exports=True independently composes section 7 slot +98 for names
     of at least 23 bytes and export kinds 0..3. Each index must name an existing
-    logical callback cache entry. Short names need further caller-frame recovery
-    and are rejected. Invalid kind 4 remains a native parse failure.
+    logical callback cache entry. Short names require enable_inline_exports=True.
+    That opt-in requires enable_exports and
+    an explicit entry_x28 (the incoming callee-saved register); import callbacks
+    can retain it in the inline string tail. Invalid kind 4 remains a native
+    parse failure.
     All opt-ins default False. Remaining handlers fail closed. The output starts empty.
     Eight prefix bytes are skipped without checking their magic.
     Parse errors return 1 and commit partial AST output. Guard failures roll
@@ -3125,7 +3133,11 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     The export opt-in also retains [state-0x210,state) (or the global frame).
     Export handler +3238b0 has a 0x60 frame: callback entry SP is state-0xd0,
     and +31d500's direct 0x90 frame starts at state-0x160. Heap names overwrite
-    all 24 header bytes, so no native stack snapshot or inline padding is used.
+    all 24 header bytes. The inline opt-in restores type/import/function/table/
+    memory/global writes into that header and retains preceding export tails.
+    Import X28 starts at entry_x28 and changes to memory flags within section 2;
+    global imports save X27=image_base+0x1210ef instead. No native snapshot is
+    used. This is the recovered consumed frame, not the entire native stack.
     allocate must be a pure plan for distinct aligned blocks, including freed
     temporaries: this bounded contract does not support address reuse. Effects
     include parser vectors, AST callbacks, parser cleanup then callback cleanup.
@@ -3157,6 +3169,11 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             or not isinstance(enable_code_definitions,bool)
             or not isinstance(max_code_words,int) or not 1 <= max_code_words <= 1048576
             or not isinstance(enable_exports,bool)
+            or not isinstance(enable_inline_exports,bool)
+            or enable_inline_exports and (not enable_exports or not isinstance(entry_x28,int)
+                or isinstance(entry_x28,bool) or not 0 <= entry_x28 <= MASK64)
+            or entry_x28 is not None and (not isinstance(entry_x28,int)
+                or isinstance(entry_x28,bool) or not 0 <= entry_x28 <= MASK64)
             or enable_inline_function_imports and not enable_function_imports
             or enable_inline_table_memory_global_imports and not enable_table_memory_global_imports
             or not callable(allocate)):
@@ -3204,6 +3221,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     m.callback(cb,attached_state_address=state)
     blocks, effects, vector_count = [], [], 0
     empty_type_section = False
+    import_x28 = entry_x28
     def plan(size):
         if not isinstance(size,int) or not 0 < size <= max_vector_bytes:
             raise RefillUnsupported('AST module allocation exceeds its byte bound')
@@ -3216,7 +3234,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         nonlocal vector_count
         effects.extend(vectors[vector_count:]); vector_count=len(vectors)
     def callback(current,event,vectors):
-        nonlocal empty_type_section
+        nonlocal empty_type_section, import_x28
         collect(vectors)
         if event.slot_offset == 0x18:
             empty_type_section = event.arguments[0] == 0
@@ -3242,7 +3260,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             if not enable_code_definitions:
                 raise RefillUnsupported('AST module code definitions need explicit opt-in')
         elif event.slot_offset == 0x98:
-            if not enable_exports or event.arguments[4] <= 22:
+            if not enable_exports or not enable_inline_exports and event.arguments[4] <= 22:
                 raise RefillUnsupported('AST module exports require explicit opt-in and heap names')
         elif event.slot_offset not in (0x18,0x20,0x50,0xA0,0x160):
             raise RefillUnsupported('AST module callback needs further native frame verification')
@@ -3257,6 +3275,61 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             attached_state_address=state,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,
             reserved_regions=((input_address,input_address+input_size),
                 (varuint_scratch_address,varuint_scratch_address+4),*reserved_regions))
+        if enable_inline_exports:
+            # Recover stores into +31d500's first string at state-0x160.
+            # Each source is an earlier native store, not an oracle snapshot.
+            frame = state-0x160
+            if event.slot_offset == 0x20:
+                # +31b6f4/+31b724/+31b72c/+31b84c: the original parameter
+                # vector's released begin/capacity; +31b7ac: type vtable.
+                count = event.arguments[1]&0xFFFFFFFF
+                pointer = next(e.address for e in result.effects if e.kind == 'allocate') if count else 0
+                _write_span(current,frame,pointer.to_bytes(8,'little')
+                    +(pointer+count*8).to_bytes(8,'little')+(image_base+0x3724F0).to_bytes(8,'little'))
+            elif event.slot_offset in (0x28,0x30,0x38,0x40):
+                # Import prologues +31b874/+31bb4c/+31be40/+31c148 save
+                # FP/LR and X28 (global saves X27). +322f40 replaces X28
+                # with memory flags within this section; the handler restores
+                # the incoming register when it returns.
+                if event.arguments[0] == 0: import_x28 = entry_x28
+                if event.slot_offset == 0x38:
+                    descriptor = event.arguments[6]
+                    import_x28 = _u(current,descriptor+16,1)|(_u(current,descriptor+18,1)<<2)
+                lr = {0x28:0x322EBC,0x30:0x322F20,0x38:0x3230B0,0x40:0x32302C}[event.slot_offset]
+                tail = image_base+0x1210EF if event.slot_offset == 0x40 else import_x28
+                _write_span(current,frame,(state-0xD0).to_bytes(8,'little')
+                    +(image_base+lr).to_bytes(8,'little')+tail.to_bytes(8,'little'))
+            elif event.slot_offset == 0x50:
+                # +31f778/+31f794 clear the moved function's type vector.
+                _write_span(current,frame,bytes(24))
+            elif event.slot_offset == 0x60:
+                # +31cb44 copies descriptor[4:19]; +31cb10 leaves its
+                # vtable. Byte 15 retains the previous caller byte.
+                descriptor = bytearray(_read_span(current,event.arguments[2],19))
+                if not descriptor[16]: descriptor[8:16]=(0xFFFFFFFF).to_bytes(8,'little')
+                _write_span(current,frame,descriptor[4:19])
+                _write_span(current,frame+16,(image_base+0x372518).to_bytes(8,'little'))
+            elif event.slot_offset == 0x70:
+                # +31cdec writes kind; +31ce0c/+31ce3c copy/normalize limits.
+                descriptor = bytearray(_read_span(current,event.arguments[1],19))
+                if not descriptor[16]:
+                    descriptor[8:16]=(0x1000000000000 if descriptor[18] else 0x10000).to_bytes(8,'little')
+                _write_span(current,frame,(2).to_bytes(4,'little'))
+                _write_span(current,frame+8,descriptor[:16])
+            elif event.slot_offset == 0x80:
+                # +31d0b8/+31d0c0/+31d0c4 initialize nested function fields.
+                _write_span(current,frame,bytes(8)+(0xFFFFFFFF).to_bytes(8,'little')+bytes(4))
+            elif event.slot_offset in (0xD0,0xD8,0xE0,0xE8):
+                # +32140c/+321494 save the initializer callback FP.
+                _write_span(current,frame+16,(state-0x120).to_bytes(8,'little'))
+                if event.slot_offset in (0xD0,0xE0):
+                    # +2db2c4 in both raw-vector extensions saves X20/X19.
+                    _write_span(current,frame,(event.arguments[0]&0xFFFFFFFF).to_bytes(8,'little')
+                        +(output_address+0x108).to_bytes(8,'little'))
+                else:
+                    # +3214b4 stores the 64-bit opcode before its payload.
+                    tag = 5 if event.slot_offset == 0xD8 else 3
+                    _write_span(current,frame+12,tag.to_bytes(4,'little'))
         if enable_table_memory_definitions or enable_global_definitions:
             if event.slot_offset == 0x20:
                 # +31b7b8 clears the moved parameter clone. The type section

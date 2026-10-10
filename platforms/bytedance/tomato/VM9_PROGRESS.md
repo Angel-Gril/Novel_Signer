@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：短名称 export 的 attached 组合
+
+`enable_inline_exports=True` 要求 `enable_exports=True` 和显式 `entry_x28`。
+恢复所有 0..22 字节名称及此前 caller stores、连续名称保留尾部。
+**386 项原生/Python 对照、25 项回滚**通过，含 12 项 SP 移位、6 项高位
+guest、884 个完整 records/clones。两组旧回归 **656/293** 的
+JSON 逐字节一致。两个基址下完整实际 ELF 的 121 条 export payload 均通过，
+声明与 code 为合成输入，扩展 1 MiB heap 全量比较；未公开名称/payload。
+其余 attached handlers、incoming X22、parse/root、完整 reader/factory/
+bootstrap、独立 signer 与线上验收尚未完成。
+见 [短名称 export 报告](REQUEST_JNI_STARTUP_WORKERS.md#640-短名称-export-的-attached-ast-组合2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：长名称 export 的 attached 组合
 
 `enable_exports=True` 默认关闭，支持至少 23 字节名称、kind 0..3 的实际
