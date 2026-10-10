@@ -316,6 +316,8 @@ is covered by the module opt-in below. See the [global expression report](../REQ
 
 `entry_x22` explicitly supplies the incoming uint64 register for table/memory/global imports after a zero-count type section. Its default `None` preserves the previous rejection boundary. 198 native/Python controls and 9 rollback checks pass, including caller-save observations, 12 moved SP and 6 high guest. On the same final owner, 36 selected historical controls (including both complete actual ELF modules) and all 77 guards from the two affected suites match their historical evidence. The actual ELF reader/AST is verified; parse/root, independent factory/bootstrap, signer and online acceptance remain unfinished. See the [zero-count type report](../REQUEST_JNI_STARTUP_WORKERS.md#642-零条目-type-与-incoming-x222026-10-11-asiashanghai).
 
+`convert_parser_instruction_word` now recovers the native parse codec helper, including scalar/SIMD shift differences and ignored metadata bytes. 434 fresh native/Python controls and 10 rejection checks pass, including 198 actual constructor codec controls, 16 moved SP and 12 high guest. Existing owner code is AST-identical after removing the new function. Complete parse/root, factory/bootstrap and signer remain unfinished. See the [parse codec report](../REQUEST_JNI_STARTUP_WORKERS.md#643-parse-指令格式转换2026-10-11-asiashanghai).
+
 
 
 

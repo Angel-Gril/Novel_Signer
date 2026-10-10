@@ -47,6 +47,82 @@ def hash_short_descriptor_name(payload):
 def _u(p,a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
 
 
+def convert_parser_instruction_word(pages, *, source_codec_address,
+        target_codec_address, word, max_fields=1024):
+    """Actual +0x2db778 instruction-format conversion, without page writes.
+
+    Each 24-byte codec record has two compared header bytes, an ignored XOR
+    byte, a triples pointer at +8 and a uint32 field count at +16. Each source
+    triple selects a target triple and supplies a source shift and width.
+    The target triple's second byte supplies its destination shift. Native
+    indexed reads are not constrained by the target's declared field count;
+    every used byte must nevertheless be mapped. The explicit count budget
+    bounds traversal. Bytes +2..+7 and +20..+23 do not affect conversion.
+
+    Matching headers/triples return the original word. Otherwise byte +1
+    rotates the word, followed by the native scalar or SIMD bit operations.
+    SIMD consumes complete groups of eight; remaining fields use scalar
+    shifts modulo 32. This distinction matters for zero widths and other
+    unusual field bytes. No catalog initialization or function parsing is
+    performed here, and native snapshots are not inputs.
+    """
+    for address in (source_codec_address,target_codec_address):
+        if type(address) is not int or not 0<address<=MASK64-23:
+            raise RefillUnsupported('parser codec record is outside the guest ABI')
+    if type(word) is not int or not 0<=word<=0xFFFFFFFF:
+        raise RefillUnsupported('parser instruction must be a uint32')
+    if type(max_fields) is not int or not 0<=max_fields<=0xFFFFFFFF:
+        raise RefillUnsupported('parser codec field budget is invalid')
+    source_count=_u(pages,source_codec_address+16,4)
+    target_count=_u(pages,target_codec_address+16,4)
+    if source_count>max_fields or target_count>max_fields:
+        raise RefillUnsupported('parser codec field count exceeds the budget')
+
+    def field_byte(pointer,index,offset):
+        address=pointer+index*3+offset
+        if not pointer or address>MASK64:
+            raise RefillUnsupported('parser codec triples address is null or overflows')
+        return _u(pages,address,1)
+
+    source_pointer=target_pointer=None
+    if source_count:
+        source_pointer=_u(pages,source_codec_address+8)
+        target_pointer=_u(pages,target_codec_address+8)
+    same=source_count==target_count
+    if same:
+        for index in range(source_count):
+            for offset in range(3):
+                if field_byte(source_pointer,index,offset)!=field_byte(target_pointer,index,offset):
+                    same=False;break
+            if not same:break
+        if same and (_u(pages,source_codec_address,1)==_u(pages,target_codec_address,1)
+                and _u(pages,source_codec_address+1,1)==_u(pages,target_codec_address+1,1)):
+            return word
+    rotation=_u(pages,source_codec_address+1,1)&31
+    rotated=((word<<rotation)|(word>>((-rotation)&31)))&0xFFFFFFFF
+    result=0;vector_fields=source_count&~7
+
+    def vector_shift(value,shift):
+        shift=((shift+128)&255)-128
+        if not -32<shift<32:return 0
+        return ((value<<shift)&0xFFFFFFFF) if shift>=0 else value>>-shift
+
+    for index in range(source_count):
+        selected=field_byte(source_pointer,index,0)
+        source_shift=field_byte(source_pointer,index,1)
+        width=field_byte(source_pointer,index,2)
+        target_shift=field_byte(target_pointer,selected,1)
+        if index<vector_fields:
+            mask=vector_shift(0xFFFFFFFF,32-width)
+            value=vector_shift(rotated,32-source_shift-width)
+            result|=vector_shift(value&mask,-(32-target_shift-width))
+        else:
+            mask=(0xFFFFFFFF<<((32-width)&31))&0xFFFFFFFF
+            value=(rotated<<((32-source_shift-width)&31))&0xFFFFFFFF
+            result|=(value&mask)>>((32-width-target_shift)&31)
+    return result
+
+
 @dataclass(frozen=True)
 class ReaderVaruint32Result:
     bytes_consumed: int

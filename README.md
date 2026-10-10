@@ -183,6 +183,8 @@ effects/cleanup/globals 全量一致。本阶段共 **406 项对照、36 项回�
 零条目 type 的 incoming X22 现已恢复，新增 **198 项对照、9 项回滚**；
 同一最终版另通过 **36/77** 关联回归，包含两个完整实际 module。见
 [零条目 type 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#642-零条目-type-与-incoming-x222026-10-11-asiashanghai)。
+parse 指令格式转换已恢复，**434 项对照、10 项拒绝检查**通过。见
+[parse codec 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#643-parse-指令格式转换2026-10-11-asiashanghai)。
 parse/root、factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

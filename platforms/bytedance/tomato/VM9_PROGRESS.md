@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：parse 指令格式转换
+
+`+2db778` 的 Python 指令格式转换通过 **434 项原生对照、10 项拒绝检查**，
+含 198 项实际构造器格式、16 项 SP 移位、12 项高位 guest。无原生快照
+输入；已有 owner 代码 AST 未变。当前继续完整 parse、root/descriptor、
+factory/bootstrap、独立 signer、新鲜输出与线上验收。
+见 [parse codec 报告](REQUEST_JNI_STARTUP_WORKERS.md#643-parse-指令格式转换2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：零条目 type 的 incoming X22
 
 显式 `entry_x22` 恢复 type-count helper 保存，允许零条目 type 后组合

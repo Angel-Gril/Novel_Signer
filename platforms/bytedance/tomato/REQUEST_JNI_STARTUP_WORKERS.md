@@ -2440,6 +2440,36 @@ factory/bootstrap，再完成独立 signer、新鲜签名输出和线上验收�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_zero_type_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-zero-type-evidence.json>
 ```
 
+## 6.43 parse 指令格式转换（2026-10-11 Asia/Shanghai）
+
+`convert_parser_instruction_word` 恢复 `+2db778`：比较格式、旋转 uint32
+指令字、按 triples 重排位段。两个 24 字节 record 的 count 实际只读取
+低 32 位；byte +2 的 XOR key 与其余 padding 不参与比较。相同格式直接
+返回原字，不同格式按 source byte +1 旋转，再使用目标字段的 shift。
+SIMD 消费完整的八字段组，余数字段使用 AArch64 标量模 32 位移；零宽度、
+超界 shift 等字节在两条路径中可能不同，Python 保留原生差异。
+
+修改前干净 `0f5ed54` 的 **12 项真实原生 RED** 确认 helper 自然返回，
+Python 缺少此 API。最终公开 verifier 新鲜通过 **434 项原生/Python 对照、
+10 项拒绝检查**，覆盖 0/1/2/6/7/8/9/15/16/17/23/24/31/32/33/64
+字段、格式相同、字段索引反序、不同 count、任意字段字节、旋转符号与
+模 32 边界、极值指令；包含 **198 项实际构造器格式对照**，分别为三组
+实际输入/builtin 格式的零字及 32 个基向量、两基址。实际格式从 fresh
+ELF 指令和常量构造，核对 51 个 constructor stores，未输入原生快照。
+另含 **16 项 SP 移位、12 项高位 guest**。全部检查自然返回、SP、完整
+guest 与全部 Python pages 不变；原生栈保存不是本纯读 API 的输出。
+
+唯一生产 owner 只新增这个函数。去掉新函数后，整个 Python AST 与
+修改前完全一致；未把历史 reader/AST 套件标记为本次重跑。显式资源
+边界、非 uint32 字、无效/未映射 record、字段预算均拒绝且页面不变。
+该入口尚不负责 builtin catalog 初始化、完整函数/模块转换、root、
+factory/bootstrap、独立 signer、新鲜输出或线上验收。
+见 [parse codec 证据](evidence/vm9_alternative_parse_codec_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_parse_codec_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <parse-codec-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
