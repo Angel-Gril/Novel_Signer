@@ -11,7 +11,7 @@ Opted-in special custom handlers parse metadata. Recovered actual AST callbacks,
 including imports/exports and owned output cleanup, have separate bounded APIs.
 A bounded module wrapper composes these sections with real AST callbacks and
 parser/callback cleanup, including the complete actual ELF module. Nonempty
-element vectors, zero-type incoming registers and independent factory remain open.
+element vectors and independent factory remain open.
 Unsupported branches fail closed.
 """
 from __future__ import annotations
@@ -3124,7 +3124,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
         enable_element_section=False, enable_data_section=False,
         expression_scratch_address=None, max_expression_ops=4096,
         enable_special_custom_sections=False, custom_scratch_address=None,
-        max_custom_records=4096):
+        max_custom_records=4096, entry_x22=None):
     """Bounded actual +31b360 / +324444 with real AST effects and cleanup.
 
     Supports generic custom, type, function, start, data-count and empty export
@@ -3199,6 +3199,10 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     its last five bytes remain from the caller. Type callbacks save their
     parameter count and type index into bytes consumed by subsequent imports.
     Their copy helper saves the output pointer retained by table node padding.
+    With a zero-count type section, later table/memory/global imports require
+    explicit entry_x22. The type reserve helper retains incoming X22 at
+    state-0x100 and the parser state pointer at state-0xe8; no type entry
+    follows to replace these words. Omission preserves the bounded rejection.
     Input/output/scratch/reservations/allocations cannot overlap that range.
     Varuint scratch is explicit model storage; the import descriptor uses
     the verified native caller address. Other native stack writes stay open.
@@ -3262,6 +3266,8 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
                 or isinstance(entry_x28,bool) or not 0 <= entry_x28 <= MASK64)
             or entry_x28 is not None and (not isinstance(entry_x28,int)
                 or isinstance(entry_x28,bool) or not 0 <= entry_x28 <= MASK64)
+            or entry_x22 is not None and (not isinstance(entry_x22,int)
+                or isinstance(entry_x22,bool) or not 0 <= entry_x22 <= MASK64)
             or enable_inline_function_imports and not enable_function_imports
             or enable_inline_table_memory_global_imports and not enable_table_memory_global_imports
             or not callable(allocate)):
@@ -3343,7 +3349,7 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
                     and min(event.arguments[2],event.arguments[4]) <= 22):
                 raise RefillUnsupported('AST module combined import kinds require two heap names')
         elif event.slot_offset in (0x30,0x38,0x40):
-            if (not enable_table_memory_global_imports or empty_type_section
+            if (not enable_table_memory_global_imports or empty_type_section and entry_x22 is None
                     or not enable_inline_table_memory_global_imports
                     and min(event.arguments[2],event.arguments[4]) <= 22):
                 raise RefillUnsupported('AST module other imports require verified type caller and two heap names')
@@ -3476,6 +3482,12 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
             elif event.slot_offset == 0x58:
                 # +31c9fc saves the section count in the memory tail word.
                 _write_span(current,state-0xD0,(event.arguments[0]&0xFFFFFFFF).to_bytes(8,'little'))
+        if (enable_table_memory_global_imports and event.slot_offset == 0x18
+                and empty_type_section and entry_x22 is not None):
+            # +31e760/+31e764 in the zero-count reserve helper save X22
+            # and X19=state. Later descriptors retain their unmodified bytes.
+            _write_span(current,state-0x100,entry_x22.to_bytes(8,'little'))
+            _write_span(current,state-0xE8,state.to_bytes(8,'little'))
         if enable_table_memory_global_imports and event.slot_offset == 0x20:
             # +31b6d8/+31b6dc retain the caller's parameter count/type index.
             # Later imports consume this saved parameter word and the high

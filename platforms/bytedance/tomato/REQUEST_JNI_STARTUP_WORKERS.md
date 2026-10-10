@@ -2403,6 +2403,43 @@ AST 相同。该范围等价检查通过，不表示旧套件已在最终版全�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_segments_custom_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-segments-custom-evidence.json>
 ```
 
+## 6.42 零条目 type 与 incoming X22（2026-10-11 Asia/Shanghai）
+
+`run_reader_ast_module` 新增 `entry_x22=None`。零条目 type section 后的
+table/memory/global imports 需要显式 uint64 X22；非整数、bool、负数与
+溢出均拒绝。默认值保留原来的拒绝边界，各类 import 仍要求已有开关。
+
+修改前 `0859d42` 绑定的 **18 项真实 RED** 覆盖两基址、三类 import、
+X22 为零、非零与全一：原生自然成功，旧 Python 拒绝并全页回滚。
+修复来自 `+31b6b0` 的 type-count callback 与 `+31e75c` reserve helper：
+`+31e760` 保存 incoming X22 到 `state-0x100`，`+31e764` 保存 X19=state
+到 `state-0xe8`。count 为零时没有 type-entry callback 覆盖它们，后续
+import 使用保存字和 descriptor 尾部。生产实现只恢复这些已消费的存储，
+未使用原生快照作为输入。
+
+**198 项原生/Python 对照、9 项回滚检查**通过。90 个合成输入覆盖三类
+import、名称长度 0/1/21/22/23/31、三种 frame padding、六种 import
+顺序、五类 custom 位于空 type 前后、后续 table/memory/global definitions、
+关闭 inline exports 和 generic custom；另含 12 项 SP 移位、6 项高位 guest。
+每项核对实际 helper 保存、自然返回/SP、全部 callback 参数/cursor/limit、
+完整 input、未屏蔽 guest 与额外 1 MiB heap、ordered effects、parser exit、
+callback cleanup 与 image globals。两处保存的中途写入失败均全页回滚。
+
+同一最终 owner 另通过 **36 项关联回归、77 项旧回滚**：34 项选定的
+旧短名称 import 对照，以及两个完整实际 ELF module；每项证据与历史
+对应行一致，两组旧 guards 全部一致。完整实际输入每次仍为 229328 字节、
+121 code bodies、54533 raw words、55369 callbacks。这是明确选定的回归
+范围，不表示重跑了全部历史套件。
+
+接下来恢复 `+2cd5a4` parse 转换、`+2cafd0` root/descriptor 与
+factory/bootstrap，再完成独立 signer、新鲜签名输出和线上验收。
+非空 element 的原生 abort、完整 native stack/TLS/OS 与实际 allocator/
+异常仍不在本次证明范围。见 [零条目 type 证据](evidence/vm9_alternative_ast_module_zero_type_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_zero_type_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-zero-type-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

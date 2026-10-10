@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：零条目 type 的 incoming X22
+
+显式 `entry_x22` 恢复 type-count helper 保存，允许零条目 type 后组合
+table/memory/global imports。默认 `None` 保留拒绝，未输入原生快照。
+**198 项原生/Python 对照、9 项回滚**通过，含 12 项 SP 移位与 6 项
+高位 guest。同一最终版的 **36 项选定旧对照、77 项旧回滚** 与历史证据
+一致；其中两个完整实际 ELF module 仍逐字节匹配。
+当前推进 parse/root、独立 factory/bootstrap、signer、新鲜输出及线上
+验收。见 [零条目 type 报告](REQUEST_JNI_STARTUP_WORKERS.md#642-零条目-type-与-incoming-x222026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：完整实际 module 的 reader AST
 
 element/data/special-custom attached 组合通过 **406 项原生/Python 对照、
