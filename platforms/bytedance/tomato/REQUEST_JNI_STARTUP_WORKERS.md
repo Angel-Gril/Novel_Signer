@@ -1671,6 +1671,69 @@ parser/AST/root、reader/factory/bootstrap/signer、fresh 签名及线上验收�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_import_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-import-evidence.json>
 ```
 
+## 6.30 完整 Output wrapper 清理（2026-10-10 Asia/Shanghai）
+
+`cleanup_reader_ast_output` 已恢复实际 `+2cbadc` 对 12 个 output vector headers
+的完整清理。**330 个原生/Python 对照、214 个回滚检查**通过，每基址 165 项。
+修改前 6 项实际行为 RED 覆盖全部容器混合、单独 kind4、空 import/export
+节点指针，两基址自然返回；Python 当时缺失完整 wrapper API。全部实现仍在
+`vm9_alternative_startup.py`，没有修改共享原生 driver 或已有 callback/parser。
+
+原生依次清理 `+108/+f0/+d8/+c0/+a8/+90/+78/+60/+48/+30/+18/+0`。
+
+| output offset | stride | 清理行为 |
+|---|---|---|
+| `+108/+c0` | 1 / 4 | raw/start 仅重置 end、释放外块 |
+| `+f0/+d8` | 176 / 184 | 倒序调用 data/element 记录析构，含 nested vectors |
+| `+a8/+18` | 40 / 64 | 倒序清零节点指针、deleting destructor、释放名称 |
+| `+90` | 40 | 直接写 kind4 vtable、重置/释放内部向量，无 destructor 调用 |
+| `+78/+30` | 176 / 144 | 倒序调用 global/function 记录析构 |
+| `+60/+48` | 40 / 48 | memory/table 仅重置 end、释放外块，记录字节不变 |
+| `+0` | 64 | 倒序 virtual non-deleting destructor，然后释放外块 |
+
+所有外块和内部向量保留 dangling begin/capacity，end 重置为 begin；非零
+零容量指针仍会到达 free。仅逻辑记录释放，必须消费一次。清理输出 object
+本身、callback cache、retained records 与 attached parser 不属于 `+2cbadc`。
+caller 必须将其他保留的地址范围显式列入 `reserved_regions`。
+
+`+90` 在删除前以 GOT `+375088 → +372580` 构造 `+372590` vtable，不读取旧
+vtable；已有旧 vtable 字节可以任意。table/memory 同样不读取 vtable 或
+节点字段。import/export 的节点指针允许零，但对应名称仍清理；非零节点
+保留实际五类节点/绑定/所有权验证。此选项仅完整清理启用，已有 callback
+和专属 import/export 清理的默认 validation 保持一致。
+
+验证比较自然 return/SP、无屏蔽完整 guest 前 `0xa000`、析构/deleting/free
+顺序及每次副作用的 output header owner bytes。330 次实际 wrapper 共观测
+1020 次记录/virtual 析构、896 次 deleting destructor 和 9424 次 free，零分配。
+独立预期核对外容器释放顺序、end 重置与 dangling headers、名称 headers
+不变、节点指针清零、kind4 vtable 与内部 end、table/memory 记录不变及借用
+callback 字节不变。fixture 从合成输入生成，未使用原生 input snapshot。
+
+覆盖每个单独容器、全部容器混合、rich/empty/mixed 嵌套内容、非零空容量
+outer pointers、空但拥有容量的 vectors、连续记录与五类 import/export 节点、
+空节点指针、inline/heap 名称和 heap 短名称、无意义旧 kind4 vtable、
+opaque table/memory fields，以及混合/空节点/kind4 各自精确 node budget
+24/14/2。两基址均通过。214 项 guard 包含 66 对容器之间有效的非零空
+指针别名、内部向量/名称/节点别名与非法地址、绑定/预算、23 处中途写入
+失败和 4 组解除限制后通过的配对输入。最大单块 384 字节通过、383 拒绝。
+全部原始页面回滚，非法原生路径不执行。
+
+新 API 复用已有记录析构 owner，只在 import/export validation 增加显式
+`allow_null_node=False` 参数。AST 检查证明删去这个 opt-in 参数/分支/转发后，
+整个既有 class 与基线一致；已有 callback/parser/API 行为保持一致。
+受影响的旧 import/export 回归本轮重新串行执行，**两份 JSON 逐字节一致**，
+共 1220 个旧对照和 657 个回滚。其他已有 owner 行为代码没有改动。
+
+全部使用 fresh ELF 与 synthetic fixtures，私有 payload 不发布。真实
+allocator/异常、整个 stack/TLS/OS、attached parser/AST/root、完整 reader/
+factory/bootstrap/signer、fresh 签名及线上验收仍未完成。
+
+见 [output 清理证据](evidence/vm9_alternative_ast_output_fresh_20261010.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_output_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-output-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1721,7 +1784,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步完成 B output wrapper 与 attached parser/AST 组合，随后解析/root 生成，再把原始 JNI /
+下一步恢复 B attached parser/AST 组合，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。

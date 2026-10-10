@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-10 Asia/Shanghai：完整 Output wrapper 清理
+
+实际 `+2cbadc` 对 12 个 output vector headers 的完整清理已恢复，通过
+**330 个对照、214 个回滚**。全部容器按原生顺序清理，名称/节点/nested
+vectors 各自释放；kind4 直接清理，table/memory 不读取记录。支持空节点
+和非零空容量指针。旧 import/export 两组回归 JSON 逐字节一致。
+attached parser/AST/root、完整 reader/factory/bootstrap/signer 仍未完成。
+见 [output 清理报告](REQUEST_JNI_STARTUP_WORKERS.md#630-完整-output-wrapper-清理2026-10-10-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-10 Asia/Shanghai：Import AST 回调与专属输出清理
 
 五类 `+28/+30/+38/+40/+48` import AST 回调和仅含 import 的实际 `+2cbadc`

@@ -7,9 +7,9 @@ Reader sections 0 (generic), 1, 3, 7, 8 and 12, plus opted-in section 2
 imports, section 4/5/6 definitions, section 9 empty element vectors,
 section 10 code words and section 11 data segments, run with explicit
 status-only callbacks.
-Opted-in special custom handlers parse metadata. Actual type/start/local-count/
-raw-word/data reserve/create/payload/expression callbacks and cleanup have separate bounded APIs;
-they are not yet composed with the section parser. Other AST callbacks,
+Opted-in special custom handlers parse metadata. Recovered actual AST callbacks,
+including imports/exports and owned output cleanup, have separate bounded APIs;
+they are not yet composed with the section parser. Attached parser composition,
 nonempty element vectors and complete AST/reader/factory remain open.
 Unsupported branches fail closed.
 """
@@ -789,7 +789,7 @@ class _ReaderAstMemory:
         self.destroy_node_storage(address)
         self.emit('free',address,stride)
 
-    def export_record(self, address):
+    def export_record(self, address, *, allow_null_node=False):
         header = _read_span(self.p,address,24)
         if header[0]&1:
             capacity = int.from_bytes(header[:8],'little')&~1
@@ -800,6 +800,7 @@ class _ReaderAstMemory:
         elif header[0]>>1 > 22:
             raise RefillUnsupported('AST export inline string length is unsupported')
         node = _u(self.p,address+24)
+        if allow_null_node and not node: return
         table = _u(self.p,node)-self.base
         if table not in _AST_NODE_TABLES:
             raise RefillUnsupported('AST export node vtable is unsupported')
@@ -816,9 +817,9 @@ class _ReaderAstMemory:
         if node: self.delete_node(node)
         self.free_string_value(_read_span(self.p,address,24))
 
-    def import_record(self, address):
+    def import_record(self, address, *, allow_null_node=False):
         # The field string and node share the recovered export-record prefix.
-        self.export_record(address+24)
+        self.export_record(address+24,allow_null_node=allow_null_node)
         header = _read_span(self.p,address,24)
         if header[0]&1:
             capacity = int.from_bytes(header[:8],'little')&~1
@@ -1857,7 +1858,7 @@ def cleanup_reader_ast_export_output(pages, *, output_address, image_base,
     Each 40-byte record owns a name and independently cloned node. Delete
     nodes, then release names, backwards; reset end and free the outer block.
     Other output containers must be empty. Begin/capacity remain dangling,
-    so consume logical frees once. Complete output-wrapper cleanup is open.
+    so consume logical frees once. Mixed containers use cleanup_reader_ast_output.
     """
     m = _ReaderAstMemory(pages,image_base,output_address,0x120,max_nodes,max_vector_bytes,reserved_regions)
     m.claim(output_address,0x120)
@@ -1883,7 +1884,7 @@ def cleanup_reader_ast_import_output(pages, *, output_address, image_base,
 
     Delete each node, then release field and module names, backwards. Reset
     end and free the outer block, retaining dangling begin/capacity. Every
-    other output header must be zero; complete output-wrapper cleanup is open.
+    other output header must be zero; mixed containers use cleanup_reader_ast_output.
     """
     m = _ReaderAstMemory(pages,image_base,output_address,0x120,max_nodes,max_vector_bytes,reserved_regions)
     m.claim(output_address,0x120)
@@ -1902,6 +1903,62 @@ def cleanup_reader_ast_import_output(pages, *, output_address, image_base,
     return ReaderAstResult(None,tuple(m.effects))
 
 
+def cleanup_reader_ast_output(pages, *, output_address, image_base,
+                              max_nodes=4096, max_vector_bytes=16*1024*1024,
+                              reserved_regions=()):
+    """Recover actual +2cbadc cleanup of the twelve output vector headers.
+
+    Validate disjoint ownership before consuming containers from +108 to +0.
+    Records are destroyed backwards through their recovered native owners;
+    +90 kind4 records reset/free their vector directly without a destructor
+    call. Import/export node pointers may be null. Scalar table/memory/start
+    and raw containers free only their outer storage. All logical frees must
+    be consumed once; begin/capacity remain dangling while end resets to begin.
+    Guard or write failure rolls back pages. This API does not free the output
+    object, borrowed callback caches, or attached parser state. Real allocator,
+    exception, stack/TLS/OS and parser composition remain outside its proof.
+    """
+    m = _ReaderAstMemory(pages,image_base,output_address,0x120,max_nodes,max_vector_bytes,reserved_regions)
+    m.claim(output_address,0x120)
+    strides = (64,64,144,48,40,176,40,40,4,184,176,1)
+    containers = []
+    for offset,stride in zip(range(0,0x120,24),strides):
+        begin,end,cap = m.vector(output_address+offset,stride)
+        if offset not in (0xC0,0x108) and (cap-begin)//stride > max_nodes:
+            raise RefillUnsupported('AST output cleanup capacity exceeds its node bound')
+        for address in range(begin,end,stride) if offset not in (0x48,0x60,0xC0,0x108) else ():
+            if offset == 0: m.node(address,64)
+            elif offset == 0x90:
+                m.nodes += 1
+                if m.nodes > max_nodes:
+                    raise RefillUnsupported('AST output kind4 node bound reached')
+                m.vector(address+0x10,8)
+                if _u(m.p,image_base+0x375088) != image_base+0x372580:
+                    raise RefillUnsupported('AST output kind4 vtable source is unsupported')
+            elif offset == 0x18: m.import_record(address,allow_null_node=True)
+            elif offset == 0x30: m.function_record(address)
+            elif offset == 0x78: m.global_record(address)
+            elif offset == 0xA8: m.export_record(address,allow_null_node=True)
+            elif offset == 0xD8: m.element_record(address)
+            elif offset == 0xF0: m.data_record(address)
+        containers.append((offset,stride,begin,end))
+    for offset,stride,begin,end in reversed(containers):
+        for address in range(end-stride,begin-1,-stride) if offset not in (0x48,0x60,0xC0,0x108) else ():
+            if offset == 0: m.destroy(address,64)
+            elif offset == 0x18: m.destroy_import(address)
+            elif offset == 0x30: m.destroy_nested(address)
+            elif offset == 0x78: m.destroy_global(address)
+            elif offset == 0x90:
+                _write_span(m.p,address,(image_base+0x372590).to_bytes(8,'little'))
+                m.free_vector(address+0x10)
+            elif offset == 0xA8: m.destroy_export(address)
+            elif offset == 0xD8: m.destroy_element(address)
+            elif offset == 0xF0: m.destroy_data(address)
+        m.free_vector(output_address+offset)
+    m.p.commit()
+    return ReaderAstResult(None,tuple(m.effects))
+
+
 def copy_reader_ast_string(pages, *, destination_address, source_address, image_base,
                            allocate=None, max_vector_bytes=16*1024*1024,
                            reserved_regions=()):
@@ -1915,8 +1972,8 @@ def copy_reader_ast_string(pages, *, destination_address, source_address, image_
     construction, so the destination must own no existing heap allocation.
     The caller must release the resulting buffer through its owning object.
     status contains the native X0 return address. Allocation is a pure plan;
-    any guard/write failure rolls back all pages. Full import/export callbacks
-    and their object/string destruction remain separate unfinished boundaries.
+    any guard/write failure rolls back all pages. Import/export callbacks and
+    output cleanup are separate entry points in this owner.
     """
     m = _ReaderAstMemory(pages,image_base,destination_address,24,4096,max_vector_bytes,reserved_regions)
     m.claim(destination_address,24)
