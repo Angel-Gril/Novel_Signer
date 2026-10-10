@@ -8,8 +8,9 @@ imports, section 4/5/6 definitions, section 9 empty element vectors,
 section 10 code words and section 11 data segments, run with explicit
 status-only callbacks.
 Opted-in special custom handlers parse metadata. Recovered actual AST callbacks,
-including imports/exports and owned output cleanup, have separate bounded APIs;
-they are not yet composed with the section parser. Attached parser composition,
+including imports/exports and owned output cleanup, have separate bounded APIs.
+A bounded module wrapper composes generic/type/function/start/data-count sections
+with real AST callbacks and parser/callback cleanup. Remaining attached handlers,
 nonempty element vectors and complete AST/reader/factory remain open.
 Unsupported branches fail closed.
 """
@@ -609,11 +610,28 @@ class _ReaderAstMemory:
         self.node(address,24)
         self.function_record(address+0x18)
 
-    def callback(self, address, *, output=True):
+    def callback(self, address, *, output=True, attached_state_address=None):
         self.claim(address, 0x108)
         if _u(self.p, address) != self.base+0x372370:
             raise RefillUnsupported('AST callback requires its actual vtable')
-        if _u(self.p, address+8):
+        if attached_state_address is not None:
+            if (not isinstance(attached_state_address,int) or attached_state_address & 15
+                    or not 0 < attached_state_address <= MASK64-0xAF
+                    or _u(self.p,address+8) != attached_state_address+8
+                    or _u(self.p,attached_state_address+0x20) != address):
+                raise RefillUnsupported('AST attached parser binding is inconsistent')
+            self.claim(attached_state_address,0xB0,alignment=16)
+            for offset in (0x28,0x40,0x58,0x70):
+                self.vector(attached_state_address+offset,8)
+            limit,data,total,cursor = (_u(self.p,attached_state_address+offset)
+                                      for offset in (0,8,16,24))
+            if (not data or data+total > MASK64+1 or total > self.max_bytes
+                    or not 0 <= cursor <= limit <= total
+                    or any(data < stop and start < data+total for start,stop in self.regions)):
+                raise RefillUnsupported('AST attached parser input is invalid or shared')
+            _read_span(self.p,data,total)
+            self.reserved.append((data,data+total))
+        elif _u(self.p, address+8):
             raise RefillUnsupported('AST callback attached parser state remains unsupported')
         ast = _u(self.p, address+0x18)
         if output:
@@ -995,7 +1013,7 @@ class _ReaderAstMemory:
 
 def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         arguments, allocate=None, max_nodes=4096, max_vector_bytes=16*1024*1024,
-        reserved_regions=(), entry_stack_address=None):
+        reserved_regions=(), entry_stack_address=None, attached_state_address=None):
     """Recovered actual B vtable callbacks with transactional owned effects.
 
     Type count reserves capacity without resizing. Type entry ignores its
@@ -1091,6 +1109,11 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
     lengths. F0 takes no arguments and appends a zero word. Arguments use
     uint64 registers and native w-register truncation. Other slots fail closed.
 
+    attached_state_address explicitly opts into verified slots +18/+20/+50/
+    +a0/+160. The attached pointer must equal state+8 and state+20 must bind
+    this callback. Parser vectors and input are retained through allocation.
+    The default continues to reject nonzero attached pointers.
+
     allocate(size) must only plan an aligned address in mapped pages. It must
     not mutate pages or allocate externally. Frees are logical effects: pages
     stay mapped and unpoisoned. Guard failures roll back all model writes;
@@ -1111,11 +1134,14 @@ def run_reader_ast_callback(pages, *, callback_address, image_base, slot_offset,
         raise RefillUnsupported('AST callback slot or uint64 arguments are unsupported')
     if not isinstance(callback_address,int) or not 0 < callback_address <= MASK64-0x108:
         raise RefillUnsupported('AST callback address is invalid')
+    if attached_state_address is not None and slot_offset not in (0x18,0x20,0x50,0xA0,0x160):
+        raise RefillUnsupported('AST attached callback slot has not been verified')
     # Local group count has no output-object access in the native function.
     root, width = (callback_address,0x108) if slot_offset == 0xB0 else (
         _u(pages,callback_address+0x18),0x120)
     m = _ReaderAstMemory(pages,image_base,root,width,max_nodes,max_vector_bytes,reserved_regions)
-    ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0)
+    ast, _, trees = m.callback(callback_address, output=slot_offset != 0xB0,
+                             attached_state_address=attached_state_address)
     entries = {0x18:0x31B6B0,0x20:0x31B6D0,0x28:0x31B870,0x30:0x31BB48,0x38:0x31BE3C,0x40:0x31C144,0x48:0x31C414,0x50:0x31C7B8,0x58:0x31C9F4,0x60:0x31CABC,0x68:0x31CCEC,0x70:0x31CDB4,0x78:0x31D004,0x80:0x31D028,0x88:0x31D45C,0x90:0x31D4AC,0x98:0x31D500,0xA0:0x31D6D4,0xA8:0x31D7D8,
                0xB8:0x31D984,0xF8:0x31DBB4,
                0xC0:0x31DA9C,0xC8:0x31DAB4,0xD0:0x31DB04,0xD8:0x31DB28,
@@ -2057,7 +2083,8 @@ def destroy_reader_ast_element_record(pages, *, record_address, image_base,
 
 
 def cleanup_reader_callback(pages, *, callback_address, image_base,
-        max_nodes=4096, max_vector_bytes=16*1024*1024, reserved_regions=()):
+        max_nodes=4096, max_vector_bytes=16*1024*1024, reserved_regions=(),
+        attached_state_address=None):
     """Actual +31b458 cleanup: five reverse node lists, two trees, buffer.
 
     The five strides are 40/24/40/48/64 at e0/c8/b0/98/80. Supported node
@@ -2066,10 +2093,12 @@ def cleanup_reader_callback(pages, *, callback_address, image_base,
     Tree payload vectors contain u32 offsets with four-byte element widths.
     Begin/capacity and tree roots remain dangling as in native destruction.
     The caller consumes logical free effects once. The independent record
-    list and output AST are retained; wrapper +31b360 cleanup remains open.
+    list and output AST are retained. An explicit attached_state_address
+    retains the parser/input graph; the default rejects attached callbacks.
+    The bounded module wrapper handles its empty retained-record list.
     """
     m = _ReaderAstMemory(pages,image_base,callback_address,0x108,max_nodes,max_vector_bytes,reserved_regions)
-    _,lists,trees = m.callback(callback_address)
+    _,lists,trees = m.callback(callback_address,attached_state_address=attached_state_address)
     _write_span(m.p,callback_address,(image_base+0x372370).to_bytes(8,'little'))
     for header,stride,begin,end,cap in lists:
         if begin:
@@ -2094,7 +2123,7 @@ def run_reader_sections(pages, *, state_address, image_base,
         enable_element_section=False, enable_data_section=False,
         expression_scratch_address=None, max_expression_ops=4096,
         enable_special_custom_sections=False, custom_scratch_address=None,
-        max_custom_records=4096):
+        max_custom_records=4096, _ast_callback=None):
     """Bounded +0x324188 dispatch with handlers 0/1/2/3/4/5/6/7/8/9/10/11/12.
 
     State layout: limit/data/total/cursor/callback at +0/+8/+16/+24/+32;
@@ -2107,6 +2136,10 @@ def run_reader_sections(pages, *, state_address, image_base,
     actual AST allocation/callback effects are not modeled here. Parse errors
     commit native-observable partial state with status 1. Unsupported branches
     and guard failures leave the original pages unchanged.
+
+    The private _ast_callback bridge is used by run_reader_ast_module to run
+    verified AST callbacks inside this transaction and preserve interleaved
+    vector effects. The ordinary callback contract remains a status service.
 
     Section 1 requires vector_allocate(size), a pure allocation plan into
     already mapped pages. Recorded allocation/free effects are logical service
@@ -2167,7 +2200,8 @@ def run_reader_sections(pages, *, state_address, image_base,
             or not isinstance(varuint_scratch_address, int)
             or not 0 < varuint_scratch_address <= MASK64-3):
         raise RefillUnsupported('reader section addresses exceed the bounded guest ABI')
-    if (not callable(callback) or not isinstance(max_sections, int)
+    if (not callable(callback) or (_ast_callback is not None and not callable(_ast_callback))
+            or not isinstance(max_sections, int)
             or not 1 <= max_sections <= 4096 or not isinstance(max_entries, int)
             or not 1 <= max_entries <= 65536 or not isinstance(max_input_bytes, int)
             or not 0 <= max_input_bytes <= 16*1024*1024
@@ -2302,7 +2336,8 @@ def run_reader_sections(pages, *, state_address, image_base,
                              int.from_bytes(descriptor[8:16], 'little'), *descriptor[16:])
         event = ReaderCallbackEvent(slot, tuple(arguments), cursor(), limit(), type_vectors,
                                     counts, import_limits)
-        status = callback(event)
+        status = (callback(event) if _ast_callback is None else
+                  _ast_callback(p,event,tuple(vector_effects)))
         if not isinstance(status, int) or not 0 <= status <= 0xFFFFFFFF:
             raise RefillUnsupported('reader callback must return an explicit uint32 status')
         events.append(event)
@@ -2930,6 +2965,134 @@ def run_reader_sections(pages, *, state_address, image_base,
                                   tuple(entered), tuple(events), tuple(vector_effects))
     p.commit()
     return result
+
+
+@dataclass(frozen=True)
+class ReaderAstModuleResult:
+    status: int
+    sections: ReaderSectionsResult | None
+    effects: tuple[ReaderAstEffect | ReaderVectorEffect, ...]
+
+
+def run_reader_ast_module(pages, *, image_base, input_address, input_size,
+        output_address, entry_stack_address, varuint_scratch_address, allocate,
+        context_address=0, context_size=0, max_sections=512, max_entries=4096,
+        max_input_bytes=16*1024*1024, max_nodes=4096,
+        max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Bounded actual +31b360 / +324444 with real AST effects and cleanup.
+
+    Supports generic custom, type, function, start, data-count and empty export
+    sections. Other handlers and nonempty exports fail closed. The output must
+    start empty. Eight prefix bytes are skipped without checking their magic.
+    Parse errors return 1 and commit partial AST output. Guard failures roll
+    back all pages. Function/code count mismatch returns 1 after dispatch.
+
+    Explicit mapped native frames retain untouched callback/state padding.
+    Only their callback/retained headers and parser object fields are modeled;
+    saved registers and other stack/TLS bytes remain outside the contract.
+    Caller scratch is explicit model storage, not native stack scratch.
+    allocate must be a pure plan for distinct aligned blocks, including freed
+    temporaries: this bounded contract does not support address reuse. Effects
+    include parser vectors, AST callbacks, parser cleanup then callback cleanup.
+    Consume logical frees once. The output and its allocations remain owned.
+    """
+    if (not isinstance(image_base,int) or image_base & 4095
+            or not 0 < image_base <= MASK64-0x400000
+            or not isinstance(max_sections,int) or not 1 <= max_sections <= 4096
+            or not isinstance(max_entries,int) or not 1 <= max_entries <= 65536
+            or not isinstance(max_input_bytes,int) or not 0 <= max_input_bytes <= 16*1024*1024
+            or not isinstance(entry_stack_address,int) or entry_stack_address & 15
+            or not 0x220 < entry_stack_address <= MASK64
+            or not isinstance(input_address,int) or not 0 < input_address <= MASK64
+            or not isinstance(input_size,int) or not 0 <= input_size <= max_input_bytes
+            or input_address+input_size > MASK64+1
+            or not isinstance(output_address,int) or output_address & 7
+            or not 0 < output_address <= MASK64-0x11F
+            or not isinstance(varuint_scratch_address,int)
+            or not 0 < varuint_scratch_address <= MASK64-3
+            or any(not isinstance(v,int) or not 0 <= v <= MASK64
+                   for v in (context_address,context_size))
+            or not callable(allocate)):
+        raise RefillUnsupported('AST module requires bounded input, output and native frames')
+    cb, state = entry_stack_address-0x150, entry_stack_address-0x220
+    retained = [(image_base,image_base+0x400000), (input_address,input_address+input_size),
+                (output_address,output_address+0x120), (state,entry_stack_address),
+                (varuint_scratch_address,varuint_scratch_address+4), *reserved_regions]
+    if any(not isinstance(a,int) or not isinstance(b,int) or not 0 <= a <= b <= MASK64+1
+           for a,b in retained):
+        raise RefillUnsupported('AST module retained region is invalid')
+    if any(a < d and c < b for i,(a,b) in enumerate(retained)
+           for c,d in retained[i+1:]):
+        raise RefillUnsupported('AST module retained regions overlap')
+    p = _PageTransaction(pages)
+    _read_span(p,input_address,input_size); _read_span(p,state,0x220)
+    _read_span(p,varuint_scratch_address,4)
+    if any(_read_span(p,output_address,0x120)):
+        raise RefillUnsupported('AST module requires empty output containers')
+    # Match constructor stores rather than zeroing unwritten +28/+78 padding.
+    for offset,length in ((0x30,0x18),(0x50,0x10),(0x68,0x10),(0x80,0x78),(0x108,0x18)):
+        _write_span(p,cb+offset,bytes(length))
+    for offset,value in ((0,image_base+0x372370),(8,0),(0x10,cb+0x108),
+            (0x18,output_address),(0x20,output_address+0x108),
+            (0x48,cb+0x50),(0x60,cb+0x68),(0xF8,context_address),(0x100,context_size)):
+        _write_span(p,cb+offset,value.to_bytes(8,'little'))
+    _write_span(p,state+0x28,bytes(0x60))
+    _write_span(p,state+0x88,bytes.fromhex('ffffffff00'))
+    _write_span(p,state+0x90,bytes(0x20))
+    _write_span(p,state+0xAC,bytes.fromhex('ffffffff'))
+    for offset,value in ((0,input_size),(8,input_address),(16,input_size),
+            (24,8 if input_size >= 8 else 4 if input_size >= 4 else 0),(32,cb)):
+        _write_span(p,state+offset,value.to_bytes(8,'little'))
+    _write_span(p,cb+8,(state+8).to_bytes(8,'little'))
+    # Validate resource bounds and the fresh graph even when no sections run.
+    m = _ReaderAstMemory(p,image_base,output_address,0x120,max_nodes,max_vector_bytes,reserved_regions)
+    m.callback(cb,attached_state_address=state)
+    blocks, effects, vector_count = [], [], 0
+    def plan(size):
+        if not isinstance(size,int) or not 0 < size <= max_vector_bytes:
+            raise RefillUnsupported('AST module allocation exceeds its byte bound')
+        address = allocate(size)
+        if (not isinstance(address,int) or address & 7 or not 0 < address <= MASK64-size
+                or any(address < b and a < address+size for a,b in (*retained,*blocks))):
+            raise RefillUnsupported('AST module allocation overlaps retained or planned storage')
+        _read_span(p,address,size); blocks.append((address,address+size)); return address
+    def collect(vectors):
+        nonlocal vector_count
+        effects.extend(vectors[vector_count:]); vector_count=len(vectors)
+    def callback(current,event,vectors):
+        collect(vectors)
+        if event.slot_offset not in (0x18,0x20,0x50,0xA0,0x160):
+            raise RefillUnsupported('AST module callback needs further native frame verification')
+        result = run_reader_ast_callback(current,callback_address=cb,image_base=image_base,
+            slot_offset=event.slot_offset,arguments=event.arguments,allocate=plan,
+            attached_state_address=state,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,
+            reserved_regions=((input_address,input_address+input_size),
+                (varuint_scratch_address,varuint_scratch_address+4),*reserved_regions))
+        effects.extend(result.effects); return result.status
+    sections = None
+    status = 1
+    if input_size >= 8:
+        sections = run_reader_sections(p,state_address=state,image_base=image_base,
+            varuint_scratch_address=varuint_scratch_address,callback=lambda event: 0,
+            vector_allocate=plan,max_sections=max_sections,max_entries=max_entries,
+            max_input_bytes=max_input_bytes,_ast_callback=callback)
+        collect(sections.vector_effects)
+        status = int(sections.status == 1 or _u(p,state+0xA4,4) != _u(p,state+0xA8,4))
+    for offset in (0x70,0x58,0x40,0x28):
+        begin,end,cap = (_u(p,state+offset+n) for n in (0,8,16))
+        if begin:
+            _write_span(p,state+offset+8,begin.to_bytes(8,'little'))
+            effects.append(ReaderVectorEffect('free',begin,cap-begin,state+offset,(begin,begin,cap)))
+    result = cleanup_reader_callback(p,callback_address=cb,image_base=image_base,
+        attached_state_address=state,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,
+        reserved_regions=((input_address,input_address+input_size),
+            (varuint_scratch_address,varuint_scratch_address+4),*reserved_regions))
+    effects.extend(result.effects)
+    # Supported callbacks never populate the independent retained-record list.
+    if any(_read_span(p,cb+0x108,24)):
+        raise RefillUnsupported('AST module retained-record construction remains unsupported')
+    p.commit()
+    return ReaderAstModuleResult(status,sections,tuple(effects))
 
 
 @dataclass(frozen=True)

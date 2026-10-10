@@ -73,15 +73,15 @@ ELF type inputs. Actual vtables run naturally; node bytes, pointer publication,
 allocation/destruction/free ordering and owner state at every effect match.
 The five callback slots are +18/+20/+a0/+b0/+168; cleanup covers five reverse
 node lists, two bounded trees and a byte buffer. These separate APIs require a
-detached callback and empty unrecovered output containers. Parser composition,
-other AST callbacks and wrapper cleanup remain open. See the
+detached callback by default and empty unrecovered output containers. A bounded
+attached module is now available below; remaining composition stays open. See the
 [AST/cleanup report](REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai).
 Slot +160 subsequently adds 176 comparisons and 30 rollback checks for
 176-byte data record reserve/move and the +2cc1ec non-deleting destructor.
 All fixtures are synthetic and run at two bases. Nested vectors transfer,
 destination padding remains intact, and publication/destruction/free match.
 Data storage at output+f0 is now validated in the shared ownership graph;
-attached parser composition remains open. See the
+remaining attached handlers stay open. See the
 [data reserve/destructor report](REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai).
 Slot +140 data record creation/append adds 148 comparisons and 105 rollback
 checks, all synthetic at two bases. Flag classification, u32 truncation,
@@ -173,7 +173,8 @@ AST string copy +32a9c4 passes 68 comparisons and 12 rollback checks, including 
 Export +98 now owns independent names and cloned nodes, including backwards cloning on growth. Export-only output cleanup is recovered; 362 comparisons and 247 rollback checks pass, with sixteen historical JSON files byte-identical. See the [export report](REQUEST_JNI_STARTUP_WORKERS.md#628-export-ast-回调与专属输出清理2026-10-10-asiashanghai).
 Five import AST callbacks now own two independent names and cloned nodes, followed by separate cache append. Import-only output cleanup is recovered; 858 comparisons and 410 rollback checks pass, including real table/global stack arguments. Seventeen historical JSON files match byte for byte. See the [import report](REQUEST_JNI_STARTUP_WORKERS.md#629-import-ast-回调与专属输出清理2026-10-10-asiashanghai).
 Complete output wrapper cleanup +2cbadc now handles all twelve containers, including nullable import/export nodes and direct kind4 cleanup. 330 comparisons and 214 rollback checks pass; the two affected import/export historical JSON files match byte for byte. See the [output cleanup report](REQUEST_JNI_STARTUP_WORKERS.md#630-完整-output-wrapper-清理2026-10-10-asiashanghai).
-Attached parser composition remains open. Allocation/free remain explicit services;
+A bounded module now composes generic/type/function/start/data-count and empty export parsing with actual AST callbacks, parser vector cleanup and callback cleanup. 214 controls and 83 rollback checks pass; old section and AST/cleanup JSON files match byte for byte. Output starts empty and pure allocation addresses cannot be reused. See the [module report](REQUEST_JNI_STARTUP_WORKERS.md#631-attached-parser-与有界-ast-module2026-10-10-asiashanghai).
+Remaining attached handlers are open. Allocation/free remain explicit services;
 complete AST construction and complete Python reader remain open. Independent Medusa, fresh
 signatures and online acceptance remain unfinished. See [the startup/worker
 report](REQUEST_JNI_STARTUP_WORKERS.md) and [VM9_PROGRESS.md](VM9_PROGRESS.md).

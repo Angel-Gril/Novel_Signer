@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-10 Asia/Shanghai：有界 attached parser 与真实 AST
+
+`run_reader_ast_module` 贯通真实 `+31b360/+324444` 的 generic/type/function/
+start/data-count 与空 export 路径、parser 临时向量和 callback cache 清理。
+**214 项对照、83 项回滚通过**；旧 section 与 AST/cleanup 两组（510/66）
+JSON 逐字节一致。解析失败/数量不匹配返回 1 并保留部分 AST；guard 完全回滚。
+output 需初始为空，allocation 地址不得复用，frames/scratch 由 caller 显式提供。
+其余 attached handlers/caller frames、parse/root、完整 reader/factory/bootstrap、
+独立 signer 和线上验收仍未完成。见 [module 报告](REQUEST_JNI_STARTUP_WORKERS.md#631-attached-parser-与有界-ast-module2026-10-10-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-10 Asia/Shanghai：完整 Output wrapper 清理
 
 实际 `+2cbadc` 对 12 个 output vector headers 的完整清理已恢复，通过

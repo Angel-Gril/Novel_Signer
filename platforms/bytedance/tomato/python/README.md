@@ -298,6 +298,8 @@ remains open. See the [global expression report](../REQUEST_JNI_STARTUP_WORKERS.
 
 `run_reader_ast_callback` import slots +28/+30/+38/+40/+48 append output+18 records (stride 64) with module/field names and an independently cloned node. Arguments retain full name lengths; function/type indexes truncate to u32. Table/global stack arguments follow ARM64 ABI; every import requires `entry_stack_address` for actual frame padding. Table import defaults to 0x00000000ffffffff, memory uses its existing default rules, and kind4 copies type params. Output growth clones old records; cache growth transfers old vectors after separately copying the new node. `cleanup_reader_ast_import_output` accepts only import-owned output headers and retains dangling begin/capacity after logical free; consume it once. All 858 comparisons and 410 rollback checks pass; seventeen historical evidence files match byte for byte. See the [import report](../REQUEST_JNI_STARTUP_WORKERS.md#629-import-ast-回调与专属输出清理2026-10-10-asiashanghai).
 
+`run_reader_ast_module` composes actual +31b360/+324444 with real AST callbacks for generic/type/function/start/data-count and empty exports. It requires empty output, explicit native `entry_stack_address`, and separate model `varuint_scratch_address`. Prefix bytes are skipped without magic validation. Parse failures/count mismatch commit partial output with status 1; guards roll back all pages. Parser vectors are freed before callback caches; output remains owned. `allocate` must plan distinct mapped aligned blocks without reusing freed addresses. `ReaderAstModuleResult.effects` preserves the interleaved `ReaderVectorEffect`/`ReaderAstEffect` order. Attached callback/cleanup opt-in uses `attached_state_address` and validates the state+8/callback+8 and state+20/callback relationship plus retained input/vectors. Only +18/+20/+50/+a0/+160 accept attached callback opt-in. Defaults still reject it. 214 controls and 83 rollback checks pass; old section and AST/cleanup evidence is byte-identical. See the [module report](../REQUEST_JNI_STARTUP_WORKERS.md#631-attached-parser-与有界-ast-module2026-10-10-asiashanghai).
+
 `cleanup_reader_ast_output` consumes the twelve output containers in native descending order. It reuses existing record destructors, accepts nullable import/export nodes, directly resets/frees kind4 vectors, and frees table/memory storage without reading its records. All owned regions must be disjoint; retained caller regions belong in `reserved_regions`. Begin/capacity stay dangling after logical free; consume every effect once. This does not free the output object or callback/parser state. 330 comparisons and 214 rollback checks pass; affected import/export JSON files match byte for byte. See the [output cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#630-完整-output-wrapper-清理2026-10-10-asiashanghai).
 
 The callback has its actual +0x372370 vtable, zero helper pointer at +8, output
@@ -309,7 +311,7 @@ and new type/function/table/memory/global/cache/element/data capacities (nested 
 The pure `allocate(size)` service returns an aligned mapped address and must
 not mutate pages or perform external allocation. Consume free effects once;
 destruction leaves native dangling begin/capacity/tree pointers. Unsupported
-slots, attached parser state, opaque output ownership, aliasing and bounds
+slots, attached parser state without the verified opt-in, opaque output ownership, aliasing and bounds
 fail closed with full model-page rollback. Nonnull zero-capacity pointers
 must also be mapped; that guard was reproduced RED before its fix. These APIs are separate from
 `run_reader_sections`, whose callback remains a status service. Full AST,
@@ -346,6 +348,7 @@ python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_table_202
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_memory_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-memory-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_global_20261009.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-global-evidence.json>
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_global_expression_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-global-expression-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_20261010.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-evidence.json>
 ```
 
 2026-10-07 Additional cold-switch original-entry observations: two native probes,

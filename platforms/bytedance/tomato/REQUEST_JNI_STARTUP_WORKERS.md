@@ -1734,6 +1734,76 @@ factory/bootstrap/signer、fresh 签名及线上验收仍未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_output_20261010.py --library "$env:TOMATO_LIBMETASEC" --output <reader-ast-output-evidence.json>
 ```
 
+## 6.31 Attached parser 与有界 AST module（2026-10-10 Asia/Shanghai）
+
+`run_reader_ast_module` 首次贯通真实 `+31b360 → +324444 → +324188` 的有界
+parser/AST 路径与临时清理。**214 项原生/Python 对照、83 项回滚检查**通过，
+每基址 107 项。修改前 10 项实际入口 RED 覆盖短输入、空 module、混合
+类型/函数/start、类型中途失败、start 后非法 section；两基址自然返回。
+全部生产实现仍由 `vm9_alternative_startup.py` 所有，共享原生 driver 未修改。
+
+目前贯通 generic custom、type、function、start、data-count 与空 export
+sections（`0/1/3/7/8/12`）；实际 AST slots 为 `+18/+20/+50/+a0/+160`。
+其余 handlers、非空 export、特殊 custom 和 retained-record 构建会回滚拒绝。
+output 必须由 caller 提供空的 12 个 headers。导入/定义/表达式/code 等
+独立 API 已有恢复，但还需要真实 caller frame 证据才能加入此组合。
+
+| 入口/对象 | 已验证契约 |
+|---|---|
+| `+31b360` | callback 在 entry SP-`150`，保留 unwritten `+28/+78` padding；retained header 在 callback+`108` |
+| `+324444` | parser 在 entry SP-`220`，callback+8 写 parser+8；parser+20 反向绑定 callback |
+| prefix | 长度不足 4 的 cursor 为 0，4..7 为 4；达到 8 为 8；不校验 magic 内容 |
+| status | 解析失败或 function/code count 不等返回 1；已生成的部分 AST 保留 |
+| parser 清理 | 倒序释放 `+70/+58/+40/+28`，end 重置为 begin，begin/capacity dangling |
+| callback 清理 | 复用实际 `+31b458`，独立 cache 按原生次序析构/释放；不释放 output |
+
+parser `+8d..8f` padding 保留。显式 frame 输入来自独立合成页面；只比较
+parser object 字段、callback/retained headers，saved registers 与整个 stack
+不属于模型。caller 的 `varuint_scratch_address` 是显式模型 scratch，
+不声称其地址/内容就是原生 caller 的 stack scratch。context 两参数按完整
+u64 保留到 callback+`f8/+100`。attached 指针退出后仍 dangling，不清零。
+
+回调与 parser 向量共用一个事务。parser 的 vector effects 与 AST effects
+按实际交错顺序返回；实际 vtables、析构、cleanup 都执行，未替换为返回
+status 的 AST stub。214 次 module 共观测 **1254 次 allocation、236 次
+owned destructor、650 次 free**。自然 return/SP、未屏蔽 guest 前 `0xa000`、
+每次副作用 owner bytes、完整 parser 退出字段、callback 清理字节、image
+rank/custom globals、回调 arguments/cursor/limit 全部一致。独立预期核对
+部分 type/function/start、data reserve、dangling headers、padding 与清理。
+
+输入覆盖长度 0..8、不同 prefix/frame padding、多类型与 params/results
+增长/缩小、function/cache 扩容、数量不匹配、所有 type truncation、非法
+form/value/envelope、重复/逆序 sections、generic custom 与确定性生成组合。
+全部合成，未将私有 payload 或 native snapshot 用作 Python 输入。
+
+83 项回滚覆盖 frames/input/output/scratch/image 地址别名、错误 relocation、
+非法预算、缺失映射、当前与之前 allocation 块重叠、7 个中途写失败、未贯通
+handlers/非空 export/特殊 custom，以及 attached 双向绑定/输入/向量错误。
+短输入也验证资源限制。非法原生内存路径不执行。`allocate` 必须只规划已
+映射的对齐块，**所有规划地址均不得复用，包括已经逻辑释放的临时块**；
+这是当前组合的明确限制。logical free 不 poison/unmap，effects 只能消费一次。
+
+`run_reader_ast_callback` 和 `cleanup_reader_callback` 增加显式
+`attached_state_address=None`；默认仍拒绝 attached state。只有上述五个
+slots 允许 attached opt-in；parser vectors/input 保留并检查独立所有权。
+`run_reader_sections` 的私有 `_ast_callback` bridge 只供 module 在 parser
+事务中调用实际 AST；原有普通 callback 仍是 pure status service。
+AST 结构检查删去这些精确 opt-ins 后，所有既有默认分支与提交基线相同。
+旧 section 与 AST/cleanup 两组串行重跑，**510 项对照、66 项回滚通过，
+两份历史 JSON 逐字节一致**；未重复声称其余未重跑的历史批次。
+
+观测器初次漏记 function 扩容调用 `+2cc470` 的 144 字节析构，补齐后对照
+通过；生产回调行为没有因此修改。整套证明仅覆盖 fresh ELF 和显式 host
+allocation/free/memory service；真实 allocator/异常、整个 stack/TLS/OS、
+其余 attached handlers、parse/root、完整 reader/factory/bootstrap、独立 signer、
+fresh 签名与线上验收仍未完成。
+
+见 [module 证据](evidence/vm9_alternative_ast_module_fresh_20261010.json)。复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_ast_module_20261010.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_MATCHING_LIBC" --output <reader-ast-module-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
@@ -1784,7 +1854,7 @@ VM 指令仍原生执行，没有替换结果。各验证器恢复 monkeypatch�
 B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fresh Medusa 输出、
 服务器认可、全部 OS 析构或独立 Python/Rust signer。
 
-下一步恢复 B attached parser/AST 组合，随后解析/root 生成，再把原始 JNI /
+下一步扩展 B attached parser 的 imports/definitions/expressions/code 与 caller frame 组合，随后解析/root 生成，再把原始 JNI /
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。
