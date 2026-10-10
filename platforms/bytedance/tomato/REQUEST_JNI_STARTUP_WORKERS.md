@@ -2630,6 +2630,40 @@ factory/bootstrap、独立 signer、新鲜输出和线上验收仍待完成；�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_runtime_link_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <runtime-link-evidence.json>
 ```
 
+## 6.49 defined descriptor 构造与失败清理（2026-10-11 Asia/Shanghai）
+
+`construct_parser_defined_descriptor` 恢复实际 +2dbf00 的空 name-filter
+路径：从 converted function 的 decoded records 构造 48 字节 runtime
+vector，复制 scalar/name，发布 kind=2 的 64 字节 descriptor。先分配
+vector，首条指令才按需初始化 catalog。普通 variant move 复制四字节，
+tag 102/137/188 复制十六字节；padding 保留实际临时栈来源。短名保留
+完整 string24，长名另行分配，heap 短名表示按原生规则转换为 inline。
+
+缺失 primary/nested builder 时，输出空指针，逆序将已构造记录 tag 改为
+-1 并释放 vector。输入 function/name/decoded storage 保留；分配器是
+纯地址计划，释放和 finalizer 注册作为逻辑效果返回。非空 name filter
+涉及的注册表路径仍拒绝；实际 factory 的 names count 为零。
+
+修改前干净 `473fea1` 绑定 **16 项真实原生 RED**。正式 verifier 通过
+**288 个原生/Python descriptor 对照、48 个 native batches、113762 条
+运行时指令构造、35 项全页回滚检查**。两基址各从 fresh ELF 经独立
+Python reader/parse 生成完整实际模块：共 **242 个函数、109066 条指令、
+488 次分配**。其余用例覆盖 422 条分发 graph paths、187 个 leaf move、
+空函数、冷/热 catalog、短/长名称、heap 短名、缺失 builder、padding、
+SP 和 thread ID 变化。
+
+全部 guest/heap/image pages、64 字节 descriptor、已用/未用 vector
+字节、96 字节已建模临时栈、自然返回/SP、分配/释放顺序、owner 发布
+状态及 finalizers 均一致；无原生快照输入。异常输入、预算、别名、
+move/destructor table 和写入失败拒绝并全页回滚。移除新增结果类型和
+API 后旧 owner AST 完全一致。未比较完整原生 stack/TLS/OS；完整 root、
+imported descriptor、factory/bootstrap、独立 signer、新鲜输出及线上验收
+仍待完成。见 [defined descriptor 证据](evidence/vm9_alternative_defined_descriptor_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_defined_descriptor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <defined-descriptor-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

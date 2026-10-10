@@ -328,6 +328,8 @@ is covered by the module opt-in below. See the [global expression report](../REQ
 
 `link_parser_runtime_descriptor` now applies root pointers and all 600 secondary instruction rules. 3918 native/Python descriptor controls in 18 batches and 27 rollback checks pass, including two complete actual ELF modules with 109066 instruction records. All guest/heap/image pages match; inputs come from Python reader/parse/builders. Native vector moves, complete descriptor/root, factory/bootstrap and signer remain unfinished. See the [runtime linking report](../REQUEST_JNI_STARTUP_WORKERS.md#648-runtime-descriptor-二次转换与-root-linking2026-10-11-asiashanghai).
 
+`construct_parser_defined_descriptor` now composes decoded builders, native variant moves, name copies and failure cleanup for an empty name filter. 288 native/Python descriptor controls in 48 batches, 113762 runtime instructions and 35 rollback checks pass. Two fresh actual modules contribute 242 functions and 109066 instructions; full guest/heap/image pages, consumed temporary bytes and ordered effects match. Imported descriptors, complete root, factory/bootstrap and signer remain unfinished. See the [defined descriptor report](../REQUEST_JNI_STARTUP_WORKERS.md#649-defined-descriptor-构造与失败清理2026-10-11-asiashanghai).
+
 
 
 

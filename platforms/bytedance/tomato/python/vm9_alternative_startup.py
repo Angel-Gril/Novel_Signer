@@ -4775,3 +4775,102 @@ def link_parser_runtime_descriptor(pages, *, image_base, descriptor_address,
             _write_span(m.p,address+40,(value+190).to_bytes(8,'little'))
     m.p.commit()
     return ReaderAstResult(None,())
+
+
+@dataclass(frozen=True)
+class ParserDefinedDescriptorResult:
+    address: int
+    instruction_count: int
+    effects: tuple[ReaderAstEffect, ...]
+    finalizers: tuple[tuple[int, int, int], ...]
+
+
+def construct_parser_defined_descriptor(pages, *, image_base, function_address,
+        names_address, output_address, entry_stack_address, thread_id,
+        allocate=None, max_instructions=1048576, max_vector_bytes=16*1024*1024,
+        reserved_regions=()):
+    """Actual +2dbf00 defined-function construction with an empty name filter.
+
+    Convert decoded records into an owned 48-byte runtime vector, copy the
+    function's scalar/name, and publish a 64-byte descriptor of kind 2. The
+    builder catalog initializes lazily after vector allocation. Missing primary
+    or nested builders publish a null output, mark prior vector tags empty in
+    reverse order, and free that vector. Ordinary variant moves copy four
+    bytes; tags 102/137/188 copy sixteen, retaining native temporary padding.
+
+    The incoming SP supplies the consumed 96-byte temporary frame. Allocation
+    is a pure address plan; frees and finalizers are returned as logical
+    effects. The source function/name/decoded bytes retain their ownership.
+    Nonempty name-filter registration, native exceptions, root linking and VM
+    execution are outside this entry. Unsupported input or write failure rolls
+    back all pages, including nested catalog initialization and stack writes.
+    """
+    if type(entry_stack_address) is not int or not 0xE0<=entry_stack_address<=MASK64 or entry_stack_address&15:
+        raise RefillUnsupported('defined descriptor requires an aligned incoming SP')
+    if type(thread_id) is not int or not 1<=thread_id<=0x7FFFFFFF:
+        raise RefillUnsupported('defined descriptor requires a positive serial thread ID')
+    if type(max_instructions) is not int or not 0<=max_instructions<=1048576:
+        raise RefillUnsupported('defined descriptor instruction budget is invalid')
+    m=_ReaderAstMemory(pages,image_base,output_address,8,4096,max_vector_bytes,reserved_regions)
+    temporary=entry_stack_address-0xC0;vector=entry_stack_address-0x88;visitor=entry_stack_address-0x70
+    for address,size in ((function_address,64),(names_address,40),(output_address,8),(temporary,96)):
+        m.claim(address,size)
+    if any(_read_span(m.p,names_address,32)) or _u(m.p,names_address+32,4)!=0x3F800000:
+        raise RefillUnsupported('defined descriptor name-filter registration remains unsupported')
+    source,end,_=m.vector(function_address+40,12);count=(end-source)//12
+    if count>max_instructions or count*48>max_vector_bytes:
+        raise RefillUnsupported('defined descriptor runtime vector exceeds its instruction/byte bound')
+    header=_read_span(m.p,function_address+16,24)
+    if header[0]&1:
+        capacity=int.from_bytes(header[:8],'little')&~1;length=int.from_bytes(header[8:16],'little')
+        if not length<capacity<=max_vector_bytes:
+            raise RefillUnsupported('defined descriptor name length/capacity is invalid')
+        m.claim(int.from_bytes(header[16:24],'little'),capacity)
+    elif header[0]>>1>22:
+        raise RefillUnsupported('defined descriptor inline name length is invalid')
+    def put(address,value):_write_span(m.p,address,value.to_bytes(8,'little'))
+    def method(tag):
+        if not (0<=tag<190 or tag==790):
+            raise RefillUnsupported('defined descriptor variant tag is unsupported')
+        move=0x2E35D8 if tag==0 else 0x2E87CC if tag==790 else 0x2E35EC+(tag-1)*24
+        if (_u(m.p,image_base+0x367078+tag*8)!=image_base+move
+                or _u(m.p,image_base+0x3657C0+tag*8)!=image_base+0x2A98CC+tag*4):
+            raise RefillUnsupported('defined descriptor move/destructor table is unsupported')
+    m.publish(vector,(0,0,0))
+    begin=m.allocate(count*48,allocate) if count else 0;cursor=begin
+    m.publish(vector,(begin,begin,begin+count*48))
+    finalizers=[];catalog=0;built=0
+    for decoded in range(source,end,12):
+        if not catalog:
+            initialized=initialize_instruction_builder_catalog(m.p,image_base=image_base,thread_id=thread_id,
+                allocate=allocate,max_vector_bytes=max_vector_bytes,reserved_regions=(*reserved_regions,*m.regions))
+            catalog=initialized.address;m.claim(catalog,0x8A18);m.claim(_u(m.p,catalog+0x200),0x3840)
+            m.effects.extend(initialized.effects);finalizers.extend(initialized.finalizers)
+        opcode=_u(m.p,decoded+4,1)
+        if opcode>=64:raise RefillUnsupported('defined descriptor primary opcode is unsupported')
+        success=False
+        if _u(m.p,catalog+opcode*8):
+            success=bool(build_parser_runtime_instruction(m.p,image_base=image_base,catalog_address=catalog,
+                decoded_address=decoded,output_address=temporary).status)
+        if not success:
+            put(output_address,0)
+            for previous in range(cursor-48,begin-1,-48):
+                tag=_u(m.p,previous+40);method(tag);put(temporary,previous);put(previous+40,MASK64)
+            put(vector+8,begin);m.emit('free',begin,count*48)
+            m.p.commit()
+            return ParserDefinedDescriptorResult(0,built,tuple(m.effects),tuple(finalizers))
+        tag=_u(m.p,temporary+40);method(tag)
+        put(visitor,cursor);put(visitor+8,temporary);put(cursor+40,MASK64)
+        put(cursor+40,tag);_write_span(m.p,cursor,_read_span(m.p,temporary,16 if tag in (102,137,188) else 4))
+        cursor+=48;built+=1;put(vector+8,cursor);put(visitor,temporary)
+    _write_span(m.p,temporary,_read_span(m.p,function_address+8,8))
+    m.publish(temporary+8,(begin,cursor,begin+count*48));m.publish(vector,(0,0,0))
+    m.copy_string_value(temporary+32,header,allocate)
+    _write_span(m.p,visitor,_read_span(m.p,temporary+33,15))
+    descriptor=m.allocate(64,allocate)
+    _write_span(m.p,descriptor,_read_span(m.p,temporary,56));put(descriptor+56,2);put(output_address,descriptor)
+    pointer=int.from_bytes(header[16:24],'little') if header[0]&1 else function_address+17
+    length=int.from_bytes(header[8:16],'little') if header[0]&1 else header[0]>>1
+    put(temporary,pointer);put(temporary+8,length)
+    m.p.commit()
+    return ParserDefinedDescriptorResult(descriptor,built,tuple(m.effects),tuple(finalizers))

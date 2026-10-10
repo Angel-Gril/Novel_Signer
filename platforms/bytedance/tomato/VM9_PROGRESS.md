@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：defined descriptor 构造与失败清理
+
+288 个原生/Python descriptor 对照、35 项回滚检查通过。48 个 batch
+构造 113762 条指令，包含两次 fresh 实际模块的全部 242 个函数和
+109066 条指令。完整 guest/heap/image pages、96 字节临时栈和有序
+效果一致，旧 owner AST 未变。继续 imported descriptor、完整 root、
+factory/bootstrap、独立 signer、新鲜输出和线上验收。
+见 [defined descriptor 报告](REQUEST_JNI_STARTUP_WORKERS.md#649-defined-descriptor-构造与失败清理2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：runtime 二次转换与 root linking
 
 3918 个原生/Python descriptor 对照、27 项回滚检查通过；18 个 batch
