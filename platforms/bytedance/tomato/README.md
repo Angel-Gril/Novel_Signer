@@ -225,6 +225,8 @@ The shared once owner now accepts all six B controls. 60 native/Python controls 
 
 The complete B worker callable now composes six outer and 48 nested descriptor programs with the shared once gate and actual CAS64/memset semantics. 18 native/Python controls and 36 rollback checks pass. Each cold task matches 120847 dispatches, six allocations and six wakes from fresh independent ELF inputs. Queue-worker/TLS composition and the full signer remain unfinished. See the [B full callable report](REQUEST_JNI_STARTUP_WORKERS.md#661-b-完整-worker-callable-与嵌套初始化2026-10-11-asiashanghai).
 
+B now runs the actual startup-generated queue task through normal worker return, TLS key cleanup and the full joinable guest pthread_exit body. 12 native/Python controls and 24 rollback checks pass with fresh independent ELF inputs. Main/task contexts, both TLS regions, all nonstack pages and ordered effects match. Full JNI/bootstrap and the independent signer remain unfinished. See the [B queue worker report](REQUEST_JNI_STARTUP_WORKERS.md#662-b-同次-startup-的队列-worker-与清理2026-10-11-asiashanghai).
+
 
 
 

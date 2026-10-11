@@ -6137,3 +6137,55 @@ def run_worker_initialization_task(pages, *, image_base, entry_stack_address,
     if _read_span(m.p,thread_pointer+0x28,8)!=_read_span(m.p,canary_slot,8):
         raise RefillUnsupported('B worker task stack canary changed')
     result=WorkerTaskResult(context,tuple(callers),tuple(arenas));m.p.commit();return result
+
+
+@dataclass(frozen=True)
+class QueueWorkerResult:
+    return_code: int
+    tasks: tuple[WorkerTaskResult, ...]
+
+
+def run_queue_worker(pages, *, argument_address, image_base,
+        entry_stack_address, thread_pointer, thread_id, allocate, broadcast,
+        create_key, set_specific, clock, futex, free, max_iterations=64,
+        max_steps=1000000, max_depth=64, reserved_regions=()):
+    """Execute one startup-generated B task through the shared queue worker.
+
+    The worker's 0x30-byte frame and queue's 0xa0-byte frame derive task storage
+    and callable incoming SP from the worker entry. Reuse shared TLS attachment,
+    queue movement/invocation, finite waiting and argument cleanup. Thread
+    creation is deferred; providers must be pure outside staged guest pages.
+    The support wrapper stays owned by pthread TLS after normal worker return;
+    the existing shared key-cleanup/pthread-exit owners perform its later exit.
+    Any rejected task or late wait/free failure rolls back the whole worker.
+    """
+    import vm9_startup as startup
+    if (type(entry_stack_address) is not int or not 0x11000<entry_stack_address<=MASK64
+            or entry_stack_address&15):
+        raise RefillUnsupported('B queue worker requires aligned incoming SP and stack space')
+    if not all(callable(provider) for provider in (allocate,broadcast,create_key,set_specific,clock,futex,free)):
+        raise RefillUnsupported('B queue worker requires explicit pure services')
+    p=_PageTransaction(pages);task=entry_stack_address-0xC0
+    _read_span(p,task,40)
+    if _u(p,argument_address+0x10)!=image_base+0x372600:
+        raise RefillUnsupported('B worker requires the queue callable')
+    queue=_u(p,argument_address+0x18)
+    if _u(p,queue+0x20)-_u(p,queue+0x18)!=48:
+        raise RefillUnsupported('B worker requires exactly one queued task')
+    results=[]
+    def invoke(staged,function,object_address):
+        if function!=image_base+0x29E05C or object_address!=task:
+            raise RefillUnsupported('unsupported B queue task invocation')
+        result=run_worker_initialization_task(staged,image_base=image_base,
+            entry_stack_address=entry_stack_address-0xD0,thread_pointer=thread_pointer,
+            allocate=allocate,broadcast=broadcast,max_steps=max_steps,max_depth=max_depth,
+            reserved_regions=(*reserved_regions,(task,task+40),(argument_address,argument_address+64)))
+        results.append(result);return 0
+    def get_tls(*args):raise RefillUnsupported('queue worker has no emulated-TLS acquisition')
+    returned=startup.run_startup_worker(p,argument_address=argument_address,worker_kind='queue',
+        image_base=image_base,thread_pointer=thread_pointer,thread_id=thread_id,
+        create_key=create_key,set_specific=set_specific,get_tls=get_tls,
+        clock=clock,futex=futex,free=free,invoke=invoke,task_address=task,
+        max_iterations=max_iterations)
+    if len(results)!=1:raise RefillUnsupported('B queue worker did not execute exactly one task')
+    result=QueueWorkerResult(returned,tuple(results));p.commit();return result

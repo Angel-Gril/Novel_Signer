@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：B 同次 startup 的队列 worker 与清理
+
+B实际队列任务、正常worker返回、TLS key清理及完整joinable guest
+pthread_exit组合。12项原生对照、24项回滚检查通过，覆盖cold/warm key、
+两基址及不同worker SP。每次任务120847次分发，全部非原生栈页面、
+生命周期内的context、两份TLS和有序效果匹配。继续完整JNI/bootstrap、
+独立signer、新鲜输出及线上验收。
+见 [B 队列与清理报告](REQUEST_JNI_STARTUP_WORKERS.md#662-b-同次-startup-的队列-worker-与清理2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：B 完整 worker callable 与嵌套初始化
 
 六个外层及48个嵌套程序与共享once/CAS64/memset组合。18项原生对照、

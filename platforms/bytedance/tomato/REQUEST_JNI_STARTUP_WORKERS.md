@@ -3040,6 +3040,36 @@ JNI/bootstrap、独立signer、新鲜输出及线上验收继续。私有名称/
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_worker_task_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-worker-task-evidence.json>
 ```
 
+## 6.62 B 同次 startup 的队列 worker 与清理（2026-10-11 Asia/Shanghai）
+
+`run_queue_worker` 把实际 B callable 接入既有共享队列worker。worker入口
+SP推导任务对象和callable入口，复用TLS key申请/所有权转移、队列移动、
+调用、有限等待、任务析构和线程参数释放。正常返回时support仍属pthread
+TLS，后续由既有共享key清理及guest pthread_exit owner完成释放。
+
+干净 `0c62411` 上 **2 项修改前真实原生 RED** 后实施变更。两份 fresh
+ELF独立构造输入，通过 **12 项原生/Python 对照、24 项回滚检查**：
+两基址、不同worker SP、cold/warm support key、正常worker返回、key清理、
+完整joinable guest pthread_exit。原生端在同一个CPU运行startup、选择其
+实际发布的worker参数、执行队列任务及清理；没有native输入快照。
+
+每次实际B任务执行6个外层及48个嵌套程序，匹配120847次分发。三个延后
+线程描述符、一次等待、参数释放、TLS所有权、完整guest/heap/image/libc
+及两份TLS页面、有序服务效果全部一致。cold key三种路径分别38/40/42项
+效果；warm key省去一次key创建。main context完整匹配；两个任务context
+在 +326620 返回点对照，之后的等待与退出可复用已失效的原生栈空间。
+
+24项回滚检查覆盖入口/服务参数、错误队列或任务、key/TLS服务失败、
+任务预算、最后等待/参数释放失败及等待次数耗尽；整次worker全页回滚。
+既有owner定义AST未变。分配、线程调度、有限futex和OS exit是显式服务，
+没有创建或终止主机线程。完整JNI/bootstrap、独立signer、新鲜输出及线上
+验收继续。私有名称/payload未发布。见
+[B 队列与清理证据](evidence/vm9_alternative_queue_worker_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_queue_worker_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-queue-worker-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
