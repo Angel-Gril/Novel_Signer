@@ -175,8 +175,17 @@ def _run_finalizer(pages, *, image_base, entry_stack_address, thread_pointer,
     decode(0x89F24,0x3DA01C,0x8A038,0x3DA020)
     if not _u(p,base+0x3DA010,1):
         pair=S-0x70
+        def register_environment(staged,function,address,dso):
+            status=register_destructor(staged,function,address,dso)
+            if status==0 and not _u(staged,base+0x3751A0):
+                # +34265C's successful local fallback calls the emutls
+                # getter at +3426FC. Its +343780 prologue saves LR below
+                # the registration frame. A later VM uses this retained
+                # word as its otherwise unwritten R21 backing slot.
+                _w(staged,pair-0xC0,base+0x342700)
+            return status
         acquired=environment.acquire_thread_environment(p,image_base=base,entry_stack_address=pair,
-            output_pair_address=pair,get_tls=get_tls,register_destructor=register_destructor,invoke_javavm=invoke_javavm)
+            output_pair_address=pair,get_tls=get_tls,register_destructor=register_environment,invoke_javavm=invoke_javavm)
         env=acquired.environment;cls=_u(p,base+0x3DEEB8)
         if not env:raise RefillUnsupported('finalizer requires a Java environment')
         environment._invoke_jni(p,env,0x388,(cls,base+0x3DA014,base+0x3DA01C),invoke_jni)

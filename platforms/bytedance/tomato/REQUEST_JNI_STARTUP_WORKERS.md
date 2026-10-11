@@ -3469,6 +3469,43 @@ registration 与 allocation 的交错沿用既有比较排除契约。provider �
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_timed_cycle_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <timed-cycle-evidence.json>
 ```
 
+## 6.75 三条 worker 协作等待、转交与完整退出（2026-10-11 Asia/Shanghai）
+
+`vm9_worker_scheduler.run_requested_worker_schedule` 接收实际 JNI 产生的三条
+worker descriptor，以显式有限选择与 futex provider 交替推进。原始
+executor 在初次等待暂停，initializer 退出后 finalizer 提交 timed task 并
+暂停，executor 到期转交真实 follow-up，queue 执行两段 image VM 和清理，
+三条 worker 按 **1、2、0** 自然返回并完成 joinable guest thread exit。
+总计 **6 次等待（3、1、2）、9 次选择**；没有创建 host worker threads。
+
+`vm9_startup` 统一拥有 condition 暂停/恢复、queue extraction、controller
+等待和 executor 循环；同步入口通过显式 provider 完成同一套 generator。
+等待之间使用单一外层页面事务，避免各 worker 保留过期页面副本。
+默认 queue 的 ABI 准备也由同一 helper 负责。finalizer 的本地线程析构
+注册恢复 emutls getter 保留的返回地址，后续 VM backing/TLS padding 一致。
+同步 wait provider 的耗尽异常也原样传递并回滚（4 项边界检查）。provider 外部 effects 需调用方
+暂存；guest 页面回滚不能撤销它们。
+
+干净 `881e06d` 的两条完整原生 A/B RED 与旧 executor 实际到期任务拒绝
+建立因果证据。**两基址×A/B 四项 fresh 完整原生/Python 对照、23 项页面
+回滚检查**通过。每组 allocation/free、JavaVM/JNI、有序服务和全部存活
+guest/heap/image/libc 页面一致，15 callbacks、checksum VM **8,606,106**
+steps、lookup VM **301** steps，新增 **GetEnv 2 / JNI 0**。task/wrapper
+清理、空队列、退出顺序匹配。旧 executor **62/6**、queue **94/5** 回归与
+已发布结果逐字节一致。condition 暂停/恢复的 **44 项 matching-libc 对照、
+19 项回滚**仅比较其 guest/TLS、mutex、futex、返回值与 errno 边界。
+
+原生和 Python 分别从独立 ELF、13 constructors 和 JNI 输入开始。物理
+stack、线程输出 scratch 和 module registration/allocation 交错沿用既有
+比较排除契约；native snapshot 仅作私有诊断输出。vector growth、未知
+callable ownership、重复 timed task 和 contention 尚未恢复。
+**live Java 字符串转换、完整独立 signer、fresh 签名和线上矩阵仍未完成。**
+私有 ELF、解码文本和快照不进入仓库。见 [协作等待证据](evidence/vm9_jni_worker_schedule_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_worker_schedule_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <worker-schedule-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

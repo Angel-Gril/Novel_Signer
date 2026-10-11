@@ -251,6 +251,8 @@ The actual delayed JNI callable now executes both guest image VMs, the unavailab
 
 Actual timed polling now transfers the owned follow-up into the drained queue and frees its wrapper/task. Four fresh complete native/Python controls, 20 page rollback guards and shared callable regressions pass. The complete executor worker wait cycle, live Java string conversion and independent signer remain unfinished. See the [timed transfer report](REQUEST_JNI_STARTUP_WORKERS.md#674-实际-timed-poll转交与-queue-清理2026-10-11-asiashanghai).
 
+The three requested workers now cooperate across six actual waits, transfer the timed follow-up and exit in order 1, 2, 0. Four fresh complete native/Python controls and 23 page rollback guards pass; the shared executor and queue regressions are byte identical. Live Java string conversion and the independent signer remain unfinished. See the [cooperative worker report](REQUEST_JNI_STARTUP_WORKERS.md#675-三条-worker-协作等待转交与完整退出2026-10-11-asiashanghai).
+
 
 
 

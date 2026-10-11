@@ -170,8 +170,18 @@ def take_queue_callable(pages, *, queue_address, task_address, image_base,
     Return False for the stopped/empty queue, True with an owned local task
     otherwise. Invocation and its destructor belong to the caller.
     """
+    p=_PageTransaction(pages)
+    ready=_drive_condition_waits(p,iter_take_queue_callable(p,
+        queue_address=queue_address,task_address=task_address,image_base=image_base,
+        thread_pointer=thread_pointer,clock=clock,free=free,max_waits=max_waits),futex)
+    p.commit();return ready
+
+
+def iter_take_queue_callable(pages, *, queue_address, task_address, image_base,
+        thread_pointer, clock, free, max_waits=64):
+    """Yield condition requests while taking a task using caller-owned pages."""
     if not isinstance(max_waits,int) or not 1<=max_waits<=4096:raise ValueError('invalid queue wait bound')
-    p=_PageTransaction(pages);q=queue_address
+    p=pages;q=queue_address
     _read_span(p,q,144);_read_span(p,task_address,40)
     _w(p,task_address+0x20,0)
     objects.lock_uncontended_mutex(p,mutex_address=q+0x30)
@@ -179,8 +189,8 @@ def take_queue_callable(pages, *, queue_address, task_address, image_base,
     while _u(p,q+0x18)==_u(p,q+0x20) and _u(p,q+0x88,1):
         if waits>=max_waits:raise RefillUnsupported('queue wait bound exceeded')
         waits+=1
-        result=wait_condition(p,condition_address=q+0x58,mutex_address=q+0x30,
-            thread_pointer=thread_pointer,absolute_timeout=None,clock=clock,futex=futex)
+        result=yield from iter_condition_wait(p,condition_address=q+0x58,mutex_address=q+0x30,
+            thread_pointer=thread_pointer,absolute_timeout=None,clock=clock)
         if result:raise RefillUnsupported('queue wait exception path is unsupported')
     ready=_u(p,q+0x18)!=_u(p,q+0x20)
     if ready:
@@ -188,7 +198,7 @@ def take_queue_callable(pages, *, queue_address, task_address, image_base,
         assign_callable(p,destination_address=task_address,source_address=begin,image_base=image_base,free=free)
         erase_queue_callable(p,vector_address=q+0x18,element_address=begin,image_base=image_base,free=free)
     objects.unlock_uncontended_mutex(p,mutex_address=q+0x30)
-    p.commit();return ready
+    return ready
 
 
 def invoke_callable(pages, *, object_address, image_base, invoke):
@@ -397,16 +407,24 @@ def _s64(value):
     return value-(1<<64) if value>>63 else value
 
 
-def wait_condition(pages, *, condition_address, mutex_address, thread_pointer,
-        absolute_timeout, clock, futex):
-    """Matching libc condition wait with serial normal-mutex/futex services.
+@dataclass(frozen=True)
+class PendingConditionWait:
+    condition_address: int
+    mutex_address: int
+    thread_pointer: int
+    operation: int
+    expected: int
+    relative_timeout: tuple[int, int] | None
+    errno_before: int
 
-    Timed waits convert the absolute CLOCK_REALTIME/MONOTONIC deadline to a
-    relative timespec before unlocking. Expired deadlines return ETIMEDOUT
-    while retaining the lock. A futex wait unlocks and reacquires the mutex;
-    syscall errors preserve errno, and only ETIMEDOUT becomes a wait error.
-    The environment must return from futex; no host blocking or scheduler is
-    supplied. External callback ledgers are outside guest-page rollback.
+
+def begin_condition_wait(pages, *, condition_address, mutex_address,
+        thread_pointer, absolute_timeout, clock):
+    """Prepare the matching-libc futex boundary and release the owned mutex.
+
+    Return a pending request, or 110 for an already expired deadline with the
+    mutex retained. A scheduler may advance other guest workers before calling
+    finish_condition_wait. The caller owns rollback across that interval.
     """
     for address,alignment in ((condition_address,4),(mutex_address,2),(thread_pointer,8)):
         if not isinstance(address,int) or address<0 or address%alignment:
@@ -434,12 +452,76 @@ def wait_condition(pages, *, condition_address, mutex_address, thread_pointer,
     objects.unlock_uncontended_mutex(p,mutex_address=mutex_address)
     operation=0 if _u(p,condition_address,4)&1 else 128
     errno=_u(p,thread_pointer+0x10,4)
-    result=futex(p,condition_address,operation,expected,relative)
+    request=PendingConditionWait(condition_address,mutex_address,thread_pointer,
+        operation,expected,relative,errno)
+    p.commit();return request
+
+
+def finish_condition_wait(pages, *, pending, result):
+    """Resume one prepared wait, restore errno and reacquire its mutex."""
+    if not isinstance(pending,PendingConditionWait):
+        raise RefillUnsupported('condition resume requires a pending request')
     if not isinstance(result,int) or not -4095<=result<1<<31:
         raise RefillUnsupported('unsupported futex result')
-    if result<0:_w(p,thread_pointer+0x10,errno,4)
-    objects.lock_uncontended_mutex(p,mutex_address=mutex_address)
+    p=_PageTransaction(pages)
+    for address,alignment in ((pending.condition_address,4),(pending.mutex_address,2),(pending.thread_pointer,8)):
+        if not isinstance(address,int) or address<0 or address%alignment:
+            raise RefillUnsupported('invalid pending condition address')
+    if (pending.operation not in (0,128) or not isinstance(pending.expected,int)
+            or not 0<=pending.expected<=0xFFFFFFFF or not isinstance(pending.errno_before,int)
+            or not 0<=pending.errno_before<=0xFFFFFFFF
+            or pending.operation!=(0 if pending.expected&1 else 128)):
+        raise RefillUnsupported('invalid pending futex request')
+    if (_u(p,pending.mutex_address,2)&~0x2000
+            or _u(p,pending.condition_address,4)&3!=pending.expected&3):
+        raise RefillUnsupported('pending condition ownership changed')
+    _read_span(p,pending.thread_pointer+0x10,4)
+    if result<0:_w(p,pending.thread_pointer+0x10,pending.errno_before,4)
+    objects.lock_uncontended_mutex(p,mutex_address=pending.mutex_address)
     p.commit();return 110 if result==-110 else 0
+
+
+def wait_condition(pages, *, condition_address, mutex_address, thread_pointer,
+        absolute_timeout, clock, futex):
+    """Matching libc condition wait with serial normal-mutex/futex services.
+
+    Timed waits convert the absolute CLOCK_REALTIME/MONOTONIC deadline to a
+    relative timespec before unlocking. Expired deadlines return ETIMEDOUT
+    while retaining the lock. A futex wait unlocks and reacquires the mutex;
+    syscall errors preserve errno, and only ETIMEDOUT becomes a wait error.
+    The environment must return from futex; no host blocking or scheduler is
+    supplied. External callback ledgers are outside guest-page rollback.
+    """
+    p=_PageTransaction(pages)
+    result=_drive_condition_waits(p,iter_condition_wait(p,condition_address=condition_address,
+        mutex_address=mutex_address,thread_pointer=thread_pointer,
+        absolute_timeout=absolute_timeout,clock=clock),futex)
+    p.commit();return result
+
+
+def iter_condition_wait(pages, *, condition_address, mutex_address, thread_pointer,
+        absolute_timeout, clock):
+    """Yield the matching-libc wait boundary using caller-owned pages."""
+    pending=begin_condition_wait(pages,condition_address=condition_address,
+        mutex_address=mutex_address,thread_pointer=thread_pointer,
+        absolute_timeout=absolute_timeout,clock=clock)
+    if isinstance(pending,PendingConditionWait):
+        result=yield pending
+        return finish_condition_wait(pages,pending=pending,result=result)
+    return pending
+
+
+def _drive_condition_waits(pages, iterator, futex):
+    """Complete yielded guest waits synchronously with the explicit provider."""
+    try:
+        try:pending=next(iterator)
+        except StopIteration as returned:return returned.value
+        while True:
+            result=futex(pages,pending.condition_address,pending.operation,
+                pending.expected,pending.relative_timeout)
+            try:pending=iterator.send(result)
+            except StopIteration as returned:return returned.value
+    finally:iterator.close()
 
 
 def wait_owned_condition(pages, *, condition_address, lock_address,
@@ -570,10 +652,20 @@ def wait_signal_controller(pages, *, controller_address, delay_ms, thread_pointe
     including microsecond truncation, saturation and the owned wait clamp.
     Clock calls and the counter/lock transitions follow the native order.
     """
+    p=_PageTransaction(pages)
+    result=_drive_condition_waits(p,iter_wait_signal_controller(p,
+        controller_address=controller_address,delay_ms=delay_ms,
+        thread_pointer=thread_pointer,clock=clock,max_waits=max_waits),futex)
+    p.commit();return result
+
+
+def iter_wait_signal_controller(pages, *, controller_address, delay_ms, thread_pointer,
+        clock, max_waits=64):
+    """Yield controller waits using shared caller-owned pages."""
     if not isinstance(delay_ms,int) or not -(1<<31)<=delay_ms<1<<31:
         raise RefillUnsupported('signal delay must be signed W32')
     if not isinstance(max_waits,int) or not 1<=max_waits<=4096:raise ValueError('invalid signal wait bound')
-    p=_PageTransaction(pages);ctrl=controller_address;mutex=ctrl+4;condition=ctrl+0x2c
+    p=pages;ctrl=controller_address;mutex=ctrl+4;condition=ctrl+0x2c
     objects.lock_uncontended_mutex(p,mutex_address=mutex)
     deadline=_s64(_clock_value(p,clock,1,1000000000)+delay_ms*1000000)
     waits=0;timed_out=False
@@ -590,9 +682,9 @@ def wait_signal_controller(pages, *, controller_address, delay_ms, thread_pointe
                 absolute=min((1<<63)-1,realtime+duration)
                 value=min(absolute,0x59682F000000E941)
                 seconds=_trunc_div(value,1000000000)
-                wait_condition(p,condition_address=condition,mutex_address=mutex,
+                yield from iter_condition_wait(p,condition_address=condition,mutex_address=mutex,
                     thread_pointer=thread_pointer,absolute_timeout=(seconds,value-seconds*1000000000),
-                    clock=clock,futex=futex)
+                    clock=clock)
                 # The elapsed-duration result is calculated by native but its
                 # caller discards it; the final until check reads clock again.
                 _s64(_clock_value(p,clock,1,1000000000)-start)
@@ -601,7 +693,7 @@ def wait_signal_controller(pages, *, controller_address, delay_ms, thread_pointe
     signalled=_s32(_u(p,ctrl,4))>=1
     if signalled:_w(p,ctrl,0,4)
     objects.unlock_uncontended_mutex(p,mutex_address=mutex)
-    p.commit();return int(signalled)
+    return int(signalled)
 
 
 def run_executor_context(pages, *, context_address, image_base, thread_pointer,
@@ -611,18 +703,28 @@ def run_executor_context(pages, *, context_address, image_base, thread_pointer,
     The environment supplies finite wake/stop behavior. This loop creates no
     host thread; running a task still requires its actual invocation provider.
     """
+    p=_PageTransaction(pages)
+    iterations=_drive_condition_waits(p,iter_executor_context(p,
+        context_address=context_address,image_base=image_base,thread_pointer=thread_pointer,
+        clock=clock,free=free,invoke=invoke,max_iterations=max_iterations),futex)
+    p.commit();return iterations
+
+
+def iter_executor_context(pages, *, context_address, image_base, thread_pointer,
+        clock, free, invoke, max_iterations=64):
+    """Yield executor waits; the caller owns the shared pages and schedule."""
     if not isinstance(max_iterations,int) or not 1<=max_iterations<=4096:raise ValueError('invalid executor iteration bound')
-    p=_PageTransaction(pages);ctx=context_address;iterations=0
+    p=pages;ctx=context_address;iterations=0
     while _u(p,ctx+0x80,1):
         if iterations>=max_iterations:raise RefillUnsupported('executor loop bound exceeded')
         iterations+=1
         result=poll_executor(p,context_address=ctx,image_base=image_base,clock=clock,free=free,invoke=invoke)
         if result==0:continue
         if not _u(p,ctx+0x80,1):break
-        wait_signal_controller(p,controller_address=ctx+0x84,
+        yield from iter_wait_signal_controller(p,controller_address=ctx+0x84,
             delay_ms=(1<<31)-1 if result==-1 else result,thread_pointer=thread_pointer,
-            clock=clock,futex=futex,max_waits=max_iterations)
-    p.commit();return iterations
+            clock=clock,max_waits=max_iterations)
+    return iterations
 
 
 def attach_worker_support(pages, *, argument_address, worker_kind, image_base,
@@ -1208,6 +1310,36 @@ class DefaultQueueWorkerResult:
     tasks: tuple[DefaultInitializationTaskResult,...]
 
 
+def run_default_queue_task(pages, *, queue_address, image_base,
+        worker_entry_stack_address, thread_pointer, vm_module, allocate,
+        broadcast, saved_registers=None):
+    """Invoke +0x280554 with the actual queue caller's retained ABI words."""
+    S=worker_entry_stack_address;base=image_base;q=queue_address
+    if not isinstance(S,int) or S&15:
+        raise RefillUnsupported('default queue task stack must be aligned')
+    regs={index:0 for index in range(19,29)}
+    if saved_registers is not None:
+        if any(index not in regs for index in saved_registers):
+            raise RefillUnsupported('unsupported worker saved register')
+        regs.update(saved_registers)
+    if any(not isinstance(value,int) or not 0<=value<1<<64 for value in regs.values()):
+        raise RefillUnsupported('worker saved register outside guest ABI')
+    regs.update({19:q+0x30,20:q+0x58,21:q+0x18,22:thread_pointer,
+        23:q,24:1,25:0,26:1})
+    p=_PageTransaction(pages);Q=S-0xd0
+    # +329f68 and matching bionic's uncontended unlock retain these words.
+    # The sixth initialization tailcall reads one as an unwritten VM slot.
+    for address,value in ((Q-0x10,Q+0x50),(Q-8,base+0x326614),
+            (Q-0x60,Q-0x10),(Q-0x58,base+0x329f78),
+            (Q-0x50,regs[19]),(Q-0x48,regs[20]),(Q-0x40,regs[21])):
+        _w(p,address,value)
+    result=run_default_initialization_task(p,allocate=allocate,
+        broadcast=broadcast,vm_module=vm_module,entry_stack_address=Q,
+        return_address=base+0x326620,thread_pointer=thread_pointer,
+        image_base=base,saved_frame_pointer=S-0x80,saved_registers=regs)
+    p.commit();return result
+
+
 def run_default_queue_worker(pages, *, argument_address, image_base,
         entry_stack_address, thread_pointer, thread_id, vm_module, allocate,
         broadcast, create_key, set_specific, get_tls, clock, futex, free,
@@ -1240,22 +1372,9 @@ def run_default_queue_worker(pages, *, argument_address, image_base,
     def invoke(staged,function,object_address):
         if function!=base+0x280554 or object_address!=task:
             raise RefillUnsupported('unsupported default worker task invocation')
-        regs=dict(inherited)
-        regs.update({19:q+0x30,20:q+0x58,21:q+0x18,22:thread_pointer,
-            23:q,24:1,25:0,26:1})
-        # The last queue unlock tailcalls +0x329f68. Its 0x10-byte
-        # wrapper and matching bionic's uncontended 0x50-byte frame leave
-        # saved words below Q. The sixth tailcall reads one of these as an
-        # otherwise unwritten VM slot; derive it rather than zero padding.
-        Q=S-0xd0
-        for address,value in ((Q-0x10,Q+0x50),(Q-8,base+0x326614),
-                (Q-0x60,Q-0x10),(Q-0x58,base+0x329f78),
-                (Q-0x50,regs[19]),(Q-0x48,regs[20]),(Q-0x40,regs[21])):
-            _w(staged,address,value)
-        result=run_default_initialization_task(staged,allocate=allocate,
-            broadcast=broadcast,vm_module=vm_module,entry_stack_address=S-0xd0,
-            return_address=base+0x326620,thread_pointer=thread_pointer,
-            image_base=base,saved_frame_pointer=S-0x80,saved_registers=regs)
+        result=run_default_queue_task(staged,queue_address=q,image_base=base,
+            worker_entry_stack_address=S,thread_pointer=thread_pointer,
+            vm_module=vm_module,allocate=allocate,broadcast=broadcast,saved_registers=inherited)
         results.append(result)
         return result.caller_results[-1].registers[0]
     returned=run_startup_worker(p,argument_address=argument_address,worker_kind='queue',

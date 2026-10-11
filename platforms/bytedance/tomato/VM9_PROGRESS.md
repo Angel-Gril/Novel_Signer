@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：三条 worker 协作等待与完整退出
+
+两基址×A/B四项fresh完整对照、23项页面回滚通过；6次等待（3、1、2）后
+实际timed task转交follow-up，worker按1、2、0返回并退出。全部存活页面、
+allocation/free、VM/JNI和有序服务组一致。共享startup generator统一拥有
+同步与协作等待；旧executor62/6、queue94/5回归逐字节一致。
+live Java转换、完整独立signer及fresh/live继续。
+见 [协作worker报告](REQUEST_JNI_STARTUP_WORKERS.md#675-三条-worker-协作等待转交与完整退出2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：实际 timed poll、queue 转交与清理
 
 两基址×A/B四项fresh完整对照、20项页面回滚及共享callable旧回归通过。
