@@ -2834,6 +2834,36 @@ AST 完全一致。非法参数、静态指令、caller/scratch/allocator 别名
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_constructor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <constructor-evidence.json>
 ```
 
+## 6.55 B 运行状态与有界描述符执行（2026-10-11 Asia/Shanghai）
+
+`initialize_runtime_context` 恢复 +2a9754：清零 status32、active-frame64
+和80个寄存器槽，设置软件栈指针，保留原始数据区与 padding。
+`execute_runtime_descriptor` 恢复 +2a9718 的 kind0/kind2 分发，以及
+B 初始化程序使用的执行路径。基础 tag 为55/66/102/134/169/188/189；
+合并 tag 为250/397/401/451/624，保留中间 PC store、逆序 operand
+pointer、嵌套调用 frame 和导入调用 link 的原生语义。
+
+干净 `b3cde47` 绑定 **7 项修改前真实原生 RED**。正式验证通过
+**48 项运行时原生/Python 对照、6 项 context 初始化对照、27 项回滚
+检查**。两基址均从 fresh ELF 经独立 Python 构造器生成实际初始化
+描述符；每次执行34条记录中的 **19 次分发、2 次导入回调**。
+
+完整 guest/heap/image pages、自然返回 SP/status、导入回调的完整
+context、active frame16 和传入 SP 均匹配。合成控制包含正负和非对齐
+内存偏移、uint64 寄存器、五类合并操作、嵌套调用、回调寄存器改写
+及重定位 SP。非法类型/索引、资源耗尽、别名、回调失败和中途写失败
+全页回滚。新增定义以外旧 owner AST 完全一致。
+
+导入回调使用显式纯 provider；本批次未执行原始导入函数体、线程和
+队列工作。实际输入、生成描述符和执行过程均没有原生快照。其他
+runtime tag、kind1、完整 stack/TLS/OS 和控制存储写入保持拒绝。
+接下来连接真实 startup 回调，继续 JNI/bootstrap、worker、独立 signer、
+新鲜输出与线上验收。见 [有界运行时证据](evidence/vm9_alternative_runtime_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_runtime_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <runtime-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：B context与有界描述符执行
+
+48项执行、6项context初始化、27项回滚检查通过。两基址从fresh ELF
+经独立Python构造器生成实际初始化描述符，各19次分发、2次显式纯
+provider调用。完整页面、回调context、active frame与SP匹配。
+实际导入函数体及线程/队列工作仍待连接；继续完整JNI/bootstrap、worker、
+独立signer、新鲜输出与线上验收。
+见 [运行时报告](REQUEST_JNI_STARTUP_WORKERS.md#655-b-运行状态与有界描述符执行2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：独立构造器与121项描述符发布
 
 2 份 fresh 完整原生/Python 构造器对照、22 项回滚检查通过，覆盖

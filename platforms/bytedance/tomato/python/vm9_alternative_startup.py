@@ -5667,3 +5667,155 @@ def run_module_constructor(pages, *, image_base, entry_stack_address, thread_id,
     m.p.commit()
     return ModuleConstructorResult(result.address,result.descriptor_count,result.instruction_count,
         tuple(publications),result.effects,result.finalizers)
+
+
+def initialize_runtime_context(pages, *, image_base, context_address, reserved_regions=()):
+    """Actual +2a9754 context initialization, preserving data and padding.
+
+    Clear status32, active-frame64 and eighty register words; register1 points
+    to context+0x6010. The 0x6000-byte software stack remains caller-owned.
+    This entry does not perform a caller's stack-canary save or execute code.
+    """
+    m=_ReaderAstMemory(pages,image_base,context_address,0x62D0,4096,16*1024*1024,reserved_regions)
+    m.claim(context_address,0x62D0)
+    _write_span(m.p,context_address,bytes(4));_write_span(m.p,context_address+8,bytes(8))
+    _write_span(m.p,context_address+0x6050,bytes(0x280))
+    _write_span(m.p,context_address+0x6058,(context_address+0x6010).to_bytes(8,'little'))
+    m.p.commit();return context_address
+
+
+@dataclass(frozen=True)
+class RuntimeExecutionResult:
+    status_word: int
+    steps: int
+    imported_calls: tuple[tuple[int, int, int], ...]
+
+
+def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
+        context_address, entry_stack_address, call_import=None, max_steps=100000,
+        max_depth=64, max_instructions=1048576, max_vector_bytes=16*1024*1024,
+        reserved_regions=()):
+    """Bounded +2a9718 descriptor dispatch and the B initialization program.
+
+    Kind0 calls an explicit pure imported provider; kind2 executes the linked
+    48-byte records. Supported primary tags are 55/66/102/134/169/188/189;
+    fused tags 250/397/401/451/624 preserve native intermediate status stores,
+    reverse operand pointers and call-link adjustment. Other tags and kind1
+    fail closed. Native caller boxes and active frame16 derive from incoming
+    SP. Software-stack exhaustion, cycles through the step/depth budget,
+    register overflow and instruction-vector escapes also reject.
+
+    call_import(pages,function_address,context_address,entry_stack_address)
+    receives staged pages and the actual imported-function incoming SP. It
+    must be pure outside those pages; defer external actions until the whole
+    result is accepted. Its return value is ignored, as by the original ABI.
+    The imported callback bodies, OS threads and full startup are not supplied
+    by this interpreter. Pages roll back on any rejected path or write failure.
+    Runtime stores cannot modify control headers, code vectors or native frame
+    records. Full native stack saves, TLS and the unspecified X0 return are not
+    outputs; status_word is the context's final first uint32.
+    """
+    if type(entry_stack_address) is not int or not 0x2000<entry_stack_address<=MASK64 or entry_stack_address&15:
+        raise RefillUnsupported('runtime descriptor requires an aligned incoming SP')
+    for value,minimum,maximum in ((max_steps,1,1048576),(max_depth,1,256),(max_instructions,1,1048576)):
+        if type(value) is not int or not minimum<=value<=maximum:
+            raise RefillUnsupported('runtime descriptor execution bound is invalid')
+    if call_import is not None and not callable(call_import):
+        raise RefillUnsupported('runtime imported provider is invalid')
+    m=_ReaderAstMemory(pages,image_base,context_address,0x62D0,4096,max_vector_bytes,reserved_regions)
+    m.claim(context_address,0x62D0)
+    protected=[(context_address,context_address+16),*reserved_regions]
+    descriptors={};roots={};frames=set();calls=[];steps=0;bank=context_address+0x6050
+    def u(address,width=8):return _u(m.p,address,width)
+    def put(address,value,width=8):_write_span(m.p,address,(value&((1<<(width*8))-1)).to_bytes(width,'little'))
+    def reg(index):
+        if not 0<=index<80:raise RefillUnsupported('runtime register index exceeds its bank')
+        return u(bank+index*8)
+    def wr(index,value):
+        if not 0<=index<80:raise RefillUnsupported('runtime register index exceeds its bank')
+        put(bank+index*8,value)
+    def claim(address,size):
+        m.claim(address,size);protected.append((address,address+size))
+    def store(address,value):
+        if address>MASK64-7 or any(address<end and start<address+8 for start,end in protected):
+            raise RefillUnsupported('runtime store overlaps protected control storage')
+        put(address,value)
+    def instruction(address,tag):
+        word=u(address,4);first=word&255;second=(word>>8)&255;third=(word>>16)&255
+        immediate=word>>16;immediate-=65536 if immediate&32768 else 0
+        if tag==55:store((reg(first)+immediate)&MASK64,reg(second))
+        elif tag==66:wr(second,reg(first)+immediate)
+        elif tag==102:wr(second,u(u(address+8))+immediate)
+        elif tag==134:wr(second,u((reg(first)+immediate)&MASK64))
+        elif tag==169:wr(third,reg(first))
+        else:raise RefillUnsupported('runtime primary instruction is unsupported')
+    def imported_target(address):
+        root=u(address+8)
+        if root not in roots:
+            claim(root,96);begin,end,capacity=m.vector(root,8)
+            if (end-begin)//8>65536:raise RefillUnsupported('runtime root descriptor array exceeds its bound')
+            if capacity>begin:protected.append((begin,capacity))
+            roots[root]=(begin,end)
+        begin,end=roots[root];index=u(address,4)
+        if index>=(end-begin)//8:raise RefillUnsupported('runtime call index exceeds its root array')
+        return u(begin+index*8)
+    def call(address,child_sp,depth):
+        value=u(context_address,4);wr(3,value-(1<<32) if value&(1<<31) else value)
+        invoke(imported_target(address),child_sp,depth+1)
+    def invoke(descriptor,sp,depth):
+        nonlocal steps
+        if depth>=max_depth or sp<0x100:
+            raise RefillUnsupported('runtime descriptor call depth exhausted')
+        if descriptor not in descriptors:
+            claim(descriptor,64);kind=u(descriptor+56)
+            if kind not in (0,2):raise RefillUnsupported('runtime descriptor kind is unsupported')
+            begin=end=0
+            if kind==2:
+                begin,end,capacity=m.vector(descriptor+8,48)
+                if not begin<end or (end-begin)//48>max_instructions:
+                    raise RefillUnsupported('runtime instruction vector is empty or exceeds its bound')
+                protected.append((begin,capacity))
+            descriptors[descriptor]=(kind,begin,end)
+        kind,begin,end=descriptors[descriptor]
+        if sp not in frames:
+            claim(sp-0x28,24);claim(sp-0x60,16);frames.add(sp)
+        put(sp-0x28,context_address);put(sp-0x20,sp-0x28);put(sp-0x18,descriptor)
+        if kind==0:
+            if not callable(call_import) or not u(descriptor):
+                raise RefillUnsupported('runtime imported descriptor requires a nonzero pure provider target')
+            active=u(context_address+8);function=u(descriptor);import_sp=sp-0x50
+            calls.append((function,context_address,import_sp))
+            call_import(m.p,function,context_address,import_sp)
+            if u(context_address+8)!=active:
+                raise RefillUnsupported('runtime imported provider changed the active frame')
+            put(context_address,reg(3),4);return
+        size=u(descriptor+4,4);size-=1<<32 if size&(1<<31) else 0
+        if ((reg(1)-size)&MASK64)<context_address+16:
+            raise RefillUnsupported('runtime software stack exhausted')
+        frame=sp-0x60;put(frame,u(descriptor));put(frame+8,u(context_address+8));put(context_address+8,frame)
+        put(context_address,0,4)
+        while True:
+            if steps>=max_steps:raise RefillUnsupported('runtime instruction step budget exhausted')
+            pc=u(context_address,4)
+            if pc>=(end-begin)//48:raise RefillUnsupported('runtime PC escapes its instruction vector')
+            address=begin+pc*48;tag=u(address+40);steps+=1
+            if tag==189:put(context_address,reg(u(address,1)),4);break
+            if tag==188:call(address,sp-0xC0,depth);put(context_address,u(context_address,4)+1,4);continue
+            if tag in (55,66,102,134,169):
+                put(context_address,pc+1,4);instruction(address,tag);continue
+            sequence={250:(134,66),397:(169,188),401:(134,55,66,55),451:(169,134),624:(55,55,169)}.get(tag)
+            if sequence is None:raise RefillUnsupported('runtime fused instruction is unsupported')
+            count=len(sequence)
+            for index,operation in enumerate(sequence):
+                operand=u(address+(count-index-1)*8)
+                if operand!=address+(index+1)*48 or operand+48>end:
+                    raise RefillUnsupported('runtime fused operand escapes its consecutive records')
+                if operation==188:
+                    call(operand,sp-0xC0,depth);put(context_address,u(context_address,4)+2,4)
+                else:
+                    put(context_address,pc+index+1 if index<count-1 else pc+count+1,4)
+                    instruction(operand,operation)
+        if u(context_address+8)!=frame:raise RefillUnsupported('runtime active-frame link changed unexpectedly')
+        put(context_address+8,u(frame+8))
+    invoke(descriptor_address,entry_stack_address,0)
+    result=RuntimeExecutionResult(u(context_address,4),steps,tuple(calls));m.p.commit();return result
