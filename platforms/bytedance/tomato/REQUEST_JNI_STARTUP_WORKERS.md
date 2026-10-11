@@ -3302,6 +3302,41 @@ python -B platforms/bytedance/tomato/python/verify_vm9_jni_complete_bootstrap_20
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_finalizer_callable_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <finalizer-callable-evidence.json>
 ```
 
+## 6.70 完整 JNI 后的两条 worker 与 guest 退出清理（2026-10-11 Asia/Shanghai）
+
+`vm9_jni_workers.run_requested_worker` 消费JNI/startup实际发布的thread
+entry与argument，复用既有executor、A/B queue、TLS与pthread_exit owners。
+显式选择当前线程的独立TLS/pthread存储；线程共用进程级key generation
+table，分别转移support所有权、运行实际初始化任务、自然返回，再完成
+matching-libc joinable guest pthread_exit body。A/B来自JNI结果的startup
+entry。未知任务、非fresh joinable存储与detached回收分支拒绝。
+
+干净 `4bb15a2` 的 **2项真实完整原生RED** 后实施。**4项原生/Python
+对照、28项回滚检查**通过：两基址×两条startup分支，每个native控制在
+同一CPU运行全部13项constructor→JNI→executor worker→实际A/B queue
+worker→两次guest退出。所有存活guest/heap/image/libc页面、各自有序
+allocation/free、registration、OS/JNI/JavaVM/thread服务组与线程独立TLS
+匹配；每组11464项allocation/free效果，两次finite wait，两条thread
+support已清空，joinable状态变为1。每次仍仅执行一个A/B入口。
+
+每个基址的Python独立ELF构造结果供两个分支分别复制；每个native控制
+重新运行全部成员，不使用native snapshot。高基址覆盖SP偏移、thread id、
+allocation delta及heap/stack padding。Clock provider承担实际libc首次
+clock_gettime的lazy cache；finite futex provider在解锁后停止idle worker。
+OS exit是显式guest事件。Provider需暂存外部效果，guest页面事务不能撤回
+已完成的外部调用。B的max_steps/max_depth约束其descriptor运行；A复用
+既有VM owner的内部预算。Physical stack/thread输出scratch、module注册与
+分配的交错、真实OS线程/JVM/并发、真实allocator boot不在本节契约中。
+
+JNI一共请求三条worker；本节完整组合其中executor和第一条初始化queue。
+第二queue仍保留JNI finalizer callable，实际callback与其延时后续任务
+尚未在Python组合。独立signer、fresh输出及线上验收仍未完成。
+见 [完整worker证据](evidence/vm9_jni_requested_workers_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_requested_workers_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <jni-workers-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

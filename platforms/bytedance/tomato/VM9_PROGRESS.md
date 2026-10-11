@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：完整 JNI 到 executor/初始化 queue 与退出
+
+两基址×两分支4项原生对照/28项回滚通过。完整13constructors/JNI后执行
+executor和实际A/B queue；独立线程TLS与两次完整joinable guest退出、全部
+存活页面及服务组匹配。继续第三queue的finalizer callback与延时任务、
+独立signer和fresh/live。见 [完整worker报告](REQUEST_JNI_STARTUP_WORKERS.md#670-完整-jni-后的两条-worker-与-guest-退出清理2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：完整 JNI 与条件主线程 startup
 
 fresh ELF映射/链接、13项constructor、JNI_OnLoad与一次A/B主线程startup

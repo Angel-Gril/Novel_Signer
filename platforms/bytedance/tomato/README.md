@@ -241,6 +241,8 @@ The ELF image loader now maps all PT_LOAD/BSS pages and eagerly binds every relo
 
 Fresh ELF mapping/linking and all thirteen constructors now compose through complete JNI_OnLoad and one conditional A/B main-thread startup. Four native/Python controls and 38 rollback checks pass; both task queues, 19 JNI calls, four JavaVM calls, three deferred worker requests and all surviving pages match. The finalizer callable adds 32 controls and nine guards; the old 84/12 callable regression is byte-identical. Same-run workers, cleanup and the independent signer remain unfinished. See the [complete JNI report](REQUEST_JNI_STARTUP_WORKERS.md#669-完整-jni-与两条主线程-startup-组合2026-10-11-asiashanghai).
 
+The complete ELF/JNI execution now continues into the executor and actual A/B initialization queue workers, with separate thread TLS and full joinable guest exit. Four native/Python controls and 28 rollback guards pass, including all surviving pages and ordered service groups. The third finalizer queue and independent signer remain unfinished. See the [full JNI worker report](REQUEST_JNI_STARTUP_WORKERS.md#670-完整-jni-后的两条-worker-与-guest-退出清理2026-10-11-asiashanghai).
+
 
 
 
