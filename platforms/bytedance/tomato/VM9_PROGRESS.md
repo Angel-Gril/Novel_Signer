@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：请求树计数、value与iterator
+
+128项原生/Python对照、1项请求入口检查、40项回滚通过。实际u64 size、
+string-value清理/回调reload、iterator pair/advance及clone wrapper完成；
+owning请求1995到2321步。旧2000预算实际耗尽后调整为有限4000。
+下一边界局部树析构 `+25C01C`；完整signer、fresh/live继续。
+见 [树遍历报告](REQUEST_JNI_STARTUP_WORKERS.md#695-请求树计数与-value-清理和-iterator-遍历2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：guest table折叠比较
 
 48项原生/Python对照、1项请求入口检查、26项回滚通过。实际ELF字节

@@ -90,7 +90,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
         vm = vm_module.VM(StrictMem(), frame.bytecode_offset,
             frame.packed_arguments_address, image + 0x35E230,
             image + 0x35E690, image + 0x28587C,
-            inputs['return_address'], maxsteps=2000)
+            inputs['return_address'], maxsteps=4000)
         vm.R = list(frame.registers)
         def callback(vm, function, argument):
             words = [vm.m.u64(argument + i * 8) for i in range(4)]
@@ -269,6 +269,30 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 _write_span(vm.m.pages, argument + 0x20, (result & 0xFFFFFFFF).to_bytes(4, 'little'))
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_folded_comparisons', []).append(result)
+            elif (wrapper, target) == (0x285F44, 0x25C150):
+                import vm9_registry as registry
+                size = registry.configuration_tree_size(vm.m.pages, container_address=words[1])
+                _write_span(vm.m.pages, argument + 0x10, size.to_bytes(8, 'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_tree_sizes', []).append(size)
+            elif (wrapper, target) == (0x285B28, 0x24C59C):
+                import vm9_registry as registry
+                pair = registry.configuration_tree_iterator_pair(vm.m.pages, iterator_address=words[1])
+                _write_span(vm.m.pages, argument + 0x10, pair.to_bytes(8, 'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_iterator_pairs', []).append(dict(nonzero=bool(pair)))
+            elif allocate is not None and (wrapper, target) == (0x285B44, 0x2483E0):
+                objects.clone_string_object(vm.m.pages, object_address=words[1],
+                    source_object_address=words[2], image_base=image, allocate=allocate)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_iterator_string_clones', []).append(dict(
+                        source_length_u32=vm.m.u32(words[2] + 12)))
+            elif (wrapper, target) == (0x285B54, 0x24C5B8):
+                import vm9_registry as registry
+                pair = registry.advance_configuration_tree_iterator(vm.m.pages, iterator_address=words[1])
+                _write_span(vm.m.pages, argument + 0x10, b''.join(v.to_bytes(8, 'little') for v in pair))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_iterator_advances', []).append(dict(returned_pair_written=True))
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

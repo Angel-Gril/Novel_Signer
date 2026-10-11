@@ -420,6 +420,8 @@ The actual tree lookup and NULL-safe C-string length wrappers reuse existing own
 
 Guest-table folded comparison and its actual wrapper pass 48 native/Python controls, one request VM entry check and 26 rollback guards. Both real warm singleton getter SPs, scratch and order match. The owning request reaches 1995 steps at tree count; the complete signer remains unfinished. See the [folded comparison report](../REQUEST_JNI_STARTUP_WORKERS.md#694-实际-guest-table-折叠比较与-singleton-接线2026-10-12-asiashanghai).
 
+Request tree count, string-value replacement, iterator pairs, clone and advance pass 128 native/Python controls, one request VM entry check and 40 rollback guards. The actual owning request reaches 2321 steps at local tree destruction under a finite 4000-step budget. The complete signer remains unfinished. See the [tree traversal report](../REQUEST_JNI_STARTUP_WORKERS.md#695-请求树计数与-value-清理和-iterator-遍历2026-10-12-asiashanghai).
+
 
 
 

@@ -255,6 +255,65 @@ class _ConfigurationTree:
         return created, True
 
 
+def configuration_tree_size(pages, *, container_address: int) -> int:
+    """+0x25c150/+0x24b958/+0x24bdd0: load controller then its uint64 count."""
+    if not isinstance(container_address, int) or not 0 <= container_address < 1 << 64:
+        raise RefillUnsupported('configuration size container must fit uint64')
+    controller = int.from_bytes(_read_span(pages, container_address + 0x20, 8), 'little')
+    return int.from_bytes(_read_span(pages, controller + 8, 8), 'little')
+
+
+def configuration_tree_iterator_pair(pages, *, iterator_address: int) -> int:
+    """+0x24c59c: return node+0x20; table and pair payload are not consumed."""
+    if not isinstance(iterator_address, int) or not 0 <= iterator_address < 1 << 64:
+        raise RefillUnsupported('configuration iterator must fit uint64')
+    node = int.from_bytes(_read_span(pages, iterator_address + 8, 8), 'little')
+    return int.from_bytes(_read_span(pages, node + 0x20, 8), 'little')
+
+
+def advance_configuration_tree_iterator(pages, *, iterator_address: int,
+                                        max_nodes: int = 4096) -> tuple[int, int]:
+    """+0x24c5b8/+0x24c62c: increment node in place, return both iterator words."""
+    if not isinstance(iterator_address, int) or not 0 <= iterator_address < 1 << 64:
+        raise RefillUnsupported('configuration iterator must fit uint64')
+    if not isinstance(max_nodes, int) or not 1 <= max_nodes <= 0x100000:
+        raise ValueError('invalid configuration iterator node bound')
+    transaction = _PageTransaction(pages)
+    def u64(address):
+        return int.from_bytes(_read_span(transaction, address, 8), 'little')
+    def put(node):
+        _write_span(transaction, iterator_address + 8, objects._word(node))
+    seen = set()
+    def visit(node):
+        if node in seen or len(seen) >= max_nodes:
+            raise RefillUnsupported('cyclic or excessive configuration iterator traversal')
+        seen.add(node)
+    node = u64(iterator_address + 8)
+    visit(node)
+    right = u64(node + 0x18)
+    if right:
+        successor = right
+        while True:
+            visit(successor)
+            left = u64(successor + 0x10)
+            if not left:
+                break
+            successor = left
+        put(successor)
+    else:
+        parent = u64(node + 8)
+        while node == u64(parent + 0x18):
+            visit(parent)
+            node = parent
+            put(node)
+            parent = u64(node + 8)
+        if u64(node + 0x18) != parent:
+            put(parent)
+    pair = (u64(iterator_address), u64(iterator_address + 8))
+    transaction.commit()
+    return pair
+
+
 def configuration_tree_iterator(pages, *, container_address: int, image_base: int,
         position: str = 'end') -> tuple[int, int]:
     """+0x25c180/+0x25c188 return the guest iterator table and begin/end node.
@@ -300,9 +359,10 @@ def insert_configuration_pair(pages, *, container_address: int, key_address: int
                               max_bytes: int = 0x100000) -> int:
     """Model +0x25bf3c: transferred key/value, pair allocation and RB insertion.
 
-    Duplicate keys destroy the incoming string object and free the old u32
-    value before replacing its pointer. Supported cleanup callbacks are
-    +0x182d6c (string delete) / +0x165334 (raw free). Native's insertion-time
+    Duplicate keys destroy the incoming string object and release the old
+    value before replacing its pointer. Supported value cleanup callbacks are
+    +0x182d6c (string delete) / +0x165334 (raw free). Reload that callback after
+    incoming-key destruction, as the original does. Native's insertion-time
     duplicate after allocator mutation retains its newly allocated pair.
     Return the resulting pair address, not the unspecified native X0.
     """
@@ -312,11 +372,22 @@ def insert_configuration_pair(pages, *, container_address: int, key_address: int
     if node != tree.sentinel:
         pair = tree.u64(node + 32)
         if (tree.u64(container_address + 8) != objects._image_address(image_base, 0x182D6C)
-                or tree.u64(container_address + 16) != objects._image_address(image_base, 0x165334)):
+                or tree.u64(container_address + 16) not in (
+                    objects._image_address(image_base, 0x165334),
+                    objects._image_address(image_base, 0x182D6C))):
             raise RefillUnsupported("unknown configuration pair cleanup callbacks")
         objects.destroy_string_object(transaction, object_address=key_address, image_base=image_base,
                                       free=free, delete_object=True)
-        free(transaction, tree.u64(pair + 8))
+        cleanup = tree.u64(container_address + 16)
+        value = tree.u64(pair + 8)
+        if cleanup == objects._image_address(image_base, 0x182D6C):
+            if value:
+                objects.destroy_string_object(transaction, object_address=value,
+                    image_base=image_base, free=free, delete_object=True)
+        elif cleanup == objects._image_address(image_base, 0x165334):
+            free(transaction, value)
+        else:
+            raise RefillUnsupported("unknown configuration value cleanup callback")
         tree.put(pair + 8, value_address)
     else:
         pair = objects._allocate(transaction, allocate, 16)

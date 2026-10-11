@@ -4090,6 +4090,44 @@ signer、fresh签名与线上矩阵仍未完成。**
 python -B platforms/bytedance/tomato/python/verify_vm9_request_folded_compare_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-fold-evidence.json>
 ```
 
+## 6.95 请求树计数与 value 清理和 iterator 遍历（2026-10-12 Asia/Shanghai）
+
+`configuration_tree_size` 恢复 `+25C150/+24B958/+24BDD0`：从container+0x20
+读取controller，再读取controller+8的完整u64 count。`+285F44`将结果
+写入packed+0x10。请求接入后在2001步触发旧2000预算，页面全部回滚；
+据实际边界把有限预算调整到4000，继续到后续真实callback。
+
+实际请求树value是字符串对象。`insert_configuration_pair` 支持
+`+182D6C` value清理：先释放incoming key，再重新加载value清理callback，
+销毁旧字符串payload/object，最后替换value pointer。保留既有raw free
+路径；原始指令确认callback在key销毁后重新加载，provider修改它的
+原生/Python顺序与结果一致。NULL旧value不调用字符串析构。
+
+`configuration_tree_iterator_pair` 恢复 `+24C59C`，只读取iterator+8的
+node及node+0x20的pair pointer；不消费table和pair payload。
+`+285B28`写入8字节结果。`+285B44 -> +2483E0` 复用既有string clone
+owner。`advance_configuration_tree_iterator` 恢复 `+24C5B8/+24C62C`：
+右子树取最左节点，或沿parent回溯；按实际顺序更新iterator，并返回
+table/node两字，`+285B54`写入packed+0x10的16字节pair。
+
+两基址 **128项原生/Python对照、1项请求入口检查、40项页面回滚**：
+24项size、28项string-value replacement、24项iterator pair、16项clone
+wrapper、36项iterator advance。覆盖full u64、跨页、NULL/未映射pair
+返回值、未读取的table word、空/二进制/内嵌NUL字符串、value别名、
+清理callback reload、左右子树/parent回溯/最后节点及完整返回两字。
+完整guest payload、对应packed ABI、清理allocator/heap/free前字节匹配。
+30项leaf拒绝与10项入口回滚通过；外部effects不回滚，native输出不作输入。
+各已接受原生分组在增加独立功能时未重复。
+
+fresh owning请求从1995到2321步，完成树计数、重复value替换、iterator
+pair、clone与遍历，下一处为 `+285B70 -> +25C01C` 局部树析构。
+**完整请求返回、整链原生差分、真实Android JVM、完整独立signer、fresh
+签名与线上矩阵仍未完成。** 见 [请求树遍历证据](evidence/vm9_request_tree_size_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_tree_size_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-tree-operations-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

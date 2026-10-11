@@ -232,8 +232,8 @@ def request_entry(library,libc):
             except prefix.RequestContinuationBoundary as exc:
                 assert before=={k:bytes(v) for k,v in p.items()}
                 if label=='JNI_connected':
-                    assert exc.vm.steps==1995 and exc.vm.pc-base==0xFECE0
-                    assert str(exc.cause)=='unknown request callback +0x285f44 -> +0x25c150'
+                    assert exc.vm.steps==2321 and exc.vm.pc-base==0xFF7DC
+                    assert str(exc.cause)=='unknown request callback +0x285b70 -> +0x25c01c'
                     assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
                     completed=diag['request_evaluator_prefixes'][-1]
                     assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
@@ -261,7 +261,10 @@ def request_entry(library,libc):
                     assert diag['request_tree_lookups']==[dict(found=False)]
                     assert diag['request_cstring_lengths'][:2]==[10,4]
                     assert diag['request_folded_comparisons'] and all(isinstance(v,int) for v in diag['request_folded_comparisons'])
-                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1995,
+                    assert diag['request_tree_sizes'] and diag['request_iterator_pairs']
+                    assert diag['request_iterator_string_clones'] and diag['request_iterator_advances']
+                    assert all(r['returned_pair_written'] for r in diag['request_iterator_advances'])
+                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=2321,
                         actual_request_callback_and_evaluator_executed=True,owning_TLS_allocator_and_JavaVM_used=True,
                         explicit_NULL_FindClass_input=True,evaluator_completed=True,
                         actual_scope_cleanup_completed=True,actual_request_byte_gate_completed=True,
@@ -273,7 +276,9 @@ def request_entry(library,libc):
                         actual_fill_string_constructor_completed=True,
                         actual_tree_lookup_completed=True,actual_NULL_safe_cstring_lengths_completed=True,
                         actual_guest_table_folded_comparisons_completed=True,owning_fold_singleton_used=True,
-                        stopped_at_wrapper_offset='0x285f44',stopped_at_callback_offset='0x25c150',
+                        actual_tree_size_and_string_value_replacement_completed=True,
+                        actual_iterator_pair_clone_and_advance_completed=True,request_VM_budget=4000,
+                        stopped_at_wrapper_offset='0x285b70',stopped_at_callback_offset='0x25c01c',
                         all_pages_unchanged_after_stop=True,
                         full_request_returned=False,whole_handoff_native_differential_verified=False))
                 elif label in ('missing_fold_singleton','fold_singleton_exception'):
@@ -312,7 +317,7 @@ def request_entry(library,libc):
                         all_pages_unchanged=True,external_effects_rolled_back=False))
             else:raise AssertionError('request unexpectedly completed')
             if label=='NULL_header_reference':w(p,request,header)
-            steps=1995 if label=='JNI_connected' else 1812 if label in ('missing_fold_singleton','fold_singleton_exception') else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
+            steps=2321 if label=='JNI_connected' else 1812 if label in ('missing_fold_singleton','fold_singleton_exception') else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
             print('PASS request VM',label,steps,'steps',flush=True)
     try:
         outer.make_session=make
