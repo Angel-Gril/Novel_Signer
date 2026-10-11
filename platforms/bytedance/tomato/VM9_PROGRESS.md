@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：B worker 完整算术与内存内置函数
+
+28个基础tag、47个组合tag与CAS64/memset恢复。310项runtime、30项builtin、
+4项startup回归及69项回滚检查通过。24项实际嵌套descriptor使用真实memset
+回调；输入来自独立ELF构造。完整once/worker组合和signer仍未完成。
+见 [B worker arithmetic 报告](REQUEST_JNI_STARTUP_WORKERS.md#659-b-worker-完整算术与内存内置函数2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：B worker 分支与组合指令
 
 既有执行器扩展两个基础 tag 和六个组合 tag。112项 runtime 原生对照、

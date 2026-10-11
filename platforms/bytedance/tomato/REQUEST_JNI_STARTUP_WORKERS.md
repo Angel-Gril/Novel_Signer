@@ -2954,6 +2954,38 @@ atomic/once/memset 回调体或嵌套初始化程序。四项 startup 回归则�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_worker_runtime_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-worker-runtime-evidence.json>
 ```
 
+## 6.59 B worker 完整算术与内存内置函数（2026-10-11 Asia/Shanghai）
+
+既有 B 执行器增加19个基础 tag 和36个组合 tag，现覆盖28个基础 tag、
+47个已举证组合 tag。新增32/64位算术、位运算、移位/旋转、无符号
+取余、字节访问和不等分支；32位结果按原生符号扩展。移位量按原生
+寄存器宽度取模，除数为零的无符号取余保留分子。字节 load 在写 PC
+前读取内存，组合指令也保留这一顺序。
+
+`run_runtime_imported_builtin` 恢复实际 +2eae70 CAS64 与 +2ea98c memset。
+register8 提供目标，register9/10 提供 expected/new 或 fill/count，
+register6 与返回值接收原值或目标地址。该接口使用串行 guest 内存；
+不创建主机原子操作或线程。context header 与 retained 区受保护，
+别名参数先读取后写入，失败时回滚完整页面。
+
+干净 `cf6401b` 绑定 **52 项修改前真实原生 RED**。正式验证通过
+**310 项 runtime 对照、30 项真实 builtin 对照、4 项实际 startup
+回归、69 项回滚检查**。runtime 包含152项新增基础指令、112项新增
+组合指令、22项旧组合回归和24项实际嵌套 worker descriptor。
+覆盖符号边界、移位回绕、别名、零除数、双向分支、直接读取 PC、
+CAS 成败与返回值别名、memset 零长度/跨页/参数别名。两基址的实际
+程序由 ELF 独立构造，嵌套程序执行真实 native memset callback，Python
+使用已恢复 builtin；完整页面、context、导入参数/frame/SP 均匹配。
+
+此处验证 descriptor 执行与两类内存 builtin。完整 once/caller/worker
+组合、JNI/bootstrap、独立 signer、新鲜输出和线上验收仍待完成。
+没有原生快照输入，没有发布私有名称或 payload。见
+[worker arithmetic 证据](evidence/vm9_alternative_worker_arithmetic_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_worker_arithmetic_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-worker-arithmetic-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

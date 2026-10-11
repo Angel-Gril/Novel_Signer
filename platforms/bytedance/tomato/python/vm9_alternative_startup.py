@@ -5695,11 +5695,12 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
         context_address, entry_stack_address, call_import=None, max_steps=100000,
         max_depth=64, max_instructions=1048576, max_vector_bytes=16*1024*1024,
         reserved_regions=()):
-    """Bounded +2a9718 descriptor dispatch and the B initialization program.
+    """Bounded +2a9718 dispatch for evidenced B startup and worker programs.
 
     Kind0 calls an explicit pure imported provider; kind2 executes the linked
-    48-byte records. Supported primary tags are 55/62/66/95/102/134/169/188/189;
-    eleven evidenced fused tags preserve native intermediate status stores,
+    48-byte records. Twenty-eight primary tags cover byte/64-bit memory, integer arithmetic,
+    shifts, rotations, branches and calls. Forty-seven evidenced fused tags
+    preserve native intermediate status stores,
     reverse operand pointers and call-link adjustment. Other tags and kind1
     fail closed. Native caller boxes and active frame16 derive from incoming
     SP. Software-stack exhaustion, cycles through the step/depth budget,
@@ -5736,10 +5737,12 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
         put(bank+index*8,value)
     def claim(address,size):
         m.claim(address,size);protected.append((address,address+size))
-    def store(address,value):
-        if address>MASK64-7 or any(address<end and start<address+8 for start,end in protected):
+    def store(address,value,width=8):
+        if address>MASK64-width+1 or any(address<end and start<address+width for start,end in protected):
             raise RefillUnsupported('runtime store overlaps protected control storage')
-        put(address,value)
+        put(address,value,width)
+    def s32(value):
+        value&=0xFFFFFFFF;return value-(1<<32) if value&(1<<31) else value
     def instruction(address,tag):
         word=u(address,4);first=word&255;second=(word>>8)&255;third=(word>>16)&255
         immediate=word>>16;immediate-=65536 if immediate&32768 else 0
@@ -5751,6 +5754,29 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
         elif tag==102:wr(second,u(u(address+8))+immediate)
         elif tag==134:wr(second,u((reg(first)+immediate)&MASK64))
         elif tag==169:wr(third,reg(first))
+        elif tag==2:wr(second,u((reg(first)+immediate)&MASK64,1))
+        elif tag in (0,103):
+            shift=((word>>24)+(32 if tag==0 else 0))&63;value=reg(second)
+            wr(third,(value>>shift)|(value<<((-shift)&63)))
+        elif tag==48:wr(third,s32(reg(first)+reg(second)))
+        elif tag==49:wr(third,reg(first)|reg(second))
+        elif tag==50:wr(third,reg(first)+reg(second))
+        elif tag==74:wr(third,s32(reg(first)-reg(second)))
+        elif tag==77:wr(third,s32((reg(second)&0xFFFFFFFF)>>((word>>24)&31)))
+        elif tag==84:wr(third,reg(second)>>(((word>>24)+32)&63))
+        elif tag==89:wr(third,reg(first)^reg(second))
+        elif tag==105:wr(third,reg(first)&reg(second))
+        elif tag==120:store((reg(first)+immediate)&MASK64,reg(second),1)
+        elif tag==138:wr(third,reg(second)<<(((word>>24)+32)&63))
+        elif tag==144:wr(third,s32(reg(second))>>((word>>24)&31))
+        elif tag==146:wr(third,s32(reg(second)<<((word>>24)&31)))
+        elif tag==147:wr(second,reg(first)&(word>>16))
+        elif tag==153:
+            left=reg(first)&0xFFFFFFFF;right=reg(second)&0xFFFFFFFF
+            wr(third,s32(left%right if right else left))
+        elif tag==165:wr(second,s32(reg(first)+immediate))
+        elif tag==187:
+            if reg(first)!=reg(second):put(context_address,u(context_address,4)+immediate,4)
         else:raise RefillUnsupported('runtime primary instruction is unsupported')
     def imported_target(address):
         root=u(address+8)
@@ -5804,11 +5830,25 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
             address=begin+pc*48;tag=u(address+40);steps+=1
             if tag==189:put(context_address,reg(u(address,1)),4);break
             if tag==188:call(address,sp-0xC0,depth);put(context_address,u(context_address,4)+1,4);continue
-            if tag in (55,62,66,95,102,134,169):
-                put(context_address,pc+1,4);instruction(address,tag);continue
-            sequence={194:(188,62,95),250:(134,66),273:(102,134,169),361:(169,169,188),
-                397:(169,188),401:(134,55,66,55),402:(55,55,169,169),451:(169,134),
-                624:(55,55,169),651:(102,134,134),726:(134,55,134,55)}.get(tag)
+            if tag in (0,2,48,49,50,55,62,66,74,77,84,89,95,102,103,105,120,134,138,144,146,147,153,165,169,187):
+                if tag not in (2,120):put(context_address,pc+1,4)
+                instruction(address,tag)
+                if tag in (2,120):put(context_address,pc+1,4)
+                continue
+            sequence={
+                193:(50, 66),194:(188, 62, 95),236:(2, 89, 120, 169),250:(134, 66),
+                256:(50, 50, 2),273:(102, 134, 169),288:(50, 2, 89),303:(55, 134, 0),
+                314:(2, 50, 2),317:(169, 95),335:(84, 165),361:(169, 169, 188),
+                367:(50, 2),397:(169, 188),402:(55, 55, 169, 169),448:(62, 95),
+                451:(169, 134),454:(50, 2, 89, 120, 2),464:(66, 66, 62, 62, 95),472:(2, 66, 66),
+                473:(147, 2),494:(50, 50, 84),539:(77, 146),541:(146, 49),
+                547:(89, 2),548:(50, 50, 50, 2),595:(50, 50, 66, 134),606:(55, 187),
+                611:(89, 120, 84),621:(147, 50, 50, 50, 2),624:(55, 55, 169),635:(66, 55, 55),
+                643:(66, 2, 2, 2),651:(102, 134, 134),670:(165, 48),678:(55, 134, 103),
+                687:(147, 146),690:(2, 89, 50, 50),697:(120, 2, 89),712:(2, 77),
+                732:(2, 50, 147),733:(66, 147),759:(2, 89, 50, 66),760:(66, 62, 62),
+                775:(62, 66, 62, 62),401:(134, 55, 66, 55),726:(134, 55, 134, 55),
+            }.get(tag)
             if sequence is None:raise RefillUnsupported('runtime fused instruction is unsupported')
             count=len(sequence)
             for index,operation in enumerate(sequence):
@@ -5825,7 +5865,7 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
                     next_pc=pc+index+1 if index<count-1 else pc+count+1
                     # These helpers perform the memory operation before their
                     # status store. A load may itself read the status word.
-                    after=(tag==402 and index==0) or (tag==273 and index==1) or (tag==726 and index==2)
+                    after=operation==2 or (tag==402 and index==0) or (tag==273 and index==1) or (tag==726 and index==2)
                     if not after:put(context_address,next_pc,4)
                     instruction(operand,operation)
                     if after:put(context_address,next_pc,4)
@@ -5925,4 +5965,44 @@ def initialize_startup_caller(pages, *, image_base, entry_stack_address,
         raise RefillUnsupported('B startup stack canary changed')
     result=StartupCallerResult(context,_u(m.p,image_base+0x3E2D78),
         executed.status_word,executed.steps,executed.imported_calls)
+    m.p.commit();return result
+
+
+def run_runtime_imported_builtin(pages, *, image_base, function_address,
+        context_address, max_bytes=16*1024*1024, reserved_regions=()):
+    """Actual B +2eae70 CAS64 or +2ea98c memset adapter, in serial guest memory.
+
+    Register8 supplies the target; registers9/10 hold expected/new CAS words
+    or fill-byte/count. Register6 and the return value receive the old word
+    or memset destination. CAS is one serialized comparison/update; this API
+    does not create host atomic operations or threads. The LL/SC versus LSE
+    implementation detail is outside this memory contract.
+
+    Context headers and explicitly retained regions cannot be targets. Other
+    mapped guest bytes, including B's once controls, are eligible. Every read
+    precedes the corresponding write, including register-bank aliases. Failed
+    bounds, pointer checks and injected writes roll the entire page change back.
+    """
+    if function_address not in (image_base+0x2EAE70,image_base+0x2EA98C):
+        raise RefillUnsupported('unrecovered B runtime imported builtin')
+    if type(max_bytes) is not int or not 1<=max_bytes<=16*1024*1024:
+        raise RefillUnsupported('runtime builtin byte budget is invalid')
+    m=_ReaderAstMemory(pages,image_base,context_address,0x62D0,4096,max_bytes,reserved_regions)
+    m.claim(context_address,0x62D0)
+    address=_u(m.p,context_address+0x6090)
+    first=_u(m.p,context_address+0x6098);second=_u(m.p,context_address+0x60A0)
+    size=8 if function_address==image_base+0x2EAE70 else second
+    if not address or size>max_bytes or address>MASK64-size+1:
+        raise RefillUnsupported('runtime builtin target is null, overflows or exceeds its budget')
+    if any(address<end and start<address+size for start,end in
+            ((context_address,context_address+16),*reserved_regions)):
+        raise RefillUnsupported('runtime builtin overlaps retained control storage')
+    if function_address==image_base+0x2EAE70:
+        if address&7:raise RefillUnsupported('runtime CAS64 requires an aligned target')
+        result=_u(m.p,address)
+        if result==first:_write_span(m.p,address,second.to_bytes(8,'little'))
+    else:
+        _read_span(m.p,address,size)
+        _write_span(m.p,address,bytes([first&255])*size);result=address
+    _write_span(m.p,context_address+0x6080,result.to_bytes(8,'little'))
     m.p.commit();return result

@@ -348,6 +348,8 @@ The B main-thread startup now executes both actual imported callback bodies thro
 
 The B executor now supports signed immediate/conditional branch tags and six further fused instructions used by worker callers. 112 runtime controls, four actual startup regressions and 40 rollback checks pass. The 24 actual worker-descriptor controls use explicit pure imported providers; worker callback bodies and nested initializers remain unfinished. See the [B worker runtime report](../REQUEST_JNI_STARTUP_WORKERS.md#658-b-worker-的分支与组合指令2026-10-11-asiashanghai).
 
+The B executor now covers the evidenced worker arithmetic with 28 primary tags and 47 fused tags, plus actual CAS64/memset adapters. 310 runtime controls, 30 builtin controls, four startup regressions and 69 rollback checks pass. The 24 actual nested worker descriptor controls execute the real memset callback. Full once/worker composition and signer remain unfinished. See the [B worker arithmetic report](../REQUEST_JNI_STARTUP_WORKERS.md#659-b-worker-完整算术与内存内置函数2026-10-11-asiashanghai).
+
 
 
 
