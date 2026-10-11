@@ -249,6 +249,7 @@ VM/callable/worker live服务接线通过 **6项原生对照、2项worker入口�
 guest table比较通过 **48项对照、1项请求入口检查、26项回滚**；请求到1995步，见 [比较报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#694-实际-guest-table-折叠比较与-singleton-接线2026-10-12-asiashanghai)。
 树计数、value清理与iterator遍历通过 **128项对照、1项请求入口检查、40项回滚**；请求到2321步，见 [树遍历报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#695-请求树计数与-value-清理和-iterator-遍历2026-10-12-asiashanghai)。
 局部树析构通过 **32项对照、1项请求入口检查、27项回滚**；请求到2329步，见 [局部树析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#696-请求局部树析构2026-10-12-asiashanghai)。
+请求后续清理通过 **78项对照、1项入口检查、36项回滚**；空header/NULL JNI输入的VM在2475步返回，见 [请求清理与VM返回报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#697-请求对象与树删除清理和-vm-返回2026-10-12-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

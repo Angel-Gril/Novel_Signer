@@ -295,6 +295,8 @@ Request tree count, string-value replacement, iterator pairs, clone and advance 
 
 Local request tree destruction passes 32 native/Python controls, one request VM entry check and 27 rollback guards. The owning request reaches 2329 steps at request object destruction. The complete signer remains unfinished. See the [local tree destructor report](REQUEST_JNI_STARTUP_WORKERS.md#696-请求局部树析构2026-10-12-asiashanghai).
 
+Request object cleanup, final free and deleting tree destruction pass 78 native/Python controls, one request VM entry check and 36 rollback guards. With empty headers and NULL FindClass services, the owning request VM returns in 2475 steps after 105 callbacks. Native caller return ABI and the complete signer remain unfinished. See the [cleanup and VM return report](REQUEST_JNI_STARTUP_WORKERS.md#697-请求对象与树删除清理和-vm-返回2026-10-12-asiashanghai).
+
 
 
 

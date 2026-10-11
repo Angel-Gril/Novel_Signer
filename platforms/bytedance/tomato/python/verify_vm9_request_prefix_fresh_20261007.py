@@ -302,6 +302,35 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     image_base=image, free=free)
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_tree_cleanups', []).append(dict(completed=True))
+            elif (wrapper, target) == (0x285B70, 0x25C12C):
+                import vm9_registry as registry
+                if diagnostic_scope is not None:
+                    diagnostic_scope['request_tree_delete_started'] = True
+                    diagnostic_scope['request_tree_delete_container_address'] = words[1]
+                registry.delete_configuration_tree(vm.m.pages,container_address=words[1],
+                    entry_stack_address=frame.native_stack_address - 0x180,image_base=image,free=free)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_tree_deletes', []).append(dict(completed=True))
+            elif (wrapper, target) == (0x285910, 0x32A264):
+                if not callable(free):
+                    raise RefillUnsupported('request final free requires a free service')
+                if diagnostic_scope is not None:
+                    diagnostic_scope['request_final_free_started'] = True
+                free(vm.m.pages,words[1])
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_final_frees', []).append(dict(completed=True))
+            elif (wrapper, target) == (0x285F9C, 0x25CF98):
+                import vm9_request_leaf_prefixes as leaf
+                if diagnostic_scope is not None:
+                    diagnostic_scope['request_object_cleanup_started'] = True
+                leaf.destroy_request_object(vm.m.pages,object_address=words[1],image_base=image,
+                    entry_stack_address=frame.native_stack_address - 0x180,
+                    thread_pointer=inputs['thread_pointer'],allocate=allocate,free=free,
+                    thread_id=None if diagnostic_scope is None else diagnostic_scope.get('thread_id'),
+                    diagnostic_observer=None if diagnostic_scope is None else lambda *event:
+                    diagnostic_scope.setdefault('events', []).append(list(event)),
+                    observer=None if diagnostic_scope is None else lambda _p, **context:
+                    diagnostic_scope.setdefault('request_object_cleanups', []).append(context))
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

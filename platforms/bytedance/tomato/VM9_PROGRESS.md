@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：请求清理完成并到达VM返回
+
+78项原生/Python对照、1项入口检查、36项回滚通过。请求object清理、
+free与tree delete完成；空header/NULL JNI输入在2475步、105 callbacks
+到达 `+FFB78` 并匹配caller sentinel。请求事务已提交到传入页面。
+物理native返回ABI、整链native差分、事件发送分支、真实JVM和完整
+signer/fresh/live未完成。见 [清理与VM返回报告](REQUEST_JNI_STARTUP_WORKERS.md#697-请求对象与树删除清理和-vm-返回2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：请求局部树析构
 
 32项原生/Python对照、1项请求入口检查、27项回滚通过。实际pair清理、

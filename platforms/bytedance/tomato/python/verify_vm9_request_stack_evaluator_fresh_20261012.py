@@ -185,10 +185,13 @@ def request_entry(library,libc):
         env=session.allocate(p,8);table=session.allocate(p,0x800)
         w(p,base+0x3DEED8,vm);w(p,vm,vm_table);w(p,vm_table+0x30,0x7400F000);w(p,env,table)
         for slot in (0x30,0x720):w(p,table+slot,0x7400F100+slot)
+        initial_request_pages=p
         for label in ('JNI_connected','missing_JNI','JNI_provider_exception',
                       'missing_counter_TLS','counter_TLS_provider_exception','NULL_header_reference',
                       'missing_exit_service','exit_provider_exception','fill_allocator_exception',
-                      'missing_fold_singleton','fold_singleton_exception','tree_free_exception'):
+                      'missing_fold_singleton','fold_singleton_exception','tree_free_exception',
+                      'object_free_exception','final_free_exception','tree_delete_free_exception'):
+            p=_PageTransaction(initial_request_pages)
             events=[];diag={'thread_id':session.thread_id}
             def invoke_vm(p,fn,args):
                 assert fn==0x7400F000 and args[0]==vm and args[2]==0x10006
@@ -220,6 +223,13 @@ def request_entry(library,libc):
                     raise RefillUnsupported('injected request fill allocation failure')
                 return session.allocate(p,n)
             def request_free(p,pointer):
+                for failure,started in (('object_free_exception','request_object_cleanup_started'),
+                        ('final_free_exception','request_final_free_started'),
+                        ('tree_delete_free_exception','request_tree_delete_started')):
+                    if label==failure and diag.get(started) and (failure!='tree_delete_free_exception' or
+                            pointer==diag.get('request_tree_delete_container_address')):
+                        w(p,request+0x700,0xA5)
+                        raise RefillUnsupported('injected request '+failure)
                 if label=='tree_free_exception' and diag.get('request_tree_cleanup_started'):
                     w(p,request+0x700,0xA5)
                     raise RefillUnsupported('injected request tree free failure')
@@ -227,7 +237,7 @@ def request_entry(library,libc):
             if label=='NULL_header_reference':w(p,request,0)
             before={k:bytes(v) for k,v in p.items()}
             try:
-                prefix.execute_prefix(p,inputs,vm_full,1791023800,500000000,
+                returned=prefix.execute_prefix(p,inputs,vm_full,1791023800,500000000,
                     allocate=request_allocate,diagnostic_scope=diag,reallocate=session.reallocate,free=request_free,
                     prepare_format=session.prepare_format,read_clock=session.read_clock,acquire_environment=acquire,
                     invoke_jni=None if label=='missing_JNI' else jni,get_singleton=None if label=='missing_fold_singleton' else request_singleton,
@@ -236,62 +246,13 @@ def request_entry(library,libc):
                     register_exit=None if label=='missing_exit_service' else register_exit)
             except prefix.RequestContinuationBoundary as exc:
                 assert before=={k:bytes(v) for k,v in p.items()}
-                if label=='JNI_connected':
-                    assert exc.vm.steps==2329 and exc.vm.pc-base==0xFF7FC
-                    assert str(exc.cause)=='unknown request callback +0x285f9c -> +0x25cf98'
-                    assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
-                    completed=diag['request_evaluator_prefixes'][-1]
-                    assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
-                    scope=diag['request_boolean_scopes'][-1]
-                    assert scope['phase']=='boolean_scope_completed' and scope['emission_calls']==1
-                    gate=diag['request_byte_gates'][-1]
-                    assert gate['phase']=='request_byte_gate_completed' and gate['returned_byte']==0
-                    assert gate['actual_target_offset']=='0x28bb54'
-                    request_object=diag['request_objects'][-1]
-                    assert request_object['phase']=='request_object_lifecycle_completed'
-                    address=request_object['object_address']
-                    assert int.from_bytes(_read_span(exc.staged,address,8),'little')==base+0x35B868
-                    counter=int.from_bytes(_read_span(exc.staged,address+0x30,8),'little')
-                    assert int.from_bytes(_read_span(exc.staged,counter,4),'little')==1
-                    count=diag['request_counters'][-1]
-                    assert count['phase']=='request_counter_completed' and count['previous_u32']==0 and count['inserted']
-                    tree=diag['request_trees'][-1]
-                    assert tree['phase']=='request_tree_constructed'
-                    assert {r['position'] for r in diag['request_tree_iterators']}=={'begin','end'}
-                    assert diag['request_iterator_comparisons'][-1]['equal']
-                    registration=diag['request_process_registrations'][-1]
-                    assert registration['status_u32']==0 and registration['owning_exit_service_used']
-                    fill=diag['request_fill_strings'][-1]
-                    assert fill['length_u32']==16 and fill['fill_byte']==0
-                    assert diag['request_tree_lookups']==[dict(found=False)]
-                    assert diag['request_cstring_lengths'][:2]==[10,4]
-                    assert diag['request_folded_comparisons'] and all(isinstance(v,int) for v in diag['request_folded_comparisons'])
-                    assert diag['request_tree_sizes'] and diag['request_iterator_pairs']
-                    assert diag['request_iterator_string_clones'] and diag['request_iterator_advances']
-                    assert all(r['returned_pair_written'] for r in diag['request_iterator_advances'])
-                    assert diag['request_tree_cleanups']==[dict(completed=True)]
-                    destroyed=tree['container_address'];controller=tree['controller_address']
-                    assert int.from_bytes(_read_span(exc.staged,destroyed,8),'little')==base+0x35B7C0
-                    assert int.from_bytes(_read_span(exc.staged,destroyed+32,8),'little')==controller
-                    assert int.from_bytes(_read_span(exc.staged,controller+8,8),'little')==0
-                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=2329,
-                        actual_request_callback_and_evaluator_executed=True,owning_TLS_allocator_and_JavaVM_used=True,
-                        explicit_NULL_FindClass_input=True,evaluator_completed=True,
-                        actual_scope_cleanup_completed=True,actual_request_byte_gate_completed=True,
-                        actual_request_object_constructed=True,temporary_reference_released_to_one_owner=True,
-                        actual_request_counter_completed=True,owning_TLS_registry_and_broadcast_used=True,
-                        valid_empty_header_container_input=True,actual_tree_and_iterators_completed=True,
-                        iterator_comparison_completed=True,unresolved_process_atexit_import=False,
-                        actual_process_atexit_registration_completed=True,
-                        actual_fill_string_constructor_completed=True,
-                        actual_tree_lookup_completed=True,actual_NULL_safe_cstring_lengths_completed=True,
-                        actual_guest_table_folded_comparisons_completed=True,owning_fold_singleton_used=True,
-                        actual_tree_size_and_string_value_replacement_completed=True,
-                        actual_iterator_pair_clone_and_advance_completed=True,request_VM_budget=4000,
-                        actual_local_tree_destructor_completed=True,original_dangling_controller_word_preserved=True,
-                        stopped_at_wrapper_offset='0x285f9c',stopped_at_callback_offset='0x25cf98',
-                        all_pages_unchanged_after_stop=True,
-                        full_request_returned=False,whole_handoff_native_differential_verified=False))
+                assert label!='JNI_connected'
+                if label in ('object_free_exception','final_free_exception','tree_delete_free_exception'):
+                    steps,pc={'object_free_exception':(2329,0xFF7FC),'final_free_exception':(2405,0xFFA60),'tree_delete_free_exception':(2416,0xFFA8C)}[label]
+                    assert exc.vm.steps==steps and exc.vm.pc-base==pc
+                    assert str(exc.cause)=='injected request '+label
+                    guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
+                        all_pages_unchanged=True,external_effects_rolled_back=False))
                 elif label=='tree_free_exception':
                     assert exc.vm.steps==2321 and exc.vm.pc-base==0xFF7DC
                     assert str(exc.cause)=='injected request tree free failure'
@@ -331,16 +292,82 @@ def request_entry(library,libc):
                     assert str(exc.cause)==expected
                     guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
                         all_pages_unchanged=True,external_effects_rolled_back=False))
-            else:raise AssertionError('request unexpectedly completed')
+            else:
+                assert label=='JNI_connected'
+                staged,frame,request_vm,ledger,decoded=returned
+                assert before!={k:bytes(v) for k,v in p.items()}
+                assert request_vm.steps==2475 and request_vm.pc-base==0xFFB78 and len(ledger)==105
+                exit_result=diag['request_vm_return']
+                assert exit_result['caller_sentinel_matches'] and exit_result['request_transaction_committed_to_supplied_pages']
+                assert exit_result['selected_target']==inputs['return_address']
+                assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
+                completed=diag['request_evaluator_prefixes'][-1]
+                assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
+                scope=diag['request_boolean_scopes'][-1]
+                assert scope['phase']=='boolean_scope_completed' and scope['emission_calls']==1
+                gate=diag['request_byte_gates'][-1]
+                assert gate['phase']=='request_byte_gate_completed' and gate['returned_byte']==0
+                assert gate['actual_target_offset']=='0x28bb54'
+                request_object=diag['request_objects'][-1]
+                assert request_object['phase']=='request_object_lifecycle_completed'
+                address=request_object['object_address']
+                assert int.from_bytes(_read_span(staged,address,8),'little')==base+0x35B868
+                assert int.from_bytes(_read_span(staged,address+0x30,8),'little')==0
+                assert int.from_bytes(_read_span(staged,address+0x20,8),'little')==0
+                assert diag['request_object_cleanups'][-1]['phase']=='request_object_destroyed'
+                assert not diag['request_object_cleanups'][-1]['event_emission_branch_taken']
+                assert diag['request_final_frees']==[dict(completed=True)]
+                assert diag['request_tree_deletes']==[dict(completed=True)]
+                count=diag['request_counters'][-1]
+                assert count['phase']=='request_counter_completed' and count['previous_u32']==0 and count['inserted']
+                tree=diag['request_trees'][-1]
+                assert tree['phase']=='request_tree_constructed'
+                assert {r['position'] for r in diag['request_tree_iterators']}=={'begin','end'}
+                assert diag['request_iterator_comparisons'][-1]['equal']
+                registration=diag['request_process_registrations'][-1]
+                assert registration['status_u32']==0 and registration['owning_exit_service_used']
+                fill=diag['request_fill_strings'][-1]
+                assert fill['length_u32']==16 and fill['fill_byte']==0
+                assert diag['request_tree_lookups']==[dict(found=False)]
+                assert diag['request_cstring_lengths'][:2]==[10,4]
+                assert diag['request_folded_comparisons'] and all(isinstance(v,int) for v in diag['request_folded_comparisons'])
+                assert diag['request_tree_sizes'] and diag['request_iterator_pairs']
+                assert diag['request_iterator_string_clones'] and diag['request_iterator_advances']
+                assert all(r['returned_pair_written'] for r in diag['request_iterator_advances'])
+                assert diag['request_tree_cleanups']==[dict(completed=True)]
+                destroyed=tree['container_address'];controller=tree['controller_address']
+                assert int.from_bytes(_read_span(staged,destroyed,8),'little')==base+0x35B7C0
+                assert int.from_bytes(_read_span(staged,destroyed+32,8),'little')==controller
+                rows.append(dict(image_base=hex(base),case=label,request_vm_steps=2475,
+                    actual_request_callback_and_evaluator_executed=True,owning_TLS_allocator_and_JavaVM_used=True,
+                    explicit_NULL_FindClass_input=True,evaluator_completed=True,
+                    actual_scope_cleanup_completed=True,actual_request_byte_gate_completed=True,
+                    actual_request_object_constructed=True,actual_NULL_reference_counter_released=True,
+                    actual_request_counter_completed=True,owning_TLS_registry_and_broadcast_used=True,
+                    valid_empty_header_container_input=True,actual_tree_and_iterators_completed=True,
+                    iterator_comparison_completed=True,unresolved_process_atexit_import=False,
+                    actual_process_atexit_registration_completed=True,
+                    actual_fill_string_constructor_completed=True,
+                    actual_tree_lookup_completed=True,actual_NULL_safe_cstring_lengths_completed=True,
+                    actual_guest_table_folded_comparisons_completed=True,owning_fold_singleton_used=True,
+                    actual_tree_size_and_string_value_replacement_completed=True,
+                    actual_iterator_pair_clone_and_advance_completed=True,request_VM_budget=4000,
+                    actual_local_tree_destructor_completed=True,original_dangling_controller_word_preserved=True,
+                    actual_request_object_destructor_completed=True,actual_final_free_completed=True,
+                    actual_deleting_tree_destructor_completed=True,event_emission_branch_taken=False,
+                    callbacks_completed=105,vm_exit_offset='0xffb78',caller_sentinel_matches=True,
+                    request_transaction_committed_to_supplied_pages=True,
+                    request_VM_returned=True,full_native_request_return_verified=False,
+                    full_request_returned=False,whole_handoff_native_differential_verified=False))
             if label=='NULL_header_reference':w(p,request,header)
-            steps=2329 if label=='JNI_connected' else 2321 if label=='tree_free_exception' else 1812 if label in ('missing_fold_singleton','fold_singleton_exception') else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
+            steps=2475 if label=='JNI_connected' else 2329 if label=='object_free_exception' else 2405 if label=='final_free_exception' else 2416 if label=='tree_delete_free_exception' else 2321 if label=='tree_free_exception' else 1812 if label in ('missing_fold_singleton','fold_singleton_exception') else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
             print('PASS request VM',label,steps,'steps',flush=True)
     try:
         outer.make_session=make
         result=boundary.case(library,libc,base,'absent',None,vm_full,apply_logger_model=True,
             apply_handoff_model=True,apply_publication=True,terminal_observer=terminal)
     finally:outer.make_session=previous
-    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==11
+    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==14
     return rows,guards
 
 

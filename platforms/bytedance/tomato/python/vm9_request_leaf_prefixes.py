@@ -510,6 +510,42 @@ def construct_request_object_with_null_reference(pages, *, image_base, entry_sta
     p.commit()
 
 
+def destroy_request_object(pages, *, image_base, entry_stack_address,
+        object_address, thread_pointer, allocate, free, thread_id=None,
+        diagnostic_observer=None, observer=None):
+    """+0x25cf98: restore vtable, release the scoped reference, destroy string.
+
+    The event path +0x25cfe4 is still unrecovered. Inactive events or a prior
+    nonzero emission byte follow the actual cleanup branch. +0x162714 and
+    +0x15e1a8 have the same scope and reference-release instructions; reuse
+    the verified owner for NULL, retained and supported string references.
+    Other virtual deleting-destructor targets retain its explicit rejection.
+    """
+    _stack(entry_stack_address, 0x60)
+    for value,label in ((image_base,'image base'),(object_address,'request object'),
+                       (thread_pointer,'request thread pointer')):
+        _uint(value,64,label)
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('request destructor requires allocator/free services')
+    import vm9_reference_scopes as references
+    p = _PageTransaction(pages)
+    flag = _u(p,object_address + 0x48,1)
+    _w(p,object_address,image_base + 0x35B868)
+    if flag and not _u(p,object_address + 0x40,1):
+        raise RefillUnsupported('request destructor event emission +0x25cfe4 is not recovered')
+    references.release_scoped_string_reference(p,reference_address=object_address + 0x28,
+        entry_stack_address=entry_stack_address - 0x20,image_base=image_base,
+        thread_pointer=thread_pointer,thread_id=thread_id,allocate=allocate,free=free,
+        diagnostic_observer=diagnostic_observer)
+    objects.destroy_string_object(p,object_address=object_address + 0x10,
+        image_base=image_base,free=free)
+    if observer:
+        observer(p,phase='request_object_destroyed',object_address=object_address,
+            event_emission_branch_taken=False,body_transaction_committed=True,
+            whole_request_callback_completed=False)
+    p.commit()
+
+
 def execute_event_mode_prefix(pages, *, image_base, entry_stack_address,
         output_object_address, mode, observer=None, allocate=None, free=None):
     """Prepare mode prefix; allocator/free services enable the bounded body."""

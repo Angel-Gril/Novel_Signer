@@ -4157,6 +4157,44 @@ Android JVM、完整独立signer、fresh签名与线上矩阵仍未完成。**
 python -B platforms/bytedance/tomato/python/verify_vm9_request_tree_destroy_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-tree-destroy-evidence.json>
 ```
 
+## 6.97 请求对象与树删除清理和 VM 返回（2026-10-12 Asia/Shanghai）
+
+`destroy_request_object` 恢复 `+25CF98` 的清理分支，接入 `+285F9C`。
+先读取object+0x48，写回vtable；flag为零或object+0x40非零时清理引用和
+字符串。实际 `+162714` 的scope/release指令与既有 `+15E1A8` 相同，
+复用引用owner；NULL、retained和支持的string deleting target得到验证。
+其他虚析构target仍拒绝。引用清理入口SP为析构SP-0x20，逻辑scope为
+析构SP-0x60。`+25CFE4` 事件发送分支仍明确拒绝，未宣称恢复。
+
+`+285910 -> +32A264` 直接转交owning free provider，包括NULL，packed
+无返回槽写入。`delete_configuration_tree` 恢复 `+25C12C`：在SP-0x20
+调用既有树析构，之后释放container，外层页面事务覆盖全部清理。
+
+两基址 **78项原生/Python对照、1项请求入口检查、36项页面回滚** 通过。
+56项request object析构覆盖冷/热锁、跨页、空/二进制string、NULL/count
+边界、被引用string删除、已发送状态与非boolean状态字节；6项实际free
+wrapper覆盖NULL、普通payload与packed别名；16项tree delete覆盖空与
+平衡树、raw/string value、直接入口和实际wrapper。完整guest payload、
+ELF页面、逻辑scope/iterator、清理顺序、heap和释放前字节匹配。
+22项leaf与14项入口拒绝通过；新入口异常分别在2329、2405、2416步。
+六个native RED在新增分支恢复前取得，入口旧边界为2329/2405/2416。
+已接受native分组未重复运行。
+
+fresh owning请求在 **2475步、105次回调** 完成VM返回，PC为 `+FFB78`，
+选中的slot31与调用者return sentinel一致；请求事务提交到传入页面。
+该输入使用空header和NULL FindClass JNI服务，事件未发送。成功路径会
+提交页面，因此每个入口case从独立页面事务开始；外部provider effects
+仍不回滚。被释放controller可能被后续allocator复用，不读取其终态
+count来推断先前清理；native清理对照和实际callback完成是该项证据。
+
+**这还不是完整signer：物理native caller epilogue/X0 ABI、整链原生差分、
+真实Android JVM、fresh签名与线上矩阵未完成。**
+见 [请求清理与VM返回证据](evidence/vm9_request_cleanup_return_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_object_destroy_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-cleanup-return-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

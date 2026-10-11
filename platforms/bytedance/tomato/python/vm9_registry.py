@@ -340,6 +340,17 @@ def destroy_configuration_tree(pages, *, container_address: int, entry_stack_add
     transaction.commit()
 
 
+def delete_configuration_tree(pages, *, container_address: int, entry_stack_address: int,
+                              image_base: int, free: Callable, max_nodes: int = 4096) -> None:
+    """+0x25c12c: enter the existing tree destructor at SP-0x20, then free self."""
+    transaction = _PageTransaction(pages)
+    destroy_configuration_tree(transaction,container_address=container_address,
+        entry_stack_address=entry_stack_address - 0x20,image_base=image_base,
+        free=free,max_nodes=max_nodes)
+    free(transaction,container_address)
+    transaction.commit()
+
+
 def configuration_tree_size(pages, *, container_address: int) -> int:
     """+0x25c150/+0x24b958/+0x24bdd0: load controller then its uint64 count."""
     if not isinstance(container_address, int) or not 0 <= container_address < 1 << 64:
