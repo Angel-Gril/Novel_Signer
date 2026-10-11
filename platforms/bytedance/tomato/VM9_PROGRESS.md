@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：Java byte array 转引用
+
+实际+2700A8/sized string/诊断reference边界通过52项原生/Python对照、19项
+页面回滚；二进制长度、NULL/非正长度、分配失败、JNI table重读和服务顺序
+一致。原有environment定义的执行AST一致。实际live lookup+21CBEC、独立
+signer及fresh/live继续。见 [byte array报告](REQUEST_JNI_STARTUP_WORKERS.md#676-java-byte-array-转引用与实际诊断锁2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：三条 worker 协作等待与完整退出
 
 两基址×A/B四项fresh完整对照、23项页面回滚通过；6次等待（3、1、2）后

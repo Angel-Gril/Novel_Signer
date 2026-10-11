@@ -382,6 +382,8 @@ Actual timed polling now transfers the owned follow-up into the drained queue an
 
 The three requested workers now cooperate across six actual waits, transfer the timed follow-up and exit in order 1, 2, 0. Four fresh complete native/Python controls and 23 page rollback guards pass; the shared executor and queue regressions are byte identical. Live Java string conversion and the independent signer remain unfinished. See the [cooperative worker report](../REQUEST_JNI_STARTUP_WORKERS.md#675-三条-worker-协作等待转交与完整退出2026-10-11-asiashanghai).
 
+The Java byte array helper now preserves binary data through the original sized-string and diagnostic-reference path. Fifty-two native/Python controls and 19 page rollback guards pass. Actual live lookup, the independent signer, fresh signature output and the online matrix remain unfinished. See the [byte array report](../REQUEST_JNI_STARTUP_WORKERS.md#676-java-byte-array-转引用与实际诊断锁2026-10-11-asiashanghai).
+
 
 
 

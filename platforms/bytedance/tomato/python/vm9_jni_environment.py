@@ -265,6 +265,77 @@ def _invoke_jni(pages, environment_pointer, slot, arguments, invoke_jni):
     return result&MASK64
 
 
+@dataclass(frozen=True)
+class JavaByteArrayReferenceResult:
+    string_address: int
+    counter_address: int
+    array_length_word: int | None
+    temporary_buffer_address: int
+    byte_region_called: bool
+
+
+def construct_java_byte_array_reference(pages, *, image_base, entry_stack_address,
+        output_reference_address, environment_pointer, array_reference,
+        thread_pointer, thread_id, invoke_jni, calloc, allocate, free,
+        max_payload_bytes=0x100000, diagnostic_observer=None):
+    """+0x2700a8: sized binary array -> string -> actual scoped reference.
+
+    NULL environment/array, nonpositive signed W32 length and calloc NULL
+    produce a NULL string with a count of one. A string-buffer malloc NULL
+    still retains its empty string object. GetByteArrayRegion is a void call;
+    its result is ignored and no Java exception check is inserted. JNI and
+    allocation services are supplied explicitly. Page rollback cannot undo
+    their external effects. Physical frame spills and C++ unwind are excluded.
+    """
+    import vm9_diagnostics as diagnostics
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<0x50
+            or entry_stack_address>MASK64 or entry_stack_address&15):
+        raise RefillUnsupported('byte array helper requires an aligned guest stack')
+    _address(output_reference_address,'byte array output reference',16)
+    for value in (environment_pointer,array_reference):
+        if not isinstance(value,int) or not 0<=value<=MASK64:
+            raise RefillUnsupported('byte array JNI pointers must fit uint64')
+    if not isinstance(max_payload_bytes,int) or not 0<=max_payload_bytes<=0x100000:
+        raise ValueError('invalid byte array payload bound')
+    if not callable(allocate):raise RefillUnsupported('byte array reference requires an allocator')
+    p=_PageTransaction(pages);string=buffer=0;length=None;called=False
+    if environment_pointer and array_reference:
+        length=_invoke_jni(p,environment_pointer,0x558,(array_reference,),invoke_jni)&0xFFFFFFFF
+        if 0<length<0x80000000:
+            if length>max_payload_bytes:raise RefillUnsupported('Java byte array exceeds the explicit payload bound')
+            if not callable(calloc):raise RefillUnsupported('byte array helper requires a calloc service')
+            buffer=calloc(p,1,length)
+            if not isinstance(buffer,int) or not 0<=buffer<=MASK64:
+                raise RefillUnsupported('byte array calloc result must fit uint64')
+            if buffer:
+                _address(buffer,'byte array temporary buffer',length)
+                _read_span(p,buffer,length)
+                _invoke_jni(p,environment_pointer,0x640,(array_reference,0,length,buffer),invoke_jni)
+                called=True
+                string=objects._allocate(p,allocate,24)
+                # +248208 saves the caller's X19 (the output pair) below its
+                # frame. The later reference scope keeps the upper four
+                # bytes of this word as its otherwise unwritten padding.
+                _w(p,entry_stack_address-0x48,output_reference_address)
+                objects.construct_sized_string_object(p,object_address=string,
+                    source_address=buffer,length=length,image_base=image_base,
+                    allocate=allocate,max_payload_bytes=max_payload_bytes)
+                if not callable(free):raise RefillUnsupported('byte array helper requires a free service')
+                free(p,buffer)
+    # The tail-call +1625a4 uses the original helper entry SP again. It clears
+    # the output pair before entering the scope, then publishes the string.
+    _write_span(p,output_reference_address,bytes(16));scope=entry_stack_address-0x50
+    diagnostics.enter_diagnostic_scope(p,object_address=scope,input_word=string,
+        image_base=image_base,thread_pointer=thread_pointer,thread_id=thread_id,
+        allocate=allocate,observer=diagnostic_observer)
+    counter=objects.construct_reference_wrapper(p,object_address=output_reference_address,
+        referenced_address=string,allocate=allocate)
+    diagnostics.leave_diagnostic_scope(p,object_address=scope,image_base=image_base,
+        thread_pointer=thread_pointer,observer=diagnostic_observer)
+    result=JavaByteArrayReferenceResult(string,counter,length,buffer,called)
+    p.commit();return result
+
+
 def retain_global_jni_reference(pages, *, environment_pointer, reference, invoke_jni):
     """+0x26f154: preserve type 2; otherwise NewGlobalRef then DeleteLocalRef.
 

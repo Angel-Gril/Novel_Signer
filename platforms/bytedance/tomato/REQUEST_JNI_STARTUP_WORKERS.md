@@ -3506,6 +3506,35 @@ callable ownership、重复 timed task 和 contention 尚未恢复。
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_worker_schedule_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <worker-schedule-evidence.json>
 ```
 
+## 6.76 Java byte array 转引用与实际诊断锁（2026-10-11 Asia/Shanghai）
+
+`vm9_jni_environment.construct_java_byte_array_reference` 恢复原始
+`+2700A8`：通过 `0x558 GetArrayLength` 和 `0x640 GetByteArrayRegion`
+读取 Java byte array，调用 `calloc(1,n)`、实际 sized string owner
+`+2481FC`，释放临时 buffer，再组合 `+1625A4` 的诊断 scope 与 reference。
+NULL environment/array、非正 signed W32 长度及 calloc NULL 均生成 NULL
+string/count1；字符串 buffer 的 malloc NULL 保留空 string object。
+内嵌 NUL、所有字节值和跨页 payload 按显式长度保留。region 为 void
+调用，其返回字不参与判断；此 helper 沿用原生行为，不额外检查 Java exception。
+
+两基址×冷暖诊断锁共 **52 项原生/Python 对照、19 项页面回滚检查**通过。
+原始 helper、reference constructor、matching-libc mutex 自然执行；guest
+payload、所有 image 页面、完整 24-byte scope 和 JNI/allocation/free/lock
+服务顺序一致。实际 `+248208` 保存的输出 reference 字用于后续 scope
+padding，已按 ABI 恢复。测试还覆盖 JNI table 重读、分配失败和 provider
+异常后的页面回滚；provider 外部 effects 由调用方暂存。
+
+实现前两项原生 RED 和旧 owner 的真实入口 API 缺失建立基线；原有
+environment 定义的执行 AST 完全一致。原生和 Python 从独立 ELF 与
+synthetic 服务输入开始，native snapshot 不作输入。完整物理 stack、
+C++ unwind 和真实 Android JVM 尚未验收。**实际 live lookup `+21CBEC`、
+完整独立 signer、fresh 签名与线上矩阵仍未完成。**
+见 [byte array 证据](evidence/vm9_jni_byte_array_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_byte_array_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <byte-array-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
