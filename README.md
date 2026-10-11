@@ -235,6 +235,7 @@ JNI引用字段、无参数方法和清理通过 **74项对照、18项回滚**�
 cold encoded SDK及其live lookup组合通过 **62项对照、13项回滚**，见 [cold SDK报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#680-cold-encoded-sdk-getter-与实际-live-lookup2026-10-11-asiashanghai)。
 带整型/引用参数的JNI方法和静态字段通过 **140项对照、11项回滚**，见 [JNI member报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#681-带整型引用参数的-jni-方法与静态字段2026-10-11-asiashanghai)。
 实际UTF构造及Java service查找通过 **42项对照、9项回滚**，见 [Java service报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#682-实际-utf-构造与-java-service-查找2026-10-12-asiashanghai)。
+实际live initializer及cold lookup通过 **92项对照、6项回滚**，见 [initializer报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#683-实际-live-initializer-与-cold-lookup2026-10-12-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

@@ -3,7 +3,7 @@
 Guest ELF supplies bytecode, encoded lazy strings and CRC tables. The absent
 object path and initialized live lookup retain their native reference order.
 Live lookup accepts encoded SDK cache/property and explicit JNI services;
-the cold live initializer and real JVM remain separate boundaries. Providers
+live receiver initialization uses the same explicit services. Providers
 must stage their own effects; no host thread is run.
 """
 from dataclasses import dataclass
@@ -108,23 +108,112 @@ def lookup_java_service(pages,*,image_base,entry_stack_address,name_address,
   remove(binder)
  p.commit();return result
 
-def initialize_absent_object(p,*,base,sp,receiver,allocate,free,read_property,system,thread_pointer,
- get_tls,register_destructor,invoke_javavm):
+class _InitializationFailure(Exception):pass
+
+def initialize_absent_object(pages,*,base,sp,receiver,allocate,free,read_property,system,thread_pointer,
+ get_tls,register_destructor,invoke_javavm,invoke_jni=None,find_sdk_property=None,
+ read_sdk_property=None,diagnostic_observer=None):
+ """Actual +2191D4 receiver once initialization; historical helper name retained.
+
+ The existing unavailable-default path and live service/Parcel path share the
+ same original lazy strings, once flag and mutex. JNI/providers are explicit.
+ Logical objects and cleanup are modeled; physical saved registers are not.
+ """
+ p=_PageTransaction(pages)
+ if type(sp) is not int or sp<0x1000 or sp&15:raise RefillUnsupported('initializer stack is unaligned')
  d=delta(base,0x2191D4)
  for destination,flag in ((0x37EA30,0x37EAA8),(0x37EA38,0x37EAC0),(0x37EB38,0x37EBA8),(0x37EB48,0x37EBD8),
   *((0x37EDF8+i*8,0x37EED0+i*24) for i in range(27))):lazy(p,base,d,destination,flag)
- if u(p,receiver+0x20,1):return
- mutex=u(p,receiver+0x30)+8;scope=sp-0x1F0
+ if u(p,receiver+0x20,1):p.commit();return 0
+ mutex=u(p,receiver+0x30)+8;scope=sp-0x1F0;call_sp=sp-0x220;status=sp-0x200
  w(p,scope,base+0x34C778);w(p,scope+8,mutex-8)
- w(p,scope+0x10,objects.lock_uncontended_mutex(p,mutex_address=mutex),4)
- if not u(p,receiver+0x20,1):
-  w(p,receiver+0x20,1,1)
-  unavailable_default_object(p,base=base,sp=sp-0x220,allocate=allocate,free=free,
-   read_property=read_property,system=system,thread_pointer=thread_pointer)
-  environment.acquire_thread_environment(p,image_base=base,entry_stack_address=sp-0x220,
-   output_pair_address=sp-0x210,get_tls=get_tls,register_destructor=register_destructor,invoke_javavm=invoke_javavm)
- w(p,scope,base+0x34C778)
- objects.unlock_uncontended_mutex(p,mutex_address=u(p,scope+8)+8)
+ if diagnostic_observer:diagnostic_observer('pthread_mutex_lock',mutex)
+ w(p,scope+16,objects.lock_uncontended_mutex(p,mutex_address=mutex),4)
+ try:
+  if not u(p,receiver+0x20,1):
+   w(p,receiver+0x20,1,1)
+   default=unavailable_default_object(p,base=base,sp=call_sp,allocate=allocate,free=free,
+    read_property=read_property,system=system,thread_pointer=thread_pointer,allow_live=callable(invoke_jni))
+   acquired=environment.acquire_thread_environment(p,image_base=base,entry_stack_address=call_sp,
+    output_pair_address=sp-0x210,get_tls=get_tls,register_destructor=register_destructor,invoke_javavm=invoke_javavm)
+   env=acquired.environment
+   if default and env:
+    sdk=configuration.get_encoded_sdk(p,image_base=base,entry_stack_address=call_sp,
+     find_property=find_sdk_property,read_property=read_sdk_property)
+    if sdk<35:
+     local=[]
+     def text(i):return encoded(p,base,d,0x37EDF8+i*8)
+     def jni(slot,*args):return environment._invoke_jni(p,env,slot,args,invoke_jni)
+     def keep(ref):
+      if ref:local.append(ref)
+      return ref
+     def check(result,*,keep_ref=False):
+      if keep_ref:keep(result.word)
+      if result.status_byte==1:raise _InitializationFailure
+      return result.word
+     def method(ref,name,sig,words=(),stack=None):
+      return environment.invoke_integer_argument_java_method(p,entry_stack_address=call_sp if stack is None else stack,
+       environment_pointer=env,status_address=status,object_reference=ref,name_address=name,signature_address=sig,
+       argument_words=words,invoke_jni=invoke_jni)
+     def static(i,words=()):
+      return environment.invoke_integer_argument_static_java_method(p,entry_stack_address=call_sp,
+       environment_pointer=env,status_address=status,class_name_address=text(i),name_address=text(i+1),
+       signature_address=text(i+2),argument_words=words,invoke_jni=invoke_jni)
+     try:
+      service=keep(lookup_java_service(p,image_base=base,entry_stack_address=call_sp,name_address=text(0),
+       thread_pointer=thread_pointer,allocate=allocate,free=free,get_tls=get_tls,register_destructor=register_destructor,
+       invoke_javavm=invoke_javavm,read_property=read_property,system=system,invoke_jni=invoke_jni))
+      cls=keep(jni(0x30,text(1)))
+      if environment.check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni) or not cls:raise _InitializationFailure
+      if not jni(0x100,service,cls)&0xFF:
+       environment.check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni)
+       raise _InitializationFailure
+      first=check(static(2),keep_ref=True)
+      if not first:raise _InitializationFailure
+      second=check(static(2),keep_ref=True)
+      if not second:raise _InitializationFailure
+      utf=keep(environment.construct_java_utf_string(p,entry_stack_address=call_sp,environment_pointer=env,
+       source_address=text(5),allocate=allocate,free=free,invoke_jni=invoke_jni))
+      if environment.check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni) or not utf:raise _InitializationFailure
+      default_name=check(method(default,encoded(p,base,d,0x37EA30),encoded(p,base,d,0x37EA38)),keep_ref=True)
+      if not default_name:raise _InitializationFailure
+      check(method(first,text(6),text(7),(utf,)))
+      check(method(first,text(8),text(7),(default_name,)))
+      field=environment.read_integer_static_java_field(p,entry_stack_address=call_sp,environment_pointer=env,
+       status_address=status,class_name_address=encoded(p,base,d,0x37EB38),name_address=text(9 if sdk<=27 else 10),
+       signature_address=encoded(p,base,d,0x37EB48),invoke_jni=invoke_jni)
+      value=check(field)
+      check(method(first,text(11),text(12),(value,)))
+      uid=objects._s32(check(static(13))&0xFFFFFFFF)
+      quotient=(abs(uid)//100000)*(-1 if uid<0 else 1)
+      check(method(first,text(11),text(12),(quotient&0xFFFFFFFF,)))
+      check(method(service,text(16),text(17),(2 if sdk<=22 else 3,first,second,0),stack=call_sp-0x10))
+      check(method(second,text(18),text(19)))
+      present=check(method(second,text(20),text(15)))
+      if present:
+       creator=check(environment.read_integer_static_java_field(p,entry_stack_address=call_sp,environment_pointer=env,
+        status_address=status,class_name_address=text(21),name_address=text(22),signature_address=text(23),invoke_jni=invoke_jni),keep_ref=True)
+       if not creator:raise _InitializationFailure
+       created=method(creator,text(24),text(25),(second,))
+       if created.status_byte==1 or not created.word:
+        keep(created.word);raise _InitializationFailure
+       retained=environment.retain_global_jni_reference(p,environment_pointer=env,reference=created.word,invoke_jni=invoke_jni)
+       w(p,receiver+0x28,retained)
+       failed=environment.check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni) or not retained
+       jni(0xB8,local.pop())
+       if failed:raise _InitializationFailure
+      method(first,text(26),text(19))
+      environment.check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni)
+      method(second,text(26),text(19))
+      environment.check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni)
+     except _InitializationFailure:pass
+     finally:
+      for ref in reversed(local):jni(0xB8,ref)
+ finally:
+  w(p,scope,base+0x34C778)
+  if diagnostic_observer:diagnostic_observer('pthread_mutex_unlock',mutex)
+  objects.unlock_uncontended_mutex(p,mutex_address=mutex)
+ p.commit();return 0
 
 def recover_absent_java_string(pages,*,image_base,entry_stack_address,receiver_address,output_reference_address,
  thread_pointer,thread_id,allocate,free,get_tls,register_destructor,invoke_javavm,read_property,system,
@@ -153,8 +242,14 @@ def recover_absent_java_string(pages,*,image_base,entry_stack_address,receiver_a
  if initializer!=base+0x2191D4:raise RefillUnsupported('follow-up initializer target is unrecovered')
  initialize_absent_object(p,base=base,sp=sp-0x1D0,receiver=receiver,allocate=allocate,free=free,
   read_property=read_property,system=system,thread_pointer=thread_pointer,get_tls=get_tls,
-  register_destructor=register_destructor,invoke_javavm=invoke_javavm)
- if u(p,receiver+0x28):raise RefillUnsupported('follow-up initialized live Java string is unrecovered')
+  register_destructor=register_destructor,invoke_javavm=invoke_javavm,invoke_jni=invoke_jni,
+  find_sdk_property=find_sdk_property,read_sdk_property=read_sdk_property,diagnostic_observer=diagnostic_observer)
+ if u(p,receiver+0x28):
+  _recover_live_java_string(p,base=base,sp=sp,receiver=receiver,out=out,environment_pointer=env.environment,
+   thread_pointer=thread_pointer,thread_id=thread_id,allocate=allocate,free=free,
+   invoke_jni=invoke_jni,calloc=calloc,reallocate=reallocate,diagnostic_observer=diagnostic_observer,
+   max_payload_bytes=max_payload_bytes,find_sdk_property=find_sdk_property,read_sdk_property=read_sdk_property)
+  p.commit();return
  # +21cd60 spills the owning output reference. The next scoped setter copies
  # its upper seven bytes as padding into a TLS node after this frame returns.
  w(p,sp-0xA0,out)

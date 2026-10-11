@@ -3721,6 +3721,33 @@ Java对象和现有environment acquisition；缺失default/VM明确拒绝，
 python -B platforms/bytedance/tomato/python/verify_vm9_java_service_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <java-service-evidence.json>
 ```
 
+## 6.83 实际 live initializer 与 cold lookup（2026-10-12 Asia/Shanghai）
+
+`initialize_absent_object` 保留历史调用名称并恢复实际 `+2191D4` 的
+live default 对象分支。31组lazy字符串由ELF解码；once flag与mutex、
+service查找、FindClass/IsInstanceOf、Parcel静态调用、UTF转换、default
+对象方法、SDK分支静态字段、整数/void方法及global引用发布沿用实际
+原生顺序。成功路径recycle两个Parcel，临时local引用反序清理。
+`recover_absent_java_string` 在cold初始化发布引用后继续完整binary lookup。
+
+两基址共 **92项原生/Python对照、6项页面回滚**。88项initializer覆盖
+SDK22/23/27/28/34/35、already initialized、类型不符、class NULL/异常、
+空Parcel、负UID、global NULL/异常/既有global类型、各member NULL/异常
+及cold SDK27/30。另4项从cold initializer与cold SDK执行完整lookup，
+比较scope退出字节及binary MD5输出。全部guest payload/image页面、
+JNI/JavaVM/分配/free顺序、free前字节、once flag与发布引用一致。
+六项参数/provider拒绝保持页面不变；页面回滚无法撤销外部effects。
+已有四项改动前native RED在旧owner拒绝时自然完成原生初始化；旧RED
+与本批基线的历史initializer/lookup/default拒绝行为经AST检查衔接。
+
+**完整physical register spills、真实Android JVM、VM/worker provider接线、
+完整独立signer、fresh签名和线上矩阵仍未完成。** 见
+[initializer证据](evidence/vm9_live_initializer_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_live_initializer_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <initializer-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

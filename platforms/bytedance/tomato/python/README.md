@@ -396,6 +396,8 @@ Integer/reference argument JNI instance and static methods, void and integer/ref
 
 Actual UTF construction and Java service lookup pass 42 native/Python controls and 9 rollback guards. Short/heap C++ strings, exception clearing, returned references and local cleanup match. Service lookup requires a live default Java object. Initializer composition, worker wiring and the complete signer remain unfinished. See the [Java service report](../REQUEST_JNI_STARTUP_WORKERS.md#682-实际-utf-构造与-java-service-查找2026-10-12-asiashanghai).
 
+Actual live receiver initialization and cold lookup pass 92 native/Python controls and 6 rollback guards. SDK branches, once flags, published global references, Parcel/local cleanup and complete binary MD5 lookup match. VM/worker provider wiring and the complete signer remain unfinished. See the [live initializer report](../REQUEST_JNI_STARTUP_WORKERS.md#683-实际-live-initializer-与-cold-lookup2026-10-12-asiashanghai).
+
 
 
 

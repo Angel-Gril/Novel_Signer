@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：实际live initializer与cold lookup
+
+88项initializer及4项完整cold lookup原生/Python对照、6项回滚通过。
+SDK22/23/27/28/34/35与NULL/exception清理、once flag、global引用发布、
+全部guest页面与服务顺序匹配。公开lookup可在cold初始化后继续MD5输出。
+VM/worker provider接线、真实Android JVM、完整独立signer、fresh/live
+继续。见 [initializer报告](REQUEST_JNI_STARTUP_WORKERS.md#683-实际-live-initializer-与-cold-lookup2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：实际UTF构造与Java service查找
 
 UTF20项及service22项原生/Python对照、9项回滚通过。short/heap string、
