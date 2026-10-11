@@ -1,5 +1,13 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：实际 reference scopes 与 MD5 生命周期
+
+共享作用域接口通过64项对照/12项回滚，MD5实际生命周期通过16项对照/
+4项回滚。原有摘要回归结果一致。实际Python live lookup、完整独立
+signer、fresh/live继续。见 [作用域报告](REQUEST_JNI_STARTUP_WORKERS.md#678-实际-reference-作用域与-md5-生命周期2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：JNI 引用字段、方法与清理
 
 三项实际JNI component通过74项原生/Python对照、18项页面回滚；status

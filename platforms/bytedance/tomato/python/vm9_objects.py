@@ -704,19 +704,22 @@ def _sized_string_object(pages, object_address, length, image_base, allocate, re
 def construct_digest_reference(
     pages, *, object_address: int, source_object_address: int, algorithm: str,
     flag: int, image_base: int, allocate: Callable, reallocate: Callable, free: Callable,
-    max_source_bytes: int = 0x100000,
+    max_source_bytes: int = 0x100000, reference_lifecycle=None,
 ) -> int:
     """Model +0x25874c (MD5) / +0x258780 (SHA-1) reference construction.
 
     Flag bit0 selects the guest ELF's hexadecimal alphabet; otherwise store
     raw bytes. Hex builds an empty string/count then reserves and appends
     characters in native order. Host allocation/free effects are explicit.
-    Diagnostic scopes and native temporary stack references are excluded.
+    An optional lifecycle owns actual temporary references and their scopes;
+    otherwise diagnostic scopes and temporary stack references are excluded.
     Return the referenced string pointer, not the native X0 return value.
     """
     _string_bound(max_source_bytes)
     if algorithm not in ("md5", "sha1") or not isinstance(flag, int) or not 0 <= flag <= 0xFFFFFFFF:
         raise RefillUnsupported("unsupported digest algorithm or flag")
+    if reference_lifecycle is not None and not flag & 1:
+        raise RefillUnsupported("scoped digest lifecycle requires hexadecimal output")
     transaction = _PageTransaction(pages)
     length = int.from_bytes(_read_span(transaction, source_object_address + 12, 4), "little")
     pointer = int.from_bytes(_read_span(transaction, source_object_address + 16, 8), "little")
@@ -750,8 +753,11 @@ def construct_digest_reference(
             empty_descriptor_address=_image_address(image_base, 0x6E168))
         # Native constructs a temporary stack reference/count before reserve;
         # its pair is not published to the caller until conversion finishes.
-        count = _allocate(transaction, allocate, 4)
-        _write_span(transaction, count, (1).to_bytes(4, "little"))
+        if reference_lifecycle is None:
+            count = _allocate(transaction, allocate, 4)
+            _write_span(transaction, count, (1).to_bytes(4, "little"))
+        else:
+            count = reference_lifecycle.construct(transaction, string, data)
         _reserve_string_fields(transaction, string + 8, len(digest) * 2 + 1,
                                allocate, reallocate, free, 0x100000)
         for value in digest:
@@ -766,11 +772,14 @@ def construct_digest_reference(
             pointer = int.from_bytes(_read_span(transaction, string + 16, 8), "little")
             _write_span(transaction, string + 12, (len(digest) * 2).to_bytes(4, "little"))
             _write_span(transaction, pointer + len(digest) * 2, bytes(1))
-        if int.from_bytes(_read_span(transaction, count, 4), "little") != 1:
-            raise RefillUnsupported("digest temporary reference count was changed by host effects")
-        _write_span(transaction, object_address, _word(string) + _word(count))
-        # Copy increments 1 -> 2, then temporary cleanup decrements 2 -> 1.
-        # No host effects occur between these two measured count operations.
+        if reference_lifecycle is None:
+            if int.from_bytes(_read_span(transaction, count, 4), "little") != 1:
+                raise RefillUnsupported("digest temporary reference count was changed by host effects")
+            _write_span(transaction, object_address, _word(string) + _word(count))
+            # Unscoped copy and cleanup have no intervening host effects.
+        else:
+            reference_lifecycle.publish(transaction, object_address)
+            reference_lifecycle.release(transaction)
     transaction.commit()
     return string
 
@@ -1544,6 +1553,10 @@ def destroy_single_scoped_lock(
 def _reference_wrapper(pages, object_address, referenced_address, allocate):
     _read_span(pages, object_address, 16)
     _write_span(pages, object_address, _word(referenced_address) + bytes(8))
+    return _allocate_reference_counter(pages, object_address, allocate)
+
+
+def _allocate_reference_counter(pages, object_address, allocate):
     counter = _allocate(pages, allocate, 4)
     _write_span(pages, object_address + 8, _word(counter))
     _write_span(pages, counter, (1).to_bytes(4, "little"))
@@ -2034,6 +2047,10 @@ def _copy_reference_wrapper(pages, object_address, source_address):
     _read_span(pages, source_address, 16)
     # Preserve native load/store order, including destination/source aliases.
     _write_span(pages, object_address, bytes(16))
+    _copy_reference_contents(pages, object_address, source_address)
+
+
+def _copy_reference_contents(pages, object_address, source_address):
     _write_span(pages, object_address, _read_span(pages, source_address, 8))
     count = int.from_bytes(_read_span(pages, source_address + 8, 8), "little")
     _write_span(pages, object_address + 8, _word(count))

@@ -3566,6 +3566,35 @@ fresh 签名、真实 Android JVM 和线上矩阵仍未完成。** native snapsh
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_reference_members_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <jni-reference-members-evidence.json>
 ```
 
+## 6.78 实际 reference 作用域与 MD5 生命周期（2026-10-11 Asia/Shanghai）
+
+`vm9_reference_scopes` 恢复 `+1625A4` 的构造、`+1651C0/+15F580`
+的复制和 `+15E1A8` 的释放。三个操作使用实际 entry SP 定位 scope，
+复用诊断锁、reference/count 与 deleting string cleanup 的既有 owner。
+复制按原生先清空 destination，再在 scope 内重读 source，保留别名行为。
+释放即使 count 为 NULL 也进入 scope；有符号计数边界及 free 前字节一致。
+
+两基址×冷/暖诊断锁，共 **64 项原生/Python 对照、12 项回滚**通过。
+另有 **16 项实际 MD5 对照、4 项回滚**通过，覆盖内嵌 NUL、全部字节值、
+跨页输入、NULL source 和单/双 padding block。MD5 算法和 ELF alphabet
+继续由 `vm9_objects.construct_digest_reference` 独占；可选 lifecycle
+在实际构造、发布和释放边界操作临时 reference，不按分配序号插入 scope。
+原生 MD5 padding block 与保存的 X20 会成为后续 scope 的 padding，按
+因果写入恢复；scope 在每次退出边界比较，后续物理 frame spills 不作
+scope 最终状态。所有 guest payload/image 页面、有序分配/free/锁和
+临时 reference 一致。六项旧 unscoped helper 的真实原生 RED 已记录。
+
+原有摘要回归 **142 项对照、5 项拒绝**的
+JSON 与已接受结果逐字节内容一致。**实际 Python live lookup、完整独立
+signer、fresh 签名、真实 Android JVM 和线上矩阵仍未完成。** ELF、解码
+文本和 native snapshot 不发布；native memory 只用于执行后比较。
+页面回滚不撤销外部 provider effects。见 [scope 与 MD5 证据](evidence/vm9_reference_scopes_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_reference_scopes_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <reference-scope-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_scoped_digest_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <scoped-md5-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

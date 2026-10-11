@@ -257,6 +257,8 @@ The Java byte array helper now preserves binary data through the original sized-
 
 JNI reference field access, no-argument object methods and local/global/weak cleanup now pass 74 native/Python controls and 18 page rollback guards. Actual Python live lookup, the independent signer, fresh output and the online matrix remain unfinished. See the [JNI reference member report](REQUEST_JNI_STARTUP_WORKERS.md#677-jni-引用字段无参数方法与引用清理2026-10-11-asiashanghai).
 
+Actual diagnostic string reference scopes and the MD5 temporary reference lifecycle pass 80 native/Python controls and 16 rollback guards. The original digest regression matches its accepted result. Actual Python live lookup and the complete signer remain unfinished. See the [reference scope report](REQUEST_JNI_STARTUP_WORKERS.md#678-实际-reference-作用域与-md5-生命周期2026-10-11-asiashanghai).
+
 
 
 

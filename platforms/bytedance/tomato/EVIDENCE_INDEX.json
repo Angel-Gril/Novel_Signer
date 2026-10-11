@@ -6037,5 +6037,25 @@
     "old_owner_real_entry_missing_API_RED": true,
     "pre_change_original_live_native_controls": 4,
     "all_prior_environment_definitions_unchanged": true
+  },
+  "vm9_reference_scopes_fresh_20261011": {
+    "evidence_file": "evidence/vm9_reference_scopes_fresh_20261011.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_reference_scopes_fresh_20261011.py",
+    "digest_verifier": "python/verify_vm9_scoped_digest_fresh_20261011.py",
+    "component": "Actual diagnostic scopes and MD5 string reference lifecycle",
+    "native_Python_controls": 80,
+    "rollback_guards": 16,
+    "causal_pre_change_reference_RED_controls": 6,
+    "old_digest_regression_byte_identical": true,
+    "old_digest_controls": 142,
+    "old_digest_guards": 5,
+    "native_input_snapshot_used": false,
+    "private_names_or_payloads_published": false,
+    "complete_live_lookup_verified": false,
+    "live_Android_JVM_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }
