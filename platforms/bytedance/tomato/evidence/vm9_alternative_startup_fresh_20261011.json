@@ -1,0 +1,665 @@
+{
+  "schema": "vm9-alternative-startup-fresh-v1",
+  "evidence_date": "2026-10-11",
+  "evidence_timezone": "Asia/Shanghai",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "native_Python_startup_controls": 28,
+  "actual_ELF_startup_controls": 4,
+  "imported_callback_controls": 24,
+  "rollback_negative_controls": 41,
+  "pre_change_behavior_RED_controls": 6,
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "real_B_imported_callback_bodies_executed": true,
+  "main_thread_B_startup_composed": true,
+  "whole_native_stack_compared": false,
+  "physical_thread_output_scratch_compared": false,
+  "worker_execution_deferred": true,
+  "full_JNI_bootstrap_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "cases": [
+    {
+      "base": "0x122c0000",
+      "label": "enqueue_inline",
+      "padding": 165,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "enqueue_inline",
+      "padding": 57,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "enqueue_heap",
+      "padding": 165,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "enqueue_heap",
+      "padding": 57,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "enqueue_empty",
+      "padding": 165,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "enqueue_empty",
+      "padding": 57,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "destroy_inline",
+      "padding": 165,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 0,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "destroy_inline",
+      "padding": 57,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 0,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "destroy_heap",
+      "padding": 165,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 1,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "destroy_heap",
+      "padding": 57,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 1,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "destroy_empty",
+      "padding": 165,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 0,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "destroy_empty",
+      "padding": 57,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 0,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "actual_initial_startup",
+      "thread_id": 137,
+      "dispatches": 19,
+      "imported_calls": 2,
+      "natural_return_SP_status_and_canary_match": true,
+      "full_context_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "actual_ELF_initial_descriptor": true,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x122c0000",
+      "label": "actual_relocated_stack",
+      "thread_id": 1,
+      "dispatches": 19,
+      "imported_calls": 2,
+      "natural_return_SP_status_and_canary_match": true,
+      "full_context_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "actual_ELF_initial_descriptor": true,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "enqueue_inline",
+      "padding": 165,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "enqueue_inline",
+      "padding": 57,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "enqueue_heap",
+      "padding": 165,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "enqueue_heap",
+      "padding": 57,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "enqueue_empty",
+      "padding": 165,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "enqueue_empty",
+      "padding": 57,
+      "entry": "0x29e908",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "destroy_inline",
+      "padding": 165,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 0,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "destroy_inline",
+      "padding": 57,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 0,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "destroy_heap",
+      "padding": 165,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 1,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "destroy_heap",
+      "padding": 57,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 1,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "destroy_empty",
+      "padding": 165,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 0,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "destroy_empty",
+      "padding": 57,
+      "entry": "0x29eaf4",
+      "natural_return_SP_and_source_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 0,
+      "thread_creations": 0,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "actual_initial_startup",
+      "thread_id": 137,
+      "dispatches": 19,
+      "imported_calls": 2,
+      "natural_return_SP_status_and_canary_match": true,
+      "full_context_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "actual_ELF_initial_descriptor": true,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    },
+    {
+      "base": "0x775c205000",
+      "label": "actual_relocated_stack",
+      "thread_id": 1,
+      "dispatches": 19,
+      "imported_calls": 2,
+      "natural_return_SP_status_and_canary_match": true,
+      "full_context_match": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_semantic_effects_match": true,
+      "effects": 22,
+      "thread_creations": 3,
+      "actual_ELF_initial_descriptor": true,
+      "native_snapshot_input": false,
+      "worker_execution_deferred": true
+    }
+  ],
+  "negative_cases": [
+    {
+      "label": "unknown_callback",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unaligned_SP",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "boolean_SP",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unaligned_context",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "image_context",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "invalid_thread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "boolean_thread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_free",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_thread_provider",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_registration_provider",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_signal_provider",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "scratch_context_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "allocator_context_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "allocator_image_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "allocator_null",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "thread_error",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "thread_handle_missing",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "signal_error",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_context",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "source_null",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "source_control_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "source_bank_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "source_image_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "bad_clone",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "recursive_guard",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "caller_unaligned_SP",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "caller_low_SP",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "caller_unmapped_TLS",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "caller_TLS_context_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "caller_zero_step_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "caller_boolean_depth",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "caller_canary_save_failure",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "late_step_exhaustion",
+      "base": "0x122c0000",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "recorded_deferred_effects": 22,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "source_destructor_relocation",
+      "base": "0x122c0000",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "recorded_deferred_effects": 22,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "changed_TLS_canary",
+      "base": "0x122c0000",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "recorded_deferred_effects": 22,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "changed_saved_canary",
+      "base": "0x122c0000",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "recorded_deferred_effects": 22,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "late_step_exhaustion",
+      "base": "0x775c205000",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "recorded_deferred_effects": 22,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "source_destructor_relocation",
+      "base": "0x775c205000",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "recorded_deferred_effects": 22,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "changed_TLS_canary",
+      "base": "0x775c205000",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "recorded_deferred_effects": 22,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "changed_saved_canary",
+      "base": "0x775c205000",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "recorded_deferred_effects": 22,
+      "native_fault_path_compared": false
+    }
+  ]
+}

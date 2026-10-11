@@ -5819,3 +5819,96 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
         put(context_address+8,u(frame+8))
     invoke(descriptor_address,entry_stack_address,0)
     result=RuntimeExecutionResult(u(context_address,4),steps,tuple(calls));m.p.commit();return result
+
+
+def run_startup_imported_callback(pages, *, image_base, function_address,
+        context_address, entry_stack_address, allocate, free, create_thread,
+        register_destructor, thread_id, signal_condition, reserved_regions=()):
+    """Actual +29e908 enqueue or +29eaf4 destruction of VM register8.
+
+    Reuse the shared callable/queue owner. The enqueue temporary starts at
+    imported incoming SP-0x1b0. Remaining shared-owner scratch is private;
+    its physical addresses and native register saves are not ABI outputs.
+    Providers receive staged pages and must be pure outside those pages.
+    Thread creation records deferred work; this entry never runs a worker.
+    Every rejected path rolls guest pages back, including late service errors.
+    """
+    import vm9_startup as startup
+    if function_address not in (image_base+0x29E908,image_base+0x29EAF4):
+        raise RefillUnsupported('unrecovered B startup imported callback')
+    if (type(entry_stack_address) is not int or not 0x2000<entry_stack_address<=MASK64
+            or entry_stack_address&15):
+        raise RefillUnsupported('startup callback requires aligned incoming SP')
+    if type(thread_id) is not int or not 0<=thread_id<=0xFFFFFFFF:
+        raise RefillUnsupported('startup callback requires an explicit uint32 thread id')
+    if not all(callable(provider) for provider in (allocate,free,create_thread,register_destructor,signal_condition)):
+        raise RefillUnsupported('startup callback requires explicit pure services')
+    m=_ReaderAstMemory(pages,image_base,context_address,0x62D0,4096,16*1024*1024,reserved_regions)
+    m.claim(context_address,0x62D0)
+    source=_u(m.p,context_address+0x6090)
+    if context_address<=source<context_address+0x62D0:
+        if source&7 or source<context_address+16 or source+40>context_address+0x6050:
+            raise RefillUnsupported('startup callable overlaps context controls or registers')
+        _read_span(m.p,source,40)
+    else:m.claim(source,40)
+    if function_address==image_base+0x29E908:
+        scratch=entry_stack_address-0x1B0;m.claim(scratch,0x80)
+        def owned_allocate(p,size):
+            address=allocate(p,size);m.claim(address,size);return address
+        startup.submit_default_callable(m.p,source_address=source,scratch_address=scratch,
+            image_base=image_base,allocate=owned_allocate,create_thread=create_thread,
+            register_destructor=register_destructor,thread_id=thread_id,signal_condition=signal_condition)
+    else:startup.destroy_callable(m.p,object_address=source,image_base=image_base,free=free)
+    m.p.commit();return source
+
+
+@dataclass(frozen=True)
+class StartupCallerResult:
+    context_address: int
+    executor_address: int
+    status_word: int
+    steps: int
+    imported_calls: tuple[tuple[int, int, int], ...]
+
+
+def initialize_startup_caller(pages, *, image_base, entry_stack_address,
+        thread_pointer, allocate, free, create_thread, register_destructor,
+        thread_id, signal_condition, max_steps=100000, max_depth=64,
+        reserved_regions=()):
+    """Actual B +2a0028 main-thread startup with its two imported bodies.
+
+    Context lives at incoming SP-0x6310; the constructor-published descriptor
+    comes from image+0x3e1eb8. Save/check the TLS canary, initialize the context,
+    execute its bounded program, enqueue the callable and destroy its source.
+    The original final context cleanup is a no-op. Return semantic state;
+    unspecified X0 and complete native register-save scratch are excluded.
+
+    Allocation/free, thread creation, registration and condition signaling
+    are explicit pure services with staged pages. Defer external actions until
+    acceptance. The three requested workers do not run here. This composes
+    B main-thread startup; it does not implement complete JNI/bootstrap.
+    """
+    if (type(entry_stack_address) is not int or not 0x9000<entry_stack_address<=MASK64
+            or entry_stack_address&15):
+        raise RefillUnsupported('B startup requires aligned incoming SP and context space')
+    context=entry_stack_address-0x6310;canary_slot=entry_stack_address-0x38
+    m=_ReaderAstMemory(pages,image_base,context,0x62D0,4096,16*1024*1024,reserved_regions)
+    m.claim(context,0x62D0);m.claim(canary_slot,8);m.claim(thread_pointer,0x30)
+    canary=_read_span(m.p,thread_pointer+0x28,8)
+    retained=(*reserved_regions,(thread_pointer,thread_pointer+0x30),(canary_slot,canary_slot+8))
+    _write_span(m.p,canary_slot,canary)
+    initialize_runtime_context(m.p,image_base=image_base,context_address=context,reserved_regions=retained)
+    def imported(p,function,ctx,sp):
+        run_startup_imported_callback(p,image_base=image_base,function_address=function,
+            context_address=ctx,entry_stack_address=sp,allocate=allocate,free=free,
+            create_thread=create_thread,register_destructor=register_destructor,
+            thread_id=thread_id,signal_condition=signal_condition,reserved_regions=retained)
+    executed=execute_runtime_descriptor(m.p,image_base=image_base,
+        descriptor_address=_u(m.p,image_base+0x3E1EB8),context_address=context,
+        entry_stack_address=context,call_import=imported,max_steps=max_steps,
+        max_depth=max_depth,reserved_regions=retained)
+    if _read_span(m.p,thread_pointer+0x28,8)!=_read_span(m.p,canary_slot,8):
+        raise RefillUnsupported('B startup stack canary changed')
+    result=StartupCallerResult(context,_u(m.p,image_base+0x3E2D78),
+        executed.status_word,executed.steps,executed.imported_calls)
+    m.p.commit();return result

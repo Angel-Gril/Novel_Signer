@@ -2893,6 +2893,38 @@ move、destroy、reset、assign、自赋值、替换已有目标及不同 paddin
 python -B platforms/bytedance/tomato/python/verify_vm9_startup_b_callable_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <b-callable-evidence.json>
 ```
 
+## 6.57 B 主线程 startup 与真实导入回调（2026-10-11 Asia/Shanghai）
+
+`vm9_alternative_startup.initialize_startup_caller` 恢复实际 +2a0028：
+在 incoming SP-6310 初始化 context，保存并核对 TLS canary，执行
+constructor 发布在 image+3e1eb8 的初始化 descriptor。其两个真实导入
+由 `run_startup_imported_callback` 处理：+29e908 从 VM register8 取源
+callable 并提交到默认队列；+29eaf4 销毁该源。复用既有 `vm9_startup`
+的移动、队列、线程请求及析构逻辑，既有 owner 定义 AST 保持一致。
+
+干净 `0233b11` 绑定 **6 项修改前真实原生 RED**。正式验证通过
+**28 项原生/Python 对照、41 项回滚检查**：24 项导入回调覆盖两基址、
+两种 padding 与 enqueue/destroy 的 inline/heap/empty 状态；另外4项
+startup 使用两份从 ELF 独立构造的完整模块，并改变 incoming SP 和 tid。
+每次 startup 自然返回，执行19次分发、2次真实导入，形成3个线程创建
+请求与22项有序服务效果。完整 context、guest/heap/image/libc 页面、
+TLS、最终队列和保存的 canary 均匹配。纯 provider 接收 staged pages；
+外部动作需等整次结果接受后消费，线程体在本验证中尚未执行。
+
+回滚检查覆盖服务缺失、无效指针、source/context/scratch/分配别名、
+clone 和源析构重定位、递归 guard、线程及 signal 错误、后期 step
+耗尽和两类 canary 破坏；后期失败仍撤回完整页面。完整原生寄存器保存
+栈、线程输出临时地址和未指定 X0 不属于本次对照。测试夹具从 ELF
+恢复 matching libc 的内部符号重定位，没有注入原生运行快照。
+
+这一步完成有界 B 主线程 startup。B worker 的六个初始化程序、完整
+JNI/bootstrap、独立 signer、新鲜输出和线上验收仍待完成。见
+[B startup 证据](evidence/vm9_alternative_startup_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_startup_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-startup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：B 主线程 startup 与真实导入回调
+
+B +2a0028 已组合独立 constructor 发布的初始化程序与真实 enqueue/destroy。
+28项原生对照、41项回滚检查通过；四项完整 startup 来自两份新鲜 ELF 模块。
+每次19次分发、2次导入、3个线程请求、22项有序效果，完整context和非原生栈页面匹配。
+线程体仍延后执行；继续 B worker、完整 JNI/bootstrap、独立 signer 和线上验收。
+见 [B startup 报告](REQUEST_JNI_STARTUP_WORKERS.md#657-b-主线程-startup-与真实导入回调2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：共享B callable生命周期
 
 在既有vm9_startup共享owner扩展B虚表的move/destroy，复用队列契约。
