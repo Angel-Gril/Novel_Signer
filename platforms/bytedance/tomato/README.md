@@ -213,6 +213,8 @@ With both `enable_function_imports=True` and `enable_inline_function_imports=Tru
 
 `initialize_runtime_context` and `execute_runtime_descriptor` now cover B context setup and the initialization descriptor with explicit pure imported providers. 48 execution controls, 6 initializer controls and 27 rollback checks pass. Two independently constructed actual descriptors each match 19 dispatches and 2 provider calls, including complete pages, active frames and callback SP. Actual imported bodies, full startup and signer remain unfinished. See the [bounded runtime report](REQUEST_JNI_STARTUP_WORKERS.md#655-b-运行状态与有界描述符执行2026-10-11-asiashanghai).
 
+The existing shared `vm9_startup` callable owner now supports B vtable +35fc28 for move/destruction, including its GOT-derived clone target. 84 native/Python controls and 12 rollback checks pass: 32 B controls and 52 existing A/queue regressions. Full B startup composition and signer remain unfinished. See the [B callable report](REQUEST_JNI_STARTUP_WORKERS.md#656-b-callable-的共享移动与清理2026-10-11-asiashanghai).
+
 
 
 

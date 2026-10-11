@@ -208,6 +208,7 @@ root 构造通过 **62 个原生对照、34 项回滚检查**，
 factory 独立组合通过 **26 个原生对照、38 项回滚检查**。见 [factory 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#653-factory-独立组合与两层清理2026-10-11-asiashanghai)。
 构造器通过 **2 份完整原生对照、22 项回滚检查**，242 个描述符发布槽一致。见 [构造器报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#654-构造器输入生成与描述符发布2026-10-11-asiashanghai)。
 B 有界运行时通过 **48 项执行、6 项初始化、27 项回滚检查**。见 [运行时报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#655-b-运行状态与有界描述符执行2026-10-11-asiashanghai)。
+共享 B callable 通过 **84 项原生对照、12 项回滚检查**，含52项A/queue回归。见 [callable 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#656-b-callable-的共享移动与清理2026-10-11-asiashanghai)。
 真实导入回调、完整 JNI/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

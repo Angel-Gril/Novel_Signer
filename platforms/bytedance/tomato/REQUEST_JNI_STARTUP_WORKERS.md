@@ -2864,6 +2864,35 @@ runtime tag、kind1、完整 stack/TLS/OS 和控制存储写入保持拒绝。
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_runtime_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <runtime-evidence.json>
 ```
 
+## 6.56 B callable 的共享移动与清理（2026-10-11 Asia/Shanghai）
+
+真实 B 启动回调 +29e908 调用共享 enqueue；+29eaf4 随后销毁源
+callable。其虚表为 +35fc28，原有共享 `vm9_startup.move_callable`
+和 `destroy_callable` 只支持 A 与 queue 的两张虚表，因而拒绝该输入。
+本节在既有共享 owner 中扩展这两个入口，复用原队列算法与服务契约。
+
+B inline clone +29e040 仅复制虚表，虚表来自 image+387cb0 的 GOT
+指针加16；inline destructor +29e054 返回，heap deleting destructor
++29e058 释放 pointee。新增分支验证 clone/GOT 和所用析构槽的原始
+重定位目标，不改变 inline 源的所有权；plain destroy 保留+20，reset
+先清空+20。其他共享 owner 定义的 AST 完全一致。
+
+干净 `a7b684c` 绑定 **12 项修改前真实原生 RED**。正式验证通过
+**84 项原生/Python callable 对照、12 项回滚检查**：其中32项 B
+callable，52项原有 A/queue 回归。两基址覆盖 inline、heap、empty、
+move、destroy、reset、assign、自赋值、替换已有目标及不同 padding。
+完整 guest payload、image pages、自然返回 SP 和有序 free 均匹配。
+错误 clone/GOT/析构指针及中途写失败均回滚页面。
+
+这一步恢复共享 callable 生命周期。完整 B startup 回调组合、线程
+执行、JNI/bootstrap、独立 signer、新鲜输出和线上验收仍待完成。
+不使用原生快照输入，不发布名称或 payload。
+见 [B callable 证据](evidence/vm9_startup_b_callable_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_startup_b_callable_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <b-callable-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

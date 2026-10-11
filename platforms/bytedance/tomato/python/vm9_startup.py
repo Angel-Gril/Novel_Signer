@@ -70,7 +70,7 @@ def release_serial_guard(pages, *, guard_address, image_base):
 
 
 def move_callable(pages, *, destination_address, source_address, image_base):
-    """+0x3259c4 move with two evidenced inline-copy vtables.
+    """+0x3259c4 move with three evidenced inline-copy vtables.
 
     An inline callable stays in its source; a non-inline pointer moves and
     clears source+0x20. Unwritten padding is preserved.
@@ -82,8 +82,11 @@ def move_callable(pages, *, destination_address, source_address, image_base):
         _w(staged,destination_address+0x20,pointer);_w(staged,source_address+0x20,0)
     else:
         table=_u(staged,pointer)
-        if table not in (image_base+0x35D630,image_base+0x372600):
+        if table not in (image_base+0x35D630,image_base+0x35FC28,image_base+0x372600):
             raise RefillUnsupported('unrecovered inline startup callable')
+        if table==image_base+0x35FC28 and (_u(staged,table+0x18)!=image_base+0x29E040
+                or _u(staged,image_base+0x387CB0)+0x10!=table):
+            raise RefillUnsupported('B callable clone method or GOT vtable is unsupported')
         _w(staged,destination_address+0x20,destination_address)
         _w(staged,destination_address,table)
         if table==image_base+0x372600:_w(staged,destination_address+8,_u(staged,pointer+8))
@@ -93,15 +96,20 @@ def move_callable(pages, *, destination_address, source_address, image_base):
 def destroy_callable(pages, *, object_address, image_base, free, reset=False):
     """+0x167310 destruction, or +0x2918b0 reset of evidenced callables.
 
-    Inline vtables +0x35d630/+0x372600 have RET destructors. Their deleting
+    Inline vtables +0x35d630/+0x35fc28/+0x372600 have RET destructors. Their deleting
     destructors free non-inline pointees. Plain destruction retains +0x20;
     reset clears it before the destructor, as native does.
     """
     p=_PageTransaction(pages);pointer=_u(p,object_address+0x20)
     if reset:_w(p,object_address+0x20,0)
     if pointer:
-        if _u(p,pointer) not in (image_base+0x35D630,image_base+0x372600):
+        table=_u(p,pointer)
+        if table not in (image_base+0x35D630,image_base+0x35FC28,image_base+0x372600):
             raise RefillUnsupported('unrecovered callable destructor')
+        if table==image_base+0x35FC28:
+            offset,target=(0x20,0x29E054) if pointer==object_address else (0x28,0x29E058)
+            if _u(p,table+offset)!=image_base+target:
+                raise RefillUnsupported('B callable destructor relocation is unsupported')
         if pointer!=object_address:free(p,pointer)
     p.commit()
 

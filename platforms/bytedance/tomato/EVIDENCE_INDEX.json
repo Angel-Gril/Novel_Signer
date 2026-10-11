@@ -5459,5 +5459,25 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_startup_b_callable_fresh_20261011": {
+    "evidence_file": "evidence/vm9_startup_b_callable_fresh_20261011.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_startup_b_callable_20261011.py",
+    "schema": "vm9-startup-b-callable-fresh-v1",
+    "evidence_date": "2026-10-11",
+    "evidence_timezone": "Asia/Shanghai",
+    "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "native_Python_callable_controls": 84,
+    "rollback_negative_controls": 12,
+    "B_callable_controls": 32,
+    "existing_A_queue_regression_controls": 52,
+    "pre_change_behavior_RED_controls": 12,
+    "native_input_snapshot_used": false,
+    "private_names_or_payloads_published": false,
+    "entire_B_startup_composed": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

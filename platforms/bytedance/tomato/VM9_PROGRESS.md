@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：共享B callable生命周期
+
+在既有vm9_startup共享owner扩展B虚表的move/destroy，复用队列契约。
+84项原生对照、12项回滚检查通过，含32项B和52项原有A/queue回归。
+完整guest/image和有序释放一致，其他共享owner定义AST未变。
+继续真实B startup回调组合、worker、JNI/bootstrap、独立signer和线上验收。
+见 [B callable 报告](REQUEST_JNI_STARTUP_WORKERS.md#656-b-callable-的共享移动与清理2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：B context与有界描述符执行
 
 48项执行、6项context初始化、27项回滚检查通过。两基址从fresh ELF
