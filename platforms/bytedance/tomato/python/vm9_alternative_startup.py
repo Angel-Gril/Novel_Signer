@@ -5562,3 +5562,108 @@ def run_module_factory(pages, *, image_base, blob_address, blob_size,
     m.p.commit()
     return ModuleFactoryResult(root.address,root.descriptor_count,root.imported_count,
         root.instruction_count,tuple(effects),tuple(finalizers))
+
+
+@dataclass(frozen=True)
+class ModuleConstructorResult:
+    address: int
+    descriptor_count: int
+    instruction_count: int
+    publications: tuple[tuple[int, int], ...]
+    effects: tuple[ReaderAstEffect, ...]
+    finalizers: tuple[tuple[int, int, int], ...]
+
+
+def run_module_constructor(pages, *, image_base, entry_stack_address, thread_id,
+        varuint_scratch_address, expression_scratch_address, custom_scratch_address,
+        allocate=None, max_nodes=4096, max_code_words=1048576,
+        max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Recover actual +29ecac constructor and its 121 descriptor publications.
+
+    Lower the constructor's straight-line ELF stores into its caller frame,
+    preserving the actual binding and codec sources. Compose +2a95e0's narrow
+    argument wrapper with run_module_factory, publish the root, then perform
+    all 121 short-name selections and stores from the original caller.
+    The small instruction decoder only accepts this evidenced static setup
+    and publication grammar; it is not an ARM64 execution engine. No native
+    state supplies input, and names/payloads are read from caller-owned pages.
+
+    All writes commit together. allocate is a pure nonreusing plan and logical
+    effects/finalizers follow the factory contract. Scratch regions cannot
+    overlap the constructor frame. Full stack saves, the Android loader,
+    JNI startup and execution of the published B VM remain separate boundaries.
+    """
+    if type(entry_stack_address) is not int or not 0x5000<entry_stack_address<=MASK64 or entry_stack_address&15:
+        raise RefillUnsupported('module constructor requires an aligned incoming SP')
+    m=_ReaderAstMemory(pages,image_base,image_base+0x3E1EB0,8,max_nodes,max_vector_bytes,reserved_regions)
+    frame=entry_stack_address-0x440;factory_sp=frame-0x30;output=factory_sp+0x18
+    m.claim(frame,0x440)
+    for address,size in ((varuint_scratch_address,4),(expression_scratch_address,8),(custom_scratch_address,8)):
+        if type(address) is not int or address<frame+0x440 and frame<address+size:
+            raise RefillUnsupported('module constructor scratch overlaps its caller frame')
+    registers=[None]*31+[frame];publications=[];lookups=0
+    def register(index,stack=False):
+        value=registers[index] if index!=31 or stack else 0
+        if value is None:raise RefillUnsupported('module constructor static register is undefined')
+        return value
+    def signed(value,bits):return value-(1<<bits) if value>>(bits-1) else value
+    def lower(start,end,publishing=False):
+        nonlocal lookups
+        stores=0
+        for pc in range(start,end,4):
+            word=_u(m.p,image_base+pc,4);rd=word&31;rn=(word>>5)&31
+            bits=64 if word>>31 else 32;mask=(1<<bits)-1
+            if word&0x9F000000==0x90000000:
+                immediate=((word>>29)&3)|(((word>>5)&0x7FFFF)<<2)
+                registers[rd]=image_base+(pc&~4095)+(signed(immediate,21)<<12)
+            elif word&0x7F800000==0x11000000:
+                immediate=((word>>10)&4095)<<(12 if word&(1<<22) else 0)
+                registers[rd]=(register(rn,True)+immediate)&mask
+            elif word==0x8B090108:
+                registers[8]=(register(8)+register(9))&MASK64
+            elif word&0x7FE0FFE0==0x2A0003E0:
+                registers[rd]=register((word>>16)&31)&mask
+            elif word&0x7F800000 in (0x52800000,0x72800000,0x12800000):
+                operation=word&0x7F800000;shift=((word>>21)&3)*16
+                if shift>=bits:raise RefillUnsupported('module constructor immediate shift is invalid')
+                immediate=((word>>5)&65535)<<shift
+                registers[rd]=((register(rd)&~(65535<<shift))|immediate)&mask if operation==0x72800000 else (~immediate&mask) if operation==0x12800000 else immediate
+            elif word&0x3FC00000==0x39000000:
+                width=1<<((word>>30)&3);address=register(rn,True)+((word>>10)&4095)*width
+                value=register(rd)&((1<<(width*8))-1)
+                if publishing:
+                    if width!=8 or rd!=0 or rn!=8 or address&7 or not image_base+0x3E1EB8<=address<=image_base+0x3E2278:
+                        raise RefillUnsupported('module constructor publication store is unsupported')
+                    publications.append((address,value))
+                elif not frame<=address<address+width<=entry_stack_address:
+                    raise RefillUnsupported('module constructor input store exceeds its caller frame')
+                _write_span(m.p,address,value.to_bytes(width,'little'));stores+=1
+            elif publishing and word&0xFC000000==0x94000000 and pc+(signed(word&0x3FFFFFF,26)<<2)==0x2A9620:
+                selected=lookup_short_descriptor(m.p,root_address=register(0),name_address=register(1),
+                    entry_stack_address=frame,max_nodes=max_nodes)
+                if not selected.descriptor_address:raise RefillUnsupported('module constructor published name was not found')
+                registers[0]=selected.descriptor_address;lookups+=1
+            else:raise RefillUnsupported('module constructor static instruction is unsupported')
+        return stores
+    if lower(0x29ECB8,0x29F2C8)!=167:
+        raise RefillUnsupported('module constructor input store count is unsupported')
+    if [register(i) for i in (0,1,2,3,4,5,6,7)]!=[image_base+0x387D20,0x37FD0,frame+0x428,0,frame+0x2A0,16,frame+0x90,22]:
+        raise RefillUnsupported('module constructor factory arguments are unsupported')
+    codec=_u(m.p,frame);count=_u(m.p,frame+8,4)
+    _write_span(m.p,factory_sp,codec.to_bytes(8,'little')+count.to_bytes(8,'little'))
+    result=run_module_factory(m.p,image_base=image_base,blob_address=register(0),blob_size=register(1),
+        output_address=output,function_bindings_address=register(4),function_binding_count=register(5),
+        global_bindings_address=register(6),global_binding_count=register(7),codec_table_address=codec,
+        codec_table_count=count,entry_stack_address=factory_sp,thread_id=thread_id,
+        varuint_scratch_address=varuint_scratch_address,expression_scratch_address=expression_scratch_address,
+        custom_scratch_address=custom_scratch_address,allocate=allocate,max_nodes=max_nodes,
+        max_code_words=max_code_words,max_vector_bytes=max_vector_bytes,
+        reserved_regions=(*reserved_regions,(frame,entry_stack_address)))
+    if not result.address:raise RefillUnsupported('module constructor factory returned an empty root')
+    registers[19]=result.address
+    _write_span(m.p,image_base+0x3E1EB0,result.address.to_bytes(8,'little'))
+    if lower(0x29F2DC,0x2A0018,True)!=121 or lookups!=121:
+        raise RefillUnsupported('module constructor publication count is unsupported')
+    m.p.commit()
+    return ModuleConstructorResult(result.address,result.descriptor_count,result.instruction_count,
+        tuple(publications),result.effects,result.finalizers)

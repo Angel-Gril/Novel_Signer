@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：独立构造器与121项描述符发布
+
+2 份 fresh 完整原生/Python 构造器对照、22 项回滚检查通过，覆盖
+两个基址和重定位/padding。共242发布槽、278描述符、109066指令；
+每次2330分配、1836释放、4个finalizer，完整页面和有序效果一致。
+ELF静态指令独立生成所有绑定/codec输入，最后发布故障也全页回滚。
+继续完整 JNI/bootstrap、B VM 执行、独立 signer、新鲜输出与线上验收。
+见 [构造器报告](REQUEST_JNI_STARTUP_WORKERS.md#654-构造器输入生成与描述符发布2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：factory 独立组合与两层清理
 
 26 个原生/Python factory 对照、38 项回滚检查通过。两个基址从 fresh

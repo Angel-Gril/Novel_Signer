@@ -206,7 +206,8 @@ imported descriptor 通过 **106 个原生对照、36 项回滚检查**，
 root 构造通过 **62 个原生对照、34 项回滚检查**，
 含两份实际模块的 278 个描述符、109066 条指令。见 [root 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#652-root-构造全局数据搬移与运行时链接2026-10-11-asiashanghai)。
 factory 独立组合通过 **26 个原生对照、38 项回滚检查**。见 [factory 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#653-factory-独立组合与两层清理2026-10-11-asiashanghai)。
-constructor publication、完整 bootstrap 和 signer 仍未完成。见
+构造器通过 **2 份完整原生对照、22 项回滚检查**，242 个描述符发布槽一致。见 [构造器报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#654-构造器输入生成与描述符发布2026-10-11-asiashanghai)。
+完整 JNI/bootstrap、B VM 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
 [Data 创建报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai)。

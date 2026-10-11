@@ -338,6 +338,8 @@ is covered by the module opt-in below. See the [global expression report](../REQ
 
 `run_module_factory` now composes ELF blob decoding, reader/AST, parser conversion, root linking and both temporary cleanups. 26 native/Python factory controls and 38 rollback checks pass. Each fresh actual module matches 139 descriptors, 54533 instructions, 2330 allocations, 1836 frees and 4 finalizers. Constructor publication, full bootstrap and signer remain unfinished. See the [factory composition report](../REQUEST_JNI_STARTUP_WORKERS.md#653-factory-独立组合与两层清理2026-10-11-asiashanghai).
 
+`run_module_constructor` now derives its binding/codec inputs from ELF instructions, invokes the independent factory and publishes all 121 descriptors. Two complete native/Python constructor controls and 22 rollback checks pass, including relocated SP, padding and a fault at the last publication. Full pages, 242 publications and ordered effects match. Full JNI/bootstrap, B VM execution and signer remain unfinished. See the [constructor report](../REQUEST_JNI_STARTUP_WORKERS.md#654-构造器输入生成与描述符发布2026-10-11-asiashanghai).
+
 
 
 

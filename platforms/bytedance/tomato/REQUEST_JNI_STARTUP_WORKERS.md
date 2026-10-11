@@ -2802,6 +2802,38 @@ stack/TLS/OS，未执行真实分配器。constructor 的 121 项 publication、
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_factory_composition_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <factory-composition-evidence.json>
 ```
 
+## 6.54 构造器输入生成与描述符发布（2026-10-11 Asia/Shanghai）
+
+`run_module_constructor` 恢复实际 +29ecac 和 +2a95e0 参数包装：从
+原始 ELF 的静态指令生成 16 个函数绑定、22 个全局绑定及 3 条 codec
+记录，调用独立 Python factory，发布 root，再执行全部 **121 次**
+短名称查找与 descriptor 全局槽写入。每次构造均从 fresh ELF 起步。
+
+静态解码只接受已验证的构造器 setup/publication 指令形态，保留
+167 次 caller 输入 store 和 121 次 publication；没有通用 ARM64
+执行器，也没有原生快照、名称或 payload 常量作为输入。输出 root、
+生成的 descriptor 和两层临时清理均来自已有唯一 owner 的组合。
+
+干净 `f28381c` 绑定 **4 项修改前真实原生 RED**。正式验证通过
+**2 个完整原生/Python 构造器对照、22 项回滚检查**。覆盖两基址、
+重定位 SP、不同分配/栈 padding 和 thread ID。合计 **242 个发布槽、
+278 个描述符、109066 条运行时指令**；每次 **2330 次分配、1836 次
+释放、4 个 finalizer** 与原始构造器一致。
+
+全部 guest/heap/image pages、自然返回 SP、root、121 项发布值和
+factory 输出槽的有序效果匹配。新增 API 和结果类型以外旧 owner
+AST 完全一致。非法参数、静态指令、caller/scratch/allocator 别名
+及写入失败全页回滚；最后一个发布槽的故障检查在完成实际模块构造
+之后注入，验证整段调用仍回滚。
+
+未比较完整 stack/TLS/OS，未运行 Android loader 或 B VM。该结果是
+独立构造器完成，完整 JNI/bootstrap、独立 signer、新鲜输出及线上
+验收仍待完成。见 [构造器证据](evidence/vm9_alternative_constructor_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_constructor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <constructor-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
