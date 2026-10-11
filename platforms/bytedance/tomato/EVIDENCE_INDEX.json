@@ -6126,5 +6126,27 @@
     "pre_change_native_RED_controls": 4,
     "accepted_native_controls_not_repeated": true,
     "delayed_VM_live_provider_wiring_verified": false
+  },
+  "vm9_java_service_fresh_20261012": {
+    "evidence_file": "evidence/vm9_java_service_fresh_20261012.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_java_service_fresh_20261012.py",
+    "component": "Actual UTF construction and Java service lookup",
+    "native_Python_controls": 42,
+    "rollback_guards": 9,
+    "UTF_helper_verified": true,
+    "Java_service_lookup_verified": true,
+    "live_default_object_required": true,
+    "native_input_snapshot_used": false,
+    "private_names_or_payloads_published": false,
+    "physical_register_spills_verified": false,
+    "cold_live_initializer_verified": false,
+    "delayed_VM_live_provider_wiring_verified": false,
+    "live_Android_JVM_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false,
+    "pre_change_native_RED_controls": 4,
+    "accepted_native_controls_not_repeated": true
   }
 }

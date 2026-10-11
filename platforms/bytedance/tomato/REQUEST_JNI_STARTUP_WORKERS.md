@@ -3691,6 +3691,36 @@ fresh签名和线上矩阵仍未完成。** 见 [JNI member证据](evidence/vm9_
 python -B platforms/bytedance/tomato/python/verify_vm9_integer_jni_members_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <integer-jni-evidence.json>
 ```
 
+## 6.82 实际 UTF 构造与 Java service 查找（2026-10-12 Asia/Shanghai）
+
+`construct_java_utf_string` 恢复 `+270204`：复用既有 C++ string owner，
+以 short/heap tagged layout 保存输入，在 `+270168` 内调用实际
+NewStringUTF slot，并在调用前后按原生顺序 check/clear exception。
+清除新异常时仍保留返回引用；JNI之后释放临时heap string。
+
+`lookup_java_service` 恢复 `+218660` 的八组ELF lazy字符串、default
+对象读取及environment获取。两次静态调用取得中间引用，再把输入
+service name转换为Java string，调用实例方法并按原生顺序清理
+string、manager、binder locals。所有生产name/signature来自guest ELF。
+该entry是取得service引用的调用，供实际initializer使用。
+
+两基址共 **42项原生/Python对照、9项页面回滚**。其中UTF20项覆盖
+empty、short、22/23/64字节、NULL环境/source/reference及调用前后异常；
+service22项覆盖正常lookup、NULL name、中间/最终NULL引用、各方法
+异常、UTF异常及其外层异常。返回引用、全部guest payload/image页面、
+逻辑UTF对象/exception scope、所有服务顺序和free前字节一致。
+四项改动前native RED自然返回，旧API缺失。服务路径要求live default
+Java对象和现有environment acquisition；缺失default/VM明确拒绝，
+与其余参数/provider失败一道保持页面不变。页面回滚无法撤销外部effects。
+
+**完整physical register spills、真实Android JVM、实际cold initializer
+的公开组合、VM/worker provider接线、完整独立signer、fresh签名和线上
+矩阵仍未完成。** 见 [UTF与service查找证据](evidence/vm9_java_service_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_java_service_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <java-service-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

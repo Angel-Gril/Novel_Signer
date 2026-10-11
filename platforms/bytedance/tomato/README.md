@@ -265,6 +265,8 @@ Cold encoded SDK lookup now passes 52 getter controls and 9 rollback guards; its
 
 Integer/reference argument JNI instance and static methods, void and integer/reference returns, and non-FP static fields pass 140 native/Python controls and 11 rollback guards. Consumed va_list arguments, native return widths, exception order and the legacy reference subset match. Cold initializer composition, worker wiring and the complete signer remain unfinished. See the [integer JNI report](REQUEST_JNI_STARTUP_WORKERS.md#681-带整型引用参数的-jni-方法与静态字段2026-10-11-asiashanghai).
 
+Actual UTF construction and Java service lookup pass 42 native/Python controls and 9 rollback guards. Short/heap C++ strings, exception clearing, returned references and local cleanup match. Service lookup requires a live default Java object. Initializer composition, worker wiring and the complete signer remain unfinished. See the [Java service report](REQUEST_JNI_STARTUP_WORKERS.md#682-实际-utf-构造与-java-service-查找2026-10-12-asiashanghai).
+
 
 
 

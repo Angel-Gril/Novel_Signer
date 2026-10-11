@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：实际UTF构造与Java service查找
+
+UTF20项及service22项原生/Python对照、9项回滚通过。short/heap string、
+exception scope、引用返回、临时locals与free前字节一致。service路径
+需要live default Java对象。实际initializer私有草稿已有两基址×SDK27/30
+四项页面/服务对照；公开组合及其异常验收、VM/worker接线、完整独立
+signer、fresh/live继续。见 [Java service报告](REQUEST_JNI_STARTUP_WORKERS.md#682-实际-utf-构造与-java-service-查找2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：带参数JNI方法与静态字段
 
 实例/静态方法、静态字段通过140项原生/Python对照、11项回滚。

@@ -37,18 +37,76 @@ def crc_string_object(p,base,object_address):
  for byte in data:crc=u(p,base+0x96144+((crc^byte)&255)*4,4)^(crc>>8)
  return crc^0xFFFFFFFF
 
-def unavailable_default_object(p,*,base,sp,allocate,free,read_property,system,thread_pointer):
+def unavailable_default_object(p,*,base,sp,allocate,free,read_property,system,thread_pointer,allow_live=False):
  for flag,source,dest,mask in ((0x3D1C60,0x7CF24,0x3D1C58,0x7D064),(0x3D1C94,0x7CF30,0x3D1C70,0x7D040)):
   if not u(p,base+flag,4):
    objects.decode_masked_bytes(p,source_address=base+source,destination_address=base+dest,mask_address=base+mask)
    w(p,base+flag,1,4)
- if u(p,base+0x3DEEE0):raise RefillUnsupported('follow-up live default Java object is unrecovered')
+ default=u(p,base+0x3DEEE0)
+ if default:
+  if allow_live:return default
+  raise RefillUnsupported('follow-up live default Java object is unrecovered')
  temporary=sp-0x60
  objects.construct_string_object(p,object_address=temporary,source_address=base+0x3D1C58,
   allocate=allocate,vtable_address=base+0x34F5F8,empty_descriptor_address=base+0x6E168)
  logger.log_literal_unavailable(p,object_address=temporary,format_address=base+0x3D1C70,
   entry_stack_address=temporary,image_base=base,read_property=read_property,syscall=system,errno_address=thread_pointer+0x10)
  objects.destroy_string_object(p,object_address=temporary,image_base=base,free=free)
+ return 0
+
+
+def lookup_java_service(pages,*,image_base,entry_stack_address,name_address,
+ thread_pointer,allocate,free,get_tls,register_destructor,invoke_javavm,
+ read_property,system,invoke_jni):
+ """+218660: static service manager calls, UTF service name and local cleanup.
+
+ Names/signatures are decoded from guest ELF. The actual default Java object
+ and acquired environment remain explicit inputs. Each helper preserves its
+ native exception/status ordering; no Java service result is fabricated.
+ """
+ if type(entry_stack_address) is not int or not 0x300<=entry_stack_address<=MASK64 or entry_stack_address&15:
+  raise RefillUnsupported('Java service lookup requires an aligned guest stack')
+ p=_PageTransaction(pages);base=image_base;sp=entry_stack_address;d=delta(base,0x218660)
+ for i in range(8):lazy(p,base,d,0x37ECF8+i*8,0x37ED38+i*24)
+ if not u(p,base+0x3DEEE0):raise RefillUnsupported('Java service lookup requires a live default object')
+ call_sp=sp-0xE0;status=sp-0xD0
+ default=unavailable_default_object(p,base=base,sp=call_sp,allocate=allocate,free=free,
+  read_property=read_property,system=system,thread_pointer=thread_pointer,allow_live=True)
+ acquired=environment.acquire_thread_environment(p,image_base=base,entry_stack_address=call_sp,
+  output_pair_address=call_sp,get_tls=get_tls,register_destructor=register_destructor,invoke_javavm=invoke_javavm)
+ env=acquired.environment;result=0
+ if not default or not env:p.commit();return 0
+ def text(i):return encoded(p,base,d,0x37ECF8+i*8)
+ def static(i,words):return environment.invoke_integer_argument_static_java_method(p,
+  entry_stack_address=call_sp,environment_pointer=env,status_address=status,
+  class_name_address=text(i),name_address=text(i+1),signature_address=text(i+2),
+  argument_words=words,invoke_jni=invoke_jni)
+ def remove(ref):environment._invoke_jni(p,env,0xB8,(ref,),invoke_jni)
+ first=static(0,());binder=first.word
+ if first.status_byte==1:
+  if binder:remove(binder)
+ elif binder:
+  second=static(3,(binder,));manager=second.word
+  if second.status_byte==1:
+   if manager:remove(manager)
+  elif manager:
+   string=environment.construct_java_utf_string(p,entry_stack_address=call_sp,
+    environment_pointer=env,source_address=name_address,allocate=allocate,free=free,invoke_jni=invoke_jni)
+   exception=environment.check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni)
+   if exception:
+    if string:remove(string)
+   elif string:
+    third=environment.invoke_integer_argument_java_method(p,entry_stack_address=call_sp,
+     environment_pointer=env,status_address=status,object_reference=manager,
+     name_address=text(6),signature_address=text(7),argument_words=(string,),invoke_jni=invoke_jni)
+    result=third.word
+    if third.status_byte==1:
+     if result:remove(result)
+     result=0
+    remove(string)
+   remove(manager)
+  remove(binder)
+ p.commit();return result
 
 def initialize_absent_object(p,*,base,sp,receiver,allocate,free,read_property,system,thread_pointer,
  get_tls,register_destructor,invoke_javavm):

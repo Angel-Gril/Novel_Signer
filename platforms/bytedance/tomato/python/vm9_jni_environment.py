@@ -8,6 +8,7 @@ Guest-page transactions cannot reverse external JavaVM/provider effects.
 from __future__ import annotations
 from dataclasses import dataclass
 import vm9_objects as objects
+import vm9_cpp_strings as cpp_strings
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
 
 MASK64 = (1 << 64) - 1
@@ -679,6 +680,33 @@ def clear_java_exception(pages, *, environment_pointer, invoke_jni):
     if _invoke_jni(p,environment_pointer,0x720,(),invoke_jni)&0xFF:
         _invoke_jni(p,environment_pointer,0x88,(),invoke_jni)
     p.commit()
+
+
+def construct_java_utf_string(pages, *, entry_stack_address, environment_pointer,
+        source_address, allocate, free, invoke_jni, max_bytes=0x100000):
+    """+270204: C string through owned C++ string into NewStringUTF.
+
+    The inner +270168 scope clears preexisting and newly raised exceptions,
+    and preserves the JNI reference even if a new exception was cleared.
+    Tagged heap storage is released after JNI. NULL environment/source skips
+    construction. This models logical objects; saved registers are separate.
+    """
+    if type(entry_stack_address) is not int or not 0xA0<=entry_stack_address<=MASK64 or entry_stack_address&15:
+        raise RefillUnsupported('JNI UTF helper requires an aligned guest stack')
+    for value in (environment_pointer,source_address):
+        if type(value) is not int or not 0<=value<=MASK64:
+            raise RefillUnsupported('JNI UTF pointers must fit uint64')
+    if not environment_pointer or not source_address:return 0
+    p=_PageTransaction(pages);temporary=entry_stack_address-0x50
+    cpp_strings.construct_cpp_string(p,object_address=temporary,source_address=source_address,
+        allocate=allocate,max_bytes=max_bytes)
+    scope=entry_stack_address-0x98;_w(p,scope,environment_pointer);_w(p,scope+8,0,1)
+    clear_java_exception(p,environment_pointer=environment_pointer,invoke_jni=invoke_jni)
+    source=_u(p,temporary+16) if _u(p,temporary,1)&1 else temporary+1
+    result=_invoke_jni(p,environment_pointer,0x538,(source,),invoke_jni)
+    clear_java_exception(p,environment_pointer=environment_pointer,invoke_jni=invoke_jni)
+    cpp_strings.destroy_cpp_string(p,object_address=temporary,free=free)
+    p.commit();return result
 
 
 @dataclass(frozen=True)
