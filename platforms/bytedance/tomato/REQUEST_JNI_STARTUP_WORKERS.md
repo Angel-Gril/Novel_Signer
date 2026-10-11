@@ -4128,6 +4128,35 @@ pair、clone与遍历，下一处为 `+285B70 -> +25C01C` 局部树析构。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_tree_size_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-tree-operations-evidence.json>
 ```
 
+## 6.96 请求局部树析构（2026-10-12 Asia/Shanghai）
+
+`destroy_configuration_tree` 恢复 `+25C01C/+25C04C`，接入实际 `+285B70`
+wrapper。先写回container vtable，复用begin/end、pair和advance owner；
+按iterator顺序清理key，再重新加载value callback，清理value并释放pair。
+支持实际string delete和NULL safe raw free。节点释放顺序为右子树、当前
+节点、左子树；左指针在右子树返回后读取，当前节点free前保存。
+
+clear按原始顺序重置count与sentinel，再清理controller并释放sentinel和
+controller。container+0x20保留原始悬空指针。逻辑begin/end iterator scratch
+分别为析构入口SP-0x88/-0x78；物理寄存器spill不作完整恢复声明。
+页面事务覆盖整个析构，free provider外部effects不随页面回滚。
+
+两基址 **32项原生/Python对照、1项请求入口检查、27项页面回滚** 通过。
+直接入口和实际wrapper均覆盖空树、单节点、平衡与降序树、二进制key，
+以及raw/string value。完整guest payload、ELF页面、逻辑iterator scratch、
+free顺序、heap和释放前字节一致，所有owned blocks释放。16项leaf拒绝与
+11项入口拒绝通过，新增入口free异常实际发生在第2321步的树析构中。
+两个有效native RED在owner恢复前取得；已接受native分组没有重复运行。
+
+fresh owning请求从2321推进到2329步，局部树析构完成，下一边界为
+`+285F9C -> +25CF98` 请求对象析构。**完整请求返回、整链原生差分、真实
+Android JVM、完整独立signer、fresh签名与线上矩阵仍未完成。**
+见 [局部树析构证据](evidence/vm9_request_tree_destroy_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_tree_destroy_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-tree-destroy-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

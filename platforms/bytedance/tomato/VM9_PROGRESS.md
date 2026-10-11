@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：请求局部树析构
+
+32项原生/Python对照、1项请求入口检查、27项回滚通过。实际pair清理、
+节点释放与sentinel/controller清理完成，逻辑iterator scratch一致；
+owning请求2321到2329步。下一边界请求对象析构 `+25CF98`。
+完整signer、fresh/live继续。见 [局部树析构报告](REQUEST_JNI_STARTUP_WORKERS.md#696-请求局部树析构2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：请求树计数、value与iterator
 
 128项原生/Python对照、1项请求入口检查、40项回滚通过。实际u64 size、

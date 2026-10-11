@@ -255,6 +255,91 @@ class _ConfigurationTree:
         return created, True
 
 
+def destroy_configuration_tree(pages, *, container_address: int, entry_stack_address: int,
+                               image_base: int, free: Callable, max_nodes: int = 4096) -> None:
+    """+0x25c01c: sorted pair cleanup, right/node/left node free, sentinel/controller.
+
+    Reuse actual iterator owners at the clear body's logical stack slots.
+    Free providers retain external effects when staged pages roll back.
+    The original leaves the controller pointer in the destroyed container.
+    """
+    if any(not isinstance(value, int) or not 0 <= value < 1 << 64
+            for value in (container_address, entry_stack_address)):
+        raise RefillUnsupported('configuration destructor inputs must fit uint64')
+    if entry_stack_address < 0x90 or entry_stack_address & 15:
+        raise RefillUnsupported('configuration destructor stack must be aligned')
+    if not callable(free):
+        raise RefillUnsupported('configuration destructor requires a free service')
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, entry_stack_address - 0x90, 0x90)
+    _write_span(transaction, container_address, objects._word(objects._image_address(image_base, 0x35B7C0)))
+    tree = _ConfigurationTree(transaction, container_address, image_base, max_nodes, 0x100000)
+    begin, end = entry_stack_address - 0x88, entry_stack_address - 0x78
+    for address,position in ((begin,'begin'),(end,'end')):
+        pair = configuration_tree_iterator(transaction, container_address=container_address,
+            image_base=image_base, position=position)
+        _write_span(transaction, address, b''.join(objects._word(v) for v in pair))
+    def u64(address):
+        return int.from_bytes(_read_span(transaction, address, 8), 'little')
+    def put(address,value):
+        _write_span(transaction, address, objects._word(value))
+    def cleanup(callback,pointer):
+        if callback == objects._image_address(image_base, 0x182D6C):
+            if pointer:
+                if u64(pointer) != objects._image_address(image_base, 0x34F5F8):
+                    raise RefillUnsupported('unknown configuration string cleanup object')
+                objects.destroy_string_object(transaction, object_address=pointer,
+                    image_base=image_base, free=free, delete_object=True)
+        elif callback == objects._image_address(image_base, 0x165334):
+            if pointer:
+                free(transaction,pointer)
+        else:
+            raise RefillUnsupported('unknown configuration destructor cleanup callback')
+    processed = 0
+    while not configuration_tree_iterators_equal(transaction, first_address=begin, second_address=end):
+        if processed >= max_nodes:
+            raise RefillUnsupported('configuration destructor exceeds the pair bound')
+        pair = configuration_tree_iterator_pair(transaction, iterator_address=begin)
+        cleanup(u64(container_address + 8),u64(pair))
+        cleanup(u64(container_address + 16),u64(pair + 8))
+        free(transaction,pair)
+        advance_configuration_tree_iterator(transaction, iterator_address=begin, max_nodes=max_nodes)
+        processed += 1
+    def clear(controller):
+        if not u64(controller + 8):
+            return
+        header = u64(controller)
+        stack = [(u64(header + 8),False)]
+        seen = set()
+        while stack:
+            node,after_right = stack.pop()
+            if not node:
+                continue
+            if not after_right:
+                if node in seen or len(seen) >= max_nodes:
+                    raise RefillUnsupported('cyclic or excessive configuration destructor traversal')
+                seen.add(node)
+                stack.append((node,True))
+                stack.append((u64(node + 24),False))
+            else:
+                left = u64(node + 16)
+                free(transaction,node)
+                stack.append((left,False))
+        header = u64(controller)
+        put(controller + 8,0)
+        put(header + 16,header)
+        header = u64(controller)
+        put(header + 8,0)
+        header = u64(controller)
+        put(header + 24,header)
+    clear(u64(container_address + 32))
+    controller = u64(container_address + 32)
+    clear(controller)
+    free(transaction,u64(controller))
+    free(transaction,u64(container_address + 32))
+    transaction.commit()
+
+
 def configuration_tree_size(pages, *, container_address: int) -> int:
     """+0x25c150/+0x24b958/+0x24bdd0: load controller then its uint64 count."""
     if not isinstance(container_address, int) or not 0 <= container_address < 1 << 64:

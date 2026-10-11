@@ -293,6 +293,15 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 _write_span(vm.m.pages, argument + 0x10, b''.join(v.to_bytes(8, 'little') for v in pair))
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_iterator_advances', []).append(dict(returned_pair_written=True))
+            elif (wrapper, target) == (0x285B70, 0x25C01C):
+                import vm9_registry as registry
+                if diagnostic_scope is not None:
+                    diagnostic_scope['request_tree_cleanup_started'] = True
+                registry.destroy_configuration_tree(vm.m.pages, container_address=words[1],
+                    entry_stack_address=frame.native_stack_address - 0x180,
+                    image_base=image, free=free)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_tree_cleanups', []).append(dict(completed=True))
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

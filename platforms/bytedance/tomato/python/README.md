@@ -422,6 +422,8 @@ Guest-table folded comparison and its actual wrapper pass 48 native/Python contr
 
 Request tree count, string-value replacement, iterator pairs, clone and advance pass 128 native/Python controls, one request VM entry check and 40 rollback guards. The actual owning request reaches 2321 steps at local tree destruction under a finite 4000-step budget. The complete signer remains unfinished. See the [tree traversal report](../REQUEST_JNI_STARTUP_WORKERS.md#695-请求树计数与-value-清理和-iterator-遍历2026-10-12-asiashanghai).
 
+Local request tree destruction passes 32 native/Python controls, one request VM entry check and 27 rollback guards. The owning request reaches 2329 steps at request object destruction. The complete signer remains unfinished. See the [local tree destructor report](../REQUEST_JNI_STARTUP_WORKERS.md#696-请求局部树析构2026-10-12-asiashanghai).
+
 
 
 
