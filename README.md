@@ -213,7 +213,8 @@ B 主线程 startup 与两类真实导入回调通过 **28 项原生对照、41 
 B worker 调用程序的指令扩展通过 **112 项 runtime 对照、4 项 startup 回归、40 项回滚检查**；实际 worker descriptor 使用显式导入 provider。见 [worker runtime 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#658-b-worker-的分支与组合指令2026-10-11-asiashanghai)。
 B worker 完整算术与 CAS/memset 通过 **310 项 runtime 对照、30 项 builtin 对照、4 项 startup 回归、69 项回滚检查**；24项实际嵌套程序执行真实 memset 回调。见 [worker arithmetic 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#659-b-worker-完整算术与内存内置函数2026-10-11-asiashanghai)。
 共享 once 已接入 B 六个控制字，**60 项原生对照、22 项回滚检查**通过；含24项A回归。见 [共享 once 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#660-b-复用共享-once-状态机2026-10-11-asiashanghai)。
-B worker、完整 JNI/bootstrap 和 signer 仍未完成。见
+B完整callable已恢复六个外层及48个嵌套程序，**18 项原生对照、36 项回滚检查**通过；每次cold任务120847次分发、6分配、6唤醒。见 [完整 callable 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#661-b-完整-worker-callable-与嵌套初始化2026-10-11-asiashanghai)。
+B队列worker组合、完整 JNI/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
 [Data 创建报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai)。

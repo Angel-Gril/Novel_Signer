@@ -6006,3 +6006,134 @@ def run_runtime_imported_builtin(pages, *, image_base, function_address,
         _write_span(m.p,address,bytes([first&255])*size);result=address
     _write_span(m.p,context_address+0x6080,result.to_bytes(8,'little'))
     m.p.commit();return result
+
+
+@dataclass(frozen=True)
+class WorkerArenaResult:
+    region_address: int
+    context_address: int
+    caller_results: tuple[RuntimeExecutionResult, ...]
+
+
+def initialize_worker_arena(pages, *, image_base, table_index,
+        entry_stack_address, thread_pointer, allocate, max_steps=1000000,
+        max_depth=64, reserved_regions=()):
+    """One actual B initializer, including all eight nested descriptor returns.
+
+    The explicit pure allocator supplies 0x4000 mapped guest bytes. Publish
+    eight 0x800 blocks, execute the first descriptor and seven chained calls,
+    and check the TLS canary. The context derives from initializer incoming SP.
+    Native physical register saves and unspecified X0 are outside the result.
+    Rejections roll back pages; defer external allocator effects until acceptance.
+    """
+    if type(table_index) is not int or not 0<=table_index<6:
+        raise RefillUnsupported('B worker table index must be in 0..5')
+    if (type(entry_stack_address) is not int or not 0x9000<entry_stack_address<=MASK64
+            or entry_stack_address&15):
+        raise RefillUnsupported('B worker initializer requires aligned incoming SP')
+    if not callable(allocate):raise RefillUnsupported('B worker requires an explicit allocator')
+    if type(max_steps) is not int or not 1<=max_steps<=1048576:
+        raise RefillUnsupported('B worker initializer step budget is invalid')
+    context=entry_stack_address-0x6320;canary_slot=context+0x62D8
+    m=_ReaderAstMemory(pages,image_base,context,0x62D0,4096,16*1024*1024,reserved_regions)
+    m.claim(context,0x62D0);m.claim(canary_slot,8);m.claim(thread_pointer,0x30)
+    canary=_read_span(m.p,thread_pointer+0x28,8);_write_span(m.p,canary_slot,canary)
+    retained=(*reserved_regions,(thread_pointer,thread_pointer+0x30),(canary_slot,canary_slot+8))
+    region=allocate(m.p,0x4000);m.claim(region,0x4000,alignment=1)
+    _write_span(m.p,region,bytes(0x4000))
+    table=image_base+0x3E2280+table_index*0x40
+    for index in range(8):_write_span(m.p,table+index*8,(region+index*0x800).to_bytes(8,'little'))
+    results=[];steps=0
+    def imported(p,function,ctx,sp):
+        run_runtime_imported_builtin(p,image_base=image_base,function_address=function,
+            context_address=ctx,reserved_regions=retained)
+    for index in range(8):
+        initialize_runtime_context(m.p,image_base=image_base,context_address=context,reserved_regions=retained)
+        # The original reloads published pointers before every chained call.
+        first=_u(m.p,table+(index-1 if index else 0)*8)
+        second=_u(m.p,table+index*8) if index else 0
+        _write_span(m.p,context+0x6090,first.to_bytes(8,'little'))
+        _write_span(m.p,context+0x6098,second.to_bytes(8,'little'))
+        result=execute_runtime_descriptor(m.p,image_base=image_base,
+            descriptor_address=_u(m.p,image_base+0x3E2220+table_index*16+(8 if index else 0)),
+            context_address=context,entry_stack_address=context,call_import=imported,
+            max_steps=max_steps-steps,max_depth=max_depth,reserved_regions=retained)
+        results.append(result);steps+=result.steps
+    if _read_span(m.p,thread_pointer+0x28,8)!=_read_span(m.p,canary_slot,8):
+        raise RefillUnsupported('B worker initializer stack canary changed')
+    result=WorkerArenaResult(region,context,tuple(results));m.p.commit();return result
+
+
+@dataclass(frozen=True)
+class WorkerTaskResult:
+    context_address: int
+    caller_results: tuple[RuntimeExecutionResult, ...]
+    arena_results: tuple[WorkerArenaResult, ...]
+
+
+def run_worker_initialization_task(pages, *, image_base, entry_stack_address,
+        thread_pointer, allocate, broadcast, max_steps=1000000, max_depth=64,
+        reserved_regions=()):
+    """Actual B +29e05c callable with six once gates and complete initializers.
+
+    Cold execution composes six outer and 48 nested descriptor programs.
+    Once state and broadcasting belong to the existing shared startup owner.
+    CAS64/memset run on staged guest pages. The incoming SP determines both
+    contexts and imported callback frames; TLS canaries are saved and checked.
+    This callable does not attach a queue worker or destroy thread TLS.
+    Allocation/broadcast providers must be pure outside their staged pages.
+    max_steps bounds the combined outer and nested dispatch count; any failure
+    rolls back all guest pages, including completed earlier once tables.
+    """
+    import vm9_startup as startup
+    if (type(entry_stack_address) is not int or not 0x10000<entry_stack_address<=MASK64
+            or entry_stack_address&15):
+        raise RefillUnsupported('B worker task requires aligned incoming SP and context space')
+    if not callable(allocate) or not callable(broadcast):
+        raise RefillUnsupported('B worker task requires explicit pure services')
+    if type(max_steps) is not int or not 1<=max_steps<=1048576:
+        raise RefillUnsupported('B worker task step budget is invalid')
+    context=entry_stack_address-0x6310;canary_slot=entry_stack_address-0x38
+    m=_ReaderAstMemory(pages,image_base,context,0x62D0,4096,16*1024*1024,reserved_regions)
+    m.claim(context,0x62D0);m.claim(canary_slot,8);m.claim(thread_pointer,0x30)
+    canary=_read_span(m.p,thread_pointer+0x28,8);_write_span(m.p,canary_slot,canary)
+    retained=(*reserved_regions,(thread_pointer,thread_pointer+0x30),(canary_slot,canary_slot+8))
+    initializers=(0x29E120,0x29E27C,0x29E3C8,0x29E514,0x29E660,0x29E7AC)
+    callers=[];arenas=[];steps=0
+    def owned_allocate(p,size):
+        address=allocate(p,size);m.claim(address,size,alignment=1);return address
+    def imported(p,function,ctx,sp):
+        nonlocal steps
+        if function!=image_base+0x29EAA4:
+            run_runtime_imported_builtin(p,image_base=image_base,function_address=function,
+                context_address=ctx,reserved_regions=retained)
+            return
+        control=_u(p,ctx+0x6090);initializer=_u(p,ctx+0x60A0)
+        if initializer-image_base not in initializers:
+            raise RefillUnsupported('B worker initializer target is unsupported')
+        index=initializers.index(initializer-image_base)
+        if control!=image_base+0x3E1E80+index*8:
+            raise RefillUnsupported('B worker once control and initializer disagree')
+        def initialize(staged):
+            nonlocal steps
+            # +29eaa4 and the shared once gate reserve 0x60 before the caller.
+            result=initialize_worker_arena(staged,image_base=image_base,table_index=index,
+                entry_stack_address=sp-0x60,thread_pointer=thread_pointer,allocate=owned_allocate,
+                max_steps=max_steps-steps,max_depth=max_depth,
+                reserved_regions=(*reserved_regions,(context,context+0x62D0),(canary_slot,canary_slot+8)))
+            steps+=sum(c.steps for c in result.caller_results);arenas.append(result)
+            return result
+        startup.call_once_arena_boot(p,image_base=image_base,control_address=control,
+            initializer=initialize,broadcast=broadcast)
+    for index in range(6):
+        initialize_runtime_context(m.p,image_base=image_base,context_address=context,reserved_regions=retained)
+        _write_span(m.p,context+0x6090,bytes(8))
+        result=execute_runtime_descriptor(m.p,image_base=image_base,
+            descriptor_address=_u(m.p,image_base+0x3E21F0+index*8),context_address=context,
+            entry_stack_address=context,call_import=imported,max_steps=max_steps-steps,
+            max_depth=max_depth,reserved_regions=retained)
+        callers.append(result);steps+=result.steps
+        if steps>max_steps:raise RefillUnsupported('B worker task combined step budget exhausted')
+    if _read_span(m.p,thread_pointer+0x28,8)!=_read_span(m.p,canary_slot,8):
+        raise RefillUnsupported('B worker task stack canary changed')
+    result=WorkerTaskResult(context,tuple(callers),tuple(arenas));m.p.commit();return result

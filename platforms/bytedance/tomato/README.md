@@ -223,6 +223,8 @@ The B executor now covers the evidenced worker arithmetic with 28 primary tags a
 
 The shared once owner now accepts all six B controls. 60 native/Python controls include 36 B cases and 24 A regressions; 22 rollback checks pass. Actual libc broadcast executes, while the initializer remains an explicit provider boundary in this check. Full B worker and signer remain unfinished. See the [B shared once report](REQUEST_JNI_STARTUP_WORKERS.md#660-b-复用共享-once-状态机2026-10-11-asiashanghai).
 
+The complete B worker callable now composes six outer and 48 nested descriptor programs with the shared once gate and actual CAS64/memset semantics. 18 native/Python controls and 36 rollback checks pass. Each cold task matches 120847 dispatches, six allocations and six wakes from fresh independent ELF inputs. Queue-worker/TLS composition and the full signer remain unfinished. See the [B full callable report](REQUEST_JNI_STARTUP_WORKERS.md#661-b-完整-worker-callable-与嵌套初始化2026-10-11-asiashanghai).
+
 
 
 

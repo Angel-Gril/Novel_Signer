@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：B 完整 worker callable 与嵌套初始化
+
+六个外层及48个嵌套程序与共享once/CAS64/memset组合。18项原生对照、
+36项回滚检查通过，输入来自两份fresh ELF独立构造。每次cold任务匹配
+120847次分发、54次descriptor、18次导入、6次分配及6次唤醒。
+继续同次startup的队列worker/TLS清理、JNI/bootstrap及完整signer。
+见 [完整 B callable 报告](REQUEST_JNI_STARTUP_WORKERS.md#661-b-完整-worker-callable-与嵌套初始化2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：B 复用共享 once 状态机
 
 共享 owner 接受B六个控制字，复用锁/状态/广播/回滚。60项原生对照

@@ -3010,6 +3010,36 @@ image、libc、TLS页面和初始化/广播/唤醒顺序一致。初始化体在
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_shared_once_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-shared-once-evidence.json>
 ```
 
+## 6.61 B 完整 worker callable 与嵌套初始化（2026-10-11 Asia/Shanghai）
+
+`initialize_worker_arena` 恢复 B 的六种实际初始化体：分配并清零0x4000，
+发布八个0x800块指针，执行一次首程序及七次链式程序。输入SP独立推导
+context和canary位置，每次调用重新读取原生发布指针及descriptor。
+`run_worker_initialization_task` 组合实际 +29e05c 的六个外层程序，复用
+共享once状态机，执行真实CAS64/memset语义，保存并检查两个TLS canary。
+统一指令预算覆盖外层与嵌套分发，后期失败回滚之前已完成的整组页面。
+
+干净 `6050d75` 上 **4 项修改前真实原生 RED** 后实施变更。正式验证
+由两份 fresh ELF 独立构造输入，通过 **18 项完整原生/Python 对照、
+36 项回滚检查**。12项逐个覆盖两基址的六种初始化体；六项完整任务覆盖
+cold、warm、交错三组cold状态及不同SP。每次完整cold任务 **120847次
+VM分发、54次descriptor调用、18次导入、6次0x4000分配与6次广播唤醒**。
+原始CAS、memset、once和matching libc broadcast函数体真实执行。
+全部非原生栈页面、完整context、canary、descriptor输入SP、导入context/
+active-frame/SP与有序分配/唤醒均匹配；没有native快照输入。函数体执行
+断言针对每条路径实际到达的导入；cold完整任务覆盖全部四类。嵌套canary
+在初始化体RET时对照，返回后该槽位可被外层原生调用者复用。
+
+非法参数/指针/descriptor、未恢复导入、重复分配、服务失败、canary破坏、
+第六组末尾发布故障、第六次广播失败及总预算耗尽均全页回滚。既有owner
+定义AST未变。本批完成callable任务体；队列worker及TLS清理组合、完整
+JNI/bootstrap、独立signer、新鲜输出及线上验收继续。私有名称/payload
+未发布。见 [完整 B callable 证据](evidence/vm9_alternative_worker_task_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_worker_task_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-worker-task-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
