@@ -104,14 +104,23 @@ def destroy_callable(pages, *, object_address, image_base, free, reset=False):
 
     Inline vtables +0x34f010/+0x34f058/+0x35d630/+0x35fc28/+0x372600 have RET destructors. Their deleting
     destructors free non-inline pointees. Plain destruction retains +0x20;
-    reset clears it before the destructor, as native does.
+    reset clears it before the destructor, as native does. The heap timed
+    wrapper +0x3725b8 owns an inline JNI follow-up and frees its outer storage.
     """
     p=_PageTransaction(pages);pointer=_u(p,object_address+0x20)
     if reset:_w(p,object_address+0x20,0)
     if pointer:
         table=_u(p,pointer)
-        if table not in (image_base+0x34F010,image_base+0x34F058,image_base+0x35D630,image_base+0x35FC28,image_base+0x372600):
+        if table not in (image_base+0x34F010,image_base+0x34F058,image_base+0x35D630,image_base+0x35FC28,image_base+0x372600,image_base+0x3725B8):
             raise RefillUnsupported('unrecovered callable destructor')
+        if table==image_base+0x3725B8:
+            if (pointer==object_address or not callable(free)
+                    or _u(p,table+0x20)!=image_base+0x325920
+                    or _u(p,table+0x28)!=image_base+0x325928
+                    or _u(p,pointer+0x20)!=image_base+0x34F058
+                    or _u(p,pointer+0x40)!=pointer+0x20):
+                raise RefillUnsupported('unrecovered timed wrapper ownership or destructor')
+            destroy_callable(p,object_address=pointer+0x20,image_base=image_base,free=free)
         if table==image_base+0x35FC28:
             offset,target=(0x20,0x29E054) if pointer==object_address else (0x28,0x29E058)
             if _u(p,table+offset)!=image_base+target:

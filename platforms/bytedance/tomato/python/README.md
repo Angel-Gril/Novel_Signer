@@ -378,6 +378,8 @@ The complete JNI execution now runs all three requested workers and full joinabl
 
 The actual delayed JNI callable now executes both guest image VMs, the unavailable Java object path, configuration publication and owning cleanup. Four fresh complete native/Python controls and 22 page rollback guards pass. Complete timed queue dispatch, live Java string conversion and the independent signer remain unfinished. See the [actual delayed callback report](../REQUEST_JNI_STARTUP_WORKERS.md#673-实际延时-jni-callable-与两段-image-vm2026-10-11-asiashanghai).
 
+Actual timed polling now transfers the owned follow-up into the drained queue and frees its wrapper/task. Four fresh complete native/Python controls, 20 page rollback guards and shared callable regressions pass. The complete executor worker wait cycle, live Java string conversion and independent signer remain unfinished. See the [timed transfer report](../REQUEST_JNI_STARTUP_WORKERS.md#674-实际-timed-poll转交与-queue-清理2026-10-11-asiashanghai).
+
 
 
 

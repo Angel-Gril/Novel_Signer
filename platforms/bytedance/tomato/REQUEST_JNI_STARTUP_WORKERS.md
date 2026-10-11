@@ -3434,6 +3434,41 @@ guest 页面回滚不能撤销它们。完整独立 signer、fresh 签名和线�
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_followup_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <followup-evidence.json>
 ```
 
+## 6.74 实际 timed poll、转交与 queue 清理（2026-10-11 Asia/Shanghai）
+
+`vm9_timed_tasks.dispatch_timed_callable` 恢复实际 `+325950` wrapper 转交，
+克隆 inline JNI follow-up 到 ABI 临时区，再移入已清空 queue 保留的 48 字节
+槽位并 signal。`vm9_startup.destroy_callable` 恢复 `+3725B8` heap wrapper
+拥有的 inline follow-up 析构和外层 free。既有 poll 与 queue owner 完成
+`+326DFC → +325950 → +326578 → +2043BC/+203948` 组合，任务与 wrapper
+各释放一次，queue 最终为空。
+
+原生转交中的 matching-libc mutex lock 会保存临时 callable 地址。
+这次 ABI 栈写入随后进入 image VM 保留的寄存器 backing，并被最后的
+scoped writer 高七字节复制到 TLS node padding。恢复该写入后，存活
+页面中的 padding 也逐字节一致；没有通过排除 heap 字节消除差异。
+
+干净 `9066915` 的 A/B 两条完整原生 RED、两基址旧 owner 拒绝后实施。
+**4 项 fresh 完整原生/Python 对照、20 项页面回滚检查**通过，覆盖两基址
+×A/B 及不同 heap/stack padding。每组匹配 **11,502 项 allocation/free**，
+checksum VM **8,606,106 steps**、lookup VM **301 steps / 15 callbacks**，
+新增 **2 次 GetEnv、0 次 JNI**。全部存活 guest/heap/image/libc 页面、
+JavaVM/JNI 和有序服务组一致。共享 callable 的旧 B、queue、finalizer
+回归也通过。follow-up owner 保持原始 hash；Python 独立映射和构造自己的
+ELF 状态，native snapshot 仅为私有诊断输出，不作为正式测试输入。
+
+本节使用 **显式 poll/queue driver**，尚未验证完整 executor worker 等待
+周期。仅支持保留一个空槽位的串行队列；vector growth、非空队列、未知
+ownership 和 contention 明确拒绝。物理 stack、线程输出 scratch、module
+registration 与 allocation 的交错沿用既有比较排除契约。provider 外部
+效果需调用方暂存，页面回滚不能撤销它们。完整独立 signer、live Java
+字符串转换、fresh 签名和线上矩阵继续。私有 ELF、解码文本和诊断快照
+不进入公开仓库。见 [timed cycle 证据](evidence/vm9_jni_timed_cycle_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_timed_cycle_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <timed-cycle-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

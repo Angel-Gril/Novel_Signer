@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：实际 timed poll、queue 转交与清理
+
+两基址×A/B四项fresh完整对照、20项页面回滚及共享callable旧回归通过。
+每组11502项allocation/free，task与wrapper释放、队列最终为空；两段VM
+自然退出，15callbacks和GetEnv2/JNI0一致，全部存活页面和有序服务组匹配。
+恢复mutex lock临时地址保存及后续TLS padding。采用显式poll/queue driver，
+完整executor worker等待周期、live Java转换、完整signer与fresh/live继续。
+见 [timed转交报告](REQUEST_JNI_STARTUP_WORKERS.md#674-实际-timed-poll转交与-queue-清理2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：实际延时 callback 与两段 image VM
 
 两基址×两分支4项fresh完整对照、22项页面回滚通过。实际callable自然返回；

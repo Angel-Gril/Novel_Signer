@@ -1,4 +1,4 @@
-"""First timed task submission into the startup-created executor.
+"""First timed task submission and transfer into an existing startup queue.
 
 Guest clock, allocation and condition signaling are explicit providers.
 Existing tasks, cancelled executors and concurrent mutation reject.
@@ -88,3 +88,50 @@ def submit_timed_callable(pages, *, source_address, scratch_address, image_base,
     for offset in (0x90,0x60,0x30,0):
         startup.destroy_callable(p,object_address=temporary+offset,image_base=base,free=free)
     p.commit();return TimedTaskSubmission(wrapper,task,deadline,context)
+
+
+def dispatch_timed_callable(pages, *, wrapper_address, entry_stack_address,
+        image_base, free, signal_condition):
+    """+325950 -> +3257e4/+325b88 with the drained queue's retained slot.
+
+    The timed wrapper owns an inline JNI follow-up. Clone it into the native
+    temporary, move it into one empty queue slot, signal and destroy the
+    temporary. Polling and the wrapper/task destructors stay with startup.
+    Vector growth, other nested callable types and concurrent mutation reject.
+    Provider effects must be staged separately from guest page rollback.
+    """
+    for address,alignment in ((image_base,4096),(wrapper_address,8),(entry_stack_address,16)):
+        if type(address) is not int or not 0<address<1<<56 or address%alignment:
+            raise RefillUnsupported('invalid timed dispatch address')
+    if not all(callable(f) for f in (free,signal_condition)):
+        raise RefillUnsupported('timed dispatch requires explicit providers')
+    p=_PageTransaction(pages);base=image_base;wrapper=wrapper_address
+    if (_u(p,wrapper)!=base+0x3725B8 or _u(p,base+0x3725E8)!=base+0x325950
+            or _u(p,wrapper+0x20)!=base+0x34F058
+            or _u(p,wrapper+0x40)!=wrapper+0x20):
+        raise RefillUnsupported('unknown timed dispatch wrapper')
+    index=_u(p,wrapper+0x18,1)
+    if index not in (0,1):raise RefillUnsupported('unknown timed queue selector')
+    executor=_u(p,wrapper+0x10)
+    if not _u(p,base+0x3E2D80,1)&1 or executor!=_u(p,base+0x3E2D78):
+        raise RefillUnsupported('timed dispatch requires its initialized executor')
+    queue=_u(p,executor+index*8);_read_span(p,queue,144)
+    temporary=entry_stack_address-0x70
+    _read_span(p,temporary,40)
+    # For this observed inline type, +325824's clone matches +3259c4's copy.
+    startup.move_callable(p,destination_address=temporary,source_address=wrapper+0x20,image_base=base)
+    # +325b88 latches x19=temporary. Its +329f3c/matching-libc lock saves x19
+    # here; the following image VM retains the word in its register backing,
+    # and the final scoped writer copies its upper seven bytes into a TLS node.
+    _w(p,entry_stack_address-0xF0,temporary)
+    objects.lock_uncontended_mutex(p,mutex_address=queue+0x30)
+    begin,end,capacity=(_u(p,queue+a) for a in (0x18,0x20,0x28))
+    if not begin or end!=begin or capacity!=begin+48:
+        raise RefillUnsupported('timed dispatch requires one retained empty queue slot')
+    startup.move_callable(p,destination_address=end,source_address=temporary,image_base=base)
+    _w(p,queue+0x20,end+48)
+    objects.unlock_uncontended_mutex(p,mutex_address=queue+0x30)
+    if signal_condition(p,queue+0x58)!=0:
+        raise RefillUnsupported('timed queue signal failed')
+    startup.destroy_callable(p,object_address=temporary,image_base=base,free=free)
+    p.commit();return queue

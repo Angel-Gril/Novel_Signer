@@ -226,7 +226,8 @@ ELF configuration constructor通过 **16 项原生对照、72 项回滚**，既�
 Finalizer延时提交通过 **8项对照、24项callable、25项回滚**。见 [延时报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#671-jni-finalizer-的首条延时任务提交2026-10-11-asiashanghai)。
 三条worker及完整guest退出通过 **4项完整对照、4项copied probe、47项回滚**。见 [finalizer报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#672-jni-finalizer-完整-worker-与-guest-退出2026-10-11-asiashanghai)。
 实际延时callback与两段image VM通过 **4项完整对照、22项页面回滚**。见 [延时回调报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#673-实际延时-jni-callable-与两段-image-vm2026-10-11-asiashanghai)。
-完整timed dispatch、live Java转换及完整signer仍未完成。见
+实际timed poll、转交与queue清理通过 **4项完整对照、20项页面回滚**。见 [timed转交报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#674-实际-timed-poll转交与-queue-清理2026-10-11-asiashanghai)。
+完整executor worker等待周期、live Java转换及完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
 [Data 创建报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai)。
