@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：实际填充字符串构造
+
+40项原生/Python对照、1项请求入口检查、20项回滚通过。按actual wrapper
+BYTE fill/u32 length恢复填充构造，复用sized布局。请求1558到1567步，
+下一边界树查询 `+25C168`。完整signer、fresh/live继续。
+见 [填充字符串报告](REQUEST_JNI_STARTUP_WORKERS.md#692-实际填充字符串构造与-wrapper-字节参数2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：进程析构导入与注册
 
 16项原生/Python对照、1项请求入口检查、17项回滚通过。实际ELF绑定

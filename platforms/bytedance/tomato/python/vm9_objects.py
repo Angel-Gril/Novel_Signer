@@ -682,6 +682,31 @@ def construct_sized_string_object(
     return pointer
 
 
+def construct_filled_string_object(
+    pages, *, object_address: int, fill: int, length: int, image_base: int,
+    allocate: Callable, max_payload_bytes: int = 0x100000,
+) -> int:
+    """Model +0x248274: memset low fill byte, then NUL; return buffer field.
+
+    Signed-negative w2 and malloc NULL clear both length words. This shares
+    the sized-string layout with +0x2481fc while generating the fill payload.
+    The buffer field is independent of the native function's incidental X0.
+    """
+    if not isinstance(fill, int) or not 0 <= fill <= 0xFFFF_FFFF:
+        raise RefillUnsupported("filled string value must fit w1")
+    if not isinstance(length, int) or not 0 <= length <= 0xFFFF_FFFF:
+        raise RefillUnsupported("filled string length must fit w2")
+    if not isinstance(max_payload_bytes, int) or not 0 <= max_payload_bytes <= 0x100000:
+        raise ValueError("invalid filled string payload bound")
+    if length < 0x8000_0000 and length > max_payload_bytes:
+        raise RefillUnsupported("filled string exceeds the explicit payload bound")
+    transaction = _PageTransaction(pages)
+    pointer = _sized_string_object(transaction, object_address, length, image_base,
+        allocate, lambda staged, size: bytes([fill & 255]) * size)
+    transaction.commit()
+    return pointer
+
+
 def _sized_string_object(pages, object_address, length, image_base, allocate, read_source):
     _write_span(pages, object_address, _word(_image_address(image_base, 0x34F5F8)))
     _write_span(pages, object_address + 0x10, bytes(8))

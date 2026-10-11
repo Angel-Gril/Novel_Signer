@@ -4007,6 +4007,32 @@ wrapper，**未执行真实libc atexit table、进程退出或已注册析构函
 python -B platforms/bytedance/tomato/python/verify_vm9_request_exit_registration_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-exit-evidence.json>
 ```
 
+## 6.92 实际填充字符串构造与 wrapper 字节参数（2026-10-12 Asia/Shanghai）
+
+`construct_filled_string_object` 恢复 `+248274`，复用既有sized-string
+布局owner并生成填充payload。低8位fill写入全部length字节，再追加NUL；
+非负W2分配length+1，负W2或malloc NULL清零两个长度字段。返回buffer
+字段，不把原始函数的偶然X0作为承诺。`+285B9C` consumer按实际指令
+读取packed+0x10的BYTE fill与packed+0x14的u32 length。
+
+两基址 **40项原生/Python对照、1项请求入口检查、20项页面回滚**。
+20项direct与20项actual wrapper覆盖empty/one/fifteen、zero/full-byte
+fill、跨页对象和payload、两种负长度、空/非空malloc NULL。完整guest
+payload、packed、ELF页、allocator顺序与堆匹配；native输出不作为输入。
+12项leaf guards覆盖参数、payload bound、对象/缓冲区未映射与provider
+异常；8项入口guards保留已有JNI/TLS/header/exit检查，并注入仅在实际
+进程注册之后发生的填充allocation异常。失败页面全回滚；外部effects
+不回滚。既有copy-sized owner及internal布局函数AST保持不变。
+
+fresh owning请求从1558到1567步，下一处为 `+285BB0 -> +25C168`
+树查询wrapper，其业务owner已存在。**完整请求返回、整链原生差分、
+真实Android JVM、完整独立signer、fresh签名与线上矩阵仍未完成。**
+见 [填充字符串证据](evidence/vm9_request_fill_string_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_fill_string_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-fill-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

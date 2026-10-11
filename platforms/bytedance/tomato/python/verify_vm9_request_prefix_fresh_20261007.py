@@ -239,6 +239,14 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_process_registrations', []).append(dict(
                         status_u32=status, owning_exit_service_used=True))
+            elif allocate is not None and (wrapper, target) == (0x285B9C, 0x248274):
+                fill = _read_span(vm.m.pages, argument + 0x10, 1)[0]
+                length = int.from_bytes(_read_span(vm.m.pages, argument + 0x14, 4), 'little')
+                objects.construct_filled_string_object(vm.m.pages, object_address=words[1],
+                    fill=fill, length=length, image_base=image, allocate=allocate)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_fill_strings', []).append(dict(
+                        length_u32=length, fill_byte=fill))
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()
