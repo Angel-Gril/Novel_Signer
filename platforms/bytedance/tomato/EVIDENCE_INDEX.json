@@ -6082,5 +6082,25 @@
     "additional_guards_run_separately": true,
     "unchanged_absent_branch_preserved": true,
     "delayed_VM_live_provider_wiring_verified": false
+  },
+  "vm9_encoded_sdk_live_lookup_fresh_20261011": {
+    "evidence_file": "evidence/vm9_encoded_sdk_live_lookup_fresh_20261011.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_encoded_sdk_fresh_20261011.py",
+    "lookup_verifier": "python/verify_vm9_jni_cold_sdk_lookup_fresh_20261011.py",
+    "component": "Encoded SDK getter and initialized Java lookup composition",
+    "native_Python_controls": 62,
+    "rollback_guards": 13,
+    "pre_change_encoded_native_RED_controls": 4,
+    "pre_change_cold_lookup_native_RED_controls": 4,
+    "accepted_native_controls_not_repeated": true,
+    "native_input_snapshot_used": false,
+    "private_names_or_payloads_published": false,
+    "cold_live_initializer_verified": false,
+    "delayed_VM_live_provider_wiring_verified": false,
+    "live_Android_JVM_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

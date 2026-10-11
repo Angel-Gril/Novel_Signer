@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：cold encoded SDK与initialized live lookup
+
+SDK getter 52项对照/9项回滚，完整lookup组合10项对照/4项回滚通过。
+encoded/plain cache独立，共用十进制转换；cold属性缺失→SDK0以及
+SDK27/30的完整JNI清理、scope、MD5输出均一致。singleton136仍须
+初始化。cold live initializer、VM/worker live provider接线、完整
+signer、fresh输出和线上矩阵继续。见 [cold SDK报告](REQUEST_JNI_STARTUP_WORKERS.md#680-cold-encoded-sdk-getter-与实际-live-lookup2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：实际 initialized live Java lookup
 
 两基址×SDK27/30通过48项完整helper对照/11项回滚；binary MD5hex、

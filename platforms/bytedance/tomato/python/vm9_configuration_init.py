@@ -312,8 +312,13 @@ def get_cached_sdk(pages, *, image_base, read_property, buffer_address):
     if not isinstance(raw,bytes) or len(raw)>91 or b'\0' in raw:
         raise RefillUnsupported('SDK property must fit a native 92-byte buffer')
     _write_span(staged,buffer_address,raw+b'\0')
-    # +0x2771bc reads the existing singleton twice before plain conversion.
-    # Its cold construction/instrumentation branches are outside this helper.
+    n=_sdk_property_number(staged,image_base,raw)
+    if n>0:_w(staged,image_base+0x3DF148,n,4)
+    staged.commit();return max(0,n)
+
+
+def _sdk_property_number(staged,image_base,raw):
+    """Shared bounded +2771bc conversion with initialized singleton136."""
     guard=_read_span(staged,image_base+0x3D1680,2)
     if not guard[0] and guard[1]!=1:
         raise RefillUnsupported('SDK conversion requires an initialized singleton136')
@@ -330,8 +335,43 @@ def get_cached_sdk(pages, *, image_base, read_property, buffer_address):
     if negative:n=-n
     if not -0x80000000<=n<=0x7FFFFFFF:
         raise RefillUnsupported('SDK decimal overflow is unsupported')
-    if n>0:_w(staged,image_base+0x3DF148,n,4)
-    staged.commit();return max(0,n)
+    return n
+
+
+def get_encoded_sdk(pages, *, image_base, entry_stack_address,
+        find_property=None, read_property=None):
+    """+1cfaf8: encoded SDK cache and cold 256-byte property buffer.
+
+    Property find/read are explicit services; read writes guest buffer and
+    its return word is ignored. Positive signed W0 is cached. Conversion
+    shares +2771bc's owner with the plain getter; a cold singleton136 or its
+    active instrumentation is refused. Physical spills remain outside scope.
+    """
+    if (type(entry_stack_address) is not int or entry_stack_address<0x160
+            or entry_stack_address>=1<<64 or entry_stack_address&15):
+        raise RefillUnsupported('encoded SDK getter requires an aligned guest stack')
+    objects._image_address(image_base,0x37B260)
+    p=_PageTransaction(pages);pc=image_base+0x1CFAF8
+    d=(((((~pc|0xA060400A021040)&0xA061440A061440)+(pc&0x10400040400))|0x1010104)^0xFF5F9EBBF4067864)&MASK64
+    def resolve(offset):return (_u(p,image_base+offset)+d)&MASK64
+    if not _u(p,resolve(0x37B248),4):
+        objects.decode_masked_bytes(p,source_address=resolve(0x37B250),destination_address=resolve(0x37B240),
+            mask_address=resolve(0x37B258),max_bytes=0x1000)
+        _w(p,resolve(0x37B248),1,4)
+    cache=resolve(0x37B260);value=_u(p,cache,4)
+    if value:p.commit();return objects._s32(value)
+    buffer=entry_stack_address-0x160;_write_span(p,buffer,bytes(256))
+    if not callable(find_property):raise RefillUnsupported('encoded SDK getter requires a property find service')
+    prop=find_property(p,resolve(0x37B240))
+    if type(prop) is not int or not 0<=prop<=MASK64:
+        raise RefillUnsupported('SDK property reference must fit uint64')
+    if prop:
+        if not callable(read_property):raise RefillUnsupported('encoded SDK getter requires a property read service')
+        read_property(p,prop,buffer)
+    raw=objects._cstring(p,buffer,256)[:-1]
+    value=_sdk_property_number(p,image_base,raw)
+    if value>0:_w(p,resolve(0x37B260),value,4)
+    p.commit();return max(0,value)
 
 
 def initialize_unavailable_logger(pages, *, image_base, read_property, syscall,

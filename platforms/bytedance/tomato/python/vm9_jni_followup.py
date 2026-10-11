@@ -2,7 +2,7 @@
 
 Guest ELF supplies bytecode, encoded lazy strings and CRC tables. The absent
 object path and initialized live lookup retain their native reference order.
-Live lookup accepts a warm encoded SDK cache and explicit JNI services;
+Live lookup accepts encoded SDK cache/property and explicit JNI services;
 the cold live initializer and real JVM remain separate boundaries. Providers
 must stage their own effects; no host thread is run.
 """
@@ -70,12 +70,13 @@ def initialize_absent_object(p,*,base,sp,receiver,allocate,free,read_property,sy
 
 def recover_absent_java_string(pages,*,image_base,entry_stack_address,receiver_address,output_reference_address,
  thread_pointer,thread_id,allocate,free,get_tls,register_destructor,invoke_javavm,read_property,system,
- invoke_jni=None,calloc=None,reallocate=None,diagnostic_observer=None,max_payload_bytes=0x100000):
+ invoke_jni=None,calloc=None,reallocate=None,diagnostic_observer=None,max_payload_bytes=0x100000,
+ find_sdk_property=None,read_sdk_property=None):
  """+21cbec: existing absent branch or initialized live binary lookup.
 
  The historical API name is retained for delayed callable consumers. Live
- lookup requires explicit JNI/calloc services and the original warm SDK
- cache. Page refusal cannot undo external JNI or allocation ledgers.
+ lookup requires explicit JNI/calloc services. A cold SDK cache requires
+ property services and initialized singleton136. Page refusal cannot undo external JNI or allocation ledgers.
  """
  p=_PageTransaction(pages);base=image_base;sp=entry_stack_address;receiver=receiver_address;out=output_reference_address
  if sp&15:raise RefillUnsupported('follow-up helper SP is unaligned')
@@ -88,7 +89,7 @@ def recover_absent_java_string(pages,*,image_base,entry_stack_address,receiver_a
   _recover_live_java_string(p,base=base,sp=sp,receiver=receiver,out=out,environment_pointer=env.environment,
    thread_pointer=thread_pointer,thread_id=thread_id,allocate=allocate,free=free,
    invoke_jni=invoke_jni,calloc=calloc,reallocate=reallocate,diagnostic_observer=diagnostic_observer,
-   max_payload_bytes=max_payload_bytes)
+   max_payload_bytes=max_payload_bytes,find_sdk_property=find_sdk_property,read_sdk_property=read_sdk_property)
   p.commit();return
  initializer=encoded(p,base,d,0x37E9E8)
  if initializer!=base+0x2191D4:raise RefillUnsupported('follow-up initializer target is unrecovered')
@@ -110,26 +111,18 @@ def recover_absent_java_string(pages,*,image_base,entry_stack_address,receiver_a
  p.commit()
 
 
-def _warm_live_lookup_sdk(p,base):
- """+1cfaf8 encoded SDK getter; only its already populated cache is accepted."""
- pc=base+0x1CFAF8
- d=(((((~pc|0xA060400A021040)&0xA061440A061440)+(pc&0x10400040400))|0x1010104)^0xFF5F9EBBF4067864)&MASK64
- lazy(p,base,d,0x37B240,0x37B248)
- value=u(p,encoded(p,base,d,0x37B260),4)
- if not value:raise RefillUnsupported('live lookup requires the encoded warm SDK cache')
- return objects._s32(value)
-
-
 def _recover_live_java_string(p,*,base,sp,receiver,out,environment_pointer,
- thread_pointer,thread_id,allocate,free,invoke_jni,calloc,reallocate,diagnostic_observer,max_payload_bytes):
+ thread_pointer,thread_id,allocate,free,invoke_jni,calloc,reallocate,diagnostic_observer,max_payload_bytes,
+ find_sdk_property,read_sdk_property):
  """Compose +21cbec's live object branch, with explicit JNI services.
 
- The initialized object and warm encoded SDK cache are inputs. Java members
+ The initialized object and explicit SDK/JNI services are inputs. Members
  are decoded from guest ELF. No JVM or Java object graph is invented here.
  """
  if not callable(invoke_jni):raise RefillUnsupported('live Java lookup requires an explicit JNI provider')
  d=delta(base,0x21CBEC);call_sp=sp-0x1D0;env=environment_pointer;status=sp-0x130
- sdk=_warm_live_lookup_sdk(p,base)
+ sdk=configuration.get_encoded_sdk(p,image_base=base,entry_stack_address=call_sp,
+  find_property=find_sdk_property,read_property=read_sdk_property)
  # +21dc8c copies the two slot pointers and marks the array local as owned.
  w(p,sp-0x160,env);w(p,sp-0x150,0)
  for aggregate in (sp-0x190,sp-0x180):

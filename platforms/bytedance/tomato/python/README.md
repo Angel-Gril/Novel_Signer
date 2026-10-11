@@ -390,6 +390,8 @@ Actual diagnostic string reference scopes and the MD5 temporary reference lifecy
 
 Initialized live Java lookup passes 48 native/Python controls and 11 rollback guards across both SDK paths. Binary MD5 output, local cleanup, scope bytes and ordered services match. Cold initialization, live worker wiring and the complete signer remain unfinished. See the [live lookup report](../REQUEST_JNI_STARTUP_WORKERS.md#679-已初始化对象的实际-live-java-lookup2026-10-11-asiashanghai).
 
+Cold encoded SDK lookup now passes 52 getter controls and 9 rollback guards; its initialized Java lookup composition passes another 10 controls and 4 guards. Encoded and plain caches remain independent and share decimal conversion. Cold live initialization, worker wiring and the complete signer remain unfinished. See the [cold SDK report](../REQUEST_JNI_STARTUP_WORKERS.md#680-cold-encoded-sdk-getter-与实际-live-lookup2026-10-11-asiashanghai).
+
 
 
 

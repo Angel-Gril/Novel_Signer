@@ -3626,6 +3626,43 @@ provider 接线、完整独立 signer、fresh 签名、真实 Android JVM 和线
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_live_lookup_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <live-lookup-evidence.json>
 ```
 
+## 6.80 cold encoded SDK getter 与实际 live lookup（2026-10-11 Asia/Shanghai）
+
+`vm9_configuration_init.get_encoded_sdk` 恢复 `+1CFAF8` 的属性查找、
+属性读取及冷缓存转换。encoded cache `+3DF140` 与 plain cache
+`+3DF148` 独立；两者共用既有 `+2771BC` 十进制转换 owner。
+冷 encoded getter 清零 entrySP−0x160 的256字节 buffer，显式调用
+find/read provider，忽略 read 的返回字并读取其写入的 guest buffer。
+转换仍要求已初始化 singleton136，并明确拒绝 active instrumentation。
+
+SDK getter 通过 **52项原生/Python对照、9项页面回滚**：两基址各13种
+encoded 与13种 plain 情况，包括已有有符号缓存、属性缺失、空值、
+SDK27/30、空白与后缀、负值、无效值、有符号边界及 read status 忽略。
+原生返回、全部 guest payload/image 页面、property buffer、缓存字与
+有序属性服务一致。plain getter 的旧行为同时回归通过。
+
+`recover_absent_java_string` 继续使用实际 initialized live lookup，
+并接收可选 `find_sdk_property` / `read_sdk_property`，通过
+**10项完整原生/Python对照、4项页面回滚**。两基址分别覆盖 cold
+SDK27/30、属性缺失→SDK0，以及 warm SDK27/30。全部 guest payload/
+image 页面、JNI/JavaVM/分配/free/锁顺序、free前字节和24字节 scope
+退出内容一致；binary MD5 hex 与 count1 一致。新增服务参数未改变
+历史 absent 分支执行语义。
+
+合计 **62项对照、13项回滚**，分组证据保留52/9与10/4的各自范围。
+两组各有4项改动前 native RED；已接受原生测试未重复执行。所有名称
+从 guest ELF 解码；native snapshot 不作 Python 输入。页面回滚无法
+撤销外部 provider effects。
+
+**实际 cold live initializer `+2191D4`、delayed VM/worker live provider
+接线、完整独立 signer、fresh签名、真实Android JVM与线上矩阵仍未完成。**
+见 [SDK与lookup分组证据](evidence/vm9_encoded_sdk_live_lookup_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_encoded_sdk_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <sdk-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_cold_sdk_lookup_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <cold-lookup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
