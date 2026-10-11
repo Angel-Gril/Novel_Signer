@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：root 构造、全局数据搬移与运行时链接
+
+62 个原生/Python root 对照、34 项回滚检查通过。两份 fresh 实际模块
+含 278 个描述符、109066 条运行时指令；每个 root 的 544 次分配、
+52 次释放和 3 个 finalizer 匹配。全页、212 字节临时存储和有序发布
+效果一致，旧 owner AST 未变。继续 factory/bootstrap、独立 signer、
+新鲜输出及线上验收。
+见 [root 报告](REQUEST_JNI_STARTUP_WORKERS.md#652-root-构造全局数据搬移与运行时链接2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：imported descriptor 解析与构造
 
 106 个原生/Python descriptor 对照、72 个 batch、36 项回滚检查通过。

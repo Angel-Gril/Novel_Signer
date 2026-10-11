@@ -2731,6 +2731,43 @@ flattened control cells、原生 stack/TLS/OS 或非空注册表/过滤器路径
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_imported_descriptor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <imported-descriptor-evidence.json>
 ```
 
+## 6.52 root 构造、全局数据搬移与运行时链接（2026-10-11 Asia/Shanghai）
+
+`construct_parser_root` 恢复实际 +2cafd0 的空 names / registration-filter
+路径。构造 borrowed-name 函数和全局绑定 map，搬移 converted data
+vector，写入全局地址，依次构造 imported / defined descriptor，建立
+owned name/index map，再发布 root96 并链接运行时指令。发布后按原生
+顺序释放临时绑定 map。重复绑定和导出名称保留第一个值。
+
+root96 包含 descriptor vector24、import count8、owned name map40
+和 data vector24；搬移时修正首桶 predecessor。global count 不匹配
+时在分配前发布空指针。其他异常图、缺失绑定/builder、索引、别名、
+预算和写入失败全页回滚；未恢复的原生 trap 路径保持拒绝。
+
+干净 `81099d3` 绑定 **9 项修改前真实原生 RED**。正式验证通过
+**62 个原生/Python root 对照、34 项回滚检查**。两基址均从 fresh ELF
+经独立 Python reader/parse 生成完整实际模块，使用原始构造器指令
+提取的 16 项函数绑定和 22 项全局绑定：合计 **278 个描述符、109066
+条运行时指令**。每个实际 root 的 **544 次分配、52 次释放、3 个
+finalizer** 完全一致。
+
+完整 guest/heap/image pages、212 字节 root 临时存储、全局数据搬移、
+运行时链接、每次分配/释放的 owner 发布字节和 finalizers 均匹配。
+额外恢复桶分配、imported frame alias 和名称复制 helper 留下的
+FP/LR/index 字节，支持 heap 短名转换、连续构造和重复导入后的复用。
+合成控制覆盖空模块、指令函数、外部/builtin/空回调、重复绑定/导出、
+全局数据、短/长及 heap 短名、padding、SP 和 thread ID 变化。
+移除新增结果类型和 API 后旧 owner AST 完全一致。
+
+不使用原生快照输入，不发布名称或 payload。未比较整个原生
+stack/TLS/OS；非空名称过滤器和 registration flag 路径仍拒绝。
+factory/bootstrap、独立 signer、新鲜输出和线上验收仍待完成。
+见 [root 构造证据](evidence/vm9_alternative_root_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_root_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <root-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

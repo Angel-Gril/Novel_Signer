@@ -5224,3 +5224,213 @@ def construct_parser_imported_descriptor(pages, *, image_base, import_address,
         _write_span(m.p,descriptor,_read_span(m.p,temporary,32));put(descriptor+56,0)
     put(output_address,descriptor);m.p.commit()
     return ParserImportedDescriptorResult(descriptor,function,source,tuple(m.effects),tuple(finalizers))
+
+
+@dataclass(frozen=True)
+class ParserRootResult:
+    address: int
+    descriptor_count: int
+    imported_count: int
+    instruction_count: int
+    effects: tuple[ReaderAstEffect, ...]
+    finalizers: tuple[tuple[int, int, int], ...]
+
+
+def construct_parser_root(pages, *, image_base, module_address, output_address,
+        function_bindings_address, function_binding_count, global_bindings_address,
+        global_binding_count, entry_stack_address, thread_id, allocate=None,
+        max_functions=65536, max_instructions=1048576,
+        max_vector_bytes=16*1024*1024, reserved_regions=()):
+    """Actual +2cafd0 root construction for empty name/registration filters.
+
+    Build borrowed function/global maps, move the converted data vector, apply
+    global relocations, construct imported and defined descriptors, and create
+    the owned name/index map. Move these into a root96, link runtime records,
+    publish the root, then release temporary binding maps in native order.
+    Binding inputs are 24-byte name-pointer/value/zero-flag records. Names use
+    the recovered hash through length 32. Duplicate binding or export names
+    keep the first value, matching the original insertion helpers.
+
+    A global-count mismatch naturally publishes zero before allocation. Other
+    malformed graphs, incomplete function slots, missing bindings/builders,
+    registration flags and unsupported native trap paths fail closed. All
+    pages roll back on rejection or write failure. allocate is a pure address
+    plan; frees and finalizers are logical effects. Consumed child temporaries
+    derive from SP-0x1a0; flattened control frames and full stack/TLS/OS are not
+    outputs. This entry does not perform reader/parse, cleanup or VM execution.
+    """
+    if type(entry_stack_address) is not int or not 0x1400<=entry_stack_address<=MASK64 or entry_stack_address&15:
+        raise RefillUnsupported('parser root requires an aligned incoming SP')
+    if type(thread_id) is not int or not 1<=thread_id<=0x7FFFFFFF:
+        raise RefillUnsupported('parser root requires a positive serial thread ID')
+    for value in (function_binding_count,global_binding_count,max_functions):
+        if type(value) is not int or not 0<=value<=65536:
+            raise RefillUnsupported('parser root binding/function bound is invalid')
+    if type(max_instructions) is not int or not 0<=max_instructions<=1048576:
+        raise RefillUnsupported('parser root instruction bound is invalid')
+    m=_ReaderAstMemory(pages,image_base,output_address,8,4096,max_vector_bytes,reserved_regions)
+    m.claim(module_address,128);m.claim(output_address,8)
+    def u(address,width=8):return _u(m.p,address,width)
+    def put(address,value,width=8):_write_span(m.p,address,(value&((1<<(width*8))-1)).to_bytes(width,'little'))
+    offsets,offsets_end,_=m.vector(module_address+80,4)
+    if global_binding_count!=(offsets_end-offsets)//4:
+        put(output_address,0);m.p.commit();return ParserRootResult(0,0,0,0,(),())
+    sp=entry_stack_address;child_sp=sp-0x1A0;m.claim(child_sp,0x1A0);m.claim(sp-0x240,24);m.claim(sp-0x260,16)
+    definitions,definitions_end,_=m.vector(module_address+8,64)
+    imports,imports_end,_=m.vector(module_address+32,64)
+    exports,exports_end,_=m.vector(module_address+56,32)
+    data_begin,data_end,_=m.vector(module_address+104)
+    count=u(module_address,4)
+    if count>max_functions or count*8>max_vector_bytes or (imports_end-imports)//64>65536:
+        raise RefillUnsupported('parser root converted module exceeds its bounds')
+    retained_strings=set()
+    def owned(address):
+        header=_read_span(m.p,address,24)
+        if header[0]&1:
+            capacity=u(address)&~1;length=u(address+8);pointer=u(address+16)
+            if not length<capacity<=max_vector_bytes:
+                raise RefillUnsupported('parser root owned name capacity is invalid')
+            if (pointer,capacity) not in retained_strings:
+                m.claim(pointer,capacity);retained_strings.add((pointer,capacity))
+        else:
+            length=header[0]>>1;pointer=address+1
+            if length>22:raise RefillUnsupported('parser root inline name is invalid')
+        if length>32:raise RefillUnsupported('parser root name exceeds the recovered hash range')
+        return _read_span(m.p,pointer,length)
+    names={};indices=set();global_names=[]
+    for record in range(imports,imports_end,64):
+        names[record+24]=owned(record+24);kind=u(record+48,4)
+        if kind==3:global_names.append(names[record+24]);continue
+        if kind!=0:raise RefillUnsupported('parser root converted import kind is unsupported')
+        index=u(record+56,4)
+        if index>=count or index in indices:raise RefillUnsupported('parser root import index is invalid or duplicated')
+        indices.add(index)
+    imported_count=len(indices)
+    for record in range(definitions,definitions_end,64):
+        names[record+16]=owned(record+16);index=u(record+4,4)
+        if index>=count or index in indices:raise RefillUnsupported('parser root definition index is invalid or duplicated')
+        indices.add(index)
+        m.vector(record+40,12)
+    if len(indices)!=count or len(global_names)!=global_binding_count:
+        raise RefillUnsupported('parser root function/global slots are incomplete')
+    for record in range(exports,exports_end,32):
+        names[record]=owned(record)
+        if u(record+28,4)>=count:raise RefillUnsupported('parser root export index is invalid')
+    for address in range(offsets,offsets_end,4):
+        if u(address,4)+8>data_end-data_begin:
+            raise RefillUnsupported('parser root global relocation exceeds its data vector')
+    def binding_input(address,length):
+        if length:m.claim(address,length*24)
+        rows=[]
+        for index in range(length):
+            source=address+index*24;pointer=u(source)
+            if u(source+16,1):raise RefillUnsupported('parser root registration flags remain unsupported')
+            raw=bytearray()
+            for position in range(33):
+                byte=u(pointer+position,1)
+                if not byte:break
+                raw.append(byte)
+            else:raise RefillUnsupported('parser root borrowed name exceeds its hash range')
+            m.reserved.append((pointer,pointer+len(raw)+1))
+            rows.append((pointer,bytes(raw),u(source+8)))
+        return rows
+    function_rows=binding_input(function_bindings_address,function_binding_count)
+    global_rows=binding_input(global_bindings_address,global_binding_count)
+    global_keys={}
+    for _,key,value in global_rows:global_keys.setdefault(key,value)
+    if any(key not in global_keys for key in global_names):
+        raise RefillUnsupported('parser root global binding is missing')
+    def plan(size):
+        if not 0<size<=max_vector_bytes or not callable(allocate):
+            raise RefillUnsupported('parser root requires a bounded pure allocation plan')
+        address=allocate(size);m.claim(address,size);return address
+    def alloc(size):return m.allocate(size,allocate)
+    def capacity(number):
+        if number==1:return 2
+        if not number&(number-1):return number
+        number|=1
+        while any(number%factor==0 for factor in range(3,int(number**0.5)+1,2)):number+=2
+        return number
+    def empty(header):_write_span(m.p,header,bytes(32));put(header+32,0x3F800000,4)
+    def reserve(header,number):
+        number=capacity(number)
+        if number:
+            pointer=alloc(number*8);_write_span(m.p,pointer,bytes(number*8));put(header,pointer);put(header+8,number)
+            # +32a1f4 saves the bucket helper's FP. A later defined name
+            # copied from a heap-short string can retain these eight bytes.
+            put(sp-0x230,sp-0x200)
+    def insert(header,node):
+        bucket=u(node+8)%u(header+8);cell=u(header)+bucket*8;previous=u(cell)
+        if previous:put(node,u(previous));put(previous,node)
+        else:
+            following=u(header+16);put(node,following);put(header+16,node);put(cell,header+16)
+            if following:put(u(header)+(u(following+8)%u(header+8))*8,node)
+        put(header+24,u(header+24)+1)
+    def borrowed_map(header,rows):
+        empty(header);reserve(header,len(rows)+3);keys=set()
+        for pointer,key,value in rows:
+            node=alloc(40);hashed=hash_descriptor_name(key)
+            _write_span(m.p,node,b''.join(x.to_bytes(8,'little') for x in (0,hashed,pointer,len(key),value)))
+            if key in keys:m.emit('free',node,40)
+            else:keys.add(key);insert(header,node)
+    exported=set()
+    def export(header,name,index,index_address):
+        key=names[name]
+        if key in exported:return
+        node=alloc(48);m.copy_string_value(node+16,_read_span(m.p,name,24),allocate)
+        put(node,0);put(node+8,hash_descriptor_name(key));put(node+40,index);insert(header,node);exported.add(key)
+        # +2cd234 calls +32a9c4: saved FP/LR and X21 survive until the
+        # next defined descriptor consumes this same string temporary.
+        put(sp-0x240,sp-0x200);put(sp-0x238,image_base+0x2CD238);put(sp-0x230,index_address)
+    finalizers=[]
+    def nested(result):
+        for effect in result.effects:m.emit(effect.kind,effect.address,effect.size)
+        finalizers.extend(result.finalizers)
+        if not result.address:raise RefillUnsupported('parser root descriptor construction reached an unsupported trap')
+    name_map=sp-0xA0;flag_map=sp-0xD0;function_map=sp-0x100;global_map=sp-0x130;export_map=sp-0x170
+    vector=sp-0x148;temporary=sp-0x178
+    empty(name_map);empty(flag_map)
+    borrowed_map(function_map,function_rows);borrowed_map(global_map,global_rows)
+    data=_read_span(m.p,module_address+104,24);_write_span(m.p,module_address+104,bytes(24))
+    array=alloc(count*8) if count else 0
+    if array:_write_span(m.p,array,bytes(count*8))
+    m.publish(vector,(array,array+count*8,array+count*8));empty(export_map)
+    reserve(export_map,(imports_end-imports)//64+(exports_end-exports)//32)
+    global_index=0;descriptors=[];instruction_count=0
+    for record in range(imports,imports_end,64):
+        if u(record+48,4)==3:
+            put(data_begin+u(offsets+global_index*4,4),global_keys[names[record+24]]);global_index+=1
+        else:
+            result=construct_parser_imported_descriptor(m.p,image_base=image_base,import_address=record,
+                bindings_address=function_map,names_address=flag_map,output_address=temporary,
+                entry_stack_address=child_sp,thread_id=thread_id,allocate=plan,max_bindings=function_binding_count,
+                max_vector_bytes=max_vector_bytes)
+            nested(result);put(array+u(record+56,4)*8,result.address);put(temporary,0)
+            # Imported aliases retain the jump-table base. +2dc44c/+2dc454
+            # feed the first wide runtime variant as well as name padding.
+            for offset in (0x260,0x258,0x240,0x238,0x230):put(sp-offset,image_base+0x3D0AB0)
+            export(export_map,record+24,u(record+56,4),record+56)
+    for record in range(definitions,definitions_end,64):
+        result=construct_parser_defined_descriptor(m.p,image_base=image_base,function_address=record,
+            names_address=name_map,output_address=temporary,entry_stack_address=child_sp,thread_id=thread_id,
+            allocate=plan,max_instructions=max_instructions-instruction_count,max_vector_bytes=max_vector_bytes)
+        nested(result);instruction_count+=result.instruction_count
+        put(array+u(record+4,4)*8,result.address);put(temporary,0);descriptors.append(result.address)
+    for record in range(exports,exports_end,32):export(export_map,record,u(record+28,4),record+28)
+    root=alloc(96);_write_span(m.p,root,_read_span(m.p,vector,24));put(root+24,imported_count)
+    _write_span(m.p,root+32,_read_span(m.p,export_map,36));_write_span(m.p,root+72,data)
+    first=u(root+48)
+    if first:put(u(root+32)+(u(first+8)%u(root+40))*8,root+48)
+    _write_span(m.p,vector,bytes(24));_write_span(m.p,export_map,bytes(32))
+    for descriptor in descriptors:
+        link_parser_runtime_descriptor(m.p,image_base=image_base,descriptor_address=descriptor,root_address=root,
+            max_instructions=max_instructions,max_vector_bytes=max_vector_bytes)
+    put(output_address,root)
+    for header in (global_map,function_map,flag_map,name_map):
+        first=u(header+16);buckets=u(header);bucket_count=u(header+8)
+        while first:
+            following=u(first);m.emit('free',first,40 if header in (global_map,function_map) else 32);first=following
+        put(header,0)
+        if buckets:m.emit('free',buckets,bucket_count*8)
+    m.p.commit()
+    return ParserRootResult(root,count,imported_count,instruction_count,tuple(m.effects),tuple(finalizers))

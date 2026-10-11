@@ -334,6 +334,8 @@ is covered by the module opt-in below. See the [global expression report](../REQ
 
 `construct_parser_imported_descriptor` now resolves external and builtin functions, initializes the empty registry and constructs kind-0 descriptors. 106 native/Python controls in 72 batches and 36 rollback checks pass. Two fresh actual modules contribute all 36 function imports using ELF constructor callback references. Full pages, consumed name temporaries and ordered publication effects match. Complete root, factory/bootstrap and signer remain unfinished. See the [defined descriptor report](../REQUEST_JNI_STARTUP_WORKERS.md#651-imported-descriptor-解析与构造2026-10-11-asiashanghai).
 
+`construct_parser_root` now composes binding maps, moved global data, imported/defined descriptors, owned name indexes and runtime linking. 62 native/Python root controls and 34 rollback checks pass. Two fresh complete actual modules contribute 278 descriptors and 109066 runtime instructions; each matches 544 allocations, 52 frees and 3 finalizers. Whole pages and consumed root temporaries match. Factory/bootstrap and signer remain unfinished. See the [root report](../REQUEST_JNI_STARTUP_WORKERS.md#652-root-构造全局数据搬移与运行时链接2026-10-11-asiashanghai).
+
 
 
 

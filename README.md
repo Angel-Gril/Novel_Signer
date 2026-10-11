@@ -203,7 +203,9 @@ builtin function catalog 通过 **32 个原生对照、198 个哈希对照、34 
 恢复 73 项名称/函数绑定。见 [builtin catalog 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#650-builtin-function-catalog-与名称哈希2026-10-11-asiashanghai)。
 imported descriptor 通过 **106 个原生对照、36 项回滚检查**，
 含两份 fresh 模块的全部 36 项函数导入。见 [imported descriptor 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#651-imported-descriptor-解析与构造2026-10-11-asiashanghai)。
-root/descriptor、factory/bootstrap 和 signer 仍未完成。见
+root 构造通过 **62 个原生对照、34 项回滚检查**，
+含两份实际模块的 278 个描述符、109066 条指令。见 [root 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#652-root-构造全局数据搬移与运行时链接2026-10-11-asiashanghai)。
+factory/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
 [Data 创建报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#614-data-record-创建与追加2026-10-09-asiashanghai)。
