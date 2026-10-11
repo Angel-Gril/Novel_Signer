@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：实际 initialized live Java lookup
+
+两基址×SDK27/30通过48项完整helper对照/11项回滚；binary MD5hex、
+JNI local清理、全部payload/image页面与scope/effects顺序一致。cold
+initializer/encoded SDK、live worker接线、完整signer和fresh/live继续。
+见 [live lookup报告](REQUEST_JNI_STARTUP_WORKERS.md#679-已初始化对象的实际-live-java-lookup2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：实际 reference scopes 与 MD5 生命周期
 
 共享作用域接口通过64项对照/12项回滚，MD5实际生命周期通过16项对照/

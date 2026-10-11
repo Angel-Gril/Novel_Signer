@@ -3595,6 +3595,37 @@ python -B platforms/bytedance/tomato/python/verify_vm9_reference_scopes_fresh_20
 python -B platforms/bytedance/tomato/python/verify_vm9_scoped_digest_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <scoped-md5-evidence.json>
 ```
 
+## 6.79 已初始化对象的实际 live Java lookup（2026-10-11 Asia/Shanghai）
+
+`vm9_jni_followup.recover_absent_java_string` 保留既有 absent 分支，并恢复
+`+21CBEC` 的已初始化 Java 对象路径。SDK≤27 读取 field；SDK>27 读取
+中间 object 后调用无参数 method。两者继续读取 object array 的 element0、
+调用 byte-array method、构造 binary string、计算 MD5 hex，并按原生顺序
+复制和销毁 owning reference、删除 byte array/element/array locals。
+
+两基址×SDK27/30，共 **48 项原生/Python 对照、11 项页面回滚**通过。
+覆盖内嵌 NUL、全部字节值、NULL field/element/method、空数组/byte array、
+length/element/method exception、calloc NULL 和 string-buffer malloc NULL。
+全部 guest payload/image 页面、JNI/JavaVM/分配/free/锁顺序、free 前字节、
+每次 scope 退出的24字节一致；成功输出 MD5 hex、count1。沿用四项实际
+原生 RED，旧 owner 明确拒绝 live 分支且所有页面未变。
+
+SDK getter 使用 `+1CFAF8` 的 encoded table/cache，独立于既有 plain
+getter 的 cache；本节仅接受 warm cache。所有 member name、signature、
+error source 和 alphabet 都来自 guest ELF，不发布 literal。MD5 算法
+复用原 owner，同时恢复其 raw scratch，以及 field return address、
+canary 和 reference slot 进入后续 scope padding 的实际重叠。
+新增11项 guards 另行运行，未重复已接受的48项 native controls。
+
+**cold live initializer、cold encoded SDK conversion、delayed VM 的 live
+provider 接线、完整独立 signer、fresh 签名、真实 Android JVM 和线上矩阵
+仍未完成。** 本节使用 synthetic JNI，不把 native snapshot 用作 Python
+输入。页面回滚无法撤销外部 provider effects。见 [live lookup 证据](evidence/vm9_jni_live_lookup_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_live_lookup_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <live-lookup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

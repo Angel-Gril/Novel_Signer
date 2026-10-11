@@ -95,7 +95,10 @@ class _DigestLifecycle:
             thread_pointer=self.thread_pointer, thread_id=self.thread_id,
             allocate=self.allocate, diagnostic_observer=self.observer)
 
-    def construct(self, p, string, data):
+    def construct(self, p, string, data, digest):
+        # +243bdc publishes the raw digest to the caller's native scratch;
+        # later callers can reuse those bytes as scope padding.
+        _write_span(p,self.stack-0x48,digest)
         # MD5 finalization leaves its last padded block in the guest context.
         # Bytes 36..39 become the later constructor scope's preserved padding.
         # This restores that overlap without implementing MD5 rounds again.
@@ -113,6 +116,7 @@ class _DigestLifecycle:
         # +162620 sees a cleared output pair, so its assignment skips cleanup
         # and preserves the already-zero pair until after scope entry.
         scope=self.stack-0xD0
+        _write_span(p,self.stack-0xB8,_read_span(p,self.thread_pointer+0x28,8))
         pointer=int.from_bytes(_read_span(p,self.stack-0x58,8),'little')
         _enter(p,scope,pointer,self.base,self.thread_pointer,self.thread_id,
                self.allocate,self.observer)

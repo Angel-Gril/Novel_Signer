@@ -259,6 +259,8 @@ JNI reference field access, no-argument object methods and local/global/weak cle
 
 Actual diagnostic string reference scopes and the MD5 temporary reference lifecycle pass 80 native/Python controls and 16 rollback guards. The original digest regression matches its accepted result. Actual Python live lookup and the complete signer remain unfinished. See the [reference scope report](REQUEST_JNI_STARTUP_WORKERS.md#678-实际-reference-作用域与-md5-生命周期2026-10-11-asiashanghai).
 
+Initialized live Java lookup passes 48 native/Python controls and 11 rollback guards across both SDK paths. Binary MD5 output, local cleanup, scope bytes and ordered services match. Cold initialization, live worker wiring and the complete signer remain unfinished. See the [live lookup report](REQUEST_JNI_STARTUP_WORKERS.md#679-已初始化对象的实际-live-java-lookup2026-10-11-asiashanghai).
+
 
 
 

@@ -1,10 +1,10 @@
 """Actual delayed JNI callable with two image VMs and bounded Java lookup.
 
-Guest ELF supplies bytecode, encoded lazy strings and CRC tables. The serial
-fixture has an unavailable default Java object and absent log files. Its
-error reference is constructed, hashed, published and destroyed in native
-order. Live Java string conversion and timed queue dispatch remain separate
-boundaries. Providers must stage their own effects; no host thread is run.
+Guest ELF supplies bytecode, encoded lazy strings and CRC tables. The absent
+object path and initialized live lookup retain their native reference order.
+Live lookup accepts a warm encoded SDK cache and explicit JNI services;
+the cold live initializer and real JVM remain separate boundaries. Providers
+must stage their own effects; no host thread is run.
 """
 from dataclasses import dataclass
 from vm9_allocator import _PageTransaction,_read_span,_write_span,RefillUnsupported
@@ -14,6 +14,7 @@ import vm9_diagnostics as diagnostics
 import vm9_logger as logger
 import vm9_configuration_init as configuration
 import vm9_registry as registry
+import vm9_reference_scopes as references
 
 MASK64=(1<<64)-1
 def u(p,a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
@@ -68,15 +69,27 @@ def initialize_absent_object(p,*,base,sp,receiver,allocate,free,read_property,sy
  objects.unlock_uncontended_mutex(p,mutex_address=u(p,scope+8)+8)
 
 def recover_absent_java_string(pages,*,image_base,entry_stack_address,receiver_address,output_reference_address,
- thread_pointer,thread_id,allocate,free,get_tls,register_destructor,invoke_javavm,read_property,system):
+ thread_pointer,thread_id,allocate,free,get_tls,register_destructor,invoke_javavm,read_property,system,
+ invoke_jni=None,calloc=None,reallocate=None,diagnostic_observer=None,max_payload_bytes=0x100000):
+ """+21cbec: existing absent branch or initialized live binary lookup.
+
+ The historical API name is retained for delayed callable consumers. Live
+ lookup requires explicit JNI/calloc services and the original warm SDK
+ cache. Page refusal cannot undo external JNI or allocation ledgers.
+ """
  p=_PageTransaction(pages);base=image_base;sp=entry_stack_address;receiver=receiver_address;out=output_reference_address
  if sp&15:raise RefillUnsupported('follow-up helper SP is unaligned')
- if u(p,receiver+0x28):raise RefillUnsupported('follow-up live Java string branch is unrecovered')
  d=delta(base,0x21CBEC)
  for dest,flag in ((0x37EA28,0x37EA90),*((0x37F1D8+i*8,0x37F218+i*24) for i in range(8))):lazy(p,base,d,dest,flag)
  env=environment.acquire_thread_environment(p,image_base=base,entry_stack_address=sp-0x1D0,
   output_pair_address=sp-0x140,get_tls=get_tls,register_destructor=register_destructor,invoke_javavm=invoke_javavm)
  if not env.environment:raise RefillUnsupported('follow-up NULL environment branch is unrecovered')
+ if u(p,receiver+0x28):
+  _recover_live_java_string(p,base=base,sp=sp,receiver=receiver,out=out,environment_pointer=env.environment,
+   thread_pointer=thread_pointer,thread_id=thread_id,allocate=allocate,free=free,
+   invoke_jni=invoke_jni,calloc=calloc,reallocate=reallocate,diagnostic_observer=diagnostic_observer,
+   max_payload_bytes=max_payload_bytes)
+  p.commit();return
  initializer=encoded(p,base,d,0x37E9E8)
  if initializer!=base+0x2191D4:raise RefillUnsupported('follow-up initializer target is unrecovered')
  initialize_absent_object(p,base=base,sp=sp-0x1D0,receiver=receiver,allocate=allocate,free=free,
@@ -95,6 +108,117 @@ def recover_absent_java_string(pages,*,image_base,entry_stack_address,receiver_a
  objects.construct_reference_wrapper(p,object_address=out,referenced_address=error,allocate=allocate)
  diagnostics.leave_diagnostic_scope(p,object_address=scope,image_base=base,thread_pointer=thread_pointer)
  p.commit()
+
+
+def _warm_live_lookup_sdk(p,base):
+ """+1cfaf8 encoded SDK getter; only its already populated cache is accepted."""
+ pc=base+0x1CFAF8
+ d=(((((~pc|0xA060400A021040)&0xA061440A061440)+(pc&0x10400040400))|0x1010104)^0xFF5F9EBBF4067864)&MASK64
+ lazy(p,base,d,0x37B240,0x37B248)
+ value=u(p,encoded(p,base,d,0x37B260),4)
+ if not value:raise RefillUnsupported('live lookup requires the encoded warm SDK cache')
+ return objects._s32(value)
+
+
+def _recover_live_java_string(p,*,base,sp,receiver,out,environment_pointer,
+ thread_pointer,thread_id,allocate,free,invoke_jni,calloc,reallocate,diagnostic_observer,max_payload_bytes):
+ """Compose +21cbec's live object branch, with explicit JNI services.
+
+ The initialized object and warm encoded SDK cache are inputs. Java members
+ are decoded from guest ELF. No JVM or Java object graph is invented here.
+ """
+ if not callable(invoke_jni):raise RefillUnsupported('live Java lookup requires an explicit JNI provider')
+ d=delta(base,0x21CBEC);call_sp=sp-0x1D0;env=environment_pointer;status=sp-0x130
+ sdk=_warm_live_lookup_sdk(p,base)
+ # +21dc8c copies the two slot pointers and marks the array local as owned.
+ w(p,sp-0x160,env);w(p,sp-0x150,0)
+ for aggregate in (sp-0x190,sp-0x180):
+  w(p,aggregate,sp-0x160);w(p,aggregate+8,sp-0x150)
+ w(p,sp-0x180+16,1,1)
+ if encoded(p,base,d,0x37E9F0)!=base+0x21DC8C or encoded(p,base,d,0x37E9F8)!=base+0x21DCA0:
+  raise RefillUnsupported('live lookup local ownership target is unrecovered')
+ def jni(slot,*args):return environment._invoke_jni(p,env,slot,args,invoke_jni)
+ def field(index):
+  # +26fa04 saves its return address; the upper word later survives in the
+  # error constructor's scope padding. This differs at the high image base.
+  w(p,call_sp-0x48,base+(0x21D66C if index==0 else 0x21D74C))
+  return environment.read_java_reference_field(p,entry_stack_address=call_sp,environment_pointer=env,
+   status_address=status,object_reference=u(p,receiver+0x28),name_address=encoded(p,base,d,0x37F1D8+index*8),
+   signature_address=encoded(p,base,d,0x37F1E0+index*8),invoke_jni=invoke_jni)
+ def method(obj,index):
+  return environment.invoke_no_argument_java_reference_method(p,entry_stack_address=call_sp,environment_pointer=env,
+   status_address=status,object_reference=obj,name_address=encoded(p,base,d,0x37F1D8+index*8),
+   signature_address=encoded(p,base,d,0x37F1E0+index*8),invoke_jni=invoke_jni)
+ def error(source):
+  string=objects._allocate(p,allocate,24)
+  objects.construct_string_object(p,object_address=string,source_address=source,allocate=allocate,
+   vtable_address=base+0x34F5F8,empty_descriptor_address=base+0x6E168)
+  references.construct_scoped_string_reference(p,reference_address=out,string_address=string,
+   entry_stack_address=call_sp,image_base=base,thread_pointer=thread_pointer,thread_id=thread_id,
+   allocate=allocate,diagnostic_observer=diagnostic_observer)
+ def release_array():
+  reference=u(p,sp-0x150)
+  if reference:environment.release_java_reference(p,environment_pointer=u(p,sp-0x160),reference=reference,invoke_jni=invoke_jni)
+ def failed_member(result,intermediate=0):
+  error(encoded(p,base,d,0x37EA28) if result.status_byte==1 else encoded(p,base,d,0x37EA10))
+  if intermediate:jni(0xB8,intermediate)
+  release_array()
+ if sdk<=27:
+  result=field(0);array=result.reference;w(p,sp-0x150,array)
+  if result.status_byte==1 or not array:failed_member(result);return
+ else:
+  result=field(2);intermediate=result.reference
+  if result.status_byte==1 or not intermediate:failed_member(result,intermediate);return
+  result=method(intermediate,4);array=result.reference;w(p,sp-0x150,array)
+  if result.status_byte==1 or not array:failed_member(result,intermediate);return
+  jni(0xB8,intermediate)
+ length=jni(0x558,array)&0xFFFFFFFF
+ if environment.check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni):
+  error(encoded(p,base,d,0x37EA28));release_array();return
+ if not length:error(encoded(p,base,d,0x37EA10));release_array();return
+ element=jni(0x568,array,0)
+ if environment.check_and_clear_java_exception(p,environment_pointer=env,invoke_jni=invoke_jni):
+  error(encoded(p,base,d,0x37EA28))
+  if element:jni(0xB8,element)
+  release_array();return
+ if not element:error(encoded(p,base,d,0x37EA10));release_array();return
+ result=method(element,6);binary=result.reference
+ if result.status_byte==1 or not binary:
+  error(encoded(p,base,d,0x37EA28) if result.status_byte==1 else encoded(p,base,d,0x37EA10))
+  if binary:jni(0xB8,binary)
+  jni(0xB8,element);release_array();return
+ binary_ref=sp-0x1A0;temporary=sp-0x1B0;digest_ref=sp-0x1C0;outer=sp-0x1D0
+ kw=dict(entry_stack_address=call_sp,image_base=base,thread_pointer=thread_pointer,
+  thread_id=thread_id,allocate=allocate,diagnostic_observer=diagnostic_observer)
+ environment.construct_java_byte_array_reference(p,output_reference_address=binary_ref,
+  environment_pointer=env,array_reference=binary,invoke_jni=invoke_jni,calloc=calloc,free=free,
+  max_payload_bytes=max_payload_bytes,**kw)
+ def empty(reference):
+  string=u(p,reference)
+  return not string or not u(p,string+12,4) or not u(p,string+16) or configuration.string_equals_cstring(
+   p,object_address=string,cstring_address=base+0x6FE64)
+ references.copy_scoped_string_reference(p,destination_address=temporary,source_address=binary_ref,**kw)
+ no_binary=empty(temporary)
+ # The copy helper's saved canary overlaps the next destructor scope padding.
+ _write_span(p,call_sp-0x38,_read_span(p,thread_pointer+0x28,8))
+ references.release_scoped_string_reference(p,reference_address=temporary,free=free,**kw)
+ if no_binary:error(encoded(p,base,d,0x37EA10))
+ else:
+  references.construct_scoped_digest_reference(p,output_reference_address=digest_ref,source_object_address=u(p,binary_ref),
+   reallocate=reallocate,free=free,max_source_bytes=max_payload_bytes,**kw)
+  references.copy_scoped_string_reference(p,destination_address=outer,source_address=digest_ref,**kw)
+  no_digest=empty(outer)
+  _write_span(p,call_sp-0x38,_read_span(p,thread_pointer+0x28,8))
+  references.release_scoped_string_reference(p,reference_address=outer,free=free,**kw)
+  if not no_digest:
+   # Diagnostic enter in +15e1a8 saves its X19 (reference slot) at SP-0x48.
+   # The subsequent copy scope preserves the high word of that saved slot.
+   w(p,call_sp-0x48,outer)
+   references.copy_scoped_string_reference(p,destination_address=out,source_address=digest_ref,**kw)
+   _write_span(p,call_sp-0x38,_read_span(p,thread_pointer+0x28,8))
+  references.release_scoped_string_reference(p,reference_address=digest_ref,free=free,**kw)
+ references.release_scoped_string_reference(p,reference_address=binary_ref,free=free,**kw)
+ jni(0xB8,binary);jni(0xB8,element);release_array()
 
 @dataclass(frozen=True)
 class FollowupResult:

@@ -757,7 +757,7 @@ def construct_digest_reference(
             count = _allocate(transaction, allocate, 4)
             _write_span(transaction, count, (1).to_bytes(4, "little"))
         else:
-            count = reference_lifecycle.construct(transaction, string, data)
+            count = reference_lifecycle.construct(transaction, string, data, digest)
         _reserve_string_fields(transaction, string + 8, len(digest) * 2 + 1,
                                allocate, reallocate, free, 0x100000)
         for value in digest:
