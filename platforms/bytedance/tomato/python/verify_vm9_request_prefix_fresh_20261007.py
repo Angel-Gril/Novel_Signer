@@ -164,10 +164,16 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                         method_name_address=name, observer=evaluator_observer,
                         acquire_environment=acquire_environment,invoke_jni=invoke_jni,
                         get_singleton=get_singleton)
+                def leave_boolean_scope(p, scope):
+                    return leaf.leave_boolean_scope(p,image_base=image,
+                        entry_stack_address=frame.native_stack_address-0x290,
+                        scope_address=scope,read_clock=read_clock,allocate=allocate,free=free,
+                        observer=lambda _p,**context:diagnostic_scope.setdefault('request_boolean_scopes',[]).append(context))
                 vm9_request_boolean_gate.execute_boolean_gate(vm.m.pages,
                     object_address=words[1], image_base=image,
                     entry_stack_address=frame.native_stack_address - 0x190,
-                    read_clock=read_clock, evaluate=evaluate, observer=gate_observer)
+                    read_clock=read_clock, evaluate=evaluate, leave_scope=leave_boolean_scope,
+                    observer=gate_observer)
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

@@ -195,25 +195,29 @@ def request_entry(library,libc):
                     prepare_format=session.prepare_format,read_clock=session.read_clock,acquire_environment=acquire,
                     invoke_jni=None if label=='missing_JNI' else jni,get_singleton=session.singleton)
             except prefix.RequestContinuationBoundary as exc:
-                assert exc.vm.steps==965 and exc.vm.pc-base==0xF8FD0
                 assert before=={k:bytes(v) for k,v in p.items()}
                 if label=='JNI_connected':
-                    assert str(exc.cause)=='request boolean scope destructor +0x28c09c is not recovered'
+                    assert exc.vm.steps==993 and exc.vm.pc-base==0xF919C
+                    assert str(exc.cause)=='unknown request callback +0x285a80 -> +0x28c0ec'
                     assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
                     completed=diag['request_evaluator_prefixes'][-1]
                     assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
-                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=965,
+                    scope=diag['request_boolean_scopes'][-1]
+                    assert scope['phase']=='boolean_scope_completed' and scope['emission_calls']==1
+                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=993,
                         actual_request_callback_and_evaluator_executed=True,owning_TLS_allocator_and_JavaVM_used=True,
                         explicit_NULL_FindClass_input=True,evaluator_completed=True,
-                        stopped_at_scope_cleanup_offset='0x28c09c',all_pages_unchanged_after_stop=True,
+                        actual_scope_cleanup_completed=True,stopped_at_callback_offset='0x28c0ec',
+                        all_pages_unchanged_after_stop=True,
                         full_request_returned=False,whole_handoff_native_differential_verified=False))
                 else:
+                    assert exc.vm.steps==965 and exc.vm.pc-base==0xF8FD0
                     expected='request JNI FindClass +0x28b71c is not recovered' if label=='missing_JNI' else 'injected request JNI failure'
                     assert str(exc.cause)==expected
                     guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
                         all_pages_unchanged=True,external_effects_rolled_back=False))
             else:raise AssertionError('request unexpectedly completed')
-            print('PASS request VM',label,'965 steps',flush=True)
+            print('PASS request VM',label,'993 steps' if label=='JNI_connected' else '965 steps',flush=True)
     try:
         outer.make_session=make
         result=boundary.case(library,libc,base,'absent',None,vm_full,apply_logger_model=True,

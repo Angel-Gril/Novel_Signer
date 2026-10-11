@@ -3815,6 +3815,39 @@ array/descriptor signed overflow、空字符串和前缀比较。原始代码虽
 python -B platforms/bytedance/tomato/python/verify_vm9_request_stack_evaluator_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <stack-evaluator-evidence.json>
 ```
 
+## 6.86 实际 boolean scope 清理与 elapsed event（2026-10-12 Asia/Shanghai）
+
+`leave_boolean_scope` 恢复 `+28C09C`：非零 scope flag 才读取 elapsed
+microseconds，再对 `+3E1620` 执行 uint64 fetch-add，并以旧计数进入
+`+28E1FC/+28E204`。`+343D60` 的原始指令是 LDADDAL 或 LDAXR/STLXR，
+不是 decoder；此实现记录串行语义，未验证 host 并发原子性。
+
+`execute_elapsed_event` 恢复两组 guest ELF lazy 名称、C++ string 克隆、
+计数采样、mode formatter、两项 uint64 借用参数、warm logger emission
+和临时清理。两项参数 formatter 使用既有 token/renderer/转换拥有者，
+新入口对应 `+1B4054/+1B41D8`；参数和格式均来自 guest 输入。
+
+两基址 **46项原生/Python对照、1项请求VM入口检查、28项页面回滚**。
+全部 guest payload/ELF 页、时钟顺序、allocator/free 顺序、存活堆和
+logger vector/锁状态匹配，没有 padding mask 或 native snapshot 输入。
+覆盖 flag0/2、负 elapsed 的 uint64 表示、微秒截断、计数回绕、零除数
+采样、clock 后载入计数、warm names、vector append/grow/drop、两次
+event emission、signed mode 和不采样路径。
+
+26项 leaf 拒绝检查覆盖缺失服务、clock error、NULL start unmapped input、
+cold/contended/alternate logger、格式、栈和 allocation failure；2项请求
+入口 missing JNI/provider exception 保持全部页面不变。外部服务 effects
+不属于页面回滚范围。fresh owning outer 的实际请求VM完成 evaluator 与
+scope cleanup，从965步继续到993步，下一处明确拒绝 `+28C0EC` 发布
+callback。该1项检查不是完整请求返回或整链原生差分。
+
+**发布 callback、真实 URL/header/JNI 转换、完整独立 signer、fresh
+签名和线上矩阵仍未完成。** 见 [scope 证据](evidence/vm9_request_boolean_scope_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_boolean_scope_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <boolean-scope-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

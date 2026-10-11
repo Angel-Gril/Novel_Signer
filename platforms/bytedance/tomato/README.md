@@ -273,6 +273,8 @@ Delayed VM and callable entries forward explicit live JNI, allocator and SDK pro
 
 The actual request stack evaluator now restores JNI calls, prefix comparisons, UTF/local cleanup and NULL/exception behavior. 78 native/Python controls, one bounded request VM entry check and 20 rollback guards pass. The request entry forwards explicit JNI and singleton services and reaches the next scope-cleanup boundary at 965 steps. The complete signer remains unfinished. See the [stack evaluator report](REQUEST_JNI_STARTUP_WORKERS.md#685-实际-request-stack-evaluator-与请求-vm-接线2026-10-12-asiashanghai).
 
+Actual boolean scope cleanup now records elapsed time, fetches/increments the counter and emits the sampled two-argument event. 46 native/Python controls, one bounded request VM entry check and 28 rollback guards pass. The owning request continues to 993 steps and reaches the publication callback boundary. The complete signer remains unfinished. See the [scope cleanup report](REQUEST_JNI_STARTUP_WORKERS.md#686-实际-boolean-scope-清理与-elapsed-event2026-10-12-asiashanghai).
+
 
 
 

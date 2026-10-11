@@ -178,6 +178,19 @@ def build_event_format_object(pages, *, image_base, object_address,
         vtable_offsets=(0x34DA48,)*4+(0x35F858,),allocate=allocate,free=free)
 
 
+def build_elapsed_format_object(pages, *, image_base, object_address,
+        format_address, argument_addresses, allocate, free):
+    """+0x1b4054/1b41d8: two borrowed uint64 cells in a 96-byte formatter."""
+    if len(argument_addresses) != 2:
+        raise RefillUnsupported('elapsed format requires two argument pointers')
+    for address in argument_addresses:
+        if not isinstance(address,int) or not 0 <= address < 1 << 64:
+            raise RefillUnsupported('elapsed format argument pointer must fit uint64')
+    return _build_format_object(pages,image_base=image_base,object_address=object_address,
+        format_address=format_address,argument_addresses=argument_addresses,
+        vtable_offsets=(0x34DA48,)*2,allocate=allocate,free=free)
+
+
 def _signed32_bytes(p, address, image):
     for source, destination, mask, flag in (
             (0x11F1BC,0x3E1AB0,0x11F1F0,0x3E1AB4),
@@ -247,7 +260,7 @@ def _render_format_to_buffer(pages, *, image_base, format_object_address,
             vtable = _u(p,cell)
             if vtable == image_base+0x35F858:
                 piece = _signed32_bytes(p,_u(p,cell+8),image_base)
-            elif argument_count == 5 and vtable == image_base+0x34DA48:
+            elif argument_count in (2,5) and vtable == image_base+0x34DA48:
                 piece = _unsigned64_bytes(p,_u(p,cell+8),image_base)
             else:
                 raise RefillUnsupported('unsupported format argument vtable')
@@ -277,6 +290,14 @@ def render_event_format_to_buffer(pages, *, image_base, format_object_address,
     return _render_format_to_buffer(pages,image_base=image_base,
         format_object_address=format_object_address,buffer_object_address=buffer_object_address,
         max_output_bytes=max_output_bytes,argument_count=5)
+
+
+def render_elapsed_format_to_buffer(pages, *, image_base, format_object_address,
+        buffer_object_address, max_output_bytes=128):
+    """Actual +0x1b40d4 rendering for the two uint64 elapsed/counter cells."""
+    return _render_format_to_buffer(pages,image_base=image_base,
+        format_object_address=format_object_address,buffer_object_address=buffer_object_address,
+        max_output_bytes=max_output_bytes,argument_count=2)
 
 
 def destroy_mode_format_object(pages, *, object_address, free):
@@ -364,5 +385,23 @@ def execute_event_arguments(pages, *, image_base, format_object_address,
             format_object_address=format_object_address,conversion_object_address=conversion_object_address,
             rendered_length=length,bounded_event_arguments_body_completed=True,
             whole_request_callback_completed=False)
+    p.commit()
+    return EventArgumentsResult(output_object_address,format_object_address,conversion_object_address,length)
+
+
+def execute_elapsed_arguments(pages, *, image_base, format_object_address,
+        conversion_object_address, output_object_address, format_address,
+        argument_addresses, allocate, free):
+    """Build/render/convert/clean the actual two-cell elapsed formatter."""
+    p = _PageTransaction(pages)
+    build_elapsed_format_object(p,image_base=image_base,object_address=format_object_address,
+        format_address=format_address,argument_addresses=argument_addresses,allocate=allocate,free=free)
+    length = render_elapsed_format_to_buffer(p,image_base=image_base,
+        format_object_address=format_object_address,buffer_object_address=conversion_object_address)
+    construct_cpp_string(p,object_address=output_object_address,
+        source_address=_u(p,conversion_object_address),length=length,allocate=allocate)
+    if _u(p,conversion_object_address) != conversion_object_address+16:
+        raise RefillUnsupported('elapsed conversion buffer ownership is unsupported')
+    destroy_mode_format_object(p,object_address=format_object_address,free=free)
     p.commit()
     return EventArgumentsResult(output_object_address,format_object_address,conversion_object_address,length)

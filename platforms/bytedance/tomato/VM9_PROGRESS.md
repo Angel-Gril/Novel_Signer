@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：实际boolean scope清理与elapsed event
+
+46项原生/Python对照、1项请求入口检查、28项回滚通过。实际scope清理
+执行elapsed时钟、uint64 fetch-add、采样、两参数formatter和warm logger
+生命周期；全部payload/ELF页、服务及临时清理匹配。请求VM从965继续
+到993步，下一处为 `+28C0EC` 发布callback。完整独立signer、fresh/live
+继续。见 [scope报告](REQUEST_JNI_STARTUP_WORKERS.md#686-实际-boolean-scope-清理与-elapsed-event2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：实际request stack evaluator与请求VM接线
 
 78项原生/Python对照、1项请求入口检查、20项回滚通过。76项执行实际

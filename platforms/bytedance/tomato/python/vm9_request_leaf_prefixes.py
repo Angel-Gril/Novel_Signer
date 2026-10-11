@@ -280,6 +280,93 @@ def execute_stack_evaluator_prefix(pages, *, image_base, entry_stack_address,
     return result
 
 
+def execute_elapsed_event(pages, *, image_base, entry_stack_address,
+        elapsed_word, sequence_word, mode=0, allocate, free, observer=None):
+    """+0x28e204 names, sampled two-cell formatter, emission and cleanup."""
+    _stack(entry_stack_address,0x400)
+    _uint(elapsed_word,64,'elapsed word');_uint(sequence_word,64,'elapsed sequence')
+    _uint(mode,32,'elapsed mode')
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('elapsed event requires allocator/free services')
+    from vm9_cpp_strings import construct_cpp_string, clone_cpp_string, destroy_cpp_string
+    import vm9_request_format_objects as formatting
+    import vm9_request_event as events
+    p = _PageTransaction(pages)
+    for n,f,s,m in ((0x3E1A10,0x3E1A30,0x11F140,0x11F260),
+                    (0x3E1A40,0x3E1A60,0x11F160,0x11F240)):
+        _lazy(p,image_base=image_base,name=n,flag=f,source=s,mask=m)
+    first,second,first_copy,second_copy=(entry_stack_address-n for n in (0x80,0xA0,0xC0,0xE0))
+    construct_cpp_string(p,object_address=first,source_address=image_base+0x3E1A10,allocate=allocate)
+    construct_cpp_string(p,object_address=second,source_address=image_base+0x3E1A40,allocate=allocate)
+    emitted=0
+    def format_event(obj):
+        nonlocal emitted
+        # Both call sites use the same original SP, including the second copy.
+        local=entry_stack_address-0xE0-0x170
+        _w(p,local+0x38,sequence_word);_w(p,local+0x40,elapsed_word)
+        divisor=_u(p,image_base+0x3839E8)
+        remainder=sequence_word % divisor if divisor else sequence_word
+        if remainder:
+            return
+        formatting.execute_event_mode(p,image_base=image_base,entry_stack_address=local,
+            output_object_address=local+0x20,mode=mode,allocate=allocate,free=free)
+        formatting.execute_elapsed_arguments(p,image_base=image_base,
+            format_object_address=local+0x48,conversion_object_address=local+0xA8,
+            output_object_address=local+8,format_address=image_base+0x6E9C7,
+            argument_addresses=(local+0x40,local+0x38),allocate=allocate,free=free)
+        construct_cpp_string(p,object_address=local+0xA8,source_address=image_base+0x6E844,allocate=allocate)
+        events.execute_event_emission(p,image_base=image_base,entry_stack_address=local,
+            input_object_addresses=(obj,local+0x20,local+8,local+0xA8),allocate=allocate,free=free)
+        for address in (local+0xA8,local+8,local+0x20):
+            destroy_cpp_string(p,object_address=address,free=free)
+        emitted+=1
+    clone_cpp_string(p,object_address=first_copy,source_object_address=first,allocate=allocate)
+    format_event(first_copy)
+    destroy_cpp_string(p,object_address=first_copy,free=free)
+    if mode:
+        clone_cpp_string(p,object_address=second_copy,source_object_address=second,allocate=allocate)
+        format_event(second_copy)
+        destroy_cpp_string(p,object_address=second_copy,free=free)
+    destroy_cpp_string(p,object_address=second,free=free)
+    destroy_cpp_string(p,object_address=first,free=free)
+    if observer:
+        observer(p,phase='elapsed_event_completed',emission_calls=emitted,
+            whole_request_callback_completed=False,body_transaction_committed=True)
+    p.commit()
+    return emitted
+
+
+def leave_boolean_scope(pages, *, image_base, entry_stack_address,
+        scope_address, read_clock, allocate, free, observer=None):
+    """Actual +0x28c09c: elapsed clock, uint64 fetch-add and tail event call.
+
+    The serialized fetch-add returns the old counter and wraps its stored
+    increment; host concurrency and architecture-specific atomicity are not
+    claimed. The counter still advances when sampling skips event emission.
+    """
+    _stack(entry_stack_address,0x400)
+    _uint(scope_address,64,'boolean scope address')
+    p = _PageTransaction(pages)
+    if not _u(p,scope_address+8,1):
+        p.commit()
+        return 0
+    import vm9_callbacks as callbacks
+    if not callable(read_clock):
+        raise RefillUnsupported('boolean scope cleanup requires a clock provider')
+    elapsed=callbacks.elapsed_monotonic_microseconds(p,object_address=_u(p,scope_address),read_clock=read_clock)
+    counter_address=image_base+0x3E1620
+    sequence=_u(p,counter_address)
+    _w(p,counter_address,(sequence+1)&MASK64)
+    emitted=execute_elapsed_event(p,image_base=image_base,entry_stack_address=entry_stack_address,
+        elapsed_word=elapsed&MASK64,sequence_word=sequence,allocate=allocate,free=free,observer=observer)
+    if observer:
+        observer(p,phase='boolean_scope_completed',elapsed_microseconds=elapsed,
+            counter_before=sequence,counter_after=(sequence+1)&MASK64,emission_calls=emitted,
+            whole_request_callback_completed=False,body_transaction_committed=True)
+    p.commit()
+    return emitted
+
+
 def execute_event_mode_prefix(pages, *, image_base, entry_stack_address,
         output_object_address, mode, observer=None, allocate=None, free=None):
     """Prepare mode prefix; allocator/free services enable the bounded body."""
