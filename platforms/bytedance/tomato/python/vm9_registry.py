@@ -346,6 +346,54 @@ def set_configuration_u32(pages, *, registry_address: int, key_address: int, val
     return previous
 
 
+def increment_configuration_counter(pages, *, registry_address: int, key_address: int,
+        entry_stack_address: int, image_base: int, allocate: Callable, free: Callable,
+        get_tls: Callable, initialize_registry: Callable, broadcast: Callable,
+        max_nodes: int = 4096, max_bytes: int = 0x100000, observer=None) -> int:
+    """+0x256ab0: scoped lookup, signed saturation, or cloned key/value insertion.
+
+    Return the old u32. A missing key stores one and returns zero. Existing
+    counts increment when their signed value is at most 0x7ffffffd, including
+    negative values whose addition wraps. Preserve the caller's stack padding.
+    """
+    if (not isinstance(entry_stack_address, int) or entry_stack_address < 0x98
+            or entry_stack_address >= 1 << 64 or entry_stack_address & 15):
+        raise RefillUnsupported('registry counter requires an aligned guest stack')
+    if not all(callable(service) for service in (allocate, free, get_tls, initialize_registry, broadcast)):
+        raise RefillUnsupported('registry counter requires allocator/free and scoped TLS services')
+    transaction = _PageTransaction(pages)
+    guard = entry_stack_address - 0x50
+    objects.construct_single_scoped_lock(transaction, object_address=guard,
+        mutex_address=registry_address + 0x80, scratch_address=guard - 0x48,
+        image_base=image_base, allocate=allocate, get_tls=get_tls,
+        initialize_registry=initialize_registry)
+    pointer = lookup_configuration_value(transaction, container_address=registry_address + 8,
+        key_address=key_address, image_base=image_base, max_nodes=max_nodes, max_bytes=max_bytes)
+    inserted = not pointer
+    if pointer:
+        previous = int.from_bytes(_read_span(transaction, pointer, 4), 'little')
+        if objects._s32(previous) <= 0x7FFFFFFD:
+            _write_span(transaction, pointer, ((previous + 1) & 0xFFFFFFFF).to_bytes(4, 'little'))
+    else:
+        key = objects._allocate(transaction, allocate, 24)
+        objects.clone_string_object(transaction, object_address=key, source_object_address=key_address,
+            image_base=image_base, allocate=allocate, max_payload_bytes=max_bytes)
+        pointer = objects._allocate(transaction, allocate, 4)
+        _write_span(transaction, pointer, (1).to_bytes(4, 'little'))
+        insert_configuration_pair(transaction, container_address=registry_address + 8,
+            key_address=key, value_address=pointer, image_base=image_base,
+            allocate=allocate, free=free, max_nodes=max_nodes, max_bytes=max_bytes)
+        previous = 0
+    objects.destroy_single_scoped_lock(transaction, object_address=guard, image_base=image_base,
+        free=free, get_tls=get_tls, initialize_registry=initialize_registry, broadcast=broadcast,
+        entry_stack_address=guard)
+    if observer:
+        observer(transaction, phase='request_counter_completed', previous_u32=previous,
+            inserted=inserted, body_transaction_committed=True, whole_request_callback_completed=False)
+    transaction.commit()
+    return previous
+
+
 def construct_registry320(pages, *, object_address: int, entry_stack_address: int,
                           image_base: int, allocate: Callable, free: Callable,
                           read_clock: Callable, get_tls: Callable,

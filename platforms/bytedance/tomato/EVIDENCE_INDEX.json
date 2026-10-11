@@ -6227,5 +6227,14 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_counter_fresh_20261012": {
+    "path": "evidence/vm9_request_counter_fresh_20261012.json",
+    "native_Python_controls": 40,
+    "request_VM_boundary_controls": 1,
+    "rollback_guards": 36,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

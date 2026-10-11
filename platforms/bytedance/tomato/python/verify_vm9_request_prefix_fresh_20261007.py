@@ -70,7 +70,7 @@ def resolve_request_memory_imports(pages, library, image):
 def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None,
                    diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
                    read_clock=None, acquire_environment=None, invoke_jni=None,
-                   get_singleton=None):
+                   get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -192,6 +192,17 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     read_clock=read_clock, diagnostic_observer=lambda *event:
                     diagnostic_scope.setdefault('events', []).append(list(event)),
                     observer=lambda _p, **context: diagnostic_scope.setdefault('request_objects', []).append(context))
+            elif allocate is not None and (wrapper, target) == (0x285ABC, 0x256AB0):
+                if diagnostic_scope is None:
+                    raise PrefixBoundary()
+                import vm9_registry as registry
+                previous_count = registry.increment_configuration_counter(vm.m.pages,
+                    registry_address=words[1], key_address=words[2], image_base=image,
+                    entry_stack_address=frame.native_stack_address - 0x190,
+                    allocate=allocate, free=free, get_tls=get_tls,
+                    initialize_registry=initialize_registry, broadcast=broadcast,
+                    observer=lambda _p, **context: diagnostic_scope.setdefault('request_counters', []).append(context))
+                _write_span(vm.m.pages, argument + 0x18, previous_count.to_bytes(4, 'little'))
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

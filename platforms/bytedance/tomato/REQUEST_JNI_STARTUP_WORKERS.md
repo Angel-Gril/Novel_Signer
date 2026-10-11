@@ -3917,6 +3917,38 @@ fresh签名和线上矩阵仍未完成。** 见 [请求对象证据](evidence/vm
 python -B platforms/bytedance/tomato/python/verify_vm9_request_object_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-object-evidence.json>
 ```
 
+## 6.89 实际 registry 计数回调与拥有者 TLS 接线（2026-10-12 Asia/Shanghai）
+
+`increment_configuration_counter` 恢复 `+256AB0`：先取得registry writer
+scope，再使用既有树lookup。已有值返回旧u32，仅在signed旧值不大于
+`0x7FFFFFFD` 时递增；`0xFFFFFFFF` 返回旧值并回绕为0，而
+`0x7FFFFFFE/0x7FFFFFFF` 保持不变。缺失键时分配并克隆StringObject，
+分配u32值1，复用既有red-black树插入后返回0，最终释放scope。
+TLS registry、mutex、条件唤醒、树查找与插入没有新增替代实现。
+
+两基址 **40项原生/Python对照、1项请求入口检查、36项页面回滚**。
+包含4项实际 `+285ABC` wrapper；原始scope/lookup/clone/insertion与
+matching libc mutex/condition执行。完整guest payload/ELF/TLS页、
+TLS/allocator/free/wake顺序、存活堆和free前字节匹配。覆盖缺失键的
+左右/平衡树插入、空键、NUL前缀比较、既有平衡树lookup、10种u32
+计数、饱和与有符号回绕；没有native snapshot作为Python输入。
+
+32项leaf拒绝检查覆盖五类服务缺失、TLS异常、多TLS键、活跃reader、
+mutex争用、scope/key/value allocation NULL、栈、未映射键、payload/
+tree限额。请求入口保留missing JNI/provider exception，另加missing TLS/
+TLS provider exception，共4项。页面全部回滚；外部服务effects不回滚。
+
+公开请求入口显式接收并传递拥有者get_tls、initialize_registry与broadcast，
+完成实际计数调用并按wrapper ABI只写回4字节旧值，保留高4字节。
+fresh owning请求从1419步到1444步，在 `+285ADC -> +25BF14`
+树构造回调明确停止。**完整请求返回、整链原生差分、真实Android JVM、
+完整独立signer、fresh签名与线上矩阵仍未完成。**
+见 [registry计数证据](evidence/vm9_request_counter_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_counter_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-counter-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

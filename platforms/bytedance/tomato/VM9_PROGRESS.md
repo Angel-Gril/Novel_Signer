@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：实际registry计数与拥有者TLS接线
+
+40项原生/Python对照、1项请求入口检查、36项回滚通过。计数回调恢复
+scoped lookup、signed饱和/回绕、克隆键并插入和旧u32返回。请求显式
+使用拥有者TLS/registry/broadcast服务，从1419到1444步，下一处为
+`+25BF14` 树构造。完整独立signer、fresh签名与线上矩阵继续。
+见 [registry计数报告](REQUEST_JNI_STARTUP_WORKERS.md#689-实际-registry-计数回调与拥有者-tls-接线2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：实际请求对象构造与临时引用
 
 60项原生/Python对照、1项请求入口检查、34项回滚通过。对象构造复用
