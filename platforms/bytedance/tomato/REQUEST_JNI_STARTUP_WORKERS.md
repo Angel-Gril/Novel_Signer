@@ -3134,6 +3134,34 @@ guest/heap/image/libc页面、有序服务、publication、finalizer状态一致
 python -B platforms/bytedance/tomato/python/verify_vm9_elf_support_constructors_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <support-constructor-evidence.json>
 ```
 
+## 6.65 ELF guarded string constructor（2026-10-11 Asia/Shanghai）
+
+`run_support_constructor` 增加实际 `+15DB50`，复用empty string与normal
+mutex owner。Cold C++ guard保存显式thread id，构造全局string，经GOT读取
+真实destructor并注册，再发布guard完成状态；warm路径跳过所有分配/注册。
+递归、等待和原生错误诊断路径仍拒绝并回滚。
+
+干净 `32e9440` 上 **8项修改前真实原生RED** 后实施，**18项fresh原生
+对照、25项回滚检查**通过。两基址/不同SP、cold/warm guard、byte0非零
+但bit0清零、byte1完成状态、NULL malloc、thread id、guard/object padding、
+GOT destructor重定向与非零注册状态均有对照。完整guest/heap/image/libc
+存活页面、有序分配/注册、guard状态和thread id一致。原生端执行实际
+C++ guard和matching-libc mutex；分配、thread id、注册是显式guest服务。
+
+六个既有支持constructor再通过 **12项fresh原生回归**，全部存活页面和
+有序效果匹配。原有分支AST保持一致；旧verifier的未支持入口负例移至
+相邻非法入口。25项失败覆盖guard递归/等待、thread/service参数、分配
+别名与映射、reserved区域、注册拒绝/状态越界及最终guard写失败；全页
+回滚。物理原生栈、真实线程并发和destructor执行不是这一阶段输出。
+
+现已恢复12/13个init_array成员。`+2679F0`、完整顺序loader/JNI/bootstrap、
+独立signer、新鲜输出及线上验收继续。私有名称/payload未发布。见
+[guarded string证据](evidence/vm9_elf_guarded_string_constructor_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_elf_guarded_string_constructor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <guarded-string-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

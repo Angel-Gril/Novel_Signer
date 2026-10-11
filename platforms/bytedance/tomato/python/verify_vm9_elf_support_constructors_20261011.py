@@ -151,7 +151,7 @@ def negatives(args):
   assert before=={k:bytes(data) for k,data in p.items()},label
   if fault:assert hits,label
   rows.append(dict(label=label,rejected=True,all_pages_unchanged=True,native_fault_path_compared=False))
- for entry in (True,0,0x2679F0,0x15DB50):reject(entry,'unsupported_entry_'+str(entry))
+ for entry in (True,0,0x2679F0,0x15DB54):reject(entry,'unsupported_entry_'+str(entry))
  for label,changes in (('boolean_image',dict(image_base=True)),('unaligned_image',dict(image_base=base+1)),
   ('unaligned_SP',dict(entry_stack_address=v.SP+1)),('boolean_SP',dict(entry_stack_address=True)),
   ('missing_return_address',dict(entry_return_address=None)),('invalid_reserved_region',dict(reserved_regions=((2,1),)))):

@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：ELF guarded string constructor
+
++15DB50通过18项fresh原生对照、25项回滚检查；六个既有入口通过12项
+fresh回归。全部存活页面、guard/thread id、分配与注册匹配。现覆盖
+12/13个init_array成员；继续2679F0、完整loader/JNI、独立signer和线上验收。
+见 [guarded string报告](REQUEST_JNI_STARTUP_WORKERS.md#665-elf-guarded-string-constructor2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：六个 ELF support constructors
 
 六个支持constructor通过48项fresh原生对照、51项回滚检查；复用既有

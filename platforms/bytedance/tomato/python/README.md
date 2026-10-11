@@ -360,6 +360,8 @@ The module constructor owner now supports all five actual ELF module constructor
 
 Six ELF support constructors now pass 48 fresh native/Python controls and 51 rollback checks. Object and JNI cache initialization reuse existing owners; clocks, auxv, property and exit registration are explicit guest services. Together with five module constructors, 11 of 13 init_array members are covered. The complete loader, JNI/bootstrap and independent signer remain unfinished. See the [ELF support report](../REQUEST_JNI_STARTUP_WORKERS.md#664-六个-elf-support-constructors2026-10-11-asiashanghai).
 
+The guarded ELF string constructor now passes 18 fresh native/Python controls and 25 rollback checks; all six existing support entries pass 12 fresh regressions. Twelve of thirteen init_array members are covered. The complete loader, JNI/bootstrap and independent signer remain unfinished. See the [guarded string report](../REQUEST_JNI_STARTUP_WORKERS.md#665-elf-guarded-string-constructor2026-10-11-asiashanghai).
+
 
 
 

@@ -24,8 +24,8 @@ class SupportConstructorResult:
 def run_support_constructor(pages, *, image_base, constructor_entry,
         entry_stack_address, entry_return_address=None, allocate=None,
         register_exit=None, read_clock=None, get_auxval=None, get_property=None,
-        reserved_regions=()):
-    """Recover six actual loader support constructors as one page transaction.
+        reserved_regions=(), thread_id=None):
+    """Recover seven actual loader support constructors as one page transaction.
 
     +17319c publishes monotonic microseconds through its GOT and initializes
     the singleton table with the original incoming return address when cold.
@@ -34,6 +34,9 @@ def run_support_constructor(pages, *, image_base, constructor_entry,
     malloc, and registers its GOT-selected destructor. +271940 delegates to
     the JNI cache mutex owner. +28300c publishes realtime milliseconds.
     +343a84 retains the auxv-bit/property/strncmp control branch.
+    +15db50 constructs the guarded empty string and registers its destructor.
+    Its uncontended C++ guard records an explicit thread_id when cold; warm
+    guard paths need no allocator, registration or thread service.
 
     Providers receive staged pages. read_clock(p,clock_id) returns signed
     status/seconds/nanoseconds; get_property(p,name,buffer) writes the bounded
@@ -41,7 +44,7 @@ def run_support_constructor(pages, *, image_base, constructor_entry,
     is ignored by native, including nonzero values. Clock failure diagnostics
     are unsupported. Native saves and retired stack bytes are not outputs.
     """
-    entries={0x17319C,0x180D28,0x1834E4,0x271940,0x28300C,0x343A84}
+    entries={0x15DB50,0x17319C,0x180D28,0x1834E4,0x271940,0x28300C,0x343A84}
     if type(constructor_entry) is not int or constructor_entry not in entries:
         raise RefillUnsupported('ELF support constructor entry is unsupported')
     if type(image_base) is not int or image_base&4095 or not 0<image_base<=MASK64-0x3E3238:
@@ -105,7 +108,33 @@ def run_support_constructor(pages, *, image_base, constructor_entry,
         value=value-(1<<64) if value>>63 else value
         return (abs(value)//1000)*(-1 if value<0 else 1)
     entry=constructor_entry
-    if entry==0x17319C:
+    if entry==0x15DB50:
+        guard_address=image_base+0x3D1418;guard=_read_span(p,guard_address,8)
+        if not guard[0]&1:
+            mutex=image_base+0x3E2F40
+            write(mutex,_read_span(p,mutex,40))
+            objects.lock_uncontended_mutex(p,mutex_address=mutex)
+            if guard[0] or guard[1]==1:
+                objects.unlock_uncontended_mutex(p,mutex_address=mutex)
+            else:
+                if guard[1]!=0:
+                    raise RefillUnsupported('ELF string guard recursion or wait is unsupported')
+                if type(thread_id) is not int or not 0<thread_id<=0xFFFFFFFF:
+                    raise RefillUnsupported('ELF cold string guard requires a nonzero uint32 thread id')
+                write(guard_address+4,thread_id.to_bytes(4,'little'))
+                write(guard_address+1,b'\2')
+                objects.unlock_uncontended_mutex(p,mutex_address=mutex)
+                address=image_base+0x3D1400;write(address,_read_span(p,address,24))
+                objects.construct_string_object(p,object_address=address,source_address=0,
+                    allocate=plan,vtable_address=image_base+0x34F5F8,
+                    empty_descriptor_address=image_base+0x6E168)
+                publications.append(address)
+                register(p,u(image_base+0x374F28),address,image_base+0x34C700)
+                write(guard_address,b'\1',True)
+                objects.lock_uncontended_mutex(p,mutex_address=mutex)
+                write(guard_address+1,b'\1')
+                objects.unlock_uncontended_mutex(p,mutex_address=mutex)
+    elif entry==0x17319C:
         clock_slot=u(image_base+0x374F80)
         word(clock_slot,clock(1,True))
         # Same relocated signed table index as +173470's existing getter.
