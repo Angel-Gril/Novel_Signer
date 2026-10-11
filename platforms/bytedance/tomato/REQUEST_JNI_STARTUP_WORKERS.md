@@ -3195,6 +3195,37 @@ JNI/bootstrap、独立 signer、fresh 输出和线上验收仍继续，不能将
 python -B platforms/bytedance/tomato/python/verify_vm9_elf_configuration_constructor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <configuration-constructor-evidence.json>
 ```
 
+## 6.67 ELF init_array 完整顺序组合（2026-10-11 Asia/Shanghai）
+
+`run_elf_constructors` 从 relocated ELF 读取并验证真实 init_array，按顺序
+调用全部13个构造器，跨五个module和support/configuration共享一个纯分配
+计划、全局catalog、TLS和诊断状态，全部页面一次提交。Module frees保留
+既有有序逻辑effects；module finalizers在其staged构造完成后调用注册服务。
+
+干净 `35470b0` 上 **2项完整真实原生RED** 后实施。**4项fresh完整顺序
+对照、40项拒绝/回滚检查**通过，覆盖两基址、不同SP、heap/stack padding、
+分配偏移、thread id、clock、注册状态和实际property/strncmp分支。每项
+连续执行全部13个原生成员，cold匹配11549项服务效果（property变体11550），
+其中6272次分配、5156次free、11次注册、两组真实diagnostic scopes；五个
+module共发布142个descriptor。全部存活guest/heap/image/libc页面一致，
+分配/free、注册、OS/TLS/clock各自的有序序列以及最终TLS/分配状态一致。
+Module注册与分配的交错时序、物理原生栈和真实线程并发没有比较。
+
+完整顺序暴露了单入口对照中没有消费的retired stack cells：前一个imported
+descriptor的控制值与root export copy保存的地址进入后续reader内联名称。
+组合owner从真实ADRP/ADD、MOVZ/MOVK/STR和保存SP推导这些活跃字节；未知
+指令布局拒绝，不使用原生快照或硬编码控制payload。40项负例包含入口顺序、
+参数/预算、服务、别名/reserved、控制指令和最后auxv服务失败；全页回滚。
+此前support/configuration函数AST保持一致。
+
+本节验证完整init_array构造序列。ELF二进制映射/完整symbol linking、完整
+同次JNI/bootstrap、独立signer、fresh输出与线上验收仍未完成。见
+[完整构造序列证据](evidence/vm9_elf_constructor_sequence_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_elf_constructor_sequence_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <constructor-sequence-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

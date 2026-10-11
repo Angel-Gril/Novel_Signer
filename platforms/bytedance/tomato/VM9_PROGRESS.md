@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：完整 init_array 顺序组合
+
+全部13项constructor共享一个分配计划、TLS、catalog与诊断状态，4项fresh
+原生对照/40项回滚通过。每项6272次分配/5156次free/11次注册，全部存活
+页面与各自有序效果匹配。继续完整二进制mapping/linking、JNI/bootstrap、
+独立signer与线上验收。见 [顺序组合报告](REQUEST_JNI_STARTUP_WORKERS.md#667-elf-init_array-完整顺序组合2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：ELF configuration constructor
 
 +2679F0通过16项fresh原生对照、72项回滚；既有registry38项对照/14项
