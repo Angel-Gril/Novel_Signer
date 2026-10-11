@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：JNI finalizer 的延时任务提交
+
+首条非零 delay 提交、heap wrapper/task、executor deque 与 controller signal
+通过8项原生对照、24项callable和25项回滚；两组旧callable结果逐字节一致。
+第三条finalizer完整worker、后续callback执行、独立signer和fresh/live继续。
+见 [延时提交报告](REQUEST_JNI_STARTUP_WORKERS.md#671-jni-finalizer-的首条延时任务提交2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：完整 JNI 到 executor/初始化 queue 与退出
 
 两基址×两分支4项原生对照/28项回滚通过。完整13constructors/JNI后执行

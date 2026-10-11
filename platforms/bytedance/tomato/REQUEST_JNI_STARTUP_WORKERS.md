@@ -3337,6 +3337,32 @@ JNI一共请求三条worker；本节完整组合其中executor和第一条初始
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_requested_workers_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <jni-workers-evidence.json>
 ```
 
+## 6.71 JNI finalizer 的首条延时任务提交（2026-10-11 Asia/Shanghai）
+
+`vm9_timed_tasks.submit_timed_callable` 恢复 `+325454` 的非零 W32 delay
+分支、`+326C00` deadline 和首次 `+326D04` deque 插入。复用共享 callable
+移动/析构，新增 `+34F058` 后续任务的实际 clone/destructor；task 拥有
+80-byte wrapper，保留分配 padding，构造 64-byte task、首个 map/segment，
+按原生顺序释放 controller mutex、发送 condition signal，再解锁 executor。
+Clock、分配与 signal 是显式 provider，外部效果须由调用方暂存。
+
+干净 `85b80c7` 上 A/B 各一次完整原生 ELF/13 constructors/JNI/三条 worker
+及 guest exit 自然返回后实施。**8项原生/Python提交对照、24项 callable
+对照、25项回滚检查**通过；两基址、两 queue index、正/负非零 delay、
+不同 heap padding 和地址偏移覆盖全部存活 guest/image 页面、有序 provider
+效果、完整 wrapper/task/deque。旧 finalizer callable **32/9** 与旧共享
+callable **84/12** 回归 JSON 逐字节一致。
+
+本节接受已初始化 controller 的首个空 deque 和 inline 后续 callable。
+Immediate/cold singleton、已有任务的排序/扩容、cancelled executor、真实
+并发及定时 callback 执行均在本节边界之外。第三条 finalizer 的完整
+Python worker、独立 signer、新鲜签名输出和线上验收仍未完成。
+见 [延时提交证据](evidence/vm9_timed_task_submission_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_timed_task_submission_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <timed-task-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

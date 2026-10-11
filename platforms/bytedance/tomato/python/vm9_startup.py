@@ -70,7 +70,7 @@ def release_serial_guard(pages, *, guard_address, image_base):
 
 
 def move_callable(pages, *, destination_address, source_address, image_base):
-    """+0x3259c4 move with four evidenced inline-copy vtables.
+    """+0x3259c4 move with five evidenced inline-copy vtables.
 
     An inline callable stays in its source; a non-inline pointer moves and
     clears source+0x20. Unwritten padding is preserved.
@@ -82,7 +82,7 @@ def move_callable(pages, *, destination_address, source_address, image_base):
         _w(staged,destination_address+0x20,pointer);_w(staged,source_address+0x20,0)
     else:
         table=_u(staged,pointer)
-        if table not in (image_base+0x34F010,image_base+0x35D630,image_base+0x35FC28,image_base+0x372600):
+        if table not in (image_base+0x34F010,image_base+0x34F058,image_base+0x35D630,image_base+0x35FC28,image_base+0x372600):
             raise RefillUnsupported('unrecovered inline startup callable')
         if table==image_base+0x35FC28 and (_u(staged,table+0x18)!=image_base+0x29E040
                 or _u(staged,image_base+0x387CB0)+0x10!=table):
@@ -90,6 +90,9 @@ def move_callable(pages, *, destination_address, source_address, image_base):
         if table==image_base+0x34F010 and (_u(staged,table+0x18)!=image_base+0x204330
                 or _read_span(staged,image_base+0x204330,16)!=bytes.fromhex('480a00f008410091280000f9c0035fd6')):
             raise RefillUnsupported('JNI finalizer callable clone method is unsupported')
+        if table==image_base+0x34F058 and (_u(staged,table+0x18)!=image_base+0x2043A4
+                or _read_span(staged,image_base+0x2043A4,16)!=bytes.fromhex('480a00f008610191280000f9c0035fd6')):
+            raise RefillUnsupported('JNI follow-up callable clone method is unsupported')
         _w(staged,destination_address+0x20,destination_address)
         _w(staged,destination_address,table)
         if table==image_base+0x372600:_w(staged,destination_address+8,_u(staged,pointer+8))
@@ -99,7 +102,7 @@ def move_callable(pages, *, destination_address, source_address, image_base):
 def destroy_callable(pages, *, object_address, image_base, free, reset=False):
     """+0x167310 destruction, or +0x2918b0 reset of evidenced callables.
 
-    Inline vtables +0x34f010/+0x35d630/+0x35fc28/+0x372600 have RET destructors. Their deleting
+    Inline vtables +0x34f010/+0x34f058/+0x35d630/+0x35fc28/+0x372600 have RET destructors. Their deleting
     destructors free non-inline pointees. Plain destruction retains +0x20;
     reset clears it before the destructor, as native does.
     """
@@ -107,7 +110,7 @@ def destroy_callable(pages, *, object_address, image_base, free, reset=False):
     if reset:_w(p,object_address+0x20,0)
     if pointer:
         table=_u(p,pointer)
-        if table not in (image_base+0x34F010,image_base+0x35D630,image_base+0x35FC28,image_base+0x372600):
+        if table not in (image_base+0x34F010,image_base+0x34F058,image_base+0x35D630,image_base+0x35FC28,image_base+0x372600):
             raise RefillUnsupported('unrecovered callable destructor')
         if table==image_base+0x35FC28:
             offset,target=(0x20,0x29E054) if pointer==object_address else (0x28,0x29E058)
@@ -117,6 +120,10 @@ def destroy_callable(pages, *, object_address, image_base, free, reset=False):
             offset,target=(0x20,0x204340) if pointer==object_address else (0x28,0x204344)
             if _u(p,table+offset)!=image_base+target:
                 raise RefillUnsupported('JNI finalizer callable destructor relocation is unsupported')
+        if table==image_base+0x34F058:
+            offset,target=(0x20,0x2043B4) if pointer==object_address else (0x28,0x2043B8)
+            if _u(p,table+offset)!=image_base+target:
+                raise RefillUnsupported('JNI follow-up callable destructor relocation is unsupported')
         if pointer!=object_address:free(p,pointer)
     p.commit()
 
