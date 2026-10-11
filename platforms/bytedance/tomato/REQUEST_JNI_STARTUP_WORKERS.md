@@ -4033,6 +4033,30 @@ fresh owning请求从1558到1567步，下一处为 `+285BB0 -> +25C168`
 python -B platforms/bytedance/tomato/python/verify_vm9_request_fill_string_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-fill-evidence.json>
 ```
 
+## 6.93 实际树查询与 C 字符串长度 wrapper（2026-10-12 Asia/Shanghai）
+
+请求 `+285BB0 -> +25C168` 复用 `lookup_configuration_value`，实际packed
+container/key顺序与返回X0写入packed+0x18的8字节ABI得到验证。
+`+285C00 -> +27617C` 复用既有NULL安全的guest C-string读取owner，
+把长度写入packed+0x10的8字节字段。两个业务owner保持不变。
+
+两基址 **28项原生/Python对照、1项请求入口检查、20项页面回滚**。
+16项lookup wrapper覆盖空树、NULL query、found/左右missing、NUL等价、
+NULL/full uint64值。12项length wrapper覆盖NULL、empty、ASCII、内嵌NUL、
+binary与跨页读取；完整guest payload、packed写宽和ELF页匹配。
+12项leaf拒绝检查与8项入口回滚通过。新consumer每次从实际请求参数
+求值，native输出不作为输入；已接受的原生批次未重复。
+
+fresh owning请求从1567到1812步，实际读取两次C-string长度并完成tree
+lookup。下一处 `+285C1C -> +2765C4` 使用实际ELF字节折叠表，并在比较前
+调用两次singleton getter，仍待恢复。**完整请求返回、整链原生差分、
+真实Android JVM、完整独立signer、fresh签名与线上矩阵仍未完成。**
+见 [collection wrapper证据](evidence/vm9_request_collection_callbacks_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_collection_callbacks_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-collection-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -287,6 +287,8 @@ The actual __cxa_atexit import and process registration wrapper now pass 16 nati
 
 The actual fill-string constructor and byte-argument wrapper pass 40 native/Python controls, one request VM entry check and 20 rollback guards. The owning request reaches 1567 steps at the tree lookup wrapper. The complete signer remains unfinished. See the [fill-string report](REQUEST_JNI_STARTUP_WORKERS.md#692-实际填充字符串构造与-wrapper-字节参数2026-10-12-asiashanghai).
 
+The actual tree lookup and NULL-safe C-string length wrappers reuse existing owners. 28 native/Python controls, one request VM entry check and 20 rollback guards pass. The owning request reaches 1812 steps at the guest-table folded comparison; the complete signer remains unfinished. See the [collection wrapper report](REQUEST_JNI_STARTUP_WORKERS.md#693-实际树查询与-c-字符串长度-wrapper2026-10-12-asiashanghai).
+
 
 
 

@@ -226,8 +226,8 @@ def request_entry(library,libc):
             except prefix.RequestContinuationBoundary as exc:
                 assert before=={k:bytes(v) for k,v in p.items()}
                 if label=='JNI_connected':
-                    assert exc.vm.steps==1567 and exc.vm.pc-base==0xF9D5C
-                    assert str(exc.cause)=='unknown request callback +0x285bb0 -> +0x25c168'
+                    assert exc.vm.steps==1812 and exc.vm.pc-base==0xFADA8
+                    assert str(exc.cause)=='unknown request callback +0x285c1c -> +0x2765c4'
                     assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
                     completed=diag['request_evaluator_prefixes'][-1]
                     assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
@@ -252,7 +252,9 @@ def request_entry(library,libc):
                     assert registration['status_u32']==0 and registration['owning_exit_service_used']
                     fill=diag['request_fill_strings'][-1]
                     assert fill['length_u32']==16 and fill['fill_byte']==0
-                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1567,
+                    assert diag['request_tree_lookups']==[dict(found=False)]
+                    assert diag['request_cstring_lengths']==[10,4]
+                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1812,
                         actual_request_callback_and_evaluator_executed=True,owning_TLS_allocator_and_JavaVM_used=True,
                         explicit_NULL_FindClass_input=True,evaluator_completed=True,
                         actual_scope_cleanup_completed=True,actual_request_byte_gate_completed=True,
@@ -262,7 +264,8 @@ def request_entry(library,libc):
                         iterator_comparison_completed=True,unresolved_process_atexit_import=False,
                         actual_process_atexit_registration_completed=True,
                         actual_fill_string_constructor_completed=True,
-                        stopped_at_wrapper_offset='0x285bb0',stopped_at_callback_offset='0x25c168',
+                        actual_tree_lookup_completed=True,actual_NULL_safe_cstring_lengths_completed=True,
+                        stopped_at_wrapper_offset='0x285c1c',stopped_at_callback_offset='0x2765c4',
                         all_pages_unchanged_after_stop=True,
                         full_request_returned=False,whole_handoff_native_differential_verified=False))
                 elif label=='fill_allocator_exception':
@@ -295,7 +298,7 @@ def request_entry(library,libc):
                         all_pages_unchanged=True,external_effects_rolled_back=False))
             else:raise AssertionError('request unexpectedly completed')
             if label=='NULL_header_reference':w(p,request,header)
-            steps=1567 if label=='JNI_connected' else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
+            steps=1812 if label=='JNI_connected' else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
             print('PASS request VM',label,steps,'steps',flush=True)
     try:
         outer.make_session=make

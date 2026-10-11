@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：请求collection wrappers
+
+28项原生/Python对照、1项请求入口检查、20项回滚通过。树查询与NULL
+安全C-string长度复用既有owner；实际wrapper写回8字节结果。请求1567
+到1812步，下一边界guest-table comparison `+2765C4`。完整signer、
+fresh/live继续。见 [collection报告](REQUEST_JNI_STARTUP_WORKERS.md#693-实际树查询与-c-字符串长度-wrapper2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：实际填充字符串构造
 
 40项原生/Python对照、1项请求入口检查、20项回滚通过。按actual wrapper

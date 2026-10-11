@@ -247,6 +247,20 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_fill_strings', []).append(dict(
                         length_u32=length, fill_byte=fill))
+            elif (wrapper, target) == (0x285BB0, 0x25C168):
+                import vm9_registry as registry
+                pointer = registry.lookup_configuration_value(vm.m.pages,
+                    container_address=words[1], key_address=words[2], image_base=image)
+                _write_span(vm.m.pages, argument + 0x18, pointer.to_bytes(8, 'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_tree_lookups', []).append(dict(
+                        found=bool(pointer)))
+            elif (wrapper, target) == (0x285C00, 0x27617C):
+                import vm9_logger as logger
+                length = len(logger.cstring(vm.m.pages, words[1]))
+                _write_span(vm.m.pages, argument + 0x10, length.to_bytes(8, 'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_cstring_lengths', []).append(length)
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()
