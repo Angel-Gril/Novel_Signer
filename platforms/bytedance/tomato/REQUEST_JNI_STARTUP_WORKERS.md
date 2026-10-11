@@ -3070,6 +3070,35 @@ ELF独立构造输入，通过 **12 项原生/Python 对照、24 项回滚检查
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_queue_worker_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-queue-worker-evidence.json>
 ```
 
+## 6.63 另外四个 ELF module constructors（2026-10-11 Asia/Shanghai）
+
+`run_module_constructor` 通过 `constructor_entry` 接受实际 `.init_array` 中
+`+299B30/+29C518/+2A1AC0/+2A2D40` 四个入口，缺省仍为 `+29ECAC`。
+五个入口复用同一静态指令 decoder、reader/AST、转换、root factory 和清理。
+各自从 fresh ELF 生成绑定与 codec，再发布 root 和短名称 descriptor；
+没有复制 parser 或从 native snapshot 初始化 Python。
+
+干净 `0d37a27` 的 **8 项修改前真实原生 RED** 证明四个入口在两基址均
+自然返回且全部 descriptor 已发布，原 Python 缺少入口选择。实现后
+**8 项原生/Python 对照、2 项既有 B constructor 回归、77 项回滚检查**
+通过，覆盖不同 SP、thread id、填充值和基址。root、所有 descriptor
+publication、全部 guest/heap/image 页面及有序分配/free/finalizer 效果一致。
+物理原生栈不是最终输出；逻辑 effect 的 caller owner 地址和当时字节独立对照。
+
+四个新增入口每基址分别发布 2/3/8/8 个 descriptor，共 42 项发布。
+回滚覆盖入口白名单、frame/scratch/allocator 别名、预算、setup/publication
+指令损坏及 input/wrapper/root/最后 publication 写失败；整次调用全页回滚。
+其余生产 owner 定义 AST 未变。分配与 finalizer 注册保留显式服务契约。
+私有名称/payload 未发布。
+
+这一阶段恢复 `.init_array` 的五个 module constructor；其余 loader
+constructor、完整 JNI/bootstrap、独立 signer、新鲜输出及线上验收继续。
+见 [module constructor 证据](evidence/vm9_bootstrap_module_constructors_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_bootstrap_module_constructors_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <module-constructor-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

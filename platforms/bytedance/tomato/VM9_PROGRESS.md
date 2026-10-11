@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：五个 ELF module constructors
+
+同一owner现已恢复五个实际module constructor。新增四个入口通过8项
+fresh原生对照、2项既有B回归及77项回滚检查；全部非原生栈页面、root、
+descriptor发布、有序分配与清理一致。继续其余loader constructors、
+完整JNI/bootstrap、独立signer、新鲜输出及线上验收。
+见 [module constructor报告](REQUEST_JNI_STARTUP_WORKERS.md#663-另外四个-elf-module-constructors2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：B 同次 startup 的队列 worker 与清理
 
 B实际队列任务、正常worker返回、TLS key清理及完整joinable guest

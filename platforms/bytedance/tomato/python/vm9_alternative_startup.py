@@ -5577,13 +5577,13 @@ class ModuleConstructorResult:
 def run_module_constructor(pages, *, image_base, entry_stack_address, thread_id,
         varuint_scratch_address, expression_scratch_address, custom_scratch_address,
         allocate=None, max_nodes=4096, max_code_words=1048576,
-        max_vector_bytes=16*1024*1024, reserved_regions=()):
-    """Recover actual +29ecac constructor and its 121 descriptor publications.
+        max_vector_bytes=16*1024*1024, reserved_regions=(), constructor_entry=0x29ECAC):
+    """Recover five actual module constructors and their descriptor publications.
 
     Lower the constructor's straight-line ELF stores into its caller frame,
     preserving the actual binding and codec sources. Compose +2a95e0's narrow
     argument wrapper with run_module_factory, publish the root, then perform
-    all 121 short-name selections and stores from the original caller.
+    all short-name selections and stores from the selected original caller.
     The small instruction decoder only accepts this evidenced static setup
     and publication grammar; it is not an ARM64 execution engine. No native
     state supplies input, and names/payloads are read from caller-owned pages.
@@ -5595,11 +5595,28 @@ def run_module_constructor(pages, *, image_base, entry_stack_address, thread_id,
     """
     if type(entry_stack_address) is not int or not 0x5000<entry_stack_address<=MASK64 or entry_stack_address&15:
         raise RefillUnsupported('module constructor requires an aligned incoming SP')
-    m=_ReaderAstMemory(pages,image_base,image_base+0x3E1EB0,8,max_nodes,max_vector_bytes,reserved_regions)
-    frame=entry_stack_address-0x440;factory_sp=frame-0x30;output=factory_sp+0x18
-    m.claim(frame,0x440)
+    # entry: frame size, factory BL, RET, root slot, publication count,
+    # setup store count, final permitted publication slot, relative X0..X7.
+    layouts={
+        0x299B30:(0x900,0x29A6AC,0x29A704,0x3E1E48,2,320,0x3E1E58,
+                  (0x383C10,0x2C33,0x8E8,0,0x130,82,0x88,7)),
+        0x29C518:(0x470,0x29CB38,0x29CBAC,0x3E1E60,3,173,0x3E1E78,
+                  (0x386910,0x1304,0x458,0,0x90,40,0x88,0)),
+        0x29ECAC:(0x440,0x29F2C8,0x2A0024,0x3E1EB0,121,167,0x3E2278,
+                  (0x387D20,0x37FD0,0x428,0,0x2A0,16,0x90,22)),
+        0x2A1AC0:(0xA20,0x2A278C,0x2A288C,0x3E2400,8,356,0x3E2440,
+                  (0x3BFD10,0xE36F,0xA08,0,0x118,95,0x88,6)),
+        0x2A2D40:(0x290,0x2A3130,0x2A3230,0x3E2448,8,113,0x3E2488,
+                  (0x3CE080,0x1C4A,0x278,0,0xD8,17,0x90,3)),
+    }
+    if type(constructor_entry) is not int or constructor_entry not in layouts:
+        raise RefillUnsupported('module constructor entry is unsupported')
+    frame_size,factory_call,return_pc,root_slot,publication_count,store_count,last_slot,arguments=layouts[constructor_entry]
+    m=_ReaderAstMemory(pages,image_base,image_base+root_slot,8,max_nodes,max_vector_bytes,reserved_regions)
+    frame=entry_stack_address-frame_size;factory_sp=frame-0x30;output=factory_sp+0x18
+    m.claim(frame,frame_size)
     for address,size in ((varuint_scratch_address,4),(expression_scratch_address,8),(custom_scratch_address,8)):
-        if type(address) is not int or address<frame+0x440 and frame<address+size:
+        if type(address) is not int or address<entry_stack_address and frame<address+size:
             raise RefillUnsupported('module constructor scratch overlaps its caller frame')
     registers=[None]*31+[frame];publications=[];lookups=0
     def register(index,stack=False):
@@ -5632,7 +5649,7 @@ def run_module_constructor(pages, *, image_base, entry_stack_address, thread_id,
                 width=1<<((word>>30)&3);address=register(rn,True)+((word>>10)&4095)*width
                 value=register(rd)&((1<<(width*8))-1)
                 if publishing:
-                    if width!=8 or rd!=0 or rn!=8 or address&7 or not image_base+0x3E1EB8<=address<=image_base+0x3E2278:
+                    if width!=8 or rd!=0 or rn!=8 or address&7 or not image_base+root_slot+8<=address<=image_base+last_slot:
                         raise RefillUnsupported('module constructor publication store is unsupported')
                     publications.append((address,value))
                 elif not frame<=address<address+width<=entry_stack_address:
@@ -5645,9 +5662,11 @@ def run_module_constructor(pages, *, image_base, entry_stack_address, thread_id,
                 registers[0]=selected.descriptor_address;lookups+=1
             else:raise RefillUnsupported('module constructor static instruction is unsupported')
         return stores
-    if lower(0x29ECB8,0x29F2C8)!=167:
+    if lower(constructor_entry+12,factory_call)!=store_count:
         raise RefillUnsupported('module constructor input store count is unsupported')
-    if [register(i) for i in (0,1,2,3,4,5,6,7)]!=[image_base+0x387D20,0x37FD0,frame+0x428,0,frame+0x2A0,16,frame+0x90,22]:
+    expected=[value+(image_base if index==0 else frame if index in (2,4,6) else 0)
+              for index,value in enumerate(arguments)]
+    if [register(i) for i in range(8)]!=expected:
         raise RefillUnsupported('module constructor factory arguments are unsupported')
     codec=_u(m.p,frame);count=_u(m.p,frame+8,4)
     _write_span(m.p,factory_sp,codec.to_bytes(8,'little')+count.to_bytes(8,'little'))
@@ -5661,8 +5680,8 @@ def run_module_constructor(pages, *, image_base, entry_stack_address, thread_id,
         reserved_regions=(*reserved_regions,(frame,entry_stack_address)))
     if not result.address:raise RefillUnsupported('module constructor factory returned an empty root')
     registers[19]=result.address
-    _write_span(m.p,image_base+0x3E1EB0,result.address.to_bytes(8,'little'))
-    if lower(0x29F2DC,0x2A0018,True)!=121 or lookups!=121:
+    _write_span(m.p,image_base+root_slot,result.address.to_bytes(8,'little'))
+    if lower(factory_call+20,return_pc-12,True)!=publication_count or lookups!=publication_count:
         raise RefillUnsupported('module constructor publication count is unsupported')
     m.p.commit()
     return ModuleConstructorResult(result.address,result.descriptor_count,result.instruction_count,

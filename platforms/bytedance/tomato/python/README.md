@@ -356,6 +356,8 @@ The complete B worker callable now composes six outer and 48 nested descriptor p
 
 B now runs the actual startup-generated queue task through normal worker return, TLS key cleanup and the full joinable guest pthread_exit body. 12 native/Python controls and 24 rollback checks pass with fresh independent ELF inputs. Main/task contexts, both TLS regions, all nonstack pages and ordered effects match. Full JNI/bootstrap and the independent signer remain unfinished. See the [B queue worker report](../REQUEST_JNI_STARTUP_WORKERS.md#662-b-同次-startup-的队列-worker-与清理2026-10-11-asiashanghai).
 
+The module constructor owner now supports all five actual ELF module constructors. Four additional entries pass 8 fresh native/Python controls, with 2 existing B constructor regressions and 77 rollback checks. Complete JNI/bootstrap and the independent signer remain unfinished. See the [module constructor report](../REQUEST_JNI_STARTUP_WORKERS.md#663-另外四个-elf-module-constructors2026-10-11-asiashanghai).
+
 
 
 
