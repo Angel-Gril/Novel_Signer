@@ -277,6 +277,8 @@ Actual boolean scope cleanup now records elapsed time, fetches/increments the co
 
 The actual JNI publisher now acquires the environment, dispatches both tags and cleans both references. The distinct request byte gate resolves to the original zero-return leaf at +28BB54; it has no JNI effects. 44 native/Python controls, one request VM entry check and 20 rollback guards pass. The public request reaches 1019 steps and stops at object construction +25CDD4. The complete signer remains unfinished. See the [publication and byte gate report](REQUEST_JNI_STARTUP_WORKERS.md#687-实际-jni-发布器与请求-byte-gate2026-10-12-asiashanghai).
 
+Actual request object construction now clones the input string, copies the shared reference, stores realtime milliseconds and releases the temporary reference to one surviving owner. 60 native/Python controls, one request VM entry check and 34 rollback guards pass. The public request reaches 1419 steps and stops at callback +256AB0. The complete signer remains unfinished. See the [request object report](REQUEST_JNI_STARTUP_WORKERS.md#688-实际请求对象构造与临时引用生命周期2026-10-12-asiashanghai).
+
 
 
 

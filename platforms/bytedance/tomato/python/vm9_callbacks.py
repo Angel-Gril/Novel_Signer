@@ -162,6 +162,24 @@ def read_monotonic_nanoseconds(pages, *, read_clock: Callable) -> int:
     return (seconds * 1_000_000_000 + nanoseconds) & ((1 << 64) - 1)
 
 
+def read_realtime_milliseconds(pages, *, read_clock: Callable) -> int:
+    """+0x26cc60/+0x291958: wrapped realtime microseconds, signed SDIV 1000."""
+    if not callable(read_clock):
+        raise RefillUnsupported('realtime milliseconds require a clock provider')
+    result = read_clock(pages, 0)
+    if not isinstance(result, (tuple, list)) or len(result) != 3:
+        raise RefillUnsupported('realtime provider must return status/sec/nsec')
+    status, seconds, nanoseconds = result
+    if not isinstance(status, int) or status != 0:
+        raise RefillUnsupported('realtime clock error/abort path is unsupported')
+    if (not isinstance(seconds, int) or not -(1 << 63) <= seconds < (1 << 63)
+            or not isinstance(nanoseconds, int) or not 0 <= nanoseconds < 1_000_000_000):
+        raise RefillUnsupported('invalid realtime timespec')
+    micros = (seconds * 1_000_000 + nanoseconds // 1000) & ((1 << 64) - 1)
+    signed = micros if micros < (1 << 63) else micros - (1 << 64)
+    return (abs(signed) // 1000) * (-1 if signed < 0 else 1)
+
+
 def store_monotonic_start(pages, *, object_address: int, read_clock: Callable) -> int:
     """+0x291440 stores the raw nanoseconds word and returns that word."""
     transaction = _PageTransaction(pages)

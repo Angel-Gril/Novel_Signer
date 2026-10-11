@@ -433,6 +433,83 @@ def publish_request_handle(pages, *, image_base, entry_stack_address, root_addre
     return returned
 
 
+def construct_request_object(pages, *, image_base, entry_stack_address,
+        object_address, kind, source_string_address, reference_address, mode, flag,
+        thread_pointer, allocate, read_clock, thread_id=None, diagnostic_observer=None,
+        observer=None, max_payload_bytes=0x100000):
+    """Actual +0x25ce68 object, cloned string, shared reference and realtime.
+
+    Kind/mode use W registers, flag uses its low byte. Padding is preserved.
+    The reference copy reuses the recovered diagnostic scope and count owner.
+    Return the signed realtime millisecond value left by +0x26cc60.
+    """
+    _stack(entry_stack_address, 0x80)
+    for value, label in ((kind, 'request kind'), (mode, 'request mode'), (flag, 'request flag')):
+        _uint(value, 32, label)
+    for value, label in ((image_base, 'image base'), (object_address, 'request object'),
+            (source_string_address, 'source string'), (reference_address, 'request reference')):
+        _uint(value, 64, label)
+    if not callable(allocate):
+        raise RefillUnsupported('request object requires allocation')
+    import vm9_reference_scopes as references
+    import vm9_callbacks as callbacks
+    p = _PageTransaction(pages)
+    _w(p, object_address + 8, kind, 4)
+    _w(p, object_address, image_base + 0x35B868)
+    objects.clone_string_object(p, object_address=object_address + 0x10,
+        source_object_address=source_string_address, allocate=allocate,
+        image_base=image_base, max_payload_bytes=max_payload_bytes)
+    references.copy_scoped_string_reference(p, destination_address=object_address + 0x28,
+        source_address=reference_address, entry_stack_address=entry_stack_address - 0x30,
+        image_base=image_base, thread_pointer=thread_pointer, allocate=allocate,
+        thread_id=thread_id, diagnostic_observer=diagnostic_observer)
+    timestamp = callbacks.read_realtime_milliseconds(p, read_clock=read_clock)
+    _w(p, object_address + 0x40, 0, 1)
+    _w(p, object_address + 0x44, mode, 4)
+    _w(p, object_address + 0x38, timestamp & MASK64)
+    _w(p, object_address + 0x48, flag & 255, 1)
+    if observer:
+        observer(p, phase='request_object_constructed', object_address=object_address,
+            kind=kind, mode=mode, flag=flag & 255, realtime_milliseconds=timestamp,
+            body_transaction_committed=True, whole_request_callback_completed=False)
+    p.commit()
+    return timestamp
+
+
+def construct_request_object_with_null_reference(pages, *, image_base, entry_stack_address,
+        object_address, kind, source_string_address, mode, flag, thread_pointer,
+        allocate, free, read_clock, thread_id=None, diagnostic_observer=None,
+        observer=None, max_payload_bytes=0x100000):
+    """+0x25cdd4: construct a NULL reference, copy it, then release the temporary.
+
+    The generated count survives with one owner in object+0x28. This models
+    constructor effects; the wrapper's incidental X0 return is unspecified.
+    """
+    _stack(entry_stack_address, 0xE0)
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('request object lifecycle requires allocator/free services')
+    import vm9_reference_scopes as references
+    p = _PageTransaction(pages)
+    stack = entry_stack_address - 0x60
+    temporary = stack + 8
+    keywords = dict(entry_stack_address=stack, image_base=image_base,
+        thread_pointer=thread_pointer, allocate=allocate, thread_id=thread_id,
+        diagnostic_observer=diagnostic_observer)
+    references.construct_scoped_string_reference(p, reference_address=temporary,
+        string_address=0, **keywords)
+    construct_request_object(p, object_address=object_address, kind=kind,
+        source_string_address=source_string_address, reference_address=temporary,
+        mode=mode, flag=flag, read_clock=read_clock, max_payload_bytes=max_payload_bytes,
+        observer=observer, **keywords)
+    references.release_scoped_string_reference(p, reference_address=temporary,
+        free=free, **keywords)
+    if observer:
+        observer(p, phase='request_object_lifecycle_completed', object_address=object_address,
+            temporary_reference_address=temporary, body_transaction_committed=True,
+            whole_request_callback_completed=False)
+    p.commit()
+
+
 def execute_event_mode_prefix(pages, *, image_base, entry_stack_address,
         output_object_address, mode, observer=None, allocate=None, free=None):
     """Prepare mode prefix; allocator/free services enable the bounded body."""

@@ -3882,6 +3882,41 @@ JNI/JavaVM/清理顺序和逻辑 va_list 匹配。覆盖 local/global/weak/未�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_publication_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-publication-evidence.json>
 ```
 
+## 6.88 实际请求对象构造与临时引用生命周期（2026-10-12 Asia/Shanghai）
+
+`construct_request_object_with_null_reference` 恢复 `+25CDD4`：在实际
+栈位置创建临时 NULL reference，调用 `+25CE68` 后清理临时引用。
+`construct_request_object` 写入 vtable、kind，复用 `+2483E0` 字符串克隆
+和既有带诊断锁的 reference copy，再写 realtime 毫秒、清零状态字节、
+mode 与低8位 flag。对象 padding 保持输入值；临时计数复制到2后释放
+为1，由新对象继续持有。直接构造入口的第六参数经显式 X5 输入。
+
+`read_realtime_milliseconds` 对应 `+26CC60/+291958/+329404`：读取
+clock0，先计算有uint64回绕的微秒，再按signed SDIV1000向零截断。
+时钟失败拒绝，未将原始 abort 路径替换成时间值。原始 reference
+constructor/copy/release、诊断锁和 matching libc 锁体执行。
+
+两基址 **60项原生/Python对照、1项请求入口检查、34项页面回滚**。
+44项NULL-reference生命周期与16项直接构造包含2种实际 tail wrapper
+输入。全部 guest payload/ELF 页、临时reference、clock/allocator/free/
+diagnostic顺序、存活堆和free前字节匹配；没有 native snapshot 输入。
+覆盖cold/warm诊断锁、跨页对象、字符串0/1/31/32/33长度、内嵌NUL、
+signed长度、NULL字符串allocation、kind/mode的uint32边界、flag截断、
+正负/sub-ms时间、秒数回绕、NULL/0/1/2/wrap计数与借用opaque引用。
+直接constructor的realtime返回值也匹配；wrapper的附带X0未作ABI承诺。
+
+32项leaf拒绝检查覆盖服务缺失、时钟异常/非法timespec、NULL count
+allocation、栈、未映射源、payload限额、uint32溢出与guard等待；
+2项请求入口missing JNI/provider exception仍拒绝。全部页面回滚通过，
+外部服务effects不回滚。真实fresh owning请求完成对象构造，VM从
+1019步继续到1419步，在 `+285ABC -> +256AB0` 回调明确停止。
+**完整请求返回、整链原生差分、真实Android JVM、完整独立signer、
+fresh签名和线上矩阵仍未完成。** 见 [请求对象证据](evidence/vm9_request_object_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_object_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-object-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

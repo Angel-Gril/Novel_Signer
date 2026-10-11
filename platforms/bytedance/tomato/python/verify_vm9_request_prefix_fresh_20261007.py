@@ -179,6 +179,19 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 leaf.execute_request_byte_gate(vm.m.pages, image_base=image,
                     object_address=words[1], observer=None if diagnostic_scope is None else
                     lambda _p, **context: diagnostic_scope.setdefault('request_byte_gates', []).append(context))
+            elif allocate is not None and (wrapper, target) == (0x285AA0, 0x25CDD4):
+                if diagnostic_scope is None or free is None or read_clock is None:
+                    raise PrefixBoundary()
+                import vm9_request_leaf_prefixes as leaf
+                leaf.construct_request_object_with_null_reference(vm.m.pages, image_base=image,
+                    entry_stack_address=frame.native_stack_address - 0x180,
+                    object_address=words[1], kind=vm.m.u32(argument + 0x10),
+                    source_string_address=words[3], mode=vm.m.u32(argument + 0x20),
+                    flag=_read_span(vm.m.pages, argument + 0x24, 1)[0], thread_pointer=inputs['thread_pointer'],
+                    thread_id=diagnostic_scope.get('thread_id'), allocate=allocate, free=free,
+                    read_clock=read_clock, diagnostic_observer=lambda *event:
+                    diagnostic_scope.setdefault('events', []).append(list(event)),
+                    observer=lambda _p, **context: diagnostic_scope.setdefault('request_objects', []).append(context))
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

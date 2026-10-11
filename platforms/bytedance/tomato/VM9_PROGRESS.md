@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：实际请求对象构造与临时引用
+
+60项原生/Python对照、1项请求入口检查、34项回滚通过。对象构造复用
+StringObject克隆与诊断reference生命周期，写入realtime毫秒和状态字段；
+临时NULL reference计数最终由对象保留为1。公开请求从1019到1419步，
+下一处为 `+256AB0` 回调。完整独立signer、fresh签名与线上矩阵继续。
+见 [请求对象报告](REQUEST_JNI_STARTUP_WORKERS.md#688-实际请求对象构造与临时引用生命周期2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：实际JNI发布器与请求byte gate
 
 44项原生/Python对照、1项请求入口检查、20项回滚通过。实际发布器

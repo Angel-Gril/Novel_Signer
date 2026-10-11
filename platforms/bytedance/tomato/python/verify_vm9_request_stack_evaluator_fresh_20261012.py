@@ -197,8 +197,8 @@ def request_entry(library,libc):
             except prefix.RequestContinuationBoundary as exc:
                 assert before=={k:bytes(v) for k,v in p.items()}
                 if label=='JNI_connected':
-                    assert exc.vm.steps==1019 and exc.vm.pc-base==0xF9204
-                    assert str(exc.cause)=='unknown request callback +0x285aa0 -> +0x25cdd4'
+                    assert exc.vm.steps==1419 and exc.vm.pc-base==0xF99A4
+                    assert str(exc.cause)=='unknown request callback +0x285abc -> +0x256ab0'
                     assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
                     completed=diag['request_evaluator_prefixes'][-1]
                     assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
@@ -207,11 +207,18 @@ def request_entry(library,libc):
                     gate=diag['request_byte_gates'][-1]
                     assert gate['phase']=='request_byte_gate_completed' and gate['returned_byte']==0
                     assert gate['actual_target_offset']=='0x28bb54'
-                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1019,
+                    request_object=diag['request_objects'][-1]
+                    assert request_object['phase']=='request_object_lifecycle_completed'
+                    address=request_object['object_address']
+                    assert int.from_bytes(_read_span(exc.staged,address,8),'little')==base+0x35B868
+                    counter=int.from_bytes(_read_span(exc.staged,address+0x30,8),'little')
+                    assert int.from_bytes(_read_span(exc.staged,counter,4),'little')==1
+                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1419,
                         actual_request_callback_and_evaluator_executed=True,owning_TLS_allocator_and_JavaVM_used=True,
                         explicit_NULL_FindClass_input=True,evaluator_completed=True,
                         actual_scope_cleanup_completed=True,actual_request_byte_gate_completed=True,
-                        stopped_at_callback_offset='0x25cdd4',
+                        actual_request_object_constructed=True,temporary_reference_released_to_one_owner=True,
+                        stopped_at_callback_offset='0x256ab0',
                         all_pages_unchanged_after_stop=True,
                         full_request_returned=False,whole_handoff_native_differential_verified=False))
                 else:
@@ -221,7 +228,7 @@ def request_entry(library,libc):
                     guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
                         all_pages_unchanged=True,external_effects_rolled_back=False))
             else:raise AssertionError('request unexpectedly completed')
-            print('PASS request VM',label,'1019 steps' if label=='JNI_connected' else '965 steps',flush=True)
+            print('PASS request VM',label,'1419 steps' if label=='JNI_connected' else '965 steps',flush=True)
     try:
         outer.make_session=make
         result=boundary.case(library,libc,base,'absent',None,vm_full,apply_logger_model=True,
