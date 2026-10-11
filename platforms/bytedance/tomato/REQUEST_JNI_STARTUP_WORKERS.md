@@ -3099,6 +3099,41 @@ constructor、完整 JNI/bootstrap、独立 signer、新鲜输出及线上验收
 python -B platforms/bytedance/tomato/python/verify_vm9_bootstrap_module_constructors_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <module-constructor-evidence.json>
 ```
 
+## 6.64 六个 ELF support constructors（2026-10-11 Asia/Shanghai）
+
+`vm9_elf_bootstrap.run_support_constructor` 恢复实际 `.init_array` 中六个
+支持入口；对象初始化与 JNI cache mutex 继续使用既有 owner。
+
+| 入口 | 恢复行为 |
+| --- | --- |
+| +17319C | GOT时钟发布，cold singleton table保存incoming return地址 |
+| +180D28 | 两个vector清零、normal mutex、三次exit注册 |
+| +1834E4 | ELF sized string、NULL malloc分支、GOT-selected destructor注册 |
+| +271940 | 复用JNI cache mutex构造，不清零已有class/method cache |
+| +28300C | realtime毫秒发布，包括wrapped signed算术 |
+| +343A84 | auxv bit8、property状态、实际strncmp控制结果 |
+
+干净 `38a180a` 的 **12 项修改前真实原生 RED** 后实施，**48 项fresh
+原生/Python对照、51项回滚检查**通过。两个基址与不同SP、填充值、
+return地址、GOT重定向、cold/warm table/cache、负秒数及signed wrap、
+NULL malloc、非零注册状态、auxv/property分支均有对照。全部存活
+guest/heap/image/libc页面、有序服务、publication、finalizer状态一致。
+原生端实际执行matching-libc mutex与strncmp；输入由fresh ELF独立生成。
+
+失败检查覆盖入口、地址、scratch、保留区、分配别名、缺少服务、clock
+错误及无效timespec、最后publication写失败和exit服务拒绝，整次调用
+全页回滚。时钟、auxv、property、分配和注册是显式guest服务；外部副作用
+须延后到接受完整结果时。对象与JNI生产代码未改，没有native快照或
+公开私有字符串/payload。原生物理栈与析构执行不是这一阶段输出。
+
+五个module与六个support入口共覆盖11个init_array成员；`+15DB50`、
+`+2679F0`及完整顺序loader/JNI组合仍待恢复。独立signer、新鲜输出及线上
+验收继续。见 [ELF support constructor证据](evidence/vm9_elf_support_constructors_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_elf_support_constructors_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <support-constructor-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

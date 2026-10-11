@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：六个 ELF support constructors
+
+六个支持constructor通过48项fresh原生对照、51项回滚检查；复用既有
+object/JNI owner。两基址、GOT、时钟signed wrap、NULL malloc和property
+分支的全部存活页面及有序服务匹配。连同五个module入口覆盖11/13成员；
+继续剩余入口、完整顺序loader/JNI组合、独立signer和线上验收。
+见 [ELF support报告](REQUEST_JNI_STARTUP_WORKERS.md#664-六个-elf-support-constructors2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：五个 ELF module constructors
 
 同一owner现已恢复五个实际module constructor。新增四个入口通过8项

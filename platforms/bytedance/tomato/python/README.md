@@ -358,6 +358,8 @@ B now runs the actual startup-generated queue task through normal worker return,
 
 The module constructor owner now supports all five actual ELF module constructors. Four additional entries pass 8 fresh native/Python controls, with 2 existing B constructor regressions and 77 rollback checks. Complete JNI/bootstrap and the independent signer remain unfinished. See the [module constructor report](../REQUEST_JNI_STARTUP_WORKERS.md#663-另外四个-elf-module-constructors2026-10-11-asiashanghai).
 
+Six ELF support constructors now pass 48 fresh native/Python controls and 51 rollback checks. Object and JNI cache initialization reuse existing owners; clocks, auxv, property and exit registration are explicit guest services. Together with five module constructors, 11 of 13 init_array members are covered. The complete loader, JNI/bootstrap and independent signer remain unfinished. See the [ELF support report](../REQUEST_JNI_STARTUP_WORKERS.md#664-六个-elf-support-constructors2026-10-11-asiashanghai).
+
 
 
 
