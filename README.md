@@ -229,6 +229,7 @@ Finalizer延时提交通过 **8项对照、24项callable、25项回滚**。见 [
 实际timed poll、转交与queue清理通过 **4项完整对照、20项页面回滚**。见 [timed转交报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#674-实际-timed-poll转交与-queue-清理2026-10-11-asiashanghai)。
 三条worker协作等待、到期转交与完整退出通过 **4项完整对照、23项页面回滚**。见 [协作worker报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#675-三条-worker-协作等待转交与完整退出2026-10-11-asiashanghai)。
 Java byte array转引用通过 **52项原生/Python对照、19项回滚**，见 [byte array报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#676-java-byte-array-转引用与实际诊断锁2026-10-11-asiashanghai)。
+JNI引用字段、无参数方法和清理通过 **74项对照、18项回滚**，见 [JNI引用报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#677-jni-引用字段无参数方法与引用清理2026-10-11-asiashanghai)。
 实际live lookup及完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

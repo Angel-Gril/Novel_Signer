@@ -357,6 +357,110 @@ def retain_global_jni_reference(pages, *, environment_pointer, reference, invoke
     p.commit();return result
 
 
+def release_java_reference(pages, *, environment_pointer, reference, invoke_jni):
+    """+0x26f1d0: delete only recognized local/global/weak reference types."""
+    for value in (environment_pointer,reference):
+        if not isinstance(value,int) or not 0<=value<=MASK64:
+            raise RefillUnsupported('JNI release pointers must fit uint64')
+    if not environment_pointer or not reference:return
+    p=_PageTransaction(pages)
+    kind=_invoke_jni(p,environment_pointer,0x740,(reference,),invoke_jni)&0xFFFFFFFF
+    slot={1:0xB8,2:0xB0,3:0x718}.get(kind)
+    if slot is not None:_invoke_jni(p,environment_pointer,slot,(reference,),invoke_jni)
+    p.commit()
+
+
+@dataclass(frozen=True)
+class JavaReferenceMemberResult:
+    reference: int
+    status_byte: int | None
+    status_written: bool
+    copied_va_list_address: int | None
+
+
+def _reference_member(pages, *, kind, entry_stack_address, environment_pointer,
+        status_address, object_reference, name_address, signature_address, invoke_jni):
+    minimum=0x60 if kind=='field' else 0x1B0
+    if (not isinstance(entry_stack_address,int) or entry_stack_address<minimum
+            or entry_stack_address>MASK64 or entry_stack_address&15):
+        raise RefillUnsupported('JNI member helper requires an aligned guest stack')
+    for value in (environment_pointer,status_address,object_reference,name_address,signature_address):
+        if not isinstance(value,int) or not 0<=value<=MASK64:
+            raise RefillUnsupported('JNI member pointers must fit uint64')
+    p=_PageTransaction(pages);result=0;status=None;copied=None
+    temporary=entry_stack_address-(0x60 if kind=='field' else 0x1A8)
+    _write_span(p,temporary,bytes(8))
+    if kind=='method':
+        # +26f728 scans the signature before it tests the environment.
+        _address(signature_address,'JNI method signature',1)
+        signature=objects._cstring(p,signature_address,0x1000)[:-1]
+        if not signature.startswith((b'()[',b'()L')):
+            raise RefillUnsupported('JNI reference method requires no arguments and an object/array return')
+        original=entry_stack_address-0x48;copied=entry_stack_address-0x70
+        raw=b''.join(v.to_bytes(8,'little') for v in (entry_stack_address,copied,entry_stack_address-0x90))
+        raw+=(-24).to_bytes(4,'little',signed=True)+(-128).to_bytes(4,'little',signed=True)
+        _write_span(p,original,raw);_write_span(p,copied,_read_span(p,original,32))
+    if environment_pointer:
+        def call(slot,*args):return _invoke_jni(p,environment_pointer,slot,args,invoke_jni)
+        pushed=objects._s32(call(0xD0,3)&0xFFFFFFFF)
+        if pushed>=0 and not call(0x720)&0xFF:
+            if object_reference and name_address and signature_address:
+                cls=call(0xF8,object_reference)
+                if cls and not call(0x720)&0xFF:
+                    member=call(0x2F0 if kind=='field' else 0x108,cls,name_address,signature_address)
+                    if member:
+                        signature=objects._cstring(p,signature_address,0x1000)[:-1]
+                        if kind=='field':
+                            if not signature.startswith((b'[',b'L')):
+                                raise RefillUnsupported('JNI reference field requires an object/array signature')
+                            result=call(0x2F8,object_reference,member)
+                        else:
+                            if not signature.startswith((b'()[',b'()L')):
+                                raise RefillUnsupported('JNI reference method requires no arguments and an object/array return')
+                            consumed=entry_stack_address-0x1A0
+                            _write_span(p,consumed,_read_span(p,copied,32))
+                            result=call(0x118,object_reference,member,consumed)
+                        _w(p,temporary,result)
+                    call(0xB8,cls)
+        exception=call(0x720)&0xFFFFFFFF
+        if exception&0xFF:call(0x88)
+        status=exception&0xFF
+        if status_address:_w(p,status_address,status,1)
+    output=JavaReferenceMemberResult(result,status,bool(environment_pointer and status_address),copied)
+    p.commit();return output
+
+
+def read_java_reference_field(pages, *, entry_stack_address, environment_pointer,
+        status_address, object_reference, name_address, signature_address, invoke_jni):
+    """+0x26fa00 object/array field subset with original JNI checks and cleanup.
+
+    Preserve the returned reference even if the final check reports an
+    exception. The caller receives the low status byte. The class local is
+    deleted after member lookup; the original early class-exception path
+    skips that deletion. Primitive fields and C++ unwind are outside this
+    bounded API. Page rollback cannot undo already performed JNI effects.
+    """
+    return _reference_member(pages,kind='field',entry_stack_address=entry_stack_address,
+        environment_pointer=environment_pointer,status_address=status_address,
+        object_reference=object_reference,name_address=name_address,
+        signature_address=signature_address,invoke_jni=invoke_jni)
+
+
+def invoke_no_argument_java_reference_method(pages, *, entry_stack_address,
+        environment_pointer,status_address,object_reference,name_address,signature_address,invoke_jni):
+    """+0x26f650 -> +0x26f6e0 object/array method with an empty argument list.
+
+    Model both wrapper va_list structures and the 32-byte copy consumed by
+    CallObjectMethodV. Unconsumed GP/SIMD saves, physical spills, primitive
+    returns and methods with arguments are outside this bounded signature.
+    Push/check/class/member/call/delete/check/clear ordering stays native.
+    """
+    return _reference_member(pages,kind='method',entry_stack_address=entry_stack_address,
+        environment_pointer=environment_pointer,status_address=status_address,
+        object_reference=object_reference,name_address=name_address,
+        signature_address=signature_address,invoke_jni=invoke_jni)
+
+
 def _dispatch_delta(image_base,entry_offset=0x26E19C):
     entry=image_base+entry_offset
     folded=(((0x00A060400A021040 | (~entry&MASK64)) & 0x00A061440A061440)

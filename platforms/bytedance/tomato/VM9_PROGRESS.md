@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：JNI 引用字段、方法与清理
+
+三项实际JNI component通过74项原生/Python对照、18项页面回滚；status
+byte、NULL/exception路径、va_list copy、reference type清理和服务顺序一致。
+原有environment定义执行AST一致。四项+21CBEC实际原生live RED已通过，
+Python组合、独立signer、fresh/live继续。见 [JNI引用报告](REQUEST_JNI_STARTUP_WORKERS.md#677-jni-引用字段无参数方法与引用清理2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：Java byte array 转引用
 
 实际+2700A8/sized string/诊断reference边界通过52项原生/Python对照、19项

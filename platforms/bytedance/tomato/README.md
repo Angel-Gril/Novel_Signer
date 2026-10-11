@@ -255,6 +255,8 @@ The three requested workers now cooperate across six actual waits, transfer the 
 
 The Java byte array helper now preserves binary data through the original sized-string and diagnostic-reference path. Fifty-two native/Python controls and 19 page rollback guards pass. Actual live lookup, the independent signer, fresh signature output and the online matrix remain unfinished. See the [byte array report](REQUEST_JNI_STARTUP_WORKERS.md#676-java-byte-array-转引用与实际诊断锁2026-10-11-asiashanghai).
 
+JNI reference field access, no-argument object methods and local/global/weak cleanup now pass 74 native/Python controls and 18 page rollback guards. Actual Python live lookup, the independent signer, fresh output and the online matrix remain unfinished. See the [JNI reference member report](REQUEST_JNI_STARTUP_WORKERS.md#677-jni-引用字段无参数方法与引用清理2026-10-11-asiashanghai).
+
 
 
 

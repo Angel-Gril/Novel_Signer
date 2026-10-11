@@ -3535,6 +3535,37 @@ C++ unwind 和真实 Android JVM 尚未验收。**实际 live lookup `+21CBEC`�
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_byte_array_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <byte-array-evidence.json>
 ```
 
+## 6.77 JNI 引用字段、无参数方法与引用清理（2026-10-11 Asia/Shanghai）
+
+`vm9_jni_environment` 增加 `read_java_reference_field`（`+26FA00`）、
+`invoke_no_argument_java_reference_method`（`+26F650/+26F6E0`）和
+`release_java_reference`（`+26F1D0`）。它们复用同一 JNI table 调用 owner。
+字段 API 只恢复 object/array，方法 API 只恢复无参数的 object/array 返回；
+primitive 和带参数的方法明确拒绝。方法 wrapper 的两份 va_list 和
+CallObjectMethodV 消费的 32-byte copy 按实际 ABI 写入。
+
+两基址共 **74 项原生/Python 对照、18 项页面回滚**通过；returned
+reference、status low byte、guest payload、所有 image 页面和有序 JNI
+服务一致。覆盖 PushLocalFrame 失败、初次/class/末次 exception、NULL
+对象与 member、high status word，以及 local/global/weak/unknown reference
+类型。按原生保留最终 exception 前已返回的 reference，class exception
+的早退路径不额外删除 class local，末次检查按低字节 clear/status。
+方法 helper 在 environment 检查前读取 signature，NULL signature 明确
+拒绝。NULL environment/reference 的清理跳过 JNI。
+
+新增真实入口在旧 owner 上缺失；原有 environment 定义（含 6.76 byte array）
+的执行 AST 完全一致。两基址×SDK27/30 的四项实际 `+21CBEC` 原生 RED
+也已自然生成 binary byte array 的 MD5 hex/count1，旧 Python live 分支
+拒绝且页面未变。这些原生结果是后续 live lookup 的基线。
+本节仅完成上述 JNI component；**Python live lookup、完整独立 signer、
+fresh 签名、真实 Android JVM 和线上矩阵仍未完成。** native snapshot
+不作 Python 输入，JNI/provider 外部 effects 不能由页面回滚撤销。
+见 [JNI 引用 member 证据](evidence/vm9_jni_reference_members_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_reference_members_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <jni-reference-members-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
