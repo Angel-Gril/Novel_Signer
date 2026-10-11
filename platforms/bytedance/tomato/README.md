@@ -263,6 +263,8 @@ Initialized live Java lookup passes 48 native/Python controls and 11 rollback gu
 
 Cold encoded SDK lookup now passes 52 getter controls and 9 rollback guards; its initialized Java lookup composition passes another 10 controls and 4 guards. Encoded and plain caches remain independent and share decimal conversion. Cold live initialization, worker wiring and the complete signer remain unfinished. See the [cold SDK report](REQUEST_JNI_STARTUP_WORKERS.md#680-cold-encoded-sdk-getter-与实际-live-lookup2026-10-11-asiashanghai).
 
+Integer/reference argument JNI instance and static methods, void and integer/reference returns, and non-FP static fields pass 140 native/Python controls and 11 rollback guards. Consumed va_list arguments, native return widths, exception order and the legacy reference subset match. Cold initializer composition, worker wiring and the complete signer remain unfinished. See the [integer JNI report](REQUEST_JNI_STARTUP_WORKERS.md#681-带整型引用参数的-jni-方法与静态字段2026-10-11-asiashanghai).
+
 
 
 

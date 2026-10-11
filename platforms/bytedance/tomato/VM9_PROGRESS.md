@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：带参数JNI方法与静态字段
+
+实例/静态方法、静态字段通过140项原生/Python对照、11项回滚。
+支持非浮点参数/返回和void；GP/stack参数、consumed va_list、字宽、
+异常顺序及旧reference subset一致。实际initializer+2191D4已有4项
+原生live对照，旧路径拒绝且页面回滚；class resolver+218660和完整
+initializer组合、VM/worker接线、独立signer/fresh/live继续。
+见 [JNI member报告](REQUEST_JNI_STARTUP_WORKERS.md#681-带整型引用参数的-jni-方法与静态字段2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：cold encoded SDK与initialized live lookup
 
 SDK getter 52项对照/9项回滚，完整lookup组合10项对照/4项回滚通过。

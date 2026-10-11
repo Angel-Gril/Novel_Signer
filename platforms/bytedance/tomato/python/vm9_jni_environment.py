@@ -379,8 +379,11 @@ class JavaReferenceMemberResult:
 
 
 def _reference_member(pages, *, kind, entry_stack_address, environment_pointer,
-        status_address, object_reference, name_address, signature_address, invoke_jni):
-    minimum=0x60 if kind=='field' else 0x1B0
+        status_address, object_reference, name_address, signature_address, invoke_jni,
+        argument_words=None):
+    is_method=kind in ('method','static_method')
+    is_static=kind in ('static_method','static_field')
+    minimum=0x1B0 if is_method else 0x60
     if (not isinstance(entry_stack_address,int) or entry_stack_address<minimum
             or entry_stack_address>MASK64 or entry_stack_address&15):
         raise RefillUnsupported('JNI member helper requires an aligned guest stack')
@@ -388,14 +391,23 @@ def _reference_member(pages, *, kind, entry_stack_address, environment_pointer,
         if not isinstance(value,int) or not 0<=value<=MASK64:
             raise RefillUnsupported('JNI member pointers must fit uint64')
     p=_PageTransaction(pages);result=0;status=None;copied=None
-    temporary=entry_stack_address-(0x60 if kind=='field' else 0x1A8)
+    temporary=entry_stack_address-(0x1A8 if is_method else 0x60)
     _write_span(p,temporary,bytes(8))
-    if kind=='method':
+    if is_method:
         # +26f728 scans the signature before it tests the environment.
         _address(signature_address,'JNI method signature',1)
         signature=objects._cstring(p,signature_address,0x1000)[:-1]
-        if not signature.startswith((b'()[',b'()L')):
-            raise RefillUnsupported('JNI reference method requires no arguments and an object/array return')
+        if argument_words is None:
+            if not signature.startswith((b'()[',b'()L')):
+                raise RefillUnsupported('JNI reference method requires no arguments and an object/array return')
+            result_kind=signature[2:3]
+        else:
+            parameters,result_kind=_integer_method_signature(signature)
+            words=tuple(argument_words)
+            if len(words)!=len(parameters) or any(type(v) is not int or not 0<=v<=MASK64 for v in words):
+                raise RefillUnsupported('JNI integer arguments must match the signature as uint64 words')
+            for i,word in enumerate(words):
+                _w(p,entry_stack_address-0x88+i*8 if i<3 else entry_stack_address+(i-3)*8,word)
         original=entry_stack_address-0x48;copied=entry_stack_address-0x70
         raw=b''.join(v.to_bytes(8,'little') for v in (entry_stack_address,copied,entry_stack_address-0x90))
         raw+=(-24).to_bytes(4,'little',signed=True)+(-128).to_bytes(4,'little',signed=True)
@@ -404,23 +416,31 @@ def _reference_member(pages, *, kind, entry_stack_address, environment_pointer,
         def call(slot,*args):return _invoke_jni(p,environment_pointer,slot,args,invoke_jni)
         pushed=objects._s32(call(0xD0,3)&0xFFFFFFFF)
         if pushed>=0 and not call(0x720)&0xFF:
-            if object_reference and name_address and signature_address:
-                cls=call(0xF8,object_reference)
+            if (object_reference or kind=='static_method') and name_address and signature_address:
+                cls=call(0x30 if is_static else 0xF8,object_reference)
                 if cls and not call(0x720)&0xFF:
-                    member=call(0x2F0 if kind=='field' else 0x108,cls,name_address,signature_address)
+                    member=call((0x388 if is_static else 0x108) if is_method else (0x480 if is_static else 0x2F0),cls,name_address,signature_address)
                     if member:
                         signature=objects._cstring(p,signature_address,0x1000)[:-1]
-                        if kind=='field':
-                            if not signature.startswith((b'[',b'L')):
-                                raise RefillUnsupported('JNI reference field requires an object/array signature')
-                            result=call(0x2F8,object_reference,member)
+                        if not is_method:
+                            if kind=='static_field':
+                                result_kind=_integer_field_signature(signature)
+                                slot,width=_STATIC_FIELD_SLOTS[result_kind]
+                                result=call(slot,cls,member)&((1<<(width*8))-1)
+                            else:
+                                if not signature.startswith((b'[',b'L')):
+                                    raise RefillUnsupported('JNI reference field requires an object/array signature')
+                                result=call(0x2F8,object_reference,member)
+                            _w(p,temporary,result)
                         else:
-                            if not signature.startswith((b'()[',b'()L')):
+                            if argument_words is None and not signature.startswith((b'()[',b'()L')):
                                 raise RefillUnsupported('JNI reference method requires no arguments and an object/array return')
                             consumed=entry_stack_address-0x1A0
                             _write_span(p,consumed,_read_span(p,copied,32))
-                            result=call(0x118,object_reference,member,consumed)
-                        _w(p,temporary,result)
+                            slot,width=(_STATIC_METHOD_SLOTS if is_static else _INSTANCE_METHOD_SLOTS)[result_kind]
+                            word=call(slot,cls if is_static else object_reference,member,consumed)
+                            result=word&((1<<(width*8))-1) if width else 0
+                            _w(p,temporary,result)
                     call(0xB8,cls)
         exception=call(0x720)&0xFFFFFFFF
         if exception&0xFF:call(0x88)
@@ -428,6 +448,96 @@ def _reference_member(pages, *, kind, entry_stack_address, environment_pointer,
         if status_address:_w(p,status_address,status,1)
     output=JavaReferenceMemberResult(result,status,bool(environment_pointer and status_address),copied)
     p.commit();return output
+
+
+_INSTANCE_METHOD_SLOTS={b'L':(0x118,8),b'[':(0x118,8),b'Z':(0x130,1),b'B':(0x148,1),
+    b'C':(0x160,2),b'S':(0x178,2),b'I':(0x190,4),b'J':(0x1A8,8),b'V':(0x1F0,0)}
+_STATIC_METHOD_SLOTS={kind:(slot+0x280,width) for kind,(slot,width) in _INSTANCE_METHOD_SLOTS.items()}
+_STATIC_FIELD_SLOTS={b'L':(0x488,8),b'[':(0x488,8),b'Z':(0x490,1),b'B':(0x498,1),
+    b'C':(0x4A0,2),b'S':(0x4A8,2),b'I':(0x4B0,4),b'J':(0x4B8,8)}
+
+
+def _integer_java_type(signature,index,*,allow_void=False):
+    if index>=len(signature):raise RefillUnsupported('incomplete JNI signature')
+    start=index;kind=signature[index:index+1];index+=1
+    if kind==b'[':
+        while signature[index:index+1]==b'[':index+=1
+        _,index=_integer_java_type(signature,index)
+    elif kind==b'L':
+        end=signature.find(b';',index)
+        if end<=index:raise RefillUnsupported('incomplete JNI reference type')
+        index=end+1
+    elif kind not in (b'B',b'C',b'S',b'I',b'J',b'Z') and not (allow_void and kind==b'V'):
+        raise RefillUnsupported('JNI floating-point or unknown types are unsupported')
+    return signature[start:start+1],index
+
+
+def _integer_method_signature(signature):
+    if not signature.startswith(b'('):raise RefillUnsupported('JNI method signature requires parameters')
+    parameters=[];index=1
+    while signature[index:index+1]!=b')':
+        kind,index=_integer_java_type(signature,index);parameters.append(kind)
+        if len(parameters)>64:raise RefillUnsupported('JNI method argument bound exceeded')
+    result,index=_integer_java_type(signature,index+1,allow_void=True)
+    if index!=len(signature):raise RefillUnsupported('JNI signature has trailing bytes')
+    return tuple(parameters),result
+
+
+def _integer_field_signature(signature):
+    kind,index=_integer_java_type(signature,0)
+    if index!=len(signature):raise RefillUnsupported('JNI field signature has trailing bytes')
+    return kind
+
+
+@dataclass(frozen=True)
+class IntegerJavaMemberResult:
+    word: int
+    status_byte: int | None
+    status_written: bool
+    copied_va_list_address: int | None
+
+
+def invoke_integer_argument_java_method(pages, *, entry_stack_address,
+        environment_pointer,status_address,object_reference,name_address,
+        signature_address,argument_words,invoke_jni):
+    """+26f650: instance method with integer/reference arguments and non-FP return.
+
+    The first three raw words use X5-X7 saves; subsequent words use the guest
+    entry stack. JNI consumes its own va_list copy. Return widths and void
+    preserve the native zero-filled eight-byte result, including exceptions.
+    SIMD and physical saved registers remain outside this logical helper.
+    """
+    result=_reference_member(pages,kind='method',entry_stack_address=entry_stack_address,
+        environment_pointer=environment_pointer,status_address=status_address,
+        object_reference=object_reference,name_address=name_address,
+        signature_address=signature_address,argument_words=argument_words,invoke_jni=invoke_jni)
+    return IntegerJavaMemberResult(result.reference,result.status_byte,result.status_written,result.copied_va_list_address)
+
+
+def invoke_integer_argument_static_java_method(pages, *, entry_stack_address,
+        environment_pointer,status_address,class_name_address,name_address,
+        signature_address,argument_words,invoke_jni):
+    """+26f2a4: FindClass/GetStaticMethodID and the native non-FP MethodV slot.
+
+    Preserve PushLocalFrame, exception checks/clear and class local cleanup.
+    Page rollback does not undo external JNI effects; C++ unwind is unsupported.
+    """
+    result=_reference_member(pages,kind='static_method',entry_stack_address=entry_stack_address,
+        environment_pointer=environment_pointer,status_address=status_address,
+        object_reference=class_name_address,name_address=name_address,
+        signature_address=signature_address,argument_words=argument_words,invoke_jni=invoke_jni)
+    return IntegerJavaMemberResult(result.reference,result.status_byte,result.status_written,result.copied_va_list_address)
+
+
+def read_integer_static_java_field(pages, *, entry_stack_address,
+        environment_pointer,status_address,class_name_address,name_address,
+        signature_address,invoke_jni):
+    """+2715b8: non-FP static field with native width and class local cleanup."""
+    result=_reference_member(pages,kind='static_field',entry_stack_address=entry_stack_address,
+        environment_pointer=environment_pointer,status_address=status_address,
+        object_reference=class_name_address,name_address=name_address,
+        signature_address=signature_address,invoke_jni=invoke_jni)
+    return IntegerJavaMemberResult(result.reference,result.status_byte,result.status_written,result.copied_va_list_address)
 
 
 def read_java_reference_field(pages, *, entry_stack_address, environment_pointer,

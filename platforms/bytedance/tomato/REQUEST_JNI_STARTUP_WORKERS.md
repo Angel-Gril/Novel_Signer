@@ -3663,6 +3663,34 @@ python -B platforms/bytedance/tomato/python/verify_vm9_encoded_sdk_fresh_2026101
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_cold_sdk_lookup_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <cold-lookup-evidence.json>
 ```
 
+## 6.81 带整型引用参数的 JNI 方法与静态字段（2026-10-11 Asia/Shanghai）
+
+`vm9_jni_environment` 在同一 member owner 内恢复实例 `+26F650`、静态
+`+26F2A4` 方法，以及 `+2715B8` 静态字段。方法接受按 signature 匹配
+的 raw uint64 参数：前三个进入 X5–X7 save slots，后续写入 guest entry
+stack。JNI读取并消耗独立 va_list copy。支持 object/array、Z/B/C/S/I/J
+返回，以及 void；字段支持相同的非浮点值。返回按原生字宽写入预先
+清零的8字节临时结果。生产名称/signature仍来自 guest ELF。
+
+两基址共 **140项原生/Python对照、11项页面回滚**通过。覆盖所有上述
+返回字宽、0/1/2/3/4/5/7个参数、NULL环境/status/target/name/class/member、
+PushLocalFrame失败及push/class/final exception。全部guest payload/image
+页面、逻辑scratch、JNI顺序、已消耗的参数和va_list一致；原生返回及
+status byte一致。旧reference field与无参数reference method各在两
+基址回归通过；没有重复既有完整批次。四项改动前原生RED证明旧
+无参数owner拒绝带参数整数返回，且所有Python页面不变。
+
+测试member/signature是明确的synthetic control，不声明真实JavaVM。
+未知/浮点signature、参数数量/字范围、未映射stack与provider失败
+明确拒绝，页面保持不变；页面回滚无法撤销外部JNI effects。
+**完整physical register spills、浮点参数/返回、C++ unwind、实际
+cold initializer与class resolver组合、VM/worker接线、完整独立signer、
+fresh签名和线上矩阵仍未完成。** 见 [JNI member证据](evidence/vm9_integer_jni_members_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_integer_jni_members_fresh_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <integer-jni-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -233,6 +233,7 @@ JNI引用字段、无参数方法和清理通过 **74项对照、18项回滚**�
 实际reference作用域与MD5生命周期通过 **80项对照、16项回滚**，见 [作用域报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#678-实际-reference-作用域与-md5-生命周期2026-10-11-asiashanghai)。
 已初始化对象的live lookup通过 **48项对照、11项回滚**，见 [live lookup报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#679-已初始化对象的实际-live-java-lookup2026-10-11-asiashanghai)。
 cold encoded SDK及其live lookup组合通过 **62项对照、13项回滚**，见 [cold SDK报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#680-cold-encoded-sdk-getter-与实际-live-lookup2026-10-11-asiashanghai)。
+带整型/引用参数的JNI方法和静态字段通过 **140项对照、11项回滚**，见 [JNI member报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#681-带整型引用参数的-jni-方法与静态字段2026-10-11-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
