@@ -350,13 +350,16 @@ def construct_registry320(pages, *, object_address: int, entry_stack_address: in
                           image_base: int, allocate: Callable, free: Callable,
                           read_clock: Callable, get_tls: Callable,
                           initialize_registry: Callable, broadcast: Callable,
-                          max_nodes: int = 4096, max_bytes: int = 0x100000):
+                          max_nodes: int = 4096, max_bytes: int = 0x100000,
+                          diagnostic_scope: Callable | None = None):
     """Model +0x2566ec through return with explicit realtime/TLS boundaries.
 
     The three containers, mutex, empty string, clock reference, initial config
     insertion and temporary string cleanup are all included. This constructor
     does not publish the +0x15e694 lazy singleton or supply process startup.
     Caller-owned stack padding remains an input, including during malloc.
+    diagnostic_scope(staged_pages,object_address,incoming_SP) optionally
+    composes the recovered final enter/leave pair and must return None.
     """
     transaction = _PageTransaction(pages)
     layout = objects.construct_registry_layout320(transaction, object_address=object_address,
@@ -374,6 +377,9 @@ def construct_registry320(pages, *, object_address: int, entry_stack_address: in
         get_tls=get_tls, initialize_registry=initialize_registry, broadcast=broadcast,
         max_nodes=max_nodes, max_bytes=max_bytes)
     objects.destroy_string_object(transaction, object_address=temporary, image_base=image_base, free=free)
+    if diagnostic_scope is not None:
+        if not callable(diagnostic_scope) or diagnostic_scope(transaction,object_address,entry_stack_address) is not None:
+            raise RefillUnsupported('registry constructor diagnostic scope service is invalid')
     transaction.commit()
     return layout
 
@@ -382,7 +388,8 @@ def get_registry320_reference(pages, *, entry_stack_address: int, image_base: in
                               allocate: Callable, free: Callable, read_clock: Callable,
                               get_tls: Callable, initialize_registry: Callable,
                               broadcast: Callable, thread_id: int | None = None,
-                              max_nodes: int = 4096, max_bytes: int = 0x100000):
+                              max_nodes: int = 4096, max_bytes: int = 0x100000,
+                              diagnostic_scope: Callable | None = None):
     """Model +0x15e694 with the verified serialized lazy-reference contract.
 
     Guard/slot are +0x3d1558/+0x3d1550. Cold initialization owns the complete
@@ -393,7 +400,7 @@ def get_registry320_reference(pages, *, entry_stack_address: int, image_base: in
         construct_registry320(staged, object_address=pointer, entry_stack_address=entry_stack_address - 0x20,
             image_base=image_base, allocate=allocate, free=free, read_clock=read_clock,
             get_tls=get_tls, initialize_registry=initialize_registry, broadcast=broadcast,
-            max_nodes=max_nodes, max_bytes=max_bytes)
+            max_nodes=max_nodes, max_bytes=max_bytes,diagnostic_scope=diagnostic_scope)
     transaction = _PageTransaction(pages)
     result = objects.construct_lazy_reference(transaction,
         guard_address=objects._image_address(image_base, 0x3D1558),
@@ -414,7 +421,8 @@ def construct_singleton136(pages, *, object_address: int, entry_stack_address: i
                            read_clock: Callable, get_tls: Callable,
                            initialize_registry: Callable, broadcast: Callable,
                            thread_id: int | None = None, max_nodes: int = 4096,
-                           max_bytes: int = 0x100000, allocate_at_stack: Callable | None = None):
+                           max_bytes: int = 0x100000, allocate_at_stack: Callable | None = None,
+                           diagnostic_scope: Callable | None = None):
     """Model +0x166370 through return, including five actual registry getters.
 
     Each getter resolves/publishes its dependency in order; five decoded ELF
@@ -429,7 +437,7 @@ def construct_singleton136(pages, *, object_address: int, entry_stack_address: i
     current_stack = entry_stack_address - 0x100
     common = dict(image_base=image_base, allocate=allocate, free=free, read_clock=read_clock,
         get_tls=get_tls, initialize_registry=initialize_registry, broadcast=broadcast,
-        thread_id=thread_id, max_nodes=max_nodes, max_bytes=max_bytes)
+        thread_id=thread_id, max_nodes=max_nodes, max_bytes=max_bytes,diagnostic_scope=diagnostic_scope)
     for index, (source, field) in enumerate(((0x3D1690, 0x68), (0x3D16C0, 0x70),
                                           (0x3D16F0, 0x78), (0x3D1720, 0x7C), (0x3D1750, 0x50))):
         reference = get_registry320_reference(transaction, entry_stack_address=current_stack, **common)
@@ -446,6 +454,9 @@ def construct_singleton136(pages, *, object_address: int, entry_stack_address: i
             max_nodes=max_nodes, max_bytes=max_bytes)
         objects.destroy_string_object(transaction, object_address=temporary, image_base=image_base, free=free)
     _write_span(transaction, object_address + 8, (2).to_bytes(4, "little"))
+    if diagnostic_scope is not None:
+        if not callable(diagnostic_scope) or diagnostic_scope(transaction,object_address,entry_stack_address) is not None:
+            raise RefillUnsupported('singleton constructor diagnostic scope service is invalid')
     transaction.commit()
     return layout
 
@@ -454,13 +465,15 @@ def get_singleton136_reference(pages, *, entry_stack_address: int, image_base: i
                                allocate: Callable, free: Callable, read_clock: Callable,
                                get_tls: Callable, initialize_registry: Callable,
                                broadcast: Callable, thread_id: int | None = None,
-                               max_nodes: int = 4096, max_bytes: int = 0x100000, allocate_at_stack: Callable | None = None):
+                               max_nodes: int = 4096, max_bytes: int = 0x100000, allocate_at_stack: Callable | None = None,
+                               diagnostic_scope: Callable | None = None):
     """Model +0x161068; publish only after its complete constructor body."""
     def initialize(staged, pointer):
         construct_singleton136(staged, object_address=pointer, entry_stack_address=entry_stack_address - 0x20,
             image_base=image_base, allocate=allocate, free=free, read_clock=read_clock,
             get_tls=get_tls, initialize_registry=initialize_registry, broadcast=broadcast,
-            thread_id=thread_id, max_nodes=max_nodes, max_bytes=max_bytes,allocate_at_stack=allocate_at_stack)
+            thread_id=thread_id, max_nodes=max_nodes, max_bytes=max_bytes,allocate_at_stack=allocate_at_stack,
+            diagnostic_scope=diagnostic_scope)
     transaction = _PageTransaction(pages)
     result = objects.construct_lazy_reference(transaction,
         guard_address=objects._image_address(image_base, 0x3D1680),

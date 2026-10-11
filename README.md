@@ -218,6 +218,7 @@ B同次startup队列worker、TLS key清理及完整guest pthread_exit通过 **12
 另外四个ELF module constructor通过 **8 项原生对照、2 项原B回归、77 项回滚检查**，复用同一factory。见 [constructor报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#663-另外四个-elf-module-constructors2026-10-11-asiashanghai)。
 六个ELF support constructor通过 **48 项原生对照、51 项回滚检查**，累计覆盖11/13个init_array入口。见 [ELF支持报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#664-六个-elf-support-constructors2026-10-11-asiashanghai)。
 ELF guarded string constructor通过 **18 项原生对照、25 项回滚、12 项既有入口回归**，累计覆盖12/13个init_array成员。见 [guard报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#665-elf-guarded-string-constructor2026-10-11-asiashanghai)。
+ELF configuration constructor通过 **16 项原生对照、72 项回滚**，既有 registry **38/14** 结果逐字节一致；13/13个init_array成员已有独立实现，完整顺序加载待验。见 [配置报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#666-elf-configuration-constructor2026-10-11-asiashanghai)。
 完整 JNI/bootstrap 和 signer 仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

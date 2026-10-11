@@ -3162,6 +3162,39 @@ C++ guard和matching-libc mutex；分配、thread id、注册是显式guest服�
 python -B platforms/bytedance/tomato/python/verify_vm9_elf_guarded_string_constructor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <guarded-string-evidence.json>
 ```
 
+## 6.66 ELF configuration constructor（2026-10-11 Asia/Shanghai）
+
+`run_configuration_constructor` 恢复实际 `+2679F0`：从新鲜 ELF 解码五组
+guarded globals，调用显式 signed strtol 服务并验证实际分派目标，再通过
+既有 registry/singleton/TLS owner 构造配置。四个 registry 入口新增可选
+`diagnostic_scope`，完整组合实际末尾 enter/leave；默认行为沿用既有边界。
+六次实际复制及 publication 从 ELF table、MOVZ/MOVK 指令生成，不使用原生
+快照或私有 payload 常量。第四组复制的后半段读取已解码 global 数据；
+相关 global selector 布局、非零 copy-hook bounds、未知分派均明确拒绝。
+
+干净 `648405a` 上 **2 项真实原生 RED** 后实施。**16 项 fresh 原生/Python
+对照、72 项拒绝/回滚检查**通过：两基址/不同 SP、cold 后连续两次 warm、
+非零 decode guards、相同目标的 decimal 变体、静态模板重定位、marker
+变化、分配地址/thread id/clock 变化。Cold 原生执行两组真实 diagnostic
+scopes，matching-libc strtol、normal/recursive mutex 与 condition broadcast；
+分配、独立 TLS keys、注册和无等待者 futex 保持显式 guest 服务。每个
+cold 对照匹配 **190 项有序服务效果**，同次 warm 只新增各一次 strtol。
+完整存活 guest/heap/image/libc 页面、TLS/分配状态、每次返回边界和 scope
+地址一致；物理原生栈与线程并发不属于此次输出。
+
+72 项负例覆盖参数/资源上限、缺少服务、分配别名、未知指令/table layout、
+非零 copy bounds、递归 guard、reserved globals/heap/frame、诊断契约错误
+及后期写入失败，全部页面回滚。原有 registry 验证 **38 项对照、14 项
+负例**逐字节一致；support owner 既有函数 AST 保持一致。
+
+现在 13/13 个 init_array 成员已有独立实现。完整顺序 loader、同次
+JNI/bootstrap、独立 signer、fresh 输出和线上验收仍继续，不能将单入口
+覆盖视为完整加载。见 [配置构造器证据](evidence/vm9_elf_configuration_constructor_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_elf_configuration_constructor_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <configuration-constructor-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

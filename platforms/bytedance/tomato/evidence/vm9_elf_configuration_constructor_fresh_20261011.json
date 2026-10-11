@@ -1,0 +1,714 @@
+{
+  "schema": "vm9-elf-configuration-constructor-fresh-v1",
+  "evidence_date": "2026-10-11",
+  "evidence_timezone": "Asia/Shanghai",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "native_Python_constructor_controls": 16,
+  "rollback_negative_controls": 72,
+  "pre_change_behavior_RED_controls": 2,
+  "configuration_constructor_implemented": true,
+  "actual_diagnostic_scopes_executed": true,
+  "fresh_independent_ELF_inputs": true,
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "full_ELF_loader_verified": false,
+  "full_JNI_bootstrap_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "cases": [
+    {
+      "base": "0x122c0000",
+      "label": "cold",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x122c0000",
+      "label": "cold_then_two_warm",
+      "constructor_returns": 3,
+      "service_count": 192,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": 0,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x122c0000",
+      "label": "warm_masked_globals",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x122c0000",
+      "label": "decimal_same_dispatch",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x122c0000",
+      "label": "redirected_templates",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x122c0000",
+      "label": "redirected_markers",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x122c0000",
+      "label": "alternate_allocation_thread",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x122c0000",
+      "label": "alternate_clock",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "label": "cold",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "label": "cold_then_two_warm",
+      "constructor_returns": 3,
+      "service_count": 192,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": 0,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "label": "warm_masked_globals",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "label": "decimal_same_dispatch",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "label": "redirected_templates",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "label": "redirected_markers",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "label": "alternate_allocation_thread",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "label": "alternate_clock",
+      "constructor_returns": 1,
+      "service_count": 190,
+      "actual_diagnostic_scopes": 2,
+      "cold_scope_count": 2,
+      "warm_scope_count": null,
+      "natural_return_SP_verified": true,
+      "all_guest_heap_image_libc_pages_match": true,
+      "ordered_services_TLS_allocations_and_boundaries_match": true,
+      "actual_diagnostic_scope_addresses_match": true,
+      "fresh_independent_ELF_inputs": true,
+      "native_snapshot_input": false,
+      "physical_native_stack_compared": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "label": "boolean_image",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unaligned_image",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unaligned_SP",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "low_SP",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unaligned_TP",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "zero_thread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "boolean_thread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "overflow_thread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "node_budget",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "byte_budget",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "invalid_reserved",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "NULL_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unmapped_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "image_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "frame_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reused_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "overflow_decimal",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "boolean_decimal",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "alternate_dispatch",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "late_free_refusal",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "late_clock_refusal",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_allocate",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_free",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_read_clock",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_get_tls",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_initialize_registry",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_broadcast",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "missing_parse_decimal",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "instruction_grammar_0x267cb0",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "instruction_grammar_0x26791c",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "instruction_grammar_0x267924",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "instruction_grammar_0x267944",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "instruction_grammar_0x267948",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unmapped_template",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unsupported_global_selector_0x8",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unsupported_global_selector_0x10",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unsupported_global_selector_0x20",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unsupported_global_selector_0x28",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unsupported_global_selector_0x38",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unsupported_global_selector_0x40",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unsupported_global_selector_0x50",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unsupported_global_selector_0x58",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unsupported_global_selector_0x60",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "unterminated_mask",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_0x3decfc",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_0x3dec74",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_0x3deca8",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_0x3d1680",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_0x3d1558",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_0x3deda0",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_0x3deda8",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_0x3e31f8",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "write_failure_0x3decfc",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "write_failure_0x3dec74",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "write_failure_0x3deccc",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "write_failure_0x3deca8",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_frame",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "reserved_heap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "pending_guard_0x3d1680",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "pending_guard_0x3d1558",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "pending_guard_0x3deda0",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "diagnostic_bad_pthread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "nonzero_copy_bound_0x10",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "nonzero_copy_bound_0x18",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "construct_registry320_noncallable",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "construct_registry320_invalid_return",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "get_registry320_reference_noncallable",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "get_registry320_reference_invalid_return",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "construct_singleton136_noncallable",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "construct_singleton136_invalid_return",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "get_singleton136_reference_noncallable",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    },
+    {
+      "label": "get_singleton136_reference_invalid_return",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "native_fault_path_compared": false
+    }
+  ],
+  "existing_registry_regression_controls": 38,
+  "existing_registry_regression_guards": 14
+}

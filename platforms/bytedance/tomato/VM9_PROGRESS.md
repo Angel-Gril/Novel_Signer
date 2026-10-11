@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：ELF configuration constructor
+
++2679F0通过16项fresh原生对照、72项回滚；既有registry38项对照/14项
+负例结果逐字节一致。实际诊断scopes、libc广播、全部存活页面、有序
+服务和同次warm匹配。13/13个init_array成员已有独立实现；继续完整
+顺序loader/JNI、独立signer和线上验收。见 [配置报告](REQUEST_JNI_STARTUP_WORKERS.md#666-elf-configuration-constructor2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：ELF guarded string constructor
 
 +15DB50通过18项fresh原生对照、25项回滚检查；六个既有入口通过12项

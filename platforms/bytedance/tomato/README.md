@@ -233,6 +233,8 @@ Six ELF support constructors now pass 48 fresh native/Python controls and 51 rol
 
 The guarded ELF string constructor now passes 18 fresh native/Python controls and 25 rollback checks; all six existing support entries pass 12 fresh regressions. Twelve of thirteen init_array members are covered. The complete loader, JNI/bootstrap and independent signer remain unfinished. See the [guarded string report](REQUEST_JNI_STARTUP_WORKERS.md#665-elf-guarded-string-constructor2026-10-11-asiashanghai).
 
+The ELF configuration constructor now passes 16 fresh native/Python controls and 72 rollback checks, including actual diagnostic scopes, matching-libc broadcasts and same-run warm calls. Existing registry results remain byte-identical (38 controls/14 guards). All thirteen init_array members have independent implementations; the complete sequential loader, JNI/bootstrap and signer remain unfinished. See the [configuration constructor report](REQUEST_JNI_STARTUP_WORKERS.md#666-elf-configuration-constructor2026-10-11-asiashanghai).
+
 
 
 

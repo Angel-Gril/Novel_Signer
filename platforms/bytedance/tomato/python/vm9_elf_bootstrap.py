@@ -3,11 +3,13 @@
 Compose existing object and JNI owners from caller-owned relocated ELF pages.
 Clock, allocation, property and exit registration providers stage guest effects;
 they must defer external actions until the complete result is accepted.
-The loader order, remaining opaque constructors and full JNI are separate work.
+The loader order and full JNI are separate work.
 """
 from dataclasses import dataclass
 import vm9_objects as objects
 import vm9_jni_environment as jni
+import vm9_registry as registry
+import vm9_diagnostics as diagnostics
 from vm9_allocator import RefillUnsupported,_PageTransaction,_read_span,_write_span
 
 MASK64=(1<<64)-1
@@ -180,3 +182,142 @@ def run_support_constructor(pages, *, image_base, constructor_entry,
         write(image_base+0x3E3230,bytes([enabled]),True)
     p.commit()
     return SupportConstructorResult(entry,tuple(publications),tuple(allocations),tuple(finalizers))
+
+
+@dataclass(frozen=True)
+class ConfigurationConstructorResult:
+    singleton_reference_address: int
+    singleton_payload_address: int
+    diagnostic_scope_addresses: tuple[int, ...]
+    publication_addresses: tuple[int, ...]
+
+
+def run_configuration_constructor(pages, *, image_base, entry_stack_address,
+        thread_pointer, thread_id, allocate, free, read_clock, get_tls,
+        initialize_registry, broadcast, parse_decimal,
+        max_nodes=4096, max_bytes=0x100000, reserved_regions=()):
+    """Compose actual +2679f0, including cold singleton/registry and logging.
+
+    Decode fresh ELF constants, resolve the decimal dispatch through its
+    evidenced target, perform +267444's ELF template copies and retain the
+    observed cold zero-bound +276b9c copy branch. Existing registry, scoped
+    TLS, ownership and diagnostic owners execute the complete constructors.
+    parse_decimal(staged,source) is the explicit signed strtol service.
+    OS/TLS/allocator providers must defer effects outside the staged pages.
+    Nonzero copy-hook bounds and alternate dispatch targets fail closed.
+    """
+    if (type(image_base) is not int or image_base&4095 or not 0<image_base<=MASK64-0x3E3238
+            or type(entry_stack_address) is not int or entry_stack_address&15
+            or not 0x2000<entry_stack_address<=MASK64
+            or type(thread_pointer) is not int or thread_pointer&7
+            or not 0<thread_pointer<=MASK64-0x30
+            or type(thread_id) is not int or not 0<thread_id<=0xFFFFFFFF):
+        raise RefillUnsupported('ELF configuration constructor guest ABI is invalid')
+    if not all(callable(f) for f in (allocate,free,read_clock,get_tls,initialize_registry,broadcast,parse_decimal)):
+        raise RefillUnsupported('ELF configuration constructor requires explicit guest services')
+    if type(max_nodes) is not int or not 1<=max_nodes<=4096 or type(max_bytes) is not int or not 1<=max_bytes<=0x100000:
+        raise RefillUnsupported('ELF configuration constructor resource budget is invalid')
+    p=_PageTransaction(pages);regions=list(reserved_regions);allocations=[];scopes=[];publications=[]
+    for start,end in regions:
+        if type(start) is not int or type(end) is not int or not 0<=start<end<=MASK64+1:
+            raise RefillUnsupported('ELF configuration reserved region is invalid')
+    def u(a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
+    def write(a,data):
+        if type(a) is not int or not 0<a<=MASK64 or a+len(data)>MASK64+1:
+            raise RefillUnsupported('ELF configuration output address is invalid')
+        if any(a<end and start<a+len(data) for start,end in regions):
+            raise RefillUnsupported('ELF configuration output overlaps reserved storage')
+        _write_span(p,a,data)
+    def plan(staged,n):
+        address=allocate(staged,n)
+        if type(n) is not int or not 0<n<=max_bytes or type(address) is not int or not 0<address<=MASK64-n:
+            raise RefillUnsupported('ELF configuration allocation is invalid')
+        retained=[(image_base,image_base+0x400000),(entry_stack_address-0x1000,entry_stack_address),*regions,*allocations]
+        if any(address<end and start<address+n for start,end in retained):
+            raise RefillUnsupported('ELF configuration allocation aliases retained storage')
+        _read_span(staged,address,n);allocations.append((address,address+n));return address
+    def scope(staged,address,sp):
+        scratch=sp-0x50
+        if any(scratch<end and start<scratch+24 for start,end in regions):
+            raise RefillUnsupported('ELF diagnostic scope overlaps reserved storage')
+        diagnostics.enter_diagnostic_scope(staged,object_address=scratch,input_word=address,
+            image_base=image_base,thread_pointer=thread_pointer,allocate=plan,thread_id=thread_id)
+        diagnostics.leave_diagnostic_scope(staged,object_address=scratch,
+            image_base=image_base,thread_pointer=thread_pointer)
+        scopes.append(scratch)
+    # Validate the caller frame before any shared owner writes within it.
+    _read_span(p,entry_stack_address-0x1000,0x1000)
+    if any(entry_stack_address-0x1000<end and start<entry_stack_address for start,end in regions):
+        raise RefillUnsupported('ELF configuration caller frame overlaps reserved storage')
+    for source,mask,destination,flag in (
+            (0x9D7EC,0x9D81C,0x3DECF4,0x3DECFC),
+            (0x9D7BC,0x9D848,0x3DEC64,0x3DEC70),
+            (0x9D7C8,0x9D83C,0x3DEC88,0x3DEC94),
+            (0x9D7D4,0x9D830,0x3DECAC,0x3DECB8),
+            (0x9D7E0,0x9D824,0x3DECD0,0x3DECDC)):
+        if not u(image_base+flag,4):
+            address=image_base+destination
+            # These destinations occupy disjoint fixed 24-byte global slots.
+            write(address,_read_span(p,address,24))
+            objects.decode_masked_bytes(p,source_address=image_base+source,
+                destination_address=address,mask_address=image_base+mask,max_bytes=24)
+            write(image_base+flag,(1).to_bytes(4,'little'))
+        if destination==0x3DECF4:
+            value=parse_decimal(p,image_base+destination)
+            if type(value) is not int or not -(1<<63)<=value<(1<<63):
+                raise RefillUnsupported('ELF decimal dispatch result exceeds signed64')
+            instruction=u(image_base+0x267CB0,4)
+            if instruction&0xFFC003FF!=0x91000100:
+                raise RefillUnsupported('ELF decimal dispatch instruction is unsupported')
+            adjustment=(instruction>>10)&4095
+            if image_base+0x267CE4-(value>>2)+adjustment!=image_base+0x267CE4:
+                raise RefillUnsupported('ELF decimal dispatch selects an unsupported target')
+    reference=registry.get_singleton136_reference(p,entry_stack_address=entry_stack_address-0x1F0,
+        image_base=image_base,allocate=plan,free=free,read_clock=read_clock,get_tls=get_tls,
+        initialize_registry=initialize_registry,broadcast=broadcast,thread_id=thread_id,
+        max_nodes=max_nodes,max_bytes=max_bytes,diagnostic_scope=scope)
+    payload=u(reference.wrapper_address)
+    if not payload or u(payload+0x10) or u(payload+0x18):
+        raise RefillUnsupported('ELF constructor copy hook requires zero singleton bounds')
+    pc=image_base+0x267444
+    index=(((((~pc|0xA060400A021040)&0xA061440A061440)+(pc&0x10400040400))|0x1010104)^0xFF5F9EBBF421C8D4)&MASK64
+    def template(offset,n):
+        address=(u(image_base+0x3822F8+offset)+index)&MASK64
+        return _read_span(p,address,n)
+    # These selectors also drive the original decoder/publication addresses.
+    # Keep that fixed global layout explicit; template +20 is decoded data.
+    for offset,destination in ((8,0x3DEC64),(0x10,0x3DEC74),(0x20,0x3DEC88),
+            (0x28,0x3DEC98),(0x38,0x3DECAC),(0x40,0x3DECBC),
+            (0x50,0x3DECD0),(0x58,0x3DECE0),(0x60,0x3DEC70)):
+        if (u(image_base+0x3822F8+offset)+index)&MASK64!=image_base+destination:
+            raise RefillUnsupported('ELF configuration global selector layout is unsupported')
+    def immediate(low,high):
+        first,second=u(image_base+low,4),u(image_base+high,4)
+        if first&0xFFE0001F!=0x52800000|(first&31) or second&0xFFE0001F!=0x72A00000|(first&31):
+            raise RefillUnsupported('ELF constructor publication immediate grammar is unsupported')
+        return ((first>>5)&65535)|(((second>>5)&65535)<<16)
+    for offset,local in ((0,entry_stack_address-0x180),(0x30,entry_stack_address-0x1A0),(0x48,entry_stack_address-0x1B0)):
+        write(local,template(offset,16))
+    for destination,source,n in (
+            (entry_stack_address-0x178,image_base+0x3DEC64,8),
+            (image_base+0x3DEC74,entry_stack_address-0x180,16),
+            (entry_stack_address-0x198,image_base+0x3DECAC,8),
+            (image_base+0x3DECBC,entry_stack_address-0x1A0,16),
+            (entry_stack_address-0x1A8,image_base+0x3DECD0,8),
+            (image_base+0x3DECE0,entry_stack_address-0x1B0,16)):
+        write(destination,_read_span(p,source,n))
+        if image_base<=destination<image_base+0x400000:publications.append(destination)
+    value=immediate(0x26791C,0x267924).to_bytes(4,'little')
+    for offset in (0x3DEC84,0x3DECCC,0x3DECF0):write(image_base+offset,value);publications.append(image_base+offset)
+    write(image_base+0x3DEC98,template(0x18,8)+template(0x20,8));publications.append(image_base+0x3DEC98)
+    write(image_base+0x3DECA8,immediate(0x267944,0x267948).to_bytes(4,'little'));publications.append(image_base+0x3DECA8)
+    # Shared owners also stage global writes. Validate their final changes
+    # against caller reservations before any page reaches the caller.
+    for page in p:
+        start=page<<12
+        for low,high in regions:
+            first,last=max(start,low),min(start+4096,high)
+            if first<last and _read_span(p,first,last-first)!=_read_span(pages,first,last-first):
+                raise RefillUnsupported('ELF configuration shared owner changed reserved storage')
+    p.commit()
+    return ConfigurationConstructorResult(reference.wrapper_address,payload,tuple(scopes),tuple(publications))
