@@ -412,6 +412,8 @@ The actual registry counter now performs scoped lookup, signed saturation or clo
 
 The request now reuses the actual tree constructor and restores begin/end iterator pairs and node/table comparison. 24 native/Python controls, one request VM entry check and 13 rollback guards pass. Its independently constructed empty header input reaches 1539 steps, where the unresolved __cxa_atexit import is rejected. The complete signer remains unfinished. See the [tree and iterator report](../REQUEST_JNI_STARTUP_WORKERS.md#690-实际请求树构造与-iterator-abi2026-10-12-asiashanghai).
 
+The actual __cxa_atexit import and process registration wrapper now pass 16 native/Python controls, one request VM entry check and 17 rollback guards. The owning request reaches 1558 steps at the fill-string constructor. Real libc exit tables and destructor execution remain unverified; the complete signer remains unfinished. See the [process registration report](../REQUEST_JNI_STARTUP_WORKERS.md#691-实际进程析构导入与注册2026-10-12-asiashanghai).
+
 
 
 

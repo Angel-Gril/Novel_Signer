@@ -3981,6 +3981,32 @@ NULL header。页面全部回滚，外部服务effects不回滚。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_tree_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-tree-evidence.json>
 ```
 
+## 6.91 实际进程析构导入与注册（2026-10-12 Asia/Shanghai）
+
+请求ELF resolver从实际 `.rela.plt` 推导 `__cxa_atexit` PLT，再绑定
+`+382CD8` 的ABS64 relocation；目标确认为 `+347EA0`。保留既有resolver
+名称与memset/memcpy绑定。`register_process_destructor` 恢复
+`+285B7C` wrapper：转发packed中的destructor/object/dso三字，显式
+进程注册服务返回的W0写入packed+0x20。请求使用owning session的
+`register_destructor`，线程析构注册仍由其独立owner处理。
+
+两基址 **16项原生/Python对照、1项请求入口检查、17项页面回滚**。
+实际wrapper覆盖0、1、负数、signed边界与unsigned u32状态，以及NULL
+和full uint64参数；完整payload、packed写宽与注册调用顺序匹配。
+10项leaf guards覆盖缺失服务、provider异常、非法/越界状态与越界参数；
+7项入口guards保留JNI/TLS/NULL header，并加入exit服务缺失/异常。
+所有失败页面回滚；外部注册effects不回滚。native输出不作为Python输入。
+
+fresh owning请求从1539到1558步，完成实际导入与注册，下一边界为
+`+285B9C -> +248274` 填充字符串构造。对照仅验证显式注册服务和实际
+wrapper，**未执行真实libc atexit table、进程退出或已注册析构函数**。
+完整请求返回、整链原生差分、真实Android JVM、完整独立signer、fresh
+签名与线上矩阵仍未完成。见 [进程注册证据](evidence/vm9_request_exit_registration_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_exit_registration_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-exit-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：进程析构导入与注册
+
+16项原生/Python对照、1项请求入口检查、17项回滚通过。实际ELF绑定
+`__cxa_atexit`，请求转发到owning进程注册服务；1539到1558步，下一边界
+为 `+248274` 填充字符串构造。真实libc exit table/析构执行未验证；
+完整signer、fresh/live继续。见 [进程注册报告](REQUEST_JNI_STARTUP_WORKERS.md#691-实际进程析构导入与注册2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：请求树与iterator ABI
 
 24项原生/Python对照、1项请求入口检查、13项回滚通过。请求复用树

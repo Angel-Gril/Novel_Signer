@@ -186,7 +186,8 @@ def request_entry(library,libc):
         w(p,base+0x3DEED8,vm);w(p,vm,vm_table);w(p,vm_table+0x30,0x7400F000);w(p,env,table)
         for slot in (0x30,0x720):w(p,table+slot,0x7400F100+slot)
         for label in ('JNI_connected','missing_JNI','JNI_provider_exception',
-                      'missing_counter_TLS','counter_TLS_provider_exception','NULL_header_reference'):
+                      'missing_counter_TLS','counter_TLS_provider_exception','NULL_header_reference',
+                      'missing_exit_service','exit_provider_exception'):
             events=[];diag={'thread_id':session.thread_id}
             def invoke_vm(p,fn,args):
                 assert fn==0x7400F000 and args[0]==vm and args[2]==0x10006
@@ -203,6 +204,10 @@ def request_entry(library,libc):
                 if label=='counter_TLS_provider_exception':
                     raise RefillUnsupported('injected request counter TLS failure')
                 return session.get_tls(p,control)
+            def register_exit(p,*args):
+                if label=='exit_provider_exception':
+                    raise RefillUnsupported('injected request process exit registration failure')
+                return session.register_destructor(p,*args)
             if label=='NULL_header_reference':w(p,request,0)
             before={k:bytes(v) for k,v in p.items()}
             try:
@@ -211,12 +216,13 @@ def request_entry(library,libc):
                     prepare_format=session.prepare_format,read_clock=session.read_clock,acquire_environment=acquire,
                     invoke_jni=None if label=='missing_JNI' else jni,get_singleton=session.singleton,
                     get_tls=None if label=='missing_counter_TLS' else counter_tls,
-                    initialize_registry=session.initialize_registry,broadcast=session.broadcast)
+                    initialize_registry=session.initialize_registry,broadcast=session.broadcast,
+                    register_exit=None if label=='missing_exit_service' else register_exit)
             except prefix.RequestContinuationBoundary as exc:
                 assert before=={k:bytes(v) for k,v in p.items()}
                 if label=='JNI_connected':
-                    assert exc.vm.steps==1539 and exc.vm.pc-base==0xF9CEC
-                    assert str(exc.cause)=='NULL request callback target at wrapper +0x285b7c'
+                    assert exc.vm.steps==1558 and exc.vm.pc-base==0xF9D38
+                    assert str(exc.cause)=='unknown request callback +0x285b9c -> +0x248274'
                     assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
                     completed=diag['request_evaluator_prefixes'][-1]
                     assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
@@ -237,17 +243,26 @@ def request_entry(library,libc):
                     assert tree['phase']=='request_tree_constructed'
                     assert {r['position'] for r in diag['request_tree_iterators']}=={'begin','end'}
                     assert diag['request_iterator_comparisons'][-1]['equal']
-                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1539,
+                    registration=diag['request_process_registrations'][-1]
+                    assert registration['status_u32']==0 and registration['owning_exit_service_used']
+                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1558,
                         actual_request_callback_and_evaluator_executed=True,owning_TLS_allocator_and_JavaVM_used=True,
                         explicit_NULL_FindClass_input=True,evaluator_completed=True,
                         actual_scope_cleanup_completed=True,actual_request_byte_gate_completed=True,
                         actual_request_object_constructed=True,temporary_reference_released_to_one_owner=True,
                         actual_request_counter_completed=True,owning_TLS_registry_and_broadcast_used=True,
                         valid_empty_header_container_input=True,actual_tree_and_iterators_completed=True,
-                        iterator_comparison_completed=True,unresolved_process_atexit_import=True,
-                        stopped_at_wrapper_offset='0x285b7c',stopped_at_callback_offset='0x0',
+                        iterator_comparison_completed=True,unresolved_process_atexit_import=False,
+                        actual_process_atexit_registration_completed=True,
+                        stopped_at_wrapper_offset='0x285b9c',stopped_at_callback_offset='0x248274',
                         all_pages_unchanged_after_stop=True,
                         full_request_returned=False,whole_handoff_native_differential_verified=False))
+                elif label in ('missing_exit_service','exit_provider_exception'):
+                    assert exc.vm.steps==1539 and exc.vm.pc-base==0xF9CEC
+                    expected='process destructor registration requires an exit service' if label=='missing_exit_service' else 'injected request process exit registration failure'
+                    assert str(exc.cause)==expected
+                    guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
+                        all_pages_unchanged=True,external_effects_rolled_back=False))
                 elif label=='NULL_header_reference':
                     assert exc.vm.steps==1452 and exc.vm.pc-base==0xF9A28
                     assert str(exc.cause)=='missing checkpoint page 0x0'
@@ -267,14 +282,14 @@ def request_entry(library,libc):
                         all_pages_unchanged=True,external_effects_rolled_back=False))
             else:raise AssertionError('request unexpectedly completed')
             if label=='NULL_header_reference':w(p,request,header)
-            steps=1539 if label=='JNI_connected' else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
+            steps=1558 if label=='JNI_connected' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
             print('PASS request VM',label,steps,'steps',flush=True)
     try:
         outer.make_session=make
         result=boundary.case(library,libc,base,'absent',None,vm_full,apply_logger_model=True,
             apply_handoff_model=True,apply_publication=True,terminal_observer=terminal)
     finally:outer.make_session=previous
-    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==5
+    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==7
     return rows,guards
 
 

@@ -162,6 +162,27 @@ def read_monotonic_nanoseconds(pages, *, read_clock: Callable) -> int:
     return (seconds * 1_000_000_000 + nanoseconds) & ((1 << 64) - 1)
 
 
+def register_process_destructor(pages, *, destructor_address: int, object_address: int,
+        dso_address: int, register_exit: Callable) -> int:
+    """Forward actual __cxa_atexit words; preserve signed/unsigned uint32 status.
+
+    The explicit provider owns process registration. This does not register a
+    thread destructor or execute process exit. Provider effects are external
+    to the staged-page transaction.
+    """
+    if any(not isinstance(value, int) or not 0 <= value < 1 << 64
+            for value in (destructor_address, object_address, dso_address)):
+        raise RefillUnsupported('process destructor arguments must fit uint64')
+    if not callable(register_exit):
+        raise RefillUnsupported('process destructor registration requires an exit service')
+    transaction = _PageTransaction(pages)
+    status = register_exit(transaction, destructor_address, object_address, dso_address)
+    if not isinstance(status, int) or not -(1 << 31) <= status < 1 << 32:
+        raise RefillUnsupported('process registration status must fit signed/unsigned uint32')
+    transaction.commit()
+    return status & 0xFFFFFFFF
+
+
 def read_realtime_milliseconds(pages, *, read_clock: Callable) -> int:
     """+0x26cc60/+0x291958: wrapped realtime microseconds, signed SDIV 1000."""
     if not callable(read_clock):

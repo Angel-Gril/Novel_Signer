@@ -30,7 +30,7 @@ class RequestContinuationBoundary(Exception):
 
 
 def resolve_request_memory_imports(pages, library, image):
-    """Resolve matching ELF memset/memcpy imports to explicit PLT services.
+    """Resolve matching ELF memory/exit imports to explicit PLT services.
 
     Derive PLT entries from this file's jump relocations, then bind matching
     ABS64/GLOB_DAT/JUMP_SLOT sites. This is loader input, not native output.
@@ -46,9 +46,10 @@ def resolve_request_memory_imports(pages, library, image):
         symbols = elf.get_section(jumps['sh_link'])
         for index, relocation in enumerate(jumps.iter_relocations()):
             name = symbols.get_symbol(relocation['r_info_sym']).name
-            if name in ('memset', 'memcpy'):
+            if name in ('memset', 'memcpy', '__cxa_atexit'):
                 targets[name] = image + plt['sh_addr'] + 32 + index * 16
-        if targets != {'memset': image + 0x347F20, 'memcpy': image + 0x347F60}:
+        if targets != {'memset': image + 0x347F20, 'memcpy': image + 0x347F60,
+                       '__cxa_atexit': image + 0x347EA0}:
             raise RefillUnsupported('request ELF memory import layout does not match this sample')
         for section in elf.iter_sections():
             if section['sh_type'] != 'SHT_RELA':
@@ -70,7 +71,8 @@ def resolve_request_memory_imports(pages, library, image):
 def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None,
                    diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
                    read_clock=None, acquire_environment=None, invoke_jni=None,
-                   get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None):
+                   get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None,
+                   register_exit=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -228,6 +230,15 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 _write_span(vm.m.pages, argument + 0x18, int(equal).to_bytes(4, 'little'))
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_iterator_comparisons', []).append(dict(equal=equal))
+            elif (wrapper, target) == (0x285B7C, 0x347EA0):
+                import vm9_callbacks as callbacks
+                status = callbacks.register_process_destructor(vm.m.pages,
+                    destructor_address=words[1], object_address=words[2],
+                    dso_address=words[3], register_exit=register_exit)
+                _write_span(vm.m.pages, argument + 0x20, status.to_bytes(4, 'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_process_registrations', []).append(dict(
+                        status_u32=status, owning_exit_service_used=True))
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()
