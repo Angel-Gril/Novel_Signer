@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：请求树与iterator ABI
+
+24项原生/Python对照、1项请求入口检查、13项回滚通过。请求复用树
+constructor，恢复begin/end pair及node/table比较；入口独立生成有效空
+header reference，NULL输入仍拒绝。请求从1444到1539步，当前缺失
+`__cxa_atexit` ABS64导入与进程析构注册。完整signer、fresh/live继续。
+见 [树与iterator报告](REQUEST_JNI_STARTUP_WORKERS.md#690-实际请求树构造与-iterator-abi2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：实际registry计数与拥有者TLS接线
 
 40项原生/Python对照、1项请求入口检查、36项回滚通过。计数回调恢复

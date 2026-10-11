@@ -3949,6 +3949,38 @@ fresh owning请求从1419步到1444步，在 `+285ADC -> +25BF14`
 python -B platforms/bytedance/tomato/python/verify_vm9_request_counter_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-counter-evidence.json>
 ```
 
+## 6.90 实际请求树构造与 iterator ABI（2026-10-12 Asia/Shanghai）
+
+请求 `+285ADC -> +25BF14` 接入既有树constructor，直接使用packed
+container与descriptor输入。`configuration_tree_iterator` 恢复
+`+25C180/+25C188`：返回实际guest iterator table与begin/end node两字；
+`+285AEC` wrapper把两字存入packed+0x10。begin读取sentinel左端节点，
+end返回sentinel。`configuration_tree_iterators_equal` 恢复 `+24C600`，
+先比较node，只有node相同才读取并比较table；`+285B08`写回4字节结果。
+
+两基址 **24项原生/Python对照、1项请求入口检查、13项页面回滚**。
+12项constructor/iterator与12项comparison均执行实际wrapper；完整packed
+ABI、guest payload/ELF页、allocator顺序与堆匹配。覆盖跨页构造、空/非空
+begin/end、不同node/table、NULL/full uint64两字，以及node不同时不读取
+未映射table字的短路行为。native输出不作为Python输入。
+
+入口发现旧fixture的header reference为NULL，在1452步触发非法读取。
+现用既有树constructor与reference owner独立生成有效空header输入；
+同时保留NULL-header拒绝检查。8项leaf guards覆盖descriptor、allocation、
+controller与iterator位置，5项入口guards覆盖JNI/TLS服务缺失/异常与
+NULL header。页面全部回滚，外部服务effects不回滚。
+
+实际fresh owning请求完成树与iterator比较，从1444步到1539步，随后
+`+285B7C` 拒绝NULL function target。原始ELF relocation确认该target来自
+`+382CD8` 的 `R_AARCH64_ABS64 __cxa_atexit`；当前请求import resolver
+只绑定memset/memcpy，因此仍需要进程析构导入与注册服务。**完整请求
+返回、整链原生差分、真实Android JVM、完整独立signer、fresh签名与
+线上矩阵仍未完成。** 见 [请求树与iterator证据](evidence/vm9_request_tree_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_tree_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-tree-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

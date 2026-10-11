@@ -281,6 +281,8 @@ Actual request object construction now clones the input string, copies the share
 
 The actual registry counter now performs scoped lookup, signed saturation or cloned-key insertion and returns the old u32. 40 native/Python controls, one request VM entry check and 36 rollback guards pass. The request uses its owning TLS/registry/broadcast services, reaches 1444 steps and stops at tree construction +25BF14. The complete signer remains unfinished. See the [registry counter report](REQUEST_JNI_STARTUP_WORKERS.md#689-实际-registry-计数回调与拥有者-tls-接线2026-10-12-asiashanghai).
 
+The request now reuses the actual tree constructor and restores begin/end iterator pairs and node/table comparison. 24 native/Python controls, one request VM entry check and 13 rollback guards pass. Its independently constructed empty header input reaches 1539 steps, where the unresolved __cxa_atexit import is rejected. The complete signer remains unfinished. See the [tree and iterator report](REQUEST_JNI_STARTUP_WORKERS.md#690-实际请求树构造与-iterator-abi2026-10-12-asiashanghai).
+
 
 
 

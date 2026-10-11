@@ -1,0 +1,396 @@
+{
+  "component": "Request tree constructor, iterator return pairs/comparison and valid header ABI input",
+  "native_Python_controls": 24,
+  "request_VM_boundary_controls": 1,
+  "rollback_guards": 13,
+  "pre_change_native_RED_controls": 2,
+  "pre_change_request_VM_RED_controls": 1,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "constructor",
+      "operation": "construct",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "constructor_cross_page",
+      "operation": "construct",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "begin_empty",
+      "operation": "begin",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "begin_nonempty",
+      "operation": "begin",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "end_empty",
+      "operation": "end",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "end_nonempty",
+      "operation": "end",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "constructor",
+      "operation": "construct",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "constructor_cross_page",
+      "operation": "construct",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "begin_empty",
+      "operation": "begin",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "begin_nonempty",
+      "operation": "begin",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "end_empty",
+      "operation": "end",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "end_nonempty",
+      "operation": "end",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "equal",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "different_nodes",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "different_tables",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_words",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "full_uint64",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_tables_not_loaded",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "equal",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "different_nodes",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "different_tables",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_words",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "full_uint64",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_tables_not_loaded",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": true
+    }
+  ],
+  "request_entry_cases": [
+    {
+      "image_base": "0x775c205000",
+      "case": "JNI_connected",
+      "request_vm_steps": 1539,
+      "actual_request_callback_and_evaluator_executed": true,
+      "owning_TLS_allocator_and_JavaVM_used": true,
+      "explicit_NULL_FindClass_input": true,
+      "evaluator_completed": true,
+      "actual_scope_cleanup_completed": true,
+      "actual_request_byte_gate_completed": true,
+      "actual_request_object_constructed": true,
+      "temporary_reference_released_to_one_owner": true,
+      "actual_request_counter_completed": true,
+      "owning_TLS_registry_and_broadcast_used": true,
+      "valid_empty_header_container_input": true,
+      "actual_tree_and_iterators_completed": true,
+      "iterator_comparison_completed": true,
+      "unresolved_process_atexit_import": true,
+      "stopped_at_wrapper_offset": "0x285b7c",
+      "stopped_at_callback_offset": "0x0",
+      "all_pages_unchanged_after_stop": true,
+      "full_request_returned": false,
+      "whole_handoff_native_differential_verified": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_descriptor",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_allocation",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_controller",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "invalid_iterator_position",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_descriptor",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_allocation",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_controller",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "invalid_iterator_position",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "missing_JNI",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "JNI_provider_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "missing_counter_TLS",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "counter_TLS_provider_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "NULL_header_reference",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "physical_register_spills_verified": false,
+  "live_Android_JVM_verified": false,
+  "whole_request_native_differential_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "accepted_native_controls_not_repeated": true,
+  "verifier_incremental_extensions": "Twelve constructor/iterator controls were followed by twelve new comparison controls; prior owners were unchanged. Entry uses an independently constructed empty header tree and preserves the NULL-header rejection."
+}

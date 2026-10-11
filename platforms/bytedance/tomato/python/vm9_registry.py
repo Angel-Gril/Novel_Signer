@@ -255,6 +255,31 @@ class _ConfigurationTree:
         return created, True
 
 
+def configuration_tree_iterator(pages, *, container_address: int, image_base: int,
+        position: str = 'end') -> tuple[int, int]:
+    """+0x25c180/+0x25c188 return the guest iterator table and begin/end node.
+
+    Both functions follow container+0x20 to the controller and its sentinel.
+    Begin reads the sentinel's leftmost node; end returns the sentinel itself.
+    They do not walk the tree or change memory.
+    """
+    if position not in ('begin', 'end'):
+        raise RefillUnsupported('unsupported configuration iterator position')
+    controller = int.from_bytes(_read_span(pages, container_address + 0x20, 8), 'little')
+    sentinel = int.from_bytes(_read_span(pages, controller, 8), 'little')
+    node = int.from_bytes(_read_span(pages, sentinel + 0x10, 8), 'little') if position == 'begin' else sentinel
+    return objects._image_address(image_base, 0x381B20), node
+
+
+def configuration_tree_iterators_equal(pages, *, first_address: int, second_address: int) -> bool:
+    """+0x24c600 compares node words first, then iterator table words."""
+    first_node = _read_span(pages, first_address + 8, 8)
+    second_node = _read_span(pages, second_address + 8, 8)
+    if first_node != second_node:
+        return False
+    return _read_span(pages, first_address, 8) == _read_span(pages, second_address, 8)
+
+
 def lookup_configuration_value(pages, *, container_address: int, key_address: int,
                                image_base: int, max_nodes: int = 4096,
                                max_bytes: int = 0x100000) -> int:

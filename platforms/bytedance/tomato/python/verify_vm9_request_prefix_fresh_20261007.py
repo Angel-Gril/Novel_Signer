@@ -203,6 +203,31 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     initialize_registry=initialize_registry, broadcast=broadcast,
                     observer=lambda _p, **context: diagnostic_scope.setdefault('request_counters', []).append(context))
                 _write_span(vm.m.pages, argument + 0x18, previous_count.to_bytes(4, 'little'))
+            elif allocate is not None and (wrapper, target) == (0x285ADC, 0x25BF14):
+                import vm9_registry as registry
+                controller = registry.construct_configuration_tree(vm.m.pages,
+                    container_address=words[1], descriptor_address=words[2],
+                    image_base=image, allocate=allocate)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_trees', []).append(dict(
+                        phase='request_tree_constructed', container_address=words[1],
+                        controller_address=controller, body_transaction_committed=True))
+            elif wrapper == 0x285AEC and target in (0x25C180, 0x25C188):
+                import vm9_registry as registry
+                pair = registry.configuration_tree_iterator(vm.m.pages,
+                    container_address=words[1], image_base=image,
+                    position='begin' if target == 0x25C180 else 'end')
+                _write_span(vm.m.pages, argument + 0x10, b''.join(v.to_bytes(8, 'little') for v in pair))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_tree_iterators', []).append(dict(
+                        position='begin' if target == 0x25C180 else 'end', packed_pair_written=True))
+            elif (wrapper, target) == (0x285B08, 0x24C600):
+                import vm9_registry as registry
+                equal = registry.configuration_tree_iterators_equal(vm.m.pages,
+                    first_address=words[1], second_address=words[2])
+                _write_span(vm.m.pages, argument + 0x18, int(equal).to_bytes(4, 'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_iterator_comparisons', []).append(dict(equal=equal))
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

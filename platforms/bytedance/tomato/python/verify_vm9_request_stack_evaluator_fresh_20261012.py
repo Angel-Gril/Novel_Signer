@@ -167,6 +167,16 @@ def request_entry(library,libc):
         p=_PageTransaction(pages)
         prefix.resolve_request_memory_imports(p,library,base)
         request=worker.TOP+0x100;_write_span(p,request,bytes(0x800))
+        import vm9_registry as registry
+        import vm9_objects as objects
+        descriptor=request+0x100
+        _write_span(p,descriptor,b''.join((base+offset).to_bytes(8,'little')
+            for offset in (0x182D6C,0x182D6C,0x188A94)))
+        header=session.allocate(p,40)
+        registry.construct_configuration_tree(p,container_address=header,
+            descriptor_address=descriptor,image_base=base,allocate=session.allocate)
+        objects.construct_reference_wrapper(p,object_address=request,
+            referenced_address=header,allocate=session.allocate)
         handler=int.from_bytes(_read_span(p,result.callback_pair_addresses[0]+8,8),'little')
         inputs=dict(entry_stack_address=worker.TOP,return_address=0xDEAD0000,thread_pointer=fixture.TLS,
             image_base=base,argument_x0=handler,argument_x1=request,argument_x2=0,
@@ -176,7 +186,7 @@ def request_entry(library,libc):
         w(p,base+0x3DEED8,vm);w(p,vm,vm_table);w(p,vm_table+0x30,0x7400F000);w(p,env,table)
         for slot in (0x30,0x720):w(p,table+slot,0x7400F100+slot)
         for label in ('JNI_connected','missing_JNI','JNI_provider_exception',
-                      'missing_counter_TLS','counter_TLS_provider_exception'):
+                      'missing_counter_TLS','counter_TLS_provider_exception','NULL_header_reference'):
             events=[];diag={'thread_id':session.thread_id}
             def invoke_vm(p,fn,args):
                 assert fn==0x7400F000 and args[0]==vm and args[2]==0x10006
@@ -193,6 +203,7 @@ def request_entry(library,libc):
                 if label=='counter_TLS_provider_exception':
                     raise RefillUnsupported('injected request counter TLS failure')
                 return session.get_tls(p,control)
+            if label=='NULL_header_reference':w(p,request,0)
             before={k:bytes(v) for k,v in p.items()}
             try:
                 prefix.execute_prefix(p,inputs,vm_full,1791023800,500000000,
@@ -204,8 +215,8 @@ def request_entry(library,libc):
             except prefix.RequestContinuationBoundary as exc:
                 assert before=={k:bytes(v) for k,v in p.items()}
                 if label=='JNI_connected':
-                    assert exc.vm.steps==1444 and exc.vm.pc-base==0xF9A08
-                    assert str(exc.cause)=='unknown request callback +0x285adc -> +0x25bf14'
+                    assert exc.vm.steps==1539 and exc.vm.pc-base==0xF9CEC
+                    assert str(exc.cause)=='NULL request callback target at wrapper +0x285b7c'
                     assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
                     completed=diag['request_evaluator_prefixes'][-1]
                     assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
@@ -222,15 +233,26 @@ def request_entry(library,libc):
                     assert int.from_bytes(_read_span(exc.staged,counter,4),'little')==1
                     count=diag['request_counters'][-1]
                     assert count['phase']=='request_counter_completed' and count['previous_u32']==0 and count['inserted']
-                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1444,
+                    tree=diag['request_trees'][-1]
+                    assert tree['phase']=='request_tree_constructed'
+                    assert {r['position'] for r in diag['request_tree_iterators']}=={'begin','end'}
+                    assert diag['request_iterator_comparisons'][-1]['equal']
+                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1539,
                         actual_request_callback_and_evaluator_executed=True,owning_TLS_allocator_and_JavaVM_used=True,
                         explicit_NULL_FindClass_input=True,evaluator_completed=True,
                         actual_scope_cleanup_completed=True,actual_request_byte_gate_completed=True,
                         actual_request_object_constructed=True,temporary_reference_released_to_one_owner=True,
                         actual_request_counter_completed=True,owning_TLS_registry_and_broadcast_used=True,
-                        stopped_at_callback_offset='0x25bf14',
+                        valid_empty_header_container_input=True,actual_tree_and_iterators_completed=True,
+                        iterator_comparison_completed=True,unresolved_process_atexit_import=True,
+                        stopped_at_wrapper_offset='0x285b7c',stopped_at_callback_offset='0x0',
                         all_pages_unchanged_after_stop=True,
                         full_request_returned=False,whole_handoff_native_differential_verified=False))
+                elif label=='NULL_header_reference':
+                    assert exc.vm.steps==1452 and exc.vm.pc-base==0xF9A28
+                    assert str(exc.cause)=='missing checkpoint page 0x0'
+                    guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
+                        all_pages_unchanged=True,external_effects_rolled_back=False))
                 elif label in ('missing_counter_TLS','counter_TLS_provider_exception'):
                     assert exc.vm.steps==1419 and exc.vm.pc-base==0xF99A4
                     expected='registry counter requires allocator/free and scoped TLS services' if label=='missing_counter_TLS' else 'injected request counter TLS failure'
@@ -244,14 +266,15 @@ def request_entry(library,libc):
                     guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
                         all_pages_unchanged=True,external_effects_rolled_back=False))
             else:raise AssertionError('request unexpectedly completed')
-            steps=1444 if label=='JNI_connected' else 1419 if 'counter_TLS' in label else 965
+            if label=='NULL_header_reference':w(p,request,header)
+            steps=1539 if label=='JNI_connected' else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
             print('PASS request VM',label,steps,'steps',flush=True)
     try:
         outer.make_session=make
         result=boundary.case(library,libc,base,'absent',None,vm_full,apply_logger_model=True,
             apply_handoff_model=True,apply_publication=True,terminal_observer=terminal)
     finally:outer.make_session=previous
-    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==4
+    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==5
     return rows,guards
 
 
