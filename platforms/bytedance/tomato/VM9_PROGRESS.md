@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：B worker 分支与组合指令
+
+既有执行器扩展两个基础 tag 和六个组合 tag。112项 runtime 原生对照、
+4项实际startup回归、40项回滚检查通过；其中24项实际worker descriptor
+仍使用显式纯导入provider。回调返回PC与读取PC时的先后顺序已对照。
+继续worker实际回调及嵌套初始化、完整JNI/bootstrap、独立signer和线上验收。
+见 [B worker runtime 报告](REQUEST_JNI_STARTUP_WORKERS.md#658-b-worker-的分支与组合指令2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：B 主线程 startup 与真实导入回调
 
 B +2a0028 已组合独立 constructor 发布的初始化程序与真实 enqueue/destroy。

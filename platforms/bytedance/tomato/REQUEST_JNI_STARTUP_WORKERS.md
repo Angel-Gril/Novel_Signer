@@ -2925,6 +2925,35 @@ JNI/bootstrap、独立 signer、新鲜输出和线上验收仍待完成。见
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_startup_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-startup-evidence.json>
 ```
 
+## 6.58 B worker 的分支与组合指令（2026-10-11 Asia/Shanghai）
+
+在既有 `execute_runtime_descriptor` 扩展 tag62（有符号16位立即数）、
+tag95（64位寄存器相等时的相对分支）和六类实际组合指令：
+194=(188,62,95)、273=(102,134,169)、361=(169,169,188)、
+402=(55,55,169,169)、651=(102,134,134)、726=(134,55,134,55)。
+组合194在回调返回的 PC 上继续计算后续分支；361保留调用后的+2。
+402的首个 store、273的第二个 load、726的第三个 load 都先操作内存
+再写 PC。特意令 load 读取 context PC 的控制覆盖该执行顺序。
+其他 owner 定义 AST 未改变。
+
+干净 `74120bc` 绑定 **16 项修改前真实原生 RED**。正式验证通过
+**112 项 runtime 原生/Python 对照、4 项实际 startup 回归、40 项回滚
+检查**。112项包含40项新增指令控制、48项旧 runtime 回归，以及两基址
+六个实际 worker descriptor 的冷/热分支共24项。包含正负极值立即数、
+前向/后向分支、64位高字差异、回调修改返回 PC、读取 PC 的组合操作、
+重定位 SP 和实际初始 descriptor。完整 guest/heap/image 页面、context、
+有序导入参数、active frame 与原生自然返回一致。
+
+worker descriptor 对照仍使用显式纯 imported provider，没有执行其
+atomic/once/memset 回调体或嵌套初始化程序。四项 startup 回归则继续
+执行已恢复的实际 enqueue/destroy，每次19次分发、3个延后线程请求、
+22项有序效果匹配。完整 B worker、JNI/bootstrap、独立 signer、新鲜
+输出和线上验收仍待完成。见 [worker runtime 证据](evidence/vm9_alternative_worker_runtime_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_worker_runtime_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-worker-runtime-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

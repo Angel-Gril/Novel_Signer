@@ -5698,8 +5698,8 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
     """Bounded +2a9718 descriptor dispatch and the B initialization program.
 
     Kind0 calls an explicit pure imported provider; kind2 executes the linked
-    48-byte records. Supported primary tags are 55/66/102/134/169/188/189;
-    fused tags 250/397/401/451/624 preserve native intermediate status stores,
+    48-byte records. Supported primary tags are 55/62/66/95/102/134/169/188/189;
+    eleven evidenced fused tags preserve native intermediate status stores,
     reverse operand pointers and call-link adjustment. Other tags and kind1
     fail closed. Native caller boxes and active frame16 derive from incoming
     SP. Software-stack exhaustion, cycles through the step/depth budget,
@@ -5744,6 +5744,9 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
         word=u(address,4);first=word&255;second=(word>>8)&255;third=(word>>16)&255
         immediate=word>>16;immediate-=65536 if immediate&32768 else 0
         if tag==55:store((reg(first)+immediate)&MASK64,reg(second))
+        elif tag==62:wr(second,immediate)
+        elif tag==95:
+            if reg(first)==reg(second):put(context_address,u(context_address,4)+immediate,4)
         elif tag==66:wr(second,reg(first)+immediate)
         elif tag==102:wr(second,u(u(address+8))+immediate)
         elif tag==134:wr(second,u((reg(first)+immediate)&MASK64))
@@ -5801,9 +5804,11 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
             address=begin+pc*48;tag=u(address+40);steps+=1
             if tag==189:put(context_address,reg(u(address,1)),4);break
             if tag==188:call(address,sp-0xC0,depth);put(context_address,u(context_address,4)+1,4);continue
-            if tag in (55,66,102,134,169):
+            if tag in (55,62,66,95,102,134,169):
                 put(context_address,pc+1,4);instruction(address,tag);continue
-            sequence={250:(134,66),397:(169,188),401:(134,55,66,55),451:(169,134),624:(55,55,169)}.get(tag)
+            sequence={194:(188,62,95),250:(134,66),273:(102,134,169),361:(169,169,188),
+                397:(169,188),401:(134,55,66,55),402:(55,55,169,169),451:(169,134),
+                624:(55,55,169),651:(102,134,134),726:(134,55,134,55)}.get(tag)
             if sequence is None:raise RefillUnsupported('runtime fused instruction is unsupported')
             count=len(sequence)
             for index,operation in enumerate(sequence):
@@ -5811,10 +5816,19 @@ def execute_runtime_descriptor(pages, *, image_base, descriptor_address,
                 if operand!=address+(index+1)*48 or operand+48>end:
                     raise RefillUnsupported('runtime fused operand escapes its consecutive records')
                 if operation==188:
-                    call(operand,sp-0xC0,depth);put(context_address,u(context_address,4)+2,4)
+                    call(operand,sp-0xC0,depth)
+                    if index==count-1:put(context_address,u(context_address,4)+2,4)
+                    else:
+                        # Fused194 continues relative to the imported return PC.
+                        pc=u(context_address,4);put(context_address,pc+1,4)
                 else:
-                    put(context_address,pc+index+1 if index<count-1 else pc+count+1,4)
+                    next_pc=pc+index+1 if index<count-1 else pc+count+1
+                    # These helpers perform the memory operation before their
+                    # status store. A load may itself read the status word.
+                    after=(tag==402 and index==0) or (tag==273 and index==1) or (tag==726 and index==2)
+                    if not after:put(context_address,next_pc,4)
                     instruction(operand,operation)
+                    if after:put(context_address,next_pc,4)
         if u(context_address+8)!=frame:raise RefillUnsupported('runtime active-frame link changed unexpectedly')
         put(context_address+8,u(frame+8))
     invoke(descriptor_address,entry_stack_address,0)

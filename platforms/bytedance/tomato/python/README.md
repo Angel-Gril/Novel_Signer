@@ -346,6 +346,8 @@ The existing shared `vm9_startup` callable owner now supports B vtable +35fc28 f
 
 The B main-thread startup now executes both actual imported callback bodies through the shared queue owner. 28 native/Python controls and 41 rollback checks pass, including four actual startup controls from two independently constructed ELF modules. Each startup matches 19 dispatches, three deferred thread requests and 22 ordered service effects. B worker execution, full JNI/bootstrap and signer remain unfinished. See the [B startup report](../REQUEST_JNI_STARTUP_WORKERS.md#657-b-主线程-startup-与真实导入回调2026-10-11-asiashanghai).
 
+The B executor now supports signed immediate/conditional branch tags and six further fused instructions used by worker callers. 112 runtime controls, four actual startup regressions and 40 rollback checks pass. The 24 actual worker-descriptor controls use explicit pure imported providers; worker callback bodies and nested initializers remain unfinished. See the [B worker runtime report](../REQUEST_JNI_STARTUP_WORKERS.md#658-b-worker-的分支与组合指令2026-10-11-asiashanghai).
+
 
 
 
