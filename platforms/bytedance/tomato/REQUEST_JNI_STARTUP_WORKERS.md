@@ -3397,6 +3397,43 @@ copied probe另覆盖page-size cache冷/热状态。所有存活guest/heap/image
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_finalizer_worker_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <finalizer-worker-evidence.json>
 ```
 
+## 6.73 实际延时 JNI callable 与两段 image VM（2026-10-11 Asia/Shanghai）
+
+`vm9_jni_followup.run_delayed_followup_callable` 恢复已入队的 inline callable
+`+2043BC → singleton136 → +203948`。它从 guest ELF 执行两段实际 bytecode：
+checksum VM **8,606,106 steps** 到达 `+89640`，lookup VM **301 steps** 到达
+`+89D18`。第二段的 **15 次实际 callbacks** 包含 masked decode、真实
+`+21CBEC/+2191D4` Java lookup、diagnostic scope、字符串比较、guest ELF
+CRC 表读取、配置写入，以及 owning string/reference 的有序释放。
+恢复 helper 保存输出 reference 的栈写入，供后续 TLS 节点复制 padding；
+CRC 表地址由真实 ARM64 指令确定为 guest ELF `+96144`。
+结束后继续 registry320 getter、最终配置写入和临时字符串销毁。
+
+本节串行路径中的默认 Java 对象尚未发布。执行真实 unavailable logger，
+构造并持有错误字符串，共新增 **2 次 GetEnv、0 次 JNI 方法调用**。
+原生与 Python 的有限服务响应全部消耗；错误分支没有用空返回代替。
+成功的 live Java 字符串转换、NULL environment 和其他未恢复分支明确拒绝。
+
+干净 `dd2dc01` 的 A/B 两条完整原生 RED 后实施。
+**4 项 fresh 完整原生/Python 对照、22 项页面回滚检查**通过，覆盖两基址
+×两分支及不同 heap/stack padding。原生从 fresh ELF 在同一 CPU 执行
+全部13constructors、JNI、三workers、三次完整 guest exit，再显式驱动
+实际入队的 callable 自然返回。Python 独立映射自己的 ELF，全部存活
+guest/heap/image/libc 页面、分配/释放、JavaVM/JNI 和有序服务组一致。
+六个既有共享 owner 保持原始 hash；不使用 native snapshot 作为模型输入。
+
+这批对照使用 **显式 callable body driver**，尚未证明完整 timed executor
+dispatch/queue 周期。物理 stack、线程输出 scratch、module registration
+与 allocation 的交错继续沿用既有排除契约；provider 外部效果需调用方暂存，
+guest 页面回滚不能撤销它们。完整独立 signer、fresh 签名和线上矩阵继续。
+系统服务按有效 ABI 参数比较；`close` 未使用的尾部寄存器不属于参数契约。
+私有 ELF、bytecode、常量文本和诊断快照不进入公开仓库。
+见 [延时回调证据](evidence/vm9_jni_followup_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_followup_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <followup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

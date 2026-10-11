@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：实际延时 callback 与两段 image VM
+
+两基址×两分支4项fresh完整对照、22项页面回滚通过。实际callable自然返回；
+checksum VM8,606,106steps、lookup VM301steps/15callbacks，真实Java错误
+reference、guest CRC、配置发布与owning清理匹配。新增GetEnv2次/JNI0次，
+所有存活页面和有序服务组一致。使用显式body driver，完整timed executor
+周期、live Java字符串转换、完整signer与fresh/live继续。
+见 [实际延时回调报告](REQUEST_JNI_STARTUP_WORKERS.md#673-实际延时-jni-callable-与两段-image-vm2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：完整 finalizer worker 与 guest 退出
 
 两基址×两分支完整ELF/13constructors/JNI/三条worker/三次guest退出，通过
