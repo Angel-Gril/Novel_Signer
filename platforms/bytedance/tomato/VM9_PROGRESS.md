@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：完整 JNI 与条件主线程 startup
+
+fresh ELF映射/链接、13项constructor、JNI_OnLoad与一次A/B主线程startup
+组合通过4项完整原生对照/38项回滚。JNI自然返回10006，全部存活页面与
+服务组匹配；两queue各含一个callable，3个worker请求延后执行。Finalizer
+callable通过32/9项检查，旧callable84/12结果逐字节一致。继续同次worker/
+cleanup、finalizer callback body、独立signer及fresh/live。
+见 [完整JNI报告](REQUEST_JNI_STARTUP_WORKERS.md#669-完整-jni-与两条主线程-startup-组合2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：ELF 映射与完整符号链接
 
 当前样本全部PT_LOAD/BSS、18481项重定位、符号版本/绑定和init/fini数组

@@ -239,6 +239,8 @@ The complete ELF init_array now executes all thirteen constructors in order with
 
 The ELF image loader now maps all PT_LOAD/BSS pages and eagerly binds every relocation from program headers and dynamic metadata. Ten independent image controls, two complete native/Python constructor sequences and 42 refusal checks pass, including sectionless and GNU-hash inputs. Full JNI/bootstrap and the independent signer remain unfinished. See the [ELF image report](REQUEST_JNI_STARTUP_WORKERS.md#668-elf-映射与完整符号链接2026-10-11-asiashanghai).
 
+Fresh ELF mapping/linking and all thirteen constructors now compose through complete JNI_OnLoad and one conditional A/B main-thread startup. Four native/Python controls and 38 rollback checks pass; both task queues, 19 JNI calls, four JavaVM calls, three deferred worker requests and all surviving pages match. The finalizer callable adds 32 controls and nine guards; the old 84/12 callable regression is byte-identical. Same-run workers, cleanup and the independent signer remain unfinished. See the [complete JNI report](REQUEST_JNI_STARTUP_WORKERS.md#669-完整-jni-与两条主线程-startup-组合2026-10-11-asiashanghai).
+
 
 
 

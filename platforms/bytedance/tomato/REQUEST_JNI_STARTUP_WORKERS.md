@@ -3259,6 +3259,49 @@ signer、fresh输出与线上验收仍未完成。见
 python -B platforms/bytedance/tomato/python/verify_vm9_elf_image_loader_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <elf-image-evidence.json>
 ```
 
+## 6.69 完整 JNI 与两条主线程 startup 组合（2026-10-11 Asia/Shanghai）
+
+`vm9_jni_bootstrap.run_jni_onload` 组合实际JNI_OnLoad `+27B41C` 到返回：
+解码ELF常量、验证已链接的defined GOT与self-code、显式JavaVM GetEnv、
+发布JavaVM、JNI注册、冷long switch、条件startup、finalizer排队与elapsed
+clock。`long_word & 0x200` 选择 `+2A0028`，否则 `+28040C`，每次只执行
+一个入口。既有JNI、registry、A/B startup和queue owners执行组件行为。
+
+干净 `43d9f8c` 上 **2项完整真实原生RED** 后实施。**4项fresh完整组合、
+38项拒绝/回滚检查**通过。每个原生控制在同次执行中运行全部13个ELF
+constructor和实际JNI/startup，自然返回JNI_VERSION_1_6 `0x10006` 并恢复
+入口SP。Python使用独立新ELF加载和构造输入，匹配所有存活guest/heap/
+image/libc页面、19项JNI调用、4项JavaVM调用、3项deferred worker请求、
+TLS/分配状态与各自有序服务组。两基址覆盖A/B、移动SP、分配偏移、thread
+id及heap/stack padding。每个基址的fresh Python构造状态供两分支分别复制；
+每个原生控制均重新执行所有成员，不使用原生快照输入。
+
+完整JNI在startup后还执行 `+27BED8 -> +27BF1C -> +204098`，创建并向
+第二queue提交 `+34F010` inline finalizer callable。`vm9_startup` 扩展其
+clone/destructor和显式queue_index，两队列各保留一个48-byte callable。
+另有 **32项finalizer callable原生对照、9项回滚**，覆盖move/heap/free/
+reset/assignment和padding；旧A/B/queue callable **84项对照、12项回滚**
+fresh结果与已发布证据逐字节一致。38项主组合负例包含错误输入/服务、
+linked GOT、selector/self-code、finalizer方法及晚期thread/signal/clock失败；
+全页回滚。其他生产owner不变，shared startup仅改动这三个已有函数。
+
+对照比较全部存活页面与各自的allocation/free、registration、OS/JNI/VM/
+thread有序组；module注册与分配的交错时序、physical native stack/thread
+output scratch及真实JVM/并发不在契约中。Provider必须暂存外部操作，页面
+事务不撤回已执行的外部效果。当前要求成功GetEnv、零singleton copy bounds、
+当前样本dispatch/self-code及有界serialized服务；其他分支拒绝。
+
+本节完成fresh ELF映射/链接/构造到JNI和条件主线程startup的完整组合。
+三条worker及其TLS/线程清理尚未在本节同次组合验证；第二队列finalizer
+callable的实际callback body、独立signer、fresh输出和线上验收仍未完成。
+见 [完整JNI证据](evidence/vm9_jni_complete_bootstrap_fresh_20261011.json) 和
+[finalizer callable证据](evidence/vm9_jni_finalizer_callable_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_complete_bootstrap_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <jni-bootstrap-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_finalizer_callable_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <finalizer-callable-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
