@@ -271,6 +271,8 @@ Actual live receiver initialization and cold lookup pass 92 native/Python contro
 
 Delayed VM and callable entries forward explicit live JNI, allocator and SDK providers. Four evaluator and two complete callable native/Python controls, two bounded worker entry checks and sixteen rollback guards pass. Live lookup now preserves the output-reference stack padding used by a later registry setter. The complete signer remains unfinished. See the [live provider report](REQUEST_JNI_STARTUP_WORKERS.md#684-delayed-vmcallableworker-的-live-provider-接线2026-10-12-asiashanghai).
 
+The actual request stack evaluator now restores JNI calls, prefix comparisons, UTF/local cleanup and NULL/exception behavior. 78 native/Python controls, one bounded request VM entry check and 20 rollback guards pass. The request entry forwards explicit JNI and singleton services and reaches the next scope-cleanup boundary at 965 steps. The complete signer remains unfinished. See the [stack evaluator report](REQUEST_JNI_STARTUP_WORKERS.md#685-实际-request-stack-evaluator-与请求-vm-接线2026-10-12-asiashanghai).
+
 
 
 

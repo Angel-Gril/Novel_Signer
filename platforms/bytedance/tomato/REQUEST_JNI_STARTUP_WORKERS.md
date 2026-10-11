@@ -3780,6 +3780,41 @@ calloc、SDK find/read、过小payload上界及JNI provider异常。
 python -B platforms/bytedance/tomato/python/verify_vm9_live_delayed_providers_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <live-provider-evidence.json>
 ```
 
+## 6.85 实际 request stack evaluator 与请求 VM 接线（2026-10-12 Asia/Shanghai）
+
+`vm9_request_leaf_prefixes.execute_stack_evaluator_prefix` 恢复实际 `+28B05C`
+的 FindClass、method ID、static/instance object calls、array iteration、UTF
+借用/释放、local reference 清理和最终 exception clear。九组名称仍由 guest
+ELF 解码；JavaVM/JNI 与 singleton getter 是显式输入服务。
+
+两基址 **78项原生/Python对照、1项请求VM入口检查、20项页面回滚**。
+76项对照执行原始 acquisition；2项 NULL environment 对照使用显式 NULL
+acquisition 边界，验证其后实际 evaluator 的自然零返回。singleton 为独立
+构造的 warm 输入，原始 getter/比较 helpers 正常执行，没有使用原生页面
+作为 Python 输入。全部 guest payload/ELF 页、environment pair、服务与
+getter SP 顺序、两份 logical va_list 匹配；physical register spills 未验。
+
+对照覆盖 JNI NULL/exception 清理、UTF 单边 NULL、descriptor cursor、
+array/descriptor signed overflow、空字符串和前缀比较。原始代码虽然取得
+两条 UTF 字符串，却使用第一条指针做两次比较；保持此行为及第二条 UTF
+的释放顺序。比较耗尽长度时跳过 singleton；非零 checked environment
+分支仍明确拒绝。显式 frame/string 上界及缺失服务/异常均回滚页面，
+外部服务 ledger 不在页面回滚范围。
+
+请求 VM 入口转发 `invoke_jni/get_singleton`。fresh Python outer 的拥有者
+分配 JavaVM/JNI fixture，经实际请求 callback 执行原始语义的 acquisition
+和 evaluator；使用 NULL FindClass 输入，965步后停在尚未恢复的
+`+28C09C` scope cleanup。该1项入口检查不是完整请求返回或整链原生对照。
+请求入口 missing JNI/provider exception 的2项检查也保持所有页面不变。
+
+**scope cleanup、cold singleton/request 整链组合、真实 Android JVM、
+完整独立 signer、fresh 签名和线上矩阵仍未完成。** 见
+[evaluator 证据](evidence/vm9_request_stack_evaluator_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_stack_evaluator_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <stack-evaluator-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

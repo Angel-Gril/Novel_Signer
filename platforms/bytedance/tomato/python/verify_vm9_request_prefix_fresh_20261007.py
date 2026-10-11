@@ -69,7 +69,8 @@ def resolve_request_memory_imports(pages, library, image):
 
 def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None,
                    diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
-                   read_clock=None, acquire_environment=None):
+                   read_clock=None, acquire_environment=None, invoke_jni=None,
+                   get_singleton=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -161,7 +162,8 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                         entry_stack_address=frame.native_stack_address - 0x290,
                         descriptor_address=descriptor, descriptor_count=count,
                         method_name_address=name, observer=evaluator_observer,
-                        acquire_environment=acquire_environment)
+                        acquire_environment=acquire_environment,invoke_jni=invoke_jni,
+                        get_singleton=get_singleton)
                 vm9_request_boolean_gate.execute_boolean_gate(vm.m.pages,
                     object_address=words[1], image_base=image,
                     entry_stack_address=frame.native_stack_address - 0x190,

@@ -1,4 +1,4 @@
-"""Recovered request leaf prefixes; missing real JNI/format bodies refuse.
+"""Recovered request leaves with explicit JNI and owning component services.
 
 +0x28b05c is a Java stack-trace evaluator, not the signature algorithm.
 +0x28ddd0 samples a diagnostic event by its fourth uint64 argument.
@@ -73,20 +73,25 @@ def resolve_stack_evaluator_globals(pages, *, image_base):
 
 def execute_stack_evaluator_prefix(pages, *, image_base, entry_stack_address,
         descriptor_address, descriptor_count, method_name_address, observer=None,
-        acquire_environment=None):
-    """+0x28b05c through actual +0x26edc4 acquisition call; no fake env.
+        acquire_environment=None, invoke_jni=None, get_singleton=None,
+        max_frames=4096, max_string_bytes=0x100000):
+    """Actual +0x28b05c acquisition, stack inspection and local cleanup.
 
-    Native saves encoded pointers and input slots, then initializes nine lazy
-    names in order. The environment output pair is still untouched at this
-    call boundary. With an explicit acquisition provider, continue through
-    environment storage to the original FindClass callsite +0x28b71c.
-    Observer sees staged pages only; this incomplete body never commits.
+    JNI results and the +0x161068 singleton getter are explicit services.
+    No-argument object calls preserve both logical va_list structures; their
+    unconsumed GP/SIMD saves and physical spills remain outside this API.
+    The original compares the first UTF pointer against both expected names,
+    with prefix lengths, and still acquires/releases the second UTF pointer.
+    Nonzero checked-comparison environment branches refuse transactionally.
     """
-    _stack(entry_stack_address, 0xF0)
+    _stack(entry_stack_address, 0x210)
     _uint(image_base, 64, 'image base')
     _uint(descriptor_address, 64, 'descriptor address')
     _uint(descriptor_count, 32, 'descriptor count')
     _uint(method_name_address, 64, 'method name address')
+    if type(max_frames) is not int or not 1 <= max_frames <= 0x100000:
+        raise RefillUnsupported('stack evaluator frame bound is invalid')
+    objects._string_bound(max_string_bytes)
     p = _PageTransaction(pages)
     frame = entry_stack_address - 0x60
     _w(p, frame - 0x30, method_name_address)
@@ -115,7 +120,12 @@ def execute_stack_evaluator_prefix(pages, *, image_base, entry_stack_address,
         output_pair_address=environment_pair)
     environment = _u(p,environment_pair)
     if not environment:
-        raise RefillUnsupported('request JNI null-environment continuation +0x28b7c8 is not recovered')
+        if observer:
+            observer(p, phase='stack_evaluator_completed', returned_boolean=False,
+                inspected_frames=0, body_transaction_committed=True,
+                whole_request_callback_completed=False)
+        p.commit()
+        return 0
     _w(p,entry_stack_address-0xF0,environment)
     table = _u(p,environment)
     if not table:
@@ -129,7 +139,145 @@ def execute_stack_evaluator_prefix(pages, *, image_base, entry_stack_address,
             environment=environment,jni_vtable_slot=0x30,jni_call_target=target,
             jni_call_arguments=(environment,addresses[0]['name']),
             native_callsite_offset='0x28b71c',body_transaction_committed=False)
-    raise RefillUnsupported('request JNI FindClass +0x28b71c is not recovered')
+    if invoke_jni is None:
+        raise RefillUnsupported('request JNI FindClass +0x28b71c is not recovered')
+    import vm9_jni_environment as jni
+    call_sp = entry_stack_address - 0xF0
+    def call(slot, *args):
+        return jni._invoke_jni(p, environment, slot, args, invoke_jni)
+    def check():
+        return jni.check_and_clear_java_exception(p,
+            environment_pointer=environment, invoke_jni=invoke_jni)
+    def remove(ref):
+        call(0xB8, ref)
+    def object_call(slot, ref, method):
+        original, copied = call_sp - 0x48, call_sp - 0x70
+        raw = b''.join(v.to_bytes(8, 'little') for v in
+            (call_sp, copied, call_sp - 0xA0))
+        raw += (-40).to_bytes(4, 'little', signed=True)
+        raw += (-128).to_bytes(4, 'little', signed=True)
+        _write_span(p, original, raw)
+        _write_span(p, copied, _read_span(p, original, 32))
+        return call(slot, ref, method, copied)
+    def length(address):
+        # +0x27617c returns zero for NULL; do not dereference that pointer.
+        return len(objects._cstring(p, address, max_string_bytes)) - 1 if address else 0
+    def compare(first, second, width):
+        # +0x276298 has no singleton effects when its initial length is zero.
+        result = 0
+        if not width:
+            return result
+        for i in range(width):
+            left, right = _u(p, first + i, 1), _u(p, second + i, 1)
+            result = left - right
+            if result or not left:
+                break
+        else:
+            return 0
+        if not callable(get_singleton):
+            raise RefillUnsupported('stack evaluator comparison requires a singleton getter')
+        reference = get_singleton(p, call_sp - 0x30)
+        _uint(reference, 64, 'comparison singleton reference')
+        first_field = _u(p, _u(p, reference) + 0x10)
+        reference = get_singleton(p, call_sp - 0x30)
+        _uint(reference, 64, 'comparison singleton reference')
+        if first_field and _u(p, _u(p, reference) + 0x18):
+            raise RefillUnsupported('stack evaluator checked-comparison environment branch is unrecovered')
+        return result
+    class _StopInspection(Exception):
+        pass
+    cleanup = []
+    result = 0
+    inspected = 0
+    first_class = call(0x30, addresses[0]['name'])
+    if first_class and not check():
+        cleanup.append(first_class)
+        try:
+            static_method = call(0x388, first_class, addresses[1]['name'], addresses[2]['name'])
+            if not static_method:
+                raise _StopInspection
+            thread = object_call(0x398, first_class, static_method)
+            if not thread or check():
+                raise _StopInspection
+            cleanup.append(thread)
+            trace_method = call(0x108, first_class, addresses[3]['name'], addresses[4]['name'])
+            if not trace_method:
+                raise _StopInspection
+            trace = object_call(0x118, thread, trace_method)
+            if not trace or check():
+                raise _StopInspection
+            cleanup.append(trace)
+            count = objects._s32(call(0x558, trace) & 0xFFFFFFFF)
+            if count < 3:
+                raise _StopInspection
+            element_class = call(0x30, addresses[5]['name'])
+            if not element_class or check():
+                raise _StopInspection
+            cleanup.append(element_class)
+            first_method = call(0x108, element_class, addresses[6]['name'], addresses[7]['name'])
+            _w(p, frame - 0x38, first_method)
+            if not first_method:
+                raise _StopInspection
+            second_method = call(0x108, element_class, addresses[8]['name'], addresses[7]['name'])
+            _w(p, frame - 0x40, second_method)
+            if not second_method:
+                raise _StopInspection
+            _w(p, frame - 0x70, element_class)
+            _w(p, frame - 0x68, thread)
+            _w(p, frame - 0x60, trace)
+            limit = min(count, objects._s32((descriptor_count + 2) & 0xFFFFFFFF))
+            _w(p, frame - 0x20, limit & 0xFFFFFFFF, 4)
+            if max(0, limit - 2) > max_frames:
+                raise RefillUnsupported('stack evaluator frame bound exceeded')
+            descriptor_index = 0
+            for index in range(2, limit):
+                inspected += 1
+                element = call(0x568, trace, index)
+                if not element:
+                    continue
+                first_string = object_call(0x118, element, first_method)
+                _w(p, frame - 0x18, first_string)
+                _w(p, frame - 0x10, descriptor_index)
+                first_failed = check() if first_string else True
+                second_string = object_call(0x118, element, second_method)
+                second_failed = check() if second_string else True
+                if not first_failed and not second_failed:
+                    first_utf = call(0x548, first_string, 0)
+                    second_utf = call(0x548, second_string, 0)
+                    _w(p, frame - 0x48, second_utf)
+                    if first_utf and second_utf:
+                        _w(p, frame - 0x50, first_utf)
+                        first_length = length(first_utf)
+                        expected = _u(p, descriptor_address + descriptor_index * 8)
+                        expected_length = length(expected)
+                        _w(p, frame - 0x58, expected_length)
+                        method_length = length(method_name_address)
+                        if compare(first_utf, method_name_address, min(first_length, method_length)):
+                            if compare(first_utf, expected, min(first_length, expected_length)):
+                                result = 1
+                        descriptor_index += 1
+                        _w(p, frame - 0x10, descriptor_index)
+                    if first_utf:
+                        call(0x550, first_string, first_utf)
+                    if second_utf:
+                        call(0x550, second_string, second_utf)
+                if first_string:
+                    remove(first_string)
+                if second_string:
+                    remove(second_string)
+                remove(element)
+        except _StopInspection:
+            pass
+        for ref in reversed(cleanup):
+            remove(ref)
+    # The final check only clears; it does not call ExceptionOccurred/delete.
+    jni.clear_java_exception(p, environment_pointer=environment, invoke_jni=invoke_jni)
+    if observer:
+        observer(p, phase='stack_evaluator_completed', returned_boolean=bool(result),
+            inspected_frames=inspected, body_transaction_committed=True,
+            whole_request_callback_completed=False)
+    p.commit()
+    return result
 
 
 def execute_event_mode_prefix(pages, *, image_base, entry_stack_address,

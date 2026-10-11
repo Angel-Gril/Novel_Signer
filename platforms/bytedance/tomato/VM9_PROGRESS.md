@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：实际request stack evaluator与请求VM接线
+
+78项原生/Python对照、1项请求入口检查、20项回滚通过。76项执行实际
+acquisition，2项使用显式NULL acquisition边界。warm singleton、guest
+payload/ELF页、JNI/getter顺序、logical va_lists及清理一致。请求VM入口
+转发JNI与getter，fresh拥有者的请求到965步后停在scope cleanup。
+下一步恢复 `+28C09C`；cold/request整链、完整独立signer、fresh/live
+继续。见 [evaluator报告](REQUEST_JNI_STARTUP_WORKERS.md#685-实际-request-stack-evaluator-与请求-vm-接线2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：delayed VM/callable/worker live服务接线
 
 4项evaluator及2项完整callable原生/Python对照、2项bounded worker入口
