@@ -4057,6 +4057,39 @@ lookup。下一处 `+285C1C -> +2765C4` 使用实际ELF字节折叠表，并在�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_collection_callbacks_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-collection-evidence.json>
 ```
 
+## 6.94 实际 guest table 折叠比较与 singleton 接线（2026-10-12 Asia/Shanghai）
+
+`compare_folded_cstrings` 恢复 `+2765C4`。非零长度先调用两次实际
+singleton getter：第一次payload+0x10在第二次调用前读取并保留；只有
+该字段非零才读取第二次payload+0x18。两个字段同时非零的环境检查
+仍显式拒绝。之后读取guest ELF `+A5BB7` 中的字节映射，比较映射后的
+unsigned bytes；差值或原始first-byte NUL结束，length零跳过getter
+和指针读取。实际table有27项变化，不能用主机lowercase替代。
+
+`+285C1C` consumer转发packed三参数，并只写packed+0x20的W0四字节。
+helper entry SP来自既有实际请求wrapper frame；getter使用helperSP-0x40。
+两基址 **48项原生/Python对照、1项请求入口检查、26项页面回滚**。
+24项direct与24项actual wrapper均执行两个实际warm getter，验证
+getter顺序/SP与scratch、完整guest payload、packed写宽及ELF页。
+覆盖ASCII fold、有符号差值、内嵌NUL、binary、长度截断、跨页、单个
+环境字段、修改guest table，以及full uint64 length的early NUL。
+zero length使用未映射指针且不调用getter，原生/Python均返回零。
+
+16项leaf回滚覆盖缺失/第一或第二getter异常、两个环境字段、第二次
+getter修改first字段时仍保留初值、未映射输入、byte bound与stack；
+10项入口回滚包含新的singleton服务缺失/异常。所有失败页面回滚；
+外部provider effects不回滚。native输出不作为输入。
+
+fresh owning请求从1812到1995步，完成折叠比较并使用owning singleton。
+下一处为 `+285F44 -> +25C150` 树计数读取。warm原生组件对照不代表cold
+整链、真实Android JVM或完整请求原生差分。**完整请求返回、完整独立
+signer、fresh签名与线上矩阵仍未完成。**
+见 [折叠比较证据](evidence/vm9_request_folded_compare_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_folded_compare_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-fold-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

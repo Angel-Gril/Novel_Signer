@@ -289,6 +289,8 @@ The actual fill-string constructor and byte-argument wrapper pass 40 native/Pyth
 
 The actual tree lookup and NULL-safe C-string length wrappers reuse existing owners. 28 native/Python controls, one request VM entry check and 20 rollback guards pass. The owning request reaches 1812 steps at the guest-table folded comparison; the complete signer remains unfinished. See the [collection wrapper report](REQUEST_JNI_STARTUP_WORKERS.md#693-实际树查询与-c-字符串长度-wrapper2026-10-12-asiashanghai).
 
+Guest-table folded comparison and its actual wrapper pass 48 native/Python controls, one request VM entry check and 26 rollback guards. Both real warm singleton getter SPs, scratch and order match. The owning request reaches 1995 steps at tree count; the complete signer remains unfinished. See the [folded comparison report](REQUEST_JNI_STARTUP_WORKERS.md#694-实际-guest-table-折叠比较与-singleton-接线2026-10-12-asiashanghai).
+
 
 
 

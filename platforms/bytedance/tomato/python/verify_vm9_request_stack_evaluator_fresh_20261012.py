@@ -187,7 +187,8 @@ def request_entry(library,libc):
         for slot in (0x30,0x720):w(p,table+slot,0x7400F100+slot)
         for label in ('JNI_connected','missing_JNI','JNI_provider_exception',
                       'missing_counter_TLS','counter_TLS_provider_exception','NULL_header_reference',
-                      'missing_exit_service','exit_provider_exception','fill_allocator_exception'):
+                      'missing_exit_service','exit_provider_exception','fill_allocator_exception',
+                      'missing_fold_singleton','fold_singleton_exception'):
             events=[];diag={'thread_id':session.thread_id}
             def invoke_vm(p,fn,args):
                 assert fn==0x7400F000 and args[0]==vm and args[2]==0x10006
@@ -208,6 +209,11 @@ def request_entry(library,libc):
                 if label=='exit_provider_exception':
                     raise RefillUnsupported('injected request process exit registration failure')
                 return session.register_destructor(p,*args)
+            def request_singleton(p,sp):
+                if label=='fold_singleton_exception' and diag.get('request_cstring_lengths'):
+                    w(p,request+0x700,0xA5)
+                    raise RefillUnsupported('injected request folded singleton failure')
+                return session.singleton(p,sp)
             def request_allocate(p,n):
                 if label=='fill_allocator_exception' and diag.get('request_process_registrations'):
                     w(p,request+0x700,0xA5)
@@ -219,15 +225,15 @@ def request_entry(library,libc):
                 prefix.execute_prefix(p,inputs,vm_full,1791023800,500000000,
                     allocate=request_allocate,diagnostic_scope=diag,reallocate=session.reallocate,free=session.free,
                     prepare_format=session.prepare_format,read_clock=session.read_clock,acquire_environment=acquire,
-                    invoke_jni=None if label=='missing_JNI' else jni,get_singleton=session.singleton,
+                    invoke_jni=None if label=='missing_JNI' else jni,get_singleton=None if label=='missing_fold_singleton' else request_singleton,
                     get_tls=None if label=='missing_counter_TLS' else counter_tls,
                     initialize_registry=session.initialize_registry,broadcast=session.broadcast,
                     register_exit=None if label=='missing_exit_service' else register_exit)
             except prefix.RequestContinuationBoundary as exc:
                 assert before=={k:bytes(v) for k,v in p.items()}
                 if label=='JNI_connected':
-                    assert exc.vm.steps==1812 and exc.vm.pc-base==0xFADA8
-                    assert str(exc.cause)=='unknown request callback +0x285c1c -> +0x2765c4'
+                    assert exc.vm.steps==1995 and exc.vm.pc-base==0xFECE0
+                    assert str(exc.cause)=='unknown request callback +0x285f44 -> +0x25c150'
                     assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
                     completed=diag['request_evaluator_prefixes'][-1]
                     assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
@@ -253,8 +259,9 @@ def request_entry(library,libc):
                     fill=diag['request_fill_strings'][-1]
                     assert fill['length_u32']==16 and fill['fill_byte']==0
                     assert diag['request_tree_lookups']==[dict(found=False)]
-                    assert diag['request_cstring_lengths']==[10,4]
-                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1812,
+                    assert diag['request_cstring_lengths'][:2]==[10,4]
+                    assert diag['request_folded_comparisons'] and all(isinstance(v,int) for v in diag['request_folded_comparisons'])
+                    rows.append(dict(image_base=hex(base),case=label,request_vm_steps=1995,
                         actual_request_callback_and_evaluator_executed=True,owning_TLS_allocator_and_JavaVM_used=True,
                         explicit_NULL_FindClass_input=True,evaluator_completed=True,
                         actual_scope_cleanup_completed=True,actual_request_byte_gate_completed=True,
@@ -265,9 +272,16 @@ def request_entry(library,libc):
                         actual_process_atexit_registration_completed=True,
                         actual_fill_string_constructor_completed=True,
                         actual_tree_lookup_completed=True,actual_NULL_safe_cstring_lengths_completed=True,
-                        stopped_at_wrapper_offset='0x285c1c',stopped_at_callback_offset='0x2765c4',
+                        actual_guest_table_folded_comparisons_completed=True,owning_fold_singleton_used=True,
+                        stopped_at_wrapper_offset='0x285f44',stopped_at_callback_offset='0x25c150',
                         all_pages_unchanged_after_stop=True,
                         full_request_returned=False,whole_handoff_native_differential_verified=False))
+                elif label in ('missing_fold_singleton','fold_singleton_exception'):
+                    assert exc.vm.steps==1812 and exc.vm.pc-base==0xFADA8
+                    expected='folded comparison requires a singleton getter' if label=='missing_fold_singleton' else 'injected request folded singleton failure'
+                    assert str(exc.cause)==expected
+                    guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
+                        all_pages_unchanged=True,external_effects_rolled_back=False))
                 elif label=='fill_allocator_exception':
                     assert exc.vm.steps==1558 and exc.vm.pc-base==0xF9D38
                     assert str(exc.cause)=='injected request fill allocation failure'
@@ -298,14 +312,14 @@ def request_entry(library,libc):
                         all_pages_unchanged=True,external_effects_rolled_back=False))
             else:raise AssertionError('request unexpectedly completed')
             if label=='NULL_header_reference':w(p,request,header)
-            steps=1812 if label=='JNI_connected' else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
+            steps=1995 if label=='JNI_connected' else 1812 if label in ('missing_fold_singleton','fold_singleton_exception') else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
             print('PASS request VM',label,steps,'steps',flush=True)
     try:
         outer.make_session=make
         result=boundary.case(library,libc,base,'absent',None,vm_full,apply_logger_model=True,
             apply_handoff_model=True,apply_publication=True,terminal_observer=terminal)
     finally:outer.make_session=previous
-    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==8
+    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==10
     return rows,guards
 
 

@@ -664,6 +664,55 @@ def decode_configuration_base64(
     return status
 
 
+def compare_folded_cstrings(
+    pages, *, first_address: int, second_address: int, length: int,
+    entry_stack_address: int, image_base: int, get_singleton: Callable,
+    max_bytes: int = 0x100000,
+) -> int:
+    """Model +0x2765c4's guest-table comparison and checked singleton reads.
+
+    A zero length reads neither pointer nor singleton. For positive lengths,
+    both getters precede byte reads; the first payload+0x10 value is retained
+    across the second getter. Nonzero environment checks remain unsupported.
+    Compare mapped unsigned bytes, but stop on the original first-byte NUL.
+    """
+    _string_bound(max_bytes)
+    if any(not isinstance(value, int) or not 0 <= value < 1 << 64
+            for value in (first_address, second_address, length, entry_stack_address)):
+        raise RefillUnsupported("folded comparison inputs must fit uint64")
+    if entry_stack_address < 0xE0 or entry_stack_address & 15:
+        raise RefillUnsupported("folded comparison stack must be aligned with scratch space")
+    table = _image_address(image_base, 0xA5BB7)
+    if not length:
+        return 0
+    if not callable(get_singleton):
+        raise RefillUnsupported("folded comparison requires a singleton getter")
+    transaction = _PageTransaction(pages)
+    def pointer(address):
+        return int.from_bytes(_read_span(transaction, address, 8), "little")
+    def getter():
+        reference = get_singleton(transaction, entry_stack_address - 0x40)
+        if not isinstance(reference, int) or not 0 <= reference < 1 << 64:
+            raise RefillUnsupported("folded comparison singleton reference must fit uint64")
+        return reference
+    first_field = pointer(pointer(getter()) + 0x10)
+    reference = getter()
+    if first_field and pointer(pointer(reference) + 0x18):
+        raise RefillUnsupported("folded comparison environment branch is unrecovered")
+    for offset in range(min(length, max_bytes)):
+        first = _read_span(transaction, first_address + offset, 1)[0]
+        second = _read_span(transaction, second_address + offset, 1)[0]
+        result = (_read_span(transaction, table + first, 1)[0]
+                  - _read_span(transaction, table + second, 1)[0])
+        if result or not first:
+            transaction.commit()
+            return result
+    if length > max_bytes:
+        raise RefillUnsupported("folded comparison exceeds the explicit byte bound")
+    transaction.commit()
+    return 0
+
+
 def construct_sized_string_object(
     pages, *, object_address: int, source_address: int, length: int, image_base: int,
     allocate: Callable, max_payload_bytes: int = 0x100000,

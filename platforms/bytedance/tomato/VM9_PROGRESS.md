@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：guest table折叠比较
+
+48项原生/Python对照、1项请求入口检查、26项回滚通过。实际ELF字节
+映射、两次warm singleton getter SP/scratch及wrapper W0写宽匹配；
+owning请求1812到1995步，下一边界树计数 `+25C150`。完整signer、
+fresh/live继续。见 [折叠比较报告](REQUEST_JNI_STARTUP_WORKERS.md#694-实际-guest-table-折叠比较与-singleton-接线2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：请求collection wrappers
 
 28项原生/Python对照、1项请求入口检查、20项回滚通过。树查询与NULL

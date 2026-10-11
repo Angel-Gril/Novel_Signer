@@ -261,6 +261,14 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 _write_span(vm.m.pages, argument + 0x10, length.to_bytes(8, 'little'))
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_cstring_lengths', []).append(length)
+            elif (wrapper, target) == (0x285C1C, 0x2765C4):
+                result = objects.compare_folded_cstrings(vm.m.pages,
+                    first_address=words[1], second_address=words[2], length=words[3],
+                    entry_stack_address=frame.native_stack_address - 0x190,
+                    image_base=image, get_singleton=get_singleton)
+                _write_span(vm.m.pages, argument + 0x20, (result & 0xFFFFFFFF).to_bytes(4, 'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_folded_comparisons', []).append(result)
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()
