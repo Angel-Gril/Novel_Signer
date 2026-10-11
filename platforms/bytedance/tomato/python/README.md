@@ -366,6 +366,8 @@ The ELF configuration constructor now passes 16 fresh native/Python controls and
 
 The complete ELF init_array now executes all thirteen constructors in order with one shared allocation plan and passes 4 fresh native/Python controls and 40 rollback checks. Surviving pages and each ordered allocation/free, registration and OS/TLS stream match. Full binary mapping/linking, JNI/bootstrap and the independent signer remain unfinished. See the [constructor sequence report](../REQUEST_JNI_STARTUP_WORKERS.md#667-elf-init_array-完整顺序组合2026-10-11-asiashanghai).
 
+The ELF image loader now maps all PT_LOAD/BSS pages and eagerly binds every relocation from program headers and dynamic metadata. Ten independent image controls, two complete native/Python constructor sequences and 42 refusal checks pass, including sectionless and GNU-hash inputs. Full JNI/bootstrap and the independent signer remain unfinished. See the [ELF image report](../REQUEST_JNI_STARTUP_WORKERS.md#668-elf-映射与完整符号链接2026-10-11-asiashanghai).
+
 
 
 

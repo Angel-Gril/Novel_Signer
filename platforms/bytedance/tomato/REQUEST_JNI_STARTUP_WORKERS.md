@@ -3226,6 +3226,39 @@ descriptor的控制值与root export copy保存的地址进入后续reader内联
 python -B platforms/bytedance/tomato/python/verify_vm9_elf_constructor_sequence_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <constructor-sequence-evidence.json>
 ```
 
+## 6.68 ELF 映射与完整符号链接（2026-10-11 Asia/Shanghai）
+
+`vm9_elf_image.load_elf_image` 从调用方提供的二进制解析 ELF64/AArch64
+program headers 和 dynamic table，映射全部 PT_LOAD、清零 BSS、执行
+ABS64/GLOB_DAT/JUMP_SLOT/RELATIVE，并返回映射页、权限、GNU_RELRO、
+init/fini arrays、依赖与导出。外部地址由显式 symbol provider 提供；保留
+符号版本和依赖名，缓存每个唯一请求，未解析强符号拒绝，缺失弱符号为零。
+无 section headers 也可加载；有 SysV/GNU hash 两种符号计数路径。
+
+干净 `bc5611d` 上 **2项真实原生RED** 后实施。**10项独立映射对照、
+2项完整链接后原生/Python构造序列、42项拒绝检查**通过。每组映射对照
+匹配全部990页和18481项重定位，包括18267项relative、210处外部符号
+及4处库内符号；140个唯一符号请求的版本/绑定、13项init array、2项
+fini array、导出和权限一致。两基址覆盖无section headers、仅GNU hash、
+弱符号存在和provider地址变化。GOT `+375010` 从ELF绑定实际JNI_OnLoad。
+
+原生构造输入由独立的section-based ELF oracle加载；Python独立使用新
+program-header/dynamic owner。两基址连续执行13个原生成员，匹配所有
+存活guest/heap/image/libc页面、11549项服务和各自有序效果。42项负例
+拒绝错误头、截断、地址/预算、版本链、重定位/array格式及无效provider；
+输入bytes不变，不返回部分image。Provider应暂存外部效果；本owner不
+回滚provider已经执行的外部操作。所有此前生产owner保持不变。
+
+本节完成当前样本的PT_LOAD映射与完整eager symbol linking。依赖加载与
+初始化、真实host OS loader、TLS/IFUNC/REL/RELR/Android packed relocations
+不在该有界契约内。完整同次JNI/bootstrap、startup/worker/cleanup、独立
+signer、fresh输出与线上验收仍未完成。见
+[ELF加载证据](evidence/vm9_elf_image_loader_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_elf_image_loader_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <elf-image-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

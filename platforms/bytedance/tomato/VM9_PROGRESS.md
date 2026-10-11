@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：ELF 映射与完整符号链接
+
+当前样本全部PT_LOAD/BSS、18481项重定位、符号版本/绑定和init/fini数组
+独立加载。10项映射对照、2项完整原生/Python构造序列、42项拒绝通过。
+继续完整同次JNI/bootstrap、startup/worker/cleanup、独立signer和fresh/live。
+见 [ELF加载报告](REQUEST_JNI_STARTUP_WORKERS.md#668-elf-映射与完整符号链接2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：完整 init_array 顺序组合
 
 全部13项constructor共享一个分配计划、TLS、catalog与诊断状态，4项fresh
