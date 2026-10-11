@@ -2768,6 +2768,40 @@ factory/bootstrap、独立 signer、新鲜输出和线上验收仍待完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_root_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <root-evidence.json>
 ```
 
+## 6.53 factory 独立组合与两层清理（2026-10-11 Asia/Shanghai）
+
+`run_module_factory` 恢复 +2cbdc8 的正常构造路径：原位 XOR、实际
+reader/AST、parse 转换、root 构造及运行时链接，随后按原生顺序清理
+converted module 和 AST。外部绑定、codec 表、输入帧和三个模型
+scratch 区均为独立输入，跨阶段共用不复用地址的纯分配计划。
+
+修复 reader 对完整位于 ELF 内的合法输入的重叠误判：整个 image
+继续受保护，仅省去重复的输入子区间。部分重叠及其他输出、帧、
+scratch 和分配别名仍拒绝。除了这一边界和新增 API，旧 owner AST
+一致。每个逻辑 allocation/free 均记录当时的 factory 输出槽字节。
+
+干净 `3b377ee` 绑定 **7 项修改前真实原生 RED**；其中两项同时证明
+旧 reader 错误拒绝 ELF 内输入。正式验证通过 **26 个原生/Python
+factory 对照、38 项回滚检查**。两份 fresh 完整实际 ELF 模块各自
+构造 **139 个描述符、54533 条运行时指令**，各有 **2330 次分配、
+1836 次释放、4 个 finalizer**，合计 4166 个有序分配/释放效果。
+
+完整 guest/heap/image pages、输出发布顺序和 finalizers 一致；实际
+factory 从原始 ELF 与构造器指令独立生成所有输入，没有原生快照。
+合成控制覆盖 ELF 内/外输入、两种 XOR key、空模块、导入、连续定义、
+分配/栈 padding、SP 和 thread ID 变化。异常参数、别名、短输入、
+reader 失败及中途写入/清理失败均保留原页面。
+
+本 API 支持 reader/parse 成功路径和 root 的自然 global-count
+不匹配返回；原生 TLS 错误报告及异常路径仍拒绝。未比较整个原生
+stack/TLS/OS，未执行真实分配器。constructor 的 121 项 publication、
+完整 bootstrap、独立 signer、新鲜输出与线上验收仍待完成。
+不发布名称或 payload。见 [factory 组合证据](evidence/vm9_alternative_factory_composition_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_factory_composition_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <factory-composition-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

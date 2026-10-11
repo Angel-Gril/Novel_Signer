@@ -1,8 +1,8 @@
 """B short descriptor selection, factory XOR and bounded reader sections.
 
-The module root/array/hash buckets are explicit inputs. Native factory and
-publication observations are verified separately; independent Python factory
-+0x2cbdc8, constructor input generation and complete B VM remain open.
+The bounded +0x2cbdc8 factory composes independent reader/AST, conversion,
+root construction and cleanup. Constructor input generation, publication and
+complete B VM startup remain separate boundaries.
 Reader sections 0 (generic), 1, 3, 7, 8 and 12, plus opted-in section 2
 imports, section 4/5/6 definitions, section 9 empty element vectors,
 section 10 code words and section 11 data segments, run with explicit
@@ -11,7 +11,7 @@ Opted-in special custom handlers parse metadata. Recovered actual AST callbacks,
 including imports/exports and owned output cleanup, have separate bounded APIs.
 A bounded module wrapper composes these sections with real AST callbacks and
 parser/callback cleanup, including the complete actual ELF module. Nonempty
-element vectors and independent factory remain open.
+element vectors remain unsupported by the module reader.
 Unsupported branches fail closed.
 """
 from __future__ import annotations
@@ -3360,7 +3360,10 @@ def run_reader_ast_module(pages, *, image_base, input_address, input_size,
     retain_frame = enable_function_imports or enable_table_memory_global_imports or enable_table_memory_definitions or enable_global_definitions or enable_code_definitions or enable_exports or enable_element_section or enable_data_section
     if retain_frame and state <= import_frame_size:
         raise RefillUnsupported('AST module import frame address is invalid')
-    retained = [(image_base,image_base+0x400000), (input_address,input_address+input_size),
+    # The original factory passes a blob inside its own ELF mapping. Keep
+    # that whole image protected without listing its input subrange twice.
+    input_region = [] if image_base <= input_address <= input_address+input_size <= image_base+0x400000 else [(input_address,input_address+input_size)]
+    retained = [(image_base,image_base+0x400000), *input_region,
                 (output_address,output_address+0x120), (state,entry_stack_address),
                 (varuint_scratch_address,varuint_scratch_address+4), *extra_scratch, *reserved_regions]
     if retain_frame:
@@ -5434,3 +5437,128 @@ def construct_parser_root(pages, *, image_base, module_address, output_address,
         if buckets:m.emit('free',buckets,bucket_count*8)
     m.p.commit()
     return ParserRootResult(root,count,imported_count,instruction_count,tuple(m.effects),tuple(finalizers))
+
+
+@dataclass(frozen=True)
+class ModuleFactoryResult:
+    address: int
+    descriptor_count: int
+    imported_count: int
+    instruction_count: int
+    effects: tuple[ReaderAstEffect, ...]
+    finalizers: tuple[tuple[int, int, int], ...]
+
+
+def run_module_factory(pages, *, image_base, blob_address, blob_size,
+        output_address, function_bindings_address, function_binding_count,
+        global_bindings_address, global_binding_count, codec_table_address,
+        codec_table_count, entry_stack_address, thread_id, varuint_scratch_address,
+        expression_scratch_address, custom_scratch_address, allocate=None,
+        max_nodes=4096, max_input_bytes=16*1024*1024,
+        max_code_words=1048576, max_vector_bytes=16*1024*1024,
+        reserved_regions=()):
+    """Compose actual +2cbdc8 with empty names/registration filters.
+
+    Decode the caller's blob in place, build its AST, convert instructions,
+    construct/link the root and destroy the two temporary module objects.
+    Input may be wholly inside the retained ELF image. Codec records and
+    external bindings are explicit caller inputs; no native snapshot is used.
+    Incoming SP supplies the native factory frame. Three disjoint mapped
+    scratch regions belong to the model, as in run_reader_ast_module.
+
+    Only the successful reader/parse paths and the root's natural global-count
+    mismatch are composed. Null input, reader/parse failure, nonempty filters,
+    TLS error reporting and native exceptions remain unsupported. Rejection
+    or a failed write rolls back the blob, outputs, catalogs and all pages.
+    allocate is a pure, nonreusing address plan across every phase. Allocation,
+    logical free and finalizer effects are consumed once after success. Full
+    stack/TLS/OS state and the factory's unspecified X0 return are not outputs.
+    """
+    if type(entry_stack_address) is not int or not 0x4000<entry_stack_address<=MASK64-15 or entry_stack_address&15:
+        raise RefillUnsupported('module factory requires an aligned incoming SP')
+    if type(thread_id) is not int or not 1<=thread_id<=0x7FFFFFFF:
+        raise RefillUnsupported('module factory requires a positive serial thread ID')
+    for value,limit in ((blob_size,16*1024*1024),(max_input_bytes,16*1024*1024),
+            (function_binding_count,65536),(global_binding_count,65536),
+            (codec_table_count,4096),(max_code_words,1048576)):
+        if type(value) is not int or not 0<=value<=limit:
+            raise RefillUnsupported('module factory input/resource bound is invalid')
+    if blob_size>max_input_bytes or not callable(allocate):
+        raise RefillUnsupported('module factory requires bounded input and a pure allocation plan')
+    m=_ReaderAstMemory(pages,image_base,output_address,8,max_nodes,max_vector_bytes,reserved_regions)
+    sp=entry_stack_address;child_sp=sp-0x240
+    ast=sp-0x190;converted=sp-0x210;error=sp-0x228;pair=sp-0x238
+    m.claim(output_address,8);m.claim(child_sp,0x250)
+    for address,size in ((varuint_scratch_address,4),(expression_scratch_address,8),(custom_scratch_address,8)):
+        m.claim(address,size,alignment=size)
+    def retain(address,size):
+        if type(address) is not int or not 0<address<=MASK64 or address+size>MASK64+1:
+            raise RefillUnsupported('module factory input address is invalid')
+        _read_span(m.p,address,size)
+        for start,end in m.regions:
+            if address<end and start<address+size:
+                raise RefillUnsupported('module factory input overlaps output, frame or scratch')
+        m.reserved.append((address,address+size))
+    retain(blob_address,blob_size)
+    if codec_table_count:retain(codec_table_address,codec_table_count*24)
+    if blob_size and not codec_table_count:retain(codec_table_address+blob_size*24,24)
+    for index in range(codec_table_count):
+        record=codec_table_address+index*24;count=_u(m.p,record+16,4)
+        if count>1024:raise RefillUnsupported('module factory codec fields exceed the bound')
+        if count:retain(_u(m.p,record+8),count*3)
+    for address,count in ((function_bindings_address,function_binding_count),(global_bindings_address,global_binding_count)):
+        if count:retain(address,count*24)
+        for index in range(count):
+            pointer=_u(m.p,address+index*24)
+            for length in range(33):
+                if not _u(m.p,pointer+length,1):break
+            else:raise RefillUnsupported('module factory binding name exceeds the hash bound')
+            retain(pointer,length+1)
+    def plan(size):
+        if type(size) is not int or not 0<size<=max_vector_bytes:
+            raise RefillUnsupported('module factory allocation exceeds the byte bound')
+        address=allocate(size);m.claim(address,size);return address
+    effects=[];finalizers=[]
+    def collect(result,owner_bytes=None):
+        for effect in result.effects:
+            if effect.kind in ('allocate','free'):
+                effects.append(ReaderAstEffect(effect.kind,effect.address,effect.size,output_address,
+                    effect.owner_bytes if owner_bytes is None else owner_bytes))
+        finalizers.extend(getattr(result,'finalizers',()))
+    initial_output=_read_span(m.p,output_address,8)
+    _write_span(m.p,ast,bytes(0x120))
+    decode_factory_blob_xor(m.p,blob_address=blob_address,blob_size=blob_size,
+        codec_table_address=codec_table_address,codec_table_count=codec_table_count,max_blob_bytes=max_input_bytes)
+    result=run_reader_ast_module(m.p,image_base=image_base,input_address=blob_address,input_size=blob_size,
+        output_address=ast,entry_stack_address=child_sp,varuint_scratch_address=varuint_scratch_address,
+        allocate=plan,context_address=image_base+0x6FE64,context_size=0,max_nodes=max_nodes,
+        max_input_bytes=max_input_bytes,max_vector_bytes=max_vector_bytes,max_code_words=max_code_words,
+        enable_function_imports=True,enable_inline_function_imports=True,
+        enable_table_memory_global_imports=True,enable_inline_table_memory_global_imports=True,
+        enable_table_memory_definitions=True,enable_global_definitions=True,enable_code_definitions=True,
+        enable_exports=True,enable_inline_exports=True,enable_element_section=True,enable_data_section=True,
+        enable_special_custom_sections=True,expression_scratch_address=expression_scratch_address,
+        custom_scratch_address=custom_scratch_address,entry_x22=function_binding_count,entry_x28=codec_table_address)
+    if result.status:raise RefillUnsupported('module factory reader failure requires unrecovered TLS reporting')
+    collect(result,initial_output)
+    _write_span(m.p,converted,bytes(128));_write_span(m.p,error,bytes(24))
+    _write_span(m.p,pair,codec_table_address.to_bytes(8,'little')+codec_table_count.to_bytes(8,'little'))
+    result=run_parser_conversion(m.p,image_base=image_base,ast_address=ast,codec_pair_address=pair,
+        output_address=converted,error_address=error,entry_stack_address=child_sp,thread_id=thread_id,
+        allocate=plan,max_nodes=max_nodes,max_vector_bytes=max_vector_bytes,max_code_words=max_code_words)
+    if not result.status:raise RefillUnsupported('module factory parse failure requires unrecovered TLS reporting')
+    collect(result,initial_output)
+    root=construct_parser_root(m.p,image_base=image_base,module_address=converted,output_address=output_address,
+        function_bindings_address=function_bindings_address,function_binding_count=function_binding_count,
+        global_bindings_address=global_bindings_address,global_binding_count=global_binding_count,
+        entry_stack_address=child_sp,thread_id=thread_id,allocate=plan,
+        max_instructions=max_code_words,max_vector_bytes=max_vector_bytes)
+    collect(root)
+    published=_read_span(m.p,output_address,8)
+    collect(cleanup_parser_conversion(m.p,image_base=image_base,output_address=converted,
+        max_nodes=max_nodes,max_vector_bytes=max_vector_bytes),published)
+    collect(cleanup_reader_ast_output(m.p,image_base=image_base,output_address=ast,
+        max_nodes=max_nodes,max_vector_bytes=max_vector_bytes),published)
+    m.p.commit()
+    return ModuleFactoryResult(root.address,root.descriptor_count,root.imported_count,
+        root.instruction_count,tuple(effects),tuple(finalizers))

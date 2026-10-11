@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：factory 独立组合与两层清理
+
+26 个原生/Python factory 对照、38 项回滚检查通过。两个基址从 fresh
+ELF 独立完成 XOR/AST/parse/root/cleanup，各139描述符、54533指令、
+2330分配、1836释放、4个finalizer；完整页面和有序发布效果匹配。
+修复 reader 对 ELF 内合法输入的重叠误判。继续 constructor 的121项
+publication、完整 bootstrap、独立 signer、新鲜输出与线上验收。
+见 [factory 报告](REQUEST_JNI_STARTUP_WORKERS.md#653-factory-独立组合与两层清理2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：root 构造、全局数据搬移与运行时链接
 
 62 个原生/Python root 对照、34 项回滚检查通过。两份 fresh 实际模块

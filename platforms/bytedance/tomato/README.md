@@ -207,6 +207,8 @@ With both `enable_function_imports=True` and `enable_inline_function_imports=Tru
 
 `construct_parser_root` now composes binding maps, moved global data, imported/defined descriptors, owned name indexes and runtime linking. 62 native/Python root controls and 34 rollback checks pass. Two fresh complete actual modules contribute 278 descriptors and 109066 runtime instructions; each matches 544 allocations, 52 frees and 3 finalizers. Whole pages and consumed root temporaries match. Factory/bootstrap and signer remain unfinished. See the [root report](REQUEST_JNI_STARTUP_WORKERS.md#652-root-构造全局数据搬移与运行时链接2026-10-11-asiashanghai).
 
+`run_module_factory` now composes ELF blob decoding, reader/AST, parser conversion, root linking and both temporary cleanups. 26 native/Python factory controls and 38 rollback checks pass. Each fresh actual module matches 139 descriptors, 54533 instructions, 2330 allocations, 1836 frees and 4 finalizers. Constructor publication, full bootstrap and signer remain unfinished. See the [factory composition report](REQUEST_JNI_STARTUP_WORKERS.md#653-factory-独立组合与两层清理2026-10-11-asiashanghai).
+
 
 
 
