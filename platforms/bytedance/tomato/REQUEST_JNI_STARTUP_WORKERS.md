@@ -3848,6 +3848,40 @@ callback。该1项检查不是完整请求返回或整链原生差分。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_boolean_scope_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <boolean-scope-evidence.json>
 ```
 
+## 6.87 实际 JNI 发布器与请求 byte gate（2026-10-12 Asia/Shanghai）
+
+`publish_request_handle` 恢复实际 `+28C268`：先获取 environment，
+再经 `+28C308/+26E70C` 分别派发 `(0x2000001,0,root,0,0)` 与
+`(0x2000002,0,root,0,0)`，两次调用结束后使用首次 environment
+清理两个引用。返回值只检查首次 dispatch 的引用是否非零。
+复用既有 JNI acquisition、dispatcher、exception 和 reference cleanup 拥有者。
+
+**纠正上一检查点的 callback 归属：** `+28C0EC` 的实际编码表
+`+383858` 指向 `+28BB54`，原始指令为 `MOV W0,0; RET`。
+`execute_request_byte_gate` 解码 guest ELF 名称、调用该零返回叶函数并写入
+输入对象的状态字节；原生执行没有 JNI effects。该请求分支与上述
+`+28C268` 发布器分别验证，旧文档中的 publisher 归属以本节为准。
+
+两基址 **44项原生/Python对照、1项请求VM入口检查、20项页面回滚**。
+44项含40项 publisher 与4项 cold/warm byte gate；全部 guest payload/ELF 页、
+JNI/JavaVM/清理顺序和逻辑 va_list 匹配。覆盖 local/global/weak/未知引用
+类型、混合类型、NULL 返回、单次/双次 exception、NULL exception 引用、
+缺失 class/method、NULL/full uint64 root，以及三次 acquisition 的 NULL 组合。
+实际 acquisition 和原始 dispatcher/cleanup 执行；NULL acquisition profiles
+使用明确的服务边界。没有 native snapshot Python 输入。
+
+18项 leaf 拒绝检查覆盖缺失 acquisition/JNI/table、服务异常、栈/root 范围
+和改写的 gate 编码表/target/code；2项请求入口拒绝检查保留 missing JNI
+和 provider exception。全部页面回滚通过，外部服务 effects 不回滚。
+公开请求入口完成 byte gate，从993步推进到1019步，在
+`+285AA0 -> +25CDD4` 对象构造明确停止并回滚。**完整请求返回、
+整链原生差分、真实 Android JVM、完整独立 signer、fresh 签名和线上矩阵
+仍未完成。** 见 [发布器与byte gate证据](evidence/vm9_request_publication_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_publication_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-publication-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

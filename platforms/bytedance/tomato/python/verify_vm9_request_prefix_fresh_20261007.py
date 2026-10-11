@@ -174,6 +174,11 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     entry_stack_address=frame.native_stack_address - 0x190,
                     read_clock=read_clock, evaluate=evaluate, leave_scope=leave_boolean_scope,
                     observer=gate_observer)
+            elif allocate is not None and (wrapper, target) == (0x285A80, 0x28C0EC):
+                import vm9_request_leaf_prefixes as leaf
+                leaf.execute_request_byte_gate(vm.m.pages, image_base=image,
+                    object_address=words[1], observer=None if diagnostic_scope is None else
+                    lambda _p, **context: diagnostic_scope.setdefault('request_byte_gates', []).append(context))
             elif allocate is not None and (wrapper, target) == (0x285F60, 0x2914D0):
                 if diagnostic_scope is None or read_clock is None:
                     raise PrefixBoundary()

@@ -367,6 +367,72 @@ def leave_boolean_scope(pages, *, image_base, entry_stack_address,
     return emitted
 
 
+def execute_request_byte_gate(pages, *, image_base, object_address, observer=None):
+    """+0x28c0ec decodes its name and invokes this ELF's zero-return leaf.
+
+    Encoded +0x383858 resolves to +0x28bb54 (MOV W0,0; RET). It does not
+    resolve to the distinct Java publisher +0x28c268. A changed target refuses.
+    """
+    _uint(image_base,64,'image base');_uint(object_address,64,'request byte gate')
+    p = _PageTransaction(pages)
+    entry=image_base+0x28C0EC
+    folded=(((0x00A060400A021040|(~entry&MASK64))&0x00A061440A061440)
+        +(entry&0x0000010400040400))&MASK64
+    delta=((folded|0x01010104)^0xFF5F9EBBF4585F1C)&MASK64
+    def resolve(offset):return (_u(p,image_base+offset)+delta)&MASK64
+    name,flag,source,mask=(resolve(off) for off in (0x3839C8,0x3839D0,0x3839D8,0x3839E0))
+    if (name,flag,source,mask)!=tuple(image_base+off for off in (0x3E1648,0x3E1658,0x11E9F0,0x11EA00)):
+        raise RefillUnsupported('request byte gate encoded globals do not match sample')
+    before=_u(p,flag,4)
+    if not before:
+        objects.decode_masked_bytes(p,source_address=source,destination_address=name,mask_address=mask)
+        _w(p,flag,1,4)
+    target=resolve(0x383858)
+    if target!=image_base+0x28BB54 or _read_span(p,target,8)!=bytes.fromhex('e0031f2ac0035fd6'):
+        raise RefillUnsupported('request byte gate zero-return target is unrecovered')
+    _w(p,object_address,0,1)
+    if observer:
+        observer(p,phase='request_byte_gate_completed',flag_before=before,
+            actual_target_offset='0x28bb54',returned_byte=0,
+            body_transaction_committed=True,whole_request_callback_completed=False)
+    p.commit()
+    return 0
+
+
+def publish_request_handle(pages, *, image_base, entry_stack_address, root_address,
+        acquire_environment, invoke_jni, observer=None):
+    """Actual +0x28c268: acquire, dispatch both tags, then clean both refs.
+
+    +0x28c308 tail-adapts each tag to (tag,0,root,0,0) for +0x26e70c.
+    Cleanup uses the first acquired environment after both dispatches, even
+    when later acquisitions return different environments. Return tests the
+    first dispatch reference for NULL; it never reads a Java Boolean value.
+    """
+    _stack(entry_stack_address,0x1E0)
+    _uint(image_base,64,'image base');_uint(root_address,64,'published root')
+    if not callable(acquire_environment):
+        raise RefillUnsupported('request publication requires environment acquisition')
+    import vm9_jni_environment as jni
+    p = _PageTransaction(pages);stack=entry_stack_address-0x50;pair=stack+8
+    acquire_environment(p,entry_stack_address=stack,output_pair_address=pair)
+    environment=_u(p,pair)
+    references=[]
+    for tag in (0x2000001,0x2000002):
+        result=jni.invoke_java_dispatch(p,image_base=image_base,entry_stack_address=stack,
+            argument_words=(tag,0,root_address,0,0),acquire_environment=acquire_environment,
+            invoke_jni=invoke_jni)
+        references.append(result.returned_reference)
+    for ref in references:
+        jni.release_java_reference(p,environment_pointer=environment,reference=ref,invoke_jni=invoke_jni)
+    returned=int(bool(references[0]))
+    if observer:
+        observer(p,phase='request_publication_completed',first_environment=environment,
+            first_reference=references[0],second_reference=references[1],returned_boolean=bool(returned),
+            body_transaction_committed=True,whole_request_callback_completed=False)
+    p.commit()
+    return returned
+
+
 def execute_event_mode_prefix(pages, *, image_base, entry_stack_address,
         output_object_address, mode, observer=None, allocate=None, free=None):
     """Prepare mode prefix; allocator/free services enable the bounded body."""

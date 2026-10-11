@@ -404,6 +404,8 @@ The actual request stack evaluator now restores JNI calls, prefix comparisons, U
 
 Actual boolean scope cleanup now records elapsed time, fetches/increments the counter and emits the sampled two-argument event. 46 native/Python controls, one bounded request VM entry check and 28 rollback guards pass. The owning request continues to 993 steps and reaches the publication callback boundary. The complete signer remains unfinished. See the [scope cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#686-实际-boolean-scope-清理与-elapsed-event2026-10-12-asiashanghai).
 
+The actual JNI publisher now acquires the environment, dispatches both tags and cleans both references. The distinct request byte gate resolves to the original zero-return leaf at +28BB54; it has no JNI effects. 44 native/Python controls, one request VM entry check and 20 rollback guards pass. The public request reaches 1019 steps and stops at object construction +25CDD4. The complete signer remains unfinished. See the [publication and byte gate report](../REQUEST_JNI_STARTUP_WORKERS.md#687-实际-jni-发布器与请求-byte-gate2026-10-12-asiashanghai).
+
 
 
 

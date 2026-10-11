@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：实际JNI发布器与请求byte gate
+
+44项原生/Python对照、1项请求入口检查、20项回滚通过。实际发布器
+恢复environment acquisition、双tag dispatch与双reference cleanup。
+纠正此前归属：请求byte gate `+28C0EC` 实际调用 `+28BB54` 零返回叶函数，
+没有JNI effects。公开请求入口从993推进到1019步，下一处为 `+25CDD4`
+对象构造。完整独立signer、fresh签名与线上矩阵继续。
+见 [发布器与byte gate报告](REQUEST_JNI_STARTUP_WORKERS.md#687-实际-jni-发布器与请求-byte-gate2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：实际boolean scope清理与elapsed event
 
 46项原生/Python对照、1项请求入口检查、28项回滚通过。实际scope清理

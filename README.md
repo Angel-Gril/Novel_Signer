@@ -239,6 +239,7 @@ cold encoded SDK及其live lookup组合通过 **62项对照、13项回滚**，�
 VM/callable/worker live服务接线通过 **6项原生对照、2项worker入口检查、16项回滚**，见 [provider报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#684-delayed-vmcallableworker-的-live-provider-接线2026-10-12-asiashanghai)。
 实际request stack evaluator通过 **78项对照、1项请求VM入口检查、20项回滚**，见 [evaluator报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#685-实际-request-stack-evaluator-与请求-vm-接线2026-10-12-asiashanghai)。
 实际boolean scope清理通过 **46项对照、1项请求VM入口检查、28项回滚**，见 [scope报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#686-实际-boolean-scope-清理与-elapsed-event2026-10-12-asiashanghai)。
+实际JNI发布器与byte gate通过 **44项对照、1项请求入口检查、20项回滚**；请求到1019步，见 [发布器报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#687-实际-jni-发布器与请求-byte-gate2026-10-12-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
