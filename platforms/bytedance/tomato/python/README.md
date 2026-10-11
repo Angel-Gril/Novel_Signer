@@ -398,6 +398,8 @@ Actual UTF construction and Java service lookup pass 42 native/Python controls a
 
 Actual live receiver initialization and cold lookup pass 92 native/Python controls and 6 rollback guards. SDK branches, once flags, published global references, Parcel/local cleanup and complete binary MD5 lookup match. VM/worker provider wiring and the complete signer remain unfinished. See the [live initializer report](../REQUEST_JNI_STARTUP_WORKERS.md#683-实际-live-initializer-与-cold-lookup2026-10-12-asiashanghai).
 
+Delayed VM and callable entries forward explicit live JNI, allocator and SDK providers. Four evaluator and two complete callable native/Python controls, two bounded worker entry checks and sixteen rollback guards pass. Live lookup now preserves the output-reference stack padding used by a later registry setter. The complete signer remains unfinished. See the [live provider report](../REQUEST_JNI_STARTUP_WORKERS.md#684-delayed-vmcallableworker-的-live-provider-接线2026-10-12-asiashanghai).
+
 
 
 

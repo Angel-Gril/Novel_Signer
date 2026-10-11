@@ -3748,6 +3748,38 @@ JNI/JavaVM/分配/free顺序、free前字节、once flag与发布引用一致。
 python -B platforms/bytedance/tomato/python/verify_vm9_live_initializer_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <initializer-evidence.json>
 ```
 
+## 6.84 delayed VM/callable/worker 的 live provider 接线（2026-10-12 Asia/Shanghai）
+
+`_run_vm`、`run_delayed_followup_callable` 与 worker scheduler 转发既有
+JNI、calloc/reallocate、diagnostic observer、encoded SDK property 服务及
+payload上界，沿实际 `+2043F4 → +21CBEC` 回调执行cold initializer与lookup。
+验证还发现并恢复 `+21CD60` 在live路径保存owning output reference的
+写入；后续registry setter的TLS节点保留其上七字节padding，释放前
+字节因此与原生一致。
+
+两基址 **4项原生/Python evaluator对照、2项完整callable对照、2项
+worker入口检查、16项回滚**。evaluator覆盖SDK27/30：实际301步bytecode、
+15对callback、全部guest payload/image页面、JNI/JavaVM/SDK/allocator
+顺序、free前字节及配置写入匹配。callable从 `+2043BC` 执行两个VM与
+最终配置发布及清理；本批synthetic输入的checksum范围为空，第一VM
+自然执行30步，lookup执行301步。既有完整checksum的8606106步验收
+保持为历史独立证据，本批没有重复6.72–6.75完整批次。
+
+worker从真实scheduler入口取得queue task并执行完整live callable，
+在随后的queue wait检查global引用与配置值7，然后按显式一步调度
+上界停止；这两项入口检查及两项missing calloc拒绝都回滚全部页面。
+此边界检查没有执行完整三worker退出，也没有原生/Python整轮调度
+对照。其余12项检查在evaluator/callable入口分别拒绝missing JNI、
+calloc、SDK find/read、过小payload上界及JNI provider异常。
+外部provider ledgers不属于页面回滚范围。
+
+**完整live三worker调度对照、真实Android JVM、完整独立signer、fresh
+签名和线上矩阵仍未完成。** 见 [live provider接线证据](evidence/vm9_live_delayed_providers_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_live_delayed_providers_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <live-provider-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -34,7 +34,9 @@ def run_requested_worker_schedule(pages, *, threads, image_base, libc_base,
         get_tls, read_clock, clock, futex, broadcast, initialize_registry,
         register_destructor, invoke_javavm, invoke_jni, read_property, system,
         signal_condition, get_libc_tls, os_call, vm_module, max_iterations=64,
-        max_scheduler_steps=256):
+        max_scheduler_steps=256, calloc=None, reallocate=None,
+        diagnostic_observer=None, find_sdk_property=None, read_sdk_property=None,
+        max_payload_bytes=0x100000):
     """Run the three requested guest workers across their actual wait boundaries.
 
     select_worker(pages, candidates) chooses an index from the unfinished
@@ -134,7 +136,10 @@ def run_requested_worker_schedule(pages, *, threads, image_base, libc_base,
                         allocate=allocate,free=free,read_clock=read_clock,get_tls=get_tls,
                         initialize_registry=initialize_registry,broadcast=broadcast,
                         register_destructor=register_destructor,invoke_javavm=invoke_javavm,
-                        read_property=read_property,system=system,vm_module=vm_module)
+                        read_property=read_property,system=system,vm_module=vm_module,
+                        invoke_jni=invoke_jni,calloc=calloc,reallocate=reallocate,
+                        diagnostic_observer=diagnostic_observer,find_sdk_property=find_sdk_property,
+                        read_sdk_property=read_sdk_property,max_payload_bytes=max_payload_bytes)
                 else:raise RefillUnsupported('unknown cooperative queue task')
                 task_results.append((index,function,result))
                 startup.destroy_callable(p,object_address=task,image_base=b,free=free)

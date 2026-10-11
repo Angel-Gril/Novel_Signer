@@ -232,6 +232,10 @@ def recover_absent_java_string(pages,*,image_base,entry_stack_address,receiver_a
  env=environment.acquire_thread_environment(p,image_base=base,entry_stack_address=sp-0x1D0,
   output_pair_address=sp-0x140,get_tls=get_tls,register_destructor=register_destructor,invoke_javavm=invoke_javavm)
  if not env.environment:raise RefillUnsupported('follow-up NULL environment branch is unrecovered')
+ # +21cd60 saves the owning output reference on both live and absent paths.
+ # A later registry setter at the same callback SP retains its upper seven
+ # bytes as padding in the scoped TLS node before that node is released.
+ w(p,sp-0xA0,out)
  if u(p,receiver+0x28):
   _recover_live_java_string(p,base=base,sp=sp,receiver=receiver,out=out,environment_pointer=env.environment,
    thread_pointer=thread_pointer,thread_id=thread_id,allocate=allocate,free=free,
@@ -250,9 +254,6 @@ def recover_absent_java_string(pages,*,image_base,entry_stack_address,receiver_a
    invoke_jni=invoke_jni,calloc=calloc,reallocate=reallocate,diagnostic_observer=diagnostic_observer,
    max_payload_bytes=max_payload_bytes,find_sdk_property=find_sdk_property,read_sdk_property=read_sdk_property)
   p.commit();return
- # +21cd60 spills the owning output reference. The next scoped setter copies
- # its upper seven bytes as padding into a TLS node after this frame returns.
- w(p,sp-0xA0,out)
  error=objects._allocate(p,allocate,24)
  objects.construct_string_object(p,object_address=error,source_address=encoded(p,base,d,0x37EA28),
   allocate=allocate,vtable_address=base+0x34F5F8,empty_descriptor_address=base+0x6E168)
@@ -375,7 +376,9 @@ class FollowupResult:
  configuration_value: int
 
 def _run_vm(p,*,base,sp,payload,entry,thread_pointer,thread_id,allocate,free,get_tls,
- initialize_registry,broadcast,register_destructor,invoke_javavm,read_property,system,vm_module,max_steps):
+ initialize_registry,broadcast,register_destructor,invoke_javavm,read_property,system,vm_module,max_steps,
+ invoke_jni=None,calloc=None,reallocate=None,diagnostic_observer=None,
+ find_sdk_property=None,read_sdk_property=None,max_payload_bytes=0x100000):
  if entry==0x895B0:frame,top_delta,argument_delta,ret,tables,exit_offset=0x320,0x2F0,0,0x203AEC,(0,0),0x89640
  elif entry==0x89650:frame,top_delta,argument_delta,ret,tables,exit_offset=0x560,0x530,8,0x203B70,(base+0x34F090,base+0x34F0E0),0x89D18
  else:raise RefillUnsupported('unknown delayed VM entry')
@@ -403,7 +406,9 @@ def _run_vm(p,*,base,sp,payload,entry,thread_pointer,thread_id,allocate,free,get
     recover_absent_java_string(p,image_base=base,entry_stack_address=callback_sp-0x10,
      receiver_address=u(p,arg+16),output_reference_address=u(p,arg+8),thread_pointer=thread_pointer,
      thread_id=thread_id,allocate=allocate,free=free,get_tls=get_tls,register_destructor=register_destructor,
-     invoke_javavm=invoke_javavm,read_property=read_property,system=system)
+     invoke_javavm=invoke_javavm,read_property=read_property,system=system,invoke_jni=invoke_jni,
+     calloc=calloc,reallocate=reallocate,diagnostic_observer=diagnostic_observer,
+     find_sdk_property=find_sdk_property,read_sdk_property=read_sdk_property,max_payload_bytes=max_payload_bytes)
    elif (wrapper,target)==(0x20440C,0x26C858):
     diagnostics.enter_diagnostic_scope(p,object_address=u(p,arg+8),input_word=u(p,arg+16),image_base=base,
      thread_pointer=thread_pointer,thread_id=thread_id,allocate=allocate)
@@ -439,13 +444,16 @@ def _run_vm(p,*,base,sp,payload,entry,thread_pointer,thread_id,allocate,free,get
 
 def run_delayed_followup_callable(pages,*,callable_address,image_base,entry_stack_address,thread_pointer,thread_id,
  allocate,free,read_clock,get_tls,initialize_registry,broadcast,register_destructor,invoke_javavm,
- read_property,system,vm_module,max_steps=10000000):
+ read_property,system,vm_module,max_steps=10000000,invoke_jni=None,calloc=None,reallocate=None,
+ diagnostic_observer=None,find_sdk_property=None,read_sdk_property=None,max_payload_bytes=0x100000):
  """+0x2043bc -> singleton136 -> +0x203948, without draining the timed queue.
 
  The existing inline callable and initialized serial main-thread services are
  inputs. Both VM bodies run from guest bytecode to their original exits. A
  successful call includes configuration writes and owning string cleanup.
- Unsupported branches roll back pages; external provider ledgers are separate.
+ Live Java lookup uses the supplied JNI, allocator and SDK services through
+ the actual VM callback. Unsupported branches roll back pages; external
+ provider ledgers are separate.
  """
  if type(max_steps) is not int or not 1<=max_steps<=10000000:raise ValueError('invalid delayed VM instruction bound')
  if type(entry_stack_address) is not int or entry_stack_address<0x1000 or entry_stack_address&15:
@@ -468,7 +476,9 @@ def run_delayed_followup_callable(pages,*,callable_address,image_base,entry_stac
  kw=dict(base=b,sp=S-0x90,payload=payload,thread_pointer=thread_pointer,thread_id=thread_id,
   allocate=allocate,free=free,get_tls=get_tls,initialize_registry=initialize_registry,broadcast=broadcast,
   register_destructor=register_destructor,invoke_javavm=invoke_javavm,read_property=read_property,
-  system=system,vm_module=vm_module,max_steps=max_steps)
+  system=system,vm_module=vm_module,max_steps=max_steps,invoke_jni=invoke_jni,calloc=calloc,
+  reallocate=reallocate,diagnostic_observer=diagnostic_observer,find_sdk_property=find_sdk_property,
+  read_sdk_property=read_sdk_property,max_payload_bytes=max_payload_bytes)
  first,_=_run_vm(p,entry=0x895B0,**kw);second,pairs=_run_vm(p,entry=0x89650,**kw)
  r=registry.get_registry320_reference(p,image_base=b,entry_stack_address=S-0x90,thread_id=thread_id,
   allocate=allocate,free=free,read_clock=read_clock,get_tls=get_tls,initialize_registry=initialize_registry,broadcast=broadcast)

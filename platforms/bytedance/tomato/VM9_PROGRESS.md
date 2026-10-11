@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：delayed VM/callable/worker live服务接线
+
+4项evaluator及2项完整callable原生/Python对照、2项bounded worker入口
+检查、16项回滚通过。callable执行完整live lookup与最终配置值7发布，
+上层入口转发显式服务。live output-reference栈padding经原生写入恢复，
+free前TLS节点字节匹配。worker在live callable后的wait按显式上界停止，
+完整live三worker调度对照、完整独立signer、fresh/live继续。见
+[provider报告](REQUEST_JNI_STARTUP_WORKERS.md#684-delayed-vmcallableworker-的-live-provider-接线2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：实际live initializer与cold lookup
 
 88项initializer及4项完整cold lookup原生/Python对照、6项回滚通过。
