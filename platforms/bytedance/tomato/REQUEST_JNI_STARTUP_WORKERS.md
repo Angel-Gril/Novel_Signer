@@ -3363,6 +3363,40 @@ Python worker、独立 signer、新鲜签名输出和线上验收仍未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_timed_task_submission_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <timed-task-evidence.json>
 ```
 
+## 6.72 JNI finalizer 完整 worker 与 guest 退出（2026-10-11 Asia/Shanghai）
+
+`vm9_jni_finalizer.run_finalizer_worker` 恢复第三条 startup queue 的实际
+`+204348` body，依次复用 singleton、JNI environment、image VM、timed task
+和 guest exit owners。覆盖两次 absent-file open、rejected sigaction、
+trylock 后的临时代码探针、实际 GetEnv/GetStaticMethodID/ExceptionCheck、
+ELF PT_LOAD 范围与 metadata 写入，再提交 `+34F058` delay 60000 的首条
+后续任务。结束 queue cleanup 后执行完整 joinable guest pthread_exit，
+包括此 worker 的 JavaVM/TLS destructor；所有 OS/clock 服务均为显式 provider。
+
+原生侧从 fresh ELF 映射开始，在同一 CPU 执行全部13constructors、JNI、
+三条 worker 和三次 guest exit，实际复制并执行原有临时代码后自然返回。
+Python侧独立映射自己的ELF；临时复制代码经完整hash与指令guard限定，
+恢复自修改counter语义，返回 **1**；image VM 经 **6435 steps** 和实际
+pagesize callbacks 到达原有exit。私有代码、路径与解码字符串不进入公开仓库。
+
+干净 `88a8801` 上 A/B 两条完整原生 RED 后实施。
+**4项完整原生/Python对照、4项copied probe对照、47项回滚检查**通过。
+完整对照覆盖两基址×两分支，包括不同heap/stack padding与地址偏移；
+copied probe另覆盖page-size cache冷/热状态。所有存活guest/heap/image/libc
+页面、分配/释放、JavaVM/JNI和有序服务组一致。五个既有共享owner保持
+原有hash；本节完整组合同时覆盖已接受的两条worker与延时提交。
+
+物理stack保存区、线程输出scratch以及module registration与allocation
+之间的交错不属于页面/服务组契约。文件存在、成功signal安装、探针系统
+服务失败、contended mutex、非空timed deque、detached exit均不在本节
+支持路径内。Guest页面回滚不能撤销外部provider效果，调用方需自行暂存。
+后续 `+203948` callback、完整独立signer、fresh签名和线上验收继续。
+见 [finalizer证据](evidence/vm9_jni_finalizer_worker_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_finalizer_worker_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <finalizer-worker-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

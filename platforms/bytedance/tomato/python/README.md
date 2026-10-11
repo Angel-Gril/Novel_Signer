@@ -374,6 +374,8 @@ The complete ELF/JNI execution now continues into the executor and actual A/B in
 
 The first delayed JNI follow-up submission now preserves the native callable, deadline and executor deque, with 8 submission controls, 24 callable controls and 25 rollback guards. Both older callable regression files are byte-identical. The full finalizer worker and independent signer remain unfinished. See the [timed submission report](../REQUEST_JNI_STARTUP_WORKERS.md#671-jni-finalizer-的首条延时任务提交2026-10-11-asiashanghai).
 
+The complete JNI execution now runs all three requested workers and full joinable guest exit. Four complete native/Python controls, four actual copied-probe controls and 47 rollback guards pass; all surviving pages and ordered service groups match. Delayed callback execution and the independent signer remain unfinished. See the [complete finalizer report](../REQUEST_JNI_STARTUP_WORKERS.md#672-jni-finalizer-完整-worker-与-guest-退出2026-10-11-asiashanghai).
+
 
 
 

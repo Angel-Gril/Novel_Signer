@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：完整 finalizer worker 与 guest 退出
+
+两基址×两分支完整ELF/13constructors/JNI/三条worker/三次guest退出，通过
+4项完整对照、4项copied probe和47项回滚；所有存活页面和服务组一致。
+临时原有代码真实执行返回1，image VM6435steps自然退出，首条后续任务
+与deque一致。继续后续callback、独立signer及fresh/live。
+见 [完整finalizer报告](REQUEST_JNI_STARTUP_WORKERS.md#672-jni-finalizer-完整-worker-与-guest-退出2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：JNI finalizer 的延时任务提交
 
 首条非零 delay 提交、heap wrapper/task、executor deque 与 controller signal
