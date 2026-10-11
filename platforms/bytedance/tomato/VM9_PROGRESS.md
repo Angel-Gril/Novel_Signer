@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-11 Asia/Shanghai：B 复用共享 once 状态机
+
+共享 owner 接受B六个控制字，复用锁/状态/广播/回滚。60项原生对照
+（36B、24A回归）与22项回滚检查通过。原始once与真实libc broadcast
+自然返回，初始化体仍为显式provider。完整worker和signer继续。
+见 [共享 once 报告](REQUEST_JNI_STARTUP_WORKERS.md#660-b-复用共享-once-状态机2026-10-11-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-11 Asia/Shanghai：B worker 完整算术与内存内置函数
 
 28个基础tag、47个组合tag与CAS64/memset恢复。310项runtime、30项builtin、

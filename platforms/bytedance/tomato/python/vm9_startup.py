@@ -698,16 +698,26 @@ def begin_once_arena_boot(pages, *, image_base, allocate):
     return ArenaBootPrefixResult(result.region_address,once_initialization_pending=True)
 
 
-def call_once_arena_boot(pages, *, image_base, initializer, broadcast, table_index=0):
+def call_once_arena_boot(pages, *, image_base, initializer, broadcast, table_index=0, control_address=None):
     """Serial once gate with an explicit complete initializer provider.
 
-    No partial built-in initializer is treated as completion. Broadcast is an
-    explicit environment boundary; state 1 waiting remains unsupported.
+    Without control_address, use the existing A table_index layout. An explicit
+    control_address selects one of B's six once words and requires the default
+    table_index=0. No partial built-in initializer is treated as completion.
+    Broadcast is explicit; state 1 waiting remains unsupported.
     """
     if not callable(initializer) or not callable(broadcast):
         raise RefillUnsupported('once gate requires explicit initializer and broadcast')
-    _,table,_,_=_table_initialization_layout(table_index)
-    p=_PageTransaction(pages);control=image_base+table+0x40;mutex=image_base+0x3E2EB8
+    if control_address is None:
+        _,table,_,_=_table_initialization_layout(table_index)
+        control=image_base+table+0x40
+    else:
+        if type(table_index) is not int or table_index!=0:
+            raise RefillUnsupported('explicit B once control cannot combine with an A table index')
+        if type(control_address) is not int or control_address not in tuple(image_base+0x3E1E80+i*8 for i in range(6)):
+            raise RefillUnsupported('unrecovered B once control address')
+        control=control_address
+    p=_PageTransaction(pages);mutex=image_base+0x3E2EB8
     objects.lock_uncontended_mutex(p,mutex_address=mutex)
     state=_u(p,control)
     if state==1:raise RefillUnsupported('arena once wait path remains unrecovered')
@@ -725,7 +735,6 @@ def call_once_arena_boot(pages, *, image_base, initializer, broadcast, table_ind
     if broadcast(p,image_base+0x3E2EE0)!=0:
         raise RefillUnsupported('once broadcast provider failed')
     p.commit();return result
-
 
 @dataclass(frozen=True)
 class InitializationCallerFrame:

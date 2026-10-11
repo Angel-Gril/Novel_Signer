@@ -2986,6 +2986,30 @@ CAS 成败与返回值别名、memset 零长度/跨页/参数别名。两基址�
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_worker_arithmetic_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-worker-arithmetic-evidence.json>
 ```
 
+## 6.60 B 复用共享 once 状态机（2026-10-11 Asia/Shanghai）
+
+既有 `vm9_startup.call_once_arena_boot` 增加可选 `control_address`，接受
+B 的六个控制字。缺省参数保留 A 的 `table_index` 契约；显式 B 控制字
+要求 `table_index=0`，避免两个选择来源冲突。两条路径复用同一份锁、
+状态发布、完整初始化 provider、广播和回滚实现。状态1等待仍拒绝。
+
+干净 `4c7a0ff` 上 **12 项修改前真实原生 RED** 后实施变更。新鲜验证
+通过 **60 项原生/Python 对照、22 项回滚检查**：36项B控制覆盖两基址、
+六个控制字及cold/done/其他非零状态，24项A回归覆盖六个原表。
+原始 +32a0a0 与 matching libc 的真实 broadcast 自然返回，完整 guest、
+image、libc、TLS页面和初始化/广播/唤醒顺序一致。初始化体在此为显式
+纯 provider 边界，尚未用本批证据宣称完整 B worker 已组合。
+
+非法控制字、含糊参数、busy/locked状态、缺失或失败服务、部分初始化、
+最后状态发布故障均拒绝且全页回滚。其他共享 owner 定义的 AST 未变。
+继续完整B任务/队列worker、JNI/bootstrap、独立signer、新鲜输出及线上
+验收。没有原生快照输入或私有名称/payload发布。见
+[共享 once 证据](evidence/vm9_alternative_shared_once_fresh_20261011.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_alternative_shared_once_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <b-shared-once-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
