@@ -1,0 +1,484 @@
+{
+  "schema": "vm9-request-token-lifecycle-fresh-v1",
+  "evidence_date": "2026-10-13",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "clone_binary",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "clone_empty",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "clone_negative",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "clone_wrap",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "clone_self",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "clone_source_pointer_alias",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "clone_cross_page",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "clone_malloc_NULL",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "clone_live_source",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "default",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2481ac",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "default_cross_page",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2481ac",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "default_malloc_NULL",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2481ac",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "destroy",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2484b8",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "destroy_NULL",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2484b8",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "delete",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2484fc",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "delete_NULL",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2484fc",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "free",
+      "wrapper_offset": "0x288b5c",
+      "target_offset": "0x32a264",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "free_NULL",
+      "wrapper_offset": "0x288b5c",
+      "target_offset": "0x32a264",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clone_binary",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clone_empty",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clone_negative",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clone_wrap",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clone_self",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clone_source_pointer_alias",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clone_cross_page",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clone_malloc_NULL",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "clone_live_source",
+      "wrapper_offset": "0x288b4c",
+      "target_offset": "0x2483e0",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "default",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2481ac",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "default_cross_page",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2481ac",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "default_malloc_NULL",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2481ac",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "destroy",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2484b8",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "destroy_NULL",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2484b8",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "delete",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2484fc",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "delete_NULL",
+      "wrapper_offset": "0x288b68",
+      "target_offset": "0x2484fc",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "free",
+      "wrapper_offset": "0x288b5c",
+      "target_offset": "0x32a264",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "free_NULL",
+      "wrapper_offset": "0x288b5c",
+      "target_offset": "0x32a264",
+      "original_consumer_returned": true,
+      "all_guest_ELF_and_packed_padding_equal": true,
+      "ordered_allocator_free_effects_equal": true,
+      "native_return_x0_compared": false,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unmapped_source",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "unmapped_destination",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "payload_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "invalid_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "wrong_wrapper",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "bad_target",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "invalid_allocation",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "free_failure",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    }
+  ],
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "whole_physical_stack_bytes_compared": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "complete_nested_caller_return_verified": false,
+  "native_Python_controls": 36,
+  "rollback_guards": 8,
+  "pre_change_native_RED_controls": 2,
+  "accepted_native_controls_not_repeated": true,
+  "nested_string_lifecycle_consumers_integrated": true,
+  "constructed_outer_steps": 3767,
+  "constructed_outer_bytecode_offset": "0xfdde0",
+  "constructed_nested_steps_before": 231,
+  "constructed_nested_steps": 287,
+  "constructed_nested_bytecode_offset": "0x118ac8",
+  "constructed_next_wrapper": "0x288b74",
+  "constructed_next_target": "0x248908",
+  "constructed_prefix_native_differential_verified": false,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "allocator_provider_mapping_rollback_verified": false,
+  "limits": [
+    "Five actual callback targets reuse accepted clone/default/destroy/delete owners and explicit free.",
+    "The independently constructed owning entry reaches 287 nested steps, before StringObject formatting.",
+    "Clone/default X0 is compared; no physical cleanup return, stack/PAC or whole-prefix claim."
+  ]
+}

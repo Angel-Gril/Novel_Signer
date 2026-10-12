@@ -1,7 +1,7 @@
 """Bounded +0x287500 nested request VM, with independently generated inputs.
 
-Constants, random, shared readers and diagnostic scopes use recovered owners.
-The next StringObject clone is an explicit boundary; no pages are published.
+Constants, random, shared readers, scopes and string lifecycle reuse owners.
+The next StringObject formatter is an explicit boundary; no pages are published.
 """
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
@@ -21,7 +21,8 @@ class RequestTokenVmPrefix:
 
 
 def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
-        random_services=None, continue_shared_readers=False, diagnostic_services=None, **inputs):
+        random_services=None, continue_shared_readers=False, diagnostic_services=None,
+        string_services=None, **inputs):
     """Run a recovered prefix to the next explicit callback boundary.
 
     The backing register words come from caller memory. No native output is
@@ -89,6 +90,18 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     allocate=diagnostic_services['allocate'],thread_id=diagnostic_services.get('thread_id'),
                     observer=diagnostic_services.get('observer'))
             elif diagnostic_services is not None and (wrapper,target)==(0x288B4C,0x2483E0):
+                if string_services is None:
+                    raise Boundary()
+                apply_token_string_lifecycle_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    allocate=string_services['allocate'],free=string_services['free'])
+            elif string_services is not None and (wrapper,target) in (
+                    (0x288B5C,0x32A264),(0x288B68,0x2481AC),
+                    (0x288B68,0x2484B8),(0x288B68,0x2484FC)):
+                apply_token_string_lifecycle_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    allocate=string_services['allocate'],free=string_services['free'])
+            elif string_services is not None and (wrapper,target)==(0x288B74,0x248908):
                 raise Boundary()
             else:
                 raise RefillUnsupported(f'unknown request token callback +{wrapper:#x} -> +{target:#x}')
@@ -155,5 +168,40 @@ def apply_token_diagnostic_callback(pages, *, argument_block_address,
             image_base=image_base,thread_pointer=thread_pointer,observer=observer)
     else:
         raise RefillUnsupported('unrecovered token diagnostic callback target')
+    p.commit()
+    return result
+
+
+def apply_token_string_lifecycle_callback(pages, *, wrapper_offset,
+        argument_block_address, image_base, allocate, free,
+        max_payload_bytes=0x100000):
+    """Actual +288b4c clone / +288b5c free / +288b68 lifecycle consumers.
+
+    Tail wrappers load the target, destination and optional source from packed
+    words. Their results remain in guest objects. Clone/default return the
+    accepted owner's X0 value; cleanup has no declared physical return value.
+    """
+    import vm9_objects as objects
+    p=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')-image_base
+    pointer=int.from_bytes(_read_span(p,argument_block_address+8,8),'little')
+    pair=(wrapper_offset,target)
+    if pair==(0x288B4C,0x2483E0):
+        source=int.from_bytes(_read_span(p,argument_block_address+16,8),'little')
+        result=objects.clone_string_object(p,object_address=pointer,
+            source_object_address=source,image_base=image_base,allocate=allocate,
+            max_payload_bytes=max_payload_bytes)
+    elif pair==(0x288B68,0x2481AC):
+        result=objects.construct_string_object(p,object_address=pointer,source_address=0,
+            allocate=allocate,vtable_address=image_base+0x34F5F8,
+            empty_descriptor_address=image_base+0x6E168)
+    elif pair in ((0x288B68,0x2484B8),(0x288B68,0x2484FC)):
+        result=objects.destroy_string_object(p,object_address=pointer,image_base=image_base,
+            free=free,delete_object=target==0x2484FC)
+    elif pair==(0x288B5C,0x32A264):
+        free(p,pointer)
+        result=None
+    else:
+        raise RefillUnsupported('unrecovered token string lifecycle callback')
     p.commit()
     return result

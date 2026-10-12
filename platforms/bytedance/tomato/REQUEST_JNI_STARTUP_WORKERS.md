@@ -5397,6 +5397,30 @@ physical ABI、mapping回滚、完整signer、fresh/live及真实JVM仍未完成
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_scopes_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-scopes-evidence.json>
 ```
 
+## 6.137 Request nested string lifecycle（2026-10-13 Asia/Shanghai）
+
+新增 `apply_token_string_lifecycle_callback`，恢复actual `+288B4C -> +2483E0`
+clone、`+288B5C -> +32A264` free，以及 `+288B68` 的default `+2481AC`、
+destroy `+2484B8`、delete `+2484FC`。复用已接受的object owner和显式
+allocate/free服务；关闭string服务时保留231步clone边界。旧default/source
+AST保留证明通过，既有helper原生组未重跑。
+
+两基址 **36项actual consumer对照、8项回滚检查**通过；binary/empty/
+signed-negative/wrap长度、self/field/cross-page alias、NULL allocation与
+allocator修改live source pointer均覆盖。guest/ELF/packed padding与
+allocator/free顺序一致。clone/default比较native X0；cleanup结果经guest
+对象传递，不宣称physical cleanup X0、native spills或PAC。2项native RED。
+
+独立非空URL/header-owning入口 **231→287个内层步骤 / +118AC8**，外层
+3767/+FDDE0，下一 `+288B74 -> +248908` 格式化。原有page bytes差异为空，
+64个新增OS pages保留。没有整段nested prefix或whole-request对照；完整
+nested return、actual JNI、physical ABI、mapping回滚、完整signer、fresh/live
+及真实JVM仍未完成。见 [nested lifecycle证据](evidence/vm9_request_token_lifecycle_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_lifecycle_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <nested-lifecycle-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

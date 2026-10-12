@@ -438,6 +438,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     vm_module=vm_module,random_services=random_services,
                     continue_shared_readers=random_services.get('continue_shared_readers',False),
                     diagnostic_services=random_services.get('diagnostic_services'),
+                    string_services=random_services.get('string_services'),
                     entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
                     image_base=image,object_address=words[1],
