@@ -1,6 +1,6 @@
 """Bounded +287474 second request VM with an independently generated caller."""
 from dataclasses import dataclass
-from vm9_allocator import _PageTransaction,RefillUnsupported
+from vm9_allocator import _PageTransaction,RefillUnsupported,_read_span,_write_span
 from vm9_request_caller import prepare_request_287474_vm_caller,RequestVmCallerFrame
 from vm9_objects import decode_masked_bytes
 
@@ -16,7 +16,8 @@ class RequestVm287474Prefix:
     steps: int
 
 
-def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000, **inputs):
+def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
+        consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
 
     Undefined virtual words retain the independently supplied caller memory.
@@ -24,6 +25,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000, **input
     """
     if type(maxsteps) is not int or maxsteps<1:
         raise RefillUnsupported('second request VM budget must be positive')
+    if consumer_services is not None and (not isinstance(consumer_services,dict) or
+            any(not callable(consumer_services.get(n)) for n in ('allocate','free'))):
+        raise RefillUnsupported('second request consumers require allocation and free services')
     staged=_PageTransaction(pages);frame=prepare_request_287474_vm_caller(staged,**inputs)
     image=inputs['image_base']
     class StrictMem(vm_module.Mem):
@@ -46,6 +50,12 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000, **input
             if (wrapper,target) in ((0x288AF4,0x167E54),(0x2884B8,0x167E54)):
                 length=decode_masked_bytes(staged,source_address=words[1],destination_address=words[2],mask_address=words[3])
                 decoded.append((words[2],length))
+            elif consumer_services is not None and (wrapper,target) in (
+                    (0x2884CC,0x2481AC),(0x2884CC,0x2484B8),
+                    (0x288578,0x248274),(0x2884D8,0x347F60),(0x28858C,0x2A9280)):
+                apply_request_287474_consumer(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    allocate=consumer_services['allocate'],free=consumer_services['free'])
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
@@ -55,3 +65,118 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000, **input
             raise RefillUnsupported('second request VM return is not recovered') from exc
         raise RefillUnsupported('second request VM budget exhausted before a boundary')
     finally:vm_module.B=previous
+
+
+def apply_request_287474_consumer(pages, *, wrapper_offset,
+        argument_block_address, image_base, allocate, free, max_bytes=0x100000):
+    """Actual second-VM lifecycle, imported memcpy and local copy wrappers.
+
+    +288578 loads a byte fill and W length. Only +28858c publishes X0 at
+    packed+32; the tail wrappers leave their packed bytes alone. Imported
+    memcpy accepts disjoint ranges or identical pointers. The local +2a9280
+    owner preserves its own ordered loads/stores, including overlapping ranges.
+    """
+    import vm9_objects as objects
+    if type(max_bytes) is not int or not 0<=max_bytes<=0x100000:
+        raise RefillUnsupported('invalid second request consumer size bound')
+    p=_PageTransaction(pages)
+    def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
+    pair=wrapper_offset,word(0)-image_base
+    destination=word(8)
+    if pair==(0x2884CC,0x2481AC):
+        result=objects.construct_string_object(p,object_address=destination,source_address=0,
+            allocate=allocate,vtable_address=image_base+0x34F5F8,
+            empty_descriptor_address=image_base+0x6E168)
+    elif pair==(0x2884CC,0x2484B8):
+        result=objects.destroy_string_object(p,object_address=destination,
+            image_base=image_base,free=free)
+    elif pair==(0x288578,0x248274):
+        fill=_read_span(p,argument_block_address+16,1)[0]
+        length=int.from_bytes(_read_span(p,argument_block_address+20,4),'little')
+        result=objects.construct_filled_string_object(p,object_address=destination,
+            fill=fill,length=length,image_base=image_base,allocate=allocate,
+            max_payload_bytes=max_bytes)
+    elif pair in ((0x2884D8,0x347F60),(0x28858C,0x2A9280)):
+        source,length=word(16),word(24)
+        if length>max_bytes:
+            raise RefillUnsupported('second request copy exceeds the explicit bound')
+        if pair[0]==0x2884D8:
+            if source!=destination and length and abs(destination-source)<length:
+                raise RefillUnsupported('overlapping imported memcpy is not recovered')
+            if length:_write_span(p,destination,_read_span(p,source,length))
+        else:
+            _copy_request_287474_bytes(p,destination,source,length)
+            _write_span(p,argument_block_address+32,destination.to_bytes(8,'little'))
+        result=destination
+    else:raise RefillUnsupported('unrecovered second request consumer')
+    p.commit()
+    return result
+
+
+def _copy_request_287474_bytes(pages,destination,source,length):
+    """+2a9280 ordered scalar/vector loads and forward/backward aligned loops."""
+    end_source,end_destination=source+length,destination+length
+    def load(address,width=16):return _read_span(pages,address,width)
+    def store(address,data):_write_span(pages,address,data)
+    if length<=32:
+        if length>=16:width=16
+        elif length>=8:width=8
+        elif length>=4:width=4
+        elif length:
+            first,last,middle=load(source,1),load(end_source-1,1),load(source+(length>>1),1)
+            store(destination,first);store(destination+(length>>1),middle);store(end_destination-1,last)
+            return
+        else:return
+        first,last=load(source,width),load(end_source-width,width)
+        store(destination,first);store(end_destination-width,last)
+        return
+    if length<=128:
+        first,second,last_two,last=load(source),load(source+16),load(end_source-32),load(end_source-16)
+        if length>64:
+            third,fourth=load(source+32),load(source+48)
+            if length>96:
+                tail_four,tail_three=load(end_source-64),load(end_source-48)
+                store(end_destination-64,tail_four);store(end_destination-48,tail_three)
+            store(destination,first);store(destination+16,second)
+            store(destination+32,third);store(destination+48,fourth)
+        else:
+            store(destination,first);store(destination+16,second)
+        store(end_destination-32,last_two);store(end_destination-16,last)
+        return
+    if destination==source:return
+    if (destination-source)&0xFFFFFFFFFFFFFFFF>=length:
+        first=load(source);alignment=destination&15
+        output=destination&~15;current=source-alignment
+        a=load(current+16);store(destination,first)
+        b,c,d=load(current+32),load(current+48),load(current+64)
+        current+=64;remaining=length+alignment-144
+        while remaining>0:
+            store(output+16,a);a=load(current+16)
+            store(output+32,b);b=load(current+32)
+            store(output+48,c);c=load(current+48)
+            store(output+64,d);output+=64;current+=64;d=load(current)
+            remaining-=64
+        tail_a=load(end_source-64);store(output+16,a)
+        tail_b=load(end_source-48);store(output+32,b)
+        tail_c=load(end_source-32);store(output+48,c)
+        tail_d=load(end_source-16);store(output+64,d)
+        store(end_destination-64,tail_a);store(end_destination-48,tail_b)
+        store(end_destination-32,tail_c);store(end_destination-16,tail_d)
+    else:
+        last=load(end_source-16);alignment=end_destination&15
+        current=end_source-alignment;output=end_destination-alignment
+        a=load(current-16);store(end_destination-16,last)
+        b,c,d=load(current-32),load(current-48),load(current-64)
+        current-=64;remaining=length-alignment-128
+        while remaining>0:
+            store(output-16,a);a=load(current-16)
+            store(output-32,b);b=load(current-32)
+            store(output-48,c);c=load(current-48)
+            store(output-64,d);output-=64;current-=64;d=load(current)
+            remaining-=64
+        head_d=load(source+48);store(output-16,a)
+        head_c=load(source+32);store(output-32,b)
+        head_b=load(source+16);store(output-48,c)
+        head_a=load(source);store(output-64,d)
+        store(destination+48,head_d);store(destination+32,head_c)
+        store(destination+16,head_b);store(destination,head_a)

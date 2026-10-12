@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request second VM consumers
+
+153项新增原生对照（152 wrappers+1 owning bounded second VM）、12项回滚与
+5项Python入口拒绝通过。default/destroy/filled、imported memcpy及实际ARM64
+copy接入。Owning第二VM8184/+1069D4，下一2885AC→28048C；32虚拟寄存器、
+callback ledger及声明内存范围匹配native。outer3900，原页回滚、64新增OS
+pages保留。完整第二VM/whole-request/full physical/JNI/mapping/signer及
+fresh/live/JVM仍未完成。见 [second consumer报告](REQUEST_JNI_STARTUP_WORKERS.md#6148-request-second-vm-consumers2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request second VM caller and prefix
 
 20项新增caller/prefix原生对照、8项回滚通过，287474/102BB0入口、完整

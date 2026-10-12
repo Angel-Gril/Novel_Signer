@@ -395,6 +395,8 @@ Actual URL condition passes 40 new native controls and seven rollback checks. Th
 
 The second request VM caller and bounded prefix pass 20 new native controls and eight rollback checks. All32 prelude/backing words and the first three decode consumers match. The constructed owning input reaches617 steps, next at default StringObject construction. Complete second VM return and signing remain unfinished. See the [second VM report](REQUEST_JNI_STARTUP_WORKERS.md#6147-request-second-vm-caller-and-prefix2026-10-13-asiashanghai).
 
+Second VM consumers pass 153 new native controls, twelve rollback checks and five Python entry rejections. The owning bounded second VM advances to8184 steps; its32 virtual registers, callback ledger and declared memory ranges match original native code. The next child is +28048c; complete request and signing remain unfinished. See the [second consumer report](REQUEST_JNI_STARTUP_WORKERS.md#6148-request-second-vm-consumers2026-10-13-asiashanghai).
+
 
 
 

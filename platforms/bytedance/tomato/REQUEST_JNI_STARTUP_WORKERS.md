@@ -5674,6 +5674,39 @@ physical spills/PAC、mapping rollback、actual JNI、完整signer/fresh/live及
 python -B platforms/bytedance/tomato/python/verify_vm9_request_287474_vm_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <second-VM-evidence.json>
 ```
 
+## 6.148 Request second VM consumers（2026-10-13 Asia/Shanghai）
+
+恢复第二VM的实际consumer：`+2884CC -> +2481AC/+2484B8` default/destroy
+StringObject、`+288578 -> +248274` filled StringObject、`+2884D8 -> +347F60`
+imported memcpy，以及 `+28858C -> +2A9280` local ARM64 copy。对象操作复用
+既有owner。filled读取packed+16一个byte、+20一个W；tail wrappers不写packed
+结果。local copy按实际scalar/vector读写、alignment及forward/backward loops
+处理重叠；返回destination写packed+32的Q。imported memcpy的重叠仍拒绝。
+
+**153项新增原生对照、12项回滚检查，另5项Python入口拒绝检查**通过。
+152 component controls覆盖两基址、NULL allocation/payload、zero/negative-W
+length、跨页、packed别名；local copy覆盖0～511 bytes、全部length阈值、
+非对齐和前后重叠。malloc/free/memcpy/memset在component oracle中是明确的
+import/provider边界；local copy执行原始ARM64指令。6项native RED通过。
+错误target、缺页、late allocation/free、size bound及result store失败均不
+发布页；入口拒绝还验证vm_module.B恢复。旧native分组未重跑，旧default/
+decoder/outer AST以及已有caller/object/first VM/URL/allocator源码保留。
+
+独立owning第二VM **617→8184/+1069D4**，下一 **+2885AC -> +28048C**。
+真实入口设10000步上限；旧4000步default保持。1项owning bounded第二VM
+原生差分执行614220 instructions，32虚拟寄存器、完整callback ledger及
+declared decoded/object/payload/copy ranges一致，未使用native输出作输入。
+outer仍3900/+FE2D0；原页差异为空，64新增OS pages保留。bounded页不发布。
+
+这项证明止于第二VM的下一child入口；完整第二VM/whole outer request、
+physical spills/PAC、mapping rollback、actual JNI、完整signer、fresh/live与
+真实JVM仍未完成。未知nested helper的NULL callable尚待定位，不能归类为
+JNI或补假返回。见 [second VM consumer证据](evidence/vm9_request_287474_consumers_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_287474_consumers_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <second-consumer-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
