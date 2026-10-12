@@ -274,6 +274,40 @@ def destroy_string_fields(pages, *, fields_address: int, free: Callable) -> int:
     return status
 
 
+def find_string_object_byte(pages, *, object_address: int, target_byte: int,
+                            start_u32: int, max_bytes: int = 0x100000) -> int:
+    """+0x248c1c searches declared bytes, including bytes after embedded NUL.
+
+    Negative W2 returns before reading the receiver. Otherwise native reads
+    signed length and payload pointer once, comparing only the target low byte.
+    Bound actual inspected bytes so a large length still allows an early hit.
+    """
+    if type(object_address) is not int or not 0 <= object_address < 1 << 64:
+        raise RefillUnsupported('byte search receiver address must fit uint64')
+    if type(target_byte) is not int or not 0 <= target_byte <= 0xFFFFFFFF:
+        raise RefillUnsupported('byte search target must fit w1')
+    if type(start_u32) is not int or not 0 <= start_u32 <= 0xFFFFFFFF:
+        raise RefillUnsupported('byte search start must fit w2')
+    if type(max_bytes) is not int or not 0 <= max_bytes <= 0x100000:
+        raise ValueError('invalid byte search scan bound')
+    if _s32(start_u32) < 0:
+        return 0xFFFFFFFF
+    length = _s32(int.from_bytes(_read_span(pages,
+        (object_address + 12) & ((1 << 64) - 1), 4), 'little'))
+    pointer = int.from_bytes(_read_span(pages,
+        (object_address + 16) & ((1 << 64) - 1), 8), 'little')
+    index, inspected = start_u32, 0
+    while index < length:
+        if inspected >= max_bytes:
+            raise RefillUnsupported('byte search exceeds the explicit scan bound')
+        value = _read_span(pages, (pointer + index) & ((1 << 64) - 1), 1)[0]
+        if value == target_byte & 255:
+            return index
+        inspected += 1
+        index += 1
+    return 0xFFFFFFFF
+
+
 def read_signer_request_flag(pages, *, object_address: int) -> int:
     """+0x282a68 returns the full receiver byte at +0x52, without header reads."""
     if type(object_address) is not int or not 0 <= object_address <= (1 << 64) - 0x53:

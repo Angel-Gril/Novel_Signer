@@ -307,6 +307,8 @@ NULL raw cleanup now skips the provider free call: 16 new native controls and si
 
 Request ASCII upper/lower conversion and the receiver byte flag now pass 92 new native controls and eight rollback checks. A constructed URL and one-header prefix advances to 2174 steps; byte search and actual JNI conversion remain open. Complete signing remains unfinished. See the [ASCII and receiver flag report](REQUEST_JNI_STARTUP_WORKERS.md#6102-ascii-case-与-request-byte-flag2026-10-12-asiashanghai).
 
+Request byte search now passes 80 new native controls, 12 rollback checks and eight scan bound checks. The constructed nonempty prefix advances to 2224 steps; sized-string dispatch, actual JNI conversion and complete signing remain unfinished. See the [byte search report](REQUEST_JNI_STARTUP_WORKERS.md#6103-request-byte-search2026-10-12-asiashanghai).
+
 
 
 

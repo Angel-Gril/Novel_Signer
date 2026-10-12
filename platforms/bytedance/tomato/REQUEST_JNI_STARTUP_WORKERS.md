@@ -4359,6 +4359,34 @@ reference/tree，并按 `+27E478` 的native callsite放入四个arguments。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_ascii_case_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-ascii-case-evidence.json>
 ```
 
+## 6.103 Request byte search（2026-10-12 Asia/Shanghai）
+
+新增 `vm9_objects.find_string_object_byte`，恢复 `+248C1C` 的declared-length
+byte search，并接入实际 `+285C5C` wrapper。W2起点为负时直接返回uint32
+-1，不读取receiver；其余路径按原生顺序读取object+12的signed length与
+object+16的payload pointer各一次。比较target最低byte，包含embedded
+NUL之后的bytes，命中返回index，否则返回uint32 -1。wrapper读取packed+16
+的一个byte与packed+20的uint32，只写packed+24的四个bytes。
+
+显式bound限制实际检查的bytes，允许很大declared length下的早期命中。
+不按总length预先拒绝。两基址 **80项新增原生/Python对照、12项回滚、
+8项精确扫描上限检查**通过，2项native RED确认缺失owner/callback。
+20种profiles分别经过direct和actual wrapper，覆盖NUL target/其后命中、
+high-byte target、正负起点边界、negative length、无payload读取路径、
+只映射length/pointer fields、跨页、receiver field alias、packed result
+alias，以及全部256 bytes中的末尾命中。所有guest bytes与packed padding
+一致，无allocator/service effects。guards覆盖部分unmapped payload、
+unmapped receiver、bound和非法word输入；失败保持页面不变。
+
+同一合成URL与一项header的请求入口从2174步推进到 **2224步** 的
+`+FB6A4`，下一callback为 `+285C80 -> +2481FC` sized string constructor。
+它仍是独立构造ABI，未完成actual JNI转换或非空prefix native差分。
+完整signer、fresh/live与真实JVM继续。见 [byte search证据](evidence/vm9_request_byte_search_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_byte_search_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-byte-search-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

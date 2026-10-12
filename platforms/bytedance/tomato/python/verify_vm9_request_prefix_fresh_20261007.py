@@ -430,6 +430,14 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 diagnostic_scope.setdefault('cstring_constructors', []).append(dict(
                     object_address=words[1], source_address=words[2],
                     declared_length=vm.m.u32(words[1] + 12), native_input_snapshot_used=False))
+            elif (wrapper, target) == (0x285C5C, 0x248C1C):
+                value = objects.find_string_object_byte(vm.m.pages,
+                    object_address=words[1], target_byte=_read_span(vm.m.pages, argument + 16, 1)[0],
+                    start_u32=int.from_bytes(_read_span(vm.m.pages, argument + 20, 4), 'little'))
+                _write_span(vm.m.pages, argument + 24, value.to_bytes(4, 'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_byte_searches', []).append(dict(
+                        object_address=words[1], result_u32=value, declared_length_used=True))
             elif (wrapper, target) == (0x285C3C, 0x282A68):
                 value = objects.read_signer_request_flag(vm.m.pages, object_address=words[1])
                 _write_span(vm.m.pages, argument + 16, bytes([value & 1]))

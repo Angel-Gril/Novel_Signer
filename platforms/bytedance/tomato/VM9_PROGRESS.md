@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：request byte search
+
+80项新增原生/Python对照、12项回滚、8项扫描上限检查通过。恢复declared-
+length byte search与packed uint32 result；构造非空prefix推进到2224步。
+下一callback为sized string constructor。actual JNI转换、非空native差分、
+完整signer、fresh/live与真实JVM未完成。见 [byte search报告](REQUEST_JNI_STARTUP_WORKERS.md#6103-request-byte-search2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：ASCII case与request receiver byte flag
 
 92项新增原生/Python对照、8项回滚通过。恢复ASCII upper/lower与receiver
