@@ -309,6 +309,8 @@ Request ASCII upper/lower conversion and the receiver byte flag now pass 92 new 
 
 Request byte search now passes 80 new native controls, 12 rollback checks and eight scan bound checks. The constructed nonempty prefix advances to 2224 steps; sized-string dispatch, actual JNI conversion and complete signing remain unfinished. See the [byte search report](REQUEST_JNI_STARTUP_WORKERS.md#6103-request-byte-search2026-10-12-asiashanghai).
 
+Request sized-string dispatch now passes 18 new native wrapper controls and ten rollback checks using the existing owner. The constructed nonempty prefix advances to 2243 steps; rejection preserves original bytes but retains 64 new allocator OS pages. Binary equality, actual JNI conversion and complete signing remain unfinished. See the [sized dispatch report](REQUEST_JNI_STARTUP_WORKERS.md#6104-request-sized-string-dispatch2026-10-12-asiashanghai).
+
 
 
 

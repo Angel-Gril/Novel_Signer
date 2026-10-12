@@ -4387,6 +4387,32 @@ unmapped receiver、bound和非法word输入；失败保持页面不变。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_byte_search_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-byte-search-evidence.json>
 ```
 
+## 6.104 Request sized string dispatch（2026-10-12 Asia/Shanghai）
+
+实际 `+285C80 -> +2481FC` tail-wrapper接入已有
+`vm9_objects.construct_sized_string_object`。按原生读取packed+8的object、
+packed+16的source和packed+24的W2 length；调用同一owner，无packed
+result store。buffer field由owner发布；不将它等同于原生incidental X0。
+
+两基址 **18项新增actual wrapper对照、10项回滚**通过，2项native RED
+确认已有owner正确但request dispatch缺失。9种profiles覆盖empty、embedded
+NUL/binary、长payload、跨页object/source/buffer、signed negative W2、
+malloc NULL与source alias。全部guest/ELF bytes、ordered allocation、heap
+和packed padding一致。未重复已接受的定长字符串direct分组。guards覆盖
+source/object/buffer unmapped、显式bound及provider异常；页面保持不变，
+不声称外部allocator effects回滚。
+
+同一构造URL与一项header的请求入口从2224推进到 **2243步** 的
+`+FB6F0`，下一处 `+285C94 -> +2487E8` binary string equality。
+该入口拒绝时原有page bytes保持不变，**64个新增allocator OS pages保留**，
+因此不是全部页面或mapping回滚。私有记录已改为original-page-bytes并
+记录新增page count。实际JNI转换、非空prefix native差分、完整signer、
+fresh/live与真实JVM仍未完成。见 [sized dispatch证据](evidence/vm9_request_sized_dispatch_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_sized_dispatch_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-sized-dispatch-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

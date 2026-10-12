@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：request sized string dispatch
+
+18项新增原生wrapper对照、10项回滚通过，复用已有owner；构造非空入口
+推进到2243步。拒绝保留原有bytes，但新增64个allocator OS页不回滚。
+下一callback为binary equality；actual JNI转换、非空native差分、完整
+signer、fresh/live与真实JVM未完成。见 [sized dispatch报告](REQUEST_JNI_STARTUP_WORKERS.md#6104-request-sized-string-dispatch2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：request byte search
 
 80项新增原生/Python对照、12项回滚、8项扫描上限检查通过。恢复declared-

@@ -430,6 +430,14 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 diagnostic_scope.setdefault('cstring_constructors', []).append(dict(
                     object_address=words[1], source_address=words[2],
                     declared_length=vm.m.u32(words[1] + 12), native_input_snapshot_used=False))
+            elif allocate is not None and (wrapper, target) == (0x285C80, 0x2481FC):
+                length = int.from_bytes(_read_span(vm.m.pages, argument + 24, 4), 'little')
+                pointer = objects.construct_sized_string_object(vm.m.pages,
+                    object_address=words[1], source_address=words[2], length=length,
+                    image_base=image, allocate=allocate)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_sized_strings', []).append(dict(
+                        object_address=words[1], length_u32=length, buffer_address=pointer))
             elif (wrapper, target) == (0x285C5C, 0x248C1C):
                 value = objects.find_string_object_byte(vm.m.pages,
                     object_address=words[1], target_byte=_read_span(vm.m.pages, argument + 16, 1)[0],
