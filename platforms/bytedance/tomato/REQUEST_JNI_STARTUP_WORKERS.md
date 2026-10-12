@@ -4551,6 +4551,41 @@ native整链差分、完整signer、fresh/live及真实JVM未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_concat_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-concat-evidence.json>
 ```
 
+## 6.109 StringObject/CString 构造（2026-10-12 Asia/Shanghai）
+
+新增 `construct_string_object_cstring` 恢复 `+2487B4`，接入
+`+285CF4`：packed+8为X8 output，+16为StringObject，+24为CString。
+先复用 `clone_string_object`，按declared length完整复制首项binary
+bytes，再tail-call现有 `append_cstring_object`。第二项在clone以后
+读取；保留live overlapping输入、部分prefix写入、reserve失败和分配时
+改写输入的效果。body恢复0x20 frame后tail-call append；不包含新的
+temporary/canary，physical spill aliases显式拒绝。X0返回output object，
+wrapper不写packed result。clone malloc NULL后的guest NULL写入不建模，
+遇到该失败以页面回滚拒绝。
+
+两基址 **68项新增原生/Python对照、24项回滚**通过，4项native RED。
+14 profiles的56项direct/actual wrapper覆盖binary/empty/long tail、
+same object、tail指向首项payload/output fields/新payload、cross page、
+malloc/realloc failure与inplace realloc，以及allocation时首项pointer
+重载和tail变化。真实请求首次触发matching-libc realloc后，另加3个
+long-first profiles的12项新对照，包含direct realloc、NULL和inplace。
+没有重跑已接受分组。guest data区域+0xA000、packed bytes、全部main
+image pages、分配释放顺序、pre-free bytes、剩余heap及native X0一致。
+原body和wrapper未改；malloc/realloc/free/memory PLT为显式边界，未用
+native输出初始化Python。unsupported回滚pages，外部provider ledger
+不回滚；已建模的reserve NULL仍保留原native部分写入。
+
+非空构造入口仍为 **2520步**，已进入新回调，停止原因变为
+`matching-libc realloc is unrecovered`。本检查点没有声称入口步数增加
+或matching-libc realloc恢复。原有页面字节回滚，64个新增allocator OS
+pages仍保留。下一任务恢复当前真实allocator状态上的realloc分支，
+并进行新原生对照；actual JNI转换、suffix整链原生差分、完整signer、
+fresh/live及真实JVM未完成。见 [对象与CString构造证据](evidence/vm9_request_object_cstring_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_object_cstring_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-object-cstring-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

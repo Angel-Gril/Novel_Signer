@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：StringObject/CString构造
+
+68项新增原生对照、24项回滚通过；复用clone和live CString append。
+非空入口仍为2520步，当前阻塞为matching-libc realloc未恢复，下一步
+恢复真实allocator realloc。64个新增OS页仍保留；actual JNI、suffix
+整链原生差分、完整signer、fresh/live及真实JVM未完成。
+见 [对象/CString报告](REQUEST_JNI_STARTUP_WORKERS.md#6109-stringobjectcstring-构造2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：CString/StringObject拼接与清理
 
 84项新增原生对照、28项回滚通过；恢复temporary构造、clone/append及析构。

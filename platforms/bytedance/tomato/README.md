@@ -319,6 +319,8 @@ Field clone and X8 substring construction now pass 74 new native controls and 20
 
 CString plus StringObject composition and temporary cleanup now pass 84 new native controls and 28 rollback checks. Allocation failures, declared binary tails and modeled temporary aliases match, including pre-free bytes. The constructed nonempty prefix advances to 2520 steps; StringObject plus CString construction, actual JNI conversion and complete signing remain unfinished. See the [composition report](REQUEST_JNI_STARTUP_WORKERS.md#6108-cstringstringobject-拼接2026-10-12-asiashanghai).
 
+StringObject clone plus CString append construction now passes 68 new native controls and 24 rollback checks, including 12 new long-first realloc controls. Native X0, live aliases and partial reserve failures match. The constructed nonempty entry remains at 2520 steps and now stops inside this callback at the unrecovered matching-libc realloc boundary. Actual JNI conversion and complete signing remain unfinished. See the [object and CString report](REQUEST_JNI_STARTUP_WORKERS.md#6109-stringobjectcstring-构造2026-10-12-asiashanghai).
+
 
 
 

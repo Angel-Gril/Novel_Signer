@@ -446,6 +446,56 @@ def construct_cstring_string_object(pages, *, object_address: int,
     return status
 
 
+def construct_string_object_cstring(pages, *, object_address: int,
+        first_object_address: int, second_cstring_address: int, image_base: int,
+        entry_stack_address: int, allocate: Callable, reallocate: Callable,
+        free: Callable, max_payload_bytes: int = 0x100000) -> int:
+    """+0x2487b4 clones a StringObject then tail-calls CString append.
+
+    Preserve declared bytes, live aliases and native partial append failures.
+    Physical stack spill aliases remain unsupported; no scratch object or
+    canary is present in this body. Return native X0 (the output object).
+    """
+    _string_bound(max_payload_bytes)
+    if any(type(v) is not int or not 0 <= v <= (1 << 64) - width for v,width in
+           ((object_address,24),(first_object_address,24),(second_cstring_address,1))):
+        raise RefillUnsupported('object/CString addresses must fit uint64')
+    if type(entry_stack_address) is not int or not 0x200 <= entry_stack_address < 1 << 64 or entry_stack_address & 15:
+        raise RefillUnsupported('object/CString stack requires aligned spill space')
+    def guard_span(address,width):
+        if address + width > 1 << 64:
+            raise RefillUnsupported('object/CString span wraps uint64')
+        if address < entry_stack_address and address + width > entry_stack_address - 0x200:
+            raise RefillUnsupported('object/CString aliases unmodeled physical spills')
+    guard_span(object_address,24);guard_span(first_object_address,24)
+    guard_span(second_cstring_address,1)
+    staged = _PageTransaction(pages)
+    length = _s32(int.from_bytes(_read_span(staged,first_object_address + 12,4),'little'))
+    cloning = True
+    def checked_allocate(p,size):
+        result = allocate(p,size)
+        if result:
+            guard_span(result,size)
+            if cloning and length > 0:
+                source = int.from_bytes(_read_span(p,first_object_address + 16,8),'little')
+                guard_span(source,length)
+        return result
+    def checked_reallocate(p,pointer,size):
+        result = reallocate(p,pointer,size)
+        if result:guard_span(result,size)
+        return result
+    clone_string_object(staged,object_address=object_address,source_object_address=first_object_address,
+        allocate=checked_allocate,image_base=image_base,max_payload_bytes=max_payload_bytes)
+    cloning = False
+    tail = _cstring(staged,second_cstring_address,min(max_payload_bytes + 1,0x100000))
+    guard_span(second_cstring_address,len(tail))
+    result = append_cstring_object(staged,object_address=object_address,
+        source_address=second_cstring_address,allocate=checked_allocate,
+        reallocate=checked_reallocate,free=free,max_bytes=max_payload_bytes)
+    staged.commit()
+    return result
+
+
 def find_string_object_byte(pages, *, object_address: int, target_byte: int,
                             start_u32: int, max_bytes: int = 0x100000) -> int:
     """+0x248c1c searches declared bytes, including bytes after embedded NUL.

@@ -6413,5 +6413,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_object_cstring_fresh_20261012": {
+    "path": "evidence/vm9_request_object_cstring_fresh_20261012.json",
+    "native_Python_controls": 68,
+    "rollback_guards": 24,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }
