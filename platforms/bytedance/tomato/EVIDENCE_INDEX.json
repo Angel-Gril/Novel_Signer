@@ -6685,5 +6685,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_libc_realloc_cross_bin_fresh_20261013": {
+    "path": "evidence/vm9_libc_realloc_cross_bin_fresh_20261013.json",
+    "native_Python_controls": 18,
+    "rollback_guards": 9,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

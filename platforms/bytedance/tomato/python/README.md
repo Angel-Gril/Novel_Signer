@@ -512,6 +512,8 @@ The request round schedule and block helpers now pass 32 new native controls and
 
 Allocated and StringObject cipher callers now pass 48 new native controls and ten rollback checks, including the actual +288BDC consumer. The owning entry reaches an unrecovered matching-libc cross-bin realloc from 32 to 64 bytes at nested step 422. Complete nested return and signing remain unfinished. See the [cipher caller report](../REQUEST_JNI_STARTUP_WORKERS.md#6141-request-allocated-and-string-cipher-callers2026-10-13-asiashanghai).
 
+Matching-libc small cross-bin realloc now passes 18 new native controls and nine rollback checks. The owning session composes actual allocation, live copy and free while preserving the same-bin owner. The independently constructed owning entry advances to430 nested steps, next at StringObject append. Complete signing remains unfinished. See the [cross-bin report](../REQUEST_JNI_STARTUP_WORKERS.md#6142-matching-libc-cross-bin-small-realloc2026-10-13-asiashanghai).
+
 
 
 

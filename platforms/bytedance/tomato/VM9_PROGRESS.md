@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：matching-libc cross-bin small realloc
+
+18项actual export/allocator对照、9项回滚通过，cross-bin realloc组合owning
+allocate/copy/free，same-bin owner保留。独立owning inner430/+118D04，outer
+3767，下一288BF0→248684 append。原页字节回滚，64新增OS pages保留。
+全JNI、whole-request、physical ABI、mapping回滚、完整signer及fresh/live
+仍未完成。见 [cross-bin报告](REQUEST_JNI_STARTUP_WORKERS.md#6142-matching-libc-cross-bin-small-realloc2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request allocated/StringObject cipher callers
 
 48项新caller对照、10项回滚通过，287A78/287580/288BDC恢复，复用既有

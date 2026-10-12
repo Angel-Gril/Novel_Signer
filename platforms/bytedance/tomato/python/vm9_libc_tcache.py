@@ -513,6 +513,44 @@ def reallocate_same_small_bin(pages, *, pointer, request_size, libc_base, thread
     return pointer
 
 
+def reallocate_small_bins(pages, *, pointer, request_size, libc_base,
+        thread_pointer, allocate, free):
+    """Matching-libc small realloc, composing actual allocation/copy/free.
+
+    Same class retains its accepted owner. Cross class validates the live slab
+    input in a disposable transaction, then allocates, copies the smaller of
+    requested and old usable size, and frees through the owning session.
+    Provider mapping/ledger effects remain outside page rollback.
+    """
+    if type(pointer) is not int or not 0<pointer<=MASK:
+        raise allocator.RefillUnsupported('small realloc requires nonNULL uint64 pointer')
+    if type(request_size) is not int or not 1<=request_size<=4096:
+        raise allocator.RefillUnsupported('small realloc requires positive request up to4096')
+    mask=_u(pages,_indirect(pages,libc_base,0xD8DD8))
+    chunk=pointer&~mask;page=(pointer-chunk)>>12
+    bias=_u(pages,_indirect(pages,libc_base,0xD8F58))
+    if chunk==pointer or not bias<=page<_u(pages,_indirect(pages,libc_base,0xD8E10)):
+        raise allocator.RefillUnsupported('cross-bin realloc requires small arena input')
+    tag=_u(pages,chunk+0x68+(page-bias)*8);class_id=(tag>>4)&255
+    if tag&3!=1 or not 0<=class_id<36:
+        raise allocator.RefillUnsupported('cross-bin realloc requires allocated small tag')
+    if region._size_index(pages,libc_base,request_size)==class_id:
+        return reallocate_same_small_bin(pages,pointer=pointer,request_size=request_size,
+            libc_base=libc_base,thread_pointer=thread_pointer)
+    width=_u(pages,libc_base+0xA6C80+class_id*8)
+    validation=allocator._PageTransaction(pages)
+    reallocate_same_small_bin(validation,pointer=pointer,request_size=width,
+        libc_base=libc_base,thread_pointer=thread_pointer)
+    p=allocator._PageTransaction(pages)
+    result=allocate(p,request_size);objects._word(result)
+    if result:
+        copied=min(width,request_size)
+        allocator._write_span(p,result,allocator._read_span(p,pointer,copied))
+        free(p,pointer)
+    p.commit()
+    return result
+
+
 def _release_cached_small_pages(pages, *, pointer, libc_base, thread_pointer, flush_bin=None, collect_cache=None):
     """Actual free +0x1bac0 -> +0x91990, NULL or nonfull clean small cache.
 

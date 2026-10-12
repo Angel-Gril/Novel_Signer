@@ -17,7 +17,7 @@ import vm9_libc_region as region
 from vm9_libc_boot import _u, _w
 from vm9_libc_cold import _initialize_default
 from vm9_libc_base import _allocate_staged
-from vm9_libc_tcache import _public_small, _public_large, reallocate_same_small_bin
+from vm9_libc_tcache import _public_small, _public_large, reallocate_same_small_bin, reallocate_small_bins
 
 
 class ActualAllocatorSession:
@@ -110,8 +110,9 @@ class ActualAllocatorSession:
             self.free_effect(p, pointer)
 
     def reallocate(self, p, pointer, size):
-        return reallocate_same_small_bin(p, pointer=pointer, request_size=size,
-            libc_base=self.libc_base, thread_pointer=self.thread_pointer)
+        return reallocate_small_bins(p, pointer=pointer, request_size=size,
+            libc_base=self.libc_base, thread_pointer=self.thread_pointer,
+            allocate=self.allocate, free=self.free)
 
     def create_key(self, p, key_address, destructor):
         return allocator.pthread_key_create(

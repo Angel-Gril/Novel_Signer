@@ -5526,6 +5526,31 @@ reference/printf。完整nested return、actual JNI、whole-request、physical A
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_cipher_callers_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-cipher-callers-evidence.json>
 ```
 
+## 6.142 Matching libc cross-bin small realloc（2026-10-13 Asia/Shanghai）
+
+新增 `reallocate_small_bins` 并接入 `ActualAllocatorSession.reallocate`。
+same class继续原owner；cross class通过disposable transaction调用既有
+same-bin校验live slab input，再实际allocate/copy/free。校验transaction
+的counter变化不发布。新块复制min(old usable size,request size)，NULL新
+分配保持旧块；NULL/zero/large realloc和profiling继续明确拒绝。
+
+两基址 **18项actual export/allocator对照、9项回滚检查**通过。8/16/32/
+48/64/128/256字节growth/shrink与uint64 counter overflow覆盖，原生执行
+matching-libc realloc export及actual allocator指令，未替换allocation/free。
+new pointer、所有非physical-stack pages、payload、allocator metadata/cache
+和TSD counters一致。2项native RED。旧same-bin实现AST不变，既有原生
+分组未重跑；缺少owner staging chain的fixture已改为session.pages。
+
+独立非空URL/header-owning入口越过32→64 realloc， **422→430内层步骤 /
++118D04**，外层3767/+FDDE0，下一 `+288BF0 -> +248684` append。原有page
+bytes差异为空，64个新增OS pages保留。provider mapping rollback未证明；
+整段nested return、actual JNI、whole-request、physical ABI、完整signer、
+fresh/live及真实JVM仍未完成。见 [cross-bin证据](evidence/vm9_libc_realloc_cross_bin_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_realloc_cross_bin_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <cross-bin-realloc-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
