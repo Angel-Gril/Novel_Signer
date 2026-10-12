@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request nested diagnostic scopes
+
+16项actual consumer对照、5项回滚通过，288B30 enter/288B40 leave复用scope
+owner，之后288B24 release已接入。独立owning inner231/+1189A8，外层3767。
+下一288B4C→2483E0 clone；原页回滚，64新增OS pages保留。未对照整段
+nested prefix/whole-request；physical X0/PAC、全JNI、mapping回滚、完整
+signer、fresh/live及真实JVM仍未完成。见 [nested scopes报告](REQUEST_JNI_STARTUP_WORKERS.md#6136-request-nested-diagnostic-scopes2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request nested shared readers
 
 28项新增对照、7项回滚通过。288B24 acquire/release重用已有reader owner，

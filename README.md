@@ -287,6 +287,7 @@ Base64 encode通过 **68项新增对照、10项回滚**；非空入口推进至3
 random state、getter和actual consumer通过 **98项新增对照、15项回滚**。见 [random报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6133-request-random-state-and-getter2026-10-13-asiashanghai)。
 嵌套random与actual外层consumer接线通过 **12项新增对照、5项回滚**，下一shared reader。见 [nested random报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6134-request-nested-random-continuation2026-10-13-asiashanghai)。
 嵌套shared-reader consumer通过 **28项新增对照、7项回滚**，下一diagnostic scope。见 [nested readers报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6135-request-nested-shared-readers2026-10-13-asiashanghai)。
+嵌套diagnostic consumers通过 **16项新增对照、5项回滚**，内层推进至231步。见 [nested scopes报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6136-request-nested-diagnostic-scopes2026-10-13-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

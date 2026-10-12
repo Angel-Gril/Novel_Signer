@@ -5372,6 +5372,31 @@ mapping回滚、完整signer、fresh/live与真实JVM仍未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_readers_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-readers-evidence.json>
 ```
 
+## 6.136 Request nested diagnostic scopes（2026-10-13 Asia/Shanghai）
+
+新增 `apply_token_diagnostic_callback`，恢复actual `+288B30 -> +26C858`
+enter与 `+288B40 -> +26C9D0` leave，复用已接受的scope owner。allocator、
+thread id和observer是显式服务；关闭新服务时保留旧边界。作用域之后
+重用已验证的 `+288B24 -> +32A4FC` release consumer。剥离新增服务和
+分支后，旧default/source AST一致，既有helper原生组未重跑。
+
+两基址 **16项actual consumer对照、5项回滚检查**通过。cold zero/high
+word、warm recursive nested/saturated锁覆盖enter/leave、packed padding、
+guest/ELF、allocator顺序与mutex/gettid events；原生执行matching libc
+recursive mutex。2项native RED。此处结果经guest对象传递，不宣称scope
+constructor的physical X0 ABI；native stack/PAC仍是独立待办。
+
+独立构造非空URL/header-owning入口178→ **231个内层步骤 / +1189A8**，
+外层仍3767/+FDDE0，下一 `+288B4C -> +2483E0` StringObject clone。
+原有page bytes差异为空，64个新增OS pages保留。本检查点没有对照整段
+nested prefix或whole-request。完整nested return、actual JNI、整链差分、
+physical ABI、mapping回滚、完整signer、fresh/live及真实JVM仍未完成。
+见 [nested scopes证据](evidence/vm9_request_token_scopes_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_scopes_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-scopes-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

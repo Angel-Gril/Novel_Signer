@@ -371,6 +371,8 @@ The nested random callback and its actual outer consumer are now connected. Twel
 
 Actual nested shared-reader consumers now reuse the accepted reader owners. Twenty-eight new native controls and seven rollback checks pass. Fresh fixtures reach 211 nested steps; the independently constructed owning entry reaches 178, next at +26c858 diagnostic scope. Complete nested return and signing remain unfinished. See the [nested readers report](REQUEST_JNI_STARTUP_WORKERS.md#6135-request-nested-shared-readers2026-10-13-asiashanghai).
 
+Actual nested diagnostic enter/leave consumers now reuse the accepted scope owners. Sixteen new native controls and five rollback checks pass. The independently constructed owning entry reaches 231 nested steps, next at +2483e0 StringObject clone. Whole nested-prefix comparison, full physical ABI and complete signing remain unfinished. See the [nested scopes report](REQUEST_JNI_STARTUP_WORKERS.md#6136-request-nested-diagnostic-scopes2026-10-13-asiashanghai).
+
 
 
 

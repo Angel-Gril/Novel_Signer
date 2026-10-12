@@ -1,7 +1,7 @@
 """Bounded +0x287500 nested request VM, with independently generated inputs.
 
-The two leading constants and optional random callback use recovered owners.
-The next shared-reader callback is an explicit boundary; no pages are published.
+Constants, random, shared readers and diagnostic scopes use recovered owners.
+The next StringObject clone is an explicit boundary; no pages are published.
 """
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
@@ -21,8 +21,8 @@ class RequestTokenVmPrefix:
 
 
 def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
-        random_services=None, continue_shared_readers=False, **inputs):
-    """Run to the random boundary, or through it to the shared-reader boundary.
+        random_services=None, continue_shared_readers=False, diagnostic_services=None, **inputs):
+    """Run a recovered prefix to the next explicit callback boundary.
 
     The backing register words come from caller memory. No native output is
     used to initialize this VM; an unknown callback remains unsupported.
@@ -68,13 +68,27 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     image_base=image,thread_pointer=inputs['thread_pointer'],
                     libc_base=random_services['libc_base'],syscall=random_services['syscall'],
                     errno_address=random_services['errno_address'],thread_id=random_services.get('thread_id'))
-            elif random_services is not None and (wrapper,target)==(0x288B24,0x32A444):
+            elif random_services is not None and (wrapper,target) in (
+                    (0x288B24,0x32A444),(0x288B24,0x32A4FC)):
                 if not continue_shared_readers:
                     raise Boundary()
                 apply_token_shared_reader_callback(staged,argument_block_address=argument,
                     image_base=image,entry_stack_address=frame.native_stack_address-0x180,
                     thread_pointer=inputs['thread_pointer'])
             elif continue_shared_readers and (wrapper,target)==(0x288B30,0x26C858):
+                if diagnostic_services is None:
+                    raise Boundary()
+                scope=apply_token_diagnostic_callback(staged,argument_block_address=argument,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    allocate=diagnostic_services['allocate'],thread_id=diagnostic_services.get('thread_id'),
+                    observer=diagnostic_services.get('observer'))
+                diagnostic_services.setdefault('entered_scopes',[]).append(scope)
+            elif diagnostic_services is not None and (wrapper,target)==(0x288B40,0x26C9D0):
+                apply_token_diagnostic_callback(staged,argument_block_address=argument,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    allocate=diagnostic_services['allocate'],thread_id=diagnostic_services.get('thread_id'),
+                    observer=diagnostic_services.get('observer'))
+            elif diagnostic_services is not None and (wrapper,target)==(0x288B4C,0x2483E0):
                 raise Boundary()
             else:
                 raise RefillUnsupported(f'unknown request token callback +{wrapper:#x} -> +{target:#x}')
@@ -118,3 +132,28 @@ def apply_token_shared_reader_callback(pages, *, argument_block_address,
         raise RefillUnsupported('unrecovered token shared-reader callback target')
     p.commit()
     return 0
+
+
+def apply_token_diagnostic_callback(pages, *, argument_block_address,
+        image_base, thread_pointer, allocate, thread_id=None, observer=None):
+    """+0x288b30/+0x288b40 enter/leave consumers using the accepted scope owner.
+
+    Native callback results are communicated through guest objects. This
+    adapter does not claim a physical X0 return ABI for scope constructors.
+    """
+    import vm9_diagnostics as scopes
+    p=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')-image_base
+    obj=int.from_bytes(_read_span(p,argument_block_address+8,8),'little')
+    if target==0x26C858:
+        word=int.from_bytes(_read_span(p,argument_block_address+16,8),'little')
+        result=scopes.enter_diagnostic_scope(p,object_address=obj,input_word=word,
+            image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,
+            thread_id=thread_id,observer=observer)
+    elif target==0x26C9D0:
+        result=scopes.leave_diagnostic_scope(p,object_address=obj,
+            image_base=image_base,thread_pointer=thread_pointer,observer=observer)
+    else:
+        raise RefillUnsupported('unrecovered token diagnostic callback target')
+    p.commit()
+    return result
