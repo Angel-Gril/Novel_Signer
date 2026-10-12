@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request random state and getter
+
+98项新增对照、15项回滚通过；matching libc random arithmetic、seed/warmup、
+normal mutex、2728F4 time helper、26CC8C getter和288B08 consumer一致。
+实际guard3DEDB0，纠正旧私有摘要；timeval在独立helper返回点对照。
+嵌套callback未接入，内层179/外层3767；全JNI、整链、physical ABI、mapping
+回滚、完整signer、fresh/live及真实JVM均未完成。见 [random报告](REQUEST_JNI_STARTUP_WORKERS.md#6133-request-random-state-and-getter2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request token VM caller and prefix
 
 20项新增原生对照、8项回滚通过；287500 caller完整frame及已定义prelude

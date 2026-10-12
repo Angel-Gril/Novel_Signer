@@ -5287,6 +5287,38 @@ allocator mapping回滚、完整signer、fresh/live及真实JVM未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_vm_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-vm-evidence.json>
 ```
 
+## 6.133 Request random state and getter（2026-10-13 Asia/Shanghai）
+
+恢复matching bionic `+487A8` random state、`+4884C` seed初始化、
+`random(+48CE8)` / `srandom(+48934)` normal mutex包装，以及actual
+request getter `+26CC8C`、time helper `+2728F4` 和consumer `+288B08`。
+native rand/srand实际执行matching libc，Python独立维护相同guest state；
+syscall169 gettimeofday为明确的virtual service。
+
+非零type执行W加法、右移和cursor advance/wrap；type0使用LCG。seed
+使用signed W Park-Miller递推，<=0加7fffffff，不把zero seed替换为1。
+degree及state pointer按native缓存，warmup每次reload live字段。getter
+guard的实际偏移 **3DEDB0**：ADRP3DE000+DB0，修正旧私有摘要的误读。
+warm guard跳过time/seed；cold acquire读取seconds lowW作为seed。时间
+helper独立验证timeval、canary、errno与negative result；返回后其scratch
+被libc physical spills复用，getter终态不宣称保留该child scratch。
+
+**58项新增state/seed/serialized-wrapper对照、40项新增time/getter/actual
+consumer对照、15项回滚检查**通过，4项native RED。覆盖两libc基址、
+wrap、cursor/data/field alias、cross-page state、zero/highbit/wide seeds、
+degree0/-1/1/7/15/31/63、shared mutex、warm/cold及completed guard、errno
+与非errno负syscall、packed W store和padding。guest、适用ELF/libc/TLS/
+canary、结果和time calls一致，未复制native state或random输出。
+
+嵌套random callback尚未接入，外层仍3767步，内层仍179步边界。
+完整generic physical ABI、actual JNI、整链差分、allocator mapping回滚、
+完整signer、fresh/live及真实JVM未完成。见 [random证据](evidence/vm9_request_random_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_random_fresh_20261013.py --libc <matching-libc> --group all --output <random-state-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_request_random_getter_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <random-getter-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

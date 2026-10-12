@@ -365,6 +365,8 @@ Forward character-set search, field erase, left trim and actual source callback 
 
 The +287500 nested caller and its first two constant callbacks pass 20 new native controls and eight rollback checks. Its prefix reaches 179 steps, next at +26cc8c. Outer request integration and complete signing remain unfinished. See the [token VM report](REQUEST_JNI_STARTUP_WORKERS.md#6132-request-token-vm-caller-and-prefix2026-10-13-asiashanghai).
 
+Matching-libc random state, seeding, serialized wrappers, the request getter and its actual consumer pass 98 new native controls and 15 rollback checks. gettimeofday is an explicit virtual service. The corrected random guard is +3dedb0. Nested integration and complete signing remain unfinished. See the [random report](REQUEST_JNI_STARTUP_WORKERS.md#6133-request-random-state-and-getter2026-10-13-asiashanghai).
+
 
 
 
