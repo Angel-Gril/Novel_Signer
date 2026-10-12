@@ -72,7 +72,8 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                    diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
                    read_clock=None, acquire_environment=None, invoke_jni=None,
                    get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None,
-                   register_exit=None, get_state_service=None, parse_decimal=None):
+                   register_exit=None, get_state_service=None, parse_decimal=None,
+                   random_services=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -429,6 +430,26 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_base64_encoded',[]).append(dict(
                         source_object_address=words[1],object_address=words[2],query_nonempty=result))
+            elif (wrapper,target) == (0x285EA8,0x287500):
+                if random_services is None:
+                    raise RefillUnsupported('nested request VM requires explicit random/time services')
+                import vm9_request_token_vm
+                nested=vm9_request_token_vm.execute_request_token_vm_prefix(vm.m.pages,
+                    vm_module=vm_module,random_services=random_services,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
+                    image_base=image,object_address=words[1],
+                    saved_frame_pointer=frame.native_stack_address-0x60,
+                    saved_x28=frame.register_backing_address,
+                    saved_x19=frame.register_backing_address-8)
+                if diagnostic_scope is not None:
+                    diagnostic_scope['request_nested_vm_boundary_state']=nested
+                    diagnostic_scope.setdefault('request_nested_vm_prefixes',[]).append(dict(
+                        nested_steps=nested.steps,nested_bytecode_offset=hex(nested.pc-image),
+                        next_wrapper=hex(nested.callbacks[-1][0]),next_target=hex(nested.callbacks[-1][1]),
+                        complete_nested_caller_return_verified=False))
+                raise RefillUnsupported('nested request VM boundary +287500: '
+                    f'+{nested.callbacks[-1][0]:#x} -> +{nested.callbacks[-1][1]:#x}')
             elif (wrapper,target) == (0x285E8C,0x287168):
                 import vm9_request_transform
                 result=vm9_request_transform.construct_request_metadata(vm.m.pages,

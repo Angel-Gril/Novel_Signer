@@ -1,7 +1,7 @@
 """Bounded +0x287500 nested request VM, with independently generated inputs.
 
-Only the two leading constant callbacks are recovered here. The first random
-callback is returned as an explicit boundary; no request pages are published.
+The two leading constants and optional random callback use recovered owners.
+The next shared-reader callback is an explicit boundary; no pages are published.
 """
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction
@@ -20,8 +20,9 @@ class RequestTokenVmPrefix:
     steps: int
 
 
-def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000, **inputs):
-    """Run fresh caller state to +0x288b08 -> +0x26cc8c, transactionally.
+def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
+        random_services=None, **inputs):
+    """Run to the random boundary, or through it to the shared-reader boundary.
 
     The backing register words come from caller memory. No native output is
     used to initialize this VM; an unknown callback remains unsupported.
@@ -57,6 +58,15 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000, **inputs
                     destination_address=words[2], mask_address=words[3])
                 decoded.append((words[2], length))
             elif (wrapper, target) == (0x288B08, 0x26CC8C):
+                if random_services is None:
+                    raise Boundary()
+                from vm9_request_random import store_request_random_callback
+                store_request_random_callback(staged,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    libc_base=random_services['libc_base'],syscall=random_services['syscall'],
+                    errno_address=random_services['errno_address'],thread_id=random_services.get('thread_id'))
+            elif random_services is not None and (wrapper,target)==(0x288B24,0x32A444):
                 raise Boundary()
             else:
                 raise RefillUnsupported(f'unknown request token callback +{wrapper:#x} -> +{target:#x}')

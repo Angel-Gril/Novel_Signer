@@ -5319,6 +5319,31 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_random_fresh_2026
 python -B platforms/bytedance/tomato/python/verify_vm9_request_random_getter_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <random-getter-evidence.json>
 ```
 
+## 6.134 Request nested random continuation（2026-10-13 Asia/Shanghai）
+
+嵌套 `+287500` 接入已验证 `+288B08 -> +26CC8C` random owner，使用明确
+libc/syscall/errno/thread服务；未提供服务时保留旧179步边界。actual外层
+`+285EA8` consumer源码生成内层caller参数，包括callback SP、saved FP、
+X28/X19和trampoline LR `+16AA4C`。下一个未恢复callback为显式边界，
+既不宣称callee完成，也不发布partial guest pages。
+
+两基址 **6项nested、6项actual outer source consumer对照**及 **5项回滚**
+通过。fresh ELF fixture的内层179→ **191步 / +118868**，下一
+`+288B24 -> +32A444`。cold/warm、wide wall seconds覆盖32 virtual registers、
+下一descriptor、guest/ELF/libc state、time调用与supplied-page rollback。
+2项native RED；去除新增服务参数和新增回调后，旧default prefix和全部旧
+outer callback AST一致，既有原生组不重跑。
+
+独立构造非空URL/header的owning入口实际进入内层 **158步 / +118868**，
+外层仍3767步/+FDDE0，停在同一shared-reader边界。该入口未作whole-prefix
+native差分。原有page bytes差异为空，64个新增OS pages保留。完整nested
+return、generic physical ABI、actual JNI、整链差分、mapping回滚、完整
+signer、fresh/live及真实JVM仍未完成。见 [nested random证据](evidence/vm9_request_token_random_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_random_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-random-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

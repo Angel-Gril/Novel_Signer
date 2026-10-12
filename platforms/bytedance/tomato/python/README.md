@@ -496,6 +496,8 @@ The +287500 nested caller and its first two constant callbacks pass 20 new nativ
 
 Matching-libc random state, seeding, serialized wrappers, the request getter and its actual consumer pass 98 new native controls and 15 rollback checks. gettimeofday is an explicit virtual service. The corrected random guard is +3dedb0. Nested integration and complete signing remain unfinished. See the [random report](../REQUEST_JNI_STARTUP_WORKERS.md#6133-request-random-state-and-getter2026-10-13-asiashanghai).
 
+The nested random callback and its actual outer consumer are now connected. Twelve new native controls and five rollback checks pass. Fresh nested fixtures reach 191 steps; the independently constructed owning entry reaches 158 nested steps, both next at +32a444. Complete nested return and signing remain unfinished. See the [nested random report](../REQUEST_JNI_STARTUP_WORKERS.md#6134-request-nested-random-continuation2026-10-13-asiashanghai).
+
 
 
 

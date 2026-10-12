@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request nested random continuation
+
+12项新增对照、5项回滚通过。288B08 random owner与285EA8实际consumer
+已接入；fresh inner191，独立owning inner158/+118868，外层3767/+FDDE0。
+下一288B24→32A444，未宣称完整callee返回。旧default/outer callbacks AST
+一致。原page bytes回滚，64个新增OS pages保留。全JNI、整链、physical
+ABI、mapping回滚、完整signer、fresh/live及真实JVM均未完成。
+见 [nested random报告](REQUEST_JNI_STARTUP_WORKERS.md#6134-request-nested-random-continuation2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request random state and getter
 
 98项新增对照、15项回滚通过；matching libc random arithmetic、seed/warmup、
