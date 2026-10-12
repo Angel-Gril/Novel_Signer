@@ -381,6 +381,8 @@ The actual nested MD5 consumer now reuses the accepted scoped reference lifecycl
 
 The request round schedule and block helpers now pass 32 new native controls and eight rollback checks. Encoded helper slots resolve from guest ELF, and block computation reuses the bytecode-bound Helios owner. The +287580 caller remains unfinished; the accepted owning boundary stays at 422 steps. See the [round/block report](REQUEST_JNI_STARTUP_WORKERS.md#6140-request-round-schedule-and-block-helpers2026-10-13-asiashanghai).
 
+Allocated and StringObject cipher callers now pass 48 new native controls and ten rollback checks, including the actual +288BDC consumer. The owning entry reaches an unrecovered matching-libc cross-bin realloc from 32 to 64 bytes at nested step 422. Complete nested return and signing remain unfinished. See the [cipher caller report](REQUEST_JNI_STARTUP_WORKERS.md#6141-request-allocated-and-string-cipher-callers2026-10-13-asiashanghai).
+
 
 
 

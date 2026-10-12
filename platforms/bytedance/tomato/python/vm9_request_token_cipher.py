@@ -84,3 +84,117 @@ def encrypt_token_block(pages, *, context_address, source_address, output_addres
     if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
         raise RefillUnsupported('token block stack canary changed')
     p.commit()
+
+
+def allocate_token_ciphertext(pages, *, source_address, length,
+        output_pointer_address, output_length_address, key_address,
+        entry_stack_address, thread_pointer, image_base, allocate, reallocate, free,
+        max_bytes=0x100000):
+    """+287a78: sized key/input, 16-byte padding, blocks, malloc and cleanup.
+
+    The output allocation contains exactly padded bytes. A NULL output malloc
+    publishes NULL and length zero after the same temporary cleanup order.
+    """
+    import vm9_objects as objects
+    objects._string_bound(max_bytes);_stack(entry_stack_address,0x1000)
+    if type(length) is not int or not 0<=length<=max_bytes:
+        raise RefillUnsupported('token cipher input exceeds positive length bound')
+    padded=(length//16+1)*16
+    if padded>max_bytes:
+        raise RefillUnsupported('token cipher padding exceeds byte bound')
+    for address,width in ((source_address,length),(key_address,32),
+            (output_pointer_address,8),(output_length_address,4)):
+        if address<entry_stack_address and address+width>entry_stack_address-0x1000:
+            raise RefillUnsupported('token allocated cipher aliases physical spills')
+    resolve_token_cipher_helpers(pages,image_base=image_base)
+    p=_PageTransaction(pages);local=entry_stack_address-0x310
+    canary=entry_stack_address-0x70;context=local+0xA8
+    key,input_string,padding,ciphertext=(local+n for n in (0x90,0x78,0x60,0x48))
+    _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    _write_span(p,context,bytes(0x1F8))
+    def pointer(obj):return int.from_bytes(_read_span(p,obj+16,8),'little')
+    objects.construct_sized_string_object(p,object_address=key,source_address=key_address,length=32,
+        image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+    objects.construct_sized_string_object(p,object_address=input_string,source_address=source_address,
+        length=length,image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+    prepare_token_round_schedule(p,context_address=context,key_address=pointer(key),
+        entry_stack_address=local,thread_pointer=thread_pointer)
+    current=int.from_bytes(_read_span(p,input_string+12,4),'little')
+    if current!=length:
+        raise RefillUnsupported('token input malloc failure branch is unsupported')
+    objects.construct_string_object(p,object_address=padding,source_address=0,allocate=allocate,
+        vtable_address=image_base+0x34F5F8,empty_descriptor_address=image_base+0x6E168)
+    pad_length=padded-current
+    objects.fill_string_object(p,object_address=padding,length=pad_length,fill=pad_length&255,
+        allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+    objects.append_string_object(p,object_address=input_string,source_object_address=padding,
+        allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+    objects.construct_filled_string_object(p,object_address=ciphertext,fill=0,length=padded,
+        image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+    for offset in range(0,padded,16):
+        encrypt_token_block(p,context_address=context,source_address=pointer(input_string)+offset,
+            output_address=pointer(ciphertext)+offset,entry_stack_address=local,
+            thread_pointer=thread_pointer,image_base=image_base)
+    output=allocate(p,padded);objects._word(output)
+    _write_span(p,output_pointer_address,output.to_bytes(8,'little'))
+    _write_span(p,output_length_address,(padded if output else 0).to_bytes(4,'little'))
+    if output:
+        copy_length=objects._s32(int.from_bytes(_read_span(p,ciphertext+12,4),'little'))
+        if not 0<=copy_length<=max_bytes:
+            raise RefillUnsupported('token output copy exceeds byte bound')
+        _write_span(p,output,_read_span(p,pointer(ciphertext),copy_length))
+    for obj in (ciphertext,padding,input_string,key):
+        objects.destroy_string_object(p,object_address=obj,image_base=image_base,free=free)
+    if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
+        raise RefillUnsupported('token allocated cipher stack canary changed')
+    p.commit()
+    return output
+
+
+def encrypt_token_string_object(pages, *, source_object_address, object_address,
+        key_object_address, entry_stack_address, thread_pointer, image_base,
+        allocate, reallocate, free, max_bytes=0x100000):
+    """+287580: clone/zero-pad key, allocated ciphertext, StringObject writeback."""
+    import vm9_objects as objects
+    objects._string_bound(max_bytes);_stack(entry_stack_address,0x1200)
+    p=_PageTransaction(pages);local=entry_stack_address-0xA0
+    canary=entry_stack_address-0x38
+    _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    if source_object_address:
+        for address in (source_object_address,object_address,key_object_address):
+            if address<entry_stack_address and address+24>entry_stack_address-0x1200:
+                raise RefillUnsupported('token StringObject caller aliases physical spills')
+        key=entry_stack_address-0x60;padding=entry_stack_address-0x78
+        out_pointer=entry_stack_address-0x40;out_length=entry_stack_address-0x44
+        _write_span(p,out_pointer,bytes(8));_write_span(p,out_length,bytes(4))
+        key_length=objects._s32(int.from_bytes(_read_span(p,key_object_address+12,4),'little'))
+        if key_length<0:
+            raise RefillUnsupported('token cipher negative key length is unsupported')
+        objects.clone_string_object(p,object_address=key,source_object_address=key_object_address,
+            image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+        if key_length<32:
+            objects.construct_filled_string_object(p,object_address=padding,fill=0,length=32-key_length,
+                image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+            objects.append_string_object(p,object_address=key,source_object_address=padding,
+                allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+            objects.destroy_string_object(p,object_address=padding,image_base=image_base,free=free)
+        source=int.from_bytes(_read_span(p,source_object_address+16,8),'little')
+        length=int.from_bytes(_read_span(p,source_object_address+12,4),'little')
+        key_pointer=int.from_bytes(_read_span(p,key+16,8),'little')
+        allocate_token_ciphertext(p,source_address=source,length=length,
+            output_pointer_address=out_pointer,output_length_address=out_length,key_address=key_pointer,
+            entry_stack_address=local,thread_pointer=thread_pointer,image_base=image_base,
+            allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+        output=int.from_bytes(_read_span(p,out_pointer,8),'little')
+        count=objects._s32(int.from_bytes(_read_span(p,out_length,4),'little'))
+        if output:
+            if count>0:
+                objects.fill_string_object(p,object_address=object_address,length=count,fill=32,
+                    allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+                destination=int.from_bytes(_read_span(p,object_address+16,8),'little')
+                _write_span(p,destination,_read_span(p,output,count))
+            free(p,output)
+        objects.destroy_string_object(p,object_address=key,image_base=image_base,free=free)
+    if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
+        raise RefillUnsupported('token StringObject cipher stack canary changed')
+    p.commit()

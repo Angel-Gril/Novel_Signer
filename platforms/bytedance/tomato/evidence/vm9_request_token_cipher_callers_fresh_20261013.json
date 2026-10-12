@@ -1,0 +1,631 @@
+{
+  "schema": "vm9-request-token-cipher-callers-fresh-v1",
+  "evidence_date": "2026-10-13",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "length_0",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "length_1",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "length_15",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "length_16",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "length_17",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "length_31",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "length_32",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "length_47",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "length_64",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "allocated",
+      "case": "NULL_output_malloc",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct",
+      "case": "key_0",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct",
+      "case": "key_32",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct",
+      "case": "existing_destination",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct",
+      "case": "NULL_output_malloc",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "key_0",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "key_1",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "key_16",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "key_31",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "key_32",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "key_40",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "NULL_receiver",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "NULL_output_malloc",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "existing_destination",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "wrapper",
+      "case": "empty_input",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "length_0",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "length_1",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "length_15",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "length_16",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "length_17",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "length_31",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "length_32",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "length_47",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "length_64",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "allocated",
+      "case": "NULL_output_malloc",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct",
+      "case": "key_0",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct",
+      "case": "key_32",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct",
+      "case": "existing_destination",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct",
+      "case": "NULL_output_malloc",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": false,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "key_0",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "key_1",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "key_16",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "key_31",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "key_32",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "key_40",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "NULL_receiver",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "NULL_output_malloc",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "existing_destination",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "wrapper",
+      "case": "empty_input",
+      "original_caller_returned": true,
+      "all_guest_ELF_and_defined_parent_locals_equal": true,
+      "ordered_malloc_realloc_free_and_allocator_blocks_equal": true,
+      "actual_nested_consumer_executed": true,
+      "native_snapshot_input": false,
+      "native_physical_X0_compared": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "bad_target",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "unmapped_source",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "unmapped_destination",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "source_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "key_negative",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "provider_NULL_key",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "changed_slots",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "changed_bytecode",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    },
+    {
+      "case": "canary_change",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_rollback_verified": false
+    }
+  ],
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "whole_physical_stack_bytes_compared": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "complete_nested_caller_return_verified": false,
+  "native_Python_controls": 48,
+  "rollback_guards": 10,
+  "pre_change_native_RED_controls": 4,
+  "accepted_native_controls_not_repeated": true,
+  "allocated_and_string_cipher_callers_integrated": true,
+  "constructed_outer_steps": 3767,
+  "constructed_outer_bytecode_offset": "0xfdde0",
+  "constructed_nested_steps": 422,
+  "constructed_nested_bytecode_offset": "0x118ce4",
+  "constructed_entry_boundary": "matching-libc cross-bin realloc is unrecovered",
+  "owning_realloc_old_usable_size": 32,
+  "owning_realloc_request_size": 64,
+  "owning_realloc_old_class": 2,
+  "owning_realloc_new_class": 4,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "constructed_entry_replayed": true,
+  "constructed_prefix_native_differential_verified": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "limits": [
+    "Fresh allocated/StringObject/actual288BDC callers reuse accepted helpers; old helper groups are not repeated.",
+    "Actual owning entry hits unrecovered cross-bin realloc 32->64 at nested422; no append-boundary advancement claimed.",
+    "Explicit synthetic allocator controls agree with native callers; whole-prefix/physical ABI/signing remain unverified."
+  ]
+}

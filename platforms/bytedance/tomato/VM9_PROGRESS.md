@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request allocated/StringObject cipher callers
+
+48项新caller对照、10项回滚通过，287A78/287580/288BDC恢复，复用既有
+schedule/block/string owner。独立owning入口仍inner422/outer3767，actual
+cross-bin realloc32→64、class2→4是下一owner边界。原页字节回滚，64新增
+OS pages保留。全JNI、whole-request、physical ABI、mapping回滚、完整
+signer及fresh/live仍未完成。见 [cipher caller报告](REQUEST_JNI_STARTUP_WORKERS.md#6141-request-allocated-and-string-cipher-callers2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request round schedule/block helpers
 
 32项新helper对照、8项回滚通过，287EDC schedule/2881CC block、编码slot

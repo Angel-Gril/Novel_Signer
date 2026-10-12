@@ -1,7 +1,7 @@
 """Bounded +0x287500 nested request VM, with independently generated inputs.
 
 Constants, random, shared readers, scopes and string lifecycle reuse owners.
-The next obfuscated string helper is an explicit boundary; no pages are published.
+The next StringObject append is an explicit boundary; no pages are published.
 """
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
@@ -121,6 +121,11 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     reallocate=string_services['reallocate'],free=string_services['free'],
                     thread_id=diagnostic_services.get('thread_id'),observer=diagnostic_services.get('observer'))
             elif string_services is not None and (wrapper,target)==(0x288BDC,0x287580):
+                apply_token_cipher_callback(staged,argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
+                    reallocate=string_services['reallocate'],free=string_services['free'])
+            elif string_services is not None and (wrapper,target)==(0x288BF0,0x248684):
                 raise Boundary()
             else:
                 raise RefillUnsupported(f'unknown request token callback +{wrapper:#x} -> +{target:#x}')
@@ -307,3 +312,18 @@ def apply_token_digest_callback(pages, *, argument_block_address, image_base,
         flag=flag,max_source_bytes=max_source_bytes)
     p.commit()
     return result
+
+
+def apply_token_cipher_callback(pages, *, argument_block_address, image_base,
+        entry_stack_address, thread_pointer, allocate, reallocate, free, max_bytes=0x100000):
+    """+288bdc tail wrapper -> +287580 with three packed StringObject pointers."""
+    from vm9_request_token_cipher import encrypt_token_string_object
+    p=_PageTransaction(pages)
+    words=tuple(int.from_bytes(_read_span(p,argument_block_address+i*8,8),'little') for i in range(4))
+    if words[0]-image_base!=0x287580:
+        raise RefillUnsupported('unrecovered token StringObject cipher callback')
+    encrypt_token_string_object(p,source_object_address=words[1],object_address=words[2],
+        key_object_address=words[3],entry_stack_address=entry_stack_address,
+        thread_pointer=thread_pointer,image_base=image_base,allocate=allocate,
+        reallocate=reallocate,free=free,max_bytes=max_bytes)
+    p.commit()

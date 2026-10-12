@@ -5499,6 +5499,33 @@ consumer尚未接入。没有重放已接受入口，当前owning边界仍422/+1
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_cipher_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-cipher-evidence.json>
 ```
 
+## 6.141 Request allocated and string cipher callers（2026-10-13 Asia/Shanghai）
+
+恢复 `+287A78` allocated/padded block caller、`+287580` StringObject caller
+和actual `+288BDC` consumer。复用已接受round schedule/block/string owner，
+保持四个temporary StringObject的构造、填充、分组、output malloc、writeback
+及cipher/pad/input/key清理顺序。短key补零至32；input按16字节分组填充，
+输出malloc NULL发布NULL/zero length并清理。物理X0/spills/PAC仍无对照承诺。
+
+两基址 **48项新caller对照、10项回滚检查**通过：20 allocated caller、
+8 direct StringObject caller、20 actual wrapper。0/1/15/16/17/31/32/47/64
+input、0/1/16/31/32/40 key、NULL receiver/output malloc和existing destination
+覆盖。guest/ELF/defined parent locals、malloc/realloc/free顺序及allocator
+blocks一致。4项native RED；旧helper原生组未重跑，旧core/default AST保留。
+
+独立owning入口执行新consumer后，仍在 **inner422/+118CE4、outer3767/+FDDE0**
+停止于owning allocator的 **32→64字节cross-bin realloc**（class2→4）。
+不是next append边界：此前same-bin realloc owner明确拒绝该路径。原有
+page bytes差异为空，64个新增OS pages保留，mapping rollback未证明。
+下一先恢复matching-libc cross-bin realloc并验证真实入口，再接append/
+reference/printf。完整nested return、actual JNI、whole-request、physical ABI、
+完整signer、fresh/live及真实JVM仍未完成。
+见 [cipher caller证据](evidence/vm9_request_token_cipher_callers_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_cipher_callers_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-cipher-callers-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
