@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：请求scoped tree构造顺序恢复
+
+24项原生/Python对照、1项入口、31项回滚通过。实际 `+25C324/+163DDC`
+diagnostic reference构造、descriptor可观察时机与分配顺序恢复；2475步、
+105次回调的VM返回保持。下一项修复native compare-and-store内存差异。
+完整signer、fresh/live、真实JVM和整链原生差分未完成。
+见 [scoped tree报告](REQUEST_JNI_STARTUP_WORKERS.md#698-请求-scoped-tree-reference-构造2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：请求清理完成并到达VM返回
 
 78项原生/Python对照、1项入口检查、36项回滚通过。请求object清理、

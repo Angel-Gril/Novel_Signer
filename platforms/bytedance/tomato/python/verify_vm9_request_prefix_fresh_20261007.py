@@ -364,8 +364,15 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if allocate is None:
                     raise PrefixBoundary()
                 import vm9_registry as registry
-                registry.construct_configuration_tree_reference(vm.m.pages,
-                    output_reference_address=words[1], image_base=image, allocate=allocate)
+                if diagnostic_scope is not None:
+                    diagnostic_scope['request_scoped_tree_started'] = True
+                registry.construct_scoped_configuration_tree_reference(vm.m.pages,
+                    output_reference_address=words[1],image_base=image,allocate=allocate,
+                    entry_stack_address=frame.native_stack_address - 0x190,
+                    thread_pointer=inputs['thread_pointer'],
+                    thread_id=None if diagnostic_scope is None else diagnostic_scope.get('thread_id'),
+                    diagnostic_observer=None if diagnostic_scope is None else lambda *event:
+                    diagnostic_scope.setdefault('events', []).append(list(event)))
             elif allocate is not None and (wrapper, target) == (0x2858D0, 0x26C858):
                 if diagnostic_scope is None:
                     raise PrefixBoundary()

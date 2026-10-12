@@ -4195,6 +4195,36 @@ count来推断先前清理；native清理对照和实际callback完成是该项�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_object_destroy_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-cleanup-return-evidence.json>
 ```
 
+## 6.98 请求 scoped tree reference 构造（2026-10-12 Asia/Shanghai）
+
+`construct_scoped_configuration_tree_reference` 恢复 `+25C324` 实际调用的
+`+163DDC` scoped reference constructor，接入 `+2858BC`。先分配40字节
+container，再写descriptor并构造tree；diagnostic范围进入后才分配count。
+`+163DDC` 的有效指令与既有 `+1625A4` 相同，复用scoped reference owner。
+原raw constructor保留，既有原生分组未重复。
+
+实际wrapper压栈0x10；consumer传入caller frame SP-0x190作为helper入口。
+descriptor位于helper SP-0x50，logical scope位于SP-0xA0。allocator provider
+观察到的descriptor/output、完整guest payload和ELF页面、heap、逻辑scope
+字段与diagnostic/allocator顺序均与原生一致。之前native allocator栈帧在
+scope+12的四字节padding留下物理寄存器残留，该padding不属于本批对照。
+
+两基址 **24项原生/Python对照、1项请求入口、31项回滚** 通过：cold/warm、
+direct/实际wrapper、跨页output和跨页stack；16项leaf、15项entry拒绝。
+两个有效native RED在新增owner前取得；descriptor过早写入也有独立RED。
+请求仍在 **2475步、105回调** 返回，新增allocator异常在599步拒绝并回滚
+全部页面。外部provider ledger不随页面回滚。
+
+私有整链探针观察到88次分配、输出引用和32个VM寄存器一致；另有一个
+全局字节差异，已定位到native compare-and-store handler `+171474`。
+该探针尚未覆盖完整heap和服务参数，不作为整链等价证据；physical caller
+epilogue/X0 ABI、真实Android JVM、完整signer、fresh签名和线上矩阵未完成。
+见 [scoped tree证据](evidence/vm9_request_scoped_tree_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_scoped_tree_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-scoped-tree-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

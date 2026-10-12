@@ -86,6 +86,36 @@ def compare_string_objects(pages, *, first_address: int, second_address: int,
         second_address=second_address + 8 if second_address else 0, max_bytes=max_bytes)
 
 
+def construct_scoped_configuration_tree_reference(pages, *, output_reference_address: int,
+        entry_stack_address: int, image_base: int, thread_pointer: int, allocate: Callable,
+        thread_id: int | None = None,diagnostic_observer=None) -> int:
+    """+0x25c324 with its actual +0x163ddc diagnostic reference constructor.
+
+    The existing raw component excludes diagnostic scopes. This composition
+    allocates the container before writing its descriptor at SP-0x50, then
+    reuses the identical scoped reference constructor instructions.
+    """
+    if (type(entry_stack_address) is not int or entry_stack_address < 0xA0
+            or entry_stack_address >= 1 << 64 or entry_stack_address & 15):
+        raise RefillUnsupported('scoped tree reference requires an aligned guest stack')
+    transaction = _PageTransaction(pages)
+    _read_span(transaction,output_reference_address,16)
+    _read_span(transaction,entry_stack_address-0xA0,0xA0)
+    descriptor = entry_stack_address - 0x50
+    container = objects._allocate(transaction,allocate,40)
+    _write_span(transaction,descriptor,b''.join(objects._word(objects._image_address(image_base,offset))
+        for offset in (0x182D6C,0x182D6C,0x188A94)))
+    construct_configuration_tree(transaction,container_address=container,
+        descriptor_address=descriptor,image_base=image_base,allocate=allocate)
+    import vm9_reference_scopes as references
+    references.construct_scoped_string_reference(transaction,reference_address=output_reference_address,
+        string_address=container,entry_stack_address=descriptor,image_base=image_base,
+        thread_pointer=thread_pointer,thread_id=thread_id,allocate=allocate,
+        diagnostic_observer=diagnostic_observer)
+    transaction.commit()
+    return container
+
+
 class _ConfigurationTree:
     def __init__(self, pages, container, image_base, max_nodes, max_bytes):
         if not isinstance(max_nodes, int) or not 1 <= max_nodes <= 0x100000:
