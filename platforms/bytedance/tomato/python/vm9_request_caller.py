@@ -141,6 +141,62 @@ def prepare_request_vm_caller(pages, *, entry_stack_address, return_address,
         backing, registers, vm_arguments)
 
 
+def prepare_request_token_vm_caller(pages, *, entry_stack_address, return_address,
+        thread_pointer, image_base, object_address, saved_frame_pointer=0,
+        saved_x28=0, saved_x19=0) -> RequestVmCallerFrame:
+    """Generate +0x287500's caller and the defined generic VM prelude slots.
+
+    Descriptor top is local SP+0x650. Undefined virtual words and packed
+    padding retain live caller memory. TLS is read after the native spills,
+    including when its canary address aliases the saved caller registers.
+    """
+    values = (entry_stack_address, return_address, thread_pointer, image_base,
+        object_address, saved_frame_pointer, saved_x28, saved_x19)
+    if any(type(v) is not int or not 0 <= v < 1 << 64 for v in values):
+        raise RefillUnsupported('request token VM caller inputs must fit uint64')
+    if entry_stack_address < 0x680 or entry_stack_address & 15:
+        raise RefillUnsupported('request token VM caller stack must be aligned')
+    if return_address >= 1 << 56:
+        raise RefillUnsupported('PAC-tagged request token VM return is unsupported')
+    tx = _PageTransaction(pages)
+    local = entry_stack_address - 0x680
+    def word(address, value):
+        _write_span(tx, address, value.to_bytes(8, 'little'))
+    try:
+        _read_span(tx, local, 0x680)
+        _read_span(tx, image_base + 0x118570, 4)
+        for address, value in (
+            (entry_stack_address - 0x20, saved_frame_pointer),
+            (entry_stack_address - 0x18, return_address),
+            (entry_stack_address - 0x10, saved_x28),
+            (entry_stack_address - 8, saved_x19),
+        ):
+            word(address, value)
+        _write_span(tx, entry_stack_address - 0x28,
+            _read_span(tx, thread_pointer + 0x28, 8))
+        for address, value in ((local + 8, object_address),
+            (local + 0x10, image_base + 0x2884AC),
+            (local + 0x18, local + 0x650), (local + 0x20, return_address)):
+            word(address, value)
+        top = local + 0x650
+        backing = top - 0x118
+        word(top - 0x120, image_base + 0x118570)
+        for slot, value in ((0, 0), (4, local + 8),
+            (5, image_base + 0x35F5E0), (6, image_base + 0x35F650),
+            (7, image_base + 0x2884AC), (29, (top - 0x130) & ~15),
+            (31, return_address)):
+            word(backing + slot * 8, value)
+        registers = tuple(int.from_bytes(_read_span(tx, backing + i * 8, 8), 'little')
+            for i in range(32))
+    except ValueError as exc:
+        raise RefillUnsupported('request token VM caller memory is unmapped') from exc
+    vm_arguments = (image_base + 0x118570, local + 8, image_base + 0x35F5E0,
+        image_base + 0x35F650, local + 0x10)
+    tx.commit()
+    return RequestVmCallerFrame(local, 0x118570, local + 8, local + 0x10,
+        backing, registers, vm_arguments)
+
+
 def validate_request_vm_exit(pages, *, image_base, pc, registers, return_address):
     """Validate the observed +0xffb78 return branch of native +0x16a974.
 

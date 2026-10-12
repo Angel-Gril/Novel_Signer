@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request token VM caller and prefix
+
+20项新增原生对照、8项回滚通过；287500 caller完整frame及已定义prelude
+slots、嵌套两个decode与32虚拟寄存器一致。内层179步/+118838，下一
+288B08→26CC8C。外层仍3767步，尚未接入。全JNI、整链、generic physical
+spills、mapping回滚、完整signer、fresh/live及真实JVM均未完成。
+见 [token VM报告](REQUEST_JNI_STARTUP_WORKERS.md#6132-request-token-vm-caller-and-prefix2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request left character-set trim
 
 94项新增原生对照、11项回滚通过；forward bitmap、erase memmove、left trim

@@ -492,6 +492,8 @@ Reverse character-set search, right trim and the actual source callback now pass
 
 Forward character-set search, field erase, left trim and actual source callback now pass 94 new native controls and 11 rollback checks. Shared reverse-search bitmap semantics remain unchanged by expansion AST comparison. The independently constructed nonempty entry advances to 3767 steps, next at +287500. Full JNI, whole-request comparison and complete signing remain unfinished. See the [left-set report](../REQUEST_JNI_STARTUP_WORKERS.md#6131-request-left-character-set-trim2026-10-13-asiashanghai).
 
+The +287500 nested caller and its first two constant callbacks pass 20 new native controls and eight rollback checks. Its prefix reaches 179 steps, next at +26cc8c. Outer request integration and complete signing remain unfinished. See the [token VM report](../REQUEST_JNI_STARTUP_WORKERS.md#6132-request-token-vm-caller-and-prefix2026-10-13-asiashanghai).
+
 
 
 

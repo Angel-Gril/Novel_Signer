@@ -5263,6 +5263,30 @@ whole-request差分、full physical ABI、完整signer、fresh/live与真实JVM
 python -B platforms/bytedance/tomato/python/verify_vm9_request_left_trim_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <left-trim-evidence.json>
 ```
 
+## 6.132 Request token VM caller and prefix（2026-10-13 Asia/Shanghai）
+
+恢复 `prepare_request_token_vm_caller(+287500)` 的0x680字节caller frame、
+`+168324` 已定义prelude slots与 `+118570` 嵌套VM前缀。descriptor top
+为localSP+650，backing为top−118；packed包含object、2884AC sentinel、
+top与未带PAC的LR。未写入的32槽保留独立caller字节。TLS canary在保存
+寄存器后读取，覆盖TLS与spill重叠。原有caller函数AST逐个一致。
+
+两基址 **14项caller/prelude、6项嵌套prefix** 对照和 **8项回滚检查**
+通过。覆盖NULL/cross-page object、wide spills、stack迁移、TLS alias、
+patterned stack；caller完整frame、32 backing words、5个VM入参、physical
+SP/X28/X19一致。嵌套 **179步 / bytecode+118838** 的两个decode callbacks、
+decoded bytes、32虚拟寄存器和下一packed descriptor一致。prefix不发布
+pages，未知回调为显式边界。2项native RED已证明此前owner缺失。
+
+下一 `+288B08 -> +26CC8C` 为random getter。外层仍3767步，尚未接入
+该嵌套callback。完整generic VM physical spills、actual JNI、整链差分、
+allocator mapping回滚、完整signer、fresh/live及真实JVM未完成。
+见 [token VM证据](evidence/vm9_request_token_vm_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_vm_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-vm-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
