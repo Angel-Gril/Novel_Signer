@@ -541,6 +541,80 @@ def get_environment_constant(pages, *, image_base, entry_offset):
     staged.commit();return result
 
 
+def _request_version_selector(pages, image_base, entry_offset, table_offset):
+    pc = objects._image_address(image_base, entry_offset)
+    folded = (((((~pc | 0xA060400A021040) & 0xA061440A061440)
+        + (pc & 0x10400040400)) | 0x1010104) ^ 0xFF5F9EBBF469CA84) & MASK64
+    return (_u(pages, image_base+table_offset)+folded) & MASK64
+
+
+def initialize_request_version_word(pages, *, image_base, allocate, free,
+        parse_decimal, thread_id=None, max_bytes=1024):
+    """+0x172f2c: split a duplicated guest version and publish its packed word.
+
+    strdup is restored through the owning allocator and guest copy. The
+    caller supplies signed-int32 atoi effects. Existing environment getters
+    own their singleton and lazy constants. Return the initializer status 1,
+    independently of the packed word stored at image+0x3d18ec.
+    """
+    if type(max_bytes) is not int or not 8<=max_bytes<=0x100000:
+        raise ValueError('invalid request version string bound')
+    if not all(callable(s) for s in (allocate, free, parse_decimal)):
+        raise RefillUnsupported('request version requires owning string services')
+    p = _PageTransaction(pages)
+    slot = _request_version_selector(p, image_base, 0x173068, 0x379960)
+    source = _u(p, slot)
+    data = objects._cstring(p, source, max_bytes)
+    if len(data)<8:
+        raise RefillUnsupported('request version delimiter stores exceed string allocation')
+    duplicate = objects._allocate(p, allocate, len(data))
+    _write_span(p, duplicate, data)
+    _write_span(p, duplicate+3, b'\0')
+    _write_span(p, duplicate+6, b'\0')
+    parts = []
+    for offset in (1,4,7):
+        value = parse_decimal(p, duplicate+offset)
+        if type(value) is not int or not -(1<<31)<=value<=0xFFFFFFFF:
+            raise RefillUnsupported('request atoi result must fit W0')
+        parts.append(value & 255)
+    free(p, duplicate)
+    reference = get_environment_service_reference(p, image_base=image_base,
+        allocate=allocate, thread_id=thread_id)
+    _u(p, reference.wrapper_address)  # Input to the constant getter is ignored.
+    constant = get_environment_constant(p, image_base=image_base, entry_offset=0x256330)
+    environment = _u(p, constant, 1)==0x65
+    identifier = get_guest_identifier(p, image_base=image_base)
+    platform = {0x69:1, 0x6C:2, 0x77:3}.get(_u(p, identifier, 1), 0)
+    word = parts[0]<<24 | parts[1]<<16 | parts[2]<<8 | int(environment)<<5 | platform
+    _w(p, image_base+0x3D18EC, word, 4)
+    p.commit()
+    return 1
+
+
+def get_request_version_word(pages, *, image_base, allocate, free,
+        parse_decimal, thread_id=None, max_bytes=1024):
+    """+0x172af4: serialized lazy version word, retaining native table reloads.
+
+    The outer getter tests guard bit0; acquisition tests all of byte0. The
+    initializer status is stored through table+8, while the returned version
+    comes from table+16. Unsupported waits and provider effects roll back
+    page bytes; external provider ledgers are the caller's responsibility.
+    """
+    from vm9_startup import acquire_serial_guard, release_serial_guard
+    p = _PageTransaction(pages)
+    def slot(offset):
+        return _request_version_selector(p, image_base, 0x172AF4, 0x379928+offset)
+    if not _u(p, slot(0), 1)&1:
+        if acquire_serial_guard(p, guard_address=slot(0), image_base=image_base, thread_id=thread_id):
+            status = initialize_request_version_word(p, image_base=image_base, allocate=allocate,
+                free=free, parse_decimal=parse_decimal, thread_id=thread_id, max_bytes=max_bytes)
+            _w(p, slot(8), status, 4)
+            release_serial_guard(p, guard_address=slot(0), image_base=image_base)
+    word = _u(p, slot(16), 4)
+    p.commit()
+    return word
+
+
 
 def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
     """Bounded printf %d/%s/%% over raw ABI words; read live inputs each call."""

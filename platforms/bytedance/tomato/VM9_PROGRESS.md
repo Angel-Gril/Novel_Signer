@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request version word getter
+
+40项新增原生对照、10项回滚通过；packed version、独立status槽、
+encoded table重读和cached guard语义一致。2869F0外层格式化和cleanup
+继续恢复，非空入口3307步。actual JNI、整链差分、完整signer、fresh/
+live与真实JVM仍未完成。见 [version报告](REQUEST_JNI_STARTUP_WORKERS.md#6124-request-version-word2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：request raw MD5与scoped assignment依赖
 
 54项新增原生对照、12项回滚通过；raw16 MD5、scratch/scope重叠与

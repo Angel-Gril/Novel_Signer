@@ -5019,6 +5019,40 @@ actual JNI、suffix整链原生差分、完整signer、fresh/live和真实JVM均
 python -B platforms/bytedance/tomato/python/verify_vm9_request_raw_digest_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <raw-digest-evidence.json>
 ```
 
+## 6.124 Request version word（2026-10-13 Asia/Shanghai）
+
+在既有configuration owner新增 `initialize_request_version_word` 与
+`get_request_version_word`，恢复 `+172F2C/+172AF4`。从guest encoded
+table读取version pointer，按原生strdup allocation/copy顺序构造副本，
+在+3/+6写NUL，再调用显式atoi服务读取+1/+4/+7，取各结果最低byte。
+free副本后复用已有environment service reference、constant与identifier
+getter；constant首byte==e决定bit5，identifier的i/l/w选择低位1/2/3，
+其余为0。三个数字占bits24/16/8。字符串至少7字节；越界delimiter
+store、unknown pages或provider行为拒绝并回滚page bytes。
+
+外层getter复用已有serialized guard acquire/release，保留guard bit0
+与whole byte0判定区别。initializer返回status1写到encoded table+8
+指向的槽；实际packed word从table+16指向的另一个槽读取。所有相关
+table在原生重读边界重新读取；分配期间更改status slot仍正确。先前
+静态假设status覆盖packed word被新鲜原生RED否定，未进入实现或证据。
+
+两基址 **40项新增原生/Python对照、10项回滚检查**通过，2项native
+RED。20项initializer覆盖signed/whitespace/non-numeric/large低byte
+component、环境和三种platform标志及cold service；6项cold getter
+覆盖原路径、cold service与status slot变更；14项cached controls覆盖
+zero/small/signed边界/allbits与两种completed guard状态。完整guest/
+ELF、uint32 return、allocator/atoi顺序与free前副本bytes匹配。原始
+helper、matching libc atoi与guard mutex实际执行；malloc和strdup为
+显式合成服务。所有旧configuration函数AST保持一致，无旧原生组重跑。
+
+这是 `+2869F0` 外层另一个依赖。两遍C-string格式化、外层组装及cleanup
+继续恢复，非空入口仍3307步。actual JNI、整链差分、完整signer、fresh/
+live和真实JVM仍未完成。见 [version证据](evidence/vm9_request_version_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_version_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <version-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

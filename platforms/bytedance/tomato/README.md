@@ -347,6 +347,8 @@ The actual request hexadecimal-reference helper now passes 20 new native control
 
 Raw MD5 and scoped reference assignments now pass 54 new native controls and 12 rollback checks. Digest scratch, scope overlap, alias order and ownership match. The outer transform caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [raw MD5 report](REQUEST_JNI_STARTUP_WORKERS.md#6123-request-raw-md5-and-reference-assignment2026-10-12-asiashanghai).
 
+The request version initializer/getter now passes 40 new native controls and ten rollback checks. Packed version, separate initializer status, encoded-table reloads and cached guard paths match. The outer caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [version report](REQUEST_JNI_STARTUP_WORKERS.md#6124-request-version-word2026-10-13-asiashanghai).
+
 
 
 
