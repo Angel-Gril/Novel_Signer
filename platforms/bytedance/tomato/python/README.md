@@ -456,6 +456,8 @@ Declared StringObject ASCII case-insensitive search now passes 72 new native con
 
 CString-pattern search now passes 76 new native controls and 24 rollback checks. Native paired scans, contiguous-hit checks, unsigned prechecks and signed offsets match. The constructed nonempty prefix advances to 2761 steps and now stops at VM op17 sub53. Actual JNI conversion and complete signing remain unfinished. See the [CString search report](../REQUEST_JNI_STARTUP_WORKERS.md#6112-cstring-pattern-搜索2026-10-12-asiashanghai).
 
+VM signed 64-bit multiplication and hidden low-product transfer now pass 238 new native/Python controls from 220 original interpreter executions. Both full-width product halves and register backing match. The constructed nonempty prefix advances to 2850 steps; actual JNI conversion and complete signing remain unfinished. See the [signed product report](../REQUEST_JNI_STARTUP_WORKERS.md#6113-vm-signed-product-与-low-copy2026-10-12-asiashanghai).
+
 
 
 

@@ -265,6 +265,7 @@ StringObject/CString构造通过 **68项新增对照、24项回滚**；非空入
 Matching-libc同类别realloc通过 **18项新增对照、28项回滚**；非空入口推进到2538步，下一StringObject搜索回调待恢复。见 [同类别realloc报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6110-matching-libc-同类别-realloc2026-10-12-asiashanghai)。
 StringObject ASCII casefold搜索通过 **72项新增对照、20项回滚**；非空入口推进到2590步。见 [casefold搜索报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6111-stringobject-ascii-casefold-搜索2026-10-12-asiashanghai)。
 StringObject ASCII CString pattern搜索通过 **76项新增对照、24项回滚**；非空入口推进到2761步。见 [CString搜索报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6112-cstring-pattern-搜索2026-10-12-asiashanghai)。
+VM signed64乘法与低半部读取通过 **238项新增对照**；非空入口推进到2850步。见 [signed product报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6113-vm-signed-product-与-low-copy2026-10-12-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

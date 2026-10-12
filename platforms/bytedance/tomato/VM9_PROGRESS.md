@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：VM signed64 product与low-copy
+
+238项新增原生/Python对照通过；恢复sub53的MUL/SMULH和sub39的low
+slot读取。非空构造入口推进到2850步，当前边界为
+`unknown request callback +0x285d74 -> +0x26bdfc`。64个新增OS页保留。
+actual JNI、suffix整链差分、完整signer、fresh/live及真实JVM未完成。
+见 [signed product报告](REQUEST_JNI_STARTUP_WORKERS.md#6113-vm-signed-product-与-low-copy2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：CString pattern搜索
 
 76项新增原生对照、24项回滚通过；恢复paired扫描、contiguous检查及

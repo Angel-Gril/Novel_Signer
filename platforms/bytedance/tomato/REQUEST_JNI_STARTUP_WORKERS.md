@@ -4692,6 +4692,38 @@ pages仍保留。actual JNI、suffix整链原生差分、完整signer、fresh/li
 python -B platforms/bytedance/tomato/python/verify_vm9_request_cstring_search_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-cstring-search-evidence.json>
 ```
 
+## 6.113 VM signed product 与 low copy（2026-10-12 Asia/Shanghai）
+
+恢复 `vm_full` 的op17/sub53与sub39。原生 `+16B1B0` 从fB、fC读取
+signed64操作数，实际MUL/SMULH产生128位乘积，低64位写hidden slot32、
+高64位写slot33；不修改普通寄存器，fA/fD字段不参与计算。两个半部均
+保留完整64位，不做W截断或额外sign-extension。已有sub52可消费高半部。
+原生 `+16AE04` 的sub39从slot32读取完整word到fA；提供guest backing时
+其slot32为读取owner，同时写回目标slot。slot33和slot34保持不变。
+
+两基址 **238项新增原生/Python对照**通过，对应220次原始interpreter
+执行；四项native RED确认旧指令缺失。200项signed multiply覆盖零、正负
+组合、signed min/max、128位溢出边界、W边界、同source、高编号source、
+ignored字段、abstract/backing及sub52消费。38项low-copy覆盖R0/R4/R15/
+R16/R29/R30/R31目标、完整high bits、外部backing修改后的读取，以及
+sub53接sub39。R31目标使用独立R30退出，原探针不完整的sub30退出编码
+已修正；退出错误不再归因于sub53。所有32普通寄存器和3隐藏槽对照
+一致，backing模式比较完整35-slot array，Python仅改变声明的slots。
+两组验证后的源码增量只含sub39新增分支，已接受旧分组未重跑。
+
+构造URL与header的非空入口从2761步，经sub53后的2762步sub39边界，
+推进至 **2850步**。当前边界：`unknown request callback +0x285d74 -> +0x26bdfc`。
+原有页面bytes回滚，64个新增allocator OS pages
+仍保留。该入口使用Python构造的ABI，actual JNI frontend、suffix整链
+原生差分、完整physical stack、alternate opaque分支、真实JVM、完整
+signer、fresh签名和线上矩阵尚未完成。
+见 [signed product证据](evidence/vm9_signed_product_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_signed_multiply_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <signed-multiply-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_product_low_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <product-low-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

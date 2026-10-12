@@ -541,6 +541,14 @@ class VM:
                         self.R[dst] = ror64(self.R[fC], 32 + fA)
                     else:
                         self.R[fA] = self.R[fC] >> (32 + fB)
+                elif sub == 39:   # native +0x16ae04, copy hidden low product
+                    value = self._vm_tmp32
+                    if self.register_backing_base is not None:
+                        value = m.u64((self.register_backing_base + 0x100) & M64)
+                    self._vm_tmp32 = value
+                    self.R[fA] = value
+                    if self.register_backing_base is not None:
+                        m.w64((self.register_backing_base + 8 * fA) & M64, value)
                 elif sub == 43:   # SLT signed
                     self.R[fA] = 1 if sx64(self.R[fC]) < sx64(self.R[fD]) else 0
                 elif sub == 46:
@@ -549,6 +557,14 @@ class VM:
                     self.R[fC] = (~(self.R[fA] | self.R[fD])) & M64
                 elif sub == 51:
                     self.R[fA] = sx32(((self.R[fD] & 0xFFFFFFFF) + (self.R[fC] & 0xFFFFFFFF)) & 0xFFFFFFFF) & M64
+                elif sub == 53:   # native +0x16b1b0, signed 64-bit MUL/SMULH
+                    product = sx64(self.R[fB]) * sx64(self.R[fC])
+                    self._vm_tmp32 = product & M64
+                    self._vm_tmp33 = (product >> 64) & M64
+                    if self.register_backing_base is not None:
+                        reg_base = self.register_backing_base & M64
+                        m.w64((reg_base + 0x100) & M64, self._vm_tmp32)
+                        m.w64((reg_base + 0x108) & M64, self._vm_tmp33)
                 elif sub == 54:
                     self.R[fB] = 1 if self.R[fA] < self.R[fD] else 0
                 elif sub == 57:   # native +0x16b618, unsigned W operands
