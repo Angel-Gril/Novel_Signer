@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request outer suffix组合与raw free
+
+32项新增原生对照、11项回滚通过；suffix输出和cleanup、actual raw
+free一致。非空入口3307→3405/+FD838，下一285E8C→287168。原页bytes
+回滚，64个新增OS pages保留。actual JNI、整链差分、full physical ABI、
+完整signer、fresh/live及真实JVM仍未完成。见 [suffix报告](REQUEST_JNI_STARTUP_WORKERS.md#6126-request-outer-suffix-and-raw-free2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request allocated printf依赖
 
 36项新增原生对照、9项回滚通过；两次live格式化、truncation、pointer

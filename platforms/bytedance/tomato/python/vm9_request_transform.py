@@ -86,3 +86,111 @@ def construct_transformed_reference(pages, *, output_reference_address,source_ob
     _write_span(p,payload+1,b'\x04')
     p.commit()
     return string
+
+
+def construct_request_suffix(pages, *, object_address, entry_stack_address,
+        image_base, thread_pointer, allocate, reallocate, free, get_singleton,
+        parse_decimal, thread_id=None, diagnostic_observer=None, max_bytes=0x100000):
+    """+0x2869f0: compose two output C strings and destroy temporary ownership.
+
+    The guest input contains timestamp, two StringObjects, seed pointer, two
+    output-pointer slots and mode. Recover lazy constants from the ELF table;
+    reuse all string, reference, digest, version, transform and printf owners.
+    Helper entry SP is outer SP-0x260. Physical callee spills and unwind remain
+    outside this semantic composition. Providers own their external rollback.
+    """
+    import vm9_configuration_init as configuration
+    if type(entry_stack_address) is not int or entry_stack_address&15 or not 0x600<=entry_stack_address<1<<64:
+        raise RefillUnsupported('request suffix requires aligned scratch space')
+    if type(max_bytes) is not int or not 64<=max_bytes<=0x100000:
+        raise ValueError('invalid request suffix byte bound')
+    if not all(callable(s) for s in (allocate,reallocate,free,get_singleton,parse_decimal)):
+        raise RefillUnsupported('request suffix requires owning services')
+    if type(object_address) is not int or not 0<object_address<(1<<64)-64:
+        raise RefillUnsupported('request suffix input must fit uint64')
+    if object_address<entry_stack_address and object_address+64>entry_stack_address-0x600:
+        raise RefillUnsupported('request suffix input aliases physical caller scratch')
+    p=_PageTransaction(pages);E=entry_stack_address;body=E-0x260
+    _read_span(p,E-0x600,0x600)
+    canary=_read_span(p,thread_pointer+0x28,8)
+    def u(a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
+    def w(a,v,n=8):_write_span(p,a,v.to_bytes(n,'little'))
+    pc=image_base+0x2869F0;mask=(1<<64)-1
+    delta=(((((~pc|0xA060400A021040)&0xA061440A061440)+(pc&0x10400040400))|0x1010104)^0xFF5F9EBBF407DE8C)&mask
+    table=image_base+0x383560
+    def selector(offset):return (u(table+offset)+delta)&mask
+    first,fmt,third=selector(0),selector(8),selector(16)
+    for flag,source,destination,key in ((0x18,0x20,0,0x28),(0x30,0x38,8,0x40),(0x48,0x50,16,0x58)):
+        if not u(selector(flag),4):
+            objects.decode_masked_bytes(p,source_address=selector(source),
+                destination_address=selector(destination),mask_address=selector(key),max_bytes=max_bytes)
+            w(selector(flag),1,4)
+    timestamp=u(object_address);output1=u(object_address+32);mode=u(object_address+48,4)
+    digest_source=u(object_address+16);seed_pointer=u(object_address+24);output2=u(object_address+40)
+    constant,md5ref,rawref,sizedref=E-0x110,E-0x120,E-0x130,E-0x140
+    version_scratch,time_scratch,combined=E-0x150,E-0x160,E-0x180
+    transformed,hexclone,hexref=E-0x230,E-0x250,E-0x260
+    kw=dict(entry_stack_address=body,image_base=image_base,thread_pointer=thread_pointer,
+        allocate=allocate,thread_id=thread_id,diagnostic_observer=diagnostic_observer)
+    def cstring(a,source):
+        return objects.construct_string_object(p,object_address=a,source_address=source,allocate=allocate,
+            vtable_address=image_base+0x34F5F8,empty_descriptor_address=image_base+0x6E168,max_source_bytes=max_bytes)
+    def destroy(a):objects.destroy_string_object(p,object_address=a,image_base=image_base,free=free)
+    def release(a):references.release_scoped_string_reference(p,reference_address=a,free=free,**kw)
+    cstring(constant,first)
+    _write_span(p,md5ref,bytes(16))
+    if mode==1:
+        clone=objects._allocate(p,allocate,24)
+        objects.clone_string_object(p,object_address=clone,source_object_address=constant,
+            image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+        references.assign_scoped_owned_string_reference(p,reference_address=md5ref,string_address=clone,free=free,**kw)
+        second=constant
+    else:
+        references.construct_scoped_digest_reference(p,output_reference_address=rawref,source_object_address=digest_source,
+            reallocate=reallocate,free=free,max_source_bytes=max_bytes,flag=0,**kw)
+        references.assign_scoped_string_reference(p,destination_address=md5ref,source_address=rawref,free=free,**kw)
+        release(rawref)
+        second=u(object_address+8)
+    sized=objects._allocate(p,allocate,24)
+    objects.construct_filled_string_object(p,object_address=sized,fill=0,length=16,
+        image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+    references.construct_scoped_string_reference(p,reference_address=sizedref,string_address=sized,**kw)
+    version=configuration.get_request_version_word(p,image_base=image_base,allocate=allocate,free=free,
+        parse_decimal=parse_decimal,thread_id=thread_id,max_bytes=max_bytes)
+    w(version_scratch,version,4)
+    w(time_scratch,int.from_bytes((timestamp&0xFFFFFFFF).to_bytes(4,'little'),'big'),4)
+    cstring(combined,0)
+    for reference,source,temp in ((md5ref,0,E-0x1A0),(0,second,E-0x1C0),(sizedref,0,E-0x1E0)):
+        if reference:source=u(reference)
+        objects.construct_substring_string_object(p,object_address=temp,source_object_address=source,
+            start_u32=0,count_u32=4,image_base=image_base,entry_stack_address=body,thread_pointer=thread_pointer,
+            allocate=allocate,max_payload_bytes=max_bytes)
+        objects.append_string_object(p,object_address=combined,source_object_address=temp,
+            allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+        destroy(temp)
+    for source,temp in ((version_scratch,E-0x200),(time_scratch,E-0x220)):
+        objects.construct_sized_string_object(p,object_address=temp,source_address=source,length=4,
+            image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+        objects.append_string_object(p,object_address=combined,source_object_address=temp,
+            allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+        destroy(temp)
+    target=selector(-0x20)
+    if target!=image_base+0x286084:
+        raise RefillUnsupported('request suffix transform dispatch is unsupported')
+    construct_transformed_reference(p,output_reference_address=transformed,source_object_address=combined,
+        seed_u32=u(seed_pointer,2),reallocate=reallocate,free=free,get_singleton=get_singleton,max_bytes=max_bytes,**kw)
+    references.construct_hexadecimal_string_reference(p,output_reference_address=hexref,source_object_address=u(transformed),
+        reallocate=reallocate,free=free,max_bytes=max_bytes,**kw)
+    objects.clone_string_object(p,object_address=hexclone,source_object_address=u(hexref),
+        image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+    release(hexref)
+    configuration.allocate_printf_cstring(p,output_pointer_address=output1,format_address=fmt,
+        argument_addresses=(third,),allocate=allocate,max_bytes=max_bytes)
+    configuration.allocate_printf_cstring(p,output_pointer_address=output2,format_address=fmt,
+        argument_addresses=(u(hexclone+16),),allocate=allocate,max_bytes=max_bytes)
+    destroy(hexclone);release(transformed);destroy(combined);release(sizedref);release(md5ref);destroy(constant)
+    if _read_span(p,thread_pointer+0x28,8)!=canary:
+        raise RefillUnsupported('request suffix TLS canary changed')
+    result=(u(output1),u(output2))
+    p.commit()
+    return result

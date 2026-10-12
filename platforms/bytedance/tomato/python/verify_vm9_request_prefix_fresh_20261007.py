@@ -72,7 +72,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                    diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
                    read_clock=None, acquire_environment=None, invoke_jni=None,
                    get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None,
-                   register_exit=None, get_state_service=None):
+                   register_exit=None, get_state_service=None, parse_decimal=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -311,7 +311,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     entry_stack_address=frame.native_stack_address - 0x180,image_base=image,free=free)
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_tree_deletes', []).append(dict(completed=True))
-            elif (wrapper, target) == (0x285910, 0x32A264):
+            elif wrapper == 0x285910 and target in (0x32A264,0x347FA0):
                 if not callable(free):
                     raise RefillUnsupported('request final free requires a free service')
                 if diagnostic_scope is not None:
@@ -396,6 +396,24 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 pointer = allocate(vm.m.pages, words[1])
                 _write_span(vm.m.pages, argument + 0x10, pointer.to_bytes(8, 'little'))
                 diagnostic_scope.setdefault('allocation_callbacks', []).append([words[1], pointer])
+            elif (wrapper,target) == (0x285E80,0x2869F0):
+                if (allocate is None or reallocate is None or free is None
+                        or get_singleton is None or parse_decimal is None):
+                    raise RefillUnsupported('request suffix requires its ownership and atoi services')
+                import vm9_request_transform
+                outputs=vm9_request_transform.construct_request_suffix(vm.m.pages,
+                    object_address=words[1],entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],allocate=allocate,
+                    reallocate=reallocate,free=free,
+                    get_singleton=lambda p:get_singleton(p,frame.native_stack_address-0x570),
+                    parse_decimal=parse_decimal,
+                    thread_id=None if diagnostic_scope is None else diagnostic_scope.get('thread_id'),
+                    diagnostic_observer=None if diagnostic_scope is None else lambda *event:
+                        diagnostic_scope.setdefault('events',[]).append(list(event)))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_suffixes',[]).append(dict(
+                        object_address=words[1],output_pointer_addresses=list(outputs),
+                        outer_suffix_returned=True))
             elif (wrapper,target) == (0x285E70,0x27ED70):
                 if get_tls is None:
                     raise RefillUnsupported('request TLS word setter requires its owning TLS service')

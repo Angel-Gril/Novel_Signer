@@ -480,6 +480,8 @@ The request version initializer/getter now passes 40 new native controls and ten
 
 The request allocated printf helper now passes 36 new native controls and nine rollback checks. Both live format passes, truncation, pointer publication and allocator effects match. The outer caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [allocated printf report](../REQUEST_JNI_STARTUP_WORKERS.md#6125-request-allocated-printf2026-10-13-asiashanghai).
 
+The outer request suffix now passes 26 new native controls and nine rollback checks; the raw-free wrapper adds six controls and two guards. Existing owners compose both output C strings and cleanup. The independently constructed nonempty entry advances from 3307 to 3405 steps, next at +287168. Full JNI, whole-request native comparison and complete signing remain unfinished. See the [outer suffix report](../REQUEST_JNI_STARTUP_WORKERS.md#6126-request-outer-suffix-and-raw-free2026-10-13-asiashanghai).
+
 
 
 

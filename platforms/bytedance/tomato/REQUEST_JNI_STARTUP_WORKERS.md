@@ -5081,6 +5081,45 @@ getter、binary transform、hex reference及allocated printf均已分别
 python -B platforms/bytedance/tomato/python/verify_vm9_request_alloc_format_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <allocated-printf-evidence.json>
 ```
 
+## 6.126 Request outer suffix and raw free（2026-10-13 Asia/Shanghai）
+
+在request transform owner新增 `construct_request_suffix`，恢复 `+2869F0`
+完整semantic组合。读取guest encoded table三组lazy constants；按实际
+mode选择clone constant或raw MD5/scoped assignment。先四字节substring
+三次，再四字节version和REV W timestamp，依次append/destroy，组合
+长度最多20字节。LDRH读取seed，调用已恢复binary transform、hex引用，
+clone结果并生成两个allocated printf C strings；随后按原生次序清理
+hexclone、transform reference、combined string、sized16 reference、
+MD5 reference、constant string。所有ownership和string行为复用已有
+owner，outer helper SP为入口SP-260；physical callee spills/unwind仍
+未完整恢复，不把void X0当成签名或业务状态。
+
+两基址 **26项新增原生/Python suffix对照、9项回滚**通过；原始外层
+自然返回。覆盖0/1/2/7/32-byte source、mode1及短constant、mode allbits、
+warm constants、seed和timestamp边界、相同output slot。完整semantic
+guest/ELF bytes、两个output C strings、allocator/diagnostic lock/free
+顺序及free前bytes一致。matching-libc锁实际执行；allocator和initialized
+zero-first SDK为显式独立输入。其他SDK分支仍拒绝。旧transform AST
+保持一致，无旧接受原生组重跑。
+
+actual `+285E80` callback接入同一suffix；另把 `+285910 -> +347FA0`
+接入既有free service。新增 **6项actual raw-free wrapper对照、2项
+provider回滚**，实际source callback body在隔离dispatch中执行，验证
+NULL、buffer及packed/free alias；无另写Python callback。总计本节
+**32项新增对照、11项回滚**，4项native RED。
+
+同一owning allocator、合成URL及一个header的非空入口从3307推进到
+**3405步 / bytecode+FD838**，suffix执行一次，随后两个raw C strings
+释放并继续VM；下一未知callback为 `+285E8C -> +287168`。原有page
+bytes回滚，64个新增allocator OS pages保留，不声称mapping回滚。这是
+独立构造ABI，actual URL/header/JNI转换与整个prefix原生差分尚未验证。
+完整signer、fresh/live、真实JVM与full physical ABI均未完成。
+见 [suffix证据](evidence/vm9_request_suffix_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_suffix_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <suffix-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
