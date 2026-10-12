@@ -592,6 +592,84 @@ def find_string_object_ascii_case_insensitive(pages, *, object_address: int,
     return 0xFFFFFFFF
 
 
+def find_string_object_cstring(pages, *, object_address: int,
+        pattern_address: int, start_u32: int, entry_stack_address: int,
+        max_comparisons: int = 0x100000) -> int:
+    """+0x248b24: CString pattern, paired byte scan and contiguous hit check.
+
+    Preserve unsigned length/start prechecks, live pattern-byte loads and W32
+    arithmetic. The one-byte pattern tail reuses +0x248c1c. Fixed prechecks
+    precede the comparison bound; physical wrapper spill aliases refuse.
+    Return W0. No guest pages or allocation state change.
+    """
+    if any(type(v) is not int or not 0 <= v < 1 << 64 for v in
+           (object_address,pattern_address)):
+        raise RefillUnsupported('CString search addresses must fit uint64')
+    if type(start_u32) is not int or not 0 <= start_u32 <= 0xFFFFFFFF:
+        raise RefillUnsupported('CString search start must fit W2')
+    if type(entry_stack_address) is not int or not 16 <= entry_stack_address < (1 << 64) - 16 or entry_stack_address & 15:
+        raise RefillUnsupported('CString search requires aligned body stack')
+    if type(max_comparisons) is not int or not 0 <= max_comparisons <= 0x100000:
+        raise ValueError('invalid CString search comparison bound')
+    mask = (1 << 64) - 1
+    def guard(address,width):
+        address &= mask
+        if address + width > 1 << 64:
+            raise RefillUnsupported('CString search read spans uint64 boundary')
+        if address < entry_stack_address + 16 and address + width > entry_stack_address:
+            raise RefillUnsupported('CString search aliases unmodeled wrapper spills')
+        return address
+    def read(address,width):return _read_span(pages,guard(address,width),width)
+    if not pattern_address:return 0xFFFFFFFF
+    length = int.from_bytes(read(object_address + 12,4),'little')
+    if length < start_u32:return 0xFFFFFFFF
+    first_byte = read(pattern_address,1)[0]
+    if not first_byte:return start_u32
+    if length == start_u32:return 0xFFFFFFFF
+    if not read(pattern_address + 1,1)[0]:
+        pointer = int.from_bytes(read(object_address + 16,8),'little')
+        start = _s32(start_u32);declared = _s32(length)
+        if start >= 0 and declared > start:
+            guard(pointer + start,min(max_comparisons,declared - start))
+        return find_string_object_byte(pages,object_address=object_address,target_byte=first_byte,
+            start_u32=start_u32,max_bytes=max_comparisons)
+    pointer = int.from_bytes(read(object_address + 16,8),'little')
+    last_u32 = (length - 1) & 0xFFFFFFFF;last = _s32(last_u32)
+    matched = 0;first_hit = 0xFFFFFFFF;position = start_u32;target = first_byte
+    comparisons = 0
+    def receiver_byte(index):
+        nonlocal comparisons
+        if comparisons >= max_comparisons:
+            raise RefillUnsupported('CString search exceeds the explicit comparison bound')
+        comparisons += 1
+        return read(pointer + index,1)[0]
+    while True:
+        scan = _s32(position)
+        while scan < last:
+            if receiver_byte(scan) == target:break
+            if receiver_byte(scan + 1) == target:
+                scan += 1
+                break
+            scan += 2
+        else:
+            if (scan & 0xFFFFFFFF) != last_u32 or receiver_byte(last) != target:
+                return 0xFFFFFFFF
+            position = last_u32
+            if read(pattern_address + _s32(matched) + 1,1)[0]:return 0xFFFFFFFF
+            if position == (first_hit + matched) & 0xFFFFFFFF:return first_hit
+            position = (position - matched) & 0xFFFFFFFF
+            target = first_byte;matched = 0
+            continue
+        if matched == 0:first_hit = scan & 0xFFFFFFFF
+        position = (scan + 1) & 0xFFFFFFFF
+        matched = (matched + 1) & 0xFFFFFFFF
+        target = read(pattern_address + _s32(matched),1)[0]
+        if not target:
+            if position == (first_hit + matched) & 0xFFFFFFFF:return first_hit
+            position = (position - matched) & 0xFFFFFFFF
+            target = first_byte;matched = 0
+
+
 def read_signer_request_flag(pages, *, object_address: int) -> int:
     """+0x282a68 returns the full receiver byte at +0x52, without header reads."""
     if type(object_address) is not int or not 0 <= object_address <= (1 << 64) - 0x53:

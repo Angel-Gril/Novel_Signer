@@ -4660,6 +4660,38 @@ start/bound/stack、unmapped访问、scan超限及physical spill alias显式
 python -B platforms/bytedance/tomato/python/verify_vm9_request_casefold_search_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-casefold-search-evidence.json>
 ```
 
+## 6.112 CString pattern 搜索（2026-10-12 Asia/Shanghai）
+
+新增 `find_string_object_cstring` 恢复 `+248B24`，接入 `+285D34`：
+packed+8为receiver StringObject，+16为CString，+24为W start，+28写
+4字节W0 result。先检查NULL pattern，再按unsigned W length/start比较，
+读取pattern首byte；empty pattern返回start，包含high-bit start；nonempty
+且start==length返回FFFFFFFF。一字节pattern复用已验证byte-find owner。
+多字节pattern恢复原生paired scan、first hit和matched count；NUL时检查
+所有命中是否连续，不连续时按W wrapping状态重试。receiver offset使用
+原sxtw语义，pattern逐byte读取，不预先转换为独立Python字符串。
+
+两基址 **76项新增原生/Python对照、24项回滚**通过，2项native RED。
+19 profiles的direct/actual wrapper覆盖gap后contiguous match、first/last
+match、empty/at end/high-bit start、negative/past end、NULL pattern不读
+receiver、zero length、one byte、binary NUL tail、case-sensitive、miss、
+overlap、cross page、high-bit signed offset与large length早期match。
+W0、packed结果和guest data区域+0xA000一致，Python搜索无页变化，
+无allocator/service调用。原body/wrapper未改，native输出未用于Python
+输入；旧原生分组未重跑。实际receiver byte comparison超过上限、非法
+参数、unmapped访问及physical wrapper spills alias显式拒绝，pages不变。
+
+非空构造入口从2590推进到 **2761步**，CString搜索callback完成一次，
+并继续通过已有CString构造、集合写入及析构。当前边界为VM指令
+**op17 sub53**，bytecode PC为image+FC708；没有下一缺失callback的
+声明。该算术指令仍需恢复。原有页面字节回滚，64个新增allocator OS
+pages仍保留。actual JNI、suffix整链原生差分、完整signer、fresh/live及
+真实JVM未完成。见 [CString搜索证据](evidence/vm9_request_cstring_search_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_cstring_search_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-cstring-search-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

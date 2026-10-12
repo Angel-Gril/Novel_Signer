@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：CString pattern搜索
+
+76项新增原生对照、24项回滚通过；恢复paired扫描、contiguous检查及
+unsigned/signed边界。非空入口推进到2761步，当前阻塞为VM op17 sub53。
+64个新增OS页保留；actual JNI、suffix整链差分、完整signer、fresh/live
+及真实JVM未完成。见 [CString搜索报告](REQUEST_JNI_STARTUP_WORKERS.md#6112-cstring-pattern-搜索2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：StringObject ASCII casefold搜索
 
 72项新增原生对照、20项回滚通过；恢复declared binary搜索、short circuits

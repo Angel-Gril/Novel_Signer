@@ -1,0 +1,1011 @@
+{
+  "component": "CString-pattern paired StringObject search",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "contiguous_after_gap",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "contiguous_after_gap",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "last_match",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "last_match",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "first_match",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "first_match",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_pattern",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_pattern",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_at_end",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_at_end",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_high_start",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_high_start",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_start",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_start",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "past_end",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "past_end",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_pattern_skips_receiver",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_pattern_skips_receiver",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "zero_length",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "zero_length",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one_byte",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one_byte",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one_byte_after_NUL",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one_byte_after_NUL",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "binary_tail",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "binary_tail",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "case_sensitive",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "case_sensitive",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "no_match",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "no_match",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "overlap",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "overlap",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high_bit_signed_scan",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high_bit_signed_scan",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "large_length_early_match",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "large_length_early_match",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "contiguous_after_gap",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "contiguous_after_gap",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "last_match",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "last_match",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "first_match",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "first_match",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_pattern",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_pattern",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_at_end",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_at_end",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_high_start",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_high_start",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_start",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_start",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "past_end",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "past_end",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_pattern_skips_receiver",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_pattern_skips_receiver",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero_length",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero_length",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one_byte",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one_byte",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one_byte_after_NUL",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one_byte_after_NUL",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "binary_tail",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "binary_tail",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "case_sensitive",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "case_sensitive",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "no_match",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "no_match",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "overlap",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "overlap",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high_bit_signed_scan",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high_bit_signed_scan",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "large_length_early_match",
+      "actual_wrapper": false,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "large_length_early_match",
+      "actual_wrapper": true,
+      "original_returned": true,
+      "native_W0_and_packed_W_result_match": true,
+      "guest_data_region_matches": true,
+      "Python_search_pages_unchanged": true,
+      "no_allocator_or_service_calls": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_receiver",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_pattern",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_payload",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_pattern_tail",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "comparison_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one_byte_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "invalid_start",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "invalid_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "invalid_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "physical_receiver_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "physical_payload_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "physical_pattern_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_receiver",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_pattern",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_payload",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_pattern_tail",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "comparison_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one_byte_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "invalid_start",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "invalid_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "invalid_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "physical_receiver_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "physical_payload_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "physical_pattern_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "native_Python_controls": 76,
+  "rollback_guards": 24,
+  "guest_data_region_size": 40960,
+  "native_input_snapshot_used": false,
+  "whole_physical_stack_bytes_compared": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "pre_change_native_RED_controls": 2,
+  "accepted_native_controls_not_repeated": true,
+  "private_names_or_payloads_published": false,
+  "physical_register_spill_aliases_explicitly_rejected": true,
+  "constructed_nonempty_request_prefix_steps_before": 2590,
+  "constructed_nonempty_request_prefix_steps_after": 2761,
+  "constructed_URL_and_header_ABI": true,
+  "constructed_prefix_next_opcode": 17,
+  "constructed_prefix_next_subopcode": 53,
+  "constructed_prefix_next_bytecode_offset": "0xfc708",
+  "constructed_prefix_native_differential_verified": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "constructed_prefix_retained_new_allocator_OS_pages": 64
+}

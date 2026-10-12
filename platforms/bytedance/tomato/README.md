@@ -325,6 +325,8 @@ Matching-libc same small-bin realloc now passes 18 new original-instruction cont
 
 Declared StringObject ASCII case-insensitive search now passes 72 new native controls and 20 rollback checks. Binary tails, native short circuits and the same-pointer fast path match; bounds count actual byte comparisons. The constructed nonempty prefix advances to 2590 steps; the next CString-pattern search, actual JNI conversion and complete signing remain unfinished. See the [casefold search report](REQUEST_JNI_STARTUP_WORKERS.md#6111-stringobject-ascii-casefold-搜索2026-10-12-asiashanghai).
 
+CString-pattern search now passes 76 new native controls and 24 rollback checks. Native paired scans, contiguous-hit checks, unsigned prechecks and signed offsets match. The constructed nonempty prefix advances to 2761 steps and now stops at VM op17 sub53. Actual JNI conversion and complete signing remain unfinished. See the [CString search report](REQUEST_JNI_STARTUP_WORKERS.md#6112-cstring-pattern-搜索2026-10-12-asiashanghai).
+
 
 
 

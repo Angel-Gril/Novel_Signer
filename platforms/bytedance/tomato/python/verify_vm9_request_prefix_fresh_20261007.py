@@ -473,6 +473,15 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_casefold_searches', []).append(dict(
                         start_u32=start, result_u32=value))
+            elif (wrapper, target) == (0x285D34, 0x248B24):
+                start = int.from_bytes(_read_span(vm.m.pages, argument + 24, 4), 'little')
+                value = objects.find_string_object_cstring(vm.m.pages,
+                    object_address=words[1], pattern_address=words[2], start_u32=start,
+                    entry_stack_address=frame.native_stack_address - 0x190)
+                _write_span(vm.m.pages, argument + 28, value.to_bytes(4, 'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_cstring_searches', []).append(dict(
+                        start_u32=start, result_u32=value))
             elif (wrapper, target) == (0x285C94, 0x2487E8):
                 import vm9_configuration_init as configuration
                 if any(not v or v > (1 << 64) - 24 for v in words[1:3]):
