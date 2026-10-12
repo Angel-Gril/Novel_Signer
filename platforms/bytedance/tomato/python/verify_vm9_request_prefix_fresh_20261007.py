@@ -430,6 +430,13 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_base64_encoded',[]).append(dict(
                         source_object_address=words[1],object_address=words[2],query_nonempty=result))
+            elif (wrapper,target) == (0x285F14,0x2828D4):
+                from vm9_request_transform import apply_request_url_condition_callback
+                result=apply_request_url_condition_callback(vm.m.pages,
+                    argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_URL_conditions',[]).append(result)
             elif (wrapper,target) == (0x285EA8,0x287500):
                 if random_services is None:
                     raise RefillUnsupported('nested request VM requires explicit random/time services')

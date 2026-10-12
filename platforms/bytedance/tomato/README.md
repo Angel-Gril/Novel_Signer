@@ -391,6 +391,8 @@ Actual nested allocated printf passes 36 new native controls and ten rollback ch
 
 Nested caller return passes 32 new native controls and ten rollback checks, plus five constructed entry checks. Explicit continuation returns after40 nested callbacks and advances the owning outer request to3879 steps, next at the URL condition callback. Whole nested/request native equivalence and complete signing remain unfinished. See the [nested return report](REQUEST_JNI_STARTUP_WORKERS.md#6145-request-nested-caller-return2026-10-13-asiashanghai).
 
+Actual URL condition passes 40 new native controls and seven rollback checks. Three lazy constants and ordered searches preserve the disabled URL shortcut and one-byte packed result. The constructed owning request reaches3900 steps, next at +287474. Whole request equivalence and complete signing remain unfinished. See the [URL condition report](REQUEST_JNI_STARTUP_WORKERS.md#6146-request-url-condition2026-10-13-asiashanghai).
+
 
 
 

@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request URL condition
+
+40项actual wrapper对照、7项回滚通过，3lazy flags、disabled URL shortcut、
+ordered CString searches与一字节packed结果恢复。Owning outer3900/+FE2D0，
+下一285F38→287474；nested574已返回。原页字节回滚，64新增OS pages保留。
+全JNI、whole-request、physical ABI、mapping回滚、完整signer及fresh/live
+未完成。见 [URL条件报告](REQUEST_JNI_STARTUP_WORKERS.md#6146-request-url-condition2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request nested caller return
 
 32项actual caller/outer wrapper对照、10项回滚及5项constructed入口检查通过。

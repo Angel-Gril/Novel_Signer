@@ -1,7 +1,53 @@
-"""Request binary transform with explicit guest reference and SDK services."""
+"""Request transforms and URL conditions using accepted guest object owners."""
 from vm9_allocator import _PageTransaction,_read_span,_write_span,RefillUnsupported
 import vm9_objects as objects
 import vm9_reference_scopes as references
+
+
+def evaluate_request_url_condition(pages, *, handler_address, source_object_address,
+        image_base, entry_stack_address, max_bytes=0x100000, max_pattern_bytes=0x10000):
+    """+2828d4: three lazy constants, handler byte and ordered URL searches.
+
+    Decode all constants before reading handler+53. A zero handler byte skips
+    the URL entirely. Otherwise the first nonnegative signed-W search wins.
+    """
+    if type(entry_stack_address) is not int or not 0x40<=entry_stack_address<1<<64 or entry_stack_address&15:
+        raise RefillUnsupported('request URL condition requires aligned caller stack')
+    p=_PageTransaction(pages)
+    constants=((0x3E0B70,0xF2398,0x3E0B60,0xF2564),
+        (0x3E0B80,0xF23A8,0x3E0B74,0xF2558),(0x3E0BA8,0xF23C0,0x3E0B90,0xF2540))
+    for flag,source,destination,mask in constants:
+        if not int.from_bytes(_read_span(p,image_base+flag,4),'little'):
+            objects.decode_masked_bytes(p,source_address=image_base+source,
+                destination_address=image_base+destination,mask_address=image_base+mask,max_bytes=max_pattern_bytes)
+            _write_span(p,image_base+flag,(1).to_bytes(4,'little'))
+    result=True
+    if _read_span(p,handler_address+0x53,1)[0]:
+        result=False
+        for flag,source,destination,mask in constants:
+            found=objects.find_string_object_cstring(p,object_address=source_object_address,
+                pattern_address=image_base+destination,start_u32=0,
+                entry_stack_address=entry_stack_address,max_comparisons=max_bytes)
+            if not found&0x80000000:
+                result=True
+                break
+    p.commit()
+    return result
+
+
+def apply_request_url_condition_callback(pages, *, argument_block_address,
+        image_base, entry_stack_address, max_bytes=0x100000, max_pattern_bytes=0x10000):
+    """+285f14: two packed pointers and only bit zero of W0 at packed+24."""
+    p=_PageTransaction(pages)
+    words=tuple(int.from_bytes(_read_span(p,argument_block_address+i*8,8),'little') for i in range(3))
+    if words[0]-image_base!=0x2828D4:
+        raise RefillUnsupported('unrecovered request URL condition callback')
+    result=evaluate_request_url_condition(p,handler_address=words[1],source_object_address=words[2],
+        image_base=image_base,entry_stack_address=entry_stack_address-0x40,
+        max_bytes=max_bytes,max_pattern_bytes=max_pattern_bytes)
+    _write_span(p,argument_block_address+24,bytes([int(result)]))
+    p.commit()
+    return result
 
 
 def construct_transformed_reference(pages, *, output_reference_address,source_object_address,

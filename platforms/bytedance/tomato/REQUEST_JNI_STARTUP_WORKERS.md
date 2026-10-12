@@ -5628,6 +5628,28 @@ rollback、actual JNI、完整signer、fresh/live与真实JVM仍未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_return_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-return-evidence.json>
 ```
 
+## 6.146 Request URL condition（2026-10-13 Asia/Shanghai）
+
+恢复actual `+285F14 -> +2828D4` URL条件。三个lazy flags是32-bit，全部
+按序decode后读handler+53 byte；disabled直接true且不读URL。enabled按序
+调用既有 `find_string_object_cstring`，任一signed-W nonnegative result为
+true，全未找到为false。wrapper仅写packed+24的一字节，后续padding保留。
+
+两基址、cold/warm flags共 **40项新增原生对照、7项回滚检查**通过：disabled/
+unmapped-disabled URL、first/second/third match、missing/empty、embedded
+NUL后的pattern、handler byte255、packed跨页。guest/ELF/lazy flags/packed
+结果与padding一致，无allocator/service effects。2项native RED，既有decode/
+search原生组未重跑；保留旧transform/default outer AST与所有nested owner。
+
+独立owning outer **3879→3900/+FE2D0**，URL condition=true；nested574已返回。
+下一 `+285F38 -> +287474`。原页差异为空，64新增OS pages保留；mapping
+rollback、whole-request原生差分、actual JNI、full physical ABI/PAC、完整
+signer、fresh/live与真实JVM仍未完成。见 [URL条件证据](evidence/vm9_request_url_condition_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_url_condition_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <URL-condition-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
