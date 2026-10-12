@@ -364,3 +364,47 @@ def prepare_request_287474_vm_caller(pages, *, entry_stack_address, return_addre
     tx.commit()
     return RequestVmCallerFrame(local, 0x102BB0, local + 8, local + 0x10,
         backing, registers, vm_arguments)
+
+
+def prepare_request_28048c_vm_caller(pages, *, entry_stack_address, return_address,
+        thread_pointer, image_base, output_x8, argument_x0, argument_x1,
+        argument_x2, saved_frame_pointer=0, saved_x28=0, saved_x19=0):
+    """+28048c caller: hidden X8, X0, low W1 and X2; top=local+ef0.
+
+    The W1 spill preserves its four padding bytes. The descriptor begins at
+    local+20, after packed X2. Undefined backing slots retain caller memory.
+    """
+    values=(entry_stack_address,return_address,thread_pointer,image_base,
+        output_x8,argument_x0,argument_x1,argument_x2,saved_frame_pointer,saved_x28,saved_x19)
+    if any(type(v) is not int or not 0<=v<1<<64 for v in values):
+        raise RefillUnsupported('request child VM caller inputs must fit uint64')
+    if entry_stack_address<0xF20 or entry_stack_address&15:
+        raise RefillUnsupported('request child VM caller stack must be aligned')
+    if return_address>=1<<56:
+        raise RefillUnsupported('PAC-tagged request child VM return is unsupported')
+    p=_PageTransaction(pages);local=entry_stack_address-0xF20
+    def word(address,value):_write_span(p,address,value.to_bytes(8,'little'))
+    try:
+        _read_span(p,local,0xF20);_read_span(p,image_base+0xA71D0,4)
+        for address,value in ((entry_stack_address-0x20,saved_frame_pointer),
+                (entry_stack_address-0x18,return_address),(entry_stack_address-0x10,saved_x28),
+                (entry_stack_address-8,saved_x19)):
+            word(address,value)
+        _write_span(p,entry_stack_address-0x28,_read_span(p,thread_pointer+0x28,8))
+        word(local,output_x8);word(local+8,argument_x0)
+        _write_span(p,local+0x10,(argument_x1&0xFFFFFFFF).to_bytes(4,'little'))
+        for address,value in ((local+0x18,argument_x2),(local+0x20,image_base+0x281414),
+                (local+0x28,local+0xEF0),(local+0x30,return_address)):
+            word(address,value)
+        top=local+0xEF0;backing=top-0x118
+        word(top-0x120,image_base+0xA71D0)
+        for slot,value in ((0,0),(4,local),(5,image_base+0x35D6B0),
+                (6,image_base+0x35D970),(7,image_base+0x281414),
+                (29,(top-0x130)&~15),(31,return_address)):
+            word(backing+slot*8,value)
+        registers=tuple(int.from_bytes(_read_span(p,backing+i*8,8),'little') for i in range(32))
+    except ValueError as exc:
+        raise RefillUnsupported('request child VM caller memory is unmapped') from exc
+    arguments=(image_base+0xA71D0,local,image_base+0x35D6B0,image_base+0x35D970,local+0x20)
+    p.commit()
+    return RequestVmCallerFrame(local,0xA71D0,local,local+0x20,backing,registers,arguments)

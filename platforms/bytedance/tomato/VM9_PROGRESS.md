@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request child VM caller and prefix
+
+26项新增原生对照、10项回滚通过。actual2885AC hidden-X8 wrapper、28048C
+caller/prelude与首个decode恢复，全部32 backing/virtual words及声明范围匹配。
+Owning child290/+A7654，下一281434→248274 filled；outer3900、second8184。
+原页回滚，64新增OS pages保留。owning child native差分、完整return/request、
+full physical/JNI/mapping/signer及fresh/live/JVM仍未完成。
+见 [child VM报告](REQUEST_JNI_STARTUP_WORKERS.md#6149-request-child-vm-caller-and-prefix2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request second VM consumers
 
 153项新增原生对照（152 wrappers+1 owning bounded second VM）、12项回滚与

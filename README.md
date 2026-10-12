@@ -300,6 +300,7 @@ nested caller return通过 **32项新增对照、10项回滚**，owning外层推
 URL条件通过 **40项新增对照、7项回滚**，外层推进至3900步。见 [URL条件报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6146-request-url-condition2026-10-13-asiashanghai)。
 第二VM caller/prefix通过 **20项新增对照、8项回滚**，owning内层推进至617步。见 [第二VM报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6147-request-second-vm-caller-and-prefix2026-10-13-asiashanghai)。
 第二VM consumers通过 **153项新增原生对照、12项回滚**，owning第二VM推进至8184步。见 [second consumer报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6148-request-second-vm-consumers2026-10-13-asiashanghai)。
+child VM caller/prefix通过 **26项新增原生对照、10项回滚**，owning child推进至290步。见 [child VM报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6149-request-child-vm-caller-and-prefix2026-10-13-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

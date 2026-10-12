@@ -5707,6 +5707,33 @@ JNI或补假返回。见 [second VM consumer证据](evidence/vm9_request_287474_
 python -B platforms/bytedance/tomato/python/verify_vm9_request_287474_consumers_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <second-consumer-evidence.json>
 ```
 
+## 6.149 Request child VM caller and prefix（2026-10-13 Asia/Shanghai）
+
+恢复实际 `+2885AC -> +28048C` hidden-X8包装与child caller：wrapper保存LR、
+按顺序读取packed X0/X8/W1/X2，child SP=wrapperSP-16；caller local=entrySP-F20。
+packed=local，descriptor=local+20，top=local+EF0；bytecode `+A71D0`，tables
+`+35D6B0/+35D970`，callback sentinel `+281414`。W1仅写低32位，保留padding；
+TLS在saved FP/LR/X28/X19 spills之后读取，未定义backing words保留输入。
+
+**26项新增原生对照、10项回滚检查**通过：20 caller frames（14 direct、6
+actual wrappers），6 first-decode prefixes。两基址、wide W/saved words、NULL
+hidden output、换栈、TLS/spill别名及patterned stack覆盖。全部caller frame/
+32 backing words/五个VM参数，以及prefix全部32虚拟寄存器、callback ledger/
+packed/decoded范围一致。2项native RED通过；wrapper错误target/缺页/带tag
+返回地址，caller输入/TLS/frame/bytecode缺页等拒绝不发布页。
+
+第二VM接入child bounded prefix；旧second VM default/decoder/consumer与所有
+旧caller AST保留。新result子类携带child状态；parent与child页均未发布。
+owning outer3900、second8184、child **290/+A7654**，下一 **+281434 -> +248274**
+filled StringObject。原页差异为空，64新增OS pages保留。owning child完整原生
+前缀、child return、whole-request/full physical ABI/PAC、mapping rollback、
+actual JNI、完整signer及fresh/live/真实JVM仍未完成。
+见 [child VM证据](evidence/vm9_request_28048c_vm_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_28048c_vm_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <child-VM-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

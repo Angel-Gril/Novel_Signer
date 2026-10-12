@@ -16,6 +16,11 @@ class RequestVm287474Prefix:
     steps: int
 
 
+@dataclass(frozen=True)
+class RequestVm287474ChildPrefix(RequestVm287474Prefix):
+    child_prefix: object
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -38,6 +43,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
             return self.pages[address>>12]
     class Boundary(Exception):pass
     callbacks,decoded=[],[];previous=vm_module.B
+    children=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -56,10 +62,21 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 apply_request_287474_consumer(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
                     allocate=consumer_services['allocate'],free=consumer_services['free'])
+            elif consumer_services is not None and (wrapper,target)==(0x2885AC,0x28048C):
+                from vm9_request_28048c_vm import execute_request_28048c_vm_prefix
+                child=execute_request_28048c_vm_prefix(staged,vm_module=vm_module,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],image_base=image,
+                    saved_frame_pointer=frame.native_stack_address-0x60,
+                    saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8)
+                children.append(child)
+                raise Boundary()
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if children:
+                return RequestVm287474ChildPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,children[-1])
             return RequestVm287474Prefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
         except vm_module.VMExit as exc:
             raise RefillUnsupported('second request VM return is not recovered') from exc

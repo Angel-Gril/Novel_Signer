@@ -1,0 +1,357 @@
+{
+  "schema": "vm9-request-28048c-vm-fresh-v1",
+  "evidence_date": "2026-10-13",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "frame_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "normal",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "wide_W",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_hidden_output",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "relocated_stack",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "TLS_spill_alias",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "wide_saved_words",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "patterned_stack",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "normal",
+      "actual_wrapper_executed": true,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "wide_W",
+      "actual_wrapper_executed": true,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "patterned_stack",
+      "actual_wrapper_executed": true,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "normal",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wide_W",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_hidden_output",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "relocated_stack",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "TLS_spill_alias",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wide_saved_words",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "patterned_stack",
+      "actual_wrapper_executed": false,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "normal",
+      "actual_wrapper_executed": true,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wide_W",
+      "actual_wrapper_executed": true,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "patterned_stack",
+      "actual_wrapper_executed": true,
+      "original_caller_and_generic_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_equal": true,
+      "hidden_X8_and_low_W_input_and_padding_equal": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "prefix_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "normal",
+      "steps": 290,
+      "bytecode_offset": "0xa7654",
+      "callback_ledger_and_packed_and_decoded_ranges_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_child_vm_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "wide_W",
+      "steps": 290,
+      "bytecode_offset": "0xa7654",
+      "callback_ledger_and_packed_and_decoded_ranges_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_child_vm_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "patterned_stack",
+      "steps": 290,
+      "bytecode_offset": "0xa7654",
+      "callback_ledger_and_packed_and_decoded_ranges_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_child_vm_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "normal",
+      "steps": 290,
+      "bytecode_offset": "0xa7654",
+      "callback_ledger_and_packed_and_decoded_ranges_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_child_vm_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wide_W",
+      "steps": 290,
+      "bytecode_offset": "0xa7654",
+      "callback_ledger_and_packed_and_decoded_ranges_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_child_vm_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "patterned_stack",
+      "steps": 290,
+      "bytecode_offset": "0xa7654",
+      "callback_ledger_and_packed_and_decoded_ranges_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_child_vm_verified": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "underflow_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "tagged_return",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "wide_argument",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_TLS",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_frame",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_bytecode",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "wrong_wrapper_target",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_wrapper_packed",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "tagged_wrapper_return",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "complete_child_vm_verified": false,
+  "native_Python_controls": 26,
+  "rollback_guards": 10,
+  "pre_change_native_RED_controls": 2,
+  "accepted_native_controls_not_repeated": true,
+  "constructed_outer_steps": 3900,
+  "constructed_second_VM_steps": 8184,
+  "constructed_child_VM_steps": 290,
+  "constructed_child_VM_bytecode_offset": "0xa7654",
+  "constructed_next_wrapper": "0x281434",
+  "constructed_next_target": "0x248274",
+  "constructed_prefix_native_differential_verified": false,
+  "owning_child_VM_native_differential_verified": false,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "limits": [
+    "Fresh direct caller and actual +2885ac wrapper controls verify hidden X8/X0/low W1/X2, caller spills, packed padding and all32 prelude backing words.",
+    "Six cold wrapper prefixes compare the first decode, complete callback ledger, all32 virtual registers and packed/decoded ranges. Native output is not input.",
+    "The independently constructed owning flow reaches the same290-step child boundary but has not been compared to original native as a complete owning child prefix. Whole child/request, JNI, physical ABI/PAC, provider mapping rollback and signing remain unfinished."
+  ]
+}
