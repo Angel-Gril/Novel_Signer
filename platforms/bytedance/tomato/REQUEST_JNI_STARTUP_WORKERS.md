@@ -4225,6 +4225,36 @@ epilogue/X0 ABI、真实Android JVM、完整signer、fresh签名和线上矩阵�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_scoped_tree_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <request-scoped-tree-evidence.json>
 ```
 
+## 6.99 VM load 与串行 compare/store（2026-10-12 Asia/Shanghai）
+
+修正 `vm_full` 的opcode36与opcode57：`+16F63C` 读取完整64位word到目标
+寄存器及hidden slot34；`+1713C0` 比较目标word与slot34，相等时写入source
+并将source/status置1、slot34清零；不相等时source/status置0，slot34改为
+当前目标值。native比较器不保存原始load地址，因此不同目标word相等时
+也可成功。guest backing被提供时，其slot34为比较值owner；抽象runner
+要求先执行opcode36。有效地址需八字节对齐，未对齐时明确拒绝。
+
+原MOVZ/no-op解释基于零目标与无寄存器delta的旧trace，遗漏了内存效果。
+两个独立native RED证明非零load及实际store与旧模型不同。两基址
+**114项原生/Python对照、1项实际请求入口、21项拒绝/回滚** 通过。
+108项主对照覆盖zero/nonzero/full-width、目标值干预后的失败、signed
+displacement边界、高编号register、不同目标、重复store与寄存器别名；
+抽象及guest backing均验证。6项backing-only store验证slot34输入；
+4项native alignment fault、2项缺少抽象比较值拒绝及15项入口回滚通过。
+对照包括32个寄存器、目标bytes、slot34及干预；这不提供host并发原子性。
+主对照之后只添加alignment拒绝和case标签，新增分支单独验证；已接受
+native分组未重复。其他旧VM指令保持原AST。
+
+请求仍在2475步、105回调返回。私有原生整链探针中的 `+3E0D48` 差异
+已消失：main ELF页面、输出引用、32 VM寄存器、回调路径和88次分配顺序
+一致。有效回调参数、完整heap/服务与物理caller ABI尚未全部对照，故不
+将该探针标为整链等价或完整signer；真实JVM、fresh签名与线上矩阵继续。
+见 [VM load/store证据](evidence/vm9_llsc_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_llsc_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <vm-load-store-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

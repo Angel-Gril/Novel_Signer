@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：VM64 load与compare-store恢复
+
+114项原生/Python对照、1项入口、21项拒绝/回滚通过。opcode36读取word，
+opcode57使用hidden slot34串行compare/store；请求2475步/105回调返回。
+私有整链main ELF字节差异消失；有效callback参数、heap/服务和physical
+caller ABI需继续对照。完整signer、fresh/live与真实JVM未完成。
+见 [VM load/store报告](REQUEST_JNI_STARTUP_WORKERS.md#699-vm-load-与串行-comparestore2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：请求scoped tree构造顺序恢复
 
 24项原生/Python对照、1项入口、31项回滚通过。实际 `+25C324/+163DDC`

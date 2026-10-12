@@ -147,6 +147,9 @@ class VM:
         # after the 32 traced slots. Keep an abstract copy of those slots.
         self._vm_tmp32 = 0
         self._vm_tmp33 = 0
+        # Native slot 34 holds the last opcode 36 load for opcode 57's
+        # serialized comparison. A supplied backing array owns its value.
+        self._vm_ll_word = None
     def _log(self, s):
         if self.log: self.log(s)
     def fx(self, pc, dw):
@@ -340,15 +343,41 @@ class VM:
                 bse = ((dw>>22)&0xF)|((dw>>27)&0x10); dst = ((dw>>12)&0xF)|((dw>>17)&0x10)
                 imm = sx16(imm_40(dw))
                 self.R[dst] = m.rb((self.R[bse] + imm) & M64)
-            elif op == 36:      # MOVZ-like zeroing form observed in VM9 trace
-                # The only captured encodings are 0x4001a4 (R3=0) and
-                # 0x4003a4 (R7=0); bits 7..11 select the destination.
-                dst = (dw >> 7) & 0x1F
-                self.R[dst] = 0
-            elif op == 57:      # opaque host-side handler; no virtual-register delta in trace
-                # VM9 captures show both observed forms (0x20400039 and
-                # 0x40400039) leaving all 32 virtual registers unchanged.
-                pass
+            elif op == 36:      # LDAR64 and saved comparison word (+0x16f63c)
+                bse = ((dw >> 27) & 16) | ((dw >> 22) & 15)
+                dst = ((dw >> 17) & 16) | ((dw >> 7) & 15)
+                imm = ((dw >> 16) & 31) | (((dw >> 26) & 31) << 5) | (((dw >> 11) & 31) << 10) | (((dw >> 6) & 1) << 15)
+                address = (self.R[bse] + sx16(imm)) & M64
+                if address & 7:
+                    raise ValueError('op36 requires an aligned 64-bit address')
+                value = m.u64(address)
+                self.R[dst] = value
+                self._vm_ll_word = value
+                if self.register_backing_base is not None:
+                    m.w64((self.register_backing_base + 0x110) & M64, value)
+            elif op == 57:      # serialized compare/store64 (+0x1713c0)
+                bse = ((dw >> 27) & 16) | ((dw >> 22) & 15)
+                src = ((dw >> 17) & 16) | ((dw >> 27) & 15)
+                imm = ((dw >> 11) & 31) | (((dw >> 6) & 31) << 5) | (((dw >> 16) & 31) << 10) | (((dw >> 26) & 1) << 15)
+                address = (self.R[bse] + sx16(imm)) & M64
+                if address & 7:
+                    raise ValueError('op57 requires an aligned 64-bit address')
+                if self.register_backing_base is not None:
+                    expected = m.u64((self.register_backing_base + 0x110) & M64)
+                elif self._vm_ll_word is not None:
+                    expected = self._vm_ll_word
+                else:
+                    raise ValueError('op57 requires a preceding op36 or guest comparison backing')
+                observed = m.u64(address)
+                if observed == expected:
+                    m.w64(address, self.R[src])
+                    self.R[src] = 1
+                    self._vm_ll_word = 0
+                else:
+                    self.R[src] = 0
+                    self._vm_ll_word = observed
+                if self.register_backing_base is not None:
+                    m.w64((self.register_backing_base + 0x110) & M64, self._vm_ll_word)
             elif op == 47:      # LWL: merge left part of an unaligned 32-bit load
                 bse = ((dw >> 12) & 15) | ((dw >> 27) & 16)
                 dst = ((dw >> 22) & 15) | ((dw >> 7) & 16)

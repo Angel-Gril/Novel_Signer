@@ -428,6 +428,8 @@ Request object cleanup, final free and deleting tree destruction pass 78 native/
 
 Actual scoped request tree construction passes 24 native/Python controls, one request VM entry and 31 rollback guards. Descriptor visibility, logical scopes and allocation order match; the request still returns in 2475 steps after 105 callbacks. Complete signing remains unfinished. See the [scoped tree report](../REQUEST_JNI_STARTUP_WORKERS.md#698-请求-scoped-tree-reference-构造2026-10-12-asiashanghai).
 
+VM opcode 36 loads the full word and opcode 57 performs a serialized compare/store using hidden slot 34. 114 native/Python controls, one request entry and 21 rejection/rollback checks pass. The remaining main ELF byte difference in the private request probe is resolved; full signing remains unfinished. See the [VM load/store report](../REQUEST_JNI_STARTUP_WORKERS.md#699-vm-load-与串行-comparestore2026-10-12-asiashanghai).
+
 
 
 
