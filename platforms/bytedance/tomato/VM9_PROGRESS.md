@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：request hexadecimal reference组件
+
+20项新增原生对照、8项回滚通过；192494/19364C的guest alphabet、
+逐半字节live读取及reference scope一致。2869F0外层组装/publication/
+cleanup仍待恢复；非空入口3307步。actual JNI、整链差分、完整signer、
+fresh/live及真实JVM仍未完成。见 [hex报告](REQUEST_JNI_STARTUP_WORKERS.md#6122-request-hexadecimal-reference2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：request binary transform组件
 
 24项新增原生对照、10项回滚通过；286084的SDK-zero分支、pointer/seed

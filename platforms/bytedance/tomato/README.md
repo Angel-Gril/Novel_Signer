@@ -343,6 +343,8 @@ Actual request TLS uint32 getter and setter now pass 34 new native wrapper contr
 
 The actual request binary-transform component now passes 24 new native controls and ten rollback checks with an initialized SDK input. Allocation-dependent key bytes, S-box writes and forward mixing match. The outer transform caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [request transform report](REQUEST_JNI_STARTUP_WORKERS.md#6121-request-binary-transform2026-10-12-asiashanghai).
 
+The actual request hexadecimal-reference helper now passes 20 new native controls and eight rollback checks. Guest alphabet, live nibble reads and scoped ownership match. The outer transform caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [hex reference report](REQUEST_JNI_STARTUP_WORKERS.md#6122-request-hexadecimal-reference2026-10-12-asiashanghai).
+
 
 
 

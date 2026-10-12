@@ -4958,6 +4958,31 @@ actual JNI、整链差分、完整signer和fresh/live仍未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_transform_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <transform-evidence.json>
 ```
 
+## 6.122 Request hexadecimal reference（2026-10-12 Asia/Shanghai）
+
+在既有reference scope owner新增 `construct_hexadecimal_string_reference`
+恢复 `+192494/+19364C`。在allocation之前保留source pointer与signed
+length，allocate24、empty StringObject、scoped reference/count、reserve
+2*length+1，再逐字节读取高/低半字节对应guest alphabet。每半字节重新
+读取源byte、image+37A068 alphabet pointer与output reference；复用
+原有reserve、append与diagnostic owner。最后仅在length过长时截短。
+负length与显式bounds拒绝；未知页/provider回滚page bytes。
+
+两基址 **20项新增原生/Python对照、8项回滚检查**通过，2项native
+RED。覆盖0/1/2/7/8/20/31/64/128字节与custom guest alphabet。完整
+guest、ELF、reference constructor返回时scope24，以及allocator/free/
+diagnostic lock顺序匹配。alphabet由caller输入，不假定固定hex编码。
+原生主体和matching-libc recursive mutex实际执行；完整physical stack
+未比较。旧reference/digest helper AST保持一致，旧原生接受组未重跑。
+
+这是 `+2869F0` 的另一个组件；外层参数组装、publication与cleanup尚待
+恢复。非空入口仍停3307步。actual JNI、suffix整链原生差分、完整signer、
+fresh/live与真实JVM仍未完成。见 [hex reference证据](evidence/vm9_request_hex_reference_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_hex_reference_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <hex-reference-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

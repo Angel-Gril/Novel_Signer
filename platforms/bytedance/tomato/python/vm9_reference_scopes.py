@@ -65,6 +65,50 @@ def copy_scoped_string_reference(pages, *, destination_address, source_address,
     p.commit()
 
 
+def construct_hexadecimal_string_reference(pages, *, output_reference_address,source_object_address,
+        entry_stack_address,image_base,thread_pointer,allocate,reallocate,free,
+        thread_id=None,diagnostic_observer=None,max_bytes=0x100000):
+    """+0x192494/+0x19364c hexadecimal bytes with an actual scoped reference.
+
+    Retain the source pointer and signed length before allocation. Reload the
+    source byte, alphabet pointer and output reference for each nibble, as
+    the original does. Reserve/append failure effects follow existing owners.
+    Negative lengths and unsupported pages refuse with page rollback.
+    """
+    stack=_scope(entry_stack_address,0x40)
+    if type(max_bytes) is not int or not 0<=max_bytes<=0x100000:
+        raise ValueError('invalid hexadecimal reference bound')
+    if not all(callable(s) for s in (allocate,reallocate,free)):
+        raise RefillUnsupported('hexadecimal reference requires owning allocation services')
+    p=_PageTransaction(pages)
+    pointer=int.from_bytes(_read_span(p,source_object_address+16,8),'little')
+    length=objects._s32(int.from_bytes(_read_span(p,source_object_address+12,4),'little'))
+    if not 0<=length<=max_bytes or length*2+2>0x100000:
+        raise RefillUnsupported('hexadecimal source length is unsupported')
+    string=objects._allocate(p,allocate,24)
+    objects.construct_string_object(p,object_address=string,source_address=0,allocate=allocate,
+        vtable_address=image_base+0x34F5F8,empty_descriptor_address=image_base+0x6E168)
+    construct_scoped_string_reference(p,reference_address=output_reference_address,string_address=string,
+        entry_stack_address=stack,image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,
+        thread_id=thread_id,diagnostic_observer=diagnostic_observer)
+    def output():return int.from_bytes(_read_span(p,output_reference_address,8),'little')
+    objects._reserve_string_fields(p,output()+8,length*2+1,allocate,reallocate,free,0x100000)
+    for offset in range(length):
+        for high in (True,False):
+            byte=_read_span(p,pointer+offset,1)[0]
+            alphabet=int.from_bytes(_read_span(p,image_base+0x37A068,8),'little')
+            nibble=byte>>4 if high else byte&15
+            char=_read_span(p,alphabet+nibble,1)[0]
+            objects._append_string_byte(p,output()+8,char,allocate,reallocate,free,0x100000)
+    string=output();current=objects._s32(int.from_bytes(_read_span(p,string+12,4),'little'))
+    if current>length*2:
+        payload=int.from_bytes(_read_span(p,string+16,8),'little')
+        _write_span(p,string+12,(length*2).to_bytes(4,'little'))
+        _write_span(p,payload+length*2,bytes(1))
+    p.commit()
+    return string
+
+
 def release_scoped_string_reference(pages, *, reference_address,
         entry_stack_address, image_base, thread_pointer, allocate, free,
         thread_id=None, diagnostic_observer=None):
