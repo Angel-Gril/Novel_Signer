@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：lazy state service
+
+8项新增原生对照、7项回滚通过；warm singleton136前置条件下cold42
+次分配/22次释放/2次注册/3次wake及ELF/TLS一致。全冷singleton136
+额外60次分配的路径明确拒绝。非空request仍2850步，下一接入26BDFC。
+actual JNI、suffix整链差分、完整signer、fresh/live及真实JVM未完成。
+见 [state service报告](REQUEST_JNI_STARTUP_WORKERS.md#6115-lazy-state-service2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：state numeric member读取
 
 60项新增原生对照、18项回滚通过；linked-node ASCII搜索、double到W0

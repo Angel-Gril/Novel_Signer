@@ -331,6 +331,8 @@ VM signed 64-bit multiplication and hidden low-product transfer now pass 238 new
 
 State numeric member lookup now passes 60 new native/Python controls and 18 rollback checks. Original nested shared readers and matching-libc mutex calls match, including ASCII keys and ARM64 floating-point conversion. This dependency is ready; the request state callback and its lazy service remain unfinished at the 2850-step boundary. See the [state numeric report](REQUEST_JNI_STARTUP_WORKERS.md#6114-state-numeric-member-读取2026-10-12-asiashanghai).
 
+Lazy state service composition now passes eight fresh native/Python controls and seven rollback checks with an explicitly initialized singleton136. Cold allocation/free/registration/wake order, all ELF pages and TLS bytes match. The request state callback remains the next boundary at 2850 steps. See the [state service report](REQUEST_JNI_STARTUP_WORKERS.md#6115-lazy-state-service2026-10-12-asiashanghai).
+
 
 
 

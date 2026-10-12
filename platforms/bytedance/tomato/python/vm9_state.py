@@ -99,6 +99,71 @@ def read_state_integer_member(pages, *, service_address, key_object_address,
     return result & 0xFFFFFFFF
 
 
+def get_state_service_reference(pages, *, entry_stack_address, thread_pointer,
+        image_base, vm_module, allocate, reallocate, free, get_tls,
+        initialize_registry, broadcast, read_property, syscall, errno_address,
+        mkdir, register_destructor, thread_id=None, prepare_format=None,
+        logger_observer=None):
+    """+0x26a3ac serialized lazy state service, including its cold VM body.
+
+    Loaded ELF owns the lazy key. The caller supplies environment services;
+    native output and captured preludes are never used. Cold state creation
+    requires singleton136 already initialized by the outer constructor.
+    Preserve allocation,
+    temporary cleanup and guard publication order. External service effects
+    remain outside page rollback; contention and concurrent guards reject.
+    """
+    if not isinstance(entry_stack_address, int) or entry_stack_address & 15:
+        raise RefillUnsupported('state service requires an aligned entry stack')
+    transaction = _PageTransaction(pages)
+    def address(offset):return objects._image_address(image_base, offset)
+    def word(pointer,value):_write_span(transaction,pointer,objects._word(value))
+    _read_span(transaction,entry_stack_address-0x60,0x60)
+    _read_span(transaction,thread_pointer+0x28,8)
+    if int.from_bytes(_read_span(transaction,address(0x3DED50),4),'little') == 0:
+        objects.decode_masked_bytes(transaction,source_address=address(0xA4674),
+            destination_address=address(0x3DED4C),mask_address=address(0xA4688))
+        _write_span(transaction,address(0x3DED50),(1).to_bytes(4,'little'))
+    guard_address,slot_address=address(0x3DED68),address(0x3DED60)
+    guard=_read_span(transaction,guard_address,8)
+    slot=int.from_bytes(_read_span(transaction,slot_address,8),'little')
+    if guard[0] or guard[1] == 1:
+        transaction.commit()
+        return objects.LazyReference(guard_address,slot_address,slot,0,0,0)
+    if guard[1] & 2:
+        raise RefillUnsupported('state service guard is recursive or contended')
+    if not isinstance(thread_id,int) or not 0 <= thread_id <= 0xFFFFFFFF:
+        raise RefillUnsupported('cold state service requires an explicit uint32 thread id')
+    sdk_guard=_read_span(transaction,address(0x3D1680),2)
+    sdk_slot=int.from_bytes(_read_span(transaction,address(0x3D1678),8),'little')
+    if not (sdk_guard[0] or sdk_guard[1] == 1) or not sdk_slot:
+        raise RefillUnsupported('cold state service requires initialized singleton136')
+    _write_span(transaction,guard_address+4,thread_id.to_bytes(4,'little'))
+    _write_span(transaction,guard_address+1,b'\x02')
+    wrapper=objects._allocate(transaction,allocate,16)
+    payload=objects._allocate(transaction,allocate,48)
+    temporary=entry_stack_address-0x60
+    objects.construct_string_object(transaction,object_address=temporary,
+        source_address=address(0x3DED4C),allocate=allocate,
+        vtable_address=address(0x34F5F8),empty_descriptor_address=address(0x6E168))
+    construct_initialized_state_owner(transaction,object_address=payload,
+        source_object_address=temporary,flag=1,entry_stack_address=temporary,
+        return_address=address(0x26A498),thread_pointer=thread_pointer,image_base=image_base,
+        vm_module=vm_module,allocate=allocate,reallocate=reallocate,free=free,
+        get_tls=get_tls,initialize_registry=initialize_registry,broadcast=broadcast,
+        read_property=read_property,syscall=syscall,errno_address=errno_address,mkdir=mkdir,
+        register_destructor=register_destructor,thread_id=thread_id,
+        prepare_format=prepare_format,logger_observer=logger_observer)
+    counter=objects.construct_reference_wrapper(transaction,object_address=wrapper,
+        referenced_address=payload,allocate=allocate)
+    objects.destroy_string_object(transaction,object_address=temporary,image_base=image_base,free=free)
+    word(slot_address,wrapper)
+    _write_span(transaction,guard_address,b'\x01')
+    _write_span(transaction,guard_address+1,b'\x01')
+    transaction.commit()
+    return objects.LazyReference(guard_address,slot_address,wrapper,payload,48,counter)
+
+
 @dataclass
 class StateResult:
     steps: int

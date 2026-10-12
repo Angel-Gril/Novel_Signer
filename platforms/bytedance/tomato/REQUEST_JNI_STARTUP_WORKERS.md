@@ -4760,6 +4760,41 @@ actual callback。actual JNI、suffix整链差分、physical stack、真实JVM�
 python -B platforms/bytedance/tomato/python/verify_vm9_state_numeric_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <state-numeric-evidence.json>
 ```
 
+## 6.115 Lazy state service（2026-10-12 Asia/Shanghai）
+
+新增 `vm9_state.get_state_service_reference` 恢复 `+26A3AC`：首先按flag
+解码key，再检查guard/slot；warm直接返回wrapper，包括NULL slot，cold
+按16-byte wrapper、48-byte state owner、temporary CString、完整state
+VM/caller、4-byte counter顺序执行。清理temporary后发布wrapper并释放
+guard。key与guard由fresh ELF提供，无decoded names或native output输入。
+
+两基址 **8项新增原生/Python对照、7项回滚检查**通过；2项cold native
+RED证明旧owner缺失。cold与decoded-key路径各42次分配、22次释放、
+2次注册、3次no-waiter唤醒；warm与warm-NULL无分配。返回、完整guest
+data、所有ELF页、TLS0xB00 bytes及allocation/free/register/wake顺序一致。
+原guard、state VM、matching-libc once/key/formatter与mutex实际执行；
+properties absent、file/socket不可用、mkdir EEXIST与futex结果为明确
+虚拟环境服务。原诊断scope效果不在该对照范围，完整physical stack未
+比较。旧state owner/VM AST保持一致，旧接受分组未重跑。
+
+独立全冷探针发现102次分配，Python最初仅42次；首分叉在原
+`+25DDEC` 文件检查调用的singleton136冷初始化，多出60次分配。
+当前request外层已构造singleton136，故恢复helper明确要求这一前置
+条件，并用两侧独立构造的warm reference验证。未初始化singleton136、
+guard wait、缺少tid、非法stack及NULL operator-new明确拒绝，页字节
+回滚；provider外部effects仍不回滚。首次原生fetch失败来自Python libc
+pages覆盖原生loader relocations，验证器已由各自loader提供libc输入。
+
+request的 `+285D74 -> +26BDFC` 构造callback尚未接入，非空入口仍2850
+步；下一步组合state service、numeric lookup、scoped writer及reference
+清理，执行actual callback对照。actual JNI、suffix整链差分、完整signer、
+fresh/live与真实JVM继续未完成。
+见 [state service证据](evidence/vm9_state_service_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_state_service_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <state-service-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

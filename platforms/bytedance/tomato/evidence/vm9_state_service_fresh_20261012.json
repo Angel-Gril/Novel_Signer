@@ -1,0 +1,189 @@
+{
+  "component": "Lazy state service with warm singleton136",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "cold",
+      "original_service_returned": true,
+      "warm_singleton136_is_explicit_input": true,
+      "cold_state_service": true,
+      "return_guest_data_ELF_and_TLS_pages_match": true,
+      "allocation_free_registration_wake_order_match": true,
+      "allocations": 42,
+      "frees": 22,
+      "registrations": 2,
+      "wakes": 3,
+      "native_clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "decoded_key",
+      "original_service_returned": true,
+      "warm_singleton136_is_explicit_input": true,
+      "cold_state_service": true,
+      "return_guest_data_ELF_and_TLS_pages_match": true,
+      "allocation_free_registration_wake_order_match": true,
+      "allocations": 42,
+      "frees": 22,
+      "registrations": 2,
+      "wakes": 3,
+      "native_clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm",
+      "original_service_returned": true,
+      "warm_singleton136_is_explicit_input": true,
+      "cold_state_service": false,
+      "return_guest_data_ELF_and_TLS_pages_match": true,
+      "allocation_free_registration_wake_order_match": true,
+      "allocations": 0,
+      "frees": 0,
+      "registrations": 0,
+      "wakes": 0,
+      "native_clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_NULL_slot",
+      "original_service_returned": true,
+      "warm_singleton136_is_explicit_input": true,
+      "cold_state_service": false,
+      "return_guest_data_ELF_and_TLS_pages_match": true,
+      "allocation_free_registration_wake_order_match": true,
+      "allocations": 0,
+      "frees": 0,
+      "registrations": 0,
+      "wakes": 0,
+      "native_clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold",
+      "original_service_returned": true,
+      "warm_singleton136_is_explicit_input": true,
+      "cold_state_service": true,
+      "return_guest_data_ELF_and_TLS_pages_match": true,
+      "allocation_free_registration_wake_order_match": true,
+      "allocations": 42,
+      "frees": 22,
+      "registrations": 2,
+      "wakes": 3,
+      "native_clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "decoded_key",
+      "original_service_returned": true,
+      "warm_singleton136_is_explicit_input": true,
+      "cold_state_service": true,
+      "return_guest_data_ELF_and_TLS_pages_match": true,
+      "allocation_free_registration_wake_order_match": true,
+      "allocations": 42,
+      "frees": 22,
+      "registrations": 2,
+      "wakes": 3,
+      "native_clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm",
+      "original_service_returned": true,
+      "warm_singleton136_is_explicit_input": true,
+      "cold_state_service": false,
+      "return_guest_data_ELF_and_TLS_pages_match": true,
+      "allocation_free_registration_wake_order_match": true,
+      "allocations": 0,
+      "frees": 0,
+      "registrations": 0,
+      "wakes": 0,
+      "native_clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_NULL_slot",
+      "original_service_returned": true,
+      "warm_singleton136_is_explicit_input": true,
+      "cold_state_service": false,
+      "return_guest_data_ELF_and_TLS_pages_match": true,
+      "allocation_free_registration_wake_order_match": true,
+      "allocations": 0,
+      "frees": 0,
+      "registrations": 0,
+      "wakes": 0,
+      "native_clock_calls": 0,
+      "native_snapshot_input": false
+    }
+  ],
+  "native_Python_controls": 8,
+  "negative_cases": [
+    {
+      "case": "cold_sdk",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "guard_wait",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_tid",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "wrapper_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "payload_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "rollback_guards": 7,
+  "native_input_snapshot_used": false,
+  "uninitialized_singleton136_supported": false,
+  "actual_request_callback_restored": false,
+  "whole_physical_stack_bytes_compared": false,
+  "whole_request_native_differential_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "pre_change_native_RED_controls": 2,
+  "accepted_native_controls_not_repeated": true,
+  "private_names_or_payloads_published": false,
+  "current_constructed_nonempty_prefix_steps": 2850,
+  "live_Android_JVM_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "isolated_uninitialized_singleton136_native_allocations": 102,
+  "explicit_initialized_singleton136_native_allocations": 42,
+  "diagnostic_scope_effects_compared": false,
+  "allocator_provider_mapping_rollback_verified": false
+}
