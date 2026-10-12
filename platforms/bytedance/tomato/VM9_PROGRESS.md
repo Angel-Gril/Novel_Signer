@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request nested allocated printf
+
+36项actual wrapper对照、10项回滚通过，packed W0/padding、live两次format、
+defined child canary恢复；formatter owner不变。owning inner574/+118F44、
+outer3767，cleanup后到达明确拒绝的nested return。原页字节回滚，64新增OS
+pages保留。全JNI、whole-request、physical ABI、mapping回滚、完整signer与
+fresh/live仍未完成。见 [nested printf报告](REQUEST_JNI_STARTUP_WORKERS.md#6144-request-nested-allocated-printf2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request nested append/Base64 reference
 
 34项actual consumer对照、8项回滚通过，append与Base64 reference复用既有

@@ -5577,6 +5577,30 @@ actual JNI、whole-request、physical ABI、完整signer、fresh/live及真实JV
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_tail_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <token-tail-evidence.json>
 ```
 
+## 6.144 Request nested allocated printf（2026-10-13 Asia/Shanghai）
+
+恢复actual `+288C28 -> +278314` wrapper：packed+8 output-pointer address、
++16 format、+24 argument，调用既有 `allocate_printf_cstring`，仅将W0的
+四字节写回packed+32，保留后续padding。恢复childSP=wrapperSP-16的
+defined canary。原生执行wrapper与guest formatter，两次format读取跨malloc
+保持live语义；accepted standalone helper组未重跑。
+
+两基址 **36项新增原生对照、10项回滚检查**通过：0/1/32/128长度、empty/
+literal/percent、signed minimum/unsigned maximum、embedded NUL、malloc后
+source变长/变短/format变化、NULL malloc、source/output/packed-result alias、
+packed/output跨页。W0、guest/ELF/packed/padding/canary及allocator effects一致。
+2项native RED，保留旧default AST、tail consumers与formatter owner证明通过。
+
+独立owning入口 **505→574内层步骤 / +118F44**，40 callbacks；printf后既有
+cleanup全部返回，当前拒绝 `0x07C00791` nested return。outer3767/+FDDE0。
+原有page bytes差异为空，64新增OS pages保留。完整nested return、mapping
+rollback、whole-prefix原生差分、actual JNI、physical ABI、完整signer、fresh/
+live矩阵与真实JVM仍未完成。见 [nested printf证据](evidence/vm9_request_token_printf_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_printf_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-printf-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

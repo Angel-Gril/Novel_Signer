@@ -70,3 +70,29 @@ def apply_token_tail_callback(pages, *, wrapper_offset, argument_block_address,
         raise RefillUnsupported('unrecovered token tail callback')
     p.commit()
     return result
+
+
+def apply_token_printf_callback(pages, *, argument_block_address, image_base,
+        entry_stack_address, thread_pointer, allocate, max_bytes=0x100000):
+    """+288c28 -> +278314: one packed argument, W0 result, child canary.
+
+    The wrapper loads X0/X1/X2 before entering the accepted live two-pass
+    formatter. It stores four result bytes; the following padding is retained.
+    Child spills and the complete physical return ABI remain separate.
+    """
+    from vm9_configuration_init import allocate_printf_cstring
+    if type(entry_stack_address) is not int or not 0x200<=entry_stack_address<1<<64 or entry_stack_address&15:
+        raise RefillUnsupported('token printf stack requires aligned child space')
+    p=_PageTransaction(pages)
+    words=tuple(int.from_bytes(_read_span(p,argument_block_address+i*8,8),'little') for i in range(4))
+    if words[0]-image_base!=0x278314:
+        raise RefillUnsupported('unrecovered token allocated printf callback')
+    canary=entry_stack_address-0x58
+    _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    result=allocate_printf_cstring(p,output_pointer_address=words[1],format_address=words[2],
+        argument_addresses=(words[3],),allocate=allocate,max_bytes=max_bytes)
+    if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
+        raise RefillUnsupported('token printf stack canary changed')
+    _write_span(p,argument_block_address+32,result.to_bytes(4,'little'))
+    p.commit()
+    return result

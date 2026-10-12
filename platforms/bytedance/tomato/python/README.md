@@ -516,6 +516,8 @@ Matching-libc small cross-bin realloc now passes 18 new native controls and nine
 
 Actual nested append and scoped Base64 reference consumers pass 34 new native controls and eight rollback checks, including live source mutations and matching-libc recursive mutexes. The independently constructed owning entry reaches505 nested steps, next at allocated printf. Complete signing remains unfinished. See the [append/Base64 report](../REQUEST_JNI_STARTUP_WORKERS.md#6143-request-nested-append-and-base64-reference2026-10-13-asiashanghai).
 
+Actual nested allocated printf passes 36 new native controls and ten rollback checks. W0 publication preserves packed padding and live inputs across malloc. The independently constructed owning entry reaches574 steps at the nested return instruction after cleanup. Complete signing remains unfinished. See the [nested printf report](../REQUEST_JNI_STARTUP_WORKERS.md#6144-request-nested-allocated-printf2026-10-13-asiashanghai).
+
 
 
 
