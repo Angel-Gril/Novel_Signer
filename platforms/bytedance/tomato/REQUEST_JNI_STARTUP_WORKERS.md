@@ -5183,6 +5183,31 @@ whole-request差分、完整signer、fresh/live与真实JVM未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_base64_encode_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <base64-encode-evidence.json>
 ```
 
+## 6.129 Request character string（2026-10-13 Asia/Shanghai）
+
+恢复StringObject owner `construct_character_string_object(+2482EC)` 与actual
+`+285E98` consumer。先从guest ELF+6E170复制八字节capacity/length字段，
+再写vtable，malloc两字节并发布pointer；成功写W1低byte与NUL，NULL则
+清除两个length字段。保留malloc期间字段变化、ELF字段在读取后变化和
+buffer/object alias；返回实际allocation pointer，即使payload store
+改变了object中的pointer字段。不能用普通filled ctor替代其读取/写入顺序。
+
+两基址 **24项constructor、6项actual source callback** 新增原生/Python
+对照通过，合计 **30项对照、7项回滚检查**。覆盖0/1/7bit/8bit/allbyte/
+宽W1、NULL malloc、修改ELF字段、跨页object、malloc改字段和buffer自身
+alias。返回pointer、完整semantic guest/ELF bytes、allocation顺序与
+packed输入padding一致；wrapper读取一个byte，consumer执行实际源码AST。
+4项native RED，旧StringObject与request方法AST保持一致。
+
+非空owning入口3538→ **3550步 / bytecode+FDA7C**，character构造一次；
+下一未知 `+285B44 -> +248EF8`。原有page bytes回滚，64个新增OS pages
+保留。actual JNI、whole-request差分、full physical ABI、完整signer、
+fresh/live与真实JVM仍未完成。见 [character证据](evidence/vm9_request_character_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_character_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <character-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

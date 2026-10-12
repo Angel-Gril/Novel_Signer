@@ -1,0 +1,323 @@
+{
+  "component": "Request character StringObject",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "zero",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high7",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high8",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all8",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "wide_word",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_malloc",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "changed_ELF_word",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "object_cross_page",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "allocator_changes_fields",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "buffer_object_alias",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "ELF_changes_after_read",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high7",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high8",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all8",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wide_word",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_malloc",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "changed_ELF_word",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "object_cross_page",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "allocator_changes_fields",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "buffer_object_alias",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "ELF_changes_after_read",
+      "original_constructor_returned": true,
+      "pointer_return_and_all_guest_ELF_bytes_match": true,
+      "live_fields_low_byte_and_ordered_publication_match": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "callback_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "zero",
+      "original_character_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_bytes_and_all_guest_ELF_bytes_match": true,
+      "allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all8",
+      "original_character_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_bytes_and_all_guest_ELF_bytes_match": true,
+      "allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_malloc",
+      "original_character_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_bytes_and_all_guest_ELF_bytes_match": true,
+      "allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero",
+      "original_character_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_bytes_and_all_guest_ELF_bytes_match": true,
+      "allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all8",
+      "original_character_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_bytes_and_all_guest_ELF_bytes_match": true,
+      "allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_malloc",
+      "original_character_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_bytes_and_all_guest_ELF_bytes_match": true,
+      "allocation_match": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "native_Python_controls": 30,
+  "negative_cases": [
+    {
+      "case": "unmapped_ELF_fields",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "negative_word",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "oversized_word",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_pointer",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_buffer",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "rollback_guards": 7,
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "whole_physical_stack_bytes_compared": false,
+  "complete_request_transform_caller": false,
+  "constructed_prefix_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "pre_change_native_RED_controls": 4,
+  "accepted_native_controls_not_repeated": true,
+  "allocator_services_are_explicit_synthetic_inputs": true,
+  "character_constructor_semantic_native_differential_verified": true,
+  "constructed_nonempty_prefix_steps_before": 3538,
+  "constructed_nonempty_prefix_steps_after": 3550,
+  "constructed_prefix_next_callback_wrapper": "0x285b44",
+  "constructed_prefix_next_callback_target": "0x248ef8",
+  "constructed_prefix_next_bytecode_offset": "0xfda7c",
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "allocator_provider_mapping_rollback_verified": false,
+  "constructed_request_ABI_is_independent_synthetic_input": true
+}

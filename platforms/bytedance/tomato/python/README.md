@@ -486,6 +486,8 @@ Request metadata formatting and unsigned decimal now pass 46 new native controls
 
 The raw Base64 encoder, two-pass StringObject composition and actual source callback now pass 68 new native controls and 10 rollback checks. Guest alphabet aliases, capacity/NUL rules, scratch and cleanup match. The independently constructed nonempty entry advances to 3538 steps, next at +2482ec. Full JNI, whole-request comparison and complete signing remain unfinished. See the [Base64 encoder report](../REQUEST_JNI_STARTUP_WORKERS.md#6128-request-base64-encoder2026-10-13-asiashanghai).
 
+The single-byte StringObject constructor and actual source callback now pass 30 new native controls and seven rollback checks. Live ELF fields, allocation publication and buffer/object aliases match. The independently constructed nonempty entry advances to 3550 steps, next at +248ef8. Full JNI, whole-request comparison and complete signing remain unfinished. See the [character report](../REQUEST_JNI_STARTUP_WORKERS.md#6129-request-character-string2026-10-13-asiashanghai).
+
 
 
 

@@ -1264,6 +1264,31 @@ def compare_folded_cstrings(
     return 0
 
 
+def construct_character_string_object(pages, *, object_address: int,
+        value_u32: int, image_base: int, allocate: Callable) -> int:
+    """+0x2482ec: live ELF length fields, malloc two, low W1 byte and NUL.
+
+    Publish the buffer before payload stores; NULL allocation clears both
+    length fields. The native return is the allocated pointer even when its
+    payload aliases and changes the object's buffer field. Providers own
+    external effects; all guest writes commit together.
+    """
+    if type(value_u32) is not int or not 0<=value_u32<=0xFFFFFFFF:
+        raise RefillUnsupported('character string value must fit W1')
+    if not callable(allocate):
+        raise RefillUnsupported('character string requires owning malloc')
+    p=_PageTransaction(pages)
+    fields=_read_span(p,_image_address(image_base,0x6E170),8)
+    _write_span(p,object_address+8,fields)
+    _write_span(p,object_address,_word(_image_address(image_base,0x34F5F8)))
+    pointer=allocate(p,2)
+    _write_span(p,object_address+16,_word(pointer))
+    if pointer:_write_span(p,pointer,bytes([value_u32&255,0]))
+    else:_write_span(p,object_address+8,bytes(8))
+    p.commit()
+    return pointer
+
+
 def construct_sized_string_object(
     pages, *, object_address: int, source_address: int, length: int, image_base: int,
     allocate: Callable, max_payload_bytes: int = 0x100000,

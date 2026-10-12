@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request character string
+
+30项新增原生对照、7项回滚通过；live ELF fields、低byte、allocation
+publication与actual callback一致。入口3538→3550/+FDA7C，下一285B44→248EF8。
+原页bytes回滚，64个新增OS pages保留。actual JNI、整链差分、full physical
+ABI、完整signer、fresh/live及真实JVM仍未完成。见 [character报告](REQUEST_JNI_STARTUP_WORKERS.md#6129-request-character-string2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request Base64 encode
 
 68项新增原生对照、10项回滚通过；query/NUL、guest alphabet aliases、
