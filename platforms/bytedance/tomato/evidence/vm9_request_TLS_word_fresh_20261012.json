@@ -1,0 +1,168 @@
+{
+  "component": "Actual request TLS uint32 getter",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "cold",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_zero",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_small",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_signed_max",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_signed_min",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_all_bits",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_empty_slot",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_zero",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_small",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_signed_max",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_signed_min",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_all_bits",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_empty_slot",
+      "original_request_wrapper_returned": true,
+      "uint32_result_guest_ELF_TLS_and_packed_padding_match": true,
+      "allocation_and_wake_order_match": true,
+      "original_TLS_and_matching_libc_executed": true,
+      "ignored_receiver_unmapped": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "native_Python_controls": 14,
+  "native_input_snapshot_used": false,
+  "whole_physical_stack_bytes_compared": false,
+  "whole_request_native_differential_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "negative_cases": [],
+  "rollback_guards": 0,
+  "pre_change_native_RED_controls": 2,
+  "accepted_native_controls_not_repeated": true,
+  "private_names_or_payloads_published": false,
+  "constructed_nonempty_prefix_steps_before": 3257,
+  "constructed_nonempty_prefix_steps_after": 3273,
+  "constructed_prefix_next_callback_wrapper": "0x285e70",
+  "constructed_prefix_next_callback_target": "0x27ed70",
+  "constructed_prefix_next_bytecode_offset": "0xfd628",
+  "constructed_prefix_native_differential_verified": false,
+  "retained_new_allocator_OS_pages": 64,
+  "original_page_bytes_unchanged": true,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "allocator_provider_mapping_rollback_verified": false
+}

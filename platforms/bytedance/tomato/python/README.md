@@ -468,6 +468,8 @@ Actual request elapsed seconds now pass 36 new native wrapper controls and 12 ro
 
 Actual request contained-reference copy and StringObject table hash64 now pass 84 new native wrapper controls and six rollback checks. Scoped ownership, hidden output, signed lengths, guest table and full-width hash results match. The constructed nonempty prefix advances to 3257 steps; complete signing remains unfinished. See the [request reference/hash report](../REQUEST_JNI_STARTUP_WORKERS.md#6119-request-stringobject-table-hash642026-10-12-asiashanghai).
 
+Actual request TLS uint32 getter and setter now pass 34 new native wrapper controls. Cold/warm libc TLS, high uint32 values, packed padding and allocation/wake order match. The constructed nonempty prefix advances to 3307 steps; complete signing remains unfinished. See the [request TLS report](../REQUEST_JNI_STARTUP_WORKERS.md#6120-request-tls-uint32-读写2026-10-12-asiashanghai).
+
 
 
 

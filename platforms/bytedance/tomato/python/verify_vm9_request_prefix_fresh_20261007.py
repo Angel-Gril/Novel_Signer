@@ -396,6 +396,22 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 pointer = allocate(vm.m.pages, words[1])
                 _write_span(vm.m.pages, argument + 0x10, pointer.to_bytes(8, 'little'))
                 diagnostic_scope.setdefault('allocation_callbacks', []).append([words[1], pointer])
+            elif (wrapper,target) == (0x285E70,0x27ED70):
+                if get_tls is None:
+                    raise RefillUnsupported('request TLS word setter requires its owning TLS service')
+                pointer=get_tls(vm.m.pages,image+0x382920)
+                value=words[2]&0xFFFFFFFF
+                _write_span(vm.m.pages,pointer,value.to_bytes(4,'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_TLS_stores',[]).append(value)
+            elif (wrapper,target) == (0x285E54,0x2850A8):
+                if get_tls is None:
+                    raise RefillUnsupported('request TLS word getter requires its owning TLS service')
+                pointer=get_tls(vm.m.pages,image+0x382920)
+                value=int.from_bytes(_read_span(vm.m.pages,pointer,4),'little')
+                _write_span(vm.m.pages,argument+0x10,value.to_bytes(4,'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_TLS_words',[]).append(value)
             elif (wrapper,target) == (0x285E38,0x258BE0):
                 value=objects.hash_string_object64(vm.m.pages,
                     object_address=words[1],image_base=image)

@@ -4898,6 +4898,35 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_contained_referen
 python -B platforms/bytedance/tomato/python/verify_vm9_request_hash64_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <hash64-evidence.json>
 ```
 
+## 6.120 Request TLS uint32 读写（2026-10-12 Asia/Shanghai）
+
+接入actual wrapper `+285E54 -> +2850A8` getter和 `+285E70 -> +27ED70`
+setter。两者忽略receiver，调用已有TLS owner解析loaded ELF control
+image+382920（size4/alignment4/index0/template NULL）。getter读取TLS
+变量的uint32，仅写packed+10四字节，高四字节与后八字节保留。setter
+从packed+10读取W1，将低32位写TLS变量，packed保持原样。两条薄分支
+使用outer session的同一显式get_tls，不重复实现pthread或emutls。
+
+两基址共 **34项新增actual wrapper对照**通过：getter14项，setter20项，
+4项native RED。覆盖cold once/key/slot、warm zero/small/high-u32、warm
+empty slot，以及cold/warm下0/17/7FFFFFFF/80000000/FFFFFFFF写入。
+未映射receiver证明该输入被忽略；packed padding、完整guest、ELF与
+TLS页、allocation/wake顺序一致。原生TLS主体与matching-libc once/
+key/get/set真实执行。warm依赖由Python独立构造，libc once/generation
+输入页显式保留，loader继续拥有其他import relocation。
+
+非空请求3257->3273-> **3307步**，next `+285E80 -> +2869F0`，bytecode
+image+FD6B0。原有页字节回滚，64个新增allocator OS pages保留。旧TLS
+owner及旧request callback AST不改，已接受原生分组未重跑。完整physical
+stack、actual JNI、suffix整链差分、完整signer、fresh/live与真实JVM仍
+未验证。见 [TLS getter证据](evidence/vm9_request_TLS_word_fresh_20261012.json) 与
+[TLS setter证据](evidence/vm9_request_TLS_store_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_TLS_word_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <TLS-getter-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_request_TLS_store_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <TLS-setter-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

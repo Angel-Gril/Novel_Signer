@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：actual request TLS读写
+
+34项新增actual wrapper对照通过；cold/warm TLS、uint32/padding与
+allocation/wake一致。非空入口3307步，下一285E80->2869F0。原有页
+回滚，64个新增OS页保留。actual JNI、suffix整链差分、完整signer、
+fresh/live及真实JVM仍未完成。见 [request TLS报告](REQUEST_JNI_STARTUP_WORKERS.md#6120-request-tls-uint32-读写2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：request contained reference与table hash64
 
 84项新增actual wrapper对照、6项回滚通过；hidden输出、source+18、
