@@ -164,6 +164,60 @@ def get_state_service_reference(pages, *, entry_stack_address, thread_pointer,
     return objects.LazyReference(guard_address,slot_address,wrapper,payload,48,counter)
 
 
+def construct_request_clock_state(pages, *, object_address, entry_stack_address,
+        image_base, get_state_service, allocate, free, get_tls,
+        initialize_registry, broadcast, max_nodes=4096, max_comparisons=0x100000):
+    """+0x26bdfc state construction with numeric default and writer cleanup.
+
+    The provider returns the original lazy wrapper from current guest state.
+    Diagnostic scopes are excluded here. The global reference must retain
+    positive ownership after the temporary copy is released; deleting a state
+    service through this helper remains unsupported.
+    """
+    if not isinstance(entry_stack_address,int) or entry_stack_address & 15:
+        raise RefillUnsupported('request clock state requires an aligned stack')
+    staged=_PageTransaction(pages)
+    stack=entry_stack_address-0x60
+    _read_span(staged,stack,0x20)
+    _write_span(staged,object_address,bytes(0x98))
+    objects.construct_mutex_state(staged,object_address=object_address,image_base=image_base)
+    _write_span(staged,object_address+0x98,bytes(8))
+    wrapper=get_state_service(staged,stack)
+    objects.copy_reference_wrapper(staged,object_address=stack,source_address=wrapper)
+    service=int.from_bytes(_read_span(staged,stack,8),'little')
+    flag=image_base+0x3DED80
+    if int.from_bytes(_read_span(staged,flag,4),'little') == 0:
+        objects.decode_masked_bytes(staged,source_address=image_base+0xA5580,
+            destination_address=image_base+0x3DED70,mask_address=image_base+0xA5590)
+        _write_span(staged,flag,(1).to_bytes(4,'little'))
+    key=stack+0x10
+    objects.construct_string_object(staged,object_address=key,source_address=image_base+0x3DED70,
+        allocate=allocate,vtable_address=image_base+0x34F5F8,empty_descriptor_address=image_base+0x6E168)
+    value=read_state_integer_member(staged,service_address=service,key_object_address=key,
+        max_nodes=max_nodes,max_comparisons=max_comparisons)
+    # +0x269c34 leaves its successful shared-acquire W status in this
+    # scratch word. The later scoped TLS node copies three of its bytes
+    # as padding; retain the upper four bytes from caller memory.
+    _write_span(staged,stack-0x40,bytes(4))
+    objects.destroy_string_object(staged,object_address=key,image_base=image_base,free=free)
+    objects.construct_single_scoped_lock(staged,object_address=key,mutex_address=object_address,
+        scratch_address=stack-0x48,image_base=image_base,allocate=allocate,get_tls=get_tls,
+        initialize_registry=initialize_registry)
+    signed=0 if value == 0xFFFFFFFF else objects._s32(value)
+    _write_span(staged,object_address+0x98,objects._word(signed & ((1<<64)-1)))
+    objects.destroy_single_scoped_lock(staged,object_address=key,image_base=image_base,free=free,
+        get_tls=get_tls,initialize_registry=initialize_registry,broadcast=broadcast,
+        entry_stack_address=stack)
+    counter=int.from_bytes(_read_span(staged,stack+8,8),'little')
+    if counter:
+        remaining=(int.from_bytes(_read_span(staged,counter,4),'little')-1)&0xFFFFFFFF
+        if objects._s32(remaining)<=0:
+            raise RefillUnsupported('request clock state cannot delete its shared state service')
+        _write_span(staged,counter,remaining.to_bytes(4,'little'))
+    staged.commit()
+    return signed & ((1<<64)-1)
+
+
 @dataclass
 class StateResult:
     steps: int

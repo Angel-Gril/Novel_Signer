@@ -4795,6 +4795,40 @@ fresh/live与真实JVM继续未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_state_service_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <state-service-evidence.json>
 ```
 
+## 6.116 Request state 构造与清理（2026-10-12 Asia/Shanghai）
+
+新增 `construct_request_clock_state` 恢复 `+26BDFC` 并接入实际leaf
+wrapper `+285D74`，packed+0为target、+8为object。按原生顺序memset
+object前0x98字节、构造mutex、zero+98、获取lazy state reference、复制
+临时引用、解码key、构造StringObject、读取numeric member、销毁key、
+scoped writer acquire、写object+98、release writer、释放临时引用。
+getter的W0=FFFFFFFF映射为zero，其他值sign-extend W0到64位写+98。
+temporary reference在global ownership仍正时释放，不支持删除state
+service；unsupported分支回滚page bytes，provider effects保持外部。
+
+两基址 **16项新增actual wrapper对照、7项回滚检查**通过，2项native
+RED。覆盖missing、positive/negative fraction、minus-one、NaN、positive/
+negative infinity saturation与nonnumeric。输出state word、完整guest data、
+ELF与TLS页、allocation/free/register/wake顺序及global count一致。
+lazy依赖由Python从fresh ELF独立生成，native输出不作为输入。原
+callback实际执行matching-libc mutex/TLS；诊断scope与完整physical stack
+未对照。reader helper的 `+269C34` Wstatus spill会成为TLS节点padding：
+恢复四字节zero，保留高四字节输入；native writer observer确认了该效果。
+warm依赖的libc once/key generation输入页显式提供，避免loader重置后
+TLS tree失配；undefined-symbol relocations仍由native loader负责。
+
+非空URL/header构造入口从2850推进至 **2911步**。下一边界
+`+285D80 -> +26BF90`，bytecode image+FCB34；state构造callback已完成。
+原有页面字节回滚，64个新增allocator OS pages仍
+保留。接入增加显式state-service provider，沿用外层已初始化singleton136
+和同一allocator/TLS会话。旧原生接受分组未重跑；旧state helper/caller
+AST未修改。actual JNI、suffix整链原生差分、完整signer、fresh/live和
+真实JVM继续未完成。见 [request state证据](evidence/vm9_request_state_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_state_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <request-state-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

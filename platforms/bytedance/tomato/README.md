@@ -333,6 +333,8 @@ State numeric member lookup now passes 60 new native/Python controls and 18 roll
 
 Lazy state service composition now passes eight fresh native/Python controls and seven rollback checks with an explicitly initialized singleton136. Cold allocation/free/registration/wake order, all ELF pages and TLS bytes match. The request state callback remains the next boundary at 2850 steps. See the [state service report](REQUEST_JNI_STARTUP_WORKERS.md#6115-lazy-state-service2026-10-12-asiashanghai).
 
+Actual request state construction now passes 16 new native wrapper controls and seven rollback checks. Signed defaults, reference counts, TLS padding and writer cleanup match. The constructed nonempty prefix advances to 2911 steps and reaches the elapsed-time getter; complete signing remains unfinished. See the [request state report](REQUEST_JNI_STARTUP_WORKERS.md#6116-request-state-构造与清理2026-10-12-asiashanghai).
+
 
 
 

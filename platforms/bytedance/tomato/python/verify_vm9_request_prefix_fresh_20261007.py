@@ -72,7 +72,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                    diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
                    read_clock=None, acquire_environment=None, invoke_jni=None,
                    get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None,
-                   register_exit=None):
+                   register_exit=None, get_state_service=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -396,6 +396,16 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 pointer = allocate(vm.m.pages, words[1])
                 _write_span(vm.m.pages, argument + 0x10, pointer.to_bytes(8, 'little'))
                 diagnostic_scope.setdefault('allocation_callbacks', []).append([words[1], pointer])
+            elif (wrapper,target) == (0x285D74,0x26BDFC):
+                if (diagnostic_scope is None or get_state_service is None or allocate is None
+                        or free is None or get_tls is None or initialize_registry is None or broadcast is None):
+                    raise RefillUnsupported('request state constructor requires its explicit state service and ownership providers')
+                import vm9_state
+                value=vm9_state.construct_request_clock_state(vm.m.pages,object_address=words[1],
+                    entry_stack_address=frame.native_stack_address-0x180,image_base=image,
+                    get_state_service=get_state_service,allocate=allocate,free=free,get_tls=get_tls,
+                    initialize_registry=initialize_registry,broadcast=broadcast)
+                diagnostic_scope.setdefault('request_clock_states',[]).append(dict(object_address=words[1],signed_state_word=value))
             elif allocate is not None and (wrapper, target) == (0x28591C, 0x2481AC):
                 import vm9_objects
                 vm9_objects.construct_string_object(vm.m.pages, object_address=words[1],
