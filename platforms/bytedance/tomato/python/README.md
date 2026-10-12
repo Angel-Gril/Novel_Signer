@@ -514,6 +514,8 @@ Allocated and StringObject cipher callers now pass 48 new native controls and te
 
 Matching-libc small cross-bin realloc now passes 18 new native controls and nine rollback checks. The owning session composes actual allocation, live copy and free while preserving the same-bin owner. The independently constructed owning entry advances to430 nested steps, next at StringObject append. Complete signing remains unfinished. See the [cross-bin report](../REQUEST_JNI_STARTUP_WORKERS.md#6142-matching-libc-cross-bin-small-realloc2026-10-13-asiashanghai).
 
+Actual nested append and scoped Base64 reference consumers pass 34 new native controls and eight rollback checks, including live source mutations and matching-libc recursive mutexes. The independently constructed owning entry reaches505 nested steps, next at allocated printf. Complete signing remains unfinished. See the [append/Base64 report](../REQUEST_JNI_STARTUP_WORKERS.md#6143-request-nested-append-and-base64-reference2026-10-13-asiashanghai).
+
 
 
 

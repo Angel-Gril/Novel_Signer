@@ -5551,6 +5551,32 @@ fresh/live及真实JVM仍未完成。见 [cross-bin证据](evidence/vm9_libc_rea
 python -B platforms/bytedance/tomato/python/verify_vm9_libc_realloc_cross_bin_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <cross-bin-realloc-evidence.json>
 ```
 
+## 6.143 Request nested append and Base64 reference（2026-10-13 Asia/Shanghai）
+
+恢复actual `+288BF0 -> +248684` append与 `+288C10 -> +258C14` Base64
+reference。append将X0写回packed+24；reference从packed+8读hidden X8、
++16读source，childSP=wrapperSP-16。`construct_base64_string_reference`
+组合既有query/encode/sized/reference owner，query后malloc、重读source/
+encode、allocate24 object、sized copy、free temporary、scoped reference。
+empty query构造NULL reference。physical X0/spills/PAC仍未对照。
+
+两基址 **34项新consumer对照、8项回滚检查**通过：14 append、20 Base64
+reference。binary/empty/self/output alias/cross-page/allocator failure、0/1/2/
+3/32 source、warm scopes和malloc后live source变短/数据变更均覆盖。guest/
+ELF/packed/defined length-canary、scope exit bytes、allocator/free/realloc/
+mutex/gettid及pre-free bytes一致；原生执行matching-libc recursive mutex。
+4项native RED，旧helper原生组未重跑，旧default AST保留证明通过。
+
+独立非空URL/header-owning入口 **430→505内层步骤 / +118E30**，外层
+3767/+FDDE0，下一 `+288C28 -> +278314` allocated printf。原有page bytes
+差异为空，64个新增OS pages保留。mapping rollback、完整nested return、
+actual JNI、whole-request、physical ABI、完整signer、fresh/live及真实JVM
+仍未完成。见 [append/Base64证据](evidence/vm9_request_token_tail_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_tail_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <token-tail-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request nested append/Base64 reference
+
+34项actual consumer对照、8项回滚通过，append与Base64 reference复用既有
+owner，actual hidden-X8/child-SP布局及query/live encoding/scoped reference
+恢复。独立owning inner505/+118E30，outer3767，下一288C28→278314 printf。
+原页字节回滚，64新增OS pages保留。全JNI、whole-request、physical ABI、
+mapping回滚、完整signer及fresh/live仍未完成。见 [append/Base64报告](REQUEST_JNI_STARTUP_WORKERS.md#6143-request-nested-append-and-base64-reference2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：matching-libc cross-bin small realloc
 
 18项actual export/allocator对照、9项回滚通过，cross-bin realloc组合owning

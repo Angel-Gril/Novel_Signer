@@ -1,7 +1,7 @@
 """Bounded +0x287500 nested request VM, with independently generated inputs.
 
 Constants, random, shared readers, scopes and string lifecycle reuse owners.
-The next StringObject append is an explicit boundary; no pages are published.
+The next allocated printf is an explicit boundary; no pages are published.
 """
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
@@ -126,6 +126,19 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
                     reallocate=string_services['reallocate'],free=string_services['free'])
             elif string_services is not None and (wrapper,target)==(0x288BF0,0x248684):
+                from vm9_request_token_tail import apply_token_tail_callback
+                apply_token_tail_callback(staged,wrapper_offset=wrapper,argument_block_address=argument,
+                    image_base=image,entry_stack_address=frame.native_stack_address-0x180,
+                    thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
+                    reallocate=string_services['reallocate'],free=string_services['free'])
+            elif string_services is not None and (wrapper,target)==(0x288C10,0x258C14):
+                from vm9_request_token_tail import apply_token_tail_callback
+                apply_token_tail_callback(staged,wrapper_offset=wrapper,argument_block_address=argument,
+                    image_base=image,entry_stack_address=frame.native_stack_address-0x180,
+                    thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
+                    reallocate=string_services['reallocate'],free=string_services['free'],
+                    thread_id=diagnostic_services.get('thread_id'),observer=diagnostic_services.get('observer'))
+            elif string_services is not None and (wrapper,target)==(0x288C28,0x278314):
                 raise Boundary()
             else:
                 raise RefillUnsupported(f'unknown request token callback +{wrapper:#x} -> +{target:#x}')
