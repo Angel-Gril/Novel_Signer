@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：request binary transform组件
+
+24项新增原生对照、10项回滚通过；286084的SDK-zero分支、pointer/seed
+key、S-box/forward mixing及reference构造一致。2869F0外层组装/hex/
+cleanup仍待恢复；非空入口3307步。actual JNI、整链差分、完整signer、
+fresh/live及真实JVM仍未完成。见 [transform报告](REQUEST_JNI_STARTUP_WORKERS.md#6121-request-binary-transform2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：actual request TLS读写
 
 34项新增actual wrapper对照通过；cold/warm TLS、uint32/padding与

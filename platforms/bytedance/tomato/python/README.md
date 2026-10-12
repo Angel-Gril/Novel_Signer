@@ -470,6 +470,8 @@ Actual request contained-reference copy and StringObject table hash64 now pass 8
 
 Actual request TLS uint32 getter and setter now pass 34 new native wrapper controls. Cold/warm libc TLS, high uint32 values, packed padding and allocation/wake order match. The constructed nonempty prefix advances to 3307 steps; complete signing remains unfinished. See the [request TLS report](../REQUEST_JNI_STARTUP_WORKERS.md#6120-request-tls-uint32-读写2026-10-12-asiashanghai).
 
+The actual request binary-transform component now passes 24 new native controls and ten rollback checks with an initialized SDK input. Allocation-dependent key bytes, S-box writes and forward mixing match. The outer transform caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [request transform report](../REQUEST_JNI_STARTUP_WORKERS.md#6121-request-binary-transform2026-10-12-asiashanghai).
+
 
 
 

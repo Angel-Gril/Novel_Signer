@@ -4927,6 +4927,37 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_TLS_word_fresh_20
 python -B platforms/bytedance/tomato/python/verify_vm9_request_TLS_store_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <TLS-setter-evidence.json>
 ```
 
+## 6.121 Request binary transform（2026-10-12 Asia/Shanghai）
+
+新增 `vm9_request_transform.construct_transformed_reference` 恢复实际
+`+286084`，限于已初始化singleton136首次读取payload+10为zero的分支。
+按原生顺序allocate StringObject、构造scoped reference、resize到
+source signed length+6、两次获取SDK reference、构造8字节key、两轮
+S-box生成、复制source、逐字节变换及forward混合。key包含allocated
+payload地址低两字节与W1 seed低16位；栈内key暂存字节在使用前均被
+原生写入覆盖。S-box写入将同一值同时写两处，末字节混合会读取已变换
+的首字节，保留这些行为。source与allocator/SDK服务由caller显式提供。
+
+两基址 **24项新增原生/Python对照、10项回滚检查**通过，2项native
+RED。覆盖0/1/2/7/8/20/31/64字节以及0/1/FFFF/12345678/FFFFFFFF
+seed；完整guest、ELF、reference scope构造返回时的24字节和allocator/
+diagnostic lock顺序一致。scope所在physical stack随后由fill/transform
+复用，因此最终该栈区域不作比较；完整physical stack未验证。原生主体
+与matching-libc recursive mutex真实执行，不使用native输出初始化模型。
+nonzero SDK首次field、负长度、未知stack/provider及allocation failure
+明确拒绝并回滚guest pages，外部provider effects不回滚。
+
+这是外层 `+2869F0` 的一个组件，尚未接入该完整caller。非空request
+仍停3307步的 `+285E80 -> +2869F0`。私有原生诊断证明当前Python
+构造输入上外层自然返回并执行MD5、字符串拼接和引用清理；它不计入
+formal native/Python controls。外层参数组装、hex publication与cleanup、
+actual JNI、整链差分、完整signer和fresh/live仍未完成。
+见 [transform证据](evidence/vm9_request_transform_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_transform_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <transform-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
