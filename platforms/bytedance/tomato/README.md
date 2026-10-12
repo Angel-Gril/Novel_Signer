@@ -329,6 +329,8 @@ CString-pattern search now passes 76 new native controls and 24 rollback checks.
 
 VM signed 64-bit multiplication and hidden low-product transfer now pass 238 new native/Python controls from 220 original interpreter executions. Both full-width product halves and register backing match. The constructed nonempty prefix advances to 2850 steps; actual JNI conversion and complete signing remain unfinished. See the [signed product report](REQUEST_JNI_STARTUP_WORKERS.md#6113-vm-signed-product-与-low-copy2026-10-12-asiashanghai).
 
+State numeric member lookup now passes 60 new native/Python controls and 18 rollback checks. Original nested shared readers and matching-libc mutex calls match, including ASCII keys and ARM64 floating-point conversion. This dependency is ready; the request state callback and its lazy service remain unfinished at the 2850-step boundary. See the [state numeric report](REQUEST_JNI_STARTUP_WORKERS.md#6114-state-numeric-member-读取2026-10-12-asiashanghai).
+
 
 
 

@@ -1,0 +1,794 @@
+{
+  "component": "State numeric member read",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "zero",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "positive_fraction",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_fraction",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_one",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_zero",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "small_positive",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "small_negative",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "signed_max",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "signed_min",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "upper_saturation",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "lower_saturation",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "huge_positive",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "huge_negative",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "positive_infinity",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_infinity",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "nan",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_key",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "casefold",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_key",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_root",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_key_payload",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_node_key",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "list_tail_hit",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "first_duplicate",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "nonnumeric_kind",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "combined_kind",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "same_key_pointer",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high_bytes",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "binary_NUL",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "existing_readers",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "positive_fraction",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_fraction",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_one",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_zero",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "small_positive",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "small_negative",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "signed_max",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "signed_min",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "upper_saturation",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "lower_saturation",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "huge_positive",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "huge_negative",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "positive_infinity",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_infinity",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "nan",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_key",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "casefold",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_key",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_root",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_key_payload",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_node_key",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "list_tail_hit",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "first_duplicate",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "nonnumeric_kind",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "combined_kind",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "same_key_pointer",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high_bytes",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "binary_NUL",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "existing_readers",
+      "original_numeric_body_returned": true,
+      "signed_W_result_matches": true,
+      "full_guest_data_and_image_pages_match": true,
+      "nested_shared_reader_count_restored": true,
+      "matching_libc_mutex_calls": 8,
+      "no_allocator_calls": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "native_Python_controls": 60,
+  "native_RED_controls": 0,
+  "negative_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "cycle",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "node_limit",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "comparison_limit",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_key",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_node",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_mutex",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "writer_active",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "saturated_readers",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "invalid_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cycle",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "node_limit",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "comparison_limit",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_key",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_node",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_mutex",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "writer_active",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "saturated_readers",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "invalid_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "rollback_guards": 18,
+  "native_input_snapshot_used": false,
+  "actual_request_callback_restored": false,
+  "state_service_cold_initialization_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "whole_request_native_differential_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "pre_change_native_RED_controls": 2,
+  "accepted_native_controls_not_repeated": true,
+  "private_names_or_payloads_published": false,
+  "current_constructed_nonempty_prefix_steps": 2850,
+  "current_request_callback_wrapper": "0x285d74",
+  "current_request_callback_target": "0x26bdfc",
+  "live_Android_JVM_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false
+}

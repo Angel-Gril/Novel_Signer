@@ -7,9 +7,96 @@ reject page writes; external effects are outside transactional rollback.
 """
 from __future__ import annotations
 from dataclasses import dataclass
+import math
+import struct
 import vm9_objects as objects
 import vm9_configuration_init as configuration
 from vm9_allocator import _PageTransaction, _read_span, _write_span, RefillUnsupported
+
+
+def find_state_member(pages, *, root_address, key_address,
+        max_nodes=4096, max_comparisons=0x100000):
+    """+0x24a0a0 ASCII case-insensitive linked member lookup.
+
+    Preserve NULL-root/key and identical-key-pointer short circuits. Keys are
+    C strings even when the caller's StringObject declares a longer length.
+    Bounds count visited nodes and actual byte-pair comparisons, respectively.
+    """
+    for value in (max_nodes, max_comparisons):
+        if isinstance(value, bool) or not isinstance(value, int) or not 1 <= value <= 0x100000:
+            raise ValueError('invalid state lookup bound')
+    if not root_address or not key_address:
+        return 0
+    node = int.from_bytes(_read_span(pages, root_address + 0x10, 8), 'little')
+    seen = set()
+    comparisons = 0
+    while node:
+        if node in seen or len(seen) == max_nodes:
+            raise RefillUnsupported('state member cycle or node bound exceeded')
+        seen.add(node)
+        name = int.from_bytes(_read_span(pages, node + 0x38, 8), 'little')
+        if name:
+            if name == key_address:
+                return node
+            offset = 0
+            while True:
+                if comparisons == max_comparisons:
+                    raise RefillUnsupported('state member comparison bound exceeded')
+                left = _read_span(pages, key_address + offset, 1)[0]
+                right = _read_span(pages, name + offset, 1)[0]
+                comparisons += 1
+                folded_left = left | 0x20 if 0x41 <= left <= 0x5A else left
+                folded_right = right | 0x20 if 0x41 <= right <= 0x5A else right
+                if folded_left != folded_right:
+                    break
+                if not left:
+                    return node
+                offset += 1
+        node = int.from_bytes(_read_span(pages, node, 8), 'little')
+    return 0
+
+
+def read_state_integer_member(pages, *, service_address, key_object_address,
+        max_nodes=4096, max_comparisons=0x100000):
+    """+0x269bf4/+0x269c80 nested shared-reader lookup and FCVTZS W0.
+
+    Type byte must equal 8. Missing or nonnumeric values convert -1.0.
+    ARM64 conversion truncates toward zero, saturates overflow and maps NaN
+    to zero. Return the zero-extended W0 bits. Only serialized, uncontended
+    shared-reader state is supported; failure rolls back all page bytes.
+    """
+    transaction = _PageTransaction(pages)
+    def acquire():
+        mutex = int.from_bytes(_read_span(transaction, service_address + 0x20, 8), 'little')
+        objects.acquire_uncontended_shared_reader(transaction, mutex_address=mutex + 8)
+        _write_span(transaction, mutex + 0x94, b'\x01')
+        return mutex
+    def release(mutex):
+        if _read_span(transaction, mutex + 0x94, 1)[0] != 1:
+            raise RefillUnsupported('state numeric reader changed to writer mode')
+        objects.release_uncontended_shared_reader(transaction, mutex_address=mutex + 8)
+    outer_mutex = acquire()
+    inner_mutex = acquire()
+    root = int.from_bytes(_read_span(transaction, service_address + 0x18, 8), 'little')
+    key = int.from_bytes(_read_span(transaction, key_object_address + 0x10, 8), 'little')
+    node = find_state_member(transaction, root_address=root, key_address=key,
+        max_nodes=max_nodes, max_comparisons=max_comparisons)
+    if node and _read_span(transaction, node + 0x18, 1)[0] == 8:
+        value = struct.unpack('<d', _read_span(transaction, node + 0x30, 8))[0]
+    else:
+        value = -1.0
+    release(inner_mutex)
+    release(outer_mutex)
+    if math.isnan(value):
+        result = 0
+    elif value >= 0x7FFFFFFF:
+        result = 0x7FFFFFFF
+    elif value <= -0x80000000:
+        result = -0x80000000
+    else:
+        result = math.trunc(value)
+    transaction.commit()
+    return result & 0xFFFFFFFF
 
 
 @dataclass

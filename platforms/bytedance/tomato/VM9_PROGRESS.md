@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：state numeric member读取
+
+60项新增原生对照、18项回滚通过；linked-node ASCII搜索、double到W0
+转换及nested reader/matching-libc mutex一致。该依赖已恢复，非空入口
+仍停2850步的+285D74 -> +26BDFC，lazy state service与callback尚待恢复。
+actual JNI、suffix整链差分、完整signer、fresh/live及真实JVM未完成。
+见 [state numeric报告](REQUEST_JNI_STARTUP_WORKERS.md#6114-state-numeric-member-读取2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：VM signed64 product与low-copy
 
 238项新增原生/Python对照通过；恢复sub53的MUL/SMULH和sub39的low

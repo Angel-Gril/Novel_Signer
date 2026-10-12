@@ -4724,6 +4724,42 @@ python -B platforms/bytedance/tomato/python/verify_vm9_signed_multiply_fresh_202
 python -B platforms/bytedance/tomato/python/verify_vm9_product_low_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <product-low-evidence.json>
 ```
 
+## 6.114 State numeric member 读取（2026-10-12 Asia/Shanghai）
+
+新增 `vm9_state.find_state_member` 与 `read_state_integer_member`，恢复
+`+24A0A0`、`+269BF4/+269C80` 的状态linked-node查找与数值转换。root+10
+指向首node，node+0为next，node+38为CString key；按ASCII A..Z折叠
+逐byte比较。NULL root/key直接miss，NULL node key跳过；key pointer相同
+直接命中。StringObject+10提供CString，声明长度不改变NUL终止语义。
+node+18的type byte精确等于8才从node+30读取double，否则使用-1.0。
+
+原生整数getter的外层与double getter的内层各获取shared reader，再
+依次释放；复用已验证的uncontended normal mutex与reader owner。
+receiver+20指向mutex object，primitive在object+8，reader count在+90；
+两次获取将+94置1，释放后+94仍为1。已有reader计数恢复到输入值。
+`FCVTZS W0` 向零截断，超界饱和为signed32 min/max，NaN转0；输出
+为zero-extended W0 bit pattern，供后续调用者按原生语义sign-extend。
+
+两基址 **60项新增原生/Python对照、18项回滚检查**通过，2项native RED。
+原body与nested reader bodies完整执行，每次实际matching-libc锁/解锁
+各4次，无allocator。覆盖fraction、signed边界、溢出、NaN/infinity、
+missing/nonnumeric/combined kind、大小写、empty、NULL、链尾、重复键、
+identical key pointer、high bytes、binary NUL和已有readers。W0及完整
+guest data一致，image/pages保持不变；cycle、node/comparison bounds、
+unmapped key/node/mutex、writer、reader saturation与非法bound明确拒绝，
+全部页字节回滚。旧state VM/caller AST保持一致，旧分组未重跑。
+
+这是 `+26BDFC` 的数值读取依赖；实际request callback及其lazy state
+service尚未接入。非空入口仍停在2850步的 `+285D74 -> +26BDFC`。
+下一步恢复 `+26A3AC` lazy reference及 `+26BDFC` 构造/清理，并对照
+actual callback。actual JNI、suffix整链差分、physical stack、真实JVM、
+完整signer、fresh/live仍未完成。
+见 [state numeric证据](evidence/vm9_state_numeric_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_state_numeric_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <state-numeric-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
