@@ -396,6 +396,14 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 pointer = allocate(vm.m.pages, words[1])
                 _write_span(vm.m.pages, argument + 0x10, pointer.to_bytes(8, 'little'))
                 diagnostic_scope.setdefault('allocation_callbacks', []).append([words[1], pointer])
+            elif (wrapper,target) == (0x285B44,0x248EB4):
+                result=objects.trim_string_object_left_set(vm.m.pages,
+                    object_address=words[1],set_object_address=words[2],
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'])
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_left_set_trims',[]).append(dict(
+                        object_address=words[1],erase_status=result))
             elif (wrapper,target) == (0x285B44,0x248EF8):
                 result=objects.trim_string_object_right_set(vm.m.pages,
                     object_address=words[1],set_object_address=words[2],

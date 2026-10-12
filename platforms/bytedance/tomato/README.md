@@ -361,6 +361,8 @@ The single-byte StringObject constructor and actual source callback now pass 30 
 
 Reverse character-set search, right trim and the actual source callback now pass 64 new native controls and nine rollback checks. Bitmap aliases, signed index, length/NUL and canary match. The independently constructed nonempty entry advances to 3559 steps, next at +248eb4. Full JNI, whole-request comparison and complete signing remain unfinished. See the [right-set report](REQUEST_JNI_STARTUP_WORKERS.md#6130-request-right-character-set-trim2026-10-13-asiashanghai).
 
+Forward character-set search, field erase, left trim and actual source callback now pass 94 new native controls and 11 rollback checks. Shared reverse-search bitmap semantics remain unchanged by expansion AST comparison. The independently constructed nonempty entry advances to 3767 steps, next at +287500. Full JNI, whole-request comparison and complete signing remain unfinished. See the [left-set report](REQUEST_JNI_STARTUP_WORKERS.md#6131-request-left-character-set-trim2026-10-13-asiashanghai).
+
 
 
 

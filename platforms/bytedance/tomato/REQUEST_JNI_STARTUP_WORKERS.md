@@ -5234,6 +5234,35 @@ actual JNI、whole-request差分、full physical ABI、完整signer、fresh/live
 python -B platforms/bytedance/tomato/python/verify_vm9_request_trim_set_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <trim-set-evidence.json>
 ```
 
+## 6.131 Request left character-set trim（2026-10-13 Asia/Shanghai）
+
+恢复 `find_string_fields_first_not_in_set(+247894)`、`erase_string_fields
+(+247250)`、`trim_string_object_left_set(+248EB4)` 和actual `+285B44`
+consumer。正向查找复用原有right-search的live bitmap构造及逐byte取反；
+通过展开共享helper后的完整AST一致性证明旧reverse语义未变，不重跑
+已接受的reverse原生组。position须严格小于length；bitmap后reload
+receiver pointer/length。erase处理负start裁剪、W count调整、无操作边界，
+按memmove语义移动，再reload fields写length/NUL。left trim查到-1时
+使用live receiver length删除整个prefix，返回erase status。
+
+两基址 **34项forward search、30项erase、24项left trim、6项actual
+source callback**通过，合计 **94项新增对照、11项回滚检查**。覆盖
+leading/all/no-set、NUL/highbyte/重复集合、NULL及position边界、bitmap
+alias、negative start/count、capacity拒绝、payload/fields alias、prefix/
+middle/suffix删除。完整semantic guest/ELF bytes、适用bitmap/canary、
+status、length/NUL与memmove一致，无allocator effects。8项native RED。
+
+非空owning入口3559→ **3767步 / bytecode+FDDE0**，left/right trim、
+Base64和character各两次；下一未知 `+285EA8 -> +287500`。原有page bytes
+回滚，64个新增OS pages保留。旧私有探针固定TLS读取一次的假设被后续
+第二次读取否定；本次收据记录实际次数，页面差异为空。actual JNI、
+whole-request差分、full physical ABI、完整signer、fresh/live与真实JVM
+仍未完成。见 [left-set证据](evidence/vm9_request_left_trim_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_left_trim_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <left-trim-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

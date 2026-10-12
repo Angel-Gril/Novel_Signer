@@ -306,6 +306,20 @@ def construct_string_object_from_fields(pages, *, object_address: int,
     return result
 
 
+def _populate_string_field_byte_set(p, bitmap, set_fields_address, max_bytes):
+    def u(a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
+    _write_span(p,bitmap,bytes(32));i=0
+    while i<_s32(u(set_fields_address+4,4)):
+        if i>=max_bytes:raise RefillUnsupported('right-set pattern exceeds byte bound')
+        value=_read_span(p,u(set_fields_address+8)+i,1)[0]
+        a=bitmap+(value>>3)
+        _write_span(p,a,bytes([_read_span(p,a,1)[0]|(1<<(value&7))]));i+=1
+
+
+def _invert_string_field_byte_set(p, bitmap):
+    for i in range(32):_write_span(p,bitmap+i,bytes([_read_span(p,bitmap+i,1)[0]^255]))
+
+
 def find_string_fields_last_not_in_set(pages, *, fields_address: int,
         position_u32: int, set_fields_address: int, entry_stack_address: int,
         image_base: int, thread_pointer: int, max_bytes: int = 0x100000) -> int:
@@ -328,14 +342,9 @@ def find_string_fields_last_not_in_set(pages, *, fields_address: int,
     if fields_address and position>=0 and u(fields_address+8):
         length=_s32(u(fields_address+4,4))
         if length>=position and set_fields_address and u(set_fields_address+8) and _s32(u(set_fields_address+4,4))>=1:
-            _write_span(p,bitmap,bytes(32));i=0
-            while i<_s32(u(set_fields_address+4,4)):
-                if i>=max_bytes:raise RefillUnsupported('right-set pattern exceeds byte bound')
-                value=_read_span(p,u(set_fields_address+8)+i,1)[0]
-                a=bitmap+(value>>3)
-                _write_span(p,a,bytes([_read_span(p,a,1)[0]|(1<<(value&7))]));i+=1
+            _populate_string_field_byte_set(p,bitmap,set_fields_address,max_bytes)
             if length==position:position-=1
-            for i in range(32):_write_span(p,bitmap+i,bytes([_read_span(p,bitmap+i,1)[0]^255]))
+            _invert_string_field_byte_set(p,bitmap)
             payload=u(fields_address+8)
             if position>=max_bytes:raise RefillUnsupported('right-set receiver exceeds byte bound')
             while position>=0:
@@ -345,6 +354,97 @@ def find_string_fields_last_not_in_set(pages, *, fields_address: int,
                 position-=1
     if _read_span(p,thread_pointer+0x28,8)!=_read_span(p,canary,8):
         raise RefillUnsupported('right-set search TLS canary changed')
+    p.commit()
+    return result
+
+
+def find_string_fields_first_not_in_set(pages, *, fields_address: int,
+        position_u32: int, set_fields_address: int, entry_stack_address: int,
+        image_base: int, thread_pointer: int, max_bytes: int = 0x100000) -> int:
+    """+0x247894: shared live complemented byte set, forward declared-span scan.
+
+    Require position strictly below signed length; bitmap/canary locations
+    match the reverse helper. Reload payload and length after bitmap writes.
+    Physical spills/unwind remain outside this semantic search.
+    """
+    _string_bound(max_bytes)
+    if type(position_u32) is not int or not 0<=position_u32<=0xFFFFFFFF:
+        raise RefillUnsupported('left-set search position must fit W2')
+    if type(entry_stack_address) is not int or entry_stack_address&15 or not 0x60<=entry_stack_address<1<<64:
+        raise RefillUnsupported('left-set search requires aligned scratch space')
+    p=_PageTransaction(pages);bitmap=entry_stack_address-0x58;canary=entry_stack_address-0x38
+    _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    def u(a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
+    position=_s32(position_u32);result=-1
+    if fields_address and position>=0 and u(fields_address+8):
+        if _s32(u(fields_address+4,4))>position and set_fields_address and u(set_fields_address+8) and _s32(u(set_fields_address+4,4))>=1:
+            _populate_string_field_byte_set(p,bitmap,set_fields_address,max_bytes)
+            _invert_string_field_byte_set(p,bitmap)
+            payload=u(fields_address+8);length=_s32(u(fields_address+4,4))
+            if length>max_bytes:raise RefillUnsupported('left-set receiver exceeds byte bound')
+            while position<length:
+                value=_read_span(p,payload+position,1)[0]
+                if _read_span(p,bitmap+(value>>3),1)[0]&(1<<(value&7)):
+                    result=position;break
+                position+=1
+    if _read_span(p,thread_pointer+0x28,8)!=_read_span(p,canary,8):
+        raise RefillUnsupported('left-set search TLS canary changed')
+    p.commit()
+    return result
+
+
+def erase_string_fields(pages, *, fields_address: int, position_u32: int,
+        count_u32: int, max_bytes: int = 0x100000) -> int:
+    """+0x247250: signed position adjustment, memmove, live reload and NUL.
+
+    Negative start clips to zero and adjusts the W count. Invalid fields or
+    negative adjusted count returns -1; zero count/past-end is a no-op. Move
+    overlap atomically, then reload length/pointer as the native import caller.
+    """
+    _string_bound(max_bytes)
+    if any(type(v) is not int or not 0<=v<=0xFFFFFFFF for v in (position_u32,count_u32)):
+        raise RefillUnsupported('string erase position/count must fit W registers')
+    p=_PageTransaction(pages);signed_position=_s32(position_u32)
+    position=max(0,signed_position);count=(count_u32+(position_u32 if signed_position<0 else 0))&0xFFFFFFFF
+    result=-1
+    if fields_address and _s32(count)>=0:
+        payload=int.from_bytes(_read_span(p,fields_address+8,8),'little')
+        if payload:
+            length=_s32(int.from_bytes(_read_span(p,fields_address+4,4),'little'))
+            capacity=_s32(int.from_bytes(_read_span(p,fields_address,4),'little'))
+            if length>=0 and capacity>=length and capacity>=1:
+                result=0
+                if count and position<length:
+                    end=(position+count)&0xFFFFFFFF
+                    if end<length:
+                        width=length-end
+                        if width>max_bytes:raise RefillUnsupported('string erase move exceeds byte bound')
+                        _write_span(p,payload+position,_read_span(p,payload+position+count,width))
+                        length=int.from_bytes(_read_span(p,fields_address+4,4),'little')
+                        payload=int.from_bytes(_read_span(p,fields_address+8,8),'little')
+                        new_length=(length-count)&0xFFFFFFFF
+                    else:new_length=position
+                    _write_span(p,fields_address+4,new_length.to_bytes(4,'little'))
+                    _write_span(p,payload+_s32(new_length),b'\0')
+    p.commit()
+    return result
+
+
+def trim_string_object_left_set(pages, *, object_address: int, set_object_address: int,
+        entry_stack_address: int, image_base: int, thread_pointer: int,
+        max_bytes: int = 0x100000) -> int:
+    """+0x248eb4: first non-set index or live length, then erase prefix.
+
+    Return erase status. If the search returns -1, use the receiver's live
+    declared length; share bitmap semantics and the existing page transaction.
+    """
+    p=_PageTransaction(pages)
+    index=find_string_fields_first_not_in_set(p,fields_address=object_address+8,
+        position_u32=0,set_fields_address=set_object_address+8,
+        entry_stack_address=entry_stack_address-0x20,image_base=image_base,
+        thread_pointer=thread_pointer,max_bytes=max_bytes)
+    count=int.from_bytes(_read_span(p,object_address+12,4),'little') if index==-1 else index
+    result=erase_string_fields(p,fields_address=object_address+8,position_u32=0,count_u32=count,max_bytes=max_bytes)
     p.commit()
     return result
 

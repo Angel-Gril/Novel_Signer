@@ -1,0 +1,1028 @@
+{
+  "component": "Request left character-set trim",
+  "search_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "leading_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "no_match",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_receiver",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "duplicate_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high_bytes",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "embedded_NUL",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "equal_position",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "before_end",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_position",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "beyond_length",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_receiver",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_receiver_payload",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_set_payload",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "pattern_bitmap_alias",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "leading_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "no_match",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_receiver",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "duplicate_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high_bytes",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "embedded_NUL",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "equal_position",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "before_end",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_position",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "beyond_length",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_receiver",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_receiver_payload",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_set",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_set_payload",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "pattern_bitmap_alias",
+      "kind": "forward_search",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "erase_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "prefix",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "middle",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "suffix",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "zero_count",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "past_end",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_position",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_adjusted_count",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_position_wrapped_count",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_fields",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_payload",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_length",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "capacity_too_small",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "zero_capacity",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "payload_fields_alias",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "prefix",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "middle",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "suffix",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero_count",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "past_end",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_position",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_adjusted_count",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_position_wrapped_count",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_fields",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_payload",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_length",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "capacity_too_small",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero_capacity",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "payload_fields_alias",
+      "kind": "erase",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "trim_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "leading_set",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "no_match",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all_set",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_receiver",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_set",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "duplicate_set",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high_bytes",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "embedded_NUL",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "same_object",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "exact_capacity",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "zero_capacity",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_capacity",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "leading_set",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "no_match",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all_set",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_receiver",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_set",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "duplicate_set",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high_bytes",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "embedded_NUL",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "same_object",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "exact_capacity",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero_capacity",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_capacity",
+      "kind": "left_trim",
+      "original_returned": true,
+      "signed_status_full_guest_ELF_and_applicable_scratch_match": true,
+      "live_fields_length_NUL_and_memmove_semantics_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "callback_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "leading_set",
+      "original_left_trim_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_padding_and_full_guest_ELF_scratch_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_receiver",
+      "original_left_trim_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_padding_and_full_guest_ELF_scratch_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "same_object",
+      "original_left_trim_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_padding_and_full_guest_ELF_scratch_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "leading_set",
+      "original_left_trim_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_padding_and_full_guest_ELF_scratch_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_receiver",
+      "original_left_trim_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_padding_and_full_guest_ELF_scratch_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "same_object",
+      "original_left_trim_wrapper_returned": true,
+      "source_callback_executed": true,
+      "packed_padding_and_full_guest_ELF_scratch_match": true,
+      "no_allocator_effects": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "native_Python_controls": 94,
+  "negative_cases": [
+    {
+      "case": "unmapped_receiver",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "unmapped_pattern",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "unmapped_bitmap",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "invalid_position",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "invalid_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "invalid_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "pattern_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "receiver_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "erase_unmapped_buffer",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "erase_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "invalid_erase_word",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "rollback_guards": 11,
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "whole_physical_stack_bytes_compared": false,
+  "complete_request_transform_caller": false,
+  "constructed_prefix_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "pre_change_native_RED_controls": 8,
+  "accepted_native_controls_not_repeated": true,
+  "left_set_trim_semantic_native_differential_verified": true,
+  "prior_reverse_bitmap_expansion_AST_preserved": true,
+  "constructed_nonempty_prefix_steps_before": 3559,
+  "constructed_nonempty_prefix_steps_after": 3767,
+  "constructed_prefix_next_callback_wrapper": "0x285ea8",
+  "constructed_prefix_next_callback_target": "0x287500",
+  "constructed_prefix_next_bytecode_offset": "0xfdde0",
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "allocator_provider_mapping_rollback_verified": false,
+  "constructed_request_ABI_is_independent_synthetic_input": true
+}
