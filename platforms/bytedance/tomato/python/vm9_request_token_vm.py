@@ -1,7 +1,7 @@
 """Bounded +0x287500 nested request VM, with independently generated inputs.
 
 Constants, random, shared readers, scopes and string lifecycle reuse owners.
-The next StringObject formatter is an explicit boundary; no pages are published.
+The next digest-reference consumer is an explicit boundary; no pages are published.
 """
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
@@ -102,6 +102,19 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,image_base=image,
                     allocate=string_services['allocate'],free=string_services['free'])
             elif string_services is not None and (wrapper,target)==(0x288B74,0x248908):
+                apply_token_string_transform_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    allocate=string_services['allocate'],reallocate=string_services['reallocate'],
+                    free=string_services['free'],prepare_format=string_services.get('prepare_format'))
+            elif string_services is not None and (wrapper,target) in (
+                    (0x288B8C,0x2481FC),(0x288BA0,0x248780)):
+                apply_token_string_transform_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    allocate=string_services['allocate'],reallocate=string_services['reallocate'],
+                    free=string_services['free'])
+            elif string_services is not None and (wrapper,target)==(0x288BBC,0x25874C):
                 raise Boundary()
             else:
                 raise RefillUnsupported(f'unknown request token callback +{wrapper:#x} -> +{target:#x}')
@@ -203,5 +216,61 @@ def apply_token_string_lifecycle_callback(pages, *, wrapper_offset,
         result=None
     else:
         raise RefillUnsupported('unrecovered token string lifecycle callback')
+    p.commit()
+    return result
+
+
+def apply_token_string_transform_callback(pages, *, wrapper_offset,
+        argument_block_address, image_base, entry_stack_address,
+        allocate, reallocate, free, prepare_format=None, max_bytes=0x100000):
+    """+288b74 format, +288b8c sized string, +288ba0 hidden-X8 pair.
+
+    W2 is read as 32 bits. The pair wrapper loads output X8 from packed+8,
+    X0 from +16 and X1 from +24, then composes the accepted clone and append
+    owners. Physical spill aliases remain outside that composition.
+    """
+    import vm9_objects as objects
+    p=_PageTransaction(pages)
+    words=tuple(int.from_bytes(_read_span(p,argument_block_address+i*8,8),'little') for i in range(4))
+    target=words[0]-image_base
+    pair=(wrapper_offset,target)
+    if pair==(0x288B74,0x248908):
+        import vm9_configuration_init as configuration
+        extra=tuple(int.from_bytes(_read_span(p,argument_block_address+i*8,8),'little') for i in (4,5))
+        result=configuration.format_string_object(p,object_address=words[1],format_address=words[2],
+            argument_addresses=(words[3]&0xFFFFFFFF,*extra,words[0]),image_base=image_base,
+            allocate=allocate,reallocate=reallocate,free=free,prepare_format=prepare_format,max_bytes=max_bytes)
+    elif pair==(0x288B8C,0x2481FC):
+        result=objects.construct_sized_string_object(p,object_address=words[1],source_address=words[2],
+            length=words[3]&0xFFFFFFFF,image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
+    elif pair==(0x288BA0,0x248780):
+        if type(entry_stack_address) is not int or not 0x200<=entry_stack_address<1<<64 or entry_stack_address&15:
+            raise RefillUnsupported('token pair stack requires aligned spill space')
+        def guard_span(address,width):
+            if address<entry_stack_address and address+width>entry_stack_address-0x200:
+                raise RefillUnsupported('token string pair aliases unmodeled physical spills')
+        for address in words[1:]:guard_span(address,24)
+        def guard_payloads(pages):
+            for address in words[2:]:
+                pointer=int.from_bytes(_read_span(pages,address+16,8),'little')
+                length=objects._s32(int.from_bytes(_read_span(pages,address+12,4),'little'))
+                if pointer and length>0:guard_span(pointer,length)
+        def checked_allocate(pages,size):
+            result=allocate(pages,size)
+            if result:guard_span(result,size)
+            guard_payloads(pages)
+            return result
+        def checked_reallocate(pages,pointer,size):
+            result=reallocate(pages,pointer,size)
+            if result:guard_span(result,size)
+            guard_payloads(pages)
+            return result
+        guard_payloads(p)
+        objects.clone_string_object(p,object_address=words[1],source_object_address=words[2],
+            image_base=image_base,allocate=checked_allocate,max_payload_bytes=max_bytes)
+        result=objects.append_string_fields(p,destination_fields=words[1]+8,source_fields=words[3]+8,
+            allocate=checked_allocate,reallocate=checked_reallocate,free=free,max_bytes=max_bytes)&0xFFFFFFFF
+    else:
+        raise RefillUnsupported('unrecovered token string transform callback')
     p.commit()
     return result

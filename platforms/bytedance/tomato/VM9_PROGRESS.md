@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request nested string transforms
+
+46项actual consumer对照、10项回滚通过；format/sized/pair复用既有owner，
+actual hidden-X8/W2布局恢复，matching-libc vsnprintf执行。独立owning inner
+321/+118B50，外层3767，下一288BBC→25874C MD5 reference。原页字节回滚，
+64新增OS pages保留。整段nested prefix、全JNI、physical ABI、mapping回滚、
+完整signer及fresh/live仍未完成。见 [nested strings报告](REQUEST_JNI_STARTUP_WORKERS.md#6138-request-nested-string-transforms2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request nested string lifecycle
 
 36项actual consumer对照、8项回滚通过；clone/default/free/destroy/delete复用

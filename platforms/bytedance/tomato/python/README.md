@@ -504,6 +504,8 @@ Actual nested diagnostic enter/leave consumers now reuse the accepted scope owne
 
 Actual nested clone, default, free, destroy and delete consumers reuse accepted owners. Thirty-six new native controls and eight rollback checks pass. The independently constructed owning entry reaches 287 nested steps, next at +248908 formatting. Complete nested return and signing remain unfinished. See the [nested lifecycle report](../REQUEST_JNI_STARTUP_WORKERS.md#6137-request-nested-string-lifecycle2026-10-13-asiashanghai).
 
+Actual nested format, sized and StringObject pair consumers now reuse accepted owners. Forty-six new native controls and ten rollback checks pass, including matching-libc vsnprintf. The independently constructed owning entry reaches 321 steps, next at MD5 reference construction. Whole nested return and complete signing remain unfinished. See the [nested strings report](../REQUEST_JNI_STARTUP_WORKERS.md#6138-request-nested-string-transforms2026-10-13-asiashanghai).
+
 
 
 

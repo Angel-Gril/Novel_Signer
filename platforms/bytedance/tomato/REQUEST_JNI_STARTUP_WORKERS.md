@@ -5421,6 +5421,32 @@ nested return、actual JNI、physical ABI、mapping回滚、完整signer、fresh
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_lifecycle_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <nested-lifecycle-evidence.json>
 ```
 
+## 6.138 Request nested string transforms（2026-10-13 Asia/Shanghai）
+
+新增 `apply_token_string_transform_callback`，恢复actual `+288B74 -> +248908`
+format、`+288B8C -> +2481FC` sized constructor和 `+288BA0 -> +248780`
+StringObject pair。format/sized复用已接受owner，pair按actual hidden-X8参数
+布局组合既有clone/append。W2读取low32；allocator/realloc/free与locale
+prepare为显式服务。旧default AST保留；string/format/outer源码逐字节不变。
+
+两基址 **46项actual consumer对照、10项回滚检查**通过：16 format、14 sized、
+16 pair。原生format执行matching-libc vsnprintf；signed/high-word、third
+argument、长字符串、重试/failure、binary/empty/negative长度及first/second
+output alias均覆盖。guest/ELF/TLS/packed padding、allocator/realloc/free和
+locale wake顺序一致。format及signed-negative sized的incidental X0不作ABI
+承诺；pair W0与positive/NULL sized X0对照。未建模physical spill alias
+拒绝，包括allocator在child transaction中修改source pointer的边界。2项RED。
+
+独立非空URL/header-owning入口 **287→321个内层步骤 / +118B50**，外层
+3767/+FDDE0，下一 `+288BBC -> +25874C` MD5 reference。原有page bytes差异
+为空，64个新增OS pages保留。没有整段nested prefix/whole-request对照；
+完整nested return、actual JNI、physical ABI、mapping回滚、完整signer、
+fresh/live及真实JVM仍未完成。见 [nested strings证据](evidence/vm9_request_token_strings_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_strings_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-strings-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
