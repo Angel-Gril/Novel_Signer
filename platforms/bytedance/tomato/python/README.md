@@ -508,6 +508,8 @@ Actual nested format, sized and StringObject pair consumers now reuse accepted o
 
 The actual nested MD5 consumer now reuses the accepted scoped reference lifecycle. Thirty-two new native controls and eight rollback checks pass with matching-libc recursive mutexes. The independently constructed owning entry reaches 422 steps, next at the obfuscated +287580 helper. Whole nested return and signing remain unfinished. See the [nested MD5 report](../REQUEST_JNI_STARTUP_WORKERS.md#6139-request-nested-scoped-md52026-10-13-asiashanghai).
 
+The request round schedule and block helpers now pass 32 new native controls and eight rollback checks. Encoded helper slots resolve from guest ELF, and block computation reuses the bytecode-bound Helios owner. The +287580 caller remains unfinished; the accepted owning boundary stays at 422 steps. See the [round/block report](../REQUEST_JNI_STARTUP_WORKERS.md#6140-request-round-schedule-and-block-helpers2026-10-13-asiashanghai).
+
 
 
 

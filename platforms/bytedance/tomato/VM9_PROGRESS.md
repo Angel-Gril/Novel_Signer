@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request round schedule/block helpers
+
+32项新helper对照、8项回滚通过，287EDC schedule/2881CC block、编码slot
+解析与guest bytecode绑定恢复。287580/287A78 caller尚未接入，已接受
+owning入口仍422步，未重放。全JNI、whole-request、physical ABI、mapping
+回滚、完整signer及fresh/live仍未完成。见 [round/block报告](REQUEST_JNI_STARTUP_WORKERS.md#6140-request-round-schedule-and-block-helpers2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request nested scoped MD5
 
 32项actual consumer对照、8项回滚通过；actual hidden-X8/byte flag/child

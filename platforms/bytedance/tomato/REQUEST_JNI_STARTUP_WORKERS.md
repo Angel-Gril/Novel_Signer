@@ -5473,6 +5473,32 @@ whole-request对照；完整nested return、actual JNI、physical ABI、mapping
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_digest_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-digest-evidence.json>
 ```
 
+## 6.140 Request round schedule and block helpers（2026-10-13 Asia/Shanghai）
+
+新增 `vm9_request_token_cipher.py`，恢复 `+287EDC` 四个little-endian seed
+words的34轮展开和 `+2881CC` block helper。实际 `+383548/+383550` 编码
+helper slots在两个基址均解析为这两处；变更slot拒绝。block复用既有Helios
+VM owner，先核对guest `+118F50` 的23条bytecode，再读取caller的34轮密钥
+和16字节input。round context写入35个words，剩余context bytes保留。
+
+两基址 **32项新helper对照、8项回滚检查**通过：14 schedule、18 block。
+zero/walk/pattern、key/context/scratch alias、cross-page、block原地/前后
+overlap及key/input/output alias覆盖。scratch先清零再复制seed，符合actual
+source/scratch alias；guest/ELF/defined scratch/canaries逐字节一致，没有
+allocator或service effects。4项native RED。physical X0/spills/PAC仍未对照，
+旧accepted helper组未重跑。
+
+此检查点只恢复standalone helpers，`+287580/+287A78` caller及 `+288BDC`
+consumer尚未接入。没有重放已接受入口，当前owning边界仍422/+118CE4。
+下一恢复caller的StringObject/填充/allocator/cleanup顺序，再验证consumer。
+整段nested return、actual JNI、whole-request、physical ABI、mapping回滚、
+完整signer、fresh/live及真实JVM仍未完成。
+见 [round/block证据](evidence/vm9_request_token_cipher_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_cipher_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-cipher-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

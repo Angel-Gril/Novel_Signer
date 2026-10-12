@@ -1,0 +1,464 @@
+{
+  "schema": "vm9-request-token-cipher-fresh-v1",
+  "evidence_date": "2026-10-13",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "kind": "key",
+      "case": "zero",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "key",
+      "case": "walk",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "key",
+      "case": "pattern",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "key",
+      "case": "key_context_alias",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "key",
+      "case": "key_cross_page",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "key",
+      "case": "context_cross_page",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "key",
+      "case": "key_scratch_alias",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "block",
+      "case": "zero",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "block",
+      "case": "walk",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "block",
+      "case": "pattern",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "block",
+      "case": "inplace",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "block",
+      "case": "output_before",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "block",
+      "case": "output_after",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "block",
+      "case": "output_key_alias",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "block",
+      "case": "input_key_alias",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "block",
+      "case": "cross_page",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "key",
+      "case": "zero",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "key",
+      "case": "walk",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "key",
+      "case": "pattern",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "key",
+      "case": "key_context_alias",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "key",
+      "case": "key_cross_page",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "key",
+      "case": "context_cross_page",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "key",
+      "case": "key_scratch_alias",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": false,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "block",
+      "case": "zero",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "block",
+      "case": "walk",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "block",
+      "case": "pattern",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "block",
+      "case": "inplace",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "block",
+      "case": "output_before",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "block",
+      "case": "output_after",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "block",
+      "case": "output_key_alias",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "block",
+      "case": "input_key_alias",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "block",
+      "case": "cross_page",
+      "original_helper_returned": true,
+      "all_guest_ELF_and_defined_scratch_equal": true,
+      "encoded_helper_slots_resolve": true,
+      "guest_bytecode_bound_to_reused_block_owner": true,
+      "no_allocator_or_service_effects": true,
+      "native_physical_X0_compared": false,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "key_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "context_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "key_spill_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "canary_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "block_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "bytecode_changed",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "helper_slot_changed",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "whole_physical_stack_bytes_compared": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "complete_nested_caller_return_verified": false,
+  "native_Python_controls": 32,
+  "rollback_guards": 8,
+  "pre_change_native_RED_controls": 4,
+  "accepted_native_controls_not_repeated": true,
+  "encoded_slots": [
+    "0x383548",
+    "0x383550"
+  ],
+  "resolved_helpers": [
+    "0x287edc",
+    "0x2881cc"
+  ],
+  "constructed_entry_replayed": false,
+  "constructed_prefix_native_differential_verified": false,
+  "obfuscated_287580_caller_integrated": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "limits": [
+    "Fresh standalone schedule/block helpers only; existing block VM owner reused after ELF bytecode binding.",
+    "Defined key scratch/canaries compared; physical X0/spills/PAC and whole-prefix not compared.",
+    "The accepted owning entry remains at 422 steps before +287580; no entry replay or advancement claimed."
+  ]
+}

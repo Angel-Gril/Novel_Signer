@@ -291,6 +291,7 @@ random state、getter和actual consumer通过 **98项新增对照、15项回滚*
 嵌套string生命周期通过 **36项新增对照、8项回滚**，内层推进至287步。见 [nested lifecycle报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6137-request-nested-string-lifecycle2026-10-13-asiashanghai)。
 嵌套string transforms通过 **46项新增对照、10项回滚**，内层推进至321步。见 [nested strings报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6138-request-nested-string-transforms2026-10-13-asiashanghai)。
 嵌套scoped MD5通过 **32项新增对照、8项回滚**，内层推进至422步。见 [nested MD5报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6139-request-nested-scoped-md52026-10-13-asiashanghai)。
+request轮密钥/分组helper通过 **32项新增对照、8项回滚**；caller待恢复。见 [round/block报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6140-request-round-schedule-and-block-helpers2026-10-13-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
