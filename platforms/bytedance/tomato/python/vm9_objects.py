@@ -364,6 +364,88 @@ def construct_substring_string_object(pages, *, object_address: int,
     return result
 
 
+def construct_cstring_string_object(pages, *, object_address: int,
+        first_cstring_address: int, second_object_address: int, image_base: int,
+        entry_stack_address: int, thread_pointer: int, allocate: Callable,
+        reallocate: Callable, free: Callable, max_payload_bytes: int = 0x100000) -> int:
+    """+0x248f5c: temporary CString object, +0x248780 clone/append, cleanup.
+
+    Return the internal append status, not incidental outer X0. Model the
+    temporary object and canary; refuse aliases into physical register spills.
+    Native allocation failures still destroy the temporary. Unsupported effects
+    roll pages back; external allocation/free ledgers are not rolled back.
+    """
+    _string_bound(max_payload_bytes)
+    if any(type(v) is not int or not 0 <= v <= (1 << 64) - width for v,width in
+           ((object_address,24),(second_object_address,24),
+            (first_cstring_address,1),(thread_pointer,0x30))):
+        raise RefillUnsupported('combined string addresses must fit uint64')
+    if type(entry_stack_address) is not int or not 0x1D0 <= entry_stack_address < 1 << 64 or entry_stack_address & 15:
+        raise RefillUnsupported('combined string stack requires aligned scratch space')
+    frame = entry_stack_address - 0x50
+    def guard_span(address, width, *, temporary=False):
+        if address + width > 1 << 64:
+            raise RefillUnsupported('combined string span wraps uint64')
+        if address < entry_stack_address and address + width > frame - 0x180:
+            if not (temporary and frame <= address and address + width <= frame + 0x20):
+                raise RefillUnsupported('combined string aliases unmodeled physical spills')
+    for address in (object_address, second_object_address):
+        guard_span(address,24,temporary=address == frame)
+    staged = _PageTransaction(pages)
+    _write_span(staged,frame + 0x18,_read_span(staged,thread_pointer + 0x28,8))
+    first_payload = None
+    if first_cstring_address:
+        guard_span(first_cstring_address,1)
+        first_payload = _cstring(staged,first_cstring_address,min(max_payload_bytes + 1,0x100000))
+        guard_span(first_cstring_address,len(first_payload))
+    append_length = None
+    def checked_effect(effect, p, *args):
+        result = effect(p,*args)
+        if effect is not free and result:
+            guard_span(result,args[-1])
+        if append_length is not None:
+            source = int.from_bytes(_read_span(p,second_object_address + 16,8),'little')
+            if source and append_length > 0:
+                guard_span(source,append_length,temporary=True)
+        return result
+    def checked_allocate(p,size):
+        result = checked_effect(allocate,p,size)
+        # The existing CString owner captures its bytes before allocation.
+        # Refuse provider mutation of that input during its constructor.
+        if constructing_first and first_payload is not None:
+            if _read_span(p,first_cstring_address,len(first_payload)) != first_payload:
+                raise RefillUnsupported('combined CString changed during allocation')
+        return result
+    def checked_reallocate(p,pointer,size):
+        return checked_effect(reallocate,p,pointer,size)
+    def checked_free(p,pointer):
+        return checked_effect(free,p,pointer)
+    constructing_first = True
+    construct_string_object(staged,object_address=frame,source_address=first_cstring_address,
+        allocate=checked_allocate,vtable_address=_image_address(image_base,0x34F5F8),
+        empty_descriptor_address=_image_address(image_base,0x6E168),
+        max_source_bytes=min(max_payload_bytes + 1,0x100000))
+    constructing_first = False
+    clone_string_object(staged,object_address=object_address,source_object_address=frame,
+        allocate=checked_allocate,image_base=image_base,max_payload_bytes=max_payload_bytes)
+    if int.from_bytes(_read_span(staged,object_address + 16,8),'little'):
+        source = int.from_bytes(_read_span(staged,second_object_address + 16,8),'little')
+        if source:
+            append_length = _s32(int.from_bytes(_read_span(staged,second_object_address + 12,4),'little'))
+            if append_length > max_payload_bytes:
+                raise RefillUnsupported('combined second payload exceeds the explicit bound')
+            if append_length > 0:guard_span(source,append_length,temporary=True)
+    status = append_string_fields(staged,destination_fields=object_address + 8,
+        source_fields=second_object_address + 8,allocate=checked_allocate,
+        reallocate=checked_reallocate,free=checked_free,max_bytes=max_payload_bytes)
+    append_length = None
+    destroy_string_object(staged,object_address=frame,image_base=image_base,free=checked_free)
+    if _read_span(staged,frame + 0x18,8) != _read_span(staged,thread_pointer + 0x28,8):
+        raise RefillUnsupported('combined string native canary changed')
+    staged.commit()
+    return status
+
+
 def find_string_object_byte(pages, *, object_address: int, target_byte: int,
                             start_u32: int, max_bytes: int = 0x100000) -> int:
     """+0x248c1c searches declared bytes, including bytes after embedded NUL.

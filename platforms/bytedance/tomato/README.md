@@ -317,6 +317,8 @@ A new constructed nonempty request prefix now matches the original caller and in
 
 Field clone and X8 substring construction now pass 74 new native controls and 20 rollback checks. Wrapped signed substring arithmetic, allocation failures and modeled scratch aliases match. The constructed nonempty prefix advances to 2510 steps; the next temporary-string composition, actual JNI conversion and complete signing remain unfinished. See the [substring report](REQUEST_JNI_STARTUP_WORKERS.md#6107-field-clone-与-substring2026-10-12-asiashanghai).
 
+CString plus StringObject composition and temporary cleanup now pass 84 new native controls and 28 rollback checks. Allocation failures, declared binary tails and modeled temporary aliases match, including pre-free bytes. The constructed nonempty prefix advances to 2520 steps; StringObject plus CString construction, actual JNI conversion and complete signing remain unfinished. See the [composition report](REQUEST_JNI_STARTUP_WORKERS.md#6108-cstringstringobject-拼接2026-10-12-asiashanghai).
+
 
 
 

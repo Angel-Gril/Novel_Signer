@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：CString/StringObject拼接与清理
+
+84项新增原生对照、28项回滚通过；恢复temporary构造、clone/append及析构。
+构造非空入口推进到2520步；下一StringObject/CString组合待原生验证。
+64个新增allocator OS页仍不回滚；actual JNI、suffix native整链差分、
+完整signer、fresh/live及真实JVM未完成。见 [组合报告](REQUEST_JNI_STARTUP_WORKERS.md#6108-cstringstringobject-拼接2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：field clone与substring
 
 74项新增原生对照、20项回滚通过；恢复borrowed fields复制与X8 substring。

@@ -441,6 +441,18 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_substrings', []).append(dict(
                         start_u32=start, count_u32=count, output_object_address=words[1]))
+            elif allocate is not None and (wrapper, target) == (0x285CD8, 0x248F5C):
+                if reallocate is None or free is None:
+                    raise PrefixBoundary()
+                status = objects.construct_cstring_string_object(vm.m.pages,
+                    object_address=words[1], first_cstring_address=words[2],
+                    second_object_address=words[3], image_base=image,
+                    entry_stack_address=frame.native_stack_address - 0x190,
+                    thread_pointer=inputs['thread_pointer'], allocate=allocate,
+                    reallocate=reallocate, free=free)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_string_combinations', []).append(dict(
+                        output_object_address=words[1], append_status=status))
             elif (wrapper, target) == (0x285C94, 0x2487E8):
                 import vm9_configuration_init as configuration
                 if any(not v or v > (1 << 64) - 24 for v in words[1:3]):

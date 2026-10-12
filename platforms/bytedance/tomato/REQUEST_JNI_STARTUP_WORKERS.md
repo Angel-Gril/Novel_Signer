@@ -4513,6 +4513,44 @@ fresh/live与真实JVM未完成。拒绝仍保留64个新增allocator OS pages�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_substring_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-substring-evidence.json>
 ```
 
+## 6.108 CString/StringObject 拼接（2026-10-12 Asia/Shanghai）
+
+新增 `construct_cstring_string_object` 恢复 `+248F5C`，接入
+`+285CD8`：packed+8 为X8 output，+16 为CString，+24 为StringObject。
+先在body SP-0x50构造temporary，再执行 `+248780` 的clone/declared
+append组合，最后复用现有析构并检查TLS canary。NULL CString仍执行
+8字节allocation；第二项的embedded NUL之后字节按declared length追加。
+复用现有construct/clone/append/destroy owner；wrapper不写packed result。
+内部append status与原native一致，outer incidental X0未声明恢复。
+
+两基址 **84项新增原生/Python对照、28项回滚**通过，4项native RED。
+21 profiles分别通过direct body和actual wrapper：binary tail、empty与
+NULL输入、negative second length、output/second alias、first/output
+alias、second/temporary与output/temporary alias、跨页、constructor
+allocation failure、reserve malloc/realloc failure、inplace realloc、
+allocator改写second pointer后重载，以及temporary/canary payload alias。
+guest data区域+0xA000及packed bytes、全部main image pages、分配/追加/
+释放顺序、剩余heap与pre-free bytes匹配。原ELF body和wrapper未修改，
+malloc/realloc/free与memory PLT保持显式服务边界。没有使用native输出
+初始化Python，也未重复已接受的原生分组。
+
+只恢复temporary object和canary slots；physical register spills alias
+显式拒绝。首项CString在其allocation期间被provider改写也显式拒绝，
+以保留现有CString owner的边界。unsupported操作回滚guest pages；
+外部provider allocation/free ledgers不回滚。native allocation NULL的
+部分效果和temporary析构仍保留。
+
+构造非空请求从2510推进到 **2520步**，组合callback执行一次；下一处为
+`+285CF4 -> +2487B4`。该body已静态核实为clone StringObject，然后
+tail-call CString append，仍待新增原生对照。原有页面字节回滚，64个
+新增allocator OS pages仍保留。构造入口并非实际JNI转换；新suffix
+native整链差分、完整signer、fresh/live及真实JVM未完成。
+见 [组合与清理证据](evidence/vm9_request_concat_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_concat_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-concat-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
