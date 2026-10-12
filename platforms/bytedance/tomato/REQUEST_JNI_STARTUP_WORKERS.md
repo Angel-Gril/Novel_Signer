@@ -4586,6 +4586,45 @@ fresh/live及真实JVM未完成。见 [对象与CString构造证据](evidence/vm
 python -B platforms/bytedance/tomato/python/verify_vm9_request_object_cstring_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-object-cstring-evidence.json>
 ```
 
+## 6.110 Matching-libc 同类别 realloc（2026-10-12 Asia/Shanghai）
+
+新增 `vm9_libc_tcache.reallocate_same_small_bin`，接入共享
+`ActualAllocatorSession.reallocate`。针对current initialized TSD/cache、
+有效small slab slot、positive request<=4096且新旧size class相同的分支，
+恢复原libc `+1BB88 -> +90420 -> +7BB80/+7B2C8`。原指针与usable
+buffer保留，不执行malloc/free，也不增加cache event；TSD allocated及
+deallocated byte counters都按usable size增加，保留uint64 wrapping。
+NULL/zero、cross-bin、profiling、缺失或noncurrent TSD/cache与无效输入
+仍显式拒绝。本检查点未恢复完整realloc。
+
+两基址 **18项新增原生/Python对照、28项回滚**通过，2项原生RED。
+新输入来自已验证的Python allocator bootstrap，不使用native输出或
+捕获进程页。loader relocation是输入，原libc export及realloc/helper
+指令实际执行；该分支没有替代malloc/free或syscall。核对除physical
+stack页以外的全部初始页面、pointer、payload、allocator metadata和
+TSD counters。覆盖多个small classes、identity、同类别变更及统计溢出；
+拒绝NULL/zero/cross-bin/oversized/profiling/missing TSD/cache、interior、
+wrong tag、never-issued slot、已回cache对象与unmapped payload，页回滚。
+已接受的早期native组未重跑。
+
+首次私有original realloc trace已观察到实际请求中的8->8原地分支。
+初次探针缺少native loader relocation导致fetch failure；补齐ELF
+relocation后原body返回，但外层探针记录列表混用令最终检查失败。
+随后独立验证器的2 RED与18 GREEN/28 guards全部通过；本节证据以
+独立验证器为准。期间一个合成profile的新旧类别不同，在进入native
+之前被fixture检查拒绝；更换为新profile，未重复已通过原生对照。
+
+非空构造入口从2520推进到 **2538步**，StringObject/CString回调完成
+一次并执行后续析构；下一处为 `+285D10 -> +248C54`，static wrapper
+输入为两个StringObject与W start，W result写packed+28。该body委托
+`+2476B0`，搜索语义仍待原生恢复。原有页面字节回滚，64个新增allocator
+OS pages仍保留。whole request/suffix原生差分、actual JNI转换、完整
+signer、fresh/live与真实JVM未完成。见 [同类别realloc证据](evidence/vm9_libc_realloc_same_bin_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_realloc_same_bin_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <same-bin-realloc-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

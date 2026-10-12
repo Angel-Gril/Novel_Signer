@@ -452,6 +452,67 @@ def allocate_public_small(guest_os, *, request_size, libc_base, thread_pointer, 
     return result
 
 
+def reallocate_same_small_bin(pages, *, pointer, request_size, libc_base, thread_pointer):
+    """+0x90420 -> +0x7bb80/+0x7b2c8, current TSD and same small class.
+
+    The native pointer stays in place and the two TSD byte counters grow by
+    usable size, wrapping uint64. No allocation/free/cache event occurs.
+    NULL/zero, profiling, missing/noncurrent TSD and cross-class realloc remain
+    unsupported. Validate live slab ownership and refuse cached/freed input.
+    """
+    if type(pointer) is not int or not 0 < pointer <= MASK:
+        raise allocator.RefillUnsupported('same-bin realloc requires a nonNULL uint64 pointer')
+    if type(request_size) is not int or not 1 <= request_size <= 4096:
+        raise allocator.RefillUnsupported('same-bin realloc requires a positive request up to 4096')
+    p = allocator._PageTransaction(pages)
+    if _u(p,libc_base + 0xE69C0):
+        raise allocator.RefillUnsupported('realloc profiling is unrecovered')
+    key = _u(p,_indirect(p,libc_base,0xD8F98),4)
+    wrapper = allocator.pthread_getspecific(p,key=key,thread_pointer=thread_pointer,
+        generation_table=libc_base + 0xE0200)
+    if not wrapper or _u(p,wrapper + 8,4) != 1:
+        raise allocator.RefillUnsupported('same-bin realloc requires current initialized TSD')
+    cache = _u(p,wrapper + 0x10)
+    if not cache:
+        raise allocator.RefillUnsupported('same-bin realloc requires the current cache')
+    mask = _u(p,_indirect(p,libc_base,0xD8DD8))
+    chunk = pointer & ~mask;page = (pointer - chunk) >> 12
+    bias = _u(p,_indirect(p,libc_base,0xD8F58))
+    if chunk == pointer or not bias <= page < _u(p,_indirect(p,libc_base,0xD8E10)):
+        raise allocator.RefillUnsupported('same-bin realloc requires a small arena allocation')
+    tag = _u(p,chunk + 0x68 + (page - bias) * 8)
+    class_id = (tag >> 4) & 255
+    if tag & 3 != 1 or not 0 <= class_id < 36:
+        raise allocator.RefillUnsupported('same-bin realloc requires an allocated small page tag')
+    if region._size_index(p,libc_base,request_size) != class_id:
+        raise allocator.RefillUnsupported('matching-libc cross-bin realloc is unrecovered')
+    width = _u(p,libc_base + 0xA6C80 + class_id * 8)
+    first_page = page - (tag >> 12);row = libc_base + 0xE9120 + class_id * 96
+    stride = _u(p,row + 0x10)
+    delta = pointer - chunk - (first_page << 12) - _u(p,row + 0x58,4)
+    if first_page < bias or not stride or delta < 0 or delta % stride:
+        raise allocator.RefillUnsupported('realloc pointer is not a live slab slot boundary')
+    slot = delta // stride
+    slab = chunk + _u(p,libc_base + 0xE9EA0) + (first_page - bias) * 96 + 16
+    if slot >= _u(p,row + 0x20,4) or _u(p,slab,4) != class_id:
+        raise allocator.RefillUnsupported('realloc pointer is outside the matching slab')
+    if _u(p,slab + 8 + (slot >> 6) * 8) & (1 << (slot & 63)):
+        raise allocator.RefillUnsupported('realloc pointer names a never-issued slot')
+    bin_address = cache + class_id * 32
+    count = _u(p,bin_address + 0x30,4)
+    capacity = _u(p,_u(p,libc_base + 0xE9F50) + class_id * 4,4)
+    if count > capacity:
+        raise allocator.RefillUnsupported('realloc current bin count exceeds capacity')
+    vector = _u(p,bin_address + 0x38)
+    if any(_u(p,vector + i * 8) == pointer for i in range(count)):
+        raise allocator.RefillUnsupported('realloc input already belongs to the cache')
+    allocator._read_span(p,pointer,width)
+    _w(p,wrapper + 0x18,(_u(p,wrapper + 0x18) + width) & MASK)
+    _w(p,wrapper + 0x20,(_u(p,wrapper + 0x20) + width) & MASK)
+    p.commit()
+    return pointer
+
+
 def _release_cached_small_pages(pages, *, pointer, libc_base, thread_pointer, flush_bin=None, collect_cache=None):
     """Actual free +0x1bac0 -> +0x91990, NULL or nonfull clean small cache.
 

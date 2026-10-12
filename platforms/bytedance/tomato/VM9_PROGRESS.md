@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：matching-libc同类别realloc
+
+18项新增原生对照、28项回滚通过；恢复current small cache内的same-bin
+realloc和TSD wrapping统计。非空入口推进到2538步，下一StringObject
+搜索callback仍待恢复。cross-bin/NULL/zero realloc、actual JNI、suffix
+整链原生差分、完整signer、fresh/live及真实JVM未完成。64新增OS页保留。
+见 [同类别realloc报告](REQUEST_JNI_STARTUP_WORKERS.md#6110-matching-libc-同类别-realloc2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：StringObject/CString构造
 
 68项新增原生对照、24项回滚通过；复用clone和live CString append。

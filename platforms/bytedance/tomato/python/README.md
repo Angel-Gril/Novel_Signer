@@ -450,6 +450,8 @@ CString plus StringObject composition and temporary cleanup now pass 84 new nati
 
 StringObject clone plus CString append construction now passes 68 new native controls and 24 rollback checks, including 12 new long-first realloc controls. Native X0, live aliases and partial reserve failures match. The constructed nonempty entry remains at 2520 steps and now stops inside this callback at the unrecovered matching-libc realloc boundary. Actual JNI conversion and complete signing remain unfinished. See the [object and CString report](../REQUEST_JNI_STARTUP_WORKERS.md#6109-stringobjectcstring-构造2026-10-12-asiashanghai).
 
+Matching-libc same small-bin realloc now passes 18 new original-instruction controls and 28 rollback checks. It retains the pointer and usable buffer while updating both TSD byte counters with uint64 wrapping. Cross-bin and NULL/zero realloc remain unfinished. The constructed nonempty prefix advances to 2538 steps; the next StringObject search callback, actual JNI conversion and complete signing remain unfinished. See the [same-bin realloc report](../REQUEST_JNI_STARTUP_WORKERS.md#6110-matching-libc-同类别-realloc2026-10-12-asiashanghai).
+
 
 
 
