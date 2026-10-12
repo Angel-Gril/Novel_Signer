@@ -6390,5 +6390,12 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_nonempty_effective_abi_fresh_20261012": {
+    "path": "evidence/vm9_request_nonempty_effective_abi_fresh_20261012.json",
+    "effective_packed_input_controls": 98,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

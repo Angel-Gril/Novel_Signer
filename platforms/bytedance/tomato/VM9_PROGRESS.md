@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：constructed nonempty effective ABI
+
+2395步的构造非空入口与原caller/interpreter在98次callback路径、packed
+addresses和有效输入上全部一致。native停止在substring body入口，97个
+body已执行；全部payload/heap/stack/OS差分、actual JNI与完整signer
+未完成。拒绝仍保留64个新增allocator OS页。见 [非空effective ABI报告](REQUEST_JNI_STARTUP_WORKERS.md#6106-constructed-nonempty-request-effective-abi2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：request binary equality
 
 48项新增原生对照、8项回滚通过，含16项actual matching-libc memcmp。

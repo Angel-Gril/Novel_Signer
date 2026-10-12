@@ -4447,6 +4447,32 @@ RED记录首次漏捕缺页ValueError；原生assertions已通过的第一项保
 python -B platforms/bytedance/tomato/python/verify_vm9_request_binary_equality_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <request-binary-equality-evidence.json>
 ```
 
+## 6.106 Constructed nonempty request effective ABI（2026-10-12 Asia/Shanghai）
+
+新增一组构造URL与一项header的原生prefix输入对照。双方从同一份独立
+构造的fresh ABI/ELF状态开始；原native caller/interpreter指令保持原样，
+真实matching libc allocation执行，JNI/clock/OS服务使用显式边界。Python
+入口推进到2395步；native在 `+285CB8 -> +248D3C` substring callback
+入口受控停止，尚未执行该body。
+
+**98次callback路径、packed addresses与有效packed输入全部一致，0差异**。
+输入范围由original wrapper load宽度提取，包括byte/W/u64/pair与第五word；
+其中97项callback body已经执行，第98项比较的是下一个body的入口输入。
+这里未逐一比较指向payload的全部内容、heap bytes、physical stack、
+libc globals或全部syscall参数，不能升级为完整非空request native等价。
+native wrapper入口SP实测为request caller entry-0x18C0，即caller local
+stack-0x180；substring wrapper保存LR后进入body的SP为local-0x190。
+Python拒绝保留原有page bytes，但64个新增allocator OS pages仍保留。
+
+初次受控停止已到达正确wrapper，但沿用whole-return断言而被误报为
+did-not-return；只调整私有oracle的终止判定，使其接受所请求的wrapper
+停止点，未修改ELF caller/interpreter。后续原生prefix与98项输入对照通过；
+未重复此前已接受的native分组。正常库memcmp/callback实现保持原native
+指令；最后一处未执行的substring也没有替换成猜测结果。
+
+实际JNI输入转换、substring body、完整signer、fresh/live与真实JVM继续。
+见 [非空effective ABI证据](evidence/vm9_request_nonempty_effective_abi_fresh_20261012.json)。
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

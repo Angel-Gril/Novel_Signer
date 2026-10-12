@@ -313,6 +313,8 @@ Request sized-string dispatch now passes 18 new native wrapper controls and ten 
 
 Request binary equality now passes 48 new native controls and eight rollback checks, including 16 comparisons using the actual matching-libc memcmp body. Native short circuits now precede skipped fields and payload bounds. The constructed nonempty prefix advances to 2395 steps; substring construction and complete signing remain unfinished. See the [binary equality report](REQUEST_JNI_STARTUP_WORKERS.md#6105-request-binary-equality2026-10-12-asiashanghai).
 
+A new constructed nonempty request prefix now matches the original caller and interpreter across 98 callback paths, packed addresses and effective packed inputs. Native stops before the substring body; pointed payloads, full heap/stack equivalence, actual JNI conversion and complete signing remain unfinished. See the [nonempty effective ABI report](REQUEST_JNI_STARTUP_WORKERS.md#6106-constructed-nonempty-request-effective-abi2026-10-12-asiashanghai).
+
 
 
 
