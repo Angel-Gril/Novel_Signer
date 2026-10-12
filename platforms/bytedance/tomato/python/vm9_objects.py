@@ -530,6 +530,68 @@ def find_string_object_byte(pages, *, object_address: int, target_byte: int,
     return 0xFFFFFFFF
 
 
+def find_string_object_ascii_case_insensitive(pages, *, object_address: int,
+        pattern_object_address: int, start_u32: int, entry_stack_address: int,
+        max_comparisons: int = 0x100000) -> int:
+    """+0x248c54/+0x2476b0: forward search of declared bytes, ASCII A-Z fold.
+
+    Preserve native field-read short circuits and identical-pointer fast path.
+    Bound actual byte-pair comparisons, allowing huge declared lengths with
+    early matches. Physical body/wrapper spill aliases remain unsupported.
+    Return W0 (uint32 index or 0xffffffff). No pages or allocator state change.
+    """
+    if any(type(v) is not int or not 0 <= v < 1 << 64 for v in
+           (object_address,pattern_object_address)):
+        raise RefillUnsupported('casefold search object addresses must fit uint64')
+    if type(start_u32) is not int or not 0 <= start_u32 <= 0xFFFFFFFF:
+        raise RefillUnsupported('casefold search start must fit W2')
+    if type(entry_stack_address) is not int or not 16 <= entry_stack_address < (1 << 64) - 16 or entry_stack_address & 15:
+        raise RefillUnsupported('casefold search requires aligned body stack')
+    if type(max_comparisons) is not int or not 0 <= max_comparisons <= 0x100000:
+        raise ValueError('invalid casefold search comparison bound')
+    mask = (1 << 64) - 1
+    def read(address,width):
+        address &= mask
+        if address + width > 1 << 64:
+            raise RefillUnsupported('casefold search read spans uint64 boundary')
+        if address < entry_stack_address + 16 and address + width > entry_stack_address - 16:
+            raise RefillUnsupported('casefold search aliases unmodeled physical spills')
+        return _read_span(pages,address,width)
+    fields = (object_address + 8) & mask
+    pattern_fields = (pattern_object_address + 8) & mask
+    if not fields:return 0xFFFFFFFF
+    pointer = int.from_bytes(read(fields + 8,8),'little')
+    if not pointer or not pattern_fields:return 0xFFFFFFFF
+    length = _s32(int.from_bytes(read(fields + 4,4),'little'))
+    if length < 0:return 0xFFFFFFFF
+    pattern = int.from_bytes(read(pattern_fields + 8,8),'little')
+    if not pattern:return 0xFFFFFFFF
+    pattern_length = _s32(int.from_bytes(read(pattern_fields + 4,4),'little'))
+    if pattern_length < 0:return 0xFFFFFFFF
+    start = _s32(start_u32)
+    if start == length:return start_u32 if not pattern_length else 0xFFFFFFFF
+    if start < 0 or start > length:return 0xFFFFFFFF
+    if not pattern_length:return start_u32
+    final = length - pattern_length
+    if final < start:return 0xFFFFFFFF
+    if start == 0 and pointer == pattern:return 0
+    comparisons = 0
+    for index in range(start,final + 1):
+        for offset in range(pattern_length):
+            if comparisons >= max_comparisons:
+                raise RefillUnsupported('casefold search exceeds the explicit comparison bound')
+            # Native loads the pattern byte before the receiver byte.
+            first = read(pattern + offset,1)[0]
+            second = read(pointer + index + offset,1)[0]
+            comparisons += 1
+            if first != second:
+                first = first | 32 if 65 <= first <= 90 else first
+                second = second | 32 if 65 <= second <= 90 else second
+                if first != second:break
+        else:return index & 0xFFFFFFFF
+    return 0xFFFFFFFF
+
+
 def read_signer_request_flag(pages, *, object_address: int) -> int:
     """+0x282a68 returns the full receiver byte at +0x52, without header reads."""
     if type(object_address) is not int or not 0 <= object_address <= (1 << 64) - 0x53:

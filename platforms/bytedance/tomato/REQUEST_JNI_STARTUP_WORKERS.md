@@ -4625,6 +4625,41 @@ signer、fresh/live与真实JVM未完成。见 [同类别realloc证据](evidence
 python -B platforms/bytedance/tomato/python/verify_vm9_libc_realloc_same_bin_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <same-bin-realloc-evidence.json>
 ```
 
+## 6.111 StringObject ASCII casefold 搜索（2026-10-12 Asia/Shanghai）
+
+新增 `find_string_object_ascii_case_insensitive` 恢复
+`+248C54 -> +2476B0`，接入 `+285D10`：packed+8为receiver，+16为
+pattern StringObject，+24为W start，W0 result写packed+28。按declared
+length搜索，包括NUL之后的binary bytes；仅将ASCII A-Z折为a-z。
+保留原native read order：receiver pointer、receiver signed length、
+pattern pointer/length、start边界，再逐项比较pattern byte与receiver
+byte。negative/NULL与empty pattern的short circuits、same-pointer
+fast path和signed start均保留。capacity/vtable不参与搜索。
+
+两基址 **72项新增原生/Python对照、20项回滚**通过，2项native RED。
+18 profiles的direct body与actual wrapper覆盖binary/mixed ASCII、
+last match、empty pattern/at end、negative start/length、past end、
+NULL payload、longer pattern、non-ASCII、miss、same pointer跳过unmapped
+payload、overlap、cross-page、large declared length早期匹配，以及标点
+不能以ASCII大小写折叠。native W0与packed+28的4字节写入一致，guest
+data区域+0xA000一致；Python搜索本身不改变任何页面，无allocator或
+service调用。native output未用于Python输入，旧原生分组未重跑。
+
+比较上限按实际byte pairs计数，允许大声明长度下早期match；非法
+start/bound/stack、unmapped访问、scan超限及physical spill alias显式
+拒绝且pages不变。body/wrapper的physical register spills未恢复。
+
+非空构造入口从2538推进到 **2590步**，新搜索callback完成两次；下一处
+为 `+285D34 -> +248B24`。其packed layout同样包括W start与+28 W结果，
+第二输入是CString；static body先检查NULL source、receiver W length
+与start，再读取source首byte，完整搜索body仍需核实。原有页面字节
+回滚，64个新增allocator OS pages保留。actual JNI、suffix整链原生差分、
+完整signer、fresh/live及真实JVM未完成。见 [casefold搜索证据](evidence/vm9_request_casefold_search_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_casefold_search_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-casefold-search-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

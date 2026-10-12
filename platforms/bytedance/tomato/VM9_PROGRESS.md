@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：StringObject ASCII casefold搜索
+
+72项新增原生对照、20项回滚通过；恢复declared binary搜索、short circuits
+和same-pointer fast path。非空入口推进到2590步，下一CString-pattern
+搜索callback待恢复。64个新增OS页保留；actual JNI、suffix整链差分、
+完整signer、fresh/live与真实JVM未完成。见 [casefold报告](REQUEST_JNI_STARTUP_WORKERS.md#6111-stringobject-ascii-casefold-搜索2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：matching-libc同类别realloc
 
 18项新增原生对照、28项回滚通过；恢复current small cache内的same-bin

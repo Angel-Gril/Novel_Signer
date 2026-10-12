@@ -452,6 +452,8 @@ StringObject clone plus CString append construction now passes 68 new native con
 
 Matching-libc same small-bin realloc now passes 18 new original-instruction controls and 28 rollback checks. It retains the pointer and usable buffer while updating both TSD byte counters with uint64 wrapping. Cross-bin and NULL/zero realloc remain unfinished. The constructed nonempty prefix advances to 2538 steps; the next StringObject search callback, actual JNI conversion and complete signing remain unfinished. See the [same-bin realloc report](../REQUEST_JNI_STARTUP_WORKERS.md#6110-matching-libc-同类别-realloc2026-10-12-asiashanghai).
 
+Declared StringObject ASCII case-insensitive search now passes 72 new native controls and 20 rollback checks. Binary tails, native short circuits and the same-pointer fast path match; bounds count actual byte comparisons. The constructed nonempty prefix advances to 2590 steps; the next CString-pattern search, actual JNI conversion and complete signing remain unfinished. See the [casefold search report](../REQUEST_JNI_STARTUP_WORKERS.md#6111-stringobject-ascii-casefold-搜索2026-10-12-asiashanghai).
+
 
 
 
