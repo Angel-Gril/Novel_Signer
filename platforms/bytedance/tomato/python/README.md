@@ -522,6 +522,8 @@ Nested caller return passes 32 new native controls and ten rollback checks, plus
 
 Actual URL condition passes 40 new native controls and seven rollback checks. Three lazy constants and ordered searches preserve the disabled URL shortcut and one-byte packed result. The constructed owning request reaches3900 steps, next at +287474. Whole request equivalence and complete signing remain unfinished. See the [URL condition report](../REQUEST_JNI_STARTUP_WORKERS.md#6146-request-url-condition2026-10-13-asiashanghai).
 
+The second request VM caller and bounded prefix pass 20 new native controls and eight rollback checks. All32 prelude/backing words and the first three decode consumers match. The constructed owning input reaches617 steps, next at default StringObject construction. Complete second VM return and signing remain unfinished. See the [second VM report](../REQUEST_JNI_STARTUP_WORKERS.md#6147-request-second-vm-caller-and-prefix2026-10-13-asiashanghai).
+
 
 
 

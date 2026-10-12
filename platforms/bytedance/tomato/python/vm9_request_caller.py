@@ -308,3 +308,59 @@ def finish_request_token_vm_caller(pages, *, image_base, entry_stack_address,
     if x30>=1<<56:
         raise RefillUnsupported('PAC-tagged token caller return is unsupported')
     return RequestCallerReturn(x30,entry_stack_address,callback_sentinel,x19,x28,x29,x30)
+
+
+def prepare_request_287474_vm_caller(pages, *, entry_stack_address, return_address,
+        thread_pointer, image_base, object_address, saved_frame_pointer=0,
+        saved_x28=0, saved_x19=0) -> RequestVmCallerFrame:
+    """Generate +0x287474's caller and the defined generic VM prelude slots.
+
+    Descriptor top is local SP+0x19D0. Undefined virtual words and packed
+    padding retain live caller memory. TLS is read after the native spills,
+    including when its canary address aliases the saved caller registers.
+    """
+    values = (entry_stack_address, return_address, thread_pointer, image_base,
+        object_address, saved_frame_pointer, saved_x28, saved_x19)
+    if any(type(v) is not int or not 0 <= v < 1 << 64 for v in values):
+        raise RefillUnsupported('request second VM caller inputs must fit uint64')
+    if entry_stack_address < 0x1A00 or entry_stack_address & 15:
+        raise RefillUnsupported('request second VM caller stack must be aligned')
+    if return_address >= 1 << 56:
+        raise RefillUnsupported('PAC-tagged request second VM return is unsupported')
+    tx = _PageTransaction(pages)
+    local = entry_stack_address - 0x1A00
+    def word(address, value):
+        _write_span(tx, address, value.to_bytes(8, 'little'))
+    try:
+        _read_span(tx, local, 0x1A00)
+        _read_span(tx, image_base + 0x102BB0, 4)
+        for address, value in (
+            (entry_stack_address - 0x20, saved_frame_pointer),
+            (entry_stack_address - 0x18, return_address),
+            (entry_stack_address - 0x10, saved_x28),
+            (entry_stack_address - 8, saved_x19),
+        ):
+            word(address, value)
+        _write_span(tx, entry_stack_address - 0x28,
+            _read_span(tx, thread_pointer + 0x28, 8))
+        for address, value in ((local + 8, object_address),
+            (local + 0x10, image_base + 0x2884AC),
+            (local + 0x18, local + 0x19D0), (local + 0x20, return_address)):
+            word(address, value)
+        top = local + 0x19D0
+        backing = top - 0x118
+        word(top - 0x120, image_base + 0x102BB0)
+        for slot, value in ((0, 0), (4, local + 8),
+            (5, image_base + 0x35EDF0), (6, image_base + 0x35F3D0),
+            (7, image_base + 0x2884AC), (29, (top - 0x130) & ~15),
+            (31, return_address)):
+            word(backing + slot * 8, value)
+        registers = tuple(int.from_bytes(_read_span(tx, backing + i * 8, 8), 'little')
+            for i in range(32))
+    except ValueError as exc:
+        raise RefillUnsupported('request second VM caller memory is unmapped') from exc
+    vm_arguments = (image_base + 0x102BB0, local + 8, image_base + 0x35EDF0,
+        image_base + 0x35F3D0, local + 0x10)
+    tx.commit()
+    return RequestVmCallerFrame(local, 0x102BB0, local + 8, local + 0x10,
+        backing, registers, vm_arguments)

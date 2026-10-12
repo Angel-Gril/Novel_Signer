@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request second VM caller and prefix
+
+20项新增caller/prefix原生对照、8项回滚通过，287474/102BB0入口、完整
+caller/prelude、三个decode callback恢复。Owning outer3900，second617/
+1035D4到2884CC→2481AC；cold fixture650。bounded页不发布，原页字节回滚，
+64新增OS pages保留。second return、whole-request/full physical/JNI/mapping/
+完整signer及fresh/live仍未完成。见 [第二VM报告](REQUEST_JNI_STARTUP_WORKERS.md#6147-request-second-vm-caller-and-prefix2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request URL condition
 
 40项actual wrapper对照、7项回滚通过，3lazy flags、disabled URL shortcut、

@@ -5650,6 +5650,30 @@ signer、fresh/live与真实JVM仍未完成。见 [URL条件证据](evidence/vm9
 python -B platforms/bytedance/tomato/python/verify_vm9_request_url_condition_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <URL-condition-evidence.json>
 ```
 
+## 6.147 Request second VM caller and prefix（2026-10-13 Asia/Shanghai）
+
+恢复actual `+287474` caller/prelude：SP=entrySP-1A00，bytecode `+102BB0`，
+tables `+35EDF0/+35F3D0`，callback sentinel `+2884AC`，packed=SP+8，
+descriptor=SP+10，top=SP+19D0。saved FP/LR/X28/X19与live TLS canary、
+generic `+168324` prelude的全部32 backing words独立生成。
+
+**20项新增原生对照、8项回滚检查**通过：14 caller frames（两基址、NULL/
+跨页object、wide saved words、relocated stack、TLS/spill alias、patterned
+stack），6 cold prefixes。前三次 `+2884B8 -> +167E54` decode复用既有owner；
+prefix到 `+2884CC -> +2481AC`，native/Python全部32虚拟寄存器、callback
+ledger/descriptor及三个decoded ranges一致。native output未作为输入。
+2项native RED，旧caller/default outer AST与所有first nested/URL owners保留。
+
+独立owning outer3900/+FE2D0，second VM **617/+1035D4** 到default StringObject
+构造；cold standalone fixtures为650步。bounded prefix不发布页。原页差异
+为空，64新增OS pages保留。second VM完整return、whole-request原生差分、
+physical spills/PAC、mapping rollback、actual JNI、完整signer/fresh/live及
+真实JVM仍未完成。见 [第二VM证据](evidence/vm9_request_287474_vm_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_287474_vm_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <second-VM-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -430,6 +430,22 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_base64_encoded',[]).append(dict(
                         source_object_address=words[1],object_address=words[2],query_nonempty=result))
+            elif (wrapper,target) == (0x285F38,0x287474):
+                import vm9_request_287474_vm
+                nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
+                    vm_module=vm_module,entry_stack_address=frame.native_stack_address-0x180,
+                    return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
+                    image_base=image,object_address=words[1],
+                    saved_frame_pointer=frame.native_stack_address-0x60,
+                    saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8)
+                if diagnostic_scope is not None:
+                    diagnostic_scope['request_287474_vm_boundary_state']=nested
+                    diagnostic_scope.setdefault('request_287474_vm_prefixes',[]).append(dict(
+                        nested_steps=nested.steps,nested_bytecode_offset=hex(nested.pc-image),
+                        next_wrapper=hex(nested.callbacks[-1][0]),next_target=hex(nested.callbacks[-1][1]),
+                        complete_second_VM_return_verified=False))
+                raise RefillUnsupported('second request VM boundary +287474: '
+                    f'+{nested.callbacks[-1][0]:#x} -> +{nested.callbacks[-1][1]:#x}')
             elif (wrapper,target) == (0x285F14,0x2828D4):
                 from vm9_request_transform import apply_request_url_condition_callback
                 result=apply_request_url_condition_callback(vm.m.pages,
