@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request nested scoped MD5
+
+32项actual consumer对照、8项回滚通过；actual hidden-X8/byte flag/child
+SP-16恢复，MD5及scoped reference复用既有owner，matching-libc recursive
+mutex执行。独立owning inner422/+118CE4，外层3767，下一288BDC→287580
+obfuscated helper。原页字节回滚，64新增OS pages保留。整段nested prefix、
+全JNI、physical ABI、mapping回滚、完整signer及fresh/live仍未完成。
+见 [nested MD5报告](REQUEST_JNI_STARTUP_WORKERS.md#6139-request-nested-scoped-md52026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request nested string transforms
 
 46项actual consumer对照、10项回滚通过；format/sized/pair复用既有owner，

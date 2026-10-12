@@ -506,6 +506,8 @@ Actual nested clone, default, free, destroy and delete consumers reuse accepted 
 
 Actual nested format, sized and StringObject pair consumers now reuse accepted owners. Forty-six new native controls and ten rollback checks pass, including matching-libc vsnprintf. The independently constructed owning entry reaches 321 steps, next at MD5 reference construction. Whole nested return and complete signing remain unfinished. See the [nested strings report](../REQUEST_JNI_STARTUP_WORKERS.md#6138-request-nested-string-transforms2026-10-13-asiashanghai).
 
+The actual nested MD5 consumer now reuses the accepted scoped reference lifecycle. Thirty-two new native controls and eight rollback checks pass with matching-libc recursive mutexes. The independently constructed owning entry reaches 422 steps, next at the obfuscated +287580 helper. Whole nested return and signing remain unfinished. See the [nested MD5 report](../REQUEST_JNI_STARTUP_WORKERS.md#6139-request-nested-scoped-md52026-10-13-asiashanghai).
+
 
 
 

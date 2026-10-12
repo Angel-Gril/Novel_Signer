@@ -1,7 +1,7 @@
 """Bounded +0x287500 nested request VM, with independently generated inputs.
 
 Constants, random, shared readers, scopes and string lifecycle reuse owners.
-The next digest-reference consumer is an explicit boundary; no pages are published.
+The next obfuscated string helper is an explicit boundary; no pages are published.
 """
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
@@ -115,6 +115,12 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     allocate=string_services['allocate'],reallocate=string_services['reallocate'],
                     free=string_services['free'])
             elif string_services is not None and (wrapper,target)==(0x288BBC,0x25874C):
+                apply_token_digest_callback(staged,argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
+                    reallocate=string_services['reallocate'],free=string_services['free'],
+                    thread_id=diagnostic_services.get('thread_id'),observer=diagnostic_services.get('observer'))
+            elif string_services is not None and (wrapper,target)==(0x288BDC,0x287580):
                 raise Boundary()
             else:
                 raise RefillUnsupported(f'unknown request token callback +{wrapper:#x} -> +{target:#x}')
@@ -272,5 +278,32 @@ def apply_token_string_transform_callback(pages, *, wrapper_offset,
             allocate=checked_allocate,reallocate=checked_reallocate,free=free,max_bytes=max_bytes)&0xFFFFFFFF
     else:
         raise RefillUnsupported('unrecovered token string transform callback')
+    p.commit()
+    return result
+
+
+def apply_token_digest_callback(pages, *, argument_block_address, image_base,
+        entry_stack_address, thread_pointer, allocate, reallocate, free,
+        thread_id=None, observer=None, max_source_bytes=0x100000):
+    """+288bbc -> +25874c: hidden X8, byte flag and child SP=entrySP-16.
+
+    Reuse the MD5 owner with its actual scoped reference lifecycle. The result
+    is the referenced StringObject; the wrapper does not store physical X0.
+    """
+    import vm9_reference_scopes as references
+    if type(entry_stack_address) is not int or not 0x120<=entry_stack_address<1<<64 or entry_stack_address&15:
+        raise RefillUnsupported('token MD5 callback requires aligned child stack')
+    p=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')-image_base
+    if target!=0x25874C:
+        raise RefillUnsupported('unrecovered token digest callback target')
+    out=int.from_bytes(_read_span(p,argument_block_address+8,8),'little')
+    source=int.from_bytes(_read_span(p,argument_block_address+16,8),'little')
+    flag=_read_span(p,argument_block_address+24,1)[0]
+    result=references.construct_scoped_digest_reference(p,output_reference_address=out,
+        source_object_address=source,entry_stack_address=entry_stack_address-16,
+        image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,
+        reallocate=reallocate,free=free,thread_id=thread_id,diagnostic_observer=observer,
+        flag=flag,max_source_bytes=max_source_bytes)
     p.commit()
     return result

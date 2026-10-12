@@ -5447,6 +5447,32 @@ fresh/live及真实JVM仍未完成。见 [nested strings证据](evidence/vm9_req
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_strings_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-strings-evidence.json>
 ```
 
+## 6.139 Request nested scoped MD5（2026-10-13 Asia/Shanghai）
+
+新增 `apply_token_digest_callback`，恢复actual `+288BBC -> +25874C`。
+hidden X8来自packed+8、source X0来自+16、flag只读取+24的byte；wrapper
+保存LR后child entrySP=wrapperSP-16。复用已接受的scoped MD5 owner，实际
+reference constructor/assignment/release和diagnostic scopes接线。原有digest/
+reference/scope/outer源码按LF归一逐字节不变，旧default AST保留证明通过。
+
+两基址 **32项actual consumer对照、8项回滚检查**通过。raw/hex、empty/
+binary、NULL source、45/60字节padding、high flag word、warm scopes与
+cross-page packed/output覆盖；原生执行matching-libc recursive mutex。
+guest/ELF/packed/defined digest scratch、scope exit bytes、allocator/free/
+mutex/gettid顺序及pre-free bytes一致。wrapper没有存physical X0，此处
+不宣称physical X0/spills/PAC。2项native RED，旧helper原生组未重跑。
+
+独立非空URL/header-owning入口 **321→422个内层步骤 / +118CE4**，外层
+3767/+FDDE0，下一 `+288BDC -> +287580` obfuscated string helper。原有
+page bytes差异为空，64个新增OS pages保留。没有整段nested prefix或
+whole-request对照；完整nested return、actual JNI、physical ABI、mapping
+回滚、完整signer、fresh/live及真实JVM仍未完成。
+见 [nested MD5证据](evidence/vm9_request_token_digest_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_digest_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-digest-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
