@@ -396,6 +396,15 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 pointer = allocate(vm.m.pages, words[1])
                 _write_span(vm.m.pages, argument + 0x10, pointer.to_bytes(8, 'little'))
                 diagnostic_scope.setdefault('allocation_callbacks', []).append([words[1], pointer])
+            elif (wrapper,target) == (0x285D80,0x26BF90):
+                if read_clock is None:
+                    raise RefillUnsupported('request elapsed getter requires an explicit clock provider')
+                import vm9_state
+                value=vm9_state.read_request_elapsed_seconds(vm.m.pages,
+                    object_address=words[1],read_clock=read_clock)
+                _write_span(vm.m.pages,argument+0x10,value.to_bytes(8,'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_elapsed_seconds',[]).append(value)
             elif (wrapper,target) == (0x285D74,0x26BDFC):
                 if (diagnostic_scope is None or get_state_service is None or allocate is None
                         or free is None or get_tls is None or initialize_registry is None or broadcast is None):

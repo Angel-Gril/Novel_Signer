@@ -4829,6 +4829,34 @@ AST未修改。actual JNI、suffix整链原生差分、完整signer、fresh/live
 python -B platforms/bytedance/tomato/python/verify_vm9_request_state_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <request-state-evidence.json>
 ```
 
+## 6.117 Request elapsed seconds（2026-10-12 Asia/Shanghai）
+
+`vm9_state.read_request_elapsed_seconds` 恢复 `+26BF90/+26BF18`，接入
+actual packed wrapper `+285D80`。shared reader获取后将flag94置1，先读
+object+98，再调用现有realtime milliseconds provider（clock id0）。
+now-start按64位回绕；signed delta>0选delta，否则选now；释放reader后
+将选中64位word按unsigned除1000，写packed+10的完整8字节结果。
+reader count恢复，flag94保留1。未知clock/mutex状态拒绝并回滚page
+bytes，provider外部effects不回滚。现有clock/reader owner直接复用。
+
+两基址 **36项新增原生/Python对照、12项回滚检查**通过，2项native
+RED。覆盖零/未来start、subsecond、负时间、microseconds与subtraction
+回绕、signed delta极值、已有reader、shared mutex bit、clock修改start。
+原生wrapper/body与matching-libc mutex实际执行；完整guest data、ELF、
+TLS和packed uint64匹配。clock在reader scope内部，修改start控制证明
+读取发生在clock之前。完整physical stack及Android clock仍未验证。
+
+非空URL/header构造入口从2911推进至 **3167步**，时间getter实际接入，
+next `+285E14 -> +2633A4`，bytecode image+FD2B4。原有页字节回滚，
+64个新增allocator OS pages保留。未重复已接受的原生
+分组；旧state与request callback AST保持一致。actual JNI、suffix整链
+差分、完整signer、fresh/live及真实JVM仍未完成。
+见 [elapsed证据](evidence/vm9_request_elapsed_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_elapsed_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <request-elapsed-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

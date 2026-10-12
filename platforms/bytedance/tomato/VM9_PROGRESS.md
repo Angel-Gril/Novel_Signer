@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：actual request elapsed getter
+
+36项新增actual wrapper对照、12项回滚通过；读取start顺序、wrapped
+signed delta选择、unsigned除1000及reader清理一致。非空入口3167步，
+下一285E14->2633A4。64个新增OS页保留；actual JNI、
+suffix整链差分、完整signer、fresh/live及真实JVM仍未完成。
+见 [request elapsed报告](REQUEST_JNI_STARTUP_WORKERS.md#6117-request-elapsed-seconds2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：actual request state构造
 
 16项新增actual wrapper对照、7项回滚通过，26BDFC构造、signed默认值、

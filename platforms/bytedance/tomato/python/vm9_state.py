@@ -164,6 +164,31 @@ def get_state_service_reference(pages, *, entry_stack_address, thread_pointer,
     return objects.LazyReference(guard_address,slot_address,wrapper,payload,48,counter)
 
 
+def read_request_elapsed_seconds(pages, *, object_address, read_clock):
+    """+0x26bf90/+0x26bf18 elapsed getter under a serialized shared reader.
+
+    Read the saved millisecond word before invoking the realtime provider.
+    Wrapped signed-positive deltas are selected; other deltas select the
+    current clock word. The final division treats that word as unsigned.
+    Clock errors and unsupported mutex transitions roll back page bytes;
+    provider effects outside guest pages remain external.
+    """
+    import vm9_callbacks
+    staged=_PageTransaction(pages)
+    objects.acquire_uncontended_shared_reader(staged,mutex_address=object_address+8)
+    _write_span(staged,object_address+0x94,b'\x01')
+    start=int.from_bytes(_read_span(staged,object_address+0x98,8),'little')
+    mask=(1<<64)-1
+    now=vm9_callbacks.read_realtime_milliseconds(staged,read_clock=read_clock)&mask
+    delta=(now-start)&mask
+    selected=delta if 0<delta<(1<<63) else now
+    if _read_span(staged,object_address+0x94,1)!=b'\x01':
+        raise RefillUnsupported('request elapsed reader changed to writer mode')
+    objects.release_uncontended_shared_reader(staged,mutex_address=object_address+8)
+    staged.commit()
+    return selected//1000
+
+
 def construct_request_clock_state(pages, *, object_address, entry_stack_address,
         image_base, get_state_service, allocate, free, get_tls,
         initialize_registry, broadcast, max_nodes=4096, max_comparisons=0x100000):

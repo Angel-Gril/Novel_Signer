@@ -335,6 +335,8 @@ Lazy state service composition now passes eight fresh native/Python controls and
 
 Actual request state construction now passes 16 new native wrapper controls and seven rollback checks. Signed defaults, reference counts, TLS padding and writer cleanup match. The constructed nonempty prefix advances to 2911 steps and reaches the elapsed-time getter; complete signing remains unfinished. See the [request state report](REQUEST_JNI_STARTUP_WORKERS.md#6116-request-state-构造与清理2026-10-12-asiashanghai).
 
+Actual request elapsed seconds now pass 36 new native wrapper controls and 12 rollback checks. Saved-start read order, wrapped signed selection, unsigned division and reader cleanup match. The constructed nonempty prefix advances to 3167 steps; complete signing remains unfinished. See the [request elapsed report](REQUEST_JNI_STARTUP_WORKERS.md#6117-request-elapsed-seconds2026-10-12-asiashanghai).
+
 
 
 
