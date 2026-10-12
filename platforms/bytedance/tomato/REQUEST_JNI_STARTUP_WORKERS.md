@@ -5344,6 +5344,34 @@ signer、fresh/live及真实JVM仍未完成。见 [nested random证据](evidence
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_random_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-random-evidence.json>
 ```
 
+## 6.135 Request nested shared readers（2026-10-13 Asia/Shanghai）
+
+新增 `apply_token_shared_reader_callback`，恢复actual `+288B24` consumer
+的 `+32A444` acquire / `+32A4FC` release。复用已接受的uncontended
+reader owner，不重跑旧helper原生组。acquire保留定义的local pointer、
+byte flag及TLS canary；正常native X0为最终mutex unlock的 **0**，与
+semantic helper返回的新reader count分别处理。等待、signal及canary
+变化拒绝，guest pages回滚；physical spills/PAC仍未宣称恢复。
+
+**16项actual consumer、6项nested prefix、6项actual outer source对照，
+7项回滚检查**通过。覆盖acquire/release计数、边界、shared mutex和packed
+与count alias；guest/ELF、applicable acquire scratch、32 virtual registers、
+下一descriptor、libc random state和time调用一致。2项native RED。
+新增continue开关默认关闭；剥离新增开关/分支后的旧prefix及outer callback
+AST一致，既有分组未重跑。
+
+fresh fixture191→ **211步 / +1188B8**；独立非空URL/header-owning入口
+158→ **178个内层步骤**，外层仍3767/+FDDE0。下一
+`+288B30 -> +26C858` diagnostic scope。新fixture按bytecode构造service+8
+StringObject依赖；不导入native对象字节。owning原页差异为空，64个新增
+OS pages保留。完整nested return、actual JNI、整链差分、physical ABI、
+mapping回滚、完整signer、fresh/live与真实JVM仍未完成。
+见 [nested readers证据](evidence/vm9_request_token_readers_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_readers_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc> --group all --output <nested-readers-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

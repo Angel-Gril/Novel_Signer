@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request nested shared readers
+
+28项新增对照、7项回滚通过。288B24 acquire/release重用已有reader owner，
+native unlock return0和定义的acquire scratch一致。fresh inner211，独立
+owning inner178/+1188B8，外层3767/+FDDE0。下一288B30→26C858；旧default
+和outer源码AST保留，旧helper组不重跑。原页回滚，64新增OS pages保留。
+全JNI、整链、physical ABI、mapping回滚、完整signer、fresh/live和真实JVM
+均未完成。见 [nested readers报告](REQUEST_JNI_STARTUP_WORKERS.md#6135-request-nested-shared-readers2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request nested random continuation
 
 12项新增对照、5项回滚通过。288B08 random owner与285EA8实际consumer

@@ -4,7 +4,7 @@ The two leading constants and optional random callback use recovered owners.
 The next shared-reader callback is an explicit boundary; no pages are published.
 """
 from dataclasses import dataclass
-from vm9_allocator import RefillUnsupported, _PageTransaction
+from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
 from vm9_request_caller import prepare_request_token_vm_caller, RequestVmCallerFrame
 from vm9_objects import decode_masked_bytes
 
@@ -21,7 +21,7 @@ class RequestTokenVmPrefix:
 
 
 def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
-        random_services=None, **inputs):
+        random_services=None, continue_shared_readers=False, **inputs):
     """Run to the random boundary, or through it to the shared-reader boundary.
 
     The backing register words come from caller memory. No native output is
@@ -29,6 +29,8 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
     """
     if type(maxsteps) is not int or maxsteps < 1:
         raise RefillUnsupported('request token VM budget must be positive')
+    if type(continue_shared_readers) is not bool:
+        raise RefillUnsupported('request token shared-reader continuation must be boolean')
     staged = _PageTransaction(pages)
     frame = prepare_request_token_vm_caller(staged, **inputs)
     image = inputs['image_base']
@@ -67,6 +69,12 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     libc_base=random_services['libc_base'],syscall=random_services['syscall'],
                     errno_address=random_services['errno_address'],thread_id=random_services.get('thread_id'))
             elif random_services is not None and (wrapper,target)==(0x288B24,0x32A444):
+                if not continue_shared_readers:
+                    raise Boundary()
+                apply_token_shared_reader_callback(staged,argument_block_address=argument,
+                    image_base=image,entry_stack_address=frame.native_stack_address-0x180,
+                    thread_pointer=inputs['thread_pointer'])
+            elif continue_shared_readers and (wrapper,target)==(0x288B30,0x26C858):
                 raise Boundary()
             else:
                 raise RefillUnsupported(f'unknown request token callback +{wrapper:#x} -> +{target:#x}')
@@ -79,3 +87,34 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
             raise RefillUnsupported('request token VM exited before its supported boundary') from exc
         raise RefillUnsupported('request token VM budget exhausted before its boundary')
     finally: vm_module.B = previous
+
+
+def apply_token_shared_reader_callback(pages, *, argument_block_address,
+        image_base, entry_stack_address, thread_pointer):
+    """+0x288b24 -> +0x32a444/+0x32a4fc, reusing serial reader owners.
+
+    Acquire keeps the defined local pointer, byte flag and canary; physical
+    register spills and PAC are separate boundaries. The normal native return
+    is the final mutex-unlock result, zero, rather than the new reader count.
+    """
+    from vm9_objects import acquire_uncontended_shared_reader,release_uncontended_shared_reader
+    if (type(entry_stack_address) is not int or entry_stack_address<0x80
+            or entry_stack_address>=1<<64 or entry_stack_address&15):
+        raise RefillUnsupported('shared-reader callback stack must be aligned')
+    p=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')-image_base
+    pointer=int.from_bytes(_read_span(p,argument_block_address+8,8),'little')
+    if target==0x32A444:
+        canary=entry_stack_address-0x38
+        _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+        _write_span(p,entry_stack_address-0x48,pointer.to_bytes(8,'little'))
+        _write_span(p,entry_stack_address-0x40,b'\1')
+        acquire_uncontended_shared_reader(p,mutex_address=pointer)
+        if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
+            raise RefillUnsupported('shared-reader callback stack canary mismatch')
+    elif target==0x32A4FC:
+        release_uncontended_shared_reader(p,mutex_address=pointer)
+    else:
+        raise RefillUnsupported('unrecovered token shared-reader callback target')
+    p.commit()
+    return 0

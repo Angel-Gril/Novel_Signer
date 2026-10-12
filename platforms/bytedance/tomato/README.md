@@ -369,6 +369,8 @@ Matching-libc random state, seeding, serialized wrappers, the request getter and
 
 The nested random callback and its actual outer consumer are now connected. Twelve new native controls and five rollback checks pass. Fresh nested fixtures reach 191 steps; the independently constructed owning entry reaches 158 nested steps, both next at +32a444. Complete nested return and signing remain unfinished. See the [nested random report](REQUEST_JNI_STARTUP_WORKERS.md#6134-request-nested-random-continuation2026-10-13-asiashanghai).
 
+Actual nested shared-reader consumers now reuse the accepted reader owners. Twenty-eight new native controls and seven rollback checks pass. Fresh fixtures reach 211 nested steps; the independently constructed owning entry reaches 178, next at +26c858 diagnostic scope. Complete nested return and signing remain unfinished. See the [nested readers report](REQUEST_JNI_STARTUP_WORKERS.md#6135-request-nested-shared-readers2026-10-13-asiashanghai).
+
 
 
 
