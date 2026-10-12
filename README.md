@@ -257,6 +257,7 @@ NULL raw cleanup修复通过 **16项新增对照、6项回滚**；构造请求�
 ASCII case与request byte flag通过 **92项新增对照、8项回滚**；构造非空请求推进到2174步，尚未完成JNI输入转换。见 [ASCII/byte flag报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6102-ascii-case-与-request-byte-flag2026-10-12-asiashanghai)。
 Byte search通过 **80项新增对照、12项回滚、8项扫描上限检查**；构造非空请求推进到2224步。见 [byte search报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6103-request-byte-search2026-10-12-asiashanghai)。
 定长字符串请求分发通过 **18项新增对照、10项回滚**；构造非空入口推进到2243步，拒绝时保留64个新增allocator OS页。见 [sized dispatch报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6104-request-sized-string-dispatch2026-10-12-asiashanghai)。
+二进制相等判断通过 **48项新增对照、8项回滚**，含16项actual libc memcmp；构造非空入口推进到2395步。见 [binary equality报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6105-request-binary-equality2026-10-12-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

@@ -61,13 +61,23 @@ def string_equals_cstring(pages, *, object_address, cstring_address, max_bytes=0
 
 
 def strings_equal(pages, *, first_object, second_object, max_bytes=0x100000):
-    """+0x1a7e10 flag bit0=1 / +0x2487e8 exact binary equality."""
+    """+0x1a7e10 flag bit0=1 / +0x2487e8 exact binary equality.
+
+    Preserve native pointer/length short circuits and the same-pointer return
+    before payload reads or the explicit comparison bound.
+    """
     if not first_object or not second_object:return False
-    first,second=_u(pages,first_object+16),_u(pages,second_object+16)
-    a,b=objects._s32(_u(pages,first_object+12,4)),objects._s32(_u(pages,second_object+12,4))
-    if not first or not second or a<0 or b<0 or a!=b:return False
+    first=_u(pages,first_object+16)
+    if not first:return False
+    second=_u(pages,second_object+16)
+    if not second:return False
+    a=objects._s32(_u(pages,first_object+12,4))
+    if a<0:return False
+    b=objects._s32(_u(pages,second_object+12,4))
+    if b<0 or a!=b:return False
+    if first==second or a==0:return True
     if a>max_bytes:raise RefillUnsupported('binary equality exceeds explicit bound')
-    return first==second or _read_span(pages,first,a)==_read_span(pages,second,a)
+    return _read_span(pages,first,a)==_read_span(pages,second,a)
 
 
 def get_guest_identifier(pages, *, image_base):

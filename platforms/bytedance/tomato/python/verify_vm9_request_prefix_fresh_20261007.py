@@ -430,6 +430,15 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 diagnostic_scope.setdefault('cstring_constructors', []).append(dict(
                     object_address=words[1], source_address=words[2],
                     declared_length=vm.m.u32(words[1] + 12), native_input_snapshot_used=False))
+            elif (wrapper, target) == (0x285C94, 0x2487E8):
+                import vm9_configuration_init as configuration
+                if any(not v or v > (1 << 64) - 24 for v in words[1:3]):
+                    raise RefillUnsupported('binary equality request objects require mapped uint64 fields')
+                equal = configuration.strings_equal(vm.m.pages,
+                    first_object=words[1], second_object=words[2])
+                _write_span(vm.m.pages, argument + 24, bytes([int(equal)]))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_binary_equalities', []).append(dict(equal=equal))
             elif allocate is not None and (wrapper, target) == (0x285C80, 0x2481FC):
                 length = int.from_bytes(_read_span(vm.m.pages, argument + 24, 4), 'little')
                 pointer = objects.construct_sized_string_object(vm.m.pages,

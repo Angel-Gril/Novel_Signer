@@ -4413,6 +4413,40 @@ fresh/live与真实JVM仍未完成。见 [sized dispatch证据](evidence/vm9_req
 python -B platforms/bytedance/tomato/python/verify_vm9_request_sized_dispatch_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-sized-dispatch-evidence.json>
 ```
 
+## 6.105 Request binary equality（2026-10-12 Asia/Shanghai）
+
+修正已有 `vm9_configuration_init.strings_equal` 的原生短路读取顺序，
+接入实际 `+285C94 -> +2487E8 -> +2472F8` callback。先读取first payload，
+NULL时跳过second；second payload NULL时跳过lengths；first length负数
+时跳过second length。长度不同返回false；同一payload pointer或两项
+length==0直接true，先于payload读取与显式bound。其余按完整declared
+bytes比较，包括embedded NUL后的bytes。此处是binary equality；原生
+helper的signed positive结果经adapter转换为boolean。wrapper只写packed+24
+的一个byte，保留另外七个bytes。NULL对象或uint64 fields溢出由request
+consumer拒绝；原helper的nullable object接口保持既有角色。
+
+两基址 **48项新增原生/Python对照、8项回滚**通过，4项native RED证明
+短路读取及同指针大length的旧owner拒绝，亦记录request dispatch缺失。
+12种profiles经direct与actual wrapper，涵盖NUL后差异、长度不等、
+NULL payload/negative length的unmapped后续fields、空串unmapped
+payload、同一pointer大length、全部256 bytes及仅映射对象fields。
+正常payload的16项对照执行 **matching libc真实memcmp**，没有替换body。
+叶级guest byte比较范围是oracle的 `0x70000000..+0xA000` data区域，
+不包含physical stack；matching libc global pages亦未全部比较。
+guards覆盖必需fields/payload缺页与comparison bound，页面保持不变。
+RED记录首次漏捕缺页ValueError；原生assertions已通过的第一项保留，
+修正异常捕获后只运行剩余原生项，未重复已接受的native controls。
+
+同一构造URL与一项header的入口从2243推进到 **2395步** 的 `+FBCF0`，
+下一callback `+285CB8 -> +248D3C` 为substring构造，经X8输出object。
+拒绝时原有page bytes保持不变，但64个新增allocator OS pages保留。
+实际JNI转换、非空prefix native差分、完整signer、fresh/live与真实JVM
+仍未完成。见 [binary equality证据](evidence/vm9_request_binary_equality_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_binary_equality_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <request-binary-equality-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

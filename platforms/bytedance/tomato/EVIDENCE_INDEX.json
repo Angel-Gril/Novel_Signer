@@ -6381,5 +6381,14 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_binary_equality_fresh_20261012": {
+    "path": "evidence/vm9_request_binary_equality_fresh_20261012.json",
+    "native_Python_controls": 48,
+    "rollback_guards": 8,
+    "actual_matching_libc_memcmp_controls": 16,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

@@ -311,6 +311,8 @@ Request byte search now passes 80 new native controls, 12 rollback checks and ei
 
 Request sized-string dispatch now passes 18 new native wrapper controls and ten rollback checks using the existing owner. The constructed nonempty prefix advances to 2243 steps; rejection preserves original bytes but retains 64 new allocator OS pages. Binary equality, actual JNI conversion and complete signing remain unfinished. See the [sized dispatch report](REQUEST_JNI_STARTUP_WORKERS.md#6104-request-sized-string-dispatch2026-10-12-asiashanghai).
 
+Request binary equality now passes 48 new native controls and eight rollback checks, including 16 comparisons using the actual matching-libc memcmp body. Native short circuits now precede skipped fields and payload bounds. The constructed nonempty prefix advances to 2395 steps; substring construction and complete signing remain unfinished. See the [binary equality report](REQUEST_JNI_STARTUP_WORKERS.md#6105-request-binary-equality2026-10-12-asiashanghai).
+
 
 
 

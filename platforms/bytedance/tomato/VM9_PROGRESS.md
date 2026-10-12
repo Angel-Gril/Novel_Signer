@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：request binary equality
+
+48项新增原生对照、8项回滚通过，含16项actual matching-libc memcmp。
+已有owner修正短路读取与同pointer的bound顺序，request wrapper写一个
+packed boolean byte。构造非空入口推进到2395步，下一callback为substring；
+原有bytes回滚，但新增64个allocator OS页保留。actual JNI转换、非空
+native差分、完整signer、fresh/live与真实JVM未完成。见 [binary equality报告](REQUEST_JNI_STARTUP_WORKERS.md#6105-request-binary-equality2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：request sized string dispatch
 
 18项新增原生wrapper对照、10项回滚通过，复用已有owner；构造非空入口
