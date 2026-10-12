@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：request caller物理返回恢复
+
+16项原生/Python对照、1项入口、26项拒绝通过。恢复canary与physical
+PC/SP/X0及saved registers；请求2475步/105回调返回。25项全部页面不变，
+canary入口保留原有页面bytes但新增64页allocator映射不回滚。
+完整请求有效参数/heap/服务差分、完整signer、fresh/live与真实JVM未完成。
+见 [caller返回报告](REQUEST_JNI_STARTUP_WORKERS.md#6100-request-caller-物理返回2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：VM64 load与compare-store恢复
 
 114项原生/Python对照、1项入口、21项拒绝/回滚通过。opcode36读取word，

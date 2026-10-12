@@ -6327,5 +6327,16 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_caller_return_fresh_20261012": {
+    "path": "evidence/vm9_request_caller_return_fresh_20261012.json",
+    "native_Python_controls": 16,
+    "request_VM_boundary_controls": 1,
+    "rejection_guards": 26,
+    "rollback_guards": 25,
+    "allocator_mapping_boundary_guards": 1,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

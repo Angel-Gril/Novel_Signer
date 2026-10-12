@@ -541,6 +541,16 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 raise RefillUnsupported('request VM completion requires its owning diagnostic context')
             result = validate_request_vm_exit(staged,image_base=image,pc=vm.pc,
                 registers=tuple(vm.R),return_address=inputs['return_address'])
+            from vm9_request_caller import finish_request_caller
+            try:
+                caller_return = finish_request_caller(staged,image_base=image,
+                    entry_stack_address=inputs['entry_stack_address'],
+                    thread_pointer=inputs['thread_pointer'],callback_sentinel=vm.cb)
+            except RefillUnsupported as exc:
+                raise RequestContinuationBoundary(staged=staged,frame=frame,vm=vm,
+                    ledger=ledger,decoded=decoded,cause=exc) from exc
+            result['physical_native_caller_epilogue_modeled'] = True
+            result['caller_native_return'] = dict(vars(caller_return))
             result.update(vm_steps=vm.steps,all_dispatched_callback_models_returned=True,
                 whole_native_request_equivalence_verified=False,
                 request_transaction_committed_to_supplied_pages=True)

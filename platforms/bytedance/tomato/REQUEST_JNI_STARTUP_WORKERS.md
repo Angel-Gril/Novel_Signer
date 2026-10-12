@@ -4255,6 +4255,39 @@ native分组未重复。其他旧VM指令保持原AST。
 python -B platforms/bytedance/tomato/python/verify_vm9_llsc_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <vm-load-store-evidence.json>
 ```
 
+## 6.100 Request caller 物理返回（2026-10-12 Asia/Shanghai）
+
+新增 `vm9_request_caller.finish_request_caller`，恢复 `+283134` 的 canary
+检查、saved X19/X28/X29/X30、SP 和返回 PC。原生 `+1683F0` 从 descriptor
+加载 physical X0，callback trampoline `+16AA30/+16AA58` 保存并恢复它；
+`+172440` 保留该值。因此此请求入口的 native X0 为 `image+28587C`。
+Python 使用明确 callback sentinel，不把虚拟 R0 当作 native X0。
+owner 只读完整 saved frame 与 TLS，拒绝未映射、错 sentinel、未对齐栈、
+canary mismatch 和 PAC-tagged return。consumer 在 VM exit 验证后、页面
+commit 前调用它；失败保留 `RequestContinuationBoundary` 与未提交页面。
+
+两基址 **16项原生/Python对照、1项实际请求入口、26项拒绝检查** 通过。
+原生 caller/interpreter 未改；合成 bytecode 是明确 guest 输入。覆盖两个
+SP、zero/pattern saved registers、无回调及回调主动改写 X0。native 返回
+PC/SP/X0/X19/X28/X29/X30 全部一致。两个 native RED 记录旧模型缺少物理
+epilogue；两基址 canary 失败确实跳转 `+347EB0`。已接受的原生分组未重复；
+之后仅收拢 frame 读取并明确转换未映射输入异常，入口与 guards 验证该改动。
+
+其中 **25项确认全部页面不变**。新增 canary 入口负例在2475步、`+FFB78`
+拒绝，全部原有页面字节不变，但最后 malloc 经 allocator provider 新增的
+64页 OS 映射保留。这些映射位于 owning OS transaction；当前 request
+页面事务不回滚 provider 的 mapping/cursor 或外部服务效果。该项独立
+记录为 mapping boundary，不能算作全部页面回滚。
+
+完整请求原生等价尚未验收；有效 packed 参数、服务、heap/allocator
+metadata 与 padding 区分仍需继续。真实 Android JVM、URL/header 输入
+转换、完整 signer、fresh 签名与线上矩阵未完成。
+见 [caller返回证据](evidence/vm9_request_caller_return_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_caller_return_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <request-caller-return-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

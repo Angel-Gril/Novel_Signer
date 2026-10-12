@@ -430,6 +430,8 @@ Actual scoped request tree construction passes 24 native/Python controls, one re
 
 VM opcode 36 loads the full word and opcode 57 performs a serialized compare/store using hidden slot 34. 114 native/Python controls, one request entry and 21 rejection/rollback checks pass. The remaining main ELF byte difference in the private request probe is resolved; full signing remains unfinished. See the [VM load/store report](../REQUEST_JNI_STARTUP_WORKERS.md#699-vm-load-与串行-comparestore2026-10-12-asiashanghai).
 
+Request caller return now checks the stack canary and restores PC/SP/X19/X28/X29/X30 with the physical X0 callback sentinel. 16 native controls, one request entry and 26 rejections pass: 25 preserve all pages; the canary entry preserves existing bytes but leaves 64 allocator mapping pages. Full signing remains unfinished. See the [caller return report](../REQUEST_JNI_STARTUP_WORKERS.md#6100-request-caller-物理返回2026-10-12-asiashanghai).
+
 
 
 

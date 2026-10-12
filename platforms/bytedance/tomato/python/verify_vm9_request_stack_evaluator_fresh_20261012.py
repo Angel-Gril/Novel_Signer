@@ -191,7 +191,7 @@ def request_entry(library,libc):
                       'missing_exit_service','exit_provider_exception','fill_allocator_exception',
                       'missing_fold_singleton','fold_singleton_exception','tree_free_exception',
                       'object_free_exception','final_free_exception','tree_delete_free_exception',
-                      'scoped_tree_allocator_exception'):
+                      'scoped_tree_allocator_exception','caller_canary_mismatch'):
             p=_PageTransaction(initial_request_pages)
             events=[];diag={'thread_id':session.thread_id}
             def invoke_vm(p,fn,args):
@@ -238,20 +238,35 @@ def request_entry(library,libc):
                     w(p,request+0x700,0xA5)
                     raise RefillUnsupported('injected request tree free failure')
                 return session.free(p,pointer)
+            def request_clock(p,clock_id):
+                value=session.read_clock(p,clock_id)
+                if label=='caller_canary_mismatch' and diag.get('request_tree_delete_started'):
+                    canary=int.from_bytes(_read_span(p,fixture.TLS+0x28,8),'little')
+                    w(p,fixture.TLS+0x28,canary^1)
+                return value
             if label=='NULL_header_reference':w(p,request,0)
             before={k:bytes(v) for k,v in p.items()}
             try:
                 returned=prefix.execute_prefix(p,inputs,vm_full,1791023800,500000000,
                     allocate=request_allocate,diagnostic_scope=diag,reallocate=session.reallocate,free=request_free,
-                    prepare_format=session.prepare_format,read_clock=session.read_clock,acquire_environment=acquire,
+                    prepare_format=session.prepare_format,read_clock=request_clock,acquire_environment=acquire,
                     invoke_jni=None if label=='missing_JNI' else jni,get_singleton=None if label=='missing_fold_singleton' else request_singleton,
                     get_tls=None if label=='missing_counter_TLS' else counter_tls,
                     initialize_registry=session.initialize_registry,broadcast=session.broadcast,
                     register_exit=None if label=='missing_exit_service' else register_exit)
             except prefix.RequestContinuationBoundary as exc:
-                assert before=={k:bytes(v) for k,v in p.items()}
+                assert all(before[k]==bytes(p[k]) for k in before)
+                if label!='caller_canary_mismatch':assert set(before)==set(p)
                 assert label!='JNI_connected'
-                if label=='scoped_tree_allocator_exception':
+                if label=='caller_canary_mismatch':
+                    added_pages=set(p)-set(before)
+                    assert len(added_pages)==64
+                    assert exc.vm.steps==2475 and exc.vm.pc-base==0xFFB78
+                    assert str(exc.cause)=='request caller stack canary mismatch'
+                    guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
+                        existing_pages_unchanged=True,new_allocator_mapping_pages=len(added_pages),
+                        allocator_provider_mappings_rolled_back=False,external_effects_rolled_back=False))
+                elif label=='scoped_tree_allocator_exception':
                     assert exc.vm.steps==599 and exc.vm.pc-base==0xF8078
                     assert str(exc.cause)=='injected request scoped tree allocation failure'
                     guards.append(dict(image_base=hex(base),entry='request_VM',case=label,rejected=True,
@@ -309,6 +324,10 @@ def request_entry(library,libc):
                 exit_result=diag['request_vm_return']
                 assert exit_result['caller_sentinel_matches'] and exit_result['request_transaction_committed_to_supplied_pages']
                 assert exit_result['selected_target']==inputs['return_address']
+                caller_return=exit_result['caller_native_return']
+                assert exit_result['physical_native_caller_epilogue_modeled']
+                assert caller_return==dict(pc=inputs['return_address'],sp=worker.TOP,x0=base+0x28587C,
+                    x19=0,x28=0,x29=0,x30=inputs['return_address'])
                 assert events==['GetEnv','GetEnv','FindClass','ExceptionCheck']
                 completed=diag['request_evaluator_prefixes'][-1]
                 assert completed['phase']=='stack_evaluator_completed' and not completed['returned_boolean']
@@ -366,17 +385,18 @@ def request_entry(library,libc):
                     actual_deleting_tree_destructor_completed=True,event_emission_branch_taken=False,
                     callbacks_completed=105,vm_exit_offset='0xffb78',caller_sentinel_matches=True,
                     request_transaction_committed_to_supplied_pages=True,
-                    request_VM_returned=True,full_native_request_return_verified=False,
+                    request_VM_returned=True,physical_caller_epilogue_completed=True,
+                    modeled_native_X0_is_callback_sentinel=True,full_native_request_return_verified=False,
                     full_request_returned=False,whole_handoff_native_differential_verified=False))
             if label=='NULL_header_reference':w(p,request,header)
-            steps=2475 if label=='JNI_connected' else 599 if label=='scoped_tree_allocator_exception' else 2329 if label=='object_free_exception' else 2405 if label=='final_free_exception' else 2416 if label=='tree_delete_free_exception' else 2321 if label=='tree_free_exception' else 1812 if label in ('missing_fold_singleton','fold_singleton_exception') else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
+            steps=2475 if label in ('JNI_connected','caller_canary_mismatch') else 599 if label=='scoped_tree_allocator_exception' else 2329 if label=='object_free_exception' else 2405 if label=='final_free_exception' else 2416 if label=='tree_delete_free_exception' else 2321 if label=='tree_free_exception' else 1812 if label in ('missing_fold_singleton','fold_singleton_exception') else 1558 if label=='fill_allocator_exception' else 1539 if label in ('missing_exit_service','exit_provider_exception') else 1452 if label=='NULL_header_reference' else 1419 if 'counter_TLS' in label else 965
             print('PASS request VM',label,steps,'steps',flush=True)
     try:
         outer.make_session=make
         result=boundary.case(library,libc,base,'absent',None,vm_full,apply_logger_model=True,
             apply_handoff_model=True,apply_publication=True,terminal_observer=terminal)
     finally:outer.make_session=previous
-    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==15
+    assert result['python_constructor_returned'] and result['publication_applied'] and len(rows)==1 and len(guards)==16
     return rows,guards
 
 

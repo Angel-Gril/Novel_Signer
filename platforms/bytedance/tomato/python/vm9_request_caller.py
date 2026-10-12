@@ -161,3 +161,47 @@ def validate_request_vm_exit(pages, *, image_base, pc, registers, return_address
         selected_target=return_address,caller_sentinel_matches=True,
         native_handler_offset='0x16a974',native_epilogue_offset='0x172440',
         physical_native_caller_epilogue_modeled=False,native_return_x0_abi_compared=False)
+
+
+@dataclass(frozen=True)
+class RequestCallerReturn:
+    pc: int
+    sp: int
+    x0: int
+    x19: int
+    x28: int
+    x29: int
+    x30: int
+
+
+def finish_request_caller(pages, *, image_base, entry_stack_address,
+        thread_pointer, callback_sentinel) -> RequestCallerReturn:
+    """+0x283134: check canary, restore saved registers and return to caller.
+
+    Native +0x1683f0 loads descriptor[0] into physical X0. Its callback
+    trampoline +0x16aa30 saves/restores X0, and +0x172440 preserves it.
+    This owner covers the supported VM return branch; it consumes explicit
+    callback ABI state and never substitutes virtual R0 for physical X0.
+    """
+    values = (image_base, entry_stack_address, thread_pointer, callback_sentinel)
+    if any(type(v) is not int or not 0 <= v < 1 << 64 for v in values):
+        raise RefillUnsupported('request caller return inputs must fit uint64')
+    if entry_stack_address < 0x1740 or entry_stack_address & 15:
+        raise RefillUnsupported('request caller return stack must be aligned')
+    if callback_sentinel != image_base + 0x28587C:
+        raise RefillUnsupported('request caller callback sentinel does not match this entry')
+    try:
+        saved = _read_span(pages, entry_stack_address - 0x28, 0x28)
+        canary = _read_span(pages, thread_pointer + 0x28, 8)
+    except ValueError as exc:
+        raise RefillUnsupported('request caller return frame or TLS is unmapped') from exc
+    if saved[:8] != canary:
+        raise RefillUnsupported('request caller stack canary mismatch')
+    def word(a):return int.from_bytes(saved[a - (entry_stack_address - 0x28):
+        a - (entry_stack_address - 0x28) + 8],'little')
+    x29 = word(entry_stack_address - 0x20)
+    x30 = word(entry_stack_address - 0x18)
+    if x30 >= 1 << 56:
+        raise RefillUnsupported('PAC-tagged request caller return is unsupported')
+    return RequestCallerReturn(x30,entry_stack_address,callback_sentinel,
+        word(entry_stack_address - 8),word(entry_stack_address - 0x10),x29,x30)
