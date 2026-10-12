@@ -4857,6 +4857,47 @@ next `+285E14 -> +2633A4`，bytecode image+FD2B4。原有页字节回滚，
 python -B platforms/bytedance/tomato/python/verify_vm9_request_elapsed_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <request-elapsed-evidence.json>
 ```
 
+## 6.118 Request contained reference copy（2026-10-12 Asia/Shanghai）
+
+接入actual wrapper `+285E14 -> +2633A4`：packed+8为hidden X8输出，
+packed+10为source object；target将source+18交给已有 `+15F580`
+scoped reference copy。复用 `vm9_reference_scopes`，保留先清零输出、
+读取pointer、诊断锁scope、重新读取pair、uint32计数回绕及scope退出。
+wrapper push10，因此helper entrySP为callback entrySP-10。
+
+两基址、cold/warm诊断锁共 **32项新增actual wrapper对照**通过，
+2项native RED。覆盖NULL/zero/wrapped count、retained、NULL object、
+self与双向重叠。完整guest、ELF、24字节scope及allocator/free/lock
+顺序一致。主体owner与旧回归AST保持一致。非空请求3167->3245步；
+下一hash64回调。见 [reference证据](evidence/vm9_request_contained_reference_fresh_20261012.json)。
+
+## 6.119 Request StringObject table hash64（2026-10-12 Asia/Shanghai）
+
+新增 `vm9_objects.hash_string_object64` 恢复 `+258BE0/+24B2D4`，接入
+actual wrapper `+285E38`。先读payload pointer、再读signed W length；
+非正长度返回zero且不读取payload/table。正长度逐字节处理，embedded
+NUL包含在内。accumulator初值0，每步table[(hash XOR byte)&FF]
+XOR(hash>>8)，表来自loaded ELF +96548，不硬编码CRC变体。wrapper
+将完整64位结果写packed+10，保留后8字节。
+
+两基址 **52项新增原生/Python对照、6项回滚检查**通过，2项native
+RED。覆盖0..1024字节边界、全256字节、embedded NUL、负signed长度、
+仅fields映射、跨页、receiver/payload与packed output alias、修改guest
+table。uint64返回、packed/fullguest与table页一致，无allocator/service
+effects。未知receiver/payload/table及扫描超限拒绝，全部页字节不变。
+max_bytes=0下三种非正长度成功返回0。
+
+非空URL/header构造入口推进 **3257步**，next `+285E54 -> +2850A8`，
+bytecode image+FD5E8；原有页字节回滚，64个新增allocator OS pages
+保留。已接受旧原生分组未重复，完整physical stack、actual JNI、suffix
+整链原生差分、完整signer、fresh/live与真实Android JVM仍未验证。
+见 [hash64证据](evidence/vm9_request_hash64_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_contained_reference_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <contained-reference-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_request_hash64_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <hash64-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

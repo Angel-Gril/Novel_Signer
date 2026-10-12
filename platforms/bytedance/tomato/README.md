@@ -337,6 +337,8 @@ Actual request state construction now passes 16 new native wrapper controls and 
 
 Actual request elapsed seconds now pass 36 new native wrapper controls and 12 rollback checks. Saved-start read order, wrapped signed selection, unsigned division and reader cleanup match. The constructed nonempty prefix advances to 3167 steps; complete signing remains unfinished. See the [request elapsed report](REQUEST_JNI_STARTUP_WORKERS.md#6117-request-elapsed-seconds2026-10-12-asiashanghai).
 
+Actual request contained-reference copy and StringObject table hash64 now pass 84 new native wrapper controls and six rollback checks. Scoped ownership, hidden output, signed lengths, guest table and full-width hash results match. The constructed nonempty prefix advances to 3257 steps; complete signing remains unfinished. See the [request reference/hash report](REQUEST_JNI_STARTUP_WORKERS.md#6119-request-stringobject-table-hash642026-10-12-asiashanghai).
+
 
 
 

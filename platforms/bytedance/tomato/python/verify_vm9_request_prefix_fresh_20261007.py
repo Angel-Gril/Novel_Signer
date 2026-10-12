@@ -396,6 +396,26 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 pointer = allocate(vm.m.pages, words[1])
                 _write_span(vm.m.pages, argument + 0x10, pointer.to_bytes(8, 'little'))
                 diagnostic_scope.setdefault('allocation_callbacks', []).append([words[1], pointer])
+            elif (wrapper,target) == (0x285E38,0x258BE0):
+                value=objects.hash_string_object64(vm.m.pages,
+                    object_address=words[1],image_base=image)
+                _write_span(vm.m.pages,argument+0x10,value.to_bytes(8,'little'))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_string_hash64',[]).append(value)
+            elif (wrapper,target) == (0x285E14,0x2633A4):
+                if allocate is None:
+                    raise RefillUnsupported('request contained reference copy requires its diagnostic allocator')
+                import vm9_reference_scopes
+                vm9_reference_scopes.copy_scoped_string_reference(vm.m.pages,
+                    destination_address=words[1],source_address=words[2]+0x18,
+                    entry_stack_address=frame.native_stack_address-0x190,image_base=image,
+                    thread_pointer=inputs['thread_pointer'],allocate=allocate,
+                    thread_id=None if diagnostic_scope is None else diagnostic_scope.get('thread_id'),
+                    diagnostic_observer=None if diagnostic_scope is None else lambda *event:
+                        diagnostic_scope.setdefault('events',[]).append(list(event)))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('contained_reference_copies',[]).append(dict(
+                        destination_address=words[1],source_address=words[2]+0x18))
             elif (wrapper,target) == (0x285D80,0x26BF90):
                 if read_clock is None:
                     raise RefillUnsupported('request elapsed getter requires an explicit clock provider')

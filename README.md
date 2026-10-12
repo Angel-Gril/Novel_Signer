@@ -270,6 +270,7 @@ VM signed64乘法与低半部读取通过 **238项新增对照**；非空入口�
 Lazy state service通过 **8项新增对照、7项回滚**，前置singleton136已初始化。见 [state service报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6115-lazy-state-service2026-10-12-asiashanghai)。
 实际request state构造通过 **16项新增对照、7项回滚**；非空入口推进2911步。见 [request state报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6116-request-state-构造与清理2026-10-12-asiashanghai)。
 实际request elapsed getter通过 **36项新增对照、12项回滚**；非空入口推进3167步。见 [request elapsed报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6117-request-elapsed-seconds2026-10-12-asiashanghai)。
+实际request reference copy/hash64通过 **84项新增对照、6项回滚**；非空入口推进3257步。见 [request reference/hash报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6119-request-stringobject-table-hash642026-10-12-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

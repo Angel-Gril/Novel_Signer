@@ -496,6 +496,31 @@ def construct_string_object_cstring(pages, *, object_address: int,
     return result
 
 
+def hash_string_object64(pages, *, object_address: int, image_base: int,
+                         max_bytes: int = 0x100000) -> int:
+    """+0x258be0/+0x24b2d4: hash declared bytes with the guest uint64 table.
+
+    Read the payload pointer before the signed W length. Nonpositive length
+    returns zero without reading the payload or table. Embedded NUL bytes
+    participate; the initial accumulator is zero, with no final inversion.
+    """
+    if type(object_address) is not int or not 0 <= object_address < 1 << 64:
+        raise RefillUnsupported('hash64 receiver address must fit uint64')
+    if type(max_bytes) is not int or not 0 <= max_bytes <= 0x100000:
+        raise ValueError('invalid hash64 scan bound')
+    mask=(1<<64)-1
+    pointer=int.from_bytes(_read_span(pages,(object_address+16)&mask,8),'little')
+    length=_s32(int.from_bytes(_read_span(pages,(object_address+12)&mask,4),'little'))
+    if length>max_bytes:
+        raise RefillUnsupported('hash64 input exceeds the explicit scan bound')
+    result=0
+    for index in range(max(length,0)):
+        byte=_read_span(pages,(pointer+index)&mask,1)[0]
+        entry=_image_address(image_base,0x96548+((result^byte)&255)*8)
+        result=int.from_bytes(_read_span(pages,entry,8),'little')^(result>>8)
+    return result
+
+
 def find_string_object_byte(pages, *, object_address: int, target_byte: int,
                             start_u32: int, max_bytes: int = 0x100000) -> int:
     """+0x248c1c searches declared bytes, including bytes after embedded NUL.

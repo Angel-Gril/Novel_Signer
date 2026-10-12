@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：request contained reference与table hash64
+
+84项新增actual wrapper对照、6项回滚通过；hidden输出、source+18、
+scope/count回绕及loaded-table uint64 hash一致。非空入口3257步，下一
+285E54->2850A8。原有页回滚，64个新增OS页保留。actual JNI、suffix
+整链差分、完整signer、fresh/live及真实JVM仍未完成。
+见 [request reference/hash报告](REQUEST_JNI_STARTUP_WORKERS.md#6119-request-stringobject-table-hash642026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：actual request elapsed getter
 
 36项新增actual wrapper对照、12项回滚通过；读取start顺序、wrapped
