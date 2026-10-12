@@ -6533,5 +6533,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_raw_digest_fresh_20261012": {
+    "path": "evidence/vm9_request_raw_digest_fresh_20261012.json",
+    "native_Python_controls": 54,
+    "rollback_guards": 12,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

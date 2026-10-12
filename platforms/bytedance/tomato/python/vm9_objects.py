@@ -1257,8 +1257,6 @@ def construct_digest_reference(
     _string_bound(max_source_bytes)
     if algorithm not in ("md5", "sha1") or not isinstance(flag, int) or not 0 <= flag <= 0xFFFFFFFF:
         raise RefillUnsupported("unsupported digest algorithm or flag")
-    if reference_lifecycle is not None and not flag & 1:
-        raise RefillUnsupported("scoped digest lifecycle requires hexadecimal output")
     transaction = _PageTransaction(pages)
     length = int.from_bytes(_read_span(transaction, source_object_address + 12, 4), "little")
     pointer = int.from_bytes(_read_span(transaction, source_object_address + 16, 8), "little")
@@ -1285,7 +1283,10 @@ def construct_digest_reference(
     if not flag & 1:
         _sized_string_object(transaction, string, len(digest), image_base,
             allocate, lambda staged, size: digest[:size])
-        _reference_wrapper(transaction, object_address, string, allocate)
+        if reference_lifecycle is None:
+            _reference_wrapper(transaction, object_address, string, allocate)
+        else:
+            reference_lifecycle.construct_raw(transaction, object_address, string, data, digest)
     else:
         construct_string_object(transaction, object_address=string, source_address=0,
             allocate=allocate, vtable_address=_image_address(image_base, 0x34F5F8),

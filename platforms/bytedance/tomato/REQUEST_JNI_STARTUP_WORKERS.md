@@ -4983,6 +4983,42 @@ fresh/live与真实JVM仍未完成。见 [hex reference证据](evidence/vm9_requ
 python -B platforms/bytedance/tomato/python/verify_vm9_request_hex_reference_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <hex-reference-evidence.json>
 ```
 
+## 6.123 Request raw MD5 and reference assignment（2026-10-12 Asia/Shanghai）
+
+扩展既有 `construct_scoped_digest_reference`，由flag低位选择raw或hex；
+默认hex保持原语义。raw通过已有digest owner计算MD5并构造16字节
+StringObject，复用新增scoped owned assignment `+162944` 发布引用与
+count1。恢复MD5 scratch SP-48；最终padding block的+36 word经实际
+`+243250/+24325C` 存到context+7C，与随后scope的SP-C4重叠。
+此处是block word，不是bit count。hex lifecycle原方法及hex分支AST
+保持一致；不重复旧原生接受分组。
+
+新增 `assign_scoped_string_reference` 恢复 `+162620`：先比较object
+pointer，相等则不触碰count/锁；不同则按需scope旧引用cleanup，再
+重新读source pointer并在新scope复制live pair及uint32计数。新增
+owned assignment `+162944` 总是构造新count，旧引用按同一cleanup
+owner处理。source/destination部分重叠沿用原生读写顺序。
+
+两基址 **54项新增原生/Python对照、12项回滚检查**通过，2项native
+RED。18项raw覆盖0/1/45/60/64/4097字节、NULL source、flag2及dirty
+scope；28项assignment覆盖删除/保留/zero/signed-min旧count、NULL
+object/count、count回绕、同object不同count、self与双向重叠；8项
+owned assignment覆盖空输出、删除、保留与NULL新object。全部guest/
+ELF、digest scratch、scope24及每次scope退出边界、allocator/free/
+matching-libc diagnostic锁顺序与free前bytes一致。allocator是显式
+合成服务，原始helper与matching libc锁实际执行。guards拒绝非法栈、
+unmapped scope、missing allocator、未知析构及source bound；页面
+保持不变，外部provider ledger不声称回滚。
+
+这是 `+2869F0` 外层所需的raw digest与assignment依赖；外层组装、
+`+172AF4` getter、C-string格式化及清理仍需恢复。非空入口仍3307步，
+actual JNI、suffix整链原生差分、完整signer、fresh/live和真实JVM均
+未完成。见 [raw MD5与assignment证据](evidence/vm9_request_raw_digest_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_raw_digest_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <raw-digest-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

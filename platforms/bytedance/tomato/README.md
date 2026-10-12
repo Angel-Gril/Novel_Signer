@@ -345,6 +345,8 @@ The actual request binary-transform component now passes 24 new native controls 
 
 The actual request hexadecimal-reference helper now passes 20 new native controls and eight rollback checks. Guest alphabet, live nibble reads and scoped ownership match. The outer transform caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [hex reference report](REQUEST_JNI_STARTUP_WORKERS.md#6122-request-hexadecimal-reference2026-10-12-asiashanghai).
 
+Raw MD5 and scoped reference assignments now pass 54 new native controls and 12 rollback checks. Digest scratch, scope overlap, alias order and ownership match. The outer transform caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [raw MD5 report](REQUEST_JNI_STARTUP_WORKERS.md#6123-request-raw-md5-and-reference-assignment2026-10-12-asiashanghai).
+
 
 
 

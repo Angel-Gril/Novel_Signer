@@ -65,6 +65,57 @@ def copy_scoped_string_reference(pages, *, destination_address, source_address,
     p.commit()
 
 
+def assign_scoped_string_reference(pages, *, destination_address, source_address,
+        entry_stack_address, image_base, thread_pointer, allocate, free,
+        thread_id=None, diagnostic_observer=None):
+    """+0x162620: equal object pointers skip assignment, even with other counts.
+
+    Otherwise release old ownership under its own scope, reload the source
+    pointer, enter a new scope and copy the live pair. Partial aliases follow
+    the native reads and writes. External service effects are not rolled back.
+    """
+    scope = _scope(entry_stack_address, 0x50)
+    p = _PageTransaction(pages)
+    old = int.from_bytes(_read_span(p, destination_address, 8), 'little')
+    source = int.from_bytes(_read_span(p, source_address, 8), 'little')
+    if old != source:
+        if int.from_bytes(_read_span(p, destination_address+8, 8), 'little'):
+            _enter(p, scope, old, image_base, thread_pointer, thread_id,
+                   allocate, diagnostic_observer)
+            stream.release_string_reference(p, reference_address=destination_address,
+                image_base=image_base, free=free)
+            _leave(p, scope, image_base, thread_pointer, diagnostic_observer)
+            source = int.from_bytes(_read_span(p, source_address, 8), 'little')
+        _enter(p, scope, source, image_base, thread_pointer, thread_id,
+               allocate, diagnostic_observer)
+        objects._copy_reference_contents(p, destination_address, source_address)
+        _leave(p, scope, image_base, thread_pointer, diagnostic_observer)
+    p.commit()
+    return destination_address
+
+
+def assign_scoped_owned_string_reference(pages, *, reference_address, string_address,
+        entry_stack_address, image_base, thread_pointer, allocate, free,
+        thread_id=None, diagnostic_observer=None):
+    """+0x162944: scope old release, then publish the object and a new count."""
+    scope = _scope(entry_stack_address, 0x50)
+    p = _PageTransaction(pages)
+    if int.from_bytes(_read_span(p, reference_address+8, 8), 'little'):
+        old = int.from_bytes(_read_span(p, reference_address, 8), 'little')
+        _enter(p, scope, old, image_base, thread_pointer, thread_id,
+               allocate, diagnostic_observer)
+        stream.release_string_reference(p, reference_address=reference_address,
+            image_base=image_base, free=free)
+        _leave(p, scope, image_base, thread_pointer, diagnostic_observer)
+    _enter(p, scope, string_address, image_base, thread_pointer, thread_id,
+           allocate, diagnostic_observer)
+    _write_span(p, reference_address, objects._word(string_address))
+    counter = objects._allocate_reference_counter(p, reference_address, allocate)
+    _leave(p, scope, image_base, thread_pointer, diagnostic_observer)
+    p.commit()
+    return counter
+
+
 def construct_hexadecimal_string_reference(pages, *, output_reference_address,source_object_address,
         entry_stack_address,image_base,thread_pointer,allocate,reallocate,free,
         thread_id=None,diagnostic_observer=None,max_bytes=0x100000):
@@ -172,21 +223,34 @@ class _DigestLifecycle:
             free=self.free, **self.keywords(self.stack-0x80))
 
 
+    def construct_raw(self, p, output, string, data, digest):
+        _write_span(p, self.stack-0x48, digest)
+        # +243250/+24325c copy the final block word at +36 to context+0x7c.
+        # It overlaps the later owned-reference scope padding (SP-0xc4).
+        tail = data[len(data)//64*64:]
+        block = (tail+b'\x80').ljust(56, b'\0') if len(tail)<56 else bytes(56)
+        _write_span(p, self.stack-0xC4, block[36:40])
+        return assign_scoped_owned_string_reference(p,
+            reference_address=output, string_address=string, free=self.free,
+            **self.keywords(self.stack-0x80))
+
+
 def construct_scoped_digest_reference(pages, *, output_reference_address,
         source_object_address, entry_stack_address, image_base, thread_pointer,
         allocate, reallocate, free, thread_id=None, diagnostic_observer=None,
-        max_source_bytes=0x100000):
-    """+0x25874c hexadecimal MD5 with its actual reference lifecycle.
+        max_source_bytes=0x100000, flag=1):
+    """+0x25874c raw or hexadecimal MD5 with actual reference lifecycle.
 
     Digest calculation and guest alphabet conversion stay in vm9_objects.
     The hexadecimal branch uses SP-0x58 for its temporary pair and real
     constructor, assignment and destructor scopes around the same string.
+    Raw output uses +0x162944 directly on the cleared output reference.
     """
     _scope(entry_stack_address,0x110)
     lifecycle=_DigestLifecycle(entry_stack_address,image_base,thread_pointer,
                                thread_id,allocate,free,diagnostic_observer)
     return objects.construct_digest_reference(pages,
         object_address=output_reference_address,
-        source_object_address=source_object_address, algorithm='md5', flag=1,
+        source_object_address=source_object_address, algorithm='md5', flag=flag,
         image_base=image_base, allocate=allocate,reallocate=reallocate,free=free,
         max_source_bytes=max_source_bytes,reference_lifecycle=lifecycle)

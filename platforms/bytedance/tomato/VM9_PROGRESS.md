@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：request raw MD5与scoped assignment依赖
+
+54项新增原生对照、12项回滚通过；raw16 MD5、scratch/scope重叠与
+reference assignment所有权及alias顺序一致。2869F0外层getter、格式化
+和cleanup继续恢复，非空入口3307步。actual JNI、整链差分、完整signer、
+fresh/live及真实JVM仍未完成。见 [raw MD5报告](REQUEST_JNI_STARTUP_WORKERS.md#6123-request-raw-md5-and-reference-assignment2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：request hexadecimal reference组件
 
 20项新增原生对照、8项回滚通过；192494/19364C的guest alphabet、
