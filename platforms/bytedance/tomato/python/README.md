@@ -444,6 +444,8 @@ Request binary equality now passes 48 new native controls and eight rollback che
 
 A new constructed nonempty request prefix now matches the original caller and interpreter across 98 callback paths, packed addresses and effective packed inputs. Native stops before the substring body; pointed payloads, full heap/stack equivalence, actual JNI conversion and complete signing remain unfinished. See the [nonempty effective ABI report](../REQUEST_JNI_STARTUP_WORKERS.md#6106-constructed-nonempty-request-effective-abi2026-10-12-asiashanghai).
 
+Field clone and X8 substring construction now pass 74 new native controls and 20 rollback checks. Wrapped signed substring arithmetic, allocation failures and modeled scratch aliases match. The constructed nonempty prefix advances to 2510 steps; the next temporary-string composition, actual JNI conversion and complete signing remain unfinished. See the [substring report](../REQUEST_JNI_STARTUP_WORKERS.md#6107-field-clone-与-substring2026-10-12-asiashanghai).
+
 
 
 

@@ -4473,6 +4473,46 @@ did-not-return；只调整私有oracle的终止判定，使其接受所请求的
 实际JNI输入转换、substring body、完整signer、fresh/live与真实JVM继续。
 见 [非空effective ABI证据](evidence/vm9_request_nonempty_effective_abi_fresh_20261012.json)。
 
+## 6.107 Field clone 与 substring（2026-10-12 Asia/Shanghai）
+
+新增 `construct_string_object_from_fields` 恢复 `+248448`。先读取declared
+W length，再初始化destination；negative length或NULL source payload
+不分配，X0返回wrapped capacity W0。malloc NULL保留capacity/length，
+payload为NULL。malloc后重新读取source pointer，复制完整declared bytes，
+追加NUL。该行为与sized `+2481FC` 的NULL allocation清空字段有所区别。
+
+新增 `construct_substring_string_object` 恢复 `+248D3C`，并接入
+`+285CB8` 的X8 output ABI。按32位signed/wrapping算术计算offset与长度：
+offset=max(start,0)，length=min(start负数部分+count,declared-offset)。
+positive length生成capacity=-1的borrowed fields，再调用同一field clone
+owner；非positive通过guest image的empty CString构造。负start会减少
+requested count；declared length负数与offset相减溢出时也按native W
+结果处理。wrapper不写packed return。恢复descriptor与TLS canary slots；
+完整physical register spills未恢复，相关receiver/output/payload alias
+显式拒绝。只允许建模窗口内的descriptor/canary payload alias，并在
+allocator可能改pointer后复核。页面失败回滚，外部provider effects不回滚。
+
+两基址 **74项新增原生/Python对照、20项回滚**通过，4项native RED。
+18项field clone包括binary/empty/negative/NULL source/malloc NULL、
+source pointer分配后重载、self alias及跨页；56项substring为14 profiles
+的direct/actual wrapper对照，含negative start/count、wrapped算术、
+negative declared length溢出、same object、allocation failure、跨页、
+scratch descriptor与canary payload alias。guest data区域+0xA000、packed
+bytes、allocation顺序与heap匹配；field clone X0一致，substring的
+incidental X0未作整体声明。原生malloc/memcpy保持显式边界；没有用
+native输出初始化Python，也未重复已接受native分组。
+
+构造非空请求从2395推进到 **2510步** 的 `+FBEBC`，下一callback
+`+285CD8 -> +248F5C`。该函数先以CString构造temporary StringObject，
+调用 `+248780` 后析构temporary，并检查canary；组合body仍需核实。
+当前构造入口并非actual JNI转换；新suffix native整链差分、完整signer、
+fresh/live与真实JVM未完成。拒绝仍保留64个新增allocator OS pages。
+见 [field clone/substring证据](evidence/vm9_request_substring_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_substring_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-substring-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

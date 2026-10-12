@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：field clone与substring
+
+74项新增原生对照、20项回滚通过；恢复borrowed fields复制与X8 substring。
+构造非空入口推进到2510步；下一temporary-string组合仍需核实。64个
+新增allocator OS页不回滚；actual JNI、suffix native差分、完整signer、
+fresh/live与真实JVM未完成。见 [substring报告](REQUEST_JNI_STARTUP_WORKERS.md#6107-field-clone-与-substring2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：constructed nonempty effective ABI
 
 2395步的构造非空入口与原caller/interpreter在98次callback路径、packed

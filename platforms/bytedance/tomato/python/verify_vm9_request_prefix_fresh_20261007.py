@@ -430,6 +430,17 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 diagnostic_scope.setdefault('cstring_constructors', []).append(dict(
                     object_address=words[1], source_address=words[2],
                     declared_length=vm.m.u32(words[1] + 12), native_input_snapshot_used=False))
+            elif allocate is not None and (wrapper, target) == (0x285CB8, 0x248D3C):
+                start = int.from_bytes(_read_span(vm.m.pages, argument + 24, 4), 'little')
+                count = int.from_bytes(_read_span(vm.m.pages, argument + 28, 4), 'little')
+                objects.construct_substring_string_object(vm.m.pages,
+                    object_address=words[1], source_object_address=words[2],
+                    start_u32=start, count_u32=count, image_base=image,
+                    entry_stack_address=frame.native_stack_address - 0x190,
+                    thread_pointer=inputs['thread_pointer'], allocate=allocate)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_substrings', []).append(dict(
+                        start_u32=start, count_u32=count, output_object_address=words[1]))
             elif (wrapper, target) == (0x285C94, 0x2487E8):
                 import vm9_configuration_init as configuration
                 if any(not v or v > (1 << 64) - 24 for v in words[1:3]):

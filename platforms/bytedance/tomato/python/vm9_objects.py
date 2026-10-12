@@ -274,6 +274,96 @@ def destroy_string_fields(pages, *, fields_address: int, free: Callable) -> int:
     return status
 
 
+def construct_string_object_from_fields(pages, *, object_address: int,
+        source_fields_address: int, image_base: int, allocate: Callable,
+        max_payload_bytes: int = 0x100000) -> int:
+    """+0x248448: clone declared fields, reloading payload after malloc.
+
+    Negative length or NULL source payload returns wrapped capacity W0.
+    Allocation failure keeps declared capacity/length with a NULL payload.
+    """
+    _string_bound(max_payload_bytes)
+    if any(type(v) is not int or not 0 <= v <= (1 << 64) - width for v,width in
+           ((object_address,24),(source_fields_address,16))):
+        raise RefillUnsupported('field string constructor addresses must fit uint64')
+    staged = _PageTransaction(pages)
+    length = int.from_bytes(_read_span(staged, source_fields_address + 4, 4), 'little')
+    if _s32(length) >= 0 and length > max_payload_bytes:
+        raise RefillUnsupported('field string clone exceeds the explicit payload bound')
+    capacity = (length + 1) & 0xFFFFFFFF
+    _write_span(staged, object_address, _word(_image_address(image_base, 0x34F5F8)))
+    _write_span(staged, object_address + 16, bytes(8))
+    _write_span(staged, object_address + 8, capacity.to_bytes(4,'little') + length.to_bytes(4,'little'))
+    result = capacity
+    if _s32(length) >= 0 and int.from_bytes(_read_span(staged, source_fields_address + 8, 8), 'little'):
+        result = allocate(staged, capacity)
+        _write_span(staged, object_address + 16, _word(result))
+        if result:
+            source = int.from_bytes(_read_span(staged, source_fields_address + 8, 8), 'little')
+            if length:_write_span(staged, result, _read_span(staged, source, length))
+            _write_span(staged, result + length, bytes(1))
+    staged.commit()
+    return result
+
+
+def construct_substring_string_object(pages, *, object_address: int,
+        source_object_address: int, start_u32: int, count_u32: int,
+        image_base: int, entry_stack_address: int, thread_pointer: int,
+        allocate: Callable, max_payload_bytes: int = 0x100000) -> int:
+    """+0x248d3c writes X8 output with wrapped signed substring arithmetic.
+
+    Model its descriptor and canary slots; reject aliases into unmodeled
+    physical register spill slots. Pages roll back, external providers do not.
+    """
+    _string_bound(max_payload_bytes)
+    if any(type(v) is not int or not 0 <= v <= (1 << 64) - width for v,width in
+           ((object_address,24),(source_object_address,24),(thread_pointer,0x30))):
+        raise RefillUnsupported('substring object/TLS addresses must fit uint64')
+    if any(type(v) is not int or not 0 <= v <= 0xFFFFFFFF for v in (start_u32,count_u32)):
+        raise RefillUnsupported('substring start and count must fit W registers')
+    if type(entry_stack_address) is not int or not 0x70 <= entry_stack_address < 1 << 64 or entry_stack_address & 15:
+        raise RefillUnsupported('substring stack requires aligned scratch space')
+    frame = entry_stack_address - 0x40
+    for address in (object_address, source_object_address):
+        if address < frame + 0x40 and address + 24 > frame:
+            raise RefillUnsupported('substring receiver/output aliases physical frame slots')
+    staged = _PageTransaction(pages)
+    _write_span(staged, frame + 0x18, _read_span(staged, thread_pointer + 0x28, 8))
+    declared = int.from_bytes(_read_span(staged, source_object_address + 12, 4), 'little')
+    start = max(_s32(start_u32), 0)
+    requested = _s32((min(_s32(start_u32), 0) + count_u32) & 0xFFFFFFFF)
+    length = min(requested, _s32((declared - start) & 0xFFFFFFFF))
+    if length > 0:
+        if length > max_payload_bytes:
+            raise RefillUnsupported('substring exceeds the explicit payload bound')
+        source = (int.from_bytes(_read_span(staged, source_object_address + 16, 8), 'little') + start) & ((1 << 64) - 1)
+        def guard_source(pointer):
+            if pointer + length > 1 << 64:
+                raise RefillUnsupported('substring source span wraps uint64')
+            if pointer < frame + 0x40 and pointer + length > frame - 0x30:
+                if not (frame + 8 <= pointer and pointer + length <= frame + 0x20):
+                    raise RefillUnsupported('substring payload aliases unmodeled physical spills')
+        guard_source(source)
+        fields = frame + 8
+        _write_span(staged, fields, (0xFFFFFFFF).to_bytes(4,'little') + length.to_bytes(4,'little') + _word(source))
+        def checked_allocate(p,size):
+            pointer = allocate(p,size)
+            if pointer:guard_source(int.from_bytes(_read_span(p, fields + 8, 8), 'little'))
+            return pointer
+        result = construct_string_object_from_fields(staged, object_address=object_address,
+            source_fields_address=fields, image_base=image_base, allocate=checked_allocate,
+            max_payload_bytes=max_payload_bytes)
+    else:
+        result = construct_string_object(staged, object_address=object_address,
+            source_address=_image_address(image_base,0x6FE64), allocate=allocate,
+            vtable_address=_image_address(image_base,0x34F5F8),
+            empty_descriptor_address=_image_address(image_base,0x6E168))
+    if _read_span(staged, frame + 0x18, 8) != _read_span(staged, thread_pointer + 0x28, 8):
+        raise RefillUnsupported('substring native canary changed')
+    staged.commit()
+    return result
+
+
 def find_string_object_byte(pages, *, object_address: int, target_byte: int,
                             start_u32: int, max_bytes: int = 0x100000) -> int:
     """+0x248c1c searches declared bytes, including bytes after embedded NUL.
