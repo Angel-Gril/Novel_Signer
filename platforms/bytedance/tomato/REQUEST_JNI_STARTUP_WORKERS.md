@@ -5120,6 +5120,34 @@ bytes回滚，64个新增allocator OS pages保留，不声称mapping回滚。这
 python -B platforms/bytedance/tomato/python/verify_vm9_request_suffix_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <suffix-evidence.json>
 ```
 
+## 6.127 Request metadata formatting（2026-10-13 Asia/Shanghai）
+
+恢复 `+287168` 的metadata组合：从encoded ELF table解码三组lazy
+constants，先读取input低32位与两个output slots，再调用已有allocated
+printf生成两个C strings。第二个格式原生为 `%u`；已用两基址失败对照
+确认旧renderer拒绝后，在同一renderer补齐低32位unsigned decimal。
+保留原有 `%d/%s/%%` 分支语义，不重复实现两遍formatting或allocator。
+整个guest transaction共同提交；allocator外部effects不声称回滚。
+
+两基址 **32项metadata、8项unsigned printf、6项actual source callback**
+新增原生/Python对照通过，合计 **46项对照、12项回滚检查**。覆盖
+0/1/高位/全位、cold和warm constants、相同output slots、input/packed
+alias、跨页slot、第一次malloc期间修改scalar与第二slot、第二format
+字节或table指针变化、constant变长、first/second/both NULL allocations。
+返回W0、完整semantic guest/ELF bytes、publication与allocation顺序一致。
+actual `+285E8C` wrapper对照执行现有consumer callback的源码AST。
+6项native RED包含缺失组合、旧unsigned拒绝与旧consumer缺失。
+
+非空owning allocator入口从3405推进至 **3520步 / bytecode+FDA04**；
+suffix与metadata各执行一次，下一未知callback为 `+285C94 -> +258D6C`。
+原有page bytes回滚，64个新增OS pages仍保留，不声称provider mapping
+回滚。actual JNI转换、whole-request native差分、full physical ABI、完整
+signer、fresh/live及真实JVM仍未完成。见 [metadata证据](evidence/vm9_request_metadata_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_metadata_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <metadata-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

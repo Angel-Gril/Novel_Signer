@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request metadata与unsigned printf
+
+46项新增原生对照、12项回滚通过；metadata两个outputs、unsigned W0、
+actual source callback一致。非空入口3405→3520/+FDA04，下一285C94→258D6C。
+原页bytes回滚，64个新增OS pages保留。actual JNI、整链差分、full physical
+ABI、完整signer、fresh/live及真实JVM仍未完成。见 [metadata报告](REQUEST_JNI_STARTUP_WORKERS.md#6127-request-metadata-formatting2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request outer suffix组合与raw free
 
 32项新增原生对照、11项回滚通过；suffix输出和cleanup、actual raw

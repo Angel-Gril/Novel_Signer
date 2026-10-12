@@ -396,6 +396,14 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 pointer = allocate(vm.m.pages, words[1])
                 _write_span(vm.m.pages, argument + 0x10, pointer.to_bytes(8, 'little'))
                 diagnostic_scope.setdefault('allocation_callbacks', []).append([words[1], pointer])
+            elif (wrapper,target) == (0x285E8C,0x287168):
+                import vm9_request_transform
+                result=vm9_request_transform.construct_request_metadata(vm.m.pages,
+                    object_address=words[1],image_base=image,allocate=allocate)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_metadata',[]).append(dict(
+                        object_address=words[1],second_printf_uint32_return=result,
+                        metadata_helper_returned=True))
             elif (wrapper,target) == (0x285E80,0x2869F0):
                 if (allocate is None or reallocate is None or free is None
                         or get_singleton is None or parse_decimal is None):

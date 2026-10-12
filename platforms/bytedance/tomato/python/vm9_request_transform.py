@@ -194,3 +194,39 @@ def construct_request_suffix(pages, *, object_address, entry_stack_address,
     result=(u(output1),u(output2))
     p.commit()
     return result
+
+
+def construct_request_metadata(pages, *, object_address, image_base, allocate,
+        max_bytes=0x100000):
+    """+0x287168: decode constants and allocate string and unsigned-word outputs.
+
+    Read the input W0 and both output-slot addresses before the first malloc;
+    preserve the second formatter's uint32 return, including allocation failure.
+    All printf passes use the existing owner and reread their live input bytes.
+    Guest writes commit together. External allocation effects are not undone.
+    """
+    import vm9_configuration_init as configuration
+    if type(max_bytes) is not int or not 1<=max_bytes<=0x100000:
+        raise ValueError('invalid request metadata byte bound')
+    if not callable(allocate):
+        raise RefillUnsupported('request metadata requires owning malloc')
+    p=_PageTransaction(pages)
+    def u(a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
+    pc=image_base+0x287168;mask=(1<<64)-1
+    delta=(((((~pc|0xA060400A021040)&0xA061440A061440)+(pc&0x10400040400))|0x1010104)^0xFF5F9EBBF407DE8C)&mask
+    table=image_base+0x383568
+    def selector(offset):return (u(table+offset)+delta)&mask
+    first_format,constant,second_format=selector(0),selector(0x70),selector(0x78)
+    for destination,flag,source,key in ((0,0x28,0x30,0x38),(0x70,0x80,0x88,0x90),(0x78,0x98,0xA0,0xA8)):
+        if not u(selector(flag),4):
+            objects.decode_masked_bytes(p,source_address=selector(source),
+                destination_address=selector(destination),mask_address=selector(key),max_bytes=max_bytes)
+            _write_span(p,selector(flag),(1).to_bytes(4,'little'))
+    value=u(object_address,4)
+    first_slot,second_slot=u(object_address+8),u(object_address+16)
+    configuration.allocate_printf_cstring(p,output_pointer_address=first_slot,
+        format_address=first_format,argument_addresses=(constant,),allocate=allocate,max_bytes=max_bytes)
+    result=configuration.allocate_printf_cstring(p,output_pointer_address=second_slot,
+        format_address=second_format,argument_addresses=(value,),allocate=allocate,max_bytes=max_bytes)
+    p.commit()
+    return result

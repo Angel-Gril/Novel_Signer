@@ -482,6 +482,8 @@ The request allocated printf helper now passes 36 new native controls and nine r
 
 The outer request suffix now passes 26 new native controls and nine rollback checks; the raw-free wrapper adds six controls and two guards. Existing owners compose both output C strings and cleanup. The independently constructed nonempty entry advances from 3307 to 3405 steps, next at +287168. Full JNI, whole-request native comparison and complete signing remain unfinished. See the [outer suffix report](../REQUEST_JNI_STARTUP_WORKERS.md#6126-request-outer-suffix-and-raw-free2026-10-13-asiashanghai).
 
+Request metadata formatting and unsigned decimal now pass 46 new native controls and 12 rollback checks. Both output strings, cached input words and actual source callback match. The independently constructed nonempty entry advances to 3520 steps, next at +258d6c. Full JNI, whole-request native comparison and complete signing remain unfinished. See the [metadata report](../REQUEST_JNI_STARTUP_WORKERS.md#6127-request-metadata-formatting2026-10-13-asiashanghai).
+
 
 
 

@@ -617,7 +617,7 @@ def get_request_version_word(pages, *, image_base, allocate, free,
 
 
 def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
-    """Bounded printf %d/%s/%% over raw ABI words; read live inputs each call."""
+    """Bounded printf %d/%u/%s/%% over raw ABI words; read live inputs each call."""
     fmt=objects._cstring(pages,format_address,max_bytes)[:-1]
     result=bytearray();i=0;argument=0
     while i<len(fmt):
@@ -639,14 +639,21 @@ def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
                 # Unqualified %d consumes signed int32 from the GP varargs
                 # slot; the wrapper loads W2, so its upper bits are ignored.
                 result.extend(str(objects._s32(raw&0xFFFFFFFF)).encode('ascii'));argument+=1
-            else:raise RefillUnsupported('printf conversion outside %d/%s/%% is unsupported')
+            elif conversion==117:
+                if argument>=len(argument_addresses):
+                    raise RefillUnsupported('missing printf unsigned argument')
+                raw=argument_addresses[argument]
+                if not isinstance(raw,int) or not 0<=raw<=MASK64:
+                    raise RefillUnsupported('printf unsigned argument must be a uint64 ABI word')
+                result.extend(str(raw&0xFFFFFFFF).encode('ascii'));argument+=1
+            else:raise RefillUnsupported('printf conversion outside %d/%u/%s/%% is unsupported')
         if len(result)>max_bytes:raise RefillUnsupported('formatted string exceeds bound')
     return bytes(result)
 
 
 def allocate_printf_cstring(pages, *, output_pointer_address, format_address,
         argument_addresses, allocate, max_bytes=0x100000):
-    """+0x278314: two live %d/%s/%% format passes around malloc and publication.
+    """+0x278314: two live %d/%u/%s/%% format passes around malloc and publication.
 
     Reserve the first pass length plus NUL, store the allocation pointer even
     on failure, then reread format and strings for the second pass. Changed

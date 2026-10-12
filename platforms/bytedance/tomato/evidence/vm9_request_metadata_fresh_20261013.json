@@ -1,0 +1,512 @@
+{
+  "component": "Request metadata allocated formatting",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "zero",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "signed_min",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all_bits",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "same_slot",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "first_slot_input_alias",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "second_slot_input_alias",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_slot",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "scalar_and_slot_change",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "second_format_change",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "constant_grows",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "format_pointer_change",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_first",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_second",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_both",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "signed_min",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all_bits",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "same_slot",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "first_slot_input_alias",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "second_slot_input_alias",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_slot",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "scalar_and_slot_change",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "second_format_change",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "constant_grows",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "format_pointer_change",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_first",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_second",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_both",
+      "original_metadata_returned": true,
+      "uint32_return_and_full_semantic_guest_ELF_bytes_match": true,
+      "two_output_Cstrings_and_ordered_allocation_match": true,
+      "cached_input_words_and_live_format_passes_match": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "native_Python_controls": 46,
+  "unsigned_printf_cases": [
+    {
+      "image_base": "0x122c0000",
+      "input_ABI_word": "0x0",
+      "original_unsigned_printf_returned": true,
+      "low32_unsigned_decimal_and_length_match": true,
+      "full_guest_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "input_ABI_word": "0x1",
+      "original_unsigned_printf_returned": true,
+      "low32_unsigned_decimal_and_length_match": true,
+      "full_guest_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "input_ABI_word": "0x80000000",
+      "original_unsigned_printf_returned": true,
+      "low32_unsigned_decimal_and_length_match": true,
+      "full_guest_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "input_ABI_word": "0x12345678ffffffff",
+      "original_unsigned_printf_returned": true,
+      "low32_unsigned_decimal_and_length_match": true,
+      "full_guest_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "input_ABI_word": "0x0",
+      "original_unsigned_printf_returned": true,
+      "low32_unsigned_decimal_and_length_match": true,
+      "full_guest_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "input_ABI_word": "0x1",
+      "original_unsigned_printf_returned": true,
+      "low32_unsigned_decimal_and_length_match": true,
+      "full_guest_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "input_ABI_word": "0x80000000",
+      "original_unsigned_printf_returned": true,
+      "low32_unsigned_decimal_and_length_match": true,
+      "full_guest_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "input_ABI_word": "0x12345678ffffffff",
+      "original_unsigned_printf_returned": true,
+      "low32_unsigned_decimal_and_length_match": true,
+      "full_guest_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unmapped_input",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_first_slot",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_second_slot",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocator_failure_after_first",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_allocation",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_buffer",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unsupported_format",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_unsigned_word",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "negative_unsigned_word",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "oversized_unsigned_word",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "rollback_guards": 12,
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "whole_physical_stack_bytes_compared": false,
+  "complete_request_transform_caller": false,
+  "constructed_prefix_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "callback_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "zero",
+      "original_metadata_wrapper_returned": true,
+      "source_callback_executed": true,
+      "full_semantic_guest_ELF_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all_bits",
+      "original_metadata_wrapper_returned": true,
+      "source_callback_executed": true,
+      "full_semantic_guest_ELF_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_output_alias",
+      "original_metadata_wrapper_returned": true,
+      "source_callback_executed": true,
+      "full_semantic_guest_ELF_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero",
+      "original_metadata_wrapper_returned": true,
+      "source_callback_executed": true,
+      "full_semantic_guest_ELF_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all_bits",
+      "original_metadata_wrapper_returned": true,
+      "source_callback_executed": true,
+      "full_semantic_guest_ELF_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_output_alias",
+      "original_metadata_wrapper_returned": true,
+      "source_callback_executed": true,
+      "full_semantic_guest_ELF_bytes_and_allocation_match": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "metadata_native_controls": 32,
+  "unsigned_printf_native_controls": 8,
+  "actual_callback_native_controls": 6,
+  "pre_change_native_RED_controls": 6,
+  "accepted_native_controls_not_repeated": true,
+  "allocator_services_are_explicit_synthetic_inputs": true,
+  "metadata_semantic_native_differential_verified": true,
+  "constructed_nonempty_prefix_steps_before": 3405,
+  "constructed_nonempty_prefix_steps_after": 3520,
+  "constructed_prefix_next_callback_wrapper": "0x285c94",
+  "constructed_prefix_next_callback_target": "0x258d6c",
+  "constructed_prefix_next_bytecode_offset": "0xfda04",
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "allocator_provider_mapping_rollback_verified": false,
+  "constructed_request_ABI_is_independent_synthetic_input": true
+}
