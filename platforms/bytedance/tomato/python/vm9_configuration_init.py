@@ -644,6 +644,38 @@ def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
     return bytes(result)
 
 
+def allocate_printf_cstring(pages, *, output_pointer_address, format_address,
+        argument_addresses, allocate, max_bytes=0x100000):
+    """+0x278314: two live %d/%s/%% format passes around malloc and publication.
+
+    Reserve the first pass length plus NUL, store the allocation pointer even
+    on failure, then reread format and strings for the second pass. Changed
+    input can truncate to the original capacity; return its full second-pass
+    length as W0. NULL malloc returns uint32 -1. Other conversions refuse.
+    """
+    if type(max_bytes) is not int or not 1<=max_bytes<=0x100000:
+        raise ValueError('invalid allocated printf byte bound')
+    if not callable(allocate):
+        raise RefillUnsupported('allocated printf requires owning malloc')
+    p = _PageTransaction(pages)
+    length = len(_format_guest_strings(p, format_address, argument_addresses, max_bytes))
+    size = length+1
+    if size>max_bytes:
+        raise RefillUnsupported('allocated printf capacity exceeds bound')
+    pointer = allocate(p, size)
+    if type(pointer) is not int or not 0<=pointer<1<<64:
+        raise RefillUnsupported('allocated printf malloc result must fit X0')
+    _w(p, output_pointer_address, pointer)
+    if pointer:
+        data = _format_guest_strings(p, format_address, argument_addresses, max_bytes)
+        _write_span(p, pointer, data[:length]+b'\0')
+        result = len(data)
+    else:
+        result = 0xFFFFFFFF
+    p.commit()
+    return result
+
+
 def format_string_object(pages, *, object_address, format_address,
         argument_addresses, image_base, allocate, reallocate, free, max_bytes=0x100000,
         prepare_format=None):

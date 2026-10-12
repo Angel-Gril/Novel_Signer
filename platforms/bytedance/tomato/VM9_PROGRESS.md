@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request allocated printf依赖
+
+36项新增原生对照、9项回滚通过；两次live格式化、truncation、pointer
+publication和allocator效果一致。2869F0外层组合和cleanup继续恢复，
+非空入口3307步。actual JNI、整链差分、完整signer、fresh/live及真实JVM
+仍未完成。见 [allocated printf报告](REQUEST_JNI_STARTUP_WORKERS.md#6125-request-allocated-printf2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request version word getter
 
 40项新增原生对照、10项回滚通过；packed version、独立status槽、

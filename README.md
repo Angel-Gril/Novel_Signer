@@ -276,6 +276,7 @@ Lazy state service通过 **8项新增对照、7项回滚**，前置singleton136�
 实际request hex reference通过 **20项新增对照、8项回滚**；外层caller继续恢复。见 [hex报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6122-request-hexadecimal-reference2026-10-12-asiashanghai)。
 原始MD5与scoped reference assignment通过 **54项新增对照、12项回滚**；外层getter和格式化继续恢复。见 [raw MD5报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6123-request-raw-md5-and-reference-assignment2026-10-12-asiashanghai)。
 版本word getter通过 **40项新增对照、10项回滚**；外层两遍格式化继续恢复。见 [version报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6124-request-version-word2026-10-13-asiashanghai)。
+两遍allocated printf通过 **36项新增对照、9项回滚**；外层组合与cleanup继续恢复。见 [allocated printf报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6125-request-allocated-printf2026-10-13-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

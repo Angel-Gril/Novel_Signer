@@ -349,6 +349,8 @@ Raw MD5 and scoped reference assignments now pass 54 new native controls and 12 
 
 The request version initializer/getter now passes 40 new native controls and ten rollback checks. Packed version, separate initializer status, encoded-table reloads and cached guard paths match. The outer caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [version report](REQUEST_JNI_STARTUP_WORKERS.md#6124-request-version-word2026-10-13-asiashanghai).
 
+The request allocated printf helper now passes 36 new native controls and nine rollback checks. Both live format passes, truncation, pointer publication and allocator effects match. The outer caller and complete signing remain unfinished; the nonempty prefix stays at 3307 steps. See the [allocated printf report](REQUEST_JNI_STARTUP_WORKERS.md#6125-request-allocated-printf2026-10-13-asiashanghai).
+
 
 
 

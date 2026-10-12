@@ -5053,6 +5053,34 @@ live和真实JVM仍未完成。见 [version证据](evidence/vm9_request_version_
 python -B platforms/bytedance/tomato/python/verify_vm9_request_version_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <version-evidence.json>
 ```
 
+## 6.125 Request allocated printf（2026-10-13 Asia/Shanghai）
+
+在既有configuration formatter owner新增 `allocate_printf_cstring`，恢复
+`+278314` 的两遍 `%d/%s/%%` C-string格式化。第一遍读取live format/
+arguments计算长度，malloc(length+1)，先把pointer写入output slot；NULL
+分配返回uint32 -1。第二遍重新读取format和string，按第一遍容量截短，
+写NUL并返回第二遍完整长度。复用已有guest printf renderer，未增加
+并列渲染器。unsupported转换或未知页拒绝并回滚page bytes。
+
+两基址 **36项新增原生/Python对照、9项回滚检查**通过，2项native
+RED。覆盖0/1/7/32/128 bytes、empty/literal/percent/two strings、signed
+%d边界、embedded NUL、第二遍变长/变短/format改变、NULL malloc、
+output/source alias与跨页slot。全部guest/ELF bytes、uint32 return、
+allocator与publication效果一致；原始custom printf主体实际执行，
+malloc为显式合成服务。已有configuration函数AST保持一致，无旧原生
+接受组重跑。guards验证unmapped format/argument/output/buffer、未知
+conversion、扫描上限和provider错误；不声称外部provider ledger回滚。
+
+这是 `+2869F0` 外层格式化依赖。raw MD5/scoped assignment、version
+getter、binary transform、hex reference及allocated printf均已分别
+恢复；外层组装和cleanup、非空入口replay及整段原生差分仍待恢复。
+非空入口仍3307步；actual JNI、完整signer、fresh/live与真实JVM未完成。
+见 [allocated printf证据](evidence/vm9_request_alloc_format_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_alloc_format_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <allocated-printf-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
