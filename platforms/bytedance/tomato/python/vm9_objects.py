@@ -306,6 +306,74 @@ def construct_string_object_from_fields(pages, *, object_address: int,
     return result
 
 
+def find_string_fields_last_not_in_set(pages, *, fields_address: int,
+        position_u32: int, set_fields_address: int, entry_stack_address: int,
+        image_base: int, thread_pointer: int, max_bytes: int = 0x100000) -> int:
+    """+0x24795c: live byte-set bitmap, complement, bounded reverse search.
+
+    Invalid receiver/position/set returns -1 before clearing the bitmap.
+    Position equal to declared length decrements once. Preserve live set
+    fields, byte reads and bitmap aliases. Compare scratch bitmap and canary;
+    physical saved registers and unwind remain outside this contract.
+    """
+    _string_bound(max_bytes)
+    if type(position_u32) is not int or not 0<=position_u32<=0xFFFFFFFF:
+        raise RefillUnsupported('right-set search position must fit W1')
+    if type(entry_stack_address) is not int or entry_stack_address&15 or not 0x60<=entry_stack_address<1<<64:
+        raise RefillUnsupported('right-set search requires aligned scratch space')
+    p=_PageTransaction(pages);bitmap=entry_stack_address-0x58;canary=entry_stack_address-0x38
+    _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    def u(a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
+    position=_s32(position_u32);result=-1
+    if fields_address and position>=0 and u(fields_address+8):
+        length=_s32(u(fields_address+4,4))
+        if length>=position and set_fields_address and u(set_fields_address+8) and _s32(u(set_fields_address+4,4))>=1:
+            _write_span(p,bitmap,bytes(32));i=0
+            while i<_s32(u(set_fields_address+4,4)):
+                if i>=max_bytes:raise RefillUnsupported('right-set pattern exceeds byte bound')
+                value=_read_span(p,u(set_fields_address+8)+i,1)[0]
+                a=bitmap+(value>>3)
+                _write_span(p,a,bytes([_read_span(p,a,1)[0]|(1<<(value&7))]));i+=1
+            if length==position:position-=1
+            for i in range(32):_write_span(p,bitmap+i,bytes([_read_span(p,bitmap+i,1)[0]^255]))
+            payload=u(fields_address+8)
+            if position>=max_bytes:raise RefillUnsupported('right-set receiver exceeds byte bound')
+            while position>=0:
+                value=_read_span(p,payload+position,1)[0]
+                if _read_span(p,bitmap+(value>>3),1)[0]&(1<<(value&7)):
+                    result=position;break
+                position-=1
+    if _read_span(p,thread_pointer+0x28,8)!=_read_span(p,canary,8):
+        raise RefillUnsupported('right-set search TLS canary changed')
+    p.commit()
+    return result
+
+
+def trim_string_object_right_set(pages, *, object_address: int, set_object_address: int,
+        entry_stack_address: int, image_base: int, thread_pointer: int,
+        max_bytes: int = 0x100000) -> int:
+    """+0x248ef8: reverse set search, set length to index+1, optional NUL.
+
+    Return signed search index, including -1 when all bytes are removed or
+    search rejects its input. The declared length is updated in either case.
+    Preserve capacity's signed comparison and reload the target payload.
+    """
+    p=_PageTransaction(pages)
+    length=int.from_bytes(_read_span(p,object_address+12,4),'little')
+    result=find_string_fields_last_not_in_set(p,fields_address=object_address+8,
+        position_u32=(length-1)&0xFFFFFFFF,set_fields_address=set_object_address+8,
+        entry_stack_address=entry_stack_address-0x20,image_base=image_base,
+        thread_pointer=thread_pointer,max_bytes=max_bytes)
+    new_length=(result+1)&0xFFFFFFFF
+    capacity=_s32(int.from_bytes(_read_span(p,object_address+8,4),'little'))
+    _write_span(p,object_address+12,new_length.to_bytes(4,'little'))
+    if capacity>_s32(new_length):
+        payload=int.from_bytes(_read_span(p,object_address+16,8),'little')
+        _write_span(p,payload+result+1,b'\0')
+    p.commit()
+    return result
+
+
 def construct_substring_string_object(pages, *, object_address: int,
         source_object_address: int, start_u32: int, count_u32: int,
         image_base: int, entry_stack_address: int, thread_pointer: int,

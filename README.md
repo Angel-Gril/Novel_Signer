@@ -281,6 +281,7 @@ Lazy state service通过 **8项新增对照、7项回滚**，前置singleton136�
 metadata与unsigned printf通过 **46项新增对照、12项回滚**；非空入口推进至3520步。见 [metadata报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6127-request-metadata-formatting2026-10-13-asiashanghai)。
 Base64 encode通过 **68项新增对照、10项回滚**；非空入口推进至3538步。见 [Base64报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6128-request-base64-encoder2026-10-13-asiashanghai)。
 单byte StringObject通过 **30项新增对照、7项回滚**；入口推进至3550步。见 [character报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6129-request-character-string2026-10-13-asiashanghai)。
+右端character-set trim通过 **64项新增对照、9项回滚**；入口推进至3559步。见 [right-set报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6130-request-right-character-set-trim2026-10-13-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

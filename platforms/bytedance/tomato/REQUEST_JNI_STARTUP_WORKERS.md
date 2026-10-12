@@ -5208,6 +5208,32 @@ fresh/live与真实JVM仍未完成。见 [character证据](evidence/vm9_request_
 python -B platforms/bytedance/tomato/python/verify_vm9_request_character_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <character-evidence.json>
 ```
 
+## 6.130 Request right character-set trim（2026-10-13 Asia/Shanghai）
+
+在StringObject owner恢复 `find_string_fields_last_not_in_set(+24795C)` 与
+`trim_string_object_right_set(+248EF8)`。原始helper用guest stack构造32-byte
+bitmap，再逐byte取反；从给定位置反向查找第一个不属于集合的byte。
+保留逐次reload set pointer/length、bitmap/input alias、position等于length
+时退一步，以及invalid receiver/position/set提前返回-1的顺序。外层将
+length设为index+1，即使返回-1也写0；signed capacity大于新length才写NUL。
+
+两基址 **34项search、24项trim、6项actual source callback** 新增原生
+对照通过，合计 **64项对照、9项回滚检查**。覆盖trailing/all/no-set、
+empty、重复/高byte/embedded NUL、position边界、NULL fields/payload/set、
+bitmap与pattern alias、自身集合、capacity等于/零/负值。返回index、完整
+semantic guest/ELF bytes、32-byte bitmap/TLS canary与length/NUL一致；
+无allocator effects。actual `+285B44` consumer保持packed bytes，执行现有
+source callback AST。6项native RED，旧objects/request方法AST保持一致。
+
+非空owning入口3550→ **3559步 / bytecode+FDAA0**，right trim一次；下一
+未知为同wrapper的 `+248EB4`。原有page bytes回滚，64个新增OS pages保留。
+actual JNI、whole-request差分、full physical ABI、完整signer、fresh/live
+与真实JVM仍未完成。见 [right-set证据](evidence/vm9_request_trim_set_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_trim_set_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <trim-set-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -488,6 +488,8 @@ The raw Base64 encoder, two-pass StringObject composition and actual source call
 
 The single-byte StringObject constructor and actual source callback now pass 30 new native controls and seven rollback checks. Live ELF fields, allocation publication and buffer/object aliases match. The independently constructed nonempty entry advances to 3550 steps, next at +248ef8. Full JNI, whole-request comparison and complete signing remain unfinished. See the [character report](../REQUEST_JNI_STARTUP_WORKERS.md#6129-request-character-string2026-10-13-asiashanghai).
 
+Reverse character-set search, right trim and the actual source callback now pass 64 new native controls and nine rollback checks. Bitmap aliases, signed index, length/NUL and canary match. The independently constructed nonempty entry advances to 3559 steps, next at +248eb4. Full JNI, whole-request comparison and complete signing remain unfinished. See the [right-set report](../REQUEST_JNI_STARTUP_WORKERS.md#6130-request-right-character-set-trim2026-10-13-asiashanghai).
+
 
 
 

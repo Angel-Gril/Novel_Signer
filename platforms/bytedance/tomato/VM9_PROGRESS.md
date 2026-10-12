@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request right character-set trim
+
+64项新增原生对照、9项回滚通过；bitmap/canary、reverse search、length/NUL
+与actual callback一致。入口3550→3559/+FDAA0，下一285B44→248EB4。原页bytes
+回滚，64个新增OS pages保留。actual JNI、整链差分、full physical ABI、完整
+signer、fresh/live及真实JVM仍未完成。见 [right-set报告](REQUEST_JNI_STARTUP_WORKERS.md#6130-request-right-character-set-trim2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request character string
 
 30项新增原生对照、7项回滚通过；live ELF fields、低byte、allocation
