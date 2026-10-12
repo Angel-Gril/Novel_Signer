@@ -296,6 +296,7 @@ request cipher caller通过 **48项新增对照、10项回滚**；owning cross-b
 cross-bin realloc通过 **18项新增对照、9项回滚**，owning内层推进至430步。见 [cross-bin报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6142-matching-libc-cross-bin-small-realloc2026-10-13-asiashanghai)。
 append/Base64 reference通过 **34项新增对照、8项回滚**，内层推进至505步。见 [append/Base64报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6143-request-nested-append-and-base64-reference2026-10-13-asiashanghai)。
 nested printf通过 **36项新增对照、10项回滚**，内层推进至574步的return。见 [nested printf报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6144-request-nested-allocated-printf2026-10-13-asiashanghai)。
+nested caller return通过 **32项新增对照、10项回滚**，owning外层推进至3879步。见 [nested return报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6145-request-nested-caller-return2026-10-13-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

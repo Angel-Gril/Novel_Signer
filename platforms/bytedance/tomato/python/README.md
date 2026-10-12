@@ -518,6 +518,8 @@ Actual nested append and scoped Base64 reference consumers pass 34 new native co
 
 Actual nested allocated printf passes 36 new native controls and ten rollback checks. W0 publication preserves packed padding and live inputs across malloc. The independently constructed owning entry reaches574 steps at the nested return instruction after cleanup. Complete signing remains unfinished. See the [nested printf report](../REQUEST_JNI_STARTUP_WORKERS.md#6144-request-nested-allocated-printf2026-10-13-asiashanghai).
 
+Nested caller return passes 32 new native controls and ten rollback checks, plus five constructed entry checks. Explicit continuation returns after40 nested callbacks and advances the owning outer request to3879 steps, next at the URL condition callback. Whole nested/request native equivalence and complete signing remain unfinished. See the [nested return report](../REQUEST_JNI_STARTUP_WORKERS.md#6145-request-nested-caller-return2026-10-13-asiashanghai).
+
 
 
 

@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request nested caller return
+
+32项actual caller/outer wrapper对照、10项回滚及5项constructed入口检查通过。
+Nested return验证、canary与caller恢复接入显式continuation，旧default保留。
+Owning nested574/40callbacks返回，outer3879/+FE27C，下一285F14→2828D4。
+原页字节回滚，64新增OS pages保留。whole nested/request差分、全JNI、full
+physical ABI/PAC、mapping回滚、完整signer及fresh/live未完成。
+见 [nested return报告](REQUEST_JNI_STARTUP_WORKERS.md#6145-request-nested-caller-return2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request nested allocated printf
 
 36项actual wrapper对照、10项回滚通过，packed W0/padding、live两次format、

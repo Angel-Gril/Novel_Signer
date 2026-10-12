@@ -1,7 +1,7 @@
 """Bounded +0x287500 nested request VM, with independently generated inputs.
 
 Constants, random, shared readers, scopes and string lifecycle reuse owners.
-Allocated printf reuses its owner; the nested return remains unsupported.
+Allocated printf and the optional validated caller return reuse their owners.
 """
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
@@ -20,9 +20,15 @@ class RequestTokenVmPrefix:
     steps: int
 
 
+@dataclass(frozen=True)
+class RequestTokenVmReturn(RequestTokenVmPrefix):
+    caller_return: object
+    exit_state: dict
+
+
 def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
         random_services=None, continue_shared_readers=False, diagnostic_services=None,
-        string_services=None, **inputs):
+        string_services=None, continue_caller_return=False, **inputs):
     """Run a recovered prefix to the next explicit callback boundary.
 
     The backing register words come from caller memory. No native output is
@@ -32,6 +38,8 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
         raise RefillUnsupported('request token VM budget must be positive')
     if type(continue_shared_readers) is not bool:
         raise RefillUnsupported('request token shared-reader continuation must be boolean')
+    if type(continue_caller_return) is not bool:
+        raise RefillUnsupported('request token caller-return continuation must be boolean')
     staged = _PageTransaction(pages)
     frame = prepare_request_token_vm_caller(staged, **inputs)
     image = inputs['image_base']
@@ -151,7 +159,18 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
             return RequestTokenVmPrefix(staged, frame, tuple(vm.R), tuple(callbacks),
                 tuple(decoded), vm.pc, vm.steps)
         except vm_module.VMExit as exc:
-            raise RefillUnsupported('request token VM exited before its supported boundary') from exc
+            if not continue_caller_return:
+                raise RefillUnsupported('request token VM exited before its supported boundary') from exc
+            from vm9_request_caller import validate_request_token_vm_exit,finish_request_token_vm_caller
+            exit_state=validate_request_token_vm_exit(staged,image_base=image,pc=vm.pc,
+                registers=tuple(vm.R),return_address=inputs['return_address'])
+            caller_return=finish_request_token_vm_caller(staged,image_base=image,
+                entry_stack_address=inputs['entry_stack_address'],thread_pointer=inputs['thread_pointer'],
+                callback_sentinel=vm.cb)
+            result=RequestTokenVmReturn(staged,frame,tuple(vm.R),tuple(callbacks),
+                tuple(decoded),vm.pc,vm.steps,caller_return,exit_state)
+            staged.commit()
+            return result
         raise RefillUnsupported('request token VM budget exhausted before its boundary')
     finally: vm_module.B = previous
 

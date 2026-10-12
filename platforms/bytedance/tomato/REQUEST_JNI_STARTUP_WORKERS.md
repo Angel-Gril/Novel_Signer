@@ -5601,6 +5601,33 @@ live矩阵与真实JVM仍未完成。见 [nested printf证据](evidence/vm9_requ
 python -B platforms/bytedance/tomato/python/verify_vm9_request_token_printf_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-printf-evidence.json>
 ```
 
+## 6.145 Request nested caller return（2026-10-13 Asia/Shanghai）
+
+恢复 `+118F44` 的 `0x07C00791` return验证：generic handler `+16A974`
+读取selected slot31并与caller sentinel比较，选择 `+172440` epilogue。
+`finish_request_token_vm_caller`恢复 `+28755C` canary检查、saved PC/SP/
+X19/X28/X29/X30和physical X0=`image+2884AC`。callback trampoline保存并
+恢复physical X0，未使用virtual R0代替。返回owner不写page。
+
+**32项新增原生对照、10项回滚检查**通过：两基址、两栈位置、zero/pattern
+saved registers、callback改写X0、direct caller/actual `+285EA8` outer
+wrapper。短synthetic bytecode是独立明确输入，original caller/interpreter/
+trampoline/epilogue执行。canary失败到stack_chk_fail的原生路径已观察。
+2项native RED；新增5项Python真实入口检查覆盖enabled、default disabled、
+invalid option、wrong exit word、budget。失败页字节不发布，vm_module.B恢复。
+
+`continue_caller_return`显式启用validated return；outer random services的
+`continue_token_return`接入同一owner，旧default和callback AST保留。
+独立owning nested **574/+118F44、40 callbacks返回**，outer **3767→3879/
++FE27C**，下一 `+285F14 -> +2828D4`。原页差异为空，64新增OS pages保留。
+此入口不是whole nested/request原生差分；full physical spills/PAC、mapping
+rollback、actual JNI、完整signer、fresh/live与真实JVM仍未完成。
+见 [nested return证据](evidence/vm9_request_token_return_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_token_return_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <token-return-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

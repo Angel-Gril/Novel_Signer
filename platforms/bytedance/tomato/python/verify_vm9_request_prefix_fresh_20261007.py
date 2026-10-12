@@ -439,20 +439,29 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     continue_shared_readers=random_services.get('continue_shared_readers',False),
                     diagnostic_services=random_services.get('diagnostic_services'),
                     string_services=random_services.get('string_services'),
+                    continue_caller_return=random_services.get('continue_token_return',False),
                     entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
                     image_base=image,object_address=words[1],
                     saved_frame_pointer=frame.native_stack_address-0x60,
                     saved_x28=frame.register_backing_address,
                     saved_x19=frame.register_backing_address-8)
-                if diagnostic_scope is not None:
-                    diagnostic_scope['request_nested_vm_boundary_state']=nested
-                    diagnostic_scope.setdefault('request_nested_vm_prefixes',[]).append(dict(
-                        nested_steps=nested.steps,nested_bytecode_offset=hex(nested.pc-image),
-                        next_wrapper=hex(nested.callbacks[-1][0]),next_target=hex(nested.callbacks[-1][1]),
-                        complete_nested_caller_return_verified=False))
-                raise RefillUnsupported('nested request VM boundary +287500: '
-                    f'+{nested.callbacks[-1][0]:#x} -> +{nested.callbacks[-1][1]:#x}')
+                if isinstance(nested,vm9_request_token_vm.RequestTokenVmReturn):
+                    if diagnostic_scope is not None:
+                        diagnostic_scope['request_nested_vm_return_state']=nested
+                        diagnostic_scope.setdefault('request_nested_vm_returns',[]).append(dict(
+                            nested_steps=nested.steps,nested_bytecode_offset=hex(nested.pc-image),
+                            callback_count=len(nested.callbacks),caller_return=dict(vars(nested.caller_return)),
+                            exit_state=nested.exit_state,whole_nested_native_differential_verified=False))
+                else:
+                    if diagnostic_scope is not None:
+                        diagnostic_scope['request_nested_vm_boundary_state']=nested
+                        diagnostic_scope.setdefault('request_nested_vm_prefixes',[]).append(dict(
+                            nested_steps=nested.steps,nested_bytecode_offset=hex(nested.pc-image),
+                            next_wrapper=hex(nested.callbacks[-1][0]),next_target=hex(nested.callbacks[-1][1]),
+                            complete_nested_caller_return_verified=False))
+                    raise RefillUnsupported('nested request VM boundary +287500: '
+                        f'+{nested.callbacks[-1][0]:#x} -> +{nested.callbacks[-1][1]:#x}')
             elif (wrapper,target) == (0x285E8C,0x287168):
                 import vm9_request_transform
                 result=vm9_request_transform.construct_request_metadata(vm.m.pages,

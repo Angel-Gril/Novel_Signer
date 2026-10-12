@@ -261,3 +261,50 @@ def finish_request_caller(pages, *, image_base, entry_stack_address,
         raise RefillUnsupported('PAC-tagged request caller return is unsupported')
     return RequestCallerReturn(x30,entry_stack_address,callback_sentinel,
         word(entry_stack_address - 8),word(entry_stack_address - 0x10),x29,x30)
+
+
+def validate_request_token_vm_exit(pages, *, image_base, pc, registers, return_address):
+    """Validate +118f44's selected-slot return through the generic VM owner.
+
+    Native +16a974 compares the selected virtual word with the saved caller
+    sentinel before choosing +172440. Other sub30 targets remain unsupported.
+    """
+    if pc!=image_base+0x118F44 or len(registers)!=32:
+        raise RefillUnsupported('token VM exit is outside its recovered return branch')
+    word=int.from_bytes(_read_span(pages,pc,4),'little')
+    if word!=0x07C00791:
+        raise RefillUnsupported('token VM exit word does not match the sample')
+    slot=(word>>22)&31
+    if type(registers[slot]) is not int or registers[slot]!=return_address:
+        raise RefillUnsupported('token VM exit target does not match its caller sentinel')
+    return dict(bytecode_offset=hex(pc-image_base),instruction_word=hex(word),
+        selected_slot=slot,selected_target=return_address,caller_sentinel_matches=True,
+        native_handler_offset='0x16a974',native_epilogue_offset='0x172440')
+
+
+def finish_request_token_vm_caller(pages, *, image_base, entry_stack_address,
+        thread_pointer, callback_sentinel) -> RequestCallerReturn:
+    """+28755c: canary check, saved caller restore and physical sentinel X0.
+
+    +1683f0 loads descriptor[0] into physical X0. Callback +16aa30 and VM
+    epilogue +172440 preserve it. Virtual R0 is not the physical return value.
+    This function reads the live caller spills and leaves all pages unchanged.
+    """
+    values=(image_base,entry_stack_address,thread_pointer,callback_sentinel)
+    if any(type(v) is not int or not 0<=v<1<<64 for v in values):
+        raise RefillUnsupported('token caller return inputs must fit uint64')
+    if entry_stack_address<0x680 or entry_stack_address&15:
+        raise RefillUnsupported('token caller return stack must be aligned')
+    if callback_sentinel!=image_base+0x2884AC:
+        raise RefillUnsupported('token caller callback sentinel does not match this entry')
+    try:
+        saved=_read_span(pages,entry_stack_address-0x28,0x28)
+        canary=_read_span(pages,thread_pointer+0x28,8)
+    except ValueError as exc:
+        raise RefillUnsupported('token caller return frame or TLS is unmapped') from exc
+    if saved[:8]!=canary:
+        raise RefillUnsupported('token caller stack canary mismatch')
+    canary_word,x29,x30,x28,x19=(int.from_bytes(saved[i:i+8],'little') for i in range(0,40,8))
+    if x30>=1<<56:
+        raise RefillUnsupported('PAC-tagged token caller return is unsupported')
+    return RequestCallerReturn(x30,entry_stack_address,callback_sentinel,x19,x28,x29,x30)
