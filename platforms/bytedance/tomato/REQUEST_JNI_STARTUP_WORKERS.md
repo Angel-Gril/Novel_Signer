@@ -4288,6 +4288,42 @@ metadata 与 padding 区分仍需继续。真实 Android JVM、URL/header 输入
 python -B platforms/bytedance/tomato/python/verify_vm9_request_caller_return_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <request-caller-return-evidence.json>
 ```
 
+## 6.101 NULL raw cleanup 与整链有效字段（2026-10-12 Asia/Shanghai）
+
+`insert_configuration_pair` duplicate 路径的 raw cleanup `+165334` 现在
+只对非 NULL 的旧值调用 free。两基址原生 RED 证明旧 Python 模型多一次
+`free(0)` provider 效果，虽然内存结果相同。**16项新增原生/Python对照、
+6项回滚**通过：direct 与实际 `+2859B8` wrapper，NULL旧值、旧/新均NULL、
+key释放后改为raw cleanup，以及包含高字节和嵌入NUL的key。全guest/ELF
+bytes、释放顺序、allocator状态、释放前payload一致。provider key释放失败
+或释放后出现未知callback时，全部页面回滚；外部释放效果不回滚。
+其他registry函数与非NULL raw cleanup保持既有实现。已接受分组未重复。
+
+私有 fresh 整链探针仍使用明确构造的 ABI、空header tree与NULL FindClass，
+原caller和interpreter未改。2475步/105回调返回，其PC/SP/X0/X19/X28/X29/
+X30一致。按原wrapper的load宽度提取 **105次有效packed输入**，包括第五
+word、uint32与byte字段，零差异；callback26不同word2未被wrapper读取。
+**10次clock/GetEnv/JNI/atexit服务**参数与结果一致。main ELF页面、32个VM
+registers、输出引用、88次malloc与55次free的顺序/地址/size，以及34个
+retained request blocks和OS mapping/cursor geometry一致。
+
+logger vector的 **12个C++ string** tags、声明payload和NUL全部一致。
+15个释放前token buffer的差异只在 `+4..7`、`+45..47` 与tag2 literal的
+`+44`。guest RAM范围 `0x12000000..0x50000000` 中6页/167个不同字节，
+全部定位到最后释放的token padding或retained short string声明payload+
+NUL之后的尾部；释放lifetime、pointer/size及最后释放前bytes逐项核对。
+没有屏蔽初始化字段。这是有效字段证据，不宣称未初始化物理bytes相等。
+
+physical stack、libc ELF/global metadata与全部syscall参数仍需对照，
+request allocator映射回滚亦未完成。真实URL/header/JNI转换、Android
+JVM、完整signer、fresh签名及线上矩阵继续。完整请求等价标志保留False。
+见 [NULL raw cleanup证据](evidence/vm9_request_raw_cleanup_fresh_20261012.json) 与
+[整链有效字段证据](evidence/vm9_request_effective_abi_fresh_20261012.json)。私有探针与payload保留在仓库外。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_raw_cleanup_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <raw-cleanup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

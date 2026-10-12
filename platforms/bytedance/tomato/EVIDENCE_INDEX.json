@@ -6338,5 +6338,23 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_raw_cleanup_fresh_20261012": {
+    "path": "evidence/vm9_request_raw_cleanup_fresh_20261012.json",
+    "native_Python_controls": 16,
+    "rollback_guards": 6,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
+  },
+  "vm9_request_effective_abi_fresh_20261012": {
+    "path": "evidence/vm9_request_effective_abi_fresh_20261012.json",
+    "request_VM_boundary_controls": 1,
+    "callback_controls": 105,
+    "explicit_service_controls": 10,
+    "whole_request_native_differential_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

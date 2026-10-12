@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：NULL raw cleanup与整链有效字段
+
+16项新增原生/Python对照、6项回滚通过；NULL raw值不调用free。
+构造请求2475步/105回调，105次有效packed输入、10次显式服务、physical
+caller返回一致。15个token释放缓冲区与6页/167字节RAM差异均定位padding。
+libc globals/全部syscall参数、真实URL/header/JNI转换与JVM、完整signer、
+fresh/live未完成。见 [NULL raw cleanup与整链报告](REQUEST_JNI_STARTUP_WORKERS.md#6101-null-raw-cleanup-与整链有效字段2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：request caller物理返回恢复
 
 16项原生/Python对照、1项入口、26项拒绝通过。恢复canary与physical

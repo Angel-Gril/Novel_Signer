@@ -511,7 +511,8 @@ def insert_configuration_pair(pages, *, container_address: int, key_address: int
                 objects.destroy_string_object(transaction, object_address=value,
                     image_base=image_base, free=free, delete_object=True)
         elif cleanup == objects._image_address(image_base, 0x165334):
-            free(transaction, value)
+            if value:
+                free(transaction, value)
         else:
             raise RefillUnsupported("unknown configuration value cleanup callback")
         tree.put(pair + 8, value_address)

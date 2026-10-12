@@ -432,6 +432,8 @@ VM opcode 36 loads the full word and opcode 57 performs a serialized compare/sto
 
 Request caller return now checks the stack canary and restores PC/SP/X19/X28/X29/X30 with the physical X0 callback sentinel. 16 native controls, one request entry and 26 rejections pass: 25 preserve all pages; the canary entry preserves existing bytes but leaves 64 allocator mapping pages. Full signing remains unfinished. See the [caller return report](../REQUEST_JNI_STARTUP_WORKERS.md#6100-request-caller-物理返回2026-10-12-asiashanghai).
 
+NULL raw cleanup now skips the provider free call: 16 new native controls and six rollback checks pass. The constructed request chain also matches 105 effective packed inputs, 10 explicit service calls and the physical caller return; remaining measured RAM differences are scoped token/short-string padding. Actual request conversion and complete signing remain unfinished. See the [raw cleanup and effective fields report](../REQUEST_JNI_STARTUP_WORKERS.md#6101-null-raw-cleanup-与整链有效字段2026-10-12-asiashanghai).
+
 
 
 

@@ -253,6 +253,7 @@ guest table比较通过 **48项对照、1项请求入口检查、26项回滚**�
 请求scoped tree构造通过 **24项对照、1项入口、31项回滚**，见 [scoped tree报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#698-请求-scoped-tree-reference-构造2026-10-12-asiashanghai)。
 VM load/compare-store修复通过 **114项对照、1项入口、21项拒绝/回滚**，见 [VM load/store报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#699-vm-load-与串行-comparestore2026-10-12-asiashanghai)。
 caller物理返回恢复通过 **16项原生对照、1项入口、26项拒绝**；25项全部页面不变，canary入口的新增分配映射保留。见 [caller返回报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6100-request-caller-物理返回2026-10-12-asiashanghai)。
+NULL raw cleanup修复通过 **16项新增对照、6项回滚**；构造请求的105次有效packed输入、10次服务与物理返回一致。见 [整链有效字段报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6101-null-raw-cleanup-与整链有效字段2026-10-12-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
