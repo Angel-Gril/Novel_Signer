@@ -396,6 +396,16 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 pointer = allocate(vm.m.pages, words[1])
                 _write_span(vm.m.pages, argument + 0x10, pointer.to_bytes(8, 'little'))
                 diagnostic_scope.setdefault('allocation_callbacks', []).append([words[1], pointer])
+            elif (wrapper,target) == (0x285C94,0x258D6C):
+                result=objects.encode_string_object_base64(vm.m.pages,
+                    source_object_address=words[1],object_address=words[2],
+                    entry_stack_address=frame.native_stack_address-0x190,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    allocate=allocate,reallocate=reallocate,free=free)
+                _write_span(vm.m.pages,argument+0x18,bytes([int(result)]))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_base64_encoded',[]).append(dict(
+                        source_object_address=words[1],object_address=words[2],query_nonempty=result))
             elif (wrapper,target) == (0x285E8C,0x287168):
                 import vm9_request_transform
                 result=vm9_request_transform.construct_request_metadata(vm.m.pages,

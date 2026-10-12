@@ -355,6 +355,8 @@ The outer request suffix now passes 26 new native controls and nine rollback che
 
 Request metadata formatting and unsigned decimal now pass 46 new native controls and 12 rollback checks. Both output strings, cached input words and actual source callback match. The independently constructed nonempty entry advances to 3520 steps, next at +258d6c. Full JNI, whole-request native comparison and complete signing remain unfinished. See the [metadata report](REQUEST_JNI_STARTUP_WORKERS.md#6127-request-metadata-formatting2026-10-13-asiashanghai).
 
+The raw Base64 encoder, two-pass StringObject composition and actual source callback now pass 68 new native controls and 10 rollback checks. Guest alphabet aliases, capacity/NUL rules, scratch and cleanup match. The independently constructed nonempty entry advances to 3538 steps, next at +2482ec. Full JNI, whole-request comparison and complete signing remain unfinished. See the [Base64 encoder report](REQUEST_JNI_STARTUP_WORKERS.md#6128-request-base64-encoder2026-10-13-asiashanghai).
+
 
 
 

@@ -5148,6 +5148,41 @@ signer、fresh/live及真实JVM仍未完成。见 [metadata证据](evidence/vm9_
 python -B platforms/bytedance/tomato/python/verify_vm9_request_metadata_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <metadata-evidence.json>
 ```
 
+## 6.128 Request Base64 encoder（2026-10-13 Asia/Shanghai）
+
+在既有StringObject owner补齐 `encode_configuration_base64(+2456AC)` 与
+`encode_string_object_base64(+258D6C)`。原始helper的跳转小函数只调整LR，
+没有diagnostic lock；通过当前独立输入原生trace确认后按实际语义组合。
+raw encoder读取guest ELF alphabet；query容量含NUL，成功length不含NUL，
+empty只写length=0；overflow query写uint64全位并返回-42。按实际byte
+顺序保留forward source/target、alphabet与length/output alias；尤其tail
+第三alphabet读取发生在前两个输出store之后。
+
+StringObject组合先query，非空则fill目标再reload source pointer/length，
+第二遍encode。目标声明length保留第一次query容量（含NUL），忽略fill
+和第二encode status，返回第一次query是否非空。空input不修改目标。
+复用既有fill/reserve/allocator；比较真实length scratch与TLS canary，
+完整physical callee spills与C++ unwind未恢复。
+
+两基址 **36项primitive、26项组合、6项actual source callback** 新增
+原生/Python对照通过，合计 **68项对照、10项回滚检查**。覆盖0/1/2/3/
+4/7/32/128-byte input、query/短容量/大长度/overflow、修改alphabet、
+source/target与alphabet/length aliases、预分配、自身StringObject、
+malloc期间source变长/变短/换pointer与NULL malloc。完整semantic
+guest/ELF bytes、scratch/canary、返回值、allocation/free顺序和free前
+bytes一致。实际 `+285C94` callback只写packed+18的一个bool byte，
+其余padding保留，source callback AST对照通过。6项native RED。
+
+非空owning入口3520→ **3538步 / bytecode+FDA4C**，suffix、metadata、
+Base64各一次；下一未知 `+285E98 -> +2482EC`。原有page bytes回滚，
+64个新增OS pages保留，provider mapping回滚仍未验证。actual JNI、
+whole-request差分、完整signer、fresh/live与真实JVM未完成。
+见 [Base64 encoder证据](evidence/vm9_request_base64_encode_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_base64_encode_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <base64-encode-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

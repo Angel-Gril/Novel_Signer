@@ -1047,6 +1047,92 @@ def destroy_string_object(
     transaction.commit()
 
 
+def encode_configuration_base64(pages, *, destination_address: int,
+        destination_size: int, length_address: int, source_address: int,
+        source_size: int, image_base: int, max_source_bytes: int = 0x100000) -> int:
+    """+0x2456ac: live guest alphabet, capacity query, padding and NUL store.
+
+    Query length includes the terminator; successful length excludes it.
+    Empty input only clears length. Overflow queries publish uint64 -1.
+    Forward source/table aliases and length/output aliases follow native stores.
+    """
+    if type(max_source_bytes) is not int or not 0<=max_source_bytes<=0x100000:
+        raise ValueError('invalid Base64 encode source bound')
+    _word(destination_size);_word(source_size)
+    p=_PageTransaction(pages)
+    groups=(source_size+2)//3
+    needed=0 if not source_size else 0xFFFFFFFFFFFFFFFF if groups>>62 else groups*4+1
+    if not source_size:
+        _write_span(p,length_address,bytes(8));status=0
+    elif groups>>62 or not destination_address or needed>destination_size:
+        _write_span(p,length_address,_word(needed));status=-42
+    else:
+        if source_size>max_source_bytes:
+            raise RefillUnsupported('Base64 encode input exceeds source bound')
+        table=_image_address(image_base,0x95C80);i=0;out=destination_address
+        def digit(index):return _read_span(p,table+index,1)
+        while i+3<=source_size:
+            a,b,c=_read_span(p,source_address+i,3)
+            values=(a>>2,((a<<4)&0x30)|(b>>4),((b<<2)&0x3C)|(c>>6),c&0x3F)
+            data=b''.join(digit(v) for v in values)
+            _write_span(p,out,data);i+=3;out+=4
+        if i<source_size:
+            a=_read_span(p,source_address+i,1)[0]
+            second=i+1<source_size
+            b=_read_span(p,source_address+i+1,1)[0] if second else 0
+            first_two=digit(a>>2)+digit(((a<<4)&0x30)|(b>>4))
+            _write_span(p,out,first_two)
+            # The third alphabet byte is loaded after the first two stores.
+            _write_span(p,out+2,digit((b<<2)&0x3C) if second else b'=')
+            _write_span(p,out+3,b'=');out+=4
+        _write_span(p,length_address,_word(out-destination_address))
+        _write_span(p,out,b'\0');status=0
+    p.commit()
+    return status
+
+
+def encode_string_object_base64(pages, *, source_object_address: int,
+        object_address: int, entry_stack_address: int, image_base: int,
+        thread_pointer: int, allocate, reallocate, free, max_bytes: int = 0x100000) -> bool:
+    """+0x258d6c: query, fill target, reload source, encode; return query != 0.
+
+    The target's declared length remains the first queried capacity, including
+    NUL. Ignore fill/second-encode status as native does. Empty query leaves
+    the target unchanged. Physical spills/unwind and provider rollback are
+    outside this composition; compare the length scratch and TLS canary.
+    """
+    if type(entry_stack_address) is not int or entry_stack_address&15 or not 0x40<=entry_stack_address<1<<64:
+        raise RefillUnsupported('Base64 string encoder requires aligned scratch space')
+    if type(max_bytes) is not int or not 1<=max_bytes<=0x100000:
+        raise ValueError('invalid Base64 string encode bound')
+    if not all(callable(s) for s in (allocate,reallocate,free)):
+        raise RefillUnsupported('Base64 string encoder requires owning allocation services')
+    p=_PageTransaction(pages);scratch=entry_stack_address-0x40
+    canary=_read_span(p,thread_pointer+0x28,8)
+    _write_span(p,scratch+8,canary);_write_span(p,scratch,bytes(8))
+    def u(a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
+    source=u(source_object_address+16);length=_s32(u(source_object_address+12,4))
+    if not 0<=length<=max_bytes:
+        raise RefillUnsupported('Base64 string source length exceeds bound')
+    encode_configuration_base64(p,destination_address=0,destination_size=0,
+        length_address=scratch,source_address=source,source_size=length,
+        image_base=image_base,max_source_bytes=max_bytes)
+    needed=u(scratch)
+    if needed:
+        fill_string_object(p,object_address=object_address,length=needed&0xFFFFFFFF,fill=0,
+            allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+        destination=u(object_address+16);capacity=u(scratch)
+        source=u(source_object_address+16);length=_s32(u(source_object_address+12,4))
+        if length<0:raise RefillUnsupported('Base64 string live source length is negative')
+        encode_configuration_base64(p,destination_address=destination,destination_size=capacity,
+            length_address=scratch,source_address=source,source_size=length,
+            image_base=image_base,max_source_bytes=max_bytes)
+    if _read_span(p,thread_pointer+0x28,8)!=canary:
+        raise RefillUnsupported('Base64 string encoder TLS canary changed')
+    p.commit()
+    return bool(needed)
+
+
 def _decode_configuration_base64(
     pages, *, destination_address: int, destination_size: int,
     source_address: int, source_size: int, image_base: int, max_source_bytes: int = 0x100000,

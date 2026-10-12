@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request Base64 encode
+
+68项新增原生对照、10项回滚通过；query/NUL、guest alphabet aliases、
+live source、scratch与actual bool callback一致。入口3520→3538/+FDA4C，
+下一285E98→2482EC。原页bytes回滚，64个新增OS pages保留。actual JNI、
+整链差分、full physical ABI、完整signer、fresh/live及真实JVM仍未完成。
+见 [Base64报告](REQUEST_JNI_STARTUP_WORKERS.md#6128-request-base64-encoder2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request metadata与unsigned printf
 
 46项新增原生对照、12项回滚通过；metadata两个outputs、unsigned W0、
