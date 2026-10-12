@@ -4324,6 +4324,41 @@ JVM、完整signer、fresh签名及线上矩阵继续。完整请求等价标志
 python -B platforms/bytedance/tomato/python/verify_vm9_request_raw_cleanup_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <raw-cleanup-evidence.json>
 ```
 
+## 6.102 ASCII case 与 request byte flag（2026-10-12 Asia/Shanghai）
+
+新增 `vm9_objects.transform_string_fields_ascii_case`，恢复 `+246FC0` 与
+`+247028` 的ASCII upper/lower转换。`+248F4C/+248F54` 将object+8传给
+fields helper；实际 `+28591C` callback接入同一owner。按signed capacity/
+length判定有效输入：NULLfields/payload、capacity<1、capacity<length或
+negative length返回uint32 -1。只转换声明长度内ASCII字母，包含embedded
+NUL之后的bytes；高字节不变，不追加terminator。每次读取重新加载pointer，
+保留原生field-alias读取顺序。实际访问受显式bound约束，失败不提交页面。
+
+新增 `read_signer_request_flag` 对照 `+282A68`，只读receiver+0x52的完整
+byte，不读object header；`+285C3C` wrapper把最低位写到packed+16的
+一个byte，其他packed padding保留。consumer依照这一区分处理返回值。
+
+两基址 **92项新增原生/Python对照、8项回滚**通过。72项ASCII对照涵盖
+全部256种byte、embedded NUL、空string、capacity==length、跨页payload、
+six invalid profiles，以及fields/object/actual callback三种入口。20项
+receiver对照涵盖0/1/2/255及只有目标field映射的receiver，direct/wrapper
+均一致。4项native RED记录这两个缺失回调。72项native全部已PASS后，
+一个guard fixture把“未映射”地址误放入已映射page而失败；纠正fixture，
+单独验证8项guards，未重复已接受native分组。新flag分组单独验证。
+
+私有probe从合成URL与一项user-agent header bytes独立分配StringObject/
+reference/tree，并按 `+27E478` 的native callsite放入四个arguments。
+该构造prefix从1556步推进至1933，再到2174步的 `+FB1F8`；下一处为
+`+285C5C -> +248C1C` byte search。probe保留原有page bytes的回滚检查。
+它不是实际JNI转换，亦未验证这个非空prefix的完整native差分。
+原JNIcaller的flattened跳转仍需恢复；局部callsite能说明argument角色，
+不能据此声明完整frontend。真实JVM、完整signer、fresh/live继续。
+见 [ASCII/receiver flag证据](evidence/vm9_request_ascii_case_fresh_20261012.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_ascii_case_fresh_20261012.py --library "$env:TOMATO_LIBMETASEC" --group all --output <request-ascii-case-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

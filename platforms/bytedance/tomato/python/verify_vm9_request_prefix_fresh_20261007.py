@@ -430,6 +430,20 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 diagnostic_scope.setdefault('cstring_constructors', []).append(dict(
                     object_address=words[1], source_address=words[2],
                     declared_length=vm.m.u32(words[1] + 12), native_input_snapshot_used=False))
+            elif (wrapper, target) == (0x285C3C, 0x282A68):
+                value = objects.read_signer_request_flag(vm.m.pages, object_address=words[1])
+                _write_span(vm.m.pages, argument + 16, bytes([value & 1]))
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_flag_reads', []).append(dict(
+                        object_address=words[1], returned_byte=value, packed_boolean=value & 1))
+            elif (wrapper, target) in ((0x28591C, 0x248F4C), (0x28591C, 0x248F54)):
+                value = objects.transform_string_fields_ascii_case(vm.m.pages,
+                    fields_address=(words[1] + 8) & ((1 << 64) - 1),
+                    uppercase=target == 0x248F4C)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('ascii_string_conversions', []).append(dict(
+                        object_address=words[1], uppercase=target == 0x248F4C,
+                        returned_u32=value, declared_length_used=True))
             elif allocate is not None and (wrapper, target) == (0x28591C, 0x2484B8):
                 if free is None or diagnostic_scope is None:
                     raise PrefixBoundary()

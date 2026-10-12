@@ -434,6 +434,8 @@ Request caller return now checks the stack canary and restores PC/SP/X19/X28/X29
 
 NULL raw cleanup now skips the provider free call: 16 new native controls and six rollback checks pass. The constructed request chain also matches 105 effective packed inputs, 10 explicit service calls and the physical caller return; remaining measured RAM differences are scoped token/short-string padding. Actual request conversion and complete signing remain unfinished. See the [raw cleanup and effective fields report](../REQUEST_JNI_STARTUP_WORKERS.md#6101-null-raw-cleanup-与整链有效字段2026-10-12-asiashanghai).
 
+Request ASCII upper/lower conversion and the receiver byte flag now pass 92 new native controls and eight rollback checks. A constructed URL and one-header prefix advances to 2174 steps; byte search and actual JNI conversion remain open. Complete signing remains unfinished. See the [ASCII and receiver flag report](../REQUEST_JNI_STARTUP_WORKERS.md#6102-ascii-case-与-request-byte-flag2026-10-12-asiashanghai).
+
 
 
 

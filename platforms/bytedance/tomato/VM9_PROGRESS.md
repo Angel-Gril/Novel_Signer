@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-12 Asia/Shanghai：ASCII case与request receiver byte flag
+
+92项新增原生/Python对照、8项回滚通过。恢复ASCII upper/lower与receiver
+byte52/getter的packed bit0。构造URL与一项header的prefix推进到2174步；
+下一callback是byte search。实际JNI转换、非空prefix native差分、完整
+signer、fresh/live与真实JVM未完成。见 [ASCII与flag报告](REQUEST_JNI_STARTUP_WORKERS.md#6102-ascii-case-与-request-byte-flag2026-10-12-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-12 Asia/Shanghai：NULL raw cleanup与整链有效字段
 
 16项新增原生/Python对照、6项回滚通过；NULL raw值不调用free。

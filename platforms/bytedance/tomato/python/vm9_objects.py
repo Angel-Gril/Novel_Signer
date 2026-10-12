@@ -274,6 +274,50 @@ def destroy_string_fields(pages, *, fields_address: int, free: Callable) -> int:
     return status
 
 
+def read_signer_request_flag(pages, *, object_address: int) -> int:
+    """+0x282a68 returns the full receiver byte at +0x52, without header reads."""
+    if type(object_address) is not int or not 0 <= object_address <= (1 << 64) - 0x53:
+        raise RefillUnsupported('request flag receiver address must fit uint64')
+    return _read_span(pages, object_address + 0x52, 1)[0]
+
+
+def transform_string_fields_ascii_case(pages, *, fields_address: int,
+                                      uppercase: bool, max_bytes: int = 0x100000) -> int:
+    """+0x246fc0/247028: change declared bytes, preserving NUL and high bytes.
+
+    Invalid signed capacity/length or NULL fields/payload returns uint32 -1.
+    Reload the pointer before each byte as native does, including field aliases.
+    Unmapped data or an explicit bound failure leaves guest pages unchanged.
+    """
+    if type(fields_address) is not int or not 0 <= fields_address < 1 << 64:
+        raise RefillUnsupported('ASCII string fields address must fit uint64')
+    if type(uppercase) is not bool:
+        raise RefillUnsupported('ASCII string case direction must be boolean')
+    if type(max_bytes) is not int or not 0 <= max_bytes <= 0x100000:
+        raise ValueError('invalid ASCII string conversion bound')
+    if not fields_address:
+        return 0xFFFFFFFF
+    p = _PageTransaction(pages)
+    pointer = int.from_bytes(_read_span(p, fields_address + 8, 8), 'little')
+    if not pointer:
+        return 0xFFFFFFFF
+    capacity = _s32(int.from_bytes(_read_span(p, fields_address, 4), 'little'))
+    length = _s32(int.from_bytes(_read_span(p, fields_address + 4, 4), 'little'))
+    if capacity < 1 or capacity < length or length < 0:
+        return 0xFFFFFFFF
+    if length > max_bytes:
+        raise RefillUnsupported('ASCII string exceeds the explicit conversion bound')
+    first = 97 if uppercase else 65
+    for index in range(length):
+        pointer = int.from_bytes(_read_span(p, fields_address + 8, 8), 'little')
+        address = (pointer + index) & ((1 << 64) - 1)
+        byte = _read_span(p, address, 1)[0]
+        value = byte ^ 32 if first <= byte < first + 26 else byte
+        _write_span(p, address, bytes([value]))
+    p.commit()
+    return 0
+
+
 def _clone_string_fields(pages, fields, allocate, free, limit):
     length = int.from_bytes(_read_span(pages, fields + 4, 4), "little")
     if _s32(length) < 0:
