@@ -33,13 +33,17 @@ def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
             saved_frame_pointer=saved_frame_pointer,saved_x28=saved_x28,saved_x19=saved_x19)
     except ValueError as exc:raise RefillUnsupported('child wrapper memory is unmapped') from exc
     p.commit();return frame
-def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,**inputs):
-    """Run the first known decode; stop before the next unsupported consumer.
+def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
+        consumer_services=None,**inputs):
+    """Run known child callbacks; stop before the next unsupported consumer.
 
     The actual wrapper spill and child caller are independently generated.
     No bounded child pages publish to the supplied page map.
     """
     if type(maxsteps) is not int or maxsteps<1:raise RefillUnsupported('child VM budget must be positive')
+    if consumer_services is not None and (not isinstance(consumer_services,dict) or
+            any(not callable(consumer_services.get(n)) for n in ('allocate','free'))):
+        raise RefillUnsupported('child request consumers require allocation and free services')
     staged=_PageTransaction(pages);frame=prepare_request_28048c_wrapper_caller(staged,**inputs)
     image=inputs['image_base'];callbacks=[];decoded=[];previous=vm_module.B
     class StrictMem(vm_module.Mem):
@@ -59,6 +63,12 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,**inputs)
             if (wrapper,target)==(0x281420,0x167E54):
                 size=decode_masked_bytes(staged,source_address=words[1],destination_address=words[2],mask_address=words[3])
                 decoded.append((words[2],size))
+            elif consumer_services is not None and (wrapper,target) in (
+                    (0x281434,0x248274),(0x281448,0x347F20),
+                    (0x28145C,0x347F60),(0x281470,0x2A9280)):
+                apply_request_28048c_consumer(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    allocate=consumer_services['allocate'])
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
@@ -66,3 +76,45 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,**inputs)
         except vm_module.VMExit as exc:raise RefillUnsupported('child VM return is not recovered') from exc
         raise RefillUnsupported('child VM exhausted its budget before a boundary')
     finally:vm_module.B=previous
+
+
+def apply_request_28048c_consumer(pages, *, wrapper_offset,
+        argument_block_address,image_base,allocate,max_bytes=0x100000):
+    """Actual child filled-string, memset, memcpy and local-copy wrappers.
+
+    Filled construction reads BYTE fill and W length; memset reads BYTE fill
+    and Q size. Only +281470 stores the returned destination at packed+32.
+    Imported memcpy requires disjoint ranges or identical pointers. +2a9280
+    shares the second VM's ordered scalar/vector copy owner.
+    """
+    from vm9_objects import construct_filled_string_object
+    from vm9_request_287474_vm import _copy_request_287474_bytes
+    if type(max_bytes) is not int or not 0<=max_bytes<=0x100000:
+        raise RefillUnsupported('invalid child request consumer size bound')
+    p=_PageTransaction(pages)
+    def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
+    pair=wrapper_offset,word(0)-image_base;destination=word(8)
+    if pair==(0x281434,0x248274):
+        fill=_read_span(p,argument_block_address+16,1)[0]
+        length=int.from_bytes(_read_span(p,argument_block_address+20,4),'little')
+        result=construct_filled_string_object(p,object_address=destination,
+            fill=fill,length=length,image_base=image_base,allocate=allocate,
+            max_payload_bytes=max_bytes)
+    elif pair==(0x281448,0x347F20):
+        fill=_read_span(p,argument_block_address+16,1)[0];length=word(24)
+        if length>max_bytes:raise RefillUnsupported('child memset exceeds the explicit bound')
+        if length:_write_span(p,destination,bytes([fill])*length)
+        result=destination
+    elif pair in ((0x28145C,0x347F60),(0x281470,0x2A9280)):
+        source,length=word(16),word(24)
+        if length>max_bytes:raise RefillUnsupported('child copy exceeds the explicit bound')
+        if pair[0]==0x28145C:
+            if source!=destination and length and abs(destination-source)<length:
+                raise RefillUnsupported('overlapping imported memcpy is not recovered')
+            if length:_write_span(p,destination,_read_span(p,source,length))
+        else:
+            _copy_request_287474_bytes(p,destination,source,length)
+            _write_span(p,argument_block_address+32,destination.to_bytes(8,'little'))
+        result=destination
+    else:raise RefillUnsupported('unrecovered child request consumer')
+    p.commit();return result

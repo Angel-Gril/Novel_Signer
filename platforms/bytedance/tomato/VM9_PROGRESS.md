@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-13 Asia/Shanghai：request child VM consumers
+
+83项新增原生对照、13项回滚和5项Python入口拒绝检查通过。四个实际child
+wrapper恢复；共享copy owner保留。owning child19295/+ECE20，下一2814C8→204E50。
+全部32虚拟寄存器、完整callback ledger、16声明范围与原生有界前缀匹配。
+outer3900、second8184；原页回滚，64新增OS pages保留。完整return/request、
+full physical/JNI/mapping/signer及fresh/live/JVM仍未完成。
+见 [child consumer报告](REQUEST_JNI_STARTUP_WORKERS.md#6150-request-child-vm-consumers2026-10-13-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request child VM caller and prefix
 
 26项新增原生对照、10项回滚通过。actual2885AC hidden-X8 wrapper、28048C

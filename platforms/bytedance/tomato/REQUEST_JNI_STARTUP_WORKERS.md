@@ -5734,6 +5734,32 @@ actual JNI、完整signer及fresh/live/真实JVM仍未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_28048c_vm_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <child-VM-evidence.json>
 ```
 
+## 6.150 Request child VM consumers（2026-10-13 Asia/Shanghai）
+
+恢复child四个实际包装：`+281434 -> +248274` filled StringObject读取BYTE fill/
+W length；`+281448 -> +347F20` memset读取BYTE fill/Q size；`+28145C -> +347F60`
+memcpy；`+281470 -> +2A9280` local copy返回destination写packed+32 Q。
+前三个tail wrappers不写packed result；填充构造复用既有对象owner，local copy
+复用已验证的有序scalar/vector和对齐forward/backward loops。
+
+**83项新增原生对照、13项回滚检查、5项Python入口拒绝检查**通过：82项实际
+wrapper覆盖两基址、零长/负W/分配NULL、对象与packed别名、跨页、重叠方向、
+自身复制及长copy；新增1项owning child有界原生差分。全部32虚拟寄存器、
+完整11项已执行callback ledger、16声明内存范围及下一wrapper参数一致。
+原生执行2039760条指令；Python child **19295/+ECE20**，下一
+**+2814C8 -> +204E50**。8项native RED通过。
+
+Owning parent传入实际allocate/free services与显式20000步child预算；standalone
+4000默认及旧child decoder/default、second consumers和共享copy AST保留。
+outer3900、second8184；原页差异为空，64新增OS pages保留。有界child差分
+止于nested helper入口；完整child/second/request return、full physical ABI/PAC、
+provider mapping rollback、actual JNI、完整signer及fresh/live/真实JVM仍未完成。
+见 [child consumer证据](evidence/vm9_request_28048c_consumers_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_28048c_consumers_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <child-consumers-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -399,6 +399,8 @@ Second VM consumers pass 153 new native controls, twelve rollback checks and fiv
 
 The child VM caller, hidden-X8 wrapper and first decode pass26 new native controls and ten rollback checks. The owning child reaches290 steps, next at filled StringObject construction. Complete child/request, JNI and signing remain unfinished. See the [child VM report](REQUEST_JNI_STARTUP_WORKERS.md#6149-request-child-vm-caller-and-prefix2026-10-13-asiashanghai).
 
+Child VM consumers pass83 new native controls,13 rollback checks and five Python entry rejection checks. Its owning bounded prefix reaches19295 steps; all32 virtual registers, the callback ledger and16 declared memory ranges match original native. The next boundary is the204e50 nested helper. Complete child/request, JNI and signing remain unfinished. See the [child consumers report](REQUEST_JNI_STARTUP_WORKERS.md#6150-request-child-vm-consumers2026-10-13-asiashanghai).
+
 
 
 
