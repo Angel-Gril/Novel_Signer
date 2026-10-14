@@ -316,6 +316,7 @@ child配置读取新增 **41项原生对照、12项回滚**，推进至19549步�
 child析构新增 **17项原生对照、7项回滚**，19566步观察VM exit，物理返回仍待恢复。见 [child cleanup报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6162-child-stringobject-cleanup-and-vm-exit2026-10-15-asiashanghai)。
 child物理返回新增 **23项原生对照、16项回滚**，second推进至8251步、下一2885D0字符串构造。见 [child return报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6163-child-physical-caller-and-wrapper-return2026-10-15-asiashanghai)。
 second字符串构造新增 **23项原生对照、8项回滚**，推进至8261步、下一32A444共享读锁。见 [second strings报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6164-second-vm-stringobject-construction2026-10-15-asiashanghai)。
+second共享读锁新增 **19项原生对照、11项回滚**，推进至8279步、下一26C858诊断scope。见 [second reader报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6165-second-vm-shared-reader-acquisition2026-10-15-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

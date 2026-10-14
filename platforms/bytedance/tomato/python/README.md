@@ -558,6 +558,8 @@ Child physical caller/wrapper return passes23 new native controls and16 rollback
 
 Second VM StringObject construction passes23 new native controls and8 rollback checks. The owning constructor executes155 original instructions and one matching-libc malloc, with1186 declared ranges equal. The second VM reaches8261 steps before shared-reader acquisition, preserving the child return; complete signing remains unfinished. See the [second strings report](../REQUEST_JNI_STARTUP_WORKERS.md#6164-second-vm-stringobject-construction2026-10-15-asiashanghai).
 
+Second VM shared-reader acquisition passes19 new native controls and11 rollback checks. The owning callback matches1185 declared ranges and two actual mutex transitions in94 instructions. The second VM reaches8279 steps before diagnostic scope entry; complete signing remains unfinished. See the [second reader report](../REQUEST_JNI_STARTUP_WORKERS.md#6165-second-vm-shared-reader-acquisition2026-10-15-asiashanghai).
+
 
 
 

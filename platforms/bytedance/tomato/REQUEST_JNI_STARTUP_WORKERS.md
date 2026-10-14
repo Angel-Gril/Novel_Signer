@@ -6098,6 +6098,28 @@ body、physical/PAC、URL/header JNI、mapping、signer及fresh/live/JVM未完�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_strings_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-strings-evidence.json>
 ```
 
+## 6.165 Second VM shared-reader acquisition（2026-10-15 Asia/Shanghai）
+
+`2885E0→32A444`复用既有shared-reader及normal mutex owner，在锁内将
+receiver+88的u32加一。返回count仅供内部记录，未伪造physical X0或packed结果。
+
+**19项新增原生/Python对照、11项回滚检查通过**；另有2项原生RED和1项接线RED。
+18项新控制覆盖两个基址、0/1/7/7FFFFFFD/7FFFFFFE reader count、process-shared
+mutex、跨页及packed padding/receiver pointer别名；实际wrapper/helper与两次真实
+匹配libc mutex操作在94指令内返回，全部声明guest bytes一致。1项owning对照
+执行94指令、1185声明范围及两次mutex操作一致，使用实际callback SP/TP，无
+allocator/JNI服务。旧second AST和reader/mutex/StringObject/child return等共享
+owner保持，旧原生分组未重跑。physical guard/canary/PAC、并发/writer/wait未覆盖。
+
+second推进到 **8279/+106B50**，下一 **288530→26C858** diagnostic scope entry。
+child返回和second字符串保持；outer仍在3900步second边界，原caller页差异为空，
+64新增OS页和外部effects保留。完整second/request、URL/header JNI、mapping、
+signer及fresh/live/JVM未完成。见 [second reader证据](evidence/vm9_request_second_reader_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_reader_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-reader-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -26,6 +26,11 @@ class RequestVm287474StringsPrefix(RequestVm287474ChildPrefix):
     strings: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474ReaderPrefix(RequestVm287474StringsPrefix):
+    reader_acquisitions: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -50,6 +55,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     callbacks,decoded=[],[];previous=vm_module.B
     children=[]
     strings=[]
+    reader_acquisitions=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -68,6 +74,10 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 apply_request_287474_consumer(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
                     allocate=consumer_services['allocate'],free=consumer_services['free'])
+            elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
+                readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image)
+                reader_acquisitions.append((argument,readers))
             elif consumer_services is not None and (wrapper,target)==(0x2885D0,0x248344):
                 from vm9_request_environment_vm import apply_request_environment_string_callback
                 constructed=apply_request_environment_string_callback(staged,wrapper_offset=wrapper,
@@ -88,6 +98,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if reader_acquisitions:
+                return RequestVm287474ReaderPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions))
             if strings:
                 return RequestVm287474StringsPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings))
@@ -98,6 +111,23 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
             raise RefillUnsupported('second request VM return is not recovered') from exc
         raise RefillUnsupported('second request VM budget exhausted before a boundary')
     finally:vm_module.B=previous
+
+
+def apply_request_287474_reader_acquisition_callback(pages, *, wrapper_offset,
+        argument_block_address,image_base):
+    """+2885e0 tail-calls the existing +32a444 shared-reader owner.
+
+    Declare receiver/packed bytes and reuse normal mutex transitions. Native
+    physical guard/canary/PAC and concurrent/writer/wait paths stay outside
+    this semantic callback. The returned reader count is internal metadata.
+    """
+    from vm9_objects import acquire_uncontended_shared_reader
+    p=_PageTransaction(pages)
+    def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
+    if (wrapper_offset,word(0)-image_base)!=(0x2885E0,0x32A444):
+        raise RefillUnsupported('unrecovered second shared-reader callback')
+    readers=acquire_uncontended_shared_reader(p,mutex_address=word(8))
+    p.commit();return readers
 
 
 def apply_request_287474_consumer(pages, *, wrapper_offset,
