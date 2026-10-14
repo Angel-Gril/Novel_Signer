@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM reference getter
+
+33项新增原生对照、13项回滚通过；owning429指令/1186范围及有效诊断字段一致。
+复用已有shared reader和scoped reference copy；观察四次shared mutex调用，
+没有owning分配。诊断字段在dead copy frame被outer release复用前比较；physical
+padding/spills未覆盖。second8539/+107018，下一288670→257880。旧AST/共享owners/
+outer保持；原页无差异，64新增OS页保留。完整second/request/signer/fresh/live/JVM
+仍未完成。见 [second reference getter报告](REQUEST_JNI_STARTUP_WORKERS.md#6172-second-vm-reference-getter2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM random callback
 
 17项新增原生对照、11项回滚通过；warm owning126指令/1191范围/实际libc random

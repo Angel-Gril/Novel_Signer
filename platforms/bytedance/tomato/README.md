@@ -443,6 +443,8 @@ Second VM string assignment passes37 new native controls and13 rollback checks. 
 
 Second VM random callback passes17 new native controls and11 rollback checks. The warm owning callback matches1191 ranges and actual libc random/mutex execution in126 instructions. The second VM reaches8532 steps before +288658 -> +257804; complete signing remains unfinished. See the [second random report](REQUEST_JNI_STARTUP_WORKERS.md#6171-second-vm-random-callback2026-10-15-asiashanghai).
 
+Second VM reference getter passes33 new native controls and13 rollback checks. The owning getter matches1186 ranges and live diagnostic fields in429 instructions, with four shared mutex transitions and no allocation. The second VM reaches8539 steps before +288670 -> +257880; complete signing remains unfinished. See the [second reference getter report](REQUEST_JNI_STARTUP_WORKERS.md#6172-second-vm-reference-getter2026-10-15-asiashanghai).
+
 
 
 

@@ -61,6 +61,11 @@ class RequestVm287474RandomPrefix(RequestVm287474AssignmentPrefix):
     random_values: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474ReferenceGetterPrefix(RequestVm287474RandomPrefix):
+    reference_getters: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -92,6 +97,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     string_comparisons=[]
     string_assignments=[]
     random_values=[]
+    reference_getters=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -149,6 +155,12 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     libc_base=services['libc_base'],syscall=services['syscall'],
                     errno_address=services['errno_address'],thread_id=services.get('thread_id'))
                 random_values.append((argument,result))
+            elif consumer_services is not None and (wrapper,target)==(0x288658,0x257804):
+                output=apply_request_287474_reference_getter_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    allocate=consumer_services['allocate'],thread_id=consumer_services.get('thread_id'))
+                reference_getters.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -173,6 +185,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if reference_getters:
+                return RequestVm287474ReferenceGetterPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters))
             if random_values:
                 return RequestVm287474RandomPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values))
@@ -320,6 +335,24 @@ def apply_request_287474_consumer(pages, *, wrapper_offset,
     else:raise RefillUnsupported('unrecovered second request consumer')
     p.commit()
     return result
+
+
+def apply_request_287474_reference_getter_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, thread_pointer, allocate, thread_id=None,
+        diagnostic_observer=None):
+    """+288658 -> +257804: packed X8 output and X0 receiver; no result store."""
+    from vm9_registry import read_configuration_string_reference
+    transaction = _PageTransaction(pages)
+    def word(offset):return int.from_bytes(_read_span(transaction,argument_block_address+offset,8),'little')
+    target,output,receiver=word(0),word(8),word(16)
+    if target!=image_base+0x257804:
+        raise RefillUnsupported('unexpected second configuration reference target')
+    read_configuration_string_reference(transaction,registry_address=receiver,
+        output_reference_address=output,entry_stack_address=entry_stack_address-16,
+        image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,
+        thread_id=thread_id,diagnostic_observer=diagnostic_observer)
+    transaction.commit()
+    return output
 
 
 def _copy_request_287474_bytes(pages,destination,source,length):

@@ -513,6 +513,41 @@ def read_configuration_u32(pages, *, registry_address: int, key_address: int,
     return value
 
 
+def read_configuration_string_reference(pages, *, registry_address,
+        output_reference_address, entry_stack_address, image_base, thread_pointer,
+        allocate, thread_id=None, diagnostic_observer=None):
+    """+0x257804: shared-reader guarded +0xd8 pair returned through X8.
+
+    The mutex pointer at +0x100 is retained in the native guard. Reference
+    copying keeps its own diagnostic lock and ordered source reloads. Scope
+    padding is preserved; physical spills/canaries and unwind are outside
+    this semantic contract. Unsupported effects roll back all page bytes.
+    """
+    from vm9_reference_scopes import copy_scoped_string_reference
+    if (type(entry_stack_address) is not int or not 0xA0<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('configuration reference requires an aligned guest stack')
+    transaction = _PageTransaction(pages)
+    guard = entry_stack_address - 0x50
+    mutex = int.from_bytes(_read_span(transaction, registry_address + 0x100, 8), 'little')
+    vtable = objects._image_address(image_base, 0x34C758).to_bytes(8, 'little')
+    _write_span(transaction, guard, vtable + mutex.to_bytes(8, 'little'))
+    objects.acquire_uncontended_shared_reader(transaction, mutex_address=mutex + 8)
+    _write_span(transaction, mutex + 0x94, b'\x01')
+    _write_span(transaction, guard + 0x10, bytes(4))
+    copy_scoped_string_reference(transaction, destination_address=output_reference_address,
+        source_address=registry_address + 0xD8, entry_stack_address=guard,
+        image_base=image_base, thread_pointer=thread_pointer, allocate=allocate,
+        thread_id=thread_id, diagnostic_observer=diagnostic_observer)
+    _write_span(transaction, guard, vtable)
+    if not int.from_bytes(_read_span(transaction, guard + 0x10, 4), 'little'):
+        mutex = int.from_bytes(_read_span(transaction, guard + 8, 8), 'little')
+        if not _read_span(transaction, mutex + 0x94, 1)[0]:
+            raise RefillUnsupported('configuration reference writer-mode release is unrecovered')
+        objects.release_uncontended_shared_reader(transaction, mutex_address=mutex + 8)
+    transaction.commit()
+
+
 def insert_configuration_pair(pages, *, container_address: int, key_address: int,
                               value_address: int, image_base: int, allocate: Callable,
                               free: Callable, max_nodes: int = 4096,

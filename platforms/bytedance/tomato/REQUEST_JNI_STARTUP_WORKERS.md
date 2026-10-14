@@ -6264,6 +6264,33 @@ stack/PAC、second/request、URL/header JNI、mapping、signer及fresh/live/JVM
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_random_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-random-evidence.json>
 ```
 
+## 6.172 Second VM reference getter（2026-10-15 Asia/Shanghai）
+
+恢复`288658→257804`隐藏X8输出的引用getter。新registry helper复用已有shared
+reader和`copy_scoped_string_reference`，保留`15F580`的诊断锁、清零后重读及引用
+计数递增。mutex来自receiver+100，reference来自receiver+D8。wrapper先读取
+target/X8/X0，不写packed result。旧second/registry AST、所有共享owners和outer
+entry保持。
+
+**33项新增原生/Python对照、13项回滚检查通过**；另有2项原生RED、1项接线RED。
+32项组件控制覆盖两个基址、cold/warm、zero/wrap/NULL计数、NULL pointer、既有
+reader、shared mutex、跨页、same/partial pair overlap以及packed/counter/mutex
+pointer输出别名。所有声明字节、有序allocation和诊断锁effects一致。
+outer release会物理复用已结束的copy frame，因此在`257850`比较诊断有效字段，
+最终另比outer scope；dead register slots及诊断+12物理padding未比较。初始跨页
+fixture误占TLS，最终使用独立输出范围；owning探针函数重名已修正。
+
+1项owning执行 **429原始指令/1186声明范围**，实际shared mutex四次transition和
+诊断effects一致，allocator stub关闭但本项没有分配，不声称执行allocator。
+second到 **8539/+107018**，下一 **288670→257880**；reference getter1次，其余
+child/string/reader/scope/equality/assignment/random记录保持。原caller页无差异，
+64新增OS页保留。完整physical ABI/stack/PAC、second/request、URL/header JNI、
+mapping、signer及fresh/live/JVM未完成。见 [second reference getter证据](evidence/vm9_request_second_reference_getter_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_reference_getter_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-reference-getter-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
