@@ -408,3 +408,45 @@ def prepare_request_28048c_vm_caller(pages, *, entry_stack_address, return_addre
     arguments=(image_base+0xA71D0,local,image_base+0x35D6B0,image_base+0x35D970,local+0x20)
     p.commit()
     return RequestVmCallerFrame(local,0xA71D0,local,local+0x20,backing,registers,arguments)
+
+
+def prepare_request_environment_vm_caller(pages, *, helper_offset,
+        entry_stack_address,return_address,thread_pointer,image_base,
+        saved_frame_pointer=0,saved_x28=0,saved_x19=0):
+    """Actual +204e50/+204ed4 zero-argument caller and generic prelude.
+
+    Both callers reserve a packed W result at local+8 without initializing it.
+    Descriptor local+10 uses +2050e4; undefined words preserve caller memory.
+    TLS is read after saving FP/LR/X28/X19, including spill aliases.
+    """
+    values=(helper_offset,entry_stack_address,return_address,thread_pointer,
+        image_base,saved_frame_pointer,saved_x28,saved_x19)
+    if any(type(v) is not int or not 0<=v<1<<64 for v in values):
+        raise RefillUnsupported('request environment VM inputs must fit uint64')
+    spec={0x204E50:(0x500,0x4D0,0x8A040,0x34F170,0x34F210),
+        0x204ED4:(0x3D0,0x3A0,0x8A4F0,0x34F250,0x34F290)}
+    if helper_offset not in spec:raise RefillUnsupported('unrecovered request environment VM helper')
+    size,top_offset,code,table_one,table_two=spec[helper_offset]
+    if entry_stack_address<size or entry_stack_address&15:
+        raise RefillUnsupported('request environment VM stack must be aligned')
+    if return_address>=1<<56:raise RefillUnsupported('PAC-tagged request environment VM return is unsupported')
+    p=_PageTransaction(pages);local=entry_stack_address-size
+    def word(address,value):_write_span(p,address,value.to_bytes(8,'little'))
+    try:
+        _read_span(p,local,size);_read_span(p,image_base+code,4)
+        for address,value in ((entry_stack_address-0x20,saved_frame_pointer),
+                (entry_stack_address-0x18,return_address),(entry_stack_address-0x10,saved_x28),
+                (entry_stack_address-8,saved_x19)):
+            word(address,value)
+        _write_span(p,entry_stack_address-0x28,_read_span(p,thread_pointer+0x28,8))
+        top=local+top_offset;backing=top-0x118;callback=image_base+0x2050E4
+        for address,value in ((local+0x10,callback),(local+0x18,top),
+                (local+0x20,return_address),(top-0x120,image_base+code)):
+            word(address,value)
+        for slot,value in ((0,0),(4,local+8),(5,image_base+table_one),
+                (6,image_base+table_two),(7,callback),(29,(top-0x130)&~15),(31,return_address)):
+            word(backing+slot*8,value)
+        registers=tuple(int.from_bytes(_read_span(p,backing+i*8,8),'little') for i in range(32))
+    except ValueError as exc:raise RefillUnsupported('request environment VM caller memory is unmapped') from exc
+    arguments=(image_base+code,local+8,image_base+table_one,image_base+table_two,local+0x10)
+    p.commit();return RequestVmCallerFrame(local,code,local+8,local+0x10,backing,registers,arguments)

@@ -5760,6 +5760,35 @@ provider mapping rollback、actual JNI、完整signer及fresh/live/真实JVM仍�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_28048c_consumers_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <child-consumers-evidence.json>
 ```
 
+## 6.151 Request environment helper VM callers and prefixes（2026-10-14 Asia/Shanghai）
+
+恢复 `+204E50/+204ED4` 的实际caller、`+2814C8` 包装入口和已知decoder。
+wrapper保存LR/X19、从packed读取target，传入helper时X19=packed；caller
+仅保留local+8的W结果与padding，descriptor=local+10，callback `+2050E4`。
+204E50：local=entrySP-500、top=local+4D0、bytecode `+8A040`、tables
+`+34F170/+34F210`；204ED4：local=entrySP-3D0、top=local+3A0、bytecode
+`+8A4F0`、tables `+34F250/+34F290`。TLS在saved-register spills后读取。
+
+**33项新增原生对照、11项回滚检查**通过：24 caller frames（16 direct、
+8 actual wrappers）、8 decoder prefixes、1 owning helper有界原生差分。
+两基址、换栈、TLS/spill别名与patterned stack覆盖；全部caller frame/
+32 backing words/五个VM参数及prefix全部32虚拟寄存器、完整callback ledger/
+packed/decoded范围一致。2项native RED通过；输入/TLS/frame/bytecode/包装
+target缺失时拒绝且不发布页。
+
+Owning outer3900、second8184、child19295；helper **134/+8A254**，下一
+**+205058 -> +26EDC4** 环境获取。204ED4独立前缀 **70/+8A604**，下一
+`+205104` 导入getenv。新增owning helper原生差分2049560指令、5声明范围一致。
+旧child decoder/default/consumer、caller及共享copy/object/JNI owners保留。
+bounded helper/child/parent均不发布页；原页差异为空，64新增OS pages保留。
+完整helper/child/second/request return、full physical ABI/PAC、mapping rollback、
+actual JNI转换、完整signer及fresh/live/真实JVM仍未完成。
+见 [environment helper证据](evidence/vm9_request_environment_vm_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_vm_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <environment-helper-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

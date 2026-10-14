@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-14 Asia/Shanghai：request environment helper VM callers and prefixes
+
+33项新增原生对照、11项回滚通过。204E50/204ED4实际caller、2814C8包装与
+decoder恢复；全部32 backing/virtual words及声明范围匹配。owning helper
+134/+8A254，下一205058→26EDC4。204ED4独立prefix70/+8A604，下一205104 getenv。
+outer3900、second8184、child19295；原页回滚，64新增OS pages保留。
+完整return/request、full physical/JNI/mapping/signer及fresh/live/JVM仍未完成。
+见 [environment helper报告](REQUEST_JNI_STARTUP_WORKERS.md#6151-request-environment-helper-vm-callers-and-prefixes2026-10-14-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-13 Asia/Shanghai：request child VM consumers
 
 83项新增原生对照、13项回滚和5项Python入口拒绝检查通过。四个实际child

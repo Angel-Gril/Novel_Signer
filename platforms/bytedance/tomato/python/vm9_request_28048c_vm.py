@@ -12,6 +12,10 @@ class RequestVm28048cPrefix:
     decoded:tuple
     pc:int
     steps:int
+
+@dataclass(frozen=True)
+class RequestVm28048cHelperPrefix(RequestVm28048cPrefix):
+    helper_prefix:object
 def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
         entry_stack_address,return_address,thread_pointer,image_base,
         saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -46,6 +50,7 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
         raise RefillUnsupported('child request consumers require allocation and free services')
     staged=_PageTransaction(pages);frame=prepare_request_28048c_wrapper_caller(staged,**inputs)
     image=inputs['image_base'];callbacks=[];decoded=[];previous=vm_module.B
+    helpers=[]
     class StrictMem(vm_module.Mem):
         def __init__(self):self.pages=staged
         def _pg(self,address):
@@ -69,10 +74,22 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                 apply_request_28048c_consumer(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
                     allocate=consumer_services['allocate'])
+            elif consumer_services is not None and wrapper==0x2814C8 and target in (0x204E50,0x204ED4):
+                from vm9_request_environment_vm import execute_request_environment_vm_prefix
+                helper=execute_request_environment_vm_prefix(staged,vm_module=vm_module,
+                    helper_offset=target,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],image_base=image,
+                    saved_frame_pointer=frame.native_stack_address-0x60,
+                    saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8)
+                helpers.append(helper);raise Boundary()
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
-        except Boundary:return RequestVm28048cPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
+        except Boundary:
+            if helpers:
+                return RequestVm28048cHelperPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,helpers[-1])
+            return RequestVm28048cPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
         except vm_module.VMExit as exc:raise RefillUnsupported('child VM return is not recovered') from exc
         raise RefillUnsupported('child VM exhausted its budget before a boundary')
     finally:vm_module.B=previous

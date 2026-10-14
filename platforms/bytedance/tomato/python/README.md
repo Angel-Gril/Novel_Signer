@@ -530,6 +530,8 @@ The child VM caller, hidden-X8 wrapper and first decode pass26 new native contro
 
 Child VM consumers pass83 new native controls,13 rollback checks and five Python entry rejection checks. Its owning bounded prefix reaches19295 steps; all32 virtual registers, the callback ledger and16 declared memory ranges match original native. The next boundary is the204e50 nested helper. Complete child/request, JNI and signing remain unfinished. See the [child consumers report](../REQUEST_JNI_STARTUP_WORKERS.md#6150-request-child-vm-consumers2026-10-13-asiashanghai).
 
+Environment helper callers and decoder prefixes pass33 new native controls and11 rollback checks. The owning204e50 helper reaches134 steps at actual environment acquisition; all32 virtual registers, the complete callback ledger and five declared memory ranges match original native. Complete helpers/request, JNI and signing remain unfinished. See the [environment helper report](../REQUEST_JNI_STARTUP_WORKERS.md#6151-request-environment-helper-vm-callers-and-prefixes2026-10-14-asiashanghai).
+
 
 
 
