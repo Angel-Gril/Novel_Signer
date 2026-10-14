@@ -171,27 +171,22 @@ def _run_finalizer(pages, *, image_base, entry_stack_address, thread_pointer,
     probe=_run_copied_probe(p,base,S,thread_pointer,system,thread_id)
     if probe!=10:_w(p,payload+0x30,1,4)
     objects.unlock_uncontended_mutex(p,mutex_address=mutex)
-    decode(0x89F20,0x3DA014,0x8A03C,0x3DA018)
-    decode(0x89F24,0x3DA01C,0x8A038,0x3DA020)
-    if not _u(p,base+0x3DA010,1):
-        pair=S-0x70
-        def register_environment(staged,function,address,dso):
-            status=register_destructor(staged,function,address,dso)
-            if status==0 and not _u(staged,base+0x3751A0):
-                # +34265C's successful local fallback calls the emutls
-                # getter at +3426FC. Its +343780 prologue saves LR below
-                # the registration frame. A later VM uses this retained
-                # word as its otherwise unwritten R21 backing slot.
-                _w(staged,pair-0xC0,base+0x342700)
-            return status
-        acquired=environment.acquire_thread_environment(p,image_base=base,entry_stack_address=pair,
-            output_pair_address=pair,get_tls=get_tls,register_destructor=register_environment,invoke_javavm=invoke_javavm)
-        env=acquired.environment;cls=_u(p,base+0x3DEEB8)
-        if not env:raise RefillUnsupported('finalizer requires a Java environment')
-        environment._invoke_jni(p,env,0x388,(cls,base+0x3DA014,base+0x3DA01C),invoke_jni)
-        if environment._invoke_jni(p,env,0x720,(),invoke_jni)&255:
-            environment._invoke_jni(p,env,0x88,(),invoke_jni);_w(p,base+0x3DA010,0,1)
-        else:_w(p,base+0x3DA010,1,1)
+    pair=S-0x70
+    def register_environment(staged,function,address,dso):
+        status=register_destructor(staged,function,address,dso)
+        if status==0 and not _u(staged,base+0x3751A0):
+            # +34265C's successful local fallback calls the emutls
+            # getter at +3426FC. Its +343780 prologue saves LR below
+            # the registration frame. A later VM uses this retained
+            # word as its otherwise unwritten R21 backing slot.
+            _w(staged,pair-0xC0,base+0x342700)
+        return status
+    def acquire_availability(staged,**inputs):
+        return environment.acquire_thread_environment(staged,image_base=base,**inputs,
+            get_tls=get_tls,register_destructor=register_environment,invoke_javavm=invoke_javavm)
+    availability=environment.check_cached_static_method_availability(p,image_base=base,
+        entry_stack_address=pair,acquire_environment=acquire_availability,invoke_jni=invoke_jni)
+    if availability.environment==0:raise RefillUnsupported('finalizer requires a Java environment')
     payload=singleton(S-0x10);image,steps=_run_image_vm(p,base,S-0x30,payload,vm_module,max_steps)
     ph=image+_u(p,image+0x20);count=_u(p,image+0x38,2)
     if not 1<=count<=64:raise RefillUnsupported('unbounded finalizer ELF headers')

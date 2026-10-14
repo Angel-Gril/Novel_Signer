@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：JNI static method availability
+
+32项新增原生对照、10项回滚、4项native RED通过。实际204B80语义与finalizer
+共用owner，cache原byte/真实acquisition/异常低byte/table刷新通过。旧AST及
+注册retained stack word保持。child19302/+ECE3C的2814C8→204B80 wrapper尚待
+接入；完整request/signer/fresh/live/JVM仍未完成。见 [availability报告](REQUEST_JNI_STARTUP_WORKERS.md#6156-jni-static-method-availability2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：request environment helper return
 
 53项新增原生对照、8项回滚、4项入口拒绝通过。owning204E50 helper与2814C8

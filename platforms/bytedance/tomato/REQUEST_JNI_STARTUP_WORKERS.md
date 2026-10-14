@@ -5893,6 +5893,30 @@ header JNI转换、provider mapping rollback、完整signer及fresh/live/真实J
 python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_return_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --group all --output <environment-return-evidence.json>
 ```
 
+## 6.156 JNI static method availability（2026-10-15 Asia/Shanghai）
+
+恢复实际 `+204B80` 的共享JNI语义：先按各自32位guard解码，再读原始缓存byte；
+非零缓存直接返回，包含2与255。冷路径复用原环境获取，之后读取`+3DEEB8`
+cached class，调用GetStaticMethodID；忽略method ID，仅按ExceptionCheck低byte
+决定缓存0或1，异常时实际ExceptionClear。每次调用都重新读取JNI table。
+
+**32项新增原生对照、10项回滚检查**通过；4项native RED。两基址覆盖raw cache、
+冷/暖decode和TLS、临时GetEnv/attach/detach、NULL env/class/method、获取期间
+class变化、异常1/255/256及调用间table变化。原生执行实际204B80、26EDC4及
+26E190，完整guest payload/image、适用output pair和全部JavaVM/JNI效果一致。
+NULL env由有限Detach服务清空TLS环境后真实获取得出。缓存命中时不宣称未初始化
+physical scratch属于output pair。
+
+finalizer内联逻辑提取到同一owner；保留NULL env拒绝及完整注册closure，包含
+pair−C0 retained stack word。旧原生分组未重跑，旧owner与提取外AST保持。
+child仍停19302/+ECE3C，2814C8→204B80 wrapper待接入。全物理栈/PAC、204ED4
+body、完整child/second/request、URL/header JNI、mapping rollback、完整signer及
+fresh/live/真实JVM未完成。见 [availability证据](evidence/vm9_jni_availability_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_availability_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <jni-availability-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -411,6 +411,8 @@ The actual environment logger passes13 new native controls, nine rollback checks
 
 Environment helper returns pass53 new native controls, eight rollback checks and four Python entry rejections. The owning +204e50 helper returns with matching physical values and packed bytes; its child reaches19302 steps before the +204b80 JNI helper. Complete request conversion and signing remain unfinished. See the [environment return report](REQUEST_JNI_STARTUP_WORKERS.md#6155-request-environment-helper-return2026-10-15-asiashanghai).
 
+JNI availability passes32 new native controls and ten rollback checks. Actual +204b80 semantics now share one owner with the finalizer, preserving raw cache bytes, real environment acquisition and exception behavior. The child wrapper remains to be connected; complete signing remains unfinished. See the [availability report](REQUEST_JNI_STARTUP_WORKERS.md#6156-jni-static-method-availability2026-10-15-asiashanghai).
+
 
 
 

@@ -267,6 +267,50 @@ def _invoke_jni(pages, environment_pointer, slot, arguments, invoke_jni):
 
 
 @dataclass(frozen=True)
+class StaticMethodAvailabilityResult:
+    availability: int
+    environment: int | None
+    acquisition: EnvironmentAcquisitionResult | None
+
+
+def check_cached_static_method_availability(pages, *, image_base,
+        entry_stack_address, acquire_environment, invoke_jni):
+    """Shared +204b80 semantics; stack address is its acquisition/output pair.
+
+    Decode guards precede the raw cached byte. The method ID is ignored;
+    only ExceptionCheck's low byte decides availability. A missing acquired
+    environment returns the live cache byte. Physical prologue, canary and
+    epilogue belong to the caller. Providers own external effects.
+    """
+    if type(entry_stack_address) is not int or entry_stack_address<0xE0 or entry_stack_address&15:
+        raise RefillUnsupported('static method availability stack must be aligned')
+    p=_PageTransaction(pages);base=image_base
+    for source,dest,mask,flag in ((0x89F20,0x3DA014,0x8A03C,0x3DA018),
+                                (0x89F24,0x3DA01C,0x8A038,0x3DA020)):
+        if not _u(p,base+flag,4):
+            objects.decode_masked_bytes(p,source_address=base+source,
+                destination_address=base+dest,mask_address=base+mask,max_bytes=64)
+            _w(p,base+flag,1,4)
+    cached=_u(p,base+0x3DA010,1);acquired=None;env=None
+    if not cached:
+        if not callable(acquire_environment):
+            raise RefillUnsupported('static method availability requires environment acquisition')
+        acquired=acquire_environment(p,entry_stack_address=entry_stack_address,
+            output_pair_address=entry_stack_address)
+        env=acquired.environment;cls=_u(p,base+0x3DEEB8)
+        if type(env) is not int or not 0<=env<=MASK64:
+            raise RefillUnsupported('invalid acquired JNI environment')
+        if env:
+            _invoke_jni(p,env,0x388,(cls,base+0x3DA014,base+0x3DA01C),invoke_jni)
+            if _invoke_jni(p,env,0x720,(),invoke_jni)&255:
+                _invoke_jni(p,env,0x88,(),invoke_jni);_w(p,base+0x3DA010,0,1)
+            else:_w(p,base+0x3DA010,1,1)
+        cached=_u(p,base+0x3DA010,1)
+    result=StaticMethodAvailabilityResult(cached,env,acquired)
+    p.commit();return result
+
+
+@dataclass(frozen=True)
 class JavaByteArrayReferenceResult:
     string_address: int
     counter_address: int
