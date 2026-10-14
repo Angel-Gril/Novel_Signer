@@ -421,6 +421,8 @@ Child environment acquisition passes17 new native controls. The actual +2814e4 t
 
 Child StringObject construction passes23 new native controls and eight rollback checks. The owning +28155c callback executes original matching-libc malloc and matches1186 declared ranges. The constructed child reaches19541 steps before +256a18 configuration lookup; complete execution and signing remain unfinished. See the [child strings report](REQUEST_JNI_STARTUP_WORKERS.md#6160-child-stringobject-construction2026-10-15-asiashanghai).
 
+Child configuration u32 reading passes41 new native controls and12 rollback checks. The +256a18 getter uses existing shared-reader and tree owners;524 owning native instructions match1186 declared ranges and four mutex transitions. The child reaches19549 steps before StringObject destruction; full signing remains unfinished. See the [child registry read report](REQUEST_JNI_STARTUP_WORKERS.md#6161-child-configuration-u32-read2026-10-15-asiashanghai).
+
 
 
 

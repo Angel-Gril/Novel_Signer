@@ -29,6 +29,10 @@ class RequestVm28048cEnvironmentPrefix(RequestVm28048cAvailabilityPrefix):
 @dataclass(frozen=True)
 class RequestVm28048cStringsPrefix(RequestVm28048cEnvironmentPrefix):
     strings:tuple
+
+@dataclass(frozen=True)
+class RequestVm28048cRegistryPrefix(RequestVm28048cStringsPrefix):
+    registry_reads:tuple
 def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
         entry_stack_address,return_address,thread_pointer,image_base,
         saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -71,6 +75,7 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
     availability=[]
     acquisitions=[]
     strings=[]
+    registry_reads=[]
     class StrictMem(vm_module.Mem):
         def __init__(self):self.pages=staged
         def _pg(self,address):
@@ -131,10 +136,18 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                     argument_block_address=argument,image_base=image,
                     allocate=consumer_services['allocate'],free=consumer_services['free'])
                 strings.append((wrapper,target,argument,constructed))
+            elif consumer_services is not None and (wrapper,target)==(0x28156C,0x256A18):
+                value=apply_request_28048c_registry_read_callback(staged,
+                    argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180)
+                registry_reads.append((argument,value))
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if registry_reads:
+                return RequestVm28048cRegistryPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    helpers[-1] if helpers else None,tuple(availability),tuple(acquisitions),tuple(strings),tuple(registry_reads))
             if strings:
                 return RequestVm28048cStringsPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     helpers[-1] if helpers else None,tuple(availability),tuple(acquisitions),tuple(strings))
@@ -150,6 +163,27 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
         except vm_module.VMExit as exc:raise RefillUnsupported('child VM return is not recovered') from exc
         raise RefillUnsupported('child VM exhausted its budget before a boundary')
     finally:vm_module.B=previous
+
+
+def apply_request_28048c_registry_read_callback(pages, *, argument_block_address,
+        image_base,entry_stack_address,max_nodes=4096,max_bytes=0x100000):
+    """+28156c invokes +256a18 at SP-16 and stores low W at packed+24.
+
+    Only the getter's declared scoped guard is modeled on the stack; full
+    wrapper spills and physical return registers are not part of this owner.
+    """
+    from vm9_registry import read_configuration_u32
+    if type(entry_stack_address) is not int or entry_stack_address<0x60 or entry_stack_address&15:
+        raise RefillUnsupported('child configuration wrapper stack must be aligned')
+    p=_PageTransaction(pages)
+    def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
+    target=word(0);registry=word(8);key=word(16)
+    if target!=image_base+0x256A18:raise RefillUnsupported('unrecovered child configuration read target')
+    value=read_configuration_u32(p,registry_address=registry,key_address=key,
+        entry_stack_address=entry_stack_address-16,image_base=image_base,
+        max_nodes=max_nodes,max_bytes=max_bytes)
+    _write_span(p,argument_block_address+24,value.to_bytes(4,'little'))
+    p.commit();return value
 
 
 def apply_request_28048c_consumer(pages, *, wrapper_offset,

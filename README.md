@@ -312,6 +312,7 @@ environment helper return通过 **53项新增原生对照、8项回滚**，child
 child availability接线通过 **1项新增原生对照、6项入口拒绝**，child推进至19470步、下一2814E4环境获取。见 [child callback报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6158-child-jni-availability-callback2026-10-15-asiashanghai)。
 child environment新增 **17项原生对照**，推进至19533步、下一28155C字符串构造。见 [child environment报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6159-child-environment-acquisition2026-10-15-asiashanghai)。
 child字符串构造通过 **23项新增原生对照、8项回滚**，推进至19541步、下一256A18配置读取。见 [child strings报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6160-child-stringobject-construction2026-10-15-asiashanghai)。
+child配置读取新增 **41项原生对照、12项回滚**，推进至19549步、下一28158C字符串析构。见 [child registry read报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6161-child-configuration-u32-read2026-10-15-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

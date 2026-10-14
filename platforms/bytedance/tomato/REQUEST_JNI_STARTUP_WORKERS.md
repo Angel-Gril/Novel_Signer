@@ -6005,6 +6005,30 @@ PAC、URL/header JNI、mapping、signer及fresh/live/JVM尚未完成。见
 python -B platforms/bytedance/tomato/python/verify_vm9_request_child_strings_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <child-strings-evidence.json>
 ```
 
+## 6.161 Child configuration u32 read（2026-10-15 Asia/Shanghai）
+
+`28156C→256A18`恢复共享读锁中的配置u32读取，复用既有reader transition和
+tree lookup。保留helper SP−50的24字节guard及padding，wrapper以SP−16调用，
+只写packed+24的低W。缺失键/NULL value返回A985F；reader count恢复，shared
+flag保留为1。writer/wait/concurrent及完整physical/PAC尚未覆盖。
+
+**41项新增原生/Python对照、12项回滚检查通过**；另有2项原生RED和1项接线RED。
+40项新控制涵盖两个基址、空树/NULL/缺失/零/高位/最大值、内嵌NUL、跨页及
+packed结果/guard padding/status/reader count/shared flag别名，完整声明guest/
+image/scope bytes和四次真实mutex操作一致。1项owning callback从独立构造的
+child页面执行524条原生指令，1186范围、W结果、四次mutex操作一致，无allocator/
+JNI服务。旧registry/child AST和共享owner保持，旧原生分组未重跑。
+
+child从19541推进到 **19549/+ED398**，下一 **28158C→2484B8** 字符串析构。
+已有helper/availability/acquisition/string记录保持。原caller页差异为空，64新增
+OS页及外部effects不回滚。完整child/second/request、204ED4 body、physical/PAC、
+URL/header JNI、mapping、signer及fresh/live/JVM尚未完成。见
+[child registry read证据](evidence/vm9_request_child_registry_read_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_child_registry_read_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <child-registry-read-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

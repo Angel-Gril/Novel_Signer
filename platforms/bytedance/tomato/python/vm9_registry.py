@@ -479,6 +479,40 @@ def lookup_configuration_value(pages, *, container_address: int, key_address: in
     return tree.u64(tree.u64(node + 32) + 8)
 
 
+def read_configuration_u32(pages, *, registry_address: int, key_address: int,
+        entry_stack_address: int, image_base: int, max_nodes: int = 4096,
+        max_bytes: int = 0x100000) -> int:
+    """+0x256a18 serial shared-reader lookup; missing/NULL value returns0xa985f.
+
+    Preserve the24-byte scoped guard at entry SP-0x50 and its padding. The
+    scope retains its shared-reader flag after release. Reader transitions
+    and tree lookup remain owned by the existing primitives. Physical saved
+    registers/canary, PAC, writer/waiter and concurrent branches are outside
+    this contract. An unsupported lookup/release rolls back all page bytes.
+    """
+    if (type(entry_stack_address) is not int or not 0x50<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('configuration read requires an aligned guest stack')
+    transaction = _PageTransaction(pages)
+    guard = entry_stack_address - 0x50
+    vtable = objects._image_address(image_base, 0x34C758).to_bytes(8, 'little')
+    _write_span(transaction, guard, vtable + (registry_address + 0x80).to_bytes(8, 'little'))
+    objects.acquire_uncontended_shared_reader(transaction, mutex_address=registry_address + 0x88)
+    _write_span(transaction, registry_address + 0x114, bytes([1]))
+    _write_span(transaction, guard + 0x10, bytes(4))
+    pointer = lookup_configuration_value(transaction, container_address=registry_address + 8,
+        key_address=key_address, image_base=image_base, max_nodes=max_nodes, max_bytes=max_bytes)
+    value = int.from_bytes(_read_span(transaction, pointer, 4), 'little') if pointer else 0xA985F
+    _write_span(transaction, guard, vtable)
+    if not int.from_bytes(_read_span(transaction, guard + 0x10, 4), 'little'):
+        mutex = int.from_bytes(_read_span(transaction, guard + 8, 8), 'little')
+        if not _read_span(transaction, mutex + 0x94, 1)[0]:
+            raise RefillUnsupported('configuration read release requires the shared-reader flag')
+        objects.release_uncontended_shared_reader(transaction, mutex_address=mutex + 8)
+    transaction.commit()
+    return value
+
+
 def insert_configuration_pair(pages, *, container_address: int, key_address: int,
                               value_address: int, image_base: int, allocate: Callable,
                               free: Callable, max_nodes: int = 4096,
