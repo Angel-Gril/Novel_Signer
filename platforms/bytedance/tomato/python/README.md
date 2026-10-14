@@ -548,6 +548,8 @@ Child JNI availability wiring passes one new owning native callback and six requ
 
 Child environment acquisition passes17 new native controls. The actual +2814e4 tail wrapper reuses the established owner at unchanged SP; the constructed child reaches19533 steps before +28155c string construction. Complete child/request execution and signing remain unfinished. See the [child environment report](../REQUEST_JNI_STARTUP_WORKERS.md#6159-child-environment-acquisition2026-10-15-asiashanghai).
 
+Child StringObject construction passes23 new native controls and eight rollback checks. The owning +28155c callback executes original matching-libc malloc and matches1186 declared ranges. The constructed child reaches19541 steps before +256a18 configuration lookup; complete execution and signing remain unfinished. See the [child strings report](../REQUEST_JNI_STARTUP_WORKERS.md#6160-child-stringobject-construction2026-10-15-asiashanghai).
+
 
 
 

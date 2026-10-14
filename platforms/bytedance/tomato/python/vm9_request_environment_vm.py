@@ -181,7 +181,7 @@ def apply_request_environment_string_callback(pages, *, wrapper_offset,
     p=_PageTransaction(pages)
     def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
     pair=wrapper_offset,word(0)-image_base;object_address=word(8)
-    if pair==(0x205064,0x248344):
+    if pair in ((0x205064,0x248344),(0x28155C,0x248344)):
         if not callable(allocate):raise RefillUnsupported('environment string allocation provider is required')
         result=construct_string_object(p,object_address=object_address,source_address=word(16),
             allocate=allocate,vtable_address=image_base+0x34F5F8,

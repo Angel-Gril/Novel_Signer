@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：child StringObject construction
+
+23项新增原生对照、8项回滚通过。owning155指令含真实libc malloc，1186范围/
+payload指针/一次分配一致。child19541/+ED378，下一28156C→256A18。旧AST与
+默认verifier保持；原页差异为空，64新增OS页保留。完整child/request/signer/
+fresh/live/JVM未完成。见 [child strings报告](REQUEST_JNI_STARTUP_WORKERS.md#6160-child-stringobject-construction2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：child environment acquisition
 
 17项新增原生对照通过：16项新2814E4地址、1项owning160指令/993范围/一次

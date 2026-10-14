@@ -25,6 +25,10 @@ class RequestVm28048cAvailabilityPrefix(RequestVm28048cPrefix):
 @dataclass(frozen=True)
 class RequestVm28048cEnvironmentPrefix(RequestVm28048cAvailabilityPrefix):
     acquisitions:tuple
+
+@dataclass(frozen=True)
+class RequestVm28048cStringsPrefix(RequestVm28048cEnvironmentPrefix):
+    strings:tuple
 def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
         entry_stack_address,return_address,thread_pointer,image_base,
         saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -66,6 +70,7 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
     helpers=[]
     availability=[]
     acquisitions=[]
+    strings=[]
     class StrictMem(vm_module.Mem):
         def __init__(self):self.pages=staged
         def _pg(self,address):
@@ -120,10 +125,19 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                     entry_stack_address=frame.native_stack_address-0x180,
                     acquire_environment=consumer_services['acquire_environment'])
                 acquisitions.append((argument,acquired))
+            elif consumer_services is not None and (wrapper,target)==(0x28155C,0x248344):
+                from vm9_request_environment_vm import apply_request_environment_string_callback
+                constructed=apply_request_environment_string_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    allocate=consumer_services['allocate'],free=consumer_services['free'])
+                strings.append((wrapper,target,argument,constructed))
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if strings:
+                return RequestVm28048cStringsPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    helpers[-1] if helpers else None,tuple(availability),tuple(acquisitions),tuple(strings))
             if acquisitions:
                 return RequestVm28048cEnvironmentPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     helpers[-1] if helpers else None,tuple(availability),tuple(acquisitions))

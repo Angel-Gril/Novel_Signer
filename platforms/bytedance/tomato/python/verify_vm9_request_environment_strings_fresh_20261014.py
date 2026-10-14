@@ -73,8 +73,9 @@ def red(library):
     return rows
 
 
-def compare(library, image, kind, label):
+def compare(library, image, kind, label, *, wrapper_offset=None):
     pages, inputs, obj = fixture(library, image, kind, label)
+    if wrapper_offset is not None: inputs['wrapper_offset'] = wrapper_offset
     initial = {k: bytearray(v) for k, v in pages.items()}; allocated, freed = [], []
     def allocate(p, size):
         pointer = 0 if label == 'allocation_failure' else G + 0x4000

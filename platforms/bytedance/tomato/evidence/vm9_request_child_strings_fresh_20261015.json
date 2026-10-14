@@ -1,0 +1,338 @@
+{
+  "schema": "vm9-request-child-strings-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "wrapper_identity": {
+    "byte_count": 16,
+    "identical_to_existing_constructor_wrapper": true,
+    "no_PC_relative_instructions": true,
+    "tail_call_preserves_entry_stack": true
+  },
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "NULL_source",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "empty",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "normal",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "embedded_NUL",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "cross_page_object",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "cross_page_source",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "packed_object_alias",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "packed_source_alias",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "object_source_alias",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "allocation_failure",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "construct",
+      "case": "custom_empty_descriptor",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "NULL_source",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "empty",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "normal",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "embedded_NUL",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "cross_page_object",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "cross_page_source",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "packed_object_alias",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "packed_source_alias",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "object_source_alias",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "allocation_failure",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "construct",
+      "case": "custom_empty_descriptor",
+      "actual_wrapper": "0x28155c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "actual_wrapper": "0x28155c"
+    },
+    {
+      "case": "unproven_wrapper",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "actual_wrapper": "0x28155c"
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "actual_wrapper": "0x28155c"
+    },
+    {
+      "case": "missing_object",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "actual_wrapper": "0x28155c"
+    },
+    {
+      "case": "missing_source",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "actual_wrapper": "0x28155c"
+    },
+    {
+      "case": "source_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "actual_wrapper": "0x28155c"
+    },
+    {
+      "case": "allocator_late_failure",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "actual_wrapper": "0x28155c"
+    },
+    {
+      "case": "noncallable_allocate",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "actual_wrapper": "0x28155c"
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "whole_request_native_differential_verified": false,
+  "complete_helper_vm_verified": false,
+  "complete_child_vm_verified": false,
+  "complete_second_vm_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 23,
+  "rollback_guards": 8,
+  "pre_change_child_wiring_RED_controls": 1,
+  "owning_callback_native": {
+    "steps": 155,
+    "actual_wrapper_and_constructor_returned": true,
+    "matching_libc_malloc_executed": true,
+    "allocation_stub_disabled": true,
+    "complete_declared_ranges_equal": true,
+    "declared_range_count": 1186,
+    "payload_pointer_and_allocation_requests_equal": true,
+    "actual_malloc_calls": 1,
+    "actual_child_callback_stack_and_thread_pointer_used": true,
+    "native_snapshot_input": false,
+    "whole_child_native_differential_verified": false,
+    "complete_physical_ABI_verified": false
+  },
+  "constructed_child_entry": {
+    "phase": "GREEN",
+    "steps": 19541,
+    "bytecode_offset": "0xed378",
+    "next_wrapper": "0x28156c",
+    "next_target": "0x256a18",
+    "completed_availability_callbacks": 1,
+    "completed_child_environment_callbacks": 1,
+    "completed_child_string_callbacks": 1,
+    "helper_return_preserved": true,
+    "explicit_initialized_JNI_service_supplied": true,
+    "complete_child_vm_verified": false
+  },
+  "previous_child_steps": 19533,
+  "previous_child_AST_preserved": true,
+  "old_helper_string_callbacks_and_verifier_default_preserved": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "limits": [
+    "The new +28155c tail wrapper is identical to the accepted +205064 constructor wrapper,16 bytes with no PC-relative instructions. The existing callback owner accepts the exact new wrapper/target pair and reuses construct_string_object. The old constructor/destructor and verifier default AST remain preserved.",
+    "Twenty-two NEW original-wrapper native controls cover two bases, NULL/empty/embedded-NUL sources, cross-page fields, packed/object/source aliasing, allocation failure and custom empty descriptor. Eight new-address guards preserve every page. Previously accepted groups are not repeated.",
+    "One NEW owning callback executes155 original instructions from independently constructed child pages, including matching-libc malloc with the allocation stub disabled.1186 declared image/heap/packed/object/payload ranges, payload pointer and one allocation request/result match. Actual child callback SP and thread pointer are supplied. Full physical ABI and complete child native execution remain unverified.",
+    "The constructed child advances19533 ->19541/+ed378, before +28156c -> +256a18 configuration lookup. Helper return, availability and acquisition records remain. Original caller pages stay unchanged;64 new OS pages and external effects remain. Complete signer, fresh/live/JVM, physical/PAC and actual URL/header conversion are unfinished."
+  ]
+}

@@ -5983,6 +5983,28 @@ request、physical/PAC、204ED4 body、URL/header JNI、mapping、signer和fresh
 python -B platforms/bytedance/tomato/python/verify_vm9_request_child_environment_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <child-environment-evidence.json>
 ```
 
+## 6.160 Child StringObject construction（2026-10-15 Asia/Shanghai）
+
+`28155C→248344`的16字节tail wrapper与205064一致，无PC-relative指令。
+既有StringObject callback只扩展该精确wrapper/target配对，复用原constructor，
+不写packed return；旧helper构造/析构和verifier默认行为由AST证明保留。
+
+**23项新增原生/Python对照、8项回滚检查通过**。22项新地址控制覆盖两个基址、
+NULL/空/内嵌NUL、跨页、packed/object/source别名、分配失败及empty descriptor。
+1项owning callback执行155条原生指令，包含实际匹配libc malloc且关闭分配stub；
+1186个声明image/heap/packed/object/payload范围、返回payload指针及一次分配请求/
+结果一致，使用实际child callback SP/线程指针。此项未证明完整physical ABI。
+
+child从19533推进到 **19541/+ED378**，下一 **28156C→256A18** 配置值读取。
+helper返回、availability和acquisition记录保持。原caller页面差异为空，64新增
+OS页与外部effects仍不回滚。完整child/second/request、204ED4 body、physical/
+PAC、URL/header JNI、mapping、signer及fresh/live/JVM尚未完成。见
+[child strings证据](evidence/vm9_request_child_strings_fresh_20261015.json)。旧原生分组未重跑。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_child_strings_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <child-strings-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
