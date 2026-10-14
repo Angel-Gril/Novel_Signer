@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：child JNI availability callback
+
+1项新增owning callback原生对照、6项入口拒绝通过。request显式JNI服务传入
+child，204B80实际callback375指令/十个物理返回值/996范围一致，W=1。child
+19470/+ED084，下一2814E4→26EDC4；原页回滚，64新增OS页保留。完整child/
+request/signer/fresh/live/JVM未完成。见 [child callback报告](REQUEST_JNI_STARTUP_WORKERS.md#6158-child-jni-availability-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：JNI availability wrapper
 
 26项新增原生对照、9项回滚、4项native RED通过。实际2814C8→204B80 wrapper

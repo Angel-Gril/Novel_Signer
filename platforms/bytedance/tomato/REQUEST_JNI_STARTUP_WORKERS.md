@@ -5938,6 +5938,29 @@ request、full physical/PAC、URL/header JNI、mapping、完整signer及fresh/li
 python -B platforms/bytedance/tomato/python/verify_vm9_request_jni_availability_wrapper_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <availability-wrapper-evidence.json>
 ```
 
+## 6.158 Child JNI availability callback（2026-10-15 Asia/Shanghai）
+
+显式JNI service现由实际request入口经second传到child；`2814C8→204B80`
+使用已验收wrapper，并记录完成的availability callback。默认不启用该项时，
+既有request/child/helper/consumer AST保持。
+
+**1项新增owning callback原生对照、6项request/child入口拒绝检查**通过；
+1项接线前RED。原生实际执行375指令，从独立构造的callback前child页面开始，
+使用已建立的dispatch初始化合约。十个物理返回值、996个声明范围、完整JNI
+effects一致，复用1次显式GetEnv，W结果1。此项未证明整个child的原生执行或
+完整physical caller ABI。
+
+Python child从19302推进到 **19470/+ED084**，下一实际边界 **2814E4→26EDC4**
+environment acquisition。outer3900/second8184不变。6项真实入口拒绝保留所有
+页面与VM基址，未调用外部服务。callback只提交child事务；原页差异为空，64
+新增OS pages保留。204ED4 body、完整child/second/request、full physical/PAC、
+URL/header JNI、mapping、完整signer及fresh/live/JVM未完成。见
+[child callback证据](evidence/vm9_request_jni_availability_child_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_jni_availability_child_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <child-availability-entry-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

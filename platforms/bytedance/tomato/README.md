@@ -415,6 +415,8 @@ JNI availability passes32 new native controls and ten rollback checks. Actual +2
 
 The actual JNI availability wrapper passes26 new native controls and nine rollback checks. Ten physical return values, declared frame bytes and packed W result match, including saved-register aliases. A constructed request now has an explicit initialization contract; child callback wiring and complete signing remain unfinished. See the [wrapper report](REQUEST_JNI_STARTUP_WORKERS.md#6157-jni-availability-wrapper2026-10-15-asiashanghai).
 
+Child JNI availability wiring passes one new owning native callback and six request/child entry refusals. The initialized +204b80 callback returns1; the constructed child reaches19470 steps before +2814e4 environment acquisition. Complete child/request execution and signing remain unfinished. See the [child callback report](REQUEST_JNI_STARTUP_WORKERS.md#6158-child-jni-availability-callback2026-10-15-asiashanghai).
+
 
 
 

@@ -16,6 +16,11 @@ class RequestVm28048cPrefix:
 @dataclass(frozen=True)
 class RequestVm28048cHelperPrefix(RequestVm28048cPrefix):
     helper_prefix:object
+
+@dataclass(frozen=True)
+class RequestVm28048cAvailabilityPrefix(RequestVm28048cPrefix):
+    helper_prefix:object
+    availability:tuple
 def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
         entry_stack_address,return_address,thread_pointer,image_base,
         saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -48,9 +53,14 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
     if consumer_services is not None and (not isinstance(consumer_services,dict) or
             any(not callable(consumer_services.get(n)) for n in ('allocate','free'))):
         raise RefillUnsupported('child request consumers require allocation and free services')
+    if consumer_services is not None and consumer_services.get('jni_availability_services') is not None:
+        services=consumer_services['jni_availability_services']
+        if not isinstance(services,dict) or not callable(services.get('invoke_jni')):
+            raise RefillUnsupported('child JNI availability requires an explicit JNI service')
     staged=_PageTransaction(pages);frame=prepare_request_28048c_wrapper_caller(staged,**inputs)
     image=inputs['image_base'];callbacks=[];decoded=[];previous=vm_module.B
     helpers=[]
+    availability=[]
     class StrictMem(vm_module.Mem):
         def __init__(self):self.pages=staged
         def _pg(self,address):
@@ -87,10 +97,24 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                     saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8)
                 helpers.append(helper)
                 if getattr(helper,'caller_return',None) is None:raise Boundary()
+            elif consumer_services is not None and (wrapper,target)==(0x2814C8,0x204B80) and consumer_services.get('jni_availability_services') is not None:
+                from vm9_request_caller import execute_request_jni_availability_wrapper
+                returned=execute_request_jni_availability_wrapper(staged,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    argument_block_address=argument,return_address=image+0x16AA4C,
+                    thread_pointer=inputs['thread_pointer'],
+                    saved_frame_pointer=frame.native_stack_address-0x60,
+                    saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8,
+                    acquire_environment=consumer_services.get('acquire_environment'),
+                    invoke_jni=consumer_services['jni_availability_services']['invoke_jni'])
+                availability.append((argument,returned))
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if availability:
+                return RequestVm28048cAvailabilityPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    helpers[-1] if helpers else None,tuple(availability))
             if helpers:
                 return RequestVm28048cHelperPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,helpers[-1])
             return RequestVm28048cPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)

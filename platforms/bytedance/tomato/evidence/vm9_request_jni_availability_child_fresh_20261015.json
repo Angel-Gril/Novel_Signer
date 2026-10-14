@@ -1,0 +1,104 @@
+{
+  "schema": "vm9-request-jni-availability-child-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "entry_negative_cases": [
+    {
+      "case": "malformed_service",
+      "entry": "child",
+      "rejected_at_actual_entry": true,
+      "all_pages_unchanged": true,
+      "external_services_not_called": true,
+      "module_image_base_unchanged": true
+    },
+    {
+      "case": "malformed_service",
+      "entry": "request",
+      "rejected_at_actual_entry": true,
+      "all_pages_unchanged": true,
+      "external_services_not_called": true,
+      "module_image_base_unchanged": true
+    },
+    {
+      "case": "missing_JNI",
+      "entry": "child",
+      "rejected_at_actual_entry": true,
+      "all_pages_unchanged": true,
+      "external_services_not_called": true,
+      "module_image_base_unchanged": true
+    },
+    {
+      "case": "missing_JNI",
+      "entry": "request",
+      "rejected_at_actual_entry": true,
+      "all_pages_unchanged": true,
+      "external_services_not_called": true,
+      "module_image_base_unchanged": true
+    },
+    {
+      "case": "noncallable_JNI",
+      "entry": "child",
+      "rejected_at_actual_entry": true,
+      "all_pages_unchanged": true,
+      "external_services_not_called": true,
+      "module_image_base_unchanged": true
+    },
+    {
+      "case": "noncallable_JNI",
+      "entry": "request",
+      "rejected_at_actual_entry": true,
+      "all_pages_unchanged": true,
+      "external_services_not_called": true,
+      "module_image_base_unchanged": true
+    }
+  ],
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "complete_child_vm_verified": false,
+  "complete_second_vm_verified": false,
+  "complete_python_medusa": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "live_Android_JVM_verified": false,
+  "native_Python_controls": 1,
+  "rollback_guards": 0,
+  "pre_change_child_wiring_RED_controls": 1,
+  "accepted_native_controls_not_repeated": true,
+  "owning_callback_native": {
+    "steps": 375,
+    "actual_helper_and_wrapper_returned": true,
+    "ten_physical_return_values_equal": true,
+    "complete_declared_ranges_equal": true,
+    "declared_range_count": 996,
+    "actual_initialization_contract_used": true,
+    "exact_JNI_effects_equal": true,
+    "actual_GetEnv_calls": 1,
+    "W_result": 1,
+    "original_acquisition_and_class_getter_executed": true,
+    "native_snapshot_input": false,
+    "whole_child_native_differential_verified": false,
+    "complete_physical_ABI_verified": false
+  },
+  "constructed_child_entry": {
+    "phase": "GREEN",
+    "steps": 19470,
+    "bytecode_offset": "0xed084",
+    "next_wrapper": "0x2814e4",
+    "next_target": "0x26edc4",
+    "completed_availability_callbacks": 1,
+    "explicit_initialized_JNI_service_supplied": true,
+    "complete_child_vm_verified": false
+  },
+  "previous_child_steps": 19302,
+  "explicit_request_to_child_JNI_service_wiring_verified": true,
+  "default_child_and_request_AST_preserved": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "limits": [
+    "The optional explicit JNI service flows from the actual request prefix through second/child consumer services. A new completed-availability prefix records returned callbacks. Without the option, prior request/child/default/helper/consumer AST remains unchanged.",
+    "One fresh owning +2814c8 -> +204b80 callback runs375 native instructions from independently constructed pre-callback child pages with the established initialization contract. Ten physical return values,996 declared ranges, exact JNI effects and one explicit GetEnv match. This is bounded callback evidence, not a native comparison of the complete child or its full physical caller ABI.",
+    "The constructed child advances19302 ->19470/+ed084 after W result1; actual next boundary is +2814e4 -> +26edc4 acquisition. Outer3900 and second8184 remain bounded. Six request/child negative entries reject before external effects and preserve every supplied page plus VM image base.",
+    "Callback pages publish only into the child transaction. Original page differences are empty;64 new allocator OS pages and external provider effects are not rolled back. Full physical/PAC, +204ed4 body, complete child/second/request, actual URL/header conversion, mapping rollback, complete signer and fresh/live/JVM remain unfinished."
+  ]
+}
