@@ -6029,6 +6029,29 @@ URL/header JNI、mapping、signer及fresh/live/JVM尚未完成。见
 python -B platforms/bytedance/tomato/python/verify_vm9_request_child_registry_read_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <child-registry-read-evidence.json>
 ```
 
+## 6.162 Child StringObject cleanup and VM exit（2026-10-15 Asia/Shanghai）
+
+`28158C→2484B8`复用既有StringObject析构owner。该tail wrapper的12字节与
+205094完全一致，无PC-relative指令，也不创建额外stack frame。
+
+**17项新增原生/Python对照、7项回滚检查通过**；另有1项接线RED。16项新控制
+覆盖两个基址、NULL payload、跨页对象、object/packed/payload别名、free副作用和
+自定义empty descriptor。1项owning callback执行152条原始指令，真实匹配libc
+free调用一次，1186声明范围及free pointer一致。void析构的incidental X0不比较。
+旧environment/child AST及StringObject/registry/JNI/allocator/oracle owner保持；
+旧原生分组未重跑。
+
+child从19549推进到 **19566/+ED3DC**，观察到VM exit指令07C00791，R31匹配
+`image+2885C8`。新增记录只保存退出状态，**物理child caller/wrapper返回尚未恢复**，
+second仍在8184步的child边界。已有helper/availability/acquisition/string/registry
+记录保持。原caller页差异为空，64新增OS页及外部effects保留。完整child/second/
+request、204ED4 body、physical/PAC、URL/header JNI、mapping、signer及fresh/live/
+JVM尚未完成。见 [child cleanup证据](evidence/vm9_request_child_cleanup_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_child_cleanup_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <child-cleanup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

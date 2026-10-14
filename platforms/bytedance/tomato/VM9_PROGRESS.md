@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：child StringObject cleanup and VM exit
+
+17项新增原生对照、7项回滚通过；owning152指令/1186范围/一次真实free一致。
+child19566/+ED3DC观察VM exit07C00791，R31匹配2885C8；物理child/wrapper返回
+和second恢复尚未完成。旧AST/共享owner保持，原页差异为空，64新增OS页保留。
+完整request/signer/fresh/live/JVM未完成。见 [child cleanup报告](REQUEST_JNI_STARTUP_WORKERS.md#6162-child-stringobject-cleanup-and-vm-exit2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：child configuration u32 read
 
 41项新增原生对照、12项回滚通过；owning524指令/1186范围/四次mutex一致。

@@ -33,6 +33,10 @@ class RequestVm28048cStringsPrefix(RequestVm28048cEnvironmentPrefix):
 @dataclass(frozen=True)
 class RequestVm28048cRegistryPrefix(RequestVm28048cStringsPrefix):
     registry_reads:tuple
+
+@dataclass(frozen=True)
+class RequestVm28048cExitPrefix(RequestVm28048cRegistryPrefix):
+    vm_exit_observed:bool
 def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
         entry_stack_address,return_address,thread_pointer,image_base,
         saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -130,7 +134,7 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                     entry_stack_address=frame.native_stack_address-0x180,
                     acquire_environment=consumer_services['acquire_environment'])
                 acquisitions.append((argument,acquired))
-            elif consumer_services is not None and (wrapper,target)==(0x28155C,0x248344):
+            elif consumer_services is not None and (wrapper,target) in ((0x28155C,0x248344),(0x28158C,0x2484B8)):
                 from vm9_request_environment_vm import apply_request_environment_string_callback
                 constructed=apply_request_environment_string_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
@@ -160,7 +164,11 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
             if helpers:
                 return RequestVm28048cHelperPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,helpers[-1])
             return RequestVm28048cPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
-        except vm_module.VMExit as exc:raise RefillUnsupported('child VM return is not recovered') from exc
+        except vm_module.VMExit as exc:
+            if registry_reads and strings and strings[-1][:2]==(0x28158C,0x2484B8):
+                return RequestVm28048cExitPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    helpers[-1] if helpers else None,tuple(availability),tuple(acquisitions),tuple(strings),tuple(registry_reads),True)
+            raise RefillUnsupported('child VM return is not recovered') from exc
         raise RefillUnsupported('child VM exhausted its budget before a boundary')
     finally:vm_module.B=previous
 

@@ -186,7 +186,7 @@ def apply_request_environment_string_callback(pages, *, wrapper_offset,
         result=construct_string_object(p,object_address=object_address,source_address=word(16),
             allocate=allocate,vtable_address=image_base+0x34F5F8,
             empty_descriptor_address=image_base+0x6E168,max_source_bytes=max_source_bytes)
-    elif pair==(0x205094,0x2484B8):
+    elif pair in ((0x205094,0x2484B8),(0x28158C,0x2484B8)):
         if not callable(free):raise RefillUnsupported('environment string free provider is required')
         result=destroy_string_object(p,object_address=object_address,image_base=image_base,free=free)
     else:raise RefillUnsupported('unrecovered request environment StringObject callback')

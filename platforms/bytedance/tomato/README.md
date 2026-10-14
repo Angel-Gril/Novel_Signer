@@ -423,6 +423,8 @@ Child StringObject construction passes23 new native controls and eight rollback 
 
 Child configuration u32 reading passes41 new native controls and12 rollback checks. The +256a18 getter uses existing shared-reader and tree owners;524 owning native instructions match1186 declared ranges and four mutex transitions. The child reaches19549 steps before StringObject destruction; full signing remains unfinished. See the [child registry read report](REQUEST_JNI_STARTUP_WORKERS.md#6161-child-configuration-u32-read2026-10-15-asiashanghai).
 
+Child StringObject cleanup passes17 new native controls and7 rollback checks. The owning destructor executes152 original instructions and one matching-libc free with1186 declared ranges equal. The child observes VM exit at19566 steps; its physical caller/wrapper return and complete signing remain unfinished. See the [child cleanup report](REQUEST_JNI_STARTUP_WORKERS.md#6162-child-stringobject-cleanup-and-vm-exit2026-10-15-asiashanghai).
+
 
 
 
