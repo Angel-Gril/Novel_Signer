@@ -5841,6 +5841,31 @@ ABI/PAC、actual URL/header JNI转换、完整signer及fresh/live/真实JVM仍�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_strings_fresh_20261014.py --library "$env:TOMATO_LIBMETASEC" --group all --output <environment-strings-evidence.json>
 ```
 
+## 6.154 Request environment logger and cleanup（2026-10-14 Asia/Shanghai）
+
+恢复实际 `+205074 -> +26E9E0` logger callback：target/object/format位于
+packed+0/8/16 Q，callee SP=wrapper SP-16，返回值仅写packed+24 W，保留高位
+padding。复用既有literal logger与显式property/syscall/errno服务。当前owning
+helper的32字节format无转换、file sink已初始化且不可用，属于已支持分支。
+
+**13项新增原生对照、9项回滚、3项Python入口拒绝检查**通过；2项native RED。
+12项实际wrapper在两基址覆盖literal/empty/embedded-NUL、跨页format/packed与
+packed-object别名，原始logger/formatter/sink实际执行，声明guest/global/output/
+sink字段和packed W/padding一致。新增1项owning helper有界差分执行logger与
+`+205094` 清理后到VM退出边界：Python **262/+8A4E8**、原生20798指令。
+全部32虚拟寄存器、完整8 callback ledger、14声明范围与slot31指向2814D8一致；
+原生停在16A974，尚未恢复helper调用者canary/寄存器恢复和实际返回。
+
+outer3900、second8184、child19295；实际GetEnv provider调用1次，原页差异为空，
+64新增OS pages保留。默认helper与acquisition/strings AST及logger/object/JNI/
+copy owner保留。conversion/live sink、provider外部效果/mapping rollback、完整
+helper/child/request return、actual URL/header JNI转换、full physical ABI/PAC、
+完整signer与fresh/live/真实JVM仍未完成。见 [logger证据](evidence/vm9_request_environment_logger_fresh_20261014.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_logger_fresh_20261014.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <environment-logger-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

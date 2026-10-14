@@ -536,6 +536,8 @@ The actual environment acquisition callback passes17 new native controls, six ro
 
 Actual environment StringObject callbacks pass39 new native controls, nine rollback checks and three Python entry rejections. The owning helper reaches226 steps before logging, with all32 virtual registers, its callback ledger and eleven declared memory ranges matching original native. Cleanup is verified separately; full request conversion and signing remain unfinished. See the [environment StringObject report](../REQUEST_JNI_STARTUP_WORKERS.md#6153-request-environment-stringobject-callbacks2026-10-14-asiashanghai).
 
+The actual environment logger passes13 new native controls, nine rollback checks and three Python entry rejections. The owning helper executes logging and cleanup through262 steps to its VM exit boundary; all32 virtual registers, the complete callback ledger and fourteen declared ranges match original native. Helper caller return and full signing remain unfinished. See the [environment logger report](../REQUEST_JNI_STARTUP_WORKERS.md#6154-request-environment-logger-and-cleanup2026-10-14-asiashanghai).
+
 
 
 

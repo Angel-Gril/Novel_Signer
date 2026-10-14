@@ -22,6 +22,11 @@ class RequestEnvironmentVmAcquisitionPrefix(RequestEnvironmentVmPrefix):
 class RequestEnvironmentVmStringsPrefix(RequestEnvironmentVmAcquisitionPrefix):
     strings:tuple
 
+@dataclass(frozen=True)
+class RequestEnvironmentVmLoggedPrefix(RequestEnvironmentVmStringsPrefix):
+    logs:tuple
+    vm_exit_observed:bool
+
 def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
         argument_block_address,entry_stack_address,return_address,
         thread_pointer,image_base,saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -62,10 +67,16 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
     if consumer_services is not None and (not isinstance(consumer_services,dict) or
             any(not callable(consumer_services.get(n)) for n in ('allocate','free'))):
         raise RefillUnsupported('request environment strings require allocation and free services')
+    logger_services=consumer_services.get('logger_services') if consumer_services is not None else None
+    if logger_services is not None and (not isinstance(logger_services,dict) or
+            any(not callable(logger_services.get(n)) for n in ('read_property','syscall')) or
+            type(logger_services.get('errno_address')) is not int):
+        raise RefillUnsupported('request environment logger services are invalid')
     staged=_PageTransaction(pages);frame=prepare_request_environment_wrapper_caller(staged,**inputs)
     image=inputs['image_base'];callbacks=[];decoded=[];previous=vm_module.B
     acquisitions=[]
     strings=[]
+    logs=[]
     class StrictMem(vm_module.Mem):
         def __init__(self):self.pages=staged
         def _pg(self,address):
@@ -94,16 +105,28 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
                     argument_block_address=argument,image_base=image,
                     allocate=consumer_services['allocate'],free=consumer_services['free'])
                 strings.append((wrapper,target,argument,result))
+            elif logger_services is not None and (wrapper,target)==(0x205074,0x26E9E0):
+                result=apply_request_environment_logger_callback(staged,
+                    argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180,**logger_services)
+                logs.append((argument,result))
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if logs:
+                return RequestEnvironmentVmLoggedPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,tuple(acquisitions),tuple(strings),tuple(logs),False)
             if strings:
                 return RequestEnvironmentVmStringsPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,tuple(acquisitions),tuple(strings))
             if acquisitions:
                 return RequestEnvironmentVmAcquisitionPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,tuple(acquisitions))
             return RequestEnvironmentVmPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
-        except vm_module.VMExit as exc:raise RefillUnsupported('request environment VM return is not recovered') from exc
+        except vm_module.VMExit as exc:
+            if logs:
+                # Record the VM exit boundary without publishing pages or
+                # claiming the helper's native caller epilogue has returned.
+                return RequestEnvironmentVmLoggedPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,tuple(acquisitions),tuple(strings),tuple(logs),True)
+            raise RefillUnsupported('request environment VM return is not recovered') from exc
         raise RefillUnsupported('request environment VM exhausted its budget before a boundary')
     finally:vm_module.B=previous
 
@@ -148,4 +171,28 @@ def apply_request_environment_string_callback(pages, *, wrapper_offset,
         if not callable(free):raise RefillUnsupported('environment string free provider is required')
         result=destroy_string_object(p,object_address=object_address,image_base=image_base,free=free)
     else:raise RefillUnsupported('unrecovered request environment StringObject callback')
+    p.commit();return result
+
+
+def apply_request_environment_logger_callback(pages, *, argument_block_address,
+        image_base,entry_stack_address,read_property,syscall,errno_address):
+    """+205074 calls the existing literal logger at wrapper SP-16.
+
+    Target/object/format are packed Q words at offsets0/8/16. Store only the
+    returned low W at packed+24; preserve its upper padding. Supported sink
+    and format behavior remains owned by vm9_logger.log_literal_unavailable.
+    Physical register spills and external provider rollback are not modeled.
+    """
+    from vm9_logger import log_literal_unavailable
+    if type(entry_stack_address) is not int or not 0x600<=entry_stack_address<1<<64 or entry_stack_address&15:
+        raise RefillUnsupported('request environment logger stack must be aligned')
+    if not callable(read_property) or not callable(syscall):
+        raise RefillUnsupported('request environment logger providers must be callable')
+    p=_PageTransaction(pages)
+    words=tuple(int.from_bytes(_read_span(p,argument_block_address+i*8,8),'little') for i in range(3))
+    if words[0]!=image_base+0x26E9E0:raise RefillUnsupported('unrecovered request environment logger target')
+    result=log_literal_unavailable(p,object_address=words[1],format_address=words[2],
+        entry_stack_address=entry_stack_address-16,image_base=image_base,
+        read_property=read_property,syscall=syscall,errno_address=errno_address)
+    _write_span(p,argument_block_address+24,(result.return_value&0xFFFFFFFF).to_bytes(4,'little'))
     p.commit();return result

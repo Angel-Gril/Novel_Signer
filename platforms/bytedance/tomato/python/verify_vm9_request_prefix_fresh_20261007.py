@@ -73,7 +73,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                    read_clock=None, acquire_environment=None, invoke_jni=None,
                    get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None,
                    register_exit=None, get_state_service=None, parse_decimal=None,
-                   random_services=None):
+                   random_services=None, logger_services=None):
     staged = _PageTransaction(pages)
     frame = prepare_request_caller(staged, **inputs)
     image = inputs['image_base']
@@ -434,7 +434,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 import vm9_request_287474_vm
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
                     vm_module=vm_module,consumer_services=dict(allocate=allocate,free=free,
-                        acquire_environment=acquire_environment),
+                        acquire_environment=acquire_environment,logger_services=logger_services),
                     maxsteps=10000,entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
                     image_base=image,object_address=words[1],

@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-14 Asia/Shanghai：request environment logger and cleanup
+
+13项新增原生对照、9项回滚、3项入口拒绝通过。actual205074复用literal logger；
+owning helper执行日志/清理，到262/+8A4E8 VM退出边界；全部32寄存器/完整8回调/
+14声明范围/slot31原生一致。helper调用者返回待恢复；outer3900/second8184/
+child19295。原页回滚，64新增OS pages保留。完整helper/request、actual JNI/
+physical/mapping/signer/fresh/live/JVM仍未完成。见 [logger报告](REQUEST_JNI_STARTUP_WORKERS.md#6154-request-environment-logger-and-cleanup2026-10-14-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-14 Asia/Shanghai：request environment StringObject callbacks
 
 39项新增原生对照、9项回滚、3项入口拒绝通过。actual205064构造/205094析构
