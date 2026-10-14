@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：JNI availability wrapper
+
+26项新增原生对照、9项回滚、4项native RED通过。实际2814C8→204B80 wrapper
+返回的十个物理值/声明保存帧/packed一致，含结果与保存槽别名。request初始化
+合约已构造；child19302/+ECE3C待callback接入。完整request/signer/fresh/live/JVM
+未完成。见 [wrapper报告](REQUEST_JNI_STARTUP_WORKERS.md#6157-jni-availability-wrapper2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：JNI static method availability
 
 32项新增原生对照、10项回滚、4项native RED通过。实际204B80语义与finalizer

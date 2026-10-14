@@ -542,6 +542,8 @@ Environment helper returns pass53 new native controls, eight rollback checks and
 
 JNI availability passes32 new native controls and ten rollback checks. Actual +204b80 semantics now share one owner with the finalizer, preserving raw cache bytes, real environment acquisition and exception behavior. The child wrapper remains to be connected; complete signing remains unfinished. See the [availability report](../REQUEST_JNI_STARTUP_WORKERS.md#6156-jni-static-method-availability2026-10-15-asiashanghai).
 
+The actual JNI availability wrapper passes26 new native controls and nine rollback checks. Ten physical return values, declared frame bytes and packed W result match, including saved-register aliases. A constructed request now has an explicit initialization contract; child callback wiring and complete signing remain unfinished. See the [wrapper report](../REQUEST_JNI_STARTUP_WORKERS.md#6157-jni-availability-wrapper2026-10-15-asiashanghai).
+
 
 
 

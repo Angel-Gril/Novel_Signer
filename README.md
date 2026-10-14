@@ -308,6 +308,7 @@ environment helper caller/prefix通过 **33项新增原生对照、11项回滚**
 实际environment logger通过 **13项新增原生对照、9项回滚**，owning helper完成日志与清理并到262步VM退出边界。见 [logger报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6154-request-environment-logger-and-cleanup2026-10-14-asiashanghai)。
 environment helper return通过 **53项新增原生对照、8项回滚**，child推进至19302步、下一204B80 JNI。见 [helper return报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6155-request-environment-helper-return2026-10-15-asiashanghai)。
 204B80共享JNI语义通过 **32项新增原生对照、10项回滚**，保留finalizer既有行为。见 [availability报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6156-jni-static-method-availability2026-10-15-asiashanghai)。
+实际availability wrapper通过 **26项新增原生对照、9项回滚**，返回值/声明保存帧/packed一致。见 [wrapper报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6157-jni-availability-wrapper2026-10-15-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

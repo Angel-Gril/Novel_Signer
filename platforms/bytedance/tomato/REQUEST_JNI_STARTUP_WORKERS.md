@@ -5917,6 +5917,27 @@ fresh/live/真实JVM未完成。见 [availability证据](evidence/vm9_jni_availa
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_availability_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <jni-availability-evidence.json>
 ```
 
+## 6.157 JNI availability wrapper（2026-10-15 Asia/Shanghai）
+
+恢复实际`2814C8→204B80` wrapper prologue、canary及epilogue。先保存wrapper
+LR/X19再读target；保存helper寄存器后读TLS canary。返回时先恢复helper的
+X20/X19、X22/X21、FP/LR，再写packed+8 W，最后读取wrapper LR/X19。
+
+**26项新增原生对照、9项回滚检查**通过；4项native RED。两基址覆盖raw cache、
+异常低byte、真实acquisition得出的NULL环境、冷TLS、JNI table变化、packed跨页
+和结果别名到saved X20/X21/X22/FP。十个物理返回值、完整声明guest/image/frame/
+packed bytes及JavaVM/JNI effects一致。未声明完整obfuscation/deeper stack。
+
+私有request fixture已复用dispatch initialization owner与既有有限JNI合约，实际
+执行注册并保留class；availability provider检查其global引用及原name/signature。
+此项仅为Python初始化组合。child19302/+ECE3C仍待callback接入；完整child/second/
+request、full physical/PAC、URL/header JNI、mapping、完整signer及fresh/live/JVM
+未完成。见 [wrapper证据](evidence/vm9_request_jni_availability_wrapper_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_jni_availability_wrapper_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <availability-wrapper-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

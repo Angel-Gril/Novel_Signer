@@ -501,3 +501,62 @@ def validate_request_environment_vm_exit(pages, *, helper_offset,image_base,pc,r
     return dict(bytecode_offset='0x8a4e8',instruction_word=hex(word),selected_slot=31,
         selected_target=registers[31],caller_sentinel_matches=True,
         native_handler_offset='0x16a974',native_epilogue_offset='0x172440')
+
+
+@dataclass(frozen=True)
+class RequestJniAvailabilityReturn(RequestCallerReturn):
+    x20: int
+    x21: int
+    x22: int
+    availability: object
+
+
+def execute_request_jni_availability_wrapper(pages, *, image_base,
+        entry_stack_address,argument_block_address,return_address,thread_pointer,
+        acquire_environment,invoke_jni,saved_frame_pointer=0,saved_x19=0,
+        saved_x20=0,saved_x21=0,saved_x22=0,saved_x28=0):
+    """Actual +2814c8 -> +204b80 prologue, shared body and ordered return.
+
+    Only saved registers, canary and the acquired output pair are declared
+    stack state. Obfuscation temporaries and deeper acquisition spills are
+    outside this wrapper's physical-stack contract. Guest pages publish
+    atomically; JavaVM/JNI providers own external effects.
+    """
+    from vm9_jni_environment import check_cached_static_method_availability
+    values=(image_base,entry_stack_address,argument_block_address,return_address,
+        thread_pointer,saved_frame_pointer,saved_x19,saved_x20,saved_x21,saved_x22,saved_x28)
+    if any(type(v) is not int or not 0<=v<1<<64 for v in values):
+        raise RefillUnsupported('JNI availability wrapper inputs must fit uint64')
+    if entry_stack_address<0x150 or entry_stack_address&15:
+        raise RefillUnsupported('JNI availability wrapper stack must be aligned')
+    if return_address>=1<<56:
+        raise RefillUnsupported('PAC-tagged JNI availability wrapper return is unsupported')
+    p=_PageTransaction(pages);W=entry_stack_address;E=W-16
+    def read(address,width=8):return int.from_bytes(_read_span(p,address,width),'little')
+    def write(address,value,width=8):_write_span(p,address,value.to_bytes(width,'little'))
+    try:
+        write(W-16,return_address);write(W-8,saved_x19)
+        if read(argument_block_address)!=image_base+0x204B80:
+            raise RefillUnsupported('unrecovered JNI availability wrapper target')
+        for address,value in ((E-0x30,saved_frame_pointer),(E-0x28,image_base+0x2814D8),
+                (E-0x20,saved_x22),(E-0x18,saved_x21),(E-0x10,saved_x20),(E-8,argument_block_address)):
+            write(address,value)
+        _write_span(p,E-0x38,_read_span(p,thread_pointer+0x28,8))
+        availability=check_cached_static_method_availability(p,image_base=image_base,
+            entry_stack_address=E-0x60,acquire_environment=acquire_environment,invoke_jni=invoke_jni)
+        result=availability.availability
+        if _read_span(p,thread_pointer+0x28,8)!=_read_span(p,E-0x38,8):
+            raise RefillUnsupported('JNI availability wrapper stack canary mismatch')
+        x20=read(E-0x10);packed=read(E-8)
+        x22=read(E-0x20);x21=read(E-0x18);x29=read(E-0x30);helper_lr=read(E-0x28)
+        if helper_lr!=image_base+0x2814D8:
+            raise RefillUnsupported('JNI availability helper LR does not reach its wrapper')
+        if packed>(1<<64)-12:
+            raise RefillUnsupported('JNI availability result address wraps uint64')
+        write(packed+8,result,4)
+        x30=read(W-16);x19=read(W-8)
+        if x30>=1<<56:
+            raise RefillUnsupported('PAC-tagged JNI availability wrapper return is unsupported')
+    except ValueError as exc:raise RefillUnsupported('JNI availability wrapper memory is unmapped') from exc
+    state=RequestJniAvailabilityReturn(x30,W,result,x19,saved_x28,x29,x30,x20,x21,x22,availability)
+    p.commit();return state
