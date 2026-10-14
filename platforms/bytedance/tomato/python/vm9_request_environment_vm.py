@@ -18,6 +18,10 @@ class RequestEnvironmentVmPrefix:
 class RequestEnvironmentVmAcquisitionPrefix(RequestEnvironmentVmPrefix):
     acquisitions:tuple
 
+@dataclass(frozen=True)
+class RequestEnvironmentVmStringsPrefix(RequestEnvironmentVmAcquisitionPrefix):
+    strings:tuple
+
 def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
         argument_block_address,entry_stack_address,return_address,
         thread_pointer,image_base,saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -46,8 +50,8 @@ def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
     p.commit();return frame
 
 def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
-        acquire_environment=None,**inputs):
-    """Execute known decoders and the optional environment acquisition callback.
+        acquire_environment=None,consumer_services=None,**inputs):
+    """Execute known decoders, optional acquisition and StringObject callbacks.
 
     Independent caller generation retains existing packed/padding bytes.
     Bounded pages never publish to the supplied page map.
@@ -55,9 +59,13 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
     if type(maxsteps) is not int or maxsteps<1:raise RefillUnsupported('request environment VM budget must be positive')
     if acquire_environment is not None and not callable(acquire_environment):
         raise RefillUnsupported('request environment acquisition provider must be callable')
+    if consumer_services is not None and (not isinstance(consumer_services,dict) or
+            any(not callable(consumer_services.get(n)) for n in ('allocate','free'))):
+        raise RefillUnsupported('request environment strings require allocation and free services')
     staged=_PageTransaction(pages);frame=prepare_request_environment_wrapper_caller(staged,**inputs)
     image=inputs['image_base'];callbacks=[];decoded=[];previous=vm_module.B
     acquisitions=[]
+    strings=[]
     class StrictMem(vm_module.Mem):
         def __init__(self):self.pages=staged
         def _pg(self,address):
@@ -81,10 +89,17 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
                     entry_stack_address=frame.native_stack_address-0x180,
                     acquire_environment=acquire_environment)
                 acquisitions.append((words[1],result))
+            elif consumer_services is not None and (wrapper,target) in ((0x205064,0x248344),(0x205094,0x2484B8)):
+                result=apply_request_environment_string_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    allocate=consumer_services['allocate'],free=consumer_services['free'])
+                strings.append((wrapper,target,argument,result))
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if strings:
+                return RequestEnvironmentVmStringsPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,tuple(acquisitions),tuple(strings))
             if acquisitions:
                 return RequestEnvironmentVmAcquisitionPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,tuple(acquisitions))
             return RequestEnvironmentVmPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
@@ -109,4 +124,28 @@ def apply_request_environment_acquisition_callback(pages, *, argument_block_addr
     output=int.from_bytes(_read_span(p,argument_block_address+8,8),'little')
     if target!=image_base+0x26EDC4:raise RefillUnsupported('unrecovered request environment acquisition target')
     result=acquire_environment(p,entry_stack_address=entry_stack_address,output_pair_address=output)
+    p.commit();return result
+
+
+def apply_request_environment_string_callback(pages, *, wrapper_offset,
+        argument_block_address,image_base,allocate,free,max_source_bytes=0x100000):
+    """Actual +205064 constructor and +205094 destructor tail wrappers.
+
+    Both load target/object before calling their existing StringObject owner;
+    construction also loads packed+16 source. Neither writes a packed result.
+    Page rollback cannot reverse allocation/free provider external effects.
+    """
+    from vm9_objects import construct_string_object,destroy_string_object
+    p=_PageTransaction(pages)
+    def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
+    pair=wrapper_offset,word(0)-image_base;object_address=word(8)
+    if pair==(0x205064,0x248344):
+        if not callable(allocate):raise RefillUnsupported('environment string allocation provider is required')
+        result=construct_string_object(p,object_address=object_address,source_address=word(16),
+            allocate=allocate,vtable_address=image_base+0x34F5F8,
+            empty_descriptor_address=image_base+0x6E168,max_source_bytes=max_source_bytes)
+    elif pair==(0x205094,0x2484B8):
+        if not callable(free):raise RefillUnsupported('environment string free provider is required')
+        result=destroy_string_object(p,object_address=object_address,image_base=image_base,free=free)
+    else:raise RefillUnsupported('unrecovered request environment StringObject callback')
     p.commit();return result

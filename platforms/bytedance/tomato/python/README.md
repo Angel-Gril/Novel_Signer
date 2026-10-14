@@ -534,6 +534,8 @@ Environment helper callers and decoder prefixes pass33 new native controls and11
 
 The actual environment acquisition callback passes17 new native controls, six rollback checks and three Python entry rejection checks. The owning helper reaches214 steps at StringObject construction; all32 virtual registers, the callback ledger and nine declared memory ranges match original native with the existing GetEnv provider. Complete request/JNI conversion and signing remain unfinished. See the [environment acquisition report](../REQUEST_JNI_STARTUP_WORKERS.md#6152-request-environment-acquisition-callback2026-10-14-asiashanghai).
 
+Actual environment StringObject callbacks pass39 new native controls, nine rollback checks and three Python entry rejections. The owning helper reaches226 steps before logging, with all32 virtual registers, its callback ledger and eleven declared memory ranges matching original native. Cleanup is verified separately; full request conversion and signing remain unfinished. See the [environment StringObject report](../REQUEST_JNI_STARTUP_WORKERS.md#6153-request-environment-stringobject-callbacks2026-10-14-asiashanghai).
+
 
 
 

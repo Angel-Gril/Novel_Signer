@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-14 Asia/Shanghai：request environment StringObject callbacks
+
+39项新增原生对照、9项回滚、3项入口拒绝通过。actual205064构造/205094析构
+复用对象owner；owning helper226/+8A3C4，下一205074→26E9E0 logger，尚未
+在owning路径执行析构。全部32虚拟寄存器/完整ledger/11声明范围与原生一致。
+outer3900、second8184、child19295；原页回滚，64新增OS pages保留。完整
+helper/child/request、physical/JNI/mapping/signer/fresh/live/JVM仍未完成。见
+[environment StringObject报告](REQUEST_JNI_STARTUP_WORKERS.md#6153-request-environment-stringobject-callbacks2026-10-14-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-14 Asia/Shanghai：request environment acquisition callback
 
 17项新增原生对照、6项回滚、3项Python入口拒绝检查通过。actual205058 tail

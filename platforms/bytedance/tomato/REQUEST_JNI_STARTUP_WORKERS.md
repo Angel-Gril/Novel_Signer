@@ -5815,6 +5815,32 @@ physical ABI/PAC、actual URL/header JNI转换、完整signer及fresh/live/真�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_acquisition_fresh_20261014.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <environment-acquisition-evidence.json>
 ```
 
+## 6.153 Request environment StringObject callbacks（2026-10-14 Asia/Shanghai）
+
+恢复实际 `+205064 -> +248344` 字符串构造与 `+205094 -> +2484B8` 析构
+tail callbacks：target位于packed+0、object位于packed+8；构造再读packed+16
+source。两者不写packed result，复用既有StringObject owner与显式allocate/free。
+child把原有consumer_services传入helper，保留默认decoder/acquisition边界。
+
+**39项新增原生对照、9项回滚、3项Python入口拒绝检查**通过。38项实际
+wrapper覆盖两基址、NULL/empty/embedded-NUL、跨页object/source、packed/object/
+source别名、allocation failure、自定义空描述符与free期间修改object；4项native
+RED通过。新增1项owning helper有界差分从actual2814C8及独立构造的child页开始，
+原生16746指令与Python **226/+8A3C4** 一致：全部32虚拟寄存器、完整callback
+ledger、11声明范围与下一包装参数相同。原生tail transfer `205070 -> 248344`
+及实际constructor入口已观察；复用原有GetEnv provider，调用1次。
+
+下一 **+205074 -> +26E9E0** logger；owning路径尚未执行清理callback，析构仅有
+独立实际wrapper对照。outer3900、second8184、child19295；原页差异为空，64新增
+OS pages保留。旧默认/helper/decoder/acquisition AST与对象/TLS/JNI/logger/copy
+owner保持。provider外部效果和mapping rollback、完整return/request、full physical
+ABI/PAC、actual URL/header JNI转换、完整signer及fresh/live/真实JVM仍未完成。
+见 [environment StringObject证据](evidence/vm9_request_environment_strings_fresh_20261014.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_strings_fresh_20261014.py --library "$env:TOMATO_LIBMETASEC" --group all --output <environment-strings-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

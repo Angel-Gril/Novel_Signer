@@ -304,6 +304,7 @@ child VM caller/prefix通过 **26项新增原生对照、10项回滚**，owning 
 child VM四个实际consumer通过 **83项新增原生对照、13项回滚**，owning child推进至19295步并完成有界原生差分。见 [child consumer报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6150-request-child-vm-consumers2026-10-13-asiashanghai)。
 environment helper caller/prefix通过 **33项新增原生对照、11项回滚**，owning helper推进至134步并完成有界原生差分。见 [environment helper报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6151-request-environment-helper-vm-callers-and-prefixes2026-10-14-asiashanghai)。
 实际environment acquisition callback通过 **17项新增原生对照、6项回滚**，owning helper推进至214步。见 [environment acquisition报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6152-request-environment-acquisition-callback2026-10-14-asiashanghai)。
+实际environment StringObject callbacks通过 **39项新增原生对照、9项回滚**，owning helper推进至226步。见 [StringObject报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6153-request-environment-stringobject-callbacks2026-10-14-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
