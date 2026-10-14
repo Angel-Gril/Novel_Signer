@@ -564,6 +564,8 @@ Second VM diagnostic scope entry passes13 new native controls and7 rollback chec
 
 Second VM diagnostic scope cleanup passes21 new native controls and9 rollback checks. The owning cleanup matches1185 declared ranges and actual recursive-mutex events in53 instructions. The second VM reaches8309 steps before shared-reader release; complete signing remains unfinished. See the [second diagnostic cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#6167-second-vm-diagnostic-scope-cleanup2026-10-15-asiashanghai).
 
+Second VM shared-reader release passes19 new native controls and12 rollback checks. The owning release matches1185 declared ranges and two actual mutex operations in83 instructions. The second VM reaches8355 steps before string/C-string comparison; complete signing remains unfinished. See the [second reader release report](../REQUEST_JNI_STARTUP_WORKERS.md#6168-second-vm-shared-reader-release2026-10-15-asiashanghai).
+
 
 
 

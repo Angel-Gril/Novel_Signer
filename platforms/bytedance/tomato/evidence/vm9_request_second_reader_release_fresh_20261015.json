@@ -1,0 +1,358 @@
+{
+  "schema": "vm9-request-second-reader-release-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "three",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "seven",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "near_limit",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "last_reader",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "shared_mutex",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_count",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_count_alias",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_pointer_alias",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "three",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "seven",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "near_limit",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "last_reader",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "shared_mutex",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_count",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_count_alias",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_pointer_alias",
+      "native_instructions": 83,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a4fc",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_decrement_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "wrong_wrapper",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_receiver",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_count",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "zero_readers",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "saturated_readers",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "writer_count",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "mutex_locked",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "mutex_contended",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "recursive_mutex",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "unaligned_mutex",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "complete_child_vm_verified": false,
+  "complete_second_vm_verified": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 19,
+  "rollback_guards": 12,
+  "pre_change_native_RED_controls": 2,
+  "pre_change_second_wiring_RED_controls": 1,
+  "owning_callback_native": {
+    "steps": 83,
+    "actual_wrapper_and_shared_reader_returned": true,
+    "complete_declared_ranges_equal": true,
+    "declared_range_count": 1185,
+    "reader_count_and_packed_alias_bytes_equal": true,
+    "two_actual_mutex_transitions_equal": true,
+    "no_allocation_or_JNI_services": true,
+    "actual_second_callback_stack_and_thread_pointer_used": true,
+    "native_snapshot_input": false,
+    "whole_second_native_differential_verified": false,
+    "complete_physical_ABI_verified": false
+  },
+  "constructed_second_entry": {
+    "phase": "GREEN",
+    "steps": 8355,
+    "bytecode_offset": "0x106ca4",
+    "next_wrapper": "0x2885ec",
+    "next_target": "0x24880c",
+    "child_return_preserved": true,
+    "completed_second_string_callbacks": 1,
+    "completed_reader_acquisitions": 1,
+    "completed_diagnostic_entries": 2,
+    "completed_diagnostic_leaves": 2,
+    "completed_reader_releases": 1,
+    "complete_second_vm_verified": false
+  },
+  "previous_second_steps": 8309,
+  "previous_second_AST_preserved": true,
+  "shared_reader_and_mutex_owners_unchanged": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "limits": [
+    "Only the exact +2885e0 -> +32a4fc release pair is enabled, delegating to release_uncontended_shared_reader. Acquisition, scope entry/leave and child return owners stay unchanged. Release count is internal metadata, not physical X0.",
+    "Eighteen NEW controls at two bases cover counts1/3/7/near-limit/last-accepted, shared mutex, cross-page count and packed count/pointer aliases. All declared guest bytes and both actual matching-libc mutex transitions match. Twelve rejection guards preserve pages, including zero/saturated/writer counts and invalid mutex states. Prior acquisition native groups are not repeated.",
+    "One NEW owning release executes83 original instructions with actual second callback SP/TP.1185 declared ranges and two actual mutex operations match; no allocation or JNI services occur. Full stack/canary/PAC, physical return ABI, concurrency and writer/signal/wait branches remain unverified.",
+    "The second VM advances8309 ->8355/+106ca4 before +2885ec -> +24880c string/C-string comparison. A second scope enter/leave pair is genuinely executed after release, so final scope entry/leave counters are both2; an initial probe assumed1 and was corrected without production changes. Final evidence counts the new native groups once. Original outer pages stay unchanged;64 new OS pages and external effects remain. Complete second/request/signing and fresh/live/JVM remain unfinished."
+  ]
+}

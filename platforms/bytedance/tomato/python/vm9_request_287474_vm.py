@@ -41,6 +41,11 @@ class RequestVm287474DiagnosticCleanupPrefix(RequestVm287474DiagnosticPrefix):
     diagnostic_leaves: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474ReaderReleasePrefix(RequestVm287474DiagnosticCleanupPrefix):
+    reader_releases: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -68,6 +73,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     reader_acquisitions=[]
     diagnostics=[]
     diagnostic_leaves=[]
+    reader_releases=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -100,6 +106,10 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     allocate=consumer_services['allocate'],thread_id=consumer_services.get('thread_id'),
                     observer=consumer_services.get('diagnostic_observer'))
                 diagnostic_leaves.append((argument,result))
+            elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A4FC):
+                readers=apply_request_287474_reader_release_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image)
+                reader_releases.append((argument,readers))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -124,6 +134,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if reader_releases:
+                return RequestVm287474ReaderReleasePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases))
             if diagnostic_leaves:
                 return RequestVm287474DiagnosticCleanupPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves))
@@ -159,6 +172,22 @@ def apply_request_287474_reader_acquisition_callback(pages, *, wrapper_offset,
     if (wrapper_offset,word(0)-image_base)!=(0x2885E0,0x32A444):
         raise RefillUnsupported('unrecovered second shared-reader callback')
     readers=acquire_uncontended_shared_reader(p,mutex_address=word(8))
+    p.commit();return readers
+
+
+def apply_request_287474_reader_release_callback(pages, *, wrapper_offset,
+        argument_block_address,image_base):
+    """+2885e0 tail-calls the shared +32a4fc release owner.
+
+    Reader count is internal metadata. Writer/signal/wait paths and the
+    physical return/stack/canary/PAC remain outside this semantic callback.
+    """
+    from vm9_objects import release_uncontended_shared_reader
+    p=_PageTransaction(pages)
+    def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
+    if (wrapper_offset,word(0)-image_base)!=(0x2885E0,0x32A4FC):
+        raise RefillUnsupported('unrecovered second shared-reader release callback')
+    readers=release_uncontended_shared_reader(p,mutex_address=word(8))
     p.commit();return readers
 
 

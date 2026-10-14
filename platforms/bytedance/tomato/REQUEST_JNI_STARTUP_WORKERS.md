@@ -6165,6 +6165,30 @@ JNI、mapping、signer及fresh/live/JVM未完成。见 [second diagnostic cleanu
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_diagnostic_cleanup_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-diagnostic-cleanup-evidence.json>
 ```
 
+## 6.168 Second VM shared-reader release（2026-10-15 Asia/Shanghai）
+
+精确接入`2885E0→32A4FC`，复用既有shared-reader release/mutex owner。
+reader acquisition、diagnostic entry/leave与child返回保持；release独立记录，
+reader计数是内部metadata，不代表原生physical X0。
+
+**19项新增原生/Python对照、12项回滚检查通过**；另有2项原生RED和1项接线RED。
+18项新控制覆盖两个基址、1/3/7/near-limit/last-accepted reader、shared mutex、
+cross-page与packed count/pointer别名；声明guest bytes及两次真实libc mutex一致。
+12项拒绝检查包括zero/saturated/writer count与不支持的mutex状态，所有页面保持。
+1项owning执行83条原始指令，1185声明范围及两次实际mutex一致，无分配/JNI。
+完整stack/canary/PAC和physical ABI、writer/signal/wait/并发仍未覆盖。旧原生分组
+未重跑，旧AST和共享owner保持。
+
+second推进到 **8355/+106CA4**，下一 **2885EC→24880C** string/C-string比较。
+释放后实际又执行一组scope进入/清理，最终各2次；初次探针错误假定各1次，修正
+断言后通过，生产代码无需调整。child/string/acquisition/leave记录保持。原caller
+页差异为空，64新增OS页和外部effects保留。完整second/request、URL/header JNI、
+mapping、signer及fresh/live/JVM未完成。见 [second reader release证据](evidence/vm9_request_second_reader_release_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_reader_release_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-reader-release-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
