@@ -16,4 +16,8 @@ No current Douyin APK, current signed request sample, live endpoint matrix, or s
 
 ## How to continue
 
+2026-10-15: the [DouYin_Spider source review](DOUYIN_SPIDER_REVIEW_20261015.md)
+maps a pinned public commit's Web APIs, signatures and session dependencies
+against this project's App-header evidence. It adds no live Douyin acceptance.
+
 To promote this directory from static to live evidence, collect one exact app version, capture a request with its complete query/body/header tuple, identify the endpoint and response semantics, then run one-variable removal matrices. Store only redacted status/length/hash summaries in `EVIDENCE_INDEX.json`.
