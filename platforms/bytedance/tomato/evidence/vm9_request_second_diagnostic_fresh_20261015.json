@@ -1,0 +1,243 @@
+{
+  "schema": "vm9-request-second-diagnostic-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "wrapper_identity": {
+    "byte_count": 16,
+    "identical_to_existing_token_scope_wrapper": true,
+    "no_PC_relative_instructions": true
+  },
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "cold_zero",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cold_high_bits",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cold_cross_page",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_nested",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_saturated",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_object_alias",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold_zero",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold_high_bits",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold_cross_page",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_nested",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_saturated",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_object_alias",
+      "actual_wrapper": "0x288530",
+      "actual_scope": "0x26c858",
+      "original_wrapper_and_diagnostic_returned": true,
+      "all_declared_guest_ELF_heap_and_packed_bytes_equal": true,
+      "ordered_allocations_mutex_gettid_equal": true,
+      "actual_matching_libc_recursive_mutexes": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "busy_guard",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "NULL_allocation",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "wrong_recursive_owner",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_scope",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "bad_target",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "noncallable_allocate",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "whole_physical_stack_bytes_compared": false,
+  "native_return_x0_ABI_compared": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "complete_second_vm_verified": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 13,
+  "rollback_guards": 7,
+  "pre_change_native_RED_controls": 2,
+  "pre_change_second_wiring_RED_controls": 1,
+  "owning_callback_native": {
+    "steps": 110,
+    "actual_wrapper_and_diagnostic_returned": true,
+    "complete_declared_ranges_equal": true,
+    "declared_range_count": 1185,
+    "actual_malloc_calls": 0,
+    "allocation_requests_and_results_equal": true,
+    "ordered_actual_mutex_and_gettid_events_equal": true,
+    "actual_matching_libc_recursive_mutexes": true,
+    "allocation_and_recursive_mutex_stubs_disabled": true,
+    "actual_second_callback_stack_and_thread_pointer_used": true,
+    "native_snapshot_input": false,
+    "whole_second_native_differential_verified": false,
+    "complete_physical_ABI_verified": false
+  },
+  "constructed_second_entry": {
+    "phase": "GREEN",
+    "steps": 8298,
+    "bytecode_offset": "0x106b9c",
+    "next_wrapper": "0x288540",
+    "next_target": "0x26c9d0",
+    "child_return_preserved": true,
+    "completed_second_string_callbacks": 1,
+    "completed_reader_acquisitions": 1,
+    "completed_diagnostic_entries": 1,
+    "complete_second_vm_verified": false
+  },
+  "previous_second_steps": 8279,
+  "previous_second_AST_preserved": true,
+  "shared_token_adapter_and_diagnostic_owners_unchanged": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "limits": [
+    "The +288530 tail wrapper is byte-identical to +288b30. Its exact +26c858 branch delegates to apply_token_diagnostic_callback and the existing diagnostic scope/recursive mutex owners. Thread pointer and allocator remain explicit; optional thread id/observer are forwarded. Cold controls supply the required tid; owning globals are already warm.",
+    "Twelve NEW controls at two bases cover cold zero/high-bit/cross-page inputs, recursive nesting and saturation, and packed-object aliasing. All declared guest/image/heap/packed bytes, ordered allocations, mutex and gettid events match actual wrapper/helper and matching-libc recursive mutexes. Seven rollback guards reject invalid inputs and failed providers; noncallable direct allocation raises the existing TypeError contract.",
+    "One NEW owning callback executes110 original instructions on independently constructed second-VM pages.1185 declared ranges and ordered actual mutex events match; the warm table/entry requires no allocation. Allocator/recursive-mutex stubs are disabled, but no owning malloc execution is claimed. Physical return X0, full stack/canary/PAC and whole-second native execution remain unverified.",
+    "The second VM advances8279 ->8298/+106b9c before +288540 -> +26c9d0 diagnostic scope cleanup. Child return, StringObject and reader acquisition records remain. Original outer pages stay unchanged;64 new OS pages and external effects remain. Complete second/request, actual URL/header JNI, allocator mapping, signer and fresh/live/JVM remain unfinished."
+  ]
+}

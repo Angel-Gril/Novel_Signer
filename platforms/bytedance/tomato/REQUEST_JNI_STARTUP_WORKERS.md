@@ -6120,6 +6120,29 @@ signer及fresh/live/JVM未完成。见 [second reader证据](evidence/vm9_reques
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_reader_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-reader-evidence.json>
 ```
 
+## 6.166 Second VM diagnostic scope entry（2026-10-15 Asia/Shanghai）
+
+`288530→26C858`的16字节tail wrapper与288B30一致，复用既有token packed
+adapter及diagnostic/recursive mutex owner。传递实际TP、allocator与可选tid/
+observer；cold对照显式提供tid，实际构造的outer诊断全局已warm。
+
+**13项新增原生/Python对照、7项回滚检查通过**；另有2项原生RED和1项接线RED。
+12项新控制覆盖两个基址、cold zero/high-bit/cross-page、recursive nesting/
+saturation及packed-object别名；声明guest/image/heap/packed bytes与有序分配/
+mutex/gettid事件全部一致。1项owning对照执行110条原始指令，1185声明范围和
+真实递归锁事件一致。warm table/entry无需分配；关闭malloc stub不代表本项执行
+了malloc。非callable的direct allocator按既有TypeError拒绝且页面保持。旧second
+AST及共享owner保持，旧原生分组未重跑。完整physical ABI/PAC/stack未覆盖。
+
+second推进到 **8298/+106B9C**，下一 **288540→26C9D0** diagnostic scope
+cleanup。child返回、second字符串/reader记录保持；原caller页差异为空，64新增
+OS页及外部effects保留。完整second/request、URL/header JNI、mapping、signer及
+fresh/live/JVM未完成。见 [second diagnostic证据](evidence/vm9_request_second_diagnostic_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_diagnostic_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-diagnostic-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM diagnostic scope entry
+
+13项新增原生对照、7项回滚通过；owning110指令/1185范围/真实递归锁一致，
+本项无分配。second8298/+106B9C，下一288540→26C9D0清理。旧AST/共享owner及
+child/string/reader保持；原页差异为空，64新增OS页保留。完整second/request/
+signer/fresh/live/JVM未完成。见 [second diagnostic报告](REQUEST_JNI_STARTUP_WORKERS.md#6166-second-vm-diagnostic-scope-entry2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM shared-reader acquisition
 
 19项新增原生对照、11项回滚通过；owning94指令/1185范围/两次真实mutex一致。

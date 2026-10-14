@@ -431,6 +431,8 @@ Second VM StringObject construction passes23 new native controls and8 rollback c
 
 Second VM shared-reader acquisition passes19 new native controls and11 rollback checks. The owning callback matches1185 declared ranges and two actual mutex transitions in94 instructions. The second VM reaches8279 steps before diagnostic scope entry; complete signing remains unfinished. See the [second reader report](REQUEST_JNI_STARTUP_WORKERS.md#6165-second-vm-shared-reader-acquisition2026-10-15-asiashanghai).
 
+Second VM diagnostic scope entry passes13 new native controls and7 rollback checks. The owning warm scope matches1185 declared ranges and actual recursive-mutex events in110 instructions, with no allocation. The second VM reaches8298 steps before scope cleanup; complete signing remains unfinished. See the [second diagnostic report](REQUEST_JNI_STARTUP_WORKERS.md#6166-second-vm-diagnostic-scope-entry2026-10-15-asiashanghai).
+
 
 
 
