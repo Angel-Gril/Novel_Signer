@@ -51,6 +51,11 @@ class RequestVm287474EqualityPrefix(RequestVm287474ReaderReleasePrefix):
     string_comparisons: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474AssignmentPrefix(RequestVm287474EqualityPrefix):
+    string_assignments: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -80,6 +85,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     diagnostic_leaves=[]
     reader_releases=[]
     string_comparisons=[]
+    string_assignments=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -120,6 +126,13 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 equal=apply_request_287474_string_equality_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
                 string_comparisons.append((argument,equal))
+            elif consumer_services is not None and (wrapper,target)==(0x28861C,0x2485A4):
+                if not callable(consumer_services.get('reallocate')):raise Boundary()
+                assigned=apply_request_287474_string_assignment_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    allocate=consumer_services['allocate'],reallocate=consumer_services['reallocate'],
+                    free=consumer_services['free'])
+                string_assignments.append((argument,assigned))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -144,6 +157,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if string_assignments:
+                return RequestVm287474AssignmentPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments))
             if string_comparisons:
                 return RequestVm287474EqualityPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons))
@@ -223,6 +239,22 @@ def apply_request_287474_string_equality_callback(pages, *, wrapper_offset,
     equal=string_equals_cstring(p,object_address=obj,cstring_address=word(16),max_bytes=max_bytes)
     _write_span(p,argument_block_address+24,bytes([int(equal)]))
     p.commit();return equal
+
+
+def apply_request_287474_string_assignment_callback(pages, *, wrapper_offset,
+        argument_block_address,image_base,allocate,reallocate,free,max_bytes=0x100000):
+    """+28861c writes the +2485a4 assignment result at packed+24 as X0."""
+    from vm9_objects import assign_string_object
+    if not all(callable(f) for f in (allocate,reallocate,free)):
+        raise RefillUnsupported('StringObject assignment requires allocator services')
+    p=_PageTransaction(pages)
+    def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
+    if (wrapper_offset,word(0)-image_base)!=(0x28861C,0x2485A4):
+        raise RefillUnsupported('unrecovered second string assignment callback')
+    assigned=assign_string_object(p,object_address=word(8),source_object_address=word(16),
+        allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+    _write_span(p,argument_block_address+24,assigned.to_bytes(8,'little'))
+    p.commit();return assigned
 
 
 def apply_request_287474_consumer(pages, *, wrapper_offset,

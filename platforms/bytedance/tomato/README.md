@@ -439,6 +439,8 @@ Second VM shared-reader release passes19 new native controls and12 rollback chec
 
 Second VM string equality passes27 new native controls and9 rollback checks. The owning comparison matches1185 declared ranges in32 instructions with no allocation or external services. The second VM reaches8405 steps before StringObject assignment; complete signing remains unfinished. See the [second equality report](REQUEST_JNI_STARTUP_WORKERS.md#6169-second-vm-string-equality2026-10-15-asiashanghai).
 
+Second VM string assignment passes37 new native controls and13 rollback checks. The owning assignment matches1185 declared ranges and actual libc malloc/free in347 instructions. The second VM reaches8416 steps before the random getter; complete signing remains unfinished. See the [second assignment report](REQUEST_JNI_STARTUP_WORKERS.md#6170-second-vm-string-assignment2026-10-15-asiashanghai).
+
 
 
 

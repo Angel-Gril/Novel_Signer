@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM string assignment
+
+37项新增原生对照、13项回滚通过；owning347指令/1185范围/实际libc malloc/free。
+赋值复用reserve，outer仅透传既有reallocator，保留字段重读和失败效果。second
+8416/+106DE8，下一28863C→26CC8C随机数。旧AST/既有StringObject与reserve owner
+保持；原页差异为空，64新增OS页保留。完整second/request/signer/fresh/live/JVM
+未完成。见 [second assignment报告](REQUEST_JNI_STARTUP_WORKERS.md#6170-second-vm-string-assignment2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM string equality
 
 27项新增原生对照、9项回滚通过；owning32指令/1185范围/无分配或外部服务。

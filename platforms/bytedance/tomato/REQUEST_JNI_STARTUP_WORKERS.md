@@ -6212,6 +6212,33 @@ mapping、signer及fresh/live/JVM未完成。见 [second equality证据](evidenc
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_equality_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-equality-evidence.json>
 ```
 
+## 6.170 Second VM string assignment（2026-10-15 Asia/Shanghai）
+
+恢复`28861C→2485A4` StringObject赋值。新语义owner复用既有reserve；原outer
+entry仅透传已有reallocator。保留signed容量判断、分配后重读source length、NULL
+destination payload清零capacity/length，以及memcpy后重读终止位置。native忽略
+reserve失败返回，模型保持该效果；partial-overlap memcpy和负copy长度明确拒绝。
+wrapper仅在packed+24写8字节destination pointer。旧AST/所有既有StringObject与
+reserve owner保持，无替代allocator。
+
+**37项新增原生/Python对照、13项回滚检查通过**；另有2项原生RED和1项接线RED。
+36项新控制覆盖两个基址、empty/binary/shrink/same-object/payload/cross-page、
+malloc与moving/in-place realloc、失败与rounded→exact fallback、全部reserve
+失败、NULL payload、allocator/memcpy改变字段后的重读和packed-result别名。
+初始capacity8/length7会选择malloc；修正length8后验证direct realloc，并显式检查
+事件种类。最终新组各计一次。字节、有序allocator调用及其状态全部一致。
+1项owning执行347原始指令，1185声明范围及实际libc malloc/free一致，allocator
+stub关闭；不声称本项执行realloc。完整physical ABI/stack/canary/PAC仍未覆盖。
+
+second推进到 **8416/+106DE8**，下一 **28863C→26CC8C** random getter。assignment/
+comparison/release各1次，scope entry/leave各3次，child/string/acquisition保持。
+原caller页差异为空，64新增OS页及外部effects保留。完整second/request、URL/header
+JNI、mapping、signer及fresh/live/JVM未完成。见 [second assignment证据](evidence/vm9_request_second_assignment_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_assignment_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-assignment-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

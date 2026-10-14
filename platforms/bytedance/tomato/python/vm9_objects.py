@@ -251,6 +251,44 @@ def reserve_string_fields(
     return status
 
 
+def assign_string_object(pages, *, object_address: int, source_object_address: int,
+        allocate: Callable, reallocate: Callable, free: Callable,
+        max_bytes: int = 0x100000) -> int:
+    """+0x2485a4: reserve, reload source length, copy, reload and terminate.
+
+    Reserve's native failure status is ignored. A NULL destination payload
+    resets capacity/length. Nonzero-copy partial overlaps and negative signed
+    memcpy lengths remain unsupported. Unsupported pages/effects roll pages
+    back; allocator ledgers remain external. Return the destination pointer.
+    """
+    _string_bound(max_bytes)
+    if not object_address or not source_object_address:
+        raise RefillUnsupported('StringObject assignment requires non-NULL objects')
+    p=_PageTransaction(pages)
+    def u(a,n=8):return int.from_bytes(_read_span(p,a,n),'little')
+    capacity=u(object_address+8,4);length=u(source_object_address+12,4)
+    if _s32(length)>=_s32(capacity):
+        _reserve_string_fields(p,object_address+8,length,allocate,reallocate,free,max_bytes)
+        length=u(source_object_address+12,4)
+    destination=u(object_address+16)
+    _write_span(p,object_address+12,length.to_bytes(4,'little'))
+    if not destination:
+        _write_span(p,object_address+8,bytes(8))
+    else:
+        source=u(source_object_address+16)
+        if _s32(length)<0 or length>max_bytes:
+            raise RefillUnsupported('StringObject assignment exceeds its signed copy bound')
+        if source!=destination and length and abs(destination-source)<length:
+            raise RefillUnsupported('overlapping assignment memcpy is unrecovered')
+        if length:_write_span(p,destination,_read_span(p,source,length))
+        # memcpy or an input alias may have changed these fields.
+        end=_s32(u(object_address+12,4));pointer=u(object_address+16)
+        if end<0 or end>max_bytes:
+            raise RefillUnsupported('StringObject assignment terminator exceeds its bound')
+        _write_span(p,pointer+end,b'\0')
+    p.commit();return object_address
+
+
 def _destroy_string_fields(pages, fields, free):
     if not fields:
         return -1

@@ -1,0 +1,658 @@
+{
+  "schema": "vm9-request-second-assignment-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "binary",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "shrink",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "same_object",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "same_payload",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_fields",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_payload",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "grow_malloc",
+      "native_instructions": 105,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "malloc",
+        "free"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "grow_realloc",
+      "native_instructions": 96,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "realloc_inplace",
+      "native_instructions": 96,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "malloc_failure_realloc",
+      "native_instructions": 100,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "malloc",
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "realloc_fallback",
+      "native_instructions": 103,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "realloc",
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all_growth_fail",
+      "native_instructions": 98,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "realloc",
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_destination_payload",
+      "native_instructions": 25,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_source_empty",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "allocator_changes_source_length",
+      "native_instructions": 105,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "malloc",
+        "free"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "copy_changes_destination_length",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_return_payload_alias",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "binary",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "shrink",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "same_object",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "same_payload",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_fields",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_payload",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "grow_malloc",
+      "native_instructions": 105,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "malloc",
+        "free"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "grow_realloc",
+      "native_instructions": 96,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "realloc_inplace",
+      "native_instructions": 96,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "malloc_failure_realloc",
+      "native_instructions": 100,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "malloc",
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "realloc_fallback",
+      "native_instructions": 103,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "realloc",
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all_growth_fail",
+      "native_instructions": 98,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "realloc",
+        "realloc"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_destination_payload",
+      "native_instructions": 25,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_source_empty",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "allocator_changes_source_length",
+      "native_instructions": 105,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [
+        "malloc",
+        "free"
+      ],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "copy_changes_destination_length",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_return_payload_alias",
+      "native_instructions": 33,
+      "actual_wrapper": "0x28861c",
+      "actual_assignment": "0x2485a4",
+      "original_wrapper_and_assignment_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "ordered_allocator_effects_and_state_equal": true,
+      "pointer_result_and_packed_aliases_equal": true,
+      "allocator_effect_kinds": [],
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "wrong_wrapper",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "NULL_destination",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "NULL_source",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_destination",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_source",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_payload",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "negative_source_length",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "partial_overlap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "operation_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "missing_reallocate",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    },
+    {
+      "case": "missing_result_page",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_allocator_effects_rolled_back": false
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "complete_second_vm_verified": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 37,
+  "rollback_guards": 13,
+  "pre_change_native_RED_controls": 2,
+  "pre_change_second_wiring_RED_controls": 1,
+  "owning_callback_native": {
+    "steps": 347,
+    "actual_wrapper_and_assignment_returned": true,
+    "complete_declared_ranges_equal": true,
+    "declared_range_count": 1185,
+    "packed_pointer_result_and_padding_equal": true,
+    "no_nonallocator_service_events": true,
+    "actual_allocator_effects_equal": true,
+    "actual_allocator_calls": 2,
+    "actual_allocator_kinds": [
+      "allocate",
+      "free"
+    ],
+    "matching_libc_allocator_executed": true,
+    "allocator_stubs_disabled": true,
+    "no_JNI_services": true,
+    "actual_second_callback_stack_and_thread_pointer_used": true,
+    "native_snapshot_input": false,
+    "whole_second_native_differential_verified": false,
+    "complete_physical_ABI_verified": false
+  },
+  "constructed_second_entry": {
+    "phase": "GREEN",
+    "steps": 8416,
+    "bytecode_offset": "0x106de8",
+    "next_wrapper": "0x28863c",
+    "next_target": "0x26cc8c",
+    "child_return_preserved": true,
+    "completed_second_string_callbacks": 1,
+    "completed_reader_acquisitions": 1,
+    "completed_diagnostic_entries": 3,
+    "completed_diagnostic_leaves": 3,
+    "completed_reader_releases": 1,
+    "completed_string_comparisons": 1,
+    "completed_string_assignments": 1,
+    "complete_second_vm_verified": false
+  },
+  "previous_second_steps": 8405,
+  "previous_second_AST_preserved": true,
+  "prior_StringObject_and_reserve_owners_preserved": true,
+  "outer_entry_only_forwards_existing_reallocator": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "limits": [
+    "New assign_string_object models +2485a4 with the existing reserve owner. It preserves signed capacity comparison, source-length reload after allocator effects, NULL destination payload capacity/length reset, and destination-length/payload reload after memcpy. Native reserve failure is ignored by assignment. Imported memcpy partial overlaps and negative signed copy lengths reject with page rollback. External allocator ledgers are not rolled back.",
+    "The exact +28861c pair writes the destination pointer as8 bytes at packed+24. The outer request entry forwards its existing reallocator; every old StringObject/reserve owner and prior second AST is preserved. No alternate allocator is introduced.",
+    "Thirty-six NEW controls at two bases cover empty/binary/shrink/same-object/same-payload/cross-page inputs, malloc growth, moving and in-place realloc, malloc-failure realloc, rounded-to-exact realloc fallback, all reserve attempts failing, NULL payloads, allocator mutation of source length, memcpy mutation of destination length, and packed-result payload alias. Both bytes and ordered allocator requests/state match. Initial growth fixtures were refined from length7 to8 at capacity8 to force direct realloc; final evidence explicitly checks allocation kinds. Thirteen rollback guards pass.",
+    "One NEW owning assignment executes347 original instructions with actual second callback SP/TP.1185 ranges and two actual matching-libc allocator calls (malloc/free) match with allocator stubs disabled. It advances8405 ->8416/+106de8 before +28863c -> +26cc8c random getter. All prior records remain; original outer pages unchanged,64 new OS pages retained. Whole physical ABI/stack/PAC, second/request, actual URL/header JNI, allocator mapping, independent signing and fresh/live/JVM remain unverified."
+  ]
+}
