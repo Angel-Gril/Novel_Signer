@@ -46,6 +46,11 @@ class RequestVm287474ReaderReleasePrefix(RequestVm287474DiagnosticCleanupPrefix)
     reader_releases: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474EqualityPrefix(RequestVm287474ReaderReleasePrefix):
+    string_comparisons: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -74,6 +79,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     diagnostics=[]
     diagnostic_leaves=[]
     reader_releases=[]
+    string_comparisons=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -110,6 +116,10 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 readers=apply_request_287474_reader_release_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
                 reader_releases.append((argument,readers))
+            elif consumer_services is not None and (wrapper,target)==(0x2885EC,0x24880C):
+                equal=apply_request_287474_string_equality_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image)
+                string_comparisons.append((argument,equal))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -134,6 +144,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if string_comparisons:
+                return RequestVm287474EqualityPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons))
             if reader_releases:
                 return RequestVm287474ReaderReleasePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases))
@@ -189,6 +202,27 @@ def apply_request_287474_reader_release_callback(pages, *, wrapper_offset,
         raise RefillUnsupported('unrecovered second shared-reader release callback')
     readers=release_uncontended_shared_reader(p,mutex_address=word(8))
     p.commit();return readers
+
+
+def apply_request_287474_string_equality_callback(pages, *, wrapper_offset,
+        argument_block_address,image_base,max_bytes=0x100000):
+    """+2885ec compares a StringObject and C string, then stores one byte.
+
+    Preserve packed+25 padding and complete all comparison reads before the
+    result store, including when the result aliases an input. Physical stack
+    and return X0 remain outside this packed callback contract.
+    """
+    from vm9_configuration_init import string_equals_cstring
+    p=_PageTransaction(pages)
+    def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
+    if (wrapper_offset,word(0)-image_base)!=(0x2885EC,0x24880C):
+        raise RefillUnsupported('unrecovered second string equality callback')
+    obj=word(8)
+    if not obj:
+        raise RefillUnsupported('second string equality requires a non-NULL receiver')
+    equal=string_equals_cstring(p,object_address=obj,cstring_address=word(16),max_bytes=max_bytes)
+    _write_span(p,argument_block_address+24,bytes([int(equal)]))
+    p.commit();return equal
 
 
 def apply_request_287474_consumer(pages, *, wrapper_offset,

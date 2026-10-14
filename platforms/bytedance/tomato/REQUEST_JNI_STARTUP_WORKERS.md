@@ -6189,6 +6189,29 @@ mapping、signer及fresh/live/JVM未完成。见 [second reader release证据](e
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_reader_release_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-reader-release-evidence.json>
 ```
 
+## 6.169 Second VM string equality（2026-10-15 Asia/Shanghai）
+
+`2885EC→24880C`的36字节wrapper与2858EC一致，复用既有StringObject/C-string
+比较owner。比较结束后仅写packed+24的boolean byte，保留+25起padding与内存
+别名的读写顺序。原second行为、scope/reader/child与共享比较owner保持不变。
+
+**27项新增原生/Python对照、9项回滚检查通过**；另有2项原生RED和1项接线RED。
+26项新控制覆盖两个基址、空/相等/不等/短/长/embedded-NUL、负长度、NULL
+source/payload、跨页payload/source以及result-source/packed-object别名。声明
+guest bytes和返回byte/padding全部一致。原生NULL receiver会读未映射内存，
+新适配器明确拒绝，纳入回滚检查；共享owner不变。初次新对照暴露该边界，最终
+通过的组各计一次。1项owning执行32条原始指令，1185声明范围一致，无分配或
+外部service。完整physical ABI/stack/canary/PAC仍未覆盖，旧原生分组未重跑。
+
+second推进到 **8405/+106DBC**，下一 **28861C→2485A4** StringObject assignment。
+实际scope entry/leave各3次，comparison/release各1次，既有记录保持。原caller页
+差异为空，64新增OS页及外部effects保留。完整second/request、URL/header JNI、
+mapping、signer及fresh/live/JVM未完成。见 [second equality证据](evidence/vm9_request_second_equality_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_equality_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-equality-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

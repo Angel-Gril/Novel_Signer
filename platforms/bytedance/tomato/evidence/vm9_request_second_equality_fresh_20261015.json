@@ -1,0 +1,427 @@
+{
+  "schema": "vm9-request-second-equality-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "wrapper_identity": {
+    "byte_count": 36,
+    "identical_to_existing_request_equality_wrapper": true,
+    "packed_result_width": 1,
+    "packed_result_offset": 24
+  },
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "native_instructions": 32,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "exact",
+      "native_instructions": 48,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "mismatch",
+      "native_instructions": 45,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "short_source",
+      "native_instructions": 40,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "long_source",
+      "native_instructions": 48,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "embedded_NUL",
+      "native_instructions": 40,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_length",
+      "native_instructions": 27,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_source",
+      "native_instructions": 22,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_payload",
+      "native_instructions": 25,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_payload",
+      "native_instructions": 48,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_source",
+      "native_instructions": 48,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_result_source_alias",
+      "native_instructions": 40,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_object_alias",
+      "native_instructions": 32,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "native_instructions": 32,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "exact",
+      "native_instructions": 48,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "mismatch",
+      "native_instructions": 45,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "short_source",
+      "native_instructions": 40,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "long_source",
+      "native_instructions": 48,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "embedded_NUL",
+      "native_instructions": 40,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_length",
+      "native_instructions": 27,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_source",
+      "native_instructions": 22,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_payload",
+      "native_instructions": 25,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_payload",
+      "native_instructions": 48,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_source",
+      "native_instructions": 48,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_result_source_alias",
+      "native_instructions": 40,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_object_alias",
+      "native_instructions": 32,
+      "actual_wrapper": "0x2885ec",
+      "actual_comparison": "0x24880c",
+      "original_wrapper_and_comparison_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "packed_low_boolean_byte_and_padding_equal": true,
+      "no_allocation_or_external_services": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "wrong_wrapper",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "NULL_object",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "unmapped_object",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "unmapped_source",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "unmapped_payload",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "comparison_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_result_page",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "complete_second_vm_verified": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 27,
+  "rollback_guards": 9,
+  "pre_change_native_RED_controls": 2,
+  "pre_change_second_wiring_RED_controls": 1,
+  "owning_callback_native": {
+    "steps": 32,
+    "actual_wrapper_and_equality_returned": true,
+    "complete_declared_ranges_equal": true,
+    "declared_range_count": 1185,
+    "packed_low_boolean_byte_and_padding_equal": true,
+    "no_external_service_events": true,
+    "no_allocation_or_JNI_services": true,
+    "actual_second_callback_stack_and_thread_pointer_used": true,
+    "native_snapshot_input": false,
+    "whole_second_native_differential_verified": false,
+    "complete_physical_ABI_verified": false
+  },
+  "constructed_second_entry": {
+    "phase": "GREEN",
+    "steps": 8405,
+    "bytecode_offset": "0x106dbc",
+    "next_wrapper": "0x28861c",
+    "next_target": "0x2485a4",
+    "child_return_preserved": true,
+    "completed_second_string_callbacks": 1,
+    "completed_reader_acquisitions": 1,
+    "completed_diagnostic_entries": 3,
+    "completed_diagnostic_leaves": 3,
+    "completed_reader_releases": 1,
+    "completed_string_comparisons": 1,
+    "complete_second_vm_verified": false
+  },
+  "previous_second_steps": 8355,
+  "previous_second_AST_preserved": true,
+  "shared_string_equality_owner_unchanged": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "limits": [
+    "The36-byte +2885ec wrapper is identical to +2858ec. Only its +24880c pair is enabled, delegating to the existing string_equals_cstring owner. Result is one boolean byte at packed+24; packed+25 padding is preserved and comparison reads precede the result store.",
+    "Twenty-six NEW controls at two bases cover empty/equal/mismatch/shorter/longer/embedded-NUL strings, signed negative length, NULL source/payload, cross-page payload/source, result-source alias and packed-object alias. All declared guest bytes and result/padding match. Nine rejection guards preserve pages, including explicit length bound and unmapped result.",
+    "A new initial NULL-receiver native control faulted: +24880c adds8 before calling the field comparison, so a NULL object cannot be treated as ordinary false. The new adapter explicitly rejects NULL receivers and preserves pages. The shared comparison owner stays unchanged. Final controls count each accepted new case once.",
+    "One NEW owning comparison executes32 original instructions with actual second callback SP/TP;1185 declared ranges match, with no allocation or external services. The second VM advances8355 ->8405/+106dbc before +28861c -> +2485a4 StringObject assignment. Scope entry/leave counts are now3 each, comparison/release1 each and child/string/acquisition records remain. Original outer pages stay unchanged;64 new OS pages remain. Complete physical ABI/stack/PAC, whole-second/request, actual URL/header JNI, mapping/signing and fresh/live/JVM remain unverified."
+  ]
+}

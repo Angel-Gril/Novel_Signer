@@ -320,6 +320,7 @@ second共享读锁新增 **19项原生对照、11项回滚**，推进至8279步�
 second诊断scope新增 **13项原生对照、7项回滚**，推进至8298步、下一26C9D0清理。见 [second diagnostic报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6166-second-vm-diagnostic-scope-entry2026-10-15-asiashanghai)。
 second诊断scope清理新增 **21项原生对照、9项回滚**，推进至8309步、下一32A4FC释放。见 [second diagnostic cleanup报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6167-second-vm-diagnostic-scope-cleanup2026-10-15-asiashanghai)。
 second共享读锁释放新增 **19项原生对照、12项回滚**，推进至8355步、下一24880C比较。见 [second reader release报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6168-second-vm-shared-reader-release2026-10-15-asiashanghai)。
+second字符串比较新增 **27项原生对照、9项回滚**，推进至8405步、下一2485A4赋值。见 [second equality报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6169-second-vm-string-equality2026-10-15-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

@@ -437,6 +437,8 @@ Second VM diagnostic scope cleanup passes21 new native controls and9 rollback ch
 
 Second VM shared-reader release passes19 new native controls and12 rollback checks. The owning release matches1185 declared ranges and two actual mutex operations in83 instructions. The second VM reaches8355 steps before string/C-string comparison; complete signing remains unfinished. See the [second reader release report](REQUEST_JNI_STARTUP_WORKERS.md#6168-second-vm-shared-reader-release2026-10-15-asiashanghai).
 
+Second VM string equality passes27 new native controls and9 rollback checks. The owning comparison matches1185 declared ranges in32 instructions with no allocation or external services. The second VM reaches8405 steps before StringObject assignment; complete signing remains unfinished. See the [second equality report](REQUEST_JNI_STARTUP_WORKERS.md#6169-second-vm-string-equality2026-10-15-asiashanghai).
+
 
 
 

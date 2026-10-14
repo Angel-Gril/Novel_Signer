@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM string equality
+
+27项新增原生对照、9项回滚通过；owning32指令/1185范围/无分配或外部服务。
+packed低byte结果及padding/alias匹配；新适配器拒绝原生会fault的NULL receiver。
+second8405/+106DBC，下一28861C→2485A4字符串赋值；scope entry/leave各3次。
+旧AST/共享owner及child/string/readers保持，原页差异为空，64新增OS页保留。
+完整second/request/signer/fresh/live/JVM未完成。见 [second equality报告](REQUEST_JNI_STARTUP_WORKERS.md#6169-second-vm-string-equality2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM shared-reader release
 
 19项新增原生对照、12项回滚通过；owning83指令/1185范围/两次真实mutex一致。
