@@ -21,6 +21,11 @@ class RequestVm287474ChildPrefix(RequestVm287474Prefix):
     child_prefix: object
 
 
+@dataclass(frozen=True)
+class RequestVm287474StringsPrefix(RequestVm287474ChildPrefix):
+    strings: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -44,6 +49,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     class Boundary(Exception):pass
     callbacks,decoded=[],[];previous=vm_module.B
     children=[]
+    strings=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -62,6 +68,12 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 apply_request_287474_consumer(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
                     allocate=consumer_services['allocate'],free=consumer_services['free'])
+            elif consumer_services is not None and (wrapper,target)==(0x2885D0,0x248344):
+                from vm9_request_environment_vm import apply_request_environment_string_callback
+                constructed=apply_request_environment_string_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    allocate=consumer_services['allocate'],free=consumer_services['free'])
+                strings.append((wrapper,target,argument,constructed))
             elif consumer_services is not None and (wrapper,target)==(0x2885AC,0x28048C):
                 from vm9_request_28048c_vm import execute_request_28048c_vm_prefix
                 child=execute_request_28048c_vm_prefix(staged,vm_module=vm_module,
@@ -76,6 +88,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if strings:
+                return RequestVm287474StringsPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings))
             if children:
                 return RequestVm287474ChildPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,children[-1])
             return RequestVm287474Prefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)

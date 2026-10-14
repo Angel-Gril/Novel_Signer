@@ -427,6 +427,8 @@ Child StringObject cleanup passes17 new native controls and7 rollback checks. Th
 
 Child physical caller/wrapper return passes23 new native controls and16 rollback checks. The owning return matches1184 declared ranges and seven physical values. The child resumes its parent, advancing the second VM to8251 steps before string construction; complete signing remains unfinished. See the [child return report](REQUEST_JNI_STARTUP_WORKERS.md#6163-child-physical-caller-and-wrapper-return2026-10-15-asiashanghai).
 
+Second VM StringObject construction passes23 new native controls and8 rollback checks. The owning constructor executes155 original instructions and one matching-libc malloc, with1186 declared ranges equal. The second VM reaches8261 steps before shared-reader acquisition, preserving the child return; complete signing remains unfinished. See the [second strings report](REQUEST_JNI_STARTUP_WORKERS.md#6164-second-vm-stringobject-construction2026-10-15-asiashanghai).
+
 
 
 

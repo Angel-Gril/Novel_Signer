@@ -6076,6 +6076,28 @@ URL/header JNI、mapping、signer及fresh/live/JVM未完成。见
 python -B platforms/bytedance/tomato/python/verify_vm9_request_child_return_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <child-return-evidence.json>
 ```
 
+## 6.164 Second VM StringObject construction（2026-10-15 Asia/Shanghai）
+
+`2885D0→248344`的16字节tail wrapper与205064完全相同。复用既有StringObject
+callback owner，second记录实际构造结果并保留child caller return。
+
+**23项新增原生/Python对照、8项回滚检查通过**；另有1项接线RED。22项新地址
+控制覆盖两个基址、NULL/空/内嵌NUL source、跨页、object/packed/source别名、
+分配失败与自定义empty descriptor。1项owning callback执行155条原始指令，真实
+匹配libc malloc调用一次，1186声明范围、payload pointer与分配请求/结果一致，
+使用实际second callback SP/线程指针。旧environment/second AST和child return/
+共享owner保留；旧原生分组未重跑。
+
+second从8251推进到 **8261/+106B08**，下一 **2885E0→32A444** shared-reader
+acquisition。child保持19566步和已恢复的物理返回；outer仍在3900步的second边界。
+原caller页差异为空，64新增OS页与外部effects保留。完整second/request、204ED4
+body、physical/PAC、URL/header JNI、mapping、signer及fresh/live/JVM未完成。见
+[second strings证据](evidence/vm9_request_second_strings_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_strings_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-strings-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

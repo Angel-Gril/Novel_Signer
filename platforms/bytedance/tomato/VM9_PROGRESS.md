@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM StringObject construction
+
+23项新增原生对照、8项回滚通过；owning155指令/1186范围/一次真实malloc一致。
+second8261/+106B08，下一2885E0→32A444共享读锁；child19566及物理返回保持。
+旧AST/共享owner保持，原页差异为空，64新增OS页保留。完整second/request/
+signer/fresh/live/JVM未完成。见 [second strings报告](REQUEST_JNI_STARTUP_WORKERS.md#6164-second-vm-stringobject-construction2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：child physical caller/wrapper return
 
 23项新增原生对照、16项回滚通过；owning10指令/1184范围/七个物理返回值一致。
