@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：child physical caller/wrapper return
+
+23项新增原生对照、16项回滚通过；owning10指令/1184范围/七个物理返回值一致。
+child19566步经退出校验返回父callback，second8251/+106AE0，下一2885D0→248344。
+旧AST/共享owner保持，原页差异为空，64新增OS页保留。完整second/request、
+whole-child native/physical/PAC、signer/fresh/live/JVM未完成。见
+[child return报告](REQUEST_JNI_STARTUP_WORKERS.md#6163-child-physical-caller-and-wrapper-return2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：child StringObject cleanup and VM exit
 
 17项新增原生对照、7项回滚通过；owning152指令/1186范围/一次真实free一致。

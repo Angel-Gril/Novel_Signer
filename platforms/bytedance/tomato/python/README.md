@@ -554,6 +554,8 @@ Child configuration u32 reading passes41 new native controls and12 rollback chec
 
 Child StringObject cleanup passes17 new native controls and7 rollback checks. The owning destructor executes152 original instructions and one matching-libc free with1186 declared ranges equal. The child observes VM exit at19566 steps; its physical caller/wrapper return and complete signing remain unfinished. See the [child cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#6162-child-stringobject-cleanup-and-vm-exit2026-10-15-asiashanghai).
 
+Child physical caller/wrapper return passes23 new native controls and16 rollback checks. The owning return matches1184 declared ranges and seven physical values. The child resumes its parent, advancing the second VM to8251 steps before string construction; complete signing remains unfinished. See the [child return report](../REQUEST_JNI_STARTUP_WORKERS.md#6163-child-physical-caller-and-wrapper-return2026-10-15-asiashanghai).
+
 
 
 

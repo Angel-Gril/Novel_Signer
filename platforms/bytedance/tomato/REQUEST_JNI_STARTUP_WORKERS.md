@@ -6052,6 +6052,30 @@ JVM尚未完成。见 [child cleanup证据](evidence/vm9_request_child_cleanup_f
 python -B platforms/bytedance/tomato/python/verify_vm9_request_child_cleanup_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <child-cleanup-evidence.json>
 ```
 
+## 6.163 Child physical caller and wrapper return（2026-10-15 Asia/Shanghai）
+
+恢复`2804F0`的live TLS canary检查、FP/LR/X28/X19恢复及`2885C8`的wrapper
+LR/SP恢复。physical X0保持descriptor callback `image+281414`。child退出必须
+匹配`ED3DC/07C00791/R31=image+2885C8`，明确继续返回时才向second事务提交页面。
+
+**23项新增原生/Python对照、16项回滚检查通过**；另有2项原生RED和1项接线RED。
+22项新控制执行实际16A974 selected-slot dispatch、172440 generic restore及child/
+wrapper epilogue，覆盖两个基址、宽值/NULL保存字、栈重定位/模式及六种TLS与保存区
+别名，七个物理返回值及声明范围一致。generic handler的四个W scratch outputs未
+包含在声明范围。1项owning对照在构造的child页上执行10条返回指令，1184范围和
+七个物理返回值一致，无allocator/JNI服务。旧caller/child/second AST和共享owner
+保留；旧原生分组未重跑。完整physical ABI/PAC及whole-child native对照尚未完成。
+
+child在19566步恢复父callback返回；second从8184推进到 **8251/+106AE0**，
+下一 **2885D0→248344** 字符串构造。outer仍在3900步second边界，原caller页
+差异为空，64新增OS页和外部effects保留。完整second/request、204ED4 body、
+URL/header JNI、mapping、signer及fresh/live/JVM未完成。见
+[child return证据](evidence/vm9_request_child_return_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_child_return_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <child-return-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

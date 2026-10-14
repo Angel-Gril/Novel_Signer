@@ -410,6 +410,48 @@ def prepare_request_28048c_vm_caller(pages, *, entry_stack_address, return_addre
     return RequestVmCallerFrame(local,0xA71D0,local,local+0x20,backing,registers,arguments)
 
 
+def validate_request_28048c_vm_exit(pages, *, image_base,pc,registers):
+    """Validate the child return word and its selected caller sentinel."""
+    if pc!=image_base+0xED3DC or len(registers)!=32:
+        raise RefillUnsupported('child VM exit is outside the recovered return branch')
+    word=int.from_bytes(_read_span(pages,pc,4),'little')
+    if word!=0x07C00791 or registers[31]!=image_base+0x2885C8:
+        raise RefillUnsupported('child VM exit does not reach its wrapper sentinel')
+    return dict(bytecode_offset='0xed3dc',instruction_word=hex(word),selected_slot=31,
+        selected_target=registers[31],caller_sentinel_matches=True,
+        native_handler_offset='0x16a974',native_epilogue_offset='0x172440')
+
+
+def finish_request_28048c_wrapper_caller(pages, *, entry_stack_address,
+        thread_pointer,image_base,callback_sentinel) -> RequestCallerReturn:
+    """+2804f0 canary/restore and +2885c8 wrapper LR/SP return.
+
+    Generic +1683f0 loads the descriptor callback into physical X0; the VM
+    epilogue and both return sequences preserve it. Read live saved words,
+    including TLS aliases, without treating virtual R0 as a physical result.
+    The generic handler's scratch words and full PAC ABI are outside scope.
+    """
+    values=(entry_stack_address,thread_pointer,image_base,callback_sentinel)
+    if any(type(v) is not int or not 0<=v<1<<64 for v in values):
+        raise RefillUnsupported('child caller return inputs must fit uint64')
+    if entry_stack_address<0xF30 or entry_stack_address&15:
+        raise RefillUnsupported('child caller return stack must be aligned')
+    if callback_sentinel!=image_base+0x281414:
+        raise RefillUnsupported('child caller descriptor callback does not match this entry')
+    entry=entry_stack_address-16
+    try:
+        canary=_read_span(pages,thread_pointer+0x28,8)
+        saved=_read_span(pages,entry-0x28,0x28)
+        if canary!=saved[:8]:raise RefillUnsupported('child caller stack canary mismatch')
+        _,x29,child_lr,x28,x19=(int.from_bytes(saved[i:i+8],'little') for i in range(0,40,8))
+        if child_lr!=image_base+0x2885C8:
+            raise RefillUnsupported('child caller LR does not reach its wrapper')
+        x30=int.from_bytes(_read_span(pages,entry_stack_address-16,8),'little')
+    except ValueError as exc:raise RefillUnsupported('child caller return memory is unmapped') from exc
+    if x30>=1<<56:raise RefillUnsupported('PAC-tagged child wrapper return is unsupported')
+    return RequestCallerReturn(x30,entry_stack_address,callback_sentinel,x19,x28,x29,x30)
+
+
 def prepare_request_environment_vm_caller(pages, *, helper_offset,
         entry_stack_address,return_address,thread_pointer,image_base,
         saved_frame_pointer=0,saved_x28=0,saved_x19=0):

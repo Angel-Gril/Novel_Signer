@@ -37,6 +37,11 @@ class RequestVm28048cRegistryPrefix(RequestVm28048cStringsPrefix):
 @dataclass(frozen=True)
 class RequestVm28048cExitPrefix(RequestVm28048cRegistryPrefix):
     vm_exit_observed:bool
+
+@dataclass(frozen=True)
+class RequestVm28048cReturnedPrefix(RequestVm28048cExitPrefix):
+    caller_return:object
+    exit_state:object
 def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
         entry_stack_address,return_address,thread_pointer,image_base,
         saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -59,13 +64,15 @@ def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
     except ValueError as exc:raise RefillUnsupported('child wrapper memory is unmapped') from exc
     p.commit();return frame
 def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
-        consumer_services=None,**inputs):
+        consumer_services=None,continue_caller_return=False,**inputs):
     """Run known child callbacks; stop before the next unsupported consumer.
 
     The actual wrapper spill and child caller are independently generated.
-    No bounded child pages publish to the supplied page map.
+    Bounded child pages remain private. An explicitly continued, validated
+    caller return publishes child pages into the containing transaction.
     """
     if type(maxsteps) is not int or maxsteps<1:raise RefillUnsupported('child VM budget must be positive')
+    if type(continue_caller_return) is not bool:raise RefillUnsupported('child return continuation must be boolean')
     if consumer_services is not None and (not isinstance(consumer_services,dict) or
             any(not callable(consumer_services.get(n)) for n in ('allocate','free'))):
         raise RefillUnsupported('child request consumers require allocation and free services')
@@ -166,8 +173,16 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
             return RequestVm28048cPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
         except vm_module.VMExit as exc:
             if registry_reads and strings and strings[-1][:2]==(0x28158C,0x2484B8):
-                return RequestVm28048cExitPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                result=RequestVm28048cExitPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     helpers[-1] if helpers else None,tuple(availability),tuple(acquisitions),tuple(strings),tuple(registry_reads),True)
+                if not continue_caller_return:return result
+                from vm9_request_caller import validate_request_28048c_vm_exit,finish_request_28048c_wrapper_caller
+                exit_state=validate_request_28048c_vm_exit(staged,image_base=image,pc=vm.pc,registers=tuple(vm.R))
+                caller_return=finish_request_28048c_wrapper_caller(staged,image_base=image,
+                    entry_stack_address=inputs['entry_stack_address'],thread_pointer=inputs['thread_pointer'],
+                    callback_sentinel=int.from_bytes(_read_span(staged,frame.descriptor_address,8),'little'))
+                returned=RequestVm28048cReturnedPrefix(**vars(result),caller_return=caller_return,exit_state=exit_state)
+                staged.commit();return returned
             raise RefillUnsupported('child VM return is not recovered') from exc
         raise RefillUnsupported('child VM exhausted its budget before a boundary')
     finally:vm_module.B=previous

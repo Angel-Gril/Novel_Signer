@@ -65,13 +65,13 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
             elif consumer_services is not None and (wrapper,target)==(0x2885AC,0x28048C):
                 from vm9_request_28048c_vm import execute_request_28048c_vm_prefix
                 child=execute_request_28048c_vm_prefix(staged,vm_module=vm_module,
-                    maxsteps=20000,consumer_services=consumer_services,
+                    maxsteps=20000,consumer_services=consumer_services,continue_caller_return=True,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],image_base=image,
                     saved_frame_pointer=frame.native_stack_address-0x60,
                     saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8)
                 children.append(child)
-                raise Boundary()
+                if getattr(child,'caller_return',None) is None:raise Boundary()
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
