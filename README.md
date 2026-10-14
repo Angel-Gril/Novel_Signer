@@ -310,6 +310,7 @@ environment helper return通过 **53项新增原生对照、8项回滚**，child
 204B80共享JNI语义通过 **32项新增原生对照、10项回滚**，保留finalizer既有行为。见 [availability报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6156-jni-static-method-availability2026-10-15-asiashanghai)。
 实际availability wrapper通过 **26项新增原生对照、9项回滚**，返回值/声明保存帧/packed一致。见 [wrapper报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6157-jni-availability-wrapper2026-10-15-asiashanghai)。
 child availability接线通过 **1项新增原生对照、6项入口拒绝**，child推进至19470步、下一2814E4环境获取。见 [child callback报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6158-child-jni-availability-callback2026-10-15-asiashanghai)。
+child environment新增 **17项原生对照**，推进至19533步、下一28155C字符串构造。见 [child environment报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6159-child-environment-acquisition2026-10-15-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

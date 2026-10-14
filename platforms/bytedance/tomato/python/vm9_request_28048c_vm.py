@@ -21,6 +21,10 @@ class RequestVm28048cHelperPrefix(RequestVm28048cPrefix):
 class RequestVm28048cAvailabilityPrefix(RequestVm28048cPrefix):
     helper_prefix:object
     availability:tuple
+
+@dataclass(frozen=True)
+class RequestVm28048cEnvironmentPrefix(RequestVm28048cAvailabilityPrefix):
+    acquisitions:tuple
 def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
         entry_stack_address,return_address,thread_pointer,image_base,
         saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -61,6 +65,7 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
     image=inputs['image_base'];callbacks=[];decoded=[];previous=vm_module.B
     helpers=[]
     availability=[]
+    acquisitions=[]
     class StrictMem(vm_module.Mem):
         def __init__(self):self.pages=staged
         def _pg(self,address):
@@ -108,10 +113,20 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                     acquire_environment=consumer_services.get('acquire_environment'),
                     invoke_jni=consumer_services['jni_availability_services']['invoke_jni'])
                 availability.append((argument,returned))
+            elif consumer_services is not None and (wrapper,target)==(0x2814E4,0x26EDC4) and consumer_services.get('acquire_environment') is not None:
+                from vm9_request_environment_vm import apply_request_environment_acquisition_callback
+                acquired=apply_request_environment_acquisition_callback(staged,
+                    argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    acquire_environment=consumer_services['acquire_environment'])
+                acquisitions.append((argument,acquired))
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if acquisitions:
+                return RequestVm28048cEnvironmentPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    helpers[-1] if helpers else None,tuple(availability),tuple(acquisitions))
             if availability:
                 return RequestVm28048cAvailabilityPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     helpers[-1] if helpers else None,tuple(availability))

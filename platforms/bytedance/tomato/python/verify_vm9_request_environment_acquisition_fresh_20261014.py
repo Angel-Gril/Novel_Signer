@@ -29,18 +29,18 @@ def fixture(library,image,label):
     inputs=dict(argument_block_address=block,image_base=image,entry_stack_address=env_fixture.SP)
     return pages,inputs,blocks,responses
 
-def run_native(library,libc,pages,inputs,provider):
+def run_native(library,libc,pages,inputs,provider,*,wrapper_offset=0x205058):
     watched={(page<<12,4096):None for page in pages if inputs['image_base']<=page<<12<inputs['image_base']+0x400000}
     counts={}
     def observe(cpu,address):
-        if address-inputs['image_base'] in (0x205058,0x26EDC4,0x34377C,0x34265C):
+        if address-inputs['image_base'] in (wrapper_offset,0x26EDC4,0x34377C,0x34265C):
             offset=address-inputs['image_base'];counts[offset]=counts.get(offset,0)+1
-    _,memory,_,_=oracle.native(library,inputs['image_base'],0x205058,[inputs['argument_block_address']],pages,
+    _,memory,_,_=oracle.native(library,inputs['image_base'],wrapper_offset,[inputs['argument_block_address']],pages,
         libc=libc,real_singletons=True,real_mutexes=True,thread_id=137,real_jni_acquisition=True,
         host_imports=provider.imports(),instruction_observer=observe,observed_memory=watched,
         malloc_handler=lambda cpu,n:provider.effects.native(cpu,'malloc',n),instruction_limit=250000,
         extra_registers={arm.UC_ARM64_REG_SP:inputs['entry_stack_address']})
-    assert counts[0x205058]==counts[0x26EDC4]==1
+    assert counts[wrapper_offset]==counts[0x26EDC4]==1
     return memory,watched,counts
 
 def red(library,libc):
@@ -55,7 +55,7 @@ def red(library,libc):
             prior_consumer_missing=True,acquisition_stub_disabled=True,native_snapshot_input=False))
     return rows
 
-def compare(library,libc,image,label):
+def compare(library,libc,image,label,*,wrapper_offset=0x205058):
     pages,inputs,blocks,responses=fixture(library,image,label);initial={k:bytearray(v) for k,v in pages.items()}
     actual=env_fixture.Providers(image,Effects(blocks=blocks),responses,attach=(0,G+0x3300))
     expected=env_fixture.Providers(image,Effects(blocks=blocks),responses,attach=(0,G+0x3300))
@@ -63,14 +63,14 @@ def compare(library,libc,image,label):
         return environment.acquire_thread_environment(p,image_base=image,**kw,
             get_tls=actual.tls,register_destructor=actual.register,invoke_javavm=actual.model_vm)
     result=getattr(model,OWNER)(pages,**inputs,acquire_environment=acquire)
-    memory,watched,counts=run_native(library,libc,initial,inputs,expected)
+    memory,watched,counts=run_native(library,libc,initial,inputs,expected,wrapper_offset=wrapper_offset)
     assert _read_span(pages,G,0xA000)==memory,label
     assert all(_read_span(pages,a,n)==raw for (a,n),raw in watched.items()),label
     assert actual.events==expected.events and actual.effects.calls==expected.effects.calls,label
     assert not actual.responses and not expected.responses and result.environment==G+0x3300
     print('PASS environment acquisition wrapper',hex(image),label,flush=True)
     return dict(image_base=hex(image),case=label,original_wrapper_and_acquisition_returned=True,
-        actual_wrapper='0x205058',acquisition_stub_disabled=True,
+        actual_wrapper=hex(wrapper_offset),acquisition_stub_disabled=True,
         all_declared_guest_and_image_bytes_equal=True,allocation_TLS_and_JavaVM_order_equal=True,
         temporary_attach_detach=label=='temporary_attach_detach',native_snapshot_input=False)
 

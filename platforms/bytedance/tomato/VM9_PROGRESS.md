@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：child environment acquisition
+
+17项新增原生对照通过：16项新2814E4地址、1项owning160指令/993范围/一次
+GetEnv。child19533/+ED358，下一28155C→248344。旧owner/default AST保留，
+原页差异为空，64新增OS页保留。完整child/request/signer/fresh/live/JVM未完成。
+见 [child environment报告](REQUEST_JNI_STARTUP_WORKERS.md#6159-child-environment-acquisition2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：child JNI availability callback
 
 1项新增owning callback原生对照、6项入口拒绝通过。request显式JNI服务传入

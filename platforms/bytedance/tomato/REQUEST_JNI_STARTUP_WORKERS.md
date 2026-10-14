@@ -5961,6 +5961,28 @@ URL/header JNI、mapping、完整signer及fresh/live/JVM未完成。见
 python -B platforms/bytedance/tomato/python/verify_vm9_request_jni_availability_child_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <child-availability-entry-evidence.json>
 ```
 
+## 6.159 Child environment acquisition（2026-10-15 Asia/Shanghai）
+
+`2814E4→26EDC4`复用既有environment acquisition owner；与205058的12字节
+tail wrapper完全相同，无PC-relative指令。callback使用原SP，不额外减16，
+不写packed return，不合成环境。helper返回与availability记录保持。
+
+**17项新增原生/Python对照通过**：16项新地址、两个基址的冷/热TLS、临时
+GetEnv/attach/detach、跨页及packed-pair别名；1项owning callback从独立构造
+child页面执行160条原生指令，993声明范围、output pair/TLS owner及一次GetEnv
+effects一致。旧205058分组未重跑；既有child与旧verifier默认语义由AST证明保留。
+
+初次owning探针用了oracle默认线程指针，导致另一TLS owner和两次GetEnv；
+传入实际child线程指针后对齐。此为fixture修正，生产逻辑未加补偿。
+child从19470推进到 **19533/+ED358**，下一 **28155C→248344** 字符串构造。
+原caller页面差异为空；64新增OS页和外部服务效果仍不回滚。完整child/second/
+request、physical/PAC、204ED4 body、URL/header JNI、mapping、signer和fresh/live/
+真实JVM尚未完成。见 [child environment证据](evidence/vm9_request_child_environment_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_child_environment_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <child-environment-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
