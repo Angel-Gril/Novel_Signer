@@ -5866,6 +5866,33 @@ helper/child/request return、actual URL/header JNI转换、full physical ABI/PA
 python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_logger_fresh_20261014.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <environment-logger-evidence.json>
 ```
 
+## 6.155 Request environment helper return（2026-10-15 Asia/Shanghai）
+
+恢复helper `+204EAC/+204F30` canary/restore与实际`+2814D8` wrapper返回：先读
+helper packed W，再查TLS canary和恢复helper寄存器；随后wrapper通过恢复的X19
+写packed+8 W，最后读取wrapper保存的LR/X19。结果与saved LR/X19/X28/FP发生
+别名时仍保持此顺序。`+204E50` VM exit验证8A4E8/07C00791/slot31=2814D8；
+显式continue选项提交helper页到child，默认helper边界保持。
+
+**53项新增原生对照、8项回滚、4项Python入口拒绝检查**通过；4项native RED。
+52项独立实际epilogue对照覆盖两helper/两基址、W宽度/padding、变更stack、
+跨页result、保存槽与TLS别名；七个物理返回值及完整声明guest/stack范围一致。
+新增1项owning helper实际返回原生20833指令，Python262步：32虚拟寄存器、
+完整8 callback ledger/14 body范围一致；真实helper与wrapper尾部执行后，七个
+物理返回值及完整wrapper packed范围一致，W0=0。不能仅以16AA4C作为停止点：
+它也用于每次generic callback返回；新探针要求先观察2814E0 RET再到16AA4C。
+
+child推进到 **19302/+ECE3C**，下一 **2814C8→204B80 JNI helper**；outer3900、
+second8184。helper页仅提交到child，原页差异为空，64新增OS pages保留。既有
+caller/helper/default/logger AST及对象/JNI/copy owner保持。仅owning204E50分支
+完成返回；204ED4 body、完整child/second/request、full physical/PAC、实际URL/
+header JNI转换、provider mapping rollback、完整signer及fresh/live/真实JVM仍
+未完成。见 [helper return证据](evidence/vm9_request_environment_return_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_return_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --group all --output <environment-return-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

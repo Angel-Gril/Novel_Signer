@@ -27,6 +27,11 @@ class RequestEnvironmentVmLoggedPrefix(RequestEnvironmentVmStringsPrefix):
     logs:tuple
     vm_exit_observed:bool
 
+@dataclass(frozen=True)
+class RequestEnvironmentVmReturn(RequestEnvironmentVmLoggedPrefix):
+    caller_return:object
+    exit_state:dict
+
 def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
         argument_block_address,entry_stack_address,return_address,
         thread_pointer,image_base,saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -55,13 +60,15 @@ def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
     p.commit();return frame
 
 def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
-        acquire_environment=None,consumer_services=None,**inputs):
+        acquire_environment=None,consumer_services=None,continue_caller_return=False,**inputs):
     """Execute known decoders, optional acquisition and StringObject callbacks.
 
     Independent caller generation retains existing packed/padding bytes.
     Bounded pages never publish to the supplied page map.
     """
     if type(maxsteps) is not int or maxsteps<1:raise RefillUnsupported('request environment VM budget must be positive')
+    if type(continue_caller_return) is not bool:
+        raise RefillUnsupported('request environment caller return option must be boolean')
     if acquire_environment is not None and not callable(acquire_environment):
         raise RefillUnsupported('request environment acquisition provider must be callable')
     if consumer_services is not None and (not isinstance(consumer_services,dict) or
@@ -123,6 +130,18 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
             return RequestEnvironmentVmPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
         except vm_module.VMExit as exc:
             if logs:
+                if continue_caller_return:
+                    from vm9_request_caller import validate_request_environment_vm_exit,finish_request_environment_wrapper_caller
+                    exit_state=validate_request_environment_vm_exit(staged,
+                        helper_offset=inputs['helper_offset'],image_base=image,pc=vm.pc,registers=tuple(vm.R))
+                    caller_return=finish_request_environment_wrapper_caller(staged,
+                        helper_offset=inputs['helper_offset'],image_base=image,
+                        entry_stack_address=inputs['entry_stack_address'],thread_pointer=inputs['thread_pointer'])
+                    if caller_return.pc!=inputs['return_address']:
+                        raise RefillUnsupported('environment wrapper return does not reach its caller')
+                    result=RequestEnvironmentVmReturn(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),
+                        vm.pc,vm.steps,tuple(acquisitions),tuple(strings),tuple(logs),True,caller_return,exit_state)
+                    staged.commit();return result
                 # Record the VM exit boundary without publishing pages or
                 # claiming the helper's native caller epilogue has returned.
                 return RequestEnvironmentVmLoggedPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,tuple(acquisitions),tuple(strings),tuple(logs),True)

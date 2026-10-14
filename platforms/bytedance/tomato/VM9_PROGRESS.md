@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：request environment helper return
+
+53项新增原生对照、8项回滚、4项入口拒绝通过。owning204E50 helper与2814C8
+wrapper实际返回，262步body/七个物理返回值/完整packed与原生匹配；child
+19302/+ECE3C，下一2814C8→204B80 JNI。helper页提交到child；原页回滚，64
+新增OS pages保留。204ED4 body、完整child/request、actual JNI/physical/mapping/
+signer/fresh/live/JVM仍未完成。见 [helper return报告](REQUEST_JNI_STARTUP_WORKERS.md#6155-request-environment-helper-return2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-14 Asia/Shanghai：request environment logger and cleanup
 
 13项新增原生对照、9项回滚、3项入口拒绝通过。actual205074复用literal logger；

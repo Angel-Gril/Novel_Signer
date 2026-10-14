@@ -450,3 +450,54 @@ def prepare_request_environment_vm_caller(pages, *, helper_offset,
     except ValueError as exc:raise RefillUnsupported('request environment VM caller memory is unmapped') from exc
     arguments=(image_base+code,local+8,image_base+table_one,image_base+table_two,local+0x10)
     p.commit();return RequestVmCallerFrame(local,code,local+8,local+0x10,backing,registers,arguments)
+
+
+def finish_request_environment_wrapper_caller(pages, *, helper_offset,
+        entry_stack_address,thread_pointer,image_base) -> RequestCallerReturn:
+    """+204eac/+204f30 canary/restore followed by actual +2814d8 wrapper.
+
+    Read the helper's packed W result first. Restore helper registers before
+    the wrapper stores that W through restored X19; only then read wrapper
+    LR/X19. Live result aliases into saved words preserve this native order.
+    Tagged return addresses and unexpected helper return targets are rejected.
+    """
+    values=(helper_offset,entry_stack_address,thread_pointer,image_base)
+    if any(type(v) is not int or not 0<=v<1<<64 for v in values):
+        raise RefillUnsupported('request environment return inputs must fit uint64')
+    sizes={0x204E50:0x500,0x204ED4:0x3D0}
+    if helper_offset not in sizes:raise RefillUnsupported('unrecovered environment helper return')
+    size=sizes[helper_offset]
+    if entry_stack_address<size+16 or entry_stack_address&15:
+        raise RefillUnsupported('request environment return stack must be aligned')
+    p=_PageTransaction(pages);entry=entry_stack_address-16;local=entry-size
+    try:
+        result=int.from_bytes(_read_span(p,local+8,4),'little')
+        canary=_read_span(p,thread_pointer+0x28,8)
+        if canary!=_read_span(p,entry-0x28,8):
+            raise RefillUnsupported('request environment return stack canary mismatch')
+        x28=int.from_bytes(_read_span(p,entry-0x10,8),'little')
+        packed=int.from_bytes(_read_span(p,entry-8,8),'little')
+        x29=int.from_bytes(_read_span(p,entry-0x20,8),'little')
+        helper_lr=int.from_bytes(_read_span(p,entry-0x18,8),'little')
+        if helper_lr!=image_base+0x2814D8:
+            raise RefillUnsupported('request environment helper LR does not reach its wrapper')
+        if packed>(1<<64)-12:raise RefillUnsupported('request environment result address wraps uint64')
+        _write_span(p,packed+8,result.to_bytes(4,'little'))
+        x30=int.from_bytes(_read_span(p,entry_stack_address-16,8),'little')
+        x19=int.from_bytes(_read_span(p,entry_stack_address-8,8),'little')
+    except ValueError as exc:raise RefillUnsupported('request environment return memory is unmapped') from exc
+    if x30>=1<<56:raise RefillUnsupported('PAC-tagged environment wrapper return is unsupported')
+    state=RequestCallerReturn(x30,entry_stack_address,result,x19,x28,x29,x30)
+    p.commit();return state
+
+
+def validate_request_environment_vm_exit(pages, *, helper_offset,image_base,pc,registers):
+    """Validate the observed +204e50 helper VM return instruction and target."""
+    if helper_offset!=0x204E50 or pc!=image_base+0x8A4E8 or len(registers)!=32:
+        raise RefillUnsupported('environment helper VM exit is outside the recovered branch')
+    word=int.from_bytes(_read_span(pages,pc,4),'little')
+    if word!=0x07C00791 or registers[31]!=image_base+0x2814D8:
+        raise RefillUnsupported('environment helper VM exit does not reach its wrapper sentinel')
+    return dict(bytecode_offset='0x8a4e8',instruction_word=hex(word),selected_slot=31,
+        selected_target=registers[31],caller_sentinel_matches=True,
+        native_handler_offset='0x16a974',native_epilogue_offset='0x172440')

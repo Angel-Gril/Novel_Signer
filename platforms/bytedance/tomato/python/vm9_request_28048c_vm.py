@@ -79,12 +79,14 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                 helper=execute_request_environment_vm_prefix(staged,vm_module=vm_module,
                     acquire_environment=consumer_services.get('acquire_environment'),
                     consumer_services=consumer_services,
+                    continue_caller_return=consumer_services.get('logger_services') is not None,
                     helper_offset=target,argument_block_address=argument,
                     entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],image_base=image,
                     saved_frame_pointer=frame.native_stack_address-0x60,
                     saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8)
-                helpers.append(helper);raise Boundary()
+                helpers.append(helper)
+                if getattr(helper,'caller_return',None) is None:raise Boundary()
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
