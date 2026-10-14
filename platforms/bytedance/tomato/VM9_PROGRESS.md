@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-14 Asia/Shanghai：request environment acquisition callback
+
+17项新增原生对照、6项回滚、3项Python入口拒绝检查通过。actual205058 tail
+callback复用实际环境获取/TLS/GetEnv/temporary attach-detach；owning helper
+214/+8A394，下一205064→248344 StringObject。全部32虚拟寄存器、完整ledger/
+9声明范围与原生匹配。outer3900、second8184、child19295；原页回滚，64新增
+OS pages保留。完整return/request、full physical/JNI/mapping/signer及fresh/live/
+JVM仍未完成。见 [environment acquisition报告](REQUEST_JNI_STARTUP_WORKERS.md#6152-request-environment-acquisition-callback2026-10-14-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-14 Asia/Shanghai：request environment helper VM callers and prefixes
 
 33项新增原生对照、11项回滚通过。204E50/204ED4实际caller、2814C8包装与

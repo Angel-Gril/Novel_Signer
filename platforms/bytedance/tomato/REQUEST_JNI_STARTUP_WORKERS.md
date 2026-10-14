@@ -5789,6 +5789,32 @@ actual JNI转换、完整signer及fresh/live/真实JVM仍未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_vm_fresh_20261013.py --library "$env:TOMATO_LIBMETASEC" --group all --output <environment-helper-evidence.json>
 ```
 
+## 6.152 Request environment acquisition callback（2026-10-14 Asia/Shanghai）
+
+恢复实际 `+205058 -> +26EDC4` tail callback：packed+0 Q target、packed+8 Q
+output pair，SP保持不变且不写packed result。复用既有环境获取owner、实际TLS、
+显式GetEnv/AttachCurrentThread/DetachCurrentThread服务；没有合成JNI环境值。
+outer请求的acquire_environment经second/child传入helper，保留默认decoder边界。
+
+**17项新增原生对照、6项回滚检查、3项Python入口拒绝检查**通过：16项实际
+wrapper覆盖两基址、warm/cold owner、cold TLS slots/destructor key、temporary
+GetEnv、attach/detach、跨页pair与packed/pair别名；全部声明guest/image字节、
+allocation/TLS/JavaVM顺序一致。2项native RED通过。新增1项owning helper
+有界原生差分从actual2814C8开始，15707指令与Python **214/+8A394** 一致：
+全部32虚拟寄存器、完整callback ledger、9声明范围、下一包装参数一致，
+实际环境获取body执行且复用现有GetEnv provider，调用1次。
+
+下一 **+205064 -> +248344** 字符串对象构造；outer3900、second8184、child19295。
+旧helper/default/decoder、caller/shared copy及TLS/JNI owner AST保留。
+helper/child/parent页未发布；原页差异为空，64新增OS pages保留。
+provider外部效果和mapping rollback、完整helper/child/request return、full
+physical ABI/PAC、actual URL/header JNI转换、完整signer及fresh/live/真实JVM
+仍未完成。见 [environment acquisition证据](evidence/vm9_request_environment_acquisition_fresh_20261014.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_environment_acquisition_fresh_20261014.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --group all --output <environment-acquisition-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

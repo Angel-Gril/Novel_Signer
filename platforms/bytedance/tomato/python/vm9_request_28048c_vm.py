@@ -77,6 +77,7 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
             elif consumer_services is not None and wrapper==0x2814C8 and target in (0x204E50,0x204ED4):
                 from vm9_request_environment_vm import execute_request_environment_vm_prefix
                 helper=execute_request_environment_vm_prefix(staged,vm_module=vm_module,
+                    acquire_environment=consumer_services.get('acquire_environment'),
                     helper_offset=target,argument_block_address=argument,
                     entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],image_base=image,

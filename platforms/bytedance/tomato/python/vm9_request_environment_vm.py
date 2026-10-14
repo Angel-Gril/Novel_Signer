@@ -14,6 +14,10 @@ class RequestEnvironmentVmPrefix:
     pc:int
     steps:int
 
+@dataclass(frozen=True)
+class RequestEnvironmentVmAcquisitionPrefix(RequestEnvironmentVmPrefix):
+    acquisitions:tuple
+
 def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
         argument_block_address,entry_stack_address,return_address,
         thread_pointer,image_base,saved_frame_pointer=0,saved_x28=0,saved_x19=0):
@@ -41,15 +45,19 @@ def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
     except ValueError as exc:raise RefillUnsupported('request environment wrapper memory is unmapped') from exc
     p.commit();return frame
 
-def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,**inputs):
-    """Execute known decoders before environment acquisition or imported getenv.
+def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
+        acquire_environment=None,**inputs):
+    """Execute known decoders and the optional environment acquisition callback.
 
     Independent caller generation retains existing packed/padding bytes.
     Bounded pages never publish to the supplied page map.
     """
     if type(maxsteps) is not int or maxsteps<1:raise RefillUnsupported('request environment VM budget must be positive')
+    if acquire_environment is not None and not callable(acquire_environment):
+        raise RefillUnsupported('request environment acquisition provider must be callable')
     staged=_PageTransaction(pages);frame=prepare_request_environment_wrapper_caller(staged,**inputs)
     image=inputs['image_base'];callbacks=[];decoded=[];previous=vm_module.B
+    acquisitions=[]
     class StrictMem(vm_module.Mem):
         def __init__(self):self.pages=staged
         def _pg(self,address):
@@ -67,10 +75,38 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,**in
             if (wrapper,target) in ((0x205044,0x167E54),(0x2050F0,0x167E54)):
                 size=decode_masked_bytes(staged,source_address=words[1],destination_address=words[2],mask_address=words[3])
                 decoded.append((words[2],size))
+            elif acquire_environment is not None and (wrapper,target)==(0x205058,0x26EDC4):
+                result=apply_request_environment_acquisition_callback(staged,
+                    argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    acquire_environment=acquire_environment)
+                acquisitions.append((words[1],result))
             else:raise Boundary()
         vm.native_hook=callback
         try:vm.run()
-        except Boundary:return RequestEnvironmentVmPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
+        except Boundary:
+            if acquisitions:
+                return RequestEnvironmentVmAcquisitionPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,tuple(acquisitions))
+            return RequestEnvironmentVmPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
         except vm_module.VMExit as exc:raise RefillUnsupported('request environment VM return is not recovered') from exc
         raise RefillUnsupported('request environment VM exhausted its budget before a boundary')
     finally:vm_module.B=previous
+
+
+def apply_request_environment_acquisition_callback(pages, *, argument_block_address,
+        image_base,entry_stack_address,acquire_environment):
+    """+205058 tail-calls +26edc4 with packed+8 output pair and unchanged SP.
+
+    The supplied owner executes actual TLS/JavaVM services. No packed result
+    or environment value is synthesized. Page transactions cannot reverse
+    external JavaVM/provider effects.
+    """
+    if not callable(acquire_environment):raise RefillUnsupported('request environment acquisition provider is required')
+    if type(entry_stack_address) is not int or entry_stack_address<0xE0 or entry_stack_address&15:
+        raise RefillUnsupported('request environment acquisition stack must be aligned')
+    p=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
+    output=int.from_bytes(_read_span(p,argument_block_address+8,8),'little')
+    if target!=image_base+0x26EDC4:raise RefillUnsupported('unrecovered request environment acquisition target')
+    result=acquire_environment(p,entry_stack_address=entry_stack_address,output_pair_address=output)
+    p.commit();return result

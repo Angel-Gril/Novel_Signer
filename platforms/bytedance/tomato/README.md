@@ -403,6 +403,8 @@ Child VM consumers pass83 new native controls,13 rollback checks and five Python
 
 Environment helper callers and decoder prefixes pass33 new native controls and11 rollback checks. The owning204e50 helper reaches134 steps at actual environment acquisition; all32 virtual registers, the complete callback ledger and five declared memory ranges match original native. Complete helpers/request, JNI and signing remain unfinished. See the [environment helper report](REQUEST_JNI_STARTUP_WORKERS.md#6151-request-environment-helper-vm-callers-and-prefixes2026-10-14-asiashanghai).
 
+The actual environment acquisition callback passes17 new native controls, six rollback checks and three Python entry rejection checks. The owning helper reaches214 steps at StringObject construction; all32 virtual registers, the callback ledger and nine declared memory ranges match original native with the existing GetEnv provider. Complete request/JNI conversion and signing remain unfinished. See the [environment acquisition report](REQUEST_JNI_STARTUP_WORKERS.md#6152-request-environment-acquisition-callback2026-10-14-asiashanghai).
+
 
 
 

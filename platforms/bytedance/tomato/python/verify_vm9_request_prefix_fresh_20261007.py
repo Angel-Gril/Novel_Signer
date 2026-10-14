@@ -433,7 +433,8 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
             elif (wrapper,target) == (0x285F38,0x287474):
                 import vm9_request_287474_vm
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
-                    vm_module=vm_module,consumer_services=dict(allocate=allocate,free=free),
+                    vm_module=vm_module,consumer_services=dict(allocate=allocate,free=free,
+                        acquire_environment=acquire_environment),
                     maxsteps=10000,entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
                     image_base=image,object_address=words[1],
