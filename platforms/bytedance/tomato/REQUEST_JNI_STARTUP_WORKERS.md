@@ -6143,6 +6143,28 @@ fresh/live/JVM未完成。见 [second diagnostic证据](evidence/vm9_request_sec
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_diagnostic_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-diagnostic-evidence.json>
 ```
 
+## 6.167 Second VM diagnostic scope cleanup（2026-10-15 Asia/Shanghai）
+
+`288540→26C9D0`的12字节tail wrapper与288B40一致，精确接入既有token packed
+adapter和diagnostic leave/recursive unlock owner。scope进入和清理分别记录，
+实际TP、allocator及可选observer保持。共享owner和旧second AST保持不变。
+
+**21项新增原生/Python对照、9项回滚检查通过**；另有2项原生RED和1项接线RED。
+20项新控制覆盖两个基址、普通/递归unlock、high-bit/cross-page scope、饱和/
+非零saved result跳过、NULL entry、packed-object/tail别名及wrong-owner EPERM。
+声明guest/image/heap/packed bytes和有序unlock事件全部一致。1项owning执行53条
+原始指令，1185声明范围和真实递归锁事件一致，无分配。原生物理X0、完整stack/
+canary/PAC不在本项合同内。旧原生分组未重跑。
+
+second推进到 **8309/+106BC8**，下一 **2885E0→32A4FC** shared-reader release。
+child返回、string/reader/diagnostic entry记录保持，独立记录1次scope leave。
+原caller页差异为空，64新增OS页及外部effects保留。完整second/request、URL/header
+JNI、mapping、signer及fresh/live/JVM未完成。见 [second diagnostic cleanup证据](evidence/vm9_request_second_diagnostic_cleanup_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_diagnostic_cleanup_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-diagnostic-cleanup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

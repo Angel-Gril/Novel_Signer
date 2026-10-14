@@ -36,6 +36,11 @@ class RequestVm287474DiagnosticPrefix(RequestVm287474ReaderPrefix):
     diagnostics: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474DiagnosticCleanupPrefix(RequestVm287474DiagnosticPrefix):
+    diagnostic_leaves: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -62,6 +67,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     strings=[]
     reader_acquisitions=[]
     diagnostics=[]
+    diagnostic_leaves=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -87,6 +93,13 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     allocate=consumer_services['allocate'],thread_id=consumer_services.get('thread_id'),
                     observer=consumer_services.get('diagnostic_observer'))
                 diagnostics.append((argument,scope))
+            elif consumer_services is not None and (wrapper,target)==(0x288540,0x26C9D0):
+                from vm9_request_token_vm import apply_token_diagnostic_callback
+                result=apply_token_diagnostic_callback(staged,argument_block_address=argument,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    allocate=consumer_services['allocate'],thread_id=consumer_services.get('thread_id'),
+                    observer=consumer_services.get('diagnostic_observer'))
+                diagnostic_leaves.append((argument,result))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -111,6 +124,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if diagnostic_leaves:
+                return RequestVm287474DiagnosticCleanupPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves))
             if diagnostics:
                 return RequestVm287474DiagnosticPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics))
