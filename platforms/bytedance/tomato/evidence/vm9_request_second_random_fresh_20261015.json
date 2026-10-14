@@ -1,0 +1,379 @@
+{
+  "schema": "vm9-request-second-random-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "wrapper_identity": {
+    "byte_count": 28,
+    "identical_to_existing_token_random_wrapper": true,
+    "result_offset": 8,
+    "result_width": 4
+  },
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "default",
+      "native_instructions": 9804,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm",
+      "native_instructions": 126,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "type_zero",
+      "native_instructions": 394,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "seconds_wide",
+      "native_instructions": 9804,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "failure_errno",
+      "native_instructions": 9818,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "guard_byte_two",
+      "native_instructions": 147,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "completed_second_byte",
+      "native_instructions": 210,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_cross_page",
+      "native_instructions": 9804,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "default",
+      "native_instructions": 9804,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm",
+      "native_instructions": 126,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "type_zero",
+      "native_instructions": 394,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "seconds_wide",
+      "native_instructions": 9804,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "failure_errno",
+      "native_instructions": 9818,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "guard_byte_two",
+      "native_instructions": 147,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "completed_second_byte",
+      "native_instructions": 210,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 0,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_cross_page",
+      "native_instructions": 9804,
+      "actual_wrapper": "0x28863c",
+      "actual_getter": "0x26cc8c",
+      "original_wrapper_and_random_returned": true,
+      "declared_guest_ELF_libc_TLS_and_scratch_equal": true,
+      "clock_syscalls_and_return_equal": true,
+      "actual_matching_libc_random_guard_mutexes": true,
+      "packed_W_result_and_padding_equal": true,
+      "clock_calls": 1,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "bad_target",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_result_page",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "contended_guard",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "contended_random_mutex",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_state",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_time_provider",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_syscall_result",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "time_provider_canary_mutation",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_thread_id",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "whole_physical_stack_bytes_compared": false,
+  "whole_request_native_differential_verified": false,
+  "complete_second_vm_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 17,
+  "rollback_guards": 11,
+  "pre_change_native_RED_controls": 2,
+  "pre_change_second_wiring_RED_controls": 1,
+  "owning_callback_native": {
+    "steps": 126,
+    "actual_wrapper_and_random_returned": true,
+    "complete_declared_ranges_equal": true,
+    "declared_range_count": 1191,
+    "packed_W_result_and_padding_equal": true,
+    "libc_random_state_and_mutex_equal": true,
+    "actual_matching_libc_random_executed": true,
+    "two_native_random_mutex_events_observed": true,
+    "warm_random_no_clock_calls": true,
+    "native_random_mutex_calls": [
+      [
+        "pthread_mutex_lock",
+        1359870768
+      ],
+      [
+        "pthread_mutex_unlock",
+        1359870768
+      ]
+    ],
+    "four_runtime_random_input_pointers_preserved": true,
+    "no_allocation_or_JNI_services": true,
+    "actual_second_callback_stack_and_thread_pointer_used": true,
+    "native_snapshot_input": false,
+    "whole_second_native_differential_verified": false,
+    "complete_physical_ABI_verified": false
+  },
+  "constructed_second_entry": {
+    "phase": "GREEN",
+    "steps": 8532,
+    "bytecode_offset": "0x106ffc",
+    "next_wrapper": "0x288658",
+    "next_target": "0x257804",
+    "child_return_preserved": true,
+    "completed_second_string_callbacks": 1,
+    "completed_reader_acquisitions": 3,
+    "completed_diagnostic_entries": 5,
+    "completed_diagnostic_leaves": 5,
+    "completed_reader_releases": 3,
+    "completed_string_comparisons": 1,
+    "completed_string_assignments": 1,
+    "completed_random_callbacks": 1,
+    "complete_second_vm_verified": false
+  },
+  "previous_second_steps": 8416,
+  "previous_second_AST_preserved": true,
+  "prior_StringObject_and_reserve_owners_preserved": true,
+  "prior_random_owners_preserved": true,
+  "outer_entry_only_forwards_existing_random_services": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "limits": [
+    "The exact +28863c -> +26cc8c callback reuses the unchanged request random owner and writes W0 at packed+8, preserving the remaining padding. Its 28 original wrapper bytes are identical to the previously recovered token wrapper. The outer entry only forwards its existing random services.",
+    "Sixteen NEW controls at two bases cover cold and warm state, type-zero random state, wide seconds, syscall failure/errno, guard byte two, a completed second guard byte, and a cross-page packed result. Guest, ELF, libc, TLS and declared scratch bytes, clock requests and return values match. Eleven page-rollback guards pass. Accepted old native groups were not repeated.",
+    "One NEW owning callback executes126 original instructions with actual second callback SP/TP.1191 declared ranges match, including packed result/padding, TLS/local slots and live libc random state. Both mutex export entries execute on the expected random mutex. This warm owning path makes no time syscall and no allocation/JNI request.",
+    "The first owning probe erroneously reapplied ELF relocations over four runtime random pointers, producing a packed-result difference. Preserving independently constructed input pointers resolves it. A subsequent probe wrongly required import-ledger events for internal libc mutex calls; observing actual ELF symbol entries supplies the evidence. Neither probe issue required changing the shared random owner; native output never repairs the input.",
+    "The constructed second entry advances8416 ->8532/+106ffc before +288658 -> +257804. Child return and every prior effect record remain; reader acquire/release3 each, diagnostic entry/leave5 each, string/comparison/assignment/random1 each. Original outer pages are unchanged and64 new OS pages remain. Whole physical ABI/stack/PAC, second/request, actual URL/header JNI, allocator mapping, independent signing and fresh/live/JVM remain unverified."
+  ]
+}

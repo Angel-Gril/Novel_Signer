@@ -6239,6 +6239,31 @@ JNI、mapping、signer及fresh/live/JVM未完成。见 [second assignment证据]
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_assignment_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-assignment-evidence.json>
 ```
 
+## 6.171 Second VM random callback（2026-10-15 Asia/Shanghai）
+
+恢复`28863C→26CC8C` random回调，复用未修改的request random owner。28字节
+wrapper与已恢复的token wrapper逐字节相同，W0写packed+8，保留padding。outer
+entry仅透传已有random services；旧second AST、StringObject/reserve和random
+owners保持。
+
+**17项新增原生/Python对照、11项回滚检查通过**；另有2项原生RED、1项接线RED。
+16项组件控制覆盖两个基址、cold/warm、type-zero、wide seconds、syscall失败/
+errno、guard第二字节和跨页packed结果，所有声明字节及时间调用一致。
+1项owning执行126原始指令，1191范围及实际libc随机状态一致；直接观察两次mutex
+export调用。owning为warm路径，没有时间syscall，也没有allocation/JNI服务。
+首次探针重做重定位误覆盖四个实时random指针；保留独立构造输入后差异消失。
+libc内部mutex调用不进入导入事件表，改为观察实际符号入口；未用原生输出修补输入。
+
+second推进到 **8532/+106FFC**，下一 **288658→257804**。reader acquire/release
+各3次，scope entry/leave各5次，string/comparison/assignment/random各1次，child
+return保持。原caller页无差异，64新增OS页及外部effects保留。完整physical ABI/
+stack/PAC、second/request、URL/header JNI、mapping、signer及fresh/live/JVM
+仍未完成。见 [second random证据](evidence/vm9_request_second_random_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_random_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-random-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

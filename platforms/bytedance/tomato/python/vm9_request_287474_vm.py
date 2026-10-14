@@ -56,6 +56,11 @@ class RequestVm287474AssignmentPrefix(RequestVm287474EqualityPrefix):
     string_assignments: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474RandomPrefix(RequestVm287474AssignmentPrefix):
+    random_values: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -86,6 +91,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     reader_releases=[]
     string_comparisons=[]
     string_assignments=[]
+    random_values=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -133,6 +139,16 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     allocate=consumer_services['allocate'],reallocate=consumer_services['reallocate'],
                     free=consumer_services['free'])
                 string_assignments.append((argument,assigned))
+            elif consumer_services is not None and (wrapper,target)==(0x28863C,0x26CC8C):
+                services=consumer_services.get('random_services')
+                if services is None:raise Boundary()
+                from vm9_request_random import store_request_random_callback
+                result=store_request_random_callback(staged,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    libc_base=services['libc_base'],syscall=services['syscall'],
+                    errno_address=services['errno_address'],thread_id=services.get('thread_id'))
+                random_values.append((argument,result))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -157,6 +173,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if random_values:
+                return RequestVm287474RandomPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values))
             if string_assignments:
                 return RequestVm287474AssignmentPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments))

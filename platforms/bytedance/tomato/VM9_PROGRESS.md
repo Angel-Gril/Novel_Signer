@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM random callback
+
+17项新增原生对照、11项回滚通过；warm owning126指令/1191范围/实际libc random
+及两次mutex调用一致。共享random owner未改，outer仅透传已有services。second
+8532/+106FFC，下一288658→257804；acquire/release各3、scope entry/leave各5。
+旧AST和所有既有owners保持；原页无差异，64新增OS页保留。完整physical ABI/
+second/request/signer/fresh/live/JVM仍未完成。见 [second random报告](REQUEST_JNI_STARTUP_WORKERS.md#6171-second-vm-random-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM string assignment
 
 37项新增原生对照、13项回滚通过；owning347指令/1185范围/实际libc malloc/free。
