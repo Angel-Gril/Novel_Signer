@@ -6958,5 +6958,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_cached_dispatch_bytes_fresh_20261015": {
+    "path": "evidence/vm9_cached_dispatch_bytes_fresh_20261015.json",
+    "native_Python_controls": 26,
+    "rollback_guards": 13,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

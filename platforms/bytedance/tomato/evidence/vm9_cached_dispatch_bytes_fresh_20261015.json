@@ -1,0 +1,450 @@
+{
+  "schema": "vm9-cached-dispatch-bytes-fresh-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "evidence_date": "2026-10-15",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "normal",
+      "native_instructions": 2975,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cold_diagnostics",
+      "native_instructions": 3432,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_environment",
+      "native_instructions": 1239,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_dispatch_result",
+      "native_instructions": 1410,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_utf",
+      "native_instructions": 1811,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_array",
+      "native_instructions": 2148,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "method_exception",
+      "native_instructions": 2161,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "zero_length",
+      "native_instructions": 2612,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "embedded_NUL",
+      "native_instructions": 2975,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "calloc_NULL",
+      "native_instructions": 2618,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "reload_table",
+      "native_instructions": 2975,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "second_acquisition_NULL",
+      "native_instructions": 1240,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "normal",
+      "native_instructions": 2975,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold_diagnostics",
+      "native_instructions": 3432,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_environment",
+      "native_instructions": 1239,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_dispatch_result",
+      "native_instructions": 1410,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_utf",
+      "native_instructions": 1811,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_array",
+      "native_instructions": 2148,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "method_exception",
+      "native_instructions": 2161,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero_length",
+      "native_instructions": 2612,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "embedded_NUL",
+      "native_instructions": 2975,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "calloc_NULL",
+      "native_instructions": 2618,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "reload_table",
+      "native_instructions": 2975,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "second_acquisition_NULL",
+      "native_instructions": 1240,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "replace_first_environment_after_dispatch",
+      "native_instructions": 2975,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "first_pair_reload_and_retained_cleanup_environment_verified": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "replace_first_environment_after_dispatch",
+      "native_instructions": 2975,
+      "original_producer_dispatch_and_conversion_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "exact_dispatch_words_and_two_acquisitions_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "first_pair_reload_and_retained_cleanup_environment_verified": true,
+      "acquisition_and_JNI_services_explicit": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "NULL_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_acquisition",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_JNI",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_calloc",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_free",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "payload_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "diagnostic_guard_wait",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "provider_failure_after_acquisition",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "complete_physical_ABI_verified": false,
+  "whole_request_native_differential_verified": false,
+  "complete_second_vm_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 26,
+  "rollback_guards": 13,
+  "pre_change_native_RED_controls": 2,
+  "preserved_request_entry": {
+    "phase": "GREEN",
+    "steps": 8809,
+    "bytecode_offset": "0x10769c",
+    "next_wrapper": "0x2886b0",
+    "next_target": "0x1cf55c",
+    "child_return_preserved": true,
+    "completed_second_string_callbacks": 2,
+    "completed_reader_acquisitions": 3,
+    "completed_diagnostic_entries": 13,
+    "completed_diagnostic_leaves": 13,
+    "completed_reader_releases": 3,
+    "completed_string_comparisons": 1,
+    "completed_string_assignments": 1,
+    "completed_random_callbacks": 1,
+    "completed_reference_getters": 1,
+    "completed_cached_u32_getters": 1,
+    "completed_pair_getters": 1,
+    "complete_second_vm_verified": false
+  },
+  "request_entry_rerun": false,
+  "request_boundary_advanced": false,
+  "previous_JNI_reference_diagnostic_and_request_AST_preserved": true,
+  "acquisition_JNI_and_allocation_services_explicit": true,
+  "actual_TLS_acquisition_body_verified": false,
+  "owning_callback_native_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "limits": [
+    "New construct_cached_dispatch_byte_reference owns +1cf688. It composes existing environment acquisition, invoke_java_dispatch with exact words(0x01000011,0,0,0,0), +26fe2c object-byte conversion and scoped reference owners. A NULL converted pointer selects the original allocated24-byte empty StringObject path before reference construction.",
+    "Two explicit acquisitions occur: producer call SP=S-0x70/output pair=S-0x58, then dispatcher call SP=S-0xe0/output pair=S-0xd8. Conversion reloads the first pair after dispatch, while final DeleteLocalRef uses the environment retained before dispatch. No acquisition or JNI result is invented by the production owner.",
+    "Twenty-four NEW base controls plus two NEW environment replacement controls cover two image bases, warm/cold diagnostics, NULL environment/dispatch result/UTF/array, method exception, zero length, embedded NUL, calloc NULL, JNI table replacement and NULL second acquisition. The replacement case changes the first live pair during dispatch; conversion uses that new environment and final object deletion still uses the retained original environment.",
+    "Declared guest/image/temporary pairs/final diagnostic semantic fields, exact dispatcher arguments, both acquisition calls and ordered JNI/allocation/free/lock effects match. Normal paths execute2975 original instructions; cold diagnostics3432. Thirteen page-rollback guards pass; external provider effects are not rolled back. The unmapped-stack negative fixture was adjusted to reach an unmapped page instead of the positive provider stack assertion.",
+    "Two new original-producer RED controls preceded implementation. All prior JNI/reference/diagnostic/request AST and bound8809/+10769c entry before +2886b0 -> +1cf55c are preserved. No accepted native group or request entry was rerun. Actual TLS body, owning cache callback, cache initialization/refresh and second wiring remain open, as do physical ABI/PAC, whole request/signing/fresh/live/JVM."
+  ]
+}

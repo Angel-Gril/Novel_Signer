@@ -442,6 +442,51 @@ def convert_java_object_to_byte_reference(pages, *, image_base, entry_stack_addr
     p.commit()
 
 
+def construct_cached_dispatch_byte_reference(pages, *, image_base, entry_stack_address,
+        output_reference_address, thread_pointer, thread_id, acquire_environment,
+        invoke_jni, allocate, calloc, free, max_payload_bytes=0x100000,
+        diagnostic_observer=None):
+    """+0x1cf688: dispatch 0x01000011, convert bytes or construct an empty string.
+
+    Preserve the first acquired environment for the final local deletion while
+    the dispatcher performs its own acquisition. Conversion re-reads the first
+    pair after dispatch. Reference ownership and empty StringObject construction
+    remain in their existing owners. External service effects are not rolled back.
+    """
+    import vm9_reference_scopes as references
+    if (type(entry_stack_address) is not int or not 0x2B0<=entry_stack_address<=MASK64
+            or entry_stack_address&15):
+        raise RefillUnsupported('cached dispatch producer requires an aligned guest stack')
+    _address(output_reference_address,'cached dispatch output reference',16)
+    if not callable(acquire_environment):
+        raise RefillUnsupported('cached dispatch producer requires environment acquisition')
+    p=_PageTransaction(pages);call_sp=entry_stack_address-0x70
+    pair,temporary=entry_stack_address-0x58,entry_stack_address-0x68
+    acquire_environment(p,entry_stack_address=call_sp,output_pair_address=pair)
+    retained_environment=_u(p,pair)
+    dispatched=invoke_java_dispatch(p,image_base=image_base,entry_stack_address=call_sp,
+        argument_words=(0x01000011,0,0,0,0),acquire_environment=acquire_environment,invoke_jni=invoke_jni)
+    reference=dispatched.returned_reference
+    kw=dict(entry_stack_address=call_sp,image_base=image_base,thread_pointer=thread_pointer,
+        thread_id=thread_id,allocate=allocate,diagnostic_observer=diagnostic_observer)
+    convert_java_object_to_byte_reference(p,output_reference_address=temporary,
+        environment_pointer=_u(p,pair),object_reference=reference,invoke_jni=invoke_jni,
+        calloc=calloc,free=free,max_payload_bytes=max_payload_bytes,**kw)
+    if _u(p,temporary):
+        references.copy_scoped_string_reference(p,destination_address=output_reference_address,
+            source_address=temporary,**kw)
+    else:
+        string=objects._allocate(p,allocate,24)
+        objects.construct_string_object(p,object_address=string,source_address=0,
+            allocate=allocate,vtable_address=image_base+0x34F5F8,
+            empty_descriptor_address=image_base+0x6E168)
+        references.construct_scoped_string_reference(p,reference_address=output_reference_address,
+            string_address=string,**kw)
+    references.release_scoped_string_reference(p,reference_address=temporary,free=free,**kw)
+    if reference:_invoke_jni(p,retained_environment,0xB8,(reference,),invoke_jni)
+    p.commit()
+
+
 def retain_global_jni_reference(pages, *, environment_pointer, reference, invoke_jni):
     """+0x26f154: preserve type 2; otherwise NewGlobalRef then DeleteLocalRef.
 

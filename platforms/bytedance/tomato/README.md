@@ -451,6 +451,8 @@ Second VM pair reference getter passes29 new native controls and10 rollback chec
 
 Java object byte reference composition passes28 new native controls and12 rollback checks at two bases. The original +26fe2c uses one UTF reference argument, existing JNI/byte-array/reference owners, ordered cleanup and live table reloads. This child component leaves the request boundary at8809 before +2886b0 -> +1cf55c; complete signing remains unfinished. See the [Java object bytes report](REQUEST_JNI_STARTUP_WORKERS.md#6175-java-object-byte-reference-composition2026-10-15-asiashanghai).
 
+Cached dispatch byte producer passes26 new native controls and13 rollback checks. The original +1cf688 composes two explicit environment acquisitions, the exact dispatcher words, existing byte conversion and empty-string fallback. Environment replacement proves live-pair reload and retained-environment cleanup. The request boundary remains8809 before +2886b0 -> +1cf55c; complete signing remains unfinished. See the [cached dispatch bytes report](REQUEST_JNI_STARTUP_WORKERS.md#6176-cached-dispatch-byte-producer2026-10-15-asiashanghai).
+
 
 
 

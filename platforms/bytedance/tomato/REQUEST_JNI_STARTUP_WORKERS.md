@@ -6368,6 +6368,30 @@ request/signer及fresh/live未验证。见 [Java object bytes证据](evidence/vm
 python -B platforms/bytedance/tomato/python/verify_vm9_java_object_bytes_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <java-object-bytes-evidence.json>
 ```
 
+## 6.176 Cached dispatch byte producer（2026-10-15 Asia/Shanghai）
+
+恢复`1CF688`组合：首次获取environment，dispatch精确5个word
+`(0x01000011,0,0,0,0)`，用已有`26FE2C`转换返回对象；转换后的pointer为NULL
+时执行原有24-byte空StringObject构造分支，再构造reference。最终释放临时引用，
+并删除dispatch返回的jobject。环境获取、dispatch、byte转换和reference均复用
+已有owner。两次acquisition显式提供，尚未在本组合中执行真实TLS body。
+
+**26项新增原生/Python对照、13项回滚检查通过**，另有2项原生RED。两个基址覆盖
+cold/warm、NULL environment/dispatch/UTF/array、method异常、零长度、嵌入NUL、
+calloc NULL、JNI table替换和第二次acquisition为NULL。额外环境替换控制证明：
+dispatch期间首次pair被改写后，conversion重读live environment，最终jobject
+清理仍用最初保留的environment。声明字节、精确dispatch words、两次获取和有序
+JNI/allocation/free/diagnostic effects一致。普通路径2975条指令，cold为3432条。
+
+旧JNI/reference/diagnostic及request AST保持，旧原生分组未重跑。**request仍为
+8809/+10769C，下一2886B0→1CF55C**；入口复用已绑定证据，无新owning执行。
+缓存冷初始化/刷新和second接线仍待恢复。physical padding/spills、真实TLS/
+Android JVM、完整request/signer及fresh/live未验证。见 [cached dispatch bytes证据](evidence/vm9_cached_dispatch_bytes_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_cached_dispatch_bytes_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <cached-dispatch-bytes-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

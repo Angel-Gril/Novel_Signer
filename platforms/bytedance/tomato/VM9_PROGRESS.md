@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：cached dispatch byte producer
+
+26项新增原生对照、13项回滚通过；恢复1CF688的两次环境获取、精确dispatch
+words、26FE2C转换和空StringObject回退。环境替换证明live pair重读及保留环境
+用于最终JNI删除。声明字节及有序services一致，旧JNI/reference/diagnostic/
+request AST保持。此组合显式提供acquisition/JNI，未执行真实TLS body。
+入口仍为8809步/2886B0→1CF55C，没有新owning/入口执行。下一步恢复缓存冷
+初始化/刷新和second接线。完整signer未完成。见 [cached dispatch bytes报告](REQUEST_JNI_STARTUP_WORKERS.md#6176-cached-dispatch-byte-producer2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：Java object byte reference composition
 
 28项新增原生对照、12项回滚通过；恢复26FE2C，用1个UTF reference参数调用
