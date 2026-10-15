@@ -477,6 +477,8 @@ Second VM environment acquisition passes 17 new native controls, reusing 6 exist
 
 Second VM locked pointer getter passes 19 new native controls and 13 rollback checks. Real normal mutexes retain the owner while reading receiver+0x40; owning86 instructions/1191 ranges match. Actual second advances9780 to9813, next2887b0->256b84. Complete signing remains unfinished. See the [locked pointer report](REQUEST_JNI_STARTUP_WORKERS.md#6188-second-vm-locked-pointer-getter2026-10-15-asiashanghai).
 
+Second VM tree pointer getter passes 41 new native controls and 18 rollback checks. Existing tree/shared-reader owners produce full X64 before release; owning321 instructions/1191 ranges match. Actual second advances9813 to9940, next2886b0->25bd8c. Complete signing remains unfinished. See the [tree pointer report](REQUEST_JNI_STARTUP_WORKERS.md#6189-second-vm-tree-pointer-getter2026-10-15-asiashanghai).
+
 
 
 

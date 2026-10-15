@@ -131,6 +131,11 @@ class RequestVm287474LockedPointerPrefix(RequestVm287474EnvironmentAcquisitionPr
     locked_pointers: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474TreePointerPrefix(RequestVm287474LockedPointerPrefix):
+    tree_pointers: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -176,6 +181,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     thread_pointers=[]
     environment_acquisitions=[]
     locked_pointers=[]
+    tree_pointers=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -323,6 +329,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image)
                 locked_pointers.append((argument,value))
+            elif (wrapper,target)==(0x2887B0,0x256B84):
+                value=apply_request_287474_tree_pointer_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image)
+                tree_pointers.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -347,6 +358,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if tree_pointers:
+                return RequestVm287474TreePointerPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers))
             if locked_pointers:
                 return RequestVm287474LockedPointerPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers))
@@ -841,6 +855,51 @@ def apply_request_287474_locked_pointer_callback(pages, *, argument_block_addres
         retained=int.from_bytes(_read_span(p,guard+8,8),'little')
         unlock_uncontended_mutex(p,mutex_address=retained+8)
     _write_span(p,argument_block_address+16,value.to_bytes(8,'little'))
+    p.commit()
+    return value
+
+
+def apply_request_287474_tree_pointer_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,max_nodes=4096,max_bytes=0x100000):
+    """+2887b0/+256b84 looks up receiver+0x58 under its shared reader.
+
+    Reuse the tree and reader owners, retain the 24-byte scope at wrapper
+    SP-0x60, read the found value as X64 before release, then store packed+24.
+    Missing/NULL values return zero. Scope padding and following bytes remain.
+    Physical spills/canaries/PAC and concurrent/writer paths are unverified.
+    """
+    from vm9_registry import lookup_configuration_value
+    from vm9_objects import acquire_uncontended_shared_reader,release_uncontended_shared_reader
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('tree pointer callback requires an aligned guest stack')
+    p=_PageTransaction(pages)
+    packed=_read_span(p,argument_block_address,24)
+    target,receiver,key=(int.from_bytes(packed[i:i+8],'little') for i in (0,8,16))
+    if target!=image_base+0x256B84:
+        raise RefillUnsupported('unexpected second tree pointer target')
+    guard=entry_stack_address-0x60
+    def exclude(address,width,allow_scope=False):
+        if address<entry_stack_address and address+width>entry_stack_address-0x1000:
+            if allow_scope and guard<=address and address+width<=guard+24:return
+            raise RefillUnsupported('tree pointer callback aliases unmodeled native spills')
+    exclude(argument_block_address,32);exclude(receiver,0x118);exclude(key,24)
+    vtable=(image_base+0x34C758).to_bytes(8,'little')
+    _write_span(p,guard,vtable+(receiver+0x80).to_bytes(8,'little'))
+    acquire_uncontended_shared_reader(p,mutex_address=receiver+0x88)
+    _write_span(p,receiver+0x114,b'\x01')
+    _write_span(p,guard+16,bytes(4))
+    pointer=lookup_configuration_value(p,container_address=receiver+0x58,key_address=key,
+        image_base=image_base,max_nodes=max_nodes,max_bytes=max_bytes)
+    if pointer:exclude(pointer,8,allow_scope=True)
+    value=int.from_bytes(_read_span(p,pointer,8),'little') if pointer else 0
+    _write_span(p,guard,vtable)
+    if not int.from_bytes(_read_span(p,guard+16,4),'little'):
+        mutex=int.from_bytes(_read_span(p,guard+8,8),'little')
+        if not _read_span(p,mutex+0x94,1)[0]:
+            raise RefillUnsupported('tree pointer writer-mode release is unrecovered')
+        release_uncontended_shared_reader(p,mutex_address=mutex+8)
+    _write_span(p,argument_block_address+24,value.to_bytes(8,'little'))
     p.commit()
     return value
 

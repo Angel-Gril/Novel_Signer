@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM tree pointer getter
+
+41项新增原生对照、18项回滚通过；2887B0→256B84复用shared-reader与树查找，
+在release前读取X64并写packed+24。owning321指令/1191范围一致。入口9813→9940/
+0x10a1e0，下一2886B0→25BD8C；tree_pointers1、strings15、registry_reads12，
+其他旧记录和child return保留。原outer页无差异/64新增OS页，second页未发布。
+完整signer和fresh/live/JVM未完成。见 [树指针读取报告](REQUEST_JNI_STARTUP_WORKERS.md#6189-second-vm-tree-pointer-getter2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM locked pointer getter
 
 19项新增原生对照、13项回滚通过；288794→282B84复用normal mutex，在scope

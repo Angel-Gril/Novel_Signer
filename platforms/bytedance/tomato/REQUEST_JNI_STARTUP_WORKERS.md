@@ -6751,6 +6751,33 @@ ABI、URL/header JNI、mapping回滚及fresh/live/JVM未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_second_locked_pointer_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-locked-pointer-evidence.json>
 ```
 
+## 6.189 Second VM tree pointer getter（2026-10-15 Asia/Shanghai）
+
+恢复 `2887B0→256B84`：复用shared-reader与25C168树查找，在receiver+0x80
+建立读锁scope，查找receiver+0x58的树。命中时在release之前读取完整X64，
+缺失/NULL返回0，最后写packed+24。scope位于wrapper SP-0x60，padding保持。
+
+**41项新增原生/Python对照、18项回滚通过**。40项两基址组件覆盖empty、
+absent、NULL、零/高X64、NUL比较、readers7、shared mutex、flag255、跨页
+query/value/result与reader/flag/scope/result别名。四次真实libc mutex转换和
+321–501条原始指令一致。2项修改前原生RED观察持锁X64读取；旧9813入口与
+已验收原生组复用绑定。开发中修正了一个覆盖初始reader count的别名fixture。
+
+owning **321条原始指令/1191声明范围**一致；实际second SP/TP、结果/scope/
+后续字节、canary输入、四个随机指针保持，没有allocator/JNI/syscall服务。
+18项回滚包括acquire后读失败、release后store失败及直接stack spill别名。
+内部tree/query payload的spill别名、physical ABI/PAC、writer和并发未证明。
+
+实际second **9813→9940/0x10a1e0**，下一 **2886B0→25BD8C**。tree_pointers1、
+strings15、registry_reads12，其他旧记录与child return保留。outer3900仍有
+边界，原页无差异、64新增OS页保留，second页未发布。完整signer、真实URL/
+header JNI、mapping回滚和fresh/live/JVM未完成。
+见 [树指针读取证据](evidence/vm9_request_second_tree_pointer_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_tree_pointer_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-tree-pointer-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

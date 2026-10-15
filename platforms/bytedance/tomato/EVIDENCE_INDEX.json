@@ -7063,5 +7063,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_second_tree_pointer_fresh_20261015": {
+    "path": "evidence/vm9_request_second_tree_pointer_fresh_20261015.json",
+    "native_Python_controls": 41,
+    "rollback_guards": 18,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }
