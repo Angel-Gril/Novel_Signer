@@ -507,6 +507,8 @@ Second global uint32 getter passes 17 new native controls and 10 rejection/rollb
 
 Second environment helper passes 27 new native controls and 14 rejection/rollback checks. The existing204e50 owner now returns through28863c; the old wrapper default remains. The actual warm helper matches32 virtual slots, four callbacks and seven physical return values. Constructed prefix reaches10169/0x10a574, next0x28863c->0x1e53d0. Complete signing remains unfinished. See the [second helper report](REQUEST_JNI_STARTUP_WORKERS.md#6203-second-environment-helper2026-10-16-asiashanghai).
 
+Third second-VM global uint32 getter passes 17 new native controls and 10 rejection/rollback checks. Target1e53d0 reads3d60d4 through the existing owner; both old getters and the environment helper remain. Constructed prefix reaches10208/0x10a760, next0x28887c->0x256f58. Complete signing remains unfinished. See the [third global getter report](REQUEST_JNI_STARTUP_WORKERS.md#6204-second-global-u32-c2026-10-16-asiashanghai).
+
 
 
 

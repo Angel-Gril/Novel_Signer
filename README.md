@@ -355,6 +355,7 @@ VM uint32转double新增 **32项原生对照、6项拒绝检查**，second prefi
 JSON数值写入新增 **69项原生对照、16项拒绝或回滚检查**，second prefix推进到10131步。见 [数值写入报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6201-json-number2026-10-16-asiashanghai)。
 第二global getter新增 **17项原生对照、10项拒绝或回滚检查**，second prefix推进到10150步。见 [getter报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6202-second-global-u32-b2026-10-16-asiashanghai)。
 第二environment helper新增 **27项原生对照、14项拒绝或回滚检查**，second prefix推进到10169步。见 [helper报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6203-second-environment-helper2026-10-16-asiashanghai)。
+第三global getter新增 **17项原生对照、10项拒绝或回滚检查**，second prefix推进到10208步。见 [第三getter报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6204-second-global-u32-c2026-10-16-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
