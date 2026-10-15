@@ -146,6 +146,11 @@ class RequestVm287474AllocationPrefix(RequestVm287474IdentifierPrefix):
     allocations: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474StringFormatPrefix(RequestVm287474AllocationPrefix):
+    string_formats: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -194,6 +199,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     tree_pointers=[]
     identifiers=[]
     allocations=[]
+    string_formats=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -361,6 +367,12 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     entry_stack_address=frame.native_stack_address-0x180,image_base=image,
                     allocate=consumer_services['allocate'])
                 allocations.append((argument,pointer))
+            elif consumer_services is not None and (wrapper,target)==(0x28880C,0x248908):
+                output=apply_request_287474_string_format_callback(staged,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,image_base=image,
+                    allocate=consumer_services['allocate'],reallocate=consumer_services.get('reallocate'),
+                    free=consumer_services['free'],prepare_format=consumer_services.get('prepare_format'))
+                string_formats.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -385,6 +397,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if string_formats:
+                return RequestVm287474StringFormatPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats))
             if allocations:
                 return RequestVm287474AllocationPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations))
@@ -960,6 +975,33 @@ def apply_request_287474_allocation_callback(pages, *, argument_block_address,
     if not pointer:raise RefillUnsupported('allocation requires unrecovered C++ new-handler or throw')
     _write_span(p,argument_block_address+16,pointer.to_bytes(8,'little'))
     p.commit();return pointer
+
+
+def apply_request_287474_string_format_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,allocate,reallocate,free,prepare_format=None,max_bytes=0x100000):
+    """+28880c tail-calls the existing formatter with one zero-extended W2.
+
+    No packed result store. The returned object address is model metadata;
+    CPU X0 after cleanup and physical GP/FP/spill/PAC state are not compared.
+    Formats requiring additional ambient arguments remain unsupported.
+    """
+    from vm9_configuration_init import format_string_object
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('string format callback requires an aligned guest stack')
+    if not all(callable(s) for s in (allocate,reallocate,free)):
+        raise RefillUnsupported('string format callback requires explicit allocation services')
+    p=_PageTransaction(pages);raw=_read_span(p,argument_block_address,28)
+    target=int.from_bytes(raw[:8],'little');output=int.from_bytes(raw[8:16],'little')
+    fmt=int.from_bytes(raw[16:24],'little');value=int.from_bytes(raw[24:28],'little')
+    if target!=image_base+0x248908:raise RefillUnsupported('unexpected second string format target')
+    for address,width in ((argument_block_address,28),(output,24),(fmt,1),(value,1)):
+        if address<entry_stack_address and address+width>entry_stack_address-0x1000:
+            raise RefillUnsupported('string format input aliases unmodeled native spills')
+    result=format_string_object(p,object_address=output,format_address=fmt,argument_addresses=(value,),
+        image_base=image_base,allocate=allocate,reallocate=reallocate,free=free,
+        prepare_format=prepare_format,max_bytes=max_bytes)
+    p.commit();return result
 
 
 def _copy_request_287474_bytes(pages,destination,source,length):

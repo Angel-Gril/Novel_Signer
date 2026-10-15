@@ -612,6 +612,8 @@ Second VM cold cached identifier passes 45 new native controls and 19 rollback c
 
 Second VM allocation callback passes 22 new native controls and 9 rollback checks. It reuses the explicit allocator owner, normalizes zero size to one and writes full X64 at packed+16. Two actual owning allocations match144/579 instructions across1190 ranges each. Actual second advances9950 to9998, next28880c->248908. Complete signing remains unfinished. See the [allocation report](../REQUEST_JNI_STARTUP_WORKERS.md#6191-second-vm-allocation-callback2026-10-15-asiashanghai).
 
+Second VM string format callback passes 21 new native controls and 12 rollback checks. Existing formatter and allocator owners handle one W2 argument; owning1839 instructions/1193 ranges match real libc. The entry forwards prepare_format and raises second budget10000 to20000. Actual second advances9998 to10009, next2887f0->248780. Complete signing remains unfinished. See the [string format report](../REQUEST_JNI_STARTUP_WORKERS.md#6192-second-vm-string-format-callback2026-10-15-asiashanghai).
+
 
 
 

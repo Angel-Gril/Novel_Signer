@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM string format callback
+
+21项新增原生对照、12项回滚通过；28880C→248908复用现有formatter，单个W2
+参数、matching-libc printf和真实allocator保持；owning1839指令/1193范围一致。
+outer仅转发prepare_format及提高second预算10000→20000。入口9998→10009/
+0x10a2f4，下一2887F0→248780；string_formats1及旧记录/child return保持。
+原outer页无差异/64新增OS页，second页未发布。完整signer和fresh/live/JVM未完成。
+见 [字符串格式回调报告](REQUEST_JNI_STARTUP_WORKERS.md#6192-second-vm-string-format-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM allocation callback
 
 22项新增原生对照、9项回滚通过；288508→32A1F0复用显式allocator，0大小转1，

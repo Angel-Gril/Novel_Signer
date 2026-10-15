@@ -437,7 +437,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
             elif (wrapper,target) == (0x285F38,0x287474):
                 import vm9_request_287474_vm
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
-                    vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,random_services=random_services,
+                    vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,prepare_format=prepare_format,random_services=random_services,
                         process_services=process_services,
                         read_clock=read_clock,
                         acquire_environment=acquire_environment,logger_services=logger_services,
@@ -446,7 +446,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                         thread_id=None if diagnostic_scope is None else diagnostic_scope.get('thread_id'),
                         diagnostic_observer=None if diagnostic_scope is None else lambda *event:
                             diagnostic_scope.setdefault('events',[]).append(event)),
-                    maxsteps=10000,entry_stack_address=frame.native_stack_address-0x180,
+                    maxsteps=20000,entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
                     image_base=image,object_address=words[1],
                     saved_frame_pointer=frame.native_stack_address-0x60,

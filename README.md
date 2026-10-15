@@ -343,6 +343,7 @@ second加锁字段读取新增 **19项原生对照、13项回滚**，入口推�
 second树指针读取新增 **41项原生对照、18项回滚**，入口推进至9940步。见 [树指针读取报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6189-second-vm-tree-pointer-getter2026-10-15-asiashanghai)。
 second冷缓存标识符新增 **45项原生对照、19项回滚**，入口推进至9950步。见 [标识符工厂报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6190-second-vm-cold-cached-identifier2026-10-15-asiashanghai)。
 second分配回调新增 **22项原生对照、9项回滚**，入口推进至9998步。见 [分配回调报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6191-second-vm-allocation-callback2026-10-15-asiashanghai)。
+second字符串格式回调新增 **21项原生对照、12项回滚**，入口推进至10009步。见 [字符串格式回调报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6192-second-vm-string-format-callback2026-10-15-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

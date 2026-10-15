@@ -6834,6 +6834,34 @@ ABI/PAC、真实URL/header JNI、mapping回滚和fresh/live/JVM未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_second_allocation_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-allocation-evidence.json>
 ```
 
+## 6.192 Second VM string format callback（2026-10-15 Asia/Shanghai）
+
+恢复 `28880C→248908` tail wrapper，复用已有 `format_string_object`，从packed
+读取object/format/W2，W2零扩展，未写packed结果。只提供一个真实W2参数，
+额外ambient GP/FP参数需求明确拒绝；实际入口格式仅有一个signed decimal。
+Python返回object用于记录，native cleanup后CPU X0未比较。
+
+**21项新增原生/Python对照、12项回滚通过**：20项两基址组件执行784–3206条
+原始指令，覆盖signed/minimum/high32忽略/unsigned、percent/literal/empty、
+单个长string增长重试、packed跨页和format/output alias。matching-libc
+vsnprintf、guest/image/TLS/locale字节、padding与有序分配/realloc/free效果一致。
+2项修改前原生RED通过。12项回滚涵盖额外ambient参数、NULL/unsupported格式、
+缺失输入/provider、temporary分配失败、长度上限和stack spill别名。
+
+实际owning **1839原始指令/1193声明范围**一致，真实allocator/reallocator/free
+及vsnprintf、实际SP/TP、输出/packed/后续字节、TLS/locale/allocator状态和四个
+随机指针保持；未调用JNI/lock/file/syscall。物理GP/FP/spill/PAC未证明。
+
+outer仅转发已有prepare_format并将second预算 **10000→20000**。实际second
+**9998→10009/0x10a2f4**，下一 **2887F0→248780**。string_formats1及旧记录/
+child return保持；outer3900仍有边界，原页无差异/64新增OS页，second页未发布。
+完整signer、真实URL/header JNI、mapping回滚及fresh/live/JVM未完成。
+见 [字符串格式回调证据](evidence/vm9_request_second_string_format_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_string_format_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-string-format-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
