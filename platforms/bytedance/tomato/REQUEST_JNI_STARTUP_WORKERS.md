@@ -6636,6 +6636,40 @@ OS 页保留，second 页未发布。周边 JNI 为显式 fixture；完整 secon
 python -B platforms/bytedance/tomato/python/verify_vm9_second_realtime_seconds_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-realtime-seconds-evidence.json>
 ```
 
+## 6.185 Second VM process ID callbacks（2026-10-15 Asia/Shanghai）
+
+恢复 `28863C→getpid/getppid`，通过显式 process_services 传递真实导入地址和
+syscall provider。getpid 先从 TP+8 指向的 pthread+0x14 读取 W32 缓存；非零
+直接返回，零才调用 syscall172，冷路径不写缓存。getppid 调用 syscall173。
+复用既有 _guest_syscall：-4095..-1 写 TP+0x10 的 W32 errno 并返回 X0=-1；
+-4096 原样返回。wrapper 只写 packed+8 的 W32，packed+12 及后续字节保持。
+
+**26 项新增原生/Python 对照、12 项回滚检查通过**。24 项两基址组件覆盖
+高位缓存、零/冷 PID、errno1/4095、负非 errno、宽 X0、父 PID 不访问未映射
+缓存和跨页写入；另有 2 项修改前原生 RED。错误控制执行真实 libc errno
+helper/PLT/__errno。初次 RED 的 TLS 断言误用了 oracle 的 0xa000 返回窗口，
+已在生产修改前改为显式 TLS 观测。旧入口/旧原生组复用绑定，没有重跑。
+拒绝控制覆盖无效绑定/provider/TLS、最终 store 失败和 SP-0x40..SP 别名；
+模型改页可回滚，外部 provider effects 和 physical spill/PAC 未证明。
+
+实际 owning getpid/getppid 各执行 **18/13 条原始指令，1190/1189 声明范围**
+一致；实际 second SP/TP、显式 syscall172/173 响应、W32/padding、TLS 和四个
+运行时随机指针一致。PID 回调没有 allocator/JNI/mutex 服务，不读取宿主 PID。
+独立入口 fixture 仅按 ELF ABS64 元数据绑定先前为 NULL 的两处导入；既有
+生产 ELF loader 不变，没有宣称完整动态链接。旧 random/realtime/cache/JNI/
+ref/diagnostic/ELF AST 和私有绑定回执保持。
+
+实际 second **9557→9729/0x109b60**，下一 **28876C→204F58**。process_ids 2，
+reader acquire/release 7，diagnostic entry/leave 21，child return 和其余旧记录
+保留。outer 3900 步仍有边界，原页无差异、64 新增 OS 页保留，second 页未
+发布。周边 JNI 为显式 fixture；完整 second/request/204ED4、physical ABI、
+URL/header JNI、allocator mapping 回滚、独立 signer/fresh/live/JVM 未完成。
+见 [PID 回调证据](evidence/vm9_request_second_process_id_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_process_id_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-process-id-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

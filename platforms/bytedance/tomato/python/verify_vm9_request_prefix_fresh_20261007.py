@@ -74,7 +74,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                    get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None,
                    register_exit=None, get_state_service=None, parse_decimal=None,
                    random_services=None, logger_services=None, jni_availability_services=None,
-                   calloc=None):
+                   calloc=None, process_services=None):
     if jni_availability_services is not None and (not isinstance(jni_availability_services,dict) or
             not callable(jni_availability_services.get('invoke_jni'))):
         raise RefillUnsupported('request JNI availability requires an explicit JNI service')
@@ -438,6 +438,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 import vm9_request_287474_vm
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
                     vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,random_services=random_services,
+                        process_services=process_services,
                         read_clock=read_clock,
                         acquire_environment=acquire_environment,logger_services=logger_services,
                         jni_availability_services=jni_availability_services,invoke_jni=invoke_jni,

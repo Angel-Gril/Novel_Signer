@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM process ID callbacks
+
+26 项新增原生对照、12 项回滚通过；28863C 调用显式导入 getpid/getppid，
+保留 PID 缓存/冷 syscall172/父 syscall173/errno 语义，W32 写 packed+8。
+owning 18/13 指令、1190/1189 范围一致。fixture 仅绑定 ELF 元数据中的两处
+ABS64 导入；生产 ELF loader 和旧 random/realtime AST 不变。
+实际入口 9557→9729/0x109b60，下一 28876C→204F58；PID 2、reader 7 对、
+diagnostic 21 对，child return 保留。outer 原页无差异，64 新增 OS 页保留，
+second 页未发布；JNI 为显式 fixture。完整 signer/fresh/live/JVM 未完成。
+见 [PID 报告](REQUEST_JNI_STARTUP_WORKERS.md#6185-second-vm-process-id-callbacks2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM realtime unsigned seconds
 
 15 项新增原生对照、10 项回滚通过；28876C→26CC64 复用有符号毫秒 owner，

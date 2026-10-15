@@ -111,6 +111,11 @@ class RequestVm287474RealtimeSecondsPrefix(RequestVm287474RegistryReadPrefix):
     realtime_seconds: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474ProcessIdPrefix(RequestVm287474RealtimeSecondsPrefix):
+    process_ids: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -152,6 +157,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     guard_releases=[]
     registry_reads=[]
     realtime_seconds=[]
+    process_ids=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -209,6 +215,16 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     libc_base=services['libc_base'],syscall=services['syscall'],
                     errno_address=services['errno_address'],thread_id=services.get('thread_id'))
                 random_values.append((argument,result))
+            elif consumer_services is not None and wrapper==0x28863C and consumer_services.get('process_services') is not None:
+                services=consumer_services['process_services']
+                if not isinstance(services,dict):raise Boundary()
+                bindings=services.get('import_bindings')
+                if not isinstance(bindings,dict) or words[0] not in bindings.values():raise Boundary()
+                value=apply_request_287474_process_id_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    thread_pointer=inputs['thread_pointer'],import_bindings=bindings,
+                    syscall=services.get('syscall'))
+                process_ids.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x288658,0x257804):
                 output=apply_request_287474_reference_getter_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -295,6 +311,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if process_ids:
+                return RequestVm287474ProcessIdPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids))
             if realtime_seconds:
                 return RequestVm287474RealtimeSecondsPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds))
@@ -670,6 +689,45 @@ def apply_request_287474_realtime_seconds_callback(pages, *, argument_block_addr
     milliseconds=read_realtime_milliseconds(p,read_clock=read_clock)
     value=(milliseconds&0xFFFFFFFFFFFFFFFF)//1000
     _write_span(p,argument_block_address+8,value.to_bytes(8,'little'))
+    p.commit()
+    return value
+
+
+def apply_request_287474_process_id_callback(pages, *, argument_block_address,
+        entry_stack_address,thread_pointer,import_bindings,syscall=None):
+    """+28863c calls explicit getpid/getppid bindings and stores only W0.
+
+    Matching bionic getpid reads pthread+0x14 through TP+8. A nonzero cached
+    W32 bypasses syscall172; the cold path does not populate that cache.
+    getppid uses syscall173. Kernel errors write errno at TP+0x10 through the
+    existing syscall owner. Import addresses are caller-owned linker results.
+    Native spills/PAC and external provider effects are outside page rollback.
+    """
+    from vm9_configuration_init import _guest_syscall
+    if (type(entry_stack_address) is not int or not 0x40<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('process ID callback requires an aligned guest stack')
+    if type(thread_pointer) is not int or not 0<thread_pointer<(1<<64)-0x18:
+        raise RefillUnsupported('process ID callback requires a guest thread pointer')
+    if (not isinstance(import_bindings,dict) or set(import_bindings)!={'getpid','getppid'}
+            or any(type(v) is not int or not 0<v<1<<64 for v in import_bindings.values())
+            or len(set(import_bindings.values()))!=2):
+        raise RefillUnsupported('process ID callback requires distinct resolved libc imports')
+    p=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
+    if target not in import_bindings.values():
+        raise RefillUnsupported('unexpected second process ID target')
+    if argument_block_address<entry_stack_address and argument_block_address+12>entry_stack_address-0x40:
+        raise RefillUnsupported('process ID packed block aliases unmodeled native spills')
+    value=0
+    if target==import_bindings['getpid']:
+        thread=int.from_bytes(_read_span(p,thread_pointer+8,8),'little')
+        value=int.from_bytes(_read_span(p,thread+0x14,4),'little')
+    if not value:
+        if not callable(syscall):raise RefillUnsupported('process ID callback requires a syscall provider')
+        number=172 if target==import_bindings['getpid'] else 173
+        value=_guest_syscall(p,syscall,thread_pointer+0x10,number)&0xFFFFFFFFFFFFFFFF
+    _write_span(p,argument_block_address+8,(value&0xFFFFFFFF).to_bytes(4,'little'))
     p.commit()
     return value
 

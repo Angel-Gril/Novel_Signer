@@ -469,6 +469,8 @@ Second VM configuration u32 reading passes 22 new native controls, including ten
 
 Second VM realtime unsigned seconds passes 15 new native controls and 10 rollback checks. Its owning callback executes54 original instructions with1188 matching ranges and one explicit clock provider call. Actual second advances9374 to9557, where wrapper28863c has a NULL target requiring investigation. Complete signing remains unfinished. See the [realtime seconds report](REQUEST_JNI_STARTUP_WORKERS.md#6184-second-vm-realtime-unsigned-seconds2026-10-15-asiashanghai).
 
+Second VM process ID callbacks pass 26 new native controls and 12 rollback checks. Explicit ELF-derived getpid/getppid imports, cached PID, syscall172/173 and errno paths match; owning callbacks execute18/13 instructions across1190/1189 ranges. Actual second advances9557 to9729, next28876c->204f58. Complete signing remains unfinished. See the [process ID report](REQUEST_JNI_STARTUP_WORKERS.md#6185-second-vm-process-id-callbacks2026-10-15-asiashanghai).
+
 
 
 
