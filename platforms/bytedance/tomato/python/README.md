@@ -578,6 +578,8 @@ Second VM cached u32 getter passes27 new native controls and13 rollback checks. 
 
 Second VM pair reference getter passes29 new native controls and10 rollback checks. The three-instruction target delegates to the existing scoped reference copy. The owning callback matches1187 ranges and diagnostic fields in198 instructions with no allocation. The second VM reaches8809 steps before +2886b0 -> +1cf55c; complete signing remains unfinished. See the [second pair getter report](../REQUEST_JNI_STARTUP_WORKERS.md#6174-second-vm-pair-reference-getter2026-10-15-asiashanghai).
 
+Java object byte reference composition passes28 new native controls and12 rollback checks at two bases. The original +26fe2c uses one UTF reference argument, existing JNI/byte-array/reference owners, ordered cleanup and live table reloads. This child component leaves the request boundary at8809 before +2886b0 -> +1cf55c; complete signing remains unfinished. See the [Java object bytes report](../REQUEST_JNI_STARTUP_WORKERS.md#6175-java-object-byte-reference-composition2026-10-15-asiashanghai).
+
 
 
 

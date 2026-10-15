@@ -1,0 +1,437 @@
+{
+  "schema": "vm9-java-object-bytes-fresh-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "evidence_date": "2026-10-15",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "normal",
+      "native_instructions": 2339,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cold_diagnostics",
+      "native_instructions": 2796,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_environment",
+      "native_instructions": 568,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_object",
+      "native_instructions": 569,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_utf",
+      "native_instructions": 964,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "push_fail",
+      "native_instructions": 1235,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_class",
+      "native_instructions": 1253,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_member",
+      "native_instructions": 1277,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_array",
+      "native_instructions": 1301,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "method_exception",
+      "native_instructions": 1314,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "zero_length",
+      "native_instructions": 1765,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "embedded_NUL",
+      "native_instructions": 2339,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "calloc_NULL",
+      "native_instructions": 1771,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "reload_table",
+      "native_instructions": 2339,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "normal",
+      "native_instructions": 2339,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold_diagnostics",
+      "native_instructions": 2796,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_environment",
+      "native_instructions": 568,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_object",
+      "native_instructions": 569,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_utf",
+      "native_instructions": 964,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "push_fail",
+      "native_instructions": 1235,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_class",
+      "native_instructions": 1253,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_member",
+      "native_instructions": 1277,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": false,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_array",
+      "native_instructions": 1301,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "method_exception",
+      "native_instructions": 1314,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero_length",
+      "native_instructions": 1765,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "embedded_NUL",
+      "native_instructions": 2339,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "calloc_NULL",
+      "native_instructions": 1771,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "reload_table",
+      "native_instructions": 2339,
+      "original_object_bytes_and_reference_helpers_returned": true,
+      "all_declared_guest_image_and_live_fields_equal": true,
+      "ordered_JNI_allocation_free_and_diagnostic_effects_equal": true,
+      "one_reference_UTF_argument_consumed": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "unmapped_scope",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "NULL_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "negative_environment",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "negative_object",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_JNI",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_calloc",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "missing_free",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "payload_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    },
+    {
+      "case": "diagnostic_guard_wait",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_provider_effects_rolled_back": false
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "complete_physical_ABI_verified": false,
+  "whole_request_native_differential_verified": false,
+  "complete_second_vm_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 28,
+  "rollback_guards": 12,
+  "pre_change_native_RED_controls": 2,
+  "preserved_request_entry": {
+    "phase": "GREEN",
+    "steps": 8809,
+    "bytecode_offset": "0x10769c",
+    "next_wrapper": "0x2886b0",
+    "next_target": "0x1cf55c",
+    "child_return_preserved": true,
+    "completed_second_string_callbacks": 2,
+    "completed_reader_acquisitions": 3,
+    "completed_diagnostic_entries": 13,
+    "completed_diagnostic_leaves": 13,
+    "completed_reader_releases": 3,
+    "completed_string_comparisons": 1,
+    "completed_string_assignments": 1,
+    "completed_random_callbacks": 1,
+    "completed_reference_getters": 1,
+    "completed_cached_u32_getters": 1,
+    "completed_pair_getters": 1,
+    "complete_second_vm_verified": false
+  },
+  "request_entry_rerun": false,
+  "request_boundary_advanced": false,
+  "previous_JNI_reference_diagnostic_and_request_AST_preserved": true,
+  "JNI_and_allocation_services_explicit": true,
+  "owning_callback_native_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "limits": [
+    "New convert_java_object_to_byte_reference owns the missing +26fe2c composition used by +1cf688 inside +1cf55c. It decodes three ELF fields before testing environment/object, constructs a temporary NULL reference, calls NewStringUTF, invokes the decoded instance method with exactly one reference argument, and converts a successful returned byte array using existing owners.",
+    "The method signature is not a no-argument signature. Existing invoke_integer_argument_java_method consumes the UTF reference through the original va_list. A nonzero status byte suppresses conversion, while every non-NULL returned array is still deleted. UTF deletion, output copy and temporary release retain the original order and reload the live JNI table.",
+    "Twenty-eight NEW controls at two bases cover warm/cold diagnostics, NULL environment/object/UTF/class/member/array, PushLocalFrame failure, method exception, zero length, embedded NUL payload, calloc NULL and environment table replacement. Declared guest/image/local reference/status/final diagnostic semantic fields and ordered JNI/allocation/free/lock services match. Twelve page-rollback guards pass; external provider effects are not rolled back.",
+    "Two new original-helper RED controls preceded implementation. The initial Python composition used the wrong result-field name; it was corrected to IntegerJavaMemberResult.word before the accepted positive run. Old JNI/reference/diagnostic owners and request AST remain unchanged and accepted native groups were not rerun. Physical scope padding/register spills are not compared.",
+    "This stage verifies the missing child composition only. The accepted8809/+10769c request boundary before +2886b0 -> +1cf55c is preserved by its bound hash, not rerun. +1cf688 composition, global cache cold initialization/refresh and second-VM wiring remain open. No owning callback, real Android JVM, whole request, independent signer, fresh output or live matrix is claimed."
+  ]
+}

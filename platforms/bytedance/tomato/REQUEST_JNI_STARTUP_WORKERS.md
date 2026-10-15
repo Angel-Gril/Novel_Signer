@@ -6343,6 +6343,31 @@ fresh/live/JVM未完成。见 [second pair getter证据](evidence/vm9_request_se
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_pair_getter_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-pair-getter-evidence.json>
 ```
 
+## 6.175 Java object byte reference composition（2026-10-15 Asia/Shanghai）
+
+恢复`1CF55C→1CF688`调用链中缺失的`26FE2C`组合函数。先解码3个ELF字段，
+再构造临时NULL reference、调用NewStringUTF，传入 **1个引用参数** 调用instance
+method，并将成功返回的byte array转成独立StringObject reference。复用已有
+integer/reference JNI、byte array及scoped reference owners；异常时跳过转换，
+仍按原顺序清理非NULL array和UTF，再复制输出并释放临时reference。
+
+**28项新增原生/Python对照、12项回滚检查通过**，另有2项原生RED。两个基址覆盖
+cold/warm、NULL environment/object/UTF/class/member/array、PushLocalFrame失败、
+method异常、零长度、嵌入NUL、calloc NULL及运行中JNI table替换。声明guest/
+image/local reference/status和最终diagnostic有效字段、有序JNI/allocation/free/
+lock effects一致。正常路径2339条原始指令，cold diagnostic路径2796条。
+初版组合层返回字段名已修正为`IntegerJavaMemberResult.word`后再通过正式对照。
+旧JNI/reference/diagnostic实现和request AST保持，已接受原生组未重跑。
+
+本节只验证缺失的child组合，**request仍为8809/+10769C、下一2886B0→1CF55C**；
+复用已绑定入口证据，没有新owning或入口执行。`1CF688`组合、cache冷初始化/
+刷新及second接线仍待恢复。physical padding/spills、真实Android JVM、完整
+request/signer及fresh/live未验证。见 [Java object bytes证据](evidence/vm9_java_object_bytes_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_java_object_bytes_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <java-object-bytes-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

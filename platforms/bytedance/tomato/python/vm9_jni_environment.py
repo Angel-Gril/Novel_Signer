@@ -381,6 +381,67 @@ def construct_java_byte_array_reference(pages, *, image_base, entry_stack_addres
     p.commit();return result
 
 
+def convert_java_object_to_byte_reference(pages, *, image_base, entry_stack_address,
+        output_reference_address, environment_pointer, object_reference,
+        thread_pointer, thread_id, invoke_jni, allocate, calloc, free,
+        max_payload_bytes=0x100000, diagnostic_observer=None):
+    """+0x26fe2c: decoded UTF argument, instance method and owned byte reference.
+
+    Reuse integer/reference JNI dispatch, binary conversion and scoped reference
+    owners. Every JNI lookup reads the current environment table. Temporary
+    locals are deleted in native order, including a non-NULL result accompanied
+    by an exception. Physical stack spills/padding and unwind stay outside this
+    composition; page rollback cannot undo external provider effects.
+    """
+    import vm9_reference_scopes as references
+    if (type(entry_stack_address) is not int or not 0x240<=entry_stack_address<=MASK64
+            or entry_stack_address&15):
+        raise RefillUnsupported('Java object bytes helper requires an aligned guest stack')
+    _address(output_reference_address,'Java object bytes output reference',16)
+    for value in (environment_pointer,object_reference):
+        if type(value) is not int or not 0<=value<=MASK64:
+            raise RefillUnsupported('Java object bytes JNI pointers must fit uint64')
+    if type(max_payload_bytes) is not int or not 0<=max_payload_bytes<=0x100000:
+        raise ValueError('invalid Java object byte payload bound')
+    p=_PageTransaction(pages)
+    for source,dest,mask,flag in ((0xA57F8,0x3DEF2C,0xA5A54,0x3DEF34),
+            (0xA5800,0x3DEF38,0xA5A48,0x3DEF44),
+            (0xA5810,0x3DEF50,0xA5A30,0x3DEF68)):
+        if not _u(p,image_base+flag,4):
+            objects.decode_masked_bytes(p,source_address=image_base+source,
+                destination_address=image_base+dest,mask_address=image_base+mask)
+            _w(p,image_base+flag,1,4)
+    call_sp=entry_stack_address-0x90
+    temporary,status,binary=entry_stack_address-0x70,entry_stack_address-0x80,call_sp
+    kw=dict(entry_stack_address=call_sp,image_base=image_base,thread_pointer=thread_pointer,
+        thread_id=thread_id,allocate=allocate,diagnostic_observer=diagnostic_observer)
+    if environment_pointer and object_reference:
+        references.construct_scoped_string_reference(p,reference_address=temporary,string_address=0,**kw)
+        utf=_invoke_jni(p,environment_pointer,0x538,(image_base+0x3DEF2C,),invoke_jni)
+        if utf:
+            result=invoke_integer_argument_java_method(p,entry_stack_address=call_sp,
+                environment_pointer=environment_pointer,status_address=status,
+                object_reference=object_reference,name_address=image_base+0x3DEF38,
+                signature_address=image_base+0x3DEF50,argument_words=(utf,),invoke_jni=invoke_jni)
+            array=result.word
+            if array and not _u(p,status,1):
+                construct_java_byte_array_reference(p,output_reference_address=binary,
+                    environment_pointer=environment_pointer,array_reference=array,invoke_jni=invoke_jni,
+                    calloc=calloc,free=free,max_payload_bytes=max_payload_bytes,**kw)
+                references.assign_scoped_string_reference(p,destination_address=temporary,
+                    source_address=binary,free=free,**kw)
+                references.release_scoped_string_reference(p,reference_address=binary,free=free,**kw)
+            if array:_invoke_jni(p,environment_pointer,0xB8,(array,),invoke_jni)
+            _invoke_jni(p,environment_pointer,0xB8,(utf,),invoke_jni)
+        references.copy_scoped_string_reference(p,destination_address=output_reference_address,
+            source_address=temporary,**kw)
+        references.release_scoped_string_reference(p,reference_address=temporary,free=free,**kw)
+    else:
+        references.construct_scoped_string_reference(p,reference_address=output_reference_address,
+            string_address=0,**kw)
+    p.commit()
+
+
 def retain_global_jni_reference(pages, *, environment_pointer, reference, invoke_jni):
     """+0x26f154: preserve type 2; otherwise NewGlobalRef then DeleteLocalRef.
 

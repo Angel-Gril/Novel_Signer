@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：Java object byte reference composition
+
+28项新增原生对照、12项回滚通过；恢复26FE2C，用1个UTF reference参数调用
+JNI method并组合已有byte array/reference owners。声明字段及有序JNI/allocator/
+free/diagnostic effects一致，旧JNI/reference/diagnostic/request AST保持。
+该child组件没有新owning/入口执行，原有8809步/2886B0→1CF55C入口证据保持。
+下一步恢复1CF688、全局缓存冷初始化/刷新及second接线。完整signer未完成。
+见 [Java object bytes报告](REQUEST_JNI_STARTUP_WORKERS.md#6175-java-object-byte-reference-composition2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM pair reference getter
 
 29项新增原生对照、10项回滚通过；owning198指令/1187范围及诊断有效字段一致。
