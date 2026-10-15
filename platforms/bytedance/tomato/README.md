@@ -487,6 +487,8 @@ Second VM string format callback passes 21 new native controls and 12 rollback c
 
 Second VM string pair callback passes 17 new native controls and 8 rollback checks. Its complete28-byte wrapper equals the accepted token wrapper, so the existing clone/append owner handles both; actual owning629 instructions/1191 ranges match. Actual second advances10009 to10021, next2887d0->25874c. Complete signing remains unfinished. See the [string pair report](REQUEST_JNI_STARTUP_WORKERS.md#6193-second-vm-string-pair-callback2026-10-15-asiashanghai).
 
+Second VM digest reference callback passes 33 new native controls and retains 8 prior rollback controls without rerunning them. The equivalent wrapper reuses unchanged digest/reference owners; actual owning4955 instructions/1194 ranges match. Actual second advances10021 to10030, next288820->258bac. Complete signing remains unfinished. See the [digest report](REQUEST_JNI_STARTUP_WORKERS.md#6194-second-vm-digest-reference-callback2026-10-15-asiashanghai).
+
 
 
 

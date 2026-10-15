@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM digest reference callback
+
+33项新增原生对照通过，旧8项回滚按hash保留、未计作新增；2887D0→25874C
+完整32字节wrapper与旧token相同，复用未修改的MD5/reference owners。
+owning4955指令/1194范围及真实allocator/recursive mutex一致。入口10021→10030/
+0x10a348，下一288820→258BAC；digests1及旧记录/child return保持。原outer页
+无差异/64新增OS页，second页未发布。完整signer和fresh/live/JVM未完成。
+见 [摘要引用回调报告](REQUEST_JNI_STARTUP_WORKERS.md#6194-second-vm-digest-reference-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM string pair callback
 
 17项新增原生对照、8项回滚通过；2887F0→248780与旧token wrapper完整28字节

@@ -6889,6 +6889,33 @@ second页未发布。完整signer、physical ABI/PAC、真实URL/header JNI、ma
 python -B platforms/bytedance/tomato/python/verify_vm9_second_string_pair_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-string-pair-evidence.json>
 ```
 
+## 6.194 Second VM digest reference callback（2026-10-15 Asia/Shanghai）
+
+恢复 `2887D0→25874C` MD5引用回调。完整32字节wrapper与 `288BBC` 相同，
+second直接复用已有 `apply_token_digest_callback`，digest/string/reference/
+guard/diagnostic/allocator owners均未修改。hidden X8、source X0和byte W1
+从packed读取，在wrapper SP-16调用，无packed结果写回。
+
+**33项新增原生/Python对照通过，保留旧8项回滚绑定**；本批没有新增回滚计数。
+32项两基址新wrapper原生控制覆盖raw/hex、empty/binary/padding/two blocks/
+NULL source、flag2/highflag、warm及跨页，guest/image/packed/defined scratch、
+scope exit、有序分配/free/mutex/gettid和pre-free字节一致。2项修改前原生RED
+通过，旧token原生组及旧回滚组均未重跑，回滚证据按hash保留。
+
+实际owning **4955原始指令/1194声明范围**一致，真实matching-libc allocator/
+recursive mutex/diagnostics、实际SP/TP、reference pair/digest payload/scratch、
+allocator状态/canary/四个随机指针与有序效果保持；未调用JNI/file/syscall。
+native physical X0、saved stack/register/PAC和mapping回滚未证明。
+
+实际second **10021→10030/0x10a348**，下一 **288820→258BAC**。digests1及旧
+记录/child return保持；outer3900仍有边界，原页无差异/64新增OS页，second页
+未发布。完整signer、真实URL/header JNI和fresh/live/JVM未完成。
+见 [摘要引用回调证据](evidence/vm9_request_second_digest_fresh_20261015.json) 与 [保留的回滚证据](evidence/vm9_request_token_digest_fresh_20261013.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_digest_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-digest-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
