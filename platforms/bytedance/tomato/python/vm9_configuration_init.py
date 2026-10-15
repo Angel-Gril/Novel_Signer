@@ -617,7 +617,7 @@ def get_request_version_word(pages, *, image_base, allocate, free,
 
 
 def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
-    """Bounded printf %d/%u/%s/%% over raw ABI words; read live inputs each call."""
+    """Bounded printf %d/%u/%lu/%llu/%s/%% over AArch64 ABI words."""
     fmt=objects._cstring(pages,format_address,max_bytes)[:-1]
     result=bytearray();i=0;argument=0
     while i<len(fmt):
@@ -625,7 +625,18 @@ def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
         else:
             if i+1>=len(fmt):raise RefillUnsupported('incomplete printf conversion')
             conversion=fmt[i+1];i+=2
-            if conversion==37:result.append(37)
+            if conversion==108:
+                if i<len(fmt) and fmt[i]==108:i+=1
+                if i>=len(fmt) or fmt[i]!=117:
+                    raise RefillUnsupported('printf long conversion outside %lu/%llu is unsupported')
+                i+=1
+                if argument>=len(argument_addresses):
+                    raise RefillUnsupported('missing printf long unsigned argument')
+                raw=argument_addresses[argument]
+                if not isinstance(raw,int) or not 0<=raw<=MASK64:
+                    raise RefillUnsupported('printf long unsigned argument must be a uint64 ABI word')
+                result.extend(str(raw).encode('ascii'));argument+=1
+            elif conversion==37:result.append(37)
             elif conversion==115:
                 if argument>=len(argument_addresses) or not argument_addresses[argument]:
                     raise RefillUnsupported('missing/NULL printf string argument')

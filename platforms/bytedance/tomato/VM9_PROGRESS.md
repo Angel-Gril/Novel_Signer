@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second five-argument unsigned64 formatter
+
+17项新增原生对照、16项拒绝或回滚检查通过；已有printf支持%lu/%llu，2888B4传W2与4个X参数。
+旧单W2默认/格式分支保持；实际原始allocator/formatter12997指令/1193范围对照通过。
+second10332/+10AA98，下一2888D0→2613E4；string format2次，旧计数/child return保持。
+outer原页无差异/64新增OS页；累计2580native/821checks；完整signer/fresh/live/JVM未完成。
+见 [格式化报告](REQUEST_JNI_STARTUP_WORKERS.md#6208-second-five-argument-format2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：second TLS uint32 getter
 
 15项新增原生对照、15项拒绝或回滚检查通过；288898→2850A8复用已有TLS provider，packed+16仅写4字节。

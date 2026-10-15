@@ -515,6 +515,8 @@ VM opcode34 operation34 int32-to-double passes 32 new native controls and 6 reje
 
 Second TLS uint32 getter passes 15 new native controls and 15 rejection/rollback checks. New wrapper288898 reuses the existing TLS provider and stores exactly four packed bytes. Actual warm callback passes63 native instructions/1190 declared ranges. Constructed second prefix reaches10320/+10aa68, next2888b4->248908. Complete signing remains unfinished. See the [second TLS getter report](REQUEST_JNI_STARTUP_WORKERS.md#6207-second-tls-u322026-10-16-asiashanghai).
 
+Five-argument second formatter passes 17 new native controls and 16 rejection/rollback checks. Existing printf owner now handles unsigned64 %lu/%llu; exact wrapper2888b4 passes W2 plus four X words and retains the old one-argument default. Actual native allocator/formatter call passes12997 instructions/1193 declared ranges. Second reaches10332/+10aa98, next2888d0->2613e4. Complete signing remains unfinished. See the [five-argument formatter report](REQUEST_JNI_STARTUP_WORKERS.md#6208-second-five-argument-format2026-10-16-asiashanghai).
+
 
 
 

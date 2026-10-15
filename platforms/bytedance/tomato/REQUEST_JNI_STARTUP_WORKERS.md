@@ -7256,6 +7256,34 @@ physical ABI/PAC、mapping/external-effect rollback、真实URL/header JNI与fre
 python -B platforms/bytedance/tomato/python/verify_vm9_second_TLS_u32_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <second-tls-u32-evidence.json>
 ```
 
+## 6.208 Second five argument format（2026-10-16 Asia/Shanghai）
+
+扩展已有printf owner，恢复AArch64 `%lu/%llu` 的unsigned64输出；旧%d/%u/%s/%%分支和
+live-input读取、字节边界保持。仅连接 `2888B4→248908` 的5个参数：packed+18的W2零扩展，
+再接+20/+28/+30/+38的4个完整X word；旧28880C单W2默认保持。signed-long及其他修饰符仍拒绝。
+此wrapper不写packed result；返回object地址仅为model metadata，未比较清理后的CPU X0。
+
+**17项新增原生/Python对照、16项拒绝或回滚检查通过**。16项两基址组件覆盖unsigned64范围、
+混合位宽、W2高位、第五字符串重试、packed跨页、format/output别名、未使用参数和long别名；
+新wrapper/原始formatter/匹配libc vsnprintf实际执行。guest/image/TLS/locale、packed与后续padding、
+allocation/reallocation/free/locale顺序一致。2项修改前原生RED确认精确5值输出及旧parser拒绝。
+16项拒绝检查保持全部model页，覆盖第六ambient参数、未恢复修饰符、第五字符串、跨packed尾部
+的spill别名/缺页、字节边界及provider写后抛错；external ledger/mapping rollback未证明。
+
+1项实际五参数回调执行 **12997条原始指令/1193个声明范围**。原始malloc/realloc/free运行，
+allocator stubs禁用；完整声明image/heap/output/payload/packed/TLS/locale、4个随机指针与有序
+allocator/format事件一致。使用实际callback SP/TP；physical padding/spills/PAC和CPU X0未比较。
+
+构造second prefix推进至 **10332步/+10AA98，下一2888D0→2613E4**。string format从1次增至2次，
+全部旧计数（含TLS getter1次）/child return保持。outer3900仍有边界，原页无差异/64新增OS页，
+second页未发布。累计6.127–6.208为 **2580项native/821项拒绝或回滚检查**。
+完整signer、whole second/request、JSON parser/浮点族、physical ABI/PAC、mapping rollback、
+真实URL/header JNI与fresh/live/JVM未完成。见 [五参数格式化证据](evidence/vm9_second_format5_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_format5_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <format5-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

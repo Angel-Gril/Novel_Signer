@@ -451,11 +451,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     entry_stack_address=frame.native_stack_address-0x180,image_base=image,
                     allocate=consumer_services['allocate'])
                 allocations.append((argument,pointer))
-            elif consumer_services is not None and (wrapper,target)==(0x28880C,0x248908):
+            elif consumer_services is not None and (wrapper,target) in ((0x28880C,0x248908),(0x2888B4,0x248908)):
                 output=apply_request_287474_string_format_callback(staged,argument_block_address=argument,
                     entry_stack_address=frame.native_stack_address-0x180,image_base=image,
                     allocate=consumer_services['allocate'],reallocate=consumer_services.get('reallocate'),
-                    free=consumer_services['free'],prepare_format=consumer_services.get('prepare_format'))
+                    free=consumer_services['free'],prepare_format=consumer_services.get('prepare_format'),wrapper_offset=wrapper)
                 string_formats.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x2887F0,0x248780):
                 from vm9_request_token_vm import apply_token_string_transform_callback
@@ -1141,8 +1141,9 @@ def apply_request_287474_allocation_callback(pages, *, argument_block_address,
 
 
 def apply_request_287474_string_format_callback(pages, *, argument_block_address,
-        entry_stack_address,image_base,allocate,reallocate,free,prepare_format=None,max_bytes=0x100000):
-    """+28880c tail-calls the existing formatter with one zero-extended W2.
+        entry_stack_address,image_base,allocate,reallocate,free,prepare_format=None,max_bytes=0x100000,
+        wrapper_offset=0x28880C):
+    """Known tail wrappers supply W2 alone or W2 followed by four X words.
 
     No packed result store. The returned object address is model metadata;
     CPU X0 after cleanup and physical GP/FP/spill/PAC state are not compared.
@@ -1154,14 +1155,18 @@ def apply_request_287474_string_format_callback(pages, *, argument_block_address
         raise RefillUnsupported('string format callback requires an aligned guest stack')
     if not all(callable(s) for s in (allocate,reallocate,free)):
         raise RefillUnsupported('string format callback requires explicit allocation services')
-    p=_PageTransaction(pages);raw=_read_span(p,argument_block_address,28)
+    if wrapper_offset not in (0x28880C,0x2888B4):
+        raise RefillUnsupported('unexpected second string format wrapper')
+    width=28 if wrapper_offset==0x28880C else 64
+    p=_PageTransaction(pages);raw=_read_span(p,argument_block_address,width)
     target=int.from_bytes(raw[:8],'little');output=int.from_bytes(raw[8:16],'little')
     fmt=int.from_bytes(raw[16:24],'little');value=int.from_bytes(raw[24:28],'little')
+    arguments=(value,) if wrapper_offset==0x28880C else (value,*(int.from_bytes(raw[i:i+8],'little') for i in range(32,64,8)))
     if target!=image_base+0x248908:raise RefillUnsupported('unexpected second string format target')
-    for address,width in ((argument_block_address,28),(output,24),(fmt,1),(value,1)):
+    for address,width in ((argument_block_address,width),(output,24),(fmt,1),*((a,1) for a in arguments)):
         if address<entry_stack_address and address+width>entry_stack_address-0x1000:
             raise RefillUnsupported('string format input aliases unmodeled native spills')
-    result=format_string_object(p,object_address=output,format_address=fmt,argument_addresses=(value,),
+    result=format_string_object(p,object_address=output,format_address=fmt,argument_addresses=arguments,
         image_base=image_base,allocate=allocate,reallocate=reallocate,free=free,
         prepare_format=prepare_format,max_bytes=max_bytes)
     p.commit();return result
