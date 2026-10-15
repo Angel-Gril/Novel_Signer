@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM C-string format callback
+
+27 项新增原生对照、12 项回滚通过；恢复自定义 %s/%% 格式化并接入 288718。
+NULL 为空串，截断返回完整长度，零容量不写；其他格式与未建模别名拒绝。
+owning 1013 指令/1188 范围一致；实际入口
+8938→8951/0x107e18，下一 0x28854c→0x32d4f8。
+child return 和旧记录保留，原 outer 页无差异、64 新增 OS 页保留，second 页未发布。
+JNI 为显式 fixture，完整 signer 及 fresh/live/JVM 未完成。见 [格式化报告](REQUEST_JNI_STARTUP_WORKERS.md#6181-second-vm-c-string-format-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM environment constant callback
 
 21 项新增原生对照、8 项回滚通过；2886FC 复用 256330 环境常量 getter。

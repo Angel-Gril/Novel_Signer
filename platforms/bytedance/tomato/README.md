@@ -461,6 +461,8 @@ Second VM static guard acquire passes 33 new native controls and 14 rollback che
 
 Second VM environment constant callback passes 21 new native controls and 8 rollback checks. The owning warm callback executes 19 instructions with 1188 matching ranges; actual second entry advances 8902 to 8938 before 0x288718 -> 0x2781f4. Complete signing remains unfinished. See the [environment constant report](REQUEST_JNI_STARTUP_WORKERS.md#6180-second-vm-environment-constant-callback2026-10-15-asiashanghai).
 
+Second VM C-string format callback passes 27 new native controls and 12 rollback checks. The owning callback executes 1013 instructions with 1188 matching ranges; actual second entry advances 8938 to 8951 before 0x28854c -> 0x32d4f8. Complete signing remains unfinished. See the [C-string format report](REQUEST_JNI_STARTUP_WORKERS.md#6181-second-vm-c-string-format-callback2026-10-15-asiashanghai).
+
 
 
 

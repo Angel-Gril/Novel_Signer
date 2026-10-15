@@ -6503,6 +6503,41 @@ second/request/204ED4、URL/header JNI、allocator mapping 回滚、独立 signe
 python -B platforms/bytedance/tomato/python/verify_vm9_second_environment_constant_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-environment-constant-evidence.json>
 ```
 
+## 6.181 Second VM C-string format callback（2026-10-15 Asia/Shanghai）
+
+恢复自定义 `2781F4→2772A4` 的 literal、`%s`、`%%` 分支，最多三个 guest
+指针参数；NULL `%s` 为空串。返回完整长度，最多写 capacity-1 字节及 NUL，
+容量 0 不写输出。未使用 libc 或 Python 格式替代。数值/宽度/精度、第四参数、
+输出与活跃输入重叠和未建模 spill 别名明确拒绝；显式字符串/输出上限为 1 MiB。
+旧 literal logger、环境 getter、guard、cache、JNI、reference、diagnostic 和
+outer 函数保持原 AST。
+
+`288718` wrapper 读取六个 X 参数，将 **W32 写至 packed+56**，packed+60
+除显式输出别名外保持。second 新增 cstring_formats。SP-0x1000..SP 为保守
+spill 排除区；未声称恢复 physical va_list、FP/register spill 或 PAC。
+
+**27 项新增原生/Python 对照、12 项回滚检查通过**。26 项组件覆盖两个基址、
+三串/literal/空串/NULL/转义、截断、零/单字节容量、零容量 NULL 输出、未使用
+的未映射参数、跨页输入/输出及结果输出别名；另有 2 项修改前原生 RED。
+12 项拒绝保持全部模型页。旧 8938 步入口复用绑定 hash 与 baseline AST 缺失
+证明，没有重跑已验收原生组。
+
+owning 回调执行 **1013 条原始指令/1188 声明范围**，
+实际 second SP/TP、variadic wrapper/custom formatter 和声明 app/heap/packed
+字段一致；比较完整 8 字节结果槽及 padding，但原生只写 W32。四个运行时
+libc 随机输入指针保留，无 allocator、JNI 或 mutex 服务。
+
+实际 second **8938→8951/0x107e18**，下一处
+**0x28854c→0x32d4f8**。格式化回调 1 次，child return 和旧
+记录保留。outer 3900 步仍有边界，原页无差异、64 新增 OS 页保留，second
+页未发布。周边 JNI 为显式 fixture；完整 second/request/204ED4、physical
+ABI/stack/PAC、URL/header JNI、allocator mapping 回滚、独立 signer 及
+fresh/live/JVM 未完成。见 [C-string format 证据](evidence/vm9_request_second_cstring_format_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_cstring_format_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-cstring-format-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

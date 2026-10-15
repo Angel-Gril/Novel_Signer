@@ -91,6 +91,11 @@ class RequestVm287474EnvironmentConstantPrefix(RequestVm287474GuardAcquirePrefix
     environment_constants: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474CStringFormatPrefix(RequestVm287474EnvironmentConstantPrefix):
+    cstring_formats: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -128,6 +133,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     cached_references=[]
     guard_acquisitions=[]
     environment_constants=[]
+    cstring_formats=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -225,6 +231,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image)
                 environment_constants.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288718,0x2781F4):
+                value=apply_request_287474_cstring_format_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image)
+                cstring_formats.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -249,6 +260,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if cstring_formats:
+                return RequestVm287474CStringFormatPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats))
             if environment_constants:
                 return RequestVm287474EnvironmentConstantPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants))
@@ -536,6 +550,30 @@ def apply_request_287474_environment_constant_callback(pages, *, argument_block_
         raise RefillUnsupported('environment constant callback aliases unmodeled physical spills')
     result=get_environment_constant(p,image_base=image_base,entry_offset=0x256330)
     _write_span(p,argument_block_address+16,result.to_bytes(8,'little'))
+    p.commit()
+    return result
+
+
+def apply_request_287474_cstring_format_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base):
+    """+288718: six X arguments to +2781f4, then W0 at packed+56.
+
+    Capacity and output are guest inputs. Preserve packed+60 except for an
+    explicit output alias. Native spill buffers and other conversions reject.
+    """
+    from vm9_logger import format_cstring_arguments
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('C-string format callback requires an aligned guest stack')
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,56)
+    words=tuple(int.from_bytes(packed[i:i+8],'little') for i in range(0,56,8))
+    if words[0]!=image_base+0x2781F4:
+        raise RefillUnsupported('unexpected second C-string format target')
+    if argument_block_address<entry_stack_address and argument_block_address+64>entry_stack_address-0x1000:
+        raise RefillUnsupported('C-string format packed block aliases unmodeled native spills')
+    result=format_cstring_arguments(p,output_address=words[1],capacity=words[2],format_address=words[3],
+        argument_addresses=words[4:],forbidden_span=(entry_stack_address-0x1000,0x1000))
+    _write_span(p,argument_block_address+56,result.to_bytes(4,'little'))
     p.commit()
     return result
 

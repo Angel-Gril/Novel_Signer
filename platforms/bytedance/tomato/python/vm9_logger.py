@@ -52,6 +52,55 @@ def format_literal(pages, *, format_address, output_address, capacity=0x400):
     return text
 
 
+def format_cstring_arguments(pages, *, format_address, output_address,
+        argument_addresses, capacity, max_bytes=0x100000, forbidden_span=None):
+    """Measured +2781f4/+2772a4 literals, %s and %% with up to three cells.
+
+    NULL %s is empty. Return the full length; write at most capacity-1 bytes
+    plus NUL, or nothing for zero capacity. Other conversions, overlapping
+    output/input buffers and declared native spill aliases remain unsupported.
+    """
+    if (type(max_bytes) is not int or not 1<=max_bytes<=0x100000
+            or type(capacity) is not int or not 0<=capacity<=0x100000
+            or type(format_address) is not int or not 0<format_address<1<<64
+            or type(output_address) is not int or not 0<=output_address<1<<64
+            or not isinstance(argument_addresses,tuple) or len(argument_addresses)>3
+            or any(type(a) is not int or not 0<=a<1<<64 for a in argument_addresses)):
+        raise RefillUnsupported('invalid bounded C-string format inputs')
+    p=_PageTransaction(pages)
+    fmt=cstring(p,format_address,max_bytes=max_bytes)
+    inputs=[(format_address,len(fmt)+1)];rendered=bytearray();index=0;argument=0
+    while index<len(fmt):
+        byte=fmt[index];index+=1
+        if byte!=37:rendered.append(byte)
+        else:
+            if index==len(fmt):raise RefillUnsupported('unterminated format conversion')
+            conversion=fmt[index];index+=1
+            if conversion==37:rendered.append(37)
+            elif conversion==115:
+                if argument==len(argument_addresses):
+                    raise RefillUnsupported('C-string format needs an unsupplied argument')
+                address=argument_addresses[argument];argument+=1
+                data=cstring(p,address,max_bytes=max_bytes)
+                if address:inputs.append((address,len(data)+1))
+                rendered.extend(data)
+            else:raise RefillUnsupported('C-string format conversion is unrecovered')
+        if len(rendered)>max_bytes:raise RefillUnsupported('formatted output exceeds explicit bound')
+    data=bytes(rendered[:max(0,capacity-1)])+b'\0' if capacity else b''
+    def overlaps(a,n,b,m):return bool(n and m and a<b+m and b<a+n)
+    if any(overlaps(output_address,len(data),a,n) for a,n in inputs):
+        raise RefillUnsupported('C-string format output aliases a live input')
+    if forbidden_span is not None:
+        if (not isinstance(forbidden_span,tuple) or len(forbidden_span)!=2
+                or any(type(v) is not int or v<0 for v in forbidden_span)):
+            raise RefillUnsupported('invalid native spill exclusion')
+        if any(overlaps(a,n,*forbidden_span) for a,n in (*inputs,(output_address,len(data)))):
+            raise RefillUnsupported('C-string format aliases unmodeled native spills')
+    if data:_write_span(p,output_address,data)
+    p.commit()
+    return len(rendered)
+
+
 def log_literal_unavailable(pages, *, object_address, format_address,
                             entry_stack_address, image_base, read_property,
                             syscall, errno_address, observer=None):
