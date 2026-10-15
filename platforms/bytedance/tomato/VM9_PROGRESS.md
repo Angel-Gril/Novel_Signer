@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM cached reference callback
+
+17项新增原生对照、8项回滚通过；2886B0直接委托已有1CF55C缓存owner。
+owning5571指令/1189范围及有序服务一致，实际入口
+8809→8844/0x107b24，下一0x2884ec→0x32d3a0。
+显式JNI fixture，真实TLS获取；原outer页保持，64新增OS页保留，second页未发布。
+完整signer及fresh/live/JVM仍未完成。见 [second cached reference报告](REQUEST_JNI_STARTUP_WORKERS.md#6178-second-vm-cached-reference-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：cached reference initialization and refresh
 
 44项新增原生对照、18项回滚通过；恢复1CF55C的inline guard、首次初始化、

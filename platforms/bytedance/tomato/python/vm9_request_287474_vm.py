@@ -76,6 +76,11 @@ class RequestVm287474PairGetterPrefix(RequestVm287474CachedU32Prefix):
     pair_getters: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474CachedReferencePrefix(RequestVm287474PairGetterPrefix):
+    cached_references: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -110,6 +115,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     reference_getters=[]
     cached_u32_getters=[]
     pair_getters=[]
+    cached_references=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -184,6 +190,18 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     image_base=image,thread_pointer=inputs['thread_pointer'],
                     allocate=consumer_services['allocate'],thread_id=consumer_services.get('thread_id'))
                 pair_getters.append((argument,output))
+            elif consumer_services is not None and (wrapper,target)==(0x2886B0,0x1CF55C):
+                if any(not callable(consumer_services.get(n)) for n in
+                        ('acquire_environment','invoke_jni','register_exit','calloc')):raise Boundary()
+                output=apply_request_287474_cached_reference_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    acquire_environment=consumer_services['acquire_environment'],
+                    invoke_jni=consumer_services['invoke_jni'],register_exit=consumer_services['register_exit'],
+                    allocate=consumer_services['allocate'],calloc=consumer_services['calloc'],free=consumer_services['free'],
+                    thread_id=consumer_services.get('thread_id'),
+                    diagnostic_observer=consumer_services.get('diagnostic_observer'))
+                cached_references.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -208,6 +226,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if cached_references:
+                return RequestVm287474CachedReferencePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references))
             if pair_getters:
                 return RequestVm287474PairGetterPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters))
@@ -414,6 +435,29 @@ def apply_request_287474_pair_getter_callback(pages, *, argument_block_address,
         source_address=receiver+0x18,entry_stack_address=entry_stack_address-16,
         image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,
         thread_id=thread_id,diagnostic_observer=diagnostic_observer)
+    transaction.commit()
+    return output
+
+
+def apply_request_287474_cached_reference_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, thread_pointer, acquire_environment,
+        invoke_jni, register_exit, allocate, calloc, free, thread_id=None,
+        diagnostic_observer=None):
+    """+2886b0 loads target/X8 only; +1cf55c receives SP-16, packed X0 intact.
+
+    The wrapper has no receiver argument and no packed result store. Pages
+    commit only after the cache owner returns; external effects stay external.
+    """
+    from vm9_jni_environment import copy_cached_dispatch_byte_reference
+    transaction=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(transaction,argument_block_address,8),'little')
+    output=int.from_bytes(_read_span(transaction,argument_block_address+8,8),'little')
+    if target!=image_base+0x1CF55C:
+        raise RefillUnsupported('unexpected second cached byte reference target')
+    copy_cached_dispatch_byte_reference(transaction,output_reference_address=output,
+        entry_stack_address=entry_stack_address-16,image_base=image_base,thread_pointer=thread_pointer,
+        acquire_environment=acquire_environment,invoke_jni=invoke_jni,register_exit=register_exit,
+        allocate=allocate,calloc=calloc,free=free,thread_id=thread_id,diagnostic_observer=diagnostic_observer)
     transaction.commit()
     return output
 

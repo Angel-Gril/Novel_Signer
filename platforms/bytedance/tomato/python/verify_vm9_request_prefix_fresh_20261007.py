@@ -73,7 +73,8 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                    read_clock=None, acquire_environment=None, invoke_jni=None,
                    get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None,
                    register_exit=None, get_state_service=None, parse_decimal=None,
-                   random_services=None, logger_services=None, jni_availability_services=None):
+                   random_services=None, logger_services=None, jni_availability_services=None,
+                   calloc=None):
     if jni_availability_services is not None and (not isinstance(jni_availability_services,dict) or
             not callable(jni_availability_services.get('invoke_jni'))):
         raise RefillUnsupported('request JNI availability requires an explicit JNI service')
@@ -438,7 +439,11 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
                     vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,random_services=random_services,
                         acquire_environment=acquire_environment,logger_services=logger_services,
-                        jni_availability_services=jni_availability_services),
+                        jni_availability_services=jni_availability_services,invoke_jni=invoke_jni,
+                        register_exit=register_exit,calloc=calloc,
+                        thread_id=None if diagnostic_scope is None else diagnostic_scope.get('thread_id'),
+                        diagnostic_observer=None if diagnostic_scope is None else lambda *event:
+                            diagnostic_scope.setdefault('events',[]).append(event)),
                     maxsteps=10000,entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
                     image_base=image,object_address=words[1],

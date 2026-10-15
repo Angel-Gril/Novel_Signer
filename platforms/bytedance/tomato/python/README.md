@@ -584,6 +584,8 @@ Cached dispatch byte producer passes26 new native controls and13 rollback checks
 
 Cached reference initialization and refresh pass44 new native controls and18 rollback checks. The original +1cf55c inline cache composes the producer, process destructor registration and scoped references, including signed64 refresh conditions. Request remains8809 before +2886b0 -> +1cf55c; second wiring and complete signing remain unfinished. See the [cached reference report](../REQUEST_JNI_STARTUP_WORKERS.md#6177-cached-reference-initialization-and-refresh2026-10-15-asiashanghai).
 
+Second VM cached reference callback passes17 new native controls and8 rollback checks. The owning callback executes5571 instructions with1189 matching ranges; actual second entry advances8809 to8844 before 0x2884ec -> 0x32d3a0. Complete signing remains unfinished. See the [second cached reference report](../REQUEST_JNI_STARTUP_WORKERS.md#6178-second-vm-cached-reference-callback2026-10-15-asiashanghai).
+
 
 
 

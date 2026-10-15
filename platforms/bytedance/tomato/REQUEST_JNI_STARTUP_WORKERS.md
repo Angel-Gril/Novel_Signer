@@ -6417,6 +6417,32 @@ guard复用已有normal mutex操作，等待/递归/broadcast明确拒绝，页�
 python -B platforms/bytedance/tomato/python/verify_vm9_cached_reference_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <cached-reference-evidence.json>
 ```
 
+## 6.178 Second VM cached reference callback（2026-10-15 Asia/Shanghai）
+
+接入`2886B0→1CF55C`：wrapper只加载packed target和X8输出，向已有缓存owner
+传入SP-16，不读取receiver、不写packed result。second记录cached_references，
+outer显式转发JNI、calloc、exit、thread id和diagnostic服务。
+
+**17项新增原生/Python对照、8项回滚检查通过**。16项组件对照覆盖两个基址、
+冷/热diagnostics、有效atexit失败、NULL引用、第九次刷新、负数计数和输出别名；
+另有2项原生RED。旧8809步入口复用绑定和baseline AST缺失证明，没有重跑旧分组。
+
+新增owning回调执行 **5571条原始指令/1189声明范围**，
+使用实际second SP/TP，执行原始wrapper/cache/producer/转换，声明字段和有序
+服务一致。JNI fixture显式定义dispatch及byte-array转换，保留真实TLS获取；
+这不代表真实Android JVM。fixture补齐class local清理；私有探针导入名冲突已修复。
+
+实际second入口从 **8809推进至8844/0x107b24**，下一
+**0x2884ec→0x32d3a0**，缓存回调1次，child return和旧记录保持。
+原outer页面无差异，64新增OS页保留；second页仍未发布。旧cache/JNI/reference/
+diagnostic owner保持。完整physical ABI/stack/PAC、second/request、URL/header JNI、
+allocator mapping回滚、独立signer/fresh/live/JVM仍未完成。
+见 [second cached reference证据](evidence/vm9_request_second_cached_reference_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_cached_reference_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-cached-reference-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
