@@ -7176,6 +7176,32 @@ outer3900仍有边界，原页无差异/64新增OS页，second页未发布。
 python -B platforms/bytedance/tomato/python/verify_vm9_second_global_u32_c_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <global-u32-c-evidence.json>
 ```
 
+## 6.205 Second atomic u32（2026-10-16 Asia/Shanghai）
+
+扩展现有cached uint32 adapter与精确分派，恢复 `28887C→256F58` 读取 `receiver+138`，
+只写packed+16的4字节并保留receiver/+20 padding。旧 `288670→257880` 的shared-reader
+cache与mutex顺序保持。此处验证串行内存下的原始 `LDAR W`，并发acquire/release语义未证明。
+
+**19项新增原生/Python对照、14项拒绝或回滚检查通过**。18项两基址组件覆盖uint32边界、
+packed/output跨页、result/field别名及page-end字段；旧+E8字段使用反值以区别来源。
+完整声明guest/image、unsigned W0、receiver/result/padding一致；2项修改前原生RED保留。
+14项拒绝检查保持全部model页，涵盖未对齐/绕回字段与unmodeled physical spills别名。
+1项实际owning执行10条原始指令、1189个声明范围及观察到的非栈写入，native X0、
+packed padding与4个随机指针一致；使用实际callback SP，无native import。
+
+构造second执行通过该callback，到达 **10266步/0x10a848，opcode34 operation34拒绝边界**。
+保留生产异常帧中的所有旧completed计数和child return；cached-u32 getter累计2次，helper1次。
+这条指令处没有返回或发布second prefix。独立Python入口重放未重复已验收native callback。
+outer3900仍有边界，原页无差异/64新增OS页。初次组件组因guest-page-hole测试夹具失败，
+移除该夹具并修正output跨页地址后验收18项；失败组不计数，旧guard/actual native未重跑。
+累计6.127–6.205为 **2516项native/784项拒绝或回滚检查**。
+完整signer、浮点族/JSON parser、whole second/request、physical ABI/PAC、mapping rollback、
+真实URL/header JNI与fresh/live/JVM仍未完成。见 [原子字段读取证据](evidence/vm9_second_atomic_u32_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_atomic_u32_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <atomic-u32-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

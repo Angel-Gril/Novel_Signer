@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second serial atomic field getter
+
+19项新增原生对照、14项拒绝或回滚检查通过；恢复256F58读取receiver+138并写packed+16。
+旧locked getter保持；原始LDAR串行值一致，并发语义未证明。
+执行到10266/0x10a848，opcode34 operation34仍拒绝；异常帧保留旧计数/child return，second prefix未返回。
+outer原页无差异/64新增OS页；累计2516native/784checks；完整signer/fresh/live/JVM未完成。
+见 [原子读取报告](REQUEST_JNI_STARTUP_WORKERS.md#6205-second-atomic-u322026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：third second-VM global uint32 getter
 
 17项新增原生对照、10项拒绝或回滚检查通过；恢复1E53D0读取3D60D4，旧两getter/helper语义保持。

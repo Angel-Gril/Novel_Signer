@@ -509,6 +509,8 @@ Second environment helper passes 27 new native controls and 14 rejection/rollbac
 
 Third second-VM global uint32 getter passes 17 new native controls and 10 rejection/rollback checks. Target1e53d0 reads3d60d4 through the existing owner; both old getters and the environment helper remain. Constructed prefix reaches10208/0x10a760, next0x28887c->0x256f58. Complete signing remains unfinished. See the [third global getter report](REQUEST_JNI_STARTUP_WORKERS.md#6204-second-global-u32-c2026-10-16-asiashanghai).
 
+Serial atomic field getter passes 19 new native controls and 14 rejection/rollback checks. Target256f58 reads receiver+138 through the existing cached-u32 adapter; its old shared-reader path remains. Constructed execution reaches10266/0x10a848, where opcode34 operation34 is rejected; no second prefix is returned there. Complete signing remains unfinished. See the [serial atomic getter report](REQUEST_JNI_STARTUP_WORKERS.md#6205-second-atomic-u322026-10-16-asiashanghai).
+
 
 
 
