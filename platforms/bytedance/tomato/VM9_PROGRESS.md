@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM locked pointer getter
+
+19项新增原生对照、13项回滚通过；288794→282B84复用normal mutex，在scope
+保留mutex owner后读取receiver+0x40，X64写packed+16。owning86指令/1191范围
+一致。入口9780→9813/0x109e08，下一2887B0→256B84；strings14、locked_pointers1，
+child return保留。原outer页无差异/64新增OS页，second页未发布。完整signer和
+fresh/live/JVM未完成。见 [加锁读取报告](REQUEST_JNI_STARTUP_WORKERS.md#6188-second-vm-locked-pointer-getter2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM environment acquisition
 
 17项新增原生对照通过；288788→26EDC4复用既有TLS/JavaVM owner，12字节tail

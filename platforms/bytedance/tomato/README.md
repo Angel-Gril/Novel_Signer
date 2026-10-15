@@ -475,6 +475,8 @@ Second VM cached thread pointer passes 15 new native controls and 7 rollback che
 
 Second VM environment acquisition passes 17 new native controls, reusing 6 existing rollback guards without rerunning them. The12-byte wrapper reuses the shared TLS/JavaVM owner; owning160 instructions/997 ranges and one GetEnv effect match. Actual second advances9752 to9780, next288794->282b84. Complete signing remains unfinished. See the [environment acquisition report](REQUEST_JNI_STARTUP_WORKERS.md#6187-second-vm-environment-acquisition2026-10-15-asiashanghai).
 
+Second VM locked pointer getter passes 19 new native controls and 13 rollback checks. Real normal mutexes retain the owner while reading receiver+0x40; owning86 instructions/1191 ranges match. Actual second advances9780 to9813, next2887b0->256b84. Complete signing remains unfinished. See the [locked pointer report](REQUEST_JNI_STARTUP_WORKERS.md#6188-second-vm-locked-pointer-getter2026-10-15-asiashanghai).
+
 
 
 

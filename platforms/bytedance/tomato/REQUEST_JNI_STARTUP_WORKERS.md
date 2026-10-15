@@ -6725,6 +6725,32 @@ mapping回滚、独立signer/fresh/live/JVM未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_environment_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-environment-evidence.json>
 ```
 
+## 6.188 Second VM locked pointer getter（2026-10-15 Asia/Shanghai）
+
+恢复 `288794→282B84`：scope位于wrapper SP-0x50，保留receiver+0x98的mutex
+owner，复用normal mutex lock/unlock，在持锁期间读取receiver+0x40。15F778
+通过scope保留的指针解锁；wrapper完整X64写packed+16，后续字节保持。
+
+**19项新增原生/Python对照、13项回滚通过**。18项两基址组件覆盖private/
+shared normal mutex、零/高X64、跨页field/result、field与mutex别名、mutex
+修改receiver+0x98时仍用原指针解锁，以及result/receiver别名。2项修改前
+原生RED直接观察持锁读取。旧9780入口和旧原生组复用绑定，没有重跑。
+
+owning **86条原始指令/1191声明范围**一致，实际second SP/TP、X64结果及
+padding、scope、两次真实libc mutex转换、canary输入和四个随机指针匹配。
+没有allocator/JNI/syscall服务。回滚覆盖锁后读失败、scope完成后store失败，
+以及SP-0x1000..SP的packed/receiver/mutex别名；physical spills/PAC和并发未证明。
+
+实际second **9780→9813/0x109e08**，下一 **2887B0→256B84**。locked_pointers1、
+strings14，其他旧记录和child return保留。outer3900仍有边界，原页无差异、
+64新增OS页保留，second页未发布。周边JNI为显式fixture；完整signer、physical
+ABI、URL/header JNI、mapping回滚及fresh/live/JVM未完成。
+见 [加锁读取证据](evidence/vm9_request_second_locked_pointer_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_locked_pointer_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-locked-pointer-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

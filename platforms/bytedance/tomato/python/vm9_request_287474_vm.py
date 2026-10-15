@@ -126,6 +126,11 @@ class RequestVm287474EnvironmentAcquisitionPrefix(RequestVm287474ThreadPointerPr
     environment_acquisitions: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474LockedPointerPrefix(RequestVm287474EnvironmentAcquisitionPrefix):
+    locked_pointers: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -170,6 +175,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     process_ids=[]
     thread_pointers=[]
     environment_acquisitions=[]
+    locked_pointers=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -312,6 +318,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     entry_stack_address=frame.native_stack_address-0x180,
                     acquire_environment=consumer_services['acquire_environment'])
                 environment_acquisitions.append((argument,acquired))
+            elif (wrapper,target)==(0x288794,0x282B84):
+                value=apply_request_287474_locked_pointer_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image)
+                locked_pointers.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -336,6 +347,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if locked_pointers:
+                return RequestVm287474LockedPointerPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers))
             if environment_acquisitions:
                 return RequestVm287474EnvironmentAcquisitionPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions))
@@ -789,6 +803,44 @@ def apply_request_287474_thread_pointer_callback(pages, *, argument_block_addres
         value=thread_pointer
         _write_span(p,cache,value.to_bytes(8,'little'))
     _write_span(p,argument_block_address+8,value.to_bytes(8,'little'))
+    p.commit()
+    return value
+
+
+def apply_request_287474_locked_pointer_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base):
+    """+288794/+282b84 reads receiver+0x40 while holding its normal mutex.
+
+    Retain receiver+0x98 in the +34c778 scope at wrapper SP-0x50 and reuse
+    the existing uncontended mutex owner. The +15f778 destructor uses that
+    retained mutex before the wrapper writes X64 at packed+16. Scope padding
+    remains unchanged. Physical spills/canary/PAC and concurrency are unverified.
+    """
+    from vm9_objects import lock_uncontended_mutex,unlock_uncontended_mutex
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('locked pointer callback requires an aligned guest stack')
+    p=_PageTransaction(pages)
+    packed=_read_span(p,argument_block_address,16)
+    target,receiver=(int.from_bytes(packed[i:i+8],'little') for i in (0,8))
+    if target!=image_base+0x282B84:
+        raise RefillUnsupported('unexpected second locked pointer target')
+    def exclude(address,width):
+        if address<entry_stack_address and address+width>entry_stack_address-0x1000:
+            raise RefillUnsupported('locked pointer callback aliases unmodeled native spills')
+    exclude(argument_block_address,24);exclude(receiver,0xA0)
+    mutex_owner=int.from_bytes(_read_span(p,receiver+0x98,8),'little')
+    exclude(mutex_owner+8,2)
+    guard=entry_stack_address-0x50;vtable=(image_base+0x34C778).to_bytes(8,'little')
+    _write_span(p,guard,vtable+mutex_owner.to_bytes(8,'little'))
+    status=lock_uncontended_mutex(p,mutex_address=mutex_owner+8)
+    _write_span(p,guard+16,status.to_bytes(4,'little'))
+    value=int.from_bytes(_read_span(p,receiver+0x40,8),'little')
+    _write_span(p,guard,vtable)
+    if not int.from_bytes(_read_span(p,guard+16,4),'little'):
+        retained=int.from_bytes(_read_span(p,guard+8,8),'little')
+        unlock_uncontended_mutex(p,mutex_address=retained+8)
+    _write_span(p,argument_block_address+16,value.to_bytes(8,'little'))
     p.commit()
     return value
 
