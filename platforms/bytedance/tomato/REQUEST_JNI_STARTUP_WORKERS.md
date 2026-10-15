@@ -6943,6 +6943,30 @@ native保存寄存器以外的页范围、packed/padding和四个随机指针保
 python -B platforms/bytedance/tomato/python/verify_vm9_second_crc_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-crc-evidence.json>
 ```
 
+## 6.196 Second VM deallocation callback（2026-10-15 Asia/Shanghai）
+
+恢复 `288610→32A264→free`，完整12字节wrapper与token `288B5C` 相同。
+second已有consumer在事务内转发显式free服务；无packed结果或物理X0返回声明。
+token/object/allocator owners未修改。
+
+**17项新增原生/Python对照、12项回滚通过**：16项两基址新wrapper控制覆盖
+普通/NULL/high/unaligned pointer转发、跨页packed、packed别名及两类provider
+写入。组件free服务是显式合成输入，不证明任意pointer对真实allocator有效。
+12项回滚覆盖wrapper/target/缺页/缺服务及provider写页或删页后失败；外部效果
+未回滚。2项修改前原生RED，旧原生组未重跑，10059步入口凭据按hash保留。
+
+实际owning **137原始指令/1193声明范围**与真实matching-libc free一致，实际
+SP/TP、有序free、image/heap/allocator、所有native非栈写入字节、packed/canary
+和四个随机指针保持；无JNI/lock/file/syscall。physical X0/spills/PAC未证明。
+实际second **10059→10070/0x10a3e8**，下一 **2884CC→2484FC**。frees1和旧记录/
+child return保持；outer3900有边界，原页无差异/64新增OS页，second页未发布。
+完整signer、真实URL/header JNI和fresh/live/JVM未完成。
+见 [释放回调证据](evidence/vm9_request_second_free_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_free_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-free-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

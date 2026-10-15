@@ -491,6 +491,8 @@ Second VM digest reference callback passes 33 new native controls and retains 8 
 
 Second VM CRC callback passes 33 new native controls and 18 rollback guards. The equivalent wrapper reuses the unchanged guest-table CRC owner and stores only four result bytes. Actual owning247 instructions/1439 ranges match. Actual second advances10030 to10059, next288610->32a264. Complete signing remains unfinished. See the [CRC report](REQUEST_JNI_STARTUP_WORKERS.md#6195-second-vm-crc-callback2026-10-15-asiashanghai).
 
+Second VM deallocation callback passes 17 new native controls and 12 rollback guards. The equivalent tail wrapper forwards explicit free with no packed result store. Actual owning137 instructions/1193 ranges match real matching-libc free. Actual second advances10059 to10070, next2884cc->2484fc. Complete signing remains unfinished. See the [deallocation report](REQUEST_JNI_STARTUP_WORKERS.md#6196-second-vm-deallocation-callback2026-10-15-asiashanghai).
+
 
 
 

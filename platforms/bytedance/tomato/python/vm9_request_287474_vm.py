@@ -166,6 +166,11 @@ class RequestVm287474CrcPrefix(RequestVm287474DigestPrefix):
     crcs: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474FreePrefix(RequestVm287474CrcPrefix):
+    frees: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -218,6 +223,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     string_pairs=[]
     digests=[]
     crcs=[]
+    frees=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -410,6 +416,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 value=apply_request_287474_crc_callback(staged,argument_block_address=argument,
                     entry_stack_address=frame.native_stack_address-0x180,image_base=image)
                 crcs.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288610,0x32A264):
+                apply_request_287474_consumer(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,image_base=image,
+                    allocate=consumer_services['allocate'],free=consumer_services['free'])
+                frees.append((argument,words[1]))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -434,6 +445,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if frees:
+                return RequestVm287474FreePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees))
             if crcs:
                 return RequestVm287474CrcPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs))
@@ -608,6 +622,7 @@ def apply_request_287474_consumer(pages, *, wrapper_offset,
     packed+32; the tail wrappers leave their packed bytes alone. Imported
     memcpy accepts disjoint ranges or identical pointers. The local +2a9280
     owner preserves its own ordered loads/stores, including overlapping ranges.
+    +288610 tail-calls explicit free without a packed or physical return value.
     """
     import vm9_objects as objects
     if type(max_bytes) is not int or not 0<=max_bytes<=0x100000:
@@ -623,6 +638,9 @@ def apply_request_287474_consumer(pages, *, wrapper_offset,
     elif pair==(0x2884CC,0x2484B8):
         result=objects.destroy_string_object(p,object_address=destination,
             image_base=image_base,free=free)
+    elif pair==(0x288610,0x32A264):
+        free(p,destination)
+        result=None
     elif pair==(0x288578,0x248274):
         fill=_read_span(p,argument_block_address+16,1)[0]
         length=int.from_bytes(_read_span(p,argument_block_address+20,4),'little')

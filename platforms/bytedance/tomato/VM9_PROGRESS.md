@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM deallocation callback
+
+17项新增原生对照、12项回滚通过；288610→32A264→free复用已有显式allocator
+服务，无packed结果。实际owning137指令/1193范围与真实matching-libc free一致。
+入口10059→10070/0x10a3e8，下一2884CC→2484FC；frees1及旧记录/child return保持。
+原outer页无差异/64新增OS页，second页未发布。完整signer和fresh/live/JVM未完成。
+见 [释放回调报告](REQUEST_JNI_STARTUP_WORKERS.md#6196-second-vm-deallocation-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM CRC callback
 
 33项新增原生对照、18项回滚通过；288820→258BAC→24B298复用未修改的guest
