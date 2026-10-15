@@ -453,6 +453,8 @@ Java object byte reference composition passes28 new native controls and12 rollba
 
 Cached dispatch byte producer passes26 new native controls and13 rollback checks. The original +1cf688 composes two explicit environment acquisitions, the exact dispatcher words, existing byte conversion and empty-string fallback. Environment replacement proves live-pair reload and retained-environment cleanup. The request boundary remains8809 before +2886b0 -> +1cf55c; complete signing remains unfinished. See the [cached dispatch bytes report](REQUEST_JNI_STARTUP_WORKERS.md#6176-cached-dispatch-byte-producer2026-10-15-asiashanghai).
 
+Cached reference initialization and refresh pass44 new native controls and18 rollback checks. The original +1cf55c inline cache composes the producer, process destructor registration and scoped references, including signed64 refresh conditions. Request remains8809 before +2886b0 -> +1cf55c; second wiring and complete signing remain unfinished. See the [cached reference report](REQUEST_JNI_STARTUP_WORKERS.md#6177-cached-reference-initialization-and-refresh2026-10-15-asiashanghai).
+
 
 
 

@@ -6392,6 +6392,31 @@ Android JVM、完整request/signer及fresh/live未验证。见 [cached dispatch 
 python -B platforms/bytedance/tomato/python/verify_vm9_cached_dispatch_bytes_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <cached-dispatch-bytes-evidence.json>
 ```
 
+## 6.177 Cached reference initialization and refresh（2026-10-15 Asia/Shanghai）
+
+恢复`1CF55C`的inline缓存：冷路径复用`1CF688`生成引用，注册进程析构并发布
+guard；有效atexit失败状态按原库忽略。空值判断覆盖NULL reference、零长度、
+NULL data和ELF中的sentinel CString。临时引用释放后，64位计数fetch-add并重读，
+**有符号余数10==9**时重新生成、赋值和清理，最后复制缓存到X8输出。
+
+**44项新增原生/Python对照、18项回滚检查通过**，另有2项原生RED。两个基址
+覆盖冷/热diagnostics、空值回退、首次及第十九次刷新、第十次跳过、负数余数、
+有符号溢出、uint64回绕、guard外层bit0与内层整字节差异、byte1特殊值，以及
+输出与缓存别名。声明guest/image/临时引用/最终diagnostic字段和有序services
+一致。冷初始化3788条指令，cold diagnostics为4245条；热非空794条。
+
+guard复用已有normal mutex操作，等待/递归/broadcast明确拒绝，页面保持不变；
+外部provider effects不能回滚。首组4项、后续36项及两组各2项sentinel用例分开保留，旧原生分组不重跑。原warm_sentinel将终止符计入长度，是非匹配控制；
+另补精确长度和非空synthetic sentinel相等控制，明确覆盖比较分支。
+旧owner/request AST和已绑定**8809/+10769C，下一2886B0→1CF55C**入口保持，
+本批无新owning或request入口执行。下一步补wrapper和second接线。
+并发atomic、physical padding/spills/PAC、真实TLS/JVM、完整signer/fresh/live
+未验证。见 [cached reference证据](evidence/vm9_cached_reference_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_cached_reference_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <cached-reference-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -487,6 +487,92 @@ def construct_cached_dispatch_byte_reference(pages, *, image_base, entry_stack_a
     p.commit()
 
 
+def copy_cached_dispatch_byte_reference(pages, *, output_reference_address,
+        entry_stack_address, image_base, thread_pointer, acquire_environment,
+        invoke_jni, register_exit, allocate, calloc, free, thread_id=None,
+        diagnostic_observer=None, max_payload_bytes=0x100000):
+    """+0x1cf55c: initialize the inline cache, refresh empty values, copy out.
+
+    Reuse the producer and scoped reference owners. The serial cxa guard
+    branch uses the existing normal mutex primitives; wait, broadcast and
+    recursion refuse. The counter models a 64-bit fetch-add then a separate
+    live reload with signed remainder. Concurrent callers and physical stack
+    spills/PAC are outside this contract. External effects cannot roll back.
+    """
+    import vm9_reference_scopes as references
+    from vm9_configuration_init import string_equals_cstring
+    from vm9_callbacks import register_process_destructor
+    if (type(entry_stack_address) is not int or not 0x300<=entry_stack_address<=MASK64
+            or entry_stack_address&15):
+        raise RefillUnsupported('cached byte reference requires an aligned guest stack')
+    _address(output_reference_address,'cached byte output reference',16)
+    if type(max_payload_bytes) is not int or not 0<=max_payload_bytes<=0x100000:
+        raise ValueError('invalid cached byte payload bound')
+    p=_PageTransaction(pages)
+    guard=objects._image_address(image_base,0x3D5100)
+    cache=objects._image_address(image_base,0x3D5120)
+    counter=objects._image_address(image_base,0x3D5108)
+    call_sp=entry_stack_address-0x60
+    kw=dict(entry_stack_address=call_sp,image_base=image_base,thread_pointer=thread_pointer,
+        thread_id=thread_id,allocate=allocate,diagnostic_observer=diagnostic_observer)
+    def produce(destination):
+        construct_cached_dispatch_byte_reference(p,output_reference_address=destination,
+            acquire_environment=acquire_environment,invoke_jni=invoke_jni,calloc=calloc,
+            free=free,max_payload_bytes=max_payload_bytes,**kw)
+    def normal(lock):
+        address=image_base+0x3E2F40
+        if diagnostic_observer is not None:
+            diagnostic_observer('pthread_mutex_lock' if lock else 'pthread_mutex_unlock',address)
+        operation=objects.lock_uncontended_mutex if lock else objects.unlock_uncontended_mutex
+        return operation(p,mutex_address=address)
+    # The outer bit test differs from the acquire helper's whole-byte test.
+    if not _u(p,guard,1)&1 and not _u(p,guard,1):
+        normal(True)
+        flag=_u(p,guard+1,1)
+        if flag&2:
+            raise RefillUnsupported('cached byte guard wait/recursive branch is unrecovered')
+        if flag!=1:
+            if type(thread_id) is not int or not 0<=thread_id<=0xFFFFFFFF:
+                raise RefillUnsupported('cold cached byte guard requires a uint32 thread id')
+            if diagnostic_observer is not None:diagnostic_observer('gettid',thread_id)
+            _w(p,guard+4,thread_id,4)
+            _w(p,guard+1,2,1)
+            normal(False)
+            produce(cache)
+            register_process_destructor(p,destructor_address=image_base+0x15E1A8,
+                object_address=cache,dso_address=image_base+0x34C700,register_exit=register_exit)
+            _w(p,guard,1,1)
+            normal(True)
+            flag=_u(p,guard+1,1)
+            _w(p,guard+1,1,1)
+            normal(False)
+            if flag&4:
+                raise RefillUnsupported('cached byte guard broadcast branch is unrecovered')
+        else:normal(False)
+    temporary=entry_stack_address-0x48
+    references.copy_scoped_string_reference(p,destination_address=temporary,source_address=cache,**kw)
+    string=_u(p,temporary)
+    empty=(not string or not _u(p,string+12,4) or not _u(p,string+16) or
+        string_equals_cstring(p,object_address=string,cstring_address=image_base+0x6FE64,
+            max_bytes=max_payload_bytes))
+    references.release_scoped_string_reference(p,reference_address=temporary,free=free,**kw)
+    if empty:
+        _w(p,counter,(_u(p,counter)+1)&MASK64)
+        value=_u(p,counter)
+        signed=value-(1<<64) if value>>63 else value
+        quotient=abs(signed)//10
+        if signed<0:quotient=-quotient
+        if signed-quotient*10==9:
+            temporary=entry_stack_address-0x58
+            produce(temporary)
+            references.assign_scoped_string_reference(p,destination_address=cache,
+                source_address=temporary,free=free,**kw)
+            references.release_scoped_string_reference(p,reference_address=temporary,free=free,**kw)
+    references.copy_scoped_string_reference(p,destination_address=output_reference_address,
+        source_address=cache,**kw)
+    p.commit()
+
+
 def retain_global_jni_reference(pages, *, environment_pointer, reference, invoke_jni):
     """+0x26f154: preserve type 2; otherwise NewGlobalRef then DeleteLocalRef.
 

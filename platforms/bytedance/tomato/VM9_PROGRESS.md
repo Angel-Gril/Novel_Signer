@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：cached reference initialization and refresh
+
+44项新增原生对照、18项回滚通过；恢复1CF55C的inline guard、首次初始化、
+进程析构注册、空值判断、64位计数及有符号余数刷新。复用producer/reference/
+mutex/string比较owner。声明字段及有序services一致；等待/递归/broadcast拒绝。
+旧AST和8809步入口证据保持，没有新owning/入口执行。下一步补2886B0 wrapper
+及second接线。完整signer未完成。见 [cached reference报告](REQUEST_JNI_STARTUP_WORKERS.md#6177-cached-reference-initialization-and-refresh2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：cached dispatch byte producer
 
 26项新增原生对照、13项回滚通过；恢复1CF688的两次环境获取、精确dispatch
