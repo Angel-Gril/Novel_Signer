@@ -471,6 +471,8 @@ Second VM realtime unsigned seconds passes 15 new native controls and 10 rollbac
 
 Second VM process ID callbacks pass 26 new native controls and 12 rollback checks. Explicit ELF-derived getpid/getppid imports, cached PID, syscall172/173 and errno paths match; owning callbacks execute18/13 instructions across1190/1189 ranges. Actual second advances9557 to9729, next28876c->204f58. Complete signing remains unfinished. See the [process ID report](REQUEST_JNI_STARTUP_WORKERS.md#6185-second-vm-process-id-callbacks2026-10-15-asiashanghai).
 
+Second VM cached thread pointer passes 15 new native controls and 7 rollback checks. Original obfuscated getter returns cached X64 or initializes it from TPIDR_EL0; owning65 instructions/1188 ranges match. Actual second advances9729 to9752, next288788->26edc4. Complete signing remains unfinished. See the [thread pointer report](REQUEST_JNI_STARTUP_WORKERS.md#6186-second-vm-cached-thread-pointer2026-10-15-asiashanghai).
+
 
 
 

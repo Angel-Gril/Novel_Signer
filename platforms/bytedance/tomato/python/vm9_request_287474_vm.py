@@ -116,6 +116,11 @@ class RequestVm287474ProcessIdPrefix(RequestVm287474RealtimeSecondsPrefix):
     process_ids: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474ThreadPointerPrefix(RequestVm287474ProcessIdPrefix):
+    thread_pointers: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -158,6 +163,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     registry_reads=[]
     realtime_seconds=[]
     process_ids=[]
+    thread_pointers=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -287,6 +293,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,read_clock=consumer_services['read_clock'])
                 realtime_seconds.append((argument,value))
+            elif (wrapper,target)==(0x28876C,0x204F58):
+                value=apply_request_287474_thread_pointer_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'])
+                thread_pointers.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -311,6 +322,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if thread_pointers:
+                return RequestVm287474ThreadPointerPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers))
             if process_ids:
                 return RequestVm287474ProcessIdPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids))
@@ -728,6 +742,36 @@ def apply_request_287474_process_id_callback(pages, *, argument_block_address,
         number=172 if target==import_bindings['getpid'] else 173
         value=_guest_syscall(p,syscall,thread_pointer+0x10,number)&0xFFFFFFFFFFFFFFFF
     _write_span(p,argument_block_address+8,(value&0xFFFFFFFF).to_bytes(4,'little'))
+    p.commit()
+    return value
+
+
+def apply_request_287474_thread_pointer_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,thread_pointer):
+    """+28876c/+204f58 returns the cached X64 TP, initializing only when zero.
+
+    +20513c advances its link register past opaque instructions. The actual
+    cold path reads TPIDR_EL0 and publishes image+3da090 before packed+8.
+    No TLS dereference, provider or per-thread cache policy is added here.
+    Physical spills/PAC are outside this semantic page transaction.
+    """
+    if (type(entry_stack_address) is not int or not 0x40<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('thread pointer callback requires an aligned guest stack')
+    if type(thread_pointer) is not int or not 0<=thread_pointer<1<<64:
+        raise RefillUnsupported('thread pointer callback requires uint64 TPIDR_EL0')
+    p=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
+    if target!=image_base+0x204F58:
+        raise RefillUnsupported('unexpected second thread pointer target')
+    if argument_block_address<entry_stack_address and argument_block_address+16>entry_stack_address-0x40:
+        raise RefillUnsupported('thread pointer packed block aliases unmodeled native spills')
+    cache=image_base+0x3DA090
+    value=int.from_bytes(_read_span(p,cache,8),'little')
+    if not value:
+        value=thread_pointer
+        _write_span(p,cache,value.to_bytes(8,'little'))
+    _write_span(p,argument_block_address+8,value.to_bytes(8,'little'))
     p.commit()
     return value
 

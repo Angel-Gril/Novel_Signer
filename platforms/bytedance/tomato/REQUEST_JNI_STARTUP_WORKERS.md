@@ -6670,6 +6670,34 @@ URL/header JNI、allocator mapping 回滚、独立 signer/fresh/live/JVM 未完�
 python -B platforms/bytedance/tomato/python/verify_vm9_second_process_id_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-process-id-evidence.json>
 ```
 
+## 6.186 Second VM cached thread pointer（2026-10-15 Asia/Shanghai）
+
+恢复 `28876C→204F58`：image+3DA090 非零时返回原 X64；零时读取 TPIDR_EL0，
+先写入该全局缓存，再将完整 X64 写 packed+8，后续字节保留。TP 为零时缓存
+仍为零；没有增加 TLS 解引用或按线程失效策略。混淆 helper20513C 修改 LR，
+跳过伪造的栈指令；已由原始指令执行验证。
+
+**15 项新增原生/Python 对照、7 项回滚通过**。14 项两基址组件覆盖冷/零 TP、
+缓存/高 X64、未映射但不使用的 TP、跨页结果以及结果与缓存别名。另有 2 项
+修改前原生 RED；旧 9729 入口和已验收原生组复用绑定。拒绝控制覆盖 cache
+写入后最终 store 失败及 SP-0x40..SP spill 别名，所有模型页保持。
+
+owning **65 条原始指令、1188 声明范围**一致，使用实际 second SP/TP，缓存
+初始为零，X64/padding 和四个随机指针一致。此回调没有 allocator/JNI/mutex/
+syscall 服务。旧 PID/random/realtime/outer/JNI/ELF AST 和私有回执均保持。
+本阶段用现有 Capstone/Unicorn；REA 未连接，不作为 REA Evidence。
+
+实际 second **9729→9752/0x109bbc**，下一 **288788→26EDC4**。thread_pointers1、
+process_ids2、reader7 对、diagnostic21 对、child return 保留。outer3900 仍有
+边界，原页无差异、64 新增 OS 页保留，second 页未发布。周边 JNI 和 syscall
+是显式 fixture；完整 second/request/204ED4、physical ABI/PAC、URL/header JNI、
+allocator mapping 回滚、独立 signer/fresh/live/JVM 未完成。
+见 [线程指针证据](evidence/vm9_request_second_thread_pointer_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_thread_pointer_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-thread-pointer-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

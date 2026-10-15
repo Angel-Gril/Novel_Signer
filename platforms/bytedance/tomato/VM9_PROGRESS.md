@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM cached thread pointer
+
+15 项新增原生对照、7 项回滚通过；28876C→204F58 恢复全局缓存或 TPIDR_EL0
+初始化、X64 packed+8 写入，包含混淆 LR helper 原始执行。owning65 指令、
+1188 范围一致；旧 PID/random/realtime/outer/ELF/JNI AST 保持。
+实际入口 9729→9752/0x109bbc，下一288788→26EDC4；TP1、PID2，child return
+保留。outer 原页无差异、64 新增 OS 页，second 页未发布。完整 signer 和
+fresh/live/JVM 未完成。见 [线程指针报告](REQUEST_JNI_STARTUP_WORKERS.md#6186-second-vm-cached-thread-pointer2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM process ID callbacks
 
 26 项新增原生对照、12 项回滚通过；28863C 调用显式导入 getpid/getppid，
