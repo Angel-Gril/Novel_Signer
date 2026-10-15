@@ -586,6 +586,8 @@ Cached reference initialization and refresh pass44 new native controls and18 rol
 
 Second VM cached reference callback passes17 new native controls and8 rollback checks. The owning callback executes5571 instructions with1189 matching ranges; actual second entry advances8809 to8844 before 0x2884ec -> 0x32d3a0. Complete signing remains unfinished. See the [second cached reference report](../REQUEST_JNI_STARTUP_WORKERS.md#6178-second-vm-cached-reference-callback2026-10-15-asiashanghai).
 
+Second VM static guard acquire passes 33 new native controls and 14 rollback checks. The owning callback executes 94 instructions with 1185 matching ranges; actual second entry advances 8844 to 8902 before 0x2886fc -> 0x256330. Complete signing remains unfinished. See the [second guard acquire report](../REQUEST_JNI_STARTUP_WORKERS.md#6179-second-vm-static-guard-acquire2026-10-15-asiashanghai).
+
 
 
 

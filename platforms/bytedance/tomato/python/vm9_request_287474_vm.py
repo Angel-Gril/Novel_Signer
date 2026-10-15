@@ -81,6 +81,11 @@ class RequestVm287474CachedReferencePrefix(RequestVm287474PairGetterPrefix):
     cached_references: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474GuardAcquirePrefix(RequestVm287474CachedReferencePrefix):
+    guard_acquisitions: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -116,6 +121,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     cached_u32_getters=[]
     pair_getters=[]
     cached_references=[]
+    guard_acquisitions=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -202,6 +208,12 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     thread_id=consumer_services.get('thread_id'),
                     diagnostic_observer=consumer_services.get('diagnostic_observer'))
                 cached_references.append((argument,output))
+            elif consumer_services is not None and (wrapper,target)==(0x2884EC,0x32D3A0):
+                value=apply_request_287474_guard_acquire_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_id=consumer_services.get('thread_id'),
+                    observer=consumer_services.get('diagnostic_observer'))
+                guard_acquisitions.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -226,6 +238,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if guard_acquisitions:
+                return RequestVm287474GuardAcquirePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions))
             if cached_references:
                 return RequestVm287474CachedReferencePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references))
@@ -460,6 +475,32 @@ def apply_request_287474_cached_reference_callback(pages, *, argument_block_addr
         allocate=allocate,calloc=calloc,free=free,thread_id=thread_id,diagnostic_observer=diagnostic_observer)
     transaction.commit()
     return output
+
+
+def apply_request_287474_guard_acquire_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, thread_id=None, observer=None):
+    """+2884ec -> +32d3a0: load target/guard, then store W0 at packed+16.
+
+    Preserve packed+20 except when the explicit guard overlaps it. Refuse
+    aliases with unmodeled physical spills in the wrapper and guard frames.
+    """
+    from vm9_objects import acquire_static_initialization_guard
+    if (type(entry_stack_address) is not int or not 0x50<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('guard callback requires an aligned guest stack')
+    p=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
+    guard=int.from_bytes(_read_span(p,argument_block_address+8,8),'little')
+    if target!=image_base+0x32D3A0:
+        raise RefillUnsupported('unexpected second static guard acquire target')
+    for address,width in ((argument_block_address,24),(guard,8)):
+        if address<entry_stack_address and address+width>entry_stack_address-0x50:
+            raise RefillUnsupported('guard callback aliases unmodeled physical spills')
+    result=acquire_static_initialization_guard(p,guard_address=guard,image_base=image_base,
+        thread_id=thread_id,observer=observer)
+    _write_span(p,argument_block_address+16,result.to_bytes(4,'little'))
+    p.commit()
+    return result
 
 
 def _copy_request_287474_bytes(pages,destination,source,length):

@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM static guard acquire
+
+33 项新增原生对照、14 项回滚通过；恢复 32D3A0 并接入 2884EC wrapper。
+仅写 W32；声明 packed 别名与任意非零 guard 首字节覆盖，等待/递归拒绝。
+owning 94 指令/1185 范围和锁/gettid 顺序一致；实际入口
+8844→8902/0x107d54，下一 0x2886fc→0x256330。
+child return 和旧记录保留，原 outer 页无差异，64 新增 OS 页保留，second 页未发布。
+JNI 为显式 fixture；完整 signer 及 fresh/live/JVM 未完成。见 [guard acquire 报告](REQUEST_JNI_STARTUP_WORKERS.md#6179-second-vm-static-guard-acquire2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM cached reference callback
 
 17项新增原生对照、8项回滚通过；2886B0直接委托已有1CF55C缓存owner。

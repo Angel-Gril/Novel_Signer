@@ -6443,6 +6443,37 @@ allocator mapping回滚、独立signer/fresh/live/JVM仍未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_second_cached_reference_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-cached-reference-evidence.json>
 ```
 
+## 6.179 Second VM static guard acquire（2026-10-15 Asia/Shanghai）
+
+恢复 `32D3A0` 独立 guard acquire，并接入 `2884EC` wrapper 和 second VM。
+复用公共 normal mutex；byte0 任意非零立即返回 0，不读后续 guard 字节。
+否则加锁，byte1 bit1 等待/递归拒绝；byte1==1 跳过初始化，其余声明 flag
+写入显式 uint32 thread id 和 byte1=2，解锁并返回 1。现有 lazy singleton、
+cache、JNI、reference、diagnostic 组合及 outer 函数保持原 AST。
+
+**33 项新增原生/Python 对照、14 项回滚检查通过**。32 项组件覆盖两个基址、
+冷/热 flag、线程 ID 边界、guard/结果跨页、packed 别名、仅首字节映射和
+shared mutex；另有 2 项修改前原生 RED。wrapper 只写 packed+16 的 W32，
+packed+20 仅在显式 guard 别名时允许改变；与未建模 spill 区域重叠则拒绝。
+只映射首字节用例修正了测试初始化的整窗映射要求，执行原始指令前解除尾页
+映射；共享 oracle 和目标语义未改。14 项拒绝保持全部模型页，外部 observer
+效果不能回滚。旧 8844 步入口由绑定 hash 和 baseline AST 缺失证明复用。
+
+新增 owning 回调执行 **94 条原始指令/1185 声明范围**，
+实际 second SP/TP、matching-libc mutex、guard/packed/app/heap 字段及锁/gettid
+顺序一致；无分配和 JNI 调用。四个运行时 libc 随机输入指针保留。
+
+实际 second 入口 **8844→8902/0x107d54**，下一处
+**0x2886fc→0x256330**。guard acquire 1 次，child return 和旧
+effect 记录保留。outer 3900 步仍有边界，原页面无差异，64 新增 OS 页保留；
+second 页未发布。周边 JNI 为显式 fixture。完整 physical ABI/stack/PAC、
+second/request/204ED4、URL/header JNI、allocator mapping 回滚、独立 signer
+及 fresh/live/JVM 仍未完成。见 [guard acquire 证据](evidence/vm9_request_second_guard_acquire_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_guard_acquire_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-guard-acquire-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

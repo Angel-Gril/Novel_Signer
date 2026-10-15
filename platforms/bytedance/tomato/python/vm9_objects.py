@@ -81,6 +81,39 @@ def unlock_uncontended_mutex(pages, *, mutex_address: int) -> int:
     return _normal_mutex_transition(pages, mutex_address, lock=False)
 
 
+def acquire_static_initialization_guard(pages, *, guard_address: int,
+        image_base: int, thread_id=None, observer=None) -> int:
+    """+0x32d3a0 serial acquire: any nonzero byte0 returns zero immediately.
+
+    Reuse normal mutex transitions for the common guard lock. Byte1==1 skips
+    initialization; other nonwaiting flags select byte1=2 and an explicit tid.
+    Wait, recursion, abort, host concurrency and physical frames/PAC remain
+    unsupported. Page rollback cannot reverse an observer's external effects.
+    """
+    if type(guard_address) is not int or not 0<guard_address<(1<<64)-8:
+        raise RefillUnsupported('static guard requires a nonzero guest address')
+    p=_PageTransaction(pages)
+    if _read_span(p,guard_address,1)[0]:return 0
+    mutex=_image_address(image_base,0x3E2F40)
+    if observer is not None:observer('pthread_mutex_lock',mutex)
+    lock_uncontended_mutex(p,mutex_address=mutex)
+    flag=_read_span(p,guard_address+1,1)[0]
+    if flag&2:
+        raise RefillUnsupported('static guard wait/recursive branch is unrecovered')
+    result=0
+    if flag!=1:
+        if type(thread_id) is not int or not 0<=thread_id<=0xFFFFFFFF:
+            raise RefillUnsupported('cold static guard requires a uint32 thread id')
+        if observer is not None:observer('gettid',thread_id)
+        _write_span(p,guard_address+4,thread_id.to_bytes(4,'little'))
+        _write_span(p,guard_address+1,b'\x02')
+        result=1
+    if observer is not None:observer('pthread_mutex_unlock',mutex)
+    unlock_uncontended_mutex(p,mutex_address=mutex)
+    p.commit()
+    return result
+
+
 def _shared_reader_transition(pages, mutex_address, *, acquire):
     transaction = _PageTransaction(pages)
     lock_uncontended_mutex(transaction, mutex_address=mutex_address)
