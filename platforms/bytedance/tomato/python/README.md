@@ -576,6 +576,8 @@ Second VM reference getter passes33 new native controls and13 rollback checks. T
 
 Second VM cached u32 getter passes27 new native controls and13 rollback checks. The owning getter matches1185 ranges in237 instructions, including the W return, packed padding and four shared mutex transitions. The second VM reaches8760 steps before +28868c -> +2633a4; complete signing remains unfinished. See the [second cached u32 report](../REQUEST_JNI_STARTUP_WORKERS.md#6173-second-vm-cached-u32-getter2026-10-15-asiashanghai).
 
+Second VM pair reference getter passes29 new native controls and10 rollback checks. The three-instruction target delegates to the existing scoped reference copy. The owning callback matches1187 ranges and diagnostic fields in198 instructions with no allocation. The second VM reaches8809 steps before +2886b0 -> +1cf55c; complete signing remains unfinished. See the [second pair getter report](../REQUEST_JNI_STARTUP_WORKERS.md#6174-second-vm-pair-reference-getter2026-10-15-asiashanghai).
+
 
 
 

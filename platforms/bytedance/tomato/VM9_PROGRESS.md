@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM pair reference getter
+
+29项新增原生对照、10项回滚通过；owning198指令/1187范围及诊断有效字段一致。
+2633A4仅将receiver+18 tail-call到15F580，直接复用已有scoped reference copy。
+覆盖cold/warm、计数边界/NULL、跨页和partial/packed/counter别名。修改前入口
+复用既有8760步证据和AST缺失证明，无新入口RED或旧分组重跑。
+second8809/+10769C，下一2886B0→1CF55C；旧AST/registry/共享owners/outer保持，
+原页无差异，64新增OS页保留。完整second/request/signer/fresh/live/JVM仍未完成。
+见 [second pair getter报告](REQUEST_JNI_STARTUP_WORKERS.md#6174-second-vm-pair-reference-getter2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM cached u32 getter
 
 27项新增原生对照、13项回滚通过；owning237指令/1185范围一致。

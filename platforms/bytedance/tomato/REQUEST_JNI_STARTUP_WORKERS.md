@@ -6317,6 +6317,32 @@ mapping、signer及fresh/live/JVM未完成。见 [second cached u32证据](evide
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_cached_u32_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-cached-u32-evidence.json>
 ```
 
+## 6.174 Second VM pair reference getter（2026-10-15 Asia/Shanghai）
+
+恢复`28868C→2633A4`隐藏X8输出的pair getter。原始target仅3条指令：
+`X1=receiver+18; X0=X8; tail 15F580`。新wrapper直接复用已有
+`copy_scoped_string_reference`，target entry SP为callback SP-16，不写packed
+result。没有新增复制语义owner；旧second AST、registry及共享owners/outer保持。
+
+**29项新增原生/Python对照、10项回滚检查通过**。28项组件控制覆盖两个基址、
+cold/warm、zero/wrap/NULL计数、NULL pointer、源/输出跨页、same/partial pair
+overlap、packed target/output及receiver输出别名和counter输出别名。声明guest/
+image/24-byte scope字节、有序allocation及诊断recursive mutex effects一致。
+另有2项新增原生RED；修改前8760步入口复用已绑定证据和baseline AST缺失证明，
+没有重跑旧入口RED或已接受原生分组。
+
+1项owning执行 **198原始指令/1187声明范围**，实际SP/TP、隐藏输出、packed
+arguments、诊断有效字段及有序effects一致。owning scope+12物理padding和spills
+未比较。allocator stub关闭，但本项无allocation/JNI。second到
+**8809/+10769C**，下一 **2886B0→1CF55C**；pair getter1，显式diagnostic
+entry/leave各13，其余记录保持。原caller页无差异，64新增OS页保留。
+完整physical ABI/stack/PAC、second/request、URL/header JNI、mapping、signer及
+fresh/live/JVM未完成。见 [second pair getter证据](evidence/vm9_request_second_pair_getter_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_pair_getter_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-pair-getter-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
