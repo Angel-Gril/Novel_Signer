@@ -6605,6 +6605,37 @@ fresh/live/JVM 未完成。见 [second 配置读取证据](evidence/vm9_request_
 python -B platforms/bytedance/tomato/python/verify_vm9_second_registry_read_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-registry-read-evidence.json>
 ```
 
+## 6.184 Second VM realtime unsigned seconds（2026-10-15 Asia/Shanghai）
+
+恢复 `28876C→26CC64`。复用既有 `291958/329404` 的有符号毫秒计算，将结果
+按 uint64 解释后再做 **UDIV 1000**；负数/溢出输入与直接读秒或有符号除法
+不同。wrapper 只加载 target，**完整 X64 写入 packed+8**，后续字节保持。
+原有 realtime owner 和所有旧函数保持 AST；outer 只新增向 second 传递既有
+read_clock 的一个 keyword。缺失 provider 时仍保留边界。
+
+**15 项新增原生/Python 对照、10 项回滚检查通过**。14 项组件覆盖两个基址、
+零/submillisecond/subsecond、正/负时间、有符号溢出和跨页结果；另有 2 项修改
+前原生 RED。拒绝覆盖错误 provider、非法 timespec、provider 改页后的最终
+store 失败及 spill 别名。复用旧 9374 步入口绑定和 baseline 缺失证明，没有
+重跑已验收原生组。SP-0x1000..SP 为保守 packed 排除区；未证明 physical
+spill/canary/PAC 或实际系统 clock syscall；外部 provider effects 不能回滚。
+
+owning 回调 **54 条原始指令/1188 声明范围**，实际 second SP/TP、完整 X64
+结果及后续字节、四个运行时随机指针一致。原生与模型使用同一个显式
+clock_gettime(0) 响应；该回调没有 allocator、JNI 或 mutex 服务。
+
+实际 second **9374→9557/0x10963c**。下一 wrapper **28863C 的 target 为
+NULL**，需要追查初始化来源；没有补入替代调用目标。realtime_seconds 1 次、
+registry_reads 11、strings 13、reader acquire/release 5、diagnostic entry/leave 17；
+child return 和其他旧记录保留。outer 3900 步仍有边界，原页无差异、64 新增
+OS 页保留，second 页未发布。周边 JNI 为显式 fixture；完整 second/request/
+204ED4、physical ABI、URL/header JNI、allocator mapping 回滚、独立 signer
+及 fresh/live/JVM 未完成。见 [时钟回调证据](evidence/vm9_request_second_realtime_seconds_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_realtime_seconds_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-realtime-seconds-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

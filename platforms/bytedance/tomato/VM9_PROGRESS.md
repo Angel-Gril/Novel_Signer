@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM realtime unsigned seconds
+
+15 项新增原生对照、10 项回滚通过；28876C→26CC64 复用有符号毫秒 owner，
+按 uint64 做 UDIV1000，完整 X64 写 packed+8。outer 转交既有 clock provider。
+owning 54 指令/1188 范围及一次显式 clock_gettime(0) 响应一致。
+实际入口 9374→9557/0x10963c；下一 28863C 的 target 为 NULL，初始化来源待查。
+registry_reads 11、strings 13、reader 5 对、diagnostic 17 对，child return 保留。
+原 outer 页无差异、64 新增 OS 页保留，second 页未发布；JNI 为显式 fixture。
+完整 signer 和 fresh/live/JVM 未完成。见 [时钟报告](REQUEST_JNI_STARTUP_WORKERS.md#6184-second-vm-realtime-unsigned-seconds2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM configuration u32 read
 
 22 项新增原生对照通过；12 项既有回滚按绑定复用，未重跑或计为新增。

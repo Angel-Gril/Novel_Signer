@@ -106,6 +106,11 @@ class RequestVm287474RegistryReadPrefix(RequestVm287474GuardReleasePrefix):
     registry_reads: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474RealtimeSecondsPrefix(RequestVm287474RegistryReadPrefix):
+    realtime_seconds: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -146,6 +151,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     cstring_formats=[]
     guard_releases=[]
     registry_reads=[]
+    realtime_seconds=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -259,6 +265,12 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image)
                 registry_reads.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x28876C,0x26CC64):
+                if not callable(consumer_services.get('read_clock')):raise Boundary()
+                value=apply_request_287474_realtime_seconds_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,read_clock=consumer_services['read_clock'])
+                realtime_seconds.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -283,6 +295,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if realtime_seconds:
+                return RequestVm287474RealtimeSecondsPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds))
             if registry_reads:
                 return RequestVm287474RegistryReadPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads))
@@ -631,6 +646,32 @@ def apply_request_287474_guard_release_callback(pages, *, argument_block_address
         observer=observer)
     p.commit()
     return result
+
+
+def apply_request_287474_realtime_seconds_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, read_clock):
+    """+28876c -> +26cc64: signed milliseconds, then unsigned UDIV1000.
+
+    Reuse the existing realtime owner, mask its signed result to X64, then
+    divide. Only the target is loaded; the full X result replaces packed+8.
+    Physical spills/PAC are unmodeled; packed aliases in SP-0x1000..SP refuse.
+    External clock-provider effects cannot be reversed by page rollback.
+    """
+    from vm9_callbacks import read_realtime_milliseconds
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('realtime seconds callback requires an aligned guest stack')
+    p=_PageTransaction(pages)
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
+    if target!=image_base+0x26CC64:
+        raise RefillUnsupported('unexpected second realtime seconds target')
+    if argument_block_address<entry_stack_address and argument_block_address+16>entry_stack_address-0x1000:
+        raise RefillUnsupported('realtime seconds packed block aliases unmodeled native spills')
+    milliseconds=read_realtime_milliseconds(p,read_clock=read_clock)
+    value=(milliseconds&0xFFFFFFFFFFFFFFFF)//1000
+    _write_span(p,argument_block_address+8,value.to_bytes(8,'little'))
+    p.commit()
+    return value
 
 
 def _copy_request_287474_bytes(pages,destination,source,length):

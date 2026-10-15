@@ -467,6 +467,8 @@ Second VM static guard release passes 25 new native controls and 12 rollback che
 
 Second VM configuration u32 reading passes 22 new native controls, including ten owning callbacks with1190 matching ranges each. Twelve prior rollback checks are reused without rerun or new counts. The actual second entry advances9050 to9374 before 0x28876c -> 0x26cc64; complete signing remains unfinished. See the [second configuration read report](REQUEST_JNI_STARTUP_WORKERS.md#6183-second-vm-configuration-u32-read2026-10-15-asiashanghai).
 
+Second VM realtime unsigned seconds passes 15 new native controls and 10 rollback checks. Its owning callback executes54 original instructions with1188 matching ranges and one explicit clock provider call. Actual second advances9374 to9557, where wrapper28863c has a NULL target requiring investigation. Complete signing remains unfinished. See the [realtime seconds report](REQUEST_JNI_STARTUP_WORKERS.md#6184-second-vm-realtime-unsigned-seconds2026-10-15-asiashanghai).
+
 
 
 

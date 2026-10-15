@@ -438,6 +438,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 import vm9_request_287474_vm
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
                     vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,random_services=random_services,
+                        read_clock=read_clock,
                         acquire_environment=acquire_environment,logger_services=logger_services,
                         jni_availability_services=jni_availability_services,invoke_jni=invoke_jni,
                         register_exit=register_exit,calloc=calloc,
