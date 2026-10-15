@@ -640,13 +640,16 @@ class VM:
                 else:
                     raise ValueError("op17 sub %d @%#x" % (sub, self.pc))
             elif op == 34:
-                # +170348 selects a floating operation. Operation 30 reads
-                # implicit slot R4 as uint32 and writes double bits to R2.
+                # +170348 selects a floating operation. Operations 30/34 read
+                # implicit R4 low32 as uint32/int32 and write double bits to R2.
                 operation = (((dw >> 16) & 0x7C1F) | ((dw >> 1) & 0x01F003E0)
                              | ((dw << 4) & 0x000F8000) | ((dw >> 6) & 0x02000000))
-                if operation != 30:
+                if operation not in (30, 34):
                     raise ValueError("unrecovered opcode34 operation %d @%#x" % (operation, self.pc))
-                value = struct.unpack("<Q", struct.pack("<d", float(self.R[4] & 0xFFFFFFFF)))[0]
+                source = self.R[4] & 0xFFFFFFFF
+                if operation == 34 and source & 0x80000000:
+                    source -= 1 << 32
+                value = struct.unpack("<Q", struct.pack("<d", float(source)))[0]
                 if self.register_backing_base is not None:
                     m.w64((self.register_backing_base + 16) & M64, value)
                 self.R[2] = value

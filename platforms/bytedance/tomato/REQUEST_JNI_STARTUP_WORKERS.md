@@ -7202,6 +7202,32 @@ outer3900仍有边界，原页无差异/64新增OS页。初次组件组因guest-
 python -B platforms/bytedance/tomato/python/verify_vm9_second_atomic_u32_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <atomic-u32-evidence.json>
 ```
 
+## 6.206 VM int32 to double（2026-10-16 Asia/Shanghai）
+
+恢复 `opcode34/operation34`：读取隐式R4低32位，按signed int32扩展，转为double位写入R2，
+有guest backing时同步8字节结果。原始 `170348→1707D4→1707DC→1707E0→1707F4`
+执行SSHLL/SCVTF；高32位忽略，所有int32均可精确表示。旧operation30 unsigned转换及写入顺序保持，
+其他operation仍在写入前拒绝；完整浮点指令族尚未恢复。
+
+**32项新增原生/Python对照、6项拒绝检查通过**。两基址×8种输入×abstract/backed，
+覆盖零、一、INT32_MAX、INT32_MIN、-1和高32位干扰；全部32寄存器、guest payload、double位及
+定义的backing bytes一致，无allocator/native service。6项新未知operation检查保持寄存器、PC及
+全部model页；已记录的2项修改前原生RED保留，本次未重跑。
+
+构造请求在 `+10A848` 执行1次signed转换并通过下一JSON number callback，second prefix恢复
+返回至 **10294步/+10AA00，下一288898→2850A8**。旧completed计数与child return保持，
+JSON number从7次增至8次；既有7次unsigned转换在Python入口中继续执行。上次10266是拒绝
+指令尝试，当时prefix未返回。此处为构造请求链验证，没有额外whole-request原生指令对照。
+outer3900仍有边界，原页无差异/64新增OS页，second页未发布；旧native组未重跑。
+
+累计6.127–6.206为 **2548项native/790项拒绝或回滚检查**。完整signer、浮点族/JSON parser、
+whole second/request、physical ABI/PAC、mapping rollback、真实URL/header JNI和fresh/live/JVM未完成。
+见 [int32转double证据](evidence/vm9_i32_double_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_i32_double_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <i32-double-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

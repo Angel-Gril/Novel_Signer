@@ -640,6 +640,8 @@ Third second-VM global uint32 getter passes 17 new native controls and 10 reject
 
 Serial atomic field getter passes 19 new native controls and 14 rejection/rollback checks. Target256f58 reads receiver+138 through the existing cached-u32 adapter; its old shared-reader path remains. Constructed execution reaches10266/0x10a848, where opcode34 operation34 is rejected; no second prefix is returned there. Complete signing remains unfinished. See the [serial atomic getter report](../REQUEST_JNI_STARTUP_WORKERS.md#6205-second-atomic-u322026-10-16-asiashanghai).
 
+VM opcode34 operation34 int32-to-double passes 32 new native controls and 6 rejection checks. Implicit R4 signed low32 converts exactly to R2 double bits, including guest backing; operation30 remains unchanged. Constructed second prefix returns at10294/+10aa00, next288898->2850a8. Complete signing remains unfinished. See the [int32-to-double report](../REQUEST_JNI_STARTUP_WORKERS.md#6206-vm-int32-to-double2026-10-16-asiashanghai).
+
 
 
 

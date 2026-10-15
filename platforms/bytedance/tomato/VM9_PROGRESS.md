@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：VM int32 to double
+
+32项新增原生对照、6项拒绝检查通过；operation34将R4低signed int32转为R2 double。
+旧operation30及全部旧owner保持；abstract/backed寄存器和定义backing bytes与原生一致。
+构造second prefix恢复返回至10294/+10AA00，下一288898→2850A8；JSON number累计8次。
+旧计数/child return保持；outer原页无差异/64新增OS页；累计2548native/790checks。
+完整signer与fresh/live/JVM未完成。见 [有符号转换报告](REQUEST_JNI_STARTUP_WORKERS.md#6206-vm-int32-to-double2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：second serial atomic field getter
 
 19项新增原生对照、14项拒绝或回滚检查通过；恢复256F58读取receiver+138并写packed+16。
