@@ -338,6 +338,7 @@ second 配置读取新增 **22 项原生对照**，复用 12 项既有回滚证�
 second 时钟回调新增 **15 项原生对照、10 项回滚**，实际入口推进至 9557 步，下一 NULL target 待排查。见 [时钟报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6184-second-vm-realtime-unsigned-seconds2026-10-15-asiashanghai)。
 second PID 回调新增 **26 项原生对照、12 项回滚**，真实导入来源已确认，实际入口推进至 9729 步。见 [PID 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6185-second-vm-process-id-callbacks2026-10-15-asiashanghai)。
 second 线程指针缓存新增 **15 项原生对照、7 项回滚**，实际入口推进至 9752 步。见 [线程指针报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6186-second-vm-cached-thread-pointer2026-10-15-asiashanghai)。
+second JNI环境获取新增 **17 项原生对照**，复用旧回滚6项，入口推进至9780步。见 [环境报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6187-second-vm-environment-acquisition2026-10-15-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

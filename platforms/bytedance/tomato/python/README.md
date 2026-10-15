@@ -602,6 +602,8 @@ Second VM process ID callbacks pass 26 new native controls and 12 rollback check
 
 Second VM cached thread pointer passes 15 new native controls and 7 rollback checks. Original obfuscated getter returns cached X64 or initializes it from TPIDR_EL0; owning65 instructions/1188 ranges match. Actual second advances9729 to9752, next288788->26edc4. Complete signing remains unfinished. See the [thread pointer report](../REQUEST_JNI_STARTUP_WORKERS.md#6186-second-vm-cached-thread-pointer2026-10-15-asiashanghai).
 
+Second VM environment acquisition passes 17 new native controls, reusing 6 existing rollback guards without rerunning them. The12-byte wrapper reuses the shared TLS/JavaVM owner; owning160 instructions/997 ranges and one GetEnv effect match. Actual second advances9752 to9780, next288794->282b84. Complete signing remains unfinished. See the [environment acquisition report](../REQUEST_JNI_STARTUP_WORKERS.md#6187-second-vm-environment-acquisition2026-10-15-asiashanghai).
+
 
 
 

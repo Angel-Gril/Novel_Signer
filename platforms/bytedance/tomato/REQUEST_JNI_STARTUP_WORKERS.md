@@ -6698,6 +6698,33 @@ allocator mapping 回滚、独立 signer/fresh/live/JVM 未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_second_thread_pointer_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-thread-pointer-evidence.json>
 ```
 
+## 6.187 Second VM environment acquisition（2026-10-15 Asia/Shanghai）
+
+`288788→26EDC4` 直接复用既有 environment acquisition 和 TLS/JavaVM owner。
+新 wrapper 与205058 的12字节相同，无 PC-relative 指令，无附加 frame，无
+packed 返回写入；输出由原 owner 写 pair。缺失 provider 时保留边界。
+
+**17 项新增原生/Python 对照通过**。16 项两基址新 wrapper 控制覆盖 warm/
+cold TLS slots/owner/destructor、临时 GetEnv/attach/detach、跨页 pair 和别名；
+另有2项修改前原生 RED。复用未修改 shared owner 的 **6 项旧回滚**证据及
+AST/hash，没有重跑或新增计数。旧9752入口同样复用绑定。
+
+owning **160 条原始指令/997 声明范围**一致，使用实际 second SP/TP；禁用
+原生 acquisition stub，执行匹配 libc emutls。输出 pair/TLS owner、packed、
+四个运行时随机指针和恰好一次 GetEnv effects 一致。保留随机输入指针后
+绑定其他 libc 重定位；没有宣称真实 JVM、完整 physical stack/PAC/allocator。
+
+实际 second **9752→9780/0x109c44**，下一 **288794→282B84**。acquisition1、
+thread_pointer1、PID2、reader7对、diagnostic21对和 child return 保留。outer
+3900仍有边界，原页无差异、64新增OS页保留，second页未发布。周边JNI为
+显式fixture；完整second/request/204ED4、physical ABI、URL/header JNI、
+mapping回滚、独立signer/fresh/live/JVM未完成。
+见 [环境获取证据](evidence/vm9_request_second_environment_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_environment_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-environment-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

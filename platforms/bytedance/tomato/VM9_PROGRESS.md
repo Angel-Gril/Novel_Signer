@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM environment acquisition
+
+17项新增原生对照通过；288788→26EDC4复用既有TLS/JavaVM owner，12字节tail
+wrapper无新增frame/store。owning160指令/997范围及一次GetEnv一致。复用旧
+6项回滚，不重跑/不新增计数，旧owner AST保持。入口9752→9780/0x109c44，
+下一288794→282B84。原outer页无差异/64新增OS页，second页未发布；JNI显式
+fixture。完整signer/fresh/live/JVM未完成。见 [环境报告](REQUEST_JNI_STARTUP_WORKERS.md#6187-second-vm-environment-acquisition2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM cached thread pointer
 
 15 项新增原生对照、7 项回滚通过；28876C→204F58 恢复全局缓存或 TPIDR_EL0

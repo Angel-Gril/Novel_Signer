@@ -121,6 +121,11 @@ class RequestVm287474ThreadPointerPrefix(RequestVm287474ProcessIdPrefix):
     thread_pointers: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474EnvironmentAcquisitionPrefix(RequestVm287474ThreadPointerPrefix):
+    environment_acquisitions: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -164,6 +169,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     realtime_seconds=[]
     process_ids=[]
     thread_pointers=[]
+    environment_acquisitions=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -298,6 +304,14 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,thread_pointer=inputs['thread_pointer'])
                 thread_pointers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288788,0x26EDC4):
+                if not callable(consumer_services.get('acquire_environment')):raise Boundary()
+                from vm9_request_environment_vm import apply_request_environment_acquisition_callback
+                acquired=apply_request_environment_acquisition_callback(staged,
+                    argument_block_address=argument,image_base=image,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    acquire_environment=consumer_services['acquire_environment'])
+                environment_acquisitions.append((argument,acquired))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -322,6 +336,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if environment_acquisitions:
+                return RequestVm287474EnvironmentAcquisitionPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions))
             if thread_pointers:
                 return RequestVm287474ThreadPointerPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers))
