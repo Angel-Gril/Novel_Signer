@@ -863,6 +863,78 @@ def construct_empty_state_container(pages, *, image_base, allocate):
     staged.commit();return address
 
 
+def construct_empty_json_reference(pages, *, output_reference_address, source_address,
+        entry_stack_address, image_base, thread_pointer, allocate, free,
+        thread_id=None, diagnostic_observer=None, max_bytes=4096):
+    """+0x261404: scoped JSON reference for NULL source or an empty object.
+
+    Preserve default-container allocation/release and native parser globals.
+    Empty object prefixes allow control whitespace, BOM and ignored trailing
+    bytes. Other values and malformed input require the unrecovered parser.
+    Physical spills/PAC, arbitrary allocation aliases and concurrent hooks
+    are outside this bounded contract.
+    """
+    from vm9_reference_scopes import construct_scoped_string_reference
+    if type(max_bytes) is not int or not 2<=max_bytes<=0x100000:
+        raise RefillUnsupported('JSON input requires a bounded byte limit')
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('JSON reference requires an aligned guest stack')
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('JSON reference requires explicit allocation services')
+    p=_PageTransaction(pages)
+    if (_u(p,image_base+0x381AA0)!=image_base+0x347FD0 or
+            _u(p,image_base+0x381AA8)!=image_base+0x347FA0):
+        raise RefillUnsupported('JSON custom allocation hooks are unrecovered')
+    def new(size):
+        pointer=objects._allocate(p,allocate,size)
+        if pointer<entry_stack_address and pointer+size>entry_stack_address-0x1000:
+            raise RefillUnsupported('JSON allocation aliases unmodeled native spills')
+        return pointer
+    wrapper=new(16);_w(p,wrapper,image_base+0x35BA58)
+    default=construct_empty_state_container(p,image_base=image_base,allocate=allocate)
+    if not default:raise RefillUnsupported('JSON default allocation failure is unrecovered')
+    _w(p,wrapper+8,default)
+    construct_scoped_string_reference(p,reference_address=output_reference_address,
+        string_address=wrapper,entry_stack_address=entry_stack_address-0x30,
+        image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,
+        thread_id=thread_id,diagnostic_observer=diagnostic_observer)
+    retained=_u(p,output_reference_address);old=_u(p,retained+8)
+    if old:
+        if _read_span(p,old,64)!=bytes(24)+(64).to_bytes(4,'little')+bytes(36):
+            raise RefillUnsupported('JSON default container changed before release')
+        free(p,old)
+    if source_address:
+        length=len(objects._cstring(p,source_address,max_bytes+1))
+        _write_span(p,image_base+0x3DE420,bytes(16))
+        parsed=construct_empty_state_container(p,image_base=image_base,allocate=allocate)
+        if not parsed:raise RefillUnsupported('JSON parser allocation failure is unrecovered')
+        for source,dest,mask,flag in ((0x95ECC,0x3DE3BC,0x95F40,0x3DE3C0),
+                (0x95ED0,0x3DE3C4,0x95F38,0x3DE3CC),
+                (0x95ED8,0x3DE3D0,0x95F30,0x3DE3D8),
+                (0x95EE0,0x3DE3DC,0x95F28,0x3DE3E4)):
+            if not _u(p,image_base+flag,4):
+                objects.decode_masked_bytes(p,source_address=image_base+source,
+                    destination_address=image_base+dest,mask_address=image_base+mask)
+                _w(p,image_base+flag,1,4)
+        data=_read_span(p,source_address,length);offset=3 if length>=5 and data[:3]==b'\xef\xbb\xbf' else 0
+        def skip(index):
+            while index<len(data) and 0<data[index]<=32:index+=1
+            return index
+        offset=skip(offset)
+        if offset>=length or data[offset]!=123:
+            raise RefillUnsupported('JSON value is outside the empty-object branch')
+        offset=skip(offset+1)
+        if offset>=length or data[offset]!=125:
+            raise RefillUnsupported('JSON members or malformed object are unrecovered')
+    else:
+        parsed=construct_empty_state_container(p,image_base=image_base,allocate=allocate)
+    _w(p,_u(p,output_reference_address)+8,parsed)
+    if not parsed:
+        _w(p,_u(p,output_reference_address)+8,construct_empty_state_container(p,image_base=image_base,allocate=allocate))
+    p.commit();return wrapper
+
+
 def environment_path_exists(pages, *, object_address, syscall, errno_address):
     """+0x25ddec: nonempty string and successful faccessat(R_OK)."""
     staged=_PageTransaction(pages);result=False

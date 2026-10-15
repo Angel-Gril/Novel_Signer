@@ -624,6 +624,8 @@ Second VM deallocation callback passes 17 new native controls and 12 rollback gu
 
 Second VM deleting destructor passes 17 new native controls and 12 rollback guards. The existing consumer reuses the unchanged object destructor with deletion enabled. Actual owning295 instructions/1198 ranges match real payload/object free and pre-free bytes. Actual second advances10070 to10101, next28883c->261404. Complete signing remains unfinished. See the [deleting destructor report](../REQUEST_JNI_STARTUP_WORKERS.md#6197-second-vm-deleting-destructor2026-10-15-asiashanghai).
 
+Second VM empty JSON reference passes 25 new native controls and 16 rollback guards. NULL source and empty-object prefixes compose existing container/reference owners; other JSON remains unsupported. Actual owning1603 instructions/1248 ranges match real allocator/free and recursive locks. Actual second advances10101 to10110, next28863c->1c3018. Complete signing remains unfinished. See the [empty JSON report](../REQUEST_JNI_STARTUP_WORKERS.md#6198-second-vm-empty-json-reference2026-10-16-asiashanghai).
+
 
 
 

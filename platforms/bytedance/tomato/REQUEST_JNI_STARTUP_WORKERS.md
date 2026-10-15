@@ -6994,6 +6994,36 @@ diagnostic leaves22→23，其他旧记录/child return保持。outer3900有边�
 python -B platforms/bytedance/tomato/python/verify_vm9_second_delete_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-delete-evidence.json>
 ```
 
+## 6.198 Second VM empty JSON reference（2026-10-16 Asia/Shanghai）
+
+恢复 `28883C→261404` 的hidden-X8 JSON引用构造。实际source为 `{}`；新增configuration
+组合函数复用既有empty-container/scoped-reference owner，保留16字节wrapper、默认64字节
+object、counter及diagnostic scope，释放默认object后执行empty-object parser分支。
+支持NULL source、控制空白、UTF8 BOM和忽略结尾；其他JSON值、成员、malformed及custom hooks
+明确拒绝。**完整JSON parser尚未恢复**。
+
+**25项新增原生/Python对照、16项回滚通过**。24项两基址组件覆盖empty/NULL、前置/
+内部/控制空白、BOM、trailing、NUL、warm及source/output/packed跨页。原生parser、
+matching-libc递归锁与strncmp实际执行；组件allocation/free为显式合成provider。
+guest/image字节、有序effects/prefree bytes及退出前scope一致。parser会复用已退出scope的
+栈位置，因此scope在退出时比较。16项失败检查完整回滚model页，外部effects不回滚。
+2项修改前原生RED通过；已接受组件和旧原生组均未重跑。
+
+实际owning **1603条原始指令/1248声明范围**通过，使用真实matching-libc allocator/free/
+递归锁及实际SP/TP。image/heap/allocator与全部观察到的非栈写入、有序allocator/free/
+diagnostic和prefree bytes、scope at leave、packed/canary/四个随机指针一致。
+该回调无JNI/file/syscall；physical X0/spills/PAC未比较。
+
+second **10101→10110/0x10a488**，下一 **28863C→1C3018**。JSON reference完成1次，
+所有旧completed记录和child return保持。outer3900仍有边界，原页无差异/64新增OS页，
+second页未发布。完整signer、真实URL/header JNI、mapping rollback及fresh/live/JVM未完成。
+累计6.127–6.198为 **2318项native/704项rollback**。
+见 [empty JSON证据](evidence/vm9_request_second_json_empty_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_json_empty_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-json-empty-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

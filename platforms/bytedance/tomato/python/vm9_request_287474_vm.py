@@ -171,6 +171,11 @@ class RequestVm287474FreePrefix(RequestVm287474CrcPrefix):
     frees: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474JsonPrefix(RequestVm287474FreePrefix):
+    json_references: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -224,6 +229,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     digests=[]
     crcs=[]
     frees=[]
+    json_references=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -421,6 +427,13 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,image_base=image,
                     allocate=consumer_services['allocate'],free=consumer_services['free'])
                 frees.append((argument,words[1]))
+            elif consumer_services is not None and (wrapper,target)==(0x28883C,0x261404):
+                result=apply_request_287474_json_callback(staged,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,image_base=image,
+                    thread_pointer=inputs['thread_pointer'],allocate=consumer_services['allocate'],
+                    free=consumer_services['free'],thread_id=consumer_services.get('thread_id'),
+                    diagnostic_observer=consumer_services.get('diagnostic_observer'))
+                json_references.append((argument,result))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -445,6 +458,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if json_references:
+                return RequestVm287474JsonPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references))
             if frees:
                 return RequestVm287474FreePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees))
@@ -1094,6 +1110,27 @@ def apply_request_287474_crc_callback(pages, *, argument_block_address,
     value=crc_string_object(p,image_base,receiver)
     _write_span(p,argument_block_address+16,value.to_bytes(4,'little'))
     p.commit();return value
+
+
+def apply_request_287474_json_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,thread_pointer,allocate,free,
+        thread_id=None,diagnostic_observer=None,max_bytes=4096):
+    """+28883c hidden-X8 empty JSON reference; no packed result store."""
+    from vm9_configuration_init import construct_empty_json_reference
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('JSON callback requires an aligned guest stack')
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,24)
+    target,output,source=(int.from_bytes(packed[i:i+8],'little') for i in (0,8,16))
+    if target!=image_base+0x261404:raise RefillUnsupported('unexpected second JSON target')
+    for a,n in ((argument_block_address,24),(output,16),(source,1 if source else 0)):
+        if n and a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('JSON input aliases unmodeled native spills')
+    result=construct_empty_json_reference(p,output_reference_address=output,source_address=source,
+        entry_stack_address=entry_stack_address-16,image_base=image_base,
+        thread_pointer=thread_pointer,allocate=allocate,free=free,thread_id=thread_id,
+        diagnostic_observer=diagnostic_observer,max_bytes=max_bytes)
+    p.commit();return result
 
 
 def _copy_request_287474_bytes(pages,destination,source,length):

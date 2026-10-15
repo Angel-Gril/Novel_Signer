@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second VM empty JSON reference
+
+25项新增原生对照、16项回滚通过；28883C→261404恢复NULL/empty-object引用构造。
+实际owning1603指令/1248范围与matching-libc allocator/free/递归锁及全部非栈写入一致。
+入口10101→10110/0x10a488，下一28863C→1C3018；JSON reference1，旧记录/child return保持。
+原outer页无差异/64新增OS页，second页未发布。累计2318native/704rollback。
+完整JSON parser、signer和fresh/live/JVM未完成。见 [empty JSON报告](REQUEST_JNI_STARTUP_WORKERS.md#6198-second-vm-empty-json-reference2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM deleting destructor
 
 17项新增原生对照、12项回滚通过；2884CC→2484FC复用既有删除析构owner。
