@@ -7126,6 +7126,32 @@ second页未发布。累计6.127–6.202为 **2453项native/746项拒绝或回�
 python -B platforms/bytedance/tomato/python/verify_vm9_second_global_u32_b_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <global-u32-b-evidence.json>
 ```
 
+## 6.203 Second environment helper（2026-10-16 Asia/Shanghai）
+
+复用现有 `204E50` helper VM、acquisition、StringObject、logger和有序caller return，
+新增明确wrapper选择：`28863C→28864C`；默认旧 `2814C8→2814D8` 契约保持。
+未知wrapper、helper LR与VM exit sentinel不匹配均拒绝。second精确分派先于process分支。
+
+**27项新增原生/Python对照、14项拒绝或回滚检查通过**。26项两基址返回控制覆盖W边界、
+padding、packed跨页、结果与保存字或TLS别名；七个物理返回值和声明guest/stack范围一致。
+14项拒绝检查保持全部model页；2项修改前原生RED保留。
+
+1项实际构造的warm helper执行 **14992条原始指令/10个声明body范围**，
+Python178步、4次callback。32个virtual slots、完整callback ledger、七个物理返回值、
+packed W/padding及声明decoded/packed范围一致。原始acquisition、StringObject构造/析构和logger
+实际执行，使用matching-libc及既有GetEnv provider；必须观察新wrapper RET `288654` 后才在
+`16AA4C` 停止，避免停在中途generic callback返回。完整physical ABI/PAC/stack未证明。
+
+构造second prefix从10150推进到 **10169步/0x10a574**，下一 `0x28863c→0x1e53d0`。
+旧completed计数和child return保持；outer3900仍有边界，原页无差异/64新增OS页，second页未发布。
+累计6.127–6.203为 **2480项native/760项拒绝或回滚检查**；旧原生组未重跑。
+完整signer、JSON parser/浮点族、whole second/request/204ED4、真实URL/header JNI、mapping rollback
+和fresh/live/JVM仍未完成。见 [second helper证据](evidence/vm9_second_environment_helper_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_environment_helper_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <second-helper-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -494,8 +494,15 @@ def prepare_request_environment_vm_caller(pages, *, helper_offset,
     p.commit();return RequestVmCallerFrame(local,code,local+8,local+0x10,backing,registers,arguments)
 
 
+def request_environment_wrapper_return_offset(wrapper_offset):
+    """Only the two observed W-result wrappers may select a helper sentinel."""
+    if type(wrapper_offset) is not int or wrapper_offset not in (0x2814C8,0x28863C):
+        raise RefillUnsupported('unrecovered request environment wrapper')
+    return {0x2814C8:0x2814D8,0x28863C:0x28864C}[wrapper_offset]
+
+
 def finish_request_environment_wrapper_caller(pages, *, helper_offset,
-        entry_stack_address,thread_pointer,image_base) -> RequestCallerReturn:
+        entry_stack_address,thread_pointer,image_base,wrapper_offset=0x2814C8) -> RequestCallerReturn:
     """+204eac/+204f30 canary/restore followed by actual +2814d8 wrapper.
 
     Read the helper's packed W result first. Restore helper registers before
@@ -503,6 +510,7 @@ def finish_request_environment_wrapper_caller(pages, *, helper_offset,
     LR/X19. Live result aliases into saved words preserve this native order.
     Tagged return addresses and unexpected helper return targets are rejected.
     """
+    sentinel=request_environment_wrapper_return_offset(wrapper_offset)
     values=(helper_offset,entry_stack_address,thread_pointer,image_base)
     if any(type(v) is not int or not 0<=v<1<<64 for v in values):
         raise RefillUnsupported('request environment return inputs must fit uint64')
@@ -521,7 +529,7 @@ def finish_request_environment_wrapper_caller(pages, *, helper_offset,
         packed=int.from_bytes(_read_span(p,entry-8,8),'little')
         x29=int.from_bytes(_read_span(p,entry-0x20,8),'little')
         helper_lr=int.from_bytes(_read_span(p,entry-0x18,8),'little')
-        if helper_lr!=image_base+0x2814D8:
+        if helper_lr!=image_base+sentinel:
             raise RefillUnsupported('request environment helper LR does not reach its wrapper')
         if packed>(1<<64)-12:raise RefillUnsupported('request environment result address wraps uint64')
         _write_span(p,packed+8,result.to_bytes(4,'little'))
@@ -533,12 +541,14 @@ def finish_request_environment_wrapper_caller(pages, *, helper_offset,
     p.commit();return state
 
 
-def validate_request_environment_vm_exit(pages, *, helper_offset,image_base,pc,registers):
+def validate_request_environment_vm_exit(pages, *, helper_offset,image_base,pc,registers,
+        wrapper_offset=0x2814C8):
     """Validate the observed +204e50 helper VM return instruction and target."""
+    sentinel=request_environment_wrapper_return_offset(wrapper_offset)
     if helper_offset!=0x204E50 or pc!=image_base+0x8A4E8 or len(registers)!=32:
         raise RefillUnsupported('environment helper VM exit is outside the recovered branch')
     word=int.from_bytes(_read_span(pages,pc,4),'little')
-    if word!=0x07C00791 or registers[31]!=image_base+0x2814D8:
+    if word!=0x07C00791 or registers[31]!=image_base+sentinel:
         raise RefillUnsupported('environment helper VM exit does not reach its wrapper sentinel')
     return dict(bytecode_offset='0x8a4e8',instruction_word=hex(word),selected_slot=31,
         selected_target=registers[31],caller_sentinel_matches=True,

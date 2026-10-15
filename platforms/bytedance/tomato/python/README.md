@@ -634,6 +634,8 @@ Second VM JSON number insertion passes 69 new native controls and 16 rejection/r
 
 Second global uint32 getter passes 17 new native controls and 10 rejection/rollback checks. Target1c3024 reads37a790 through the existing owner;1c3018 semantics remain. Constructed prefix advances to10150/0x10a528, next0x28863c->0x204e50. Complete signing remains unfinished. See the [second global getter report](../REQUEST_JNI_STARTUP_WORKERS.md#6202-second-global-u32-b2026-10-16-asiashanghai).
 
+Second environment helper passes 27 new native controls and 14 rejection/rollback checks. The existing204e50 owner now returns through28863c; the old wrapper default remains. The actual warm helper matches32 virtual slots, four callbacks and seven physical return values. Constructed prefix reaches10169/0x10a574, next0x28863c->0x1e53d0. Complete signing remains unfinished. See the [second helper report](../REQUEST_JNI_STARTUP_WORKERS.md#6203-second-environment-helper2026-10-16-asiashanghai).
+
 
 
 

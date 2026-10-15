@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second environment helper
+
+27项新增原生对照、14项拒绝或回滚检查通过；复用204E50 owner接通28863C，旧wrapper默认契约保持。
+26项两基址返回+1项实际warm helper；32 virtual slots/4 callbacks/7物理返回值及声明范围一致。
+构造prefix10169/0x10a574，下一0x28863c→0x1e53d0；旧计数及child return保持。
+outer原页无差异/64新增OS页；累计2480native/760checks；旧原生组未重跑。
+完整signer和fresh/live/JVM未完成。见 [helper报告](REQUEST_JNI_STARTUP_WORKERS.md#6203-second-environment-helper2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：second global uint32 getter
 
 17项新增原生对照、10项拒绝或回滚检查通过；恢复1C3024读取37A790，旧getter语义保持。

@@ -186,6 +186,11 @@ class RequestVm287474JsonNumberPrefix(RequestVm287474GlobalU32Prefix):
     json_numbers: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474EnvironmentHelperPrefix(RequestVm287474JsonNumberPrefix):
+    environment_helpers: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -242,6 +247,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     json_references=[]
     global_u32_getters=[]
     json_numbers=[]
+    environment_helpers=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -309,6 +315,20 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image)
                 global_u32_getters.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x28863C,0x204E50):
+                if not callable(consumer_services.get('acquire_environment')) or consumer_services.get('logger_services') is None:
+                    raise Boundary()
+                from vm9_request_environment_vm import execute_request_environment_vm_prefix
+                helper=execute_request_environment_vm_prefix(staged,vm_module=vm_module,
+                    helper_offset=target,wrapper_offset=wrapper,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],image_base=image,
+                    saved_frame_pointer=frame.native_stack_address-0x60,
+                    saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8,
+                    acquire_environment=consumer_services['acquire_environment'],
+                    consumer_services=consumer_services,continue_caller_return=True)
+                environment_helpers.append((argument,helper))
+                if getattr(helper,'caller_return',None) is None:raise Boundary()
             elif consumer_services is not None and wrapper==0x28863C and consumer_services.get('process_services') is not None:
                 services=consumer_services['process_services']
                 if not isinstance(services,dict):raise Boundary()
@@ -480,6 +500,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if environment_helpers:
+                return RequestVm287474EnvironmentHelperPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers))
             if json_numbers:
                 return RequestVm287474JsonNumberPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers))

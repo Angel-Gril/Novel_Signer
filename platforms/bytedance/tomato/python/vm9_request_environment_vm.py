@@ -1,7 +1,7 @@
-"""Bounded +204e50/+204ed4 helper VMs through their actual +2814c8 wrapper."""
+"""Bounded +204e50/+204ed4 helper VMs through their observed W-result wrappers."""
 from dataclasses import dataclass
 from vm9_allocator import _PageTransaction,RefillUnsupported,_read_span,_write_span
-from vm9_request_caller import prepare_request_environment_vm_caller,RequestVmCallerFrame
+from vm9_request_caller import prepare_request_environment_vm_caller,RequestVmCallerFrame,request_environment_wrapper_return_offset
 from vm9_objects import decode_masked_bytes
 
 @dataclass(frozen=True)
@@ -34,12 +34,14 @@ class RequestEnvironmentVmReturn(RequestEnvironmentVmLoggedPrefix):
 
 def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
         argument_block_address,entry_stack_address,return_address,
-        thread_pointer,image_base,saved_frame_pointer=0,saved_x28=0,saved_x19=0):
+        thread_pointer,image_base,saved_frame_pointer=0,saved_x28=0,saved_x19=0,
+        wrapper_offset=0x2814C8):
     """+2814c8 saves LR/X19, loads target, sets X19=packed and calls helper.
 
     The completed wrapper's packed+8 W result is outside this bounded caller.
     No packed bytes are initialized or overwritten while entering the helper.
     """
+    sentinel=request_environment_wrapper_return_offset(wrapper_offset)
     if type(entry_stack_address) is not int or entry_stack_address<0x510 or entry_stack_address&15:
         raise RefillUnsupported('request environment wrapper stack must be aligned')
     if type(return_address) is not int or not 0<=return_address<1<<56:
@@ -53,7 +55,7 @@ def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
         if helper_offset not in (0x204E50,0x204ED4) or target!=image_base+helper_offset:
             raise RefillUnsupported('unrecovered request environment wrapper target')
         frame=prepare_request_environment_vm_caller(p,helper_offset=helper_offset,
-            entry_stack_address=entry_stack_address-16,return_address=image_base+0x2814D8,
+            entry_stack_address=entry_stack_address-16,return_address=image_base+sentinel,
             thread_pointer=thread_pointer,image_base=image_base,saved_frame_pointer=saved_frame_pointer,
             saved_x28=saved_x28,saved_x19=argument_block_address)
     except ValueError as exc:raise RefillUnsupported('request environment wrapper memory is unmapped') from exc
@@ -79,6 +81,8 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
             any(not callable(logger_services.get(n)) for n in ('read_property','syscall')) or
             type(logger_services.get('errno_address')) is not int):
         raise RefillUnsupported('request environment logger services are invalid')
+    wrapper_offset=inputs.get('wrapper_offset',0x2814C8)
+    sentinel=request_environment_wrapper_return_offset(wrapper_offset)
     staged=_PageTransaction(pages);frame=prepare_request_environment_wrapper_caller(staged,**inputs)
     image=inputs['image_base'];callbacks=[];decoded=[];previous=vm_module.B
     acquisitions=[]
@@ -93,7 +97,7 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
-            frame.vm_call_registers[2],frame.vm_call_registers[3],image+0x2050E4,image+0x2814D8,maxsteps=maxsteps)
+            frame.vm_call_registers[2],frame.vm_call_registers[3],image+0x2050E4,image+sentinel,maxsteps=maxsteps)
         vm.R=list(frame.registers);vm.register_backing_base=frame.register_backing_address
         def callback(vm,function,argument):
             words=tuple(vm.m.u64(argument+i*8) for i in range(4));wrapper=function-image;target=words[0]-image
@@ -133,10 +137,12 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
                 if continue_caller_return:
                     from vm9_request_caller import validate_request_environment_vm_exit,finish_request_environment_wrapper_caller
                     exit_state=validate_request_environment_vm_exit(staged,
-                        helper_offset=inputs['helper_offset'],image_base=image,pc=vm.pc,registers=tuple(vm.R))
+                        helper_offset=inputs['helper_offset'],image_base=image,pc=vm.pc,registers=tuple(vm.R),
+                        wrapper_offset=wrapper_offset)
                     caller_return=finish_request_environment_wrapper_caller(staged,
                         helper_offset=inputs['helper_offset'],image_base=image,
-                        entry_stack_address=inputs['entry_stack_address'],thread_pointer=inputs['thread_pointer'])
+                        entry_stack_address=inputs['entry_stack_address'],thread_pointer=inputs['thread_pointer'],
+                        wrapper_offset=wrapper_offset)
                     if caller_return.pc!=inputs['return_address']:
                         raise RefillUnsupported('environment wrapper return does not reach its caller')
                     result=RequestEnvironmentVmReturn(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),
