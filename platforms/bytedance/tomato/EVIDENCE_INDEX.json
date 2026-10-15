@@ -7071,5 +7071,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_identifier_fresh_20261015": {
+    "path": "evidence/vm9_request_identifier_fresh_20261015.json",
+    "native_Python_controls": 45,
+    "rollback_guards": 19,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

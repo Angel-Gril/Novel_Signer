@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM cold cached identifier
+
+45项新增原生对照、19项回滚通过；2886B0→25BD8C冷工厂恢复显式文件seed、
+两次状态推进及模板formatter，复用guard/mutex/string/reference owners。
+owning3918指令/1192范围一致。入口9940→9950/0x10a208，下一288508→32A1F0；
+identifiers1与所有旧记录/child return保持。原outer页无差异/64新增OS页，
+second页未发布。完整signer和fresh/live/JVM未完成。见 [标识符工厂报告](REQUEST_JNI_STARTUP_WORKERS.md#6190-second-vm-cold-cached-identifier2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM tree pointer getter
 
 41项新增原生对照、18项回滚通过；2887B0→256B84复用shared-reader与树查找，

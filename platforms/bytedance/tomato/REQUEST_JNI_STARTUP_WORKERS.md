@@ -6778,6 +6778,34 @@ header JNI、mapping回滚和fresh/live/JVM未完成。
 python -B platforms/bytedance/tomato/python/verify_vm9_second_tree_pointer_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-tree-pointer-evidence.json>
 ```
 
+## 6.190 Second VM cold cached identifier（2026-10-15 Asia/Shanghai）
+
+恢复 `2886B0→25BD8C` 冷缓存标识符引用工厂。复用已有guard、normal mutex、
+string和reference owners，恢复seed初始化 `255CB4`、状态推进 `255EC0`、
+formatter `255D84` 与 `25BCE4` 字符串引用构造；接入second VM真实回调。
+文件读取使用显式fopen/fread/fclose provider，保留短读、忽略close状态，
+初始化失败仍发布guard；没有隐式宿主种子读取。模板/alphabet从ELF延迟解码，
+两次状态推进、低nibble优先，拒绝超出32占位符和显式模板长度的读取。
+
+**45项新增原生/Python对照、19项回滚通过**：两基址44项组件覆盖冷/热缓存、
+文件失败/短读、NULL/count/cache别名、guard/seed状态、跨页、32nibble、
+literal/mixed及template/alphabet/seed输出别名。2项修改前原生RED通过。
+19项回滚覆盖guard等待、缺失provider、分配失败、provider执行后抛错、
+输入/输出和栈别名、长度上限及锁竞争；外部provider效果不回滚。
+
+实际owning冷路径 **3918条原始指令/1192声明范围**一致：真实allocator/mutex、
+实际second SP/TP、输出/临时引用/外层scope、有序文件/分配/锁操作、canary
+输入与四个随机指针保持。物理spill/PAC、并发和allocator mapping回滚未证明。
+
+实际second **9940→9950/0x10a208**，下一 **288508→32A1F0**。identifiers1，
+所有旧completed记录和child return保持；outer3900仍有边界，原页无差异、
+64新增OS页保留，second页未发布。完整signer、真实URL/header JNI和
+fresh/live/JVM未完成。见 [标识符工厂证据](evidence/vm9_request_identifier_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_identifier_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <identifier-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -136,6 +136,11 @@ class RequestVm287474TreePointerPrefix(RequestVm287474LockedPointerPrefix):
     tree_pointers: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474IdentifierPrefix(RequestVm287474TreePointerPrefix):
+    identifiers: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -182,6 +187,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     environment_acquisitions=[]
     locked_pointers=[]
     tree_pointers=[]
+    identifiers=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -334,6 +340,16 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image)
                 tree_pointers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x2886B0,0x25BD8C):
+                if consumer_services.get('identifier_file_services') is None:raise Boundary()
+                from vm9_request_identifier import apply_request_identifier_callback
+                output=apply_request_identifier_callback(staged,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,image_base=image,
+                    thread_pointer=inputs['thread_pointer'],allocate=consumer_services['allocate'],
+                    free=consumer_services['free'],file_services=consumer_services['identifier_file_services'],
+                    thread_id=consumer_services.get('thread_id'),
+                    diagnostic_observer=consumer_services.get('diagnostic_observer'))
+                identifiers.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -358,6 +374,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if identifiers:
+                return RequestVm287474IdentifierPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers))
             if tree_pointers:
                 return RequestVm287474TreePointerPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers))
