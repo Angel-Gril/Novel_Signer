@@ -6916,6 +6916,33 @@ native physical X0、saved stack/register/PAC和mapping回滚未证明。
 python -B platforms/bytedance/tomato/python/verify_vm9_second_digest_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-digest-evidence.json>
 ```
 
+## 6.195 Second VM CRC callback（2026-10-15 Asia/Shanghai）
+
+恢复 `288820→258BAC→24B298` CRC回调。完整28字节wrapper与已有JNI
+`204464` 相同，复用未修改的 `vm9_jni_followup.crc_string_object` 和guest
+CRC表。wrapper在SP-16保存X30/X19，结果仅写packed+16的4字节，padding保留。
+有符号非正长度不读取payload；native栈别名因未建模spills而拒绝。
+
+**33项新增原生/Python对照、18项回滚通过**。32项两基址新wrapper控制覆盖
+empty/NULL/negative length、digits/binary NUL/all bytes/long payload、三个跨页、
+result/object字段别名、修改guest表、未对齐payload及忽略尾字节。W0及guest/
+image字节一致，无allocator/JNI/service效果。18项拒绝和页回滚覆盖错误target、
+未对齐SP、缺页、长度上限、部分output及三类native栈别名；2项修改前原生RED。
+已接受的旧原生组未重跑，10030步入口凭据按hash保留。
+
+实际owning **247原始指令/1439声明范围**一致，真实second SP/TP、W0、除32字节
+native保存寄存器以外的页范围、packed/padding和四个随机指针保持。唯一非栈
+写入是4字节CRC结果。physical saved registers/PAC和whole second仍未证明。
+
+实际second **10030→10059/0x10a3bc**，下一 **288610→32A264**。crcs1、diagnostics23
+及旧记录/child return保持；outer3900仍有边界，原页无差异/64新增OS页，second页
+未发布。完整signer、真实URL/header JNI和fresh/live/JVM未完成。
+见 [CRC回调证据](evidence/vm9_request_second_crc_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_crc_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-crc-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

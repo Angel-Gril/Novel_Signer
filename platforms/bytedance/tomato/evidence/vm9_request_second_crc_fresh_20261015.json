@@ -1,0 +1,611 @@
+{
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "steps": 23,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_NULL",
+      "steps": 23,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative_NULL",
+      "steps": 23,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "minimum_negative_NULL",
+      "steps": 23,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "digits",
+      "steps": 86,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "binary_NUL",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all_bytes",
+      "steps": 1815,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "long_binary",
+      "steps": 28702,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_payload",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_object",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_packed",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "result_alias",
+      "steps": 107,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "object_fields_alias",
+      "steps": 107,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "mutated_guest_table",
+      "steps": 3607,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unaligned_payload",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "length_ignores_tail",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "steps": 23,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_NULL",
+      "steps": 23,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative_NULL",
+      "steps": 23,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "minimum_negative_NULL",
+      "steps": 23,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "digits",
+      "steps": 86,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "binary_NUL",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all_bytes",
+      "steps": 1815,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "long_binary",
+      "steps": 28702,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_payload",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_object",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_packed",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "result_alias",
+      "steps": 107,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "object_fields_alias",
+      "steps": 107,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "mutated_guest_table",
+      "steps": 3607,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unaligned_payload",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "length_ignores_tail",
+      "steps": 58,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "W0_and_all_guest_and_image_bytes_equal": true,
+      "packed_uint32_only_and_padding_preserved": true,
+      "no_allocator_JNI_or_service_effects": true,
+      "native_snapshot_input": false,
+      "physical_saved_registers_and_PAC_compared": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "wrong_target",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_object",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_payload",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "length_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "partial_output",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_stack_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "object_stack_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "payload_stack_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wrong_target",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_object",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_payload",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "length_bound",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "partial_output",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_stack_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "object_stack_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "payload_stack_alias",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "red_cases": [],
+  "native_snapshot_input": false,
+  "complete_second_vm_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_physical_ABI_verified": false,
+  "native_Python_controls": 33,
+  "rollback_guards": 18,
+  "schema": "vm9-request-second-crc-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "pre_change_native_RED_controls": 2,
+  "pre_change_native_RED_cases": [
+    {
+      "image_base": "0x122c0000",
+      "previous_second_crc_dispatch_missing": true,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "steps": 58,
+      "packed_uint32_store_and_following_padding_observed": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "previous_second_crc_dispatch_missing": true,
+      "original_new_wrapper_and_guest_table_crc_returned": true,
+      "steps": 58,
+      "packed_uint32_store_and_following_padding_observed": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "preserved_pre_change_entry": {
+    "steps": 10030,
+    "bytecode_offset": "0x10a348",
+    "next_wrapper": "0x288820",
+    "next_target": "0x258bac",
+    "child_return_preserved": true,
+    "completed_strings": 15,
+    "completed_reader_acquisitions": 7,
+    "completed_diagnostics": 22,
+    "completed_diagnostic_leaves": 22,
+    "completed_reader_releases": 7,
+    "completed_string_comparisons": 1,
+    "completed_string_assignments": 1,
+    "completed_random_values": 1,
+    "completed_reference_getters": 1,
+    "completed_cached_u32_getters": 1,
+    "completed_pair_getters": 1,
+    "completed_cached_references": 1,
+    "completed_guard_acquisitions": 1,
+    "completed_environment_constants": 1,
+    "completed_cstring_formats": 1,
+    "completed_guard_releases": 1,
+    "completed_registry_reads": 12,
+    "completed_realtime_seconds": 1,
+    "completed_process_ids": 2,
+    "completed_thread_pointers": 1,
+    "completed_environment_acquisitions": 1,
+    "completed_locked_pointers": 1,
+    "completed_tree_pointers": 1,
+    "completed_identifiers": 1,
+    "completed_allocations": 2,
+    "completed_string_formats": 1,
+    "completed_string_pairs": 1,
+    "completed_digests": 1,
+    "complete_second_vm_verified": false,
+    "explicit_JNI_fixture": true,
+    "complete_signer_verified": false
+  },
+  "preserved_pre_change_entry_sha256": "3d411ed0f244b7b8d9b656463119e80fd054f23709d68ebbab2465b7e0d85c4b",
+  "pre_change_second_source_sha256": "53b4379ac2479fc83c6e7c9be5250ffc28aca8481bdf7ee6c88014fb036b076b",
+  "accepted_prior_entry_reused_without_rerun": true,
+  "fresh_entry_RED_run": false,
+  "owning_callback_native": {
+    "steps": 247,
+    "declared_range_count": 1439,
+    "actual_new_wrapper_guest_table_crc_returned": true,
+    "W0_and_complete_declared_ranges_equal": true,
+    "only_packed_uint32_nonstack_store": true,
+    "following_padding_and_four_runtime_random_pointers_preserved": true,
+    "actual_second_callback_stack_and_thread_pointer_used": true,
+    "no_allocator_JNI_or_service_effects": true,
+    "native_snapshot_input": false,
+    "physical_saved_registers_and_PAC_compared": false,
+    "whole_second_native_differential_verified": false,
+    "complete_physical_ABI_verified": false
+  },
+  "constructed_second_entry": {
+    "steps": 10059,
+    "bytecode_offset": "0x10a3bc",
+    "next_wrapper": "0x288610",
+    "next_target": "0x32a264",
+    "child_return_preserved": true,
+    "completed_strings": 15,
+    "completed_reader_acquisitions": 7,
+    "completed_diagnostics": 23,
+    "completed_diagnostic_leaves": 22,
+    "completed_reader_releases": 7,
+    "completed_string_comparisons": 1,
+    "completed_string_assignments": 1,
+    "completed_random_values": 1,
+    "completed_reference_getters": 1,
+    "completed_cached_u32_getters": 1,
+    "completed_pair_getters": 1,
+    "completed_cached_references": 1,
+    "completed_guard_acquisitions": 1,
+    "completed_environment_constants": 1,
+    "completed_cstring_formats": 1,
+    "completed_guard_releases": 1,
+    "completed_registry_reads": 12,
+    "completed_realtime_seconds": 1,
+    "completed_process_ids": 2,
+    "completed_thread_pointers": 1,
+    "completed_environment_acquisitions": 1,
+    "completed_locked_pointers": 1,
+    "completed_tree_pointers": 1,
+    "completed_identifiers": 1,
+    "completed_allocations": 2,
+    "completed_string_formats": 1,
+    "completed_string_pairs": 1,
+    "completed_digests": 1,
+    "completed_crcs": 1,
+    "complete_second_vm_verified": false,
+    "explicit_JNI_fixture": true,
+    "complete_signer_verified": false
+  },
+  "previous_second_steps": 10030,
+  "previous_owner_AST_preserved_after_crc_additions_removed": true,
+  "existing_CRC_and_other_owners_unchanged": true,
+  "accepted_native_controls_not_repeated": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "private_names_or_payloads_published": false,
+  "whole_physical_stack_bytes_compared": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "external_provider_effects_rolled_back": false,
+  "limits": [
+    "The complete28-byte +288820 wrapper equals accepted JNI wrapper +204464. It saves X30/X19 at SP-16, loads target and object from packed, calls +258bac/+24b298, and stores only W0 at packed+16. The existing vm9_jni_followup.crc_string_object guest-table algorithm is reused unchanged. Physical register spills/PAC are not modeled and overlapping native-stack inputs are refused.",
+    "Thirty-two fresh two-base controls execute only the new +288820 wrapper, covering empty/NULL/signed-negative lengths, digits, binary NUL/all bytes/long data, cross-page payload/object/packed, result/object-field aliases, modified guest CRC tables, unaligned data and ignored tail bytes. W0 and all declared guest/image bytes agree, and packed+20 padding is retained without allocator/JNI/service effects.",
+    "Eighteen new rollback guards reject wrong target, unaligned stack, unmapped object/payload, excessive length, partially mapped output, and packed/object/payload aliases into unmodeled native stack. Every model page is retained. Two pre-change native RED controls establish the new wrapper return and four-byte store before dispatch exists. Accepted10030-step entry receipt replaces fresh entry RED; accepted native groups are not replayed.",
+    "One actual owning callback executes247 original instructions across1439 declared ranges using actual second SP/TP and independently constructed request input. W0 and all page ranges outside the32 bytes of saved native registers agree, with packed/following bytes and four runtime random pointers retained. The only nonstack native write is packed+16 for4 bytes. No allocation/JNI/file/lock/syscall services execute. Full physical ABI/PAC and whole-second differential remain unproved.",
+    "Actual second advances10030 to10059/+10a3bc, next288610->32a264. One CRC record,23 diagnostic entries and all prior completed records/child return remain. Original outer pages unchanged/64 new OS pages retained; outer3900 remains bounded and second pages unpublished. Whole second/request/204ed4, actual URL/header JNI, complete signer and fresh/live/JVM remain unfinished."
+  ]
+}

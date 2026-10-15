@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM CRC callback
+
+33项新增原生对照、18项回滚通过；288820→258BAC→24B298复用未修改的guest
+CRC表owner，W0和4字节packed写回一致。实际owning247指令/1439范围及真实
+SP/TP保持。入口10030→10059/0x10a3bc，下一288610→32A264；crcs1、diagnostics23
+及旧记录/child return保持。原outer页无差异/64新增OS页，second页未发布。
+完整signer和fresh/live/JVM未完成。见 [CRC回调报告](REQUEST_JNI_STARTUP_WORKERS.md#6195-second-vm-crc-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM digest reference callback
 
 33项新增原生对照通过，旧8项回滚按hash保留、未计作新增；2887D0→25874C

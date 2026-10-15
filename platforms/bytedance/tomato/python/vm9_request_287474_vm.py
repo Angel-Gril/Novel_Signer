@@ -161,6 +161,11 @@ class RequestVm287474DigestPrefix(RequestVm287474StringPairPrefix):
     digests: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474CrcPrefix(RequestVm287474DigestPrefix):
+    crcs: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -212,6 +217,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     string_formats=[]
     string_pairs=[]
     digests=[]
+    crcs=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -400,6 +406,10 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     reallocate=consumer_services.get('reallocate'),free=consumer_services['free'],
                     thread_id=consumer_services.get('thread_id'),observer=consumer_services.get('diagnostic_observer'))
                 digests.append((argument,output))
+            elif consumer_services is not None and (wrapper,target)==(0x288820,0x258BAC):
+                value=apply_request_287474_crc_callback(staged,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,image_base=image)
+                crcs.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -424,6 +434,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if crcs:
+                return RequestVm287474CrcPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs))
             if digests:
                 return RequestVm287474DigestPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests))
@@ -1035,6 +1048,33 @@ def apply_request_287474_string_format_callback(pages, *, argument_block_address
         image_base=image_base,allocate=allocate,reallocate=reallocate,free=free,
         prepare_format=prepare_format,max_bytes=max_bytes)
     p.commit();return result
+
+
+def apply_request_287474_crc_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base):
+    """+288820/+258bac reuses the guest-table CRC owner and stores only W0.
+
+    Signed nonpositive lengths do not read payload bytes. Packed/object/data
+    aliases are supported outside the native stack; spills/PAC are unproved.
+    """
+    from vm9_jni_followup import crc_string_object
+    from vm9_objects import _s32
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('CRC callback requires an aligned guest stack')
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,16)
+    target,receiver=(int.from_bytes(packed[i:i+8],'little') for i in (0,8))
+    if target!=image_base+0x258BAC:raise RefillUnsupported('unexpected second CRC target')
+    def exclude(address,width):
+        if width and address<entry_stack_address and address+width>entry_stack_address-0x1000:
+            raise RefillUnsupported('CRC input aliases unmodeled native spills')
+    exclude(argument_block_address,20);exclude(receiver+12,12)
+    length=_s32(int.from_bytes(_read_span(p,receiver+12,4),'little'))
+    pointer=int.from_bytes(_read_span(p,receiver+16,8),'little')
+    exclude(pointer,max(0,length))
+    value=crc_string_object(p,image_base,receiver)
+    _write_span(p,argument_block_address+16,value.to_bytes(4,'little'))
+    p.commit();return value
 
 
 def _copy_request_287474_bytes(pages,destination,source,length):
