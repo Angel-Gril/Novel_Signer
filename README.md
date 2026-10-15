@@ -331,6 +331,7 @@ cached dispatch producer新增 **26项原生对照、13项回滚**，补齐1CF68
 缓存初始化/刷新新增 **44项原生对照、18项回滚**，恢复1CF55C；request边界仍为8809步。见 [cached reference报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6177-cached-reference-initialization-and-refresh2026-10-15-asiashanghai)。
 second缓存回调新增 **17项原生对照、8项回滚**，实际入口推进至8844步。见 [second cached reference报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6178-second-vm-cached-reference-callback2026-10-15-asiashanghai)。
 second 独立 guard acquire 新增 **33 项原生对照、14 项回滚**，实际入口推进至 8902 步。见 [guard acquire 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6179-second-vm-static-guard-acquire2026-10-15-asiashanghai)。
+second 环境常量回调新增 **21 项原生对照、8 项回滚**，实际入口推进至 8938 步。见 [环境常量报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6180-second-vm-environment-constant-callback2026-10-15-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

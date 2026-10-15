@@ -6474,6 +6474,35 @@ second/request/204ED4、URL/header JNI、allocator mapping 回滚、独立 signe
 python -B platforms/bytedance/tomato/python/verify_vm9_second_guard_acquire_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-guard-acquire-evidence.json>
 ```
 
+## 6.180 Second VM environment constant callback（2026-10-15 Asia/Shanghai）
+
+接入 `2886FC→256330`：wrapper 读取 packed target/receiver，receiver 不解引用，
+复用已有环境常量 getter，将完整 X64 指针写至 packed+16。常量和 mask 均来自
+guest ELF；已有 lazy getter、decoder、guard、cache、JNI、reference、diagnostic
+和 outer 函数保持原 AST。second 新增 environment_constants 记录。
+
+**21 项新增原生/Python 对照、8 项回滚检查通过**。20 项组件覆盖两个基址、
+冷/热 flag、热路径无 decoder 页、NULL/未映射 receiver、结果跨页、结果与
+constant/flag 别名；另有 2 项修改前原生 RED。热路径缺页用例在首条原始指令前
+实际解除 decoder 页映射。错误 target、未映射/部分 packed、缺失 flag/decoder/
+结果页和 spill 别名等拒绝保持全部模型页，包含最终结果写入失败前的冷解码。
+旧 8902 步入口复用绑定 hash 与 baseline AST 缺失证明，没有重跑旧原生分组。
+
+owning 回调执行 **19 条原始指令/1188 声明范围**，
+使用实际 second SP/TP，热路径未执行 decoder；声明 app/heap/packed 字段和
+4 个运行时 libc 随机输入指针一致，无 allocator、JNI 或 mutex 调用。
+
+实际 second 入口 **8902→8938/0x107de4**，下一处
+**0x288718→0x2781f4**。环境常量回调 1 次，child return 与
+此前记录保留。outer 仍为 3900 步边界，原页面无差异、64 新增 OS 页保留，
+second 页未发布。周边 JNI 为显式 fixture；完整 physical ABI/stack/PAC、
+second/request/204ED4、URL/header JNI、allocator mapping 回滚、独立 signer
+及 fresh/live/JVM 仍未完成。见 [环境常量 callback 证据](evidence/vm9_request_second_environment_constant_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_environment_constant_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-environment-constant-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

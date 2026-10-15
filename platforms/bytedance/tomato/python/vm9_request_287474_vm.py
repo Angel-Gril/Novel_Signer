@@ -86,6 +86,11 @@ class RequestVm287474GuardAcquirePrefix(RequestVm287474CachedReferencePrefix):
     guard_acquisitions: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474EnvironmentConstantPrefix(RequestVm287474GuardAcquirePrefix):
+    environment_constants: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -122,6 +127,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     pair_getters=[]
     cached_references=[]
     guard_acquisitions=[]
+    environment_constants=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -214,6 +220,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     image_base=image,thread_id=consumer_services.get('thread_id'),
                     observer=consumer_services.get('diagnostic_observer'))
                 guard_acquisitions.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x2886FC,0x256330):
+                value=apply_request_287474_environment_constant_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image)
+                environment_constants.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -238,6 +249,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if environment_constants:
+                return RequestVm287474EnvironmentConstantPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants))
             if guard_acquisitions:
                 return RequestVm287474GuardAcquirePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions))
@@ -499,6 +513,29 @@ def apply_request_287474_guard_acquire_callback(pages, *, argument_block_address
     result=acquire_static_initialization_guard(p,guard_address=guard,image_base=image_base,
         thread_id=thread_id,observer=observer)
     _write_span(p,argument_block_address+16,result.to_bytes(4,'little'))
+    p.commit()
+    return result
+
+
+def apply_request_287474_environment_constant_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base):
+    """+2886fc -> +256330: ignore receiver and store the full X0 at packed+16.
+
+    Reuse the existing lazy guest constant owner. Refuse packed aliases with
+    unmodeled wrapper/getter spills; no host strings or services are supplied.
+    """
+    from vm9_configuration_init import get_environment_constant
+    if (type(entry_stack_address) is not int or not 0x30<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('environment constant callback requires an aligned guest stack')
+    p=_PageTransaction(pages)
+    packed=_read_span(p,argument_block_address,16)
+    if int.from_bytes(packed[:8],'little')!=image_base+0x256330:
+        raise RefillUnsupported('unexpected second environment constant target')
+    if argument_block_address<entry_stack_address and argument_block_address+24>entry_stack_address-0x30:
+        raise RefillUnsupported('environment constant callback aliases unmodeled physical spills')
+    result=get_environment_constant(p,image_base=image_base,entry_offset=0x256330)
+    _write_span(p,argument_block_address+16,result.to_bytes(8,'little'))
     p.commit()
     return result
 

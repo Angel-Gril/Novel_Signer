@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM environment constant callback
+
+21 项新增原生对照、8 项回滚通过；2886FC 复用 256330 环境常量 getter。
+写入完整 X64 指针，receiver 不解引用；冷/热、缺页和声明别名覆盖。
+owning 热路径 19 指令/1188 范围一致；实际入口
+8902→8938/0x107de4，下一 0x288718→0x2781f4。
+child return 和旧记录保留，原 outer 页无差异、64 新增 OS 页保留，second 页未发布。
+JNI 为显式 fixture，完整 signer 及 fresh/live/JVM 未完成。见 [环境常量报告](REQUEST_JNI_STARTUP_WORKERS.md#6180-second-vm-environment-constant-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM static guard acquire
 
 33 项新增原生对照、14 项回滚通过；恢复 32D3A0 并接入 2884EC wrapper。
