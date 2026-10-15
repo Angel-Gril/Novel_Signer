@@ -630,6 +630,8 @@ Second VM global unsigned-word getter passes 17 new native controls and 10 rollb
 
 VM opcode34 operation30 uint32-to-double passes 32 new native controls and 6 rejection checks. Implicit R4 low32 converts exactly to R2 double bits, including guest backing; other floating operations remain unsupported. Constructed second prefix now returns at10124/+10a4c0, next288854->261350. Complete signing remains unfinished. See the [uint32-to-double report](../REQUEST_JNI_STARTUP_WORKERS.md#6200-vm-uint32-to-double2026-10-16-asiashanghai).
 
+Second VM JSON number insertion passes 69 new native controls and 16 rejection/rollback checks. Exact binary64 bits, native int32 saturation/NaN-zero, owned key append, allocation-failure cleanup and one-byte bool results agree. Constructed prefix advances to10131/+10a4dc, next28863c->1c3024. Complete signing remains unfinished. See the [JSON number report](../REQUEST_JNI_STARTUP_WORKERS.md#6201-json-number2026-10-16-asiashanghai).
+
 
 
 

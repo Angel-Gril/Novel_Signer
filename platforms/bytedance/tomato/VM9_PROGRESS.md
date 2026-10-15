@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second JSON number
+
+69项新增原生对照、16项拒绝或回滚检查通过；恢复数值节点创建、owned key、链表追加和失败释放。
+68项两基址组件+1项actual owning；NaN int32为0，原double位和1字节bool/padding一致。
+构造prefix10131/+10A4DC，下一28863C→1C3024；旧记录及child return保持。
+outer原页无差异/64新增OS页；累计2436native/736checks；旧原生组未重跑。
+完整signer和fresh/live/JVM未完成。见 [数值写入报告](REQUEST_JNI_STARTUP_WORKERS.md#6201-json-number2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：VM uint32 to double
 
 32项新增原生对照、6项拒绝检查通过；opcode34/operation30取隐式R4低uint32转R2 double。

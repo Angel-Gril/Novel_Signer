@@ -863,6 +863,79 @@ def construct_empty_state_container(pages, *, image_base, allocate):
     staged.commit();return address
 
 
+def add_json_number_to_object(pages, *, parent_address, key_address, number_bits,
+        entry_stack_address, image_base, allocate, free, max_bytes=4096, max_nodes=4096):
+    """+24a35c: create type8, duplicate its key, append, or delete on failure.
+
+    Preserve double bits (including NaN payloads); the native FCVTZS path
+    produces zero for NaN and truncates finite in-range values toward zero.
+    Default hooks and bounded mapped lists only. Page rollback does not undo
+    allocation/free services outside these pages or model physical spills.
+    """
+    import math, struct
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('JSON number requires an aligned guest stack')
+    if any(type(n) is not int or not 1<=n<=0x100000 for n in (max_bytes,max_nodes)):
+        raise RefillUnsupported('JSON number requires bounded key and list limits')
+    if type(number_bits) is not int or not 0<=number_bits<1<<64:
+        raise RefillUnsupported('JSON number requires binary64 bits')
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('JSON number requires allocation and free services')
+    p=_PageTransaction(pages)
+    if (_u(p,image_base+0x381AA0)!=image_base+0x347FD0 or
+            _u(p,image_base+0x381AA8)!=image_base+0x347FA0):
+        raise RefillUnsupported('JSON number custom allocation hooks are unrecovered')
+    def bounded(a,n):
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('JSON number aliases unmodeled native spills')
+    def new(n):
+        a=allocate(p,n)
+        if type(a) is not int or not 0<=a<(1<<64)-n:
+            raise RefillUnsupported('JSON number allocator returned an invalid address')
+        if a:bounded(a,n)
+        return a
+    if parent_address:bounded(parent_address,64)
+    if key_address:bounded(key_address,1)
+    node=new(64)
+    if not node:p.commit();return False
+    _write_span(p,node,bytes(64))
+    _w(p,node+48,number_bits);_w(p,node+24,8,4)
+    value=struct.unpack('<d',number_bits.to_bytes(8,'little'))[0]
+    integer=(0 if math.isnan(value) else 0x7FFFFFFF if value>=2147483647
+        else -2147483648 if value<=-2147483648 else int(value))
+    _w(p,node+40,integer,4)
+    if parent_address and key_address and parent_address!=node:
+        length=len(objects._cstring(p,key_address,max_bytes));bounded(key_address,length)
+        key=new(length)
+        if key:
+            _write_span(p,key,_read_span(p,key_address,length))
+            # Fresh type8 has no owned old key; provider mutation is unmodeled.
+            if _u(p,node+24,4)!=8 or _u(p,node+56):
+                raise RefillUnsupported('JSON number node changed during key allocation')
+            _w(p,node+56,key);_w(p,node+24,8,4)
+            first=_u(p,parent_address+16)
+            if not first:
+                _w(p,parent_address+16,node);_w(p,node,0);_w(p,node+8,node)
+            else:
+                bounded(first,16);tail=_u(p,first+8)
+                if not tail:
+                    tail=first;seen=set()
+                    while True:
+                        if tail in seen or len(seen)>=max_nodes:
+                            raise RefillUnsupported('JSON number child list is cyclic or exceeds its bound')
+                        seen.add(tail);bounded(tail,16);following=_u(p,tail)
+                        if not following:break
+                        tail=following
+                bounded(tail,16)
+                _w(p,tail,node);_w(p,node+8,tail);_w(p,first+8,node)
+            p.commit();return True
+    if any(_u(p,node+off) for off in (0,16,32,56)) or _u(p,node+24,4)!=8:
+        raise RefillUnsupported('JSON number failure cleanup requires an unmodified fresh node')
+    free(p,node)
+    p.commit();return False
+
+
 def construct_empty_json_reference(pages, *, output_reference_address, source_address,
         entry_stack_address, image_base, thread_pointer, allocate, free,
         thread_id=None, diagnostic_observer=None, max_bytes=4096):

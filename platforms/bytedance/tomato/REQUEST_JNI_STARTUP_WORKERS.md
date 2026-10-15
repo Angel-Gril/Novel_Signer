@@ -7076,6 +7076,32 @@ signer、真实URL/header JNI、physical ABI/PAC、mapping rollback和fresh/live
 python -B platforms/bytedance/tomato/python/verify_vm9_u32_double_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <u32-double-evidence.json>
 ```
 
+## 6.201 JSON number（2026-10-16 Asia/Shanghai）
+
+恢复 `288854→261350`：创建64字节type8节点，保留double原始位，int32饱和或向零截断，
+复制owned key并追加child链；失败删除新节点。原生确认**NaN的整数副本为0**，
+quiet/signaling/负NaN的double payload保留。wrapper只写packed+32的**1字节bool**。
+
+**69项新增原生/Python对照、16项拒绝或回滚检查通过**：68项两基址组件对照覆盖数值边界、
+NaN/inf/±0/subnormal、键名、NULL输入、分配失败、parent==node、非空链和跨页。
+有序分配/释放、释放前字节、guest和image页一致；组件allocator是显式合成服务。
+另1项使用实际构造请求输入、原callback SP/TP及matching-libc malloc，执行389条原生指令，
+1208个声明范围及观察到的非栈写入、分配顺序、bool/padding和4个随机指针一致。
+物理spill/PAC和whole-request原生对照仍未证明；外部服务效果不声称回滚。
+
+构造入口second prefix从10124推进到 **10131步/0x10A4DC**，下一 `28863C→1C3024`。
+所有旧completed记录及child return保持；outer3900仍有边界，原页无差异/64新增OS页。
+2项修改前原生RED保留。跨页packed测试曾与parent重叠，修正fixture后复用32项已通过对照，
+只运行剩余项，无重复计数。旧原生组未重跑。
+
+累计6.127–6.201为 **2436项native/736项拒绝或回滚检查**。完整JSON parser、浮点族、
+signer、真实URL/header JNI、physical ABI/PAC、mapping rollback及fresh/live/JVM仍未完成。
+见 [JSON数值证据](evidence/vm9_second_json_number_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_json_number_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <json-number-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
