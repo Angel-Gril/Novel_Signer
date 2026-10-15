@@ -176,6 +176,11 @@ class RequestVm287474JsonPrefix(RequestVm287474FreePrefix):
     json_references: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474GlobalU32Prefix(RequestVm287474JsonPrefix):
+    global_u32_getters: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -230,6 +235,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     crcs=[]
     frees=[]
     json_references=[]
+    global_u32_getters=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -287,6 +293,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     libc_base=services['libc_base'],syscall=services['syscall'],
                     errno_address=services['errno_address'],thread_id=services.get('thread_id'))
                 random_values.append((argument,result))
+            elif consumer_services is not None and (wrapper,target)==(0x28863C,0x1C3018):
+                value=apply_request_287474_global_u32_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image)
+                global_u32_getters.append((argument,value))
             elif consumer_services is not None and wrapper==0x28863C and consumer_services.get('process_services') is not None:
                 services=consumer_services['process_services']
                 if not isinstance(services,dict):raise Boundary()
@@ -458,6 +469,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if global_u32_getters:
+                return RequestVm287474GlobalU32Prefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters))
             if json_references:
                 return RequestVm287474JsonPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references))
@@ -1110,6 +1124,26 @@ def apply_request_287474_crc_callback(pages, *, argument_block_address,
     value=crc_string_object(p,image_base,receiver)
     _write_span(p,argument_block_address+16,value.to_bytes(4,'little'))
     p.commit();return value
+
+
+def apply_request_287474_global_u32_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base):
+    """+28863c/+1c3018: load global W0 and store exactly four packed bytes.
+
+    The wrapper saves native registers below SP; aliases of that region are
+    refused because physical spills/PAC are outside this bounded model.
+    """
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('global u32 callback requires an aligned guest stack')
+    p=_PageTransaction(pages)
+    if int.from_bytes(_read_span(p,argument_block_address,8),'little')!=image_base+0x1C3018:
+        raise RefillUnsupported('unexpected second global u32 target')
+    if argument_block_address<entry_stack_address and argument_block_address+12>entry_stack_address-0x1000:
+        raise RefillUnsupported('global u32 packed input aliases unmodeled native spills')
+    raw=_read_span(p,image_base+0x37A794,4)
+    _write_span(p,argument_block_address+8,raw)
+    p.commit();return int.from_bytes(raw,'little')
 
 
 def apply_request_287474_json_callback(pages, *, argument_block_address,

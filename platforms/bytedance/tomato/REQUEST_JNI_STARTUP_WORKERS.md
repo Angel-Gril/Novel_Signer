@@ -7024,6 +7024,32 @@ second页未发布。完整signer、真实URL/header JNI、mapping rollback及fr
 python -B platforms/bytedance/tomato/python/verify_vm9_second_json_empty_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-json-empty-evidence.json>
 ```
 
+## 6.199 Second VM global unsigned word（2026-10-16 Asia/Shanghai）
+
+恢复 `28863C→1C3018`，精确分派位于process-services分支之前。getter三条指令读取
+`image+37A794` 的unsigned32，wrapper只写packed+8的4字节；后续padding保持。
+无allocator/diagnostic/JNI/file/syscall。新增helper明确拒绝native spill栈别名。
+
+**17项新增原生/Python对照、10项回滚通过**。16项两基址组件覆盖zero/one/highbit/
+allones/mixed、packed/output跨页及output/global别名；guest/image/packed与unsigned W0
+一致。10项失败检查对target/缺页/partial mapping/SP/栈别名完整回滚model页。
+2项修改前原生RED通过。实际owning **10条原始指令/1189声明范围**，全部声明范围和
+观察到的非栈写入、native X0、packed padding及四个随机指针一致，无native import。
+
+真实入口完成global getter1后，在second **第10118次尝试执行**时拒绝未实现指令
+**opcode34 / word001E0022 / 字节码偏移0x10A4A8**。入口探针exit1；second prefix
+未返回，不能视为second VM续跑成功。随后仅重跑Python采集失败frame，已通过的owning
+原生结果保留且只计一次。所有旧completed记录和child return保持，outer原页无差异/
+64新增OS页。生产代码未屏蔽异常，未实现opcode34。
+
+累计6.127–6.199为 **2335项native/714项rollback**。下一步恢复opcode34。
+完整JSON parser/signer、whole second/request、真实URL/header JNI、mapping rollback、
+physical ABI/PAC及fresh/live/JVM未完成。见 [global u32证据](evidence/vm9_request_second_global_u32_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_global_u32_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <second-global-u32-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

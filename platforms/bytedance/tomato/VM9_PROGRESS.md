@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second VM global unsigned word
+
+17项新增原生对照、10项回滚通过；28863C→1C3018全局unsigned32与精确4字节写回恢复。
+实际owning10指令/1189范围一致；无allocator/diagnostic/JNI/file/syscall。
+入口完成global getter1后在第10118次尝试执行时拒绝opcode34/001E0022/+10A4A8。
+入口探针exit1、second prefix未返回；旧记录/child return在失败frame保持。
+原outer页无差异/64新增OS页；累计2335native/714rollback。下一步恢复opcode34。
+完整signer和fresh/live/JVM未完成。见 [global u32报告](REQUEST_JNI_STARTUP_WORKERS.md#6199-second-vm-global-unsigned-word2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：second VM empty JSON reference
 
 25项新增原生对照、16项回滚通过；28883C→261404恢复NULL/empty-object引用构造。

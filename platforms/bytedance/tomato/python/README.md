@@ -626,6 +626,8 @@ Second VM deleting destructor passes 17 new native controls and 12 rollback guar
 
 Second VM empty JSON reference passes 25 new native controls and 16 rollback guards. NULL source and empty-object prefixes compose existing container/reference owners; other JSON remains unsupported. Actual owning1603 instructions/1248 ranges match real allocator/free and recursive locks. Actual second advances10101 to10110, next28863c->1c3018. Complete signing remains unfinished. See the [empty JSON report](../REQUEST_JNI_STARTUP_WORKERS.md#6198-second-vm-empty-json-reference2026-10-16-asiashanghai).
 
+Second VM global unsigned-word getter passes 17 new native controls and 10 rollback guards. Actual owning10 instructions/1189 ranges match unsigned W0, exact four-byte output and padding. Constructed entry then rejects unimplemented opcode34 at second+10a4a8 on attempted step10118; the second prefix does not return. Complete signing remains unfinished. See the [global unsigned-word report](../REQUEST_JNI_STARTUP_WORKERS.md#6199-second-vm-global-unsigned-word2026-10-16-asiashanghai).
+
 
 
 
