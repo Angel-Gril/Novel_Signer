@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM static guard release
+
+25 项新增原生对照、12 项回滚通过；恢复 32D4F8 非 broadcast 分支并接入 28854C。
+仅访问两个 guard 字节，无 packed store；保留旧共享和内联 guard 函数 AST。
+owning 71 指令/1189 范围及锁顺序一致；实际入口
+8951→9050/0x1080e0，下一 0x28874c→0x256a18。
+child return 和旧记录保留，strings 累计 3 次；原 outer 页无差异、64 新增 OS 页
+保留，second 页未发布。JNI 为显式 fixture，完整 signer 及 fresh/live/JVM 未完成。
+见 [guard release 报告](REQUEST_JNI_STARTUP_WORKERS.md#6182-second-vm-static-guard-release2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM C-string format callback
 
 27 项新增原生对照、12 项回滚通过；恢复自定义 %s/%% 格式化并接入 288718。

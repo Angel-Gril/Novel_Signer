@@ -6538,6 +6538,40 @@ fresh/live/JVM 未完成。见 [C-string format 证据](evidence/vm9_request_sec
 python -B platforms/bytedance/tomato/python/verify_vm9_second_cstring_format_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-cstring-format-evidence.json>
 ```
 
+## 6.182 Second VM static guard release（2026-10-15 Asia/Shanghai）
+
+恢复 `32D4F8` 的非 broadcast 分支：先写 guard byte0=1，再锁公共 normal
+mutex，读取旧 byte1、写 byte1=1，解锁后检查旧 byte1 bit2。复用既有 mutex
+owner；broadcast、等待和主机并发仍拒绝。既有 lazy/cache/diagnostic 内联 guard
+组合及其他旧函数保持 AST。模型页可回滚，observer 已发生的外部效果不能撤销。
+
+`28854C` wrapper 只读 packed 前 16 字节的 target/guard，直接尾跳转，**没有
+wrapper frame，也不写 packed 返回值**。guard 只需两个映射字节，不读取或写入
+tid。排除与原始 body 的 SP-0x30..SP 未建模物理 frame 的别名。second 保留
+guard_releases 及全部旧记录。
+
+**25 项新增原生/Python 对照、12 项回滚检查通过**。24 项组件覆盖两个基址、
+pending/clear/complete/其他 flag、偶数 byte0、shared normal mutex、跨页、仅映射
+两个 guard 字节、packed 别名、仅映射 16 字节 packed。拒绝覆盖 busy/missing
+mutex、broadcast flag、observer 失败和 spill 别名。另有 2 项修改前原生 RED。
+复用旧 8951 步入口绑定 hash 和 baseline AST 缺失证明，未重跑已验收原生组。
+
+owning 回调执行 **71 条原始指令/1189 声明范围**；
+实际 second SP/TP、matching-libc normal mutex、声明 app/heap/packed 字段及
+锁/解锁顺序一致，四个运行时 libc 随机输入指针保留。没有 broadcast、gettid、
+allocator 或 JNI 服务；未比较全部物理 stack/register spill/PAC。
+
+实际 second **8951→9050/0x1080e0**，下一处
+**0x28874c→0x256a18**。release 1 次，字符串回调累计 3 次，
+child return 和旧记录保留。outer 3900 步仍有边界，原页无差异、64 新增 OS 页
+保留，second 页未发布。周边 JNI 是显式 fixture；完整 second/request/204ED4、
+physical ABI、URL/header JNI、allocator mapping 回滚、独立 signer 及
+fresh/live/JVM 未完成。见 [guard release 证据](evidence/vm9_request_second_guard_release_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_guard_release_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-guard-release-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -96,6 +96,11 @@ class RequestVm287474CStringFormatPrefix(RequestVm287474EnvironmentConstantPrefi
     cstring_formats: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474GuardReleasePrefix(RequestVm287474CStringFormatPrefix):
+    guard_releases: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -134,6 +139,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     guard_acquisitions=[]
     environment_constants=[]
     cstring_formats=[]
+    guard_releases=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -236,6 +242,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image)
                 cstring_formats.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x28854C,0x32D4F8):
+                value=apply_request_287474_guard_release_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,observer=consumer_services.get('diagnostic_observer'))
+                guard_releases.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -260,6 +271,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if guard_releases:
+                return RequestVm287474GuardReleasePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases))
             if cstring_formats:
                 return RequestVm287474CStringFormatPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats))
@@ -574,6 +588,32 @@ def apply_request_287474_cstring_format_callback(pages, *, argument_block_addres
     result=format_cstring_arguments(p,output_address=words[1],capacity=words[2],format_address=words[3],
         argument_addresses=words[4:],forbidden_span=(entry_stack_address-0x1000,0x1000))
     _write_span(p,argument_block_address+56,result.to_bytes(4,'little'))
+    p.commit()
+    return result
+
+
+def apply_request_287474_guard_release_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, observer=None):
+    """+28854c -> +32d4f8 tail branch: load target/guard without a packed store.
+
+    The wrapper has no frame. Refuse aliases with the guard body's unmodeled
+    0x30-byte physical frame, and require only the two accessed guard bytes.
+    """
+    from vm9_objects import release_static_initialization_guard
+    if (type(entry_stack_address) is not int or not 0x30<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('guard release callback requires an aligned guest stack')
+    p=_PageTransaction(pages)
+    packed=_read_span(p,argument_block_address,16)
+    target=int.from_bytes(packed[:8],'little')
+    guard=int.from_bytes(packed[8:],'little')
+    if target!=image_base+0x32D4F8:
+        raise RefillUnsupported('unexpected second static guard release target')
+    for address,width in ((argument_block_address,16),(guard,2)):
+        if address<entry_stack_address and address+width>entry_stack_address-0x30:
+            raise RefillUnsupported('guard release callback aliases unmodeled physical spills')
+    result=release_static_initialization_guard(p,guard_address=guard,image_base=image_base,
+        observer=observer)
     p.commit()
     return result
 

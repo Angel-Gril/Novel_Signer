@@ -114,6 +114,31 @@ def acquire_static_initialization_guard(pages, *, guard_address: int,
     return result
 
 
+def release_static_initialization_guard(pages, *, guard_address: int,
+        image_base: int, observer=None) -> int:
+    """+0x32d4f8 serial release: publish byte0 before locking the common mutex.
+
+    Only two guard bytes are accessed. Preserve the old byte1 for the branch
+    after publishing byte1=1 and unlocking. Broadcast and host concurrency
+    remain unsupported; page rollback cannot reverse external observer effects.
+    """
+    if type(guard_address) is not int or not 0<guard_address<(1<<64)-1:
+        raise RefillUnsupported('static guard requires a nonzero guest address')
+    p=_PageTransaction(pages)
+    _write_span(p,guard_address,b'\x01')
+    mutex=_image_address(image_base,0x3E2F40)
+    if observer is not None:observer('pthread_mutex_lock',mutex)
+    lock_uncontended_mutex(p,mutex_address=mutex)
+    flag=_read_span(p,guard_address+1,1)[0]
+    _write_span(p,guard_address+1,b'\x01')
+    if observer is not None:observer('pthread_mutex_unlock',mutex)
+    unlock_uncontended_mutex(p,mutex_address=mutex)
+    if flag&4:
+        raise RefillUnsupported('static guard condition broadcast is unrecovered')
+    p.commit()
+    return 0
+
+
 def _shared_reader_transition(pages, mutex_address, *, acquire):
     transaction = _PageTransaction(pages)
     lock_uncontended_mutex(transaction, mutex_address=mutex_address)
