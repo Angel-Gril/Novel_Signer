@@ -639,6 +639,17 @@ class VM:
                         npc = tgt
                 else:
                     raise ValueError("op17 sub %d @%#x" % (sub, self.pc))
+            elif op == 34:
+                # +170348 selects a floating operation. Operation 30 reads
+                # implicit slot R4 as uint32 and writes double bits to R2.
+                operation = (((dw >> 16) & 0x7C1F) | ((dw >> 1) & 0x01F003E0)
+                             | ((dw << 4) & 0x000F8000) | ((dw >> 6) & 0x02000000))
+                if operation != 30:
+                    raise ValueError("unrecovered opcode34 operation %d @%#x" % (operation, self.pc))
+                value = struct.unpack("<Q", struct.pack("<d", float(self.R[4] & 0xFFFFFFFF)))[0]
+                if self.register_backing_base is not None:
+                    m.w64((self.register_backing_base + 16) & M64, value)
+                self.R[2] = value
             elif op == 0:
                 raise ValueError("op0 (padding?) @%#x dw=%08x" % (self.pc, dw))
             elif op == 4 and sub != 11:

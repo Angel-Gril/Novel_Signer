@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：VM uint32 to double
+
+32项新增原生对照、6项拒绝检查通过；opcode34/operation30取隐式R4低uint32转R2 double。
+abstract/backed两种模式的全部32寄存器与定义backing一致；其他浮点操作仍拒绝。
+构造入口在+10A4A8转换1次，second prefix恢复返回到10124/+10A4C0，下一288854→261350。
+旧记录/child return保持，outer原页无差异/64新增OS页；累计2367native/720checks。
+完整signer和fresh/live/JVM未完成。见 [转换报告](REQUEST_JNI_STARTUP_WORKERS.md#6200-vm-uint32-to-double2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：second VM global unsigned word
 
 17项新增原生对照、10项回滚通过；28863C→1C3018全局unsigned32与精确4字节写回恢复。

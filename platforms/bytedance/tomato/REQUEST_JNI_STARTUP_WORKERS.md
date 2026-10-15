@@ -7050,6 +7050,32 @@ physical ABI/PAC及fresh/live/JVM未完成。见 [global u32证据](evidence/vm9
 python -B platforms/bytedance/tomato/python/verify_vm9_second_global_u32_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <second-global-u32-evidence.json>
 ```
 
+## 6.200 VM uint32 to double（2026-10-16 Asia/Shanghai）
+
+恢复 `opcode34/operation30`：从隐式R4读取低uint32，以双精度浮点位写入隐式R2，
+有guest backing时同步8字节结果。native `170348→170798→1707AC→1707F4` 实际执行
+UCVTF；VM entry初始化两个operand pointer。所有uint32均可用double精确表示，
+高32位忽略。**其他浮点operation仍明确拒绝**，未恢复完整浮点指令族。
+
+**32项新增原生/Python对照、6项拒绝检查通过**。两基址×8种值×abstract/backed，
+覆盖zero/one/u31max/signbit/u32max/high-only/high-mixed/allones；全部32个寄存器、
+guest payload、结果double位及定义backing slots一致。无allocator/native service。
+6项未恢复operation检查保持寄存器、PC及全部model页，2项修改前原生RED通过。
+
+真实构造请求在 `0x10A4A8` 执行1次conversion，second prefix现可返回到
+**10124步/0x10A4C0，下一288854→261350**。上次10118是未执行成功的指令尝试，
+当时prefix未返回；其失败记录保留。所有旧completed记录/child return保持。
+本次入口是Python构造链验证，无额外whole-request原生指令对照；旧原生组未重跑。
+outer3900仍有边界，原页无差异/64新增OS页，second页未发布。
+
+累计6.127–6.200为 **2367项native/720项拒绝或回滚检查**。完整浮点族/JSON parser/
+signer、真实URL/header JNI、physical ABI/PAC、mapping rollback和fresh/live/JVM未完成。
+见 [uint32转double证据](evidence/vm9_u32_double_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_u32_double_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <u32-double-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

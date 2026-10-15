@@ -628,6 +628,8 @@ Second VM empty JSON reference passes 25 new native controls and 16 rollback gua
 
 Second VM global unsigned-word getter passes 17 new native controls and 10 rollback guards. Actual owning10 instructions/1189 ranges match unsigned W0, exact four-byte output and padding. Constructed entry then rejects unimplemented opcode34 at second+10a4a8 on attempted step10118; the second prefix does not return. Complete signing remains unfinished. See the [global unsigned-word report](../REQUEST_JNI_STARTUP_WORKERS.md#6199-second-vm-global-unsigned-word2026-10-16-asiashanghai).
 
+VM opcode34 operation30 uint32-to-double passes 32 new native controls and 6 rejection checks. Implicit R4 low32 converts exactly to R2 double bits, including guest backing; other floating operations remain unsupported. Constructed second prefix now returns at10124/+10a4c0, next288854->261350. Complete signing remains unfinished. See the [uint32-to-double report](../REQUEST_JNI_STARTUP_WORKERS.md#6200-vm-uint32-to-double2026-10-16-asiashanghai).
+
 
 
 

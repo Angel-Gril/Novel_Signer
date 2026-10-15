@@ -7152,5 +7152,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_u32_double_fresh_20261016": {
+    "path": "evidence/vm9_u32_double_fresh_20261016.json",
+    "native_Python_controls": 32,
+    "rollback_guards": 6,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

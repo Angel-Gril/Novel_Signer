@@ -351,6 +351,7 @@ second释放新增 **17项原生对照、12项回滚**，入口推进至10070步
 second删除析构新增 **17项原生对照、12项回滚**，入口推进至10101步。见 [删除析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6197-second-vm-deleting-destructor2026-10-15-asiashanghai)。
 second空JSON引用新增 **25项原生对照、16项回滚**，入口推进至10110步。见 [empty JSON报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6198-second-vm-empty-json-reference2026-10-16-asiashanghai)。
 second全局u32读取新增 **17项原生对照、10项回滚**；入口在10118步遇到未实现opcode34。见 [global u32报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6199-second-vm-global-unsigned-word2026-10-16-asiashanghai)。
+VM uint32转double新增 **32项原生对照、6项拒绝检查**，second prefix恢复返回至10124步。见 [转换报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6200-vm-uint32-to-double2026-10-16-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。
