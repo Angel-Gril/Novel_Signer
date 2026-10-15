@@ -7228,6 +7228,34 @@ whole second/request、physical ABI/PAC、mapping rollback、真实URL/header JN
 python -B platforms/bytedance/tomato/python/verify_vm9_i32_double_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <i32-double-evidence.json>
 ```
 
+## 6.207 Second TLS u32（2026-10-16 Asia/Shanghai）
+
+恢复 `288898→2850A8`，经已有get_tls owner读取 `image+382920` 对应的unsigned W值，
+只写packed+16的4字节，保留receiver与+20 padding；target忽略receiver。outer显式传入
+现有TLS provider；新增bounded prefix保留全部旧记录，并记录一次TLS getter。
+
+**15项新增原生/Python对照、15项拒绝或回滚检查通过**。14项两基址组件覆盖cold和
+warm zero/small/signed-max/signed-min/all-bits/empty-slot；实际执行新wrapper、34377C及匹配libc
+TLS代码，guest/ELF/TLS、unsigned X0、padding与allocation/wake顺序一致，receiver未映射。
+2项修改前原生RED保留。15项拒绝检查覆盖缺provider、错误target、非法/绕回地址与stack、
+packed/control/resolved-payload的physical spill别名及provider写后抛错，全部model页保持。
+初次guard组对缺页异常类型的预期错误已修正，失败组不计数；已验收原生组未重跑。
+
+1项实际warm回调执行 **63条原始指令/1190个声明范围**，并比较观察到的非栈写入；
+native unsigned X0、全部声明image/heap/TLS、receiver/padding及4个随机指针一致。
+使用实际callback SP，匹配libc TLS实际执行，无分配或wake；physical spills/PAC未比较。
+
+构造second prefix从10294步推进至 **10320步/+10AA68，下一2888B4→248908**。
+TLS getter累计1次，全部旧completed计数与child return保持。outer3900仍有边界，
+原页无差异/64新增OS页，second页未发布；没有whole-second原生对照。
+累计6.127–6.207为 **2563项native/805项拒绝或回滚检查**。完整signer、JSON parser/浮点族、
+physical ABI/PAC、mapping/external-effect rollback、真实URL/header JNI与fresh/live/JVM未完成。
+见 [TLS getter证据](evidence/vm9_second_TLS_u32_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_TLS_u32_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <second-tls-u32-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

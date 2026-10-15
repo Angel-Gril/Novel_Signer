@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second TLS uint32 getter
+
+15项新增原生对照、15项拒绝或回滚检查通过；288898→2850A8复用已有TLS provider，packed+16仅写4字节。
+14项两基址cold/warm组件及1项实际63指令/1190声明范围对照通过；旧TLS owner保持。
+second10320/+10AA68，下一2888B4→248908；TLS getter1次，旧计数/child return保持。
+outer原页无差异/64新增OS页；累计2563native/805checks；完整signer/fresh/live/JVM未完成。
+见 [TLS读取报告](REQUEST_JNI_STARTUP_WORKERS.md#6207-second-tls-u322026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：VM int32 to double
 
 32项新增原生对照、6项拒绝检查通过；operation34将R4低signed int32转为R2 double。

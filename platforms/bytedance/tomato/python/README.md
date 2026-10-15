@@ -642,6 +642,8 @@ Serial atomic field getter passes 19 new native controls and 14 rejection/rollba
 
 VM opcode34 operation34 int32-to-double passes 32 new native controls and 6 rejection checks. Implicit R4 signed low32 converts exactly to R2 double bits, including guest backing; operation30 remains unchanged. Constructed second prefix returns at10294/+10aa00, next288898->2850a8. Complete signing remains unfinished. See the [int32-to-double report](../REQUEST_JNI_STARTUP_WORKERS.md#6206-vm-int32-to-double2026-10-16-asiashanghai).
 
+Second TLS uint32 getter passes 15 new native controls and 15 rejection/rollback checks. New wrapper288898 reuses the existing TLS provider and stores exactly four packed bytes. Actual warm callback passes63 native instructions/1190 declared ranges. Constructed second prefix reaches10320/+10aa68, next2888b4->248908. Complete signing remains unfinished. See the [second TLS getter report](../REQUEST_JNI_STARTUP_WORKERS.md#6207-second-tls-u322026-10-16-asiashanghai).
+
 
 
 
