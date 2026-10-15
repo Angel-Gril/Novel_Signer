@@ -548,6 +548,37 @@ def read_configuration_string_reference(pages, *, registry_address,
     transaction.commit()
 
 
+def read_configuration_cached_u32(pages, *, registry_address,
+        entry_stack_address, image_base):
+    """+0x257880: cache W at receiver+0xe8 while holding its shared reader.
+
+    Retain the mutex pointer from +0x100 in the 24-byte guard at entry SP-0x40.
+    Read the value before release, including when it aliases reader state.
+    Scope padding is preserved. Physical spills/canary/PAC and writer/wait
+    paths are outside this semantic contract; unsupported page effects roll back.
+    """
+    if (type(entry_stack_address) is not int or not 0x40<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('configuration cached value requires an aligned guest stack')
+    transaction = _PageTransaction(pages)
+    guard = entry_stack_address - 0x40
+    mutex = int.from_bytes(_read_span(transaction, registry_address + 0x100, 8), 'little')
+    vtable = objects._image_address(image_base, 0x34C758).to_bytes(8, 'little')
+    _write_span(transaction, guard, vtable + mutex.to_bytes(8, 'little'))
+    objects.acquire_uncontended_shared_reader(transaction, mutex_address=mutex + 8)
+    _write_span(transaction, mutex + 0x94, b'\x01')
+    _write_span(transaction, guard + 0x10, bytes(4))
+    value = int.from_bytes(_read_span(transaction, registry_address + 0xE8, 4), 'little')
+    _write_span(transaction, guard, vtable)
+    if not int.from_bytes(_read_span(transaction, guard + 0x10, 4), 'little'):
+        mutex = int.from_bytes(_read_span(transaction, guard + 8, 8), 'little')
+        if not _read_span(transaction, mutex + 0x94, 1)[0]:
+            raise RefillUnsupported('configuration cached value writer-mode release is unrecovered')
+        objects.release_uncontended_shared_reader(transaction, mutex_address=mutex + 8)
+    transaction.commit()
+    return value
+
+
 def insert_configuration_pair(pages, *, container_address: int, key_address: int,
                               value_address: int, image_base: int, allocate: Callable,
                               free: Callable, max_nodes: int = 4096,

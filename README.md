@@ -324,6 +324,7 @@ second字符串比较新增 **27项原生对照、9项回滚**，推进至8405�
 second字符串赋值新增 **37项原生对照、13项回滚**，推进至8416步、下一26CC8C随机数。见 [second assignment报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6170-second-vm-string-assignment2026-10-15-asiashanghai)。
 second random新增 **17项原生对照、11项回滚**，推进至8532步、下一288658→257804。见 [second random报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6171-second-vm-random-callback2026-10-15-asiashanghai)。
 second reference getter新增 **33项原生对照、13项回滚**，推进至8539步、下一288670→257880。见 [second reference getter报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6172-second-vm-reference-getter2026-10-15-asiashanghai)。
+second cached u32新增 **27项原生对照、13项回滚**，推进至8760步、下一28868C→2633A4。见 [second cached u32报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6173-second-vm-cached-u32-getter2026-10-15-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

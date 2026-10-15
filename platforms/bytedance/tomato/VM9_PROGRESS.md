@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM cached u32 getter
+
+27项新增原生对照、13项回滚通过；owning237指令/1185范围一致。
+复用已有shared reader；receiver+E8在release之前缓存，packed+16仅写4字节。
+count/flag别名、跨页、近reader上限均通过；实际观察四次shared mutex调用。
+修改前入口复用既有8539步证据和AST缺失证明，没有新入口RED或旧分组重跑。
+second8760/+107594，下一28868C→2633A4；旧AST/共享owners/outer保持，原页
+无差异，64新增OS页保留。完整second/request/signer/fresh/live/JVM仍未完成。
+见 [second cached u32报告](REQUEST_JNI_STARTUP_WORKERS.md#6173-second-vm-cached-u32-getter2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM reference getter
 
 33项新增原生对照、13项回滚通过；owning429指令/1186范围及有效诊断字段一致。

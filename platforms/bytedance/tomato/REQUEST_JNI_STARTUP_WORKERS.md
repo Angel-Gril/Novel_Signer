@@ -6291,6 +6291,32 @@ mapping、signer及fresh/live/JVM未完成。见 [second reference getter证据]
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_reference_getter_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-reference-getter-evidence.json>
 ```
 
+## 6.173 Second VM cached u32 getter（2026-10-15 Asia/Shanghai）
+
+恢复`288670→257880`缓存W getter。新registry helper复用已有shared reader，
+mutex来自receiver+100，读取receiver+E8后再释放reader。wrapper先读取target/
+receiver，在packed+16写4字节，保留+20 padding；guard位于callback SP-50。
+旧second/registry AST、共享owners和outer entry保持。
+
+**27项新增原生/Python对照、13项回滚检查通过**。26项组件控制覆盖两个基址、
+zero/u32 max/high bit、既有和近上限reader、shared mutex、字段/packed跨页、
+packed输出别名和reader count/flag字段别名。count别名返回acquire后的8，释放后
+count恢复7，证明读取在release之前。所有声明字节及四次实际mutex transition一致。
+另有2项新增原生RED；修改前8539步入口复用既有已绑定证据和baseline AST缺失证明，
+没有重跑旧入口RED或已接受原生分组。
+
+1项owning执行 **237原始指令/1185声明范围**，实际callback SP/TP、W返回、
+packed结果/padding及shared mutex四次transition一致；关闭allocator stub，
+本项无allocation/JNI/diagnostic服务。second到 **8760/+107594**，下一
+**28868C→2633A4**；cached getter1，string2，显式diagnostic entry/leave各12，
+其余child/reader/equality/assignment/random/reference记录保持。原caller页无差异，
+64新增OS页保留。完整physical ABI/stack/PAC、second/request、URL/header JNI、
+mapping、signer及fresh/live/JVM未完成。见 [second cached u32证据](evidence/vm9_request_second_cached_u32_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_cached_u32_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-cached-u32-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
