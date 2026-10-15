@@ -481,6 +481,8 @@ Second VM tree pointer getter passes 41 new native controls and 18 rollback chec
 
 Second VM cold cached identifier passes 45 new native controls and 19 rollback checks. Explicit seed-file providers, two state advances, template formatting and existing reference owners match the original; owning3918 instructions/1192 ranges match. Actual second advances9940 to9950, next288508->32a1f0. Complete signing remains unfinished. See the [identifier report](REQUEST_JNI_STARTUP_WORKERS.md#6190-second-vm-cold-cached-identifier2026-10-15-asiashanghai).
 
+Second VM allocation callback passes 22 new native controls and 9 rollback checks. It reuses the explicit allocator owner, normalizes zero size to one and writes full X64 at packed+16. Two actual owning allocations match144/579 instructions across1190 ranges each. Actual second advances9950 to9998, next28880c->248908. Complete signing remains unfinished. See the [allocation report](REQUEST_JNI_STARTUP_WORKERS.md#6191-second-vm-allocation-callback2026-10-15-asiashanghai).
+
 
 
 

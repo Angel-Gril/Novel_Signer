@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM allocation callback
+
+22项新增原生对照、9项回滚通过；288508→32A1F0复用显式allocator，0大小转1，
+向packed+16写X64指针。两次实际owning分配24/4字节，144/579指令、各1190范围
+一致。入口9950→9998/0x10a2c8，下一28880C→248908；allocations2，旧diagnostic
+enter/leave增加1对，其余旧记录/child return保持。原outer页无差异/64新增OS页，
+second页未发布。完整signer和fresh/live/JVM未完成。见 [分配回调报告](REQUEST_JNI_STARTUP_WORKERS.md#6191-second-vm-allocation-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM cold cached identifier
 
 45项新增原生对照、19项回滚通过；2886B0→25BD8C冷工厂恢复显式文件seed、

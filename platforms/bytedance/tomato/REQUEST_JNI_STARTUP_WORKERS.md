@@ -6806,6 +6806,34 @@ fresh/live/JVM未完成。见 [标识符工厂证据](evidence/vm9_request_ident
 python -B platforms/bytedance/tomato/python/verify_vm9_request_identifier_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <identifier-evidence.json>
 ```
 
+## 6.191 Second VM allocation callback（2026-10-15 Asia/Shanghai）
+
+恢复 `288508→32A1F0` 分配回调：先读取X64 size，0转为1，调用已有显式
+allocator owner，再向packed+16写完整X64指针；provider修改packed时仍保持
+原始size及最终写回顺序。NULL后的new-handler重试/C++异常尚未建模。
+
+**22项新增原生/Python对照、9项回滚通过**：20项两基址组件每项执行21条
+原始指令，覆盖0/1/24/4097/最大X64大小、高位指针、跨页输入/写回、provider
+修改packed与allocation/packed别名。组件malloc为显式provider，2项修改前
+原生RED证明0→1及X64写回。9项回滚包括分配后result写失败、provider产生
+页效果后抛错、缺失输入/provider、NULL、无效指针和stack spill别名；外部
+provider账本或mapping不回滚。
+
+实际owning连续分配 **24和4字节**，分别 **144/579条原始指令**，每次
+**1190声明范围**一致；使用真实matching-libc allocator与实际second SP/TP，
+payload/packed/后续字节、allocator状态、canary与四个随机指针保持。
+开发探针曾只断言首个24字节分配，现已按实际两次分配完成原生对照。
+
+实际second **9950→9998/0x10a2c8**，下一 **28880C→248908**。allocations2，
+旧diagnostic enter/leave增加1对，其余旧记录和child return保持。outer3900
+仍有边界，原页无差异/64新增OS页保留，second页未发布。完整signer、physical
+ABI/PAC、真实URL/header JNI、mapping回滚和fresh/live/JVM未完成。
+见 [分配回调证据](evidence/vm9_request_second_allocation_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_allocation_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-allocation-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

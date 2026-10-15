@@ -141,6 +141,11 @@ class RequestVm287474IdentifierPrefix(RequestVm287474TreePointerPrefix):
     identifiers: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474AllocationPrefix(RequestVm287474IdentifierPrefix):
+    allocations: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -188,6 +193,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     locked_pointers=[]
     tree_pointers=[]
     identifiers=[]
+    allocations=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -350,6 +356,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     thread_id=consumer_services.get('thread_id'),
                     diagnostic_observer=consumer_services.get('diagnostic_observer'))
                 identifiers.append((argument,output))
+            elif consumer_services is not None and (wrapper,target)==(0x288508,0x32A1F0):
+                pointer=apply_request_287474_allocation_callback(staged,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,image_base=image,
+                    allocate=consumer_services['allocate'])
+                allocations.append((argument,pointer))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -374,6 +385,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if allocations:
+                return RequestVm287474AllocationPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations))
             if identifiers:
                 return RequestVm287474IdentifierPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers))
@@ -921,6 +935,31 @@ def apply_request_287474_tree_pointer_callback(pages, *, argument_block_address,
     _write_span(p,argument_block_address+24,value.to_bytes(8,'little'))
     p.commit()
     return value
+
+
+def apply_request_287474_allocation_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,allocate):
+    """+288508/+32a1f0 successful operator-new with explicit allocation owner.
+
+    Load X64 size before the provider, normalize zero to one, then write X64
+    pointer at packed+16. A NULL return needs C++ retry/throw and is unsupported.
+    Pages roll back on failure; external provider effects do not. Physical
+    spills/PAC are unproved, so packed aliases into the native stack are refused.
+    """
+    from vm9_objects import _word
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('allocation callback requires an aligned guest stack')
+    if not callable(allocate):raise RefillUnsupported('allocation callback requires an explicit provider')
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,16)
+    target=int.from_bytes(packed[:8],'little');size=int.from_bytes(packed[8:],'little')
+    if target!=image_base+0x32A1F0:raise RefillUnsupported('unexpected second allocation target')
+    if argument_block_address<entry_stack_address and argument_block_address+24>entry_stack_address-0x1000:
+        raise RefillUnsupported('allocation packed input aliases unmodeled native spills')
+    pointer=allocate(p,max(size,1));_word(pointer)
+    if not pointer:raise RefillUnsupported('allocation requires unrecovered C++ new-handler or throw')
+    _write_span(p,argument_block_address+16,pointer.to_bytes(8,'little'))
+    p.commit();return pointer
 
 
 def _copy_request_287474_bytes(pages,destination,source,length):
