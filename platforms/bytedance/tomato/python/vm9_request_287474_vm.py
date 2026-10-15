@@ -101,6 +101,11 @@ class RequestVm287474GuardReleasePrefix(RequestVm287474CStringFormatPrefix):
     guard_releases: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474RegistryReadPrefix(RequestVm287474GuardReleasePrefix):
+    registry_reads: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -140,6 +145,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     environment_constants=[]
     cstring_formats=[]
     guard_releases=[]
+    registry_reads=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -247,6 +253,12 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,observer=consumer_services.get('diagnostic_observer'))
                 guard_releases.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x28874C,0x256A18):
+                from vm9_request_28048c_vm import apply_request_28048c_registry_read_callback
+                value=apply_request_28048c_registry_read_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image)
+                registry_reads.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -271,6 +283,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if registry_reads:
+                return RequestVm287474RegistryReadPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads))
             if guard_releases:
                 return RequestVm287474GuardReleasePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases))

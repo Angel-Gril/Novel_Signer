@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM configuration u32 read
+
+22 项新增原生对照通过；12 项既有回滚按绑定复用，未重跑或计为新增。
+28874C 与旧 child wrapper 32 字节完全一致，直接复用已有配置读取组合。
+10 次 owning 回调各 1190 范围、W32/padding/scoped guard 及四次锁操作一致。
+探针末尾单次预期修正为 10 次，已核对原始比较回执，未重放原生。
+实际入口 9050→9374/0x109144，下一 0x28876c→0x26cc64；strings 12 次。
+child return 和旧记录保留；原 outer 页无差异、64 新增 OS 页保留，second 页未发布。
+JNI 是显式 fixture，完整 signer 及 fresh/live/JVM 未完成。见 [配置读取报告](REQUEST_JNI_STARTUP_WORKERS.md#6183-second-vm-configuration-u32-read2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM static guard release
 
 25 项新增原生对照、12 项回滚通过；恢复 32D4F8 非 broadcast 分支并接入 28854C。

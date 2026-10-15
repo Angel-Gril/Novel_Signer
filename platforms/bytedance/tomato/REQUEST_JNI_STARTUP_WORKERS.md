@@ -6572,6 +6572,39 @@ fresh/live/JVM 未完成。见 [guard release 证据](evidence/vm9_request_secon
 python -B platforms/bytedance/tomato/python/verify_vm9_second_guard_release_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-guard-release-evidence.json>
 ```
 
+## 6.183 Second VM configuration u32 read（2026-10-15 Asia/Shanghai）
+
+`28874C` 的 **32 字节原始指令与已验收 `28156C` 完全一致**。second 直接
+复用 child 的 `apply_request_28048c_registry_read_callback` 和 registry getter，
+没有增加另一份 getter/锁组合。以 wrapper SP-16 调用 `256A18`，只写
+packed+24 的 W32，保留 packed+28；缺失键/NULL value 返回 A985F。
+24 字节 scoped guard 位于 wrapper SP-0x60；完整物理 spill、canary/PAC、
+writer/wait/concurrent 分支不在本次证明内。
+
+**22 项新增原生/Python 对照通过**：12 项新 second-wrapper 组件覆盖两个
+基址、空树/default、u32 最大值/高位、跨页 packed、结果 value 和 guard status
+value 别名；另有 2 项修改前原生 RED。复用已绑定的 **12 项既有回滚证据**，
+相关 owner AST 不变，未重跑且未计为新增。旧 9050 步入口绑定与 baseline
+dispatch 缺失证明替代新 entry RED，旧原生组没有重跑。
+
+10 次实际 owning 回调分别执行 **1108, 524, 524, 542, 524, 1126, 1108, 1108, 1108, 1108 条原始指令**，
+每次 **1190 声明范围**、实际 second SP/TP、四次 matching-libc mutex 操作、
+W32/padding/scoped guard 及四个运行时随机指针一致，无 allocator/JNI 服务。
+探针末尾原先预期 1 次，实际 10 次均完成比较后才触发计数断言；已修正为
+10 并独立核对原始日志/回执，没有重放原生对照。
+
+实际 second **9050→9374/0x109144**，下一
+**0x28876c→0x26cc64**；registry_reads 10 次、strings 12 次，
+child return 和旧记录保留。outer 3900 步仍有边界，原页无差异、64 新增 OS 页
+保留，second 页未发布。周边 JNI 为显式 fixture；完整 second/request/204ED4、
+physical ABI、URL/header JNI、allocator mapping 回滚、独立 signer 和
+fresh/live/JVM 未完成。见 [second 配置读取证据](evidence/vm9_request_second_registry_read_fresh_20261015.json) 及
+[既有回滚证据](evidence/vm9_request_child_registry_read_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_registry_read_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-registry-read-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
