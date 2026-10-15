@@ -53,7 +53,7 @@ def guards(library):
     rows=[]
     for label in GUARDS:
         image=BASES[0];p,kw,_=fresh(library,image,'mixed');block=kw['argument_block_address']
-        if label=='wrong_target':_write_span(p,block,(image+0x1C3024).to_bytes(8,'little'))
+        if label=='wrong_target':_write_span(p,block,(image+0x1C3030).to_bytes(8,'little'))
         elif label=='unmapped_packed':kw['argument_block_address']=0x66000000
         elif label=='partial_target':
             a=0x66000FFC;p[a>>12]=bytearray(4096);_write_span(p,a,(image+0x1C3018).to_bytes(8,'little')[:4]);kw['argument_block_address']=a

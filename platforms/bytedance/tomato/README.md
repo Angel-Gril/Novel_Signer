@@ -503,6 +503,8 @@ VM opcode34 operation30 uint32-to-double passes 32 new native controls and 6 rej
 
 Second VM JSON number insertion passes 69 new native controls and 16 rejection/rollback checks. Exact binary64 bits, native int32 saturation/NaN-zero, owned key append, allocation-failure cleanup and one-byte bool results agree. Constructed prefix advances to10131/+10a4dc, next28863c->1c3024. Complete signing remains unfinished. See the [JSON number report](REQUEST_JNI_STARTUP_WORKERS.md#6201-json-number2026-10-16-asiashanghai).
 
+Second global uint32 getter passes 17 new native controls and 10 rejection/rollback checks. Target1c3024 reads37a790 through the existing owner;1c3018 semantics remain. Constructed prefix advances to10150/0x10a528, next0x28863c->0x204e50. Complete signing remains unfinished. See the [second global getter report](REQUEST_JNI_STARTUP_WORKERS.md#6202-second-global-u32-b2026-10-16-asiashanghai).
+
 
 
 

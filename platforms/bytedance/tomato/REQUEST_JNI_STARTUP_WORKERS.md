@@ -7102,6 +7102,30 @@ signer、真实URL/header JNI、physical ABI/PAC、mapping rollback及fresh/live
 python -B platforms/bytedance/tomato/python/verify_vm9_second_json_number_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <json-number-evidence.json>
 ```
 
+## 6.202 Second global u32 B（2026-10-16 Asia/Shanghai）
+
+扩展现有global uint32 owner和精确分派，恢复 `28863C→1C3024` 读取 `image+37A790`，
+只写packed+8的4字节。旧 `1C3018→37A794` 语义保持，其他target拒绝。
+旧验证器的unknown-target guard改为未支持的1C3030；旧原生组未重跑。
+
+**17项新增原生/Python对照、10项拒绝或回滚检查通过**。16项两基址组件覆盖unsigned边界、
+packed/output跨页及output/global别名，并以相邻旧global的反值确认读取来源。
+guest/image/packed、unsigned W0及4字节结果/padding一致；2项修改前原生RED保留。
+另1项actual owning执行10条原始指令、1189个声明范围及观察到的非栈写入，
+native X0、packed padding和4个随机指针一致，使用原callback SP，无native import。
+10项拒绝检查保持全部model页；物理spill/PAC和whole-request原生对照未证明。
+
+构造入口second prefix从10131推进到 **10150步/0x10a528**，下一 `0x28863c→0x204e50`。
+此前各completed计数及child return保持；global getter累计2次，
+JSON number累计2次。outer3900仍有边界，原页无差异/64新增OS页，
+second页未发布。累计6.127–6.202为 **2453项native/746项拒绝或回滚检查**。
+完整signer、JSON parser、浮点族、真实URL/header JNI、physical ABI/PAC、mapping rollback
+和fresh/live/JVM仍未完成。见 [第二global getter证据](evidence/vm9_second_global_u32_b_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_global_u32_b_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <global-u32-b-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

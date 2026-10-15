@@ -304,7 +304,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
-            elif consumer_services is not None and (wrapper,target)==(0x28863C,0x1C3018):
+            elif consumer_services is not None and (wrapper,target) in ((0x28863C,0x1C3018),(0x28863C,0x1C3024)):
                 value=apply_request_287474_global_u32_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image)
@@ -1172,11 +1172,12 @@ def apply_request_287474_global_u32_callback(pages, *, argument_block_address,
             or entry_stack_address&15):
         raise RefillUnsupported('global u32 callback requires an aligned guest stack')
     p=_PageTransaction(pages)
-    if int.from_bytes(_read_span(p,argument_block_address,8),'little')!=image_base+0x1C3018:
+    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
+    if target not in (image_base+0x1C3018,image_base+0x1C3024):
         raise RefillUnsupported('unexpected second global u32 target')
     if argument_block_address<entry_stack_address and argument_block_address+12>entry_stack_address-0x1000:
         raise RefillUnsupported('global u32 packed input aliases unmodeled native spills')
-    raw=_read_span(p,image_base+0x37A794,4)
+    raw=_read_span(p,image_base+(0x37A790 if target==image_base+0x1C3024 else 0x37A794),4)
     _write_span(p,argument_block_address+8,raw)
     p.commit();return int.from_bytes(raw,'little')
 

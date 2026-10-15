@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second global uint32 getter
+
+17项新增原生对照、10项拒绝或回滚检查通过；恢复1C3024读取37A790，旧getter语义保持。
+16项两基址组件+1项actual owning；4字节结果、unsigned W0、padding及全部声明范围一致。
+构造prefix10150/0x10a528，下一0x28863c→0x204e50；旧计数及child return保持。
+outer原页无差异/64新增OS页；累计2453native/746checks；旧原生组未重跑。
+完整signer和fresh/live/JVM未完成。见 [getter报告](REQUEST_JNI_STARTUP_WORKERS.md#6202-second-global-u32-b2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：second JSON number
 
 69项新增原生对照、16项拒绝或回滚检查通过；恢复数值节点创建、owned key、链表追加和失败释放。
