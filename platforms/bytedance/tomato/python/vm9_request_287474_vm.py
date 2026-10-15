@@ -237,7 +237,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 length=decode_masked_bytes(staged,source_address=words[1],destination_address=words[2],mask_address=words[3])
                 decoded.append((words[2],length))
             elif consumer_services is not None and (wrapper,target) in (
-                    (0x2884CC,0x2481AC),(0x2884CC,0x2484B8),
+                    (0x2884CC,0x2481AC),(0x2884CC,0x2484B8),(0x2884CC,0x2484FC),
                     (0x288578,0x248274),(0x2884D8,0x347F60),(0x28858C,0x2A9280)):
                 apply_request_287474_consumer(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
@@ -623,6 +623,7 @@ def apply_request_287474_consumer(pages, *, wrapper_offset,
     memcpy accepts disjoint ranges or identical pointers. The local +2a9280
     owner preserves its own ordered loads/stores, including overlapping ranges.
     +288610 tail-calls explicit free without a packed or physical return value.
+    +2884cc/+2484fc also deletes the object through the same destructor owner.
     """
     import vm9_objects as objects
     if type(max_bytes) is not int or not 0<=max_bytes<=0x100000:
@@ -635,9 +636,9 @@ def apply_request_287474_consumer(pages, *, wrapper_offset,
         result=objects.construct_string_object(p,object_address=destination,source_address=0,
             allocate=allocate,vtable_address=image_base+0x34F5F8,
             empty_descriptor_address=image_base+0x6E168)
-    elif pair==(0x2884CC,0x2484B8):
+    elif pair in ((0x2884CC,0x2484B8),(0x2884CC,0x2484FC)):
         result=objects.destroy_string_object(p,object_address=destination,
-            image_base=image_base,free=free)
+            image_base=image_base,free=free,delete_object=pair[1]==0x2484FC)
     elif pair==(0x288610,0x32A264):
         free(p,destination)
         result=None

@@ -7128,5 +7128,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_second_delete_fresh_20261015": {
+    "path": "evidence/vm9_request_second_delete_fresh_20261015.json",
+    "native_Python_controls": 17,
+    "rollback_guards": 12,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

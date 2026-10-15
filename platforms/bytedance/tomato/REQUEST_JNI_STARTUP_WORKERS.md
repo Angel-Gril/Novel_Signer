@@ -6967,6 +6967,33 @@ child return保持；outer3900有边界，原页无差异/64新增OS页，second
 python -B platforms/bytedance/tomato/python/verify_vm9_second_free_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-free-evidence.json>
 ```
 
+## 6.197 Second VM deleting destructor（2026-10-15 Asia/Shanghai）
+
+恢复 `2884CC→2484FC` 删除析构。复用未修改的
+`destroy_string_object(delete_object=True)`：先释放非NULL payload，再清指针/
+恢复empty字段，最后释放object。生产改动只有dispatch pair、consumer条件、
+delete flag和docstring，未引入新record类型。wrapper完整12字节与token `288B68` 相同。
+
+**17项新增原生/Python对照、12项回滚通过**。16项两基址控制覆盖binary/NULL、
+negative length、object/packed跨页、payload/object别名与provider改字段/数据；
+声明页、有序payload/object free及释放前字节一致。组件free是显式合成输入。
+12项回滚覆盖target/缺页/缺服务及payload/object free后失败，外部效果未回滚。
+2项修改前原生RED通过，旧原生组未重跑。
+
+实际owning **295原始指令/1198声明范围**与真实matching-libc两次free一致。
+实际SP/TP、有序free/prefree bytes、reset字段、image/heap/allocator和所有native
+非栈写入、packed/canary/四个随机指针保持，无JNI/lock/file/syscall。该原生控制
+通过后的入口统计断言已修正，入口仅重跑Python，原生结果保留并且只计一次。
+
+实际second **10070→10101/0x10a464**，下一 **28883C→261404**。删除回调完成，
+diagnostic leaves22→23，其他旧记录/child return保持。outer3900有边界，原页
+无差异/64新增OS页，second页未发布。physical X0/spills/PAC、完整signer、
+真实URL/header JNI和fresh/live/JVM未完成。见 [删除析构证据](evidence/vm9_request_second_delete_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_delete_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --output <second-delete-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

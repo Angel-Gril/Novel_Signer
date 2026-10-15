@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM deleting destructor
+
+17项新增原生对照、12项回滚通过；2884CC→2484FC复用既有删除析构owner。
+实际owning295指令/1198范围与matching-libc payload/object free及prefree字节一致。
+入口10070→10101/0x10a464，下一28883C→261404；diagnostic leaves23，其他旧记录/
+child return保持。原outer页无差异/64新增OS页，second页未发布。
+完整signer和fresh/live/JVM未完成。见 [删除析构报告](REQUEST_JNI_STARTUP_WORKERS.md#6197-second-vm-deleting-destructor2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM deallocation callback
 
 17项新增原生对照、12项回滚通过；288610→32A264→free复用已有显式allocator

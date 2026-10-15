@@ -493,6 +493,8 @@ Second VM CRC callback passes 33 new native controls and 18 rollback guards. The
 
 Second VM deallocation callback passes 17 new native controls and 12 rollback guards. The equivalent tail wrapper forwards explicit free with no packed result store. Actual owning137 instructions/1193 ranges match real matching-libc free. Actual second advances10059 to10070, next2884cc->2484fc. Complete signing remains unfinished. See the [deallocation report](REQUEST_JNI_STARTUP_WORKERS.md#6196-second-vm-deallocation-callback2026-10-15-asiashanghai).
 
+Second VM deleting destructor passes 17 new native controls and 12 rollback guards. The existing consumer reuses the unchanged object destructor with deletion enabled. Actual owning295 instructions/1198 ranges match real payload/object free and pre-free bytes. Actual second advances10070 to10101, next28883c->261404. Complete signing remains unfinished. See the [deleting destructor report](REQUEST_JNI_STARTUP_WORKERS.md#6197-second-vm-deleting-destructor2026-10-15-asiashanghai).
+
 
 
 
