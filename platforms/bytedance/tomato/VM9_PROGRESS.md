@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-15 Asia/Shanghai：second VM string pair callback
+
+17项新增原生对照、8项回滚通过；2887F0→248780与旧token wrapper完整28字节
+相同，复用同一clone/append owner。owning629指令/1191范围及真实allocator一致。
+入口10009→10021/0x10a324，下一2887D0→25874C；string_pairs1及旧记录/child
+return保持。原outer页无差异/64新增OS页，second页未发布。完整signer和
+fresh/live/JVM未完成。见 [字符串拼接回调报告](REQUEST_JNI_STARTUP_WORKERS.md#6193-second-vm-string-pair-callback2026-10-15-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-15 Asia/Shanghai：second VM string format callback
 
 21项新增原生对照、12项回滚通过；28880C→248908复用现有formatter，单个W2

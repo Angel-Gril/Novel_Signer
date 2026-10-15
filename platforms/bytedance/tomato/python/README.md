@@ -614,6 +614,8 @@ Second VM allocation callback passes 22 new native controls and 9 rollback check
 
 Second VM string format callback passes 21 new native controls and 12 rollback checks. Existing formatter and allocator owners handle one W2 argument; owning1839 instructions/1193 ranges match real libc. The entry forwards prepare_format and raises second budget10000 to20000. Actual second advances9998 to10009, next2887f0->248780. Complete signing remains unfinished. See the [string format report](../REQUEST_JNI_STARTUP_WORKERS.md#6192-second-vm-string-format-callback2026-10-15-asiashanghai).
 
+Second VM string pair callback passes 17 new native controls and 8 rollback checks. Its complete28-byte wrapper equals the accepted token wrapper, so the existing clone/append owner handles both; actual owning629 instructions/1191 ranges match. Actual second advances10009 to10021, next2887d0->25874c. Complete signing remains unfinished. See the [string pair report](../REQUEST_JNI_STARTUP_WORKERS.md#6193-second-vm-string-pair-callback2026-10-15-asiashanghai).
+
 
 
 

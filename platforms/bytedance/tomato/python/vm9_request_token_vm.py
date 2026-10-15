@@ -269,7 +269,7 @@ def apply_token_string_lifecycle_callback(pages, *, wrapper_offset,
 def apply_token_string_transform_callback(pages, *, wrapper_offset,
         argument_block_address, image_base, entry_stack_address,
         allocate, reallocate, free, prepare_format=None, max_bytes=0x100000):
-    """+288b74 format, +288b8c sized string, +288ba0 hidden-X8 pair.
+    """+288b74 format, +288b8c sized string, +288ba0/+2887f0 hidden-X8 pair.
 
     W2 is read as 32 bits. The pair wrapper loads output X8 from packed+8,
     X0 from +16 and X1 from +24, then composes the accepted clone and append
@@ -289,7 +289,7 @@ def apply_token_string_transform_callback(pages, *, wrapper_offset,
     elif pair==(0x288B8C,0x2481FC):
         result=objects.construct_sized_string_object(p,object_address=words[1],source_address=words[2],
             length=words[3]&0xFFFFFFFF,image_base=image_base,allocate=allocate,max_payload_bytes=max_bytes)
-    elif pair==(0x288BA0,0x248780):
+    elif pair in ((0x288BA0,0x248780),(0x2887F0,0x248780)):
         if type(entry_stack_address) is not int or not 0x200<=entry_stack_address<1<<64 or entry_stack_address&15:
             raise RefillUnsupported('token pair stack requires aligned spill space')
         def guard_span(address,width):

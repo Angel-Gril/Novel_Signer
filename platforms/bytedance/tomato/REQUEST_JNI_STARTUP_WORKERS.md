@@ -6862,6 +6862,33 @@ child return保持；outer3900仍有边界，原页无差异/64新增OS页，sec
 python -B platforms/bytedance/tomato/python/verify_vm9_second_string_format_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-string-format-evidence.json>
 ```
 
+## 6.193 Second VM string pair callback（2026-10-15 Asia/Shanghai）
+
+恢复 `2887F0→248780` hidden-X8字符串拼接。完整28字节wrapper与已验收的
+`288BA0` 相同，现有token字符串owner增加这个实际wrapper分支，继续复用
+`2483E0` clone与 `246BA0` append，未新增拼接实现；X8/X0/X1从packed+8/+16/
++24读取，wrapper SP-16调用，无packed结果写回。
+
+**17项新增原生/Python对照、8项回滚通过**：16项两基址新wrapper原生控制
+覆盖binary含NUL、空串、first/second alias、NULL malloc、growth failure及
+跨页。guest/image/packed padding、有序分配/realloc/free和uint32 append
+status一致。2项修改前RED证明旧owner拒绝新wrapper和原生binary拼接。
+8项回滚包括首次/后续payload栈别名、provider分配后修改payload到栈、缺失
+输入/输出和长度上限，均保留model页；外部provider账本/mapping不回滚。
+
+实际owning **629原始指令/1191声明范围**一致，真实allocator、实际second
+SP/TP、hidden输出/payload/packed/后续字节、allocator状态、append status、
+canary与四个随机指针保持；未调用JNI/lock/file/syscall。旧token组件组未重跑。
+
+实际second **10009→10021/0x10a324**，下一 **2887D0→25874C**。string_pairs1
+及所有旧记录/child return保持；outer3900仍有边界，原页无差异/64新增OS页，
+second页未发布。完整signer、physical ABI/PAC、真实URL/header JNI、mapping
+回滚和fresh/live/JVM未完成。见 [字符串拼接回调证据](evidence/vm9_request_second_string_pair_fresh_20261015.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_string_pair_fresh_20261015.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <second-string-pair-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -151,6 +151,11 @@ class RequestVm287474StringFormatPrefix(RequestVm287474AllocationPrefix):
     string_formats: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474StringPairPrefix(RequestVm287474StringFormatPrefix):
+    string_pairs: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -200,6 +205,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     identifiers=[]
     allocations=[]
     string_formats=[]
+    string_pairs=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -373,6 +379,13 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     allocate=consumer_services['allocate'],reallocate=consumer_services.get('reallocate'),
                     free=consumer_services['free'],prepare_format=consumer_services.get('prepare_format'))
                 string_formats.append((argument,output))
+            elif consumer_services is not None and (wrapper,target)==(0x2887F0,0x248780):
+                from vm9_request_token_vm import apply_token_string_transform_callback
+                status=apply_token_string_transform_callback(staged,wrapper_offset=wrapper,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,allocate=consumer_services['allocate'],
+                    reallocate=consumer_services.get('reallocate'),free=consumer_services['free'])
+                string_pairs.append((argument,status))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image)
@@ -397,6 +410,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if string_pairs:
+                return RequestVm287474StringPairPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs))
             if string_formats:
                 return RequestVm287474StringFormatPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats))
