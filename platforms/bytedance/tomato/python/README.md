@@ -648,6 +648,8 @@ Five-argument second formatter passes 17 new native controls and 16 rejection/ro
 
 Second JSON string insertion passes 53 new native controls and 24 rejection/rollback checks. The configuration owner creates type0x10 nodes, copies value/key and appends with native cleanup order. Actual native allocation/copy call passes923 instructions/1221 declared ranges. Second reaches10341/+10aabc, next2888f4->28794c. Complete signing remains unfinished. See the [JSON string report](../REQUEST_JNI_STARTUP_WORKERS.md#6209-second-json-string2026-10-16-asiashanghai).
 
+Second numeric string construction passes 31 new native controls and 34 rejection/rollback checks. Nine unsigned globals and one TLS value use measured libc++ reserve/append/shrink semantics. Actual native allocation/TLS call passes2579 instructions/1224 ranges. Second reaches10403/+10ad04, next28890c->256ce0; complete signing remains unfinished. See the [numeric string report](../REQUEST_JNI_STARTUP_WORKERS.md#6210-second-numeric-string2026-10-16-asiashanghai).
+
 
 
 

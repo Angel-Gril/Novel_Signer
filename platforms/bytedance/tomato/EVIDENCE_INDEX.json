@@ -7232,5 +7232,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_second_numeric_string_fresh_20261016": {
+    "path": "evidence/vm9_second_numeric_string_fresh_20261016.json",
+    "native_Python_controls": 31,
+    "rollback_guards": 34,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

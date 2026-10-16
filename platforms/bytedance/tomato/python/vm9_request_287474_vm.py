@@ -201,6 +201,11 @@ class RequestVm287474JsonStringPrefix(RequestVm287474TlsU32Prefix):
     json_strings: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474NumericStringPrefix(RequestVm287474JsonStringPrefix):
+    numeric_strings: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -260,6 +265,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     environment_helpers=[]
     tls_u32_getters=[]
     json_strings=[]
+    numeric_strings=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -322,6 +328,13 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x2888F4,0x28794C):
+                if not callable(consumer_services.get('get_tls')):raise Boundary()
+                value=apply_request_287474_numeric_string_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'],
+                    get_tls=consumer_services['get_tls'])
+                numeric_strings.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2888D0,0x2613E4):
                 value=apply_request_287474_json_string_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -523,6 +536,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if numeric_strings:
+                return RequestVm287474NumericStringPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings))
             if json_strings:
                 return RequestVm287474JsonStringPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings))
@@ -1232,6 +1248,90 @@ def apply_request_287474_json_number_callback(pages, *, argument_block_address,
         max_bytes=max_bytes,max_nodes=max_nodes)
     _write_span(p,argument_block_address+32,bytes([int(result)]))
     p.commit();return result
+
+
+def apply_request_287474_numeric_string_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,allocate,free,get_tls):
+    """+2888f4/+28794c builds the request's libc++ numeric string.
+
+    Nine live u32 globals each gain '|', followed by one live TLS u32.
+    Reserve128 allocates144 bytes; at most109 output bytes need no growth.
+    Final reserve(0) copies length+1, frees the old buffer and changes the
+    representation. This is libc++ SSO, distinct from Medusa string objects.
+
+    Only staged pages roll back. Providers must preserve the output descriptor;
+    aliases into native spills, inputs or active allocations are unsupported.
+    Temporary stack bytes, canary/PAC and physical return registers are unproved.
+    """
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('numeric string requires an aligned guest stack')
+    def address(a,n):
+        if type(a) is not int or not 0<a<=(1<<64)-n:
+            raise RefillUnsupported('numeric string address is invalid or wraps uint64')
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('numeric string aliases unmodeled native spills')
+    if type(image_base) is not int or not 0<=image_base<=(1<<64)-0x3D19AC:
+        raise RefillUnsupported('numeric string image address wraps uint64')
+    if not all(callable(s) for s in (allocate,free,get_tls)):
+        raise RefillUnsupported('numeric string requires allocation, free and TLS providers')
+    address(argument_block_address,24)
+    p=_PageTransaction(pages);raw=_read_span(p,argument_block_address,24)
+    target,output,receiver=(int.from_bytes(raw[i:i+8],'little') for i in (0,8,16))
+    if target!=image_base+0x28794C:raise RefillUnsupported('unexpected second numeric string target')
+    globals_address=image_base+0x3D1988;control=image_base+0x382920
+    inputs=((argument_block_address,24),(globals_address,36),(control,32))
+    def overlaps(a,n,b,m):return a<b+m and b<a+n
+    address(output,24)
+    for a,n in inputs:
+        address(a,n)
+        if overlaps(output,24,a,n):raise RefillUnsupported('numeric string output aliases inputs')
+    _read_span(p,globals_address,36)
+    active=[]
+    def service(provider,*args):
+        descriptor=_read_span(p,output,24)
+        result=provider(p,*args)
+        if _read_span(p,output,24)!=descriptor:
+            raise RefillUnsupported('numeric string provider changed its output descriptor')
+        return result
+    def allocation(size):
+        pointer=service(allocate,size);address(pointer,size)
+        for a,n in (*inputs,(output,24),*active):
+            if overlaps(pointer,size,a,n):
+                raise RefillUnsupported('numeric string allocation aliases live state')
+        _read_span(p,pointer,size);active.append((pointer,size));return pointer
+    _write_span(p,output,bytes(24))
+    buffer=allocation(144)
+    _write_span(p,buffer,b'\0')
+    _write_span(p,output,(145).to_bytes(8,'little')+bytes(8)+buffer.to_bytes(8,'little'))
+    length=0
+    def append(data):
+        nonlocal length
+        if length+len(data)>109:raise RefillUnsupported('numeric string exceeded its uint32 bound')
+        _write_span(p,buffer+length,data)
+        length+=len(data)
+        _write_span(p,output+8,length.to_bytes(8,'little'))
+        _write_span(p,buffer+length,b'\0')
+    for index in range(9):
+        value=int.from_bytes(_read_span(p,globals_address+index*4,4),'little')
+        append(str(value).encode('ascii')+b'|')
+    pointer=service(get_tls,control);address(pointer,4)
+    for a,n in ((output,24),*active):
+        if overlaps(pointer,4,a,n):raise RefillUnsupported('numeric string TLS payload aliases output')
+    value=int.from_bytes(_read_span(p,pointer,4),'little')
+    append(str(value).encode('ascii'))
+    if length<=22:
+        _write_span(p,output+1,_read_span(p,buffer,length+1))
+        service(free,buffer)
+        _write_span(p,output,bytes([length*2]))
+    else:
+        size=(length+16)&~15
+        destination=allocation(size)
+        _write_span(p,destination,_read_span(p,buffer,length+1))
+        service(free,buffer)
+        _write_span(p,output+16,destination.to_bytes(8,'little'))
+        _write_span(p,output,(size|1).to_bytes(8,'little')+length.to_bytes(8,'little'))
+    p.commit();return output
 
 
 def apply_request_287474_json_string_callback(pages, *, argument_block_address,

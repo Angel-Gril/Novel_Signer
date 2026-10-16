@@ -361,6 +361,7 @@ VM int32转double新增 **32项原生对照、6项拒绝检查**，second prefix
 second TLS getter新增 **15项原生对照、15项拒绝或回滚检查**，prefix到10320步。见 [TLS读取报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6207-second-tls-u322026-10-16-asiashanghai)。
 五参数64位unsigned格式化新增 **17项原生对照、16项拒绝或回滚检查**，prefix到10332步。见 [格式化报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6208-second-five-argument-format2026-10-16-asiashanghai)。
 JSON字符串插入新增 **53项原生对照、24项拒绝或回滚检查**，prefix到10341步。见 [字符串报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6209-second-json-string2026-10-16-asiashanghai)。
+数字字符串构造新增 **31项原生对照、34项拒绝或回滚检查**，prefix到10403步。见 [数字字符串报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6210-second-numeric-string2026-10-16-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

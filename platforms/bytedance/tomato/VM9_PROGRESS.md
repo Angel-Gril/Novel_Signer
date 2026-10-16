@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second numeric string construction
+
+31项新增原生对照、34项拒绝或回滚检查通过；9个u32全局及1个TLS u32转十进制，libc++ reserve/append/shrink恢复。
+实际原始allocator/TLS回调2579指令/1224范围对照通过；34个旧AST owner和617个历史绑定哈希保持。
+second10403/+10AD04，下一28890C→256CE0；numeric string1次/string16次/json string2次，其余旧计数与child return保持。
+outer原页无差异/64新增OS页；累计2664native/879checks；完整signer/fresh/live/JVM未完成。
+见 [数字字符串报告](REQUEST_JNI_STARTUP_WORKERS.md#6210-second-numeric-string2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：second JSON string insertion
 
 53项新增原生对照、24项拒绝或回滚检查通过；type0x10字符串节点及value/key复制、链表追加和失败清理恢复。

@@ -7311,6 +7311,32 @@ whole second/request、physical ABI、真实URL/header JNI与fresh/live/JVM仍�
 python -B platforms/bytedance/tomato/python/verify_vm9_second_json_string_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <json-string-evidence.json> --mode native
 ```
 
+## 6.210 Second numeric string（2026-10-16 Asia/Shanghai）
+
+恢复 `2888F4→28794C`：9个全局u32分别转无符号十进制并追加`|`，再追加1个TLS u32。
+原始路径使用24字节libc++短/长字符串布局；reserve128分配144字节，输出长度19–109，
+末尾`287A70`为reserve(0)。长度≤22转短字符串；否则按16字节取整分配、复制length+1、释放旧buffer。
+临时数字字符串均为短字符串，移动后清零、析构无堆释放；packed没有结果写回。
+
+**31项新增原生/Python对照、34项拒绝或回滚检查通过**。30项两基址组件覆盖SSO22/23、
+收缩取整31/32、u32高位/最大值、十进制边界、跨页、初始垃圾内容及provider对全局/复制源的实时修改。
+完整声明guest/image字节、TLS/分配/free顺序和free前内容一致。34项拒绝检查保持model页，
+包括缺失/失败provider、地址/栈边界、分配结果别名与复用、output/input别名和descriptor被provider改写。
+
+实际原始allocator/libc TLS回调对照 **2579条指令/1224个声明范围**；2次分配、1次TLS、1次free一致，
+使用实际SP/TP，packed、生成的output及声明TLS字节一致，4个随机运行时指针保持。physical X0/
+spills/PAC、external provider/mapping rollback及whole second/request未证明。
+
+本阶段在生产编辑前观察1项预期的缺失callback RED，并保存source/log哈希及TaskDecision。
+second到 **10403步/+10AD04，下一28890C→256CE0**；numeric string1次，string15→16、json string1→2，
+其余旧计数与child return保持。outer3900仍有边界；原页无差异/64新增OS页，second页未发布。
+累计6.127–6.210为 **2664项native/879项拒绝或回滚检查**。完整signer/fresh/live/JVM仍未完成。
+见 [数字字符串证据](evidence/vm9_second_numeric_string_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_numeric_string_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <numeric-string-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
