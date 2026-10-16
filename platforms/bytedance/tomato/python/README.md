@@ -646,6 +646,8 @@ Second TLS uint32 getter passes 15 new native controls and 15 rejection/rollback
 
 Five-argument second formatter passes 17 new native controls and 16 rejection/rollback checks. Existing printf owner now handles unsigned64 %lu/%llu; exact wrapper2888b4 passes W2 plus four X words and retains the old one-argument default. Actual native allocator/formatter call passes12997 instructions/1193 declared ranges. Second reaches10332/+10aa98, next2888d0->2613e4. Complete signing remains unfinished. See the [five-argument formatter report](../REQUEST_JNI_STARTUP_WORKERS.md#6208-second-five-argument-format2026-10-16-asiashanghai).
 
+Second JSON string insertion passes 53 new native controls and 24 rejection/rollback checks. The configuration owner creates type0x10 nodes, copies value/key and appends with native cleanup order. Actual native allocation/copy call passes923 instructions/1221 declared ranges. Second reaches10341/+10aabc, next2888f4->28794c. Complete signing remains unfinished. See the [JSON string report](../REQUEST_JNI_STARTUP_WORKERS.md#6209-second-json-string2026-10-16-asiashanghai).
+
 
 
 

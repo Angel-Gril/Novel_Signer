@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-16 Asia/Shanghai：second JSON string insertion
+
+53项新增原生对照、24项拒绝或回滚检查通过；type0x10字符串节点及value/key复制、链表追加和失败清理恢复。
+实际原始allocator/copy回调923指令/1221范围对照通过；旧AST owner和历史私有证据保留。
+second10341/+10AABC，下一2888F4→28794C；json string1次，旧计数/child return保持。
+outer原页无差异/64新增OS页；累计2633native/845checks；完整signer/fresh/live/JVM未完成。
+见 [字符串报告](REQUEST_JNI_STARTUP_WORKERS.md#6209-second-json-string2026-10-16-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：second five-argument unsigned64 formatter
 
 17项新增原生对照、16项拒绝或回滚检查通过；已有printf支持%lu/%llu，2888B4传W2与4个X参数。

@@ -947,6 +947,89 @@ def add_json_number_to_object(pages, *, parent_address, key_address, number_bits
     p.commit();return False
 
 
+def add_json_string_to_object(pages, *, parent_address, key_address, value_address,
+        entry_stack_address, image_base, allocate, free, max_bytes=4096, max_nodes=4096):
+    """+24a424: create type0x10, copy its value and key, then append.
+
+    The native string insertion path allocates a 64-byte node, copies the
+    value cstring into the node's +0x20 payload, duplicates the member key at
+    +0x38, and links the node through the parent's +0x10 list head.  A failed
+    link causes the native destructor to release the value, key, and node;
+    this bounded model performs the same guest-page mutation transactionally.
+    Page rollback does not undo allocator/free service effects or physical
+    spills, so aliases of the saved native stack are rejected.
+    """
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('JSON string requires an aligned guest stack')
+    if any(type(n) is not int or not 1<=n<=0x100000 for n in (max_bytes,max_nodes)):
+        raise RefillUnsupported('JSON string requires bounded strings and list limits')
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('JSON string requires allocation and free services')
+    p=_PageTransaction(pages)
+    if (_u(p,image_base+0x381AA0)!=image_base+0x347FD0 or
+            _u(p,image_base+0x381AA8)!=image_base+0x347FA0):
+        raise RefillUnsupported('JSON string custom allocation hooks are unrecovered')
+    def bounded(a,n):
+        if a and a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('JSON string aliases unmodeled native spills')
+    def new(n):
+        a=allocate(p,n)
+        if type(a) is not int or not 0<=a<(1<<64)-n:
+            raise RefillUnsupported('JSON string allocator returned an invalid address')
+        if a:bounded(a,n)
+        return a
+    for address in (parent_address,key_address,value_address):
+        if type(address) is not int or not 0<=address<1<<64:
+            raise RefillUnsupported('JSON string input pointer is invalid')
+    if parent_address:bounded(parent_address,64)
+    if key_address:bounded(key_address,1)
+    if value_address:bounded(value_address,1)
+    node=new(64)
+    if not node:p.commit();return False
+    _write_span(p,node,bytes(64));_w(p,node+24,0x10,4)
+    def duplicate(source):
+        if not source:return 0
+        length=len(objects._cstring(p,source,max_bytes));bounded(source,length)
+        copy=new(length)
+        # strlen precedes malloc; memcpy reloads the source after its effects.
+        if copy:_write_span(p,copy,_read_span(p,source,length))
+        return copy
+    def fresh_node(payload=0):
+        expected=bytearray(64);expected[24:28]=(0x10).to_bytes(4,'little')
+        expected[32:40]=payload.to_bytes(8,'little')
+        if _read_span(p,node,64)!=expected:
+            raise RefillUnsupported('JSON string node changed during allocation or cleanup')
+    value_copy=duplicate(value_address)
+    fresh_node();_w(p,node+32,value_copy)
+    if not value_copy:
+        free(p,node);p.commit();return False
+    if parent_address and key_address and parent_address!=node:
+        key_copy=duplicate(key_address);fresh_node(value_copy)
+        if key_copy:
+            _w(p,node+56,key_copy)
+            first=_u(p,parent_address+16)
+            if not first:
+                _w(p,parent_address+16,node);_w(p,node,0);_w(p,node+8,node)
+            else:
+                bounded(first,16);tail=_u(p,first+8)
+                if not tail:
+                    tail=first;seen=set()
+                    while True:
+                        if tail in seen or len(seen)>=max_nodes:
+                            raise RefillUnsupported('JSON string child list is cyclic or exceeds its bound')
+                        seen.add(tail);bounded(tail,16);following=_u(p,tail)
+                        if not following:break
+                        tail=following
+                bounded(tail,16)
+                _w(p,tail,node);_w(p,node+8,tail);_w(p,first+8,node)
+            p.commit();return True
+    fresh_node(value_copy)
+    free(p,value_copy);fresh_node(value_copy)
+    free(p,node)
+    p.commit();return False
+
+
 def construct_empty_json_reference(pages, *, output_reference_address, source_address,
         entry_stack_address, image_base, thread_pointer, allocate, free,
         thread_id=None, diagnostic_observer=None, max_bytes=4096):

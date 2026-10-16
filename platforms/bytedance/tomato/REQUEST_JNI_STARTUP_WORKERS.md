@@ -7284,6 +7284,33 @@ second页未发布。累计6.127–6.208为 **2580项native/821项拒绝或回�
 python -B platforms/bytedance/tomato/python/verify_vm9_second_format5_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <format5-evidence.json>
 ```
 
+## 6.209 Second JSON string（2026-10-16 Asia/Shanghai）
+
+恢复 `2888D0→2613E4→24A424` 字符串成员插入。configuration owner创建64字节type `0x10`
+节点，把value复制到+0x20、key复制到+0x38，再追加到parent+0x10链表。second adapter读取
+receiver+8的parent，只在packed+0x20写1字节bool。strlen先于分配，拷贝在分配后重新读取源。
+NULL value、node/value/key三处分配失败、NULL parent/key和parent等于新节点均按原始路径清理。
+
+**53项新增原生/Python对照、24项拒绝或回滚检查通过**。52项两基址组件覆盖空/长/二进制/
+内嵌NUL字符串、NULL、三处分配失败、旧链尾/遍历、跨页及分配器修改拷贝源。完整声明guest/image
+字节、allocation/free顺序及free前内容一致。24项拒绝检查保留全部model页，包括value尾部栈别名、
+provider修改node/抛错、cleanup失败和链表循环/上限；external ledger/mapping rollback未证明。
+
+1项实际回调执行 **923条原始指令/1221个声明范围**；原始malloc/free与匹配libc运行，allocator
+stubs禁用，三次分配顺序及image/heap/packed/TLS、4个运行时指针一致。使用实际callback SP/TP；
+CPU X0、physical spills/PAC和whole second没有完整对照。
+
+旧source基线与2项native控制确认旧callback缺失及type/value语义；该基线在实现后提取，
+不计为修改前TDD RED。构造second到 **10341步/+10AABC，下一2888F4→28794C**，json string1次，
+全部旧计数/child return保持。outer3900仍有边界，原页无差异/64新增OS页，second页未发布。
+累计6.127–6.209为 **2633项native/845项拒绝或回滚检查**；完整signer、JSON parser/浮点族、
+whole second/request、physical ABI、真实URL/header JNI与fresh/live/JVM仍未完成。
+见 [字符串插入证据](evidence/vm9_second_json_string_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_json_string_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <json-string-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
