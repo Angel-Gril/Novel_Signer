@@ -216,6 +216,11 @@ class RequestVm287474JsonBoolPrefix(RequestVm287474ConfigurationStringPrefix):
     json_bools: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474JsonPrintPrefix(RequestVm287474JsonBoolPrefix):
+    json_prints: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -278,6 +283,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     numeric_strings=[]
     configuration_strings=[]
     json_bools=[]
+    json_prints=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -340,6 +346,14 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288990,0x2616B4):
+                value=apply_request_287474_json_print_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    allocate=consumer_services['allocate'],free=consumer_services['free'],
+                    thread_id=consumer_services.get('thread_id'),diagnostic_observer=consumer_services.get('diagnostic_observer'),
+                    prepare_format=consumer_services.get('prepare_format'))
+                json_prints.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x288968,0x261580):
                 value=apply_request_287474_json_bool_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -558,6 +572,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if json_prints:
+                return RequestVm287474JsonPrintPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints))
             if json_bools:
                 return RequestVm287474JsonBoolPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools))
@@ -1275,6 +1292,31 @@ def apply_request_287474_json_number_callback(pages, *, argument_block_address,
         entry_stack_address=entry_stack_address,image_base=image_base,allocate=allocate,free=free,
         max_bytes=max_bytes,max_nodes=max_nodes)
     _write_span(p,argument_block_address+32,bytes([int(result)]))
+    p.commit();return result
+
+
+def apply_request_287474_json_print_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,thread_pointer,allocate,free,
+        thread_id=None,diagnostic_observer=None,prepare_format=None,
+        max_bytes=0x100000,max_nodes=4096,max_depth=64):
+    """+288990/+2616b4: hidden X8 reference output, no packed store."""
+    from vm9_configuration_init import construct_printed_json_reference
+    if (type(entry_stack_address) is not int or not 0x4040<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('JSON print callback requires an aligned guest stack')
+    if type(argument_block_address) is not int or not 0<argument_block_address<=(1<<64)-24:
+        raise RefillUnsupported('JSON print packed address wraps uint64')
+    p=_PageTransaction(pages);raw=_read_span(p,argument_block_address,24)
+    target,output,receiver=(int.from_bytes(raw[i:i+8],'little') for i in (0,8,16))
+    if target!=image_base+0x2616B4:raise RefillUnsupported('unexpected second JSON print target')
+    for a,n in ((argument_block_address,24),(receiver,16)):
+        if a<entry_stack_address and a+n>entry_stack_address-0x4040:
+            raise RefillUnsupported('JSON print callback input aliases native spills')
+    node=int.from_bytes(_read_span(p,receiver+8,8),'little')
+    result=construct_printed_json_reference(p,output_reference_address=output,node_address=node,
+        entry_stack_address=entry_stack_address-16,image_base=image_base,thread_pointer=thread_pointer,
+        allocate=allocate,free=free,thread_id=thread_id,diagnostic_observer=diagnostic_observer,
+        prepare_format=prepare_format,max_bytes=max_bytes,max_nodes=max_nodes,max_depth=max_depth)
     p.commit();return result
 
 

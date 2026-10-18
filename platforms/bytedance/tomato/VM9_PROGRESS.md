@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second compact JSON printing/reference
+
+49项新增原生对照、36项拒绝或回滚检查通过；256字节起始缓冲、转义/数字/容器、扩容与失败清理、字符串引用已恢复。
+实际原始allocator回调27222指令/1375范围；scope的4字节padding和libc内部浮点状态未比较。
+37个旧AST owner及660个历史绑定哈希保持；second10494/+10AF54，下一2889A8绝对target为NULL。
+JSON print1次，其余旧计数与child return保持；outer原页无差异/64新增OS页。
+累计2783native/961checks；完整signer/fresh/live/JVM未完成。见 [JSON序列化报告](REQUEST_JNI_STARTUP_WORKERS.md#6213-second-json-print2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second JSON bool insertion
 
 41项新增原生对照、22项拒绝或回滚检查通过；最低位布尔节点、键复制、链表追加和失败清理已恢复。

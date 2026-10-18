@@ -7385,6 +7385,31 @@ outer3900有界、原页无差异/64新增OS页，second页未发布。累计6.1
 python -B platforms/bytedance/tomato/python/verify_vm9_second_json_bool_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <json-bool-evidence.json> --mode native
 ```
 
+## 6.213 Second JSON print（2026-10-18 Asia/Shanghai）
+
+恢复 `249AF0` compact JSON序列化及 `288990→2616B4` 字符串引用构造。
+初始256字节缓冲按native规则扩容、最终收缩复制；键/值转义、数组/对象、raw、数字15/17位选择、
+nonfinite转null及分配失败清理已实现。复用`248344`字符串和`1625A4`scope引用owner，最终释放临时JSON文本。
+
+**49项新增原生/Python对照、36项拒绝或回滚检查通过**。48项两基址核心组件比较guest/image/TLS/locale、
+输出指针、目标分配/释放顺序及释放前内容；20项核心与16项回调检查保持全部model页。
+实际9个数字/3个字符串/1个布尔对象使用原始allocator、实际SP/TP，**27222条指令/1375范围**一致。
+目标分配与释放、输出引用、scope有效字段及4个运行时随机指针一致。
+
+**比较范围**：scope的4字节padding受此前打印函数栈复用影响，未比较；libc浮点内部scratch/状态、
+physical ABI、外部provider/mapping回滚及whole second/request仍未证明。locale依赖缺失先修正验证环境；
+回调node位于printer入口SP的漏检由新增RED复现后补齐。修复后请求回放一致，不重跑旧native组。
+
+37个旧AST owner、58份绑定/660个私有哈希保持。second到 **10494步/+10AF54**，JSON print1次，
+全部旧计数与child return保持；下一wrapper **2889A8的绝对target为NULL**，需追查导入/虚表来源。
+outer3900有界、原页无差异/64新增OS页，second页未发布。累计6.127–6.213为
+**2783项native/961项拒绝或回滚检查**；完整signer/fresh/live/JVM仍未完成。
+见 [JSON序列化证据](evidence/vm9_second_json_print_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_json_print_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <json-print-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

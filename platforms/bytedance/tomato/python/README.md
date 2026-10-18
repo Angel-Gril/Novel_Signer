@@ -654,6 +654,8 @@ Second configuration string lookup passes 29 new native controls and 24 rejectio
 
 Second JSON bool insertion passes 41 new native controls and 22 rejection/rollback checks. The low bit selects type1/2; key duplication, append and failure cleanup match. Actual native allocation passes384 instructions/1208 ranges. Second reaches10481/+10af20, next288990->2616b4; complete signing remains unfinished. See the [JSON bool report](../REQUEST_JNI_STARTUP_WORKERS.md#6212-second-json-bool2026-10-18-asiashanghai).
 
+Second compact JSON printing and string reference construction pass 49 new native controls and 36 rejection/rollback checks. Actual original allocation passes27222 instructions/1375 ranges; scope fields match while4 padding bytes and internal libc numeric state remain unverified. Second reaches10494/+10af54, next2889a8 with NULL target; complete signing remains unfinished. See the [JSON print report](../REQUEST_JNI_STARTUP_WORKERS.md#6213-second-json-print2026-10-18-asiashanghai).
+
 
 
 

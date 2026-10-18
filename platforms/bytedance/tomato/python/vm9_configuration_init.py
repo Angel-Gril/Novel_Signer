@@ -947,6 +947,51 @@ def add_json_number_to_object(pages, *, parent_address, key_address, number_bits
     p.commit();return False
 
 
+def construct_printed_json_reference(pages, *, output_reference_address, node_address,
+        entry_stack_address, image_base, thread_pointer, allocate, free,
+        thread_id=None, diagnostic_observer=None, prepare_format=None,
+        max_bytes=0x100000, max_nodes=4096, max_depth=64):
+    """+2616b4 prints compact JSON, constructs a string reference, frees text.
+
+    Entry SP belongs to this target (the wrapper has already saved its LR).
+    Model pages roll back; external allocation/diagnostic effects do not.
+    """
+    from vm9_json_print import print_json_unformatted
+    from vm9_reference_scopes import construct_scoped_string_reference
+    if (type(entry_stack_address) is not int or not 0x4030<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('JSON print reference requires an aligned guest stack')
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('JSON print reference requires allocation and free services')
+    def check(a,n):
+        if type(a) is not int or not 0<=a<=(1<<64)-n:
+            raise RefillUnsupported('JSON print reference address wraps uint64')
+        if a and a<entry_stack_address+16 and a+n>entry_stack_address-0x4030:
+            raise RefillUnsupported('JSON print reference aliases unmodeled native spills')
+    check(output_reference_address,16)
+    if node_address:check(node_address,64)
+    p=_PageTransaction(pages)
+    def checked_allocate(tx,n):
+        a=allocate(tx,n)
+        if type(a) is not int or not 0<=a<(1<<64)-n:
+            raise RefillUnsupported('JSON print reference allocator returned an invalid address')
+        if a:check(a,n)
+        return a
+    text=print_json_unformatted(p,node_address=node_address,entry_stack_address=entry_stack_address-0x30,
+        image_base=image_base,allocate=checked_allocate,free=free,prepare_format=prepare_format,
+        max_bytes=max_bytes,max_nodes=max_nodes,max_depth=max_depth)
+    obj=checked_allocate(p,24)
+    if not obj:raise RefillUnsupported('JSON print reference operator-new NULL abort is unsupported')
+    objects.construct_string_object(p,object_address=obj,source_address=text or image_base+0x6FE64,
+        allocate=checked_allocate,vtable_address=image_base+0x34F5F8,
+        empty_descriptor_address=image_base+0x6E168,max_source_bytes=max_bytes)
+    construct_scoped_string_reference(p,reference_address=output_reference_address,string_address=obj,
+        entry_stack_address=entry_stack_address-0x30,image_base=image_base,thread_pointer=thread_pointer,
+        allocate=checked_allocate,thread_id=thread_id,diagnostic_observer=diagnostic_observer)
+    free(p,text)
+    p.commit();return output_reference_address
+
+
 def add_json_bool_to_object(pages, *, parent_address, key_address, value_byte,
         entry_stack_address, image_base, allocate, free, max_bytes=4096, max_nodes=4096):
     """+24a2c4/+24a320: create a boolean, duplicate its key and append.
