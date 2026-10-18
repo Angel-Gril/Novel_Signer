@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second JSON delete
+
+288A24→2614EC JSON清理恢复，53项新增native/30项拒绝或回滚通过。
+实际8409指令/1230范围/592字节栈，31次原生free顺序和字节一致。
+45旧AST、65旧绑定/809私有哈希保持。second11108/0x10bb00，下一0x288a30→0x263174。
+JSON清理1次，旧计数/child return保持；outer原页无差异/64新增OS页，second页未发布。
+累计3020native/1146checks；完整signer/fresh/live/JVM未证明。见 [清理报告](REQUEST_JNI_STARTUP_WORKERS.md#6220-second-json-delete2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second mutex unlock
 
 2889A8显式pthread_mutex_unlock回调恢复，复用既有owner，15项新增native/24项拒绝或回滚通过。

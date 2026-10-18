@@ -251,6 +251,11 @@ class RequestVm287474MutexUnlockPrefix(RequestVm287474ProtobufPackPrefix):
     mutex_unlocks: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474JsonDeletePrefix(RequestVm287474MutexUnlockPrefix):
+    json_deletions: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -320,6 +325,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     string_fills=[]
     protobuf_packs=[]
     mutex_unlocks=[]
+    json_deletions=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -382,6 +388,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288A24,0x2614EC):
+                apply_request_287474_json_delete_callback(staged,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,image_base=image,
+                    free=consumer_services['free'])
+                json_deletions.append((argument,words[1]))
             elif (consumer_services is not None and wrapper==0x2889A8 and
                     isinstance(consumer_services.get('mutex_import_bindings'),dict) and
                     type(consumer_services['mutex_import_bindings'].get('pthread_mutex_unlock')) is int and
@@ -649,6 +660,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if json_deletions:
+                return RequestVm287474JsonDeletePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions))
             if mutex_unlocks:
                 return RequestVm287474MutexUnlockPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks))
@@ -1911,3 +1925,18 @@ def apply_request_287474_mutex_unlock_callback(pages, *, argument_block_address,
     result=unlock_uncontended_mutex(p,mutex_address=mutex)
     _write_span(p,argument_block_address+16,result.to_bytes(4,'little'))
     p.commit();return result
+
+
+def apply_request_287474_json_delete_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, free, max_nodes=4096, max_depth=64):
+    """+288a24 tailcall: target/receiver at0/8, void and no packed store."""
+    from vm9_json_cleanup import delete_json_object
+    if type(argument_block_address) is not int or not 0<argument_block_address<=(1<<64)-16:
+        raise RefillUnsupported('JSON delete packed address wraps uint64')
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,16)
+    target,obj=(int.from_bytes(packed[i:i+8],'little') for i in (0,8))
+    if target!=image_base+0x2614EC:raise RefillUnsupported('unexpected JSON deleting destructor target')
+    delete_json_object(p,object_address=obj,entry_stack_address=entry_stack_address,
+        image_base=image_base,free=free,protected_ranges=((argument_block_address,16),),
+        max_nodes=max_nodes,max_depth=max_depth)
+    p.commit()

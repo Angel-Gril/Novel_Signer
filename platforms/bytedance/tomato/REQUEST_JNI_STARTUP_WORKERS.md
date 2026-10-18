@@ -7551,6 +7551,31 @@ atomicity/并发、完整physical ABI、whole second/request、外部provider/ma
 python -B platforms/bytedance/tomato/python/verify_vm9_second_mutex_unlock_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <mutex-unlock-evidence.json> --mode native
 ```
 
+## 6.220 Second JSON delete（2026-10-18 Asia/Shanghai）
+
+恢复 `288A24→2614EC` 的 JSON deleting destructor：packed+0/+8为target/receiver，尾调用没有packed结果。
+新owner `vm9_json_cleanup.delete_json_object` 按原生顺序清理子树、值、键、节点，再释放包装对象；
+包装vtable先恢复为+35BA58。bit8跳过引用的子树和值，bit9跳过常量键。
+子树和值释放后重读flags，释放值后读取key，next则提前保存；payload只作为free参数，不扫描字符串。
+
+**53项新增原生/Python对照、30项拒绝或回滚检查通过**。52项双基址组件覆盖26组输入，包括跨页、
+64层子树、引用/常量键、保留标志，以及provider修改flags/key/next；完整guest/image字节、释放顺序、
+释放前字节及包装vtable一致。30项检查覆盖循环、重复所有权、已知别名、地址/栈/资源边界、hook变化和
+第一次/最后一次free之后抛错的页回滚。上限4096节点/64层，排除SP前0x1000；外部free账本不回滚。
+实际请求执行 **8409条指令/1230个声明范围/592字节栈**，
+**31次原生libc free**的顺序、释放前字节和声明内存一致；分配器stub关闭，原SP/TP保留。
+
+45旧AST owner、65旧绑定/809私有哈希保持，旧native组未重跑。
+second从10788推进到 **11108步/0x10bb00**，JSON清理1次，旧计数/child return保持；
+下一边界 **0x288a30→0x263174**。outer3900有界，原页无差异/64新增OS页，second页未发布。
+累计 **3020native/1146项拒绝或回滚**。完整signer、whole second/request、physical ABI、外部provider/mapping回滚、
+实际URL/header JNI及fresh/live/JVM仍未完成。void析构不声明physical X0一致。
+见 [JSON清理证据](evidence/vm9_second_json_delete_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_json_delete_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <json-delete-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

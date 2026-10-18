@@ -1,5 +1,7 @@
 # Tomato Python material
 
+Second JSON deleting destructor passes53 new native controls and30 refusal/rollback checks. Actual request matches31 original libc frees and8409 instructions/1230 ranges. Second reaches11108/0x10bb00,next0x288a30->0x263174; complete signing remains unfinished. See the [JSON delete report](../REQUEST_JNI_STARTUP_WORKERS.md#6220-second-json-delete2026-10-18-asiashanghai).
+
 Second explicit normal mutex unlock callback passes15 new native controls and24 refusal/rollback checks. Matching-libc actual request passes30 instructions/1187 ranges andmutex1->0. Second reaches10788/+10b3ec,next288a24->2614ec; complete signing remains unfinished. See the [mutex unlock report](../REQUEST_JNI_STARTUP_WORKERS.md#6219-second-mutex-unlock2026-10-18-asiashanghai).
 
 Second Protobuf-C pack callback passes57 new native controls and32 refusal/rollback checks. Actual706-byte encoding and tail match over9402 instructions/1439 ranges. Second reaches10680/+10b23c,next2889a8 with an unresolved NULL pthread_mutex_unlock import; complete signing remains unfinished. See the [protobuf pack report](../REQUEST_JNI_STARTUP_WORKERS.md#6218-second-protobuf-pack2026-10-18-asiashanghai).
