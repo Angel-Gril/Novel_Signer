@@ -236,6 +236,11 @@ class RequestVm287474ProtobufSizePrefix(RequestVm287474RealtimeMillisecondsPrefi
     protobuf_sizes: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474StringFillPrefix(RequestVm287474ProtobufSizePrefix):
+    string_fills: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -302,6 +307,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     mutex_locks=[]
     realtime_milliseconds=[]
     protobuf_sizes=[]
+    string_fills=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -494,6 +500,13 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image)
                 registry_reads.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x2889E0,0x248DD8):
+                if not callable(consumer_services.get('reallocate')):raise Boundary()
+                value=apply_request_287474_string_fill_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,allocate=consumer_services['allocate'],
+                    reallocate=consumer_services['reallocate'],free=consumer_services['free'])
+                string_fills.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2889C4,0x2A3378):
                 value=apply_request_287474_protobuf_size_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -610,6 +623,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if string_fills:
+                return RequestVm287474StringFillPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills))
             if protobuf_sizes:
                 return RequestVm287474ProtobufSizePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes))
@@ -1733,3 +1749,76 @@ def apply_request_287474_protobuf_size_callback(pages, *, argument_block_address
     _write_span(p, argument_block_address + 16, value.to_bytes(8, 'little'))
     p.commit()
     return value
+
+
+def apply_request_287474_string_fill_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, allocate, reallocate, free, max_bytes=0x100000):
+    """+2889e0 tail-calls +248dd8; reuse fill owner, no packed result store.
+
+    Explicit providers may change the declared length; validate input/buffer
+    ranges after each effect. Header/packed/payload aliases and native spill
+    aliases reject. Page rollback cannot reverse an external allocator ledger.
+    """
+    from vm9_objects import fill_string_object, _s32
+    if (type(entry_stack_address) is not int or not 0x1000 <= entry_stack_address < 1 << 64
+            or entry_stack_address & 15):
+        raise RefillUnsupported('string fill callback requires an aligned stack')
+    if type(max_bytes) is not int or not 1 <= max_bytes <= 0x100000:
+        raise RefillUnsupported('invalid string fill byte bound')
+    if any(not callable(provider) for provider in (allocate, reallocate, free)):
+        raise RefillUnsupported('string fill callback requires explicit allocation providers')
+    def span(address, size):
+        if type(address) is not int or not 0 < address < 1 << 64 or address + size > 1 << 64:
+            raise RefillUnsupported('string fill address wraps uint64')
+        if address < entry_stack_address and address + size > entry_stack_address - 0x1000:
+            raise RefillUnsupported('string fill input aliases native spills')
+    span(argument_block_address, 21)
+    p = _PageTransaction(pages)
+    packed = _read_span(p, argument_block_address, 21)
+    target, receiver = (int.from_bytes(packed[i:i+8], 'little') for i in (0, 8))
+    if target != image_base + 0x248DD8:
+        raise RefillUnsupported('unexpected second string fill target')
+    span(receiver, 24)
+    if receiver < argument_block_address + 21 and argument_block_address < receiver + 24:
+        raise RefillUnsupported('string fill receiver aliases packed input')
+    length, fill = int.from_bytes(packed[16:20], 'little'), packed[20]
+    if _s32(length) >= 0 and length + 1 > max_bytes:
+        raise RefillUnsupported('string fill output exceeds explicit byte bound')
+    def buffer_span(pointer, size):
+        span(pointer, size)
+        for address, width in ((argument_block_address, 21), (receiver, 24)):
+            if pointer < address + width and address < pointer + size:
+                raise RefillUnsupported('string fill payload aliases active input')
+    def check(current, after_provider=False):
+        if _read_span(current, argument_block_address, 21) != packed:
+            raise RefillUnsupported('string fill provider changed packed input')
+        capacity = _s32(int.from_bytes(_read_span(current, receiver + 8, 4), 'little'))
+        pointer = int.from_bytes(_read_span(current, receiver + 16, 8), 'little')
+        if after_provider:
+            current_length = _s32(int.from_bytes(_read_span(current, receiver + 12, 4), 'little'))
+            if not 0 <= current_length <= max_bytes:
+                raise RefillUnsupported('string fill provider length exceeds explicit bound')
+        if capacity > max_bytes:
+            raise RefillUnsupported('string fill capacity exceeds explicit byte bound')
+        if capacity > 0 and pointer:
+            buffer_span(pointer, capacity)
+    check(p)
+    def malloc(tx, size):
+        pointer = allocate(tx, size)
+        check(tx, True)
+        if pointer:buffer_span(pointer, size)
+        return pointer
+    def realloc(tx, pointer, size):
+        result = reallocate(tx, pointer, size)
+        check(tx, True)
+        if result:buffer_span(result, size)
+        return result
+    def release(tx, pointer):
+        result = free(tx, pointer)
+        check(tx, True)
+        return result
+    status = fill_string_object(p, object_address=receiver, length=length, fill=fill,
+        allocate=malloc, reallocate=realloc, free=release, max_bytes=max_bytes)
+    check(p, True)
+    p.commit()
+    return status & 0xFFFFFFFF

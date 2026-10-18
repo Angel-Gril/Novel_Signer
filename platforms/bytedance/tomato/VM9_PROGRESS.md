@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second string fill
+
+2889E0→248DD8填充回调复用既有owner，29项新增native/26项拒绝或回滚通过。
+实际请求3657指令/1245范围/3072字节栈，原始分配器；42旧AST、62旧绑定/742私有哈希保持。
+second10671/+10B218，下一2889F4→2A337C；填充1次，旧计数/child return保持。
+outer原页无差异/64新增OS页，second页未发布；累计2895native/1060checks。
+完整signer/fresh/live/JVM未证明。见 [字符串填充报告](REQUEST_JNI_STARTUP_WORKERS.md#6217-second-string-fill2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second protobuf packed size
 
 2889C4→2A3378长度回调恢复，独立有界proto3模型，53项新增native/35项拒绝或回滚通过。

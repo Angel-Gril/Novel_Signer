@@ -7478,6 +7478,30 @@ second从10651推进至 **10662步/+10B1F4**，长度回调1次，旧计数不�
 python -B platforms/bytedance/tomato/python/verify_vm9_second_protobuf_size_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <protobuf-size-evidence.json> --mode native
 ```
 
+## 6.217 Second string fill（2026-10-18 Asia/Shanghai）
+
+恢复 `2889E0→248DD8` 字符串填充尾回调。packed+0/+8/+16/+20分别为target/object/u32长度/u8填充值，
+没有packed结果写回；复用现有 `fill_string_object`，保留清零长度、reserve/fill/终止符、分配失败和长度重读语义。
+返回原生W0位模式，限制1MiB，排除SP前0x1000字节及packed/header/payload别名；provider后检查当前事务。
+
+**29项新增原生/Python对照、26项拒绝或回滚检查通过**。28项双基址组件覆盖零值、不扩容、边界扩容、
+malloc/realloc/回退/全部失败、负位置/长度/容量、NULL payload、高字节填充、跨页参数及provider修改长度。
+回滚检查发现provider后曾读取外层副本，已修复为读取当前内层事务；修复后复验同28项，仅计一次。
+26项拒绝覆盖地址、资源、别名、provider异常/修改和部分输出缺页，模型页保持，外部分配账本不回滚。
+实际请求执行 **3657条指令/1245个声明范围/3072字节栈**，启用原始分配器并保留原始SP/TP；
+声明内存、观察到的非栈写入、W0、分配释放顺序、完整参数块及四个运行时libc指针一致。
+
+42旧AST owner、62旧绑定/742私有哈希保持，旧native组未重跑。
+second从10662推进至 **10671步/+10B218**，填充回调1次，旧计数/child return保持；
+下一边界 **2889F4→2A337C**。outer3900有界、原页无差异/64新增OS页，second页未发布。
+累计6.127–6.217为 **2895项native/1060项拒绝或回滚检查**。
+libc内部scratch/state、完整physical ABI、whole second/request、外部provider/mapping回滚及完整signer/fresh/live/JVM仍未证明。
+见 [字符串填充证据](evidence/vm9_second_string_fill_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_string_fill_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <string-fill-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
