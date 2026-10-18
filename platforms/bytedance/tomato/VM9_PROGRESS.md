@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second string clone
+
+288A64→2483E0 二进制字符串复制wrapper恢复，31项新增native/29项拒绝或回滚通过。
+实际155指令/1200范围/352字节栈，1malloc/0free与声明内存一致；旧clone owner未改动。
+second11263/+10BDB0，下一288A74→2481FC；旧计数/child return保持。
+438个旧AST、68个历史绑定/862项私有哈希保持。
+累计3101native/1241checks；完整signer/fresh/live/JVM未证明。见 [复制报告](REQUEST_JNI_STARTUP_WORKERS.md#6223-second-string-clone2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second decoded reference
 
 288A4C→258E7C 解码引用wrapper恢复，31项新增native/33项拒绝或回滚通过。

@@ -1,5 +1,7 @@
 # Tomato / Fanqie (ByteDance)
 
+Second binary string clone passes 31 new native controls and 29 refusal/rollback checks. Actual request matches 155 instructions/1200 ranges and 1 allocation. Second reaches 11263/+10BDB0; next 288A74→2481FC. Complete signing remains unfinished. See the [string clone report](REQUEST_JNI_STARTUP_WORKERS.md#6223-second-string-clone2026-10-18-asiashanghai).
+
 Second decoded reference wrapper passes 31 new native controls and 33 refusal/rollback checks. Actual request matches 3159 instructions/1243 ranges and 4 allocations/1 free. Second reaches 11128/+10BB50; next 288A64→2483E0. Complete signing remains unfinished. See the [decoded reference report](REQUEST_JNI_STARTUP_WORKERS.md#6222-second-decoded-reference2026-10-18-asiashanghai).
 
 Second configuration lookup and nested reference scopes pass 19 new native controls and 33 rollback/refusal checks. Actual request matches 65 allocations/57 frees and 304121 instructions/1981 ranges. Second reaches 11118/+10BB28; next 288A4C→258E7C. Complete signing remains unfinished. See the [configuration lookup report](REQUEST_JNI_STARTUP_WORKERS.md#6221-second-configuration-lookup2026-10-18-asiashanghai).

@@ -7627,6 +7627,29 @@ fresh/live/JVM仍未完成。见 [解码引用证据](evidence/vm9_second_decode
 python -B platforms/bytedance/tomato/python/verify_vm9_second_decoded_reference_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <decoded-reference-evidence.json>
 ```
 
+## 6.223 Second string clone（2026-10-18 Asia/Shanghai）
+
+恢复 `288A64→2483E0` 二进制字符串复制：packed+0/+8/+16 为target、destination和source，
+wrapper尾调用，没有packed结果。复用未改动的 `vm9_objects.clone_string_object`；长度在目标写入和分配前保留，
+payload指针在分配后重读。负int32长度不分配，保留wrapped capacity与NULL payload；malloc NULL路径也保持。
+
+**31项新增原生/Python对照、29项拒绝或回滚通过**。30项双基址wrapper覆盖空/短/长、embedded NUL、binary、
+两种负长度、负长度配缺页payload、空NULL payload、malloc NULL、实时指针变化和四类跨页。
+完整声明的非栈guest/image字节、分配顺序和packed字节一致。实际请求执行 **155条指令/1200个声明范围/
+352字节栈**，**1次原生malloc、0次free**；全部声明内存和观测到的非栈写入一致。
+上限1 MiB，已知输入/输出/分配排除SP前0x1000；29项检查覆盖已知别名、wrap/缺页/栈、资源边界、
+allocator故障与packed修改。模型页回滚不撤销外部allocator账本或OS mapping。
+
+保留 438 个旧Python AST、68 个历史绑定与
+862 项私有哈希；旧native不重跑。second推进到 **11263步/+10BDB0**，复制1次，
+旧计数/child return保持；下一 **288A74→2481FC**。outer3900有界、原页无差异/64新增OS页，second页未发布。
+累计 **3101native/1241项拒绝或回滚**。完整signer、whole second/request、physical ABI、外部回滚、实际URL/header JNI、
+fresh/live/JVM仍未完成。见 [字符串复制证据](evidence/vm9_second_string_clone_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_string_clone_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <string-clone-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
