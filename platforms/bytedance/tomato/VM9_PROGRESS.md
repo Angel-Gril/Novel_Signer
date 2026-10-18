@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second mutex unlock
+
+2889A8显式pthread_mutex_unlock回调恢复，复用既有owner，15项新增native/24项拒绝或回滚通过。
+实际30指令/1187范围/96字节栈，mutex1→0；44旧AST、64旧绑定/788私有哈希保持。
+second10788/+10B3EC，下一288A24→2614EC；解锁1次，旧计数/child return保持。
+outer原页无差异/64新增OS页，second页未发布；累计2967native/1116checks。
+完整signer/fresh/live/JVM未证明。见 [解锁报告](REQUEST_JNI_STARTUP_WORKERS.md#6219-second-mutex-unlock2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second protobuf pack
 
 2889F4→2A337C编码回调复用size验证，57项新增native/32项拒绝或回滚通过。

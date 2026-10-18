@@ -7528,6 +7528,29 @@ outer3900有界、原页无差异/64新增OS页，second页未发布；累计 **
 python -B platforms/bytedance/tomato/python/verify_vm9_second_protobuf_pack_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <protobuf-pack-evidence.json> --mode native
 ```
 
+## 6.219 Second mutex unlock（2026-10-18 Asia/Shanghai）
+
+恢复 `2889A8` 的显式 `pthread_mutex_unlock` 回调：target/mutex位于packed+0/+8，状态精确写4字节到+16。
+复用现有 `unlock_uncontended_mutex`，支持私有/共享无争用普通锁1/2001→0/2000；NULL不会被推断为合法target。
+验证器从匹配libc导出和ELF重定位解析全部4处unlock绑定，包括+383490；实际fixture保留4 lock+4 unlock绑定。
+生产入口接受调用者显式绑定，不自动加载ELF；原锁算法及lock回调保持。
+
+**15项新增原生/Python对照、24项拒绝或回滚检查通过**。14项双基址组件覆盖私有/共享、跨页参数、
+页尾半字、image mutex、结果与mutex共址、mutex在packed尾部；全部guest/image字节及4字节结果一致。
+尾部共址允许mutex半字变化，由完整原生内存对照验证。native使用96字节栈，模型保守排除SP前0x1000字节。
+24项检查覆盖绑定/target/地址/状态/栈及mutex修改后结果缺页回滚。
+实际请求执行 **30条指令/1187个声明范围/96字节栈**，mutex1→0、X0、4字节结果及声明内存一致，原SP/TP保留。
+
+44旧AST owner、64旧绑定/788私有哈希保持，旧native组未重跑。
+second从10680推进至 **10788步/+10B3EC**，解锁1次，旧计数/child return保持；下一边界 **288A24→2614EC**。
+outer3900有界、原页无差异/64新增OS页，second页未发布；累计 **2967native/1116项拒绝或回滚**。
+atomicity/并发、完整physical ABI、whole second/request、外部provider/mapping回滚及完整signer/fresh/live/JVM未证明。
+见 [解锁回调证据](evidence/vm9_second_mutex_unlock_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_mutex_unlock_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <mutex-unlock-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
