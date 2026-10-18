@@ -211,6 +211,11 @@ class RequestVm287474ConfigurationStringPrefix(RequestVm287474NumericStringPrefi
     configuration_strings: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474JsonBoolPrefix(RequestVm287474ConfigurationStringPrefix):
+    json_bools: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -272,6 +277,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     json_strings=[]
     numeric_strings=[]
     configuration_strings=[]
+    json_bools=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -334,6 +340,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288968,0x261580):
+                value=apply_request_287474_json_bool_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
+                json_bools.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x28890C,0x256CE0):
                 value=apply_request_287474_configuration_string_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -547,6 +558,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if json_bools:
+                return RequestVm287474JsonBoolPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools))
             if configuration_strings:
                 return RequestVm287474ConfigurationStringPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings))
@@ -1261,6 +1275,29 @@ def apply_request_287474_json_number_callback(pages, *, argument_block_address,
         entry_stack_address=entry_stack_address,image_base=image_base,allocate=allocate,free=free,
         max_bytes=max_bytes,max_nodes=max_nodes)
     _write_span(p,argument_block_address+32,bytes([int(result)]))
+    p.commit();return result
+
+
+def apply_request_287474_json_bool_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,allocate,free,max_bytes=4096,max_nodes=4096):
+    """+288968/+261580: append a low-bit boolean, store one result byte."""
+    from vm9_configuration_init import add_json_bool_to_object
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('JSON bool callback requires an aligned guest stack')
+    if type(argument_block_address) is not int or not 0<argument_block_address<=(1<<64)-26:
+        raise RefillUnsupported('JSON bool packed address wraps uint64')
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,25)
+    target,obj,key=(int.from_bytes(packed[i:i+8],'little') for i in (0,8,16))
+    if target!=image_base+0x261580:raise RefillUnsupported('unexpected second JSON bool target')
+    for a,n in ((argument_block_address,26),(obj,16)):
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('JSON bool callback input aliases native spills')
+    parent=int.from_bytes(_read_span(p,obj+8,8),'little')
+    result=add_json_bool_to_object(p,parent_address=parent,key_address=key,value_byte=packed[24],
+        entry_stack_address=entry_stack_address,image_base=image_base,allocate=allocate,free=free,
+        max_bytes=max_bytes,max_nodes=max_nodes)
+    _write_span(p,argument_block_address+25,bytes([int(result)]))
     p.commit();return result
 
 

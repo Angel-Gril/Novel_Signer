@@ -523,6 +523,8 @@ Second numeric string construction passes 31 new native controls and 34 rejectio
 
 Second configuration string lookup passes 29 new native controls and 24 rejection/rollback checks. Existing reader/tree/clone owners implement guarded copy or empty construction; actual native allocation/locks pass909 instructions/1215 ranges. Second reaches10471/+10aef8, next288968->261580; complete signing remains unfinished. See the [configuration string report](REQUEST_JNI_STARTUP_WORKERS.md#6211-second-configuration-string2026-10-18-asiashanghai).
 
+Second JSON bool insertion passes 41 new native controls and 22 rejection/rollback checks. The low bit selects type1/2; key duplication, append and failure cleanup match. Actual native allocation passes384 instructions/1208 ranges. Second reaches10481/+10af20, next288990->2616b4; complete signing remains unfinished. See the [JSON bool report](REQUEST_JNI_STARTUP_WORKERS.md#6212-second-json-bool2026-10-18-asiashanghai).
+
 
 
 

@@ -947,6 +947,75 @@ def add_json_number_to_object(pages, *, parent_address, key_address, number_bits
     p.commit();return False
 
 
+def add_json_bool_to_object(pages, *, parent_address, key_address, value_byte,
+        entry_stack_address, image_base, allocate, free, max_bytes=4096, max_nodes=4096):
+    """+24a2c4/+24a320: create a boolean, duplicate its key and append.
+
+    The +261580 caller passes only the low bit. Types 1/2 represent false/true.
+    Default hooks and bounded mapped child lists are supported. Only model
+    pages roll back; external provider effects and physical spills do not.
+    """
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('JSON bool requires an aligned guest stack')
+    if any(type(n) is not int or not 1<=n<=0x100000 for n in (max_bytes,max_nodes)):
+        raise RefillUnsupported('JSON bool requires bounded key and list limits')
+    if type(value_byte) is not int or not 0<=value_byte<=255:
+        raise RefillUnsupported('JSON bool requires one unsigned byte')
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('JSON bool requires allocation and free services')
+    p=_PageTransaction(pages)
+    if (_u(p,image_base+0x381AA0)!=image_base+0x347FD0 or
+            _u(p,image_base+0x381AA8)!=image_base+0x347FA0):
+        raise RefillUnsupported('JSON bool custom allocation hooks are unrecovered')
+    def bounded(a,n):
+        if a and a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('JSON bool aliases unmodeled native spills')
+    def new(n):
+        a=allocate(p,n)
+        if type(a) is not int or not 0<=a<(1<<64)-n:
+            raise RefillUnsupported('JSON bool allocator returned an invalid address')
+        if a:bounded(a,n)
+        return a
+    for address in (parent_address,key_address):
+        if type(address) is not int or not 0<=address<1<<64:
+            raise RefillUnsupported('JSON bool input pointer is invalid')
+    if parent_address:bounded(parent_address,64)
+    if key_address:bounded(key_address,1)
+    node=new(64)
+    if not node:p.commit();return False
+    expected=bytearray(64);expected[24:28]=(1+(value_byte&1)).to_bytes(4,'little')
+    _write_span(p,node,expected)
+    def fresh_node():
+        if _read_span(p,node,64)!=expected:
+            raise RefillUnsupported('JSON bool node changed during key allocation or cleanup')
+    if parent_address and key_address and parent_address!=node:
+        length=len(objects._cstring(p,key_address,max_bytes));bounded(key_address,length)
+        key=new(length)
+        if key:
+            # strlen precedes malloc; memcpy observes its changes to key bytes.
+            _write_span(p,key,_read_span(p,key_address,length));fresh_node()
+            _w(p,node+56,key)
+            first=_u(p,parent_address+16)
+            if not first:
+                _w(p,parent_address+16,node);_w(p,node,0);_w(p,node+8,node)
+            else:
+                bounded(first,16);tail=_u(p,first+8)
+                if not tail:
+                    tail=first;seen=set()
+                    while True:
+                        if tail in seen or len(seen)>=max_nodes:
+                            raise RefillUnsupported('JSON bool child list is cyclic or exceeds its bound')
+                        seen.add(tail);bounded(tail,16);following=_u(p,tail)
+                        if not following:break
+                        tail=following
+                bounded(tail,16)
+                _w(p,tail,node);_w(p,node+8,tail);_w(p,first+8,node)
+            p.commit();return True
+    fresh_node();free(p,node)
+    p.commit();return False
+
+
 def add_json_string_to_object(pages, *, parent_address, key_address, value_address,
         entry_stack_address, image_base, allocate, free, max_bytes=4096, max_nodes=4096):
     """+24a424: create type0x10, copy its value and key, then append.

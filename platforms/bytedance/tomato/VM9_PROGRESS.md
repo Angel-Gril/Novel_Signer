@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second JSON bool insertion
+
+41项新增原生对照、22项拒绝或回滚检查通过；最低位布尔节点、键复制、链表追加和失败清理已恢复。
+实际原始allocator回调384指令/1208范围通过；36个旧AST owner及646个历史绑定哈希保持。
+second10481/+10AF20，下一288990→2616B4；JSON bool1次，其余旧计数和child return保持。
+outer原页无差异/64新增OS页；累计2734native/925checks；完整signer/fresh/live/JVM未完成。
+见 [JSON布尔报告](REQUEST_JNI_STARTUP_WORKERS.md#6212-second-json-bool2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second configuration string lookup
 
 29项新增原生对照、24项拒绝或回滚检查通过；配置树命中按长度克隆、缺失/NULL构造空字符串，均持有shared reader。

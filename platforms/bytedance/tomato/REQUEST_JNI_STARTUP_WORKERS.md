@@ -7363,6 +7363,28 @@ number8→9，其余旧计数和child return保持。outer3900仍有边界，原
 python -B platforms/bytedance/tomato/python/verify_vm9_second_configuration_string_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <configuration-string-evidence.json> --mode native
 ```
 
+## 6.212 Second JSON bool（2026-10-18 Asia/Shanghai）
+
+恢复 `288968→261580`：读取输入字节最低位，创建64字节清零节点，false/true类型为1/2；
+复制键并追加至父对象，失败释放节点。`vm9_configuration_init.add_json_bool_to_object`拥有节点行为，
+second adapter只解packed及写回`+25`的一个结果字节，新增继承prefix保留全部旧字段。
+
+**41项新增原生/Python对照、22项拒绝或回滚检查通过**。40项两基址组件覆盖最低位、
+空/长/二进制/嵌入NUL键、NULL、两处分配失败、父子别名、链尾扫描、跨页及分配器修改键。
+guest/image字节、分配/释放顺序及释放前内容一致；22项异常拒绝保持全部model页。
+实际已有成员对象追加路径使用原始allocator、实际SP/TP，**384条指令/1208个范围**一致，
+两次分配及packed padding、4个运行时随机指针保持。physical ABI和外部provider回滚仍未证明。
+
+生产编辑前预期缺callback RED已记录；36个旧AST owner、57份绑定/646个私有哈希保持，旧native组未重跑。
+second到 **10481步/+10AF20，下一288990→2616B4**；JSON bool1次，其余旧计数和child return保持。
+outer3900有界、原页无差异/64新增OS页，second页未发布。累计6.127–6.212为
+**2734项native/925项拒绝或回滚检查**；完整signer/fresh/live/JVM仍未完成。
+见 [JSON bool证据](evidence/vm9_second_json_bool_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_json_bool_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <json-bool-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
