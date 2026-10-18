@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-19 Asia/Shanghai：second allocated printf
+
+288AD4→278314双遍格式化分配恢复，50项新增native/39项拒绝或回滚通过。
+两次实际调用逐次核对，声明内存/非栈写入/W0/canary/原生分配效果一致；旧format owner未修改。
+second96740/+112434到达VMExit，返回流程待恢复；旧计数/child return保持，second页未发布。
+443个旧AST、73个历史绑定/941项私有哈希保持。
+累计3301native/1380checks；完整signer/fresh/live/JVM未证明。见 [格式化分配报告](REQUEST_JNI_STARTUP_WORKERS.md#6228-second-allocated-printf2026-10-19-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second Base64 reference
 
 288A4C→258C14 Base64引用构造wrapper恢复，31项新增native/33项拒绝或回滚通过。

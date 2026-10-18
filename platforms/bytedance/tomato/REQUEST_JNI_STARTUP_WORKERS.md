@@ -7744,6 +7744,34 @@ second推进到 **96588步/0x1121d4**，探针上限500000步，下一 **0x288ad
 python -B platforms/bytedance/tomato/python/verify_vm9_second_base64_reference_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <base64-reference-evidence.json>
 ```
 
+## 6.228 Second allocated printf（2026-10-19 Asia/Shanghai）
+
+恢复 `288AD4→278314` 双遍格式化分配：target/output pointer address/format/单个64位vararg
+位于packed+0/+8/+16/+24，仅写+32的4字节W0。wrapper保存16字节，canary位于SP−0x58。
+复用未改动的 `vm9_request_token_tail.apply_token_printf_callback` 和双遍format owner，保持
+首遍计长、分配、先发布output指针（含NULL）、第二遍读取实时format/source、原容量截断及完整长度返回。
+
+**50项新增原生/Python对照、39项拒绝或页回滚通过**。48项双基址exact wrapper覆盖空/短/长字符串、
+literal/escaped percent、signed/unsigned32与unsigned64、内嵌NUL、双遍之间源/格式变化、NULLmalloc、
+output/source与output/result别名，以及packed/output/source/format跨页。声明guest/image非栈字节、
+W0、packed/padding、定义的canary及分配效果一致。39项检查覆盖wrap/缺页/1 MiB/栈/分配别名/provider故障。
+页回滚不撤销外部allocator账本或OS mapping。
+
+实际请求 **两次调用逐次原生对照**：call 1: 907 instructions/1205 ranges/704 stack bytes/1 malloc/0 free; call 2: 22731 instructions/2197 ranges/704 stack bytes/1 malloc/0 free。全部声明内存、观测非栈写入、W0/canary及原生分配顺序一致。
+首个driver在两次对照成功后到达此前未恢复的VM返回，其旧callback-boundary断言因此失败；保留该日志。
+新的entry-only捕获未重复native，也未注入人工callback，确认second **96740步/+112434、391callbacks、VMExit**。
+当前下一边界为 **second VM返回**；返回流程尚未恢复，不能视为完整second/request/signing通过。
+
+保留 443 个旧Python AST、73 个历史绑定与
+941 项私有哈希，历史native未重跑。旧计数/child return保持，outer3900有界，
+原页无差异/64新增OS页，second页未发布。累计 **3301native/1380项拒绝或回滚**。
+完整signer、whole second/request、physical ABI、实际URL/header JNI、fresh/live/JVM仍未完成。
+见 [格式化分配证据](evidence/vm9_second_allocated_printf_fresh_20261019.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_allocated_printf_fresh_20261019.py --library "$env:TOMATO_LIBMETASEC" --output <allocated-printf-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

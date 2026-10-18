@@ -291,6 +291,11 @@ class RequestVm287474Base64ReferencePrefix(RequestVm287474FlaggedCleanupPrefix):
     base64_references: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474AllocatedPrintfPrefix(RequestVm287474Base64ReferencePrefix):
+    allocated_printfs: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -368,6 +373,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     memory_fills=[]
     flagged_cleanups=[]
     base64_references=[]
+    allocated_printfs=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -430,6 +436,12 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288AD4,0x278314):
+                value=apply_request_287474_allocated_printf_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    allocate=consumer_services['allocate'])
+                allocated_printfs.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x288A4C,0x258C14):
                 output=apply_request_287474_base64_reference_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -746,6 +758,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if allocated_printfs:
+                return RequestVm287474AllocatedPrintfPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references),tuple(string_clones),tuple(sized_strings),tuple(memory_fills),tuple(flagged_cleanups),tuple(base64_references),tuple(allocated_printfs))
             if base64_references:
                 return RequestVm287474Base64ReferencePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references),tuple(string_clones),tuple(sized_strings),tuple(memory_fills),tuple(flagged_cleanups),tuple(base64_references))
@@ -1712,6 +1727,66 @@ def apply_request_287474_numeric_string_callback(pages, *, argument_block_addres
         _write_span(p,output+16,destination.to_bytes(8,'little'))
         _write_span(p,output,(size|1).to_bytes(8,'little')+length.to_bytes(8,'little'))
     p.commit();return output
+
+
+def apply_request_287474_allocated_printf_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,thread_pointer,allocate,max_bytes=0x100000):
+    """+288AD4/+278314: live two-pass allocation, W0 at packed+32.
+
+    Share the token printf owner, including the canary at wrapper SP-0x58.
+    Output/source and output/result aliases retain the native publication order.
+    Native spill aliases and overlapping allocations are outside this boundary;
+    page rollback does not reverse external allocator or mapping effects.
+    """
+    import re
+    import vm9_objects as objects
+    from vm9_request_token_tail import apply_token_printf_callback
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('allocated printf requires an aligned guest stack')
+    if type(max_bytes) is not int or not 1<=max_bytes<=0x100000:
+        raise RefillUnsupported('allocated printf requires a bounded format')
+    if not callable(allocate):raise RefillUnsupported('allocated printf requires an allocator')
+    def span(a,n):
+        if type(a) is not int or not 0<a<=(1<<64)-n:
+            raise RefillUnsupported('allocated printf address wraps uint64')
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('allocated printf aliases native spills')
+    span(argument_block_address,40)
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,40)
+    target,output,fmt,arg=(int.from_bytes(packed[i:i+8],'little') for i in (0,8,16,24))
+    if target!=image_base+0x278314:raise RefillUnsupported('unexpected allocated printf target')
+    span(output,8);_read_span(p,output,8)
+    span(thread_pointer,0x30);_read_span(p,thread_pointer+0x28,8)
+    fixed=((argument_block_address,40),(output,8),(thread_pointer+0x28,8))
+    if any(a<thread_pointer+0x30 and thread_pointer+0x28<a+n for a,n in fixed[:2]):
+        raise RefillUnsupported('allocated printf output or packed input aliases TLS canary')
+    def live_inputs(tx):
+        span(fmt,1);raw=objects._cstring(tx,fmt,max_bytes);span(fmt,len(raw))
+        active=[(fmt,len(raw))]
+        # The shared formatter owns conversion semantics. This scan only
+        # identifies string-address ranges, consuming escaped percent pairs.
+        if any(m.group()==b'%s' for m in re.finditer(rb'%(?:%|s|d|u|llu|lu)',raw[:-1])):
+            span(arg,1);data=objects._cstring(tx,arg,max_bytes);span(arg,len(data))
+            active.append((arg,len(data)))
+        return tuple(active)
+    live_inputs(p)
+    def checked_allocate(tx,n):
+        result=allocate(tx,n)
+        if type(result) is not int or not 0<=result<=(1<<64)-n:
+            raise RefillUnsupported('allocated printf allocator returned invalid address')
+        if _read_span(tx,argument_block_address,40)!=packed:
+            raise RefillUnsupported('allocated printf provider changed packed input')
+        active=live_inputs(tx)
+        if result:
+            span(result,n);_read_span(tx,result,n)
+            if any(result<a+m and a<result+n for a,m in fixed+active):
+                raise RefillUnsupported('allocated printf allocation aliases active storage')
+        return result
+    result=apply_token_printf_callback(p,argument_block_address=argument_block_address,
+        image_base=image_base,entry_stack_address=entry_stack_address,
+        thread_pointer=thread_pointer,allocate=checked_allocate,max_bytes=max_bytes)
+    p.commit();return result
 
 
 def apply_request_287474_json_string_callback(pages, *, argument_block_address,
