@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second protobuf pack
+
+2889F4→2A337C编码回调复用size验证，57项新增native/32项拒绝或回滚通过。
+实际706字节编码/9402指令/1439范围/592字节栈；43旧AST、63旧绑定/765私有哈希保持。
+second10680/+10B23C；下一2889A8，+383490 pthread_mutex_unlock导入尚未绑定、target NULL。
+编码1次，旧计数/child return保持；outer原页无差异/64新增OS页，second页未发布。
+累计2952native/1092checks；完整signer/fresh/live/JVM未证明。见 [Protobuf编码报告](REQUEST_JNI_STARTUP_WORKERS.md#6218-second-protobuf-pack2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second string fill
 
 2889E0→248DD8填充回调复用既有owner，29项新增native/26项拒绝或回滚通过。

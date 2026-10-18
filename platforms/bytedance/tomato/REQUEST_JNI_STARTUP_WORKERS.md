@@ -7502,6 +7502,32 @@ libc内部scratch/state、完整physical ABI、whole second/request、外部prov
 python -B platforms/bytedance/tomato/python/verify_vm9_second_string_fill_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <string-fill-evidence.json> --mode native
 ```
 
+## 6.218 Second protobuf pack（2026-10-18 Asia/Shanghai）
+
+恢复 `2889F4→2A337C→253D08` 编码回调：packed+8/+16为message/output，精确8字节编码长度写packed+24。
+新 `pack_message` 复用已验收的长度计算来检查schema和资源限制；size/configuration unpack/free保持。
+支持同一proto3子集，标量、string、bytes和嵌套消息；限制深度16、节点1024、字段4096、字节1MiB。
+输入与输出排除SP前0x1000字节及packed参数；拒绝输出/输入别名，完整编码后按事务发布。
+
+**57项新增原生/Python对照、32项拒绝或回滚检查通过**。56项双基址组件覆盖全部标量类型、
+负数/zigzag/varint/tag边界、浮点负零/NaN、string/bytes、嵌套/共享消息、跨页输出及4+4字节长度写回。
+嵌套长度超过127字节时，原生memmove分支得到验证；完整编码、返回值、声明内存与尾部字节一致。
+32项检查覆盖schema/边界/资源/别名、缺失bytes内容、部分输出及编码成功后结果写回缺页时的回滚。
+实际构造请求执行 **9402条指令/1439个声明范围/592字节栈**，**706字节编码及尾部逐字节一致**；
+保留原始SP/TP，无分配或服务账本；strlen/memcpy/memmove沿用显式oracle服务边界。
+
+43旧AST owner、63旧绑定/765私有哈希保持，旧native组未重跑。
+second从10671推进至 **10680步/+10B23C**，编码1次，旧计数/child return保持；
+下一wrapper **2889A8**，target为 **NULL**。ELF的 **+383490 ABS64** 槽位指向尚未绑定的 `pthread_mutex_unlock`。
+旧探针的负next_target表示NULL减image，不是函数偏移；NULL没有被当作合法回调。
+outer3900有界、原页无差异/64新增OS页，second页未发布；累计 **2952native/1092项拒绝或回滚**。
+完整physical ABI、whole second/request、实际URL/header JNI、外部provider/mapping回滚及完整signer/fresh/live/JVM未证明。
+见 [Protobuf编码证据](evidence/vm9_second_protobuf_pack_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_protobuf_pack_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <protobuf-pack-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

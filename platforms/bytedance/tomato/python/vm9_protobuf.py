@@ -180,6 +180,106 @@ def get_packed_size(pages, *, message_address, max_bytes=1 << 20, max_fields=409
                        forbidden_ranges).message(message_address)
 
 
+class _PackedEncoder(_PackedSize):
+    """Encode validated immutable inputs, refusing output/input overlap."""
+    def __init__(self, pages, output, width, *bounds):
+        super().__init__(pages, *bounds)
+        self.output, self.width = output, width
+
+    def span(self, address, size):
+        super().span(address, size)
+        if self.width and address < self.output + self.width and self.output < address + size:
+            raise RefillUnsupported('protobuf pack output aliases message input')
+
+    @staticmethod
+    def wire_varint(value):
+        result = bytearray()
+        while value >= 128:
+            result.append((value & 127) | 128)
+            value >>= 7
+        result.append(value)
+        return result
+
+    def encode(self, message, depth=0):
+        if depth > self.max_depth or message in self.active:
+            raise RefillUnsupported('protobuf pack cycle or nesting bound')
+        self.active.add(message)
+        try:
+            descriptor = self.u(message)
+            self.span(descriptor, 64)
+            self.span(message, self.u(descriptor + 40))
+            count, table = self.u(descriptor + 48, 4), self.u(descriptor + 56)
+            if count:
+                self.span(table, count * 72)
+            output = bytearray()
+            for i in range(count):
+                at = table + 72 * i
+                # Schema acceptance belongs to get_packed_size, called before
+                # this read-only pass. No second schema/label/flags policy.
+                f = Field(at, *(self.u(at + off, 4) for off in (8, 12, 16, 20, 24)),
+                          self.u(at + 32), self.u(at + 40))
+                member, kind = message + f.offset, f.kind
+                value = self.u(member, 8 if kind == 15 else f.size)
+                zero = value & ((1 << (31 if kind == 10 else 63)) - 1) if kind in (10, 11) else value
+                if not zero:
+                    continue
+                if kind == 14:
+                    length = self.string_size(value)
+                    if not length:
+                        continue
+                    payload = self.read(value, length)
+                elif kind == 15:
+                    payload = self.read(self.u(member + 8), value)
+                elif kind == 16:
+                    payload = self.encode(value, depth + 1)
+                elif kind in (2, 7, 10, 5, 9, 11):
+                    payload = value.to_bytes(f.size, 'little')
+                else:
+                    if kind in (0, 13) and value & (1 << 31):
+                        value |= ((1 << 32) - 1) << 32
+                    elif kind in (1, 4):
+                        bits = 32 if kind == 1 else 64
+                        signed = value - (1 << bits) if value & (1 << (bits - 1)) else value
+                        value = (signed << 1) ^ (signed >> (bits - 1))
+                    elif kind == 12:
+                        value = int(bool(value))
+                    payload = self.wire_varint(value)
+                wire = 5 if kind in (2, 7, 10) else 1 if kind in (5, 9, 11) else 2 if kind in (14, 15, 16) else 0
+                output.extend(self.wire_varint((f.tag << 3) | wire))
+                if wire == 2:
+                    output.extend(self.wire_varint(len(payload)))
+                output.extend(payload)
+                self.bounded(len(output))
+            return output
+        finally:
+            self.active.remove(message)
+
+
+def pack_message(pages, *, message_address, output_address, max_bytes=1 << 20,
+        max_fields=4096, max_nodes=1024, max_depth=16, forbidden_ranges=()):
+    """Bound +253d08 using the existing singular proto3 size acceptance owner.
+
+    Caller supplies constructed messages and a separate mapped output buffer.
+    Full message/table extents and all accessed input ranges must be separate
+    from output. Encode before publication; unmapped output rolls back pages.
+    The scalar/string/bytes/nested wire bytes match the native nonalias path.
+    """
+    forbidden_ranges = tuple(forbidden_ranges)
+    p = _PageTransaction(pages)
+    width = get_packed_size(p, message_address=message_address, max_bytes=max_bytes,
+        max_fields=max_fields, max_nodes=max_nodes, max_depth=max_depth,
+        forbidden_ranges=forbidden_ranges)
+    encoder = _PackedEncoder(p, output_address, width, max_bytes, max_fields,
+                             max_nodes, max_depth, forbidden_ranges)
+    _PackedSize.span(encoder, output_address, width)
+    payload = encoder.encode(message_address)
+    if len(payload) != width:
+        raise RefillUnsupported('protobuf packed size and encoder disagree')
+    _write_span(p, output_address, payload)
+    p.commit()
+    return width
+
+
 class _WireFailure(Exception):
     pass
 

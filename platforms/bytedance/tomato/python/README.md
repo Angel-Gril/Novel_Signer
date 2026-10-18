@@ -1,5 +1,7 @@
 # Tomato Python material
 
+Second Protobuf-C pack callback passes57 new native controls and32 refusal/rollback checks. Actual706-byte encoding and tail match over9402 instructions/1439 ranges. Second reaches10680/+10b23c,next2889a8 with an unresolved NULL pthread_mutex_unlock import; complete signing remains unfinished. See the [protobuf pack report](../REQUEST_JNI_STARTUP_WORKERS.md#6218-second-protobuf-pack2026-10-18-asiashanghai).
+
 Second string fill tail callback passes29 new native controls and26 refusal/rollback checks. Existing fill owner is reused; actual request passes3657 instructions/1245 ranges with the original allocator. Second reaches10671/+10b218,next2889f4->2a337c; complete signing remains unfinished. See the [string fill report](../REQUEST_JNI_STARTUP_WORKERS.md#6217-second-string-fill2026-10-18-asiashanghai).
 
 Second Protobuf-C size callback passes53 new native controls and35 refusal/rollback checks. Bounded proto3 size agrees with the original actual-request result706 over7168 instructions/1186 ranges. Second reaches10662/+10b1f4,next2889e0->248dd8; complete signing remains unfinished. See the [protobuf size report](../REQUEST_JNI_STARTUP_WORKERS.md#6216-second-protobuf-packed-size2026-10-18-asiashanghai).

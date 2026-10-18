@@ -1,0 +1,1053 @@
+{
+  "native_Python_controls": 57,
+  "component_native_controls": 56,
+  "owning_native_controls": 1,
+  "rollback_guards": 32,
+  "pre_change_native_RED_controls": 1,
+  "strict_TDD_order_verified": true,
+  "red_cases": [
+    {
+      "captured_before_implementation": true,
+      "baseline_callback_missing": true,
+      "baseline_source_hashes": {
+        "vm9_protobuf.py": "1eb080fb761aebc8d492eceb033544103b504efb4657e14ee2d35ec68be47799",
+        "vm9_request_287474_vm.py": "3993c7055c084a42e83e2093f447942e6c7234eb1ed6347c074fe5cf70fde91b"
+      },
+      "failure_log_sha256": "5a32353bbb3314d968547d0b65ee1c1dc1c724ec9e4bcec4c4551f0c725e512c"
+    }
+  ],
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "zero",
+      "native_instructions": 764,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "signed_negative",
+      "native_instructions": 1128,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "signed_minimum",
+      "native_instructions": 1191,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "zigzag_edges",
+      "native_instructions": 897,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "varint_127",
+      "native_instructions": 1053,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "varint_128",
+      "native_instructions": 1083,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "varint_16383",
+      "native_instructions": 1083,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "varint_16384",
+      "native_instructions": 1108,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "varint_2097151",
+      "native_instructions": 1108,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "varint_2097152",
+      "native_instructions": 1128,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "varint_268435455",
+      "native_instructions": 1128,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "varint_268435456",
+      "native_instructions": 1138,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "uint64_max",
+      "native_instructions": 974,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "fixed_and_bool",
+      "native_instructions": 1022,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "float_negative_zero",
+      "native_instructions": 764,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "float_nan",
+      "native_instructions": 869,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "float_nonzero",
+      "native_instructions": 869,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "string",
+      "native_instructions": 845,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_string",
+      "native_instructions": 768,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "bytes",
+      "native_instructions": 843,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty_bytes",
+      "native_instructions": 764,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "nested_empty",
+      "native_instructions": 918,
+      "native_stack_bytes": 336,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "nested_populated",
+      "native_instructions": 983,
+      "native_stack_bytes": 400,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "shared_child",
+      "native_instructions": 1244,
+      "native_stack_bytes": 400,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "tag_boundaries",
+      "native_instructions": 1021,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_result",
+      "native_instructions": 764,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "nested_prefix_growth",
+      "native_instructions": 1003,
+      "native_stack_bytes": 400,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": true,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_output",
+      "native_instructions": 1083,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero",
+      "native_instructions": 764,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "signed_negative",
+      "native_instructions": 1128,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "signed_minimum",
+      "native_instructions": 1191,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zigzag_edges",
+      "native_instructions": 897,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "varint_127",
+      "native_instructions": 1053,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "varint_128",
+      "native_instructions": 1083,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "varint_16383",
+      "native_instructions": 1083,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "varint_16384",
+      "native_instructions": 1108,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "varint_2097151",
+      "native_instructions": 1108,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "varint_2097152",
+      "native_instructions": 1128,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "varint_268435455",
+      "native_instructions": 1128,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "varint_268435456",
+      "native_instructions": 1138,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "uint64_max",
+      "native_instructions": 974,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "fixed_and_bool",
+      "native_instructions": 1022,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "float_negative_zero",
+      "native_instructions": 764,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "float_nan",
+      "native_instructions": 869,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "float_nonzero",
+      "native_instructions": 869,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "string",
+      "native_instructions": 845,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_string",
+      "native_instructions": 768,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "bytes",
+      "native_instructions": 843,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty_bytes",
+      "native_instructions": 764,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "nested_empty",
+      "native_instructions": 918,
+      "native_stack_bytes": 336,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "nested_populated",
+      "native_instructions": 983,
+      "native_stack_bytes": 400,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "shared_child",
+      "native_instructions": 1244,
+      "native_stack_bytes": 400,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "tag_boundaries",
+      "native_instructions": 1021,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_result",
+      "native_instructions": 764,
+      "native_stack_bytes": 144,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "nested_prefix_growth",
+      "native_instructions": 1003,
+      "native_stack_bytes": 400,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": true,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_output",
+      "native_instructions": 1083,
+      "native_stack_bytes": 208,
+      "original_wrapper_and_pack_helpers_returned": true,
+      "return_and_exact_eight_byte_store_equal": true,
+      "all_encoded_payload_and_declared_guest_image_bytes_equal": true,
+      "nested_prefix_memmove_observed": false,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "native_input_snapshot_used": false,
+      "physical_spills_and_register_ABI_compared": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "NULL_packed",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "wrapped_packed",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "NULL_message",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "missing_message",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "bad_magic",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "unknown_fields",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "repeated",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "oneof",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "field_limit",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "depth_limit",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "node_limit",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "byte_bound",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "cycle",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "NULL_output",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "wrapped_output",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "missing_output",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "output_message_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "output_descriptor_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "output_table_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "output_string_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "output_bytes_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "output_packed_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "packed_spill_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "output_spill_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "message_spill_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "payload_spill_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "missing_bytes_payload",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "partial_payload_store",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "partial_result_after_payload",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    }
+  ],
+  "owning_cases": [
+    {
+      "steps": 9402,
+      "declared_range_count": 1439,
+      "native_stack_bytes": 592,
+      "actual_wrapper_and_pack_helpers_returned": true,
+      "all_declared_ranges_and_nonstack_writes_equal": true,
+      "exact_eight_byte_result_and_native_return_equal": true,
+      "encoded_size": 706,
+      "encoded_payload_and_tail_equal": true,
+      "explicit_strlen_memcpy_memmove_services": true,
+      "actual_second_callback_stack_and_thread_pointer_used": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false,
+      "whole_second_native_differential_verified": false,
+      "complete_physical_ABI_verified": false
+    }
+  ],
+  "retained_explicit_mutex_ELF_import_bindings": [
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x379748",
+      "relocation_kind": 257,
+      "libc_export_offset": "0x68cf8"
+    },
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x382eb8",
+      "relocation_kind": 257,
+      "libc_export_offset": "0x68cf8"
+    },
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x383350",
+      "relocation_kind": 257,
+      "libc_export_offset": "0x68cf8"
+    },
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x375210",
+      "relocation_kind": 1026,
+      "libc_export_offset": "0x68cf8"
+    }
+  ],
+  "constructed_second_entry": {
+    "steps": 10680,
+    "bytecode_offset": "0x10b23c",
+    "next_wrapper": "0x2889a8",
+    "next_target": "-0x775c205000",
+    "child_return_preserved": true,
+    "completed_strings": 16,
+    "completed_reader_acquisitions": 7,
+    "completed_diagnostics": 23,
+    "completed_diagnostic_leaves": 23,
+    "completed_reader_releases": 7,
+    "completed_string_comparisons": 1,
+    "completed_string_assignments": 1,
+    "completed_random_values": 1,
+    "completed_reference_getters": 1,
+    "completed_cached_u32_getters": 2,
+    "completed_pair_getters": 1,
+    "completed_cached_references": 1,
+    "completed_guard_acquisitions": 1,
+    "completed_environment_constants": 1,
+    "completed_cstring_formats": 1,
+    "completed_guard_releases": 1,
+    "completed_registry_reads": 12,
+    "completed_realtime_seconds": 1,
+    "completed_process_ids": 2,
+    "completed_thread_pointers": 1,
+    "completed_environment_acquisitions": 1,
+    "completed_locked_pointers": 1,
+    "completed_tree_pointers": 1,
+    "completed_identifiers": 1,
+    "completed_allocations": 2,
+    "completed_string_formats": 2,
+    "completed_string_pairs": 1,
+    "completed_digests": 1,
+    "completed_crcs": 2,
+    "completed_frees": 1,
+    "completed_json_references": 1,
+    "completed_global_u32_getters": 3,
+    "completed_json_numbers": 9,
+    "completed_environment_helpers": 1,
+    "completed_tls_u32_getters": 1,
+    "completed_json_strings": 3,
+    "completed_numeric_strings": 1,
+    "completed_configuration_strings": 1,
+    "completed_json_bools": 1,
+    "completed_json_prints": 1,
+    "completed_mutex_locks": 1,
+    "completed_realtime_milliseconds": 1,
+    "completed_protobuf_sizes": 1,
+    "completed_string_fills": 1,
+    "completed_protobuf_packs": 1,
+    "complete_second_vm_verified": false,
+    "explicit_JNI_fixture": true,
+    "complete_signer_verified": false
+  },
+  "previous_owners": {
+    "old_AST_owners": 43,
+    "old_bindings": 63,
+    "private_hashes": 765,
+    "previous_native_groups_replayed": false,
+    "baseline": "2e73a3fa8c08f08f78fe68245761e7f700ed0084"
+  },
+  "next_boundary": {
+    "wrapper": "0x2889a8",
+    "target_absolute": "0x0",
+    "binding_status": "unresolved_import",
+    "import_slot_offset": "0x383490",
+    "ELF_symbol": "pthread_mutex_unlock",
+    "relocation_kind": 257
+  },
+  "previous_owner_AST_preserved_after_pack_additions_removed": true,
+  "previous_verifiers_unchanged": true,
+  "historical_native_groups_not_replayed": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "cumulative_native_controls": 2952,
+  "cumulative_rollback_guards": 1092,
+  "limits": [
+    "2889f4 loads target/message/output atpacked0/8/16,calls2a337c/253d08,stores exactly8 count bytes atpacked24. New pack_message reuses unchanged get_packed_size for descriptor/resource acceptance and Field/reader in the encoder. Configuration unpack/free and size owners are unchanged.",
+    "56 fresh two-base component comparisons cover all proto3 scalar kinds,zero/sign/zigzag/varint/tag boundaries,float negative zero/NaN,string/bytes,nested/shared messages,nested length prefixes above127 requiring original memmove,cross-page output and4+4 count store. Full encoded payload,declared guest/image memory,return count and trailing bytes agree. Native strlen/memcpy/memmove use the explicit existing oracle service contract.",
+    "32 refusal/page rollback checks cover bad inputs/schema/repeated/oneof/unknown fields,field/node/depth/byte bounds,cycles,NULL/wrapping/missing output,output/message/descriptor/table/string/bytes/packed overlap,stack aliases,missing bytes payload,partial payload store and final result failure after payload publication into the staged outer transaction. Depth16/nodes1024/fields4096/bytes1MiB. All input reads/message/table extents and output exclude SP-0x1000..SP and packed input;output/input overlap unsupported.",
+    "Actual independently constructed request executes9402 original instructions/1439 declared ranges/592 stack bytes with actual SP/TP. Count706,the full706 encoded bytes plus trailing buffer bytes,native X0,8-byte result,declared image/heap/packed/TLS and observed nonstack writes agree. No allocation/service ledger;strlen/copy/move services remain explicit boundary inputs. Physical spills/register ABI and whole second/request are unverified.",
+    "Expected missing-callback native RED predates edits;parent sources/log hashes and validatedD2/T2 retained,Host enforcementUNVERIFIED.43 old AST owners,63 old bindings/765 private hashes retained;historical accepted native groups not replayed.",
+    "Second advances10671->10680/+10b23c,protobuf_packs1,old counters/child return retained. Next2889a8 has absolute targetNULL;image+383490 relocation is pthread_mutex_unlock ABS64. The old driver represents NULL-image as negative next_target;this is not a native function offset. No NULL import is inferred as a callback. Outer3900bounded,original pages unchanged/64 allocator OS pages retained;second pages unpublished. Full signer,whole second/request/204ed4,physical ABI,external provider/mapping rollback,actual URL/header JNI and fresh/live/JVM remain unverified."
+  ],
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "second_pages_published": false,
+  "complete_physical_ABI_verified": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "external_provider_effect_rollback_verified": false,
+  "whole_second_native_differential_verified": false,
+  "complete_second_vm_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false
+}
