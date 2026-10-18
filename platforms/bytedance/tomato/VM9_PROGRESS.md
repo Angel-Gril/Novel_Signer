@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second flagged cleanup
+
+288AC8→1B55F8 条件字符串清理wrapper恢复，34项新增native/19项拒绝或回滚通过。
+实际2次调用逐次核对，声明内存/非栈写入/原生free效果一致；旧destructor owner未改动。
+second96519/0x1120c0，下一0x288a4c→0x258c14；旧计数/child return保持。
+441个旧AST、71个历史绑定/911项私有哈希保持。
+累计3220native/1308checks；完整signer/fresh/live/JVM未证明。见 [清理报告](REQUEST_JNI_STARTUP_WORKERS.md#6226-second-flagged-cleanup2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second memory fill
 
 288AB4→347F20 内存填充wrapper恢复，50项新增native/20项拒绝或回滚通过。

@@ -7696,6 +7696,30 @@ fresh/live/JVM仍未完成。见 [内存填充证据](evidence/vm9_second_memory
 python -B platforms/bytedance/tomato/python/verify_vm9_second_memory_fill_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <memory-fill-evidence.json>
 ```
 
+## 6.226 Second flagged cleanup（2026-10-18 Asia/Shanghai）
+
+恢复 `288AC8→1B55F8` 条件字符串清理：packed+0/+8 为target和receiver，wrapper尾调用，没有packed结果。
+仅receiver+24标志非零时调用未改动的 `vm9_objects.destroy_string_object`；标志不清零。
+未激活时只读标志，允许其余对象页或payload缺页；free后读取实时ELF空描述符。
+
+**34项新增原生/Python对照、19项拒绝或回滚通过**。32项双基址wrapper覆盖未激活缺页payload、
+仅标志有映射、未激活无free、激活配NULL/空/短/binary/长payload、flagFF、provider修改标志、
+free后修改ELF描述符及packed/receiver/flag/payload跨页。全部声明非栈guest/image字节、free顺序和free前字节一致。
+19项检查覆盖wrap/缺页/栈/已知别名、缺少free、free后缺ELF描述符、provider故障及packed修改。
+只验证已知payload起点，未知分配范围、外部free账本和OS mapping回滚未证明。
+
+实际请求逐次核对 **2次清理**：call 1: 21 instructions/1192 ranges/32 stack bytes/0 malloc/0 free; call 2: 155 instructions/1197 ranges/256 stack bytes/0 malloc/1 free；声明内存、观测非栈写入、TLS/四个runtime指针和free效果一致。
+second推进到 **96519步/0x1120c0**，探针上限500000步，下一 **0x288a4c→0x258c14**。
+保留 441 个旧Python AST、71 个历史绑定与
+911 项私有哈希；历史native不重跑。旧计数/child return保持，outer3900有界，
+原页无差异/64新增OS页，second页未发布。累计 **3220native/1308项拒绝或回滚**。
+完整signer、whole second/request、physical ABI、实际URL/header JNI、fresh/live/JVM仍未完成。
+见 [条件清理证据](evidence/vm9_second_flagged_cleanup_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_flagged_cleanup_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <flagged-cleanup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

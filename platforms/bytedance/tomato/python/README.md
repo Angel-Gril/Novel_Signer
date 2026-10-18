@@ -1,5 +1,7 @@
 # Tomato Python material
 
+Second flag-controlled string cleanup passes 34 new native controls and 19 refusal/rollback checks. All 2 actual calls match declared memory and free effects. Second reaches 96519/0x1120c0; next 0x288a4c→0x258c14. Complete signing remains unfinished. See the [flagged cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#6226-second-flagged-cleanup2026-10-18-asiashanghai).
+
 Second byte filling passes 50 new native controls and 20 refusal/rollback checks, using actual matching libc memset. 2 selected actual input shapes are compared; 17 total modeled calls are recorded separately. Second reaches 93021/0x111bc0; next 0x288ac8→0x1b55f8. Complete signing remains unfinished. See the [memory fill report](../REQUEST_JNI_STARTUP_WORKERS.md#6225-second-memory-fill2026-10-18-asiashanghai).
 
 Second explicit-length string construction passes 35 new native controls and 28 refusal/rollback checks. Every one of 3 actual request calls matches native allocation effects and declared memory. Second reaches 86800/0x11387c; next 0x288ab4→0x347f20. Complete signing remains unfinished. See the [sized string report](../REQUEST_JNI_STARTUP_WORKERS.md#6224-second-sized-string2026-10-18-asiashanghai).

@@ -281,6 +281,11 @@ class RequestVm287474MemoryFillPrefix(RequestVm287474SizedStringPrefix):
     memory_fills: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474FlaggedCleanupPrefix(RequestVm287474MemoryFillPrefix):
+    flagged_cleanups: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -356,6 +361,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     string_clones=[]
     sized_strings=[]
     memory_fills=[]
+    flagged_cleanups=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -418,6 +424,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288AC8,0x1B55F8):
+                output=apply_request_287474_flagged_cleanup_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,free=consumer_services['free'])
+                flagged_cleanups.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x288AB4,0x347F20):
                 output=apply_request_287474_memory_fill_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -722,6 +733,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if flagged_cleanups:
+                return RequestVm287474FlaggedCleanupPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references),tuple(string_clones),tuple(sized_strings),tuple(memory_fills),tuple(flagged_cleanups))
             if memory_fills:
                 return RequestVm287474MemoryFillPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references),tuple(string_clones),tuple(sized_strings),tuple(memory_fills))
@@ -2243,3 +2257,42 @@ def apply_request_287474_memory_fill_callback(pages, *, argument_block_address,
             raise RefillUnsupported('memory fill output aliases packed input')
         _write_span(p,output,bytes([fill])*length)
     p.commit();return output
+
+
+def apply_request_287474_flagged_cleanup_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,free):
+    """+288AC8 tailcalls +1B55F8; target0/receiver8, no packed result.
+
+    Only a nonzero byte at receiver+24 invokes the existing string destructor.
+    The flag is not cleared. Page rollback cannot undo external free effects;
+    unknown allocation extents and native physical X0 remain outside this API.
+    """
+    from vm9_objects import destroy_string_object
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('flagged cleanup requires an aligned guest stack')
+    def span(a,n):
+        if type(a) is not int or not 0<a<=(1<<64)-n:
+            raise RefillUnsupported('flagged cleanup address wraps uint64')
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('flagged cleanup aliases native spills')
+    span(argument_block_address,16)
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,16)
+    target,receiver=(int.from_bytes(packed[i:i+8],'little') for i in (0,8))
+    if target!=image_base+0x1B55F8:raise RefillUnsupported('unexpected flagged cleanup target')
+    span(receiver,25)
+    if receiver<argument_block_address+16 and argument_block_address<receiver+25:
+        raise RefillUnsupported('flagged cleanup receiver aliases packed input')
+    if _read_span(p,receiver+24,1)[0]:
+        if not callable(free):raise RefillUnsupported('active cleanup requires an explicit free provider')
+        pointer=int.from_bytes(_read_span(p,receiver+16,8),'little')
+        if pointer:
+            span(pointer,1);_read_span(p,pointer,1)
+            if any(a<=pointer<a+n for a,n in ((argument_block_address,16),(receiver,25))):
+                raise RefillUnsupported('flagged cleanup payload aliases active input')
+        def checked_free(tx,address):
+            free(tx,address)
+            if _read_span(tx,argument_block_address,16)!=packed:
+                raise RefillUnsupported('flagged cleanup provider changed packed input')
+        destroy_string_object(p,object_address=receiver,image_base=image_base,free=checked_free)
+    p.commit();return receiver
