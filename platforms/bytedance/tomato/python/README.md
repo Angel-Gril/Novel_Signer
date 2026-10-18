@@ -1,5 +1,7 @@
 # Tomato Python material
 
+Second Base64 reference construction passes 31 new native controls and 33 refusal/rollback checks. All 1 actual calls match declared memory, ordered allocation/free and prefree bytes. Second reaches 96588/0x1121d4; next 0x288ad4→0x278314. Complete signing remains unfinished. See the [Base64 reference report](../REQUEST_JNI_STARTUP_WORKERS.md#6227-second-base64-reference2026-10-18-asiashanghai).
+
 Second flag-controlled string cleanup passes 34 new native controls and 19 refusal/rollback checks. All 2 actual calls match declared memory and free effects. Second reaches 96519/0x1120c0; next 0x288a4c→0x258c14. Complete signing remains unfinished. See the [flagged cleanup report](../REQUEST_JNI_STARTUP_WORKERS.md#6226-second-flagged-cleanup2026-10-18-asiashanghai).
 
 Second byte filling passes 50 new native controls and 20 refusal/rollback checks, using actual matching libc memset. 2 selected actual input shapes are compared; 17 total modeled calls are recorded separately. Second reaches 93021/0x111bc0; next 0x288ac8→0x1b55f8. Complete signing remains unfinished. See the [memory fill report](../REQUEST_JNI_STARTUP_WORKERS.md#6225-second-memory-fill2026-10-18-asiashanghai).

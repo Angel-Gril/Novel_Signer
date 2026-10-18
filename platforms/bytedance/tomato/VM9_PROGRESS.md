@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second Base64 reference
+
+288A4C→258C14 Base64引用构造wrapper恢复，31项新增native/33项拒绝或回滚通过。
+实际1次调用逐次核对，声明内存/非栈写入/原生allocator/free效果一致；旧Base64/scoped owner未改动。
+second96588/0x1121d4，下一0x288ad4→0x278314；旧计数/child return保持。
+442个旧AST、72个历史绑定/926项私有哈希保持。
+累计3251native/1341checks；完整signer/fresh/live/JVM未证明。见 [Base64报告](REQUEST_JNI_STARTUP_WORKERS.md#6227-second-base64-reference2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second flagged cleanup
 
 288AC8→1B55F8 条件字符串清理wrapper恢复，34项新增native/19项拒绝或回滚通过。

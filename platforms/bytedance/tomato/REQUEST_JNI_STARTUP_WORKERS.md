@@ -7720,6 +7720,30 @@ second推进到 **96519步/0x1120c0**，探针上限500000步，下一 **0x288a4
 python -B platforms/bytedance/tomato/python/verify_vm9_second_flagged_cleanup_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <flagged-cleanup-evidence.json>
 ```
 
+## 6.227 Second Base64 reference（2026-10-18 Asia/Shanghai）
+
+恢复 `288A4C→258C14` Base64字符串引用构造：packed+0/+8/+16 为target、hidden X8 output和source。
+wrapper保存16字节LR，不写packed结果。复用未改动的 `vm9_request_token_tail.construct_base64_string_reference`，
+目标SP为wrapper SP−16，保持query/malloc/live encode/sized object/free/scoped reference生命周期。
+
+**31项新增原生/Python对照、33项拒绝或回滚通过**。30项双基址wrapper覆盖空/1/2/3字节、binary、长、
+非ASCII、空NULL payload、分配后源指针/长度缩短/源字节变化及packed/output/source/payload跨页。
+全部声明非栈guest/image字节、分配/释放顺序、free前字节及scope地址/自有字段一致，未比较scope padding。
+33项检查覆盖wrap/缺页/已知别名/栈/负长度/实时长度/1 MiB边界、provider故障、packed修改及free失败。
+页回滚不撤销外部allocator/free账本或OS mapping。
+
+实际请求逐次核对 **1次构造**：call 1: 7501 instructions/2212 ranges/512 stack bytes/4 malloc/1 free；全部声明内存、观测非栈写入、原生allocator效果和free前字节一致。
+second推进到 **96588步/0x1121d4**，探针上限500000步，下一 **0x288ad4→0x278314**。
+保留 442 个旧Python AST、72 个历史绑定与
+926 项私有哈希，历史native不重跑；旧计数/child return保持，outer3900有界，
+原页无差异/64新增OS页，second页未发布。累计 **3251native/1341项拒绝或回滚**。
+完整signer、whole second/request、physical ABI、实际URL/header JNI、fresh/live/JVM仍未完成。
+见 [Base64引用证据](evidence/vm9_second_base64_reference_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_base64_reference_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <base64-reference-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -7368,5 +7368,13 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_second_base64_reference_fresh_20261018": {
+    "path": "evidence/vm9_second_base64_reference_fresh_20261018.json",
+    "native_Python_controls": 31,
+    "rollback_guards": 33,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }
