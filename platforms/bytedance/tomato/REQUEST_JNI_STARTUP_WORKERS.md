@@ -7337,6 +7337,32 @@ second到 **10403步/+10AD04，下一28890C→256CE0**；numeric string1次，st
 python -B platforms/bytedance/tomato/python/verify_vm9_second_numeric_string_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --output <numeric-string-evidence.json> --mode native
 ```
 
+## 6.211 Second configuration string（2026-10-18 Asia/Shanghai）
+
+恢复 `28890C→256CE0`：在shared reader内查询receiver+0x30配置树，命中非NULL值时
+复用`2483E0`按声明长度克隆；缺失或NULL值复用`248344`构造空字符串。沿用现有树查询、
+读锁、clone和CString owner，packed没有结果写回；24字节scope及padding保持。
+
+**29项新增原生/Python对照、24项拒绝或回滚检查通过**。28项两基址组件覆盖空树/缺失/NULL、
+空/二进制/嵌入NUL、负长度、命中与缺失路径分配失败、跨页及分配器修改源指针。
+完整声明guest/image/scope字节、分配事件与分配时reader状态一致；四次真实libc mutex转换通过。
+24项拒绝检查保持model页，包括writer/饱和/争用、查询边界、provider失败及native stack别名。
+新增用例先复现wrapper保存返回地址的16字节区域漏检，再补齐output/payload排除。
+
+实际missing路径原始allocator/libc锁对照 **909条指令/1215个声明范围**；1次分配和4次mutex转换一致，
+实际SP/TP、scope/output/packed/TLS及4个运行时随机指针保持。physical X0/spills/PAC、
+external provider/mapping rollback及whole second/request仍未证明。
+
+生产编辑前1项预期缺失callback RED通过；refactor后定向复查通过且不重复计数。
+second到 **10471步/+10AEF8，下一288968→261580**；configuration string1次，JSON string2→3、
+number8→9，其余旧计数和child return保持。outer3900仍有边界，原页无差异/64新增OS页，second页未发布。
+累计6.127–6.211为 **2693项native/903项拒绝或回滚检查**；完整signer/fresh/live/JVM仍未完成。
+见 [配置字符串证据](evidence/vm9_second_configuration_string_fresh_20261016.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_configuration_string_fresh_20261016.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <configuration-string-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

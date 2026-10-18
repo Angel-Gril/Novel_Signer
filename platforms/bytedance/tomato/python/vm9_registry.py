@@ -513,6 +513,73 @@ def read_configuration_u32(pages, *, registry_address: int, key_address: int,
     return value
 
 
+def read_configuration_string_object(pages, *, registry_address,
+        output_object_address,key_address,entry_stack_address,image_base,allocate,
+        max_nodes=4096,max_bytes=0x100000,excluded_spans=()):
+    """+256ce0: copy a non-NULL receiver+0x30 tree value under its reader.
+
+    A miss or NULL value constructs the image's empty CString instead. Reuse
+    the declared-length clone, CString and shared-reader owners; scope padding
+    is retained. Allocation occurs while the reader is held. Physical native
+    spills/canary/PAC and concurrent/writer paths are outside this contract.
+    Unsupported effects roll back pages, not external allocator state.
+    """
+    objects._string_bound(max_bytes)
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('configuration string requires an aligned guest stack')
+    if not callable(allocate):raise RefillUnsupported('configuration string requires an allocator')
+    def exclude(a,n):
+        if type(a) is not int or not 0<a<=(1<<64)-n:
+            raise RefillUnsupported('configuration string span is invalid or wraps uint64')
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('configuration string aliases native spills')
+        if any(a<b+m and b<a+n for b,m in excluded_spans):
+            raise RefillUnsupported('configuration string aliases caller spills')
+    exclude(registry_address,0x118);exclude(output_object_address,24)
+    if key_address:exclude(key_address,24)
+    p=_PageTransaction(pages);guard=entry_stack_address-0x50
+    vtable=objects._image_address(image_base,0x34C758).to_bytes(8,'little')
+    _write_span(p,guard,vtable+(registry_address+0x80).to_bytes(8,'little'))
+    objects.acquire_uncontended_shared_reader(p,mutex_address=registry_address+0x88)
+    _write_span(p,registry_address+0x114,b'\x01');_write_span(p,guard+16,bytes(4))
+    source=lookup_configuration_value(p,container_address=registry_address+0x30,
+        key_address=key_address,image_base=image_base,max_nodes=max_nodes,max_bytes=max_bytes)
+    empty_address=objects._image_address(image_base,0x6FE64)
+    if source:
+        exclude(source,24);length=int.from_bytes(_read_span(p,source+12,4),'little');empty=None
+    else:
+        exclude(empty_address,1)
+        empty=objects._cstring(p,empty_address,min(max_bytes+1,0x100000));length=0
+    def checked_allocate(tx,size):
+        pointer=allocate(tx,size)
+        if type(pointer) is not int or not 0<=pointer<=(1<<64)-size:
+            raise RefillUnsupported('configuration string allocator returned an invalid pointer')
+        if pointer:
+            exclude(pointer,size)
+            if source and 0<length<0x80000000:
+                exclude(int.from_bytes(_read_span(tx,source+16,8),'little'),length)
+        if empty is not None and _read_span(tx,empty_address,len(empty))!=empty:
+            raise RefillUnsupported('configuration empty CString changed during allocation')
+        return pointer
+    if source:
+        objects.clone_string_object(p,object_address=output_object_address,source_object_address=source,
+            image_base=image_base,allocate=checked_allocate,max_payload_bytes=max_bytes)
+    else:
+        objects.construct_string_object(p,object_address=output_object_address,source_address=empty_address,
+            vtable_address=objects._image_address(image_base,0x34F5F8),
+            empty_descriptor_address=objects._image_address(image_base,0x6E168),
+            allocate=checked_allocate,max_source_bytes=min(max_bytes+1,0x100000))
+    _write_span(p,guard,vtable)
+    if int.from_bytes(_read_span(p,guard+16,4),'little'):
+        raise RefillUnsupported('configuration string writer-mode release is unrecovered')
+    mutex=int.from_bytes(_read_span(p,guard+8,8),'little')
+    if not _read_span(p,mutex+0x94,1)[0]:
+        raise RefillUnsupported('configuration string release lacks its shared-reader flag')
+    objects.release_uncontended_shared_reader(p,mutex_address=mutex+8)
+    p.commit();return output_object_address
+
+
 def read_configuration_string_reference(pages, *, registry_address,
         output_reference_address, entry_stack_address, image_base, thread_pointer,
         allocate, thread_id=None, diagnostic_observer=None):

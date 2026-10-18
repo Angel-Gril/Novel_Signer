@@ -650,6 +650,8 @@ Second JSON string insertion passes 53 new native controls and 24 rejection/roll
 
 Second numeric string construction passes 31 new native controls and 34 rejection/rollback checks. Nine unsigned globals and one TLS value use measured libc++ reserve/append/shrink semantics. Actual native allocation/TLS call passes2579 instructions/1224 ranges. Second reaches10403/+10ad04, next28890c->256ce0; complete signing remains unfinished. See the [numeric string report](../REQUEST_JNI_STARTUP_WORKERS.md#6210-second-numeric-string2026-10-16-asiashanghai).
 
+Second configuration string lookup passes 29 new native controls and 24 rejection/rollback checks. Existing reader/tree/clone owners implement guarded copy or empty construction; actual native allocation/locks pass909 instructions/1215 ranges. Second reaches10471/+10aef8, next288968->261580; complete signing remains unfinished. See the [configuration string report](../REQUEST_JNI_STARTUP_WORKERS.md#6211-second-configuration-string2026-10-18-asiashanghai).
+
 
 
 

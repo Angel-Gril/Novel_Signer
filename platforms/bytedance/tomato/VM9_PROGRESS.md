@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second configuration string lookup
+
+29项新增原生对照、24项拒绝或回滚检查通过；配置树命中按长度克隆、缺失/NULL构造空字符串，均持有shared reader。
+实际原始allocator/libc锁回调909指令/1215范围通过；35个旧AST owner及630个历史绑定哈希保持。
+second10471/+10AEF8，下一288968→261580；configuration string1次/JSON string3次/number9次，其余旧计数和child return保持。
+outer原页无差异/64新增OS页；累计2693native/903checks；完整signer/fresh/live/JVM未完成。
+见 [配置字符串报告](REQUEST_JNI_STARTUP_WORKERS.md#6211-second-configuration-string2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-16 Asia/Shanghai：second numeric string construction
 
 31项新增原生对照、34项拒绝或回滚检查通过；9个u32全局及1个TLS u32转十进制，libc++ reserve/append/shrink恢复。

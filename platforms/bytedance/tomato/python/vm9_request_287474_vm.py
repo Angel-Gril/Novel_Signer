@@ -206,6 +206,11 @@ class RequestVm287474NumericStringPrefix(RequestVm287474JsonStringPrefix):
     numeric_strings: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474ConfigurationStringPrefix(RequestVm287474NumericStringPrefix):
+    configuration_strings: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -266,6 +271,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     tls_u32_getters=[]
     json_strings=[]
     numeric_strings=[]
+    configuration_strings=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -328,6 +334,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x28890C,0x256CE0):
+                value=apply_request_287474_configuration_string_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,allocate=consumer_services['allocate'])
+                configuration_strings.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2888F4,0x28794C):
                 if not callable(consumer_services.get('get_tls')):raise Boundary()
                 value=apply_request_287474_numeric_string_callback(staged,
@@ -536,6 +547,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if configuration_strings:
+                return RequestVm287474ConfigurationStringPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings))
             if numeric_strings:
                 return RequestVm287474NumericStringPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings))
@@ -1248,6 +1262,27 @@ def apply_request_287474_json_number_callback(pages, *, argument_block_address,
         max_bytes=max_bytes,max_nodes=max_nodes)
     _write_span(p,argument_block_address+32,bytes([int(result)]))
     p.commit();return result
+
+
+def apply_request_287474_configuration_string_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,allocate,max_nodes=4096,max_bytes=0x100000):
+    """+28890c/+256ce0 hidden-X8 output; receiver/key at packed+16/+24."""
+    from vm9_registry import read_configuration_string_object
+    if (type(entry_stack_address) is not int or not 0x1010<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('configuration string callback requires an aligned stack')
+    if (type(argument_block_address) is not int or not 0<argument_block_address<=(1<<64)-32):
+        raise RefillUnsupported('configuration string packed address wraps uint64')
+    if argument_block_address<entry_stack_address and argument_block_address+32>entry_stack_address-0x1010:
+        raise RefillUnsupported('configuration string packed input aliases native spills')
+    p=_PageTransaction(pages);raw=_read_span(p,argument_block_address,32)
+    target,output,receiver,key=(int.from_bytes(raw[i:i+8],'little') for i in (0,8,16,24))
+    if target!=image_base+0x256CE0:raise RefillUnsupported('unexpected second configuration string target')
+    value=read_configuration_string_object(p,registry_address=receiver,output_object_address=output,
+        key_address=key,entry_stack_address=entry_stack_address-16,image_base=image_base,
+        allocate=allocate,max_nodes=max_nodes,max_bytes=max_bytes,
+        excluded_spans=((entry_stack_address-16,16),))
+    p.commit();return value
 
 
 def apply_request_287474_numeric_string_callback(pages, *, argument_block_address,
