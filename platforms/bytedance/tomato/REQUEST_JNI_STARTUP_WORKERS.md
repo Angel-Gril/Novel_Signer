@@ -7673,6 +7673,29 @@ outer3900有界、原页无差异/64新增OS页，second页未发布。累计 **
 python -B platforms/bytedance/tomato/python/verify_vm9_second_sized_string_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <sized-string-evidence.json>
 ```
 
+## 6.225 Second memory fill（2026-10-18 Asia/Shanghai）
+
+恢复 `288AB4→347F20` 内存填充：packed+0/+8/+16/+24 为target、destination、单字节fill和u64 size，
+wrapper尾调用，没有packed结果。零长度不访问destination；size上限1 MiB，排除已知packed及SP前0x1000别名。
+
+**50项新增原生/Python对照、20项拒绝或回滚通过**。48项双基址wrapper直接执行匹配libc的 `memset` 导出，
+测试副本只关闭该函数的旧oracle替代分支，原有oracle代码未改动。覆盖scalar/vector长度边界、packed高位padding、
+packed/output跨页、8193字节、完整1 MiB及零长度配NULL/缺页/uint64最大值/栈区指针。
+全部声明非栈guest/image字节、packed和native X0一致。20项检查覆盖wrap/缺页/截断/后页失败及大小/别名/栈限制。
+
+实际请求按fill、size、destination对齐核对 **2种原生形态**，模型共调用 **17次**。
+原生形态指标：call 1: 72 instructions/1332 ranges/0 stack bytes/0 malloc/0 free; call 2: 25 instructions/1192 ranges/0 stack bytes/0 malloc/0 free。声明内存、观测非栈写入、TLS/四个runtime指针和X0一致，无malloc/free。
+没有逐次比较全部实际调用，未据此声明whole second/request通过。second推进到 **93021步/0x111bc0**，
+本阶段探针上限500000步，下一 **0x288ac8→0x1b55f8**；旧计数/child return保持。
+保留 440 个旧Python AST、70 个历史绑定与
+894 项私有哈希，历史native不重跑。outer3900有界，原页无差异/64新增OS页，second页未发布。
+累计 **3186native/1289项拒绝或回滚**。完整signer、whole second/request、physical ABI、实际URL/header JNI、
+fresh/live/JVM仍未完成。见 [内存填充证据](evidence/vm9_second_memory_fill_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_memory_fill_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <memory-fill-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -276,6 +276,11 @@ class RequestVm287474SizedStringPrefix(RequestVm287474StringClonePrefix):
     sized_strings: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474MemoryFillPrefix(RequestVm287474SizedStringPrefix):
+    memory_fills: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -350,6 +355,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     decoded_references=[]
     string_clones=[]
     sized_strings=[]
+    memory_fills=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -412,6 +418,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288AB4,0x347F20):
+                output=apply_request_287474_memory_fill_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image)
+                memory_fills.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x288A74,0x2481FC):
                 output=apply_request_287474_sized_string_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -711,6 +722,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if memory_fills:
+                return RequestVm287474MemoryFillPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references),tuple(string_clones),tuple(sized_strings),tuple(memory_fills))
             if sized_strings:
                 return RequestVm287474SizedStringPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references),tuple(string_clones),tuple(sized_strings))
@@ -2197,4 +2211,35 @@ def apply_request_287474_sized_string_callback(pages, *, argument_block_address,
         return result
     construct_sized_string_object(p,object_address=output,source_address=source,
         length=length,image_base=image_base,allocate=checked_allocate,max_payload_bytes=max_bytes)
+    p.commit();return output
+
+
+def apply_request_287474_memory_fill_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,max_bytes=0x100000):
+    """+288AB4 tailcalls memset: target0/destination8/fillBYTE16/sizeQ24.
+
+    Zero size does not access destination. Known packed/spill aliases reject;
+    cross-page guest writes commit together. No packed result is stored.
+    """
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('memory fill requires an aligned guest stack')
+    if type(max_bytes) is not int or not 0<=max_bytes<=0x100000:
+        raise RefillUnsupported('invalid memory fill byte bound')
+    def span(a,n):
+        if type(a) is not int or not 0<a<=(1<<64)-n:
+            raise RefillUnsupported('memory fill address wraps uint64')
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('memory fill aliases native spills')
+    span(argument_block_address,32)
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,32)
+    target,output=(int.from_bytes(packed[i:i+8],'little') for i in (0,8))
+    fill=packed[16];length=int.from_bytes(packed[24:32],'little')
+    if target!=image_base+0x347F20:raise RefillUnsupported('unexpected memory fill target')
+    if length>max_bytes:raise RefillUnsupported('memory fill exceeds byte bound')
+    if length:
+        span(output,length)
+        if output<argument_block_address+32 and argument_block_address<output+length:
+            raise RefillUnsupported('memory fill output aliases packed input')
+        _write_span(p,output,bytes([fill])*length)
     p.commit();return output

@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second memory fill
+
+288AB4→347F20 内存填充wrapper恢复，50项新增native/20项拒绝或回滚通过。
+实际2种输入形态与真实libc memset/X0一致；模型总调用17次，未逐次原生比较。
+second93021/0x111bc0，下一0x288ac8→0x1b55f8；旧计数/child return保持。
+440个旧AST、70个历史绑定/894项私有哈希保持。
+累计3186native/1289checks；完整signer/fresh/live/JVM未证明。见 [填充报告](REQUEST_JNI_STARTUP_WORKERS.md#6225-second-memory-fill2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second sized string
 
 288A74→2481FC 显式长度字符串构造wrapper恢复，35项新增native/28项拒绝或回滚通过。

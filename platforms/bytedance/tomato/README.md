@@ -1,5 +1,7 @@
 # Tomato / Fanqie (ByteDance)
 
+Second byte filling passes 50 new native controls and 20 refusal/rollback checks, using actual matching libc memset. 2 selected actual input shapes are compared; 17 total modeled calls are recorded separately. Second reaches 93021/0x111bc0; next 0x288ac8→0x1b55f8. Complete signing remains unfinished. See the [memory fill report](REQUEST_JNI_STARTUP_WORKERS.md#6225-second-memory-fill2026-10-18-asiashanghai).
+
 Second explicit-length string construction passes 35 new native controls and 28 refusal/rollback checks. Every one of 3 actual request calls matches native allocation effects and declared memory. Second reaches 86800/0x11387c; next 0x288ab4→0x347f20. Complete signing remains unfinished. See the [sized string report](REQUEST_JNI_STARTUP_WORKERS.md#6224-second-sized-string2026-10-18-asiashanghai).
 
 Second binary string clone passes 31 new native controls and 29 refusal/rollback checks. Actual request matches 155 instructions/1200 ranges and 1 allocation. Second reaches 11263/+10BDB0; next 288A74→2481FC. Complete signing remains unfinished. See the [string clone report](REQUEST_JNI_STARTUP_WORKERS.md#6223-second-string-clone2026-10-18-asiashanghai).
