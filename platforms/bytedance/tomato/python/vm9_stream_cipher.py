@@ -130,20 +130,30 @@ def transform_configuration_reference(pages, *, output_reference_address: int,
                                       data_object_address: int, key_object_address: int,
                                       entry_stack_address: int, image_base: int,
                                       allocate: Callable, free: Callable,
-                                      max_bytes: int = 0x100000) -> int:
+                                      max_bytes: int = 0x100000,
+                                      diagnostic_services=None) -> int:
     """Model +0x258fd8/+0x2592b8's filled string, RC4 and reference lifecycle.
 
     X8 selects output reference. An empty key or data produces NULL/count=1.
     A nonempty result allocates string/payload/count in that order, transforms
     original source into the zero-filled payload, copies the temporary shared
     reference and releases it. Native X0 has no result contract here.
+    Explicit diagnostic services enable all three native reference scopes.
     """
     objects._string_bound(max_bytes)
     transaction = _PageTransaction(pages)
+    def construct(reference,string):
+        if diagnostic_services is None:
+            objects.construct_reference_wrapper(transaction,object_address=reference,
+                referenced_address=string,allocate=allocate)
+        else:
+            from vm9_reference_scopes import construct_scoped_string_reference, _scope
+            construct_scoped_string_reference(transaction,reference_address=reference,
+                string_address=string,entry_stack_address=_scope(entry_stack_address,0xD0),
+                image_base=image_base,allocate=allocate,**diagnostic_services)
     key_length = _u32(transaction, key_object_address + 12)
     if not key_length or not _u32(transaction, data_object_address + 12):
-        objects.construct_reference_wrapper(transaction, object_address=output_reference_address,
-            referenced_address=0, allocate=allocate)
+        construct(output_reference_address,0)
         transaction.commit()
         return output_reference_address
     length = _u32(transaction, data_object_address + 12)
@@ -152,8 +162,7 @@ def transform_configuration_reference(pages, *, output_reference_address: int,
     objects._sized_string_object(transaction, string, length, image_base, allocate,
                                 lambda staged, size: bytes(size))
     temporary_reference = entry_stack_address - 0x78
-    objects.construct_reference_wrapper(transaction, object_address=temporary_reference,
-        referenced_address=string, allocate=allocate)
+    construct(temporary_reference,string)
     # Reload pointers/lengths after allocations and reference construction.
     output_string = _pointer(transaction, temporary_reference)
     transform_stream_bytes(transaction, key_address=_pointer(transaction, key_object_address + 16),
@@ -162,9 +171,18 @@ def transform_configuration_reference(pages, *, output_reference_address: int,
         output_address=_pointer(transaction, output_string + 16),
         length=_u32(transaction, data_object_address + 12),
         entry_stack_address=entry_stack_address - 0xD0, max_bytes=max_bytes)
-    objects.copy_reference_wrapper(transaction, object_address=output_reference_address,
-                                   source_address=temporary_reference)
-    release_string_reference(transaction, reference_address=temporary_reference,
-                             image_base=image_base, free=free)
+    if diagnostic_services is None:
+        objects.copy_reference_wrapper(transaction, object_address=output_reference_address,
+                                       source_address=temporary_reference)
+        release_string_reference(transaction, reference_address=temporary_reference,
+                                 image_base=image_base, free=free)
+    else:
+        from vm9_reference_scopes import copy_scoped_string_reference, release_scoped_string_reference
+        keywords=dict(entry_stack_address=entry_stack_address-0xD0,
+            image_base=image_base,allocate=allocate,**diagnostic_services)
+        copy_scoped_string_reference(transaction,destination_address=output_reference_address,
+            source_address=temporary_reference,**keywords)
+        release_scoped_string_reference(transaction,reference_address=temporary_reference,
+            free=free,**keywords)
     transaction.commit()
     return output_reference_address

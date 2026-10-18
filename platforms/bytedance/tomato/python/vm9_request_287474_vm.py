@@ -256,6 +256,11 @@ class RequestVm287474JsonDeletePrefix(RequestVm287474MutexUnlockPrefix):
     json_deletions: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474ConfigurationLookupPrefix(RequestVm287474JsonDeletePrefix):
+    configuration_lookups: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -326,6 +331,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     protobuf_packs=[]
     mutex_unlocks=[]
     json_deletions=[]
+    configuration_lookups=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -388,6 +394,16 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288A30,0x263174):
+                if not callable(consumer_services.get('get_singleton')):raise Boundary()
+                output=apply_request_287474_configuration_lookup_callback(staged,argument_block_address=argument,
+                    entry_stack_address=frame.native_stack_address-0x180,image_base=image,
+                    thread_pointer=inputs['thread_pointer'],vm_module=vm_module,
+                    allocate=consumer_services['allocate'],reallocate=consumer_services.get('reallocate'),
+                    free=consumer_services['free'],
+                    get_singleton=consumer_services['get_singleton'],
+                    thread_id=consumer_services.get('thread_id'),diagnostic_observer=consumer_services.get('diagnostic_observer'))
+                configuration_lookups.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x288A24,0x2614EC):
                 apply_request_287474_json_delete_callback(staged,argument_block_address=argument,
                     entry_stack_address=frame.native_stack_address-0x180,image_base=image,
@@ -660,6 +676,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if configuration_lookups:
+                return RequestVm287474ConfigurationLookupPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups))
             if json_deletions:
                 return RequestVm287474JsonDeletePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions))
@@ -1940,3 +1959,22 @@ def apply_request_287474_json_delete_callback(pages, *, argument_block_address,
         image_base=image_base,free=free,protected_ranges=((argument_block_address,16),),
         max_nodes=max_nodes,max_depth=max_depth)
     p.commit()
+
+
+def apply_request_287474_configuration_lookup_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,thread_pointer,vm_module,allocate,reallocate,free,
+        get_singleton,thread_id=None,diagnostic_observer=None,max_entries=4096,max_bytes=0x100000):
+    """+288a30/+263174: hidden output8, config16/key24, no packed result."""
+    from vm9_configuration_lookup import lookup_configuration_reference
+    if type(argument_block_address) is not int or not 0<argument_block_address<=(1<<64)-32:
+        raise RefillUnsupported('configuration lookup packed address wraps uint64')
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,32)
+    target,output,receiver,key=(int.from_bytes(packed[i:i+8],'little') for i in (0,8,16,24))
+    if target!=image_base+0x263174:raise RefillUnsupported('unexpected configuration lookup target')
+    result=lookup_configuration_reference(p,output_reference_address=output,
+        configuration_address=receiver,key_object_address=key,entry_stack_address=entry_stack_address,
+        image_base=image_base,thread_pointer=thread_pointer,vm_module=vm_module,
+        allocate=allocate,reallocate=reallocate,free=free,get_singleton=get_singleton,
+        thread_id=thread_id,diagnostic_observer=diagnostic_observer,
+        protected_ranges=((argument_block_address,32),),max_entries=max_entries,max_bytes=max_bytes)
+    p.commit();return result

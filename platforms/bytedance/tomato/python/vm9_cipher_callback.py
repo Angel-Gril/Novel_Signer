@@ -93,7 +93,8 @@ def decrypt_configuration_reference(pages, *, output_reference_address: int,
                                     entry_stack_address: int, image_base: int,
                                     allocate: Callable, free: Callable,
                                     get_singleton: Callable,
-                                    max_bytes: int = 0x100000) -> int:
+                                    max_bytes: int = 0x100000,
+                                    diagnostic_services=None) -> int:
     """Model +0x259dbc's verified mode-0 configuration string/reference path.
 
     Return the output reference address; native X0 is not a semantic result.
@@ -104,10 +105,20 @@ def decrypt_configuration_reference(pages, *, output_reference_address: int,
     that many bytes, even if preceding padding differs; >16 creates NULL.
     The temporary buffer is freed before reference publication, then the
     temporary key is destroyed. No full TLS/guard/diagnostic OS claim is made.
+    Explicit diagnostic services enable the result constructor's real scope.
     """
     objects._string_bound(max_bytes)
     transaction = _PageTransaction(pages)
     stack = entry_stack_address - 0x320
+    def construct_reference(string):
+        if diagnostic_services is None:
+            objects.construct_reference_wrapper(transaction, object_address=output_reference_address,
+                referenced_address=string, allocate=allocate)
+        else:
+            from vm9_reference_scopes import construct_scoped_string_reference
+            construct_scoped_string_reference(transaction, reference_address=output_reference_address,
+                string_address=string, entry_stack_address=stack, image_base=image_base,
+                allocate=allocate, **diagnostic_services)
     temporary_key = stack + 0x68
     _write_span(transaction, stack + 0x80, objects._word(mode_address))
     _write_span(transaction, stack + 0x88, objects._word(mode_address)
@@ -148,12 +159,10 @@ def decrypt_configuration_reference(pages, *, output_reference_address: int,
                     source_address=buffer, length=(data_length - padding) & 0xFFFFFFFF,
                     image_base=image_base, allocate=allocate, max_payload_bytes=max_bytes)
             free(transaction, buffer)
-        objects.construct_reference_wrapper(transaction, object_address=output_reference_address,
-            referenced_address=result_string, allocate=allocate)
+        construct_reference(result_string)
         objects.destroy_string_object(transaction, object_address=temporary_key,
             image_base=image_base, free=free)
     else:
-        objects.construct_reference_wrapper(transaction, object_address=output_reference_address,
-            referenced_address=0, allocate=allocate)
+        construct_reference(0)
     transaction.commit()
     return output_reference_address

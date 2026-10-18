@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second configuration lookup
+
+288A30→263174 配置解析查找与嵌套引用 scope 恢复，19项新增native/33项拒绝或回滚通过。
+实际304121指令/1981范围/5120字节栈，65malloc/57free及完整声明内存一致。
+second11118/+10BB28，下一288A4C→258E7C；旧计数/child return保持。
+430个完整旧AST、136个扩展owner内未改动函数/类、
+66个旧绑定/830项私有哈希保持，旧native不重跑。
+空/无效完整配置的原生终止分支仍拒绝；SHA1 hex未恢复。outer原页保持/64新增OS页，second页未发布。
+累计3039native/1179checks；完整signer/fresh/live/JVM未证明。见 [配置查找报告](REQUEST_JNI_STARTUP_WORKERS.md#6221-second-configuration-lookup2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second JSON delete
 
 288A24→2614EC JSON清理恢复，53项新增native/30项拒绝或回滚通过。

@@ -235,22 +235,35 @@ class _DigestLifecycle:
             **self.keywords(self.stack-0x80))
 
 
+class _Sha1RawLifecycle(_DigestLifecycle):
+    def construct_raw(self, p, output, string, data, digest):
+        # +258780's raw SHA-1 branch assigns from its own 0x60-byte frame.
+        # MD5 scratch and padding locations do not apply to this frame.
+        return assign_scoped_owned_string_reference(p,
+            reference_address=output, string_address=string, free=self.free,
+            **self.keywords(self.stack-0x60))
+
+
 def construct_scoped_digest_reference(pages, *, output_reference_address,
         source_object_address, entry_stack_address, image_base, thread_pointer,
         allocate, reallocate, free, thread_id=None, diagnostic_observer=None,
-        max_source_bytes=0x100000, flag=1):
-    """+0x25874c raw or hexadecimal MD5 with actual reference lifecycle.
+        max_source_bytes=0x100000, flag=1, algorithm='md5'):
+    """+0x25874c MD5 and +0x258780 raw SHA-1 with actual reference scopes.
 
     Digest calculation and guest alphabet conversion stay in vm9_objects.
     The hexadecimal branch uses SP-0x58 for its temporary pair and real
     constructor, assignment and destructor scopes around the same string.
     Raw output uses +0x162944 directly on the cleared output reference.
+    SHA-1 uses its separate 0x60-byte assignment frame and rejects hex.
     """
+    if algorithm not in ('md5','sha1') or (algorithm=='sha1' and flag&1):
+        raise RefillUnsupported('scoped SHA-1 hexadecimal lifecycle is unrecovered')
     _scope(entry_stack_address,0x110)
-    lifecycle=_DigestLifecycle(entry_stack_address,image_base,thread_pointer,
+    lifecycle_type = _DigestLifecycle if algorithm=='md5' else _Sha1RawLifecycle
+    lifecycle=lifecycle_type(entry_stack_address,image_base,thread_pointer,
                                thread_id,allocate,free,diagnostic_observer)
     return objects.construct_digest_reference(pages,
         object_address=output_reference_address,
-        source_object_address=source_object_address, algorithm='md5', flag=flag,
+        source_object_address=source_object_address, algorithm=algorithm, flag=flag,
         image_base=image_base, allocate=allocate,reallocate=reallocate,free=free,
         max_source_bytes=max_source_bytes,reference_lifecycle=lifecycle)

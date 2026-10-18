@@ -7576,6 +7576,34 @@ second从10788推进到 **11108步/0x10bb00**，JSON清理1次，旧计数/child
 python -B platforms/bytedance/tomato/python/verify_vm9_second_json_delete_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <json-delete-evidence.json> --mode native
 ```
 
+## 6.221 Second configuration lookup（2026-10-18 Asia/Shanghai）
+
+恢复 `288A30→263174` 配置解析与字符串查找：packed+0/+8/+16/+24 为 target、隐藏 X8 输出、配置对象和 key，
+没有 packed 结果。复用 `262608` parser；首个 publication 字符串作为解析 key，按 message+88/+96 的数组
+查找首个 key+24 匹配项，以 value+32 构造 scoped reference，再由 `2627D8` 清理解析结果。
+
+实际对照暴露了 parser 内部引用的诊断锁时序。已在现有 owner 中加入可选的真实生命周期：cipher、base64
+结果构造，stream 构造/复制/释放，MD5 与 raw SHA1 赋值，以及 parser 显式 scope。默认调用保持原 scope 排除。
+SHA1 使用自己的 0x60 栈帧，不套用 MD5 scratch；未恢复的 SHA1 hex 拒绝执行。
+
+**19项新增原生/Python对照、33项拒绝或回滚通过**：18项双基址引用组件，以及1项实际请求查找。
+实际执行 **304121条指令/1981个声明范围/5120字节栈**，**65次 malloc、57次 free** 的顺序、释放前字节、
+全部声明内存与非栈写入一致。组件还比较 scope 地址和拥有的字段，保留 padding/寄存器 spill 排除。
+空或无效完整配置样例在原生中进入 `2634BC→263794` 终止路径，模型事务性拒绝；这些不计为正常返回对照。
+33项检查覆盖已知别名、地址/栈/资源边界、publication 循环/表、provider 故障、终止回调与 SHA1 hex。
+上限4096条/1 MiB，已知输入和分配排除 SP 前0x8000；外部 provider 账本和 OS mapping 不回滚。
+
+保留 430 个完整旧 Python AST、扩展 owner 内
+136 个未改动函数/类、66 个旧绑定与
+830 项私有哈希；旧 native 组未重跑。second 到 **11118步/+10BB28**，配置查找1次，
+旧计数和 child return 保持；下一 **288A4C→258E7C**。outer3900有界，原页无差异/64新增OS页，second页未发布。
+累计 **3039native/1179项拒绝或回滚**。完整 signer、whole second/request、physical ABI、外部回滚、
+实际 URL/header JNI 与 fresh/live/JVM 仍未完成。见 [配置查找证据](evidence/vm9_second_configuration_lookup_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_configuration_lookup_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <lookup-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

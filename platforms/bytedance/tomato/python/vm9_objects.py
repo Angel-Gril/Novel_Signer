@@ -1702,11 +1702,13 @@ def construct_digest_reference(
 def construct_decoded_configuration_reference(
     pages, *, object_address: int, source_object_address: int, image_base: int,
     allocate: Callable, free: Callable, max_source_bytes: int = 0x100000,
+    entry_stack_address=None, diagnostic_services=None,
 ) -> int:
     """Model +0x258e7c: base64 decode, optional sized string, free, reference.
 
     Caller supplies both allocation and free effects on staged pages. This
     does not execute the later parser or its cryptographic callbacks.
+    Explicit diagnostic services enable the constructor's own 0x50 frame.
     Return the new referenced string pointer (NULL for empty/invalid decode).
     """
     transaction = _PageTransaction(pages)
@@ -1727,7 +1729,13 @@ def construct_decoded_configuration_reference(
         construct_sized_string_object(transaction, object_address=string,
             source_address=buffer, length=decoded_length, image_base=image_base, allocate=allocate)
     free(transaction, buffer)
-    _reference_wrapper(transaction, object_address, string, allocate)
+    if diagnostic_services is None:
+        _reference_wrapper(transaction, object_address, string, allocate)
+    else:
+        from vm9_reference_scopes import construct_scoped_string_reference, _scope
+        construct_scoped_string_reference(transaction, reference_address=object_address,
+            string_address=string, entry_stack_address=_scope(entry_stack_address,0x50),
+            image_base=image_base, allocate=allocate, **diagnostic_services)
     transaction.commit()
     return string
 

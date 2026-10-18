@@ -439,6 +439,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
                     vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,prepare_format=prepare_format,random_services=random_services,
                         process_services=process_services,
+                        get_singleton=get_singleton,
                         get_tls=get_tls,
                         read_clock=read_clock,
                         acquire_environment=acquire_environment,logger_services=logger_services,
