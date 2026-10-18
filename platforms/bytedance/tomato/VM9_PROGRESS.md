@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second decoded reference
+
+288A4C→258E7C 解码引用wrapper恢复，31项新增native/33项拒绝或回滚通过。
+实际3159指令/1243范围/512字节栈，4malloc/1free与声明内存一致；旧decoded/reference owner未改动。
+second11128/+10BB50，下一288A64→2483E0；旧计数/child return保持。
+437个旧AST、67个历史绑定/846项私有哈希保持。
+累计3070native/1212checks；完整signer/fresh/live/JVM未证明。见 [解码引用报告](REQUEST_JNI_STARTUP_WORKERS.md#6222-second-decoded-reference2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second configuration lookup
 
 288A30→263174 配置解析查找与嵌套引用 scope 恢复，19项新增native/33项拒绝或回滚通过。

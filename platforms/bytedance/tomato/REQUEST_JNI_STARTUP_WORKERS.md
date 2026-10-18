@@ -7604,6 +7604,29 @@ SHA1 使用自己的 0x60 栈帧，不套用 MD5 scratch；未恢复的 SHA1 hex
 python -B platforms/bytedance/tomato/python/verify_vm9_second_configuration_lookup_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <lookup-evidence.json>
 ```
 
+## 6.222 Second decoded reference（2026-10-18 Asia/Shanghai）
+
+恢复 `288A4C→258E7C` 解码引用回调：packed+0/+8/+16 为 target、隐藏 X8 输出和 source，
+wrapper 保存16字节 LR，没有 packed 结果。复用现有 base64 与 scoped reference owner，target入口栈为wrapper SP−16。
+source长度在分配前保留，payload指针在分配后重读；provider修改指针的原生对照已通过。
+
+**31项新增原生/Python对照、33项拒绝或回滚通过**。30项双基址wrapper对照覆盖空值、1/2/3字节、
+binary、无效/部分/空白/padding编码、空NULL payload、实时指针变化以及packed/output/source/payload跨页。
+完整声明的非栈guest/image字节、分配和释放顺序、释放前字节、scope地址及拥有字段一致；padding和spill排除。
+实际请求执行 **3159条指令/1243个声明范围/512字节栈**，**4次原生malloc和1次free**及声明内存一致。
+上限1 MiB，已知输入/输出/分配排除SP前0x1000；33项检查覆盖别名、wrap/缺页/栈、资源边界、provider故障
+与packed修改。模型页回滚不撤销外部分配/free账本和OS mapping。
+
+保留 437 个旧Python AST、67 个历史绑定与
+846 项私有哈希，旧native不重跑。second推进到 **11128步/+10BB50**，解码引用1次，
+旧计数/child return保持；下一 **288A64→2483E0**。outer3900有界、原页无差异/64新增OS页，second页未发布。
+累计 **3070native/1212项拒绝或回滚**。完整signer、whole second/request、physical ABI、外部回滚、实际URL/header JNI、
+fresh/live/JVM仍未完成。见 [解码引用证据](evidence/vm9_second_decoded_reference_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_decoded_reference_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <decoded-reference-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

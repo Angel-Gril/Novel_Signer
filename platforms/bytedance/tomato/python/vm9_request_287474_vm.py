@@ -261,6 +261,11 @@ class RequestVm287474ConfigurationLookupPrefix(RequestVm287474JsonDeletePrefix):
     configuration_lookups: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474DecodedReferencePrefix(RequestVm287474ConfigurationLookupPrefix):
+    decoded_references: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -332,6 +337,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     mutex_unlocks=[]
     json_deletions=[]
     configuration_lookups=[]
+    decoded_references=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -394,6 +400,13 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288A4C,0x258E7C):
+                output=apply_request_287474_decoded_reference_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],
+                    allocate=consumer_services['allocate'],free=consumer_services['free'],
+                    thread_id=consumer_services.get('thread_id'),diagnostic_observer=consumer_services.get('diagnostic_observer'))
+                decoded_references.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x288A30,0x263174):
                 if not callable(consumer_services.get('get_singleton')):raise Boundary()
                 output=apply_request_287474_configuration_lookup_callback(staged,argument_block_address=argument,
@@ -676,6 +689,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if decoded_references:
+                return RequestVm287474DecodedReferencePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references))
             if configuration_lookups:
                 return RequestVm287474ConfigurationLookupPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups))
@@ -1978,3 +1994,70 @@ def apply_request_287474_configuration_lookup_callback(pages, *, argument_block_
         thread_id=thread_id,diagnostic_observer=diagnostic_observer,
         protected_ranges=((argument_block_address,32),),max_entries=max_entries,max_bytes=max_bytes)
     p.commit();return result
+
+
+def apply_request_287474_decoded_reference_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,thread_pointer,allocate,free,thread_id=None,
+        diagnostic_observer=None,max_bytes=0x100000):
+    """+288A4C/+258E7C: hidden X8 output8/source16; no packed result.
+
+    Reuse the decoded reference owner with the wrapper's 16-byte LR save.
+    Known input, output and allocation aliases reject. Page rollback cannot
+    reverse an external allocator/free ledger or OS mappings.
+    """
+    from vm9_objects import construct_decoded_configuration_reference
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('decoded reference requires an aligned guest stack')
+    if type(max_bytes) is not int or not 1<=max_bytes<=0x100000:
+        raise RefillUnsupported('decoded reference requires a bounded source')
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('decoded reference requires allocation and free services')
+    def span(a,n):
+        if type(a) is not int or not 0<a<=(1<<64)-n:
+            raise RefillUnsupported('decoded reference address wraps uint64')
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('decoded reference aliases native spills')
+    span(argument_block_address,24)
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,24)
+    target,output,source=(int.from_bytes(packed[i:i+8],'little') for i in (0,8,16))
+    if target!=image_base+0x258E7C:raise RefillUnsupported('unexpected decoded reference target')
+    fixed=((argument_block_address,24),(output,16),(source,24))
+    for a,n in fixed:span(a,n);_read_span(p,a,n)
+    if any(a<b+m and b<a+n for i,(a,n) in enumerate(fixed) for b,m in fixed[i+1:]):
+        raise RefillUnsupported('decoded reference inputs alias')
+    length=int.from_bytes(_read_span(p,source+12,4),'little')
+    if length>max_bytes:raise RefillUnsupported('decoded reference source exceeds byte bound')
+    live=[]
+    def check_payload(tx):
+        if _read_span(tx,argument_block_address,24)!=packed:
+            raise RefillUnsupported('decoded reference provider changed packed input')
+        pointer=int.from_bytes(_read_span(tx,source+16,8),'little')
+        if length:
+            span(pointer,length);_read_span(tx,pointer,length)
+            if any(pointer<a+n and a<pointer+length for a,n in fixed+tuple(live)):
+                raise RefillUnsupported('decoded reference source aliases active storage')
+        return pointer
+    check_payload(p)
+    def checked_allocate(tx,n):
+        result=allocate(tx,n)
+        if type(result) is not int or not 0<=result<=(1<<64)-max(n,1):
+            raise RefillUnsupported('decoded reference allocator returned invalid address')
+        pointer=check_payload(tx)
+        if result:
+            span(result,max(n,1))
+            protected=fixed+tuple(live)+(((pointer,length),) if length else ())
+            if any(result<a+m and a<result+max(n,1) for a,m in protected):
+                raise RefillUnsupported('decoded reference allocation aliases active storage')
+            live.append((result,max(n,1)))
+        return result
+    def checked_free(tx,a):
+        free(tx,a)
+        live[:]=[(b,n) for b,n in live if b!=a]
+        check_payload(tx)
+    construct_decoded_configuration_reference(p,object_address=output,
+        source_object_address=source,image_base=image_base,allocate=checked_allocate,
+        free=checked_free,max_source_bytes=max_bytes,entry_stack_address=entry_stack_address-16,
+        diagnostic_services=dict(thread_pointer=thread_pointer,thread_id=thread_id,
+            diagnostic_observer=diagnostic_observer))
+    p.commit();return output
