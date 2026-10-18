@@ -1,0 +1,456 @@
+{
+  "native_Python_controls": 15,
+  "component_native_controls": 14,
+  "owning_native_controls": 1,
+  "rollback_guards": 24,
+  "pre_change_native_RED_controls": 1,
+  "strict_TDD_order_verified": true,
+  "red_cases": [
+    {
+      "captured_before_implementation": true,
+      "baseline_callback_missing": true,
+      "baseline_source_hashes": {
+        "vm9_request_287474_vm.py": "a1902f0fa5c72d6bcf98f55f9cc56f89a5edabe618e9f09e72e922d5de2baa2b"
+      },
+      "failure_log_sha256": "1dbb332a1510f20a1d39f4932622c8eee444b621054dbf31ca803d36bb44ff35"
+    }
+  ],
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "private",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "shared",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_packed",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "page_tail",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "image_mutex",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_result_mutex",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_receiver_mutex",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "private",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "shared",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_packed",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "page_tail",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "image_mutex",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_result_mutex",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_receiver_mutex",
+      "steps": 26,
+      "original_wrapper_and_matching_libc_lock_returned": true,
+      "all_guest_and_image_bytes_equal": true,
+      "exact_four_byte_result_and_alias_order_equal": true,
+      "explicit_ELF_import_input": true,
+      "minimum_stack_displacement": 48,
+      "native_snapshot_input": false,
+      "atomicity_or_host_concurrency_verified": false,
+      "complete_physical_ABI_verified": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "missing_binding",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "NULL_binding",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "boolean_binding",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "unaligned_binding",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "wrapped_binding",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "NULL_target",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "NULL_mutex",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "odd_mutex",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "wrapped_mutex",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "unmapped_mutex",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "locked",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "contended",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "recursive",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "errorcheck",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "destroyed",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "wrapped_stack",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "invalid_packed",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "wrapped_packed",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "partial_output",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "packed_spill",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "mutex_spill",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    },
+    {
+      "case": "mutex_spill_tail",
+      "rejected": true,
+      "all_model_pages_unchanged": true
+    }
+  ],
+  "owning_cases": [
+    {
+      "steps": 26,
+      "declared_range_count": 1187,
+      "actual_wrapper_and_matching_libc_lock_returned": true,
+      "all_declared_ranges_and_nonstack_writes_equal": true,
+      "exact_four_byte_result_equal": true,
+      "actual_second_callback_stack_and_thread_pointer_used": true,
+      "explicit_ELF_import_input": true,
+      "actual_normal_lock_state_changed_zero_to_one": true,
+      "native_snapshot_input": false,
+      "native_return_equal": true,
+      "physical_padding_and_register_spills_compared": false,
+      "whole_second_native_differential_verified": false,
+      "complete_physical_ABI_verified": false,
+      "atomicity_or_host_concurrency_verified": false
+    }
+  ],
+  "explicit_matching_libc_ELF_import_bindings": [
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x379748",
+      "relocation_kind": 257,
+      "libc_export_offset": "0x68cf8"
+    },
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x382eb8",
+      "relocation_kind": 257,
+      "libc_export_offset": "0x68cf8"
+    },
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x383350",
+      "relocation_kind": 257,
+      "libc_export_offset": "0x68cf8"
+    },
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x375210",
+      "relocation_kind": 1026,
+      "libc_export_offset": "0x68cf8"
+    }
+  ],
+  "constructed_second_entry": {
+    "steps": 10599,
+    "bytecode_offset": "0x10b0f8",
+    "next_wrapper": "0x28876c",
+    "next_target": "0x26cc60",
+    "child_return_preserved": true,
+    "completed_strings": 16,
+    "completed_reader_acquisitions": 7,
+    "completed_diagnostics": 23,
+    "completed_diagnostic_leaves": 23,
+    "completed_reader_releases": 7,
+    "completed_string_comparisons": 1,
+    "completed_string_assignments": 1,
+    "completed_random_values": 1,
+    "completed_reference_getters": 1,
+    "completed_cached_u32_getters": 2,
+    "completed_pair_getters": 1,
+    "completed_cached_references": 1,
+    "completed_guard_acquisitions": 1,
+    "completed_environment_constants": 1,
+    "completed_cstring_formats": 1,
+    "completed_guard_releases": 1,
+    "completed_registry_reads": 12,
+    "completed_realtime_seconds": 1,
+    "completed_process_ids": 2,
+    "completed_thread_pointers": 1,
+    "completed_environment_acquisitions": 1,
+    "completed_locked_pointers": 1,
+    "completed_tree_pointers": 1,
+    "completed_identifiers": 1,
+    "completed_allocations": 2,
+    "completed_string_formats": 2,
+    "completed_string_pairs": 1,
+    "completed_digests": 1,
+    "completed_crcs": 2,
+    "completed_frees": 1,
+    "completed_json_references": 1,
+    "completed_global_u32_getters": 3,
+    "completed_json_numbers": 9,
+    "completed_environment_helpers": 1,
+    "completed_tls_u32_getters": 1,
+    "completed_json_strings": 3,
+    "completed_numeric_strings": 1,
+    "completed_configuration_strings": 1,
+    "completed_json_bools": 1,
+    "completed_json_prints": 1,
+    "completed_mutex_locks": 1,
+    "complete_second_vm_verified": false,
+    "explicit_JNI_fixture": true,
+    "complete_signer_verified": false
+  },
+  "previous_owners": {
+    "old_AST_owners": 39,
+    "old_bindings": 59,
+    "private_hashes": 680,
+    "previous_native_groups_replayed": false,
+    "baseline": "be860db8d507eec80d7b5d2d3e01a94ccb7a0010"
+  },
+  "previous_owner_AST_preserved_after_mutex_additions_removed": true,
+  "previous_verifiers_unchanged": true,
+  "historical_native_groups_not_replayed": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "cumulative_native_controls": 2798,
+  "cumulative_rollback_guards": 985,
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "second_pages_published": false,
+  "atomicity_or_host_concurrency_verified": false,
+  "complete_physical_ABI_verified": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "external_provider_effect_rollback_verified": false,
+  "whole_second_native_differential_verified": false,
+  "complete_second_vm_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "limits": [
+    "2889a8 loads target/mutex from packed+0/+8, calls the explicit pthread_mutex_lock import, then writes exactly four result bytes at packed+16. Existing vm9_objects.lock_uncontended_mutex owns the normal-state transition; no copied mutex algorithm or NULL-target inference.",
+    "Loader input is explicit: the verifier resolves the matching libc dynsym export and binds all matching ABS64/GLOB_DAT/JUMP_SLOT sites from the target ELF. The VM receives mutex_import_bindings separately. Native output is never used as input; missing or NULL bindings do not enable the callback.",
+    "14 fresh controls at two image bases execute the original wrapper and actual matching-libc function. Private/shared normal states, crossing packed output, page-tail mutex storage, image mutex storage and result/receiver aliases compare all guest payload and image bytes. Native uses48 stack bytes; packed+16 changes exactly4 bytes with native alias order.",
+    "24 refusal checks cover absent/NULL/boolean/unaligned/wrapping bindings, wrong/NULL targets, NULL/odd/wrapping/unmapped mutex pointers, locked/contended/recursive/error-checking/destroyed states, stack/packed bounds, partial output mapping and spill aliases. All model pages remain unchanged; this is not host atomicity or contention support.",
+    "Actual independently constructed request input executes26 original instructions across1187 declared ranges using its actual SP/TP. All declared image/heap/packed/mutex/TLS and observed nonstack writes agree; native return0 and mutex0->1 agree. No allocator callback or syscall is substituted on this lock path. Physical stack spills/PAC/register preservation and the whole second/request remain unverified.",
+    "Expected missing-callback RED predates owner edits; exact parent source/log hashes and validated D2/T2 retained,Host enforcement UNVERIFIED.39 old AST owners,59 old bindings/680 private hashes retained. Earlier failed stack-bound and exception-type harness diagnostics are not accepted native controls; accepted historical groups were not replayed.",
+    "Second advances10494->10599/+10b0f8,next28876c->26cc60,mutex lock1. Prior counters do not decrease and child return persists; outer3900 remains bounded with unchanged original pages and64 retained allocator OS pages. Second pages remain unpublished. Full signer,JSON parser,whole libc/second/request/204ed4,physical ABI,actual URL/header JNI and fresh/live/JVM remain unfinished."
+  ]
+}

@@ -365,6 +365,7 @@ JSON字符串插入新增 **53项原生对照、24项拒绝或回滚检查**，p
 配置字符串查询新增 **29项原生对照、24项拒绝或回滚检查**，prefix到10471步。见 [配置字符串报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6211-second-configuration-string2026-10-18-asiashanghai)。
 JSON布尔插入新增 **41项原生对照、22项拒绝或回滚检查**，prefix到10481步。见 [JSON布尔报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6212-second-json-bool2026-10-18-asiashanghai)。
 JSON序列化与引用构造新增 **49项原生对照、36项拒绝或回滚检查**，prefix到10494步。见 [JSON序列化报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6213-second-json-print2026-10-18-asiashanghai)。
+普通锁导入与回调新增 **15项原生对照、24项拒绝或回滚检查**，prefix到10599步。见 [普通锁报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6214-second-mutex-lock2026-10-18-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

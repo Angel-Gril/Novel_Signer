@@ -221,6 +221,11 @@ class RequestVm287474JsonPrintPrefix(RequestVm287474JsonBoolPrefix):
     json_prints: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474MutexLockPrefix(RequestVm287474JsonPrintPrefix):
+    mutex_locks: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -284,6 +289,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     configuration_strings=[]
     json_bools=[]
     json_prints=[]
+    mutex_locks=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -346,6 +352,15 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif (consumer_services is not None and wrapper==0x2889A8 and
+                    isinstance(consumer_services.get('mutex_import_bindings'),dict) and
+                    type(consumer_services['mutex_import_bindings'].get('pthread_mutex_lock')) is int and
+                    consumer_services['mutex_import_bindings']['pthread_mutex_lock']>0 and
+                    words[0]==consumer_services['mutex_import_bindings']['pthread_mutex_lock']):
+                value=apply_request_287474_mutex_lock_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    import_bindings=consumer_services['mutex_import_bindings'])
+                mutex_locks.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x288990,0x2616B4):
                 value=apply_request_287474_json_print_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -572,6 +587,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if mutex_locks:
+                return RequestVm287474MutexLockPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks))
             if json_prints:
                 return RequestVm287474JsonPrintPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints))
@@ -1292,6 +1310,36 @@ def apply_request_287474_json_number_callback(pages, *, argument_block_address,
         entry_stack_address=entry_stack_address,image_base=image_base,allocate=allocate,free=free,
         max_bytes=max_bytes,max_nodes=max_nodes)
     _write_span(p,argument_block_address+32,bytes([int(result)]))
+    p.commit();return result
+
+
+def apply_request_287474_mutex_lock_callback(pages, *, argument_block_address,
+        entry_stack_address,import_bindings):
+    """+2889a8: explicit loader target, normal lock, exact packed+16 W0 store.
+
+    Bindings are caller-supplied loader input. No NULL target is inferred or
+    repaired here. Reuse the serialized uncontended mutex owner; this does
+    not model atomicity or host concurrency.
+    """
+    from vm9_objects import lock_uncontended_mutex
+    target=import_bindings.get('pthread_mutex_lock') if isinstance(import_bindings,dict) else None
+    if type(target) is not int or not 0<target<1<<64 or target&3:
+        raise RefillUnsupported('second mutex lock requires an explicit aligned import binding')
+    if (type(entry_stack_address) is not int or not 48<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('second mutex lock requires an aligned native stack')
+    if type(argument_block_address) is not int or not 0<argument_block_address<=(1<<64)-20:
+        raise RefillUnsupported('second mutex packed address wraps uint64')
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,16)
+    actual,mutex=(int.from_bytes(packed[i:i+8],'little') for i in (0,8))
+    if actual!=target:raise RefillUnsupported('unexpected second mutex lock import target')
+    if not 0<mutex<=(1<<64)-2:
+        raise RefillUnsupported('second mutex address wraps uint64')
+    for a,n in ((argument_block_address,20),(mutex,2)):
+        if a<entry_stack_address and a+n>entry_stack_address-48:
+            raise RefillUnsupported('second mutex callback aliases native spills')
+    result=lock_uncontended_mutex(p,mutex_address=mutex)
+    _write_span(p,argument_block_address+16,result.to_bytes(4,'little'))
     p.commit();return result
 
 

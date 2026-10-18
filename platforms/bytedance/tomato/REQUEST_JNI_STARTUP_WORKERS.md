@@ -7410,6 +7410,28 @@ outer3900有界、原页无差异/64新增OS页，second页未发布。累计6.1
 python -B platforms/bytedance/tomato/python/verify_vm9_json_print_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <json-print-evidence.json> --mode native
 ```
 
+## 6.214 Second mutex lock（2026-10-18 Asia/Shanghai）
+
+恢复 `2889A8` 的显式 `pthread_mutex_lock` 导入回调。加载器从匹配libc符号表取得地址，
+按目标ELF重定位绑定导入槽，并单独传入 `mutex_import_bindings`。复用现有普通锁owner，
+仅接受无争用的private/shared normal状态；结果在packed+16精确写入4字节。
+
+**15项新增原生/Python对照、24项拒绝或回滚检查通过**。14项双基址组件比较全部guest payload/image字节，
+覆盖跨页参数、页尾锁、image内锁以及结果/receiver别名顺序；native共使用48字节栈。
+24项检查覆盖无效导入/地址/锁状态、栈重叠及结果写回跨入缺页，全部model页保持。
+实际构造请求以原始SP/TP执行 **26条指令/1187个声明范围**，锁0→1、返回0和4字节结果一致。
+
+39个旧AST owner、59份绑定/680个私有哈希保持，旧native组未重跑。
+second从10494推进至 **10599步/+10B0F8**，锁回调1次，旧计数不减少、child return保持；
+下一边界 **28876C→26CC60**。outer3900有界，原页无差异/64新增allocator OS页，second页未发布。
+累计6.127–6.214为 **2798项native/985项拒绝或回滚检查**。
+并发原子性、争用锁、完整physical ABI、whole second/request、完整signer/fresh/live/JVM仍未证明。
+见 [普通锁回调证据](evidence/vm9_second_mutex_lock_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_mutex_lock_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <mutex-lock-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

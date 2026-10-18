@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second explicit mutex lock
+
+显式ELF/libc导入绑定与2889A8普通锁回调恢复，精确4字节结果；15项新增native/24项拒绝或回滚通过。
+实际请求26指令/1187范围；39旧AST、59旧绑定/680私有哈希保持。second10599/+10B0F8，下一28876C→26CC60。
+锁回调1次，旧计数不减少/child return保持；outer原页无差异/64新增OS页，second页未发布。
+累计2798native/985checks；并发与完整signer/fresh/live/JVM未证明。见 [普通锁报告](REQUEST_JNI_STARTUP_WORKERS.md#6214-second-mutex-lock2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second compact JSON printing/reference
 
 49项新增原生对照、36项拒绝或回滚检查通过；256字节起始缓冲、转义/数字/容器、扩容与失败清理、字符串引用已恢复。
