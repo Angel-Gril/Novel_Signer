@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second raw realtime milliseconds
+
+28876C→26CC60毫秒回调恢复，复用现有有符号回绕运算，精确8字节结果；15项新增native/14项拒绝或回滚通过。
+实际请求48指令/1186范围；40旧AST、60旧绑定/699私有哈希保持。second10651/+10B1C8，下一2889C4→2A3378。
+毫秒回调1次，旧计数不减少/child return保持；outer原页无差异/64新增OS页，second页未发布。
+累计2813native/999checks；完整signer/fresh/live/JVM未证明。见 [实时毫秒报告](REQUEST_JNI_STARTUP_WORKERS.md#6215-second-realtime-milliseconds2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second explicit mutex lock
 
 显式ELF/libc导入绑定与2889A8普通锁回调恢复，精确4字节结果；15项新增native/24项拒绝或回滚通过。

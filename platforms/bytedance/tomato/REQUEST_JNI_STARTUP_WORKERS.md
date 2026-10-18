@@ -7432,6 +7432,28 @@ second从10494推进至 **10599步/+10B0F8**，锁回调1次，旧计数不减�
 python -B platforms/bytedance/tomato/python/verify_vm9_second_mutex_lock_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <mutex-lock-evidence.json> --mode native
 ```
 
+## 6.215 Second realtime milliseconds（2026-10-18 Asia/Shanghai）
+
+恢复 `28876C→26CC60→291958→329404` 的实时毫秒回调。复用现有 `read_realtime_milliseconds`：
+微秒运算按64位回绕、解释为有符号值、除1000并向零截断；结果按X64位模式写到packed+8，精确8字节。
+
+**15项新增原生/Python对照、14项拒绝或回滚检查通过**。14项双基址组件覆盖零、亚毫秒、亚秒、
+普通/负时间、微秒回绕与跨页参数块（结果从下一页开始）；全部guest payload/image、返回位模式和显式CLOCK_REALTIME调用一致。
+native使用48条指令/96字节栈，回调沿用保守的前0x1000字节栈排除范围。
+14项检查覆盖无效参数/栈/target/provider/timespec，以及provider修改模型页后输出跨入缺页的回滚。
+实际请求以原始SP/TP执行 **48条指令/1186个声明范围**，8字节结果、返回值及声明内存一致。
+
+40个旧AST owner、60份绑定/699个私有哈希保持，旧native组未重跑。
+second从10599推进至 **10651步/+10B1C8**，毫秒回调1次，旧计数不减少/child return保持；
+下一边界 **2889C4→2A3378**。outer3900有界、原页无差异/64新增allocator OS页，second页未发布。
+累计6.127–6.215为 **2813项native/999项拒绝或回滚检查**。
+时钟错误/abort、外部provider回滚、完整physical ABI、whole second/request及完整signer/fresh/live/JVM仍未证明。
+见 [实时毫秒回调证据](evidence/vm9_second_realtime_milliseconds_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_realtime_milliseconds_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <realtime-milliseconds-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

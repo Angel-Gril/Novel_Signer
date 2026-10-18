@@ -1,5 +1,7 @@
 # Tomato / Fanqie (ByteDance)
 
+Second raw realtime milliseconds callback passes15 new native controls and14 refusal/rollback checks. Existing signed wrapped-microsecond arithmetic is reused; actual request input passes48 instructions/1186 ranges. Second reaches10651/+10b1c8,next2889c4->2a3378; complete signing remains unfinished. See the [realtime milliseconds report](REQUEST_JNI_STARTUP_WORKERS.md#6215-second-realtime-milliseconds2026-10-18-asiashanghai).
+
 Second explicit pthread_mutex_lock import/callback passes15 new native controls and24 refusal/rollback checks. Actual request input passes26 instructions/1187 ranges; second reaches10599/+10b0f8,next28876c->26cc60. Only serialized uncontended normal locks are supported; complete signing remains unfinished. See the [mutex lock report](REQUEST_JNI_STARTUP_WORKERS.md#6214-second-mutex-lock2026-10-18-asiashanghai).
 
 Current boundary (2026-10-09 Asia/Shanghai; earlier host trial label `20261008`): original A

@@ -1,0 +1,432 @@
+{
+  "native_Python_controls": 15,
+  "component_native_controls": 14,
+  "owning_native_controls": 1,
+  "rollback_guards": 14,
+  "pre_change_native_RED_controls": 1,
+  "strict_TDD_order_verified": true,
+  "red_cases": [
+    {
+      "captured_before_implementation": true,
+      "baseline_callback_missing": true,
+      "baseline_source_hashes": {
+        "vm9_request_287474_vm.py": "de5fc87b64d871e8c7644e8df85dce664f208a0907648968e15f7b23b565c3b9"
+      },
+      "failure_log_sha256": "392cd2191044a0dee9bcb4c9554e39ef8e9c74ccf9797c0c961e3eaf6a456553"
+    }
+  ],
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "zero",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "submillisecond",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "subsecond",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "positive",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "negative",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "signed_overflow",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_result",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "submillisecond",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "subsecond",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "positive",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "negative",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "signed_overflow",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_result",
+      "steps": 48,
+      "native_stack_bytes": 96,
+      "original_wrapper_and_clock_helpers_returned": true,
+      "all_declared_guest_and_image_bytes_equal": true,
+      "signed_milliseconds_X64_bits_equal": true,
+      "exact_eight_byte_store_and_tail_equal": true,
+      "explicit_realtime_provider_call_equal": true,
+      "native_snapshot_input": false,
+      "physical_spills_and_PAC_compared": false,
+      "external_provider_effect_rollback_verified": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "NULL_packed",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "wrapped_packed",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "wrapped_stack",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "missing_provider",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "clock_failure",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "malformed_clock",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "invalid_seconds",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "invalid_nanoseconds",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "provider_failure",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "partial_store_after_provider",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    },
+    {
+      "case": "packed_spill_alias",
+      "rejected": true,
+      "all_model_pages_unchanged": true,
+      "external_provider_effect_rollback_verified": false
+    }
+  ],
+  "owning_cases": [
+    {
+      "steps": 48,
+      "declared_range_count": 1186,
+      "native_stack_bytes": 96,
+      "actual_wrapper_and_clock_helpers_returned": true,
+      "all_declared_ranges_and_nonstack_writes_equal": true,
+      "exact_eight_byte_result_and_native_return_equal": true,
+      "explicit_clock_provider_calls_equal": true,
+      "actual_second_callback_stack_and_thread_pointer_used": true,
+      "native_snapshot_input": false,
+      "physical_padding_and_register_spills_compared": false,
+      "whole_second_native_differential_verified": false,
+      "complete_physical_ABI_verified": false,
+      "external_provider_effect_rollback_verified": false
+    }
+  ],
+  "retained_explicit_mutex_ELF_import_bindings": [
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x379748",
+      "relocation_kind": 257,
+      "libc_export_offset": "0x68cf8"
+    },
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x382eb8",
+      "relocation_kind": 257,
+      "libc_export_offset": "0x68cf8"
+    },
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x383350",
+      "relocation_kind": 257,
+      "libc_export_offset": "0x68cf8"
+    },
+    {
+      "symbol": "pthread_mutex_lock",
+      "relocation_offset": "0x375210",
+      "relocation_kind": 1026,
+      "libc_export_offset": "0x68cf8"
+    }
+  ],
+  "constructed_second_entry": {
+    "steps": 10651,
+    "bytecode_offset": "0x10b1c8",
+    "next_wrapper": "0x2889c4",
+    "next_target": "0x2a3378",
+    "child_return_preserved": true,
+    "completed_strings": 16,
+    "completed_reader_acquisitions": 7,
+    "completed_diagnostics": 23,
+    "completed_diagnostic_leaves": 23,
+    "completed_reader_releases": 7,
+    "completed_string_comparisons": 1,
+    "completed_string_assignments": 1,
+    "completed_random_values": 1,
+    "completed_reference_getters": 1,
+    "completed_cached_u32_getters": 2,
+    "completed_pair_getters": 1,
+    "completed_cached_references": 1,
+    "completed_guard_acquisitions": 1,
+    "completed_environment_constants": 1,
+    "completed_cstring_formats": 1,
+    "completed_guard_releases": 1,
+    "completed_registry_reads": 12,
+    "completed_realtime_seconds": 1,
+    "completed_process_ids": 2,
+    "completed_thread_pointers": 1,
+    "completed_environment_acquisitions": 1,
+    "completed_locked_pointers": 1,
+    "completed_tree_pointers": 1,
+    "completed_identifiers": 1,
+    "completed_allocations": 2,
+    "completed_string_formats": 2,
+    "completed_string_pairs": 1,
+    "completed_digests": 1,
+    "completed_crcs": 2,
+    "completed_frees": 1,
+    "completed_json_references": 1,
+    "completed_global_u32_getters": 3,
+    "completed_json_numbers": 9,
+    "completed_environment_helpers": 1,
+    "completed_tls_u32_getters": 1,
+    "completed_json_strings": 3,
+    "completed_numeric_strings": 1,
+    "completed_configuration_strings": 1,
+    "completed_json_bools": 1,
+    "completed_json_prints": 1,
+    "completed_mutex_locks": 1,
+    "completed_realtime_milliseconds": 1,
+    "complete_second_vm_verified": false,
+    "explicit_JNI_fixture": true,
+    "complete_signer_verified": false
+  },
+  "previous_owners": {
+    "old_AST_owners": 40,
+    "old_bindings": 60,
+    "private_hashes": 699,
+    "previous_native_groups_replayed": false,
+    "baseline": "d2387ccd99cc04a9e871d781a7745466f7ea5d64"
+  },
+  "previous_owner_AST_preserved_after_milliseconds_additions_removed": true,
+  "previous_verifiers_unchanged": true,
+  "historical_native_groups_not_replayed": true,
+  "original_page_bytes_unchanged": true,
+  "retained_new_allocator_OS_pages": 64,
+  "cumulative_native_controls": 2813,
+  "cumulative_rollback_guards": 999,
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "second_pages_published": false,
+  "complete_physical_ABI_verified": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "external_provider_effect_rollback_verified": false,
+  "whole_second_native_differential_verified": false,
+  "complete_second_vm_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "limits": [
+    "28876c loads only packed+0 target, calls26cc60/291958/329404 and writes exactly8 X64 bits atpacked+8. The callback reuses existing vm9_callbacks.read_realtime_milliseconds: wrap(sec*1000000+nsec//1000) to64 bits, interpret signed, then SDIV1000 truncating toward zero. The signed result is masked to X64 without another division.",
+    "14 fresh native/Python controls at two image bases cover zero,submillisecond,subsecond,ordinary,negative,wrapped-microsecond overflow and a cross-page packed block whose result starts on the following page. All guest payload/image bytes,return bits and one explicit CLOCK_REALTIME provider call agree. Native uses48 instructions/96 stack bytes; callback conservatively excludes the previous0x1000 stack bytes.",
+    "14 refusal/model-page rollback guards cover wrong target,NULL/wrapping/missing packed input,unaligned/wrapping stack,missing/malformed/failing clock provider,invalid timespec,provider exception,partial output mapping after provider mutation and packed spill alias. External provider effects cannot be reversed by model-page rollback; native abort/error paths remain unsupported.",
+    "Actual independently constructed request input executes48 original instructions/1186 declared ranges with actual SP/TP. Declared image/heap/packed/TLS and observed nonstack writes,native X0 and exact8 result bytes agree. Native and model invoke the explicit fixed clock provider independently; the native-provider page copy is unchanged. Physical spills/PAC/register preservation and whole second/request remain unverified.",
+    "Expected missing-callback RED predates edits; exact parent source/log hashes and validatedD2/T2 retained,Host enforcementUNVERIFIED.40 old AST owners,60 old bindings/699 private hashes retained. Existing clock arithmetic,seconds callback,mutex callback and previous verifiers are unchanged; accepted historical native groups were not replayed.",
+    "Second advances10599->10651/+10b1c8,next2889c4->2a3378,realtime_milliseconds1. Prior completed counters do not decrease and child return persists. Outer3900 remains bounded with unchanged original pages and64 retained allocator OS pages;second pages unpublished. Full signer,JSON parser,whole libc/second/request/204ed4,physical ABI,actual URL/header JNI and fresh/live/JVM remain unfinished."
+  ]
+}
