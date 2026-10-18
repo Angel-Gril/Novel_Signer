@@ -7772,6 +7772,32 @@ W0、packed/padding、定义的canary及分配效果一致。39项检查覆盖wr
 python -B platforms/bytedance/tomato/python/verify_vm9_second_allocated_printf_fresh_20261019.py --library "$env:TOMATO_LIBMETASEC" --output <allocated-printf-evidence.json>
 ```
 
+## 6.229 Second VM return（2026-10-19 Asia/Shanghai）
+
+恢复 `+112434` 的selected-slot VM返回，要求原始指令 `07C00791` 和R31匹配caller sentinel。
+原生 `16A974→172440→2874D8` 返回；`285F38` 为tailcall，无额外wrapper frame。
+新second caller恢复入口复用未修改的token caller owner，增加0x1A00栈边界，保留实时TLS canary、
+保存的X19/X28/X29/LR。physical X0来自descriptor `2884AC`，未使用virtual R0替代。
+新增显式continue选项（默认false）、exit/returned状态；outer仅在已恢复caller return时继续。
+
+**21项新增原生/Python对照、15项拒绝或回滚通过**。20项双基址执行原始handler/generic epilogue/second caller，
+核对7个物理返回值及声明guest/caller stack字节；覆盖TLS与frame/FP/X19/X28/LR别名、宽值及NULL保存字。
+15项检查覆盖栈/地址/缺页/canary/PAC标记、错误exit PC/word/target、寄存器长度和非法continue参数。
+不比较generic scratch或完整physical ABI。
+
+实际构造请求在原生 `2874D8` 执行 **9条指令、1437个完整声明页**，7个物理返回值和全部字节一致，
+无分配或service效果。second **96740步/+112434、391callbacks** 完成有界caller return，旧计数和child return保持。
+outer从 **3900继续至4000步/+FE5B0**，下一 **285EF0→2568C8**。原页无差异，64新增OS页，完整second/request
+原生对照与signer输出尚未证明。公共second预算仍20000，仅私有探针500000。
+
+保留 444 个旧Python AST、74 个历史绑定和
+959 项私有哈希，历史native不重跑。累计 **3322native/1395项拒绝或回滚**。
+完整signer、physical ABI、实际URL/header JNI、fresh/live/JVM仍未完成。见 [second返回证据](evidence/vm9_request_second_return_fresh_20261019.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_return_fresh_20261019.py --library "$env:TOMATO_LIBMETASEC" --output <second-return-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

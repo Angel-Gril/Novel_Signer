@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-19 Asia/Shanghai：second VM return
+
+Second selected-slot返回与caller epilogue恢复，21项新增native/15项拒绝检查通过。
+实际9instructions/1437完整页及7个物理返回值一致；旧token caller owner未修改。
+second96740/+112434完成有界caller return；outer3900→4000/+FE5B0，下一285EF0→2568C8。
+444个旧AST、74个历史绑定/959项私有哈希保持。
+累计3322native/1395checks；完整signer/whole second/request/fresh/live/JVM未证明。见 [second返回报告](REQUEST_JNI_STARTUP_WORKERS.md#6229-second-vm-return2026-10-19-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-19 Asia/Shanghai：second allocated printf
 
 288AD4→278314双遍格式化分配恢复，50项新增native/39项拒绝或回滚通过。

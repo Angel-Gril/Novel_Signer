@@ -437,6 +437,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
             elif (wrapper,target) == (0x285F38,0x287474):
                 import vm9_request_287474_vm
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
+                    continue_caller_return=True,
                     vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,prepare_format=prepare_format,random_services=random_services,
                         process_services=process_services,
                         get_singleton=get_singleton,
@@ -453,6 +454,14 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                     image_base=image,object_address=words[1],
                     saved_frame_pointer=frame.native_stack_address-0x60,
                     saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8)
+                if getattr(nested,'caller_return',None) is not None:
+                    if diagnostic_scope is not None:
+                        diagnostic_scope['request_287474_vm_boundary_state']=nested
+                        diagnostic_scope.setdefault('request_287474_vm_returns',[]).append(dict(
+                            nested_steps=nested.steps,nested_bytecode_offset=hex(nested.pc-image),
+                            callback_count=len(nested.callbacks),caller_return=vars(nested.caller_return),
+                            exit_state=nested.exit_state,whole_second_native_differential_verified=False))
+                    return
                 if diagnostic_scope is not None:
                     diagnostic_scope['request_287474_vm_boundary_state']=nested
                     diagnostic_scope.setdefault('request_287474_vm_prefixes',[]).append(dict(

@@ -310,6 +310,35 @@ def finish_request_token_vm_caller(pages, *, image_base, entry_stack_address,
     return RequestCallerReturn(x30,entry_stack_address,callback_sentinel,x19,x28,x29,x30)
 
 
+def validate_request_287474_vm_exit(pages, *, image_base,pc,registers,return_address):
+    """Validate +112434's selected-slot return to the second caller sentinel."""
+    if (any(type(v) is not int or not 0<=v<1<<64 for v in (image_base,pc,return_address))
+            or pc!=image_base+0x112434 or len(registers)!=32):
+        raise RefillUnsupported('second VM exit is outside its recovered return branch')
+    try:word=int.from_bytes(_read_span(pages,pc,4),'little')
+    except ValueError as exc:raise RefillUnsupported('second VM return word is unmapped') from exc
+    if word!=0x07C00791 or type(registers[31]) is not int or registers[31]!=return_address:
+        raise RefillUnsupported('second VM exit does not reach its caller sentinel')
+    return dict(bytecode_offset='0x112434',instruction_word=hex(word),selected_slot=31,
+        selected_target=return_address,caller_sentinel_matches=True,
+        native_handler_offset='0x16a974',native_epilogue_offset='0x172440')
+
+
+def finish_request_287474_vm_caller(pages, *, image_base,entry_stack_address,
+        thread_pointer,callback_sentinel) -> RequestCallerReturn:
+    """+2874D8: live canary/restore after the +285F38 tail call.
+
+    This entry shares the token caller's saved-word layout and descriptor X0.
+    The native wrapper saves no extra frame. Reuse that return owner with
+    the second caller's larger stack bound; virtual R0 is not physical X0.
+    """
+    if type(entry_stack_address) is not int or entry_stack_address<0x1A00:
+        raise RefillUnsupported('second caller return requires its full stack frame')
+    return finish_request_token_vm_caller(pages,image_base=image_base,
+        entry_stack_address=entry_stack_address,thread_pointer=thread_pointer,
+        callback_sentinel=callback_sentinel)
+
+
 def prepare_request_287474_vm_caller(pages, *, entry_stack_address, return_address,
         thread_pointer, image_base, object_address, saved_frame_pointer=0,
         saved_x28=0, saved_x19=0) -> RequestVmCallerFrame:

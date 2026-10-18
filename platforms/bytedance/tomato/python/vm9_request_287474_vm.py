@@ -296,8 +296,19 @@ class RequestVm287474AllocatedPrintfPrefix(RequestVm287474Base64ReferencePrefix)
     allocated_printfs: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474ExitPrefix(RequestVm287474AllocatedPrintfPrefix):
+    completed_bytecode_return: bool
+
+
+@dataclass(frozen=True)
+class RequestVm287474ReturnedPrefix(RequestVm287474ExitPrefix):
+    caller_return: object
+    exit_state: object
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
-        consumer_services=None, **inputs):
+        consumer_services=None,continue_caller_return=False, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
 
     Undefined virtual words retain the independently supplied caller memory.
@@ -305,6 +316,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     """
     if type(maxsteps) is not int or maxsteps<1:
         raise RefillUnsupported('second request VM budget must be positive')
+    if type(continue_caller_return) is not bool:
+        raise RefillUnsupported('second return continuation must be boolean')
     if consumer_services is not None and (not isinstance(consumer_services,dict) or
             any(not callable(consumer_services.get(n)) for n in ('allocate','free'))):
         raise RefillUnsupported('second request consumers require allocation and free services')
@@ -927,6 +940,18 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 return RequestVm287474ChildPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,children[-1])
             return RequestVm287474Prefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps)
         except vm_module.VMExit as exc:
+            if allocated_printfs and callbacks[-1][:2]==(0x2884CC,0x2484B8):
+                from vm9_request_caller import validate_request_287474_vm_exit,finish_request_287474_vm_caller
+                exit_state=validate_request_287474_vm_exit(staged,image_base=image,pc=vm.pc,
+                    registers=tuple(vm.R),return_address=inputs['return_address'])
+                result=RequestVm287474ExitPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references),tuple(string_clones),tuple(sized_strings),tuple(memory_fills),tuple(flagged_cleanups),tuple(base64_references),tuple(allocated_printfs),True)
+                if not continue_caller_return:return result
+                caller_return=finish_request_287474_vm_caller(staged,image_base=image,
+                    entry_stack_address=inputs['entry_stack_address'],thread_pointer=inputs['thread_pointer'],
+                    callback_sentinel=int.from_bytes(_read_span(staged,frame.descriptor_address,8),'little'))
+                returned=RequestVm287474ReturnedPrefix(**vars(result),caller_return=caller_return,exit_state=exit_state)
+                staged.commit();return returned
             raise RefillUnsupported('second request VM return is not recovered') from exc
         raise RefillUnsupported('second request VM budget exhausted before a boundary')
     finally:vm_module.B=previous

@@ -1,5 +1,7 @@
 # Tomato / Fanqie (ByteDance)
 
+Second VM selected return passes21 new native controls and15 refusal checks. Actual caller return matches seven physical values and1437 declared pages. Outer resumes3900→4000;next285EF0→2568C8. Complete signing remains unfinished. See the [second return report](REQUEST_JNI_STARTUP_WORKERS.md#6229-second-vm-return2026-10-19-asiashanghai).
+
 Second allocated printf passes 50 new native controls and 39 refusal/rollback checks. Both actual calls match memory, result, canary and ordered real allocation effects. Second reaches96740/+112434 and the unrecovered VM return; complete signing remains unfinished. See the [allocated printf report](REQUEST_JNI_STARTUP_WORKERS.md#6228-second-allocated-printf2026-10-19-asiashanghai).
 
 Second Base64 reference construction passes 31 new native controls and 33 refusal/rollback checks. All 1 actual calls match declared memory, ordered allocation/free and prefree bytes. Second reaches 96588/0x1121d4; next 0x288ad4→0x278314. Complete signing remains unfinished. See the [Base64 reference report](REQUEST_JNI_STARTUP_WORKERS.md#6227-second-base64-reference2026-10-18-asiashanghai).
