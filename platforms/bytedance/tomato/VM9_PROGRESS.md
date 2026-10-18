@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second protobuf packed size
+
+2889C4→2A3378长度回调恢复，独立有界proto3模型，53项新增native/35项拒绝或回滚通过。
+实际请求706/7168指令/1186范围/448字节栈；41旧AST、61旧绑定/719私有哈希保持。
+second10662/+10B1F4，下一2889E0→248DD8；长度回调1次，旧计数不减少/child return保持。
+outer原页无差异/64新增OS页，second页未发布；累计2866native/1034checks。
+完整signer/fresh/live/JVM未证明。见 [Protobuf长度报告](REQUEST_JNI_STARTUP_WORKERS.md#6216-second-protobuf-packed-size2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second raw realtime milliseconds
 
 28876C→26CC60毫秒回调恢复，复用现有有符号回绕运算，精确8字节结果；15项新增native/14项拒绝或回滚通过。

@@ -7454,6 +7454,30 @@ second从10599推进至 **10651步/+10B1C8**，毫秒回调1次，旧计数不�
 python -B platforms/bytedance/tomato/python/verify_vm9_second_realtime_milliseconds_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <realtime-milliseconds-evidence.json> --mode native
 ```
 
+## 6.216 Second protobuf packed size（2026-10-18 Asia/Shanghai）
+
+恢复 `2889C4→2A3378→253888` 的Protobuf-C编码长度回调：message位于packed+8，结果精确写8字节到packed+16。
+在现有protobuf owner增加独立的有界proto3长度入口，复用Field/MAGIC；原configuration unpack/free实现保持。
+支持标量、string、bytes和嵌套message，bytes只读长度；repeated、oneof、未知字段及非proto3路径拒绝。
+限制深度16、节点1024、累计字段4096、结果及字符串扫描1MiB；输入排除SP前0x1000字节。
+
+**53项新增原生/Python对照、35项拒绝或回滚检查通过**。52项双基址组件覆盖全部标量类型、
+零值/负数/zigzag、varint与tag边界、浮点负零/NaN、空/非空字符串、未映射bytes内容指针、
+空/非空/共享嵌套消息与跨页4+4字节结果；35项检查覆盖schema/地址/资源/栈别名及部分输出缺页。
+实际构造请求以原始SP/TP执行 **7168条指令/1186个声明范围/448字节栈**，独立模型与原生均得 **706**；
+返回值、8字节输出、声明内存与观察到的非栈写入一致，无分配或服务记录。先前706发现基线不重复计数。
+
+41个旧AST owner、61份旧绑定/719个私有哈希保持，旧native组未重跑。
+second从10651推进至 **10662步/+10B1F4**，长度回调1次，旧计数不减少/child return保持；
+下一边界 **2889E0→248DD8**。outer3900有界、原页无差异/64新增allocator OS页，second页未发布。
+累计6.127–6.216为 **2866项native/1034项拒绝或回滚检查**。
+完整physical ABI、whole second/request、外部provider/mapping回滚、实际URL/header JNI及完整signer/fresh/live/JVM仍未证明。
+见 [Protobuf长度回调证据](evidence/vm9_second_protobuf_size_fresh_20261018.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_second_protobuf_size_fresh_20261018.py --library "$env:TOMATO_LIBMETASEC" --output <protobuf-size-evidence.json> --mode native
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

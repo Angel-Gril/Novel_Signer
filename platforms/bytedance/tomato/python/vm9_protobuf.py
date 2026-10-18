@@ -37,6 +37,149 @@ class Field:
         return 4 if self.kind in (0, 1, 2, 6, 7, 10, 12, 13) else 16 if self.kind == 15 else 8
 
 
+class _PackedSize:
+    """Read-only proto3 size contract, separate from configuration decoding."""
+    def __init__(self, pages, max_bytes, max_fields, max_nodes, max_depth, forbidden_ranges):
+        self.pages = pages
+        self.max_bytes, self.max_fields = max_bytes, max_fields
+        self.max_nodes, self.max_depth = max_nodes, max_depth
+        self.forbidden = tuple(forbidden_ranges)
+        self.fields = self.nodes = self.scanned = 0
+        self.active = set()
+
+    def span(self, address, size):
+        if (type(address) is not int or type(size) is not int or
+                not 0 < address < 1 << 64 or size < 0 or address + size > 1 << 64):
+            raise RefillUnsupported('protobuf size address wraps uint64')
+        if any(address < end and start < address + size for start, end in self.forbidden):
+            raise RefillUnsupported('protobuf size input aliases native spills')
+
+    def read(self, address, size):
+        self.span(address, size)
+        return _read_span(self.pages, address, size)
+
+    def u(self, address, size=8):
+        return int.from_bytes(self.read(address, size), 'little')
+
+    @staticmethod
+    def varint(value):
+        return max(1, (value.bit_length() + 6) // 7)
+
+    def bounded(self, value):
+        if value > self.max_bytes:
+            raise RefillUnsupported('protobuf encoded size exceeds explicit byte bound')
+        return value
+
+    def string_size(self, pointer):
+        length = 0
+        while True:
+            if self.scanned >= self.max_bytes:
+                raise RefillUnsupported('protobuf string scan exceeds explicit byte bound')
+            self.scanned += 1
+            if not self.u(pointer + length, 1):
+                return length
+            length += 1
+
+    def message(self, message, depth=0, expected_descriptor=None):
+        if depth > self.max_depth or message in self.active:
+            raise RefillUnsupported('protobuf size cycle or nesting bound')
+        self.nodes += 1
+        if self.nodes > self.max_nodes:
+            raise RefillUnsupported('protobuf size node bound')
+        descriptor = self.u(message)
+        if expected_descriptor is not None and descriptor != expected_descriptor:
+            raise RefillUnsupported('protobuf nested message descriptor mismatch')
+        if self.u(descriptor, 4) != MAGIC:
+            raise RefillUnsupported('unsupported protobuf size descriptor magic')
+        size = self.u(descriptor + 40)
+        if not 24 <= size <= 1 << 20:
+            raise RefillUnsupported('unsupported protobuf size message extent')
+        self.span(message, size)
+        if self.u(message + 8, 4):
+            raise RefillUnsupported('protobuf size unknown fields are unsupported')
+        count, table = self.u(descriptor + 48, 4), self.u(descriptor + 56)
+        self.fields += count
+        if self.fields > self.max_fields:
+            raise RefillUnsupported('protobuf size field bound')
+        if count:
+            self.span(table, count * 72)
+        fields, tags = [], set()
+        for i in range(count):
+            at = table + 72 * i
+            f = Field(at, *(self.u(at + off, 4) for off in (8, 12, 16, 20, 24)),
+                      self.u(at + 32), self.u(at + 40))
+            if not 0 < f.tag < 1 << 29 or f.tag in tags:
+                raise RefillUnsupported('unsupported protobuf size field tag')
+            tags.add(f.tag)
+            if f.label != 3 or f.quantifier or f.kind > 16 or self.u(at + 48, 4):
+                raise RefillUnsupported('protobuf size supports only singular proto3 fields without flags')
+            if f.offset < 24 or f.offset + f.size > size:
+                raise RefillUnsupported('protobuf size field outside message')
+            fields.append(f)
+        self.active.add(message)
+        try:
+            total = 0
+            for f in fields:
+                at, kind = message + f.offset, f.kind
+                value = self.u(at, 8 if kind == 15 else f.size)
+                # Native zero test treats both signs of floating zero as absent.
+                zero = value & ((1 << (31 if kind == 10 else 63)) - 1) if kind in (10, 11) else value
+                if not zero:
+                    continue
+                if kind == 14:
+                    length = self.string_size(value)
+                    if not length:
+                        continue
+                    payload = length + self.varint(length)
+                elif kind == 15:
+                    # No payload pointer dereference: this function computes size only.
+                    length = self.bounded(value)
+                    payload = length + self.varint(length)
+                elif kind == 16:
+                    length = self.message(value, depth + 1, f.descriptor)
+                    payload = length + self.varint(length)
+                elif kind in (2, 7, 10):
+                    payload = 4
+                elif kind in (5, 9, 11):
+                    payload = 8
+                elif kind == 12:
+                    payload = 1
+                elif kind in (0, 13):
+                    payload = 10 if value & (1 << 31) else self.varint(value)
+                elif kind in (1, 4):
+                    bits = 32 if kind == 1 else 64
+                    signed = value - (1 << bits) if value & (1 << (bits - 1)) else value
+                    payload = self.varint((signed << 1) ^ (signed >> (bits - 1)))
+                else:
+                    payload = self.varint(value)
+                total = self.bounded(total + self.varint(f.tag << 3) + payload)
+            return total
+        finally:
+            self.active.remove(message)
+
+
+def get_packed_size(pages, *, message_address, max_bytes=1 << 20, max_fields=4096,
+        max_nodes=1024, max_depth=16, forbidden_ranges=()):
+    """Bound +253888 for singular proto3 scalars, bytes, strings and messages.
+
+    Caller supplies relocated descriptors and constructed messages. No native
+    output or configuration schema is embedded. Repeated, oneof, unknown-field
+    and non-proto3 paths reject. Bytes payloads are not read. Physical stack
+    spills are excluded by the callback; no memory is changed by this owner.
+    """
+    for name, value, upper, lower in (('bytes', max_bytes, 1 << 20, 1),
+            ('fields', max_fields, 4096, 1), ('nodes', max_nodes, 1024, 1),
+            ('depth', max_depth, 16, 0)):
+        if type(value) is not int or not lower <= value <= upper:
+            raise RefillUnsupported('invalid protobuf size ' + name + ' bound')
+    for region in forbidden_ranges:
+        if (not isinstance(region, tuple) or len(region) != 2 or
+                any(type(v) is not int for v in region) or not 0 <= region[0] < region[1] <= 1 << 64):
+            raise RefillUnsupported('invalid protobuf size forbidden range')
+    return _PackedSize(pages, max_bytes, max_fields, max_nodes, max_depth,
+                       forbidden_ranges).message(message_address)
+
+
 class _WireFailure(Exception):
     pass
 

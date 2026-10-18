@@ -1,5 +1,7 @@
 # Tomato Python material
 
+Second Protobuf-C size callback passes53 new native controls and35 refusal/rollback checks. Bounded proto3 size agrees with the original actual-request result706 over7168 instructions/1186 ranges. Second reaches10662/+10b1f4,next2889e0->248dd8; complete signing remains unfinished. See the [protobuf size report](../REQUEST_JNI_STARTUP_WORKERS.md#6216-second-protobuf-packed-size2026-10-18-asiashanghai).
+
 Second raw realtime milliseconds callback passes15 new native controls and14 refusal/rollback checks. Existing signed wrapped-microsecond arithmetic is reused; actual request input passes48 instructions/1186 ranges. Second reaches10651/+10b1c8,next2889c4->2a3378; complete signing remains unfinished. See the [realtime milliseconds report](../REQUEST_JNI_STARTUP_WORKERS.md#6215-second-realtime-milliseconds2026-10-18-asiashanghai).
 
 Second explicit pthread_mutex_lock import/callback passes15 new native controls and24 refusal/rollback checks. Actual request input passes26 instructions/1187 ranges; second reaches10599/+10b0f8,next28876c->26cc60. Only serialized uncontended normal locks are supported; complete signing remains unfinished. See the [mutex lock report](../REQUEST_JNI_STARTUP_WORKERS.md#6214-second-mutex-lock2026-10-18-asiashanghai).

@@ -231,6 +231,11 @@ class RequestVm287474RealtimeMillisecondsPrefix(RequestVm287474MutexLockPrefix):
     realtime_milliseconds: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474ProtobufSizePrefix(RequestVm287474RealtimeMillisecondsPrefix):
+    protobuf_sizes: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -296,6 +301,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     json_prints=[]
     mutex_locks=[]
     realtime_milliseconds=[]
+    protobuf_sizes=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -488,6 +494,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image)
                 registry_reads.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x2889C4,0x2A3378):
+                value=apply_request_287474_protobuf_size_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image)
+                protobuf_sizes.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x28876C,0x26CC60):
                 if not callable(consumer_services.get('read_clock')):raise Boundary()
                 value=apply_request_287474_realtime_milliseconds_callback(staged,
@@ -599,6 +610,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if protobuf_sizes:
+                return RequestVm287474ProtobufSizePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes))
             if realtime_milliseconds:
                 return RequestVm287474RealtimeMillisecondsPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds))
@@ -1693,3 +1707,29 @@ def _copy_request_287474_bytes(pages,destination,source,length):
         head_a=load(source);store(output-64,d)
         store(destination+48,head_d);store(destination+32,head_c)
         store(destination+16,head_b);store(destination,head_a)
+
+
+def apply_request_287474_protobuf_size_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, max_bytes=1 << 20, max_fields=4096,
+        max_nodes=1024, max_depth=16):
+    """+2889c4/+2a3378: bounded proto3 size, exact eight-byte packed+16 store."""
+    from vm9_protobuf import get_packed_size
+    if (type(entry_stack_address) is not int or not 0x1000 <= entry_stack_address < 1 << 64
+            or entry_stack_address & 15):
+        raise RefillUnsupported('protobuf size callback requires an aligned stack')
+    if (type(argument_block_address) is not int or
+            not 0 < argument_block_address <= (1 << 64) - 24):
+        raise RefillUnsupported('protobuf size packed address wraps uint64')
+    if argument_block_address < entry_stack_address and argument_block_address + 24 > entry_stack_address - 0x1000:
+        raise RefillUnsupported('protobuf size packed block aliases native spills')
+    p = _PageTransaction(pages)
+    target = int.from_bytes(_read_span(p, argument_block_address, 8), 'little')
+    if target != image_base + 0x2A3378:
+        raise RefillUnsupported('unexpected second protobuf size target')
+    message = int.from_bytes(_read_span(p, argument_block_address + 8, 8), 'little')
+    value = get_packed_size(p, message_address=message, max_bytes=max_bytes,
+        max_fields=max_fields, max_nodes=max_nodes, max_depth=max_depth,
+        forbidden_ranges=((entry_stack_address - 0x1000, entry_stack_address),))
+    _write_span(p, argument_block_address + 16, value.to_bytes(8, 'little'))
+    p.commit()
+    return value
