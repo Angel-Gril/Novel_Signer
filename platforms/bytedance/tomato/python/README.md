@@ -1,5 +1,7 @@
 # Tomato Python material
 
+Second explicit-length string construction passes 35 new native controls and 28 refusal/rollback checks. Every one of 3 actual request calls matches native allocation effects and declared memory. Second reaches 86800/0x11387c; next 0x288ab4→0x347f20. Complete signing remains unfinished. See the [sized string report](../REQUEST_JNI_STARTUP_WORKERS.md#6224-second-sized-string2026-10-18-asiashanghai).
+
 Second binary string clone passes 31 new native controls and 29 refusal/rollback checks. Actual request matches 155 instructions/1200 ranges and 1 allocation. Second reaches 11263/+10BDB0; next 288A74→2481FC. Complete signing remains unfinished. See the [string clone report](../REQUEST_JNI_STARTUP_WORKERS.md#6223-second-string-clone2026-10-18-asiashanghai).
 
 Second decoded reference wrapper passes 31 new native controls and 33 refusal/rollback checks. Actual request matches 3159 instructions/1243 ranges and 4 allocations/1 free. Second reaches 11128/+10BB50; next 288A64→2483E0. Complete signing remains unfinished. See the [decoded reference report](../REQUEST_JNI_STARTUP_WORKERS.md#6222-second-decoded-reference2026-10-18-asiashanghai).

@@ -271,6 +271,11 @@ class RequestVm287474StringClonePrefix(RequestVm287474DecodedReferencePrefix):
     string_clones: tuple
 
 
+@dataclass(frozen=True)
+class RequestVm287474SizedStringPrefix(RequestVm287474StringClonePrefix):
+    sized_strings: tuple
+
+
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         consumer_services=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
@@ -344,6 +349,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
     configuration_lookups=[]
     decoded_references=[]
     string_clones=[]
+    sized_strings=[]
     try:
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
@@ -406,6 +412,11 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
                 json_numbers.append((argument,value))
+            elif consumer_services is not None and (wrapper,target)==(0x288A74,0x2481FC):
+                output=apply_request_287474_sized_string_callback(staged,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,allocate=consumer_services['allocate'])
+                sized_strings.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x288A64,0x2483E0):
                 output=apply_request_287474_string_clone_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
@@ -700,6 +711,9 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm.native_hook=callback
         try:vm.run()
         except Boundary:
+            if sized_strings:
+                return RequestVm287474SizedStringPrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
+                    children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references),tuple(string_clones),tuple(sized_strings))
             if string_clones:
                 return RequestVm287474StringClonePrefix(staged,frame,tuple(vm.R),tuple(callbacks),tuple(decoded),vm.pc,vm.steps,
                     children[-1] if children else None,tuple(strings),tuple(reader_acquisitions),tuple(diagnostics),tuple(diagnostic_leaves),tuple(reader_releases),tuple(string_comparisons),tuple(string_assignments),tuple(random_values),tuple(reference_getters),tuple(cached_u32_getters),tuple(pair_getters),tuple(cached_references),tuple(guard_acquisitions),tuple(environment_constants),tuple(cstring_formats),tuple(guard_releases),tuple(registry_reads),tuple(realtime_seconds),tuple(process_ids),tuple(thread_pointers),tuple(environment_acquisitions),tuple(locked_pointers),tuple(tree_pointers),tuple(identifiers),tuple(allocations),tuple(string_formats),tuple(string_pairs),tuple(digests),tuple(crcs),tuple(frees),tuple(json_references),tuple(global_u32_getters),tuple(json_numbers),tuple(environment_helpers),tuple(tls_u32_getters),tuple(json_strings),tuple(numeric_strings),tuple(configuration_strings),tuple(json_bools),tuple(json_prints),tuple(mutex_locks),tuple(realtime_milliseconds),tuple(protobuf_sizes),tuple(string_fills),tuple(protobuf_packs),tuple(mutex_unlocks),tuple(json_deletions),tuple(configuration_lookups),tuple(decoded_references),tuple(string_clones))
@@ -2130,4 +2144,57 @@ def apply_request_287474_string_clone_callback(pages, *, argument_block_address,
         return result
     clone_string_object(p,object_address=output,source_object_address=source,
         image_base=image_base,allocate=checked_allocate,max_payload_bytes=max_bytes)
+    p.commit();return output
+
+
+def apply_request_287474_sized_string_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,allocate,max_bytes=0x100000):
+    """+288A74 tailcalls +2481FC; target0/destination8/source16/length32at24.
+
+    Reuse the sized-string owner; negative lengths and malloc NULL clear both
+    length words. Read source bytes after allocation only for a nonempty copy.
+    Return the destination address; native physical X0 is outside this API.
+    Page rollback cannot undo external allocation effects.
+    """
+    from vm9_objects import construct_sized_string_object
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('sized string requires an aligned guest stack')
+    if type(max_bytes) is not int or not 1<=max_bytes<=0x100000 or not callable(allocate):
+        raise RefillUnsupported('sized string requires a bound and allocation service')
+    def span(a,n):
+        if type(a) is not int or not 0<a<=(1<<64)-n:
+            raise RefillUnsupported('sized string address wraps uint64')
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('sized string aliases native spills')
+    span(argument_block_address,28)
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,28)
+    target,output,source=(int.from_bytes(packed[i:i+8],'little') for i in (0,8,16))
+    length=int.from_bytes(packed[24:28],'little')
+    if target!=image_base+0x2481FC:raise RefillUnsupported('unexpected sized string target')
+    fixed=((argument_block_address,28),(output,24))
+    span(output,24);_read_span(p,output,24)
+    if output<argument_block_address+28 and argument_block_address<output+24:
+        raise RefillUnsupported('sized string output aliases packed input')
+    copying=0<length<0x80000000
+    if length<0x80000000 and length>max_bytes:
+        raise RefillUnsupported('sized string source exceeds byte bound')
+    if copying:
+        span(source,length)
+        if any(source<a+n and a<source+length for a,n in fixed):
+            raise RefillUnsupported('sized string source aliases active input')
+    def checked_allocate(tx,n):
+        result=allocate(tx,n)
+        if _read_span(tx,argument_block_address,28)!=packed:
+            raise RefillUnsupported('sized string provider changed packed input')
+        if type(result) is not int or not 0<=result<=(1<<64)-n:
+            raise RefillUnsupported('sized string allocator returned invalid address')
+        if result:
+            span(result,n)
+            protected=fixed+(((source,length),) if copying else ())
+            if any(result<a+m and a<result+n for a,m in protected):
+                raise RefillUnsupported('sized string allocation aliases active input')
+        return result
+    construct_sized_string_object(p,object_address=output,source_address=source,
+        length=length,image_base=image_base,allocate=checked_allocate,max_payload_bytes=max_bytes)
     p.commit();return output

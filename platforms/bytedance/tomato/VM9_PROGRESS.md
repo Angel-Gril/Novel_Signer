@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-18 Asia/Shanghai：second sized string
+
+288A74→2481FC 显式长度字符串构造wrapper恢复，35项新增native/28项拒绝或回滚通过。
+实际3次调用逐次核对，声明内存/非栈写入/原生malloc效果一致；旧sized owner未改动。
+second86800/0x11387c，下一0x288ab4→0x347f20；旧计数/child return保持。
+439个旧AST、69个历史绑定/877项私有哈希保持。
+累计3136native/1269checks；完整signer/fresh/live/JVM未证明。见 [构造报告](REQUEST_JNI_STARTUP_WORKERS.md#6224-second-sized-string2026-10-18-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-18 Asia/Shanghai：second string clone
 
 288A64→2483E0 二进制字符串复制wrapper恢复，31项新增native/29项拒绝或回滚通过。
