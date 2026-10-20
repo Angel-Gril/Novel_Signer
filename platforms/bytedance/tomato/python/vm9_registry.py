@@ -381,6 +381,48 @@ def delete_configuration_tree(pages, *, container_address: int, entry_stack_addr
     transaction.commit()
 
 
+def release_scoped_configuration_tree_reference(pages, *, reference_address,
+        entry_stack_address, image_base, thread_pointer, allocate, free,
+        thread_id=None, diagnostic_observer=None, max_nodes=4096):
+    """+1628e4/+166ec8: diagnostic scope, signed count, tree deleting dispatch.
+
+    The counter is freed before reloading the object and clearing the counter
+    slot. Retained pairs remain populated. Unknown deleting targets refuse;
+    the supported tree destructor and allocator effects keep their owners.
+    """
+    import vm9_reference_scopes as references
+    scope=references._scope(entry_stack_address,0x40)
+    if not callable(allocate) or not callable(free):
+        raise RefillUnsupported('tree reference release requires allocation/free services')
+    if type(max_nodes) is not int or not 1<=max_nodes<=4096:
+        raise RefillUnsupported('tree reference release requires a bounded tree')
+    p=_PageTransaction(pages)
+    _read_span(p,reference_address,16)
+    canary=scope+24
+    _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    u=lambda a:int.from_bytes(_read_span(p,a,8),'little')
+    references._enter(p,scope,u(reference_address),image_base,thread_pointer,
+        thread_id,allocate,diagnostic_observer)
+    counter=u(reference_address+8)
+    if counter:
+        original=int.from_bytes(_read_span(p,counter,4),'little')
+        _write_span(p,counter,((original-1)&0xFFFFFFFF).to_bytes(4,'little'))
+        if objects._s32(original)<=1:
+            free(p,counter)
+            pointer=u(reference_address)
+            _write_span(p,reference_address+8,bytes(8))
+            if pointer:
+                if u(u(pointer)+8)!=objects._image_address(image_base,0x25C12C):
+                    raise RefillUnsupported('unrecovered tree reference deleting target')
+                delete_configuration_tree(p,container_address=pointer,
+                    entry_stack_address=scope-0x20,image_base=image_base,free=free,max_nodes=max_nodes)
+                _write_span(p,reference_address,bytes(8))
+    references._leave(p,scope,image_base,thread_pointer,diagnostic_observer)
+    if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
+        raise RefillUnsupported('tree reference release stack canary changed')
+    p.commit()
+
+
 def configuration_tree_size(pages, *, container_address: int) -> int:
     """+0x25c150/+0x24b958/+0x24bdd0: load controller then its uint64 count."""
     if not isinstance(container_address, int) or not 0 <= container_address < 1 << 64:

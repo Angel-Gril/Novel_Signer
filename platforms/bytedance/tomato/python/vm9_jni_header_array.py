@@ -7,8 +7,114 @@ ledgers and mapping effects are outside guest-page transaction rollback.
 import vm9_registry as registry
 import vm9_objects as objects
 import vm9_jni_environment as environment
+import vm9_reference_scopes as references
 from vm9_configuration_init import _lazy_constant
 from vm9_allocator import _PageTransaction, _read_span, _write_span, RefillUnsupported
+
+
+def construct_configuration_tree_from_java_headers(pages, *, image_base,
+        entry_stack_address, output_reference_address, thread_pointer,
+        environment_pointer, array_reference, thread_id, allocate, calloc,
+        free, invoke_jni, diagnostic_observer=None, max_pairs=4096,
+        max_bytes=0x100000):
+    """+26fc94: Java object pairs, byte references, cloned owning tree.
+
+    Signed array length controls the native loop. Odd lengths still request
+    index+1 from JNI; the supplied service owns that out-of-range result.
+    A NULL environment constructs a NULL/count-one tree reference. Native
+    exception unwind, physical spills and external provider rollback remain
+    outside this bounded serialized composition.
+    """
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('header input requires an aligned guest stack')
+    if any(type(v) is not int or not 0<=v<1<<64 for v in
+            (image_base,output_reference_address,thread_pointer,environment_pointer,array_reference)):
+        raise RefillUnsupported('header input pointers must fit uint64')
+    if type(max_pairs) is not int or not 1<=max_pairs<=4096:
+        raise RefillUnsupported('header input requires a bounded pair count')
+    if type(max_bytes) is not int or not 1<=max_bytes<=0x100000:
+        raise RefillUnsupported('header input requires bounded byte payloads')
+    if any(not callable(f) for f in (allocate,calloc,free,invoke_jni)):
+        raise RefillUnsupported('header input requires explicit allocation/calloc/free/JNI services')
+    def span(a,n):
+        if type(a) is not int or not 0<a<=(1<<64)-n:
+            raise RefillUnsupported('header input address wraps uint64')
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('header input storage aliases native scratch')
+    p=_PageTransaction(pages)
+    span(output_reference_address,16);_read_span(p,output_reference_address,16)
+    span(thread_pointer,0x30);span(image_base,0x3E3000)
+    _read_span(p,entry_stack_address-0x1000,0x1000)
+    fixed=[(output_reference_address,16),(thread_pointer,0x30),(image_base,0x3E3000)]
+    if environment_pointer:
+        span(environment_pointer,8);table=int.from_bytes(_read_span(p,environment_pointer,8),'little')
+        span(table,0x748);fixed.extend(((environment_pointer,8),(table,0x748)))
+    live=[]
+    def checked_allocation(tx,n,provider):
+        if type(n) is not int or not 1<=n<=max(max_bytes+32,0x800):
+            raise RefillUnsupported('header input allocation exceeds explicit bounds')
+        a=provider(tx,n)
+        if type(a) is not int or not 0<=a<=(1<<64)-n:
+            raise RefillUnsupported('header input allocator returned invalid address')
+        if a:
+            span(a,n);_read_span(tx,a,n)
+            if any(a<b+m and b<a+n for b,m in fixed+live):
+                raise RefillUnsupported('header input allocation aliases active storage')
+            live.append((a,n))
+        return a
+    def alloc(tx,n):return checked_allocation(tx,n,allocate)
+    def zero(tx,count,n):
+        if count!=1:raise RefillUnsupported('header input calloc requires count one')
+        return checked_allocation(tx,n,lambda tx,n:calloc(tx,1,n))
+    def release(tx,a):
+        free(tx,a);live[:]=[(b,n) for b,n in live if b!=a]
+    u=lambda a:int.from_bytes(_read_span(p,a,8),'little')
+    canary=entry_stack_address-0x68
+    _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    call_sp=entry_stack_address-0xA0
+    kw=dict(entry_stack_address=call_sp,image_base=image_base,thread_pointer=thread_pointer,
+        thread_id=thread_id,allocate=alloc,diagnostic_observer=diagnostic_observer)
+    if not environment_pointer:
+        references.construct_scoped_string_reference(p,reference_address=output_reference_address,
+            string_address=0,**kw)
+    else:
+        tree=entry_stack_address-0x78;key=entry_stack_address-0x88;value=entry_stack_address-0x98
+        registry.construct_scoped_configuration_tree_reference(p,output_reference_address=tree,**kw)
+        count=objects._s32(environment._invoke_jni(p,environment_pointer,0x558,(array_reference,),invoke_jni))
+        if count>max_pairs*2:
+            raise RefillUnsupported('header input array exceeds explicit pair bound')
+        for index in range(0,max(0,count),2):
+            first=environment._invoke_jni(p,environment_pointer,0x568,(array_reference,index),invoke_jni)
+            second=environment._invoke_jni(p,environment_pointer,0x568,(array_reference,index+1),invoke_jni)
+            for reference,obj in ((key,first),(value,second)):
+                environment.convert_java_object_to_byte_reference(p,output_reference_address=reference,
+                    environment_pointer=environment_pointer,object_reference=obj,invoke_jni=invoke_jni,
+                    calloc=zero,free=release,max_payload_bytes=max_bytes,**kw)
+            environment.release_java_reference(p,environment_pointer=environment_pointer,reference=first,invoke_jni=invoke_jni)
+            environment.release_java_reference(p,environment_pointer=environment_pointer,reference=second,invoke_jni=invoke_jni)
+            source=u(key)
+            if source and u(value):
+                container=u(tree)
+                key_clone=objects._allocate(p,alloc,24)
+                objects.clone_string_object(p,object_address=key_clone,source_object_address=source,
+                    image_base=image_base,allocate=alloc,max_payload_bytes=max_bytes)
+                value_clone=objects._allocate(p,alloc,24)
+                objects.clone_string_object(p,object_address=value_clone,source_object_address=u(value),
+                    image_base=image_base,allocate=alloc,max_payload_bytes=max_bytes)
+                registry.insert_configuration_pair(p,container_address=container,key_address=key_clone,
+                    value_address=value_clone,image_base=image_base,allocate=alloc,free=release,
+                    max_nodes=max_pairs,max_bytes=max_bytes)
+            for reference in (value,key):
+                references.release_scoped_string_reference(p,reference_address=reference,free=release,**kw)
+        references.copy_scoped_string_reference(p,destination_address=output_reference_address,
+            source_address=tree,**kw)
+        registry.release_scoped_configuration_tree_reference(p,reference_address=tree,free=release,
+            max_nodes=max_pairs,**kw)
+    if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
+        raise RefillUnsupported('header input stack canary changed')
+    result=u(output_reference_address)
+    p.commit();return result
 
 
 def construct_java_header_array(pages, *, image_base, entry_stack_address,

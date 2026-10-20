@@ -1,5 +1,7 @@
 # Tomato / Fanqie (ByteDance)
 
+JNI header input now builds an owning configuration tree through object-byte conversion and cloning. Adds52 input and20 tree-release native controls plus32 rollback checks. A synthetic six-element input becomes four ordered Java output elements and its tree is deleted; actual Java request integration and complete signing remain unfinished. See the [header input report](REQUEST_JNI_STARTUP_WORKERS.md#6234-jni-header-input-and-tree-reference-release2026-10-20-asiashanghai).
+
 Header array conversion now restores cold String class lookup and global retention with explicit serial lock services. Adds24 native comparisons and16 rollback checks. A constructed request result with7 pairs converts to14 ordered Java array elements; actual Java request wiring and complete signing remain unfinished. See the [cold class report](REQUEST_JNI_STARTUP_WORKERS.md#6233-cold-string-class-and-constructed-output2026-10-20-asiashanghai).
 
 Cached-class JNI header array conversion271384 now composes existing tree, UTF and reference owners. Adds42 two-base native comparisons and42 page rollback checks. Actual request output integration and complete signing remain unfinished. See the [JNI header array report](REQUEST_JNI_STARTUP_WORKERS.md#6232-cached-class-jni-header-array2026-10-20-asiashanghai).

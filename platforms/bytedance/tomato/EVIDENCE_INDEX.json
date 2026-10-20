@@ -7426,5 +7426,14 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_jni_header_input_fresh_20261020": {
+    "path": "evidence/vm9_jni_header_input_fresh_20261020.json",
+    "native_Python_controls": 72,
+    "rollback_guards": 32,
+    "synthetic_roundtrip_controls": 1,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

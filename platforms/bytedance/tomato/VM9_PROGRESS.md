@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：JNI header input and tree reference release
+
+恢复26FC94 Java ObjectArray→拥有的树及1628E4/166EC8树引用释放。
+52输入/20释放双基址native与32回滚通过；synthetic 6元素→2项树→4个Java输出及最终删除通过。
+450旧AST/79bindings/1028privatehashes保持；历史native未重跑。
+累计3499native/1579checks。实际Java request facade与URL/header到request接入、whole request/second native、
+fresh完整signer及live/JVM仍未完成。见 [header输入报告](REQUEST_JNI_STARTUP_WORKERS.md#6234-jni-header-input-and-tree-reference-release2026-10-20-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：cold String class and constructed output
 
 JNI数组组件恢复cold String class lookup/global retention，显式serial lock服务。

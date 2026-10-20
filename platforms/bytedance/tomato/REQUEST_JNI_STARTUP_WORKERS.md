@@ -7892,6 +7892,39 @@ warm路径的原有主体保持，class初始化失败仍可按原生返回NULL�
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_header_class_fresh_20261020.py --library <private-libmetasec.so> --libc <matching-libc.so> --output <header-class-evidence.json>
 ```
 
+## 6.234 JNI header input and tree reference release（2026-10-20 Asia/Shanghai）
+
+`construct_configuration_tree_from_java_headers` 恢复原生 `26FC94`：构造树、按signed长度
+取Java对象对、复用 `26FE2C` 转字节引用、释放Java引用、克隆两个StringObject并插入树。
+重复key按原生替换旧value。奇数长度仍请求 `index+1`，该越界请求的返回由显式JNI服务负责；
+NULL环境构造NULL/count-one引用，NULL数组指针原样交给JNI。
+
+输出复制 `270020` 复用既有相同指令语义的scoped copy。
+`release_scoped_configuration_tree_reference` 恢复 `1628E4/166EC8`，包含真实诊断锁、
+signed计数、先free count再重读对象，以及 `25C12C` 树deleting destructor。
+最终删除、保留引用、NULL和计数溢出边界均有原生对照；未知析构目标拒绝。
+
+原生RED **6027步** 返回一组有效键值，旧Python缺少输入入口。
+新增 **52项输入转换 + 20项树释放双基址原生对照、32项拒绝或回滚检查**。
+比较声明的非栈guest/image、JNI/分配/free/诊断顺序、live heap和free前字节。
+输入栈仅声明最终tree reference（SP−78）及canary（SP−68）；释放声明scope（SP−40）
+及canary（SP−28）。其余physical spills、临时scratch/padding不属于本阶段栈等价证明。
+
+新增 **1项synthetic JNI输入→输出→清理验收**：6个输入元素经重复key替换后为2项树，
+已恢复输出组件生成4个有序Java元素；UTF locals均释放，输出期间reference/count保持，
+随后完整删除拥有的树，只保留process-owned诊断锁。
+这是组件组合验收；实际Java request facade、URL/header到request接入尚未验证。
+
+保留450个旧Python AST、79个历史绑定、1028项私有哈希；历史native组未重跑。
+累计 **3499native/1579项拒绝或回滚**。whole second/request native、fresh完整signer、
+live/JVM、完整physical ABI及provider/mapping回滚仍未完成。
+见 [header输入证据](evidence/vm9_jni_header_input_fresh_20261020.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_header_input_fresh_20261020.py --library <private-libmetasec.so> --libc <matching-libc.so> --output <header-input-evidence.json>
+python -B platforms/bytedance/tomato/python/verify_vm9_tree_reference_release_fresh_20261020.py --library <private-libmetasec.so> --libc <matching-libc.so> --output <tree-release-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
