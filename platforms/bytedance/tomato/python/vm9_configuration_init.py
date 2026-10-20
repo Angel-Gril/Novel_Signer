@@ -495,13 +495,18 @@ def construct_default_shared_reference(pages, *, entry_stack_address, image_base
 
 def get_inline_shared_reference(pages, *, output_reference_address,
         entry_stack_address, image_base, allocate, free, read_property,
-        syscall, errno_address, thread_id=None, register_destructor=None, logger_observer=None):
+        syscall, errno_address, thread_id=None, register_destructor=None, logger_observer=None,
+        reference_copier=None):
     """+0x26cd0c serialized cold acquire/factory/atexit/release/copy.
 
     Output alias behavior is the actual zero-before-source-read +0x15f580.
+    An explicit reference_copier receives the copy call's live entry SP;
+    the default preserves the component's diagnostic exclusion.
     Page writes roll back on rejection; external allocator/syscall/registration
     effects are outside that rollback and may already have occurred.
     """
+    if reference_copier is not None and not callable(reference_copier):
+        raise RefillUnsupported('inline shared reference requires a callable copy provider')
     staged=_PageTransaction(pages);guard=image_base+0x3DEE20
     raw=_read_span(staged,guard,8)
     # Getter tests byte0 bit0; __cxa_guard_acquire then tests all of byte0.
@@ -519,8 +524,12 @@ def get_inline_shared_reference(pages, *, output_reference_address,
         # Native does not inspect __cxa_atexit's return.
         register_destructor(staged,image_base+0x15E1A8,guard+8,image_base+0x34C700)
         _w(staged,guard,1,1);_w(staged,guard+1,1,1)
-    copy_string_reference(staged,destination_address=output_reference_address,
-        source_address=guard+8)
+    if reference_copier is None:
+        copy_string_reference(staged,destination_address=output_reference_address,
+            source_address=guard+8)
+    else:
+        reference_copier(staged,destination_address=output_reference_address,
+            source_address=guard+8,entry_stack_address=entry_stack_address-0x40)
     staged.commit();return output_reference_address
 
 
@@ -815,7 +824,8 @@ def ensure_environment_directory(pages, *, object_address, entry_stack_address,
 def construct_environment_reference(pages, *, output_reference_address,
         entry_stack_address, image_base, allocate, reallocate, free,
         read_property, syscall, errno_address, mkdir,
-        thread_id=None, register_destructor=None, prepare_format=None, logger_observer=None):
+        thread_id=None, register_destructor=None, prepare_format=None, logger_observer=None,
+        reference_copier=None):
     """+0x25ee84 observed default shared/getter/format/filesystem branch.
 
     All path content is generated from loaded guest constants and references.
@@ -830,7 +840,7 @@ def construct_environment_reference(pages, *, output_reference_address,
         entry_stack_address=entry_stack_address-0x60,image_base=image_base,
         allocate=allocate,free=free,read_property=read_property,syscall=syscall,
         errno_address=errno_address,thread_id=thread_id,register_destructor=register_destructor,
-        logger_observer=logger_observer)
+        logger_observer=logger_observer,reference_copier=reference_copier)
     # +0x25eef4 latches the shared object before zeroing caller output.
     shared=_u(staged,reference);_write_span(staged,output_reference_address,bytes(16))
     if shared:

@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-21 Asia/Shanghai：inline shared reference scope
+
+state显式diagnostic_scope通过environment转发reference_copier，由getter传递入口SP-40，
+复用15F580 scoped copy；默认getter/state全部字节和事件保持。
+新增36项原始getter对照、8项拒绝/页面回滚、46项Python回归，累计3815 native/1756 guards。
+完整2830C4首个分配分歧114->117；20共同页差异5554->5508字节，减少46。
+七项返回和GuestOS映射一致，原生1439页及初态hash保持；1417/1437共同页相同。
+5个packed记录、2个native-only服务页仍不同。下一诊断LR16299C对应162944拥有引用赋值。
+完整signer、全内存等价、live/JVM、完整ABI及provider/mapping回滚仍未完成。
+见 [inline引用作用域报告](REQUEST_JNI_STARTUP_WORKERS.md#6248-inline-shared-reference-scope2026-10-21-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：state prefix reference
 
 state prefix通过显式reference_constructor复用1625A4作用域；state的diagnostic_scope启用该组合。

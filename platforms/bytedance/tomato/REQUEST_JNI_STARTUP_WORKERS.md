@@ -8482,3 +8482,43 @@ signer、替代Java2A8824、live Android/JVM、完整ABI及provider/mapping回�
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_state_prefix_reference_fresh_20261020.py --library <private-library.so> --libc <matching-libc.so> --output <state-prefix-reference-evidence.json>
 ```
+
+## 6.248 Inline shared reference scope（2026-10-21 Asia/Shanghai）
+
+原始26CD0C在getter入口SP-40处调用15F580，后者清零目标、读取source诊断指针、
+进入26C858，再重读并复制引用，最后清理。完整请求的原生allocation114和诊断
+caller LR15F5B8精确定位此边界。getter现在接受显式reference_copier，并传递当前
+copy入口SP；environment只转发，显式启用diagnostic_scope的StateCallbacks绑定现有
+vm9_reference_scopes.copy_scoped_string_reference。没有复制reference算法。
+
+pre-owner RED为ordinary输入的原始getter分配/锁事件与裸copy不同。
+新增 **36项原始getter对照**，覆盖两基址、cold/warm诊断锁、NULL对象/计数、
+0/2/80000000/FFFFFFFF计数及self/before/after别名。比较全部guest payload、全部
+library页、24字节scope和分配/锁效果。shared factory在这些原生控制中已初始化；
+不宣称恢复cold factory内部诊断或物理spill。
+**8项拒绝/页面回滚**覆盖错误provider、失败/写后失败、不可映射输出/作用域、
+未对齐SP、guard wait和诊断分配NULL。**46项Python回归**对照不可变父版本默认
+getter/state返回、全部页面和事件；公开cold state factory实测只调用一次原有scoped
+copy，入口为factory SP-960，目标为SP-920，source为image+3DEE28。
+
+完整原始2830C4再次返回，Python5182步/双方322根回调，七项物理返回和GuestOS
+映射元数据一致。原生1439输出页与前次逐字节一致，初态hash保持；**20共同页/
+5508字节**仍不同，较5554减少46；**1417/1437共同页**相同。
+5个packed记录263/271/279/287/295（零基）仍不同；原生独有7400F000/74110000
+全零服务页仍是页面存在性差异。新探针只比较共同页的字节，并单独记录双方缺页，
+没有把缺页按零页计为通过。整段探索不计正式native控制。
+
+首个分配事件分歧114->117，仍在root callback127，原生malloc48。诊断entry15的
+caller LR偏移16299C，定位到原有162944 owning-reference assignment；当前裸
+vm9_configuration_init.assign_owned_string_reference尚未组合这一作用域。
+原生trace观察app PLT，模型观察allocator session；realloc内部观察范围不同，
+事件总数853/864本身不能作为错误结论。保留所有原始事件和页面差异。
+
+累计 **3815 native/1756项拒绝或回滚**。完整state/second/request内存等价、signer、
+替代Java2A8824、live Android/JVM、完整ABI及provider/mapping回滚仍未完成。
+外部provider/ledger不保证随页面回滚；Host enforcement为UNVERIFIED。
+证据见 [inline引用作用域记录](evidence/vm9_inline_reference_scope_fresh_20261020.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_inline_reference_scope_fresh_20261020.py --library <private-library.so> --libc <matching-libc.so> --output <inline-reference-scope-evidence.json>
+```

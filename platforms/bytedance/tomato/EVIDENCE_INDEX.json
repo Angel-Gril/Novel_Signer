@@ -7643,5 +7643,27 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_inline_reference_scope_fresh_20261020": {
+    "path": "evidence/vm9_inline_reference_scope_fresh_20261020.json",
+    "native_Python_controls": 36,
+    "new_refusal_or_page_rollback_guards": 8,
+    "Python_only_regressions": 46,
+    "constructed_original_request_returned": true,
+    "root_callback_count": 322,
+    "packed_callback_mismatch_count": 5,
+    "seven_return_values_equal": true,
+    "GuestOS_mapping_metadata_equal": true,
+    "complete_equal_pages": 1417,
+    "common_page_count": 1437,
+    "native_page_count": 1439,
+    "model_page_count": 1437,
+    "remaining_different_common_pages": 20,
+    "native_only_provider_stub_pages": 2,
+    "remaining_different_bytes": 5508,
+    "whole_request_native_differential_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }
