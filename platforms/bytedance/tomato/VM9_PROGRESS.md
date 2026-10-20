@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-21 Asia/Shanghai：state service final reference scope
+
+state显式diagnostic_scope现在将尾部25728C引用构造绑定到既有scoped reference owner。
+构造入口factory SP-60，scope SP-B0；padding由原生1625B4保存uint32 flag1的高位生成。
+新增20项原生对照、4项页面回滚、10项Python回归。完整诊断表预热state用例通过；
+完整冷诊断表state失败保留，environment作用域的独立缺口仍未修复。
+完整2830C4的322根packed回调全部一致，七项返回和GuestOS映射一致。
+共同页相同1424/1437；差异20页5504字节->13页5042字节，减少462。
+原生1439页、初态hash保持；两个native-only服务页仍是页面存在性差异。
+raw分配轨迹首次分歧157->181，native free对model malloc10；须先区分realloc观察边界。
+累计3927 native/1776 guards。完整signer和全内存等价仍未完成。
+见 [state尾部引用报告](REQUEST_JNI_STARTUP_WORKERS.md#6251-state-service-final-reference-scope2026-10-21-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-21 Asia/Shanghai：SHA-1 hexadecimal reference scopes
 
 state显式diagnostic_scope现在绑定258780 SHA-1 hex生命周期，复用digest和reference owner。

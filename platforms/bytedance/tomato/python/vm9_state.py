@@ -157,8 +157,19 @@ def get_state_service_reference(pages, *, entry_stack_address, thread_pointer,
         register_destructor=register_destructor,thread_id=thread_id,
         prepare_format=prepare_format,logger_observer=logger_observer,
         diagnostic_scope=diagnostic_scope)
-    counter=objects.construct_reference_wrapper(transaction,object_address=wrapper,
-        referenced_address=payload,allocate=allocate)
+    if diagnostic_scope is None:
+        counter=objects.construct_reference_wrapper(transaction,object_address=wrapper,
+            referenced_address=payload,allocate=allocate)
+    else:
+        import vm9_reference_scopes
+        # The prefix's +1625b4 saves its uint32 flag (one here) in X19.
+        # Its zero high word survives as +25728c's diagnostic scope padding.
+        _write_span(transaction,entry_stack_address-0xA4,bytes(4))
+        counter=vm9_reference_scopes.construct_scoped_string_reference(transaction,
+            reference_address=wrapper,string_address=payload,
+            entry_stack_address=entry_stack_address-0x60,image_base=image_base,
+            thread_pointer=thread_pointer,allocate=allocate,thread_id=thread_id,
+            diagnostic_observer=lambda *event:diagnostic_scope.setdefault('events',[]).append(list(event)))
     objects.destroy_string_object(transaction,object_address=temporary,image_base=image_base,free=free)
     word(slot_address,wrapper)
     _write_span(transaction,guard_address,b'\x01')

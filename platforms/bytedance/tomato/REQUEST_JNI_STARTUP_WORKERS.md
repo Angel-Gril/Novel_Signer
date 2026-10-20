@@ -8600,3 +8600,39 @@ live Android/JVM、完整ABI及provider/mapping回滚仍未完成；替代Java2A
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_sha1_hex_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <sha1-hex-scope-evidence.json>
 ```
+
+## 6.251 State service final reference scope（2026-10-21 Asia/Shanghai）
+
+完整请求allocation157、diagnostic caller LR2572C0定位state service尾部25728C构造器。
+原始26A4A0调用它；显式diagnostic_scope现在复用construct_scoped_string_reference。
+实际入口factory SP-60、scope SP-B0。内存写hook确认padding最后由1625B4保存prefix
+uint32 flag1的高位写入；模型生成四个零字节，未读取native输出。默认裸构造保持。
+
+真实RED为原始factory出现最终scope，模型缺少它。**16项原始25728C对照**覆盖两基址、
+cold/warm锁、NULL/非NULL对象和脏padding，比较完整guest/image/scope及分配/锁事件。
+**4项原始26A3AC整段对照**使用双方相同的256桶已初始化诊断表，覆盖cold state与
+decoded-key状态，比较完整guest/image/TLS/诊断表页面、返回、分配/释放/注册/wake
+及最终scope全部24字节。最初cold诊断表整段测试在更早allocation20已因environment
+缺口分歧，失败与全部差异保留；不声称完整cold诊断表state通过。最终fixture也重新
+在不可变父提交中产生相同“缺少最终scope”的RED。完整请求仍使用原来独立构造的初态。
+**4项页面回滚**验证最终provider写后抛错、不可映射/未对齐scope及NULL counter；
+**10项Python回归**验证默认state逐字节保持、公开factory实际一次绑定当前wrapper/payload。
+
+完整原始2830C4再次返回：模型5182步、双方322根回调，**所有packed回调逐项一致**，
+七项返回和GuestOS映射一致。原生1439页与6.250逐字节相同、初态hash不变。
+**1424/1437共同页相同**；差异从20页5504字节降至**13页5042字节**，减少462。
+7400F000/74110000两个native-only全零服务页仍记录存在性差异。无字段、字节或页面过滤。
+
+raw分配事件首次分歧157->181，此处native是free，model多出一次malloc10后相同free。
+原生app PLT与模型allocator session观察范围不同；853/865事件总数和这一raw错位还不能
+归因为遗漏scope。下一步先区分realloc内部事件，再追踪13页剩余字节的last writer；
+environment25EF80的15E1A8释放scope仍是已知独立缺口。完整请求探索不计native控制。
+
+累计 **3927 native/1776项拒绝或回滚**。完整state/second/request内存等价、完整signer、
+live Android/JVM、完整ABI及provider/mapping回滚仍未完成。替代Java2A8824仍拒绝。
+外部provider效果不保证随页面回滚；Host enforcement为UNVERIFIED。
+证据见 [state尾部引用记录](evidence/vm9_state_final_reference_scope_fresh_20261021.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_state_final_reference_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <state-final-reference-evidence.json>
+```
