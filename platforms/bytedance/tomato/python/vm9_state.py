@@ -310,8 +310,17 @@ class StateCallbacks:
                     vtable_address=b+0x34F5F8,empty_descriptor_address=b+0x6E168)
             else:objects.destroy_string_object(p,object_address=words[1],image_base=b,free=free,delete_object=target==0x2484FC)
         elif (wrapper,target)==(0x26A50C,0x258780):
-            objects.construct_digest_reference(p,object_address=words[1],source_object_address=words[2],
-                algorithm='sha1',flag=words[3]&255,image_base=b,allocate=allocate,reallocate=reallocate,free=free)
+            if self.diagnostic_scope is None:
+                objects.construct_digest_reference(p,object_address=words[1],source_object_address=words[2],
+                    algorithm='sha1',flag=words[3]&255,image_base=b,allocate=allocate,reallocate=reallocate,free=free)
+            else:
+                import vm9_reference_scopes
+                vm9_reference_scopes.construct_scoped_digest_reference(p,
+                    output_reference_address=words[1],source_object_address=words[2],
+                    entry_stack_address=self.stack-0x190,image_base=b,thread_pointer=self.thread_pointer,
+                    algorithm='sha1',flag=words[3]&255,allocate=allocate,reallocate=reallocate,free=free,
+                    thread_id=self.thread_id,diagnostic_observer=lambda *event:
+                        self.diagnostic_scope.setdefault('events',[]).append(list(event)))
         elif (wrapper,target)==(0x26A52C,0x248908):
             configuration.format_string_object(p,object_address=words[1],format_address=words[2],
                 argument_addresses=(words[3],vm.m.u64(argument+32),vm.m.u64(argument+40)),image_base=b,

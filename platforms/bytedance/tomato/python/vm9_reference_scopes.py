@@ -235,7 +235,31 @@ class _DigestLifecycle:
             **self.keywords(self.stack-0x80))
 
 
-class _Sha1RawLifecycle(_DigestLifecycle):
+class _Sha1Lifecycle(_DigestLifecycle):
+    def construct(self, p, string, data, digest):
+        _write_span(p, self.stack-0x50, digest)
+        # +245090 leaves SHA-1 context word3 under the later constructor's
+        # padding. Context words are little endian; the digest is big endian.
+        _write_span(p, self.stack-0xE4, digest[12:16][::-1])
+        # +2468fc saves the hex helper's X19 = temporary reference SP-0x60.
+        # Its upper word survives as the assignment scope's padding.
+        _write_span(p, self.stack-0xA4, objects._word(self.stack-0x60)[4:])
+        return construct_scoped_string_reference(p,
+            reference_address=self.stack-0x60, string_address=string,
+            **self.keywords(self.stack-0xA0))
+
+    def publish(self, p, output):
+        # +162644 saves the canary; its high word later becomes padding in
+        # +15e1a8's overlapping scope. Assignment semantics stay in the owner.
+        _write_span(p, self.stack-0x98, _read_span(p, self.thread_pointer+0x28, 8))
+        return assign_scoped_string_reference(p,
+            destination_address=output, source_address=self.stack-0x60,
+            free=self.free, **self.keywords(self.stack-0x60))
+
+    def release(self, p):
+        release_scoped_string_reference(p, reference_address=self.stack-0x60,
+            free=self.free, **self.keywords(self.stack-0x60))
+
     def construct_raw(self, p, output, string, data, digest):
         # +258780's raw SHA-1 branch assigns from its own 0x60-byte frame.
         # MD5 scratch and padding locations do not apply to this frame.
@@ -248,18 +272,20 @@ def construct_scoped_digest_reference(pages, *, output_reference_address,
         source_object_address, entry_stack_address, image_base, thread_pointer,
         allocate, reallocate, free, thread_id=None, diagnostic_observer=None,
         max_source_bytes=0x100000, flag=1, algorithm='md5'):
-    """+0x25874c MD5 and +0x258780 raw SHA-1 with actual reference scopes.
+    """+0x25874c MD5 and +0x258780 SHA-1 with actual reference scopes.
 
     Digest calculation and guest alphabet conversion stay in vm9_objects.
-    The hexadecimal branch uses SP-0x58 for its temporary pair and real
+    MD5's hexadecimal branch uses SP-0x58 for its temporary pair and real
     constructor, assignment and destructor scopes around the same string.
     Raw output uses +0x162944 directly on the cleared output reference.
-    SHA-1 uses its separate 0x60-byte assignment frame and rejects hex.
+    SHA-1 uses a separate 0x60-byte frame and SP-0x60 temporary pair;
+    its hexadecimal constructor, assignment and release preserve their own
+    padding from digest context, saved temporary address and stack canary.
     """
-    if algorithm not in ('md5','sha1') or (algorithm=='sha1' and flag&1):
-        raise RefillUnsupported('scoped SHA-1 hexadecimal lifecycle is unrecovered')
+    if algorithm not in ('md5','sha1'):
+        raise RefillUnsupported('unsupported scoped digest algorithm')
     _scope(entry_stack_address,0x110)
-    lifecycle_type = _DigestLifecycle if algorithm=='md5' else _Sha1RawLifecycle
+    lifecycle_type = _DigestLifecycle if algorithm=='md5' else _Sha1Lifecycle
     lifecycle=lifecycle_type(entry_stack_address,image_base,thread_pointer,
                                thread_id,allocate,free,diagnostic_observer)
     return objects.construct_digest_reference(pages,

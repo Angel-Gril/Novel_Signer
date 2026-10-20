@@ -1,0 +1,1469 @@
+{
+  "schema": "vm9-sha1-hex-scope/v1",
+  "stage": "6.250",
+  "baseline": "766403983feada993cf6852eb8f151febfa06516",
+  "native_Python_controls": 64,
+  "new_refusal_or_page_rollback_guards": 8,
+  "cumulative_native_controls": 3907,
+  "cumulative_refusal_or_rollback_checks": 1772,
+  "direct_controls": {
+    "schema": "vm9-sha1-hex-scope-fresh/v1",
+    "native_Python_controls": 64,
+    "new_refusal_or_page_rollback_guards": 8,
+    "cases": [
+      {
+        "image_base": "0x122c0000",
+        "case": "empty",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "empty",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "empty",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "empty",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "binary",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "binary",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "binary",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "binary",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "padding",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "padding",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "padding",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "padding",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "two_blocks",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "two_blocks",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "two_blocks",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "two_blocks",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "block",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "block",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "block",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "block",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cross_page",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cross_page",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cross_page",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cross_page",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "flag_ff",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "flag_ff",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "flag_ff",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "flag_ff",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "high_stack",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "high_stack",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "high_stack",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "high_stack",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "empty",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "empty",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "empty",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "empty",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "binary",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "binary",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "binary",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "binary",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "padding",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "padding",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "padding",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "padding",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "two_blocks",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "two_blocks",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "two_blocks",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "two_blocks",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "block",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "block",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "block",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "block",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cross_page",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cross_page",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cross_page",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cross_page",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "flag_ff",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "flag_ff",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "flag_ff",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "flag_ff",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "high_stack",
+        "warm_locks": false,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "high_stack",
+        "warm_locks": false,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "high_stack",
+        "warm_locks": true,
+        "state_wrapper": false,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "high_stack",
+        "warm_locks": true,
+        "state_wrapper": true,
+        "original_returned": true,
+        "actual_target_entry_stack_verified": true,
+        "all_guest_payload_and_image_pages_equal": true,
+        "digest_scratch_and_temporary_pair_equal": true,
+        "all_24_byte_scope_snapshots_equal": true,
+        "ordered_effects_and_prefree_bytes_equal": true,
+        "final_reference_count_one": true,
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      }
+    ],
+    "negative_cases": [
+      {
+        "case": "unaligned",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "external_effect_rollback_verified": false
+      },
+      {
+        "case": "unmapped_scope",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "external_effect_rollback_verified": false
+      },
+      {
+        "case": "missing_allocator",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "external_effect_rollback_verified": false
+      },
+      {
+        "case": "source_bound",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "external_effect_rollback_verified": false
+      },
+      {
+        "case": "guard_wait",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "external_effect_rollback_verified": false
+      },
+      {
+        "case": "counter_NULL",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "external_effect_rollback_verified": false
+      },
+      {
+        "case": "invalid_algorithm",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "external_effect_rollback_verified": false
+      },
+      {
+        "case": "invalid_flag",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "external_effect_rollback_verified": false
+      }
+    ],
+    "native_snapshot_input": false,
+    "synthetic_allocator": true,
+    "actual_matching_libc_diagnostic_locks": true,
+    "historical_native_groups_replayed": false,
+    "complete_signer_verified": false
+  },
+  "Python_only_regressions": {
+    "baseline": "766403983feada993cf6852eb8f151febfa06516",
+    "Python_only_regressions": 42,
+    "cases": [
+      {
+        "image_base": "0x122c0000",
+        "case": "md5_0_empty",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "md5_0_binary",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "md5_0_padding",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "md5_0_two_blocks",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "md5_1_empty",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "md5_1_binary",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "md5_1_padding",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "md5_1_two_blocks",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "sha1_0_empty",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "sha1_0_binary",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "sha1_0_padding",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "sha1_0_two_blocks",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "sha1_2_empty",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "sha1_2_binary",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "sha1_2_padding",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "sha1_2_two_blocks",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "state_cold",
+        "default_state_return_all_pages_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "state_decoded_key",
+        "default_state_return_all_pages_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "state_warm",
+        "default_state_return_all_pages_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "state_warm_NULL_slot",
+        "default_state_return_all_pages_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "public_opt_in",
+        "public_state_factory_binds_existing_scoped_digest": true,
+        "digest_target_stack_offset_from_factory": -2240,
+        "digest_provider_calls": 1,
+        "state_VM_scope_pairs": 2
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "md5_0_empty",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "md5_0_binary",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "md5_0_padding",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "md5_0_two_blocks",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "md5_1_empty",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "md5_1_binary",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "md5_1_padding",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "md5_1_two_blocks",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "sha1_0_empty",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "sha1_0_binary",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "sha1_0_padding",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "sha1_0_two_blocks",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "sha1_2_empty",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "sha1_2_binary",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "sha1_2_padding",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "sha1_2_two_blocks",
+        "immutable_parent_return_all_pages_and_effects_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "state_cold",
+        "default_state_return_all_pages_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "state_decoded_key",
+        "default_state_return_all_pages_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "state_warm",
+        "default_state_return_all_pages_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "state_warm_NULL_slot",
+        "default_state_return_all_pages_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "public_opt_in",
+        "public_state_factory_binds_existing_scoped_digest": true,
+        "digest_target_stack_offset_from_factory": -2240,
+        "digest_provider_calls": 1,
+        "state_VM_scope_pairs": 2
+      }
+    ],
+    "immutable_prior_sources_used": true,
+    "counted_as_native_controls": false,
+    "historical_native_groups_replayed": false
+  },
+  "constructed_whole_request": {
+    "original_2830C4_returned": true,
+    "Python_steps": 5182,
+    "root_callback_count": 322,
+    "exact_packed_callback_ledger_equal": false,
+    "packed_callback_mismatch_indices_zero_based": [
+      263,
+      271,
+      279,
+      287,
+      295
+    ],
+    "seven_physical_return_values_equal": true,
+    "complete_mapping_metadata_equal": true,
+    "both_complete_page_sets_equal": false,
+    "total_compared_pages": 1439,
+    "model_page_count": 1437,
+    "common_page_count": 1437,
+    "complete_equal_pages": 1417,
+    "remaining_different_pages": [
+      {
+        "page": "0x13600000",
+        "count": 1,
+        "first": "0x9d0"
+      },
+      {
+        "page": "0x136c0000",
+        "count": 1,
+        "first": "0x8de"
+      },
+      {
+        "page": "0x136c2000",
+        "count": 16,
+        "first": "0x18"
+      },
+      {
+        "page": "0x136d3000",
+        "count": 5,
+        "first": "0xdf8"
+      },
+      {
+        "page": "0x136d4000",
+        "count": 406,
+        "first": "0xe0"
+      },
+      {
+        "page": "0x136d6000",
+        "count": 16,
+        "first": "0x18"
+      },
+      {
+        "page": "0x136d9000",
+        "count": 2,
+        "first": "0x6f0"
+      },
+      {
+        "page": "0x136df000",
+        "count": 9,
+        "first": "0x304"
+      },
+      {
+        "page": "0x136e5000",
+        "count": 29,
+        "first": "0x4"
+      },
+      {
+        "page": "0x136fc000",
+        "count": 28,
+        "first": "0x20"
+      },
+      {
+        "page": "0x13702000",
+        "count": 53,
+        "first": "0x4"
+      },
+      {
+        "page": "0x13704000",
+        "count": 61,
+        "first": "0x804"
+      },
+      {
+        "page": "0x13707000",
+        "count": 13,
+        "first": "0x82"
+      },
+      {
+        "page": "0x70049000",
+        "count": 106,
+        "first": "0xbe0"
+      },
+      {
+        "page": "0x7004a000",
+        "count": 1624,
+        "first": "0x108"
+      },
+      {
+        "page": "0x7004b000",
+        "count": 1205,
+        "first": "0x0"
+      },
+      {
+        "page": "0x7004c000",
+        "count": 1143,
+        "first": "0x3b0"
+      },
+      {
+        "page": "0x7004d000",
+        "count": 721,
+        "first": "0x0"
+      },
+      {
+        "page": "0x7004e000",
+        "count": 64,
+        "first": "0x720"
+      },
+      {
+        "page": "0x775c5e3000",
+        "count": 1,
+        "first": "0x720"
+      }
+    ],
+    "native_only_provider_stub_pages": [
+      "0x7400f000",
+      "0x74110000"
+    ],
+    "native_only_provider_stub_pages_are_zero": true,
+    "model_only_pages": [],
+    "page_presence_differences_included": true,
+    "remaining_different_bytes": 5504,
+    "prior_different_bytes": 5504,
+    "different_bytes_removed": 0,
+    "native_all_pages_equal_prior_native_output": true,
+    "original_input_hash_equal_prior": true,
+    "original_supplied_pages_unchanged": true,
+    "model_allocation_events": 864,
+    "native_app_PLT_allocation_events": 853,
+    "allocation_traces_have_different_observation_boundaries": true,
+    "first_allocation_mismatch_index": 157,
+    "first_allocation_mismatch_root_callback_index": 127,
+    "first_missing_native_allocation_size": 48,
+    "state_VM_opt_in_enters": 2,
+    "state_VM_opt_in_leaves": 2,
+    "native_output_used_as_model_input": false,
+    "explicit_synthetic_JNI_OS_services": true,
+    "counted_as_formal_native_control": false,
+    "first_previous_allocation_mismatch_resolved": true,
+    "native_only_page_addresses": [
+      "0x7400f000",
+      "0x74110000"
+    ],
+    "model_only_page_addresses": [],
+    "next_observed_boundary": {
+      "root_callback_index": 127,
+      "allocation_event_index": 157,
+      "malloc_size": 48,
+      "diagnostic_caller_LR_offset": "0x2572c0",
+      "original_reference_entry_offset": "0x25728c",
+      "state_service_final_reference_constructor": true,
+      "environment_reference_release_scope_still_unrestored": true
+    }
+  },
+  "contract": {
+    "owner": "vm9_reference_scopes",
+    "digest_and_hex_owner": "vm9_objects.construct_digest_reference",
+    "composition_owner": "vm9_state.StateCallbacks",
+    "state_opt_in": "diagnostic_scope=dict",
+    "digest_entry_offset_from_state_native_stack": -400,
+    "digest_entry_offset_from_state_factory": -2240,
+    "temporary_pair_offset": -96,
+    "digest_scratch_offset": -80,
+    "constructor_scope_offset": -240,
+    "assignment_scope_offset": -176,
+    "release_scope_offset": -160,
+    "constructor_padding": "little-endian SHA-1 final context word3 from digest bytes12..15",
+    "assignment_padding": "upper word of current temporary reference address",
+    "release_padding": "upper word of current thread stack canary",
+    "default_MD5_and_raw_unchanged": true,
+    "all_live_scope_bytes_compared": true,
+    "expired_scope_physical_spill_bytes_compared": false,
+    "complete_physical_spills_verified": false
+  },
+  "test_correction": "Initial final-scope assertion reached expired addresses reused for native FP/LR spills. Retained full24-byte live leave snapshots and final defined pair/digest checks; archived initial failure. No live scope bytes filtered.",
+  "source_sha256": {
+    "vm9_reference_scopes.py": "985306af0ad98881b39bd04bca12bebb7934c1b6c9d7e636c8fbf2fa1f58c767",
+    "vm9_state.py": "c1c9255e0d285e59913a7fe92855dd48706923669d6cce185d1582c26f25b183",
+    "verify_vm9_sha1_hex_scope_fresh_20261021.py": "d9b20c7889034ed68ec0f92b0ca87dc59739f859642a9de0e3d6ac8871982d8b"
+  },
+  "private_evidence_sha256": {
+    "_sha1_hex_scope_BEFORE_20261021.json": "990ed8d36d2dee7fedccd0269206177697b5ec63db09fd17c79f6fad0486edcf",
+    "_sha1_hex_scope_task_decision_20261021.json": "ee53af31cad69c86d70fdd618ba1fbc08fd67ee063b34176a714be25f63f8e09",
+    "_sha1_hex_scope_RED_20261021.log": "6614e08eef67b3af37fc73e546cad2a9be2f08f83c799fd7d4d9563cf82ffaca",
+    "_sha1_hex_scope_GREEN_20261021.json": "9d1cb4a764fb2e91df2cd37550ad6c68df8dd3aa0a49f9004ab3f2f45f42c360",
+    "_sha1_hex_scope_PYTHON_REGRESSION_20261021.json": "92ca4016c55e98dee66f9746ec32d5f462e4a7d1646640fde28a331be8e1a625",
+    "_sha1_hex_scope_PADDING_WRITERS_20261021.json": "f158c92f8673617701902ec29f5e09264bc9062c872f6260f4145abb09bb7257",
+    "_sha1_hex_scope_EXPIRED_SCOPE_TEST_20261021.log": "10852232fc8d2d22fd7dc51115e0e1ccc1360435d9cb7fe22b6438b56cf6475c",
+    "_sha1_hex_scope_python_regression_20261021.py": "6e39e9dc68fd373c23428355f7bc0f7da33bc4ecc2c0e091e05bdde226401ea5",
+    "_inspect_sha1_padding_20261021.py": "6b57c2ddfc5054032b1ff00f64c0f86fa65839d34f3c684ce85855550c4a2563",
+    "_full_outer_sha1_hex_scope_WHOLE_20261021.json": "25472168b39e2817f4b462977a51429515ae35bcbaa573a47e1f901be2440578",
+    "_full_outer_sha1_hex_scope_WHOLE_NATIVE_RETURN_20261021.json": "2199be825b6a58d829d606bd97e83202a24dea4dd0afe58c8af06a09c5b6b87d",
+    "_full_outer_sha1_hex_scope_WHOLE_NATIVE_OUTPUT_20261021.pkl.gz": "a7a12571c2f698096702c353c251642f1b0b4e6acb08a20b8a711756f2394ee9",
+    "_full_outer_sha1_hex_scope_WHOLE_MODEL_OUTPUT_20261021.pkl.gz": "40981b8c361472f21fa6fd85c2fe27a82385cc96d25e6670d09800f94ed20731",
+    "_probe_full_outer_sha1_hex_scope_20261021.py": "aba6d978b1f8848f0bc9bea7640f957b0df4996499a2d9809ac222f558ececee"
+  },
+  "baseline_provenance": "Immutable parent Git blobs and raw worktree hashes. Real ELF returns before pre-owner model refuses SHA-1 hex. Padding last writers observed with native memory hooks; generated from model inputs.",
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "whole_second_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_complete_standalone_signer_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_physical_ABI_verified": false,
+  "external_provider_mapping_rollback_verified": false,
+  "Host_enforcement": "UNVERIFIED"
+}

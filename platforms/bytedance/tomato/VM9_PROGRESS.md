@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-21 Asia/Shanghai：SHA-1 hexadecimal reference scopes
+
+state显式diagnostic_scope现在绑定258780 SHA-1 hex生命周期，复用digest和reference owner。
+恢复构造、赋值、释放的独立frame与完整24字节scope；padding来自当前digest、临时地址与canary。
+新增64项原生对照、8项页面回滚、42项Python回归；公开state factory实际绑定，默认路径保持。
+完整2830C4首个分配分歧132->157；20共同页仍差5504字节，1417/1437共同页相同。
+七项返回、GuestOS映射、原生1439页和初态hash保持；5个packed记录和2个native-only页仍不同。
+下一诊断LR2572C0定位state service尾部25728C引用构造；environment release独立缺口仍在。
+累计3907 native/1772 guards。完整signer和全内存等价仍未完成。
+见 [SHA-1作用域报告](REQUEST_JNI_STARTUP_WORKERS.md#6250-sha-1-hexadecimal-reference-scopes2026-10-21-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-21 Asia/Shanghai：environment owned reference scope
 
 state显式diagnostic_scope绑定environment的reference_assigner，复用162944拥有引用赋值，

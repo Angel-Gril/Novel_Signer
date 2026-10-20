@@ -8561,3 +8561,42 @@ caller需继续跟踪，不能直接按根callback归因。environment 15E1A8释
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_environment_assignment_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <environment-assignment-scope-evidence.json>
 ```
+
+## 6.250 SHA-1 hexadecimal reference scopes（2026-10-21 Asia/Shanghai）
+
+原始258780的hex分支调用19364C/1625A4、162620和15E1A8。state的26A50C包装器现在在
+显式diagnostic_scope下绑定既有scoped digest owner；摘要和guest alphabet转换仍由
+vm9_objects.construct_digest_reference持有。默认路径、MD5和SHA-1 raw语义保持。
+
+真实pre-owner RED中原始ELF已返回，模型明确拒绝SHA-1 hex。内存写hook确认构造scope的
+padding由245090写入最终SHA-1 context word3；赋值padding最后由2468FC保存临时引用
+地址高位；释放padding来自162644保存的canary高位。全部从当前参数生成，无native回填。
+以SHA-1入口SP为基准，临时pair位于SP-60，digest scratch位于SP-50，三个scope分别为
+SP-F0/SP-B0/SP-A0。完整请求原生实测state factory到SHA-1入口相差8C0、包装器占10。
+
+新增 **64项原生/Python对照**，两个image基址、helper与state包装器、cold/warm诊断锁，
+涵盖空/二进制/45/60/64/4097长度、FFFFFFFF flag及高地址栈。比较所有guest payload和
+image页、最终digest scratch和temporary pair，以及每次leave前完整24字节scope快照、
+分配/释放/锁/gettid顺序和pre-free字节。初版测试错误地比较已结束scope地址，后来调用
+将其用于FP/LR spill；该失败保留在私有证据中，正式比较覆盖scope有效期内全部字节，
+不声称完整物理栈等价。**8项页面回滚**与**42项Python回归**通过；公开cold state
+factory实际调用新的scoped digest一次，入口factory SP-8C0。
+
+完整原始2830C4返回：模型5182步，双方322根回调，七项返回和GuestOS映射一致；原生
+1439页与父阶段逐字节相同、初态hash不变。**1417/1437共同页相同**，**20页仍差5504
+字节**，本轮未减少；packed记录263/271/279/287/295仍不同。7400F000/74110000两个
+native-only全零页仍作为存在性差异记录。没有过滤字段或用native输出初始化模型。
+
+首个分配分歧 **132->157**，新diagnostic caller LR2572C0定位25728C构造器。state
+service尾部仍调用裸reference wrapper，该边界需下一组原生控制后修复；environment
+15E1A8释放scope也仍待恢复。原生app PLT和模型allocator session的realloc观察边界
+不同，853/864事件数本身不构成bug证据。完整请求探索不计正式native控制。
+
+累计 **3907 native/1772项拒绝或回滚**。完整state/second/request内存等价、完整signer、
+live Android/JVM、完整ABI及provider/mapping回滚仍未完成；替代Java2A8824仍拒绝。
+外部provider效果不保证随页面回滚；Host enforcement为UNVERIFIED。
+证据见 [SHA-1作用域记录](evidence/vm9_sha1_hex_scope_fresh_20261021.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_sha1_hex_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <sha1-hex-scope-evidence.json>
+```

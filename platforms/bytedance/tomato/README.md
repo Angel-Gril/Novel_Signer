@@ -1,6 +1,6 @@
 # Tomato / Fanqie (ByteDance)
 
-The opted-in state environment now assigns its owned reference through the original diagnostic scope, including observed saved-register padding. Adds 28 native prefix controls, 8 rollback checks and 38 Python regressions. Full request differences fall from 5508 to 5504 bytes; first allocation divergence moves from 117 to 132. Full signing remains unfinished. See the [environment assignment scope report](REQUEST_JNI_STARTUP_WORKERS.md#6249-environment-owned-reference-scope2026-10-21-asiashanghai).
+The opted-in state SHA-1 hexadecimal callback now restores its constructor, assignment and release scopes with measured padding. Adds 64 native controls, 8 rollback checks and 42 Python regressions. Full request first allocation divergence moves from 132 to 157; 5504 different bytes remain. Full signing remains unfinished. See the [SHA-1 scope report](REQUEST_JNI_STARTUP_WORKERS.md#6250-sha-1-hexadecimal-reference-scopes2026-10-21-asiashanghai).
 
 The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).
 
