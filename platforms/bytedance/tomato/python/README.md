@@ -1,6 +1,6 @@
 # Tomato Python material
 
-The second allocated printf wrapper now also preserves its two known caller spills. Adds32 native controls and48 Python regressions; six existing refusal checks were replayed without increasing the guard count. The constructed whole second retains1436/1439 matching pages,391 callbacks and seven return values; remaining stack differences fall from2909 to2904 bytes. Full signing remains unfinished. See the [caller spill report](../REQUEST_JNI_STARTUP_WORKERS.md#6245-caller-spills2026-10-20-asiashanghai).
+The state VM now supports explicit diagnostic enter/leave callbacks through its existing owner. Adds 36 native wrapper controls, 8 rollback checks and 28 Python regressions. The complete constructed request returns with matching seven return values and GuestOS mapping metadata; 20 common pages, 2 native service stub pages and 5 packed callback records still differ. Full signing remains unfinished. See the [state diagnostic report](../REQUEST_JNI_STARTUP_WORKERS.md#6246-state-vm-diagnostics2026-10-20-asiashanghai).
 
 The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](../REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).
 

@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：state VM diagnostics
+
+state VM通过显式diagnostic_scope启用26A544/26A560进入与清理；公开factory/caller已转发。
+新增36项原始包装器对照、8项拒绝/页面回滚、28项Python回归通过；默认排除模式逐字节保持。
+完整original2830C4首次返回，5182步/322根回调，七项返回及完整映射元数据一致。
+全部1439原生输出页与上一轮逐字节一致；1417/1437共同页面相同，20页仍差5638字节，
+比统一返回地址后的对照减少10字节。5个packed回调记录仍不同，未过滤差异。
+另有2个全零native provider stub页未在Python模型映射；页面集合不相同，未按零页算通过。
+首个分配分歧在state prefix的1625A4引用作用域；该项及environment helper仍未恢复。
+累计3763 native/1740项拒绝或回滚。完整request内存等价、signer、live/JVM及完整ABI未完成。
+见 [state诊断报告](REQUEST_JNI_STARTUP_WORKERS.md#6246-state-vm-diagnostics2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：printf caller spills
 
 second printf恢复两个由调用本身确定的保存字：SP-48处LR=image+288AE8、SP-18处X19=packed。

@@ -8412,3 +8412,41 @@ signer、替代Java `2A8824`、live Android/JVM、完整physical ABI及provider/
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_printf_caller_spills_fresh_20261020.py --library <private-library.so> --output <caller-spill-evidence.json>
 ```
+
+## 6.246 State VM diagnostics（2026-10-20 Asia/Shanghai）
+
+`vm9_state.StateCallbacks`现在可通过显式`diagnostic_scope={}`执行原始
+`26A544→26C858`与`26A560→26C9D0`诊断作用域。沿用`vm9_diagnostics`，
+实际构造/获取递归锁并在离开时释放；线程指针为显式输入。`get_state_service_reference`
+和`construct_state_caller`转发该参数。默认保持旧组件对照明确声明的诊断排除模式。
+
+pre-owner RED为旧callback在cold_zero的scope bytes与原始26A544不同。
+新增 **36项原始包装器对照**（两基址×9组×进入/离开）覆盖cold/warm、末槽、
+高位输入、跨页scope、缺table/entry、嵌套和饱和锁。比较scope全部24字节、padding、
+全部guest payload及library页面、分配顺序和锁事件。**8项拒绝/页面回滚**及
+**28项Python回归**通过，包括不可变父提交的默认state结果/全部页面/事件对照，以及
+公开factory实际转发后的两组进入/清理。外部provider和诊断ledger不保证回滚。
+
+完整owning request `2830C4`在显式synthetic JNI/OS provider下首次执行至原始返回。
+修正私有夹具syscall79四参数后，前128回调继续一致；再统一两侧原始调用者返回地址。
+双方为 **322根回调**（Python VM为5182步），PC/SP/X0/X19/X28/X29/X30和
+GuestOS映射元数据一致。原生1439页、模型1437页；当前 **1417/1437共同页**逐字节相同，仍有
+**20共同页/5638字节**差异，较统一返回地址后的5648减少10；原始1439页输出在前后两轮
+逐字节相同，输入hash相同。第263/271/279/287/295个packed记录（从0开始）仍不同，
+未忽略其未消费字段。首个分配分歧为root callback127内state prefix引用构造的
+原始`1625A4`作用域；本阶段只恢复state VM自己的两组作用域，不宣称完整state等价。
+分配轨迹native记录app PLT，Python记录session；realloc内部观察边界不同，不能直接将
+总事件数差值解释为缺失行为。整段探索不计正式native控制。
+
+页面集合另差原生桥接使用的两个全零服务stub页`7400F000`和`74110000`；模型没有这两个
+映射。本阶段将其明确记为页面存在性差异，不把缺页归一化为零页而计为相同。GuestOS
+映射记录相等仅指显式堆映射，不代表原生CPU与Python完整地址空间等价。
+
+累计 **3763 native/1740项拒绝或回滚**。完整second/request内存等价、standalone
+signer、替代Java `2A8824`、live Android/JVM、完整physical ABI及provider/mapping回滚
+仍未完成；Host enforcement为UNVERIFIED。前缀引用和environment helper诊断另行恢复。
+证据见 [state诊断记录](evidence/vm9_state_diagnostics_fresh_20261020.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_state_diagnostics_fresh_20261020.py --library <private-library.so> --libc <matching-libc.so> --output <state-diagnostic-evidence.json>
+```

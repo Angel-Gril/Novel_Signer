@@ -103,7 +103,7 @@ def get_state_service_reference(pages, *, entry_stack_address, thread_pointer,
         image_base, vm_module, allocate, reallocate, free, get_tls,
         initialize_registry, broadcast, read_property, syscall, errno_address,
         mkdir, register_destructor, thread_id=None, prepare_format=None,
-        logger_observer=None):
+        logger_observer=None, diagnostic_scope=None):
     """+0x26a3ac serialized lazy state service, including its cold VM body.
 
     Loaded ELF owns the lazy key. The caller supplies environment services;
@@ -112,6 +112,8 @@ def get_state_service_reference(pages, *, entry_stack_address, thread_pointer,
     Preserve allocation,
     temporary cleanup and guard publication order. External service effects
     remain outside page rollback; contention and concurrent guards reject.
+    An explicit diagnostic_scope enables the state VM's diagnostic callbacks;
+    the default retains the historical component exclusion.
     """
     if not isinstance(entry_stack_address, int) or entry_stack_address & 15:
         raise RefillUnsupported('state service requires an aligned entry stack')
@@ -153,7 +155,8 @@ def get_state_service_reference(pages, *, entry_stack_address, thread_pointer,
         get_tls=get_tls,initialize_registry=initialize_registry,broadcast=broadcast,
         read_property=read_property,syscall=syscall,errno_address=errno_address,mkdir=mkdir,
         register_destructor=register_destructor,thread_id=thread_id,
-        prepare_format=prepare_format,logger_observer=logger_observer)
+        prepare_format=prepare_format,logger_observer=logger_observer,
+        diagnostic_scope=diagnostic_scope)
     counter=objects.construct_reference_wrapper(transaction,object_address=wrapper,
         referenced_address=payload,allocate=allocate)
     objects.destroy_string_object(transaction,object_address=temporary,image_base=image_base,free=free)
@@ -255,13 +258,20 @@ class StateCallbacks:
     def __init__(self, *, image_base, native_stack_address, allocate, reallocate,
             free, get_tls, initialize_registry, broadcast, read_property,
             syscall, errno_address, mkdir, register_destructor,
-            thread_id=None, prepare_format=None, logger_observer=None):
+            thread_id=None, prepare_format=None, logger_observer=None,
+            thread_pointer=None, diagnostic_scope=None):
+        if diagnostic_scope is not None:
+            if not isinstance(diagnostic_scope,dict):
+                raise RefillUnsupported('state diagnostic scope requires a dictionary')
+            if type(thread_pointer) is not int or not 0<=thread_pointer<1<<64:
+                raise RefillUnsupported('state diagnostic scope requires an explicit thread pointer')
         self.base,self.stack=image_base,native_stack_address
         self.allocate,self.reallocate,self.free=allocate,reallocate,free
         self.get_tls,self.initialize_registry,self.broadcast=get_tls,initialize_registry,broadcast
         self.read_property,self.syscall,self.errno,self.mkdir=read_property,syscall,errno_address,mkdir
         self.register,self.thread_id,self.prepare_format=register_destructor,thread_id,prepare_format
         self.logger_observer=logger_observer
+        self.thread_pointer,self.diagnostic_scope=thread_pointer,diagnostic_scope
         self.modeled=[]
 
     def __call__(self,vm,function,argument):
@@ -293,7 +303,22 @@ class StateCallbacks:
                 argument_addresses=(words[3],vm.m.u64(argument+32),vm.m.u64(argument+40)),image_base=b,
                 allocate=allocate,reallocate=reallocate,free=free,prepare_format=self.prepare_format)
         elif wrapper in (0x26A544,0x26A560) and target in (0x26C858,0x26C9D0):
-            pass  # Explicit diagnostic-scope exclusion shared with native oracle.
+            if self.diagnostic_scope is not None:
+                import vm9_diagnostics
+                context=self.diagnostic_scope
+                def observe(*event):context.setdefault('events',[]).append(list(event))
+                if (wrapper,target)==(0x26A544,0x26C858):
+                    scope=vm9_diagnostics.enter_diagnostic_scope(p,
+                        object_address=words[1],input_word=words[2],image_base=b,
+                        thread_pointer=self.thread_pointer,allocate=allocate,
+                        thread_id=self.thread_id,observer=observe)
+                    context.setdefault('scopes',[]).append(scope)
+                elif (wrapper,target)==(0x26A560,0x26C9D0):
+                    result=vm9_diagnostics.leave_diagnostic_scope(p,
+                        object_address=words[1],image_base=b,
+                        thread_pointer=self.thread_pointer,observer=observe)
+                    context.setdefault('leaves',[]).append(result)
+                else:raise RefillUnsupported('unexpected state diagnostic wrapper/target pair')
         elif (wrapper,target)==(0x26A554,0x32A264):free(p,words[1])
         elif (wrapper,target)==(0x26A56C,0x25DDEC):
             vm.m.wb(argument+16,int(configuration.environment_path_exists(p,object_address=words[1],
@@ -312,7 +337,8 @@ def construct_state_caller(pages, *, object_address, source_object_address,
         entry_stack_address, return_address, thread_pointer, image_base,
         vm_module, allocate, reallocate, free, get_tls, initialize_registry,
         broadcast, read_property, syscall, errno_address, mkdir,
-        register_destructor, thread_id=None, prepare_format=None, max_steps=100000, logger_observer=None):
+        register_destructor, thread_id=None, prepare_format=None, max_steps=100000,
+        logger_observer=None, diagnostic_scope=None):
     """+0x269988 prelude and observed +0xa46a0 VM, returning all32 virtual slots."""
     if not isinstance(max_steps,int) or not 1<=max_steps<=1000000:
         raise ValueError('invalid state instruction bound')
@@ -344,7 +370,8 @@ def construct_state_caller(pages, *, object_address, source_object_address,
             allocate=allocate,reallocate=reallocate,free=free,get_tls=get_tls,
             initialize_registry=initialize_registry,broadcast=broadcast,read_property=read_property,
             syscall=syscall,errno_address=errno_address,mkdir=mkdir,register_destructor=register_destructor,
-            thread_id=thread_id,prepare_format=prepare_format,logger_observer=logger_observer)
+            thread_id=thread_id,prepare_format=prepare_format,logger_observer=logger_observer,
+            thread_pointer=thread_pointer,diagnostic_scope=diagnostic_scope)
         vm.native_hook=callbacks
         try:vm.run()
         except vm_module.VMExit:pass
