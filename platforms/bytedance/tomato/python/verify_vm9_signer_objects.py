@@ -89,7 +89,9 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            instruction_observer=None, syscall_handler=None, malloc_handler=None,
            memory_write_observer=None, code_hook_ranges=None, real_malloc=False,
            real_recursive_mutexes=False, real_diagnostics=False, real_jni_acquisition=False,
-           real_jni_dispatch=False):
+           real_jni_dispatch=False, map_extra_input_pages=False):
+    if type(map_extra_input_pages) is not bool:
+        raise ValueError("extra input page mapping must be boolean")
     if real_malloc and (libc is None or malloc_handler is not None or allocation_effect is not None):
         raise ValueError("real malloc requires libc and no substituted allocation provider")
     if real_recursive_mutexes and (libc is None or not real_mutexes):
@@ -154,6 +156,15 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
         assert "pthread_mutex_init" in mutex_entries
     cpu.mem_map(GUEST, GUEST_SIZE)
     cpu.mem_write(GUEST, flatten(pages))
+    if map_extra_input_pages:
+        mapped = {page for start, end, _ in cpu.mem_regions()
+                  for page in range(start >> 12, (end >> 12) + 1)}
+        for page, data in pages.items():
+            if type(page) is not int or not 0 <= page < 1 << 52 or len(data) != 4096:
+                raise ValueError("extra input mapping requires complete uint64 pages")
+            if page not in mapped:
+                cpu.mem_map(page << 12, 4096)
+                mapped.add(page)
     for page, data in pages.items():
         if not GUEST <= page << 12 < GUEST + GUEST_SIZE:
             cpu.mem_write(page << 12, bytes(data))

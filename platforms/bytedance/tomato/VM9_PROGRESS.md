@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：live native provider bridge
+
+公开 LiveCpuPages/NativeService 桥接与显式 opt-in 输入页映射通过2项原始GetEnv对照、13项拒绝检查。
+实际构造输入上的 original287474 与 Python 均完整返回：391回调逐项一致，七项物理返回值一致；
+1439页中1432页相同，库映像与堆页均相同。剩余3页libc时钟/dtoa缓存及4页栈残留不同，
+whole second/request完整内存对照仍不通过；整段探索不计入已验收native数量。
+累计3559native/1650项拒绝或回滚。JNI/OS仍为显式synthetic服务；完整standalone signer、
+替代Java、live/JVM、完整physical ABI及provider/mapping回滚仍未完成。
+见 [native服务桥报告](REQUEST_JNI_STARTUP_WORKERS.md#6238-live-native-provider-bridge2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：reusable owning request VM entry
 
 正式 vm9_request_vm 入口与 normal Java facade 适配已接通。五个迁移定义 AST 保持，

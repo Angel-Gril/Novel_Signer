@@ -362,3 +362,12 @@ child请求分发及结果所有权恢复，新增36项原生对照、18项回�
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。
 
 Owning request VM execution now lives in a production module with strict callback and Java facade adapters. Two Python prefix checks and25 refusal/rollback checks pass; the constructed chain returns14 Java elements with complete scoped cleanup. No historical native groups replayed; complete signing remains unfinished. See the [owning entry report](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6237-reusable-owning-request-vm-entry2026-10-20-asiashanghai).
+
+
+## 2026-10-20：VM9 live native provider bridge
+
+公开CPU页面/provider桥与opt-in输入页映射新增2项native GetEnv对照和13项拒绝检查。
+实际original287474完整返回，391回调与七项返回值一致；1432/1439页一致，7页libc/栈
+差异保留为未完成，整段探索不计入已验收native数量。累计3559native/1650checks。
+未重跑历史native组，完整signer仍未完成。
+见 [6.238报告](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6238-live-native-provider-bridge2026-10-20-asiashanghai)。

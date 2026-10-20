@@ -1,0 +1,132 @@
+{
+  "schema": "vm9-native-service-bridge/v1",
+  "stage": "6.238",
+  "baseline": "4782ca7abbcfe290a91ca4fa9bcb68ceeea7c533",
+  "native_Python_controls": 2,
+  "refusal_guards": 13,
+  "rollback_guards": 0,
+  "cumulative_native_controls": 3559,
+  "cumulative_refusal_or_rollback_checks": 1650,
+  "direct_bridge_controls": {
+    "native_Python_controls": 2,
+    "refusal_guards": 13,
+    "cases": [
+      {
+        "image_base": "0x122c0000",
+        "original_GetEnv_return_equal": true,
+        "current_CPU_scratch_observed": true,
+        "nested_transaction_commit_visible": true,
+        "cross_page_bytes_equal": true,
+        "ordered_provider_events_equal": true,
+        "independent_input_unchanged": true,
+        "declared_ranges": 2
+      },
+      {
+        "image_base": "0x775c205000",
+        "original_GetEnv_return_equal": true,
+        "current_CPU_scratch_observed": true,
+        "nested_transaction_commit_visible": true,
+        "cross_page_bytes_equal": true,
+        "ordered_provider_events_equal": true,
+        "independent_input_unchanged": true,
+        "declared_ranges": 2
+      }
+    ],
+    "guards": [
+      "default_extra_mapping_disabled",
+      "unaligned_target",
+      "bool_target",
+      "oversized_arity",
+      "missing_provider",
+      "duplicate_target",
+      "unmapped_read",
+      "implicit_mapping",
+      "implicit_unmapping",
+      "page_resize",
+      "invalid_provider_result",
+      "hook_target_mismatch",
+      "non_boolean_mapping_option"
+    ],
+    "historical_native_groups_replayed": false,
+    "whole_second_memory_equivalence_verified": false,
+    "live_JVM_verified": false,
+    "external_provider_effect_rollback_verified": false
+  },
+  "constructed_whole_second": {
+    "original_second_native_returned": true,
+    "public_service_bridge_used": true,
+    "public_opt_in_mapping_used": true,
+    "independently_Python_constructed_input_pages": 1437,
+    "explicit_service_code_pages_added": 2,
+    "Python_second_steps": 97156,
+    "Python_second_callbacks": 391,
+    "native_root_callbacks": 391,
+    "complete_root_callback_ledger_equal": true,
+    "seven_physical_return_values_equal": true,
+    "total_compared_pages": 1439,
+    "complete_equal_pages": 1432,
+    "complete_image_pages_equal": 990,
+    "complete_heap_pages_equal": 193,
+    "original_supplied_pages_unchanged": true,
+    "libc_differing_pages": 3,
+    "stack_differing_pages": 4,
+    "libc_differences": [
+      {
+        "offset": "0xda000",
+        "differing_bytes": 2,
+        "first_offset": "0x110"
+      },
+      {
+        "offset": "0xde000",
+        "differing_bytes": 5,
+        "first_offset": "0x810"
+      },
+      {
+        "offset": "0xdf000",
+        "differing_bytes": 16,
+        "first_offset": "0x1e8"
+      }
+    ],
+    "libc_remaining_state": [
+      "clock_gettime vdso initialization guard/cache",
+      "dtoa pmem_next and private_mem"
+    ],
+    "instruction_observation": "Sparse code hooks; event counts are not total native instructions",
+    "ELF_loader_inputs": {
+      "defined_libc_JUMP_SLOT_bindings": 477,
+      "ctype_relocations": 2,
+      "not_native_output": true
+    },
+    "same_explicit_JavaVM_and_JNI_providers": true,
+    "JNI_and_OS_services_synthetic": true,
+    "output_only_native_receipt_never_used_as_model_input": true,
+    "whole_second_native_differential_verified": false,
+    "whole_request_native_differential_verified": false,
+    "ordered_external_ledger_equivalence_verified": false
+  },
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "whole_second_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_complete_standalone_signer_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_physical_ABI_verified": false,
+  "external_provider_mapping_rollback_verified": false,
+  "Host_enforcement": "UNVERIFIED",
+  "source_sha256": {
+    "verify_vm9_signer_objects.py": "6e43aa811a28c6681c7c5144839306edac480b233e5fff5b8d4439af70cae96e",
+    "vm9_native_service_bridge.py": "1af661b362a0ffadb5ba0a494fc1ed841e70fa41aefa7ce07fefb17c481743c9",
+    "verify_vm9_native_service_bridge_fresh_20261020.py": "ad759d00f149d1a70b06c8181f162bdd8d48fb58983545e241af1e8dc7fc9880"
+  },
+  "private_evidence_sha256": {
+    "_native_service_bridge_GREEN_20261020.json": "8188bce4bc048fbfe2cae926361d4e8acfb9b25933f7726b4a29a6abbd2d7a66",
+    "_native_service_bridge_WHOLE_20261020.json": "3330e8886adc7f940c83a2295bc651db63c4ca13145748a9a8ea40497119409a",
+    "_native_service_bridge_WHOLE_NATIVE_RETURN_20261020.json": "b4608a3dee8902e2d9cb07311c0dd7c5b97c6d112c4d4e2bfcbfacde4473e368",
+    "_native_service_bridge_WHOLE_NATIVE_OUTPUT_20261020.pkl.gz": "a04f86ba83cf452334bb7cc046e572a3283e6e0746f3ff2711a4f89e16658bb0",
+    "_native_service_bridge_task_decision_20261020.json": "527139cb2d283c7039c698e77f7c6f6b5dcd98372b124879780fa8621328f5e0",
+    "_probe_native_service_bridge_whole_20261020.py": "b8e60fcee3b5bb3cd64b0c998d52198cd286e44d64fb381eb2ae314c98c8ef3e",
+    "_request_whole_second_GETENV_DISCOVERY_20261020.json": "7a715541a6da9ccb15b24efca6131a7994909893e814066c2265b86a5678ab73"
+  },
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db"
+}

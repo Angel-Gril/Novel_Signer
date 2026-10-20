@@ -8100,3 +8100,48 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_vm_entry_fresh_20
 
 该命令复核 2 项 Python prefix 与 24 项局部拒绝；构造成功链和 clock 缺失路径的私有
 服务探针另计，脱敏结果包含在上述证据中。
+
+## 6.238 Live native provider bridge（2026-10-20 Asia/Shanghai）
+
+新增 `vm9_native_service_bridge`。`LiveCpuPages` 直接读取当前 CPU 内存，支持原有
+页面 provider 的跨页访问与 `_PageTransaction.commit()` 写回；它不缓存初始输入，
+不隐式 map/unmap。`NativeService` 明确目标地址、X0..X7 参数数和 provider；
+`make_native_service_imports` 验证目标唯一、对齐、实际 hook PC 和 ABI 返回值。
+模块导入不加载 Unicorn 或 native oracle。provider 外部效果不在页面回滚内。
+
+native oracle 增加 `map_extra_input_pages=False`，只有显式开启才映射输入中已有的
+额外完整页。默认行为保持，旧 native 函数除新增参数、参数检查与 opt-in 映射块外保持。
+其他457个旧Python文件逐字节不变。未修改 signer 执行逻辑或重跑历史native组。
+
+先记录 original GetEnv 实际跳转到构造表中的 `7400F000` 并 fetch fault 的 RED，
+验证 D2/T2 决策后实现。两个映像基址上的 original `17CAAC` 与 Python GetEnv
+返回、provider事件及声明输出范围一致。provider实测读到原始指令新清零的scratch，
+并通过嵌套页面事务提交跨页写入。**2项native对照、13项拒绝检查**通过；拒绝覆盖
+错误目标、参数数、缺失provider、重复目标、隐式map/unmap、改页长度、非法返回及
+hook错位。拒绝检查只证明这些用例没有内存/映射效果，不代表任意provider效果可回滚。
+
+使用公开桥和公开opt-in映射复核 actual constructed second 输入：1437个独立Python
+构造页，加2个显式外部服务代码页。原始 `287474` 以独立根哨兵结束，Python为
+**97156步/391回调**。全部391个根回调（wrapper、target、argument及四个packed
+word）逐项一致，PC/SP/X0/X19/X28/X29/X30七项物理返回值一致。1439页完整比较，
+**1432页逐字节相同**，包括所有声明的库映像页与堆页，原始输入页保持不变。
+
+仍有7页不同：3页libc包含clock_gettime的vdso初始化guard/cache，以及dtoa的
+`pmem_next/private_mem`；4页为栈残留。它们没有被过滤为通过，也没有用native输出
+填充Python输入。477个defined libc JUMP_SLOT及2个ctype重定位均来自ELF加载输入。
+native最终页只保留为私有输出oracle；稀疏hook计数不作为完整native指令数。
+该整段探索**不计入新增已验收native对照**，whole second/request完整内存等价仍为false。
+完整外部provider ledger尚未逐项对照；JNI/OS仍为显式synthetic服务。
+
+累计**3559native/1650项拒绝或回滚**。下一步处理上述剩余状态并取得whole request
+对照，随后推进fresh完整standalone signer。替代Java `2A8824`、live Android/JVM、
+完整physical ABI及外部provider/mapping回滚仍未完成。Host enforcement为UNVERIFIED。
+证据见 [native服务桥记录](evidence/vm9_native_service_bridge_fresh_20261020.json)。
+
+独立复核公开桥的2项native对照与13项拒绝：
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_native_service_bridge_fresh_20261020.py --library <private-library.so> --output <bridge-evidence.json>
+```
+
+此命令不重放整段私有构造链；上述整段结果单独绑定私有探针和输出证据哈希。
