@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：reusable owning request VM entry
+
+正式 vm9_request_vm 入口与 normal Java facade 适配已接通。五个迁移定义 AST 保持，
+455 旧 Python 文件逐字节不变；旧函数/异常直接导出同一对象，正式导入无需 native oracle。
+2 项 Python prefix、24 项局部拒绝/回滚及 1 项完整构造输入提前停止检查通过。
+新入口构造链返回 outer5182/322、second97156/391、14 Java 元素；对象与 counter 各释放一次。
+本轮新增 native 对照0；累计3557native/1637checks。JNI/OS仍为显式synthetic服务。
+下一步 whole second/request original-native 对照与 fresh 完整 standalone signer；替代Java、
+live/JVM、physical ABI和provider/mapping回滚仍未完成。
+见 [正式入口报告](REQUEST_JNI_STARTUP_WORKERS.md#6237-reusable-owning-request-vm-entry2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：signer child request dispatch
 
 恢复27DD04分发器与27E798树引用赋值。36双基址native/18回滚通过。

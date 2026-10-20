@@ -360,3 +360,5 @@ child请求分发及结果所有权恢复，新增36项原生对照、18项回�
 真实 OS 线程/allocator、独立 Medusa 与 fresh 签名仍未完成，
 完整 Python bootstrap 对照仍为 **0**。详见
 [原始 JNI 与同次 worker 报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md)。
+
+Owning request VM execution now lives in a production module with strict callback and Java facade adapters. Two Python prefix checks and25 refusal/rollback checks pass; the constructed chain returns14 Java elements with complete scoped cleanup. No historical native groups replayed; complete signing remains unfinished. See the [owning entry report](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6237-reusable-owning-request-vm-entry2026-10-20-asiashanghai).

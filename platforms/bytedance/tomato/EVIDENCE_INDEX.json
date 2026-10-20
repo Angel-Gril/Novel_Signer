@@ -7454,5 +7454,17 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_vm_entry_fresh_20261020": {
+    "path": "evidence/vm9_request_vm_entry_fresh_20261020.json",
+    "native_Python_controls": 0,
+    "rollback_guards": 25,
+    "Python_prefix_controls": 2,
+    "constructed_Java_chain_controls": 1,
+    "public_owning_VM_adapter_verified": true,
+    "whole_request_native_differential_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

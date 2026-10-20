@@ -8039,3 +8039,64 @@ B 实际 descriptor 生成/发布与短 selector 布局。它们不能证明 fre
 worker / cleanup 接入独立 Python 启动与真实 allocator/arena/OS 输入。B VM、fresh
 签名和线上矩阵仍待通过。无 JVM Rust 下载链路、非空搜索/分页、抖音/起点闭环及
 最终 Pages/Actions 搜索下载产品仍未完成。
+
+## 6.237 Reusable owning request VM entry（2026-10-20 Asia/Shanghai）
+
+新增正式模块 `vm9_request_vm`，将两个异常、ELF import resolver、configuration setter
+与原 `execute_prefix` 的五个定义迁出验证脚本；执行函数正式命名为
+`execute_request_vm`。五个定义的 AST 完全一致（仅归一化函数名），原 harness
+的三个函数 AST 不变，其余 **455 个旧 Python 文件逐字节不变**。旧验证模块继续
+直接导出同一函数与异常对象，既有 `prefix.execute_prefix` 调用方式保留。
+正式模块导入不加载 Unicorn、native oracle 或私有解释器样本。
+
+新增 `invoke_request_vm_callback`，将 URL/header/W-mode/context/X8 映射到实际
+`2830C4` 调用输入。它要求明确的 owning 服务，在独立页面事务内执行；提前停止
+不能发布结果，只有本次 VM exit、caller sentinel 和 caller epilogue 校验完成才提交。
+旧 `execute_request_vm` 仍允许诊断性 prefix 返回；owning 消费者应使用严格适配入口。
+`invoke_java_request_service` 可作为 normal facade 的 `invoke_request`，只接收
+child `27DD04`，复用已有分发器和 owning callback。handler 的 `284F98` 拒绝。
+
+本轮先记录新入口缺失 RED，再验证 D2/T2 决策后迁移。两个映射基址共
+**2 项 Python prefix 检查、24 项拒绝/页面回滚**通过，检查错误目标、缺失服务、
+非法 ABI、未映射输出与失败后解释器基址恢复。另在完整构造输入上移除 clock 服务，
+并预置旧的成功标记，实测提前停止被严格入口拒绝，callback 页面保持原样，基址恢复。
+合计 **25 项拒绝/回滚**；没有重跑历史 native 组，新增 native 对照为 **0**。
+
+通过新公开适配入口实测完整构造链：JNI URL/header → normal facade → 实际构造的
+child → dispatcher → owning VM → Java 输出及引用清理。mode 为 `0x138`，outer
+**5182 步/322 回调**，second **97156 步/391 回调**，14 个 Java 元素与独立
+7-pair 树遍历一致。URL、输入树、结果树及三个 counter，在各自引用生命周期内
+均各 free 一次；保留地址复用的生命周期区分。
+
+累计 **3557native/1637项拒绝或回滚**。JNI/OS 仍是显式 synthetic 服务；本轮证明
+可复用入口与构造链，whole second/request original-native 对照、fresh 完整 standalone
+signer、替代 Java `2A8824`、live Android/JVM、完整 physical ABI 与外部 provider/mapping
+回滚仍未完成。证据见 [正式入口记录](evidence/vm9_request_vm_entry_fresh_20261020.json)。
+
+最小接入方式（页面、解释器和全部服务由已有 owner 提供）：
+
+```python
+from functools import partial
+from vm9_request_vm import invoke_java_request_service
+
+request_service = partial(
+    invoke_java_request_service,
+    image_base=image, thread_pointer=tp, thread_id=thread_id,
+    return_address=caller_return, vm_module=vm_module,
+    seconds=seconds, nanoseconds=nanoseconds,
+    allocate=allocate, free=free, diagnostic_scope=diagnostics,
+    **vm_services,
+)
+# invoke_java_request_facade(..., invoke_request=request_service)
+```
+
+`vm_services` 使用 `execute_request_vm` 的显式服务参数，避免与已绑定参数重复。
+解释器会临时修改模块基址，必须串行执行。诊断列表和 provider ledger 不在页面回滚内。
+复核局部入口（需要匹配私有样本，不执行 native 历史组）：
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_request_vm_entry_fresh_20261020.py --library <private-library.so> --output <entry-evidence.json>
+```
+
+该命令复核 2 项 Python prefix 与 24 项局部拒绝；构造成功链和 clock 缺失路径的私有
+服务探针另计，脱敏结果包含在上述证据中。

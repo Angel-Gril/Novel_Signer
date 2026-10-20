@@ -1,5 +1,7 @@
 # Tomato / Fanqie (ByteDance)
 
+The owning request VM now has a reusable production entry and a normal Java facade adapter. The constructed chain returns14 Java elements with complete scoped cleanup;2 Python prefix checks and25 refusal/rollback checks pass. Historical native groups were not replayed. JNI/OS services remain synthetic and complete signing is unfinished. See the [owning entry report](REQUEST_JNI_STARTUP_WORKERS.md#6237-reusable-owning-request-vm-entry2026-10-20-asiashanghai).
+
 The signer child dispatcher now preserves callback/fallback ABI and scoped result ownership. Adds36 original native controls and18 rollback checks. A fresh constructed Java facade/input to owning request VM/output chain returns14 elements; JNI/OS services remain synthetic and complete signing is unfinished. See the [child dispatch report](REQUEST_JNI_STARTUP_WORKERS.md#6236-signer-child-request-dispatch2026-10-20-asiashanghai).
 
 The normal Java request facade now composes URL/header conversion, a live virtual request target, Java output and complete scoped cleanup. Adds22 native controls and15 rollback checks. The request method is an explicit synthetic provider in these controls; actual request VM integration and complete signing remain unfinished. See the [Java facade report](REQUEST_JNI_STARTUP_WORKERS.md#6235-normal-java-request-facade2026-10-20-asiashanghai).

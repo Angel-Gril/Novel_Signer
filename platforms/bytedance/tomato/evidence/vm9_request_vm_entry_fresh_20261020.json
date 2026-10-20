@@ -1,0 +1,276 @@
+{
+  "schema": "vm9-request-vm-entry-fresh-v1",
+  "evidence_date": "2026-10-20",
+  "baseline": "5fb53ddb6ab1722bb583569afce390723a462f37",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "native_Python_controls": 0,
+  "rollback_guards": 25,
+  "component_rollback_guards": 24,
+  "constructed_incomplete_controls": 1,
+  "Python_prefix_controls": 2,
+  "constructed_Java_chain_controls": 1,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "vm_steps": 599,
+      "bytecode_offset": "0xf8078",
+      "decoded_constants": 3,
+      "caller_pages_unchanged": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "vm_steps": 599,
+      "bytecode_offset": "0xf8078",
+      "decoded_constants": 3,
+      "caller_pages_unchanged": true,
+      "module_base_restored": true
+    }
+  ],
+  "guards": [
+    {
+      "image_base": "0x122c0000",
+      "case": "wrong_callback",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "bool_target",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_diagnostics",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_allocator",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_free",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "bool_mode",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "overflow_mode",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unaligned_stack",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_output",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "allocation_service_failure",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "failure_with_prior_completion",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "wrong_facade_target",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wrong_callback",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "bool_target",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_diagnostics",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_allocator",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_free",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "bool_mode",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "overflow_mode",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unaligned_stack",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_output",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "allocation_service_failure",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "failure_with_prior_completion",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wrong_facade_target",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    }
+  ],
+  "constructed_chain": {
+    "Java_facade_to_real_child_dispatch_to_owning_request_VM_returned": true,
+    "public_owning_entry_and_facade_adapter_used": true,
+    "actual_callback_mode": "0x138",
+    "actual_URL_and_header_JNI_conversion": true,
+    "outer_VM_steps": 5182,
+    "outer_VM_callbacks": 322,
+    "Java_output_elements": 14,
+    "Java_output_matches_independent_result_tree": true,
+    "original_input_output_and_dispatch_cleanup_executed": true,
+    "result_tree_and_its_counter_freed_once": true,
+    "all_URL_input_tree_result_tree_and_reference_counters_freed_once": true,
+    "reused_counter_address_lifetimes_separated": true,
+    "explicit_synthetic_JNI_and_OS_services": true,
+    "native_snapshot_input": false,
+    "native_groups_replayed": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_complete_standalone_signer_verified": false,
+    "live_Android_JVM_verified": false
+  },
+  "constructed_incomplete": {
+    "incomplete_request_rejected": true,
+    "stale_success_marker_ignored": true,
+    "callback_transaction_pages_unchanged": true,
+    "module_base_restored": true,
+    "explicit_synthetic_services": true,
+    "native_groups_replayed": false
+  },
+  "second_VM": {
+    "steps": 97156,
+    "callback_count": 391,
+    "bytecode_offset": "0x112434",
+    "caller_return_restored": true,
+    "public_call_budget": 500000
+  },
+  "preservation": {
+    "moved_definition_AST_equal": [
+      "PrefixBoundary",
+      "RequestContinuationBoundary",
+      "resolve_request_memory_imports",
+      "apply_request_configuration_set_callback",
+      "execute_prefix"
+    ],
+    "historical_harness_functions_AST_equal": [
+      "case",
+      "outer_handoff",
+      "main"
+    ],
+    "old_python_files_byte_unchanged": 455,
+    "baseline": "5fb53dd"
+  },
+  "legacy_function_and_exception_identity_preserved": true,
+  "production_imports_oracle_or_unicorn": false,
+  "pre_edit_RED": "New callable entry absent: ModuleNotFoundError vm9_request_vm",
+  "native_groups_replayed": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_complete_standalone_signer_verified": false,
+  "live_Android_JVM_verified": false,
+  "Host_enforcement": "UNVERIFIED",
+  "limitations": [
+    "JNI and OS services are explicit synthetic providers.",
+    "Page rollback does not undo external provider ledgers or guest mappings.",
+    "Interpreter module base changes require serial execution.",
+    "Whole second/request native equivalence, alternate Java branch and full physical ABI remain unverified."
+  ],
+  "cumulative_native_controls": 3557,
+  "cumulative_rollback_guards": 1637,
+  "native_snapshot_input": false,
+  "complete_physical_ABI_verified": false,
+  "external_provider_mapping_rollback_verified": false,
+  "source_sha256": {
+    "vm9_request_vm.py": "646cd9133894da22c4f300d792d0d294a53c942d9c0158de8a842f1f276d2903",
+    "verify_vm9_request_prefix_fresh_20261007.py": "eb21ab32db1192c37f54f2457f2508c5b4d5d63bf482e536fa46b40aebfb578f",
+    "verify_vm9_request_vm_entry_fresh_20261020.py": "48d514378b623faa21240c0539ded66680b245f187059267b32ea2ff9296b608"
+  },
+  "pre_change_RED_log_sha256": "2356ef3357a2af9e42aec7acb9d6919642f3128f947692db58a37ec4d6c77aaa"
+}
