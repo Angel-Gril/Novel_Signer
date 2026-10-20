@@ -1,6 +1,6 @@
 # Tomato / Fanqie (ByteDance)
 
-The state VM now supports explicit diagnostic enter/leave callbacks through its existing owner. Adds 36 native wrapper controls, 8 rollback checks and 28 Python regressions. The complete constructed request returns with matching seven return values and GuestOS mapping metadata; 20 common pages, 2 native service stub pages and 5 packed callback records still differ. Full signing remains unfinished. See the [state diagnostic report](REQUEST_JNI_STARTUP_WORKERS.md#6246-state-vm-diagnostics2026-10-20-asiashanghai).
+The opted-in state prefix now constructs its string reference through the original scoped owner. Adds 16 native prefix controls, 8 rollback checks and 26 Python regressions. Full request differences fall from 5638 to 5554 bytes; seven returns and GuestOS mappings match, with 5 packed callback records and 2 native service pages still differing. Full signing remains unfinished. See the [state prefix reference report](REQUEST_JNI_STARTUP_WORKERS.md#6247-state-prefix-reference2026-10-20-asiashanghai).
 
 The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).
 

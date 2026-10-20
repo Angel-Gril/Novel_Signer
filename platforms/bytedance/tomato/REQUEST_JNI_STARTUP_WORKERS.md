@@ -8450,3 +8450,35 @@ signer、替代Java `2A8824`、live Android/JVM、完整physical ABI及provider/
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_state_diagnostics_fresh_20261020.py --library <private-library.so> --libc <matching-libc.so> --output <state-diagnostic-evidence.json>
 ```
+
+## 6.247 State prefix reference（2026-10-20 Asia/Shanghai）
+
+原始2698F0前缀在存活SP=entry-40时调用1625A4，其先进入诊断作用域，再分配4字节
+引用计数并清理作用域。原对象前缀只使用裸_reference_wrapper，首次malloc48因此缺失。
+现在对象前缀接受显式reference_constructor，返回counter地址；state的显式diagnostic_scope
+通过原有vm9_reference_scopes.construct_scoped_string_reference绑定这一调用。prefix和
+reference语义各保留唯一owner；默认裸引用模式逐字节保持。
+
+pre-owner RED为empty输入的原生分配/锁事件顺序与旧前缀不同。新增 **16项原始前缀对照**
+覆盖两基址、cold/warm锁、0/1/7/32/165字节字符串、flag截断及可恢复payload NULL。
+比较全部guest payload、全部library页、24字节scope、padding、分配和锁事件。
+**8项拒绝/页面回滚**检查包括provider类型错误、直接失败/写后失败、不可映射输入、
+长度边界、object NULL及counter NULL。**26项Python回归**对照不可变父版本的默认
+prefix/state返回、全部页面及事件；公开state factory实测绑定引用owner，入口为factory
+SP-A0（初始化前缀入口SP-40），未复制native输出作为模型输入。
+
+完整原始2830C4再次返回：Python为5182步、双方322根回调；七项物理返回和GuestOS
+映射元数据一致，原生1439输出页与父阶段全部逐字节一致，初态hash相同。首个分配
+分歧从110移至114，仍在root callback127内；下一内部owner需继续按原生调用点定位。
+**20共同页/5554字节**仍不同，减少84；**1417/1437共同页**相同。5个packed记录仍
+不同，native另有7400F000/74110000两个全零服务页，Python无这两个映射。页面存在性
+差异单独记录；未将缺页当零页算通过。整段探索不计正式native控制。
+
+累计 **3779 native/1748项拒绝或回滚**。完整state/second/request内存等价、standalone
+signer、替代Java2A8824、live Android/JVM、完整ABI及provider/mapping回滚仍未完成。
+外部provider/ledger不保证随页面回滚；Host enforcement为UNVERIFIED。
+证据见 [state前缀引用记录](evidence/vm9_state_prefix_reference_fresh_20261020.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_state_prefix_reference_fresh_20261020.py --library <private-library.so> --libc <matching-libc.so> --output <state-prefix-reference-evidence.json>
+```

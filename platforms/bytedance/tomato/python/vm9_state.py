@@ -386,8 +386,22 @@ def construct_initialized_state_owner(pages, *, object_address, source_object_ad
         vm_module, allocate, **environment):
     """+0x2698f0 prefix and tail caller; source X1 reloads the cloned string."""
     staged=_PageTransaction(pages)
+    context=environment.get('diagnostic_scope')
+    construct_reference=None
+    if context is not None:
+        if not isinstance(context,dict):
+            raise RefillUnsupported('state diagnostic scope requires a dictionary')
+        import vm9_reference_scopes
+        def construct_reference(p,*,reference_address,string_address):
+            return vm9_reference_scopes.construct_scoped_string_reference(p,
+                reference_address=reference_address,string_address=string_address,
+                entry_stack_address=entry_stack_address-0x40,image_base=image_base,
+                thread_pointer=thread_pointer,allocate=allocate,
+                thread_id=environment.get('thread_id'),diagnostic_observer=lambda *event:
+                    context.setdefault('events',[]).append(list(event)))
     objects.construct_mutex_backed_string_owner_prefix(staged,object_address=object_address,
-        source_object_address=source_object_address,flag=flag,image_base=image_base,allocate=allocate)
+        source_object_address=source_object_address,flag=flag,image_base=image_base,allocate=allocate,
+        reference_constructor=construct_reference)
     # Measured surviving +0x1625a4/operator-new and +0x17d7e0 spill words.
     # They occupy otherwise retained virtual slots in the tail caller backing.
     # Generate these ABI inputs from current frame/ELF/TLS/clone addresses;

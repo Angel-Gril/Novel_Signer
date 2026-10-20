@@ -2768,13 +2768,18 @@ class MutexBackedStringOwnerPrefix:
 def construct_mutex_backed_string_owner_prefix(
     pages, *, object_address: int, source_object_address: int, flag: int,
     image_base: int, allocate: Callable, max_payload_bytes: int = 0x100000,
+    reference_constructor: Callable | None = None,
 ) -> MutexBackedStringOwnerPrefix:
     """+0x2698f0 through +0x269988, before its VM body.
 
     Construct the observed 48-byte owner, cloned string reference and zeroed
     152-byte mutex state. Only the low byte of native W2 is stored; the last
     seven owner bytes remain caller input. This is not the +0xa46a0 VM body.
+    An explicit reference constructor owns the original +0x1625a4 scope;
+    omitting it retains the diagnostic exclusion of the component model.
     """
+    if reference_constructor is not None and not callable(reference_constructor):
+        raise RefillUnsupported('state prefix reference constructor must be callable')
     transaction = _PageTransaction(pages)
     _read_span(transaction, object_address, 48)
     _write_span(transaction, object_address, _word(_image_address(image_base, 0x35D2C0)))
@@ -2782,7 +2787,11 @@ def construct_mutex_backed_string_owner_prefix(
     clone_string_object(transaction, object_address=string,
                         source_object_address=source_object_address, image_base=image_base,
                         allocate=allocate, max_payload_bytes=max_payload_bytes)
-    counter = _reference_wrapper(transaction, object_address + 8, string, allocate)
+    if reference_constructor is None:
+        counter = _reference_wrapper(transaction, object_address + 8, string, allocate)
+    else:
+        counter = reference_constructor(transaction,
+            reference_address=object_address + 8, string_address=string)
     _write_span(transaction, object_address + 0x18, bytes(8))
     mutex = _allocate(transaction, allocate, 152)
     # Native memset precedes +0x17d7e0, so even its trailing padding is zero.

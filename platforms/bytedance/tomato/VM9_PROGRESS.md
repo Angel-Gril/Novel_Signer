@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：state prefix reference
+
+state prefix通过显式reference_constructor复用1625A4作用域；state的diagnostic_scope启用该组合。
+新增16项原始前缀对照、8项拒绝/页面回滚、26项Python回归；默认prefix/state返回与全部字节保持。
+完整2830C4的首个分配分歧从110移至114；20共同页字节差异从5638降至5554，减少84。
+七项返回与GuestOS映射一致，原生1439输出页及初态hash保持；1417/1437共同页相同。
+5个packed记录、2个native-only全零服务页仍不同，未过滤。累计3779 native/1748项拒绝或回滚。
+完整state/request内存等价、signer、live/JVM及完整ABI仍未完成。
+见 [state前缀引用报告](REQUEST_JNI_STARTUP_WORKERS.md#6247-state-prefix-reference2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：state VM diagnostics
 
 state VM通过显式diagnostic_scope启用26A544/26A560进入与清理；公开factory/caller已转发。
