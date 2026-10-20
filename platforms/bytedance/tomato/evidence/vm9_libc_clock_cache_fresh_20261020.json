@@ -1,0 +1,239 @@
+{
+  "schema": "vm9-libc-clock-cache/v1",
+  "stage": "6.239",
+  "baseline": "baeb95ddae38620d9e5c69686e256f4103da05ef",
+  "native_Python_controls": 8,
+  "refusal_guards": 14,
+  "rollback_guards": 0,
+  "cumulative_native_controls": 3567,
+  "cumulative_refusal_or_rollback_checks": 1664,
+  "direct_clock_controls": {
+    "native_Python_controls": 8,
+    "cases": [
+      {
+        "image_base": "0x122c0000",
+        "case": "cold",
+        "clock_id": 0,
+        "native_return_equal": true,
+        "full_cache_and_source_pages_equal": true,
+        "timespec_and_padding_equal": true,
+        "provider_observed_ready_cache": true,
+        "independent_input_unchanged": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "cold_highword",
+        "clock_id": 1,
+        "native_return_equal": true,
+        "full_cache_and_source_pages_equal": true,
+        "timespec_and_padding_equal": true,
+        "provider_observed_ready_cache": true,
+        "independent_input_unchanged": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "warm",
+        "clock_id": 0,
+        "native_return_equal": true,
+        "full_cache_and_source_pages_equal": true,
+        "timespec_and_padding_equal": true,
+        "provider_observed_ready_cache": true,
+        "independent_input_unchanged": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "warm_lowbit",
+        "clock_id": 1,
+        "native_return_equal": true,
+        "full_cache_and_source_pages_equal": true,
+        "timespec_and_padding_equal": true,
+        "provider_observed_ready_cache": true,
+        "independent_input_unchanged": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cold",
+        "clock_id": 0,
+        "native_return_equal": true,
+        "full_cache_and_source_pages_equal": true,
+        "timespec_and_padding_equal": true,
+        "provider_observed_ready_cache": true,
+        "independent_input_unchanged": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "cold_highword",
+        "clock_id": 1,
+        "native_return_equal": true,
+        "full_cache_and_source_pages_equal": true,
+        "timespec_and_padding_equal": true,
+        "provider_observed_ready_cache": true,
+        "independent_input_unchanged": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "warm",
+        "clock_id": 0,
+        "native_return_equal": true,
+        "full_cache_and_source_pages_equal": true,
+        "timespec_and_padding_equal": true,
+        "provider_observed_ready_cache": true,
+        "independent_input_unchanged": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "warm_lowbit",
+        "clock_id": 1,
+        "native_return_equal": true,
+        "full_cache_and_source_pages_equal": true,
+        "timespec_and_padding_equal": true,
+        "provider_observed_ready_cache": true,
+        "independent_input_unchanged": true
+      }
+    ],
+    "refusal_guards": 14,
+    "guards": [
+      "unaligned_base",
+      "boolean_base",
+      "overflowing_base",
+      "guard_wait_0x100",
+      "guard_wait_0x200",
+      "guard_wait_0x2",
+      "cold_target_0x0",
+      "warm_target_0x0",
+      "cold_target_0x5106a868",
+      "warm_target_0x5106a868",
+      "cold_source_unmapped",
+      "guard_unmapped",
+      "missing_provider",
+      "noncallable_provider"
+    ],
+    "rollback_guards": 0,
+    "warm_source_page_not_read": true,
+    "historical_native_groups_replayed": false,
+    "complete_physical_ABI_verified": false,
+    "external_provider_effect_rollback_verified": false
+  },
+  "production_contract": {
+    "owner": "vm9_libc_clock.prepare_bionic_clock_cache",
+    "consumer": "ActualAllocatorSession.read_clock",
+    "original_clock_offset": "0x1d854",
+    "supported_syscall_target_offset": "0x6a864",
+    "guard_offset": "0xde810",
+    "cache_offset": "0xde820",
+    "source_offset": "0xd9048",
+    "cold_low_guard_32bit_writes": true,
+    "guard_upper_32bits_preserved": true,
+    "warm_lowbit_path_ignores_source": true,
+    "vdso_and_guard_wait_supported": false,
+    "physical_stack_spills_supported": false
+  },
+  "pre_edit_RED": {
+    "shared_session_full_cache_page_mismatch": true
+  },
+  "constructed_whole_second": {
+    "original_second_native_returned": true,
+    "public_service_bridge_used": true,
+    "public_opt_in_mapping_used": true,
+    "independently_Python_constructed_input_pages": 1437,
+    "explicit_service_code_pages_added": 2,
+    "Python_second_steps": 97156,
+    "Python_second_callbacks": 391,
+    "native_root_callbacks": 391,
+    "complete_root_callback_ledger_equal": true,
+    "seven_physical_return_values_equal": true,
+    "total_compared_pages": 1439,
+    "complete_equal_pages": 1433,
+    "complete_image_pages_equal": 990,
+    "complete_heap_pages_equal": 193,
+    "complete_clock_cache_page_equal": true,
+    "original_supplied_pages_unchanged": true,
+    "libc_differing_pages": 2,
+    "stack_differing_pages": 4,
+    "remaining_differences": [
+      {
+        "page": "0x510da000",
+        "differing_bytes": 2,
+        "first_offset": "0x110"
+      },
+      {
+        "page": "0x510df000",
+        "differing_bytes": 16,
+        "first_offset": "0x1e8"
+      },
+      {
+        "page": "0x70049000",
+        "differing_bytes": 106,
+        "first_offset": "0xbe0"
+      },
+      {
+        "page": "0x7004a000",
+        "differing_bytes": 1624,
+        "first_offset": "0x108"
+      },
+      {
+        "page": "0x7004b000",
+        "differing_bytes": 1290,
+        "first_offset": "0x0"
+      },
+      {
+        "page": "0x7004d000",
+        "differing_bytes": 83,
+        "first_offset": "0x3e0"
+      }
+    ],
+    "remaining_libc_state": [
+      "dtoa pmem_next",
+      "dtoa private_mem/freelist"
+    ],
+    "JNI_and_OS_services_synthetic": true,
+    "native_output_used_as_model_input": false,
+    "counted_as_formal_native_control": false,
+    "ordered_external_ledger_equivalence_verified": false
+  },
+  "residual_writer_diagnosis": {
+    "baseline_seven_page_trace": true,
+    "clock_root_callback_1based": 138,
+    "clock_root_target_offset": "0x26cc64",
+    "clock_libc_writer_offsets": [
+      "0x285ec",
+      "0x1d8bc",
+      "0x28690"
+    ],
+    "dtoa_root_callback_1based": 223,
+    "dtoa_root_target_offset": "0x2616b4",
+    "dtoa_Balloc_offset": "0x442e8",
+    "dtoa_Bfree_offset": "0x443c4",
+    "stack_writes_include_allocator_JSON_delete_printf_and_VM_callers": true
+  },
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "whole_second_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_complete_standalone_signer_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_physical_ABI_verified": false,
+  "external_provider_mapping_rollback_verified": false,
+  "Host_enforcement": "UNVERIFIED",
+  "source_sha256": {
+    "vm9_libc_clock.py": "d36405898d9a2a21b54666483dc73c700f71cbf6f3f3d57317a4a713e875b1aa",
+    "vm9_outer_allocator.py": "0473fa43526f72cbe543a1f95842fe6a54492689e05728b89fa5f0e4f01687a0",
+    "verify_vm9_libc_clock_cache_fresh_20261020.py": "d1cf5bdd861703dc2a6a79c5befb0960b2446a0d51804e992a9d84dce7ffe1d5"
+  },
+  "private_evidence_sha256": {
+    "_libc_clock_cache_GREEN_20261020.json": "c867131ab60cf2fb0a11ddf9b7671c1df91e31c37e1c83c0e3eab69c543a967d",
+    "_libc_clock_cache_RED_20261020.log": "588eaab1d0806a368d1234f43b2cfae4e930c71ffdbeef8e5c3dc16ca0ce5274",
+    "_libc_clock_cache_WHOLE_20261020.json": "51c39338d0d3b66b6f6e5460756e809781bcc87220614182b0aee397b5d8a8e3",
+    "_libc_clock_cache_WHOLE_NATIVE_RETURN_20261020.json": "b4608a3dee8902e2d9cb07311c0dd7c5b97c6d112c4d4e2bfcbfacde4473e368",
+    "_libc_clock_cache_WHOLE_NATIVE_OUTPUT_20261020.pkl.gz": "a04f86ba83cf452334bb7cc046e572a3283e6e0746f3ff2711a4f89e16658bb0",
+    "_libc_clock_cache_task_decision_20261020.json": "9dc6c0811e9275fc9ae71e09c288ae98623cff61a84b4ef0af50df2bf460b73d",
+    "_probe_libc_clock_cache_whole_20261020.py": "523bd8ce021db80f76283e9d3afae8b902fe6d5e215fb47d3fba0fb6623e8fa0",
+    "_second_residuals_LAST_WRITERS_20261020.json": "68c880a36b573089bfea492b62ab6f20e3f402478ef1e6a742ce51a47d3914ba",
+    "_second_residuals_NATIVE_20261020.json": "3330e8886adc7f940c83a2295bc651db63c4ca13145748a9a8ea40497119409a",
+    "_second_residuals_MODEL_20261020.json": "5592789d6006eb5ab4a4abdb7cc8116aab108ff17527a8a3726ae402a912f0b9",
+    "_probe_second_residuals_native_20261020.py": "dd50364644e0e99cdf7fc772ed624482a9f503201603acb6263acd19282957cc",
+    "_probe_second_residuals_model_20261020.py": "3e9da5ccc3d34bbf6a6a7ad5a28a7563a4d3f245e8213c1c646d0245a49530e3"
+  },
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db"
+}

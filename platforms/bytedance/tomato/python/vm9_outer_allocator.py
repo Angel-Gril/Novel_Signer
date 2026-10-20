@@ -174,8 +174,10 @@ class ActualAllocatorSession:
             thread_pointer=self.thread_pointer, wake=self.once_wake)
 
     def read_clock(self, p, clock_id):
-        if self._read_clock_provider is None:
+        if not callable(self._read_clock_provider):
             raise allocator.RefillUnsupported('outer composition requires read_clock provider')
+        from vm9_libc_clock import prepare_bionic_clock_cache
+        prepare_bionic_clock_cache(p, libc_base=self.libc_base)
         return self._read_clock_provider(p, clock_id)
 
     def commit(self):

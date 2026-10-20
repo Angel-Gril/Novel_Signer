@@ -371,3 +371,11 @@ Owning request VM execution now lives in a production module with strict callbac
 差异保留为未完成，整段探索不计入已验收native数量。累计3559native/1650checks。
 未重跑历史native组，完整signer仍未完成。
 见 [6.238报告](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6238-live-native-provider-bridge2026-10-20-asiashanghai)。
+
+## 2026-10-20：VM9 matching libc clock cache
+
+共享时钟provider前恢复匹配bionic guard/cache，新增8项native对照、14项拒绝。
+整段original287474保持391回调与七项返回值一致；1433/1439页相同，剩余2页dtoa和4页栈。
+最后写入探针将dtoa定位到JSON打印回调223；完整内存等价和完整signer仍未通过。
+累计3567native/1664checks；未重跑历史native组。见
+[6.239报告](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai)。

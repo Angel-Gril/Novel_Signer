@@ -8145,3 +8145,44 @@ python -B platforms/bytedance/tomato/python/verify_vm9_native_service_bridge_fre
 ```
 
 此命令不重放整段私有构造链；上述整段结果单独绑定私有探针和输出证据哈希。
+
+## 6.239 Matching libc clock cache（2026-10-20 Asia/Shanghai）
+
+新增 `vm9_libc_clock.prepare_bionic_clock_cache`，由现有
+`ActualAllocatorSession.read_clock` 在调用显式时钟 provider 前执行。匹配 bionic
+`clock_gettime +1D854` 冷路径先获取 guard、从 `+D9048` 读取目标、写入 `+DE820`
+再释放 guard；仅改写 `+DE810` 的低32位。热路径按 bit0 直接使用缓存，不读取源表。
+仅支持匹配 `+6A864` syscall fallback；真实 vDSO、竞争等待与物理栈 spill 仍未恢复。
+模块不执行 libc，也不在导入时加载 Unicorn/native oracle。其他459个旧Python文件
+逐字节保持；旧 session 只改动 read_clock 方法。
+
+修改前，独立ELF输入上的 session/原始clock_gettime对照在整个缓存页比较处失败。
+D2/T2决策验证后修复。两个目标库映像基址、cold/cold-highword/warm/warm-lowbit
+共 **8项新增原生/Python对照**通过；返回值、完整缓存页与源表页、timespec及padding、
+provider观察到的已初始化缓存一致，原始输入未修改。另 **14项拒绝检查**通过，覆盖
+非法基址、guard等待、cold/warm非法目标、缺页、缺失及非法provider，均在调用provider
+前拒绝且输入页不变。热路径另证明不需要映射源表页。provider外部效果未证明可回滚。
+
+独立重新构造并执行整段 original `287474`：Python仍为 **97156步/391回调**，
+全部根回调及PC/SP/X0/X19/X28/X29/X30七项返回值一致。1439页完整比较，
+**1433页逐字节一致**，时钟缓存页已一致，所有990个声明库映像页与193个堆页一致。
+原始输入hash不变，没有用native输出填入Python初态；整段探索不计入正式native数量。
+
+剩余6页：`510DA000`有2字节dtoa pmem_next差异，`510DF000`有16字节private_mem/
+freelist差异；`70049000/7004A000/7004B000/7004D000`分别有106/1624/1290/83字节
+栈残留差异，全部保留。独立最后写入探针定位：clock来自第138个根回调`26CC64`，
+dtoa差异全部来自第223个JSON打印回调`2616B4`，经过libc Balloc/Bfree；栈差异还涉及
+分配器、JSON删除、printf与VM caller，不能通过过滤栈宣称整段等价。
+
+累计 **3567native/1664项拒绝或回滚**。whole second/request完整内存等价、fresh完整
+standalone signer、替代Java `2A8824`、live Android/JVM、完整physical ABI和外部
+provider/mapping回滚仍未完成。JNI/OS仍使用显式synthetic服务，Host enforcement为
+UNVERIFIED。证据见 [时钟缓存记录](evidence/vm9_libc_clock_cache_fresh_20261020.json)。
+
+独立复核新增8项native与14项拒绝（需要匹配私有样本，不重跑历史native组）：
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_clock_cache_fresh_20261020.py --library <private-library.so> --libc <matching-libc.so> --output <clock-evidence.json>
+```
+
+此命令复核局部服务；整段私有构造链与最后写入探针另以证据hash绑定。

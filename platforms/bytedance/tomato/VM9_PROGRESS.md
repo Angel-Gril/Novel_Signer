@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：matching libc clock cache
+
+共享session的时钟路径恢复bionic冷guard/cache与热缓存，新增8项原始对照、14项拒绝。
+整段original287474复核仍为391回调、七项返回值一致；1433/1439页相同，时钟页已一致。
+剩余2页dtoa状态和4页栈残留，均未过滤；whole second/request完整内存对照仍未通过。
+最后写入证据将dtoa定位到第223个JSON打印回调。累计3567native/1664项拒绝或回滚。
+完整standalone signer、替代Java、live/JVM、完整physical ABI及provider/mapping回滚仍未完成。
+见 [时钟缓存报告](REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：live native provider bridge
 
 公开 LiveCpuPages/NativeService 桥接与显式 opt-in 输入页映射通过2项原始GetEnv对照、13项拒绝检查。
@@ -9,8 +20,6 @@ whole second/request完整内存对照仍不通过；整段探索不计入已验
 累计3559native/1650项拒绝或回滚。JNI/OS仍为显式synthetic服务；完整standalone signer、
 替代Java、live/JVM、完整physical ABI及provider/mapping回滚仍未完成。
 见 [native服务桥报告](REQUEST_JNI_STARTUP_WORKERS.md#6238-live-native-provider-bridge2026-10-20-asiashanghai)。
-
-以下各节为历史检查点，当前状态以本节为准。
 
 ## 2026-10-20 Asia/Shanghai：reusable owning request VM entry
 

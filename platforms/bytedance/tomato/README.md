@@ -1,5 +1,7 @@
 # Tomato / Fanqie (ByteDance)
 
+The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).
+
 The reusable native service bridge passes2 original GetEnv controls and13 refusal checks. Original287474 now returns through the same explicit JavaVM/JNI providers:391 callbacks and seven return values match;1432/1439 pages match, with7 libc/stack pages still differing. Full memory equivalence and complete signing remain unfinished. See the [native provider report](REQUEST_JNI_STARTUP_WORKERS.md#6238-live-native-provider-bridge2026-10-20-asiashanghai).
 
 The owning request VM now has a reusable production entry and a normal Java facade adapter. The constructed chain returns14 Java elements with complete scoped cleanup;2 Python prefix checks and25 refusal/rollback checks pass. Historical native groups were not replayed. JNI/OS services remain synthetic and complete signing is unfinished. See the [owning entry report](REQUEST_JNI_STARTUP_WORKERS.md#6237-reusable-owning-request-vm-entry2026-10-20-asiashanghai).
