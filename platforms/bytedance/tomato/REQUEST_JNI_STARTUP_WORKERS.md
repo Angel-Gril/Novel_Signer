@@ -8186,3 +8186,47 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_clock_cache_fresh_20
 ```
 
 此命令复核局部服务；整段私有构造链与最后写入探针另以证据hash绑定。
+
+## 6.240 Matching libc integer dtoa（2026-10-20 Asia/Shanghai）
+
+新增纯Python `vm9_libc_dtoa.format_bionic_integer`，恢复匹配bionic `__dtoa` mode2、
+15位精度后 `__freedtoa` 的静态池状态。支持有限、绝对值小于1e9的整数double，含负零；
+从实际数值计算去除二进制尾零后的mantissa，恢复Balloc(1)/d2b、Balloc(0)结果缓冲、
+Bfree链、pmem_next及池内未写padding。小数、更大数、其他精度、池耗尽后的malloc、
+竞争锁等路径显式拒绝，未声称通用dtoa或strtod完成。模块不执行native/Unicorn。
+
+`ActualAllocatorSession.format_number(pages,number,precision)`暴露该服务；新增可选
+`format_number`参数经公开owning VM、second consumer、JSON callback及reference
+owner进入JSON printer。调用方须显式提供服务；未提供时保留原有Python格式化路径，
+包含需要17位精度的值。返回格式须为有界、有限的JSON数值bytes。页面事务拒绝不会
+回滚allocator/provider的外部ledger，物理栈spill仍不在这次数值服务内。
+
+原先整段对照的18字节libc差异、独立构造JSON输入和9组原始dtoa/free探针定位了
+缺失状态；新owner的RED与D2/T2决策均在实现前记录。两个目标库映像基址上的
+**16项新增原生/Python对照**逐项核对数值文本和两张完整libc池页。输入池以A5填充，
+验证未写padding和d2b两分支的高limb保留；native输出只用于native自身的后续free/
+下一次转换，Python初态和连续状态始终独立。另 **29项拒绝/页面回滚检查**覆盖输入
+数值/精度、池与链、锁、缺页、非法formatter及输出，默认17位精度路径单独复核。
+457个未涉及的旧Python文件逐字节保持，未重跑历史native组。
+
+通过公开owning入口显式注入服务，重新构造并执行整段 original `287474`。
+9次实际数值调用全部为15位整数路径。Python仍 **97156步/391回调**，全部packed
+根回调及PC/SP/X0/X19/X28/X29/X30七项返回值一致。**1435/1439页逐字节一致**，
+所有声明的990个库映像页、193个堆页及全部libc页一致；原始输入hash不变。
+
+剩余4页均为栈残留：`70049000/7004A000/7004B000/7004D000`分别有
+106/1624/1290/83字节差异，未过滤也未回填。整段探索不计入正式native数量。
+累计 **3583native/1693项拒绝或回滚**。whole second/request完整内存等价、fresh
+完整standalone signer、替代Java `2A8824`、live Android/JVM、完整physical ABI与外部
+provider/mapping回滚仍未完成；JNI/OS为显式synthetic服务，Host enforcement为
+UNVERIFIED。证据见 [整数dtoa记录](evidence/vm9_libc_dtoa_integer_fresh_20261020.json)。
+
+调用方接入已有session：`format_number=session.format_number`，将其传入
+`invoke_java_request_service`或`execute_request_vm`；该显式服务会拒绝超出上述范围的数值。
+复核新增16项native与29项拒绝/回滚：
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_libc_dtoa_integer_fresh_20261020.py --library <private-library.so> --libc <matching-libc.so> --output <number-evidence.json>
+```
+
+该命令不重放整段构造链；整段输入、探针及native输出另绑定私有证据hash。

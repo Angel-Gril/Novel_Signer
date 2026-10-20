@@ -949,7 +949,7 @@ def add_json_number_to_object(pages, *, parent_address, key_address, number_bits
 
 def construct_printed_json_reference(pages, *, output_reference_address, node_address,
         entry_stack_address, image_base, thread_pointer, allocate, free,
-        thread_id=None, diagnostic_observer=None, prepare_format=None,
+        thread_id=None, diagnostic_observer=None, prepare_format=None, format_number=None,
         max_bytes=0x100000, max_nodes=4096, max_depth=64):
     """+2616b4 prints compact JSON, constructs a string reference, frees text.
 
@@ -979,7 +979,7 @@ def construct_printed_json_reference(pages, *, output_reference_address, node_ad
         return a
     text=print_json_unformatted(p,node_address=node_address,entry_stack_address=entry_stack_address-0x30,
         image_base=image_base,allocate=checked_allocate,free=free,prepare_format=prepare_format,
-        max_bytes=max_bytes,max_nodes=max_nodes,max_depth=max_depth)
+        format_number=format_number,max_bytes=max_bytes,max_nodes=max_nodes,max_depth=max_depth)
     obj=checked_allocate(p,24)
     if not obj:raise RefillUnsupported('JSON print reference operator-new NULL abort is unsupported')
     objects.construct_string_object(p,object_address=obj,source_address=text or image_base+0x6FE64,

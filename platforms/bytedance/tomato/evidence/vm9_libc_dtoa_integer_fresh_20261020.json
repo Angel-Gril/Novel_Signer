@@ -1,0 +1,274 @@
+{
+  "schema": "vm9-libc-dtoa-integer/v1",
+  "stage": "6.240",
+  "baseline": "afba5c8435355652e5f10200a166fad304c9a40a",
+  "native_Python_controls": 16,
+  "refusal_or_page_rollback_guards": 29,
+  "cumulative_native_controls": 3583,
+  "cumulative_refusal_or_rollback_checks": 1693,
+  "direct_controls": {
+    "native_Python_controls": 16,
+    "cases": [
+      {
+        "image_base": "0x122c0000",
+        "value": 0.0,
+        "digits": "0",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "value": -0.0,
+        "digits": "0",
+        "negative_zero_preserved": true,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "value": 1.0,
+        "digits": "1",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "value": -1.0,
+        "digits": "1",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "value": 16777216.0,
+        "digits": "16777216",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "value": 123456789.0,
+        "digits": "123456789",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "value": 999999999.0,
+        "digits": "999999999",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "value": -999999999.0,
+        "digits": "999999999",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "value": 0.0,
+        "digits": "0",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "value": -0.0,
+        "digits": "0",
+        "negative_zero_preserved": true,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "value": 1.0,
+        "digits": "1",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "value": -1.0,
+        "digits": "1",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "value": 16777216.0,
+        "digits": "16777216",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "value": 123456789.0,
+        "digits": "123456789",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "value": 999999999.0,
+        "digits": "999999999",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "value": -999999999.0,
+        "digits": "999999999",
+        "negative_zero_preserved": false,
+        "complete_two_pool_pages_equal": true,
+        "seeded_pool_padding_preserved": true
+      }
+    ],
+    "refusal_or_page_rollback_guards": 29,
+    "guards": [
+      "bool",
+      "integer_type",
+      "fraction",
+      "inf",
+      "nan",
+      "positive_bound",
+      "negative_bound",
+      "precision17",
+      "boolean_precision",
+      "unaligned_base",
+      "overflowing_base",
+      "lock_binding",
+      "held_mutex",
+      "unmapped_pool_cursor",
+      "pool_heap_fallback",
+      "foreign_free_block",
+      "free_block_class",
+      "cyclic_free_list",
+      "missing_lock_page",
+      "missing_pmem_page",
+      "JSON_not_bytes",
+      "JSON_empty",
+      "JSON_nul",
+      "JSON_nan_text",
+      "JSON_leading_plus",
+      "JSON_leading_zero",
+      "JSON_overflow_text",
+      "public_entry_noncallable_formatter",
+      "JSON_noncallable_formatter"
+    ],
+    "complete_two_pool_pages_equal": true,
+    "native_output_used_as_model_input": false,
+    "historical_native_groups_replayed": false,
+    "default_precise_number_path_preserved": true,
+    "complete_physical_ABI_verified": false,
+    "external_provider_effect_rollback_verified": false
+  },
+  "production_contract": {
+    "owner": "vm9_libc_dtoa.format_bionic_integer",
+    "session_service": "ActualAllocatorSession.format_number",
+    "public_service_keyword": "format_number",
+    "supported_number": "finite integral float with abs(value)<1e9",
+    "supported_precision": 15,
+    "original_dtoa_offset": "0x40888",
+    "original_freedtoa_offset": "0x40708",
+    "static_Balloc_classes": [
+      0,
+      1
+    ],
+    "mantissa_derived_from_number": true,
+    "pool_padding_preserved": true,
+    "negative_zero_preserved": true,
+    "heap_fallback_supported": false,
+    "general_float_or_precision17_supported": false,
+    "default_without_provider_preserved": true
+  },
+  "constructed_whole_second": {
+    "original_second_native_returned": true,
+    "public_number_provider_routed": true,
+    "actual_numeric_provider_calls": 9,
+    "all_actual_precision": 15,
+    "Python_second_steps": 97156,
+    "exact_root_callbacks": 391,
+    "seven_physical_return_values_equal": true,
+    "total_compared_pages": 1439,
+    "complete_equal_pages": 1435,
+    "complete_image_pages_equal": 990,
+    "complete_heap_pages_equal": 193,
+    "all_declared_libc_pages_equal": true,
+    "remaining_different_pages": 4,
+    "remaining_stack_differences": [
+      {
+        "page": "0x70049000",
+        "differing_bytes": 106,
+        "first_offset": "0xbe0"
+      },
+      {
+        "page": "0x7004a000",
+        "differing_bytes": 1624,
+        "first_offset": "0x108"
+      },
+      {
+        "page": "0x7004b000",
+        "differing_bytes": 1290,
+        "first_offset": "0x0"
+      },
+      {
+        "page": "0x7004d000",
+        "differing_bytes": 83,
+        "first_offset": "0x3e0"
+      }
+    ],
+    "original_supplied_pages_unchanged": true,
+    "native_output_used_as_model_input": false,
+    "counted_as_formal_native_control": false,
+    "JNI_and_OS_services_synthetic": true
+  },
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "whole_second_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_complete_standalone_signer_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_physical_ABI_verified": false,
+  "external_provider_mapping_rollback_verified": false,
+  "Host_enforcement": "UNVERIFIED",
+  "source_sha256": {
+    "vm9_libc_dtoa.py": "74da09a331a1def7fd585757f6e7b7e2dadd69d207df8bb1c82e0e6093abf43c",
+    "vm9_json_print.py": "3f698ff477b592da98f701c0ed1df8667e4c77e5409a9783bac91b51803b9c18",
+    "vm9_configuration_init.py": "426fa88e344b8679857d107b0025347b7fdfdcab435a80020e287cb08b348f02",
+    "vm9_request_287474_vm.py": "77cd752040bc43d4b7aa54a2faea09a2745a032409ddcc3d2f6b1b2fa5dc1054",
+    "vm9_request_vm.py": "d784948b1429756fbae17edb3ca97828cd980374256b6bfb20c33121f43d4195",
+    "vm9_outer_allocator.py": "0ff03fec4eb3f08924344afb7383e31c07c1384308476193d1fde2494a0e0614",
+    "verify_vm9_libc_dtoa_integer_fresh_20261020.py": "d2050ac61d1d44297452ea9a493f9a9bb96bb2d7df28ef7d077db4493b0fd3ca"
+  },
+  "private_evidence_sha256": {
+    "_libc_dtoa_integer_GREEN_20261020.json": "cce5efc2a53153c9ff477606a4b02e2b58fc92211a0640a4c176f97daf512ece",
+    "_libc_dtoa_integer_RED_20261020.log": "191e639fd4b562445dab6ff57a7c84cb06fdbe972cfa0c652262094b716d3c06",
+    "_libc_dtoa_integer_WHOLE_20261020.json": "986ba527519c9d8c135dd8bbc232ecf51ea15f6db4dc52d381c875c51792cec7",
+    "_libc_dtoa_integer_WHOLE_NATIVE_RETURN_20261020.json": "b4608a3dee8902e2d9cb07311c0dd7c5b97c6d112c4d4e2bfcbfacde4473e368",
+    "_libc_dtoa_integer_WHOLE_NATIVE_OUTPUT_20261020.pkl.gz": "a04f86ba83cf452334bb7cc046e572a3283e6e0746f3ff2711a4f89e16658bb0",
+    "_libc_dtoa_integer_task_decision_20261020.json": "18c37715e5089999db44ff9dfe1a380768b1d5322c2e654e9602914fb02ada14",
+    "_probe_libc_dtoa_integer_whole_20261020.py": "6593caeb00cd0cca35f857ad04cf92719e5d06586ed06ffc6b9cf7840b681ec0",
+    "_second_dtoa_CALLBACK_INPUT_20261020.json": "3877eecc7f4efd75b1c460b48c6f94ed5a862b5a4d1adca54cb1c15dcc279cb4",
+    "_second_dtoa_CALLBACK_INPUT_20261020.pkl.gz": "e0ea6f2a22ece47dfa6bd0b574f1775016c972be9e1a4930cfca3bedd9930b79",
+    "_probe_second_dtoa_input_20261020.py": "5435f865f23a7ec933e49dd9d2aa23d659bc2904ac16a87b423843abd9fba3db",
+    "_second_dtoa_INTEGER_DISCOVERY_20261020.json": "b9365082ccfb07bee6e5b1f60bd35916607aded853d2dc3a6c3a23c4f23bb28e",
+    "_probe_second_dtoa_integer_20261020.py": "1d374c712c15993425fa226727c549eea548847ab37a59a35633215f6dd79892"
+  },
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db"
+}

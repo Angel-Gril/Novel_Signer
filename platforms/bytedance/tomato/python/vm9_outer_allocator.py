@@ -180,6 +180,11 @@ class ActualAllocatorSession:
         prepare_bionic_clock_cache(p, libc_base=self.libc_base)
         return self._read_clock_provider(p, clock_id)
 
+    def format_number(self, p, number, precision):
+        from vm9_libc_dtoa import format_bionic_integer
+        return format_bionic_integer(p, number=number, precision=precision,
+            libc_base=self.libc_base)
+
     def commit(self):
         self.tx.commit()
 

@@ -145,7 +145,9 @@ def execute_request_vm(pages, inputs, vm_module, seconds, nanoseconds, *, alloca
                    register_exit=None, get_state_service=None, parse_decimal=None,
                    random_services=None, logger_services=None, jni_availability_services=None,
                    calloc=None, process_services=None, identifier_file_services=None,
-                   mutex_import_bindings=None):
+                   mutex_import_bindings=None, format_number=None):
+    if format_number is not None and not callable(format_number):
+        raise RefillUnsupported('request number formatter must be callable')
     if identifier_file_services is not None and (
             not isinstance(identifier_file_services,dict)
             or set(identifier_file_services)!={'fopen','fread','fclose'}
@@ -526,7 +528,7 @@ def execute_request_vm(pages, inputs, vm_module, seconds, nanoseconds, *, alloca
                 import vm9_request_287474_vm
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
                     continue_caller_return=True,
-                    vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,prepare_format=prepare_format,random_services=random_services,
+                    vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,prepare_format=prepare_format,format_number=format_number,random_services=random_services,
                         process_services=process_services,identifier_file_services=identifier_file_services,
                         mutex_import_bindings=mutex_import_bindings,
                         get_singleton=get_singleton,

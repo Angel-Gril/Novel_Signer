@@ -7497,5 +7497,21 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_libc_dtoa_integer_fresh_20261020": {
+    "path": "evidence/vm9_libc_dtoa_integer_fresh_20261020.json",
+    "native_Python_controls": 16,
+    "refusal_or_page_rollback_guards": 29,
+    "constructed_original_second_returned": true,
+    "exact_root_callbacks": 391,
+    "complete_equal_pages": 1435,
+    "total_compared_pages": 1439,
+    "remaining_different_pages": 4,
+    "all_declared_libc_pages_equal": true,
+    "whole_second_native_differential_verified": false,
+    "whole_request_native_differential_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

@@ -379,3 +379,11 @@ Owning request VM execution now lives in a production module with strict callbac
 最后写入探针将dtoa定位到JSON打印回调223；完整内存等价和完整signer仍未通过。
 累计3567native/1664checks；未重跑历史native组。见
 [6.239报告](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai)。
+
+## 2026-10-20：VM9 matching libc integer dtoa
+
+显式数值服务恢复已观察整数double的dtoa静态池与free链，经公开owning入口完成9次实际调用。
+新增16项原始对照、29项拒绝/页面回滚；默认17位路径保留。整段391回调及七项返回值一致，
+1435/1439页相同，全部libc页一致，剩余4页栈残留。通用float、完整内存等价与完整signer仍未完成。
+累计3583native/1693checks，未重跑历史native组。见
+[6.240报告](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6240-matching-libc-integer-dtoa2026-10-20-asiashanghai)。

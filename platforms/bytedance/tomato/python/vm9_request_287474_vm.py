@@ -528,7 +528,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     image_base=image,thread_pointer=inputs['thread_pointer'],
                     allocate=consumer_services['allocate'],free=consumer_services['free'],
                     thread_id=consumer_services.get('thread_id'),diagnostic_observer=consumer_services.get('diagnostic_observer'),
-                    prepare_format=consumer_services.get('prepare_format'))
+                    prepare_format=consumer_services.get('prepare_format'),
+                    format_number=consumer_services.get('format_number'))
                 json_prints.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x288968,0x261580):
                 value=apply_request_287474_json_bool_callback(staged,
@@ -1603,7 +1604,7 @@ def apply_request_287474_mutex_lock_callback(pages, *, argument_block_address,
 
 def apply_request_287474_json_print_callback(pages, *, argument_block_address,
         entry_stack_address,image_base,thread_pointer,allocate,free,
-        thread_id=None,diagnostic_observer=None,prepare_format=None,
+        thread_id=None,diagnostic_observer=None,prepare_format=None,format_number=None,
         max_bytes=0x100000,max_nodes=4096,max_depth=64):
     """+288990/+2616b4: hidden X8 reference output, no packed store."""
     from vm9_configuration_init import construct_printed_json_reference
@@ -1622,7 +1623,8 @@ def apply_request_287474_json_print_callback(pages, *, argument_block_address,
     result=construct_printed_json_reference(p,output_reference_address=output,node_address=node,
         entry_stack_address=entry_stack_address-16,image_base=image_base,thread_pointer=thread_pointer,
         allocate=allocate,free=free,thread_id=thread_id,diagnostic_observer=diagnostic_observer,
-        prepare_format=prepare_format,max_bytes=max_bytes,max_nodes=max_nodes,max_depth=max_depth)
+        prepare_format=prepare_format,format_number=format_number,
+        max_bytes=max_bytes,max_nodes=max_nodes,max_depth=max_depth)
     p.commit();return result
 
 

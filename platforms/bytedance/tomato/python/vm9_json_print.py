@@ -1,15 +1,18 @@
 """Bounded compact JSON printing with original buffer allocation semantics."""
-import math,struct,sys
+import math,re,struct,sys
 from vm9_allocator import _PageTransaction,_read_span,_write_span,RefillUnsupported
 from vm9_configuration_init import _lazy_constant
 
 
 def print_json_unformatted(pages, *, node_address, entry_stack_address, image_base,
-        allocate, free, prepare_format=None, max_bytes=0x100000, max_nodes=4096, max_depth=64):
+        allocate, free, prepare_format=None, format_number=None,
+        max_bytes=0x100000, max_nodes=4096, max_depth=64):
     """+249af0/+2499b0 compact printer, malloc/free hooks and no reallocator.
 
     Values use the low type byte. Strings preserve non-ASCII bytes; finite
     numbers use 15 significant digits, then 17 if the native tolerance fails.
+    An explicit format_number(pages, number, precision) may also preserve
+    matching libc state; its unsupported inputs remain provider boundaries.
     Only staged pages roll back. Physical spills and external service state
     are outside this contract; native stack aliases are rejected.
     """
@@ -22,6 +25,8 @@ def print_json_unformatted(pages, *, node_address, entry_stack_address, image_ba
         raise RefillUnsupported('JSON printer requires a bounded recursion depth')
     if not callable(allocate) or not callable(free):
         raise RefillUnsupported('JSON printer requires allocation and free services')
+    if format_number is not None and not callable(format_number):
+        raise RefillUnsupported('JSON printer number provider must be callable')
     p=_PageTransaction(pages)
     def check(a,n):
         if type(a) is not int or not 0<=a<=(1<<64)-n:
@@ -52,6 +57,15 @@ def print_json_unformatted(pages, *, node_address, entry_stack_address, image_ba
     pointer=new(256);capacity=256;offset=0;visited=0
     if not pointer:p.commit();return 0
     class PrintFailure(Exception):pass
+    def number_text(number, precision):
+        if format_number is None:return format(number, '.' + str(precision) + 'g').encode()
+        text = format_number(p, number, precision)
+        if type(text) is not bytes or not 1 <= len(text) <= 64 or b'\0' in text:
+            raise RefillUnsupported('JSON number provider must return bounded numeric bytes')
+        if (not re.fullmatch(rb'-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?', text)
+                or not math.isfinite(float(text))):
+            raise RefillUnsupported('JSON number provider returned invalid numeric bytes')
+        return text
     def ensure(n):
         nonlocal pointer,capacity
         needed=n+offset+1
@@ -103,10 +117,10 @@ def print_json_unformatted(pages, *, node_address, entry_stack_address, image_ba
             if prepare_format is not None:prepare_format(p)
             if not math.isfinite(number):text=cstring(null)[:-1]
             else:
-                text=format(number,'.15g').encode();parsed=float(text)
+                text=number_text(number,15);parsed=float(text)
                 if abs(number-parsed)>max(abs(number),abs(parsed))*sys.float_info.epsilon:
                     if prepare_format is not None:prepare_format(p)
-                    text=format(number,'.17g').encode()
+                    text=number_text(number,17)
             out=ensure(len(text)+1);_write_span(p,out,text+b'\0');offset+=len(text)
         elif kind==16:string(u(a+32))
         elif kind==128:

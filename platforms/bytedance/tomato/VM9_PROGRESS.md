@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：matching libc integer dtoa
+
+显式format_number服务接通公开owning VM至JSON printer，恢复已观察整数double的
+匹配bionic静态池、mantissa与free链，新增16项原始对照、29项拒绝/页面回滚。
+整段original287474保持391回调、七项返回值一致；1435/1439页相同，全部libc页一致。
+剩余4页栈残留106/1624/1290/83字节未过滤，完整second/request内存等价仍未通过。
+支持范围为abs(integer double)<1e9、precision15；通用float/17位/heap分支未完成。
+累计3583native/1693项拒绝或回滚；完整signer、替代Java、live/JVM、完整ABI和外部回滚仍未完成。
+见 [整数dtoa报告](REQUEST_JNI_STARTUP_WORKERS.md#6240-matching-libc-integer-dtoa2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：matching libc clock cache
 
 共享session的时钟路径恢复bionic冷guard/cache与热缓存，新增8项原始对照、14项拒绝。
@@ -8,8 +20,6 @@
 最后写入证据将dtoa定位到第223个JSON打印回调。累计3567native/1664项拒绝或回滚。
 完整standalone signer、替代Java、live/JVM、完整physical ABI及provider/mapping回滚仍未完成。
 见 [时钟缓存报告](REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai)。
-
-以下各节为历史检查点，当前状态以本节为准。
 
 ## 2026-10-20 Asia/Shanghai：live native provider bridge
 

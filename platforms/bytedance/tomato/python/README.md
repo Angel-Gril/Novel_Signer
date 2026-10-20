@@ -1,5 +1,7 @@
 # Tomato Python material
 
+An explicit integer number formatter now preserves matching bionic dtoa pool state through the public owning VM and JSON printer. Adds16 native controls and29 refusal/page rollback checks. All libc pages match in the constructed whole second;1435/1439 total pages match, with four stack pages still differing. The service supports only integral doubles below1e9 in magnitude at precision15; full signing remains unfinished. See the [integer dtoa report](../REQUEST_JNI_STARTUP_WORKERS.md#6240-matching-libc-integer-dtoa2026-10-20-asiashanghai).
+
 The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](../REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).
 
 The reusable native service bridge passes2 original GetEnv controls and13 refusal checks. Original287474 now returns through the same explicit JavaVM/JNI providers:391 callbacks and seven return values match;1432/1439 pages match, with7 libc/stack pages still differing. Full memory equivalence and complete signing remain unfinished. See the [native provider report](../REQUEST_JNI_STARTUP_WORKERS.md#6238-live-native-provider-bridge2026-10-20-asiashanghai).
