@@ -7798,6 +7798,31 @@ outer从 **3900继续至4000步/+FE5B0**，下一 **285EF0→2568C8**。原页�
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_return_fresh_20261019.py --library "$env:TOMATO_LIBMETASEC" --output <second-return-evidence.json>
 ```
 
+## 6.230 Outer configuration set（2026-10-20 Asia/Shanghai）
+
+恢复外层 `285EF0→2568C8`，复用未修改的 registry setter 和 scoped writer/TLS/init/broadcast。
+wrapper保存16字节，target SP为wrapper SP−16；参数依次为target/registry/key/value，u32结果写回+28。
+保留分配期间实时键读取、scoped padding、canary及输入padding，增加明确的地址、映射、别名和资源边界。
+
+**39项新增原生/Python对照、64项拒绝或页回滚检查通过**。38项双基址运行原始wrapper，覆盖新增/替换、
+平衡树、空键、binary/NUL、跨页、malloc期间键和padding变化。payload分配NULL按原生行为保留NULL payload并继续，
+有两项原生对照；其他不支持的分配失败拒绝。检查全部声明guest/image/TLS、非栈写入、guard/canary、
+分配/TLS/wake顺序及释放前字节；外部provider账本和mapping不属于页回滚。
+
+实际构造请求的配置回调匹配 **3572条指令、1238个声明范围、768字节native栈、6次真实分配/1次释放**。
+结果、内存和效果一致，四个runtime random pointers保留。随后outer自然返回 **5182步/+FFB78、322callbacks**。
+旧探针的“应遇到下一个未知回调”断言因此失败；原生对照已完成，不重跑。另一次fresh入口只验证公共outer预算
+由4000增加至8000后的成功返回。second保持 **96740/+112434、391callbacks** 及child return。
+**公共second预算仍20000，此构造请求继续使用私有500000预算；尚不能宣称公共独立signer完成。**
+
+保留445个旧Python AST、75个历史绑定和974项私有哈希，历史native组未重跑。
+累计 **3361native/1459项拒绝或回滚**。whole second/request原生对照、完整signer、physical ABI、实际URL/header JNI、
+fresh/live/JVM仍未完成。见 [配置写入证据](evidence/vm9_request_configuration_set_fresh_20261019.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_configuration_set_fresh_20261019.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <configuration-set-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

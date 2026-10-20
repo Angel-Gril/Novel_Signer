@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：outer configuration set
+
+外层配置写入恢复，39项新增native/64项拒绝检查通过；实际3572instructions/1238ranges、6次真实分配/1次释放一致。
+构造outer5182/+FFB78/322callbacks正常返回，second96740/+112434/391callbacks和child return保持。
+公共outer预算8000，公共second仍20000；该构造入口继续依赖私有second500000预算。
+445个旧AST、75个历史绑定/974项私有哈希保持；累计3361native/1459checks。
+完整signer、whole second/request native、actual URL/header JNI、fresh/live/JVM未证明。见 [配置写入报告](REQUEST_JNI_STARTUP_WORKERS.md#6230-outer-configuration-set2026-10-20-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-19 Asia/Shanghai：second VM return
 
 Second selected-slot返回与caller epilogue恢复，21项新增native/15项拒绝检查通过。

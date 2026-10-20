@@ -68,6 +68,80 @@ def resolve_request_memory_imports(pages, library, image):
         target_offset=hex(target-image), relocation_kind=kind) for name, offset, target, kind in relocations]
 
 
+def apply_request_configuration_set_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,thread_pointer,allocate,free,get_tls,
+        initialize_registry,broadcast,max_nodes=4096,max_bytes=0x100000):
+    """+285EF0/+2568C8: scoped u32 write; packed W0 at +28.
+
+    The wrapper saves 16 bytes before entering the existing registry writer.
+    Retain its defined canary and live key reads around provider effects.
+    Known input/allocation/spill aliases reject; page rollback does not undo
+    an external provider ledger or guest mapping effects.
+    """
+    import vm9_registry as registry
+    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+            or entry_stack_address&15):
+        raise RefillUnsupported('configuration setter requires an aligned guest stack')
+    if type(max_nodes) is not int or not 1<=max_nodes<=4096:
+        raise RefillUnsupported('configuration setter requires a bounded tree')
+    if type(max_bytes) is not int or not 1<=max_bytes<=0x100000:
+        raise RefillUnsupported('configuration setter requires a bounded key')
+    if any(not callable(f) for f in (allocate,free,get_tls,initialize_registry,broadcast)):
+        raise RefillUnsupported('configuration setter requires explicit writer services')
+    def span(a,n):
+        if type(a) is not int or not 0<a<=(1<<64)-n:
+            raise RefillUnsupported('configuration setter address wraps uint64')
+        if a<entry_stack_address and a+n>entry_stack_address-0x1000:
+            raise RefillUnsupported('configuration setter aliases native spills')
+    span(argument_block_address,32)
+    p=_PageTransaction(pages);packed=_read_span(p,argument_block_address,32)
+    target,receiver,key=(int.from_bytes(packed[i:i+8],'little') for i in (0,8,16))
+    if target!=image_base+0x2568C8:raise RefillUnsupported('unexpected configuration setter target')
+    span(thread_pointer,0x30)
+    fixed=((argument_block_address,32),(receiver,320),(key,24),(thread_pointer+0x28,8))
+    for a,n in fixed:span(a,n);_read_span(p,a,n)
+    if any(a<b+m and b<a+n for i,(a,n) in enumerate(fixed) for b,m in fixed[i+1:]):
+        raise RefillUnsupported('configuration setter fixed inputs alias')
+    live=[]
+    def check_inputs(tx):
+        if _read_span(tx,argument_block_address,32)!=packed:
+            raise RefillUnsupported('configuration setter provider changed packed input')
+        length=int.from_bytes(_read_span(tx,key+12,4),'little')
+        if length>max_bytes:raise RefillUnsupported('configuration setter key exceeds byte bound')
+        pointer=int.from_bytes(_read_span(tx,key+16,8),'little')
+        if length:
+            span(pointer,length);_read_span(tx,pointer,length)
+            if any(pointer<a+n and a<pointer+length for a,n in fixed+tuple(live)):
+                raise RefillUnsupported('configuration setter key aliases active storage')
+        return ((pointer,length),) if length else ()
+    check_inputs(p)
+    def checked_allocate(tx,n):
+        if type(n) is not int or not 1<=n<=0x100000:
+            raise RefillUnsupported('configuration setter allocation exceeds byte bound')
+        result=allocate(tx,n);payload=check_inputs(tx)
+        if type(result) is not int or not 0<=result<=(1<<64)-n:
+            raise RefillUnsupported('configuration setter allocator returned invalid address')
+        if result:
+            span(result,n);_read_span(tx,result,n)
+            if any(result<a+m and a<result+n for a,m in fixed+tuple(live)+payload):
+                raise RefillUnsupported('configuration setter allocation aliases active storage')
+            live.append((result,n))
+        return result
+    def checked_free(tx,a):
+        free(tx,a);live[:]=[(b,n) for b,n in live if b!=a];check_inputs(tx)
+    canary=entry_stack_address-0x58
+    _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    result=registry.set_configuration_u32(p,registry_address=receiver,key_address=key,
+        value=int.from_bytes(packed[24:28],'little'),entry_stack_address=entry_stack_address-16,
+        image_base=image_base,allocate=checked_allocate,free=checked_free,get_tls=get_tls,
+        initialize_registry=initialize_registry,broadcast=broadcast,max_nodes=max_nodes,max_bytes=max_bytes)
+    check_inputs(p)
+    if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
+        raise RefillUnsupported('configuration setter stack canary changed')
+    _write_span(p,argument_block_address+28,result.to_bytes(4,'little'))
+    p.commit();return result
+
+
 def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None,
                    diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
                    read_clock=None, acquire_environment=None, invoke_jni=None,
@@ -95,7 +169,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
         vm = vm_module.VM(StrictMem(), frame.bytecode_offset,
             frame.packed_arguments_address, image + 0x35E230,
             image + 0x35E690, image + 0x28587C,
-            inputs['return_address'], maxsteps=4000)
+            inputs['return_address'], maxsteps=8000)
         vm.R = list(frame.registers)
         def callback(vm, function, argument):
             words = [vm.m.u64(argument + i * 8) for i in range(4)]
@@ -434,6 +508,13 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 if diagnostic_scope is not None:
                     diagnostic_scope.setdefault('request_base64_encoded',[]).append(dict(
                         source_object_address=words[1],object_address=words[2],query_nonempty=result))
+            elif (wrapper,target) == (0x285EF0,0x2568C8):
+                value=apply_request_configuration_set_callback(vm.m.pages,
+                    argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
+                    image_base=image,thread_pointer=inputs['thread_pointer'],allocate=allocate,free=free,
+                    get_tls=get_tls,initialize_registry=initialize_registry,broadcast=broadcast)
+                if diagnostic_scope is not None:
+                    diagnostic_scope.setdefault('request_configuration_sets',[]).append((argument,value))
             elif (wrapper,target) == (0x285F38,0x287474):
                 import vm9_request_287474_vm
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
