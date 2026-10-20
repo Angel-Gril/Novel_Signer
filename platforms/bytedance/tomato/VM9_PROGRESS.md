@@ -1,5 +1,14 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：cached-class JNI header array
+
+新增271384树到Java数组组合，复用既有tree/UTF/reference owner，显式cached String class。
+42双基址native与42回滚检查通过；447旧AST/77bindings/1008privatehashes保持。
+累计3403native/1531checks。实际request输出接入、URL/header JNI输入、whole request/second native、
+fresh完整signer及live/JVM仍未完成。见 [JNI数组报告](REQUEST_JNI_STARTUP_WORKERS.md#6232-cached-class-jni-header-array2026-10-20-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：public second services
 
 公共outer入口显式传入identifier file及mutex绑定，second调用预算500000，outer预算8000。

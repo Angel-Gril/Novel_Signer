@@ -7844,6 +7844,28 @@ whole second/request原生对照、live/JVM、physical ABI及provider/mapping回
 python -B platforms/bytedance/tomato/python/verify_vm9_request_second_services_fresh_20261020.py --output <second-services-evidence.json>
 ```
 
+## 6.232 Cached-class JNI header array（2026-10-20 Asia/Shanghai）
+
+恢复原生 `271384` 的configuration tree到Java header数组组合：复用现有size/iterator、
+`270204` UTF构造和 `26F1D0` 引用释放。每个pair按key/value顺序写入 `NewObjectArray`，
+保留key JNI调用之后重新读取value指针的时机。String class缓存 `3DF110` 为显式输入；
+`3DF094` 冷guard触发的class-name解码已对照，class缓存为空的查找/全局引用发布仍拒绝。
+
+新增 **42项双基址原生/Python对照、42项拒绝/回滚检查**。比较完整声明的非栈guest/image、
+迭代器和UTF逻辑栈、canary、JNI调用及数组内容、分配状态和free前字节。
+覆盖empty/one/multiple与顺序、22/23字节及长字符串、NUL截断、NULL source/env/container/
+array/UTF、引用类型、lazy名称、JNI修改value指针、malloc修改源内容和异常清理。
+原生RED先返回524步，随后确认Python owner缺失；未用native快照或输出初始化Python。
+
+保留447个旧Python AST、77个历史绑定和1008项私有哈希；历史native组未重跑。
+累计 **3403native/1531项拒绝或回滚**。该组件仍需显式synthetic JNI；实际request输出接入、
+真实URL/header JNI输入、whole second/request原生对照、fresh signer、live/JVM、完整physical ABI
+及provider/mapping回滚尚未完成。见 [JNI数组证据](evidence/vm9_jni_header_array_fresh_20261020.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_header_array_fresh_20261020.py --library <private-libmetasec.so> --output <header-array-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

@@ -383,6 +383,7 @@ Base64引用构造新增 **31项原生对照、33项拒绝或回滚检查**，pr
 Second返回新增 **21项原生对照、15项拒绝检查**，outer推进至4000步。见 [second返回报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6229-second-vm-return2026-10-19-asiashanghai)。
 外层配置写入新增 **39项原生对照、64项拒绝检查**，构造request在5182步返回（second使用私有预算）。见 [配置写入报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6230-outer-configuration-set2026-10-20-asiashanghai)。
 公共服务传入与执行预算恢复，构造request在公共调用参数下5182步返回，新增30项拒绝检查。见 [公共服务报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6231-public-second-services2026-10-20-asiashanghai)。
+JNI header输出数组组件已恢复，新增42项双基址原生对照和42项回滚检查。见 [JNI数组报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6232-cached-class-jni-header-array2026-10-20-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

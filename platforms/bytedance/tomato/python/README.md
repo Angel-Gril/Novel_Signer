@@ -1,5 +1,7 @@
 # Tomato Python material
 
+Cached-class JNI header array conversion271384 now composes existing tree, UTF and reference owners. Adds42 two-base native comparisons and42 page rollback checks. Actual request output integration and complete signing remain unfinished. See the [JNI header array report](../REQUEST_JNI_STARTUP_WORKERS.md#6232-cached-class-jni-header-array2026-10-20-asiashanghai).
+
 Public outer entry now forwards explicit identifier file and mutex services. Constructed request returns at5182/322callbacks with public outer8000/second500000 call budgets, without changing second execution kwargs. Adds30 early refusal checks; no new native comparisons. Complete signing remains unfinished. See the [public service report](../REQUEST_JNI_STARTUP_WORKERS.md#6231-public-second-services2026-10-20-asiashanghai).
 
 Outer configuration setter passes39 new native controls and64 refusal checks. Constructed outer request returns at5182/+FFB78 with322callbacks; second retains96740/391callbacks using private500000 budget. Public outer budget is8000; public second budget remains20000. Complete signing remains unfinished. See the [configuration setter report](../REQUEST_JNI_STARTUP_WORKERS.md#6230-outer-configuration-set2026-10-20-asiashanghai).
