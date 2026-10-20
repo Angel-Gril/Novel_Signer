@@ -123,6 +123,31 @@ class VMExit(Exception): pass
 class NativeCall(Exception):
     def __init__(self, f, arg): self.f, self.arg = f, arg
 
+
+class _GuestRegisters:
+    """The native X28 array: guest stores and callbacks are visible immediately."""
+    def __init__(self, mem, address):
+        self.mem, self.address = mem, address
+    def __len__(self): return 32
+    def _index(self, index):
+        from operator import index as integer_index
+        index = integer_index(index)
+        if index < 0: index += 32
+        if not 0 <= index < 32: raise IndexError('VM register index out of range')
+        return index
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            return [self[i] for i in range(*index.indices(32))]
+        return self.mem.u64(self.address + self._index(index) * 8)
+    def __setitem__(self, index, value):
+        self.mem.w64(self.address + self._index(index) * 8, value)
+    def __iter__(self): return (self[i] for i in range(32))
+    def __eq__(self, other):
+        if not isinstance(other, (list, tuple, _GuestRegisters)): return NotImplemented
+        return list(self) == list(other)
+    def __repr__(self): return repr(list(self))
+
+
 class VM:
     def __init__(self, mem, entry_va, r4, r5, r6, cb_va, exit_sentinel, log=None, maxsteps=2_000_000):
         self.m = mem; self.R = [0]*32
@@ -141,6 +166,7 @@ class VM:
         # Physical x28 belongs to the native VM frame, not virtual R28.
         # A native bridge may supply the guest slot-array address explicitly.
         self.register_backing_base = None
+        self._register_cursor_address = None
         self.opaque_hook = None            # optional callable(vm, dw, op, sub)
         self.trace = False
         # Native multiply/divmod and sub52 use two hidden VM slots immediately
@@ -150,6 +176,25 @@ class VM:
         # Native slot 34 holds the last opcode 36 load for opcode 57's
         # serialized comparison. A supplied backing array owns its value.
         self._vm_ll_word = None
+    def bind_registers(self, address):
+        """Use an existing guest cursor/32-slot array as live execution state.
+
+        The caller supplies cursor at address-8 and hidden slots through +0x117.
+        Binding never seeds memory from the abstract register list or maps pages.
+        Legacy register_backing_base alone still supplies only hidden-slot effects.
+        Physical decoder spills and general native ABI are outside this binding.
+        """
+        if (type(address) is not int or address < 8 or address & 7
+                or address + 0x118 > 1 << 64):
+            raise ValueError('live VM register binding requires an aligned uint64 span')
+        if any(page not in self.m.pages for page in
+                range((address - 8) >> 12, ((address + 0x117) >> 12) + 1)):
+            raise ValueError('live VM register binding span is unmapped')
+        if self.m.u64(address - 8) != self.pc:
+            raise ValueError('live VM register cursor does not match the entry PC')
+        self.R = _GuestRegisters(self.m, address)
+        self.register_backing_base = address
+        self._register_cursor_address = address - 8
     def _log(self, s):
         if self.log: self.log(s)
     def fx(self, pc, dw):
@@ -681,4 +726,6 @@ class VM:
             else:
                 raise ValueError("op %d @%#x dw=%08x" % (op, self.pc, dw))
             self.pc = npc
+            if self._register_cursor_address is not None:
+                m.w64(self._register_cursor_address, npc)
             if self.trace: self.snaps.append(list(self.R))

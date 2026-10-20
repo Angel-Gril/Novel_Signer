@@ -8230,3 +8230,41 @@ python -B platforms/bytedance/tomato/python/verify_vm9_libc_dtoa_integer_fresh_2
 ```
 
 该命令不重放整段构造链；整段输入、探针及native输出另绑定私有证据hash。
+
+## 6.241 Live VM register memory（2026-10-20 Asia/Shanghai）
+
+栈最后写入归因确认：原`7004D000`页的83字节差异来自原始解释器更新bytecode
+cursor和X28寄存器数组。此前多数指令只更新Python寄存器列表，少数隐藏结果写入
+客体数组；两者未保持同步。独立构造输入上的隔离实验消除了整页差异。
+
+`VM.bind_registers(address)`显式采用已有客体cursor（address-8）、32个可见槽及
+隐藏槽所在的完整映射。绑定本身不填充内存、不创建页面，要求初始cursor匹配入口；
+寄存器读写直接访问客体数组，每条成功指令更新cursor。second VM在caller完成后
+启用该绑定。普通abstract模式及仅设置`register_backing_base`的旧隐藏槽契约保持。
+这次没有恢复物理decoder spills、libc帧或完整native ABI。
+
+实现前的原始解释器算术对照在cursor页产生真实RED，D2/T2决策已验证。
+**36项新增原生/Python对照**覆盖两个库基址和普通/跨页布局，对照完整寄存器页、
+未写padding、普通payload与cursor；包含算术、load/store别名、显式外部改写、
+native回调改写、跳转、条件不写入、隐藏乘积及double转换。另 **17项拒绝检查**
+覆盖非法地址、缺页、cursor不符、越界索引，验证拒绝后页面与绑定状态保持。
+原abstract/hidden-only模式单独复核，未重跑历史native组。
+
+通过公开owning构造链重做整段原始`287474`：仍为 **97156步/391回调**，全部
+packed根回调和PC/SP/X0/X19/X28/X29/X30七项返回值相同。**1436/1439页逐字节
+一致**，含全部990个声明库映像页、193个堆页和全部libc页；原始输入hash不变。
+native输出始终仅用于比较，未作为Python输入。
+
+剩余`70049000/7004A000/7004B000`三页分别有106/1624/1290字节差异，合计3020，
+未过滤或回填；整段探索不计入正式native数量。累计 **3619native/1710项拒绝或
+回滚**。完整second/request内存等价、fresh完整standalone signer、替代Java
+`2A8824`、live Android/JVM、完整physical ABI及provider/mapping回滚仍未完成。
+JNI/OS仍为显式synthetic服务，Host enforcement为UNVERIFIED。
+
+证据见 [寄存器内存记录](evidence/vm9_live_registers_fresh_20261020.json)。复核：
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_live_registers_fresh_20261020.py --library <private-library.so> --output <register-evidence.json>
+```
+
+此命令验证局部寄存器绑定；整段独立构造输入、探针与native比较输出另绑定私有hash。

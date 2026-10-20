@@ -391,7 +391,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         vm_module.B=image
         vm=vm_module.VM(StrictMem(),frame.bytecode_offset,frame.packed_arguments_address,
             image+0x35EDF0,image+0x35F3D0,image+0x2884AC,inputs['return_address'],maxsteps=maxsteps)
-        vm.R=list(frame.registers);vm.register_backing_base=frame.register_backing_address
+        vm.bind_registers(frame.register_backing_address)
         def callback(vm,function,argument):
             words=tuple(vm.m.u64(argument+i*8) for i in range(4))
             wrapper,target=function-image,words[0]-image
