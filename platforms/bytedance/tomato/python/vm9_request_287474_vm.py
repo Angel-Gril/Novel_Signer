@@ -1764,7 +1764,8 @@ def apply_request_287474_allocated_printf_callback(pages, *, argument_block_addr
     Preserve eight input-derived formatter frame words at the malloc boundary
     and final return, plus known X21 on the successful second pass. Other
     physical spills and formatter locals remain separate. The shared formatter
-    also owns the consumed va_list copies at SP-0xC0 and SP-0xE0.
+    also owns the consumed va_list copies at SP-0xC0 and SP-0xE0. Save the
+    known printf caller LR and packed X19 at SP-0x48 and SP-0x18 on entry.
     Output/source and output/result aliases retain the native publication order.
     Native spill aliases and overlapping allocations are outside this boundary;
     page rollback does not reverse external allocator or mapping effects.
@@ -1802,6 +1803,8 @@ def apply_request_287474_allocated_printf_callback(pages, *, argument_block_addr
             active.append((arg,len(data)))
         return tuple(active)
     live_inputs(p)
+    _write_span(p,entry_stack_address-0x48,(image_base+0x288AE8).to_bytes(8,'little'))
+    _write_span(p,entry_stack_address-0x18,argument_block_address.to_bytes(8,'little'))
     second_pass_size=0
     def formatter_frame(return_offset,size=0):
         for offset,value in ((-0x1F0,entry_stack_address-0x50),(-0x1E8,image_base+return_offset),

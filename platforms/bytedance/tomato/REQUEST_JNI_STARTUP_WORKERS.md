@@ -8383,3 +8383,32 @@ synthetic服务，Host enforcement为UNVERIFIED。
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_printf_consumed_va_lists_fresh_20261020.py --library <private-library.so> --output <consumed-varargs-evidence.json>
 ```
+
+## 6.245 Caller spills（2026-10-20 Asia/Shanghai）
+
+原始`288AD4`先令X19等于packed参数块，再通过`BLR`调用`278314`，其LR因此为
+image+288AE8。被调函数把这两值保存到wrapper SP-18/SP-48；second包装层现沿
+原始输入恢复这两个八字节保存字，分配前写入一次。其他传入GP/FP保存值仍未知。
+未扩展stack alias、provider破坏saved return或完整ABI契约。
+
+真实pre-owner RED为literal在malloc前caller spills不一致。新增 **32项原始入口
+对照** 覆盖两基址、普通/两保存字分属不同页的布局、literal/escaped percent、string、
+signed/64bit unsigned、live格式变更、输出与格式重叠及NULL malloc；其余传入GP寄存器
+使用不相关值。比较原始保存指令完成后、malloc入口及最终两字，返回、payload和allocator
+事件全部一致。另重跑 **6项既有拒绝/页面回滚检查**；这些不增加累计guard数量。
+
+**48项纯Python回归** 隔离不可变父提交的second函数，遍历既有24profiles和两基址；
+返回、事件和新增16字节以外的全部页面字节保持一致。没有重跑历史native组。
+独立构造整段original `287474` 后，**97156步/391回调**、PC/SP/X0/X19/X28/X29/X30
+均一致；**1436/1439页**、全部990库映像页、193堆页及全部libc页逐字节相同。
+剩余三页106/1624/1174字节，合计 **2904**，减少5；输入hash不变，
+native输出只作比较，差异未过滤，整段探索不计正式native控制。
+
+累计 **3727native/1732项拒绝或回滚**。完整second/request内存等价、standalone
+signer、替代Java `2A8824`、live Android/JVM、完整physical ABI及provider/mapping
+回滚仍未完成。JNI/OS仍为显式synthetic服务，Host enforcement为UNVERIFIED。
+证据见 [调用保存字记录](evidence/vm9_printf_caller_spills_fresh_20261020.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_printf_caller_spills_fresh_20261020.py --library <private-library.so> --output <caller-spill-evidence.json>
+```

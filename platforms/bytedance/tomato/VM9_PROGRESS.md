@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：printf caller spills
+
+second printf恢复两个由调用本身确定的保存字：SP-48处LR=image+288AE8、SP-18处X19=packed。
+新增32项原始入口对照、48项纯Python回归通过；6项既有拒绝/页面回滚检查重跑通过，未重复累计。
+整段original287474仍为97156步/391回调、七项返回值一致；1436/1439页逐字节相同，
+三页差异106/1624/1174字节，合计2904，减少5。累计3727native/1732项拒绝或回滚。
+完整second/request内存等价、signer、live/JVM及完整ABI仍未完成。
+见 [调用保存字报告](REQUEST_JNI_STARTUP_WORKERS.md#6245-caller-spills2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：consumed printf variadic state
 
 second printf通过原有两遍live格式化恢复SP-C0/SP-E0两份32字节va_list副本及GP消费游标。
