@@ -7435,5 +7435,14 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_java_request_facade_fresh_20261020": {
+    "path": "evidence/vm9_java_request_facade_fresh_20261020.json",
+    "native_Python_controls": 22,
+    "rollback_guards": 15,
+    "actual_request_VM_integration_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

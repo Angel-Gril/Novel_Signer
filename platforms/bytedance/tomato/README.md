@@ -1,5 +1,7 @@
 # Tomato / Fanqie (ByteDance)
 
+The normal Java request facade now composes URL/header conversion, a live virtual request target, Java output and complete scoped cleanup. Adds22 native controls and15 rollback checks. The request method is an explicit synthetic provider in these controls; actual request VM integration and complete signing remain unfinished. See the [Java facade report](REQUEST_JNI_STARTUP_WORKERS.md#6235-normal-java-request-facade2026-10-20-asiashanghai).
+
 JNI header input now builds an owning configuration tree through object-byte conversion and cloning. Adds52 input and20 tree-release native controls plus32 rollback checks. A synthetic six-element input becomes four ordered Java output elements and its tree is deleted; actual Java request integration and complete signing remain unfinished. See the [header input report](REQUEST_JNI_STARTUP_WORKERS.md#6234-jni-header-input-and-tree-reference-release2026-10-20-asiashanghai).
 
 Header array conversion now restores cold String class lookup and global retention with explicit serial lock services. Adds24 native comparisons and16 rollback checks. A constructed request result with7 pairs converts to14 ordered Java array elements; actual Java request wiring and complete signing remain unfinished. See the [cold class report](REQUEST_JNI_STARTUP_WORKERS.md#6233-cold-string-class-and-constructed-output2026-10-20-asiashanghai).

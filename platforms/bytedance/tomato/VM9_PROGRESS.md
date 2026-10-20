@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：normal Java request facade
+
+新增17B8F8常规外层，组合URL/header输入、request虚调用、Java输出及全部scoped清理。
+22双基址native和15回滚通过；虚request为显式synthetic服务，非实际request VM证明。
+452旧AST/80bindings/1045privatehashes保持；历史native未重跑。
+累计3521native/1594checks。下一步将真实URL/header引用接入拥有状态的request VM并验证外层完整组合。
+替代Java路径、whole request/second native、fresh完整signer及live/JVM仍未完成。
+见 [Java外层报告](REQUEST_JNI_STARTUP_WORKERS.md#6235-normal-java-request-facade2026-10-20-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：JNI header input and tree reference release
 
 恢复26FC94 Java ObjectArray→拥有的树及1628E4/166EC8树引用释放。

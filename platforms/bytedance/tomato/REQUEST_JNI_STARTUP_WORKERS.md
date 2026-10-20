@@ -7925,6 +7925,33 @@ python -B platforms/bytedance/tomato/python/verify_vm9_jni_header_input_fresh_20
 python -B platforms/bytedance/tomato/python/verify_vm9_tree_reference_release_fresh_20261020.py --library <private-libmetasec.so> --libc <matching-libc.so> --output <tree-release-evidence.json>
 ```
 
+## 6.235 Normal Java request facade（2026-10-20 Asia/Shanghai）
+
+新增 `vm9_jni_request.invoke_java_request_facade`，恢复原生 `17B8F8` 常规路径：
+复用mask `0x200` 谓词，读取facade+18 receiver，转换URL与header，复制输入引用，
+重读receiver vtable+20，以mode `0x138` 调用显式request服务，随后转换Java输出并按原生顺序
+释放所有参数、输出副本、返回结果和原URL/header引用。request服务收到真实target及native X8输出地址。
+
+原生RED **11083步** 返回2个Java元素，旧Python缺少外层模块。
+新增 **22项双基址原生对照、15项拒绝或回滚检查**，覆盖NULL receiver/env/URL、空header、
+重复key、3项树、NULL request结果/输出数组/UTF与JNI table重读。
+原生真实执行所有转换、引用和树析构及匹配libc诊断锁；只替代request虚方法与JNI/分配服务。
+声明的非栈guest/image、外层canary、输出及JNI/request/分配/free/诊断顺序、free前字节均一致，
+成功结束只保留process-owned诊断锁。
+
+本组使用warm switch once和cached String class。既有cold owner及可选服务继续复用，
+历史native组未重跑。switch选择的 `2A8824` 替代路径尚未恢复，显式拒绝并回滚guest页。
+实际request VM仍由测试服务替代；这不是实际Java/JVM运行或完整签名证明。
+
+保留452个旧Python AST、80个历史绑定、1045项私有哈希。
+累计 **3521native/1594项拒绝或回滚**。下一步接入真实拥有状态的request VM与URL/header引用，
+再验证Java外层到request到输出清理；whole second/request native、fresh完整signer、live/JVM、
+完整physical ABI及provider/mapping回滚仍未完成。见 [Java外层证据](evidence/vm9_java_request_facade_fresh_20261020.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_java_request_facade_fresh_20261020.py --library <private-libmetasec.so> --libc <matching-libc.so> --output <java-facade-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
