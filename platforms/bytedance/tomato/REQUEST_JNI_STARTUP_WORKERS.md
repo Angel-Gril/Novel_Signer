@@ -8522,3 +8522,42 @@ vm9_configuration_init.assign_owned_string_reference尚未组合这一作用域�
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_inline_reference_scope_fresh_20261020.py --library <private-library.so> --libc <matching-libc.so> --output <inline-reference-scope-evidence.json>
 ```
+
+## 6.249 Environment owned reference scope（2026-10-21 Asia/Shanghai）
+
+原始25EE84在入口SP-60调用162944。完整请求的allocation117及诊断caller LR16299C
+定位到这一边界。environment现在接受显式reference_assigner；state显式diagnostic_scope
+绑定既有vm9_reference_scopes.assign_scoped_owned_string_reference。默认裸赋值保持。
+
+pre-owner RED为empty输入原始environment前缀的分配/锁事件不同。接入owner后，完整
+24字节scope对照进一步指出+12..15 padding差异。写入跟踪确认其最后writer为15F590
+保存getter的incoming X19：warm getter保留environment输出，cold分支改为临时引用。
+模型从当前调用参数生成这4字节，无native输出回填；高基址输出槽专门验证非零高位。
+
+新增 **28项原始environment前缀对照**，两基址、cold/warm诊断锁、0/1/33/165长度、
+0/FFFFFFFF引用计数和高地址输出。原生停在25EF1C，Python在首次environment service
+getter前观察同一前缀；比较全部guest payload、全部library页、完整24字节assignment
+scope和分配/锁事件。Python前缀没有发布到caller页面；不把前缀描述为完整helper。
+**8项拒绝/页面回滚**覆盖provider类型、直接/写后失败、不可映射输出/作用域、未对齐
+assignment SP、诊断guard wait和counter NULL。**38项Python回归**验证不可变父版本的
+默认environment前缀、默认完整state与公开cold state factory绑定；实际assignment调用
+一次，入口factory SP-920。默认返回、全部页面及效果一致。
+
+完整原始2830C4再次返回：模型5182步、双方322根回调，七项返回和GuestOS映射元数据
+一致；1439原生输出页与前阶段逐字节相同，初态hash保持。**20共同页/5504字节**仍
+不同，比5508减少4；**1417/1437共同页**相同。5个packed记录和7400F000/74110000
+两个native-only全零服务页仍不同，页面存在性独立记录，没有过滤差异。
+
+首个分配分歧117->132；诊断entry17的caller LR1625D8定位1625A4构造器。它的上层
+caller需继续跟踪，不能直接按根callback归因。environment 15E1A8释放作用域也仍未
+组合。原生app PLT和模型allocator session的realloc观察边界不同，853/864事件数量
+本身不证明错误。整段完整请求探索不计正式native控制。
+
+累计 **3843 native/1764项拒绝或回滚**。完整state/second/request内存等价、signer、
+替代Java2A8824、live Android/JVM、完整ABI及provider/mapping回滚仍未完成。
+外部provider/ledger不保证随页面回滚；Host enforcement为UNVERIFIED。
+证据见 [environment赋值作用域记录](evidence/vm9_environment_assignment_scope_fresh_20261021.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_environment_assignment_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <environment-assignment-scope-evidence.json>
+```

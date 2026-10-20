@@ -825,17 +825,25 @@ def construct_environment_reference(pages, *, output_reference_address,
         entry_stack_address, image_base, allocate, reallocate, free,
         read_property, syscall, errno_address, mkdir,
         thread_id=None, register_destructor=None, prepare_format=None, logger_observer=None,
-        reference_copier=None):
+        reference_copier=None, reference_assigner=None):
     """+0x25ee84 observed default shared/getter/format/filesystem branch.
 
     All path content is generated from loaded guest constants and references.
     Host property/syscall/mkdir/registration callbacks are environment inputs.
     A native VM input snapshot is not required by this helper.
+    An explicit reference_assigner receives the live SP for +0x162944;
+    the default retains the component's bare assignment semantics.
     """
     if entry_stack_address&15:raise RefillUnsupported('environment helper stack must be aligned')
+    if reference_assigner is not None and not callable(reference_assigner):
+        raise RefillUnsupported('environment reference requires a callable assignment provider')
     staged=_PageTransaction(pages)
     fmt=_lazy_constant(staged,image_base,0x3DE9A8,0x9A488,0x3DE99C,0x9A494)
     reference=entry_stack_address-0x60
+    if reference_assigner is not None:
+        # +15f590 spills getter's incoming X19. Warm getter retains this
+        # helper's output; its cold branch replaces X19 with the temporary.
+        copy_saved_x19=output_reference_address if _u(staged,image_base+0x3DEE20,1)&1 else reference
     get_inline_shared_reference(staged,output_reference_address=reference,
         entry_stack_address=entry_stack_address-0x60,image_base=image_base,
         allocate=allocate,free=free,read_property=read_property,syscall=syscall,
@@ -848,8 +856,14 @@ def construct_environment_reference(pages, *, output_reference_address,
         if not obj:raise RefillUnsupported('environment operator-new NULL abort is unsupported')
         objects.construct_string_object(staged,object_address=obj,source_address=0,
             allocate=allocate,vtable_address=image_base+0x34F5F8,empty_descriptor_address=image_base+0x6E168)
-        assign_owned_string_reference(staged,reference_address=output_reference_address,
-            object_address=obj,image_base=image_base,allocate=allocate,free=free)
+        if reference_assigner is None:
+            assign_owned_string_reference(staged,reference_address=output_reference_address,
+                object_address=obj,image_base=image_base,allocate=allocate,free=free)
+        else:
+            # Upper saved-X19 word survives as +162944 scope+12 padding.
+            _write_span(staged,entry_stack_address-0xA4,objects._word(copy_saved_x19)[4:])
+            reference_assigner(staged,reference_address=output_reference_address,
+                string_address=obj,entry_stack_address=entry_stack_address-0x60)
         # Native reloads shared and result pointers after all allocation effects.
         shared_string=_u(staged,_u(staged,reference)+16);result_object=_u(staged,output_reference_address)
         get_environment_service_reference(staged,image_base=image_base,allocate=allocate,thread_id=thread_id)

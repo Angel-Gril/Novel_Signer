@@ -1,6 +1,6 @@
 # Tomato Python material
 
-The opted-in state environment now copies the inline shared reference through its original diagnostic scope. Adds 36 native getter controls, 8 rollback checks and 46 Python regressions. Full request differences fall from 5554 to 5508 bytes; seven returns and GuestOS mappings match, with 5 packed records and 2 native service pages still differing. Full signing remains unfinished. See the [inline reference scope report](../REQUEST_JNI_STARTUP_WORKERS.md#6248-inline-shared-reference-scope2026-10-21-asiashanghai).
+The opted-in state environment now assigns its owned reference through the original diagnostic scope, including observed saved-register padding. Adds 28 native prefix controls, 8 rollback checks and 38 Python regressions. Full request differences fall from 5508 to 5504 bytes; first allocation divergence moves from 117 to 132. Full signing remains unfinished. See the [environment assignment scope report](../REQUEST_JNI_STARTUP_WORKERS.md#6249-environment-owned-reference-scope2026-10-21-asiashanghai).
 
 The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](../REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).
 

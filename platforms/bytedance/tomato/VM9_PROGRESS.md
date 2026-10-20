@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-21 Asia/Shanghai：environment owned reference scope
+
+state显式diagnostic_scope绑定environment的reference_assigner，复用162944拥有引用赋值，
+传递environment入口SP-60；15F590保存X19的高位生成后续scope padding，无native快照输入。
+新增28项原始environment前缀对照、8项拒绝/页面回滚、38项Python回归；默认行为全部保持。
+完整2830C4首个分配分歧117->132；20共同页差异5508->5504字节，减少4。
+七项返回和GuestOS映射一致，原生1439页及初态hash保持；1417/1437共同页相同。
+5个packed记录和2个native-only服务页仍不同。下一诊断LR1625D8定位1625A4，需继续关联上层caller。
+environment release scope仍未恢复。累计3843 native/1764 guards。完整signer及全内存等价仍未完成。
+见 [environment赋值作用域报告](REQUEST_JNI_STARTUP_WORKERS.md#6249-environment-owned-reference-scope2026-10-21-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-21 Asia/Shanghai：inline shared reference scope
 
 state显式diagnostic_scope通过environment转发reference_copier，由getter传递入口SP-40，
