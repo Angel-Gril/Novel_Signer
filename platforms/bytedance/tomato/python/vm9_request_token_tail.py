@@ -78,7 +78,9 @@ def apply_token_printf_callback(pages, *, argument_block_address, image_base,
 
     The wrapper loads X0/X1/X2 before entering the accepted live two-pass
     formatter. It stores four result bytes; the following padding is retained.
-    Child spills and the complete physical return ABI remain separate.
+    Save X2 and the two unconsumed AArch64 va_list descriptors in their actual
+    stack cells. Other GP/FP spills, consumed copies and the complete physical
+    return ABI remain separate.
     """
     from vm9_configuration_init import allocate_printf_cstring
     if type(entry_stack_address) is not int or not 0x200<=entry_stack_address<1<<64 or entry_stack_address&15:
@@ -87,8 +89,14 @@ def apply_token_printf_callback(pages, *, argument_block_address, image_base,
     words=tuple(int.from_bytes(_read_span(p,argument_block_address+i*8,8),'little') for i in range(4))
     if words[0]-image_base!=0x278314:
         raise RefillUnsupported('unrecovered token allocated printf callback')
+    _write_span(p,entry_stack_address-0x110,words[3].to_bytes(8,'little'))
     canary=entry_stack_address-0x58
     _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    saved_varargs=b''.join(v.to_bytes(8,'little') for v in
+        (entry_stack_address-0x10,entry_stack_address-0xE0,entry_stack_address-0x110))
+    saved_varargs+=(-0x30).to_bytes(4,'little',signed=True)+(-0x80).to_bytes(4,'little',signed=True)
+    _write_span(p,entry_stack_address-0x78,saved_varargs)
+    _write_span(p,entry_stack_address-0xA0,saved_varargs)
     result=allocate_printf_cstring(p,output_pointer_address=words[1],format_address=words[2],
         argument_addresses=(words[3],),allocate=allocate,max_bytes=max_bytes)
     if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):

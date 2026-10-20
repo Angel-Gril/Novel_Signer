@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：saved printf variadic state
+
+共享token/second printf owner恢复保存的X2和两份未消费va_list，共72字节声明栈状态。
+新增24项原始包装入口对照和6项拒绝/页面回滚检查；GP/FP spills与已消费副本仍未恢复。
+整段original287474保持97156步、391回调和七项返回值一致，1436/1439页逐字节相同。
+剩余3页栈差异106/1624/1245字节，合计2975，比上一阶段减少45字节；没有过滤差异。
+累计3643native/1716项拒绝或回滚；完整second/request内存等价、signer、替代Java、
+live/JVM、完整ABI和外部回滚仍未完成。
+见 [printf保存参数报告](REQUEST_JNI_STARTUP_WORKERS.md#6242-saved-printf-variadic-state2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：live VM register memory
 
 second VM使用客体内存中的32个寄存器槽和bytecode cursor，按执行顺序保留写入与别名读取。

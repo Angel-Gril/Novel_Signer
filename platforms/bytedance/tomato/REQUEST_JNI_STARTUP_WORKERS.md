@@ -8268,3 +8268,40 @@ python -B platforms/bytedance/tomato/python/verify_vm9_live_registers_fresh_2026
 ```
 
 此命令验证局部寄存器绑定；整段独立构造输入、探针与native比较输出另绑定私有hash。
+
+## 6.242 Saved printf variadic state（2026-10-20 Asia/Shanghai）
+
+原始`278314`将X2写入wrapper SP-110，并在SP-78保存32字节AArch64 va_list，
+再复制到SP-A0。描述包含stack=SP-10、gr_top=SP-E0、vr_top=SP-110、gr_offs=-48、
+vr_offs=-128。这两份描述不传给消费参数的`2772A4`，其原始副本在两次格式化后仍保持。
+这些字节均由实际输入参数和栈地址计算，没有从native输出中回填。
+
+已有`apply_token_printf_callback`按原始顺序恢复上述72字节及已有canary路径，
+second包装入口继续调用该共享owner。GP/FP spills、传给格式化器的消费副本、其他
+libc帧和完整物理ABI仍不在本阶段。接口和两次live格式化的原有语义保持。
+
+原始包装入口对照先在保存参数的栈单元产生真实RED，再实现并通过相同检查。
+**24项新增原生/Python对照**覆盖`288AD4`和`288C28`两个入口、两个库基址、
+普通与跨页栈布局，以及literal、不透明64位X2、字符串和NULL malloc分支。
+原生GP/FP使用独立非零输入；逐次比较格式化入口、分配入口和最终72字节状态及
+canary，并核对返回值、payload和allocator事件。另 **6项拒绝/页面回滚检查**覆盖
+缺页及分配服务抛错，验证页面不发布；未声称provider或映射效果回滚。历史native
+组没有重跑。旧代码基线取自不可变Git blobs；除本owner外466个旧Python文件相对
+早先工作区采集逐字节保持，规范CRLF为LF后与Git基线相同。owner修改前证据仅取Git。
+
+通过公开owning构造链重新执行整段原始`287474`：**97156步/391回调**，全部packed
+根回调及PC/SP/X0/X19/X28/X29/X30七项返回值一致，**1436/1439页逐字节相同**；
+全部990个声明库映像页、193个堆页和全部libc页仍一致，原始输入hash不变。
+剩余`70049000/7004A000/7004B000`分别有106/1624/1245字节差异，合计 **2975字节**，
+比上一阶段减少45字节。差异未过滤，整段探索不计入正式native数量。
+
+累计 **3643native/1716项拒绝或回滚**。完整second/request内存等价、fresh完整
+standalone signer、替代Java `2A8824`、live Android/JVM、完整physical ABI及
+provider/mapping回滚仍未完成。JNI/OS仍为显式synthetic服务，Host enforcement
+为UNVERIFIED。证据见 [printf保存参数记录](evidence/vm9_printf_saved_varargs_fresh_20261020.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_printf_saved_varargs_fresh_20261020.py --library <private-library.so> --output <printf-stack-evidence.json>
+```
+
+该命令比较声明的72字节和canary；未将局部成功升级为整段栈或完整signer验收。

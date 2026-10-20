@@ -1,0 +1,430 @@
+{
+  "schema": "vm9-printf-saved-varargs/v1",
+  "stage": "6.242",
+  "baseline": "015eca0e4c1e0aff037757242def8915c59574d8",
+  "native_Python_controls": 24,
+  "refusal_or_page_rollback_guards": 6,
+  "cumulative_native_controls": 3643,
+  "cumulative_refusal_or_rollback_checks": 1716,
+  "direct_controls": {
+    "native_Python_controls": 24,
+    "refusal_or_page_rollback_guards": 6,
+    "cases": [
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288ad4",
+        "case": "opaque_saved_argument",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288ad4",
+        "case": "text_saved_argument",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288ad4",
+        "case": "failed_allocation",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288ad4",
+        "case": "opaque_saved_argument",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288ad4",
+        "case": "text_saved_argument",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288ad4",
+        "case": "failed_allocation",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288c28",
+        "case": "opaque_saved_argument",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288c28",
+        "case": "text_saved_argument",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288c28",
+        "case": "failed_allocation",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288c28",
+        "case": "opaque_saved_argument",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288c28",
+        "case": "text_saved_argument",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "wrapper_offset": "0x288c28",
+        "case": "failed_allocation",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288ad4",
+        "case": "opaque_saved_argument",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288ad4",
+        "case": "text_saved_argument",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288ad4",
+        "case": "failed_allocation",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288ad4",
+        "case": "opaque_saved_argument",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288ad4",
+        "case": "text_saved_argument",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288ad4",
+        "case": "failed_allocation",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288c28",
+        "case": "opaque_saved_argument",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288c28",
+        "case": "text_saved_argument",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288c28",
+        "case": "failed_allocation",
+        "split_stack_layout": false,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288c28",
+        "case": "opaque_saved_argument",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288c28",
+        "case": "text_saved_argument",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "wrapper_offset": "0x288c28",
+        "case": "failed_allocation",
+        "split_stack_layout": true,
+        "original_printf_returned": true,
+        "saved_72_stack_bytes_and_canary_equal": true,
+        "state_before_each_format_pass_and_allocation_equal": true,
+        "opaque_GP_FP_inputs_independent": true,
+        "return_payload_and_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      }
+    ],
+    "negative_cases": [
+      {
+        "wrapper_offset": "0x288ad4",
+        "case": "missing_saved_argument",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "wrapper_offset": "0x288ad4",
+        "case": "missing_va_lists",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "wrapper_offset": "0x288ad4",
+        "case": "provider_failure",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "wrapper_offset": "0x288c28",
+        "case": "missing_saved_argument",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "wrapper_offset": "0x288c28",
+        "case": "missing_va_lists",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "wrapper_offset": "0x288c28",
+        "case": "provider_failure",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      }
+    ],
+    "saved_stack_bytes_per_control": 72,
+    "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "historical_native_groups_replayed": false,
+    "native_output_used_as_model_input": false,
+    "consumed_va_lists_compared": false,
+    "complete_physical_ABI_verified": false,
+    "complete_signer_verified": false
+  },
+  "contract": {
+    "owner": "apply_token_printf_callback",
+    "wrappers": [
+      "0x288ad4",
+      "0x288c28"
+    ],
+    "saved_argument_offset": -272,
+    "original_va_list_offset": -120,
+    "backup_va_list_offset": -160,
+    "va_list_size": 32,
+    "saved_bytes": 72,
+    "gr_offset": -48,
+    "vr_offset": -128,
+    "opaque_GP_FP_spills_modeled": false,
+    "consumed_va_lists_modeled": false
+  },
+  "constructed_whole_second": {
+    "original_287474_returned": true,
+    "total_compared_pages": 1439,
+    "complete_equal_pages": 1436,
+    "exact_root_callbacks": 391,
+    "Python_steps": 97156,
+    "packed_callback_ledger_equal": true,
+    "seven_physical_return_values_equal": true,
+    "all_declared_library_image_pages_equal": 990,
+    "all_declared_heap_pages_equal": 193,
+    "all_declared_libc_pages_equal": true,
+    "remaining_different_pages": [
+      {
+        "page": "0x70049000",
+        "count": 106,
+        "first": "0xbe0"
+      },
+      {
+        "page": "0x7004a000",
+        "count": 1624,
+        "first": "0x108"
+      },
+      {
+        "page": "0x7004b000",
+        "count": 1245,
+        "first": "0x0"
+      }
+    ],
+    "remaining_different_bytes": 2975,
+    "different_bytes_removed": 45,
+    "original_input_hash_unchanged": true,
+    "native_output_used_as_model_input": false,
+    "counted_as_formal_native_control": false,
+    "explicit_synthetic_JNI_OS_providers": true
+  },
+  "source_sha256": {
+    "vm9_request_token_tail.py": "173dcd378970eba3ffdbd7ec3ff15ecb20314c96a7517399f6651380c24b7340",
+    "verify_vm9_printf_saved_varargs_fresh_20261020.py": "698f317a167ace6be90ce7f4671dfc81dbeb70a4282c9c375db1b8527dd53228"
+  },
+  "private_evidence_sha256": {
+    "_printf_saved_varargs_RED_20261020.log": "ebabfdf02b259d25dacad87ebe80beed0dccfc98767ac0329aad9bef5509bbf7",
+    "_printf_saved_varargs_BEFORE_20261020.json": "bad2c895d2b1993b37ac07b3454e1e9a2de0638a77b4eb0d6c2905565cbaa854",
+    "_printf_saved_varargs_BASELINE_20261020.json": "edc86f38d7a69898d396a80f7ae8d22384587ddc32d666fe14392e5970425254",
+    "_printf_saved_varargs_task_decision_20261020.json": "f27d34cb2d3893f0acc234d7674e878f658ac497f57066fce067eeaa0cdd0a9e",
+    "_printf_saved_varargs_GREEN_20261020.json": "867000c799ac39e9f94a127c1178c3b533b9b213a563d473bce98fcfedc216e6",
+    "_printf_saved_varargs_WHOLE_20261020.json": "b497bea2923757e94e9c61f1b8032407158c058f17b0291c2e3d926c5a62c756",
+    "_printf_saved_varargs_WHOLE_NATIVE_RETURN_20261020.json": "b4608a3dee8902e2d9cb07311c0dd7c5b97c6d112c4d4e2bfcbfacde4473e368",
+    "_printf_saved_varargs_WHOLE_NATIVE_OUTPUT_20261020.pkl.gz": "a04f86ba83cf452334bb7cc046e572a3283e6e0746f3ff2711a4f89e16658bb0",
+    "_probe_printf_saved_varargs_whole_20261020.py": "edb90b634db709b283fa4c57e172f0be38f2059bf2042ac3e35e482e2e14d099"
+  },
+  "baseline_provenance": "Immutable Git blobs for pre-edit owner evidence. The other 466 worktree Python files retain the bytes of the earlier concurrent BEFORE capture and match Git after CRLF-to-LF normalization; BEFORE is not pre-edit owner evidence.",
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "whole_second_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_complete_standalone_signer_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_physical_ABI_verified": false,
+  "external_provider_mapping_rollback_verified": false,
+  "Host_enforcement": "UNVERIFIED"
+}
