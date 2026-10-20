@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：signer child request dispatch
+
+恢复27DD04分发器与27E798树引用赋值。36双基址native/18回滚通过。
+真实构造child连接JNI输入、mode138 owning VM及Java输出清理：outer5182/322、second97156/391，
+14元素与7项树一致；三个对象及counter在各自引用生命周期内各free一次。JNI/OS为显式synthetic服务。
+454旧AST/81bindings/1060private hashes保持；旧native未重跑。
+累计3557native/1612checks。下一步正式owning VM适配入口及whole native/fresh完整standalone signer验证。
+替代Java分支、live/JVM、physical ABI和provider/mapping回滚仍未验证。
+见 [分发器报告](REQUEST_JNI_STARTUP_WORKERS.md#6236-signer-child-request-dispatch2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：normal Java request facade
 
 新增17B8F8常规外层，组合URL/header输入、request虚调用、Java输出及全部scoped清理。

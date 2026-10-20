@@ -1,5 +1,7 @@
 # Tomato / Fanqie (ByteDance)
 
+The signer child dispatcher now preserves callback/fallback ABI and scoped result ownership. Adds36 original native controls and18 rollback checks. A fresh constructed Java facade/input to owning request VM/output chain returns14 elements; JNI/OS services remain synthetic and complete signing is unfinished. See the [child dispatch report](REQUEST_JNI_STARTUP_WORKERS.md#6236-signer-child-request-dispatch2026-10-20-asiashanghai).
+
 The normal Java request facade now composes URL/header conversion, a live virtual request target, Java output and complete scoped cleanup. Adds22 native controls and15 rollback checks. The request method is an explicit synthetic provider in these controls; actual request VM integration and complete signing remain unfinished. See the [Java facade report](REQUEST_JNI_STARTUP_WORKERS.md#6235-normal-java-request-facade2026-10-20-asiashanghai).
 
 JNI header input now builds an owning configuration tree through object-byte conversion and cloning. Adds52 input and20 tree-release native controls plus32 rollback checks. A synthetic six-element input becomes four ordered Java output elements and its tree is deleted; actual Java request integration and complete signing remain unfinished. See the [header input report](REQUEST_JNI_STARTUP_WORKERS.md#6234-jni-header-input-and-tree-reference-release2026-10-20-asiashanghai).

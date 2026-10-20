@@ -340,6 +340,7 @@ Second返回新增 **21项原生对照、15项拒绝检查**，outer推进至400
 JNI header输出数组组件已恢复，新增42项双基址原生对照和42项回滚检查。见 [JNI数组报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6232-cached-class-jni-header-array2026-10-20-asiashanghai)。
 JNI String class冷分支恢复，新增24项原生对照和16项回滚检查；构造request的7项结果成功转为14个Java元素。见 [冷class报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6233-cold-string-class-and-constructed-output2026-10-20-asiashanghai)。
 JNI header输入和树引用释放恢复，新增72项原生对照、32项回滚；synthetic输入输出及树清理通过。见 [header输入报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6234-jni-header-input-and-tree-reference-release2026-10-20-asiashanghai)。
+child请求分发及结果所有权恢复，新增36项原生对照、18项回滚；fresh Java输入到owning VM到14元素输出及清理的构造链通过，JNI/OS仍为显式服务。见 [分发器报告](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6236-signer-child-request-dispatch2026-10-20-asiashanghai)。
 完整signer仍未完成。见
 [AST/清理报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#612-实际-ast-callback-与临时清理2026-10-09-asiashanghai)。
 [Data reserve/析构报告](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#613-data-record-容量预留搬移与析构2026-10-09-asiashanghai)。

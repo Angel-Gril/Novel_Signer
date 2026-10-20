@@ -423,6 +423,39 @@ def release_scoped_configuration_tree_reference(pages, *, reference_address,
     p.commit()
 
 
+def assign_scoped_configuration_tree_reference(pages, *, destination_address,
+        source_address, entry_stack_address, image_base, thread_pointer,
+        allocate, free, thread_id=None, diagnostic_observer=None, max_nodes=4096):
+    """+27e798: equal object pointers skip; otherwise release and copy live pair.
+
+    The old release and new copy use separate diagnostic scopes. The existing
+    release composition selects the identical scope/destructor stack by using
+    entry SP-0x10. Provider ledgers are outside guest-page rollback.
+    """
+    import vm9_reference_scopes as references
+    scope=references._scope(entry_stack_address,0x50)
+    p=_PageTransaction(pages)
+    _read_span(p,destination_address,16);_read_span(p,source_address,16)
+    canary=scope+24
+    _write_span(p,canary,_read_span(p,thread_pointer+0x28,8))
+    u=lambda a:int.from_bytes(_read_span(p,a,8),'little')
+    if u(destination_address)!=u(source_address):
+        if u(destination_address+8):
+            release_scoped_configuration_tree_reference(p,
+                reference_address=destination_address,
+                entry_stack_address=entry_stack_address-0x10,
+                image_base=image_base,thread_pointer=thread_pointer,
+                allocate=allocate,free=free,thread_id=thread_id,
+                diagnostic_observer=diagnostic_observer,max_nodes=max_nodes)
+        references._enter(p,scope,u(source_address),image_base,thread_pointer,
+            thread_id,allocate,diagnostic_observer)
+        objects._copy_reference_contents(p,destination_address,source_address)
+        references._leave(p,scope,image_base,thread_pointer,diagnostic_observer)
+    if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
+        raise RefillUnsupported('tree reference assignment stack canary changed')
+    p.commit();return destination_address
+
+
 def configuration_tree_size(pages, *, container_address: int) -> int:
     """+0x25c150/+0x24b958/+0x24bdd0: load controller then its uint64 count."""
     if not isinstance(container_address, int) or not 0 <= container_address < 1 << 64:

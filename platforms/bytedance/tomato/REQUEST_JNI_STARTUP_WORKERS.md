@@ -7952,6 +7952,39 @@ python -B platforms/bytedance/tomato/python/verify_vm9_tree_reference_release_fr
 python -B platforms/bytedance/tomato/python/verify_vm9_java_request_facade_fresh_20261020.py --library <private-libmetasec.so> --libc <matching-libc.so> --output <java-facade-evidence.json>
 ```
 
+## 6.236 Signer child request dispatch（2026-10-20 Asia/Shanghai）
+
+新增 `vm9_request_dispatch.invoke_signer_child_request`，恢复 `27DD04`。
+已确认Java facade的receiver是 `35D5F0` child；其vtable+20才是请求分发器。
+`35DC50` handler的+20只返回NULL，+68只返回VM入口getter，不能直接作为facade请求方法。
+分发器持有shared reader，遍历callback/context pair，以URL引用、header引用、W-mode、context及X8输出调用，
+选取首个非NULL结果，否则调用child+20保存的fallback，并按原生顺序赋值、释放临时引用及reader。
+树引用赋值 `27E798` 归属 `vm9_registry.assign_scoped_configuration_tree_reference`，复用既有释放和诊断owner。
+
+原生RED **2502条指令**，观察到完整参数和返回引用后，旧Python缺少模块。
+复核另发现单个NULL callback的遍历还会访问sentinel；先复现bound1失败，修正遍历空间后新增2项原生对照通过，回调次数上限保持1。
+**22项分发器 +12项树赋值 +2项遍历预算双基址原生对照、18项拒绝或回滚检查通过**。
+覆盖空列表、NULL/成功callback、第二项成功、fallback、动态fallback、uint32 mode、已有reader，
+以及旧引用最终删除/保留、相同指针不同counter、NULL counter、自赋值与counter溢出。
+原生真实执行分发、迭代器、引用、赋值、树析构和匹配libc锁；callback及分配仍为显式服务。
+所有声明的非栈guest/image、canary、回调参数、诊断/分配/free顺序和最终状态一致。
+
+另有fresh构造组合：**JNI URL/header →真实child分发器 →拥有状态的请求VM →Java输出及清理**。
+使用facade真实mode `0x138`，outer **5182步/322callbacks**，second **97156步/391callbacks**，
+输出 **14个Java元素**，与独立遍历的 **7项树**一致。URL、输入树、结果树及其counter在对应引用捕获后各释放一次。
+输入counter地址曾在之前生命周期被free后复用，核对已分开，不按整条流程的地址总次数误判。
+本组合使用显式synthetic JNI/OS服务；这是恢复代码之间的组合证明，尚非whole original-native request或live JVM证明。
+旧direct-entry mode0的second96740步不套用于新输入；旧native组未重跑。
+
+保留454个旧AST/81bindings/1060private hashes。
+累计 **3557native/1612项拒绝或回滚**。下一步整理正式可调用的owning VM适配入口，
+继续whole second/request native、fresh完整standalone signer和live/JVM验证；替代Java路径仍未完成。
+见 [分发器证据](evidence/vm9_request_dispatch_fresh_20261020.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_dispatch_fresh_20261020.py --library <private-library.so> --libc <matching-libc.so> --output <dispatch-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：
