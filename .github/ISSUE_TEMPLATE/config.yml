@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report index (GitHub Pages)
+    url: https://angel-gril.github.io/Novel_Signer/
+    about: Platform reports and evidence index
+  - name: Evidence rules
+    url: https://github.com/Angel-Gril/Novel_Signer/blob/main/docs/architecture.md
+    about: The three evidence labels and their acceptance rules
+  - name: Security policy
+    url: https://github.com/Angel-Gril/Novel_Signer/blob/main/SECURITY.md
+    about: What to do if sensitive material was committed

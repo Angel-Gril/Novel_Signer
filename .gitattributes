@@ -1,0 +1,17 @@
+# Binary types — never normalize
+*.so        binary
+*.apk       binary
+*.aab       binary
+*.p12       binary
+*.jks       binary
+*.keystore  binary
+*.bin       binary
+*.raw       binary
+*.dump      binary
+*.trace     binary
+*.png       binary
+*.jpg       binary
+
+# Language statistics hints
+docs/RESEARCH_LOG.md      linguist-documentation
+platforms/**/evidence/**  linguist-generated

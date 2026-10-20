@@ -1,0 +1,69 @@
+name: Research claim
+description: Submit a new reproducible result, or correct the evidence label of an existing one
+title: "[Claim] "
+labels: ["research-claim"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting: the evidence must **not** contain device identifiers, tokens,
+        complete request headers, raw responses, APKs or native libraries.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Tomato / ByteDance
+        - Douyin / ByteDance
+        - Qidian
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Target version
+      placeholder: "v7.1.3.32"
+    validations:
+      required: true
+  - type: dropdown
+    id: evidence
+    attributes:
+      label: Evidence label (required)
+      description: See docs/architecture.md
+      options:
+        - Live verified
+        - Sample verified
+        - Static only
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: Claim
+      description: One sentence stating what this change asserts
+    validations:
+      required: true
+  - type: textarea
+    id: checks
+    attributes:
+      label: Controls and command
+      description: How many controls / negatives / rollback checks, and the command that reproduces them
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: What is still open
+      description: State explicitly what this claim does **not** cover
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: The evidence contains no device identifiers, tokens, raw responses, APKs or native libraries
+          required: true
+        - label: `python scripts/scan_public.py` passes locally
+          required: true

@@ -1,0 +1,35 @@
+name: Bug report
+description: Report a problem with the scripts, CI or documentation links
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Actual behaviour vs expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. python scripts/check_python.py
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "Windows 11 / Python 3.12 / Rust stable"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output
+      render: text
+    validations:
+      required: false
