@@ -7400,5 +7400,14 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_second_services_fresh_20261020": {
+    "path": "evidence/vm9_request_second_services_fresh_20261020.json",
+    "native_Python_controls": 0,
+    "constructed_request_controls": 1,
+    "rollback_guards": 30,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

@@ -7823,6 +7823,27 @@ fresh/live/JVM仍未完成。见 [配置写入证据](evidence/vm9_request_confi
 python -B platforms/bytedance/tomato/python/verify_vm9_request_configuration_set_fresh_20261019.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <configuration-set-evidence.json>
 ```
 
+## 6.231 Public second services（2026-10-20 Asia/Shanghai）
+
+公共outer入口增加可选 `identifier_file_services` 和 `mutex_import_bindings`，在任何guest/provider效果前
+验证fopen/fread/fclose可调用，以及显式pthread_mutex_lock/unlock地址类型、范围和对齐。
+两个service对象原样传入现有second consumer，不复制私有探针中的fixture实现。
+outer对second的调用预算由20000改为500000，依据已验收的96740步执行；standalone second默认4000保持。
+
+实际构造入口RED在second **9940/+10A1E0** 的 `2886B0→25BD8C` 停下，outer为 **3900/+FE2D0**。
+GREEN通过公共参数传入服务，全程不修改second执行参数，second **96740/+112434、391callbacks** 返回，
+outer **5182/+FFB78、322callbacks** 返回并提交；旧callback计数保持，file顺序为fopen/fread/fclose。
+**新增1项构造request验收、30项提前拒绝检查；新增native对照0项**，历史native不重跑。
+
+保留446个旧Python AST、76个历史绑定和994项私有哈希。累计 **3361native/1489项拒绝或回滚**。
+该入口仍使用显式synthetic JNI/device/file/clock/system providers，尚未证明实际URL/header JNI和fresh独立signer输出；
+whole second/request原生对照、live/JVM、physical ABI及provider/mapping回滚仍未完成。
+见 [公共服务证据](evidence/vm9_request_second_services_fresh_20261020.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_second_services_fresh_20261020.py --output <second-services-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

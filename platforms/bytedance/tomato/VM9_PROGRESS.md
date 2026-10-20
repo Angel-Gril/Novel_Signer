@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：public second services
+
+公共outer入口显式传入identifier file及mutex绑定，second调用预算500000，outer预算8000。
+构造request无需修改second执行参数即可返回：second96740/+112434/391callbacks；outer5182/+FFB78/322callbacks。
+新增1项构造入口验收及30项拒绝检查，native新增0项。446旧AST/76bindings/994privatehashes保持。
+累计3361native/1489checks；完整signer、whole second/request native、actual URL/header JNI、fresh/live/JVM未证明。
+见 [公共服务报告](REQUEST_JNI_STARTUP_WORKERS.md#6231-public-second-services2026-10-20-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：outer configuration set
 
 外层配置写入恢复，39项新增native/64项拒绝检查通过；实际3572instructions/1238ranges、6次真实分配/1次释放一致。

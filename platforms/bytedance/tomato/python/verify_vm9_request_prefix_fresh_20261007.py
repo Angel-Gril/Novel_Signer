@@ -148,7 +148,18 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                    get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None,
                    register_exit=None, get_state_service=None, parse_decimal=None,
                    random_services=None, logger_services=None, jni_availability_services=None,
-                   calloc=None, process_services=None):
+                   calloc=None, process_services=None, identifier_file_services=None,
+                   mutex_import_bindings=None):
+    if identifier_file_services is not None and (
+            not isinstance(identifier_file_services,dict)
+            or set(identifier_file_services)!={'fopen','fread','fclose'}
+            or any(not callable(f) for f in identifier_file_services.values())):
+        raise RefillUnsupported('request identifier requires explicit fopen/fread/fclose services')
+    if mutex_import_bindings is not None and (
+            not isinstance(mutex_import_bindings,dict)
+            or set(mutex_import_bindings)!={'pthread_mutex_lock','pthread_mutex_unlock'}
+            or any(type(a) is not int or not 0<a<1<<64 or a&3 for a in mutex_import_bindings.values())):
+        raise RefillUnsupported('request mutex imports require explicit aligned lock/unlock bindings')
     if jni_availability_services is not None and (not isinstance(jni_availability_services,dict) or
             not callable(jni_availability_services.get('invoke_jni'))):
         raise RefillUnsupported('request JNI availability requires an explicit JNI service')
@@ -520,7 +531,8 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                 nested=vm9_request_287474_vm.execute_request_287474_vm_prefix(vm.m.pages,
                     continue_caller_return=True,
                     vm_module=vm_module,consumer_services=dict(allocate=allocate,reallocate=reallocate,free=free,prepare_format=prepare_format,random_services=random_services,
-                        process_services=process_services,
+                        process_services=process_services,identifier_file_services=identifier_file_services,
+                        mutex_import_bindings=mutex_import_bindings,
                         get_singleton=get_singleton,
                         get_tls=get_tls,
                         read_clock=read_clock,
@@ -530,7 +542,7 @@ def execute_prefix(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=N
                         thread_id=None if diagnostic_scope is None else diagnostic_scope.get('thread_id'),
                         diagnostic_observer=None if diagnostic_scope is None else lambda *event:
                             diagnostic_scope.setdefault('events',[]).append(event)),
-                    maxsteps=20000,entry_stack_address=frame.native_stack_address-0x180,
+                    maxsteps=500000,entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
                     image_base=image,object_address=words[1],
                     saved_frame_pointer=frame.native_stack_address-0x60,

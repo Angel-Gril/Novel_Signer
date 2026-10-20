@@ -1,5 +1,7 @@
 # Tomato Python material
 
+Public outer entry now forwards explicit identifier file and mutex services. Constructed request returns at5182/322callbacks with public outer8000/second500000 call budgets, without changing second execution kwargs. Adds30 early refusal checks; no new native comparisons. Complete signing remains unfinished. See the [public service report](../REQUEST_JNI_STARTUP_WORKERS.md#6231-public-second-services2026-10-20-asiashanghai).
+
 Outer configuration setter passes39 new native controls and64 refusal checks. Constructed outer request returns at5182/+FFB78 with322callbacks; second retains96740/391callbacks using private500000 budget. Public outer budget is8000; public second budget remains20000. Complete signing remains unfinished. See the [configuration setter report](../REQUEST_JNI_STARTUP_WORKERS.md#6230-outer-configuration-set2026-10-20-asiashanghai).
 
 Second VM selected return passes21 new native controls and15 refusal checks. Actual caller return matches seven physical values and1437 declared pages. Outer resumes3900→4000;next285EF0→2568C8. Complete signing remains unfinished. See the [second return report](../REQUEST_JNI_STARTUP_WORKERS.md#6229-second-vm-return2026-10-19-asiashanghai).
