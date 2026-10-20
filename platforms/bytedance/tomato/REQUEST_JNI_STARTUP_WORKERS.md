@@ -8343,3 +8343,43 @@ signer、替代Java `2A8824`、live Android/JVM、完整physical ABI及provider/
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_printf_formatter_frame_fresh_20261020.py --library <private-library.so> --output <formatter-frame-evidence.json>
 ```
+
+## 6.244 Consumed printf variadic state（2026-10-20 Asia/Shanghai）
+
+原始`278314`在wrapper SP-C0创建第一份32字节va_list副本；成功分配并发布输出指针后，
+才在SP-E0创建第二份副本。原始`2772A4`每消费一个GP参数推进gr_offs八字节，`%%`
+不消费参数。实际入口探索分别观察副本初始化、格式化返回与malloc边界。
+
+共享`allocate_printf_cstring`接受可选的source/first/second三处独立va_list地址，
+每次实际格式化前复制原描述；`_format_guest_strings`沿原有参数消费路径更新GP游标。
+token为薄转发，second包装层显式提供对应地址。默认shared/token调用不启用这些写入。
+second已拒绝输入或分配结果进入native栈，因此未扩展native栈别名契约，也未新增
+formatter hook、格式串重复读取或第二套解析器。未知GP/FP spills与完整ABI仍未恢复。
+
+**32项新增原生/Python对照**覆盖两基址、普通及描述跨页布局、literal/escaped percent、
+字符串、signed与64位unsigned；分配期间格式串在消费/不消费间切换，输出槽与格式串
+重叠，以及NULL malloc。比较原始formatter边界、分配入口和最终两份描述，以及返回、
+payload、allocator事件；NULL分配保留第二份原字节。旧实现先在分配前描述状态出现
+真实RED。一次to_string探索夹具沿用未使用的不合法X2，已修正为映射字符串地址；该
+oracle输入错误不计为production RED或native control。
+
+另 **10项拒绝/页面回滚检查**覆盖provider抛错、成功第二遍前原描述被改写、分配栈别名、
+描述形状/重叠/缺页、错误GP初值及超过六个保存GP参数。页面不发布；provider ledger和
+映射效果回滚未验证。**68项纯Python回归**隔离不可变旧shared/token/second三个owner，
+分别覆盖second48、默认token8、默认shared12项；返回、事件和全部非声明字节保持，
+默认路径全部页面逐字节相同。未重跑历史native组，这些回归不计入native controls。
+
+独立构造输入后重新执行整段original `287474`：**97156步/391回调**，全部packed根
+回调及PC/SP/X0/X19/X28/X29/X30一致，**1436/1439页逐字节相同**；全部990库映像页、
+193堆页和全部libc页仍一致，输入hash保持。三页差异106/1624/1179字节，合计
+**2909字节**，减少21字节。没有过滤差异，整段探索不计正式native数量，native输出
+只用于比较。累计 **3695native/1732项拒绝或回滚**。
+
+完整second/request内存等价、完整standalone signer、替代Java `2A8824`、live
+Android/JVM、完整physical ABI及provider/mapping回滚仍未完成。JNI/OS仍为显式
+synthetic服务，Host enforcement为UNVERIFIED。
+证据见 [消费参数状态记录](evidence/vm9_printf_consumed_va_lists_fresh_20261020.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_printf_consumed_va_lists_fresh_20261020.py --library <private-library.so> --output <consumed-varargs-evidence.json>
+```

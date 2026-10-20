@@ -73,7 +73,7 @@ def apply_token_tail_callback(pages, *, wrapper_offset, argument_block_address,
 
 
 def apply_token_printf_callback(pages, *, argument_block_address, image_base,
-        entry_stack_address, thread_pointer, allocate, max_bytes=0x100000):
+        entry_stack_address, thread_pointer, allocate, max_bytes=0x100000,va_list_frame=None):
     """+288c28 -> +278314: one packed argument, W0 result, child canary.
 
     The wrapper loads X0/X1/X2 before entering the accepted live two-pass
@@ -98,7 +98,7 @@ def apply_token_printf_callback(pages, *, argument_block_address, image_base,
     _write_span(p,entry_stack_address-0x78,saved_varargs)
     _write_span(p,entry_stack_address-0xA0,saved_varargs)
     result=allocate_printf_cstring(p,output_pointer_address=words[1],format_address=words[2],
-        argument_addresses=(words[3],),allocate=allocate,max_bytes=max_bytes)
+        argument_addresses=(words[3],),allocate=allocate,max_bytes=max_bytes,va_list_frame=va_list_frame)
     if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
         raise RefillUnsupported('token printf stack canary changed')
     _write_span(p,argument_block_address+32,result.to_bytes(4,'little'))

@@ -1,0 +1,505 @@
+{
+  "schema": "vm9-printf-consumed-va-lists/v1",
+  "stage": "6.244",
+  "baseline": "cdea6a82c4c56f6f3268a26dc76b199b9c626f1a",
+  "native_Python_controls": 32,
+  "refusal_or_page_rollback_guards": 10,
+  "cumulative_native_controls": 3695,
+  "cumulative_refusal_or_rollback_checks": 1732,
+  "direct_controls": {
+    "native_Python_controls": 32,
+    "refusal_or_page_rollback_guards": 10,
+    "cases": [
+      {
+        "image_base": "0x122c0000",
+        "case": "literal",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "string",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "signed",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "unsigned_long_long",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "to_literal",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "to_string",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "output_format_alias",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "NULL_malloc",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "literal",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "string",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "signed",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "unsigned_long_long",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "to_literal",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "to_string",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "output_format_alias",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "NULL_malloc",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "literal",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "string",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "signed",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "unsigned_long_long",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "to_literal",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "to_string",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "output_format_alias",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "NULL_malloc",
+        "split_stack_layout": false,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "literal",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "string",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "signed",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "unsigned_long_long",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "to_literal",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "to_string",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "output_format_alias",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "NULL_malloc",
+        "split_stack_layout": true,
+        "original_formatter_boundaries_observed": true,
+        "allocation_entry_state_equal": true,
+        "final_two_va_list_cells_equal": true,
+        "return_payload_allocator_effects_equal": true,
+        "native_snapshot_input": false
+      }
+    ],
+    "negative_cases": [
+      {
+        "case": "provider_failure",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "provider_changes_source",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "allocation_spill",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "bad_frame_shape",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "overlapping_frame",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "missing_source",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "missing_first",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "missing_second",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "wrong_GP_offset",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "too_many_GP_arguments",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      }
+    ],
+    "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "historical_native_groups_replayed": false,
+    "native_output_used_as_model_input": false,
+    "token_default_consumed_frame_extended": false,
+    "complete_physical_ABI_verified": false,
+    "complete_signer_verified": false
+  },
+  "Python_only_regressions": {
+    "baseline": "cdea6a82c4c56f6f3268a26dc76b199b9c626f1a",
+    "Python_only_regressions": 68,
+    "groups": {
+      "second_wrapper": 48,
+      "default_token": 8,
+      "default_shared": 12
+    },
+    "historical_native_groups_replayed": false,
+    "counted_as_native_controls": false,
+    "all_three_baseline_owners_isolated": true
+  },
+  "contract": {
+    "owner": "allocate_printf_cstring / _format_guest_strings",
+    "wrapper": "0x288ad4",
+    "source_descriptor_offset": -120,
+    "first_consumed_descriptor_offset": -192,
+    "second_consumed_descriptor_offset": -224,
+    "descriptor_bytes": 32,
+    "initial_GP_offset": -48,
+    "initial_FP_offset": -128,
+    "GP_argument_increment": 8,
+    "maximum_saved_GP_arguments": 6,
+    "percent_escape_consumes_argument": false,
+    "second_copy_after_output_pointer_publication": true,
+    "NULL_allocation_preserves_second_cell": true,
+    "source_change_before_successful_second_pass_rejected": true,
+    "native_stack_aliases_supported": false,
+    "token_default_consumed_frame_extended": false,
+    "new_formatter_hook_added": false,
+    "extra_format_reads_added": false,
+    "duplicate_format_parser_added": false,
+    "instruction_by_instruction_stack_write_order_verified": false,
+    "complete_GP_FP_ABI_modeled": false
+  },
+  "constructed_whole_second": {
+    "original_287474_returned": true,
+    "total_compared_pages": 1439,
+    "complete_equal_pages": 1436,
+    "exact_root_callbacks": 391,
+    "Python_steps": 97156,
+    "packed_callback_ledger_equal": true,
+    "seven_physical_return_values_equal": true,
+    "all_declared_library_image_pages_equal": 990,
+    "all_declared_heap_pages_equal": 193,
+    "all_declared_libc_pages_equal": true,
+    "remaining_different_pages": [
+      {
+        "page": "0x70049000",
+        "count": 106,
+        "first": "0xbe0"
+      },
+      {
+        "page": "0x7004a000",
+        "count": 1624,
+        "first": "0x108"
+      },
+      {
+        "page": "0x7004b000",
+        "count": 1179,
+        "first": "0x0"
+      }
+    ],
+    "remaining_different_bytes": 2909,
+    "different_bytes_removed": 21,
+    "original_input_hash_unchanged": true,
+    "native_output_used_as_model_input": false,
+    "counted_as_formal_native_control": false,
+    "explicit_synthetic_JNI_OS_providers": true
+  },
+  "source_sha256": {
+    "vm9_configuration_init.py": "27c8224d6588b104d33bbce6fc7cbf893875f565c6049c9f6bf7123ca5f8fb3b",
+    "vm9_request_token_tail.py": "3d6557feae2bf8be3c93a5fd95771d0eb53c2617f228a14ba898423a7b93af93",
+    "vm9_request_287474_vm.py": "a169df0988cd04277ccb43a4c8a4af1bffed60230efb78cb706b980d709e31c4",
+    "verify_vm9_printf_consumed_va_lists_fresh_20261020.py": "33aa54c5ac730a4faa29c7c8c1bd0c4a375e140aaeef492e54d28609ee0ed3c0"
+  },
+  "private_evidence_sha256": {
+    "_printf_consumed_va_lists_DISCOVERY_20261020.json": "821291c335e1ea9295c2e41462647d0982b22a9aa2d32946a7d310f4922e3575",
+    "_printf_consumed_va_lists_RED_20261020.log": "134be4527cfdca75aff6b9ea5d7598abaeb5d41fad8975de15b1b52c9fef9087",
+    "_printf_consumed_va_lists_BEFORE_20261020.json": "9aa74d076a2af0e28fb38bc7989ac8c4a3f6ce0da36f8a6e7be2c5c069308c60",
+    "_printf_consumed_va_lists_task_decision_20261020.json": "fcb897e3f4370e66c97dba594b144b1ced3350da72511b6421e46f9a7c9bb3c3",
+    "_printf_consumed_va_lists_FIXTURE_ERROR_20261020.log": "dabceeb91c515d3806bea8416db388b7554ae2be5409358a999a9b1a0af53f53",
+    "_printf_consumed_va_lists_GREEN_20261020.json": "eecd22d605e6aca2a7c7d36efedae221066dceaa1e8d677a7551dc91a0b35468",
+    "_printf_consumed_va_lists_PYTHON_REGRESSION_20261020.json": "aea4e91ea9a00971c66c2539f773ca93dd505ae1414ecda2319fa9ef2f14bffe",
+    "_printf_consumed_va_lists_WHOLE_20261020.json": "7f8bf79dedb20668af10c9b4300657329ab846637b5370736976d5922898726c",
+    "_printf_consumed_va_lists_WHOLE_NATIVE_RETURN_20261020.json": "b4608a3dee8902e2d9cb07311c0dd7c5b97c6d112c4d4e2bfcbfacde4473e368",
+    "_printf_consumed_va_lists_WHOLE_NATIVE_OUTPUT_20261020.pkl.gz": "a04f86ba83cf452334bb7cc046e572a3283e6e0746f3ff2711a4f89e16658bb0",
+    "_probe_printf_consumed_va_lists_20261020.py": "be644d749ed5a67e125408ecde46fb74215d1719645c4ada156c90a4284fc977",
+    "_probe_printf_consumed_va_lists_whole_20261020.py": "9370ed2ddc0d4c8a30add3821b8a5bc58d2979bb32680360aafe53fe63024f04",
+    "_printf_consumed_va_lists_python_regression_20261020.py": "c462fa1cfaf935a56ca5398aeb373956da1e6664259347faa3fdd7c1241dc3bd"
+  },
+  "baseline_provenance": "Serial capture before owner editing, binding raw worktree bytes and immutable Git blobs.",
+  "fixture_correction": "The first to_string fixture retained an unused unmapped X2; corrected to a mapped string. That oracle setup error is neither the production RED nor a native control.",
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "whole_second_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_complete_standalone_signer_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_physical_ABI_verified": false,
+  "external_provider_mapping_rollback_verified": false,
+  "Host_enforcement": "UNVERIFIED"
+}

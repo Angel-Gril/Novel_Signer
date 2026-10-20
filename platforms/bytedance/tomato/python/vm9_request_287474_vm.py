@@ -1763,7 +1763,8 @@ def apply_request_287474_allocated_printf_callback(pages, *, argument_block_addr
     Share the token printf owner, including the canary at wrapper SP-0x58.
     Preserve eight input-derived formatter frame words at the malloc boundary
     and final return, plus known X21 on the successful second pass. Other
-    physical spills and formatter locals remain separate.
+    physical spills and formatter locals remain separate. The shared formatter
+    also owns the consumed va_list copies at SP-0xC0 and SP-0xE0.
     Output/source and output/result aliases retain the native publication order.
     Native spill aliases and overlapping allocations are outside this boundary;
     page rollback does not reverse external allocator or mapping effects.
@@ -1828,7 +1829,8 @@ def apply_request_287474_allocated_printf_callback(pages, *, argument_block_addr
         return result
     result=apply_token_printf_callback(p,argument_block_address=argument_block_address,
         image_base=image_base,entry_stack_address=entry_stack_address,
-        thread_pointer=thread_pointer,allocate=checked_allocate,max_bytes=max_bytes)
+        thread_pointer=thread_pointer,allocate=checked_allocate,max_bytes=max_bytes,
+        va_list_frame=(entry_stack_address-0x78,entry_stack_address-0xC0,entry_stack_address-0xE0))
     if second_pass_size:formatter_frame(0x2783DC,second_pass_size)
     p.commit();return result
 

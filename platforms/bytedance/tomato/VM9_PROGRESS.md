@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：consumed printf variadic state
+
+second printf通过原有两遍live格式化恢复SP-C0/SP-E0两份32字节va_list副本及GP消费游标。
+新增32项原始入口对照、10项拒绝/页面回滚检查；68项纯Python回归保持旧返回、事件及
+声明帧以外全部字节，默认shared/token路径逐字节保持。历史native组未重跑。
+整段original287474保持97156步、391回调和七项返回值一致，1436/1439页逐字节相同；
+剩余三页106/1624/1179字节，合计2909，比上一阶段减少21字节。
+累计3695native/1732项拒绝或回滚；完整内存等价、signer、live/JVM及完整ABI未完成。
+见 [消费参数状态报告](REQUEST_JNI_STARTUP_WORKERS.md#6244-consumed-printf-variadic-state2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：deterministic printf formatter frame
 
 second allocated printf恢复八个由输入计算的格式化器帧字，以及成功第二遍保存的分配尺寸。

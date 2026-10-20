@@ -616,11 +616,12 @@ def get_request_version_word(pages, *, image_base, allocate, free,
 
 
 
-def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
+def _format_guest_strings(pages,format_address,argument_addresses,max_bytes,*,va_list_address=None):
     """Bounded printf %d/%u/%lu/%llu/%s/%% over AArch64 ABI words."""
     fmt=objects._cstring(pages,format_address,max_bytes)[:-1]
     result=bytearray();i=0;argument=0
     while i<len(fmt):
+        previous_argument=argument
         if fmt[i]!=37:result.append(fmt[i]);i+=1
         else:
             if i+1>=len(fmt):raise RefillUnsupported('incomplete printf conversion')
@@ -658,25 +659,43 @@ def _format_guest_strings(pages,format_address,argument_addresses,max_bytes):
                     raise RefillUnsupported('printf unsigned argument must be a uint64 ABI word')
                 result.extend(str(raw&0xFFFFFFFF).encode('ascii'));argument+=1
             else:raise RefillUnsupported('printf conversion outside %d/%u/%s/%% is unsupported')
+        if va_list_address is not None and argument!=previous_argument:
+            _write_span(pages,va_list_address+24,(-48+argument*8).to_bytes(4,'little',signed=True))
         if len(result)>max_bytes:raise RefillUnsupported('formatted string exceeds bound')
     return bytes(result)
 
 
 def allocate_printf_cstring(pages, *, output_pointer_address, format_address,
-        argument_addresses, allocate, max_bytes=0x100000):
+        argument_addresses, allocate, max_bytes=0x100000,va_list_frame=None):
     """+0x278314: two live %d/%u/%s/%% format passes around malloc and publication.
 
     Reserve the first pass length plus NUL, store the allocation pointer even
     on failure, then reread format and strings for the second pass. Changed
     input can truncate to the original capacity; return its full second-pass
     length as W0. NULL malloc returns uint32 -1. Other conversions refuse.
+    Optional (source, first, second) va_list addresses preserve the declared
+    physical copies for callers that exclude native stack aliases. Each live
+    format pass advances its GP cursor; allocation must retain the source.
     """
     if type(max_bytes) is not int or not 1<=max_bytes<=0x100000:
         raise ValueError('invalid allocated printf byte bound')
     if not callable(allocate):
         raise RefillUnsupported('allocated printf requires owning malloc')
     p = _PageTransaction(pages)
-    length = len(_format_guest_strings(p, format_address, argument_addresses, max_bytes))
+    first=second=None
+    if va_list_frame is not None:
+        if (type(va_list_frame) is not tuple or len(va_list_frame)!=3
+                or any(type(a) is not int or not 0<a<=(1<<64)-32 or a&7 for a in va_list_frame)
+                or any(a<b+32 and b<a+32 for i,a in enumerate(va_list_frame) for b in va_list_frame[i+1:])):
+            raise RefillUnsupported('allocated printf requires three separate aligned va_list cells')
+        if len(argument_addresses)>6:
+            raise RefillUnsupported('allocated printf va_list exceeds saved GP argument bank')
+        source,first,second=va_list_frame
+        descriptor=_read_span(p,source,32)
+        if descriptor[24:]!=(-48).to_bytes(4,'little',signed=True)+(-128).to_bytes(4,'little',signed=True):
+            raise RefillUnsupported('allocated printf va_list requires its initial GP/FP offsets')
+        _write_span(p,first,descriptor)
+    length = len(_format_guest_strings(p, format_address, argument_addresses, max_bytes,va_list_address=first))
     size = length+1
     if size>max_bytes:
         raise RefillUnsupported('allocated printf capacity exceeds bound')
@@ -685,7 +704,11 @@ def allocate_printf_cstring(pages, *, output_pointer_address, format_address,
         raise RefillUnsupported('allocated printf malloc result must fit X0')
     _w(p, output_pointer_address, pointer)
     if pointer:
-        data = _format_guest_strings(p, format_address, argument_addresses, max_bytes)
+        if va_list_frame is not None:
+            if _read_span(p,source,32)!=descriptor:
+                raise RefillUnsupported('allocated printf provider changed source va_list')
+            _write_span(p,second,descriptor)
+        data = _format_guest_strings(p, format_address, argument_addresses, max_bytes,va_list_address=second)
         _write_span(p, pointer, data[:length]+b'\0')
         result = len(data)
     else:
