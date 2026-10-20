@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：deterministic printf formatter frame
+
+second allocated printf恢复八个由输入计算的格式化器帧字，以及成功第二遍保存的分配尺寸。
+新增20项原始包装入口对照、6项拒绝/页面回滚检查；48项旧Python路径的返回、payload、
+事件及声明帧以外全部字节保持。历史native组没有重跑。
+整段original287474保持97156步、391回调及七项返回值一致，1436/1439页逐字节相同；
+剩余三页差异106/1624/1200字节，合计2930，比上一阶段减少45字节。
+累计3663native/1722项拒绝或回滚；完整内存等价、signer、live/JVM及完整ABI未完成。
+见 [格式化器帧报告](REQUEST_JNI_STARTUP_WORKERS.md#6243-deterministic-printf-formatter-frame2026-10-20-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：saved printf variadic state
 
 共享token/second printf owner恢复保存的X2和两份未消费va_list，共72字节声明栈状态。

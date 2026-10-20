@@ -1,6 +1,6 @@
 # Tomato / Fanqie (ByteDance)
 
-Allocated printf now preserves its saved argument and two unconsumed AArch64 va_list descriptors. Adds24 native controls and6 rollback checks. The constructed whole second retains1436/1439 matching pages,391 callbacks and seven return values; remaining stack differences fall from3020 to2975 bytes. Full signing remains unfinished. See the [saved printf arguments report](REQUEST_JNI_STARTUP_WORKERS.md#6242-saved-printf-variadic-state2026-10-20-asiashanghai).
+The second allocated printf wrapper now preserves eight deterministic formatter frame words and the successful second pass size. Adds20 native controls and6 refusal checks;48 Python regressions preserve undeclared bytes. The constructed whole second retains1436/1439 matching pages,391 callbacks and seven return values; remaining stack differences fall from2975 to2930 bytes. Full signing remains unfinished. See the [formatter frame report](REQUEST_JNI_STARTUP_WORKERS.md#6243-deterministic-printf-formatter-frame2026-10-20-asiashanghai).
 
 The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).
 

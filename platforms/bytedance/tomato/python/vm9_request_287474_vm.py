@@ -1761,6 +1761,9 @@ def apply_request_287474_allocated_printf_callback(pages, *, argument_block_addr
     """+288AD4/+278314: live two-pass allocation, W0 at packed+32.
 
     Share the token printf owner, including the canary at wrapper SP-0x58.
+    Preserve eight input-derived formatter frame words at the malloc boundary
+    and final return, plus known X21 on the successful second pass. Other
+    physical spills and formatter locals remain separate.
     Output/source and output/result aliases retain the native publication order.
     Native spill aliases and overlapping allocations are outside this boundary;
     page rollback does not reverse external allocator or mapping effects.
@@ -1798,7 +1801,19 @@ def apply_request_287474_allocated_printf_callback(pages, *, argument_block_addr
             active.append((arg,len(data)))
         return tuple(active)
     live_inputs(p)
+    second_pass_size=0
+    def formatter_frame(return_offset,size=0):
+        for offset,value in ((-0x1F0,entry_stack_address-0x50),(-0x1E8,image_base+return_offset),
+                (-0x1B8,entry_stack_address-0x78),(-0x1B0,thread_pointer)):
+            _write_span(p,entry_stack_address+offset,value.to_bytes(8,'little'))
+        if size:_write_span(p,entry_stack_address-0x1A8,size.to_bytes(8,'little'))
+        _write_span(p,entry_stack_address-0x1A0,output.to_bytes(8,'little'))
+        _write_span(p,entry_stack_address-0x198,fmt.to_bytes(8,'little'))
+        _write_span(p,entry_stack_address-0x210,thread_pointer.to_bytes(8,'little'))
+        _write_span(p,entry_stack_address-0x1F8,_read_span(p,thread_pointer+0x28,8))
+    formatter_frame(0x2783AC)
     def checked_allocate(tx,n):
+        nonlocal second_pass_size
         result=allocate(tx,n)
         if type(result) is not int or not 0<=result<=(1<<64)-n:
             raise RefillUnsupported('allocated printf allocator returned invalid address')
@@ -1809,10 +1824,12 @@ def apply_request_287474_allocated_printf_callback(pages, *, argument_block_addr
             span(result,n);_read_span(tx,result,n)
             if any(result<a+m and a<result+n for a,m in fixed+active):
                 raise RefillUnsupported('allocated printf allocation aliases active storage')
+            second_pass_size=n
         return result
     result=apply_token_printf_callback(p,argument_block_address=argument_block_address,
         image_base=image_base,entry_stack_address=entry_stack_address,
         thread_pointer=thread_pointer,allocate=checked_allocate,max_bytes=max_bytes)
+    if second_pass_size:formatter_frame(0x2783DC,second_pass_size)
     p.commit();return result
 
 

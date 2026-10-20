@@ -8305,3 +8305,41 @@ python -B platforms/bytedance/tomato/python/verify_vm9_printf_saved_varargs_fres
 ```
 
 该命令比较声明的72字节和canary；未将局部成功升级为整段栈或完整signer验收。
+
+## 6.243 Deterministic printf formatter frame（2026-10-20 Asia/Shanghai）
+
+原始`2772A4`在分配前和成功第二遍格式化时保存若干确定的帧字：wrapper SP-210的
+线程指针、SP-1F8的canary、SP-1F0的调用者帧地址、SP-1E8的返回地址、SP-1B8的
+原始va_list地址、SP-1B0的线程指针、SP-1A0的输出指针和SP-198的格式串地址。
+共64字节；成功第二遍还在SP-1A8保存请求的分配尺寸。两遍返回位置分别为
+`2783AC`和`2783DC`，地址均由库基址、当前栈与实际输入计算。
+
+已有second包装层拒绝输入与分配结果进入native栈，因此在该owner恢复分配入口与
+最终返回边界的声明帧状态，无新增参数、格式串重复读取或formatter hook。
+NULL分配保留第一遍状态；成功路径恢复第二遍声明字。未扩展token包装层，其他寄存器
+spills、第一遍未知X21、已消费va_list、局部变量及逐指令栈写入顺序仍未建模。
+
+真实RED首先定位到分配前的formatter frame。**20项新增原生/Python对照**覆盖两基址、
+普通/跨页栈、不透明X2、字符串、NULL分配，以及分配服务改写已返回formatter帧残留的
+成功/失败分支。分别比较原始帧初始化、分配边界、最终声明帧及成功第二遍尺寸，并
+核对返回值、payload和allocator事件。另 **6项拒绝/页面回滚检查**覆盖缺页、provider
+抛错与format/output/packed/allocation栈别名；未声称provider ledger或映射回滚。
+
+通过不可变上一提交运行 **48项纯Python回归**，覆盖旧整数格式、两遍live输入变化、
+输出别名及跨页路径。返回、payload、allocator事件和声明帧以外全部字节保持。
+这些回归不计入native controls，历史native组没有重跑。基线在owner编辑前串行捕获。
+
+独立构造输入后重新执行整段original `287474`：**97156步/391回调**，全部packed根
+回调及PC/SP/X0/X19/X28/X29/X30一致，**1436/1439页逐字节相同**；全部990库映像页、
+193堆页及全部libc页仍一致，原始输入hash保持。剩余`70049000/7004A000/7004B000`
+分别106/1624/1200字节，合计 **2930字节**，减少45字节；未过滤任何差异。
+整段探索不计入正式native数量，native输出仅作比较。
+
+累计 **3663native/1722项拒绝或回滚**。完整second/request内存等价、完整standalone
+signer、替代Java `2A8824`、live Android/JVM、完整physical ABI及provider/mapping回滚
+仍未完成。JNI/OS仍为显式synthetic服务，Host enforcement为UNVERIFIED。
+证据见 [格式化器帧记录](evidence/vm9_printf_formatter_frame_fresh_20261020.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_printf_formatter_frame_fresh_20261020.py --library <private-library.so> --output <formatter-frame-evidence.json>
+```
