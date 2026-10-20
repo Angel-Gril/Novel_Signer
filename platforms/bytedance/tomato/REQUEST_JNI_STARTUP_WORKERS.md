@@ -7866,6 +7866,32 @@ array/UTF、引用类型、lazy名称、JNI修改value指针、malloc修改源�
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_header_array_fresh_20261020.py --library <private-libmetasec.so> --output <header-array-evidence.json>
 ```
 
+## 6.233 Cold String class and constructed output（2026-10-20 Asia/Shanghai）
+
+`construct_java_header_array` 增加可选 `lock_mutex`/`unlock_mutex`，仅class缓存为空时要求显式提供。
+恢复原生 `271384` 冷分支：锁 `3DF120` 后重查 `3DF110`，`26F0EC` 查找class并在低字节异常时
+clear/丢弃结果，非NULL结果复用 `26F154` 保留全局引用；解锁后重新读取缓存和输入reference。
+warm路径的原有主体保持，class初始化失败仍可按原生返回NULL。
+
+原生RED **786步** 返回，旧Python拒绝cold class。新增 **24项双基址原生对照、16项回滚检查**；
+原生执行匹配libc的normal mutex。覆盖NULL/异常/高字节异常、global/weak/unknown类型、
+全局提升失败、lock/unlock回调发布class及所有JNI/锁顺序。
+冷helper的物理寄存器spill可能占据SSO未写padding，本阶段比较实际初始化的9字节tag/value/NUL，
+该15字节padding不计入逻辑栈等价；声明的非栈guest/image、迭代器、canary、JNI和分配仍完整比较。
+
+新增 **1项构造request输出验收**：outer **5182步/322callbacks** 生成的7项结果树，
+独立遍历后直接交给恢复组件，得到 **14个有序Java数组元素**。14个UTF local和提升前class local
+均已释放，global class缓存、锁顺序及原request reference保持。
+这仍使用显式synthetic JNI；实际Java request wrapper、URL/header JNI输入和完整signer尚未完成。
+
+保留449个旧Python AST、78个历史绑定、1016项私有哈希；历史native组未重跑。
+累计 **3427native/1547项拒绝或回滚**。whole second/request native、live/JVM、完整physical ABI
+及provider/mapping回滚未验证。见 [冷class证据](evidence/vm9_jni_header_class_fresh_20261020.json)。
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_jni_header_class_fresh_20261020.py --library <private-libmetasec.so> --libc <matching-libc.so> --output <header-class-evidence.json>
+```
+
 ## 7. 复现、证据用途与后续验收
 
 私有 `.so` 不纳入仓库；验证器核对样本摘要。从仓库根目录运行：

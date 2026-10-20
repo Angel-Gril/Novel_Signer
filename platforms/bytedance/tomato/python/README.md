@@ -1,5 +1,7 @@
 # Tomato Python material
 
+Header array conversion now restores cold String class lookup and global retention with explicit serial lock services. Adds24 native comparisons and16 rollback checks. A constructed request result with7 pairs converts to14 ordered Java array elements; actual Java request wiring and complete signing remain unfinished. See the [cold class report](../REQUEST_JNI_STARTUP_WORKERS.md#6233-cold-string-class-and-constructed-output2026-10-20-asiashanghai).
+
 Cached-class JNI header array conversion271384 now composes existing tree, UTF and reference owners. Adds42 two-base native comparisons and42 page rollback checks. Actual request output integration and complete signing remain unfinished. See the [JNI header array report](../REQUEST_JNI_STARTUP_WORKERS.md#6232-cached-class-jni-header-array2026-10-20-asiashanghai).
 
 Public outer entry now forwards explicit identifier file and mutex services. Constructed request returns at5182/322callbacks with public outer8000/second500000 call budgets, without changing second execution kwargs. Adds30 early refusal checks; no new native comparisons. Complete signing remains unfinished. See the [public service report](../REQUEST_JNI_STARTUP_WORKERS.md#6231-public-second-services2026-10-20-asiashanghai).

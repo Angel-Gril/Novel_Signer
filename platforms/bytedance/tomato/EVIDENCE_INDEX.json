@@ -7417,5 +7417,14 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_jni_header_class_fresh_20261020": {
+    "path": "evidence/vm9_jni_header_class_fresh_20261020.json",
+    "native_Python_controls": 24,
+    "rollback_guards": 16,
+    "constructed_request_controls": 1,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

@@ -1,6 +1,6 @@
 """Bounded +271384 configuration tree to Java header array composition.
 
-An explicit cached String class is required. Tree traversal, C++/JNI UTF
+Cold class lookup requires explicit serial lock services. Tree traversal, C++/JNI UTF
 conversion and reference cleanup retain their existing owners. JNI/provider
 ledgers and mapping effects are outside guest-page transaction rollback.
 """
@@ -13,12 +13,13 @@ from vm9_allocator import _PageTransaction, _read_span, _write_span, RefillUnsup
 
 def construct_java_header_array(pages, *, image_base, entry_stack_address,
         thread_pointer, environment_pointer, input_reference_address,
-        allocate, free, invoke_jni, max_nodes=4096, max_bytes=0x100000):
+        allocate, free, invoke_jni, max_nodes=4096, max_bytes=0x100000,
+        lock_mutex=None, unlock_mutex=None):
     """+271384: ordered key/value UTF strings, array stores, reference release.
 
-    Model the cached-class branch and original lazy class-name decode. The
-    iterator and UTF temporaries are declared stack state; register spills
-    and the cold class lookup/global-reference publication remain separate.
+    Model the class cache and original lazy class-name decode. The
+    iterator and initialized UTF fields are declared stack state. Physical
+    register spills, untouched SSO padding and host concurrency are separate.
     Input reference and value pointers are read live around JNI effects.
     """
     if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
@@ -55,7 +56,28 @@ def construct_java_header_array(pages, *, image_base, entry_stack_address,
     if not container:return finish(0)
     cached_class=u(image_base+0x3DF110)
     if not cached_class:
-        raise RefillUnsupported('header array cold String class resolution is unrecovered')
+        if not callable(lock_mutex) or not callable(unlock_mutex):
+            raise RefillUnsupported('header array cold String class requires explicit lock/unlock services')
+        mutex=image_base+0x3DF120;span(image_base+0x3DF118,48)
+        status=lock_mutex(p,mutex_address=mutex)
+        if type(status) is not int or status!=0:
+            raise RefillUnsupported('header array class cache lock failure is unrecovered')
+        if not u(image_base+0x3DF110):
+            local=environment._invoke_jni(p,environment_pointer,0x30,(image_base+0x3DF080,),invoke_jni)
+            # +26f0ec checks after FindClass, clears and discards on low-byte
+            # exception. It does not obtain or delete an exception reference.
+            if environment._invoke_jni(p,environment_pointer,0x720,(),invoke_jni)&255:
+                environment._invoke_jni(p,environment_pointer,0x88,(),invoke_jni);local=0
+            if local:
+                retained=environment.retain_global_jni_reference(p,environment_pointer=environment_pointer,
+                    reference=local,invoke_jni=invoke_jni)
+                write(image_base+0x3DF110,retained)
+        status=unlock_mutex(p,mutex_address=mutex)
+        if type(status) is not int or status!=0:
+            raise RefillUnsupported('header array class cache unlock failure is unrecovered')
+        cached_class=u(image_base+0x3DF110)
+        if not cached_class:return finish(0)
+        container=u(input_reference_address)
     span(container,40)
     registry._ConfigurationTree(p,container,image_base,max_nodes,max_bytes)
     count=registry.configuration_tree_size(p,container_address=container)

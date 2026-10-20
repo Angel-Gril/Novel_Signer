@@ -1,5 +1,15 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-20 Asia/Shanghai：cold String class and constructed output
+
+JNI数组组件恢复cold String class lookup/global retention，显式serial lock服务。
+24双基址native/16回滚通过；构造request5182步/322callbacks的7项结果转为14个Java元素。
+449旧AST/78bindings/1016privatehashes保持；历史native未重跑。
+累计3427native/1547checks。实际Java request wrapper与URL/header JNI输入、whole request/second native、
+fresh完整signer及live/JVM仍未完成。见 [冷class报告](REQUEST_JNI_STARTUP_WORKERS.md#6233-cold-string-class-and-constructed-output2026-10-20-asiashanghai)。
+
+以下各节记录历史检查点；当前状态以本节为准。
+
 ## 2026-10-20 Asia/Shanghai：cached-class JNI header array
 
 新增271384树到Java数组组合，复用既有tree/UTF/reference owner，显式cached String class。
