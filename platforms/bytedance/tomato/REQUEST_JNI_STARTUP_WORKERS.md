@@ -8675,3 +8675,50 @@ Host enforcement 为 UNVERIFIED。完整请求探索未计入正式 native contr
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_environment_release_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <environment-release-evidence.json>
 ```
+
+## 6.253 Default shared factory reference scope（2026-10-21 Asia/Shanghai）
+
+冷 state allocation20 的原生 malloc48 位于 default shared factory 26CDC4 尾部引用构造：
+26CF4C 调用 1625A4，返回 LR26CF50。模型此前直接分配 counter4，遗漏诊断 scope。
+现在显式 reference_constructor 贯通 default factory、inline getter、environment 和 StateCallbacks；
+state 在 diagnostic_scope 下复用既有 construct_scoped_string_reference，未复制引用或清理算法。
+默认裸构造保持。构造入口 factory SP-70，scope SP-C0，padding 为 SP-B4 的四字节。
+内存写 hook 与反汇编确认最后 writer 为 26EA54 的 STP X9,X10，X9 是 logger entry SP；
+模型从当前 factory SP-70 的高位生成 padding，未读取原生输出初始化模型。
+
+**44 项原始 helper 对照**覆盖两基址、factory/getter、冷/256 桶预热诊断表、冷/热常量、
+空/1/19 字节 payload 与脏栈；另有 4 个高地址栈用例证明不能把 padding 固定写零。
+比较 constructor live scope 全部 24 字节、完整 guest payload/image/TLS/table 页面、
+分配/释放/注册/wake 及引用诊断 entry/leave 中的锁事件。真实 matching libc 锁执行，
+分配、缺失 property 与不可用文件/socket 服务为双方一致的 synthetic 输入。
+
+**事件边界如实保留：**22 个 direct factory 的完整锁轨迹相同；22 个 getter 的完整轨迹
+仍有旧有 C++ guard PLT mutex/gettid 观察差异。测试同时保留两侧完整轨迹和 false 标记，
+没有删除差异事件；本阶段未声称 getter 的完整 guard 事件等价。引用诊断窗口逐项一致。
+最初 fixture 没记录 logger 锁、随后发现 getter guard 观察边界的失败日志也保留。
+**7 项回滚**覆盖 provider 写后抛错、不可映射/未对齐 scope、NULL counter、不可调用
+factory/getter provider 与公开 state provider 失败。只保证页面回滚，外部 ledger 不保证。
+**60 项 Python 回归**验证不可变父提交默认 factory/getter/environment/state 的全部页面、
+返回和效果，并验证公开 state 在冷 shared 路径恰好一次调用现有 constructor，热 getter 不重构造。
+
+冷 state 探针原先 allocation20 的差异已消除，首次分歧移至 **28**：原生仍为 malloc48，
+模型为 counter4；getter environment service 的 native scope caller LR 为 **172EE4**，
+模型 owner 是 get_environment_service_reference -> objects.construct_lazy_reference。
+返回、注册、wake 相同，分配/释放仍不等；guest 差异 **868->833 字节**，image/TLS 差异
+区域 **1->0**。完整差异和调用来源保留，探针未计入通过的正式 native controls。
+
+完整原始 2830C4 再次返回：模型 5182 步、322 根 packed 回调全部一致，七项返回与映射一致。
+初态 hash 保持，原生 1439 页和模型 1437 页各自与 6.252 逐字节相同。
+**1424/1437 共同页一致，13 页仍差 5042 字节，本项没有减少完整请求终态差异。**
+7400F000/74110000 两个 native-only 全零服务页仍是单独存在性差异。
+raw 分配首次错位仍在 181/root callback163，native free 对 model malloc10 后再 free；
+app PLT 与 allocator-session realloc 的观察边界仍待核对，未认定为缺失语义。
+
+累计 **4009 native / 1790 项拒绝或回滚**。完整 state/second/request 内存、完整 signer、
+live Android/JVM、完整 ABI 与 provider/mapping 回滚仍未完成。替代 Java2A8824 仍拒绝。
+下一步单独恢复 environment-service 引用构造作用域，先测量其真实 frame/padding，再做 RED/GREEN。
+Host enforcement 为 UNVERIFIED。证据见 [shared factory 记录](evidence/vm9_shared_factory_scope_fresh_20261021.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_shared_factory_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <shared-factory-evidence.json>
+```

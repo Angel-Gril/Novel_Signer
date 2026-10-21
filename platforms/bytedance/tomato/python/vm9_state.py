@@ -296,9 +296,14 @@ class StateCallbacks:
                 scratch_address=self.stack-0x1C8,image_base=b,allocate=allocate,
                 get_tls=self.get_tls,initialize_registry=self.initialize_registry)
         elif (wrapper,target)==(0x26A4EC,0x25EE84):
-            copy_reference=assign_reference=release_reference=None
+            copy_reference=assign_reference=release_reference=construct_reference=None
             if self.diagnostic_scope is not None:
                 import vm9_reference_scopes
+                def construct_reference(tx,**kw):
+                    return vm9_reference_scopes.construct_scoped_string_reference(tx,**kw,
+                        image_base=b,thread_pointer=self.thread_pointer,allocate=allocate,
+                        thread_id=self.thread_id,diagnostic_observer=lambda *event:
+                            self.diagnostic_scope.setdefault('events',[]).append(list(event)))
                 def copy_reference(tx,**kw):
                     return vm9_reference_scopes.copy_scoped_string_reference(tx,**kw,
                         image_base=b,thread_pointer=self.thread_pointer,allocate=allocate,
@@ -320,7 +325,8 @@ class StateCallbacks:
                 mkdir=self.mkdir,thread_id=self.thread_id,register_destructor=self.register,
                 prepare_format=self.prepare_format,logger_observer=self.logger_observer,
                 reference_copier=copy_reference,reference_assigner=assign_reference,
-                reference_releaser=release_reference,thread_pointer=self.thread_pointer)
+                reference_releaser=release_reference,thread_pointer=self.thread_pointer,
+                reference_constructor=construct_reference)
         elif wrapper==0x26A500 and target in (0x2481AC,0x2484B8,0x2484FC):
             if target==0x2481AC:
                 objects.construct_string_object(p,object_address=words[1],source_address=0,allocate=allocate,

@@ -455,15 +455,20 @@ def initialize_unavailable_logger(pages, *, image_base, read_property, syscall,
 
 
 def construct_default_shared_reference(pages, *, entry_stack_address, image_base,
-        allocate, free, read_property, syscall, errno_address, logger_observer=None):
+        allocate, free, read_property, syscall, errno_address, logger_observer=None,
+        reference_constructor=None):
     """+0x26cdc4 default/no-JNI factory, publishing an inline global reference.
 
-    Preserve four allocations and temporary-string free in their actual order.
+    Preserve bare allocations and temporary-string free in their actual order.
+    An explicit reference_constructor scopes the final +0x1625a4 publication
+    at its live entry SP. Its padding retains the logger's saved stack word.
     This is not the existing wrapper/payload singleton allocation layout.
     Native JNI and operator-new abort branches are explicitly unsupported.
     """
     if entry_stack_address&15:
         raise RefillUnsupported('shared factory stack must be aligned')
+    if reference_constructor is not None and not callable(reference_constructor):
+        raise RefillUnsupported('shared factory requires a callable reference constructor')
     staged=_PageTransaction(pages)
     for flag,source,destination,mask in (
             (0x3DEDC0,0xA55A0,0x3DEDB8,0xA5648),
@@ -488,25 +493,35 @@ def construct_default_shared_reference(pages, *, entry_stack_address, image_base
     objects.construct_string_object(staged,object_address=payload,
         source_address=image_base+0x3DEE00,allocate=allocate,
         vtable_address=image_base+0x34F5F8,empty_descriptor_address=image_base+0x6E168)
-    objects.construct_reference_wrapper(staged,object_address=image_base+0x3DEE28,
-        referenced_address=payload,allocate=allocate)
+    if reference_constructor is None:
+        objects.construct_reference_wrapper(staged,object_address=image_base+0x3DEE28,
+            referenced_address=payload,allocate=allocate)
+    else:
+        # +26ea54 saves X9, logger entry SP, at the future scope+8 word.
+        # Its high half survives +1625a4's 32-bit scope status writes.
+        _write_span(staged,entry_stack_address-0xB4,objects._word(entry_stack_address-0x70)[4:])
+        reference_constructor(staged,reference_address=image_base+0x3DEE28,
+            string_address=payload,entry_stack_address=entry_stack_address-0x70)
     staged.commit();return image_base+0x3DEE28
 
 
 def get_inline_shared_reference(pages, *, output_reference_address,
         entry_stack_address, image_base, allocate, free, read_property,
         syscall, errno_address, thread_id=None, register_destructor=None, logger_observer=None,
-        reference_copier=None):
+        reference_copier=None, reference_constructor=None):
     """+0x26cd0c serialized cold acquire/factory/atexit/release/copy.
 
     Output alias behavior is the actual zero-before-source-read +0x15f580.
     An explicit reference_copier receives the copy call's live entry SP;
     the default preserves the component's diagnostic exclusion.
+    reference_constructor is forwarded to the cold default shared factory.
     Page writes roll back on rejection; external allocator/syscall/registration
     effects are outside that rollback and may already have occurred.
     """
     if reference_copier is not None and not callable(reference_copier):
         raise RefillUnsupported('inline shared reference requires a callable copy provider')
+    if reference_constructor is not None and not callable(reference_constructor):
+        raise RefillUnsupported('inline shared reference requires a callable reference constructor')
     staged=_PageTransaction(pages);guard=image_base+0x3DEE20
     raw=_read_span(staged,guard,8)
     # Getter tests byte0 bit0; __cxa_guard_acquire then tests all of byte0.
@@ -520,7 +535,7 @@ def get_inline_shared_reference(pages, *, output_reference_address,
         construct_default_shared_reference(staged,entry_stack_address=entry_stack_address-0x40,
             image_base=image_base,allocate=allocate,free=free,
             read_property=read_property,syscall=syscall,errno_address=errno_address,
-            logger_observer=logger_observer)
+            logger_observer=logger_observer,reference_constructor=reference_constructor)
         # Native does not inspect __cxa_atexit's return.
         register_destructor(staged,image_base+0x15E1A8,guard+8,image_base+0x34C700)
         _w(staged,guard,1,1);_w(staged,guard+1,1,1)
@@ -826,7 +841,7 @@ def construct_environment_reference(pages, *, output_reference_address,
         read_property, syscall, errno_address, mkdir,
         thread_id=None, register_destructor=None, prepare_format=None, logger_observer=None,
         reference_copier=None, reference_assigner=None, reference_releaser=None,
-        thread_pointer=None):
+        thread_pointer=None, reference_constructor=None):
     """+0x25ee84 observed default shared/getter/format/filesystem branch.
 
     All path content is generated from loaded guest constants and references.
@@ -860,7 +875,8 @@ def construct_environment_reference(pages, *, output_reference_address,
         entry_stack_address=entry_stack_address-0x60,image_base=image_base,
         allocate=allocate,free=free,read_property=read_property,syscall=syscall,
         errno_address=errno_address,thread_id=thread_id,register_destructor=register_destructor,
-        logger_observer=logger_observer,reference_copier=reference_copier)
+        logger_observer=logger_observer,reference_copier=reference_copier,
+        reference_constructor=reference_constructor)
     # +0x25eef4 latches the shared object before zeroing caller output.
     shared=_u(staged,reference);_write_span(staged,output_reference_address,bytes(16))
     if shared:

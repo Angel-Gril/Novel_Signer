@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-21 Asia/Shanghai：default shared factory reference scope
+
+冷 shared factory 26CDC4 尾部 1625A4 现在通过显式 provider 复用既有 scoped constructor。
+provider 贯通 getter/environment/StateCallbacks；仅 state diagnostic_scope 启用，默认裸构造保持。
+入口 factory SP-70，scope SP-C0；padding 来自 26EA54 保存的 logger entry SP 高位。
+44 项原生对照、7 项回滚、60 项 Python 回归通过，累计 4009 native / 1790 guards。
+getter 的完整 guard PLT 事件轨迹仍不等，两侧完整记录保留；引用作用域事件单独验证一致。
+冷 state 的首次分配差异从 20 移到 28，guest 差异 868->833 字节，image/TLS 差异区域 1->0。
+下一处为 environment service 引用构造：原生 scope caller LR172EE4，模型仍为裸 lazy reference。
+完整 2830C4 的 322 个 packed 回调、七项返回及映射一致；两侧输出各自与 6.252 相同。
+13 个共同页面仍差 5042 字节、两个 native-only 服务页仍计存在性差异。完整 signer 尚未完成。
+见 [shared factory 报告](REQUEST_JNI_STARTUP_WORKERS.md#6253-default-shared-factory-reference-scope2026-10-21-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-21 Asia/Shanghai：environment reference release scope
 
 environment 尾部 25EF80 释放现在通过显式 provider 复用既有 scoped release owner。
