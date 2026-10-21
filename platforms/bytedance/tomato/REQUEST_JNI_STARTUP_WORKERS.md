@@ -8636,3 +8636,42 @@ live Android/JVM、完整ABI及provider/mapping回滚仍未完成。替代Java2A
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_state_final_reference_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <state-final-reference-evidence.json>
 ```
+
+## 6.252 Environment reference release scope（2026-10-21 Asia/Shanghai）
+
+原始 25EE84 在 25EF80 调用 15E1A8。environment 新增显式 reference_releaser 与 TP，
+state 在 diagnostic_scope 下绑定既有 release_scoped_string_reference，未复制计数或清理算法。
+释放入口 environment SP-60、scope SP-A0。内存写 hook 和反汇编共同确认 scope+12 的
+最后来源：NULL shared 为 26CD2C 保存的 canary 高位；目录分支为 25EB58 保存的 LR
+(image+25EF7C) 高位；路径已存在时为 272EA8 保存的 X23，即第一个 environment 常量指针高位。
+模型从显式 TLS、已获取的常量地址和调用点生成这些字节；原生输出未用作模型输入。
+
+**38 项原始 helper 对照**覆盖两个基址、冷/256 桶预热诊断表、NULL/空/19/165 字节文本、
+0/FFFFFFFF 计数及路径存在分支，另以跨 32 位边界的第三基址区分 LR/X23 的高位。
+逐项比较最终 live scope 全部 24 字节、guest payload、image/TLS/预热表页面以及
+分配/释放/注册/wake/诊断事件。测试复用既有 Effects 提供相同 synthetic malloc/realloc/free，
+ELF relocation 确认 348320 为 realloc；真实 libc 锁、格式化与原生文件系统包装指令执行。
+inline shared/environment-service 为双方相同预热输入，其他冷构造作用域与物理 spills 未据此验证。
+**7 项页面回滚**覆盖释放 provider 写后抛错、不可映射/未对齐 scope、不可调用 provider、
+缺少 TP、不可映射 canary 与 free 写后抛错。外部 provider ledger 不保证回滚。
+**46 项 Python 回归**验证不可变父版本默认 environment/state 的完整页面、返回和效果，
+并确认公开 state 工厂在 environment 中恰好一次调用既有 scoped release owner。
+
+完整原始 2830C4 再次返回：模型 5182 步，双方 322 根 packed 回调全部一致，七项返回与
+GuestOS 映射一致。初态 hash 保持；原生 1439 页、模型 1437 页各自与 6.251 逐字节相同。
+**1424/1437 共同页一致，13 页仍差 5042 字节，本项没有减少终态差异。**
+7400F000/74110000 两个 native-only 全零服务页仍是单独的页面存在性差异，无字节或页面过滤。
+raw 分配轨迹仍在 index181/root callback163 首次分歧，原生 free 对模型额外 malloc10；
+app PLT 与 allocator-session realloc 观察边界不同，尚未判定为缺失语义。
+
+完整冷诊断表 state 探针仍在 allocation20 分歧：返回、注册和 wake 相同，分配/释放与内存
+不等；868 字节 guest 差异、一个 image/TLS 差异区域全部保留，未计入通过的 native controls。
+下一步沿该更早分歧追踪原生 caller，并核对 realloc 观察边界及剩余页面 last writer。
+累计 **3965 native / 1783 项拒绝或回滚**。完整 state/second/request 内存等价、完整 signer、
+live Android/JVM、完整 ABI、provider/mapping 回滚仍未完成。替代 Java2A8824 仍拒绝。
+Host enforcement 为 UNVERIFIED。完整请求探索未计入正式 native controls。
+证据见 [environment 释放记录](evidence/vm9_environment_release_scope_fresh_20261021.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_environment_release_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <environment-release-evidence.json>
+```

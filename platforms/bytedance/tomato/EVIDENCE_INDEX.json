@@ -7733,5 +7733,29 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_environment_release_scope_fresh_20261021": {
+    "path": "evidence/vm9_environment_release_scope_fresh_20261021.json",
+    "native_Python_controls": 38,
+    "new_refusal_or_page_rollback_guards": 7,
+    "Python_only_regressions": 46,
+    "constructed_original_request_returned": true,
+    "root_callback_count": 322,
+    "packed_callback_mismatch_count": 0,
+    "seven_return_values_equal": true,
+    "GuestOS_mapping_metadata_equal": true,
+    "complete_equal_pages": 1424,
+    "common_page_count": 1437,
+    "native_page_count": 1439,
+    "model_page_count": 1437,
+    "remaining_different_common_pages": 13,
+    "native_only_provider_stub_pages": 2,
+    "remaining_different_bytes": 5042,
+    "different_bytes_removed": 0,
+    "first_raw_allocation_mismatch_index": 181,
+    "whole_request_native_differential_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

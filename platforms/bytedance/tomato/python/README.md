@@ -1,6 +1,6 @@
 # Tomato Python material
 
-The opted-in state service now scopes its final reference constructor. Adds 20 native controls, 4 rollback checks and 10 Python regressions. All 322 full-request packed callbacks now match; memory differences fall from 5504 to 5042 bytes across 13 common pages. Full signing remains unfinished. See the [state final reference report](../REQUEST_JNI_STARTUP_WORKERS.md#6251-state-service-final-reference-scope2026-10-21-asiashanghai).
+The opted-in state environment helper now scopes its final reference release. Adds 38 native controls, 7 rollback checks and 46 Python regressions. All 322 full-request packed callbacks still match; 13 common pages still differ by 5042 bytes. Full signing remains unfinished. See the [environment release report](../REQUEST_JNI_STARTUP_WORKERS.md#6252-environment-reference-release-scope2026-10-21-asiashanghai).
 
 The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](../REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).
 

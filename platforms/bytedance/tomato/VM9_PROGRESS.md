@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-21 Asia/Shanghai：environment reference release scope
+
+environment 尾部 25EF80 释放现在通过显式 provider 复用既有 scoped release owner。
+state 在 diagnostic_scope 下绑定；入口 environment SP-60，scope SP-A0。
+padding 按路径来自 canary、目录调用保存 LR 或 faccessat 包装器保存 X23，均由模型输入生成。
+新增 38 项原生对照、7 项页面回滚和 46 项 Python 回归，累计 3965 native / 1783 guards。
+完整 2830C4 的 322 个 packed 回调、七项返回与 GuestOS 映射继续一致。
+原生/模型结果各自与 6.251 相同：1424/1437 共同页一致，13 页仍差 5042 字节。
+两个 native-only 服务页仍计入页面存在性差异。完整冷诊断表 state 仍在 allocation20 分歧，
+868 字节 guest 差异及一个 image/TLS 差异区域全部保留。完整 signer 尚未完成。
+见 [environment 释放报告](REQUEST_JNI_STARTUP_WORKERS.md#6252-environment-reference-release-scope2026-10-21-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-21 Asia/Shanghai：state service final reference scope
 
 state显式diagnostic_scope现在将尾部25728C引用构造绑定到既有scoped reference owner。

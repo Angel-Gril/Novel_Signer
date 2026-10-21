@@ -825,7 +825,8 @@ def construct_environment_reference(pages, *, output_reference_address,
         entry_stack_address, image_base, allocate, reallocate, free,
         read_property, syscall, errno_address, mkdir,
         thread_id=None, register_destructor=None, prepare_format=None, logger_observer=None,
-        reference_copier=None, reference_assigner=None):
+        reference_copier=None, reference_assigner=None, reference_releaser=None,
+        thread_pointer=None):
     """+0x25ee84 observed default shared/getter/format/filesystem branch.
 
     All path content is generated from loaded guest constants and references.
@@ -833,13 +834,24 @@ def construct_environment_reference(pages, *, output_reference_address,
     A native VM input snapshot is not required by this helper.
     An explicit reference_assigner receives the live SP for +0x162944;
     the default retains the component's bare assignment semantics.
+    An explicit reference_releaser receives +0x15e1a8's live entry SP.
+    Its retained scope padding comes from the getter canary, a saved LR or
+    the saved environment-constant pointer; the canary requires an explicit TP.
     """
     if entry_stack_address&15:raise RefillUnsupported('environment helper stack must be aligned')
     if reference_assigner is not None and not callable(reference_assigner):
         raise RefillUnsupported('environment reference requires a callable assignment provider')
+    if reference_releaser is not None:
+        if not callable(reference_releaser):
+            raise RefillUnsupported('environment reference requires a callable release provider')
+        if type(thread_pointer) is not int or not 0<=thread_pointer<1<<64:
+            raise RefillUnsupported('environment release requires an explicit thread pointer')
     staged=_PageTransaction(pages)
     fmt=_lazy_constant(staged,image_base,0x3DE9A8,0x9A488,0x3DE99C,0x9A494)
     reference=entry_stack_address-0x60
+    if reference_releaser is not None:
+        # +26cd2c saves the getter's incoming TLS canary before its callbacks.
+        release_padding=_read_span(staged,thread_pointer+0x2C,4)
     if reference_assigner is not None:
         # +15f590 spills getter's incoming X19. Warm getter retains this
         # helper's output; its cold branch replaces X19 with the temporary.
@@ -880,7 +892,15 @@ def construct_environment_reference(pages, *, output_reference_address,
             ensure_environment_directory(staged,object_address=result_object,
                 entry_stack_address=entry_stack_address-0x60,syscall=syscall,
                 errno_address=errno_address,mkdir=mkdir)
-    stream.release_string_reference(staged,reference_address=reference,image_base=image_base,free=free)
+        if reference_releaser is not None:
+            # +25eb58 saves directory caller LR. Successful faccessat instead
+            # retains +272ea8's saved X23, the first environment constant.
+            release_padding=objects._word(first if exists else image_base+0x25EF7C)[4:]
+    if reference_releaser is None:
+        stream.release_string_reference(staged,reference_address=reference,image_base=image_base,free=free)
+    else:
+        _write_span(staged,entry_stack_address-0x94,release_padding)
+        reference_releaser(staged,reference_address=reference,entry_stack_address=entry_stack_address-0x60)
     staged.commit();return output_reference_address
 
 

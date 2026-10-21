@@ -296,7 +296,7 @@ class StateCallbacks:
                 scratch_address=self.stack-0x1C8,image_base=b,allocate=allocate,
                 get_tls=self.get_tls,initialize_registry=self.initialize_registry)
         elif (wrapper,target)==(0x26A4EC,0x25EE84):
-            copy_reference=assign_reference=None
+            copy_reference=assign_reference=release_reference=None
             if self.diagnostic_scope is not None:
                 import vm9_reference_scopes
                 def copy_reference(tx,**kw):
@@ -309,12 +309,18 @@ class StateCallbacks:
                         image_base=b,thread_pointer=self.thread_pointer,allocate=allocate,free=free,
                         thread_id=self.thread_id,diagnostic_observer=lambda *event:
                             self.diagnostic_scope.setdefault('events',[]).append(list(event)))
+                def release_reference(tx,**kw):
+                    return vm9_reference_scopes.release_scoped_string_reference(tx,**kw,
+                        image_base=b,thread_pointer=self.thread_pointer,allocate=allocate,free=free,
+                        thread_id=self.thread_id,diagnostic_observer=lambda *event:
+                            self.diagnostic_scope.setdefault('events',[]).append(list(event)))
             configuration.construct_environment_reference(p,output_reference_address=words[1],
                 entry_stack_address=self.stack-0x190,image_base=b,allocate=allocate,reallocate=reallocate,
                 free=free,read_property=self.read_property,syscall=self.syscall,errno_address=self.errno,
                 mkdir=self.mkdir,thread_id=self.thread_id,register_destructor=self.register,
                 prepare_format=self.prepare_format,logger_observer=self.logger_observer,
-                reference_copier=copy_reference,reference_assigner=assign_reference)
+                reference_copier=copy_reference,reference_assigner=assign_reference,
+                reference_releaser=release_reference,thread_pointer=self.thread_pointer)
         elif wrapper==0x26A500 and target in (0x2481AC,0x2484B8,0x2484FC):
             if target==0x2481AC:
                 objects.construct_string_object(p,object_address=words[1],source_address=0,allocate=allocate,
