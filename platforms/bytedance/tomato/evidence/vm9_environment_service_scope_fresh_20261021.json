@@ -1,0 +1,3641 @@
+{
+  "schema": "vm9-environment-service-scope/v1",
+  "stage": "6.254",
+  "baseline": "31914e60f7727663f7a38492dd9245a0c97da63f",
+  "native_Python_controls": 36,
+  "new_refusal_or_page_rollback_guards": 6,
+  "cumulative_native_controls": 4045,
+  "cumulative_refusal_or_rollback_checks": 1796,
+  "direct_controls": {
+    "schema": "vm9-environment-service-scope-fresh/v1",
+    "native_Python_controls": 36,
+    "cases": [
+      {
+        "image_base": "0x122c0000",
+        "case": "dirty_A7",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "dirty_A7",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388088
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "dirty_3C",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "dirty_3C",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388088
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "warm_service",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "warm_service",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "warm_NULL_slot",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "warm_NULL_slot",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "guard_byte0_2",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "guard_byte0_2",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "guard_byte1_1",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "guard_byte1_1",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "dirty_A7",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "dirty_A7",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388088
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "dirty_3C",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "dirty_3C",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929388088
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388088
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "warm_service",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "warm_service",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "warm_NULL_slot",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "warm_NULL_slot",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "guard_byte0_2",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "guard_byte0_2",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": true,
+        "native_context_mutex_and_gettid_events": [],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "guard_byte1_1",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "guard_byte1_1",
+        "warm_diagnostics": true,
+        "entry_stack_address": "0x7000ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "dirty_A7",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x760010ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "dirty_3C",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x760010ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "dirty_A7",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x760010ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "dirty_3C",
+        "warm_diagnostics": false,
+        "entry_stack_address": "0x760010ef00",
+        "original_helper_returned": true,
+        "constructor_entry_offset_from_getter": -32,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064616
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066712
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066712
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "empty",
+        "warm_diagnostics": false,
+        "kind": "environment_parent",
+        "original_helper_returned": true,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "empty",
+        "warm_diagnostics": true,
+        "kind": "environment_parent",
+        "original_helper_returned": true,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "text",
+        "warm_diagnostics": false,
+        "kind": "environment_parent",
+        "original_helper_returned": true,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x122c0000",
+        "case": "text",
+        "warm_diagnostics": true,
+        "kind": "environment_parent",
+        "original_helper_returned": true,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_lock",
+            308948800
+          ],
+          [
+            "pthread_mutex_unlock",
+            308948800
+          ],
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "empty",
+        "warm_diagnostics": false,
+        "kind": "environment_parent",
+        "original_helper_returned": true,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "empty",
+        "warm_diagnostics": true,
+        "kind": "environment_parent",
+        "original_helper_returned": true,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "text",
+        "warm_diagnostics": false,
+        "kind": "environment_parent",
+        "original_helper_returned": true,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066776
+          ],
+          [
+            "pthread_mutex_lock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879064584
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066872
+          ],
+          [
+            "pthread_mutex_lock",
+            1879066680
+          ],
+          [
+            "pthread_mutex_unlock",
+            1879066680
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      },
+      {
+        "image_base": "0x775c205000",
+        "case": "text",
+        "warm_diagnostics": true,
+        "kind": "environment_parent",
+        "original_helper_returned": true,
+        "full24byte_live_scope_equal": true,
+        "return_guest_payload_image_TLS_and_table_equal": true,
+        "ordered_allocation_free_registration_wake_and_reference_diagnostics_equal": true,
+        "complete_context_mutex_trace_equal": false,
+        "native_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "gettid",
+            137
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_lock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_unlock",
+            512650805056
+          ],
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ]
+        ],
+        "model_context_mutex_and_gettid_events": [
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388040
+          ],
+          [
+            "pthread_mutex_lock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929388280
+          ],
+          [
+            "pthread_mutex_lock",
+            1929391112
+          ],
+          [
+            "pthread_mutex_unlock",
+            1929391112
+          ]
+        ],
+        "native_snapshot_input": false,
+        "physical_spills_compared": false
+      }
+    ],
+    "new_refusal_or_page_rollback_guards": 6,
+    "negative_cases": [
+      {
+        "case": "provider_writes_then_raises",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "unmapped_scope",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "unaligned_stack",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "missing_stack",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "counter_NULL",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      },
+      {
+        "case": "noncallable_constructor",
+        "rejected": true,
+        "all_pages_unchanged": true,
+        "provider_effect_rollback_verified": false
+      }
+    ],
+    "native_snapshot_input": false,
+    "historical_native_groups_replayed": false,
+    "complete_state_request_or_signer_verified": false
+  },
+  "Python_only_regressions": {
+    "baseline": "31914e60f7727663f7a38492dd9245a0c97da63f",
+    "Python_only_regressions": 96,
+    "cases": [
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "cold_constants",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "cold_constants",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "warm_constants",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "warm_constants",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "empty_payload",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "empty_payload",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "one_byte",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "one_byte",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "text19",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_factory",
+        "case": "text19",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "cold_constants",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "cold_constants",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "warm_constants",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "warm_constants",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "empty_payload",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "empty_payload",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "one_byte",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "one_byte",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "text19",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_getter",
+        "case": "text19",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment",
+        "case": "NULL_shared",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment",
+        "case": "NULL_shared",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment",
+        "case": "long",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment",
+        "case": "long",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_state",
+        "case": "cold",
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_state",
+        "case": "decoded_key",
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_state",
+        "case": "warm",
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_state",
+        "case": "warm_NULL_slot",
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "public_state_cold_shared_binding",
+        "existing_constructor_owner_called_once": true,
+        "constructor_entry_offset_from_factory": -2512
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "warm_getter_no_reconstruction",
+        "constructor_not_called": true,
+        "no_new_allocations": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "cold_constants",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "cold_constants",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "warm_constants",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "warm_constants",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "empty_payload",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "empty_payload",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "one_byte",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "one_byte",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "text19",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_factory",
+        "case": "text19",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "cold_constants",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "cold_constants",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "warm_constants",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "warm_constants",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "empty_payload",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "empty_payload",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "one_byte",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "one_byte",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "text19",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_getter",
+        "case": "text19",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment",
+        "case": "NULL_shared",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment",
+        "case": "NULL_shared",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment",
+        "case": "long",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment",
+        "case": "long",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_state",
+        "case": "cold",
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_state",
+        "case": "decoded_key",
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_state",
+        "case": "warm",
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_state",
+        "case": "warm_NULL_slot",
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "public_state_cold_shared_binding",
+        "existing_constructor_owner_called_once": true,
+        "constructor_entry_offset_from_factory": -2512
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "warm_getter_no_reconstruction",
+        "constructor_not_called": true,
+        "no_new_allocations": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "dirty_A7",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "dirty_A7",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "dirty_3C",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "dirty_3C",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "warm_service",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "warm_service",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "warm_NULL_slot",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "warm_NULL_slot",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "guard_byte0_2",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "guard_byte0_2",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "guard_byte1_1",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_environment_service",
+        "case": "guard_byte1_1",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "public_state_cold_environment_service_binding",
+        "existing_constructor_owner_called_once": true,
+        "constructor_entry_offset_from_state": -2368
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "warm_environment_service_no_reconstruction",
+        "constructor_not_called": true,
+        "no_new_allocations": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_generic_lazy_reference",
+        "payload_size": 1,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_generic_lazy_reference",
+        "payload_size": 8,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "default_generic_lazy_reference",
+        "payload_size": 24,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x122c0000",
+        "kind": "generic_explicit_constructor_before_publication",
+        "exactly_once_after_initialization": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "dirty_A7",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "dirty_A7",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "dirty_3C",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "dirty_3C",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "warm_service",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "warm_service",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "warm_NULL_slot",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "warm_NULL_slot",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "guard_byte0_2",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "guard_byte0_2",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "guard_byte1_1",
+        "warm_diagnostics": false,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_environment_service",
+        "case": "guard_byte1_1",
+        "warm_diagnostics": true,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "public_state_cold_environment_service_binding",
+        "existing_constructor_owner_called_once": true,
+        "constructor_entry_offset_from_state": -2368
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "warm_environment_service_no_reconstruction",
+        "constructor_not_called": true,
+        "no_new_allocations": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_generic_lazy_reference",
+        "payload_size": 1,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_generic_lazy_reference",
+        "payload_size": 8,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "default_generic_lazy_reference",
+        "payload_size": 24,
+        "all_pages_return_and_effects_preserved": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "kind": "generic_explicit_constructor_before_publication",
+        "exactly_once_after_initialization": true
+      }
+    ],
+    "immutable_parent_sources": true,
+    "counted_as_native_controls": false,
+    "historical_native_groups_replayed": false
+  },
+  "constructed_whole_request": {
+    "original_2830C4_returned": true,
+    "Python_steps": 5182,
+    "root_callback_count": 322,
+    "exact_packed_callback_ledger_equal": true,
+    "packed_callback_mismatch_indices_zero_based": [],
+    "seven_physical_return_values_equal": true,
+    "complete_mapping_metadata_equal": true,
+    "both_complete_page_sets_equal": false,
+    "native_page_count": 1439,
+    "model_page_count": 1437,
+    "common_page_count": 1437,
+    "complete_equal_pages": 1424,
+    "remaining_different_pages": [
+      {
+        "page": "0x136d4000",
+        "count": 3,
+        "first": "0x649"
+      },
+      {
+        "page": "0x136d6000",
+        "count": 15,
+        "first": "0x204"
+      },
+      {
+        "page": "0x136df000",
+        "count": 8,
+        "first": "0x304"
+      },
+      {
+        "page": "0x136e5000",
+        "count": 29,
+        "first": "0x4"
+      },
+      {
+        "page": "0x13702000",
+        "count": 53,
+        "first": "0x4"
+      },
+      {
+        "page": "0x13704000",
+        "count": 61,
+        "first": "0x804"
+      },
+      {
+        "page": "0x13707000",
+        "count": 13,
+        "first": "0x82"
+      },
+      {
+        "page": "0x70049000",
+        "count": 106,
+        "first": "0xbe0"
+      },
+      {
+        "page": "0x7004a000",
+        "count": 1624,
+        "first": "0x108"
+      },
+      {
+        "page": "0x7004b000",
+        "count": 1205,
+        "first": "0x0"
+      },
+      {
+        "page": "0x7004c000",
+        "count": 1141,
+        "first": "0x558"
+      },
+      {
+        "page": "0x7004d000",
+        "count": 721,
+        "first": "0x0"
+      },
+      {
+        "page": "0x7004e000",
+        "count": 63,
+        "first": "0xca0"
+      }
+    ],
+    "remaining_different_bytes": 5042,
+    "prior_different_bytes": 5042,
+    "different_bytes_removed": 0,
+    "native_all_pages_equal_prior_native_output": true,
+    "model_all_pages_equal_prior_model_output": true,
+    "original_input_hash_equal_prior": true,
+    "original_supplied_pages_unchanged": true,
+    "native_only_provider_stub_pages": [
+      "0x7400f000",
+      "0x74110000"
+    ],
+    "native_only_provider_stub_pages_are_zero": true,
+    "model_only_pages": [],
+    "page_presence_differences_included": true,
+    "model_allocation_events": 865,
+    "native_app_PLT_allocation_events": 853,
+    "allocation_traces_have_different_observation_boundaries": true,
+    "first_raw_allocation_mismatch_index": 181,
+    "first_raw_allocation_mismatch_root_callback_index": 163,
+    "native_event": "free",
+    "model_event": "malloc(10) before same free",
+    "identified_as_missing_diagnostic_scope": false,
+    "native_output_used_as_model_input": false,
+    "explicit_synthetic_JNI_OS_services": true,
+    "counted_as_formal_native_control": false
+  },
+  "contract": {
+    "owner": "vm9_configuration_init.get_environment_service_reference",
+    "generic_owner": "vm9_objects.construct_lazy_reference",
+    "original_constructor": "172D9C -> 172EB0",
+    "reference_owner": "vm9_reference_scopes.construct_scoped_string_reference",
+    "state_opt_in": "existing diagnostic_scope constructor binding; state source unchanged",
+    "constructor_entry_offset_from_getter": -32,
+    "scope_offset_from_getter": -112,
+    "padding_offset_from_getter": -100,
+    "constructor_instruction_shape_equal_to_1625A4": true,
+    "padding_high2_last_writer": "matching libc68D28 STRH W7,[X29,#1E];cold guard mutex W7=0",
+    "padding_low2_direct_getter": "retain incoming bytes",
+    "padding_low2_environment_parent": "32A1F4 saved counter-new LR=image+1629A8 high word before cold service getter",
+    "page_rollback_only": true,
+    "provider_effect_rollback_verified": false,
+    "default_bare_behavior_preserved": true,
+    "constructor_runs_once_after_payload_initialization_before_slot_publication": true,
+    "reference_count_or_cleanup_algorithm_copied": false
+  },
+  "fixture_boundary": {
+    "two_image_bases": true,
+    "direct_getter_controls": 28,
+    "environment_parent_controls": 8,
+    "high_address_stack_controls": 4,
+    "cold_and_all256_warm_diagnostics": true,
+    "dirty_A7_and_3C_stacks": true,
+    "nonzero_canary": true,
+    "service_payload_size_one_untouched": true,
+    "all_live24_scope_bytes_compared": true,
+    "reference_diagnostic_entry_leave_mutex_gettid_events_equal": true,
+    "complete_context_traces_retained_for_all36_cases": true,
+    "complete_context_trace_equal_cases": 12,
+    "complete_context_trace_unequal_cases": 24,
+    "getter_guard_PLT_observer_verified": false,
+    "context_trace_inequality_reason": "Existing serial C++ guard model omits its mutex/gettid PLT observer; complete arrays and false flags retained.",
+    "isolated_cold_state_fixture_return_payload_image_TLS_allocation_free_registration_wake_and_new_scope_equal": true,
+    "cold_state_guest_different_bytes": 0,
+    "prior_cold_state_guest_different_bytes": 833,
+    "cold_state_image_TLS_different_regions": 0,
+    "all_state_variants_physical_spills_or_guard_events_verified": false,
+    "cold_state_and_whole_request_probes_counted_as_native_controls": false
+  },
+  "source_sha256": {
+    "vm9_objects.py": "87dacc9d3f8f8ab8f80e1425f8ecc852b5a7801a60d14289a96f1f1c775f3572",
+    "vm9_configuration_init.py": "0b58ac2fa9196f3da60c42bd3a03ee1a4d86ead9e824052cbdcbaaebed9533a8",
+    "vm9_state.py": "2935578c80944abc54dc62eb7a14ef2a16811ffc94dcabe258f474bf42080131",
+    "verify_vm9_environment_service_scope_fresh_20261021.py": "8cabb162136ff464ece56d08941ecd1251dec2bf337adf664f2ca8dc04714f76"
+  },
+  "private_evidence_sha256": {
+    "_environment_service_scope_BEFORE_20261021.json": "9105506402d5705a713ded6b236137c80a10cdb305be168b11c094fed9b877b3",
+    "_environment_service_scope_task_decision_20261021.json": "1bf902d6290b5e0f3871be4f100f7ed9eda114d8dc2a7498a861a01b5fe9bfae",
+    "_environment_service_scope_RED_20261021.log": "6e3d9940e2d37fd9a1f56be960438c71aac7a5ab0005f0b0ab6cba18d58b73e7",
+    "_environment_service_scope_PARENT_RED_20261021.log": "ae778a8b432560861d5cfb0839f195a6b836a92d4125fdfa0f2218970501503e",
+    "_environment_service_scope_GREEN_20261021.json": "50f4790907c5caf101c6d8adc98023c9e98037b1d7f62bd69439a239ea7a6ff2",
+    "_environment_service_scope_GREEN_20261021.log": "82c46cac4635990fd3ae65b33d38605d430e8777ca7a5b541cfa1fed7332731a",
+    "_environment_service_scope_PYTHON_REGRESSION_20261021.json": "6a9710a2e0fc6f61b11d95e5dcd09cfb76aace5e527fff774c38fb7fa03e5f31",
+    "_environment_service_scope_PADDING_WRITERS_20261021.json": "b7d99f6e8327b3d338d1a12386275ac63a2dd33203b96cffac082d17fa063abf",
+    "_environment_service_scope_PARENT_PADDING_WRITERS_20261021.json": "d7603cc4cbd5c80b97575412d8ebc810e6ad24bef8bd03da90b483c4b4f27885",
+    "_environment_service_scope_NATIVE_LAYOUT_20261021.json": "645e1d2359db028ad64787b5527ce45df5184ccb7c125386a5b9adb48bd7886e",
+    "_environment_service_scope_COLD_STATE_SCOPE_RED_20261021.json": "92cebee4b305c0570798036263ce1e335265ba4cea08aa3f1384ac2ab67f2182",
+    "_environment_service_scope_COLD_STATE_SCOPE_RED_20261021.log": "78fd6819d30475b517022690952543635d7c1d34083821490ee96cf42eddc05b",
+    "_environment_service_scope_COLD_STATE_20261021.json": "514432b3f037fb4c1851591ab658e5b58efc68baf705ab8908ed2bc0415ee472",
+    "_environment_service_scope_COLD_STATE_20261021.log": "46f7ab9b7228c0cabe15b282ac12f1d6431f40d84b4c44300134b5deaeeca893",
+    "_environment_service_scope_python_regression_20261021.py": "6a628a8095d58e4c1a71113008ae3f121516e7f51cf85a8b0e875bb36726b1f2",
+    "_inspect_environment_service_scope_20261021.py": "59780fa4810b08cc10405dcbab52054476802fb820fa1e832f86e845f3ede76b",
+    "_inspect_environment_service_parent_padding_20261021.py": "9bf13f4fd27e42ffcd788cf515b2a7eeffefbde5ddb0e324fb342cef2aacbb10",
+    "_probe_environment_service_cold_state_20261021.py": "c20eefea2c7d298a081b3c0091bbcf6b7054da4d9ca1256f1cdba7b626126053",
+    "_probe_full_outer_environment_service_scope_20261021.py": "0845edfe55b21d8d479f852b0c2fb580979e2a8882e925678cc1785d397e5ac1",
+    "_full_outer_environment_service_scope_WHOLE_20261021.json": "61af16c282405e21e4f977bdaaa0c9b81ae7bc7ceeab756eec1e2fba1c549757",
+    "_full_outer_environment_service_scope_WHOLE_NATIVE_RETURN_20261021.json": "6f7ca8c12761db90b8f2180167ec4e4e552b2f9af4bc5d04eed38010cfabeca7",
+    "_full_outer_environment_service_scope_WHOLE_NATIVE_OUTPUT_20261021.pkl.gz": "6b13fc1707c9fdc81c1de08125685434904b9d699c9bd538ab20e864845db37e",
+    "_full_outer_environment_service_scope_WHOLE_MODEL_OUTPUT_20261021.pkl.gz": "ace496108ed4ff39f5c62906ca25334ce83e0c7fbc5dbe011fae2fce15ebce3f"
+  },
+  "baseline_provenance": "Fresh direct getter missing-scope RED before implementation. Additional integrated environment padding RED before saved-LR composition. Immutable parent default regressions; all failed discovery evidence retained.",
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "whole_second_native_differential_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_complete_standalone_signer_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_physical_ABI_verified": false,
+  "external_provider_mapping_rollback_verified": false,
+  "Host_enforcement": "UNVERIFIED"
+}

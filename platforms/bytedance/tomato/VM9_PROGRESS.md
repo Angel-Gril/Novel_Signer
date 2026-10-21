@@ -1,5 +1,22 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-21 Asia/Shanghai：environment service reference scope
+
+冷 environment-service 172D40 的 172EB0 构造现在复用既有 scoped constructor。
+generic lazy owner 接受显式构造回调；environment 贯通既有 state provider，未修改 state 源码。
+getter scope 位于入口 SP-70，padding 高两字节由 libc68D28 写零，低两字节保留调用前内容；
+environment 前序 counter-new 的 32A1F4 保存 LR=image+1629A8，其高位成为该调用链的低两字节。
+36 项原生对照、6 项页面回滚、96 项 Python 回归通过，累计 4045 native / 1796 guards。
+12 个完整 context 事件轨迹相等，24 个含 C++ guard 观察差异的轨迹完整保留；引用诊断窗口一致。
+孤立冷 state fixture 的 guest 差异 833->0，image/TLS 及分配/释放/注册/wake、新 scope24 字节一致。
+这是该 fixture 的结果，不覆盖所有 state 分支、完整物理栈或 guard 事件。
+完整 2830C4 的 322 packed 回调、七项返回及映射一致；两侧输出各自与 6.253 相同。
+13 个共同页仍差 5042 字节，两个 native-only 页仍计存在性差异；完整 signer 尚未完成。
+下一步定位完整请求中剩余页面的字段来源，并核对 raw allocation 的观察边界。
+见 [environment service 报告](REQUEST_JNI_STARTUP_WORKERS.md#6254-environment-service-reference-scope2026-10-21-asiashanghai)。
+
+以下各节为历史检查点，当前状态以本节为准。
+
 ## 2026-10-21 Asia/Shanghai：default shared factory reference scope
 
 冷 shared factory 26CDC4 尾部 1625A4 现在通过显式 provider 复用既有 scoped constructor。

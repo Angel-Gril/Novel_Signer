@@ -548,11 +548,29 @@ def get_inline_shared_reference(pages, *, output_reference_address,
     staged.commit();return output_reference_address
 
 
-def get_environment_service_reference(pages, *, image_base, allocate, thread_id=None):
-    """+0x172d40:16-byte wrapper/1-byte untouched payload/4-byte count."""
+def get_environment_service_reference(pages, *, image_base, allocate, thread_id=None,
+        entry_stack_address=None, reference_constructor=None):
+    """+0x172d40:16-byte wrapper/1-byte untouched payload/4-byte count.
+
+    Explicit construction reuses the scoped reference owner for +0x172eb0,
+    whose frame and instructions match +0x1625a4. Cold guard libc mutex
+    +0x68d28 writes scope padding high2 to zero; low2 retain incoming bytes.
+    The default preserves this component's bare reference semantics.
+    """
+    construct=None
+    if reference_constructor is not None:
+        if not callable(reference_constructor):
+            raise RefillUnsupported('environment service requires a callable reference constructor')
+        if (type(entry_stack_address) is not int or not 0x70<=entry_stack_address<1<<64
+                or entry_stack_address&15):
+            raise RefillUnsupported('environment service scope requires an aligned guest stack')
+        def construct(tx, *, object_address, referenced_address):
+            _write_span(tx,entry_stack_address-0x62,bytes(2))
+            return reference_constructor(tx,reference_address=object_address,
+                string_address=referenced_address,entry_stack_address=entry_stack_address-0x20)
     return objects.construct_lazy_reference(pages,guard_address=image_base+0x3D18D8,
         slot_address=image_base+0x3D18D0,payload_size=1,allocate=allocate,
-        initialize_payload=lambda p,a:None,thread_id=thread_id)
+        initialize_payload=lambda p,a:None,thread_id=thread_id,reference_constructor=construct)
 
 
 def get_environment_constant(pages, *, image_base, entry_offset):
@@ -892,11 +910,18 @@ def construct_environment_reference(pages, *, output_reference_address,
             _write_span(staged,entry_stack_address-0xA4,objects._word(copy_saved_x19)[4:])
             reference_assigner(staged,reference_address=output_reference_address,
                 string_address=obj,entry_stack_address=entry_stack_address-0x60)
+        if reference_constructor is not None:
+            # +32a1f4 saves the preceding assignment's counter-new return LR
+            # (+1629a8). Its high word survives at the service scope+12;
+            # the cold getter's libc mutex overwrites only its upper two bytes.
+            _write_span(staged,entry_stack_address-0xC4,objects._word(image_base+0x1629A8)[4:])
         # Native reloads shared and result pointers after all allocation effects.
         shared_string=_u(staged,_u(staged,reference)+16);result_object=_u(staged,output_reference_address)
-        get_environment_service_reference(staged,image_base=image_base,allocate=allocate,thread_id=thread_id)
+        get_environment_service_reference(staged,image_base=image_base,allocate=allocate,thread_id=thread_id,
+            entry_stack_address=entry_stack_address-0x60,reference_constructor=reference_constructor)
         first=get_environment_constant(staged,image_base=image_base,entry_offset=0x2562DC)
-        get_environment_service_reference(staged,image_base=image_base,allocate=allocate,thread_id=thread_id)
+        get_environment_service_reference(staged,image_base=image_base,allocate=allocate,thread_id=thread_id,
+            entry_stack_address=entry_stack_address-0x60,reference_constructor=reference_constructor)
         second=get_environment_constant(staged,image_base=image_base,entry_offset=0x256330)
         format_string_object(staged,object_address=result_object,format_address=fmt,
             argument_addresses=(shared_string,first,second),image_base=image_base,

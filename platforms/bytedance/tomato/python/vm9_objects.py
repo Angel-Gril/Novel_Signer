@@ -2504,7 +2504,7 @@ def construct_reference_wrapper(
 def construct_lazy_reference(
     pages, *, guard_address: int, slot_address: int, payload_size: int,
     allocate: Callable, initialize_payload: Callable | None = None,
-    thread_id: int | None = None,
+    thread_id: int | None = None, reference_constructor: Callable | None = None,
 ) -> LazyReference:
     """Construct one measured guard/slot singleton from fresh input.
 
@@ -2516,10 +2516,14 @@ def construct_lazy_reference(
     is unsupported. Cold acquisition records explicit gettid at guard+4 and
     byte1=2; release sets byte0=byte1=1. Other guard bytes are preserved.
     ``initialize_payload(staged_pages, address)`` is needed only on the cold
-    path. All page writes are transactional; no host mutex is invoked here.
+    path. An explicit reference_constructor receives object_address and
+    referenced_address before slot publication; its owner supplies diagnostics.
+    All page writes are transactional; no host mutex is invoked here.
     """
     if not isinstance(payload_size, int) or payload_size <= 0:
         raise RefillUnsupported("singleton payload size must be positive")
+    if reference_constructor is not None and not callable(reference_constructor):
+        raise RefillUnsupported("singleton requires a callable reference constructor")
     transaction = _PageTransaction(pages)
     guard = _read_span(transaction, guard_address, 8)
     slot = int.from_bytes(_read_span(transaction, slot_address, 8), "little")
@@ -2538,7 +2542,10 @@ def construct_lazy_reference(
     wrapper = _allocate(transaction, allocate, 16)
     payload = _allocate(transaction, allocate, payload_size)
     initialize_payload(transaction, payload)
-    _reference_wrapper(transaction, wrapper, payload, allocate)
+    if reference_constructor is None:
+        _reference_wrapper(transaction, wrapper, payload, allocate)
+    else:
+        reference_constructor(transaction,object_address=wrapper,referenced_address=payload)
     _write_span(transaction, slot_address, _word(wrapper))
     _write_span(transaction, guard_address, bytes((1,)))
     _write_span(transaction, guard_address + 1, bytes((1,)))

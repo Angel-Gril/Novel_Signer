@@ -8722,3 +8722,49 @@ Host enforcement 为 UNVERIFIED。证据见 [shared factory 记录](evidence/vm9
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_shared_factory_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <shared-factory-evidence.json>
 ```
+
+## 6.254 Environment service reference scope（2026-10-21 Asia/Shanghai）
+
+冷 state allocation28 的 native malloc48 来自 172D40 getter 调用 172EB0：constructor LR172DA0，
+diagnostic entry LR172EE4。模型原先使用裸 lazy reference，只分配 counter4。
+反汇编逐项比较确认 172EB0 与 1625A4 的 31 条指令结构一致（局部条件分支按相对位置比较）。
+现在 generic lazy reference owner 接受显式 constructor，在 payload 初始化后、slot 发布前恰好调用一次；
+默认仍使用原来的裸 reference owner。configuration 把既有 scoped provider 贯通 environment-service；
+state 已有的 diagnostic_scope 绑定直接复用，state 源码未修改。没有复制引用计数或清理算法。
+
+构造入口为 getter SP-20，scope SP-70，padding SP-64。原生写 hook 发现 padding 分两段：
+matching libc68D28 的 STRH W7,[X29,#1E] 在冷 guard mutex 中将高两字节写零，低两字节保留。
+在 environment 调用链中，前序 assignment counter-new 的 32A1F4 保存 LR=image+1629A8，
+高位留在未来 service padding。两基址写入证据与新增 parent RED 证明此差异，不能把四字节全写零，
+也不能把直接 getter 的输入低位覆盖为固定返回地址。模型从当前 image/SP 生成已测量的保存效果。
+
+**36 项原始 helper 对照**包括 28 个 direct getter 与 8 个 environment parent：两个加载基址、
+冷/256 桶预热诊断表、A7/3C 脏栈、非零 canary、冷/热/NULL/guard 早返、4 个高地址栈用例，
+以及空/19 字节 shared payload。比较 live scope 全部24字节、guest payload/image/TLS/table、
+有序分配/释放/注册/wake 和 reference diagnostic entry/leave 的 mutex/gettid 事件。
+完整 context 事件轨迹保留：12 组相等，24 组仍有既有 C++ guard PLT 观察差异，false 标记保留。
+未声称 getter 的完整 guard 事件等价。真实 libc 锁和格式化指令执行，分配与环境服务为 synthetic。
+
+**6 项拒绝/页面回滚**覆盖 provider 写后抛错、不可映射 scope、未对齐/缺失 SP、NULL counter、
+不可调用 provider。外部 ledger 回滚仍未验证。**96 项 Python 回归**覆盖不可变父提交的默认
+factory/getter/environment/state、direct environment-service、generic lazy payload，及构造先后关系、
+公开 state 恰好一次调用既有 constructor、热 getter 不构造/分配。默认行为完整页面/返回/效果一致。
+
+孤立冷 state 探针的 guest 差异 **833->0**，image/TLS 差异仍为0，返回、全部分配/释放、
+注册和 wake 相同。新 constructor live scope24字节一致。首次测试曾保留 padding 低两字节差异，
+其失败记录与最后写入者证据均保留。探针未计入36个正式 native controls；该结论未覆盖所有 state
+分支、完整物理栈或 C++ guard context 事件。未声明完整 state 内存或 ABI 等价。
+
+完整原始2830C4再次返回：模型5182步，322根packed回调、PC/SP/X0/X19/X28/X29/X30和映射一致。
+两侧输出各自与6.253逐字节相同，初态hash不变；**1424/1437共同页相同，13页仍差5042字节**。
+原生1439页、模型1437页；7400F000/74110000两个原生独有全零页仍单列存在性差异。
+本阶段没有减少完整请求终态差异。raw分配首次错位仍在181/rootcallback163：native free对
+model malloc10后同一次free。app PLT与allocator-session realloc观察范围不同，尚未确认语义bug。
+
+累计 **4045 native / 1796 拒绝或回滚**。完整signer、state/second/request完整内存、live JVM、
+完整ABI和provider/mapping回滚仍未完成。下一步追踪完整请求剩余字段及分配观察边界。
+Host enforcement为UNVERIFIED。证据见 [environment service记录](evidence/vm9_environment_service_scope_fresh_20261021.json)。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_environment_service_scope_fresh_20261021.py --library <private-library.so> --libc <matching-libc.so> --output <environment-service-evidence.json>
+```

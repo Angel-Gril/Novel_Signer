@@ -1,6 +1,6 @@
 # Tomato / Fanqie (ByteDance)
 
-The opted-in state now scopes cold shared-reference construction. Adds 44 native controls, 7 rollback checks and 60 Python regressions. The cold-state allocation mismatch moves from 20 to 28 and its image/TLS regions now match; full-request differences remain 13 pages and 5042 bytes. Full signing remains unfinished. See the [shared factory report](REQUEST_JNI_STARTUP_WORKERS.md#6253-default-shared-factory-reference-scope2026-10-21-asiashanghai).
+The opted-in state now scopes cold environment-service construction. Adds 36 native controls, 6 rollback checks and 96 Python regressions. The isolated cold-state fixture now matches payload/image/TLS and allocation/free effects, including its live constructor scope; full-request differences remain 13 pages and 5042 bytes. Full signing remains unfinished. See the [environment service report](REQUEST_JNI_STARTUP_WORKERS.md#6254-environment-service-reference-scope2026-10-21-asiashanghai).
 
 The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).
 
