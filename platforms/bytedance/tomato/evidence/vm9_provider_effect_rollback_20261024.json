@@ -76,10 +76,15 @@
       "case": "jni_availability_provider_failure",
       "jni_effects_rolled_back": true,
       "jni_pages_unchanged": true
+    },
+    {
+      "case": "second_allocation_provider_failure",
+      "allocation_effects_rolled_back": true,
+      "allocation_pages_unchanged": true
     }
   ],
-  "python_controls": 15,
-  "rollback_controls": 15,
+  "python_controls": 16,
+  "rollback_controls": 16,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

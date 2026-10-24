@@ -456,6 +456,36 @@ def verify():
     rows.append(dict(case='jni_availability_provider_failure',
         jni_effects_rolled_back=True, jni_pages_unchanged=True))
 
+    # The second VM's operator-new wrapper is another owning allocator
+    # boundary. A provider that records an allocation and then fails must be
+    # removed from the outer journal while the packed guest result stays staged.
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    allocation_block = 0x2000
+    _write_span(pages, allocation_block,
+        (0x32A1F0).to_bytes(8, 'little') + (24).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+
+    def failing_allocate(_pages, _size):
+        external.append('malloc')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled allocation provider failure')
+
+    try:
+        second_vm.apply_request_287474_allocation_callback(
+            pages, argument_block_address=allocation_block,
+            entry_stack_address=0x5000, image_base=0,
+            allocate=failing_allocate, effect_journal=journal)
+    except RefillUnsupported:
+        pass
+    else:
+        raise AssertionError('failing allocation unexpectedly returned')
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_allocation_provider_failure',
+        allocation_effects_rolled_back=True, allocation_pages_unchanged=True))
+
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
         controls=rows, python_controls=len(rows), rollback_controls=len(rows),

@@ -715,7 +715,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
             elif consumer_services is not None and (wrapper,target)==(0x288508,0x32A1F0):
                 pointer=apply_request_287474_allocation_callback(staged,argument_block_address=argument,
                     entry_stack_address=frame.native_stack_address-0x180,image_base=image,
-                    allocate=consumer_services['allocate'])
+                    allocate=consumer_services['allocate'],effect_journal=effect_journal)
                 allocations.append((argument,pointer))
             elif consumer_services is not None and (wrapper,target) in ((0x28880C,0x248908),(0x2888B4,0x248908)):
                 output=apply_request_287474_string_format_callback(staged,argument_block_address=argument,
@@ -1496,7 +1496,7 @@ def apply_request_287474_tree_pointer_callback(pages, *, argument_block_address,
     return value
 
 
-def apply_request_287474_allocation_callback(pages, *, argument_block_address,
+def _apply_request_287474_allocation_callback_impl(pages, *, argument_block_address,
         entry_stack_address,image_base,allocate):
     """+288508/+32a1f0 successful operator-new with explicit allocation owner.
 
@@ -1519,6 +1519,20 @@ def apply_request_287474_allocation_callback(pages, *, argument_block_address,
     if not pointer:raise RefillUnsupported('allocation requires unrecovered C++ new-handler or throw')
     _write_span(p,argument_block_address+16,pointer.to_bytes(8,'little'))
     p.commit();return pointer
+
+
+def apply_request_287474_allocation_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,allocate,effect_journal=None):
+    """Run the second-VM allocation callback with an optional owner journal."""
+    from vm9_effects import require_effect_journal
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,
+        entry_stack_address=entry_stack_address,image_base=image_base,
+        allocate=allocate)
+    if effect_journal is None:
+        return _apply_request_287474_allocation_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_allocation_callback_impl(pages,**kwargs)
 
 
 def apply_request_287474_string_format_callback(pages, *, argument_block_address,
