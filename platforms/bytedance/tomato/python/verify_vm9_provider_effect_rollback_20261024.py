@@ -351,6 +351,37 @@ def verify():
         environment_effects_rolled_back=True, environment_pages_unchanged=True,
         second_child_helper_journal_forwarded=True))
 
+    # StringObject construction uses the same boundary for an allocator
+    # provider.  The nested object transaction must not publish its vtable or
+    # payload when allocation fails.
+    pages = {2: bytearray(0x1000)}
+    _write_span(pages, 0x2000, b''.join(value.to_bytes(8, 'little') for value in
+        (0x248344, 0x2200, 0x2300)))
+    _write_span(pages, 0x2300, b'x\0')
+    before = bytes(pages[2])
+    external = []
+    journal = EffectJournal()
+
+    def failing_string_allocate(p, _size):
+        _write_span(p, 0x2400, b'string')
+        external.append('string-allocation')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled StringObject allocation failure')
+
+    try:
+        environment_vm.apply_request_environment_string_callback(
+            pages, wrapper_offset=0x205064, argument_block_address=0x2000,
+            image_base=0, allocate=failing_string_allocate, free=lambda *_: None,
+            effect_journal=journal)
+    except RefillUnsupported:
+        pass
+    else:
+        raise AssertionError('failing StringObject allocation unexpectedly returned')
+    assert bytes(pages[2]) == before
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='environment_string_allocator_failure',
+        string_provider_effects_rolled_back=True, string_pages_unchanged=True))
+
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
         controls=rows, python_controls=len(rows), rollback_controls=len(rows),

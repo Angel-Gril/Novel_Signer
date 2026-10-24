@@ -117,7 +117,8 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
             elif consumer_services is not None and (wrapper,target) in ((0x205064,0x248344),(0x205094,0x2484B8)):
                 result=apply_request_environment_string_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
-                    allocate=consumer_services['allocate'],free=consumer_services['free'])
+                    allocate=consumer_services['allocate'],free=consumer_services['free'],
+                    effect_journal=effect_journal)
                 strings.append((wrapper,target,argument,result))
             elif logger_services is not None and (wrapper,target)==(0x205074,0x26E9E0):
                 result=apply_request_environment_logger_callback(staged,
@@ -189,27 +190,37 @@ def apply_request_environment_acquisition_callback(pages, *, argument_block_addr
 
 
 def apply_request_environment_string_callback(pages, *, wrapper_offset,
-        argument_block_address,image_base,allocate,free,max_source_bytes=0x100000):
+        argument_block_address,image_base,allocate,free,max_source_bytes=0x100000,
+        effect_journal=None):
     """Actual +205064 constructor and +205094 destructor tail wrappers.
 
     Both load target/object before calling their existing StringObject owner;
     construction also loads packed+16 source. Neither writes a packed result.
-    Page rollback cannot reverse allocation/free provider external effects.
+    The default page-only behavior is unchanged; an explicit effect journal
+    also rolls back allocation/free provider undo records on failure.
     """
     from vm9_objects import construct_string_object,destroy_string_object
-    p=_PageTransaction(pages)
-    def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
-    pair=wrapper_offset,word(0)-image_base;object_address=word(8)
-    if pair in ((0x205064,0x248344),(0x28155C,0x248344),(0x2885D0,0x248344)):
-        if not callable(allocate):raise RefillUnsupported('environment string allocation provider is required')
-        result=construct_string_object(p,object_address=object_address,source_address=word(16),
-            allocate=allocate,vtable_address=image_base+0x34F5F8,
-            empty_descriptor_address=image_base+0x6E168,max_source_bytes=max_source_bytes)
-    elif pair in ((0x205094,0x2484B8),(0x28158C,0x2484B8)):
-        if not callable(free):raise RefillUnsupported('environment string free provider is required')
-        result=destroy_string_object(p,object_address=object_address,image_base=image_base,free=free)
-    else:raise RefillUnsupported('unrecovered request environment StringObject callback')
-    p.commit();return result
+    effect_journal=require_effect_journal(effect_journal)
+
+    def apply():
+        p=_PageTransaction(pages)
+        def word(offset):return int.from_bytes(_read_span(p,argument_block_address+offset,8),'little')
+        pair=wrapper_offset,word(0)-image_base;object_address=word(8)
+        if pair in ((0x205064,0x248344),(0x28155C,0x248344),(0x2885D0,0x248344)):
+            if not callable(allocate):raise RefillUnsupported('environment string allocation provider is required')
+            result=construct_string_object(p,object_address=object_address,source_address=word(16),
+                allocate=allocate,vtable_address=image_base+0x34F5F8,
+                empty_descriptor_address=image_base+0x6E168,max_source_bytes=max_source_bytes)
+        elif pair in ((0x205094,0x2484B8),(0x28158C,0x2484B8)):
+            if not callable(free):raise RefillUnsupported('environment string free provider is required')
+            result=destroy_string_object(p,object_address=object_address,image_base=image_base,free=free)
+        else:raise RefillUnsupported('unrecovered request environment StringObject callback')
+        p.commit();return result
+
+    if effect_journal is None:
+        return apply()
+    with effect_journal.transaction():
+        return apply()
 
 
 def apply_request_environment_logger_callback(pages, *, argument_block_address,

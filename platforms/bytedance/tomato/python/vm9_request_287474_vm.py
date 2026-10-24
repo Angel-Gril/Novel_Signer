@@ -762,7 +762,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 from vm9_request_environment_vm import apply_request_environment_string_callback
                 constructed=apply_request_environment_string_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
-                    allocate=consumer_services['allocate'],free=consumer_services['free'])
+                    allocate=consumer_services['allocate'],free=consumer_services['free'],
+                    effect_journal=effect_journal)
                 strings.append((wrapper,target,argument,constructed))
             elif consumer_services is not None and (wrapper,target)==(0x2885AC,0x28048C):
                 from vm9_request_28048c_vm import execute_request_28048c_vm_prefix

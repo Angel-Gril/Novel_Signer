@@ -61,10 +61,15 @@
       "environment_effects_rolled_back": true,
       "environment_pages_unchanged": true,
       "second_child_helper_journal_forwarded": true
+    },
+    {
+      "case": "environment_string_allocator_failure",
+      "string_provider_effects_rolled_back": true,
+      "string_pages_unchanged": true
     }
   ],
-  "python_controls": 12,
-  "rollback_controls": 12,
+  "python_controls": 13,
+  "rollback_controls": 13,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

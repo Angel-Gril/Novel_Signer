@@ -8783,7 +8783,7 @@ acquisition callback 也接受该 opt-in JNI/clock/provider owner journal。seco
 向 environment helper 和 child VM 继续传递同一 journal，避免 acquisition provider
 失败时脱离 owning checkpoint。
 
-**12 项 Python controls 与 12 项 rollback controls**通过：hook 失败同时回滚 provider
+**13 项 Python controls 与 13 项 rollback controls**通过：hook 失败同时回滚 provider
 ledger 与 CPU 页面；成功 hook 的效果可由外层 owner 回滚；嵌套 inner success 的 undo
 记录可由 outer failure 按逆序清理；child dispatcher 的后续失败也会回滚 callback
 provider 效果；Java facade 的 child 与 nested callback VM 观察到同一个 journal；
@@ -8791,7 +8791,8 @@ provider 效果；Java facade 的 child 与 nested callback VM 观察到同一�
 provider 失败时 getter 的页面和外部效果都恢复；second VM 毫秒/秒 wrapper
 失败时同样恢复页面和外部效果；environment acquisition provider 失败时，
 acquisition 的 guest 页面与外部 ledger 同时恢复，且 source-level forwarding
-检查确认 second→helper/child 使用同一 journal。
+检查确认 second→helper/child 使用同一 journal；StringObject allocation provider
+失败时其 guest object/payload 页面和外部 allocation ledger 同时恢复。
 没有使用 native 输出作为模型输入，也没有把这些
 Python controls 计入原生差分数量；不声称 live JVM、真实 OS mapping 拓扑或完整 signer。
 默认不传 journal 的旧 page-only 行为保持。证据见
