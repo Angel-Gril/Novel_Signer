@@ -55,10 +55,16 @@
       "case": "second_realtime_seconds_provider_failure",
       "second_clock_effects_rolled_back": true,
       "second_pages_unchanged": true
+    },
+    {
+      "case": "environment_acquisition_provider_failure",
+      "environment_effects_rolled_back": true,
+      "environment_pages_unchanged": true,
+      "second_child_helper_journal_forwarded": true
     }
   ],
-  "python_controls": 11,
-  "rollback_controls": 11,
+  "python_controls": 12,
+  "rollback_controls": 12,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

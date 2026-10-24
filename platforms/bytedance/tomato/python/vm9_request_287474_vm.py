@@ -577,7 +577,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     saved_frame_pointer=frame.native_stack_address-0x60,
                     saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8,
                     acquire_environment=consumer_services['acquire_environment'],
-                    consumer_services=consumer_services,continue_caller_return=True)
+                    consumer_services=consumer_services,continue_caller_return=True,
+                    effect_journal=effect_journal)
                 environment_helpers.append((argument,helper))
                 if getattr(helper,'caller_return',None) is None:raise Boundary()
             elif consumer_services is not None and wrapper==0x28863C and consumer_services.get('process_services') is not None:
@@ -688,7 +689,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 acquired=apply_request_environment_acquisition_callback(staged,
                     argument_block_address=argument,image_base=image,
                     entry_stack_address=frame.native_stack_address-0x180,
-                    acquire_environment=consumer_services['acquire_environment'])
+                    acquire_environment=consumer_services['acquire_environment'],
+                    effect_journal=effect_journal)
                 environment_acquisitions.append((argument,acquired))
             elif (wrapper,target)==(0x288794,0x282B84):
                 value=apply_request_287474_locked_pointer_callback(staged,
@@ -766,6 +768,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 from vm9_request_28048c_vm import execute_request_28048c_vm_prefix
                 child=execute_request_28048c_vm_prefix(staged,vm_module=vm_module,
                     maxsteps=20000,consumer_services=consumer_services,continue_caller_return=True,
+                    effect_journal=effect_journal,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],image_base=image,
                     saved_frame_pointer=frame.native_stack_address-0x60,

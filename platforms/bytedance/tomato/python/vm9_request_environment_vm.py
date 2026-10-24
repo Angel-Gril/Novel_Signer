@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from vm9_allocator import _PageTransaction,RefillUnsupported,_read_span,_write_span
 from vm9_request_caller import prepare_request_environment_vm_caller,RequestVmCallerFrame,request_environment_wrapper_return_offset
 from vm9_objects import decode_masked_bytes
+from vm9_effects import require_effect_journal
 
 @dataclass(frozen=True)
 class RequestEnvironmentVmPrefix:
@@ -62,7 +63,8 @@ def prepare_request_environment_wrapper_caller(pages, *, helper_offset,
     p.commit();return frame
 
 def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
-        acquire_environment=None,consumer_services=None,continue_caller_return=False,**inputs):
+        acquire_environment=None,consumer_services=None,continue_caller_return=False,
+        effect_journal=None,**inputs):
     """Execute known decoders, optional acquisition and StringObject callbacks.
 
     Independent caller generation retains existing packed/padding bytes.
@@ -71,6 +73,7 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
     if type(maxsteps) is not int or maxsteps<1:raise RefillUnsupported('request environment VM budget must be positive')
     if type(continue_caller_return) is not bool:
         raise RefillUnsupported('request environment caller return option must be boolean')
+    effect_journal=require_effect_journal(effect_journal)
     if acquire_environment is not None and not callable(acquire_environment):
         raise RefillUnsupported('request environment acquisition provider must be callable')
     if consumer_services is not None and (not isinstance(consumer_services,dict) or
@@ -109,7 +112,7 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
                 result=apply_request_environment_acquisition_callback(staged,
                     argument_block_address=argument,image_base=image,
                     entry_stack_address=frame.native_stack_address-0x180,
-                    acquire_environment=acquire_environment)
+                    acquire_environment=acquire_environment,effect_journal=effect_journal)
                 acquisitions.append((words[1],result))
             elif consumer_services is not None and (wrapper,target) in ((0x205064,0x248344),(0x205094,0x2484B8)):
                 result=apply_request_environment_string_callback(staged,wrapper_offset=wrapper,
@@ -157,22 +160,32 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
 
 
 def apply_request_environment_acquisition_callback(pages, *, argument_block_address,
-        image_base,entry_stack_address,acquire_environment):
+        image_base,entry_stack_address,acquire_environment,effect_journal=None):
     """+205058 tail-calls +26edc4 with packed+8 output pair and unchanged SP.
 
     The supplied owner executes actual TLS/JavaVM services. No packed result
-    or environment value is synthesized. Page transactions cannot reverse
-    external JavaVM/provider effects.
+    or environment value is synthesized. By default this keeps the historical
+    page-only transaction; an explicit effect journal also rolls back provider
+    undo records when acquisition fails, while an enclosing owner may retain
+    successful records for a larger rollback.
     """
-    if not callable(acquire_environment):raise RefillUnsupported('request environment acquisition provider is required')
-    if type(entry_stack_address) is not int or entry_stack_address<0xE0 or entry_stack_address&15:
-        raise RefillUnsupported('request environment acquisition stack must be aligned')
-    p=_PageTransaction(pages)
-    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
-    output=int.from_bytes(_read_span(p,argument_block_address+8,8),'little')
-    if target!=image_base+0x26EDC4:raise RefillUnsupported('unrecovered request environment acquisition target')
-    result=acquire_environment(p,entry_stack_address=entry_stack_address,output_pair_address=output)
-    p.commit();return result
+    effect_journal=require_effect_journal(effect_journal)
+
+    def apply():
+        if not callable(acquire_environment):raise RefillUnsupported('request environment acquisition provider is required')
+        if type(entry_stack_address) is not int or entry_stack_address<0xE0 or entry_stack_address&15:
+            raise RefillUnsupported('request environment acquisition stack must be aligned')
+        p=_PageTransaction(pages)
+        target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
+        output=int.from_bytes(_read_span(p,argument_block_address+8,8),'little')
+        if target!=image_base+0x26EDC4:raise RefillUnsupported('unrecovered request environment acquisition target')
+        result=acquire_environment(p,entry_stack_address=entry_stack_address,output_pair_address=output)
+        p.commit();return result
+
+    if effect_journal is None:
+        return apply()
+    with effect_journal.transaction():
+        return apply()
 
 
 def apply_request_environment_string_callback(pages, *, wrapper_offset,

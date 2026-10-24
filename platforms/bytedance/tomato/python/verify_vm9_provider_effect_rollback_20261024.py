@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import inspect
 from pathlib import Path
 
 from unicorn import Uc, UC_ARCH_ARM64, UC_MODE_ARM
@@ -21,6 +22,8 @@ import vm9_request_dispatch as request_dispatch
 import vm9_callbacks
 import vm9_state
 import vm9_request_287474_vm as second_vm
+import vm9_request_28048c_vm as child_vm
+import vm9_request_environment_vm as environment_vm
 from vm9_allocator import _write_span
 
 
@@ -309,6 +312,44 @@ def verify():
         assert external == [] and len(journal) == 0
         rows.append(dict(case=name, second_clock_effects_rolled_back=True,
             second_pages_unchanged=True))
+
+    # Environment acquisition has the same opt-in boundary.  The explicit
+    # journal is forwarded from the second VM through its child/helper calls;
+    # a failing provider must leave both staged guest bytes and its external
+    # ledger unchanged.
+    assert inspect.getsource(environment_vm.execute_request_environment_vm_prefix).count(
+        'effect_journal=effect_journal') >= 1
+    assert inspect.getsource(second_vm.execute_request_287474_vm_prefix).count(
+        'effect_journal=effect_journal') >= 3
+    assert inspect.getsource(child_vm.execute_request_28048c_vm_prefix).count(
+        'effect_journal=effect_journal') >= 2
+    pages = {2: bytearray(0x1000)}
+    _write_span(pages, 0x2000, (0x26EDC4).to_bytes(8, 'little'))
+    _write_span(pages, 0x2008, (0x2400).to_bytes(8, 'little'))
+    before = bytes(pages[2])
+    external = []
+    journal = EffectJournal()
+
+    def failing_environment(p, **_kwargs):
+        _write_span(p, 0x2200, b'environment')
+        external.append('environment')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled environment acquisition failure')
+
+    try:
+        environment_vm.apply_request_environment_acquisition_callback(
+            pages, argument_block_address=0x2000, image_base=0,
+            entry_stack_address=0x3000, acquire_environment=failing_environment,
+            effect_journal=journal)
+    except RefillUnsupported:
+        pass
+    else:
+        raise AssertionError('failing environment acquisition unexpectedly returned')
+    assert bytes(pages[2]) == before
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='environment_acquisition_provider_failure',
+        environment_effects_rolled_back=True, environment_pages_unchanged=True,
+        second_child_helper_journal_forwarded=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",

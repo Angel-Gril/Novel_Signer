@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from vm9_allocator import _PageTransaction,RefillUnsupported,_read_span,_write_span
 from vm9_request_caller import prepare_request_28048c_vm_caller,RequestVmCallerFrame
 from vm9_objects import decode_masked_bytes
+from vm9_effects import require_effect_journal
 @dataclass(frozen=True)
 class RequestVm28048cPrefix:
     staged:object
@@ -64,7 +65,7 @@ def prepare_request_28048c_wrapper_caller(pages, *, argument_block_address,
     except ValueError as exc:raise RefillUnsupported('child wrapper memory is unmapped') from exc
     p.commit();return frame
 def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
-        consumer_services=None,continue_caller_return=False,**inputs):
+        consumer_services=None,continue_caller_return=False,effect_journal=None,**inputs):
     """Run known child callbacks; stop before the next unsupported consumer.
 
     The actual wrapper spill and child caller are independently generated.
@@ -73,6 +74,7 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
     """
     if type(maxsteps) is not int or maxsteps<1:raise RefillUnsupported('child VM budget must be positive')
     if type(continue_caller_return) is not bool:raise RefillUnsupported('child return continuation must be boolean')
+    effect_journal=require_effect_journal(effect_journal)
     if consumer_services is not None and (not isinstance(consumer_services,dict) or
             any(not callable(consumer_services.get(n)) for n in ('allocate','free'))):
         raise RefillUnsupported('child request consumers require allocation and free services')
@@ -116,6 +118,7 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                     acquire_environment=consumer_services.get('acquire_environment'),
                     consumer_services=consumer_services,
                     continue_caller_return=consumer_services.get('logger_services') is not None,
+                    effect_journal=effect_journal,
                     helper_offset=target,argument_block_address=argument,
                     entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],image_base=image,
@@ -139,7 +142,8 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                 acquired=apply_request_environment_acquisition_callback(staged,
                     argument_block_address=argument,image_base=image,
                     entry_stack_address=frame.native_stack_address-0x180,
-                    acquire_environment=consumer_services['acquire_environment'])
+                    acquire_environment=consumer_services['acquire_environment'],
+                    effect_journal=effect_journal)
                 acquisitions.append((argument,acquired))
             elif consumer_services is not None and (wrapper,target) in ((0x28155C,0x248344),(0x28158C,0x2484B8)):
                 from vm9_request_environment_vm import apply_request_environment_string_callback

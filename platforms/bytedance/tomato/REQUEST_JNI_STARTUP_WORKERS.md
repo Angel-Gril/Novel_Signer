@@ -8778,16 +8778,20 @@ checkpoint/rollback/discard。native service bridge 现在接受 opt-in journal�
 隐式 map/unmap；映射拓扑变化会 fail closed。owning request VM 也接受同一 journal，异常
 回滚当前请求 checkpoint，成功 prefix/return 保留效果供外层 owner 决定最终提交；Java
 facade 继续把同一 journal 传入嵌套 owning request VM；signer-handle publisher、
-request state elapsed getter 和 second VM realtime wrappers 也接受该 opt-in
-JNI/clock owner journal。
+request state elapsed getter、second VM realtime wrappers 和 request-environment
+acquisition callback 也接受该 opt-in JNI/clock/provider owner journal。second VM
+向 environment helper 和 child VM 继续传递同一 journal，避免 acquisition provider
+失败时脱离 owning checkpoint。
 
-**11 项 Python controls 与 11 项 rollback controls**通过：hook 失败同时回滚 provider
+**12 项 Python controls 与 12 项 rollback controls**通过：hook 失败同时回滚 provider
 ledger 与 CPU 页面；成功 hook 的效果可由外层 owner 回滚；嵌套 inner success 的 undo
 记录可由 outer failure 按逆序清理；child dispatcher 的后续失败也会回滚 callback
 provider 效果；Java facade 的 child 与 nested callback VM 观察到同一个 journal；
 第二个 JNI handle provider 失败时第一个 handle 的外部效果被清理；state clock
 provider 失败时 getter 的页面和外部效果都恢复；second VM 毫秒/秒 wrapper
-失败时同样恢复页面和外部效果。
+失败时同样恢复页面和外部效果；environment acquisition provider 失败时，
+acquisition 的 guest 页面与外部 ledger 同时恢复，且 source-level forwarding
+检查确认 second→helper/child 使用同一 journal。
 没有使用 native 输出作为模型输入，也没有把这些
 Python controls 计入原生差分数量；不声称 live JVM、真实 OS mapping 拓扑或完整 signer。
 默认不传 journal 的旧 page-only 行为保持。证据见
