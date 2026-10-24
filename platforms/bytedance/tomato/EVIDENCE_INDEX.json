@@ -8005,5 +8005,23 @@
     "fresh_input_signer_output_verified": false,
     "complete_python_medusa": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_signer_boundary_audit_20261024": {
+    "path": "evidence/vm9_signer_boundary_audit_20261024.json",
+    "evidence_label": "Public outer/request standalone-signer boundary audit",
+    "handoff_case_count": 4,
+    "composition_path": ["+0x17b8f8", "+0x27dd04", "+0x2830c4"],
+    "production_entries_inspected": 5,
+    "missing_boundaries": [
+      "outer_constructor",
+      "java_facade_to_child",
+      "owning_request_output",
+      "published_signer_state",
+      "live_jvm_and_os",
+      "online_header_acceptance"
+    ],
+    "standalone_signer_verified": false,
+    "decision": "continue_boundary_recovery",
+    "native_input_snapshot_used": false
   }
 }

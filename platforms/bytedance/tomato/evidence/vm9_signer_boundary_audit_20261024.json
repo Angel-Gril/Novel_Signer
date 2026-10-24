@@ -1,0 +1,83 @@
+{
+  "schema": "vm9-signer-boundary-audit-v1",
+  "evidence_date": "2026-10-24",
+  "source_hashes": {
+    "request_vm": "a731afb2290369c2407dcff3a6810217c551f3d9229e7533ca47d5291597dd2f",
+    "facade": "3517aa62cb0fb5c1f3d3ebd6aae5992a487e148b52f476b91f3f0751b8779771",
+    "outer_constructor": "7f0a4288d2edb8700e2bd407bb52fa1293b28bc8073d2a2a1513dd315a249a7a",
+    "elf_bootstrap": "9216acf097f48054407f29385fb3558ed43d71a81da4411ef011d732c5aaa7e9",
+    "handoff_evidence": "7afa9f2849275358744a4faae2b5a248261c2c36198322630b21d27a17180acc"
+  },
+  "handoff_case_count": 4,
+  "production_entries": {
+    "facade": "invoke_java_request_facade_service",
+    "child": "invoke_java_request_service",
+    "request": "invoke_request_vm_callback",
+    "outer": "construct_default_outer",
+    "constructors": "run_elf_constructors"
+  },
+  "composition_path": [
+    "+0x17b8f8",
+    "+0x27dd04",
+    "+0x2830c4"
+  ],
+  "rows": [
+    {
+      "boundary": "outer_constructor",
+      "owner": "vm9_outer_constructor.construct_default_outer",
+      "status": "sample_verified_native_boundary_only",
+      "evidence": "vm9_outer_signer_native_20261024 is private/native-only; no Python whole-state proof",
+      "blocks_standalone": true
+    },
+    {
+      "boundary": "java_facade_to_child",
+      "owner": "vm9_request_vm.invoke_java_request_facade_service",
+      "status": "python_composition_verified",
+      "evidence": "vm9_java_request_handoff_fresh_20261024.json",
+      "blocks_standalone": true
+    },
+    {
+      "boundary": "owning_request_output",
+      "owner": "vm9_request_vm.invoke_request_vm_callback",
+      "status": "synthetic_provider_output_only",
+      "evidence": "vm9_java_request_handoff_fresh_20261024.json",
+      "blocks_standalone": true
+    },
+    {
+      "boundary": "published_signer_state",
+      "owner": "outer allocator/session publication",
+      "status": "not_published",
+      "evidence": "request_pages_published_to_outer_session=false",
+      "blocks_standalone": true
+    },
+    {
+      "boundary": "live_jvm_and_os",
+      "owner": "Android JVM, JNI and OS thread providers",
+      "status": "synthetic_or_unverified",
+      "evidence": "actual_jvm_used=false; actual_os_threads_created=false",
+      "blocks_standalone": true
+    },
+    {
+      "boundary": "online_header_acceptance",
+      "owner": "current reading endpoints",
+      "status": "unverified",
+      "evidence": "current_online_header_matrix_verified=false",
+      "blocks_standalone": true
+    }
+  ],
+  "standalone_signer_verified": false,
+  "missing_boundaries": [
+    "outer_constructor",
+    "java_facade_to_child",
+    "owning_request_output",
+    "published_signer_state",
+    "live_jvm_and_os",
+    "online_header_acceptance"
+  ],
+  "decision": "continue_boundary_recovery",
+  "limitations": [
+    "This audit reads current source and committed evidence only.",
+    "It does not claim a live JVM, real OS threads, whole-native request differential, or online acceptance.",
+    "A successful Python callback return is not a published signer state until the outer session and provider effects have an explicit commit owner."
+  ]
+}

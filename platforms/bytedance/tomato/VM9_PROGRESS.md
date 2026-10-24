@@ -1,5 +1,13 @@
 # Current VM9 progress checkpoint
 
+在进入 fresh standalone signer 前新增只读 public-boundary audit。审计锁定
+`construct_default_outer`、`run_elf_constructors`、`+17b8f8`、`+27dd04` 和
+`+2830c4` 五个生产入口，确认当前 normal facade 调用链和四项 handoff case 的
+边界字段。request object 仍为 synthetic，未使用实际 JVM/OS thread，request pages
+没有发布回 outer session；因此 standalone signer 仍为 false，下一步继续恢复真实
+provider 输入与持久 publication owner。见
+[signer boundary audit](evidence/vm9_signer_boundary_audit_20261024.json)。
+
 新增 facade service 的 nested provider journal 回归：`+17b8f8`、`+27dd04` 和
 `+2830c4` 现在有直接入口级 forwarding 证明；provider rollback 批次更新为
 **32 Python controls / 32 rollback controls**。该项仍是显式 synthetic provider

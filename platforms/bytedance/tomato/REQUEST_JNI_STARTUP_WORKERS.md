@@ -9028,6 +9028,31 @@ python -B platforms/bytedance/tomato/python/verify_vm9_java_request_handoff_fres
   --output platforms/bytedance/tomato/evidence/vm9_java_request_handoff_fresh_20261024.json
 ```
 
+## 6.270 Public outer/request standalone-signer boundary audit（2026-10-24 Asia/Shanghai）
+
+在继续 fresh standalone signer 之前，对当前生产入口和已提交 handoff evidence 做
+只读边界审计。审计锁定五个入口：`construct_default_outer`、
+`run_elf_constructors`、`invoke_java_request_facade_service`、
+`invoke_java_request_service` 和 `invoke_request_vm_callback`，并确认 normal
+facade 的调用链为 `+17b8f8 → +27dd04 → +2830c4`。
+
+审计同时检查四项 handoff case 的边界字段：request objects 仍为 synthetic，
+没有实际 JVM 或 OS thread，request pages 没有发布回 outer session，whole-native
+handoff differential 与线上 header acceptance 都仍为 false。由此保留六个独立
+缺口：outer 全状态等价、facade/child 的真实 JNI 输入、owning request 的真实输出、
+持久 signer state 的提交 owner、live JVM/OS provider，以及线上 header acceptance。
+本批没有执行私有 ELF、没有读取 native snapshot，也没有生成签名；结论是
+**continue_boundary_recovery**，不是 standalone signer ready。
+
+证据和复现脚本：
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_signer_boundary_audit_20261024.py `
+  --output platforms/bytedance/tomato/evidence/vm9_signer_boundary_audit_20261024.json
+```
+
+结果见 `evidence/vm9_signer_boundary_audit_20261024.json`。
+
 \n
 \n
 \n

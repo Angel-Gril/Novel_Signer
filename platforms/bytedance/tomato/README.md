@@ -1,5 +1,11 @@
 # Tomato / Fanqie (ByteDance)
 
+Fresh standalone signer 前的 public-boundary audit 已完成：当前生产入口锁定为
+`construct_default_outer`、`run_elf_constructors` 和 `+17b8f8 → +27dd04 → +2830c4`。
+四项 handoff 仍使用 synthetic JNI/JavaVM，request pages 未发布回 outer session，
+所以完整独立 signer、live JVM/OS provider 和线上 header acceptance 继续保持未验证。
+见 [signer boundary audit](evidence/vm9_signer_boundary_audit_20261024.json)。
+
 The 2026-10-24 fresh outer-finalization rerun passes 10 native hash controls, 6 publication/JNI integration cases, and 5 negative/rollback controls at both ELF image bases. Current-input hash generation, zero-extended caller storage, lazy formatter guards, and publication/destructor service ledgers match; the only live allocation mismatch is allocation 308's native short-string vector padding. See the [outer finalization evidence](evidence/vm9_outer_finalize_fresh_20261024.json) and [allocation attribution](evidence/vm9_outer_allocation_308_padding_20261024.json).
 
 The allocation 308 trace shows all 21 differing bytes are unused short-string padding; semantic fields match and the production model remains unchanged. Full physical stack/ABI equivalence, fresh-input Medusa, complete signing, and online header acceptance remain unverified.
