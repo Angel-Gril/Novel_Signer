@@ -9,8 +9,9 @@ state elapsed getter, second-VM realtime wrappers and request-environment
 acquisition callback, StringObject callbacks, the environment logger callback and
 the JNI availability wrapper, second-VM allocation callback, formatter,
 consumer free tail, StringObject assignment and the two configuration reference
-getters also have opt-in JNI/clock/provider rollback boundaries. Twenty-one
-Python controls and twenty-one rollback controls pass.
+getters and cached JNI reference callback also have opt-in JNI/clock/provider
+rollback boundaries. Twenty-two Python controls and twenty-two rollback controls
+pass.
 Implicit mapping remains rejected and
 complete signing is unfinished. See [the provider-effect report](../REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai).
 

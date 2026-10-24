@@ -660,6 +660,41 @@ def verify():
     rows.append(dict(case='second_pair_provider_failure',
         pair_effects_rolled_back=True, pair_pages_unchanged=True))
 
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    cached_block = 0x2000
+    _write_span(pages, cached_block,
+        (0x1CF55C).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_cached = vm9_jni_environment.copy_cached_dispatch_byte_reference
+
+    def failing_cached(*_args, **_kwargs):
+        external.append('cached-jni')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled cached JNI provider failure')
+
+    vm9_jni_environment.copy_cached_dispatch_byte_reference = failing_cached
+    try:
+        try:
+            second_vm.apply_request_287474_cached_reference_callback(
+                pages, argument_block_address=cached_block,
+                entry_stack_address=0x8000, image_base=0,
+                thread_pointer=0x7000, acquire_environment=lambda *_a, **_k: None,
+                invoke_jni=lambda *_a: 0, register_exit=lambda *_a: 0,
+                allocate=lambda *_a: 0x5000, calloc=lambda *_a: 0x6000,
+                free=lambda *_a: 0, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing cached JNI unexpectedly returned')
+    finally:
+        vm9_jni_environment.copy_cached_dispatch_byte_reference = original_cached
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_cached_reference_provider_failure',
+        cached_reference_effects_rolled_back=True, cached_reference_pages_unchanged=True))
+
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
         controls=rows, python_controls=len(rows), rollback_controls=len(rows),

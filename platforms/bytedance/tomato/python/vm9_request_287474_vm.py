@@ -619,7 +619,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     acquire_environment=consumer_services['acquire_environment'],
                     invoke_jni=consumer_services['invoke_jni'],register_exit=consumer_services['register_exit'],
                     allocate=consumer_services['allocate'],calloc=consumer_services['calloc'],free=consumer_services['free'],
-                    thread_id=consumer_services.get('thread_id'),
+                    thread_id=consumer_services.get('thread_id'),effect_journal=effect_journal,
                     diagnostic_observer=consumer_services.get('diagnostic_observer'))
                 cached_references.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x2884EC,0x32D3A0):
@@ -1214,7 +1214,7 @@ def apply_request_287474_pair_getter_callback(pages, *, argument_block_address,
         return _apply_request_287474_pair_getter_callback_impl(pages,**kwargs)
 
 
-def apply_request_287474_cached_reference_callback(pages, *, argument_block_address,
+def _apply_request_287474_cached_reference_callback_impl(pages, *, argument_block_address,
         entry_stack_address, image_base, thread_pointer, acquire_environment,
         invoke_jni, register_exit, allocate, calloc, free, thread_id=None,
         diagnostic_observer=None):
@@ -1235,6 +1235,22 @@ def apply_request_287474_cached_reference_callback(pages, *, argument_block_addr
         allocate=allocate,calloc=calloc,free=free,thread_id=thread_id,diagnostic_observer=diagnostic_observer)
     transaction.commit()
     return output
+
+
+def apply_request_287474_cached_reference_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, thread_pointer, acquire_environment,
+        invoke_jni, register_exit, allocate, calloc, free, thread_id=None,
+        diagnostic_observer=None, effect_journal=None):
+    """Run the second cached JNI reference callback with an optional journal."""
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,entry_stack_address=entry_stack_address,
+        image_base=image_base,thread_pointer=thread_pointer,acquire_environment=acquire_environment,
+        invoke_jni=invoke_jni,register_exit=register_exit,allocate=allocate,calloc=calloc,free=free,
+        thread_id=thread_id,diagnostic_observer=diagnostic_observer)
+    if effect_journal is None:
+        return _apply_request_287474_cached_reference_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_cached_reference_callback_impl(pages,**kwargs)
 
 
 def apply_request_287474_guard_acquire_callback(pages, *, argument_block_address,

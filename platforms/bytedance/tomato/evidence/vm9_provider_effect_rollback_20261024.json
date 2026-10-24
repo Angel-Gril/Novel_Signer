@@ -106,10 +106,15 @@
       "case": "second_pair_provider_failure",
       "pair_effects_rolled_back": true,
       "pair_pages_unchanged": true
+    },
+    {
+      "case": "second_cached_reference_provider_failure",
+      "cached_reference_effects_rolled_back": true,
+      "cached_reference_pages_unchanged": true
     }
   ],
-  "python_controls": 21,
-  "rollback_controls": 21,
+  "python_controls": 22,
+  "rollback_controls": 22,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,
