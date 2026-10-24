@@ -39,6 +39,12 @@ TLS canary、callback X0 preservation 与请求入口错误回滚保持一致。
 bounded component 验证，完整 standalone signer 和线上 acceptance 未验证。证据见
 [request caller return fresh rerun](evidence/vm9_request_caller_return_fresh_20261024.json)。
 
+正式 owning request VM entry 也完成 fresh import/rollback rerun：2 项 Python prefix
+controls 与 24 项 rollback guards 通过；生产入口没有导入 native oracle、Unicorn 或
+重放历史 native group。该项只验证入口边界和旧函数/异常 identity，whole-request
+differential、完整 signer 与线上 acceptance 仍未验证。证据见
+[request VM entry fresh rerun](evidence/vm9_request_vm_entry_fresh_20261024.json)。
+
 ## 2026-10-24 Asia/Shanghai：outer native signer boundary rerun
 
 The existing fresh-ELF native outer control was rerun against the pinned

@@ -1,0 +1,198 @@
+{
+  "native_Python_controls": 0,
+  "rollback_guards": 24,
+  "Python_prefix_controls": 2,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "vm_steps": 599,
+      "bytecode_offset": "0xf8078",
+      "decoded_constants": 3,
+      "caller_pages_unchanged": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "vm_steps": 599,
+      "bytecode_offset": "0xf8078",
+      "decoded_constants": 3,
+      "caller_pages_unchanged": true,
+      "module_base_restored": true
+    }
+  ],
+  "guards": [
+    {
+      "image_base": "0x122c0000",
+      "case": "wrong_callback",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "bool_target",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_diagnostics",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_allocator",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_free",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "bool_mode",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "overflow_mode",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unaligned_stack",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_output",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "allocation_service_failure",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "failure_with_prior_completion",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "wrong_facade_target",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wrong_callback",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "bool_target",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_diagnostics",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_allocator",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_free",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "bool_mode",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "overflow_mode",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unaligned_stack",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_output",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "allocation_service_failure",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "failure_with_prior_completion",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wrong_facade_target",
+      "rejected": true,
+      "page_rollback": true,
+      "module_base_restored": true
+    }
+  ],
+  "legacy_function_and_exception_identity_preserved": true,
+  "production_imports_oracle_or_unicorn": false,
+  "native_groups_replayed": false,
+  "whole_request_native_differential_verified": false,
+  "complete_signer_verified": false
+}

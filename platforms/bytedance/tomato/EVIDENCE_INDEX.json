@@ -7919,5 +7919,17 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_vm_entry_fresh_20261024": {
+    "path": "evidence/vm9_request_vm_entry_fresh_20261024.json",
+    "evidence_label": "Fresh owning request VM entry rerun",
+    "native_Python_controls": 0,
+    "Python_prefix_controls": 2,
+    "rollback_guards": 24,
+    "legacy_function_and_exception_identity_preserved": true,
+    "production_imports_oracle_or_unicorn": false,
+    "native_groups_replayed": false,
+    "whole_request_native_differential_verified": false,
+    "complete_signer_verified": false
   }
 }

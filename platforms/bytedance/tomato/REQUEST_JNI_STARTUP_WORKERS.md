@@ -8965,6 +8965,16 @@ X19/X28/X29、TLS canary、callback X0 preservation、入口错误回滚和 modu
 完整 physical ABI、JVM 和线上 header acceptance 继续未验证。证据见
 `evidence/vm9_request_caller_return_fresh_20261024.json`。
 
+## 6.266 Owning request VM entry fresh rerun（2026-10-24 Asia/Shanghai）
+
+正式 `vm9_request_vm` entry 完成 fresh import/rollback rerun：2 项 Python prefix
+controls 与 **24 项 rollback guards** 全部通过。入口保持 legacy function/exception
+identity，生产 import 不加载 native oracle、Unicorn 或历史 native replay。
+
+这是入口契约验证，不是 whole-request native differential、fresh standalone signer、
+完整 physical ABI、JVM 或线上 header acceptance。证据见
+`evidence/vm9_request_vm_entry_fresh_20261024.json`。
+
 \n
 \n
 \n
