@@ -2,9 +2,11 @@
 
 `verify_vm9_signer_boundary_audit_20261024.py` now audits the public outer and
 request owners before standalone-signer work. It confirms the `+17b8f8 →
-+27dd04 → +2830c4` composition while keeping synthetic JNI/JavaVM, unpublished
-request pages, live JVM/OS providers, and online acceptance explicitly open. The
-audit is read-only and does not execute private ELF or replay native snapshots.
++27dd04 → +2830c4` composition while keeping synthetic JNI/JavaVM, live JVM/OS
+providers, and online acceptance explicitly open. Completed request pages now pass
+through the owning session's explicit `publish_request_state` commit owner; duplicate
+publication is rejected. The audit is read-only and does not execute private ELF or
+replay native snapshots.
 
 The opt-in `vm9_effects.EffectJournal` now gives allocator/JNI/OS providers an
 explicit nested rollback boundary. Native service hooks can restore provider

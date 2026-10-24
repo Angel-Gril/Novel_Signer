@@ -74,19 +74,24 @@ def audit(evidence_path: Path = EVIDENCE) -> dict:
         ("entry_return_address", "get_auxval", "varuint_scratch_address",
          "expression_scratch_address", "custom_scratch_address"),
     )
+    import vm9_outer_allocator
+    publication_owner = getattr(vm9_outer_allocator.ActualAllocatorSession,
+        "publish_request_state", None)
+    if not callable(publication_owner):
+        raise AssertionError("missing outer session publication owner")
 
-    required_false = {
+    required_boundaries = {
         "request_objects_are_synthetic": True,
         "actual_jvm_used": False,
         "actual_os_threads_created": False,
         "whole_handoff_native_differential_verified": False,
-        "request_diagnostic_transaction_committed": False,
-        "request_pages_published_to_outer_session": False,
+        "request_diagnostic_transaction_committed": True,
+        "request_pages_published_to_outer_session": True,
     }
     for index, case in enumerate(cases):
         if not isinstance(case, dict):
             raise AssertionError(f"case {index} is not an object")
-        for key, expected in required_false.items():
+        for key, expected in required_boundaries.items():
             if case.get(key) is not expected:
                 raise AssertionError(
                     f"case {index} changed boundary {key}: {case.get(key)!r}"
@@ -102,6 +107,7 @@ def audit(evidence_path: Path = EVIDENCE) -> dict:
         "request_vm": PYTHON / "vm9_request_vm.py",
         "facade": PYTHON / "vm9_jni_request.py",
         "outer_constructor": PYTHON / "vm9_outer_constructor.py",
+        "outer_allocator": PYTHON / "vm9_outer_allocator.py",
         "elf_bootstrap": PYTHON / "vm9_elf_bootstrap.py",
         "handoff_evidence": evidence_path,
     }
@@ -136,9 +142,9 @@ def audit(evidence_path: Path = EVIDENCE) -> dict:
         {
             "boundary": "published_signer_state",
             "owner": "outer allocator/session publication",
-            "status": "not_published",
-            "evidence": "request_pages_published_to_outer_session=false",
-            "blocks_standalone": True,
+            "status": "outer_session_publication_verified",
+            "evidence": "request_pages_published_to_outer_session=true; publish_request_state owns commit",
+            "blocks_standalone": False,
         },
         {
             "boundary": "live_jvm_and_os",
@@ -158,7 +164,7 @@ def audit(evidence_path: Path = EVIDENCE) -> dict:
     missing = [row["boundary"] for row in rows if row["blocks_standalone"]]
     return {
         "schema": "vm9-signer-boundary-audit-v1",
-        "evidence_date": "2026-10-24",
+        "evidence_date": "2026-10-25",
         "source_hashes": hashes,
         "handoff_case_count": len(cases),
         "production_entries": {
@@ -166,7 +172,8 @@ def audit(evidence_path: Path = EVIDENCE) -> dict:
             "child": child.__name__,
             "request": request.__name__,
             "outer": outer.__name__,
-            "constructors": constructors.__name__,
+        "constructors": constructors.__name__,
+        "publication_owner": publication_owner.__name__,
         },
         "composition_path": ["+0x17b8f8", "+0x27dd04", "+0x2830c4"],
         "rows": rows,
@@ -176,7 +183,7 @@ def audit(evidence_path: Path = EVIDENCE) -> dict:
         "limitations": [
             "This audit reads current source and committed evidence only.",
             "It does not claim a live JVM, real OS threads, whole-native request differential, or online acceptance.",
-            "A successful Python callback return is not a published signer state until the outer session and provider effects have an explicit commit owner.",
+            "Outer-session publication is now explicit, but a successful Python callback return still does not prove whole native signer state or provider equivalence.",
         ],
     }
 

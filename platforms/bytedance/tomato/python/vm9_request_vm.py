@@ -1060,7 +1060,7 @@ def invoke_java_request_facade_service(pages, target, *, image_base,
         vm_module, seconds, nanoseconds, allocate=None, calloc=None, free=None,
         invoke_jni=None, diagnostic_scope=None, diagnostic_observer=None,
         acquire_environment=None, wake_condition=None, lock_mutex=None,
-        unlock_mutex=None, effect_journal=None, max_pairs=4096,
+        unlock_mutex=None, effect_journal=None, publish_request=None, max_pairs=4096,
         max_bytes=0x100000, max_callbacks=4096, max_nodes=4096, **services):
     """Bind the normal Java facade (+17b8f8) to the owning request service.
 
@@ -1070,13 +1070,17 @@ def invoke_java_request_facade_service(pages, target, *, image_base,
     binds child ``+27dd04`` to the owning request VM ``+2830c4``.  All three
     layers receive the same page transaction and optional provider-effect
     journal, so a failed nested request cannot publish staged pages or leave
-    an unpaired provider effect at this boundary.
+    an unpaired provider effect at this boundary.  When supplied, the
+    ``publish_request`` callback runs only after the complete request return and
+    is the explicit outer allocator/session commit owner.
     """
     if (type(image_base) is not int or type(target) is not int
             or target != image_base + 0x17B8F8):
         raise RefillUnsupported('Java facade service requires normal +17b8f8 entry')
     if not isinstance(diagnostic_scope, dict):
         raise RefillUnsupported('Java facade service requires a diagnostic scope')
+    if publish_request is not None and not callable(publish_request):
+        raise RefillUnsupported('Java facade publication callback must be callable')
     if any(not callable(f) for f in (allocate, calloc, free, invoke_jni)):
         raise RefillUnsupported('Java facade service requires allocation/calloc/free/JNI services')
     import vm9_jni_request as facade
@@ -1108,8 +1112,15 @@ def invoke_java_request_facade_service(pages, target, *, image_base,
             unlock_mutex=unlock_mutex, max_pairs=max_pairs,
             max_bytes=max_bytes)
     if effect_journal is None:
-        return run()
-    with effect_journal.transaction():
-        return run()
+        result = run()
+    else:
+        with effect_journal.transaction():
+            result = run()
+    if publish_request is not None:
+        # Publication is deliberately outside the nested provider journal: the
+        # outer session owns the final allocator/OS commit after the complete
+        # facade -> child -> owning VM return has been validated.
+        publish_request(diagnostic_scope=diagnostic_scope, result=result)
+    return result
 
 

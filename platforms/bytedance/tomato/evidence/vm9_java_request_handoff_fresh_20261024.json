@@ -1,10 +1,10 @@
 {
-  "schema": "vm9-java-request-handoff-fresh-python-v1",
-  "evidence_date": "2026-10-24",
+  "schema": "vm9-java-request-handoff-fresh-python-v2",
+  "evidence_date": "2026-10-25",
   "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
   "controls": 4,
-  "rollback_guards": 4,
+  "rollback_guards": 8,
   "cases": [
     {
       "image_base": "0x122c0000",
@@ -163,14 +163,17 @@
       "actual_jni_environment_acquisition": true,
       "actual_request_cleanup_completed": true,
       "actual_request_vm_returned": true,
+      "request_publication_count": 1,
+      "request_published_mapping_count": 4,
+      "duplicate_request_publication_rejected": true,
       "stop_bytecode_offset": "0xffb78",
       "boundary_wrapper_offset": "0x285fb4",
       "boundary_target_offset": "0x28dc38",
       "actual_jvm_used": false,
       "actual_os_threads_created": false,
       "whole_handoff_native_differential_verified": false,
-      "request_diagnostic_transaction_committed": false,
-      "request_pages_published_to_outer_session": false
+      "request_diagnostic_transaction_committed": true,
+      "request_pages_published_to_outer_session": true
     },
     {
       "image_base": "0x122c0000",
@@ -329,14 +332,17 @@
       "actual_jni_environment_acquisition": true,
       "actual_request_cleanup_completed": true,
       "actual_request_vm_returned": true,
+      "request_publication_count": 1,
+      "request_published_mapping_count": 4,
+      "duplicate_request_publication_rejected": true,
       "stop_bytecode_offset": "0xffb78",
       "boundary_wrapper_offset": "0x285fb4",
       "boundary_target_offset": "0x28dc38",
       "actual_jvm_used": false,
       "actual_os_threads_created": false,
       "whole_handoff_native_differential_verified": false,
-      "request_diagnostic_transaction_committed": false,
-      "request_pages_published_to_outer_session": false
+      "request_diagnostic_transaction_committed": true,
+      "request_pages_published_to_outer_session": true
     },
     {
       "image_base": "0x775c205000",
@@ -495,14 +501,17 @@
       "actual_jni_environment_acquisition": true,
       "actual_request_cleanup_completed": true,
       "actual_request_vm_returned": true,
+      "request_publication_count": 1,
+      "request_published_mapping_count": 4,
+      "duplicate_request_publication_rejected": true,
       "stop_bytecode_offset": "0xffb78",
       "boundary_wrapper_offset": "0x285fb4",
       "boundary_target_offset": "0x28dc38",
       "actual_jvm_used": false,
       "actual_os_threads_created": false,
       "whole_handoff_native_differential_verified": false,
-      "request_diagnostic_transaction_committed": false,
-      "request_pages_published_to_outer_session": false
+      "request_diagnostic_transaction_committed": true,
+      "request_pages_published_to_outer_session": true
     },
     {
       "image_base": "0x775c205000",
@@ -661,14 +670,17 @@
       "actual_jni_environment_acquisition": true,
       "actual_request_cleanup_completed": true,
       "actual_request_vm_returned": true,
+      "request_publication_count": 1,
+      "request_published_mapping_count": 4,
+      "duplicate_request_publication_rejected": true,
       "stop_bytecode_offset": "0xffb78",
       "boundary_wrapper_offset": "0x285fb4",
       "boundary_target_offset": "0x28dc38",
       "actual_jvm_used": false,
       "actual_os_threads_created": false,
       "whole_handoff_native_differential_verified": false,
-      "request_diagnostic_transaction_committed": false,
-      "request_pages_published_to_outer_session": false
+      "request_diagnostic_transaction_committed": true,
+      "request_pages_published_to_outer_session": true
     }
   ],
   "fresh_input_signer_output_verified": false,
@@ -682,9 +694,8 @@
     "These are same Python-state compositions, not whole native handoff comparisons.",
     "The low image-base path and high image-base path take different recovered VM branches; both return at the caller sentinel.",
     "URL/header/JNI request conversion is not recovered; request objects and the JavaVM/JNI providers are synthetic.",
-    "The strict owning callback entry commits only to the handoff staging transaction; the disposable outer session is not published as signer state.",
+    "The strict owning callback entry now has an explicit outer-session publication owner; this proves staged state commit, not a complete native signer state.",
     "The complete independent signer output and later server request callbacks remain open.",
-    "The disposable OS/allocator session and request page staging are not a published signer state.",
     "Explicit OS/clock/property/JNI services; no native snapshot, actual JVM or server request."
   ]
 }

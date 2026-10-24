@@ -1,12 +1,13 @@
 {
   "schema": "vm9-signer-boundary-audit-v1",
-  "evidence_date": "2026-10-24",
+  "evidence_date": "2026-10-25",
   "source_hashes": {
-    "request_vm": "a731afb2290369c2407dcff3a6810217c551f3d9229e7533ca47d5291597dd2f",
+    "request_vm": "ffe69a8fe15657b592dd72a69270ada9da26db9df67be9de068c4c7a302a362b",
     "facade": "3517aa62cb0fb5c1f3d3ebd6aae5992a487e148b52f476b91f3f0751b8779771",
     "outer_constructor": "7f0a4288d2edb8700e2bd407bb52fa1293b28bc8073d2a2a1513dd315a249a7a",
+    "outer_allocator": "e0a3def02d997d83b4cbd3aa780645e9b8a98323b9aea8824d6795159ce629af",
     "elf_bootstrap": "9216acf097f48054407f29385fb3558ed43d71a81da4411ef011d732c5aaa7e9",
-    "handoff_evidence": "7afa9f2849275358744a4faae2b5a248261c2c36198322630b21d27a17180acc"
+    "handoff_evidence": "ee9aa01ad2b46e3aec58d99be5d1745299317a6cdafcdb9a2e2a9fd587cfeaf8"
   },
   "handoff_case_count": 4,
   "production_entries": {
@@ -14,7 +15,8 @@
     "child": "invoke_java_request_service",
     "request": "invoke_request_vm_callback",
     "outer": "construct_default_outer",
-    "constructors": "run_elf_constructors"
+    "constructors": "run_elf_constructors",
+    "publication_owner": "publish_request_state"
   },
   "composition_path": [
     "+0x17b8f8",
@@ -46,9 +48,9 @@
     {
       "boundary": "published_signer_state",
       "owner": "outer allocator/session publication",
-      "status": "not_published",
-      "evidence": "request_pages_published_to_outer_session=false",
-      "blocks_standalone": true
+      "status": "outer_session_publication_verified",
+      "evidence": "request_pages_published_to_outer_session=true; publish_request_state owns commit",
+      "blocks_standalone": false
     },
     {
       "boundary": "live_jvm_and_os",
@@ -70,7 +72,6 @@
     "outer_constructor",
     "java_facade_to_child",
     "owning_request_output",
-    "published_signer_state",
     "live_jvm_and_os",
     "online_header_acceptance"
   ],
@@ -78,6 +79,6 @@
   "limitations": [
     "This audit reads current source and committed evidence only.",
     "It does not claim a live JVM, real OS threads, whole-native request differential, or online acceptance.",
-    "A successful Python callback return is not a published signer state until the outer session and provider effects have an explicit commit owner."
+    "Outer-session publication is now explicit, but a successful Python callback return still does not prove whole native signer state or provider equivalence."
   ]
 }

@@ -42,6 +42,8 @@ class ActualAllocatorSession:
         self.allocation_effect = allocation_effect
         self.free_effect = free_effect
         self.generation = libc_base + 0xE0200
+        self._published = False
+        self._publication_count = 0
 
     @property
     def pages(self):
@@ -187,6 +189,62 @@ class ActualAllocatorSession:
 
     def commit(self):
         self.tx.commit()
+
+    @property
+    def published(self):
+        """Whether this session has explicitly committed its staged state."""
+        return self._published
+
+    @property
+    def publication_count(self):
+        return self._publication_count
+
+    def publish_request_state(self, *, diagnostic_scope, output_reference_address=None,
+            result=None):
+        """Commit one completed request into the owning outer session.
+
+        Request and facade helpers operate on ``self.tx.pages`` so nested page
+        transactions can still fail atomically.  They must not silently turn
+        that staging buffer into process state.  This method is the one explicit
+        publication owner: it requires the owning VM return markers, optionally
+        checks the returned reference, commits the allocator/OS transaction and
+        rejects a second publication on the same session.
+        """
+        if self._published:
+            raise allocator.RefillUnsupported(
+                "outer allocator session already published")
+        if not isinstance(diagnostic_scope, dict):
+            raise allocator.RefillUnsupported(
+                "request publication requires diagnostic scope")
+        if result is None:
+            raise allocator.RefillUnsupported(
+                "request publication requires a facade result")
+        completed = diagnostic_scope.get("request_vm_return")
+        if not isinstance(completed, dict) or not all(
+                completed.get(key) is True for key in (
+                    "caller_sentinel_matches",
+                    "physical_native_caller_epilogue_modeled",
+                    "all_dispatched_callback_models_returned",
+                    "request_transaction_committed_to_supplied_pages")):
+            raise allocator.RefillUnsupported(
+                "request publication requires a completed owning VM return")
+        if output_reference_address is not None:
+            if (type(output_reference_address) is not int
+                    or not 0 <= output_reference_address <= (1 << 64) - 16):
+                raise allocator.RefillUnsupported(
+                    "request publication output reference is invalid")
+            # Reading through the session transaction proves the output was
+            # produced in the same staged page owner before publication.
+            allocator._read_span(self.tx, output_reference_address, 16)
+        self.tx.commit()
+        self._published = True
+        self._publication_count += 1
+        return {
+            "published": True,
+            "publication_count": self._publication_count,
+            "allocator_mapping_count": len(self.guest_os.mappings),
+            "result_present": result is not None,
+        }
 
     def rollback(self):
         return None

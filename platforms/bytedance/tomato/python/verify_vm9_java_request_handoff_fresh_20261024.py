@@ -140,6 +140,11 @@ def case(library, libc, image, label, property_value, vm_module):
             write_word(staged,address,value)
         _write_span(staged, child_mutex, bytes(0x98))
         write_word(staged, image+0x35D5F0+0x20, image+0x27DD04)
+        publication_result = []
+        def publish_request(**kwargs):
+            value = session.publish_request_state(**kwargs)
+            publication_result.append(value)
+            return value
         output = invoke_java_request_facade_service(staged, image + 0x17B8F8,
             image_base=image, entry_stack_address=inputs['entry_stack_address'],
             thread_pointer=fixture.TLS, thread_id=137, environment_pointer=env_pointer,
@@ -158,7 +163,8 @@ def case(library, libc, image, label, property_value, vm_module):
             reallocate=session.reallocate, prepare_format=session.prepare_format,
             read_clock=session.read_clock, get_tls=session.get_tls,
             initialize_registry=session.initialize_registry, broadcast=session.broadcast,
-            register_exit=session.thread_destructor, get_singleton=session.singleton)
+            register_exit=session.thread_destructor, get_singleton=session.singleton,
+            publish_request=publish_request)
         vm_return = diagnostic_scope.get('request_vm_return', {})
         vm = type('VMResult', (), {'steps': vm_return.get('vm_steps'),
             'pc': vm_return.get('caller_native_return', {}).get('pc', image)})()
@@ -169,6 +175,18 @@ def case(library, libc, image, label, property_value, vm_module):
             'pc', hex(vm.pc-image), 'allocations', len(allocations), flush=True)
         assert vm_return.get('caller_sentinel_matches') is True
         assert vm_return.get('caller_sentinel_matches') is True
+        assert len(publication_result) == 1
+        publication = publication_result[0]
+        assert publication['published'] is True
+        assert session.published and session.publication_count == 1
+        try:
+            session.publish_request_state(
+                diagnostic_scope=diagnostic_scope, result=output)
+        except RefillUnsupported as exc:
+            assert str(exc) == 'outer allocator session already published'
+            duplicate_publication_rejected = True
+        else:
+            raise AssertionError('outer session accepted a second publication')
         descriptor = []
         wrong_target_before = {k: bytes(v) for k, v in staged.staged.items()}
         try:
@@ -206,12 +224,15 @@ def case(library, libc, image, label, property_value, vm_module):
             actual_jni_environment_acquisition=bool(diagnostic_scope.get('request_evaluator_prefixes')),
             actual_request_cleanup_completed=bool(diagnostic_scope.get('request_tree_cleanups')),
             actual_request_vm_returned=bool(diagnostic_scope.get('request_vm_return')),
+            request_publication_count=session.publication_count,
+            request_published_mapping_count=publication['allocator_mapping_count'],
+            duplicate_request_publication_rejected=duplicate_publication_rejected,
             stop_bytecode_offset=vm_return.get('bytecode_offset'),
             boundary_wrapper_offset='0x285fb4', boundary_target_offset='0x28dc38',
             actual_jvm_used=False, actual_os_threads_created=False,
             whole_handoff_native_differential_verified=False,
-            request_diagnostic_transaction_committed=False,
-            request_pages_published_to_outer_session=False))
+            request_diagnostic_transaction_committed=True,
+            request_pages_published_to_outer_session=publication['published']))
     outer_allocator.make_session = capture_session
     try:
         result = boundary.case(library, libc, image, label, property_value, vm_module,
@@ -239,18 +260,17 @@ def main():
         for label, value in (('absent', None), ('sdk_30', b'30')):
             rows.append(case(args.library, args.libc, image, label, value, vm_full))
             print('request owning allocator', hex(image), label, 'PASS', flush=True)
-    report = dict(schema='vm9-java-request-handoff-fresh-python-v1', evidence_date='2026-10-24',
+    report = dict(schema='vm9-java-request-handoff-fresh-python-v2', evidence_date='2026-10-25',
         sample_sha256=oracle.LIBRARY_SHA256, libc_sha256=worker.LIBC_SHA256,
-        controls=len(rows), rollback_guards=len(rows), cases=rows, fresh_input_signer_output_verified=False,
+        controls=len(rows), rollback_guards=len(rows) * 2, cases=rows, fresh_input_signer_output_verified=False,
         complete_python_medusa=False, current_online_header_matrix_verified=False,
         normal_java_facade_entry_used=True, child_dispatcher_entry_used=True,
         owning_request_vm_entry_used=True, synthetic_jni_and_java_vm=True,
         limitations=['These are same Python-state compositions, not whole native handoff comparisons.',
             'The low image-base path and high image-base path take different recovered VM branches; both return at the caller sentinel.',
             'URL/header/JNI request conversion is not recovered; request objects and the JavaVM/JNI providers are synthetic.',
-            'The strict owning callback entry commits only to the handoff staging transaction; the disposable outer session is not published as signer state.',
+            'The strict owning callback entry now has an explicit outer-session publication owner; this proves staged state commit, not a complete native signer state.',
             'The complete independent signer output and later server request callbacks remain open.',
-            'The disposable OS/allocator session and request page staging are not a published signer state.',
             'Explicit OS/clock/property/JNI services; no native snapshot, actual JVM or server request.'])
     args.output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     print('request owning allocator', len(rows), 'Python compositions PASS; fresh signature remains open')

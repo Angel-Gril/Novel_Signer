@@ -7951,7 +7951,7 @@
     "path": "evidence/vm9_java_request_handoff_fresh_20261024.json",
     "evidence_label": "Fresh normal Java facade to child dispatcher to owning request VM handoff",
     "native_Python_controls": 4,
-    "rollback_guards": 4,
+    "rollback_guards": 8,
     "image_bases": ["0x122c0000", "0x775c205000"],
     "property_profiles": ["absent", "sdk_30"],
     "return_offset": "0xffb78",
@@ -7961,6 +7961,9 @@
     "child_dispatcher_entry_used": true,
     "owning_request_vm_entry_used": true,
     "owning_allocator_session_used": true,
+    "request_diagnostic_transaction_committed": true,
+    "request_pages_published_to_outer_session": true,
+    "duplicate_request_publication_rejected": true,
     "synthetic_JNI_and_JavaVM": true,
     "native_snapshot_input": false,
     "whole_native_differential_verified": false,
@@ -8011,17 +8014,20 @@
     "evidence_label": "Public outer/request standalone-signer boundary audit",
     "handoff_case_count": 4,
     "composition_path": ["+0x17b8f8", "+0x27dd04", "+0x2830c4"],
-    "production_entries_inspected": 5,
+    "production_entries_inspected": 6,
     "missing_boundaries": [
       "outer_constructor",
       "java_facade_to_child",
       "owning_request_output",
-      "published_signer_state",
       "live_jvm_and_os",
       "online_header_acceptance"
     ],
     "standalone_signer_verified": false,
     "decision": "continue_boundary_recovery",
-    "native_input_snapshot_used": false
+    "native_input_snapshot_used": false,
+    "evidence_date": "2026-10-25",
+    "publication_owner": "vm9_outer_allocator.ActualAllocatorSession.publish_request_state",
+    "published_request_state_verified": true,
+    "duplicate_publication_rejected": true
   }
 }
