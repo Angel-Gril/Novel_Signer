@@ -8788,3 +8788,36 @@ Python controls 计入原生差分数量；不声称 live JVM、真实 OS mappin
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_provider_effect_rollback_20261024.py --output <provider-effect-rollback-evidence.json>
 ```
+
+## 6.256 GuestOS mapping-owner effect rollback（2026-10-24 Asia/Shanghai）
+
+`GuestOS` 现在接受同一 opt-in journal。高层 `map_anonymous`、`unmap_exact`、
+`unmap_range`、`name_exact`、`protect_exact` 以及 `register_os_region` 在成功提交
+后登记页面、mapping metadata 和 `next_address` 的 owner snapshot；失败时按 checkpoint
+恢复这些外部状态。默认不传 journal 的旧 mapping 事务保持不变，底层 transaction
+仍然只在显式 `commit()` 时发布。
+
+**4 项 Python controls、3 项 rollback controls**通过：组合 map/name/protect 的外层
+拒绝恢复空 owner，拆分 unmap 恢复原 mapping，显式 map rollback 恢复零页与游标，
+非法 journal 在任何 mutation 前拒绝。该批只证明 GuestOS owner 状态，不等同于真实
+内核 mmap/munmap 拓扑或完整 allocator rollback；不计入 native 差分。证据见
+`evidence/vm9_guest_os_effect_rollback_20261024.json`。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_guest_os_effect_rollback_20261024.py --output <guest-os-effect-rollback-evidence.json>
+```
+
+## 6.257 Allocator region-registration effect rollback（2026-10-24 Asia/Shanghai）
+
+`register_os_region` 现在也可在同一 journal 下发布 GuestOS mapping。基于已有
+allocator checkpoint 的单项控制在外层 owner 拒绝后恢复 region pages、arena metadata、
+mapping list 和 `next_address`，并清空本地 undo 记录。该证据仍是 captured-state
+allocator owner 控制；不等同于真实内核 mmap 拓扑、fresh allocator boot 或完整 rollback。
+
+**2 项 Python controls 与 2 项 rollback controls**通过，未使用 native 输出作为模型输入，
+不计入 native 差分。证据见 `evidence/vm9_region_effect_rollback_20261024.json`，
+checkpoint SHA-256 只用于标识输入。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_region_effect_rollback_20261024.py --checkpoint <private-allocator-checkpoint.pkl> --output <region-effect-rollback-evidence.json>
+```

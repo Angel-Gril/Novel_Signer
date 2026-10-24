@@ -10,6 +10,16 @@ service bridge 可选恢复 provider undo 与 live CPU 页面，owning request V
 page-only 行为保持；该批不计入 native 差分，不声称 live JVM、真实 mapping 拓扑或完整
 signer。见 [provider-effect report](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai)。
 
+同日 `GuestOS` 高层 map/unmap/name/protect 与 `register_os_region` 接入同一 opt-in
+journal，4 项 Python controls、3 项 rollback controls 通过；mapping owner 的页面、
+metadata 与游标可按 checkpoint 恢复。该批不计入 native 差分，不声称真实内核拓扑或
+完整 allocator rollback。见 [GuestOS effect report](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6256-guestos-mapping-owner-effect-rollback2026-10-24-asiashanghai)。
+
+`register_os_region` 同步接入 owner journal；2 项 captured-checkpoint controls 与 2 项
+rollback controls 通过，恢复 region pages、arena metadata、mapping list 和游标，并覆盖
+lifecycle malloc owner。该批
+不计入 native 差分，不声称 fresh allocator 或真实内核拓扑。见 [region effect report](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6257-allocator-region-registration-effect-rollback2026-10-24-asiashanghai)。
+
 The latest bounded root factory/caller runs from fresh ELF/TLS/reference
 inputs without native entry snapshots. Eight controls match all32 terminal
 slots and ordered effects (206 allocations/93 frees for the full factory).

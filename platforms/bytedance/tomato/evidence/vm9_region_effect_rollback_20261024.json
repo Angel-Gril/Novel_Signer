@@ -1,0 +1,14 @@
+{
+  "schema": "vm9-region-effect-rollback-v1",
+  "evidence_label": "Sample verified",
+  "checkpoint_sha256": "1f782a038c7266cffef3187a405275377350c4fdcc2a3b87abbad550ff919b6e",
+  "arena_address": "0x12266900",
+  "python_controls": 2,
+  "rollback_controls": 2,
+  "region_pages_and_allocator_metadata_rolled_back": true,
+  "lifecycle_malloc_owner_rolled_back": true,
+  "guest_os_mapping_owner_rolled_back": true,
+  "native_input_snapshot_used": false,
+  "real_kernel_mapping_verified": false,
+  "complete_allocator_rollback_verified": false
+}

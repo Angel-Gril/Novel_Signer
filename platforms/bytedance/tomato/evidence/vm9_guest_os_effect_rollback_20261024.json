@@ -1,0 +1,27 @@
+{
+  "schema": "vm9-guest-os-effect-rollback-v1",
+  "evidence_label": "Sample verified",
+  "controls": [
+    {
+      "case": "map_name_protect_outer_failure",
+      "pages_mappings_cursor_rolled_back": true
+    },
+    {
+      "case": "unmap_range_explicit_rollback",
+      "split_mapping_and_pages_restored": true
+    },
+    {
+      "case": "map_explicit_rollback",
+      "mapping_cursor_and_zero_pages_restored": true
+    },
+    {
+      "case": "invalid_journal",
+      "rejected_without_mutation": true
+    }
+  ],
+  "python_controls": 4,
+  "rollback_controls": 3,
+  "native_input_snapshot_used": false,
+  "mapping_topology_claim": "owner-only",
+  "real_os_mapping_verified": false
+}

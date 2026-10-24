@@ -15,6 +15,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Callable, Mapping, MutableMapping
 from collections.abc import MutableMapping as MutableMappingABC
+from vm9_effects import require_effect_journal
 
 
 class RefillUnsupported(RuntimeError):
@@ -386,6 +387,28 @@ class GuestOS:
     def begin(self):
         return _GuestOSTransaction(self)
 
+    def _effect_snapshot(self):
+        return ({key: bytes(value) for key, value in self.pages.items()},
+                tuple(self.mappings), self.next_address)
+
+    def _restore_effect_snapshot(self, snapshot):
+        pages, mappings, next_address = snapshot
+        for key in list(self.pages):
+            if key not in pages:
+                del self.pages[key]
+        for key, value in pages.items():
+            if key in self.pages:
+                self.pages[key][:] = value
+            else:
+                self.pages[key] = bytearray(value)
+        self.mappings = list(mappings)
+        self.next_address = next_address
+
+    def _record_effect(self, effect_journal, snapshot):
+        if effect_journal is not None:
+            effect_journal.record_undo(
+                lambda snapshot=snapshot: self._restore_effect_snapshot(snapshot))
+
     def map_anonymous(
         self,
         length: int,
@@ -396,7 +419,10 @@ class GuestOS:
         fd: int = -1,
         offset: int = 0,
         anonymous_name: bytes = b"vm9-region",
+        effect_journal=None,
     ) -> GuestMapping:
+        effect_journal = require_effect_journal(effect_journal)
+        snapshot = self._effect_snapshot() if effect_journal is not None else None
         transaction = self.begin()
         result = transaction.map_anonymous(
             length,
@@ -408,35 +434,48 @@ class GuestOS:
             anonymous_name=anonymous_name,
         )
         transaction.commit()
+        self._record_effect(effect_journal, snapshot)
         return result
 
-    def unmap_exact(self, address: int, length: int) -> None:
+    def unmap_exact(self, address: int, length: int, *, effect_journal=None) -> None:
         """Release one complete owned guest mapping; never touch host memory."""
+        effect_journal = require_effect_journal(effect_journal)
+        snapshot = self._effect_snapshot() if effect_journal is not None else None
         transaction = self.begin()
         transaction.unmap_exact(address, length)
         transaction.commit()
+        self._record_effect(effect_journal, snapshot)
 
-    def unmap_range(self, address: int, length: int) -> None:
+    def unmap_range(self, address: int, length: int, *, effect_journal=None) -> None:
         """Trim page-aligned bytes within one owned mapping atomically."""
+        effect_journal = require_effect_journal(effect_journal)
+        snapshot = self._effect_snapshot() if effect_journal is not None else None
         transaction = self.begin()
         transaction.unmap_range(address, length)
         transaction.commit()
+        self._record_effect(effect_journal, snapshot)
 
-    def name_exact(self, address: int, length: int, name: bytes) -> None:
+    def name_exact(self, address: int, length: int, name: bytes, *, effect_journal=None) -> None:
         """Name a complete owned mapping; never infer success for an OS call."""
+        effect_journal = require_effect_journal(effect_journal)
+        snapshot = self._effect_snapshot() if effect_journal is not None else None
         transaction = self.begin()
         transaction.name_exact(address, length, name)
         transaction.commit()
+        self._record_effect(effect_journal, snapshot)
 
-    def protect_exact(self, address: int, length: int, prot: int) -> None:
+    def protect_exact(self, address: int, length: int, prot: int, *, effect_journal=None) -> None:
         """Update whole-mapping protection metadata.
 
         The byte-page helpers do not enforce this metadata on each access.
         A CPU provider must apply the corresponding hardware permissions.
         """
+        effect_journal = require_effect_journal(effect_journal)
+        snapshot = self._effect_snapshot() if effect_journal is not None else None
         transaction = self.begin()
         transaction.protect_exact(address, length, prot)
         transaction.commit()
+        self._record_effect(effect_journal, snapshot)
 
     def mapping_for(self, address: int) -> GuestMapping | None:
         return next((item for item in self.mappings if item.base <= address < item.end), None)
@@ -1349,10 +1388,13 @@ def register_os_region(
     length: int = 0x40000,
     anonymous_name: bytes = b"vm9-region",
     constants: AllocatorConstants = AllocatorConstants(),
+    effect_journal=None,
 ) -> RegionRegistration:
     """Map and register one fresh anonymous allocator region atomically."""
     if guest_os.pages is not pages:
         raise ValueError("guest_os must own the supplied page map")
+    effect_journal = require_effect_journal(effect_journal)
+    snapshot = guest_os._effect_snapshot() if effect_journal is not None else None
     transaction = guest_os.begin()
     result = _register_os_region(
         transaction.pages,
@@ -1364,6 +1406,7 @@ def register_os_region(
         anonymous_name=anonymous_name,
     )
     transaction.commit()
+    guest_os._record_effect(effect_journal, snapshot)
     return result
 
 
@@ -1833,6 +1876,7 @@ def allocate_small_object(
     request_size,
     guest_os: GuestOS | None = None,
     constants=AllocatorConstants(),
+    effect_journal=None,
 ):
     """Normal malloc including empty-bin refill, new slab setup and cleanup.
 
@@ -1843,6 +1887,9 @@ def allocate_small_object(
     are used. Large objects fail atomically; purge requires an explicit guest
     madvise result in constants.
     """
+    effect_journal = require_effect_journal(effect_journal)
+    owner_snapshot = (guest_os._effect_snapshot()
+                      if guest_os is not None and effect_journal is not None else None)
     if guest_os is not None:
         if guest_os.pages is not pages:
             raise ValueError("guest_os must own the supplied page map")
@@ -1870,6 +1917,7 @@ def allocate_small_object(
             lifecycle=True,
         )
         staged.commit()
+        guest_os._record_effect(effect_journal, owner_snapshot)
     else:
         staged = _PageTransaction(pages)
         result = _allocate_small_object(
