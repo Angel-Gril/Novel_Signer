@@ -8975,6 +8975,18 @@ identity，生产 import 不加载 native oracle、Unicorn 或历史 native repl
 完整 physical ABI、JVM 或线上 header acceptance。证据见
 `evidence/vm9_request_vm_entry_fresh_20261024.json`。
 
+## 6.267 Outer to request-prefix fresh handoff rerun（2026-10-24 Asia/Shanghai）
+
+当前 pinned ELF 上重跑 request prefix：两个 image base、三个 W2/clock profile 共
+**6 项 native/Python prefix controls**，并以同次独立 Python outer 构造结果接入
+callback pair，完成 **4 项 outer→request handoff controls**，全部通过。handoff
+只消费本次 Python outer 的 callback pair，request prefix 在 synthetic URL/header/
+context 上自然到达 `+0x2858bc`；native 输出和 captured snapshot 均未作为输入。
+
+该批停止在分配型 request callback 之前，不等同于完整 request VM、fresh Medusa、
+standalone signer、JVM 或线上 header acceptance。证据见
+`evidence/vm9_request_prefix_fresh_20261024.json`。
+
 \n
 \n
 \n

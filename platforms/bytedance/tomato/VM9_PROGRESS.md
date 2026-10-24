@@ -45,6 +45,13 @@ controls 与 24 项 rollback guards 通过；生产入口没有导入 native ora
 differential、完整 signer 与线上 acceptance 仍未验证。证据见
 [request VM entry fresh rerun](evidence/vm9_request_vm_entry_fresh_20261024.json)。
 
+同次 outer→request prefix handoff 也重跑通过：6 项 fresh request VM prefix controls
+与 4 项独立 Python outer handoff controls 均通过。outer 本轮输出只提供当前独立
+Python 构造的 callback pair，request prefix 在 synthetic URL/header/context 上自然
+执行到 `+0x2858bc` 边界；没有使用 native snapshot。分配型 request callback、完整
+request VM、fresh Medusa 和线上 acceptance 仍未验证。证据见
+[request prefix fresh rerun](evidence/vm9_request_prefix_fresh_20261024.json)。
+
 ## 2026-10-24 Asia/Shanghai：outer native signer boundary rerun
 
 The existing fresh-ELF native outer control was rerun against the pinned

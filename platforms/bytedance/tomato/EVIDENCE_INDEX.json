@@ -7931,5 +7931,20 @@
     "native_groups_replayed": false,
     "whole_request_native_differential_verified": false,
     "complete_signer_verified": false
+  },
+  "vm9_request_prefix_fresh_20261024": {
+    "path": "evidence/vm9_request_prefix_fresh_20261024.json",
+    "evidence_label": "Fresh request prefix and outer handoff rerun",
+    "native_Python_prefix_controls": 6,
+    "same_python_outer_handoff_controls": 4,
+    "native_snapshot_input": false,
+    "fresh_elf_inputs": true,
+    "stop_boundary": "0x2858bc",
+    "request_objects_are_synthetic": true,
+    "actual_allocator_request_callback_executed": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "complete_python_medusa": false,
+    "live_server_matrix_verified": false
   }
 }
