@@ -27,6 +27,10 @@ tag/pointer/length/index/reserved 字段相同，event 的 tag/payload 相同；
 stack 等价、whole-request 内存等价、fresh Medusa 和完整 signer 仍未验证。证据见
 [full outer residual diff](evidence/vm9_full_outer_residual_diff_20261024.json)。
 
+同日用当前 pinned library/matching libc 重跑四组相关边界，共 138 项 native controls
+和 27 项回滚检查全部通过；回归只确认组件边界稳定，不改变 full outer 的未完成结论。
+证据见 [residual-boundary regression](evidence/vm9_residual_boundary_regression_20261024.json)。
+
 ## 2026-10-21 Asia/Shanghai：environment service reference scope
 
 冷 environment-service 172D40 的 172EB0 构造现在复用既有 scoped constructor。
