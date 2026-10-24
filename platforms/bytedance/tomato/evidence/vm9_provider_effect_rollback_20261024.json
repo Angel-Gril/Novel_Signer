@@ -86,10 +86,15 @@
       "case": "second_formatter_provider_failure",
       "formatter_effects_rolled_back": true,
       "formatter_pages_unchanged": true
+    },
+    {
+      "case": "second_consumer_free_provider_failure",
+      "free_effects_rolled_back": true,
+      "consumer_pages_unchanged": true
     }
   ],
-  "python_controls": 17,
-  "rollback_controls": 17,
+  "python_controls": 18,
+  "rollback_controls": 18,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

@@ -746,7 +746,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
             elif consumer_services is not None and (wrapper,target)==(0x288610,0x32A264):
                 apply_request_287474_consumer(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
-                    allocate=consumer_services['allocate'],free=consumer_services['free'])
+                    allocate=consumer_services['allocate'],free=consumer_services['free'],
+                    effect_journal=effect_journal)
                 frees.append((argument,words[1]))
             elif consumer_services is not None and (wrapper,target)==(0x28883C,0x261404):
                 result=apply_request_287474_json_callback(staged,argument_block_address=argument,
@@ -1037,7 +1038,7 @@ def apply_request_287474_string_assignment_callback(pages, *, wrapper_offset,
     p.commit();return assigned
 
 
-def apply_request_287474_consumer(pages, *, wrapper_offset,
+def _apply_request_287474_consumer_impl(pages, *, wrapper_offset,
         argument_block_address, image_base, allocate, free, max_bytes=0x100000):
     """Actual second-VM lifecycle, imported memcpy and local copy wrappers.
 
@@ -1086,6 +1087,19 @@ def apply_request_287474_consumer(pages, *, wrapper_offset,
     else:raise RefillUnsupported('unrecovered second request consumer')
     p.commit()
     return result
+
+
+def apply_request_287474_consumer(pages, *, wrapper_offset,
+        argument_block_address, image_base, allocate, free, max_bytes=0x100000,
+        effect_journal=None):
+    """Run the second-VM lifecycle consumer with an optional effect journal."""
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(wrapper_offset=wrapper_offset,argument_block_address=argument_block_address,
+        image_base=image_base,allocate=allocate,free=free,max_bytes=max_bytes)
+    if effect_journal is None:
+        return _apply_request_287474_consumer_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_consumer_impl(pages,**kwargs)
 
 
 def apply_request_287474_reference_getter_callback(pages, *, argument_block_address,

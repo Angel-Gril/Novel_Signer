@@ -523,6 +523,35 @@ def verify():
     rows.append(dict(case='second_formatter_provider_failure',
         formatter_effects_rolled_back=True, formatter_pages_unchanged=True))
 
+    # The explicit second-VM free tail is also an external provider boundary.
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    consumer_block = 0x2000
+    _write_span(pages, consumer_block,
+        (0x32A264).to_bytes(8, 'little') + (0x5000).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+
+    def failing_free(_pages, _address):
+        external.append('free')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled consumer free failure')
+
+    try:
+        second_vm.apply_request_287474_consumer(
+            pages, wrapper_offset=0x288610,
+            argument_block_address=consumer_block, image_base=0,
+            allocate=lambda *_a: 0x6000, free=failing_free,
+            effect_journal=journal)
+    except RefillUnsupported:
+        pass
+    else:
+        raise AssertionError('failing consumer free unexpectedly returned')
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_consumer_free_provider_failure',
+        free_effects_rolled_back=True, consumer_pages_unchanged=True))
+
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
         controls=rows, python_controls=len(rows), rollback_controls=len(rows),
