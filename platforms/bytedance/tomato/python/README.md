@@ -6,9 +6,8 @@ undo records and, when requested, live CPU page bytes after a failed hook; the
 owning request VM and child dispatcher accept the same journal, and the Java facade
 forwards it into the nested callback VM. The signer-handle publisher and request
 state elapsed getter also have opt-in JNI/clock rollback boundaries. Nine Python
-controls and nine rollback controls
-pass. Implicit mapping remains rejected and complete signing
-is unfinished. See [the provider-effect report](../REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai).
+controls and nine rollback controls pass. Implicit mapping remains rejected and
+complete signing is unfinished. See [the provider-effect report](../REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai).
 
 `GuestOS` mapping owners now register page, mapping-metadata and cursor snapshots
 with the same journal for map/unmap/name/protect and allocator region registration.
