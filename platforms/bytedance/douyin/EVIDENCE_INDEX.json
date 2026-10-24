@@ -1,7 +1,14 @@
 {
   "platform": "bytedance.douyin",
   "evidence_level": "static_community",
-  "source_material": "local douyin-algorithm README and source files",
+  "source_material": "local douyin-algorithm README/source plus cv-cat/DouYin_Spider public source",
+  "source_review": {
+    "repository": "cv-cat/DouYin_Spider",
+    "commit": "d151f9c2980abc304c1ae4918c2272675cd9e4c2",
+    "review_date": "2026-10-24",
+    "evidence_level": "static_community",
+    "live_requests_verified": false
+  },
   "verified_live_requests": [],
   "generations": {
     "23.2.0": {"headers": ["X-Khronos", "X-Gorgon", "X-Argus", "X-Ladon"], "status": "static/community implementation"},

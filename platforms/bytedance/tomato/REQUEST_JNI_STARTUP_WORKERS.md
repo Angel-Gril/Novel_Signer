@@ -8845,6 +8845,23 @@ checkpoint SHA-256 只用于标识输入。
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_region_effect_rollback_20261024.py --checkpoint <private-allocator-checkpoint.pkl> --output <region-effect-rollback-evidence.json>
 ```
+
+## 6.258 Outer native signer boundary rerun（2026-10-24 Asia/Shanghai）
+
+在同一 pinned `libmetasec_ml_71332.so` 与 matching libc 上重跑现有 fresh-ELF
+outer native control。两个 image base 各执行 absent、`30`、负值和带后缀的 SDK
+property profile，另执行重定位 stack/mapping 输入，共 **10 项 native controls**。
+每项均自然返回 outer getter，root flag=5，wrapper/configuration singleton 计数为1，
+child/handler callback pair、publication recursive mutex release、warm getter reuse
+和 JNI/destructor publication ledger 均通过。没有使用 native input snapshot、JVM 或
+真实 OS thread；allocator、property、clock、virtual-pthread 仍为显式服务。该批是
+**Sample verified** 的 native 边界复核，不计入 fresh Python signer、完整 Medusa、
+线上 header acceptance 或 whole-request memory equivalence。证据保存在工作区私有
+`_outer_signer_native_probe_20261024.json`，公开仓库只记录脱敏摘要。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_outer_signer_native.py --library <private-library.so> --libc <matching-libc.so> --output <outer-signer-native-evidence.json>
+```
 staged 页面和外部 free ledger 同时恢复；StringObject assignment provider 失败时其
 staged 页面和外部 assignment ledger 同时恢复；两个 configuration reference provider
 失败时各自的 staged 页面和外部 reference ledger 同时恢复；cached JNI provider 失败时

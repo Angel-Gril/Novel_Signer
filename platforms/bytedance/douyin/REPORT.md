@@ -20,4 +20,12 @@ No current Douyin APK, current signed request sample, live endpoint matrix, or s
 maps a pinned public commit's Web APIs, signatures and session dependencies
 against this project's App-header evidence. It adds no live Douyin acceptance.
 
+2026-10-24: the review was refreshed against upstream HEAD
+`d151f9c2980abc304c1ae4918c2272675cd9e4c2`. It now includes the newer browser
+dtrait/fingerprint and Cookie-order work, creator-specific `msToken`, passport
+secondary verification, and the expanded live protobuf transport. These remain
+`Static only`; no `X-Gorgon`, `X-Khronos`, `X-Ladon`, `X-Argus`, `X-Helios`,
+`X-Medusa`, `X-Neptune`, or `X-Perseus` generator was found, and
+`verified_live_requests` remains empty.
+
 To promote this directory from static to live evidence, collect one exact app version, capture a request with its complete query/body/header tuple, identify the endpoint and response semantics, then run one-variable removal matrices. Store only redacted status/length/hash summaries in `EVIDENCE_INDEX.json`.

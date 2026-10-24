@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-24 Asia/Shanghai：outer native signer boundary rerun
+
+The existing fresh-ELF native outer control was rerun against the pinned
+`libmetasec_ml_71332.so` and matching libc at both image bases. Ten controls
+passed: absent, `30`, negative and signed-suffix SDK-property profiles, plus
+relocated stack/mapping inputs. Each case returned through the native outer
+getter with the expected root flag, singleton/configuration counts, child and
+handler callback pairs, recursive publication mutex release, warm getter reuse,
+and ordered JNI/destructor publication ledger. The run used no native input
+snapshot, JVM, or real OS thread; allocator, property, clock and virtual thread
+services remain explicit. It is **Sample verified** native boundary evidence only:
+Python outer construction, fresh-input Medusa output, online header acceptance,
+and whole-request memory equivalence remain open.
+
 ## 2026-10-21 Asia/Shanghai：environment service reference scope
 
 冷 environment-service 172D40 的 172EB0 构造现在复用既有 scoped constructor。

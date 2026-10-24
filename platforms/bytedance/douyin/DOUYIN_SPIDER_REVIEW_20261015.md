@@ -73,6 +73,34 @@ Android App 的请求头和番茄 native SDK。现有成果没有验证该项目
 3. 当前主线继续恢复番茄JNI/VM请求链和独立Medusa。该项目没有提供可直接接入的
    当前App七神实现，本次不据其源码增加“已验证线上接口”数量。
 
+## 2026-10-24 上游 HEAD 复核
+
+为避免把旧快照当成当前接口，本次又读取了上游 HEAD
+`d151f9c2980abc304c1ae4918c2272675cd9e4c2`（相对本报告记录的
+`fc8b9c2490a9561265425c26058290f01c064eda` 前进两个提交）。这仍是
+**Static only**：只读取公开源码，未使用账号、Cookie、原始响应或线上写接口。
+
+上游新增内容分成两组：
+
+| 上游变化 | 可确认的接口边界 | 对七神主线的结论 |
+| --- | --- | --- |
+| 浏览器指纹/dtrait 与 Cookie wire 顺序 | `x-tt-session-dtrait` 按 path 重算；`UIFID`、`ttwid`、`msToken`、`web_sign_token` 和 passport Cookie 分阶段维护；creator 域使用独立 `ms_appid=2906` 的 `msToken` | 这是 Web 会话与风控输入，不能替换 App 的 `X-Helios/X-Medusa`；可参考“签名之外的会话状态”建模 |
+| 直播 protobuf 与运行入口 | `webcast100-ws-web-hl.douyin.com/webcast/im/push/v2/`，`PushFrame/Response`、gzip、ack、心跳和约 2900 个 protobuf message 定义 | 这是 WebSocket 传输/解码层；与 Tomato 的 HTTP 阅读矩阵和 VM9 signer 没有可直接复用的算法证据 |
+| 登录与发布二次验证 | `passport/web/*`、`ticket_guard/get_client_cert`、`x-tt-verify-passport-decision`，发布链可进入扫码二次验证 | 说明会话、设备指纹、证书和签名是分层依赖；没有证明 App 七神头已经完成 |
+| creator 与媒体上传 | ImageX `ApplyImageUpload/CommitImageUpload`、VOD `ApplyUploadInner/CommitUploadInner`，AWS V4 网关签名 | 属于上传网关认证；不应并入 Tomato `X-Argus/X-Helios/X-Medusa` 结论 |
+
+当前 HEAD 的源码检索仍找不到 `X-Gorgon`、`X-Khronos`、`X-Ladon`、`X-Argus`、
+`X-Helios`、`X-Medusa`、`X-Neptune` 或 `X-Perseus` 生成逻辑；能直接看到的是
+`a_bogus`、直播 `X-Bogus`、`x-secsdk-web-signature` 和 `x-tt-session-dtrait`。
+因此本次复核没有改变现有证据等级：Douyin 目录仍是 **Static only**，
+`verified_live_requests` 仍为空；Tomato 目录已测得的 `X-Helios + X-Medusa`
+阅读请求仍只属于 Tomato 产品和对应版本，不能外推到 Douyin App。
+
+上游差异还揭示了一个可复用的研究方向：以后若取得 Douyin App 的一组完整抓包，
+应把 `query/body canonicalization`、设备/会话 Cookie、dtrait、WebSocket 或 REST
+传输和六/七神头分开做一变量矩阵；不能把浏览器 `a_bogus` 的成功或 HTTP 200
+当作 App Medusa 的验收。
+
 “七神”指历史请求头命名：传统六名为Gorgon、Ladon、Argus、Khronos、Helios、
 Medusa，Neptune常被列为第七个软字段；Perseus另行跟踪。16个selector空间也不
 代表16套算法已经全部完成。详见

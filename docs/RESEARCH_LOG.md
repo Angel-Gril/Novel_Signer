@@ -3,6 +3,18 @@
 Chronological record of the Tomato / ByteDance signer work. Each entry states what was
 reproduced, how many controls / negatives / rollback checks passed, and links the detailed
 report. Moved verbatim out of the README; wording, numbers and links are unchanged.
+2026-10-24：重跑 fresh ELF outer signer native 边界。两个 image base、四种 SDK
+property profile、重定位 stack/mapping 共 **10 项 native controls** 通过；root flag、
+singleton/configuration、child/handler callback pair、recursive publication mutex、warm
+getter reuse 和 JNI/destructor publication ledger 均符合原生。该运行没有使用 native
+输入快照、JVM 或真实 OS 线程，allocator/property/clock/virtual-thread 仍是显式服务，
+因此只记为 **Sample verified** 边界，不计入 fresh Python signer、完整 Medusa 或线上
+验签。见 [VM9 progress checkpoint](../platforms/bytedance/tomato/VM9_PROGRESS.md)。
+
+同日复核 `cv-cat/DouYin_Spider` 上游 HEAD `d151f9c`。新增的浏览器 dtrait/指纹、
+Cookie wire 顺序、creator `msToken`、passport 二次验证和直播 protobuf 仍是
+**Static only** Web 会话/传输证据；源码没有发现六/七神 App header 生成器，
+Douyin `verified_live_requests` 仍为空。见 [DouYin_Spider review](../platforms/bytedance/douyin/DOUYIN_SPIDER_REVIEW_20261015.md)。
 2026-10-24：新增显式 provider-effect rollback journal。`EffectJournal` 为
 allocator/JNI/OS provider 提供可嵌套 checkpoint、逆序 undo 和外层提交边界；native
 service bridge 可选恢复 provider undo 与 live CPU 页面，owning request VM 可在异常时
