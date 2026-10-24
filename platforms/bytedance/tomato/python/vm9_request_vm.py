@@ -146,7 +146,8 @@ def _execute_request_vm_impl(pages, inputs, vm_module, seconds, nanoseconds, *, 
                    register_exit=None, get_state_service=None, parse_decimal=None,
                    random_services=None, logger_services=None, jni_availability_services=None,
                    calloc=None, process_services=None, identifier_file_services=None,
-                   mutex_import_bindings=None, format_number=None):
+                   mutex_import_bindings=None, format_number=None,
+                   effect_journal=None):
     if format_number is not None and not callable(format_number):
         raise RefillUnsupported('request number formatter must be callable')
     if identifier_file_services is not None and (
@@ -543,7 +544,7 @@ def _execute_request_vm_impl(pages, inputs, vm_module, seconds, nanoseconds, *, 
                             diagnostic_scope.setdefault('events',[]).append(event)),
                     maxsteps=500000,entry_stack_address=frame.native_stack_address-0x180,
                     return_address=image+0x16AA4C,thread_pointer=inputs['thread_pointer'],
-                    image_base=image,object_address=words[1],
+                    image_base=image,object_address=words[1],effect_journal=effect_journal,
                     saved_frame_pointer=frame.native_stack_address-0x60,
                     saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8)
                 if getattr(nested,'caller_return',None) is not None:
@@ -959,10 +960,10 @@ def execute_request_vm(pages, inputs, vm_module, seconds, nanoseconds, *,
     effect_journal = require_effect_journal(effect_journal)
     if effect_journal is None:
         return _execute_request_vm_impl(pages, inputs, vm_module, seconds,
-            nanoseconds, **services)
+            nanoseconds, effect_journal=effect_journal, **services)
     with effect_journal.transaction():
         return _execute_request_vm_impl(pages, inputs, vm_module, seconds,
-            nanoseconds, **services)
+            nanoseconds, effect_journal=effect_journal, **services)
 
 
 def invoke_request_vm_callback(pages, target, *, image_base, thread_pointer,

@@ -1,6 +1,7 @@
 """Bounded +287474 second request VM with an independently generated caller."""
 from dataclasses import dataclass
 from vm9_allocator import _PageTransaction,RefillUnsupported,_read_span,_write_span
+from vm9_effects import require_effect_journal
 from vm9_request_caller import prepare_request_287474_vm_caller,RequestVmCallerFrame
 from vm9_objects import decode_masked_bytes
 
@@ -308,7 +309,7 @@ class RequestVm287474ReturnedPrefix(RequestVm287474ExitPrefix):
 
 
 def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
-        consumer_services=None,continue_caller_return=False, **inputs):
+        consumer_services=None,continue_caller_return=False,effect_journal=None, **inputs):
     """Execute known decoder callbacks and retain the first unknown boundary.
 
     Undefined virtual words retain the independently supplied caller memory.
@@ -318,6 +319,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
         raise RefillUnsupported('second request VM budget must be positive')
     if type(continue_caller_return) is not bool:
         raise RefillUnsupported('second return continuation must be boolean')
+    effect_journal = require_effect_journal(effect_journal)
     if consumer_services is not None and (not isinstance(consumer_services,dict) or
             any(not callable(consumer_services.get(n)) for n in ('allocate','free'))):
         raise RefillUnsupported('second request consumers require allocation and free services')
@@ -665,13 +667,15 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 if not callable(consumer_services.get('read_clock')):raise Boundary()
                 value=apply_request_287474_realtime_milliseconds_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
-                    image_base=image,read_clock=consumer_services['read_clock'])
+                    image_base=image,read_clock=consumer_services['read_clock'],
+                    effect_journal=effect_journal)
                 realtime_milliseconds.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x28876C,0x26CC64):
                 if not callable(consumer_services.get('read_clock')):raise Boundary()
                 value=apply_request_287474_realtime_seconds_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
-                    image_base=image,read_clock=consumer_services['read_clock'])
+                    image_base=image,read_clock=consumer_services['read_clock'],
+                    effect_journal=effect_journal)
                 realtime_seconds.append((argument,value))
             elif (wrapper,target)==(0x28876C,0x204F58):
                 value=apply_request_287474_thread_pointer_callback(staged,
@@ -1270,33 +1274,42 @@ def apply_request_287474_guard_release_callback(pages, *, argument_block_address
 
 
 def apply_request_287474_realtime_milliseconds_callback(pages, *, argument_block_address,
-        entry_stack_address,image_base,read_clock):
+        entry_stack_address,image_base,read_clock,effect_journal=None):
     """+28876c/+26cc60: reuse the signed clock owner and store its X64 bits."""
-    from vm9_callbacks import read_realtime_milliseconds
-    if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
-            or entry_stack_address&15):
-        raise RefillUnsupported('realtime milliseconds callback requires an aligned stack')
-    if type(argument_block_address) is not int or not 0<argument_block_address<=(1<<64)-16:
-        raise RefillUnsupported('realtime milliseconds packed address wraps uint64')
-    if argument_block_address<entry_stack_address and argument_block_address+16>entry_stack_address-0x1000:
-        raise RefillUnsupported('realtime milliseconds packed block aliases native spills')
-    p=_PageTransaction(pages)
-    target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
-    if target!=image_base+0x26CC60:
-        raise RefillUnsupported('unexpected second realtime milliseconds target')
-    value=read_realtime_milliseconds(p,read_clock=read_clock)&0xFFFFFFFFFFFFFFFF
-    _write_span(p,argument_block_address+8,value.to_bytes(8,'little'))
-    p.commit();return value
+    effect_journal = require_effect_journal(effect_journal)
+
+    def apply():
+        from vm9_callbacks import read_realtime_milliseconds
+        if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
+                or entry_stack_address&15):
+            raise RefillUnsupported('realtime milliseconds callback requires an aligned stack')
+        if type(argument_block_address) is not int or not 0<argument_block_address<=(1<<64)-16:
+            raise RefillUnsupported('realtime milliseconds packed address wraps uint64')
+        if argument_block_address<entry_stack_address and argument_block_address+16>entry_stack_address-0x1000:
+            raise RefillUnsupported('realtime milliseconds packed block aliases native spills')
+        p=_PageTransaction(pages)
+        target=int.from_bytes(_read_span(p,argument_block_address,8),'little')
+        if target!=image_base+0x26CC60:
+            raise RefillUnsupported('unexpected second realtime milliseconds target')
+        value=read_realtime_milliseconds(p,read_clock=read_clock)&0xFFFFFFFFFFFFFFFF
+        _write_span(p,argument_block_address+8,value.to_bytes(8,'little'))
+        p.commit();return value
+
+    if effect_journal is None:
+        return apply()
+    with effect_journal.transaction():
+        return apply()
 
 
-def apply_request_287474_realtime_seconds_callback(pages, *, argument_block_address,
-        entry_stack_address, image_base, read_clock):
+def _apply_request_287474_realtime_seconds_callback_impl(pages, *, argument_block_address,
+        entry_stack_address, image_base, read_clock, effect_journal=None):
     """+28876c -> +26cc64: signed milliseconds, then unsigned UDIV1000.
 
     Reuse the existing realtime owner, mask its signed result to X64, then
     divide. Only the target is loaded; the full X result replaces packed+8.
     Physical spills/PAC are unmodeled; packed aliases in SP-0x1000..SP refuse.
-    External clock-provider effects cannot be reversed by page rollback.
+    An explicit effect journal also rolls back clock-provider effects; the
+    default page-only behavior remains unchanged.
     """
     from vm9_callbacks import read_realtime_milliseconds
     if (type(entry_stack_address) is not int or not 0x1000<=entry_stack_address<1<<64
@@ -1313,6 +1326,18 @@ def apply_request_287474_realtime_seconds_callback(pages, *, argument_block_addr
     _write_span(p,argument_block_address+8,value.to_bytes(8,'little'))
     p.commit()
     return value
+
+
+def apply_request_287474_realtime_seconds_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, read_clock, effect_journal=None):
+    effect_journal = require_effect_journal(effect_journal)
+    kwargs = dict(argument_block_address=argument_block_address,
+        entry_stack_address=entry_stack_address, image_base=image_base,
+        read_clock=read_clock)
+    if effect_journal is None:
+        return _apply_request_287474_realtime_seconds_callback_impl(pages, **kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_realtime_seconds_callback_impl(pages, **kwargs)
 
 
 def apply_request_287474_process_id_callback(pages, *, argument_block_address,

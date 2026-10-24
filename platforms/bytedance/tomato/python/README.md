@@ -4,9 +4,10 @@ The opt-in `vm9_effects.EffectJournal` now gives allocator/JNI/OS providers an
 explicit nested rollback boundary. Native service hooks can restore provider
 undo records and, when requested, live CPU page bytes after a failed hook; the
 owning request VM and child dispatcher accept the same journal, and the Java facade
-forwards it into the nested callback VM. The signer-handle publisher and request
-state elapsed getter also have opt-in JNI/clock rollback boundaries. Nine Python
-controls and nine rollback controls pass. Implicit mapping remains rejected and
+forwards it into the nested callback VM. The signer-handle publisher, request
+state elapsed getter and second-VM realtime wrappers also have opt-in JNI/clock
+rollback boundaries. Eleven Python controls and eleven rollback controls pass.
+Implicit mapping remains rejected and
 complete signing is unfinished. See [the provider-effect report](../REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai).
 
 `GuestOS` mapping owners now register page, mapping-metadata and cursor snapshots

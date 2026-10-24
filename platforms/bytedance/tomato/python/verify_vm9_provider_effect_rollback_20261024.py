@@ -20,6 +20,8 @@ import vm9_request_vm as request_vm
 import vm9_request_dispatch as request_dispatch
 import vm9_callbacks
 import vm9_state
+import vm9_request_287474_vm as second_vm
+from vm9_allocator import _write_span
 
 
 PAGE = 0x400000
@@ -277,6 +279,36 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case="state_clock_provider_failure",
         state_provider_effects_rolled_back=True, state_pages_unchanged=True))
+
+    # Both second-VM realtime wrappers use the same journal boundary.
+    for offset, callback, name in (
+            (0x26CC60, second_vm.apply_request_287474_realtime_milliseconds_callback,
+             "second_realtime_milliseconds_provider_failure"),
+            (0x26CC64, second_vm.apply_request_287474_realtime_seconds_callback,
+             "second_realtime_seconds_provider_failure")):
+        pages = {2: bytearray(0x1000)}
+        _write_span(pages, 0x2000, offset.to_bytes(8, "little"))
+        before = bytes(pages[2])
+        external = []
+        journal = EffectJournal()
+
+        def failing_second_clock(_pages, _clock_id):
+            external.append("clock")
+            journal.record_undo(lambda: external.pop())
+            raise RefillUnsupported("controlled second clock failure")
+
+        try:
+            callback(pages, argument_block_address=0x2000,
+                entry_stack_address=0x3000, image_base=0,
+                read_clock=failing_second_clock, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError("failing second clock unexpectedly returned")
+        assert bytes(pages[2]) == before
+        assert external == [] and len(journal) == 0
+        rows.append(dict(case=name, second_clock_effects_rolled_back=True,
+            second_pages_unchanged=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",

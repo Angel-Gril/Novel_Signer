@@ -45,10 +45,20 @@
       "case": "state_clock_provider_failure",
       "state_provider_effects_rolled_back": true,
       "state_pages_unchanged": true
+    },
+    {
+      "case": "second_realtime_milliseconds_provider_failure",
+      "second_clock_effects_rolled_back": true,
+      "second_pages_unchanged": true
+    },
+    {
+      "case": "second_realtime_seconds_provider_failure",
+      "second_clock_effects_rolled_back": true,
+      "second_pages_unchanged": true
     }
   ],
-  "python_controls": 9,
-  "rollback_controls": 9,
+  "python_controls": 11,
+  "rollback_controls": 11,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,
