@@ -5,12 +5,15 @@
 `verify_vm9_request_allocator_handoff_fresh_20261007.py` 现在在继续 request VM
 前先对 fresh ELF 的 35 个匹配内存重定位执行 `resolve_request_memory_imports`，
 并用同一 owning allocator session 构造合成配置树/reference、VM/JNI 表和
-请求输入。原先高基址在 `+0x2859cc` 因 NULL imported `malloc` 停止的问题已消除。
+请求输入；现在通过正式 `invoke_request_vm_callback` owning entry，而不是
+诊断 prefix 直接调用。原先高基址在 `+0x2859cc` 因 NULL imported `malloc`
+停止的问题已消除。
 
 四个 absent/`sdk_30` 组合均在 caller sentinel `+0xffb78` 返回：低基址
 `0x122c0000` 为 957 步、26 callbacks；高基址 `0x775c205000` 为 2475 步、
 105 callbacks，并实际执行现有 JNI environment acquisition、树计数/遍历、清理
-和 VM return owner。新增证据为
+和 VM return owner；strict callback ABI 校验和 staged request transaction
+也通过。新增证据为
 [`vm9_request_allocator_handoff_fresh_20261024.json`](evidence/vm9_request_allocator_handoff_fresh_20261024.json)。
 
 这仍是同一 Python 状态组合：请求对象、JavaVM/JNI provider 和 URL/header 输入

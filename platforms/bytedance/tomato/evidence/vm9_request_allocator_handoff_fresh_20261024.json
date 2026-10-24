@@ -66,6 +66,8 @@
       "steps": 957,
       "callback_count": 26,
       "scoped_tree_reference_callback_count": 1,
+      "owning_request_vm_entry_used": true,
+      "strict_callback_abi_validated": true,
       "actual_jni_environment_acquisition": false,
       "actual_request_cleanup_completed": false,
       "actual_request_vm_returned": true,
@@ -75,7 +77,8 @@
       "actual_jvm_used": false,
       "actual_os_threads_created": false,
       "whole_handoff_native_differential_verified": false,
-      "request_diagnostic_transaction_committed": false
+      "request_diagnostic_transaction_committed": false,
+      "request_pages_published_to_outer_session": false
     },
     {
       "image_base": "0x122c0000",
@@ -138,6 +141,8 @@
       "steps": 957,
       "callback_count": 26,
       "scoped_tree_reference_callback_count": 1,
+      "owning_request_vm_entry_used": true,
+      "strict_callback_abi_validated": true,
       "actual_jni_environment_acquisition": false,
       "actual_request_cleanup_completed": false,
       "actual_request_vm_returned": true,
@@ -147,7 +152,8 @@
       "actual_jvm_used": false,
       "actual_os_threads_created": false,
       "whole_handoff_native_differential_verified": false,
-      "request_diagnostic_transaction_committed": false
+      "request_diagnostic_transaction_committed": false,
+      "request_pages_published_to_outer_session": false
     },
     {
       "image_base": "0x775c205000",
@@ -262,6 +268,8 @@
       "steps": 2475,
       "callback_count": 105,
       "scoped_tree_reference_callback_count": 2,
+      "owning_request_vm_entry_used": true,
+      "strict_callback_abi_validated": true,
       "actual_jni_environment_acquisition": true,
       "actual_request_cleanup_completed": true,
       "actual_request_vm_returned": true,
@@ -271,7 +279,8 @@
       "actual_jvm_used": false,
       "actual_os_threads_created": false,
       "whole_handoff_native_differential_verified": false,
-      "request_diagnostic_transaction_committed": false
+      "request_diagnostic_transaction_committed": false,
+      "request_pages_published_to_outer_session": false
     },
     {
       "image_base": "0x775c205000",
@@ -386,6 +395,8 @@
       "steps": 2475,
       "callback_count": 105,
       "scoped_tree_reference_callback_count": 2,
+      "owning_request_vm_entry_used": true,
+      "strict_callback_abi_validated": true,
       "actual_jni_environment_acquisition": true,
       "actual_request_cleanup_completed": true,
       "actual_request_vm_returned": true,
@@ -395,7 +406,8 @@
       "actual_jvm_used": false,
       "actual_os_threads_created": false,
       "whole_handoff_native_differential_verified": false,
-      "request_diagnostic_transaction_committed": false
+      "request_diagnostic_transaction_committed": false,
+      "request_pages_published_to_outer_session": false
     }
   ],
   "fresh_input_signer_output_verified": false,
@@ -405,6 +417,7 @@
     "These are same Python-state compositions, not whole native handoff comparisons.",
     "The low image-base path and high image-base path take different recovered VM branches; both return at the caller sentinel.",
     "URL/header/JNI request conversion is not recovered; request objects and the JavaVM/JNI providers are synthetic.",
+    "The strict owning callback entry commits only to the handoff staging transaction; the disposable outer session is not published as signer state.",
     "The complete independent signer output and later server request callbacks remain open.",
     "The disposable OS/allocator session and request page staging are not a published signer state.",
     "Explicit OS/clock/property/JNI services; no native snapshot, actual JVM or server request."

@@ -23,6 +23,7 @@ from vm9_allocator import _PageTransaction, _read_span, _write_span, RefillUnsup
 import vm9_registry as registry
 import vm9_objects as objects
 import vm9_jni_environment as environment
+from vm9_request_vm import invoke_request_vm_callback
 
 
 def case(library, libc, image, label, property_value, vm_module):
@@ -105,8 +106,17 @@ def case(library, libc, image, label, property_value, vm_module):
             assert args[0] == env_pointer and function in (0x7400F130, 0x7400F820)
             return 0
         diagnostic_scope = {'thread_id': 137}
-        state, frame, vm, ledger, decoded = prefix.execute_prefix(
-            staged, inputs, vm_module, 1791023800, 500000000, allocate=allocate,
+        state, frame, vm, ledger, decoded = invoke_request_vm_callback(
+            staged, image + 0x2830C4,
+            image_base=image, thread_pointer=fixture.TLS,
+            return_address=inputs['return_address'], vm_module=vm_module,
+            seconds=1791023800, nanoseconds=500000000,
+            entry_stack_address=inputs['entry_stack_address'],
+            url_reference_address=handler,
+            header_reference_address=request, mode=0,
+            context_address=request + 0x200,
+            output_reference_address=request + 0x400,
+            allocate=allocate,
             reallocate=session.reallocate, free=session.free,
             prepare_format=session.prepare_format,
             read_clock=session.read_clock,
@@ -149,6 +159,7 @@ def case(library, libc, image, label, property_value, vm_module):
             allocated_spans_inside_owned_os_mappings=True,
             request_objects_are_synthetic=True, steps=vm.steps,
             callback_count=len(ledger), scoped_tree_reference_callback_count=len(descriptor),
+            owning_request_vm_entry_used=True, strict_callback_abi_validated=True,
             actual_jni_environment_acquisition=bool(diagnostic_scope.get('request_evaluator_prefixes')),
             actual_request_cleanup_completed=bool(diagnostic_scope.get('request_tree_cleanups')),
             actual_request_vm_returned=bool(diagnostic_scope.get('request_vm_return')),
@@ -156,7 +167,8 @@ def case(library, libc, image, label, property_value, vm_module):
             boundary_wrapper_offset='0x285fb4', boundary_target_offset='0x28dc38',
             actual_jvm_used=False, actual_os_threads_created=False,
             whole_handoff_native_differential_verified=False,
-            request_diagnostic_transaction_committed=False))
+            request_diagnostic_transaction_committed=False,
+            request_pages_published_to_outer_session=False))
     outer_allocator.make_session = capture_session
     try:
         result = boundary.case(library, libc, image, label, property_value, vm_module,
@@ -191,6 +203,7 @@ def main():
         limitations=['These are same Python-state compositions, not whole native handoff comparisons.',
             'The low image-base path and high image-base path take different recovered VM branches; both return at the caller sentinel.',
             'URL/header/JNI request conversion is not recovered; request objects and the JavaVM/JNI providers are synthetic.',
+            'The strict owning callback entry commits only to the handoff staging transaction; the disposable outer session is not published as signer state.',
             'The complete independent signer output and later server request callbacks remain open.',
             'The disposable OS/allocator session and request page staging are not a published signer state.',
             'Explicit OS/clock/property/JNI services; no native snapshot, actual JVM or server request.'])

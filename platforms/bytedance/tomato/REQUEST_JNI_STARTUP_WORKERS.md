@@ -8991,13 +8991,15 @@ standalone signer、JVM 或线上 header acceptance。证据见
 
 在 request VM 继续前接入 `resolve_request_memory_imports`，解析 pinned ELF 中
 匹配的 35 个内存重定位，并用持有 outer guest pages 的同一 allocator session
-构造合成配置树/reference、VM/JNI 表和请求输入。这样修复了高基址在
+构造合成配置树/reference、VM/JNI 表和请求输入；handoff 现在通过正式
+`invoke_request_vm_callback` owning entry。这样修复了高基址在
 `+0x2859cc` 读取 NULL imported `malloc` 的 handoff fixture 假失败。
 
 两个 image base 的 absent/`sdk_30` 共 **4 项 Python handoff controls** 均在
 caller sentinel `+0xffb78` 返回。低基址为 957 步、26 callbacks；高基址为
 2475 步、105 callbacks，并执行现有 JNI environment acquisition、配置树计数/遍历、
-对象与树清理以及 VM return owner。detached page copy 仍在分配前被拒绝，所有
+对象与树清理以及 VM return owner。strict callback ABI 和 staged request transaction
+均通过；detached page copy 仍在分配前被拒绝，所有
 request allocations 均来自 owning matching-libc allocator session 并落在其 OS
 mapping 内。证据见 `evidence/vm9_request_allocator_handoff_fresh_20261024.json`。
 

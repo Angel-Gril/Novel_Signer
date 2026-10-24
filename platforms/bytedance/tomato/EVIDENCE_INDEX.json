@@ -7960,6 +7960,8 @@
     "high_base_callbacks": 105,
     "memory_import_relocations_resolved": true,
     "owning_allocator_session_used": true,
+    "owning_request_vm_entry_used": true,
+    "strict_callback_abi_validated": true,
     "actual_jni_environment_acquisition_high_base": true,
     "actual_request_cleanup_high_base": true,
     "native_snapshot_input": false,
