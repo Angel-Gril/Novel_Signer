@@ -1,5 +1,12 @@
 # Tomato Python material
 
+The opt-in `vm9_effects.EffectJournal` now gives allocator/JNI/OS providers an
+explicit nested rollback boundary. Native service hooks can restore provider
+undo records and, when requested, live CPU page bytes after a failed hook; the
+owning request VM accepts the same journal. Five Python controls and five
+rollback controls pass. Implicit mapping remains rejected and complete signing
+is unfinished. See [the provider-effect report](../REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai).
+
 The opted-in state now scopes cold environment-service construction. Adds 36 native controls, 6 rollback checks and 96 Python regressions. The isolated cold-state fixture now matches payload/image/TLS and allocation/free effects, including its live constructor scope; full-request differences remain 13 pages and 5042 bytes. Full signing remains unfinished. See the [environment service report](../REQUEST_JNI_STARTUP_WORKERS.md#6254-environment-service-reference-scope2026-10-21-asiashanghai).
 
 The shared clock service now preserves matching bionic guard/cache initialization. Adds8 native controls and14 refusal checks; the constructed whole second retains391 matching callbacks and seven matching return values, with1433/1439 pages equal. Two dtoa pages and four stack pages still differ; complete signing remains unfinished. See the [clock cache report](../REQUEST_JNI_STARTUP_WORKERS.md#6239-matching-libc-clock-cache2026-10-20-asiashanghai).

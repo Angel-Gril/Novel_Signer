@@ -3,6 +3,13 @@
 Chronological record of the Tomato / ByteDance signer work. Each entry states what was
 reproduced, how many controls / negatives / rollback checks passed, and links the detailed
 report. Moved verbatim out of the README; wording, numbers and links are unchanged.
+2026-10-24：新增显式 provider-effect rollback journal。`EffectJournal` 为
+allocator/JNI/OS provider 提供可嵌套 checkpoint、逆序 undo 和外层提交边界；native
+service bridge 可选恢复 provider undo 与 live CPU 页面，owning request VM 可在异常时
+回滚当前请求 checkpoint。5 项 Python controls 与 5 项 rollback controls 通过，默认
+page-only 行为保持；该批不计入 native 差分，不声称 live JVM、真实 mapping 拓扑或完整
+signer。见 [provider-effect report](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai)。
+
 The latest bounded root factory/caller runs from fresh ELF/TLS/reference
 inputs without native entry snapshots. Eight controls match all32 terminal
 slots and ordered effects (206 allocations/93 frees for the full factory).

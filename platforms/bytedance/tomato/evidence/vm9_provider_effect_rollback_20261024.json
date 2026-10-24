@@ -1,0 +1,38 @@
+{
+  "schema": "vm9-provider-effect-rollback-v1",
+  "evidence_label": "Sample verified",
+  "controls": [
+    {
+      "case": "hook_failure",
+      "provider_effects_rolled_back": true,
+      "mapped_cpu_bytes_rolled_back": true,
+      "mapping_topology_unchanged": true
+    },
+    {
+      "case": "outer_owner_rollback",
+      "successful_result": 7,
+      "provider_effects_rolled_back": true,
+      "mapped_cpu_bytes_rolled_back": true
+    },
+    {
+      "case": "nested_outer_failure",
+      "inner_undo_preserved": true,
+      "reverse_order_rollback": true
+    },
+    {
+      "case": "owning_request_failure",
+      "request_effects_rolled_back": true
+    },
+    {
+      "case": "nested_owning_request_success_then_outer_failure",
+      "outer_owner_retains_undo": true,
+      "explicit_outer_rollback": true
+    }
+  ],
+  "python_controls": 5,
+  "rollback_controls": 5,
+  "native_input_snapshot_used": false,
+  "live_jvm_verified": false,
+  "current_medusa_verified": false,
+  "implicit_mapping_or_unmapping": false
+}

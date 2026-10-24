@@ -12,6 +12,7 @@ from elftools.elf.elffile import ELFFile
 import vm9_objects as objects
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
 from vm9_request_caller import prepare_request_caller
+from vm9_effects import require_effect_journal
 
 
 class PrefixBoundary(Exception):
@@ -138,7 +139,7 @@ def apply_request_configuration_set_callback(pages, *, argument_block_address,
     p.commit();return result
 
 
-def execute_request_vm(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None,
+def _execute_request_vm_impl(pages, inputs, vm_module, seconds, nanoseconds, *, allocate=None,
                    diagnostic_scope=None, reallocate=None, free=None, prepare_format=None,
                    read_clock=None, acquire_environment=None, invoke_jni=None,
                    get_singleton=None, get_tls=None, initialize_registry=None, broadcast=None,
@@ -944,16 +945,37 @@ def execute_request_vm(pages, inputs, vm_module, seconds, nanoseconds, *, alloca
         vm_module.B = previous
 
 
+def execute_request_vm(pages, inputs, vm_module, seconds, nanoseconds, *,
+        effect_journal=None, **services):
+    """Run the request VM with optional provider-side failure rollback.
+
+    Guest pages are always staged by ``_PageTransaction``.  When an explicit
+    effect journal is supplied, providers may register inverse allocator, OS
+    or JNI operations; an exception rolls those effects back to this request
+    checkpoint.  Successful prefixes and completed returns keep their effects
+    inside an enclosing ``journal.transaction()``; without that outer scope a
+    direct call commits and discards its local undo records.
+    """
+    effect_journal = require_effect_journal(effect_journal)
+    if effect_journal is None:
+        return _execute_request_vm_impl(pages, inputs, vm_module, seconds,
+            nanoseconds, **services)
+    with effect_journal.transaction():
+        return _execute_request_vm_impl(pages, inputs, vm_module, seconds,
+            nanoseconds, **services)
+
+
 def invoke_request_vm_callback(pages, target, *, image_base, thread_pointer,
         return_address, vm_module, seconds, nanoseconds, entry_stack_address,
         url_reference_address, header_reference_address, mode, context_address,
         output_reference_address, diagnostic_scope=None, allocate=None,
-        free=None, **services):
+        free=None, effect_journal=None, **services):
     """Dispatch callback +2830c4 using URL/header/W-mode/context/X8 ABI.
 
     A diagnostic prefix is insufficient for an owning request. Only a fresh
     VM exit and validated caller return publish the staged pages. External
-    service effects and diagnostic lists are outside page rollback.
+    service effects are outside the historical page rollback unless an
+    explicit ``effect_journal`` is supplied.
     """
     words = (target, image_base, thread_pointer, return_address,
         entry_stack_address, url_reference_address, header_reference_address,
@@ -977,7 +999,8 @@ def invoke_request_vm_callback(pages, target, *, image_base, thread_pointer,
         argument_x2=mode & 0xFFFFFFFF, argument_x3=context_address,
         output_x8=output_reference_address)
     result = execute_request_vm(p, inputs, vm_module, seconds, nanoseconds,
-        allocate=allocate, free=free, diagnostic_scope=diagnostic, **services)
+        allocate=allocate, free=free, diagnostic_scope=diagnostic,
+        effect_journal=effect_journal, **services)
     completed = diagnostic.get('request_vm_return', {})
     if not all(completed.get(key) is True for key in (
             'caller_sentinel_matches', 'physical_native_caller_epilogue_modeled',
