@@ -88,7 +88,7 @@ def apply_token_tail_callback(pages, *, wrapper_offset, argument_block_address,
         return _apply_token_tail_callback_impl(pages,**kwargs)
 
 
-def apply_token_printf_callback(pages, *, argument_block_address, image_base,
+def _apply_token_printf_callback_impl(pages, *, argument_block_address, image_base,
         entry_stack_address, thread_pointer, allocate, max_bytes=0x100000,va_list_frame=None):
     """+288c28 -> +278314: one packed argument, W0 result, child canary.
 
@@ -120,3 +120,18 @@ def apply_token_printf_callback(pages, *, argument_block_address, image_base,
     _write_span(p,argument_block_address+32,result.to_bytes(4,'little'))
     p.commit()
     return result
+
+
+def apply_token_printf_callback(pages, *, argument_block_address, image_base,
+        entry_stack_address, thread_pointer, allocate, max_bytes=0x100000,
+        va_list_frame=None, effect_journal=None):
+    """Run token allocated printf with an optional allocator-effect journal."""
+    from vm9_effects import require_effect_journal
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,image_base=image_base,
+        entry_stack_address=entry_stack_address,thread_pointer=thread_pointer,
+        allocate=allocate,max_bytes=max_bytes,va_list_frame=va_list_frame)
+    if effect_journal is None:
+        return _apply_token_printf_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_token_printf_callback_impl(pages,**kwargs)

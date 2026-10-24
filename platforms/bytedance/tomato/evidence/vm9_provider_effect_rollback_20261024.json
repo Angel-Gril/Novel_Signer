@@ -151,10 +151,15 @@
       "case": "second_base64_tail_provider_failure",
       "base64_effects_rolled_back": true,
       "base64_pages_unchanged": true
+    },
+    {
+      "case": "second_allocated_printf_provider_failure",
+      "allocated_printf_effects_rolled_back": true,
+      "allocated_printf_pages_unchanged": true
     }
   ],
-  "python_controls": 30,
-  "rollback_controls": 30,
+  "python_controls": 31,
+  "rollback_controls": 31,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

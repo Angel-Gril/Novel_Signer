@@ -5,6 +5,7 @@ Allocated printf and the optional validated caller return reuse their owners.
 """
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
+from vm9_effects import require_effect_journal
 from vm9_request_caller import prepare_request_token_vm_caller, RequestVmCallerFrame
 from vm9_objects import decode_masked_bytes
 
@@ -28,7 +29,7 @@ class RequestTokenVmReturn(RequestTokenVmPrefix):
 
 def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
         random_services=None, continue_shared_readers=False, diagnostic_services=None,
-        string_services=None, continue_caller_return=False, **inputs):
+        string_services=None, continue_caller_return=False, effect_journal=None, **inputs):
     """Run a recovered prefix to the next explicit callback boundary.
 
     The backing register words come from caller memory. No native output is
@@ -40,6 +41,7 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
         raise RefillUnsupported('request token shared-reader continuation must be boolean')
     if type(continue_caller_return) is not bool:
         raise RefillUnsupported('request token caller-return continuation must be boolean')
+    effect_journal = require_effect_journal(effect_journal)
     staged = _PageTransaction(pages)
     frame = prepare_request_token_vm_caller(staged, **inputs)
     image = inputs['image_base']
@@ -114,20 +116,22 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     argument_block_address=argument,image_base=image,
                     entry_stack_address=frame.native_stack_address-0x180,
                     allocate=string_services['allocate'],reallocate=string_services['reallocate'],
-                    free=string_services['free'],prepare_format=string_services.get('prepare_format'))
+                    free=string_services['free'],prepare_format=string_services.get('prepare_format'),
+                    effect_journal=effect_journal)
             elif string_services is not None and (wrapper,target) in (
                     (0x288B8C,0x2481FC),(0x288BA0,0x248780)):
                 apply_token_string_transform_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
                     entry_stack_address=frame.native_stack_address-0x180,
                     allocate=string_services['allocate'],reallocate=string_services['reallocate'],
-                    free=string_services['free'])
+                    free=string_services['free'],effect_journal=effect_journal)
             elif string_services is not None and (wrapper,target)==(0x288BBC,0x25874C):
                 apply_token_digest_callback(staged,argument_block_address=argument,image_base=image,
                     entry_stack_address=frame.native_stack_address-0x180,
                     thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
                     reallocate=string_services['reallocate'],free=string_services['free'],
-                    thread_id=diagnostic_services.get('thread_id'),observer=diagnostic_services.get('observer'))
+                    thread_id=diagnostic_services.get('thread_id'),observer=diagnostic_services.get('observer'),
+                    effect_journal=effect_journal)
             elif string_services is not None and (wrapper,target)==(0x288BDC,0x287580):
                 apply_token_cipher_callback(staged,argument_block_address=argument,image_base=image,
                     entry_stack_address=frame.native_stack_address-0x180,
@@ -153,7 +157,8 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 from vm9_request_token_tail import apply_token_printf_callback
                 apply_token_printf_callback(staged,argument_block_address=argument,image_base=image,
                     entry_stack_address=frame.native_stack_address-0x180,
-                    thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'])
+                    thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
+                    effect_journal=effect_journal)
             else:
                 raise RefillUnsupported(f'unknown request token callback +{wrapper:#x} -> +{target:#x}')
         vm.native_hook = callback

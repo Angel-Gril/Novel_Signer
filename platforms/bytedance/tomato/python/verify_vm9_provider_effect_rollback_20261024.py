@@ -972,6 +972,43 @@ def verify():
     rows.append(dict(case='second_base64_tail_provider_failure',
         base64_effects_rolled_back=True, base64_pages_unchanged=True))
 
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    printf_block = 0x2000
+    _write_span(pages, printf_block,
+        (0x278314).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little') + (0x5000).to_bytes(8, 'little'))
+    _write_span(pages, 0x4000, b'%s\0')
+    _write_span(pages, 0x5000, b'x\0')
+    _write_span(pages, 0x7000 + 0x28, b'canary!!')
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_printf = vm9_request_token_tail.apply_token_printf_callback
+
+    def failing_printf(*_args, **_kwargs):
+        external.append('printf-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled token printf provider failure')
+
+    vm9_request_token_tail.apply_token_printf_callback = failing_printf
+    try:
+        try:
+            second_vm.apply_request_287474_allocated_printf_callback(
+                pages, argument_block_address=printf_block,
+                entry_stack_address=0x9000, image_base=0,
+                thread_pointer=0x7000, allocate=lambda *_a: 0x6000,
+                effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing allocated printf unexpectedly returned')
+    finally:
+        vm9_request_token_tail.apply_token_printf_callback = original_printf
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_allocated_printf_provider_failure',
+        allocated_printf_effects_rolled_back=True, allocated_printf_pages_unchanged=True))
+
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
         controls=rows, python_controls=len(rows), rollback_controls=len(rows),

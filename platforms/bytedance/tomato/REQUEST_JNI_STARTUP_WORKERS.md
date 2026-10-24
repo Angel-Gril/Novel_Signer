@@ -8782,11 +8782,11 @@ request state elapsed getter、second VM realtime wrappers 和 request-environme
 acquisition/StringObject/logger callbacks、JNI availability wrapper、second-VM
 allocation callback、formatter、consumer free tail、StringObject assignment 和两个
 configuration reference getters、cached JNI reference callback、JSON string 和
-StringObject fill paths、empty JSON reference path、token string transform、token digest、token cipher、token append tail 和 Base64 tail paths 也接受该 opt-in JNI/clock/provider owner journal。second VM
+StringObject fill paths、empty JSON reference path、token string transform、token digest、token cipher、token append tail、Base64 tail 和 allocated-printf paths 也接受该 opt-in JNI/clock/provider owner journal。second VM
 向 environment helper 和 child VM 继续传递同一 journal，避免 acquisition provider
 失败时脱离 owning checkpoint。
 
-**30 项 Python controls 与 30 项 rollback controls**通过：hook 失败同时回滚 provider
+**31 项 Python controls 与 31 项 rollback controls**通过：hook 失败同时回滚 provider
 ledger 与 CPU 页面；成功 hook 的效果可由外层 owner 回滚；嵌套 inner success 的 undo
 记录可由 outer failure 按逆序清理；child dispatcher 的后续失败也会回滚 callback
 provider 效果；Java facade 的 child 与 nested callback VM 观察到同一个 journal；
@@ -8802,7 +8802,8 @@ logger provider 失败时其 guest 页面和外部 ledger 也同时恢复；JNI 
 staged 页面和外部 formatter allocation ledger 同时恢复；consumer free provider 失败时
 其 staged 页面和外部 free ledger 同时恢复；JSON string、StringObject fill、empty JSON
 reference、token transform、token digest、token cipher、token append tail 和 Base64 tail
-provider 失败时各自的 staged 页面和外部 ledger 同时恢复。
+provider 失败时各自的 staged 页面和外部 ledger 同时恢复；allocated-printf provider
+失败时其 staged 页面和外部 allocator ledger 同时恢复。
 没有使用 native 输出作为模型输入，也没有把这些
 Python controls 计入原生差分数量；不声称 live JVM、真实 OS mapping 拓扑或完整 signer。
 默认不传 journal 的旧 page-only 行为保持。证据见

@@ -455,7 +455,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 value=apply_request_287474_allocated_printf_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,thread_pointer=inputs['thread_pointer'],
-                    allocate=consumer_services['allocate'])
+                    allocate=consumer_services['allocate'],effect_journal=effect_journal)
                 allocated_printfs.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x288A4C,0x258C14):
                 output=apply_request_287474_base64_reference_callback(staged,
@@ -1894,7 +1894,7 @@ def apply_request_287474_numeric_string_callback(pages, *, argument_block_addres
     p.commit();return output
 
 
-def apply_request_287474_allocated_printf_callback(pages, *, argument_block_address,
+def _apply_request_287474_allocated_printf_callback_impl(pages, *, argument_block_address,
         entry_stack_address,image_base,thread_pointer,allocate,max_bytes=0x100000):
     """+288AD4/+278314: live two-pass allocation, W0 at packed+32.
 
@@ -1974,6 +1974,20 @@ def apply_request_287474_allocated_printf_callback(pages, *, argument_block_addr
         va_list_frame=(entry_stack_address-0x78,entry_stack_address-0xC0,entry_stack_address-0xE0))
     if second_pass_size:formatter_frame(0x2783DC,second_pass_size)
     p.commit();return result
+
+
+def apply_request_287474_allocated_printf_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,thread_pointer,allocate,max_bytes=0x100000,
+        effect_journal=None):
+    """Run second-VM allocated printf with an optional allocator-effect journal."""
+    from vm9_effects import require_effect_journal
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,entry_stack_address=entry_stack_address,
+        image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,max_bytes=max_bytes)
+    if effect_journal is None:
+        return _apply_request_287474_allocated_printf_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_allocated_printf_callback_impl(pages,**kwargs)
 
 
 def _apply_request_287474_json_string_callback_impl(pages, *, argument_block_address,
