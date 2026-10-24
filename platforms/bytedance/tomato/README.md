@@ -1,5 +1,9 @@
 # Tomato / Fanqie (ByteDance)
 
+The 2026-10-24 fresh outer-finalization rerun passes 10 native hash controls, 6 publication/JNI integration cases, and 5 negative/rollback controls at both ELF image bases. Current-input hash generation, zero-extended caller storage, lazy formatter guards, and publication/destructor service ledgers match; the only live allocation mismatch is allocation 308's native short-string vector padding. See the [outer finalization evidence](evidence/vm9_outer_finalize_fresh_20261024.json) and [allocation attribution](evidence/vm9_outer_allocation_308_padding_20261024.json).
+
+The allocation 308 trace shows all 21 differing bytes are unused short-string padding; semantic fields match and the production model remains unchanged. Full physical stack/ABI equivalence, fresh-input Medusa, complete signing, and online header acceptance remain unverified.
+
 The opted-in state now scopes cold environment-service construction. Adds 36 native controls, 6 rollback checks and 96 Python regressions. The isolated cold-state fixture now matches payload/image/TLS and allocation/free effects, including its live constructor scope; full-request differences remain 13 pages and 5042 bytes. Full signing remains unfinished. See the [environment service report](REQUEST_JNI_STARTUP_WORKERS.md#6254-environment-service-reference-scope2026-10-21-asiashanghai).
 
 The remaining full-request bytes have now been attributed read-only: 4860 bytes are physical stack/ABI scratch, 3 bytes are a caller-stack pointer alias in the scoped-lock guard, 166 bytes are format-token vector-store padding, and 13 bytes are short-string tail bytes. Token fields and event payloads are semantically equal; no production change was justified. Two native-only pages are zero-filled service-page existence differences. See the [residual diff evidence](evidence/vm9_full_outer_residual_diff_20261024.json).
