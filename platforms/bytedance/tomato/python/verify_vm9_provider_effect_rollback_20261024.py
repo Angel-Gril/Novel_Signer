@@ -17,6 +17,7 @@ from vm9_allocator import RefillUnsupported
 from vm9_effects import EffectJournal
 import vm9_native_service_bridge as bridge
 import vm9_request_vm as request_vm
+import vm9_request_dispatch as request_dispatch
 
 
 PAGE = 0x400000
@@ -157,6 +158,28 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case="nested_owning_request_success_then_outer_failure",
         outer_owner_retains_undo=True, explicit_outer_rollback=True))
+
+    external = []
+    journal = EffectJournal()
+    original_child = request_dispatch._invoke_signer_child_request_impl
+
+    def failed_child(*_args, **_kwargs):
+        external.append("child")
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported("controlled child failure")
+
+    request_dispatch._invoke_signer_child_request_impl = failed_child
+    try:
+        try:
+            request_dispatch.invoke_signer_child_request(effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError("failed child unexpectedly returned")
+    finally:
+        request_dispatch._invoke_signer_child_request_impl = original_child
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case="child_dispatch_failure", child_provider_effects_rolled_back=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",

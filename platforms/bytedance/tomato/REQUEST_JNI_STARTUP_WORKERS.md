@@ -8778,9 +8778,10 @@ checkpoint/rollback/discard。native service bridge 现在接受 opt-in journal�
 隐式 map/unmap；映射拓扑变化会 fail closed。owning request VM 也接受同一 journal，异常
 回滚当前请求 checkpoint，成功 prefix/return 保留效果供外层 owner 决定最终提交。
 
-**5 项 Python controls 与 5 项 rollback controls**通过：hook 失败同时回滚 provider
+**6 项 Python controls 与 6 项 rollback controls**通过：hook 失败同时回滚 provider
 ledger 与 CPU 页面；成功 hook 的效果可由外层 owner 回滚；嵌套 inner success 的 undo
-记录可由 outer failure 按逆序清理。没有使用 native 输出作为模型输入，也没有把这些
+记录可由 outer failure 按逆序清理；child dispatcher 的后续失败也会回滚 callback
+provider 效果。没有使用 native 输出作为模型输入，也没有把这些
 Python controls 计入原生差分数量；不声称 live JVM、真实 OS mapping 拓扑或完整 signer。
 默认不传 journal 的旧 page-only 行为保持。证据见
 `evidence/vm9_provider_effect_rollback_20261024.json`。

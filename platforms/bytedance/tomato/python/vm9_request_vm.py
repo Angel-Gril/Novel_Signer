@@ -1018,6 +1018,7 @@ def invoke_java_request_service(pages, target, *, image_base, thread_pointer,
         receiver_address, url_reference_address, header_reference_address,
         mode, output_reference_address, entry_stack_address, allocate=None,
         free=None, diagnostic_scope=None, diagnostic_observer=None,
+        effect_journal=None,
         max_callbacks=4096, max_nodes=4096, **services):
     """Normal Java facade provider: child +27dd04 -> owning callback VM.
 
@@ -1046,6 +1047,7 @@ def invoke_java_request_service(pages, target, *, image_base, thread_pointer,
         output_reference_address=output_reference_address,
         entry_stack_address=entry_stack_address, allocate=allocate, free=free,
         invoke_callback=callback, diagnostic_observer=diagnostic_observer,
-        max_callbacks=max_callbacks, max_nodes=max_nodes)
+        max_callbacks=max_callbacks, max_nodes=max_nodes,
+        effect_journal=effect_journal)
 
 

@@ -8,9 +8,10 @@ import vm9_objects as objects
 import vm9_registry as registry
 import vm9_reference_scopes as references
 from vm9_allocator import _PageTransaction, _read_span, _write_span, RefillUnsupported
+from vm9_effects import require_effect_journal
 
 
-def invoke_signer_child_request(pages, *, image_base, entry_stack_address,
+def _invoke_signer_child_request_impl(pages, *, image_base, entry_stack_address,
         thread_pointer, receiver_address, url_reference_address,
         header_reference_address, mode, output_reference_address,
         allocate, free, invoke_callback, thread_id=None,
@@ -109,3 +110,18 @@ def invoke_signer_child_request(pages, *, image_base, entry_stack_address,
     if _read_span(p,canary,8)!=_read_span(p,thread_pointer+0x28,8):
         raise RefillUnsupported('request dispatcher stack canary changed')
     p.commit()
+
+
+def invoke_signer_child_request(*args, effect_journal=None, **kwargs):
+    """Run child dispatch with an optional provider-effect transaction.
+
+    The child owns a page transaction, while callback providers may mutate an
+    allocator/JNI/OS owner. An explicit journal makes a later child failure
+    undo those effects in the same LIFO scope; default calls retain the prior
+    page-only behavior.
+    """
+    effect_journal = require_effect_journal(effect_journal)
+    if effect_journal is None:
+        return _invoke_signer_child_request_impl(*args, **kwargs)
+    with effect_journal.transaction():
+        return _invoke_signer_child_request_impl(*args, **kwargs)

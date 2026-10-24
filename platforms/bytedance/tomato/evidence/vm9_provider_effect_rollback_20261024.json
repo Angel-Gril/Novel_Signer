@@ -27,10 +27,14 @@
       "case": "nested_owning_request_success_then_outer_failure",
       "outer_owner_retains_undo": true,
       "explicit_outer_rollback": true
+    },
+    {
+      "case": "child_dispatch_failure",
+      "child_provider_effects_rolled_back": true
     }
   ],
-  "python_controls": 5,
-  "rollback_controls": 5,
+  "python_controls": 6,
+  "rollback_controls": 6,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,
