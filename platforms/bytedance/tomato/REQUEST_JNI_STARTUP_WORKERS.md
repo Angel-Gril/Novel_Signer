@@ -8880,6 +8880,15 @@ event-record 的 tag 和 payload 相同。stack alias 仍需真实 physical stac
 不计入 native controls。完整 physical stack/ABI、whole-request 内存等价、fresh
 Medusa、完整 signer 与线上 header acceptance 仍未验证。证据见
 `evidence/vm9_full_outer_residual_diff_20261024.json`。
+
+## 6.260 Residual-boundary regression rerun（2026-10-24 Asia/Shanghai）
+
+针对本次归因涉及的 state/environment/format 边界，用当前工作区和同一 pinned
+library/matching libc 重跑四组既有 fresh controls：state final reference **20**
+项 native/4 项回滚、environment release **38/7**、SHA-1 hex **64/8**、state
+prefix reference **16/8**，共 **138 项 native controls、27 项回滚检查**全部通过。
+这些检查没有使用 native 输出作为模型输入，也没有改变 full outer 的 5042 字节
+差异结论。证据见 `evidence/vm9_residual_boundary_regression_20261024.json`。
 staged 页面和外部 free ledger 同时恢复；StringObject assignment provider 失败时其
 staged 页面和外部 assignment ledger 同时恢复；两个 configuration reference provider
 失败时各自的 staged 页面和外部 reference ledger 同时恢复；cached JNI provider 失败时

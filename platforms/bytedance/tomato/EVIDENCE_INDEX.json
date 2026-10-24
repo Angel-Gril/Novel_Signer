@@ -7832,5 +7832,13 @@
     "production_model_changed": false,
     "complete_physical_stack_equivalence": false,
     "complete_signer_verified": false
+  },
+  "vm9_residual_boundary_regression_20261024": {
+    "path": "evidence/vm9_residual_boundary_regression_20261024.json",
+    "evidence_label": "Fresh regression",
+    "total_native_controls": 138,
+    "total_rollback_guards": 27,
+    "native_output_used_as_model_input": false,
+    "complete_signer_verified": false
   }
 }

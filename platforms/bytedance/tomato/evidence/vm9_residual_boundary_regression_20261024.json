@@ -1,0 +1,37 @@
+{
+  "schema": "vm9-residual-boundary-regression-v1",
+  "evidence_label": "Fresh regression",
+  "date": "2026-10-24",
+  "library_input": "private pinned libmetasec_ml_71332.so",
+  "libc_input": "private matching _vlibc.so",
+  "controls": [
+    {
+      "script": "verify_vm9_state_final_reference_scope_fresh_20261021.py",
+      "native_controls": 20,
+      "rollback_guards": 4,
+      "status": "passed"
+    },
+    {
+      "script": "verify_vm9_environment_release_scope_fresh_20261021.py",
+      "native_controls": 38,
+      "rollback_guards": 7,
+      "status": "passed"
+    },
+    {
+      "script": "verify_vm9_sha1_hex_scope_fresh_20261021.py",
+      "native_controls": 64,
+      "rollback_guards": 8,
+      "status": "passed"
+    },
+    {
+      "script": "verify_vm9_state_prefix_reference_fresh_20261020.py",
+      "native_controls": 16,
+      "rollback_guards": 8,
+      "status": "passed"
+    }
+  ],
+  "total_native_controls": 138,
+  "total_rollback_guards": 27,
+  "native_output_used_as_model_input": false,
+  "complete_signer_verified": false
+}
