@@ -8921,6 +8921,19 @@ live allocation mismatch 归因到 native vector-store 未初始化 padding，�
 RED；没有把 native bytes 写回 Python，也没有修改生产模型。完整 physical stack/ABI、
 fresh-input Medusa、完整 signer 和线上 acceptance 仍未验证。证据见
 `evidence/vm9_outer_allocation_308_padding_20261024.json`。
+
+## 6.263 Java request facade fresh rerun（2026-10-24 Asia/Shanghai）
+
+用当前生产 owner 重跑 normal Java request facade 的两个 image base 与 11 个输入
+profile，共 **22 项 native/Python controls、15 项 rollback guards** 全部通过。
+URL/header 转换、合成 virtual request target、Java 输出数组和 owning reference/free
+顺序均与对应 native 控制一致；native 输出没有作为 Python 输入，历史 native groups
+没有 replay。
+
+报告明确保留边界：JNI 与 request provider 是 synthetic services，actual request VM
+integration、alternate facade branch、fresh standalone signer、完整 physical ABI 和
+online header acceptance 仍为未验证。证据见
+`evidence/vm9_java_request_facade_fresh_20261024.json`。
 staged 页面和外部 free ledger 同时恢复；StringObject assignment provider 失败时其
 staged 页面和外部 assignment ledger 同时恢复；两个 configuration reference provider
 失败时各自的 staged 页面和外部 reference ledger 同时恢复；cached JNI provider 失败时

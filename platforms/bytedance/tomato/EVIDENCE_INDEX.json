@@ -7874,5 +7874,22 @@
     "production_model_changed": false,
     "complete_physical_stack_equivalence": false,
     "complete_signer_verified": false
+  },
+  "vm9_java_request_facade_fresh_20261024": {
+    "path": "evidence/vm9_java_request_facade_fresh_20261024.json",
+    "evidence_label": "Fresh Java request facade rerun",
+    "native_Python_controls": 22,
+    "rollback_guards": 15,
+    "original_normal_Java_facade_verified": true,
+    "synthetic_JNI_and_virtual_request": true,
+    "actual_request_VM_integration_verified": false,
+    "alternate_Java_facade_branch_verified": false,
+    "fresh_complete_standalone_signer_verified": false,
+    "whole_request_native_differential_verified": false,
+    "live_Android_JVM_verified": false,
+    "complete_physical_ABI_verified": false,
+    "external_provider_mapping_rollback_verified": false,
+    "historical_native_groups_not_replayed": true,
+    "native_snapshot_input": false
   }
 }

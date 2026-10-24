@@ -20,6 +20,13 @@ physical stack/ABI、fresh-input Medusa、完整 signer 或线上 header accepta
 payload 和终止字节均一致；21 个差异全部落在未使用的短字符串 padding，因此没有
 形成生产 RED，也没有修改模型。证据见 [allocation 308 padding attribution](evidence/vm9_outer_allocation_308_padding_20261024.json)。
 
+同日重跑 normal Java request facade fresh 组合：两个 image base、11 个输入 profile
+共 **22 项 native/Python controls** 和 **15 项 rollback guards** 全部通过。URL/header
+转换、合成 virtual request provider、Java 输出数组和 owning cleanup 的返回与顺序保持
+一致；本批仍明确标记为 synthetic JNI/request provider，actual request VM integration、
+alternate facade、fresh standalone signer 和线上 acceptance 未验证。证据见
+[Java facade fresh rerun](evidence/vm9_java_request_facade_fresh_20261024.json)。
+
 ## 2026-10-24 Asia/Shanghai：outer native signer boundary rerun
 
 The existing fresh-ELF native outer control was rerun against the pinned
