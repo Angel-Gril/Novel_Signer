@@ -8782,11 +8782,11 @@ request state elapsed getter、second VM realtime wrappers 和 request-environme
 acquisition/StringObject/logger callbacks、JNI availability wrapper、second-VM
 allocation callback、formatter、consumer free tail、StringObject assignment 和两个
 configuration reference getters、cached JNI reference callback、JSON string 和
-StringObject fill paths 也接受该 opt-in JNI/clock/provider owner journal。second VM
+StringObject fill paths 和 empty JSON reference path 也接受该 opt-in JNI/clock/provider owner journal。second VM
 向 environment helper 和 child VM 继续传递同一 journal，避免 acquisition provider
 失败时脱离 owning checkpoint。
 
-**24 项 Python controls 与 24 项 rollback controls**通过：hook 失败同时回滚 provider
+**25 项 Python controls 与 25 项 rollback controls**通过：hook 失败同时回滚 provider
 ledger 与 CPU 页面；成功 hook 的效果可由外层 owner 回滚；嵌套 inner success 的 undo
 记录可由 outer failure 按逆序清理；child dispatcher 的后续失败也会回滚 callback
 provider 效果；Java facade 的 child 与 nested callback VM 观察到同一个 journal；
@@ -8846,8 +8846,10 @@ staged 页面和外部 free ledger 同时恢复；StringObject assignment provid
 staged 页面和外部 assignment ledger 同时恢复；两个 configuration reference provider
 失败时各自的 staged 页面和外部 reference ledger 同时恢复；cached JNI provider 失败时
 其 staged 页面和外部 JNI/reference ledger 同时恢复；JSON string 与 StringObject fill
-provider 失败时各自的 staged 页面和外部 allocator ledger 同时恢复。
+provider 失败时各自的 staged 页面和外部 allocator ledger 同时恢复；empty JSON reference
+provider 失败时其 staged 页面和外部 reference ledger 同时恢复。
 
+\n
 \n
 \n
 \n

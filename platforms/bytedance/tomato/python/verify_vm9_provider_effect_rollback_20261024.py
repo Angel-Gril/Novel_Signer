@@ -764,6 +764,40 @@ def verify():
     rows.append(dict(case='second_string_fill_provider_failure',
         string_fill_effects_rolled_back=True, string_fill_pages_unchanged=True))
 
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    json_block = 0x2000
+    _write_span(pages, json_block,
+        (0x261404).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_json = vm9_configuration_init.construct_empty_json_reference
+
+    def failing_json(*_args, **_kwargs):
+        external.append('json-reference-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled JSON reference provider failure')
+
+    vm9_configuration_init.construct_empty_json_reference = failing_json
+    try:
+        try:
+            second_vm.apply_request_287474_json_callback(
+                pages, argument_block_address=json_block,
+                entry_stack_address=0x8000, image_base=0,
+                thread_pointer=0x7000, allocate=lambda *_a: 0x6000,
+                free=lambda *_a: 0, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing JSON reference unexpectedly returned')
+    finally:
+        vm9_configuration_init.construct_empty_json_reference = original_json
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_json_reference_provider_failure',
+        json_reference_effects_rolled_back=True, json_reference_pages_unchanged=True))
+
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
         controls=rows, python_controls=len(rows), rollback_controls=len(rows),

@@ -758,7 +758,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     entry_stack_address=frame.native_stack_address-0x180,image_base=image,
                     thread_pointer=inputs['thread_pointer'],allocate=consumer_services['allocate'],
                     free=consumer_services['free'],thread_id=consumer_services.get('thread_id'),
-                    diagnostic_observer=consumer_services.get('diagnostic_observer'))
+                    diagnostic_observer=consumer_services.get('diagnostic_observer'),
+                    effect_journal=effect_journal)
                 json_references.append((argument,result))
             elif consumer_services is not None and (wrapper,target)==(0x2885E0,0x32A444):
                 readers=apply_request_287474_reader_acquisition_callback(staged,wrapper_offset=wrapper,
@@ -2060,7 +2061,7 @@ def apply_request_287474_global_u32_callback(pages, *, argument_block_address,
     p.commit();return int.from_bytes(raw,'little')
 
 
-def apply_request_287474_json_callback(pages, *, argument_block_address,
+def _apply_request_287474_json_callback_impl(pages, *, argument_block_address,
         entry_stack_address,image_base,thread_pointer,allocate,free,
         thread_id=None,diagnostic_observer=None,max_bytes=4096):
     """+28883c hidden-X8 empty JSON reference; no packed result store."""
@@ -2079,6 +2080,20 @@ def apply_request_287474_json_callback(pages, *, argument_block_address,
         thread_pointer=thread_pointer,allocate=allocate,free=free,thread_id=thread_id,
         diagnostic_observer=diagnostic_observer,max_bytes=max_bytes)
     p.commit();return result
+
+
+def apply_request_287474_json_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,thread_pointer,allocate,free,
+        thread_id=None,diagnostic_observer=None,max_bytes=4096,effect_journal=None):
+    """Run the second empty-JSON reference callback with an optional journal."""
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,entry_stack_address=entry_stack_address,
+        image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,free=free,
+        thread_id=thread_id,diagnostic_observer=diagnostic_observer,max_bytes=max_bytes)
+    if effect_journal is None:
+        return _apply_request_287474_json_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_json_callback_impl(pages,**kwargs)
 
 
 def _copy_request_287474_bytes(pages,destination,source,length):
