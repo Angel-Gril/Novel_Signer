@@ -96,10 +96,20 @@
       "case": "second_string_assignment_provider_failure",
       "assignment_effects_rolled_back": true,
       "assignment_pages_unchanged": true
+    },
+    {
+      "case": "second_reference_provider_failure",
+      "reference_effects_rolled_back": true,
+      "reference_pages_unchanged": true
+    },
+    {
+      "case": "second_pair_provider_failure",
+      "pair_effects_rolled_back": true,
+      "pair_pages_unchanged": true
     }
   ],
-  "python_controls": 19,
-  "rollback_controls": 19,
+  "python_controls": 21,
+  "rollback_controls": 21,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

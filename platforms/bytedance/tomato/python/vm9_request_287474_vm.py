@@ -595,7 +595,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 output=apply_request_287474_reference_getter_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,thread_pointer=inputs['thread_pointer'],
-                    allocate=consumer_services['allocate'],thread_id=consumer_services.get('thread_id'))
+                    allocate=consumer_services['allocate'],thread_id=consumer_services.get('thread_id'),
+                    effect_journal=effect_journal)
                 reference_getters.append((argument,output))
             elif consumer_services is not None and (wrapper,target) in ((0x288670,0x257880),(0x28887C,0x256F58)):
                 value=apply_request_287474_cached_u32_callback(staged,
@@ -606,7 +607,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 output=apply_request_287474_pair_getter_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,thread_pointer=inputs['thread_pointer'],
-                    allocate=consumer_services['allocate'],thread_id=consumer_services.get('thread_id'))
+                    allocate=consumer_services['allocate'],thread_id=consumer_services.get('thread_id'),
+                    effect_journal=effect_journal)
                 pair_getters.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x2886B0,0x1CF55C):
                 if any(not callable(consumer_services.get(n)) for n in
@@ -1116,7 +1118,7 @@ def apply_request_287474_consumer(pages, *, wrapper_offset,
         return _apply_request_287474_consumer_impl(pages,**kwargs)
 
 
-def apply_request_287474_reference_getter_callback(pages, *, argument_block_address,
+def _apply_request_287474_reference_getter_callback_impl(pages, *, argument_block_address,
         entry_stack_address, image_base, thread_pointer, allocate, thread_id=None,
         diagnostic_observer=None):
     """+288658 -> +257804: packed X8 output and X0 receiver; no result store."""
@@ -1132,6 +1134,20 @@ def apply_request_287474_reference_getter_callback(pages, *, argument_block_addr
         thread_id=thread_id,diagnostic_observer=diagnostic_observer)
     transaction.commit()
     return output
+
+
+def apply_request_287474_reference_getter_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, thread_pointer, allocate, thread_id=None,
+        diagnostic_observer=None, effect_journal=None):
+    """Run the second configuration reference getter with an optional journal."""
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,entry_stack_address=entry_stack_address,
+        image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,
+        thread_id=thread_id,diagnostic_observer=diagnostic_observer)
+    if effect_journal is None:
+        return _apply_request_287474_reference_getter_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_reference_getter_callback_impl(pages,**kwargs)
 
 
 def apply_request_287474_cached_u32_callback(pages, *, argument_block_address,
@@ -1166,7 +1182,7 @@ def apply_request_287474_cached_u32_callback(pages, *, argument_block_address,
     return value
 
 
-def apply_request_287474_pair_getter_callback(pages, *, argument_block_address,
+def _apply_request_287474_pair_getter_callback_impl(pages, *, argument_block_address,
         entry_stack_address, image_base, thread_pointer, allocate, thread_id=None,
         diagnostic_observer=None):
     """+28868c -> +2633a4 tail-calls the scoped copy of receiver+0x18 to X8."""
@@ -1182,6 +1198,20 @@ def apply_request_287474_pair_getter_callback(pages, *, argument_block_address,
         thread_id=thread_id,diagnostic_observer=diagnostic_observer)
     transaction.commit()
     return output
+
+
+def apply_request_287474_pair_getter_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, thread_pointer, allocate, thread_id=None,
+        diagnostic_observer=None, effect_journal=None):
+    """Run the second scoped pair getter with an optional journal."""
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,entry_stack_address=entry_stack_address,
+        image_base=image_base,thread_pointer=thread_pointer,allocate=allocate,
+        thread_id=thread_id,diagnostic_observer=diagnostic_observer)
+    if effect_journal is None:
+        return _apply_request_287474_pair_getter_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_pair_getter_callback_impl(pages,**kwargs)
 
 
 def apply_request_287474_cached_reference_callback(pages, *, argument_block_address,

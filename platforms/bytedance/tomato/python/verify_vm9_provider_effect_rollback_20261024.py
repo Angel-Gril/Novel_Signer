@@ -29,6 +29,8 @@ import vm9_jni_environment
 import vm9_request_caller
 import vm9_configuration_init
 import vm9_objects
+import vm9_registry
+import vm9_reference_scopes
 from vm9_allocator import _write_span
 
 
@@ -588,6 +590,75 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case='second_string_assignment_provider_failure',
         assignment_effects_rolled_back=True, assignment_pages_unchanged=True))
+
+    # Configuration-reference construction is an allocator/JNI owner too.
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    reference_block = 0x2000
+    _write_span(pages, reference_block,
+        (0x257804).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_reference = vm9_registry.read_configuration_string_reference
+
+    def failing_reference(*_args, **_kwargs):
+        external.append('reference-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled reference provider failure')
+
+    vm9_registry.read_configuration_string_reference = failing_reference
+    try:
+        try:
+            second_vm.apply_request_287474_reference_getter_callback(
+                pages, argument_block_address=reference_block,
+                entry_stack_address=0x8000, image_base=0,
+                thread_pointer=0x7000, allocate=lambda *_a: 0x5000,
+                effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing reference getter unexpectedly returned')
+    finally:
+        vm9_registry.read_configuration_string_reference = original_reference
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_reference_provider_failure',
+        reference_effects_rolled_back=True, reference_pages_unchanged=True))
+
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    pair_block = 0x2000
+    _write_span(pages, pair_block,
+        (0x2633A4).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_pair = vm9_reference_scopes.copy_scoped_string_reference
+
+    def failing_pair(*_args, **_kwargs):
+        external.append('pair-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled pair provider failure')
+
+    vm9_reference_scopes.copy_scoped_string_reference = failing_pair
+    try:
+        try:
+            second_vm.apply_request_287474_pair_getter_callback(
+                pages, argument_block_address=pair_block,
+                entry_stack_address=0x8000, image_base=0,
+                thread_pointer=0x7000, allocate=lambda *_a: 0x5000,
+                effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing pair getter unexpectedly returned')
+    finally:
+        vm9_reference_scopes.copy_scoped_string_reference = original_pair
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_pair_provider_failure',
+        pair_effects_rolled_back=True, pair_pages_unchanged=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
