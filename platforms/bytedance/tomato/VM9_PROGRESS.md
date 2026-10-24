@@ -33,6 +33,12 @@ native/Python controls、18 项 rollback guards** 全部通过，两个 image ba
 request provider；完整 request VM、fresh standalone signer 和线上 acceptance 未验证。
 证据见 [request dispatch fresh rerun](evidence/vm9_request_dispatch_fresh_20261024.json)。
 
+caller/VM return 边界随后重跑通过：16 项 physical caller-return controls、1 项
+request-entry control 和 26 项 refusal/rollback guards 全部通过；saved PC/SP、X19/X28/X29、
+TLS canary、callback X0 preservation 与请求入口错误回滚保持一致。request body 仍是
+bounded component 验证，完整 standalone signer 和线上 acceptance 未验证。证据见
+[request caller return fresh rerun](evidence/vm9_request_caller_return_fresh_20261024.json)。
+
 ## 2026-10-24 Asia/Shanghai：outer native signer boundary rerun
 
 The existing fresh-ELF native outer control was rerun against the pinned

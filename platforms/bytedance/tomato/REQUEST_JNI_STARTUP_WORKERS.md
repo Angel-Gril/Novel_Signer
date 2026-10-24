@@ -8953,6 +8953,18 @@ staged 页面和外部 assignment ledger 同时恢复；两个 configuration ref
 provider 失败时各自的 staged 页面和外部 allocator ledger 同时恢复；empty JSON reference
 provider 失败时其 staged 页面和外部 reference ledger 同时恢复。
 
+## 6.265 Request caller return fresh rerun（2026-10-24 Asia/Shanghai）
+
+重跑 request caller/VM return owner：两个 image base、两种栈位置、callback/no-callback
+与 zero/pattern 保存寄存器组合共 **16 项 physical caller-return controls**，另有 **1 项
+request-entry control** 和 **26 项 refusal/rollback guards**，全部通过。saved PC/SP、
+X19/X28/X29、TLS canary、callback X0 preservation、入口错误回滚和 module-base restore
+均保持一致。
+
+该批仍是 bounded request component 验证；完整 request VM、fresh standalone signer、
+完整 physical ABI、JVM 和线上 header acceptance 继续未验证。证据见
+`evidence/vm9_request_caller_return_fresh_20261024.json`。
+
 \n
 \n
 \n

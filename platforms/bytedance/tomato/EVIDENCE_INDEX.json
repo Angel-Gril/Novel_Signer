@@ -7904,5 +7904,20 @@
     "actual_request_vm_executed": false,
     "fresh_complete_standalone_signer_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_caller_return_fresh_20261024": {
+    "path": "evidence/vm9_request_caller_return_fresh_20261024.json",
+    "evidence_label": "Fresh request caller return rerun",
+    "physical_caller_return_controls": 16,
+    "request_entry_controls": 1,
+    "rollback_guards": 26,
+    "saved_registers_and_tls_canary_equal": true,
+    "callback_x0_preservation_equal": true,
+    "module_base_restored": true,
+    "native_snapshot_input": false,
+    "whole_request_native_differential_verified": false,
+    "complete_python_medusa": false,
+    "fresh_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }
