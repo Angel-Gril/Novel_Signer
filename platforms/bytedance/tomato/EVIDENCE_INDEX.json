@@ -7946,5 +7946,26 @@
     "fresh_input_signer_output_verified": false,
     "complete_python_medusa": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_request_allocator_handoff_fresh_20261024": {
+    "path": "evidence/vm9_request_allocator_handoff_fresh_20261024.json",
+    "evidence_label": "Fresh owning allocator request handoff continuation",
+    "python_handoff_controls": 4,
+    "image_bases": ["0x122c0000", "0x775c205000"],
+    "property_profiles": ["absent", "sdk_30"],
+    "return_offset": "0xffb78",
+    "low_base_steps": 957,
+    "low_base_callbacks": 26,
+    "high_base_steps": 2475,
+    "high_base_callbacks": 105,
+    "memory_import_relocations_resolved": true,
+    "owning_allocator_session_used": true,
+    "actual_jni_environment_acquisition_high_base": true,
+    "actual_request_cleanup_high_base": true,
+    "native_snapshot_input": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "complete_python_medusa": false,
+    "live_server_matrix_verified": false
   }
 }

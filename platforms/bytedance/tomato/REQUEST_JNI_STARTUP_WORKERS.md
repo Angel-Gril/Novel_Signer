@@ -8987,6 +8987,24 @@ context 上自然到达 `+0x2858bc`；native 输出和 captured snapshot 均未�
 standalone signer、JVM 或线上 header acceptance。证据见
 `evidence/vm9_request_prefix_fresh_20261024.json`。
 
+## 6.268 Owning allocator handoff and request VM continuation（2026-10-24 Asia/Shanghai）
+
+在 request VM 继续前接入 `resolve_request_memory_imports`，解析 pinned ELF 中
+匹配的 35 个内存重定位，并用持有 outer guest pages 的同一 allocator session
+构造合成配置树/reference、VM/JNI 表和请求输入。这样修复了高基址在
+`+0x2859cc` 读取 NULL imported `malloc` 的 handoff fixture 假失败。
+
+两个 image base 的 absent/`sdk_30` 共 **4 项 Python handoff controls** 均在
+caller sentinel `+0xffb78` 返回。低基址为 957 步、26 callbacks；高基址为
+2475 步、105 callbacks，并执行现有 JNI environment acquisition、配置树计数/遍历、
+对象与树清理以及 VM return owner。detached page copy 仍在分配前被拒绝，所有
+request allocations 均来自 owning matching-libc allocator session 并落在其 OS
+mapping 内。证据见 `evidence/vm9_request_allocator_handoff_fresh_20261024.json`。
+
+这仍是 synthetic request/JavaVM/JNI provider 的同一 Python 状态组合，不是
+whole-native handoff differential；真实 Android JVM、URL/header 转换、fresh
+独立 Medusa/signer 输出和线上验收继续保持未验证。
+
 \n
 \n
 \n
