@@ -15,6 +15,11 @@ physical stack/ABI、fresh-input Medusa、完整 signer 或线上 header accepta
 `complete_native_outer_state_equal=false`、`fresh_input_signer_output_verified=false`
 和 `current_online_header_matrix_verified=false` 保持。
 
+同次只读 allocation trace 已定位 live allocation 308：native/Python 都是第 309 个
+96-byte allocation，调用点为 `+0x32a210`。4 个 24-byte vector 的 tag、长度、
+payload 和终止字节均一致；21 个差异全部落在未使用的短字符串 padding，因此没有
+形成生产 RED，也没有修改模型。证据见 [allocation 308 padding attribution](evidence/vm9_outer_allocation_308_padding_20261024.json)。
+
 ## 2026-10-24 Asia/Shanghai：outer native signer boundary rerun
 
 The existing fresh-ELF native outer control was rerun against the pinned

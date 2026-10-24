@@ -8910,6 +8910,17 @@ Medusa、完整 signer 或线上 header acceptance；相关状态继续保持未
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_outer_finalize_fresh_20261007.py --output <outer-finalize-fresh-evidence.json>
 ```
+
+## 6.262 Allocation 308 padding attribution（2026-10-24 Asia/Shanghai）
+
+对 outer finalization 的同次 fresh native/Python allocation trace 做只读来源核对。
+allocation 308 在两侧均为第 309 个 **96-byte** 分配，调用点均为 `+0x32a210`。
+该 block 由四个 24-byte vector 组成；每个 vector 的 tag、长度、payload 和终止字节
+逐项相同，21 个 mismatch offsets 全部位于未使用的短字符串 padding。这个结果将
+live allocation mismatch 归因到 native vector-store 未初始化 padding，不构成生产
+RED；没有把 native bytes 写回 Python，也没有修改生产模型。完整 physical stack/ABI、
+fresh-input Medusa、完整 signer 和线上 acceptance 仍未验证。证据见
+`evidence/vm9_outer_allocation_308_padding_20261024.json`。
 staged 页面和外部 free ledger 同时恢复；StringObject assignment provider 失败时其
 staged 页面和外部 assignment ledger 同时恢复；两个 configuration reference provider
 失败时各自的 staged 页面和外部 reference ledger 同时恢复；cached JNI provider 失败时

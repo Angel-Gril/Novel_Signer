@@ -1,0 +1,79 @@
+{
+  "schema": "vm9-outer-allocation-padding-attribution-v1",
+  "evidence_label": "Read-only allocation attribution",
+  "scope": "outer finalization fresh differential, image 0x122c0000 absent profile",
+  "allocation_index": 308,
+  "allocation_size": 96,
+  "allocation_callsite": "0x32a210",
+  "native_and_python_allocation_sequence_equal": true,
+  "vector_count": 4,
+  "vector_stride": 24,
+  "semantic_vectors": [
+    {
+      "index": 0,
+      "offset": "0x00",
+      "string_length": 18,
+      "owned_range": [
+        "0x00",
+        "0x13"
+      ]
+    },
+    {
+      "index": 1,
+      "offset": "0x18",
+      "string_length": 8,
+      "owned_range": [
+        "0x18",
+        "0x21"
+      ]
+    },
+    {
+      "index": 2,
+      "offset": "0x30",
+      "string_length": 8,
+      "owned_range": [
+        "0x30",
+        "0x39"
+      ]
+    },
+    {
+      "index": 3,
+      "offset": "0x48",
+      "string_length": 2,
+      "owned_range": [
+        "0x48",
+        "0x4b"
+      ]
+    }
+  ],
+  "mismatch_offsets": [
+    "0x22",
+    "0x23",
+    "0x29",
+    "0x2a",
+    "0x2b",
+    "0x3a",
+    "0x3b",
+    "0x40",
+    "0x41",
+    "0x42",
+    "0x43",
+    "0x50",
+    "0x54",
+    "0x58",
+    "0x59",
+    "0x5a",
+    "0x5b",
+    "0x5c",
+    "0x5d",
+    "0x5e",
+    "0x5f"
+  ],
+  "all_mismatches_in_unused_short_string_padding": true,
+  "semantic_fields_equal": true,
+  "native_vector_store_padding_uninitialized": true,
+  "native_output_used_as_model_input": false,
+  "production_model_changed": false,
+  "complete_physical_stack_equivalence": false,
+  "complete_signer_verified": false
+}
