@@ -17,6 +17,15 @@ pass.
 Implicit mapping remains rejected and
 complete signing is unfinished. See [the provider-effect report](../REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai).
 
+The owning request handoff now resolves the 35 matching ELF memory imports before
+entering request VM and constructs its synthetic configuration tree/reference and
+JavaVM/JNI table from the same outer allocator session. Four absent/`sdk_30` cases
+return at `+0xffb78`: low base 957 steps/26 callbacks and high base 2475 steps/105
+callbacks. The high-base path executes the existing JNI acquisition, tree cleanup and
+request-return owners. This remains synthetic Python composition; real Android JVM,
+URL/header conversion, whole-native handoff memory equivalence and fresh independent
+Medusa/signer output remain open. See [the owning handoff evidence](../evidence/vm9_request_allocator_handoff_fresh_20261024.json).
+
 `GuestOS` mapping owners now register page, mapping-metadata and cursor snapshots
 with the same journal for map/unmap/name/protect and allocator region registration.
 Four Python controls and three rollback controls pass; this is owner-state
