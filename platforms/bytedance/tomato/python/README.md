@@ -10,9 +10,9 @@ acquisition callback, StringObject callbacks, the environment logger callback an
 the JNI availability wrapper, second-VM allocation callback, formatter,
 consumer free tail, StringObject assignment and the two configuration reference
 getters, cached JNI reference callback, JSON string, StringObject fill, empty
-JSON reference, token string transform and token digest paths also have opt-in
-JNI/clock/provider rollback boundaries. Twenty-seven Python controls and
-twenty-seven rollback controls pass.
+JSON reference, token string transform, token digest and token cipher paths also
+have opt-in JNI/clock/provider rollback boundaries. Twenty-eight Python controls
+and twenty-eight rollback controls pass.
 Implicit mapping remains rejected and
 complete signing is unfinished. See [the provider-effect report](../REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai).
 

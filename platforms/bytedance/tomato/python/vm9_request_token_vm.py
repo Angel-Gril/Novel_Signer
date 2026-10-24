@@ -132,7 +132,8 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 apply_token_cipher_callback(staged,argument_block_address=argument,image_base=image,
                     entry_stack_address=frame.native_stack_address-0x180,
                     thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
-                    reallocate=string_services['reallocate'],free=string_services['free'])
+                    reallocate=string_services['reallocate'],free=string_services['free'],
+                    effect_journal=effect_journal)
             elif string_services is not None and (wrapper,target)==(0x288BF0,0x248684):
                 from vm9_request_token_tail import apply_token_tail_callback
                 apply_token_tail_callback(staged,wrapper_offset=wrapper,argument_block_address=argument,
@@ -381,7 +382,7 @@ def apply_token_digest_callback(pages, *, argument_block_address, image_base,
         return _apply_token_digest_callback_impl(pages,**kwargs)
 
 
-def apply_token_cipher_callback(pages, *, argument_block_address, image_base,
+def _apply_token_cipher_callback_impl(pages, *, argument_block_address, image_base,
         entry_stack_address, thread_pointer, allocate, reallocate, free, max_bytes=0x100000):
     """+288bdc tail wrapper -> +287580 with three packed StringObject pointers."""
     from vm9_request_token_cipher import encrypt_token_string_object
@@ -394,3 +395,18 @@ def apply_token_cipher_callback(pages, *, argument_block_address, image_base,
         thread_pointer=thread_pointer,image_base=image_base,allocate=allocate,
         reallocate=reallocate,free=free,max_bytes=max_bytes)
     p.commit()
+
+
+def apply_token_cipher_callback(pages, *, argument_block_address, image_base,
+        entry_stack_address, thread_pointer, allocate, reallocate, free, max_bytes=0x100000,
+        effect_journal=None):
+    """Run token cipher callback with an optional allocator-effect journal."""
+    from vm9_effects import require_effect_journal
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,image_base=image_base,
+        entry_stack_address=entry_stack_address,thread_pointer=thread_pointer,
+        allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+    if effect_journal is None:
+        return _apply_token_cipher_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_token_cipher_callback_impl(pages,**kwargs)

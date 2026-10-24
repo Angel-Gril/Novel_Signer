@@ -136,10 +136,15 @@
       "case": "second_token_digest_provider_failure",
       "token_digest_effects_rolled_back": true,
       "token_digest_pages_unchanged": true
+    },
+    {
+      "case": "second_token_cipher_provider_failure",
+      "token_cipher_effects_rolled_back": true,
+      "token_cipher_pages_unchanged": true
     }
   ],
-  "python_controls": 27,
-  "rollback_controls": 27,
+  "python_controls": 28,
+  "rollback_controls": 28,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,
