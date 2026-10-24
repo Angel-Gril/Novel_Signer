@@ -733,7 +733,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 status=apply_token_string_transform_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],
-                    reallocate=consumer_services.get('reallocate'),free=consumer_services['free'])
+                    reallocate=consumer_services.get('reallocate'),free=consumer_services['free'],
+                    effect_journal=effect_journal)
                 string_pairs.append((argument,status))
             elif consumer_services is not None and (wrapper,target)==(0x2887D0,0x25874C):
                 from vm9_request_token_vm import apply_token_digest_callback
@@ -741,7 +742,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                     entry_stack_address=frame.native_stack_address-0x180,image_base=image,
                     thread_pointer=inputs['thread_pointer'],allocate=consumer_services['allocate'],
                     reallocate=consumer_services.get('reallocate'),free=consumer_services['free'],
-                    thread_id=consumer_services.get('thread_id'),observer=consumer_services.get('diagnostic_observer'))
+                    thread_id=consumer_services.get('thread_id'),observer=consumer_services.get('diagnostic_observer'),
+                    effect_journal=effect_journal)
                 digests.append((argument,output))
             elif consumer_services is not None and (wrapper,target)==(0x288820,0x258BAC):
                 value=apply_request_287474_crc_callback(staged,argument_block_address=argument,

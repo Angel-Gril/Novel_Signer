@@ -126,10 +126,20 @@
       "case": "second_json_reference_provider_failure",
       "json_reference_effects_rolled_back": true,
       "json_reference_pages_unchanged": true
+    },
+    {
+      "case": "second_token_transform_provider_failure",
+      "token_transform_effects_rolled_back": true,
+      "token_transform_pages_unchanged": true
+    },
+    {
+      "case": "second_token_digest_provider_failure",
+      "token_digest_effects_rolled_back": true,
+      "token_digest_pages_unchanged": true
     }
   ],
-  "python_controls": 25,
-  "rollback_controls": 25,
+  "python_controls": 27,
+  "rollback_controls": 27,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

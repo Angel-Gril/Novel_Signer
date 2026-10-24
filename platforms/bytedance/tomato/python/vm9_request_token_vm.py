@@ -266,7 +266,7 @@ def apply_token_string_lifecycle_callback(pages, *, wrapper_offset,
     return result
 
 
-def apply_token_string_transform_callback(pages, *, wrapper_offset,
+def _apply_token_string_transform_callback_impl(pages, *, wrapper_offset,
         argument_block_address, image_base, entry_stack_address,
         allocate, reallocate, free, prepare_format=None, max_bytes=0x100000):
     """+288b74 format, +288b8c sized string, +288ba0/+2887f0 hidden-X8 pair.
@@ -322,7 +322,23 @@ def apply_token_string_transform_callback(pages, *, wrapper_offset,
     return result
 
 
-def apply_token_digest_callback(pages, *, argument_block_address, image_base,
+def apply_token_string_transform_callback(pages, *, wrapper_offset,
+        argument_block_address, image_base, entry_stack_address,
+        allocate, reallocate, free, prepare_format=None, max_bytes=0x100000,
+        effect_journal=None):
+    """Run token string transform with an optional allocator-effect journal."""
+    from vm9_effects import require_effect_journal
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(wrapper_offset=wrapper_offset,argument_block_address=argument_block_address,
+        image_base=image_base,entry_stack_address=entry_stack_address,allocate=allocate,
+        reallocate=reallocate,free=free,prepare_format=prepare_format,max_bytes=max_bytes)
+    if effect_journal is None:
+        return _apply_token_string_transform_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_token_string_transform_callback_impl(pages,**kwargs)
+
+
+def _apply_token_digest_callback_impl(pages, *, argument_block_address, image_base,
         entry_stack_address, thread_pointer, allocate, reallocate, free,
         thread_id=None, observer=None, max_source_bytes=0x100000):
     """+288bbc -> +25874c: hidden X8, byte flag and child SP=entrySP-16.
@@ -347,6 +363,22 @@ def apply_token_digest_callback(pages, *, argument_block_address, image_base,
         flag=flag,max_source_bytes=max_source_bytes)
     p.commit()
     return result
+
+
+def apply_token_digest_callback(pages, *, argument_block_address, image_base,
+        entry_stack_address, thread_pointer, allocate, reallocate, free,
+        thread_id=None, observer=None, max_source_bytes=0x100000, effect_journal=None):
+    """Run token digest reference construction with an optional journal."""
+    from vm9_effects import require_effect_journal
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,image_base=image_base,
+        entry_stack_address=entry_stack_address,thread_pointer=thread_pointer,
+        allocate=allocate,reallocate=reallocate,free=free,thread_id=thread_id,
+        observer=observer,max_source_bytes=max_source_bytes)
+    if effect_journal is None:
+        return _apply_token_digest_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_token_digest_callback_impl(pages,**kwargs)
 
 
 def apply_token_cipher_callback(pages, *, argument_block_address, image_base,

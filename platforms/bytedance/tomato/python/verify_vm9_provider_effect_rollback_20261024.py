@@ -31,6 +31,7 @@ import vm9_configuration_init
 import vm9_objects
 import vm9_registry
 import vm9_reference_scopes
+import vm9_request_token_vm
 from vm9_allocator import _write_span
 
 
@@ -797,6 +798,75 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case='second_json_reference_provider_failure',
         json_reference_effects_rolled_back=True, json_reference_pages_unchanged=True))
+
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    transform_block = 0x2000
+    _write_span(pages, transform_block,
+        (0x248780).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little') + (0x5000).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_clone = vm9_objects.clone_string_object
+
+    def failing_clone(*_args, **_kwargs):
+        external.append('token-transform-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled token transform provider failure')
+
+    vm9_objects.clone_string_object = failing_clone
+    try:
+        try:
+            vm9_request_token_vm.apply_token_string_transform_callback(
+                pages, wrapper_offset=0x2887F0,
+                argument_block_address=transform_block, image_base=0,
+                entry_stack_address=0x8000, allocate=lambda *_a: 0x6000,
+                reallocate=lambda *_a: 0x6000, free=lambda *_a: 0,
+                effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing token transform unexpectedly returned')
+    finally:
+        vm9_objects.clone_string_object = original_clone
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_token_transform_provider_failure',
+        token_transform_effects_rolled_back=True, token_transform_pages_unchanged=True))
+
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    digest_block = 0x2000
+    _write_span(pages, digest_block,
+        (0x25874C).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little') + b'\1')
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_digest = vm9_reference_scopes.construct_scoped_digest_reference
+
+    def failing_digest(*_args, **_kwargs):
+        external.append('token-digest-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled token digest provider failure')
+
+    vm9_reference_scopes.construct_scoped_digest_reference = failing_digest
+    try:
+        try:
+            vm9_request_token_vm.apply_token_digest_callback(
+                pages, argument_block_address=digest_block, image_base=0,
+                entry_stack_address=0x8000, thread_pointer=0x7000,
+                allocate=lambda *_a: 0x6000, reallocate=lambda *_a: 0x6000,
+                free=lambda *_a: 0, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing token digest unexpectedly returned')
+    finally:
+        vm9_reference_scopes.construct_scoped_digest_reference = original_digest
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_token_digest_provider_failure',
+        token_digest_effects_rolled_back=True, token_digest_pages_unchanged=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
