@@ -28,6 +28,7 @@ import vm9_logger
 import vm9_jni_environment
 import vm9_request_caller
 import vm9_configuration_init
+import vm9_objects
 from vm9_allocator import _write_span
 
 
@@ -551,6 +552,42 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case='second_consumer_free_provider_failure',
         free_effects_rolled_back=True, consumer_pages_unchanged=True))
+
+    # String assignment can allocate/reallocate before publishing its packed
+    # result. Keep that external provider work within the same callback scope.
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    assignment_block = 0x2000
+    _write_span(pages, assignment_block,
+        (0x2485A4).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_assign = vm9_objects.assign_string_object
+
+    def failing_assign(*_args, **_kwargs):
+        external.append('assignment-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled assignment provider failure')
+
+    vm9_objects.assign_string_object = failing_assign
+    try:
+        try:
+            second_vm.apply_request_287474_string_assignment_callback(
+                pages, wrapper_offset=0x28861C,
+                argument_block_address=assignment_block, image_base=0,
+                allocate=lambda *_a: 0x5000, reallocate=lambda *_a: 0x5000,
+                free=lambda *_a: 0, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing assignment unexpectedly returned')
+    finally:
+        vm9_objects.assign_string_object = original_assign
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_string_assignment_provider_failure',
+        assignment_effects_rolled_back=True, assignment_pages_unchanged=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",

@@ -91,10 +91,15 @@
       "case": "second_consumer_free_provider_failure",
       "free_effects_rolled_back": true,
       "consumer_pages_unchanged": true
+    },
+    {
+      "case": "second_string_assignment_provider_failure",
+      "assignment_effects_rolled_back": true,
+      "assignment_pages_unchanged": true
     }
   ],
-  "python_controls": 18,
-  "rollback_controls": 18,
+  "python_controls": 19,
+  "rollback_controls": 19,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

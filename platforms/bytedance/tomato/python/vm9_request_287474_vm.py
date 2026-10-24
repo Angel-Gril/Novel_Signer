@@ -434,7 +434,7 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 assigned=apply_request_287474_string_assignment_callback(staged,wrapper_offset=wrapper,
                     argument_block_address=argument,image_base=image,
                     allocate=consumer_services['allocate'],reallocate=consumer_services['reallocate'],
-                    free=consumer_services['free'])
+                    free=consumer_services['free'],effect_journal=effect_journal)
                 string_assignments.append((argument,assigned))
             elif consumer_services is not None and (wrapper,target)==(0x28863C,0x26CC8C):
                 services=consumer_services.get('random_services')
@@ -1022,7 +1022,7 @@ def apply_request_287474_string_equality_callback(pages, *, wrapper_offset,
     p.commit();return equal
 
 
-def apply_request_287474_string_assignment_callback(pages, *, wrapper_offset,
+def _apply_request_287474_string_assignment_callback_impl(pages, *, wrapper_offset,
         argument_block_address,image_base,allocate,reallocate,free,max_bytes=0x100000):
     """+28861c writes the +2485a4 assignment result at packed+24 as X0."""
     from vm9_objects import assign_string_object
@@ -1036,6 +1036,20 @@ def apply_request_287474_string_assignment_callback(pages, *, wrapper_offset,
         allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
     _write_span(p,argument_block_address+24,assigned.to_bytes(8,'little'))
     p.commit();return assigned
+
+
+def apply_request_287474_string_assignment_callback(pages, *, wrapper_offset,
+        argument_block_address,image_base,allocate,reallocate,free,max_bytes=0x100000,
+        effect_journal=None):
+    """Run second-VM StringObject assignment with an optional effect journal."""
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(wrapper_offset=wrapper_offset,argument_block_address=argument_block_address,
+        image_base=image_base,allocate=allocate,reallocate=reallocate,free=free,
+        max_bytes=max_bytes)
+    if effect_journal is None:
+        return _apply_request_287474_string_assignment_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_string_assignment_callback_impl(pages,**kwargs)
 
 
 def _apply_request_287474_consumer_impl(pages, *, wrapper_offset,
