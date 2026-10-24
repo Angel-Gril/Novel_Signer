@@ -411,7 +411,7 @@ Owning request VM execution now lives in a production module with strict callbac
 `apply_request_environment_acquisition_callback` 现在接受可选
 `EffectJournal`；second VM 向 helper/child 继续传递同一 journal。新增失败
 acquire-environment provider 控制同时恢复 guest page transaction 与外部 ledger，
-默认 page-only 行为保持不变。provider evidence 更新为 13 Python / 13 rollback
+默认 page-only 行为保持不变。provider evidence 更新为 14 Python / 14 rollback
 controls；Python compile、public scan、diff check 和既有 Rust tests 继续按当前
 工作区验证，live JVM、完整 signer 与完整 second/request 物理内存等价仍未验证。
 见 [provider rollback 报告](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai)。
@@ -419,3 +419,6 @@ controls；Python compile、public scan、diff check 和既有 Rust tests 继续
 同一批继续覆盖 request-environment `StringObject` 构造/析构 wrapper；显式
 allocation/free provider 失败时，object/payload guest 页面与外部 ledger 一起回滚，
 默认 page-only 路径不变。
+
+环境 logger callback 也加入同一 opt-in 边界；logger provider 失败时其 staged
+guest 页面和外部 ledger 一起回滚。

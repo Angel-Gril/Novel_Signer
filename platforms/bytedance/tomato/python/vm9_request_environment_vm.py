@@ -123,7 +123,8 @@ def execute_request_environment_vm_prefix(pages, *, vm_module,maxsteps=4000,
             elif logger_services is not None and (wrapper,target)==(0x205074,0x26E9E0):
                 result=apply_request_environment_logger_callback(staged,
                     argument_block_address=argument,image_base=image,
-                    entry_stack_address=frame.native_stack_address-0x180,**logger_services)
+                    entry_stack_address=frame.native_stack_address-0x180,
+                    effect_journal=effect_journal,**logger_services)
                 logs.append((argument,result))
             else:raise Boundary()
         vm.native_hook=callback
@@ -224,24 +225,34 @@ def apply_request_environment_string_callback(pages, *, wrapper_offset,
 
 
 def apply_request_environment_logger_callback(pages, *, argument_block_address,
-        image_base,entry_stack_address,read_property,syscall,errno_address):
+        image_base,entry_stack_address,read_property,syscall,errno_address,
+        effect_journal=None):
     """+205074 calls the existing literal logger at wrapper SP-16.
 
     Target/object/format are packed Q words at offsets0/8/16. Store only the
     returned low W at packed+24; preserve its upper padding. Supported sink
     and format behavior remains owned by vm9_logger.log_literal_unavailable.
-    Physical register spills and external provider rollback are not modeled.
+    The default page-only behavior is unchanged; an explicit effect journal
+    also rolls back provider undo records when the sink fails.
     """
     from vm9_logger import log_literal_unavailable
-    if type(entry_stack_address) is not int or not 0x600<=entry_stack_address<1<<64 or entry_stack_address&15:
-        raise RefillUnsupported('request environment logger stack must be aligned')
-    if not callable(read_property) or not callable(syscall):
-        raise RefillUnsupported('request environment logger providers must be callable')
-    p=_PageTransaction(pages)
-    words=tuple(int.from_bytes(_read_span(p,argument_block_address+i*8,8),'little') for i in range(3))
-    if words[0]!=image_base+0x26E9E0:raise RefillUnsupported('unrecovered request environment logger target')
-    result=log_literal_unavailable(p,object_address=words[1],format_address=words[2],
-        entry_stack_address=entry_stack_address-16,image_base=image_base,
-        read_property=read_property,syscall=syscall,errno_address=errno_address)
-    _write_span(p,argument_block_address+24,(result.return_value&0xFFFFFFFF).to_bytes(4,'little'))
-    p.commit();return result
+    effect_journal=require_effect_journal(effect_journal)
+
+    def apply():
+        if type(entry_stack_address) is not int or not 0x600<=entry_stack_address<1<<64 or entry_stack_address&15:
+            raise RefillUnsupported('request environment logger stack must be aligned')
+        if not callable(read_property) or not callable(syscall):
+            raise RefillUnsupported('request environment logger providers must be callable')
+        p=_PageTransaction(pages)
+        words=tuple(int.from_bytes(_read_span(p,argument_block_address+i*8,8),'little') for i in range(3))
+        if words[0]!=image_base+0x26E9E0:raise RefillUnsupported('unrecovered request environment logger target')
+        result=log_literal_unavailable(p,object_address=words[1],format_address=words[2],
+            entry_stack_address=entry_stack_address-16,image_base=image_base,
+            read_property=read_property,syscall=syscall,errno_address=errno_address)
+        _write_span(p,argument_block_address+24,(result.return_value&0xFFFFFFFF).to_bytes(4,'little'))
+        p.commit();return result
+
+    if effect_journal is None:
+        return apply()
+    with effect_journal.transaction():
+        return apply()

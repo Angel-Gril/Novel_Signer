@@ -24,6 +24,7 @@ import vm9_state
 import vm9_request_287474_vm as second_vm
 import vm9_request_28048c_vm as child_vm
 import vm9_request_environment_vm as environment_vm
+import vm9_logger
 from vm9_allocator import _write_span
 
 
@@ -381,6 +382,42 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case='environment_string_allocator_failure',
         string_provider_effects_rolled_back=True, string_pages_unchanged=True))
+
+    # The logger wrapper also owns a provider boundary.  Patch only its
+    # already-established logger seam so this control isolates transaction
+    # behavior without synthesizing a logger result or native sink output.
+    pages = {2: bytearray(0x1000)}
+    _write_span(pages, 0x2000, (0x26E9E0).to_bytes(8, 'little') +
+        (0x2200).to_bytes(8, 'little') + (0x2300).to_bytes(8, 'little'))
+    before = bytes(pages[2])
+    external = []
+    journal = EffectJournal()
+    original_logger = vm9_logger.log_literal_unavailable
+
+    def failing_logger(p, **_kwargs):
+        _write_span(p, 0x2400, b'logger')
+        external.append('logger')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled logger provider failure')
+
+    vm9_logger.log_literal_unavailable = failing_logger
+    try:
+        try:
+            environment_vm.apply_request_environment_logger_callback(
+                pages, argument_block_address=0x2000, image_base=0,
+                entry_stack_address=0x3000, read_property=lambda *_: 0,
+                syscall=lambda *_: 0, errno_address=0x2500,
+                effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing logger unexpectedly returned')
+    finally:
+        vm9_logger.log_literal_unavailable = original_logger
+    assert bytes(pages[2]) == before
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='environment_logger_provider_failure',
+        logger_effects_rolled_back=True, logger_pages_unchanged=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",

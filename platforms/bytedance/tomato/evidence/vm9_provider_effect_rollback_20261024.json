@@ -66,10 +66,15 @@
       "case": "environment_string_allocator_failure",
       "string_provider_effects_rolled_back": true,
       "string_pages_unchanged": true
+    },
+    {
+      "case": "environment_logger_provider_failure",
+      "logger_effects_rolled_back": true,
+      "logger_pages_unchanged": true
     }
   ],
-  "python_controls": 13,
-  "rollback_controls": 13,
+  "python_controls": 14,
+  "rollback_controls": 14,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,
