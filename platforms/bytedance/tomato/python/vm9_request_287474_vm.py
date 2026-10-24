@@ -553,7 +553,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
             elif consumer_services is not None and (wrapper,target)==(0x2888D0,0x2613E4):
                 value=apply_request_287474_json_string_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
-                    image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'])
+                    image_base=image,allocate=consumer_services['allocate'],free=consumer_services['free'],
+                    effect_journal=effect_journal)
                 json_strings.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x288898,0x2850A8):
                 if not callable(consumer_services.get('get_tls')):raise Boundary()
@@ -659,7 +660,8 @@ def execute_request_287474_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 value=apply_request_287474_string_fill_callback(staged,
                     argument_block_address=argument,entry_stack_address=frame.native_stack_address-0x180,
                     image_base=image,allocate=consumer_services['allocate'],
-                    reallocate=consumer_services['reallocate'],free=consumer_services['free'])
+                    reallocate=consumer_services['reallocate'],free=consumer_services['free'],
+                    effect_journal=effect_journal)
                 string_fills.append((argument,value))
             elif consumer_services is not None and (wrapper,target)==(0x2889C4,0x2A3378):
                 value=apply_request_287474_protobuf_size_callback(staged,
@@ -1971,7 +1973,7 @@ def apply_request_287474_allocated_printf_callback(pages, *, argument_block_addr
     p.commit();return result
 
 
-def apply_request_287474_json_string_callback(pages, *, argument_block_address,
+def _apply_request_287474_json_string_callback_impl(pages, *, argument_block_address,
         entry_stack_address,image_base,allocate,free,max_bytes=4096,max_nodes=4096):
     """+2888d0/+2613e4: append a cstring node and store one bool byte."""
     from vm9_configuration_init import add_json_string_to_object
@@ -1990,6 +1992,19 @@ def apply_request_287474_json_string_callback(pages, *, argument_block_address,
         max_bytes=max_bytes,max_nodes=max_nodes)
     _write_span(p,argument_block_address+32,bytes([int(result)]))
     p.commit();return result
+
+
+def apply_request_287474_json_string_callback(pages, *, argument_block_address,
+        entry_stack_address,image_base,allocate,free,max_bytes=4096,max_nodes=4096,
+        effect_journal=None):
+    """Run the second JSON string callback with an optional effect journal."""
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,entry_stack_address=entry_stack_address,
+        image_base=image_base,allocate=allocate,free=free,max_bytes=max_bytes,max_nodes=max_nodes)
+    if effect_journal is None:
+        return _apply_request_287474_json_string_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_json_string_callback_impl(pages,**kwargs)
 
 
 def apply_request_287474_tls_u32_callback(pages, *, argument_block_address,
@@ -2161,7 +2176,7 @@ def apply_request_287474_protobuf_size_callback(pages, *, argument_block_address
     return value
 
 
-def apply_request_287474_string_fill_callback(pages, *, argument_block_address,
+def _apply_request_287474_string_fill_callback_impl(pages, *, argument_block_address,
         entry_stack_address, image_base, allocate, reallocate, free, max_bytes=0x100000):
     """+2889e0 tail-calls +248dd8; reuse fill owner, no packed result store.
 
@@ -2232,6 +2247,19 @@ def apply_request_287474_string_fill_callback(pages, *, argument_block_address,
     check(p, True)
     p.commit()
     return status & 0xFFFFFFFF
+
+
+def apply_request_287474_string_fill_callback(pages, *, argument_block_address,
+        entry_stack_address, image_base, allocate, reallocate, free, max_bytes=0x100000,
+        effect_journal=None):
+    """Run the second StringObject fill callback with an optional journal."""
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(argument_block_address=argument_block_address,entry_stack_address=entry_stack_address,
+        image_base=image_base,allocate=allocate,reallocate=reallocate,free=free,max_bytes=max_bytes)
+    if effect_journal is None:
+        return _apply_request_287474_string_fill_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_request_287474_string_fill_callback_impl(pages,**kwargs)
 
 
 def apply_request_287474_protobuf_pack_callback(pages, *, argument_block_address,

@@ -695,6 +695,75 @@ def verify():
     rows.append(dict(case='second_cached_reference_provider_failure',
         cached_reference_effects_rolled_back=True, cached_reference_pages_unchanged=True))
 
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    json_string_block = 0x2000
+    _write_span(pages, json_string_block,
+        (0x2613E4).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little') + (0x5000).to_bytes(8, 'little')
+        + b'\0')
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_json_string = vm9_configuration_init.add_json_string_to_object
+
+    def failing_json_string(*_args, **_kwargs):
+        external.append('json-string-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled JSON string provider failure')
+
+    vm9_configuration_init.add_json_string_to_object = failing_json_string
+    try:
+        try:
+            second_vm.apply_request_287474_json_string_callback(
+                pages, argument_block_address=json_string_block,
+                entry_stack_address=0x8000, image_base=0,
+                allocate=lambda *_a: 0x6000, free=lambda *_a: 0,
+                effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing JSON string unexpectedly returned')
+    finally:
+        vm9_configuration_init.add_json_string_to_object = original_json_string
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_json_string_provider_failure',
+        json_string_effects_rolled_back=True, json_string_pages_unchanged=True))
+
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    string_fill_block = 0x2000
+    _write_span(pages, string_fill_block,
+        (0x248DD8).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (4).to_bytes(4, 'little') + b'Z')
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_fill = vm9_objects.fill_string_object
+
+    def failing_fill(*_args, **_kwargs):
+        external.append('string-fill-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled string fill provider failure')
+
+    vm9_objects.fill_string_object = failing_fill
+    try:
+        try:
+            second_vm.apply_request_287474_string_fill_callback(
+                pages, argument_block_address=string_fill_block,
+                entry_stack_address=0x8000, image_base=0,
+                allocate=lambda *_a: 0x6000, reallocate=lambda *_a: 0x6000,
+                free=lambda *_a: 0, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing string fill unexpectedly returned')
+    finally:
+        vm9_objects.fill_string_object = original_fill
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_string_fill_provider_failure',
+        string_fill_effects_rolled_back=True, string_fill_pages_unchanged=True))
+
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
         controls=rows, python_controls=len(rows), rollback_controls=len(rows),

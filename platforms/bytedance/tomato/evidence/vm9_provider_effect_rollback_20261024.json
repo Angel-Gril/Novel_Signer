@@ -111,10 +111,20 @@
       "case": "second_cached_reference_provider_failure",
       "cached_reference_effects_rolled_back": true,
       "cached_reference_pages_unchanged": true
+    },
+    {
+      "case": "second_json_string_provider_failure",
+      "json_string_effects_rolled_back": true,
+      "json_string_pages_unchanged": true
+    },
+    {
+      "case": "second_string_fill_provider_failure",
+      "string_fill_effects_rolled_back": true,
+      "string_fill_pages_unchanged": true
     }
   ],
-  "python_controls": 22,
-  "rollback_controls": 22,
+  "python_controls": 24,
+  "rollback_controls": 24,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,
