@@ -930,7 +930,8 @@ def _execute_request_vm_impl(pages, inputs, vm_module, seconds, nanoseconds, *, 
                     ledger=ledger,decoded=decoded,cause=exc) from exc
             result['physical_native_caller_epilogue_modeled'] = True
             result['caller_native_return'] = dict(vars(caller_return))
-            result.update(vm_steps=vm.steps,all_dispatched_callback_models_returned=True,
+            result.update(vm_steps=vm.steps,callback_count=len(ledger),
+                all_dispatched_callback_models_returned=True,
                 whole_native_request_equivalence_verified=False,
                 request_transaction_committed_to_supplied_pages=True)
             staged.commit()
@@ -1051,5 +1052,64 @@ def invoke_java_request_service(pages, target, *, image_base, thread_pointer,
         invoke_callback=callback, diagnostic_observer=diagnostic_observer,
         max_callbacks=max_callbacks, max_nodes=max_nodes,
         effect_journal=effect_journal)
+
+
+def invoke_java_request_facade_service(pages, target, *, image_base,
+        entry_stack_address, thread_pointer, thread_id, environment_pointer,
+        facade_address, url_reference, header_array_reference, return_address,
+        vm_module, seconds, nanoseconds, allocate=None, calloc=None, free=None,
+        invoke_jni=None, diagnostic_scope=None, diagnostic_observer=None,
+        acquire_environment=None, wake_condition=None, lock_mutex=None,
+        unlock_mutex=None, effect_journal=None, max_pairs=4096,
+        max_bytes=0x100000, max_callbacks=4096, max_nodes=4096, **services):
+    """Bind the normal Java facade (+17b8f8) to the owning request service.
+
+    This is the production composition boundary for a Java request.  The
+    facade owns JNI URL/header conversion and Java output cleanup; the child
+    dispatcher owns callback/fallback selection; ``invoke_java_request_service``
+    binds child ``+27dd04`` to the owning request VM ``+2830c4``.  All three
+    layers receive the same page transaction and optional provider-effect
+    journal, so a failed nested request cannot publish staged pages or leave
+    an unpaired provider effect at this boundary.
+    """
+    if (type(image_base) is not int or type(target) is not int
+            or target != image_base + 0x17B8F8):
+        raise RefillUnsupported('Java facade service requires normal +17b8f8 entry')
+    if not isinstance(diagnostic_scope, dict):
+        raise RefillUnsupported('Java facade service requires a diagnostic scope')
+    if any(not callable(f) for f in (allocate, calloc, free, invoke_jni)):
+        raise RefillUnsupported('Java facade service requires allocation/calloc/free/JNI services')
+    import vm9_jni_request as facade
+
+    def invoke_request(p, child_target, **abi):
+        return invoke_java_request_service(p, child_target,
+            image_base=image_base, thread_pointer=thread_pointer,
+            thread_id=thread_id, return_address=return_address,
+            vm_module=vm_module, seconds=seconds, nanoseconds=nanoseconds,
+            allocate=allocate, free=free, diagnostic_scope=diagnostic_scope,
+            diagnostic_observer=diagnostic_observer,
+            acquire_environment=acquire_environment, invoke_jni=invoke_jni,
+            effect_journal=effect_journal, max_callbacks=max_callbacks,
+            max_nodes=max_nodes, **abi, **services)
+
+    effect_journal = require_effect_journal(effect_journal)
+    def run():
+        return facade.invoke_java_request_facade(pages,
+            image_base=image_base, entry_stack_address=entry_stack_address,
+            thread_pointer=thread_pointer, thread_id=thread_id,
+            environment_pointer=environment_pointer,
+            facade_address=facade_address, url_reference=url_reference,
+            header_array_reference=header_array_reference, allocate=allocate,
+            calloc=calloc, free=free, invoke_jni=invoke_jni,
+            invoke_request=invoke_request,
+            diagnostic_observer=diagnostic_observer,
+            acquire_environment=acquire_environment,
+            wake_condition=wake_condition, lock_mutex=lock_mutex,
+            unlock_mutex=unlock_mutex, max_pairs=max_pairs,
+            max_bytes=max_bytes)
+    if effect_journal is None:
+        return run()
+    with effect_journal.transaction():
+        return run()
 
 

@@ -9007,6 +9007,27 @@ mapping 内。证据见 `evidence/vm9_request_allocator_handoff_fresh_20261024.j
 whole-native handoff differential；真实 Android JVM、URL/header 转换、fresh
 独立 Medusa/signer 输出和线上验收继续保持未验证。
 
+## 6.269 Normal Java facade to owning request VM handoff（2026-10-24 Asia/Shanghai）
+
+新增正式生产组合入口 `invoke_java_request_facade_service`，把 normal Java
+facade `+17b8f8`、child dispatcher `+27dd04` 和 owning request VM `+2830c4`
+绑定到同一 outer allocator session。两个 image base 与 `absent`/`sdk_30` 四项
+fresh controls 均返回 caller sentinel `+0xffb78`；每项 2583 VM steps、115
+callbacks。URL/header JNI 转换、child callback、request VM return、Java 输出
+与 scoped cleanup 都在同一 staged session 内完成。
+
+证据为 `evidence/vm9_java_request_handoff_fresh_20261024.json`。JNI/JavaVM
+provider 仍是 synthetic，未把这批组合提升为 whole-native differential、真实
+Android JVM、fresh standalone signer、完整 physical ABI 或线上 header acceptance。
+
+复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_java_request_handoff_fresh_20261024.py `
+  --library <private-libmetasec.so> --libc <matching-libc.so> `
+  --output platforms/bytedance/tomato/evidence/vm9_java_request_handoff_fresh_20261024.json
+```
+
 \n
 \n
 \n

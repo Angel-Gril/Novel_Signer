@@ -47,6 +47,14 @@ payload 和终止字节均一致；21 个差异全部落在未使用的短字符
 alternate facade、fresh standalone signer 和线上 acceptance 未验证。证据见
 [Java facade fresh rerun](evidence/vm9_java_request_facade_fresh_20261024.json)。
 
+随后把 normal Java facade 的生产入口正式接到同一 owning allocator session：
+`+17b8f8 → +27dd04 → +2830c4`。两个 image base、`absent`/`sdk_30` 四项组合
+均返回 `+0xffb78`，每项 2583 VM steps、115 callbacks；URL/header 转换、child
+callback 路由、owning request VM、Java 输出清理和 allocator mapping 均在同一
+staged session 内完成。JNI/JavaVM 仍为 synthetic provider，未宣称 whole-native
+differential、真实 Android JVM、fresh standalone signer 或线上 acceptance。证据见
+[Java request handoff](evidence/vm9_java_request_handoff_fresh_20261024.json)。
+
 随后重跑 child dispatcher：callback/fallback 路由与 scoped tree assignment 共 **36 项
 native/Python controls、18 项 rollback guards** 全部通过，两个 image base 的 callback
 顺序、共享 mutex、reference ownership 和 free effects 保持一致。该层仍只接到显式
