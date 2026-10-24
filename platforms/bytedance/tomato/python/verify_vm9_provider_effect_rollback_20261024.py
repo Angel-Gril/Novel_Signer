@@ -19,6 +19,7 @@ import vm9_native_service_bridge as bridge
 import vm9_request_vm as request_vm
 import vm9_request_dispatch as request_dispatch
 import vm9_callbacks
+import vm9_state
 
 
 PAGE = 0x400000
@@ -249,6 +250,33 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case="signer_handle_provider_failure",
         jni_provider_effects_rolled_back=True))
+
+    # The request-state elapsed getter has the same opt-in boundary around its
+    # realtime provider.  Its guest page transaction remains page-only by
+    # default, while a provider failure removes the external clock effect.
+    pages = {1: bytearray(0x1000)}
+    before = bytes(pages[1])
+    external = []
+    journal = EffectJournal()
+
+    def failing_clock(_pages, _clock_id):
+        external.append("clock")
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported("controlled clock failure")
+
+    try:
+        vm9_state.read_request_elapsed_seconds(
+            pages, object_address=0x1000, read_clock=failing_clock,
+            effect_journal=journal,
+        )
+    except RefillUnsupported:
+        pass
+    else:
+        raise AssertionError("failing state clock unexpectedly returned")
+    assert bytes(pages[1]) == before
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case="state_clock_provider_failure",
+        state_provider_effects_rolled_back=True, state_pages_unchanged=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
