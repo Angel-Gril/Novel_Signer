@@ -8934,6 +8934,18 @@ URL/header 转换、合成 virtual request target、Java 输出数组和 owning 
 integration、alternate facade branch、fresh standalone signer、完整 physical ABI 和
 online header acceptance 仍为未验证。证据见
 `evidence/vm9_java_request_facade_fresh_20261024.json`。
+
+## 6.264 Child request dispatcher fresh rerun（2026-10-24 Asia/Shanghai）
+
+在 Java facade 之后重跑 child dispatcher 的 callback/fallback 路由和 scoped tree
+assignment。两个 image base 的 11 个 dispatch profile、6 个 reference assignment
+profile 与 2 个 bounded callback case 共 **36 项 native/Python controls、18 项
+rollback guards** 全部通过；共享 normal mutex、callback 顺序、reference ownership、
+free bytes 和 canary 均一致。
+
+这仍是显式 request callback provider 的边界验证，没有把 native output 作为 Python
+输入；完整 request VM、fresh standalone signer、physical ABI 和线上 acceptance 仍未
+验证。证据见 `evidence/vm9_request_dispatch_fresh_20261024.json`。
 staged 页面和外部 free ledger 同时恢复；StringObject assignment provider 失败时其
 staged 页面和外部 assignment ledger 同时恢复；两个 configuration reference provider
 失败时各自的 staged 页面和外部 reference ledger 同时恢复；cached JNI provider 失败时

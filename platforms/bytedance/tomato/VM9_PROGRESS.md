@@ -27,6 +27,12 @@ payload 和终止字节均一致；21 个差异全部落在未使用的短字符
 alternate facade、fresh standalone signer 和线上 acceptance 未验证。证据见
 [Java facade fresh rerun](evidence/vm9_java_request_facade_fresh_20261024.json)。
 
+随后重跑 child dispatcher：callback/fallback 路由与 scoped tree assignment 共 **36 项
+native/Python controls、18 项 rollback guards** 全部通过，两个 image base 的 callback
+顺序、共享 mutex、reference ownership 和 free effects 保持一致。该层仍只接到显式
+request provider；完整 request VM、fresh standalone signer 和线上 acceptance 未验证。
+证据见 [request dispatch fresh rerun](evidence/vm9_request_dispatch_fresh_20261024.json)。
+
 ## 2026-10-24 Asia/Shanghai：outer native signer boundary rerun
 
 The existing fresh-ELF native outer control was rerun against the pinned

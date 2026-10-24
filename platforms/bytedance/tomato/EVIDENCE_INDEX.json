@@ -7891,5 +7891,18 @@
     "external_provider_mapping_rollback_verified": false,
     "historical_native_groups_not_replayed": true,
     "native_snapshot_input": false
+  },
+  "vm9_request_dispatch_fresh_20261024": {
+    "path": "evidence/vm9_request_dispatch_fresh_20261024.json",
+    "evidence_label": "Fresh child request dispatcher rerun",
+    "native_Python_controls": 36,
+    "rollback_guards": 18,
+    "callback_fallback_routes_equal": true,
+    "reference_assignment_equal": true,
+    "shared_mutex_effects_equal": true,
+    "native_snapshot_input": false,
+    "actual_request_vm_executed": false,
+    "fresh_complete_standalone_signer_verified": false,
+    "live_server_matrix_verified": false
   }
 }

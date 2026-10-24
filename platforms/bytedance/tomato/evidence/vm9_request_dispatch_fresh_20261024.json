@@ -1,0 +1,584 @@
+{
+  "native_Python_controls": 36,
+  "rollback_guards": 18,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "max_callbacks": 4096,
+      "native_instructions": 1012,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "callback_success",
+      "max_callbacks": 4096,
+      "native_instructions": 2502,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "callback_NULL",
+      "max_callbacks": 4096,
+      "native_instructions": 2522,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_callback",
+      "max_callbacks": 4096,
+      "native_instructions": 1409,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "second_success",
+      "max_callbacks": 4096,
+      "native_instructions": 4004,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "fallback_success",
+      "max_callbacks": 4096,
+      "native_instructions": 2426,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "callback_then_fallback",
+      "max_callbacks": 4096,
+      "native_instructions": 3936,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "all_NULL",
+      "max_callbacks": 4096,
+      "native_instructions": 2522,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high_mode",
+      "max_callbacks": 4096,
+      "native_instructions": 2502,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "readers7",
+      "max_callbacks": 4096,
+      "native_instructions": 2502,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "live_fallback",
+      "max_callbacks": 4096,
+      "native_instructions": 3936,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "max_callbacks": 4096,
+      "native_instructions": 1012,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "callback_success",
+      "max_callbacks": 4096,
+      "native_instructions": 2502,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "callback_NULL",
+      "max_callbacks": 4096,
+      "native_instructions": 2522,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_callback",
+      "max_callbacks": 4096,
+      "native_instructions": 1409,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "second_success",
+      "max_callbacks": 4096,
+      "native_instructions": 4004,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "fallback_success",
+      "max_callbacks": 4096,
+      "native_instructions": 2426,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "callback_then_fallback",
+      "max_callbacks": 4096,
+      "native_instructions": 3936,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "all_NULL",
+      "max_callbacks": 4096,
+      "native_instructions": 2522,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high_mode",
+      "max_callbacks": 4096,
+      "native_instructions": 2502,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "readers7",
+      "max_callbacks": 4096,
+      "native_instructions": 2502,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "live_fallback",
+      "max_callbacks": 4096,
+      "native_instructions": 3936,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    }
+  ],
+  "assignment_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "final_old",
+      "native_instructions": 1461,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": true,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "retained_old",
+      "native_instructions": 825,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": false,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "equal_pointer",
+      "native_instructions": 24,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": false,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_count",
+      "native_instructions": 648,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": false,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "same_pair",
+      "native_instructions": 24,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": false,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "source_counter",
+      "native_instructions": 1464,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": true,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "final_old",
+      "native_instructions": 1461,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": true,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "retained_old",
+      "native_instructions": 825,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": false,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "equal_pointer",
+      "native_instructions": 24,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": false,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_count",
+      "native_instructions": 648,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": false,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "same_pair",
+      "native_instructions": 24,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": false,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "source_counter",
+      "native_instructions": 1464,
+      "original_assignment_executed": true,
+      "tree_deleting_dispatch_executed": true,
+      "all_nonstack_guest_image_and_canary_equal": true,
+      "ordered_diagnostic_allocator_effects_equal": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "bounded_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "callback_NULL",
+      "max_callbacks": 1,
+      "native_instructions": 2522,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "callback_NULL",
+      "max_callbacks": 1,
+      "native_instructions": 2522,
+      "original_dispatch_and_reference_helpers_executed": true,
+      "all_nonstack_guest_and_image_bytes_equal": true,
+      "canary_equal": true,
+      "ordered_callbacks_diagnostics_allocation_and_free_equal": true,
+      "matching_libc_shared_reader_executed": true,
+      "callback_service_synthetic": true,
+      "actual_request_VM_executed": false,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "NULL_receiver",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "wrong_receiver",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "wrong_container",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "scratch_input",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "wrapped_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "negative_mode",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_callback",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_allocator",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_free",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_callback_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_tree_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "traversal_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "cyclic_tree",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "unrecovered_reader",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "provider_failure",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "canary_corruption",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "native_snapshot_input": false,
+  "original_signer_child_dispatch_verified": true,
+  "actual_request_VM_integration_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_complete_standalone_signer_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_physical_ABI_verified": false,
+  "external_provider_mapping_rollback_verified": false
+}
