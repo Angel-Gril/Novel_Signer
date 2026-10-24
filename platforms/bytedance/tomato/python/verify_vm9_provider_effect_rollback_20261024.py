@@ -19,6 +19,7 @@ from vm9_effects import EffectJournal
 import vm9_native_service_bridge as bridge
 import vm9_request_vm as request_vm
 import vm9_request_dispatch as request_dispatch
+import vm9_jni_request as jni_request
 import vm9_callbacks
 import vm9_state
 import vm9_request_287474_vm as second_vm
@@ -240,6 +241,51 @@ def verify():
         request_vm.invoke_request_vm_callback = original_callback
     rows.append(dict(case="java_facade_nested_journal",
         child_journal_forwarded=True, nested_journal_forwarded=True))
+
+    # The public normal-facade entry must preserve that same journal through
+    # its facade callback closure as well.  This uses the production adapter;
+    # only the JNI facade body is replaced so the boundary remains isolated.
+    original_facade = jni_request.invoke_java_request_facade
+    captured = {}
+    def fake_facade(_pages, **kwargs):
+        captured["facade_callback"] = kwargs["invoke_request"]
+        return kwargs["invoke_request"](_pages, 0x27DD04,
+            receiver_address=10, url_reference_address=11,
+            header_reference_address=12, mode=13,
+            output_reference_address=14, entry_stack_address=0x1000)
+    jni_request.invoke_java_request_facade = fake_facade
+    original_dispatch = request_dispatch.invoke_signer_child_request
+    original_callback = request_vm.invoke_request_vm_callback
+    def fake_dispatch(*_args, **kwargs):
+        captured["facade_child_journal"] = kwargs.get("effect_journal")
+        return kwargs["invoke_callback"]({}, 0x2830C4,
+            url_reference_address=1, header_reference_address=2, mode=3,
+            context_address=4, output_reference_address=5,
+            entry_stack_address=0x1000)
+    def fake_callback(*_args, **kwargs):
+        captured["facade_nested_journal"] = kwargs.get("effect_journal")
+        return "facade-nested-ok"
+    request_dispatch.invoke_signer_child_request = fake_dispatch
+    request_vm.invoke_request_vm_callback = fake_callback
+    try:
+        journal = EffectJournal()
+        result = request_vm.invoke_java_request_facade_service(
+            {}, 0x17B8F8, image_base=0, entry_stack_address=0x1000,
+            thread_pointer=7, thread_id=8, environment_pointer=0,
+            facade_address=10, url_reference=11, header_array_reference=12,
+            return_address=9, vm_module=object(), seconds=0, nanoseconds=0,
+            allocate=lambda *_: 0, calloc=lambda *_: 0, free=lambda *_: None,
+            invoke_jni=lambda *_: 0, diagnostic_scope={}, effect_journal=journal)
+        assert result == "facade-nested-ok"
+        assert captured["facade_child_journal"] is journal
+        assert captured["facade_nested_journal"] is journal
+    finally:
+        jni_request.invoke_java_request_facade = original_facade
+        request_dispatch.invoke_signer_child_request = original_dispatch
+        request_vm.invoke_request_vm_callback = original_callback
+    rows.append(dict(case="java_facade_service_nested_journal",
+        facade_callback_bound=True, child_journal_forwarded=True,
+        nested_journal_forwarded=True))
 
     # Signer-handle publication is another external JNI owner.  Its default
     # path remains unchanged, while an opted-in journal removes a partial

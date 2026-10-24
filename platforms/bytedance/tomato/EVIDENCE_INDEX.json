@@ -7970,6 +7970,19 @@
     "online_header_acceptance_verified": false,
     "external_provider_mapping_rollback_verified": false
   },
+  "vm9_provider_effect_rollback_20261024": {
+    "path": "evidence/vm9_provider_effect_rollback_20261024.json",
+    "evidence_label": "Explicit provider effect rollback rerun",
+    "python_controls": 32,
+    "rollback_controls": 32,
+    "java_facade_service_nested_journal_forwarded": true,
+    "owning_request_journal_forwarded": true,
+    "child_dispatch_journal_forwarded": true,
+    "native_input_snapshot_used": false,
+    "live_jvm_verified": false,
+    "current_medusa_verified": false,
+    "implicit_mapping_or_unmapping": false
+  },
   "vm9_request_allocator_handoff_fresh_20261024": {
     "path": "evidence/vm9_request_allocator_handoff_fresh_20261024.json",
     "evidence_label": "Fresh owning allocator request handoff continuation",

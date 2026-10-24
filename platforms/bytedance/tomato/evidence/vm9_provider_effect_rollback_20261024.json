@@ -38,6 +38,12 @@
       "nested_journal_forwarded": true
     },
     {
+      "case": "java_facade_service_nested_journal",
+      "facade_callback_bound": true,
+      "child_journal_forwarded": true,
+      "nested_journal_forwarded": true
+    },
+    {
       "case": "signer_handle_provider_failure",
       "jni_provider_effects_rolled_back": true
     },
@@ -158,8 +164,8 @@
       "allocated_printf_pages_unchanged": true
     }
   ],
-  "python_controls": 31,
-  "rollback_controls": 31,
+  "python_controls": 32,
+  "rollback_controls": 32,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

@@ -8786,7 +8786,7 @@ StringObject fill paths、empty JSON reference path、token string transform、t
 向 environment helper 和 child VM 继续传递同一 journal，避免 acquisition provider
 失败时脱离 owning checkpoint。
 
-**31 项 Python controls 与 31 项 rollback controls**通过：hook 失败同时回滚 provider
+**32 项 Python controls 与 32 项 rollback controls**通过：hook 失败同时回滚 provider
 ledger 与 CPU 页面；成功 hook 的效果可由外层 owner 回滚；嵌套 inner success 的 undo
 记录可由 outer failure 按逆序清理；child dispatcher 的后续失败也会回滚 callback
 provider 效果；Java facade 的 child 与 nested callback VM 观察到同一个 journal；

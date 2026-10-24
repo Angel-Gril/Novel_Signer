@@ -1,5 +1,10 @@
 # Current VM9 progress checkpoint
 
+新增 facade service 的 nested provider journal 回归：`+17b8f8`、`+27dd04` 和
+`+2830c4` 现在有直接入口级 forwarding 证明；provider rollback 批次更新为
+**32 Python controls / 32 rollback controls**。该项仍是显式 synthetic provider
+边界，不代表真实 JVM 或线上 signer。
+
 ## 2026-10-24：owning allocator handoff 重新接回 request VM
 
 `verify_vm9_request_allocator_handoff_fresh_20261007.py` 现在在继续 request VM
