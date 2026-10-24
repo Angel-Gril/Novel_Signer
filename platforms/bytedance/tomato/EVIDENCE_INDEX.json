@@ -7815,5 +7815,22 @@
     "complete_python_medusa": false,
     "fresh_signer_output_verified": false,
     "live_server_matrix_verified": false
+  },
+  "vm9_full_outer_residual_diff_20261024": {
+    "path": "evidence/vm9_full_outer_residual_diff_20261024.json",
+    "evidence_label": "Read-only attribution",
+    "common_page_count": 1437,
+    "equal_common_pages": 1424,
+    "remaining_different_common_pages": 13,
+    "remaining_different_bytes": 5042,
+    "physical_stack_or_abi_scratch_bytes": 4860,
+    "scoped_lock_stack_alias_bytes": 3,
+    "format_token_padding_bytes": 166,
+    "event_record_short_string_tail_bytes": 13,
+    "native_only_zero_pages": 2,
+    "native_output_used_as_model_input": false,
+    "production_model_changed": false,
+    "complete_physical_stack_equivalence": false,
+    "complete_signer_verified": false
   }
 }

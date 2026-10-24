@@ -8862,6 +8862,24 @@ child/handler callback pair、publication recursive mutex release、warm getter 
 ```text
 python -B platforms/bytedance/tomato/python/verify_vm9_outer_signer_native.py --library <private-library.so> --libc <matching-libc.so> --output <outer-signer-native-evidence.json>
 ```
+
+## 6.259 Full outer residual attribution（2026-10-24 Asia/Shanghai）
+
+对同一独立构造的原始 `0x2830C4` outer/request chain 做只读 last-writer 与字段来源
+归因。两侧仍是 1437 个共同页，其中 1424 页逐字节相同，13 页差 5042 字节；原生
+1439 页、模型 1437 页，两个 native-only 页为全零服务页。
+
+剩余共同页差异按来源分成四类：六个 physical stack/ABI scratch 页共 4860 字节；
+guest scoped-lock guard 中保存 caller-stack 指针高位的 3 字节 alias；五个
+format-token 对象共 166 字节 native vector-store padding；event-record 短字符串
+尾部 13 字节。format-token 的 tag、pointer、length、index、reserved 字段相同，
+event-record 的 tag 和 payload 相同。stack alias 仍需真实 physical stack owner 才能
+判断完整 ABI 语义，不能用固定地址或零填充修补。
+
+本批没有形成生产 RED，因此没有修改生产代码，也没有把 native 输出作为模型输入，
+不计入 native controls。完整 physical stack/ABI、whole-request 内存等价、fresh
+Medusa、完整 signer 与线上 header acceptance 仍未验证。证据见
+`evidence/vm9_full_outer_residual_diff_20261024.json`。
 staged 页面和外部 free ledger 同时恢复；StringObject assignment provider 失败时其
 staged 页面和外部 assignment ledger 同时恢复；两个 configuration reference provider
 失败时各自的 staged 页面和外部 reference ledger 同时恢复；cached JNI provider 失败时

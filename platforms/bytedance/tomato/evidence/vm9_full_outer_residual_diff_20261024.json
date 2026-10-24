@@ -1,0 +1,58 @@
+{
+  "schema": "vm9-full-outer-residual-diff-v1",
+  "evidence_label": "Read-only attribution",
+  "scope": "original 0x2830C4 outer/request chain",
+  "compared_page_sets": {
+    "native_pages": 1439,
+    "model_pages": 1437,
+    "common_pages": 1437,
+    "equal_common_pages": 1424,
+    "different_common_pages": 13,
+    "different_bytes": 5042
+  },
+  "difference_buckets": {
+    "physical_stack_spill_or_abi_scratch": {
+      "pages": [
+        "0x70049000",
+        "0x7004a000",
+        "0x7004b000",
+        "0x7004c000",
+        "0x7004d000",
+        "0x7004e000"
+      ],
+      "bytes": 4860,
+      "status": "unresolved physical stack boundary"
+    },
+    "scoped_lock_stack_alias": {
+      "pages": ["0x136d4000"],
+      "bytes": 3,
+      "status": "unresolved physical stack pointer alias",
+      "detail": "The native guard object keeps the low flag plus high bytes of a caller-stack pointer; the model keeps only the flag. No physical stack owner is added by this attribution pass."
+    },
+    "format_token_padding": {
+      "pages": [
+        "0x136d6000",
+        "0x136df000",
+        "0x136e5000",
+        "0x13702000",
+        "0x13704000"
+      ],
+      "bytes": 166,
+      "status": "semantic fields equal; native vector-store padding differs"
+    },
+    "event_record_short_string_tail": {
+      "pages": ["0x13707000"],
+      "bytes": 13,
+      "status": "tag and payload equal; short-string tail is unspecified"
+    }
+  },
+  "native_only_pages": {
+    "pages": ["0x7400F000", "0x74110000"],
+    "all_zero": true,
+    "status": "service-page existence difference"
+  },
+  "native_output_used_as_model_input": false,
+  "production_model_changed": false,
+  "complete_physical_stack_equivalence": false,
+  "complete_signer_verified": false
+}

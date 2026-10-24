@@ -14,6 +14,19 @@ services remain explicit. It is **Sample verified** native boundary evidence onl
 Python outer construction, fresh-input Medusa output, online header acceptance,
 and whole-request memory equivalence remain open.
 
+## 2026-10-24 Asia/Shanghai：full outer residual attribution
+
+对同一独立构造的 `0x2830C4` 终态做只读来源归因：1437 个共同页中 1424 页相同，
+13 页仍差 5042 字节。差异被分成 4860 字节的六个 physical stack/ABI scratch 页、
+3 字节保存 caller-stack 指针高位的 scoped-lock alias、166 字节 format-token
+native vector-store padding，以及 13 字节 event-record 短字符串尾部。token 的
+tag/pointer/length/index/reserved 字段相同，event 的 tag/payload 相同；这些内容没有
+形成生产 RED，因此没有修改生产模型。两个 native-only 页仍是全零服务页的存在性差异。
+
+该归因没有把 native 输出作为模型输入，也没有计入 native controls；完整 physical
+stack 等价、whole-request 内存等价、fresh Medusa 和完整 signer 仍未验证。证据见
+[full outer residual diff](evidence/vm9_full_outer_residual_diff_20261024.json)。
+
 ## 2026-10-21 Asia/Shanghai：environment service reference scope
 
 冷 environment-service 172D40 的 172EB0 构造现在复用既有 scoped constructor。
