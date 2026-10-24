@@ -51,7 +51,7 @@ def construct_base64_string_reference(pages, *, reference_address, source_object
     return string
 
 
-def apply_token_tail_callback(pages, *, wrapper_offset, argument_block_address,
+def _apply_token_tail_callback_impl(pages, *, wrapper_offset, argument_block_address,
         image_base, entry_stack_address, thread_pointer, allocate, reallocate, free,
         thread_id=None, observer=None, max_bytes=0x100000):
     """+288bf0 append stores X0; +288c10 Base64 passes hidden X8 and child SP."""
@@ -70,6 +70,22 @@ def apply_token_tail_callback(pages, *, wrapper_offset, argument_block_address,
         raise RefillUnsupported('unrecovered token tail callback')
     p.commit()
     return result
+
+
+def apply_token_tail_callback(pages, *, wrapper_offset, argument_block_address,
+        image_base, entry_stack_address, thread_pointer, allocate, reallocate, free,
+        thread_id=None, observer=None, max_bytes=0x100000, effect_journal=None):
+    """Run token append/Base64 tail with an optional allocator-effect journal."""
+    from vm9_effects import require_effect_journal
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(wrapper_offset=wrapper_offset,argument_block_address=argument_block_address,
+        image_base=image_base,entry_stack_address=entry_stack_address,thread_pointer=thread_pointer,
+        allocate=allocate,reallocate=reallocate,free=free,thread_id=thread_id,observer=observer,
+        max_bytes=max_bytes)
+    if effect_journal is None:
+        return _apply_token_tail_callback_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _apply_token_tail_callback_impl(pages,**kwargs)
 
 
 def apply_token_printf_callback(pages, *, argument_block_address, image_base,

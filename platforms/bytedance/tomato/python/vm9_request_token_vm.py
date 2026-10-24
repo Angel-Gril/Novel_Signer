@@ -139,14 +139,16 @@ def execute_request_token_vm_prefix(pages, *, vm_module, maxsteps=4000,
                 apply_token_tail_callback(staged,wrapper_offset=wrapper,argument_block_address=argument,
                     image_base=image,entry_stack_address=frame.native_stack_address-0x180,
                     thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
-                    reallocate=string_services['reallocate'],free=string_services['free'])
+                    reallocate=string_services['reallocate'],free=string_services['free'],
+                    effect_journal=effect_journal)
             elif string_services is not None and (wrapper,target)==(0x288C10,0x258C14):
                 from vm9_request_token_tail import apply_token_tail_callback
                 apply_token_tail_callback(staged,wrapper_offset=wrapper,argument_block_address=argument,
                     image_base=image,entry_stack_address=frame.native_stack_address-0x180,
                     thread_pointer=inputs['thread_pointer'],allocate=string_services['allocate'],
                     reallocate=string_services['reallocate'],free=string_services['free'],
-                    thread_id=diagnostic_services.get('thread_id'),observer=diagnostic_services.get('observer'))
+                    thread_id=diagnostic_services.get('thread_id'),observer=diagnostic_services.get('observer'),
+                    effect_journal=effect_journal)
             elif string_services is not None and (wrapper,target)==(0x288C28,0x278314):
                 from vm9_request_token_tail import apply_token_printf_callback
                 apply_token_printf_callback(staged,argument_block_address=argument,image_base=image,

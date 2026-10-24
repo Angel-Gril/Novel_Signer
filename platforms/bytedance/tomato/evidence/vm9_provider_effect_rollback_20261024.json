@@ -141,10 +141,20 @@
       "case": "second_token_cipher_provider_failure",
       "token_cipher_effects_rolled_back": true,
       "token_cipher_pages_unchanged": true
+    },
+    {
+      "case": "second_token_tail_provider_failure",
+      "token_tail_effects_rolled_back": true,
+      "token_tail_pages_unchanged": true
+    },
+    {
+      "case": "second_base64_tail_provider_failure",
+      "base64_effects_rolled_back": true,
+      "base64_pages_unchanged": true
     }
   ],
-  "python_controls": 28,
-  "rollback_controls": 28,
+  "python_controls": 30,
+  "rollback_controls": 30,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

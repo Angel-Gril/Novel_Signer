@@ -33,6 +33,7 @@ import vm9_registry
 import vm9_reference_scopes
 import vm9_request_token_vm
 import vm9_request_token_cipher
+import vm9_request_token_tail
 from vm9_allocator import _write_span
 
 
@@ -902,6 +903,74 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case='second_token_cipher_provider_failure',
         token_cipher_effects_rolled_back=True, token_cipher_pages_unchanged=True))
+
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    tail_block = 0x2000
+    _write_span(pages, tail_block,
+        (0x248684).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_append = vm9_objects.append_string_object
+
+    def failing_append(*_args, **_kwargs):
+        external.append('token-tail-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled token tail provider failure')
+
+    vm9_objects.append_string_object = failing_append
+    try:
+        try:
+            vm9_request_token_tail.apply_token_tail_callback(
+                pages, wrapper_offset=0x288BF0, argument_block_address=tail_block,
+                image_base=0, entry_stack_address=0x9000, thread_pointer=0x7000,
+                allocate=lambda *_a: 0x6000, reallocate=lambda *_a: 0x6000,
+                free=lambda *_a: 0, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing token tail unexpectedly returned')
+    finally:
+        vm9_objects.append_string_object = original_append
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_token_tail_provider_failure',
+        token_tail_effects_rolled_back=True, token_tail_pages_unchanged=True))
+
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    base64_block = 0x2000
+    _write_span(pages, base64_block,
+        (0x258C14).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_base64 = vm9_request_token_tail.construct_base64_string_reference
+
+    def failing_base64(*_args, **_kwargs):
+        external.append('base64-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled Base64 provider failure')
+
+    vm9_request_token_tail.construct_base64_string_reference = failing_base64
+    try:
+        try:
+            vm9_request_token_tail.apply_token_tail_callback(
+                pages, wrapper_offset=0x288C10, argument_block_address=base64_block,
+                image_base=0, entry_stack_address=0x9000, thread_pointer=0x7000,
+                allocate=lambda *_a: 0x6000, reallocate=lambda *_a: 0x6000,
+                free=lambda *_a: 0, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing Base64 tail unexpectedly returned')
+    finally:
+        vm9_request_token_tail.construct_base64_string_reference = original_base64
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_base64_tail_provider_failure',
+        base64_effects_rolled_back=True, base64_pages_unchanged=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
