@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-24 Asia/Shanghai：outer finalization fresh boundary rerun
+
+当前 pinned `libmetasec_ml_71332.so` 与 matching libc 上完成 outer finalization
+fresh differential 重跑：10 个独立 u32 hash controls、6 个 publication/JNI
+integration cases，以及 5 个负向/既有 rollback controls 全部通过。hash 由当前
+输入 counter 生成，caller 高位零扩展、lazy formatter constants/guards、publication
+与 JNI service ledger 均相等；6 个 integration case 的唯一 live allocation
+mismatch 仍为 allocation 308 的 logger record/vector padding，字段内容保持一致。
+结果见 [outer finalization fresh evidence](evidence/vm9_outer_finalize_fresh_20261024.json)。
+
+这仍是 sample-verified fresh native boundary 与 Python publication 对照，不是完整
+physical stack/ABI、fresh-input Medusa、完整 signer 或线上 header acceptance；
+`complete_native_outer_state_equal=false`、`fresh_input_signer_output_verified=false`
+和 `current_online_header_matrix_verified=false` 保持。
+
 ## 2026-10-24 Asia/Shanghai：outer native signer boundary rerun
 
 The existing fresh-ELF native outer control was rerun against the pinned

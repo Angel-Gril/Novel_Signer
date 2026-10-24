@@ -7840,5 +7840,22 @@
     "total_rollback_guards": 27,
     "native_output_used_as_model_input": false,
     "complete_signer_verified": false
+  },
+  "vm9_outer_finalize_fresh_20261024": {
+    "path": "evidence/vm9_outer_finalize_fresh_20261024.json",
+    "evidence_label": "Fresh outer finalization boundary",
+    "native_hash_controls": 10,
+    "integration_controls": 6,
+    "negative_controls": 5,
+    "constructor_hash_generated_from_current_u32": true,
+    "caller_high_word_is_zero_extended": true,
+    "formatter_lazy_constants_and_guards_equal": true,
+    "publication_and_jni_service_ledger_equal": true,
+    "native_input_snapshot_used": false,
+    "live_allocation_mismatch_index": 308,
+    "complete_native_outer_state_equal": false,
+    "fresh_signer_output_verified": false,
+    "complete_python_medusa": false,
+    "live_server_matrix_verified": false
   }
 }

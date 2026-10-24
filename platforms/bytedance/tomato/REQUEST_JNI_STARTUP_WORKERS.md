@@ -8889,6 +8889,27 @@ library/matching libc 重跑四组既有 fresh controls：state final reference 
 prefix reference **16/8**，共 **138 项 native controls、27 项回滚检查**全部通过。
 这些检查没有使用 native 输出作为模型输入，也没有改变 full outer 的 5042 字节
 差异结论。证据见 `evidence/vm9_residual_boundary_regression_20261024.json`。
+
+## 6.261 Outer finalization fresh boundary rerun（2026-10-24 Asia/Shanghai）
+
+在同一 pinned `libmetasec_ml_71332.so` 与 matching libc 上重跑 outer finalization
+fresh differential。两个 image base 各执行五组当前 u32 hash 输入，共 **10 项
+独立 native hash controls**；随后对 absent、`sdk_30` 和 changed-counter profile
+执行 **6 项 publication/JNI integration cases**，并重跑 5 项负向/既有 rollback
+controls，全部通过。hash 结果来自当前 caller counter，caller 高位按 native 规则
+零扩展；lazy formatter constants/guards、publication mutex 与 JNI/destructor
+service ledger 均一致。integration case 的唯一 live allocation mismatch 仍为
+allocation 308 的 logger record/vector padding，内容字段不变。
+
+该批没有使用 native 输出作为 Python 输入，也没有 JVM 或真实 OS thread；allocator、
+property、clock 与 virtual-pthread 仍是显式服务。它验证 outer finalization 的
+fresh 边界，不等同于完整 physical stack/ABI、whole-request 内存等价、fresh-input
+Medusa、完整 signer 或线上 header acceptance；相关状态继续保持未验证。证据见
+`evidence/vm9_outer_finalize_fresh_20261024.json`。
+
+```text
+python -B platforms/bytedance/tomato/python/verify_vm9_outer_finalize_fresh_20261007.py --output <outer-finalize-fresh-evidence.json>
+```
 staged 页面和外部 free ledger 同时恢复；StringObject assignment provider 失败时其
 staged 页面和外部 assignment ledger 同时恢复；两个 configuration reference provider
 失败时各自的 staged 页面和外部 reference ledger 同时恢复；cached JNI provider 失败时
