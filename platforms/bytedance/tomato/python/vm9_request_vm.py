@@ -1038,7 +1038,7 @@ def invoke_java_request_service(pages, target, *, image_base, thread_pointer,
             thread_pointer=thread_pointer, return_address=return_address,
             vm_module=vm_module, seconds=seconds, nanoseconds=nanoseconds,
             allocate=allocate, free=free, diagnostic_scope=diagnostic_scope,
-            **abi, **services)
+            effect_journal=effect_journal, **abi, **services)
 
     return dispatch.invoke_signer_child_request(pages, image_base=image_base,
         thread_pointer=thread_pointer, thread_id=thread_id,

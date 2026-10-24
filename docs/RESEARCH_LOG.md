@@ -6,7 +6,7 @@ report. Moved verbatim out of the README; wording, numbers and links are unchang
 2026-10-24：新增显式 provider-effect rollback journal。`EffectJournal` 为
 allocator/JNI/OS provider 提供可嵌套 checkpoint、逆序 undo 和外层提交边界；native
 service bridge 可选恢复 provider undo 与 live CPU 页面，owning request VM 可在异常时
-回滚当前请求 checkpoint，并由 child dispatcher 向下传递。6 项 Python controls 与 6 项 rollback controls 通过，默认
+回滚当前请求 checkpoint，并由 child dispatcher 和 Java facade 向下传递。7 项 Python controls 与 7 项 rollback controls 通过，默认
 page-only 行为保持；该批不计入 native 差分，不声称 live JVM、真实 mapping 拓扑或完整
 signer。见 [provider-effect report](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai)。
 

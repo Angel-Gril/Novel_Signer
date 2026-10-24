@@ -181,6 +181,49 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case="child_dispatch_failure", child_provider_effects_rolled_back=True))
 
+    # The Java facade must pass the same owner journal through both the child
+    # dispatcher and its nested owning request VM callback.  A child-only
+    # journal would leave nested provider effects outside the outer boundary.
+    original_dispatch = request_dispatch.invoke_signer_child_request
+    original_callback = request_vm.invoke_request_vm_callback
+    captured = {}
+
+    def fake_dispatch(*_args, **kwargs):
+        captured["child_journal"] = kwargs.get("effect_journal")
+        callback = kwargs["invoke_callback"]
+        captured["result"] = callback(
+            {}, 0x27DD04,
+            url_reference_address=1, header_reference_address=2, mode=3,
+            context_address=4, output_reference_address=5,
+            entry_stack_address=0x1000,
+        )
+        return captured["result"]
+
+    def fake_callback(*_args, **kwargs):
+        captured["nested_journal"] = kwargs.get("effect_journal")
+        return "nested-ok"
+
+    request_dispatch.invoke_signer_child_request = fake_dispatch
+    request_vm.invoke_request_vm_callback = fake_callback
+    try:
+        journal = EffectJournal()
+        result = request_vm.invoke_java_request_service(
+            {}, 0x27DD04, image_base=0, thread_pointer=7, thread_id=8,
+            return_address=9, vm_module=object(), seconds=0, nanoseconds=0,
+            receiver_address=10, url_reference_address=11,
+            header_reference_address=12, mode=13, output_reference_address=14,
+            entry_stack_address=0x1000, allocate=lambda *_: 0,
+            free=lambda *_: None, diagnostic_scope={}, effect_journal=journal,
+        )
+        assert result == "nested-ok"
+        assert captured["child_journal"] is journal
+        assert captured["nested_journal"] is journal
+    finally:
+        request_dispatch.invoke_signer_child_request = original_dispatch
+        request_vm.invoke_request_vm_callback = original_callback
+    rows.append(dict(case="java_facade_nested_journal",
+        child_journal_forwarded=True, nested_journal_forwarded=True))
+
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
         controls=rows, python_controls=len(rows), rollback_controls=len(rows),

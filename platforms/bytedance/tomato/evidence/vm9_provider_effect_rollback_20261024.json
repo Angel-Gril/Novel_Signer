@@ -31,10 +31,15 @@
     {
       "case": "child_dispatch_failure",
       "child_provider_effects_rolled_back": true
+    },
+    {
+      "case": "java_facade_nested_journal",
+      "child_journal_forwarded": true,
+      "nested_journal_forwarded": true
     }
   ],
-  "python_controls": 6,
-  "rollback_controls": 6,
+  "python_controls": 7,
+  "rollback_controls": 7,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,
