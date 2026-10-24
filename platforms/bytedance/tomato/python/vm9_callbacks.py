@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from collections.abc import Callable
 
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
+from vm9_effects import require_effect_journal
 
 
 @dataclass(frozen=True)
@@ -459,6 +460,7 @@ def cleanup_jni_reference(
 def publish_signer_handle(
     *, root_address: int, environment: int, invoke: Callable,
     get_reference_type: Callable, delete_reference: Callable,
+    effect_journal=None,
 ) -> bool:
     """Model the default-configuration publisher +0x28c268/+0x28c308.
 
@@ -467,15 +469,26 @@ def publish_signer_handle(
     root before either result is cleaned. The return value tests the first
     reference for NULL; it never unboxes or reads a Java Boolean. The caller
     owns construction, thread attachment, Java dispatch and reference storage.
-    Host exceptions propagate; this API promises no rollback of host effects.
+    Host exceptions propagate.  When an explicit effect journal is supplied,
+    provider undo records registered by ``invoke`` or reference cleanup are
+    rolled back with the whole publication attempt; the default host-effect
+    behavior remains unchanged.
     """
-    first = invoke(0x2000001, 0, root_address, 0, 0)
-    second = invoke(0x2000002, 0, root_address, 0, 0)
-    cleanup_jni_reference(environment=environment, reference=first,
-        get_reference_type=get_reference_type, delete_reference=delete_reference)
-    cleanup_jni_reference(environment=environment, reference=second,
-        get_reference_type=get_reference_type, delete_reference=delete_reference)
-    return first != 0
+    effect_journal = require_effect_journal(effect_journal)
+
+    def publish():
+        first = invoke(0x2000001, 0, root_address, 0, 0)
+        second = invoke(0x2000002, 0, root_address, 0, 0)
+        cleanup_jni_reference(environment=environment, reference=first,
+            get_reference_type=get_reference_type, delete_reference=delete_reference)
+        cleanup_jni_reference(environment=environment, reference=second,
+            get_reference_type=get_reference_type, delete_reference=delete_reference)
+        return first != 0
+
+    if effect_journal is None:
+        return publish()
+    with effect_journal.transaction():
+        return publish()
 
 
 @dataclass(frozen=True)

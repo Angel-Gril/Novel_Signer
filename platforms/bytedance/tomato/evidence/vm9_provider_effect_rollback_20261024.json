@@ -36,10 +36,14 @@
       "case": "java_facade_nested_journal",
       "child_journal_forwarded": true,
       "nested_journal_forwarded": true
+    },
+    {
+      "case": "signer_handle_provider_failure",
+      "jni_provider_effects_rolled_back": true
     }
   ],
-  "python_controls": 7,
-  "rollback_controls": 7,
+  "python_controls": 8,
+  "rollback_controls": 8,
   "native_input_snapshot_used": false,
   "live_jvm_verified": false,
   "current_medusa_verified": false,

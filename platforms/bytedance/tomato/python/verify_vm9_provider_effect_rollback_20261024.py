@@ -18,6 +18,7 @@ from vm9_effects import EffectJournal
 import vm9_native_service_bridge as bridge
 import vm9_request_vm as request_vm
 import vm9_request_dispatch as request_dispatch
+import vm9_callbacks
 
 
 PAGE = 0x400000
@@ -223,6 +224,31 @@ def verify():
         request_vm.invoke_request_vm_callback = original_callback
     rows.append(dict(case="java_facade_nested_journal",
         child_journal_forwarded=True, nested_journal_forwarded=True))
+
+    # Signer-handle publication is another external JNI owner.  Its default
+    # path remains unchanged, while an opted-in journal removes a partial
+    # first-handle effect if the second provider call fails.
+    external = []
+    journal = EffectJournal()
+
+    def failing_invoke(*_args):
+        external.append("jni-handle")
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported("controlled signer handle failure")
+
+    try:
+        vm9_callbacks.publish_signer_handle(
+            root_address=1, environment=2, invoke=failing_invoke,
+            get_reference_type=lambda *_: 0,
+            delete_reference=lambda *_: None, effect_journal=journal,
+        )
+    except RefillUnsupported:
+        pass
+    else:
+        raise AssertionError("failing signer handle unexpectedly returned")
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case="signer_handle_provider_failure",
+        jni_provider_effects_rolled_back=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
