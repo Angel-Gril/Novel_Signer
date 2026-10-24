@@ -27,6 +27,7 @@ import vm9_request_environment_vm as environment_vm
 import vm9_logger
 import vm9_jni_environment
 import vm9_request_caller
+import vm9_configuration_init
 from vm9_allocator import _write_span
 
 
@@ -485,6 +486,42 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case='second_allocation_provider_failure',
         allocation_effects_rolled_back=True, allocation_pages_unchanged=True))
+
+    # Formatter construction owns several allocator calls. The callback must
+    # keep those provider undo records inside the same second-VM checkpoint.
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    format_block = 0x2000
+    _write_span(pages, format_block,
+        (0x248908).to_bytes(8, 'little') + (0x3000).to_bytes(8, 'little')
+        + (0x4000).to_bytes(8, 'little') + (7).to_bytes(4, 'little'))
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_formatter = vm9_configuration_init.format_string_object
+
+    def failing_formatter(*_args, **_kwargs):
+        external.append('formatter-allocate')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled formatter provider failure')
+
+    vm9_configuration_init.format_string_object = failing_formatter
+    try:
+        try:
+            second_vm.apply_request_287474_string_format_callback(
+                pages, argument_block_address=format_block,
+                entry_stack_address=0x8000, image_base=0,
+                allocate=lambda *_a: 0x5000, reallocate=lambda *_a: 0x5000,
+                free=lambda *_a: 0, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing formatter unexpectedly returned')
+    finally:
+        vm9_configuration_init.format_string_object = original_formatter
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='second_formatter_provider_failure',
+        formatter_effects_rolled_back=True, formatter_pages_unchanged=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
