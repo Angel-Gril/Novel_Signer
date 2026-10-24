@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from vm9_allocator import RefillUnsupported, _PageTransaction, _read_span, _write_span
+from vm9_effects import require_effect_journal
 
 
 @dataclass(frozen=True)
@@ -592,7 +593,7 @@ class RequestJniAvailabilityReturn(RequestCallerReturn):
     availability: object
 
 
-def execute_request_jni_availability_wrapper(pages, *, image_base,
+def _execute_request_jni_availability_wrapper_impl(pages, *, image_base,
         entry_stack_address,argument_block_address,return_address,thread_pointer,
         acquire_environment,invoke_jni,saved_frame_pointer=0,saved_x19=0,
         saved_x20=0,saved_x21=0,saved_x22=0,saved_x28=0):
@@ -641,3 +642,27 @@ def execute_request_jni_availability_wrapper(pages, *, image_base,
     except ValueError as exc:raise RefillUnsupported('JNI availability wrapper memory is unmapped') from exc
     state=RequestJniAvailabilityReturn(x30,W,result,x19,saved_x28,x29,x30,x20,x21,x22,availability)
     p.commit();return state
+
+
+def execute_request_jni_availability_wrapper(pages, *, image_base,
+        entry_stack_address,argument_block_address,return_address,thread_pointer,
+        acquire_environment,invoke_jni,saved_frame_pointer=0,saved_x19=0,
+        saved_x20=0,saved_x21=0,saved_x22=0,saved_x28=0,effect_journal=None):
+    """Run the availability wrapper with an optional provider-effect boundary.
+
+    The historical default remains page-only.  When an owner supplies an
+    ``EffectJournal``, acquisition/JNI provider undo records are scoped to this
+    callback and remain available to an enclosing request transaction after a
+    successful return.
+    """
+    effect_journal=require_effect_journal(effect_journal)
+    kwargs=dict(image_base=image_base,entry_stack_address=entry_stack_address,
+        argument_block_address=argument_block_address,return_address=return_address,
+        thread_pointer=thread_pointer,acquire_environment=acquire_environment,
+        invoke_jni=invoke_jni,saved_frame_pointer=saved_frame_pointer,
+        saved_x19=saved_x19,saved_x20=saved_x20,saved_x21=saved_x21,
+        saved_x22=saved_x22,saved_x28=saved_x28)
+    if effect_journal is None:
+        return _execute_request_jni_availability_wrapper_impl(pages,**kwargs)
+    with effect_journal.transaction():
+        return _execute_request_jni_availability_wrapper_impl(pages,**kwargs)

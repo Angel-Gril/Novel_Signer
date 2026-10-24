@@ -7,7 +7,9 @@ report. Moved verbatim out of the README; wording, numbers and links are unchang
 allocator/JNI/OS provider 提供可嵌套 checkpoint、逆序 undo 和外层提交边界；native
 service bridge 可选恢复 provider undo 与 live CPU 页面，owning request VM 可在异常时
 回滚当前请求 checkpoint，并由 child dispatcher 和 Java facade 向下传递；signer-handle
-发布、request state elapsed getter 和 second VM realtime wrappers 也可回滚 JNI/clock provider 效果。11 项 Python controls 与 11 项 rollback controls 通过，默认
+发布、request state elapsed getter、second VM realtime wrappers、request-environment
+acquisition/StringObject/logger callbacks 与 JNI availability wrapper 也可回滚 JNI/clock
+provider 效果。15 项 Python controls 与 15 项 rollback controls 通过，默认
 page-only 行为保持；该批不计入 native 差分，不声称 live JVM、真实 mapping 拓扑或完整
 signer。见 [provider-effect report](platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai)。
 
@@ -411,7 +413,7 @@ Owning request VM execution now lives in a production module with strict callbac
 `apply_request_environment_acquisition_callback` 现在接受可选
 `EffectJournal`；second VM 向 helper/child 继续传递同一 journal。新增失败
 acquire-environment provider 控制同时恢复 guest page transaction 与外部 ledger，
-默认 page-only 行为保持不变。provider evidence 更新为 14 Python / 14 rollback
+默认 page-only 行为保持不变。provider evidence 更新为 15 Python / 15 rollback
 controls；Python compile、public scan、diff check 和既有 Rust tests 继续按当前
 工作区验证，live JVM、完整 signer 与完整 second/request 物理内存等价仍未验证。
 见 [provider rollback 报告](../platforms/bytedance/tomato/REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai)。
@@ -422,3 +424,8 @@ allocation/free provider 失败时，object/payload guest 页面与外部 ledger
 
 环境 logger callback 也加入同一 opt-in 边界；logger provider 失败时其 staged
 guest 页面和外部 ledger 一起回滚。
+
+JNI availability wrapper 也加入同一 opt-in 边界；provider 失败时 wrapper 的 staged
+guest 页面和外部 ledger 一起回滚，默认 page-only 调用保持兼容。
+
+\n

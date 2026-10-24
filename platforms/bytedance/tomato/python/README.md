@@ -6,9 +6,9 @@ undo records and, when requested, live CPU page bytes after a failed hook; the
 owning request VM and child dispatcher accept the same journal, and the Java facade
 forwards it into the nested callback VM. The signer-handle publisher, request
 state elapsed getter, second-VM realtime wrappers and request-environment
-acquisition callback, StringObject callbacks and the environment logger callback
-also have opt-in JNI/clock/provider rollback boundaries. Fourteen Python controls
-and fourteen rollback controls pass.
+acquisition callback, StringObject callbacks, the environment logger callback and
+the JNI availability wrapper also have opt-in JNI/clock/provider rollback
+boundaries. Fifteen Python controls and fifteen rollback controls pass.
 Implicit mapping remains rejected and
 complete signing is unfinished. See [the provider-effect report](../REQUEST_JNI_STARTUP_WORKERS.md#6255-explicit-provider-effect-rollback-journal2026-10-24-asiashanghai).
 

@@ -135,7 +135,8 @@ def execute_request_28048c_vm_prefix(pages, *, vm_module,maxsteps=4000,
                     saved_frame_pointer=frame.native_stack_address-0x60,
                     saved_x28=frame.register_backing_address,saved_x19=frame.register_backing_address-8,
                     acquire_environment=consumer_services.get('acquire_environment'),
-                    invoke_jni=consumer_services['jni_availability_services']['invoke_jni'])
+                    invoke_jni=consumer_services['jni_availability_services']['invoke_jni'],
+                    effect_journal=effect_journal)
                 availability.append((argument,returned))
             elif consumer_services is not None and (wrapper,target)==(0x2814E4,0x26EDC4) and consumer_services.get('acquire_environment') is not None:
                 from vm9_request_environment_vm import apply_request_environment_acquisition_callback

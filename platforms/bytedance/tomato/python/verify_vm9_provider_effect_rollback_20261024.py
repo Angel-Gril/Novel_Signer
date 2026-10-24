@@ -25,6 +25,8 @@ import vm9_request_287474_vm as second_vm
 import vm9_request_28048c_vm as child_vm
 import vm9_request_environment_vm as environment_vm
 import vm9_logger
+import vm9_jni_environment
+import vm9_request_caller
 from vm9_allocator import _write_span
 
 
@@ -418,6 +420,41 @@ def verify():
     assert external == [] and len(journal) == 0
     rows.append(dict(case='environment_logger_provider_failure',
         logger_effects_rolled_back=True, logger_pages_unchanged=True))
+
+    # JNI availability is an owning caller boundary too.  A provider failure
+    # after the wrapper has staged its frame must remove external effects while
+    # leaving the supplied pages untouched.
+    pages = {index: bytearray(0x1000) for index in range(16)}
+    _write_span(pages, 0x2000, (0x204B80).to_bytes(8, 'little'))
+    _write_span(pages, 0x2800 + 0x28, b'canary!!')
+    before = {key: bytes(value) for key, value in pages.items()}
+    external = []
+    journal = EffectJournal()
+    original_availability = vm9_jni_environment.check_cached_static_method_availability
+
+    def failing_availability(*_args, **_kwargs):
+        external.append('jni-availability')
+        journal.record_undo(lambda: external.pop())
+        raise RefillUnsupported('controlled JNI availability failure')
+
+    vm9_jni_environment.check_cached_static_method_availability = failing_availability
+    try:
+        try:
+            vm9_request_caller.execute_request_jni_availability_wrapper(
+                pages, image_base=0, entry_stack_address=0x3000,
+                argument_block_address=0x2000, return_address=0x4000,
+                thread_pointer=0x2800, acquire_environment=lambda *_a, **_k: None,
+                invoke_jni=lambda *_a: 0, effect_journal=journal)
+        except RefillUnsupported:
+            pass
+        else:
+            raise AssertionError('failing JNI availability unexpectedly returned')
+    finally:
+        vm9_jni_environment.check_cached_static_method_availability = original_availability
+    assert before == {key: bytes(value) for key, value in pages.items()}
+    assert external == [] and len(journal) == 0
+    rows.append(dict(case='jni_availability_provider_failure',
+        jni_effects_rolled_back=True, jni_pages_unchanged=True))
 
     return dict(schema="vm9-provider-effect-rollback-v1",
         evidence_label="Sample verified",
