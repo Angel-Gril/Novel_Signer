@@ -8936,7 +8936,7 @@
   "vm9_request_runtime_table_owner_fresh_20261025": {
     "path": "evidence/vm9_request_runtime_table_owner_fresh_20261025.json",
     "evidence_label": "Read-only native request VM relocation-slot, effective-handler and final register-value owner probe",
-    "schema": "vm9-request-runtime-table-owner-fresh-20261025-v6",
+    "schema": "vm9-request-runtime-table-owner-fresh-20261025-v7",
     "controls": 2,
     "image_bases": [
       "0x122c0000",
@@ -8962,7 +8962,13 @@
     "external_runtime_table_reads": 0,
     "effective_handler_reads_observed": true,
     "vm_handler_semantics_events_each": 283,
-    "vm_operand_store_semantics_each": 16,
+    "vm_operand_store_semantics_each": 20,
+    "vm_frame_operand_writers_each": 4,
+    "vm_frame_operand_writer_pcs": [
+      "0x2830ec",
+      "0x283100",
+      "0x28310c"
+    ],
     "vm_handler_offsets": [
       "0x1692fc",
       "0x16db74",
@@ -9016,6 +9022,6 @@
     "fresh_signer_output_verified": false,
     "live_Android_JVM_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "Both bases load the same external relocation pointer and record the same 283-handler sequence. The VM first produces pointer 0x7000ee38 in slot 1 from slot 4 plus offset 0x8 at +0x16f974, and later produces the same pointer in slot 18 from slot 29 plus offset 0x6f8; native +0x171268 copies slot 1 through 0x7000df38. The final +0x16f974 loads zero from 0x7000ee38 into slot 1, and +0x170308 forms target 0x0 plus offset 0xc before stopping on guest read 0xc. Memory-write events retain pre-store snapshots, while handler written_value and the post-store workspace snapshot establish the result. No write to the five relocation slots or external-table read occurred; the VM program/workspace input and complete dispatch-table owner remain unresolved."
+    "comparison_note": "Both bases load the same external relocation pointer and record the same 283-handler sequence. The owning frame stores at +0x2830ec write 0x7000ee48 to 0x7000d668 and 0x7000ee38 to 0x7000d670; +0x283100 writes 0x138 to 0x7000d680; +0x28310c writes 0x7000ee28 to 0x7000d678. The VM first produces pointer 0x7000ee38 in slot 1 from slot 4 plus offset 0x8 at +0x16f974, and later produces the same pointer in slot 18 from slot 29 plus offset 0x6f8; native +0x171268 copies slot 1 through 0x7000df38. The final +0x16f974 loads zero from 0x7000ee38 into slot 1, and +0x170308 forms target 0x0 plus offset 0xc before stopping on guest read 0xc. Memory-write events retain pre-store snapshots, while handler written_value and the post-store workspace snapshot establish the result. No write to the five relocation slots or external-table read occurred; the VM program/workspace input and complete dispatch-table owner remain unresolved."
   }
 }

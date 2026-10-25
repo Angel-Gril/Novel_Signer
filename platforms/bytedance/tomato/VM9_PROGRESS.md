@@ -6030,3 +6030,18 @@ canary。随后 `+0x16f974` 读取 `0x7000df38` 得到该指针，再从
 `0x7000d668+0x8` 得到 `0x7000ee38` 写 slot 1，稍后从 slot 29 的
 `0x7000d840+0x6f8`（`0x7000df38`）得到同一值写 slot 18。随后
 `+0x171268` 把 slot 1 复制到 `0x7000df38`，最终 slot 18 参与零偏移加载。
+
+## 2026-10-25：request frame operand writers（fresh）
+
+继续在同一只读 native request VM probe 中追踪 owning frame 对 VM workspace 的直接
+写入。两个 image base 都得到相同的四项 frame-store 语义：`+0x2830ec` 将
+`0x7000ee48` 写入 `0x7000d668`、将 `0x7000ee38` 写入 `0x7000d670`；
+`+0x283100` 将 `0x138` 写入 `0x7000d680`；`+0x28310c` 将 `0x7000ee28`
+写入 `0x7000d678`。这些结果补上了 slot 4 以及后续 pointer producer 使用的
+frame operand 来源，并与两组 283-handler 序列一致。
+
+这只是当前 fresh request frame 的 native store 证据，不等同于真实 JNI/Android
+启动输入，也没有恢复完整 VM code、dispatch table 或 signer。内存写回调仍记录
+写入前旧值；实际值以 frame-store `written_value` 和后续 workspace 读取为准。
+证据：[runtime table owner probe](evidence/vm9_request_runtime_table_owner_fresh_20261025.json)，
+复现脚本：`python/verify_vm9_request_runtime_table_owner_20261025.py`。

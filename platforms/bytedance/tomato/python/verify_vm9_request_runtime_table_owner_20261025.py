@@ -28,7 +28,8 @@ TABLE_PAGE_COUNT = 2
 CANARY = bytes([0xA5]) * 4096
 LIBRARY_SHA256 = oracle.LIBRARY_SHA256
 VM_OPERAND_WATCH_RANGES = ((0x7000DF00, 0x7000DF80),
-                           (0x7000EE00, 0x7000EE80))
+                           (0x7000EE00, 0x7000EE80),
+                           (0x7000D668, 0x7000D688))
 
 # These are the VM instructions whose stores are on the last failing paths.
 # The native code is a threaded interpreter: the handler entry decodes a
@@ -45,6 +46,7 @@ VM_HANDLER_OPS = {
 }
 VM_OPERAND_STORE_PCS = (0x15F5A8, 0x15F5BC, 0x15F5C4, 0x162884,
                         0x162898, 0x1628A0, 0x171268)
+VM_FRAME_STORE_PCS = (0x2830EC, 0x283100, 0x28310C)
 
 
 def _imports(library: Path):
@@ -235,6 +237,24 @@ def run(library: Path, libc: Path, image: int):
                         vm_registers=_vm_regs(cpu))
             if offset in VM_HANDLER_OPS:
                 _handler_semantics(cpu, offset)
+            if offset in VM_FRAME_STORE_PCS:
+                registers = {f"x{index}": hex(cpu.reg_read(getattr(arm, f"UC_ARM64_REG_X{index}")))
+                             for index in (0, 1, 2, 3, 8, 19, 28)}
+                stack = cpu.reg_read(arm.UC_ARM64_REG_SP)
+                if offset == 0x2830EC:
+                    stores = ((stack + 8, 8, cpu.reg_read(arm.UC_ARM64_REG_X8)),
+                              (stack + 16, 8, cpu.reg_read(arm.UC_ARM64_REG_X0)))
+                elif offset == 0x283100:
+                    stores = ((stack + 0x20, 4,
+                               cpu.reg_read(arm.UC_ARM64_REG_X2) & 0xFFFFFFFF),)
+                else:  # +0x28310c
+                    stores = ((stack + 0x18, 8, cpu.reg_read(arm.UC_ARM64_REG_X1)),)
+                for address, width, value in stores:
+                    if any(start <= address < end for start, end in VM_OPERAND_WATCH_RANGES):
+                        _record("vm_operand_store_semantics", pc=hex(offset),
+                                address=hex(address), written_value=hex(value),
+                                previous_value=_read_word(cpu, address, width),
+                                registers=registers, stack_pointer=hex(stack))
             if offset in VM_OPERAND_STORE_PCS:
                 registers = {f"x{index}": hex(cpu.reg_read(getattr(arm, f"UC_ARM64_REG_X{index}")))
                              for index in (8, 9, 10, 13, 14, 15, 16, 17, 19, 20, 21, 28)}
@@ -475,6 +495,9 @@ def run(library: Path, libc: Path, image: int):
         "vm_operand_writes": operand_writes,
         "vm_operand_store_semantics": [event for event in events
                                         if event["kind"] == "vm_operand_store_semantics"],
+        "vm_frame_operand_writers": [event for event in events
+                                      if event["kind"] == "vm_operand_store_semantics"
+                                      and event["pc"] in ("0x2830ec", "0x283100", "0x28310c")],
         "vm_operand_pointer_writer": next((event for event in events
                                             if event["kind"] == "vm_operand_store_semantics"
                                             and event["address"] == "0x7000df38"
@@ -514,7 +537,7 @@ def main():
         raise SystemExit(f"unexpected native sample {digest}")
     rows = [run(args.library, args.libc, image) for image in BASES]
     report = {
-        "schema": "vm9-request-runtime-table-owner-fresh-20261025-v6",
+        "schema": "vm9-request-runtime-table-owner-fresh-20261025-v7",
         "evidence_date": "2026-10-25",
         "sample_sha256": LIBRARY_SHA256,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),

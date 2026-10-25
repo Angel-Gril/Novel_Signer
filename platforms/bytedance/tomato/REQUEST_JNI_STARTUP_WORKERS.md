@@ -9494,3 +9494,17 @@ VM 的 `+0x16f974` 从 `0x7000df38` 读出这个指针，再对 `0x7000ee38` 做
 fresh standalone signer 和线上验收仍未完成。证据：
 `evidence/vm9_request_runtime_table_owner_fresh_20261025.json`；脚本：
 `python/verify_vm9_request_runtime_table_owner_20261025.py`。
+
+## 6.275 Owning request frame operand writers（2026-10-25 Asia/Shanghai）
+
+同一 fresh native owner probe 继续记录 request frame 对 VM workspace 的直接 store。
+两个 image base 均出现四项相同语义：`+0x2830ec` 写 `0x7000ee48 → 0x7000d668`
+和 `0x7000ee38 → 0x7000d670`，`+0x283100` 写 `0x138 → 0x7000d680`，
+`+0x28310c` 写 `0x7000ee28 → 0x7000d678`。这些 frame stores 解释了 slot 4
+附近的 operand 初值，并连接到后续 `+0x16f974` 的 slot 1/slot 18 pointer
+producer；两基址仍各记录 283 条 handler 语义事件。
+
+该观察仅覆盖当前 fresh workspace 的 owning-frame 写入，不证明真实 JNI/Android
+启动会提供相同输入，也未闭合 VM code、完整 dispatch table、whole-request native
+返回、fresh signer 或线上验收。证据：`evidence/vm9_request_runtime_table_owner_fresh_20261025.json`；
+脚本：`python/verify_vm9_request_runtime_table_owner_20261025.py`。
