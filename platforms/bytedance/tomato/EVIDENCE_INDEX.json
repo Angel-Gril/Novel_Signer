@@ -9195,43 +9195,5 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The same Unicorn CPU completes bootstrap and then continues the URL-bearing request through the actual callback object's image+0x347f60 memcpy PLT. The preserved bootstrap oracle handles the existing matching-libc/import boundaries; both bases return to the oracle STOP with a nonzero output reference and no runtime-table page access. This is a native return/continuation observation, not a whole-request differential, fresh standalone signer, or online acceptance result."
-  },
-  "vm9_outer_loader_synthetic_branch_diagnostic_20261026": {
-    "path": "evidence/vm9_outer_loader_synthetic_branch_diagnostic_20261026.json",
-    "evidence_label": "Bounded diagnostic of the statically identified outer loader branch",
-    "entry_offset": "+0x184ad4",
-    "caller_offset": "+0x18a314",
-    "synthetic_inputs": [
-      "dlopen handle",
-      "descriptor bounds",
-      "anonymous mmap",
-      "callback methods",
-      "one-page synthetic descriptor span"
-    ],
-    "native_vector_helpers_executed": ["+0x25c4dc", "+0x25c4e4", "+0x25c480"],
-    "native_callback_thunks_executed": ["+0x184d34", "+0x184d38", "+0x187780"],
-    "returned_success_branch": true,
-    "return_value": "0x1",
-    "stop_offset": "+0x184dd0",
-    "syscall_numbers": [222, 226, 56, 80, 226, 226, 63, 57, 222],
-    "allocation_events": 86,
-    "ledger_events": 102,
-    "external_page_write_count": 4096,
-    "runtime_slot_write_count": 0,
-    "runtime_table_owner_recovered": false,
-    "runtime_table_content_reconstructed": false,
-    "whole_request_native_success": false,
-    "fresh_signer_output_verified": false,
-    "online_header_acceptance_verified": false,
-    "full_span_probe": {
-      "descriptor_span": "0x400000",
-      "external_payload": "same sample ELF mapped at synthetic external base",
-      "outcome": "instruction-limit stop",
-      "instruction_limit": 300000,
-      "last_native_offsets": ["+0x276c74", "+0x276c78", "+0x276c7c", "+0x276c80", "+0x276c84", "+0x276c88"],
-      "runtime_slot_write_count": 0,
-      "interpretation": "The same sample ELF is not a substitute for the external custom payload: the bulk-copy helper repeats without reaching cleanup."
-    },
-    "comparison_note": "The candidate reaches its mapping, cleanup, and return path with native vector helpers and callback thunks, but the object fields selecting those thunks and the loader, descriptor, mapping, and handle boundaries remain synthetic. This records control flow and cleanup order; it is not evidence of the real linker input, runtime-table owner, handler contents, or signer output."
   }
 }

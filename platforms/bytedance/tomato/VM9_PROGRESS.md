@@ -1,27 +1,5 @@
 # Current VM9 progress checkpoint
 
-## 2026-10-26：outer loader candidate synthetic branch diagnostic
-
-对静态扫描定位的 `+0x18a314 → +0x184ad4` 候选路径做了一次有界动态诊断。
-在显式伪造 `dlopen` handle、descriptor bounds、匿名 mmap、callback method 和一页
-外部 mapping（descriptor 只声明一页 span）后，native 成功经过 old mapping `munmap`、`MAP_FIXED` replacement
-`mmap`、两次 segment copy、temporary `munmap`、`dlclose`，返回值为 `1`，停止于
-`+0x184dd0`。该运行记录 **86** 项 allocation、**102** 项 ledger、syscall
-`222/226/56/80/226/226/63/57/222`，外部 synthetic page 有 **4096** 次写入，
-五个 runtime relocation slot 仍为 **0** 次写入。
-
-其中 `+0x25c4dc/+0x25c4e4/+0x25c480` 的 vector begin/end/size helper 以及
-`+0x184d34/+0x184d38/+0x187780` callback thunk 是 native 实际执行的；选择这些
-thunk 的 object fields 仍由 synthetic 输入提供，linker、descriptor、mapping 和
-handle 语义也仍是 synthetic，不能据此认定 runtime-table owner、表内容、whole
-request 或 signer 输出已经恢复。该诊断单独记录在
-[outer-loader synthetic diagnostic](evidence/vm9_outer_loader_synthetic_branch_diagnostic_20261026.json)。
-
-同一探针把 descriptor span 扩到完整 `0x400000`，并让当前 sample ELF 充当外部
-payload；native 在 `+0x276c74…+0x276c88` bulk-copy loop 重复至 300000 条指令
-预算，仍没有写五个 relocation slot。这个负结果说明当前主 ELF 不能替代真实 custom
-DSO payload，继续伪造该 mapping 不会闭合 runtime-table owner。
-
 ## 2026-10-25 Asia/Shanghai：timed transfer 与完整 executor worker schedule fresh rerun
 
 在完成 follow-up callback 重跑后，先重跑 timed poll/queue 组合。两基址、两个

@@ -505,21 +505,6 @@ the loaded span `[x22, x8)` and `x20=x8-x22`, anonymous syscall 222, old mapping
 this closes the candidate's static contract only and does not prove execution, table
 ownership, handler contents, or signer output.
 
-The bounded synthetic branch diagnostic then executed that candidate through its return
-at `+0x184dd0`. Its vector begin/end/size helpers and the `+0x184d34/+0x184d38/
-+0x187780` callback thunks ran natively, while the object fields selecting those
-thunks and the descriptor, mapping, and handle semantics were supplied synthetically;
-the run recorded 86 allocation events, 102 ledger events, the expected mmap/mprotect/file
-syscall family, and no writes to the five relocation slots. This is control-flow evidence
-only. It does not recover the Android linker input or runtime-table owner and is kept
-separate from signer evidence. See
-`platforms/bytedance/tomato/evidence/vm9_outer_loader_synthetic_branch_diagnostic_20261026.json`.
-
-With a full `0x400000` descriptor span and the same sample ELF as the synthetic external
-payload, the real bulk-copy helper repeated at `+0x276c74…+0x276c88` until the 300000
-instruction bound. No relocation slot was written. This negative control shows that the
-main sample ELF cannot stand in for the custom DSO payload expected by this loader.
-
 \n
 
 \n
