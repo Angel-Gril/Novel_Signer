@@ -75,6 +75,12 @@ verifier 没有重放旧 formal evidence 的 constructed outer/second metadata�
 仍未完成。见 [second-VM rerun](evidence/vm9_request_287474_vm_rerun_20261025.json)
 与 [token-VM rerun](evidence/vm9_request_token_vm_rerun_20261025.json)。
 
+随后重跑 lazy state-service component：两基址共 8 项 controls、7 项 rollback guards，
+每个 formal case/guard 结果均复现。当前 verifier 没有输出 formal cumulative/provenance
+字段，因此不宣称逐字节一致；cold/decoded-key/warm singleton 已覆盖，但完整 state
+memory、live JVM 与 fresh signer 仍未完成。见
+[state-service rerun](evidence/vm9_state_service_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

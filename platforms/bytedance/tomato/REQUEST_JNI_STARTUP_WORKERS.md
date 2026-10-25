@@ -9279,3 +9279,14 @@ JVM and fresh signing remain open.
 
 Evidence: [second VM](evidence/vm9_request_287474_vm_rerun_20261025.json) and
 [token VM](evidence/vm9_request_token_vm_rerun_20261025.json).
+
+## 2026-10-25：lazy state-service fresh rerun
+
+The lazy state-service component was rerun from fresh state at both image bases.
+All 8 native/Python controls and 7 rollback guards reproduce the formal case and
+guard outcomes, covering cold, decoded-key, warm singleton and refusal paths. The
+current verifier omits formal cumulative/provenance metadata, so byte identity is
+not claimed. Complete state memory, live Android JVM and fresh standalone signing
+remain open.
+
+Evidence: [state service](evidence/vm9_state_service_rerun_20261025.json).

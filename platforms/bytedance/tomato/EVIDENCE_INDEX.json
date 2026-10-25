@@ -8674,5 +8674,23 @@
     "complete_token_vm_verified": false,
     "fresh_input_signer_output_verified": false,
     "comparison_note": "Fresh token frame/prefix outcomes reproduce 20 controls and 8 guards; current verifier omits the formal constructed outer/nested metadata, so byte identity is not claimed."
+  },
+  "vm9_state_service_rerun_20261025": {
+    "evidence_file": "evidence/vm9_state_service_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_state_service_fresh_20261012.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_state_service_fresh_20261012.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 8,
+    "rollback_guards": 7,
+    "case_outcomes_reproduced": true,
+    "guard_outcomes_reproduced": true,
+    "native_snapshot_input": false,
+    "complete_state_request_or_signer_verified": false,
+    "comparison_note": "Fresh state-service rerun reproduces every case and guard; current verifier omits formal cumulative/provenance fields, so byte identity is not claimed.",
+    "live_Android_JVM_verified": false,
+    "fresh_input_signer_output_verified": false
   }
 }

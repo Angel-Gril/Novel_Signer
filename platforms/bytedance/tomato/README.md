@@ -83,6 +83,13 @@ returns, whole-request equivalence and signing remain open. See the
 [second-VM rerun](evidence/vm9_request_287474_vm_rerun_20261025.json) and
 [token-VM rerun](evidence/vm9_request_token_vm_rerun_20261025.json).
 
+The lazy state-service component was rerun from fresh state as well: 8 controls
+and 7 rollback guards reproduce every formal case outcome across both image bases.
+The current verifier omits formal cumulative/provenance fields, so byte identity
+is not claimed. This covers cold/decoded-key/warm singleton state behavior and
+failure guards; complete state memory, live JVM and fresh signing remain open.
+See the [state-service rerun](evidence/vm9_state_service_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115
