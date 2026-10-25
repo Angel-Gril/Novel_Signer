@@ -48,6 +48,12 @@ fields compared with the 2026-10-06 formal JSON, so byte identity is not claimed
 Python outer construction, current Medusa, standalone signing and online header
 acceptance remain unverified. See the [outer native rerun](evidence/vm9_outer_signer_native_rerun_20261025.json).
 
+Outer finalization was rerun from fresh ELF state as well: 10 hash controls, 6
+publication/JNI integration cases and 5 negative controls are byte-identical to
+the 2026-10-24 formal evidence. Current-input hash generation, zero-extended
+caller storage and service ledgers remain equal; allocation 308's unused native
+short-string padding remains the only live mismatch. See the [outer-finalize rerun](evidence/vm9_outer_finalize_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

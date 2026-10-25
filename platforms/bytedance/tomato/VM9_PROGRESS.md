@@ -42,6 +42,12 @@ constructor、matching-libc allocator 与 publication/JNI ledger，未创建 hos
 因此不宣称 byte-identical；Python outer、current Medusa、standalone signer 与线上
 header acceptance 仍未验证。见 [outer native rerun](evidence/vm9_outer_signer_native_rerun_20261025.json)。
 
+随后重跑 outer finalization：10 项 hash controls、6 项 publication/JNI integration、
+5 项 negative controls 与 2026-10-24 formal evidence 逐字节一致。current-input hash、
+caller 高位零扩展及 service ledger 均匹配；allocation 308 的 unused native
+short-string padding 仍是唯一 live mismatch。见
+[outer-finalize rerun](evidence/vm9_outer_finalize_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

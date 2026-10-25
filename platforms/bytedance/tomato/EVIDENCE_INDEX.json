@@ -8075,6 +8075,25 @@
     "complete_python_medusa": false,
     "live_server_matrix_verified": false
   },
+  "vm9_outer_finalize_rerun_20261025": {
+    "evidence_file": "evidence/vm9_outer_finalize_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_outer_finalize_fresh_20261024.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_outer_finalize_fresh_20261007.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": true,
+    "native_hash_controls": 10,
+    "integration_controls": 6,
+    "negative_controls": 5,
+    "constructor_hash_generated_from_current_u32": true,
+    "publication_and_jni_service_ledger_equal": true,
+    "native_input_snapshot_used": false,
+    "complete_native_outer_state_equal": false,
+    "fresh_signer_output_verified": false,
+    "complete_python_medusa": false,
+    "live_server_matrix_verified": false
+  },
   "vm9_outer_allocation_308_padding_20261024": {
     "path": "evidence/vm9_outer_allocation_308_padding_20261024.json",
     "evidence_label": "Read-only allocation attribution",

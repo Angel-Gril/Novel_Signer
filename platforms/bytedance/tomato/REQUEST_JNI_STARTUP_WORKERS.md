@@ -49,6 +49,12 @@ JVM。由于新 verifier 输出增加了旧 formal JSON 不含的 allocation/pub
 signer 与线上 header acceptance 仍未验证。见
 [outer native rerun](evidence/vm9_outer_signer_native_rerun_20261025.json)。
 
+随后重跑 outer finalization：10 项 hash controls、6 项 publication/JNI integration
+和 5 项 negative controls，与 2026-10-24 正式 JSON 逐字节一致。current-input hash、
+caller 高位零扩展、publication/JNI ledger 均匹配；allocation 308 的 unused native
+short-string padding 仍是唯一 live mismatch。见
+[outer-finalize rerun](evidence/vm9_outer_finalize_rerun_20261025.json)。
+
 同一工作区继续重跑 normal Java facade → child dispatcher → owning request VM handoff：
 两基址×absent/SDK-30 共 4 项、8 项 rollback guards，与 2026-10-24 正式 JSON
 逐字节一致；每项 2583 VM steps、115 callbacks。该组合仍使用 synthetic JNI/JavaVM
