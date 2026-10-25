@@ -563,6 +563,32 @@
     "slot_store_observed": false,
     "interpretation": "custom DSO mapping/replacement path; runtime-table ownership remains unproven"
   },
+  "loader_path_argument_provenance": {
+    "callsite": "+0x18a314",
+    "instruction_facts": [
+      {
+        "offset": "0x18a30c",
+        "mnemonic": "ldr",
+        "operands": "x8, [x23, #0x20]"
+      },
+      {
+        "offset": "0x18a310",
+        "mnemonic": "ldr",
+        "operands": "x0, [x8, #0x40]"
+      },
+      {
+        "offset": "0x18a314",
+        "mnemonic": "bl",
+        "operands": "#0x184ad4"
+      }
+    ],
+    "equivalent_dataflow": "x0 = *(*(x23 + 0x20) + 0x40)",
+    "object_field_offset": "0x40",
+    "base_object_register": "x23",
+    "base_object_source": "caller-provided state; static owner unresolved",
+    "path_value_runtime_observed": false,
+    "interpretation": "The candidate loader receives the path from an object field; this does not identify the object constructor or prove the candidate executes."
+  },
   "loader_opcode_facts": [
     {
       "offset": "0x184af4",

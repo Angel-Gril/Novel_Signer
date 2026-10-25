@@ -291,6 +291,23 @@ def scan(library: Path) -> dict:
             "slot_store_observed": False,
             "interpretation": "custom DSO mapping/replacement path; runtime-table ownership remains unproven",
         }
+        path_argument_facts = [
+            _instruction_fact(data, text_base, address)
+            for address in (0x18A30C, 0x18A310, 0x18A314)
+        ]
+        expected_path_facts = {
+            ("0x18a30c", "ldr", "x8, [x23, #0x20]"),
+            ("0x18a310", "ldr", "x0, [x8, #0x40]"),
+            ("0x18a314", "bl", "#0x184ad4"),
+        }
+        actual_path_facts = {
+            (fact["offset"].lower(), fact["mnemonic"], fact["operands"])
+            for fact in path_argument_facts
+        }
+        if not expected_path_facts <= actual_path_facts:
+            raise AssertionError(
+                f"loader path argument facts changed: {sorted(expected_path_facts - actual_path_facts)}"
+            )
         assert imports[_bl_target(_word_at(word_list, text_base, 0x184B04), 0x184B04)] == "dlopen"
         assert imports[_bl_target(_word_at(word_list, text_base, 0x184CAC), 0x184CAC)] == "munmap"
         assert imports[_bl_target(_word_at(word_list, text_base, 0x184CD0), 0x184CD0)] == "mmap"
@@ -375,6 +392,16 @@ def scan(library: Path) -> dict:
                 "interpretation": "loader-like outer candidate only; no runtime-table ownership proven",
             },
             "outer_loader_sequence": outer_sequence,
+            "loader_path_argument_provenance": {
+                "callsite": "+0x18a314",
+                "instruction_facts": path_argument_facts,
+                "equivalent_dataflow": "x0 = *(*(x23 + 0x20) + 0x40)",
+                "object_field_offset": "0x40",
+                "base_object_register": "x23",
+                "base_object_source": "caller-provided state; static owner unresolved",
+                "path_value_runtime_observed": False,
+                "interpretation": "The candidate loader receives the path from an object field; this does not identify the object constructor or prove the candidate executes.",
+            },
             "loader_opcode_facts": loader_opcode_facts,
             "runtime_table_owner_recovered": False,
             "runtime_table_content_reconstructed": False,

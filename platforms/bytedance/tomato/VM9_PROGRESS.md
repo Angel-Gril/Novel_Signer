@@ -6087,6 +6087,12 @@ reference（`G+0x1800`），所以当前最终零值不仅能归因到 VM 的 `+
 映射/替换线索。same-CPU bootstrap→request 运行没有
 进入该候选，因此它仍不是已确认的 dispatch-table owner。
 
+同一静态扫描现在固化了候选调用前的参数链：`+0x18a30c` 读取
+`[x23,#0x20]`，`+0x18a310` 再读取该对象的 `+0x40` 字段并将结果作为
+`x0` 传给 `+0x184ad4`，即 `x0 = *(*(x23+0x20)+0x40)`。这只定位了
+path field 的 native 入口边界；`x23` 对象的构造者、实际 path 值和 loader
+执行时机仍未由静态证据闭合。
+
 证据：[outer owner static scan](evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json)，
 脚本：`python/verify_vm9_outer_runtime_owner_static_scan_20261025.py`。
 
