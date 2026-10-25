@@ -116,6 +116,13 @@ guards，NULL/exception、global/weak 与 mutex publication paths 在两基址�
 JSON 的 constructed-request/source metadata 未由该 verifier 输出，本轮不宣称
 byte-identical。见 [header-class rerun](evidence/vm9_jni_header_class_rerun_20261025.json)。
 
+随后重跑 child environment-acquisition wrapper：16 项 controls；child cleanup/
+destructor wrapper：16 项 controls、7 项 rollback guards。GetEnv ownership、temporary
+attach/detach、object reset 与 matching-libc free 均通过；formal files 的 owning callback
+和 metadata 未由 wrapper-only verifier 重放，本轮不宣称 byte-identical。见
+[environment rerun](evidence/vm9_request_child_environment_rerun_20261025.json) 与
+[cleanup rerun](evidence/vm9_request_child_cleanup_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

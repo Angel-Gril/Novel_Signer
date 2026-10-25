@@ -1,0 +1,226 @@
+{
+  "schema": "vm9-request-child-cleanup-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "wrapper_identity": {
+    "byte_count": 12,
+    "identical_to_existing_destructor_wrapper": true,
+    "no_PC_relative_instructions": true,
+    "tail_call_preserves_entry_stack": true
+  },
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "kind": "destroy",
+      "case": "normal",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "destroy",
+      "case": "NULL_payload",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "destroy",
+      "case": "cross_page_object",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "destroy",
+      "case": "packed_object_alias",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "destroy",
+      "case": "payload_object_alias",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "destroy",
+      "case": "payload_packed_alias",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "destroy",
+      "case": "free_mutates_object",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "destroy",
+      "case": "custom_empty_descriptor",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "destroy",
+      "case": "normal",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "destroy",
+      "case": "NULL_payload",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "destroy",
+      "case": "cross_page_object",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "destroy",
+      "case": "packed_object_alias",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "destroy",
+      "case": "payload_object_alias",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "destroy",
+      "case": "payload_packed_alias",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "destroy",
+      "case": "free_mutates_object",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "destroy",
+      "case": "custom_empty_descriptor",
+      "actual_wrapper": "0x28158c",
+      "original_wrapper_returned": true,
+      "all_declared_guest_bytes_and_packed_padding_equal": true,
+      "allocation_requests_and_free_calls_equal": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "unproven_wrapper",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_object",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "free_late_failure",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "noncallable_free",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_empty_descriptor",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "whole_request_native_differential_verified": false,
+  "complete_helper_vm_verified": false,
+  "complete_child_vm_verified": false,
+  "complete_second_vm_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 16,
+  "rollback_guards": 7
+}

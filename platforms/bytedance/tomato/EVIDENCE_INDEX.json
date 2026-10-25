@@ -8299,6 +8299,36 @@
     "fresh_signer_output_verified": false,
     "comparison_note": "Fresh cold-class component passes 24/16. Formal JSON includes pre-change/source and constructed-request metadata not emitted by this verifier, so byte identity is not claimed."
   },
+  "vm9_request_child_environment_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_child_environment_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_child_environment_fresh_20261015.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_child_environment_fresh_20261015.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_component_controls": 16,
+    "rollback_guards": 0,
+    "environment_acquisition_wrapper_verified": true,
+    "native_snapshot_input": false,
+    "whole_child_native_differential_verified": false,
+    "comparison_note": "Fresh environment-acquisition wrapper cases pass 16 controls. Formal JSON includes an additional owning callback and source metadata not emitted by this wrapper-only verifier, so byte identity is not claimed."
+  },
+  "vm9_request_child_cleanup_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_child_cleanup_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_child_cleanup_fresh_20261015.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_child_cleanup_fresh_20261015.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_component_controls": 16,
+    "rollback_guards": 7,
+    "child_destructor_and_free_verified": true,
+    "native_snapshot_input": false,
+    "whole_child_native_differential_verified": false,
+    "comparison_note": "Fresh child-cleanup component cases pass 16/7. Formal JSON includes an additional owning callback and source metadata not emitted by this cleanup-only verifier, so byte identity is not claimed."
+  },
   "vm9_request_caller_return_fresh_20261024": {
     "path": "evidence/vm9_request_caller_return_fresh_20261024.json",
     "evidence_label": "Fresh request caller return rerun",

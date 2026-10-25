@@ -109,6 +109,13 @@ retention、ordered Java array values、string conversion 与 provider failures�
 JSON 的 constructed-request/source metadata 未由该 verifier 输出，因此不宣称
 byte-identical。见 [header-class rerun](evidence/vm9_jni_header_class_rerun_20261025.json)。
 
+继续重跑 child environment-acquisition wrapper：16 项 controls；child cleanup/
+destructor wrapper：16 项 controls、7 项回滚。GetEnv ownership、temporary attach/
+detach、object reset 与 matching-libc free 均通过；formal files 的 owning callback
+和 metadata 未由 wrapper-only verifier 重放，因此不宣称 byte-identical。见
+[environment rerun](evidence/vm9_request_child_environment_rerun_20261025.json) 与
+[cleanup rerun](evidence/vm9_request_child_cleanup_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层
