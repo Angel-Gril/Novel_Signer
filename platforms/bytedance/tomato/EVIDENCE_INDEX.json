@@ -8140,6 +8140,24 @@
     "fresh_complete_standalone_signer_verified": false,
     "live_server_matrix_verified": false
   },
+  "vm9_request_dispatch_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_dispatch_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_dispatch_fresh_20261024.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_dispatch_fresh_20261020.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": true,
+    "native_Python_controls": 36,
+    "rollback_guards": 18,
+    "callback_fallback_routes_equal": true,
+    "reference_assignment_equal": true,
+    "shared_mutex_effects_equal": true,
+    "native_snapshot_input": false,
+    "actual_request_VM_executed": false,
+    "fresh_complete_standalone_signer_verified": false,
+    "live_server_matrix_verified": false
+  },
   "vm9_request_caller_return_fresh_20261024": {
     "path": "evidence/vm9_request_caller_return_fresh_20261024.json",
     "evidence_label": "Fresh request caller return rerun",

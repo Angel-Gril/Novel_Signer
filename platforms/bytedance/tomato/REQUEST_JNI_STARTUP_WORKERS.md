@@ -69,6 +69,11 @@ byte-identical；request 仍为 synthetic provider，不能替代 whole-request 
 differential、live JVM、fresh signer 或线上 acceptance。见
 [facade rerun](evidence/vm9_java_request_facade_rerun_20261025.json)。
 
+继续重跑 child request dispatcher：36 项 controls、18 项 rollback guards 与
+2026-10-24 正式 JSON 逐字节一致；两基址的 callback/fallback route、reference
+assignment、shared mutex effects 均匹配。actual request VM、fresh standalone signer
+与线上 acceptance 仍未验证。见 [dispatch rerun](evidence/vm9_request_dispatch_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

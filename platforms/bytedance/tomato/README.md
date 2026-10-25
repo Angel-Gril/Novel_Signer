@@ -70,6 +70,12 @@ was absent from the 2026-10-20 formal JSON, so byte identity is not claimed. The
 request remains a synthetic provider boundary; whole-request native differential,
 live JVM, fresh signing and online acceptance remain open. See the [facade rerun](evidence/vm9_java_request_facade_rerun_20261025.json).
 
+The child request dispatcher was then rerun with 36 controls and 18 rollback
+guards; its callback/fallback routes, reference assignment and shared-mutex
+effects are byte-identical to the 2026-10-24 formal evidence across both image
+bases. The actual request VM and standalone signer remain separate boundaries.
+See the [dispatch rerun](evidence/vm9_request_dispatch_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**

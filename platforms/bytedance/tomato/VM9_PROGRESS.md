@@ -61,6 +61,11 @@ differential、fresh signing 与线上验收未完成。见
 request 仍为 synthetic provider，whole-request native differential、live JVM、fresh
 signing 和线上验收未完成。见 [facade rerun](evidence/vm9_java_request_facade_rerun_20261025.json)。
 
+随后重跑 child request dispatcher：36 项 controls、18 项回滚，与 2026-10-24 formal
+evidence 逐字节一致；callback/fallback route、reference assignment 和 shared mutex
+effects 在两基址均匹配。actual request VM、fresh standalone signer 与线上验收仍为
+独立未完成边界。见 [dispatch rerun](evidence/vm9_request_dispatch_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层
