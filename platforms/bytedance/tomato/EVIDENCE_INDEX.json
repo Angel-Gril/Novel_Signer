@@ -9196,4 +9196,24 @@
     "online_header_acceptance_verified": false,
     "comparison_note": "The same Unicorn CPU completes bootstrap and then continues the URL-bearing request through the actual callback object's image+0x347f60 memcpy PLT. The preserved bootstrap oracle handles the existing matching-libc/import boundaries; both bases return to the oracle STOP with a nonzero output reference and no runtime-table page access. This is a native return/continuation observation, not a whole-request differential, fresh standalone signer, or online acceptance result."
   }
+  ,"vm9_dso_java_loader_provenance_fresh_20261026": {
+    "path": "evidence/vm9_dso_java_loader_provenance_fresh_20261026.json",
+    "verifier": "python/verify_vm9_dso_java_loader_provenance_20261026.py",
+    "evidence_label": "Real APK native-library provenance and Java loader boundary",
+    "apk_basename": "fq_7xz.apk",
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "apk_library_entry": "lib/arm64-v8a/libmetasec_ml.so",
+    "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "apk_entry_matches_supplied_dso": true,
+    "java_loader_paths": ["System.loadLibrary(name)", "APK/split ABI ZIP lookup and extraction", "System.load(private lib path)"],
+    "real_library_source_closed": true,
+    "external_custom_mapping_source_closed": false,
+    "runtime_table_owner_recovered": false,
+    "synthetic_loader_executed": false,
+    "synthetic_dispatch_table_used": false,
+    "whole_request_native_success": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "The pinned DSO is byte-identical to the arm64-v8a base-APK entry. p3.java and h.java prove normal and APK/split fallback loading, but do not identify the external custom mapping or VM runtime-table owner."
+  }
 }

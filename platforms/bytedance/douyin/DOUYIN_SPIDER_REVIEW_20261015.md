@@ -105,3 +105,17 @@ Android App 的请求头和番茄 native SDK。现有成果没有验证该项目
 Medusa，Neptune常被列为第七个软字段；Perseus另行跟踪。16个selector空间也不
 代表16套算法已经全部完成。详见
 [命名与完成度说明](../tomato/COMPLETE_ANALYSIS_AND_USAGE.md#对六神七神1624-神的准确结论)。
+
+## 2026-10-26 与当前 Tomato 主线的交叉边界
+
+当前主线新增的 provenance 证据闭合了 `fq_7xz.apk` 内
+`lib/arm64-v8a/libmetasec_ml.so` 与 pinned DSO 的字节级来源，并确认 Java
+loader 的 `System.loadLibrary`/APK ABI fallback。这个 APK/native SDK 来源与
+`cv-cat/DouYin_Spider` 的浏览器 Web 源码是两个独立证据对象；没有因此新增
+Douyin Web 的线上请求，也没有把 Tomato 的 `X-Helios`/`X-Medusa` 结果移植到
+Douyin。
+
+所以本项目对“七神”的研究已经覆盖了 Tomato 版本的命名、部分算法/桥接请求和
+当前 VM9 边界，但还没有覆盖 `DouYin_Spider` 所列 Web 作品、搜索、直播、私信、
+登录或创作者接口的线上验收。该目录仍保持 `static_community`，
+`verified_live_requests` 为空。

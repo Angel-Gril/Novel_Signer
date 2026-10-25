@@ -6132,3 +6132,21 @@ standalone signer 或线上验收，也没有合成 callback vtable/dispatch tab
 [memcpy continuation](evidence/vm9_bootstrap_request_memcpy_continuation_fresh_20261026.json)，
 复现脚本为
 [verify_vm9_bootstrap_request_memcpy_continuation_20261026.py](python/verify_vm9_bootstrap_request_memcpy_continuation_20261026.py)。
+
+## 2026-10-26：真实 APK/Java native-library provenance boundary
+
+新增只读 provenance verifier，读取固定 `fq_7xz.apk`、反编译的 `p3.java`/
+`h.java`/`o4.java` 和 pinned native DSO。APK 中的
+`lib/arm64-v8a/libmetasec_ml.so` 与 `libmetasec_ml_71332.so` 均为 3,971,808
+字节，SHA-256 均为
+`712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c`。源码特征
+同时闭合了 `System.loadLibrary(name)`、`ApplicationInfo.sourceDir`/
+`splitSourceDirs` 的 ABI-qualified ZIP 查找、私有 `lib` 目录解压和
+`System.load(absolutePath)` fallback。
+
+这只闭合了真实 `libmetasec_ml.so` 的 APK 来源和 Java loader 边界；没有证明
+另一个 APK DSO 提供 `image+0x13bb8f0` 外部 runtime table，也没有恢复 custom
+mapping/table owner。没有执行 synthetic loader 或写入 dispatch table。证据见
+[DSO/Java provenance](evidence/vm9_dso_java_loader_provenance_fresh_20261026.json)，
+复现脚本为
+[verify_vm9_dso_java_loader_provenance_20261026.py](python/verify_vm9_dso_java_loader_provenance_20261026.py)。
