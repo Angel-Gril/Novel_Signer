@@ -483,6 +483,18 @@ guest 页面和外部 allocator ledger 一起回滚。
 
 \n
 
+## 2026-10-26：request continuation evidence redaction and callback target correction
+
+The fresh same-CPU continuation probes now publish only bounded summaries rather than
+raw import, callback, tail, or unmapped traces. The summary retains import-name counts,
+the first `memcpy` argument shape, callback target offsets, stop state, output-reference
+nonzero status, and runtime-page read/write counts. Re-running both image bases preserved
+the prior observations: the memcpy probe reaches the oracle STOP after 99,927 native
+instructions and 194 imports; the URL-only probe reaches the real `image+0x347f60`
+memcpy PLT and then records one unserviced unmapped stop. This remains a native
+continuation boundary, not a whole-request differential, fresh standalone signer, or
+online acceptance result.
+
 \n
 
 \n
