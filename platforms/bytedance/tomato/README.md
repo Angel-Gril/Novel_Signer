@@ -54,6 +54,12 @@ the 2026-10-24 formal evidence. Current-input hash generation, zero-extended
 caller storage and service ledgers remain equal; allocation 308's unused native
 short-string padding remains the only live mismatch. See the [outer-finalize rerun](evidence/vm9_outer_finalize_rerun_20261025.json).
 
+The provider-effect rollback journal was rerun and is byte-identical: 32 nested
+provider controls and 32 rollback controls cover facade, owning-request and child
+dispatch journals. GuestOS mapping rollback is also byte-identical with 4 controls
+and 3 guards. These verify owner-side transactions and do not claim real OS
+mapping or live JVM behavior. See the [provider rollback rerun](evidence/vm9_provider_effect_rollback_rerun_20261025.json) and [GuestOS rollback rerun](evidence/vm9_guest_os_effect_rollback_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

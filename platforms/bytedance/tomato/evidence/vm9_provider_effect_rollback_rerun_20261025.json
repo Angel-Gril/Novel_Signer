@@ -1,0 +1,173 @@
+{
+  "schema": "vm9-provider-effect-rollback-v1",
+  "evidence_label": "Sample verified",
+  "controls": [
+    {
+      "case": "hook_failure",
+      "provider_effects_rolled_back": true,
+      "mapped_cpu_bytes_rolled_back": true,
+      "mapping_topology_unchanged": true
+    },
+    {
+      "case": "outer_owner_rollback",
+      "successful_result": 7,
+      "provider_effects_rolled_back": true,
+      "mapped_cpu_bytes_rolled_back": true
+    },
+    {
+      "case": "nested_outer_failure",
+      "inner_undo_preserved": true,
+      "reverse_order_rollback": true
+    },
+    {
+      "case": "owning_request_failure",
+      "request_effects_rolled_back": true
+    },
+    {
+      "case": "nested_owning_request_success_then_outer_failure",
+      "outer_owner_retains_undo": true,
+      "explicit_outer_rollback": true
+    },
+    {
+      "case": "child_dispatch_failure",
+      "child_provider_effects_rolled_back": true
+    },
+    {
+      "case": "java_facade_nested_journal",
+      "child_journal_forwarded": true,
+      "nested_journal_forwarded": true
+    },
+    {
+      "case": "java_facade_service_nested_journal",
+      "facade_callback_bound": true,
+      "child_journal_forwarded": true,
+      "nested_journal_forwarded": true
+    },
+    {
+      "case": "signer_handle_provider_failure",
+      "jni_provider_effects_rolled_back": true
+    },
+    {
+      "case": "state_clock_provider_failure",
+      "state_provider_effects_rolled_back": true,
+      "state_pages_unchanged": true
+    },
+    {
+      "case": "second_realtime_milliseconds_provider_failure",
+      "second_clock_effects_rolled_back": true,
+      "second_pages_unchanged": true
+    },
+    {
+      "case": "second_realtime_seconds_provider_failure",
+      "second_clock_effects_rolled_back": true,
+      "second_pages_unchanged": true
+    },
+    {
+      "case": "environment_acquisition_provider_failure",
+      "environment_effects_rolled_back": true,
+      "environment_pages_unchanged": true,
+      "second_child_helper_journal_forwarded": true
+    },
+    {
+      "case": "environment_string_allocator_failure",
+      "string_provider_effects_rolled_back": true,
+      "string_pages_unchanged": true
+    },
+    {
+      "case": "environment_logger_provider_failure",
+      "logger_effects_rolled_back": true,
+      "logger_pages_unchanged": true
+    },
+    {
+      "case": "jni_availability_provider_failure",
+      "jni_effects_rolled_back": true,
+      "jni_pages_unchanged": true
+    },
+    {
+      "case": "second_allocation_provider_failure",
+      "allocation_effects_rolled_back": true,
+      "allocation_pages_unchanged": true
+    },
+    {
+      "case": "second_formatter_provider_failure",
+      "formatter_effects_rolled_back": true,
+      "formatter_pages_unchanged": true
+    },
+    {
+      "case": "second_consumer_free_provider_failure",
+      "free_effects_rolled_back": true,
+      "consumer_pages_unchanged": true
+    },
+    {
+      "case": "second_string_assignment_provider_failure",
+      "assignment_effects_rolled_back": true,
+      "assignment_pages_unchanged": true
+    },
+    {
+      "case": "second_reference_provider_failure",
+      "reference_effects_rolled_back": true,
+      "reference_pages_unchanged": true
+    },
+    {
+      "case": "second_pair_provider_failure",
+      "pair_effects_rolled_back": true,
+      "pair_pages_unchanged": true
+    },
+    {
+      "case": "second_cached_reference_provider_failure",
+      "cached_reference_effects_rolled_back": true,
+      "cached_reference_pages_unchanged": true
+    },
+    {
+      "case": "second_json_string_provider_failure",
+      "json_string_effects_rolled_back": true,
+      "json_string_pages_unchanged": true
+    },
+    {
+      "case": "second_string_fill_provider_failure",
+      "string_fill_effects_rolled_back": true,
+      "string_fill_pages_unchanged": true
+    },
+    {
+      "case": "second_json_reference_provider_failure",
+      "json_reference_effects_rolled_back": true,
+      "json_reference_pages_unchanged": true
+    },
+    {
+      "case": "second_token_transform_provider_failure",
+      "token_transform_effects_rolled_back": true,
+      "token_transform_pages_unchanged": true
+    },
+    {
+      "case": "second_token_digest_provider_failure",
+      "token_digest_effects_rolled_back": true,
+      "token_digest_pages_unchanged": true
+    },
+    {
+      "case": "second_token_cipher_provider_failure",
+      "token_cipher_effects_rolled_back": true,
+      "token_cipher_pages_unchanged": true
+    },
+    {
+      "case": "second_token_tail_provider_failure",
+      "token_tail_effects_rolled_back": true,
+      "token_tail_pages_unchanged": true
+    },
+    {
+      "case": "second_base64_tail_provider_failure",
+      "base64_effects_rolled_back": true,
+      "base64_pages_unchanged": true
+    },
+    {
+      "case": "second_allocated_printf_provider_failure",
+      "allocated_printf_effects_rolled_back": true,
+      "allocated_printf_pages_unchanged": true
+    }
+  ],
+  "python_controls": 32,
+  "rollback_controls": 32,
+  "native_input_snapshot_used": false,
+  "live_jvm_verified": false,
+  "current_medusa_verified": false,
+  "implicit_mapping_or_unmapping": false
+}

@@ -8467,6 +8467,38 @@
     "current_medusa_verified": false,
     "implicit_mapping_or_unmapping": false
   },
+  "vm9_provider_effect_rollback_rerun_20261025": {
+    "evidence_file": "evidence/vm9_provider_effect_rollback_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_provider_effect_rollback_20261024.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_provider_effect_rollback_20261024.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": true,
+    "python_controls": 32,
+    "rollback_controls": 32,
+    "java_facade_service_nested_journal_forwarded": true,
+    "owning_request_journal_forwarded": true,
+    "child_dispatch_journal_forwarded": true,
+    "native_input_snapshot_used": false,
+    "live_jvm_verified": false,
+    "current_medusa_verified": false,
+    "implicit_mapping_or_unmapping": false
+  },
+  "vm9_guest_os_effect_rollback_rerun_20261025": {
+    "evidence_file": "evidence/vm9_guest_os_effect_rollback_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_guest_os_effect_rollback_20261024.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_guest_os_effect_rollback_20261024.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": true,
+    "python_controls": 4,
+    "rollback_controls": 3,
+    "native_input_snapshot_used": false,
+    "mapping_topology_claim": "owner-only",
+    "real_os_mapping_verified": false
+  },
   "vm9_request_allocator_handoff_fresh_20261024": {
     "path": "evidence/vm9_request_allocator_handoff_fresh_20261024.json",
     "evidence_label": "Fresh owning allocator request handoff continuation",

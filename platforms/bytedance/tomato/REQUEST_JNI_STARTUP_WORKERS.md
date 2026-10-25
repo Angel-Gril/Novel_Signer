@@ -55,6 +55,13 @@ caller 高位零扩展、publication/JNI ledger 均匹配；allocation 308 的 u
 short-string padding 仍是唯一 live mismatch。见
 [outer-finalize rerun](evidence/vm9_outer_finalize_rerun_20261025.json)。
 
+随后重跑 provider-effect rollback journal：32 项 controls、32 项 rollback guards，
+与 formal evidence 逐字节一致，覆盖 facade/owning-request/child-dispatch nested
+journals。GuestOS mapping rollback 同样逐字节一致（4 controls、3 guards）；该层只
+验证 owner-side transaction，不等同于真实 OS mapping 或 live JVM。见
+[provider rollback rerun](evidence/vm9_provider_effect_rollback_rerun_20261025.json) 与
+[GuestOS rollback rerun](evidence/vm9_guest_os_effect_rollback_rerun_20261025.json)。
+
 同一工作区继续重跑 normal Java facade → child dispatcher → owning request VM handoff：
 两基址×absent/SDK-30 共 4 项、8 项 rollback guards，与 2026-10-24 正式 JSON
 逐字节一致；每项 2583 VM steps、115 callbacks。该组合仍使用 synthetic JNI/JavaVM
