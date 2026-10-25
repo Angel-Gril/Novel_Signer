@@ -6079,7 +6079,8 @@ reference（`G+0x1800`），所以当前最终零值不仅能归因到 VM 的 `+
 对真实样本的整个 `.text` 扫描五个 relocation slot 的短地址链写入，未发现
 相邻 `ADRP/(ADD)/STR` 形式的 slot writer；同时确认 VM 入口通过五条
 `ADRP #0x379000 → LDR X` 链在 `+0x16848c/+0x168570/+0x16ba18/+0x16c37c/+0x16cf90`
-读取五个 slot。另记录 39 个 loader-like PLT 调用点；
+读取五个 slot；后续索引分别为 `w9 & 0x3f`、`(w21/w27/w26 >> 6) & 0x3f` 和
+`(w8 >> 22) & 0x1f`，对应五组 VM dispatch base。另记录 39 个 loader-like PLT 调用点；
 其中 `+0x184ad4` 由 `+0x18a314` 调用，静态路径包含 `dlopen`、`munmap` 和
 `mmap`，是当前最具体的 outer-loader 线索。same-CPU bootstrap→request 运行没有
 进入该候选，因此它仍不是已确认的 dispatch-table owner。

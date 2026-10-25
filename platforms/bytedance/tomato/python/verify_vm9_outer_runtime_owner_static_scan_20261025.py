@@ -31,6 +31,18 @@ LOADER_IMPORTS = {
     "mmap", "mprotect", "munmap", "calloc", "syscall",
 }
 KNOWN_LOADER_CALLERS = (0x184AD4, 0x18A314)
+SLOT_READ_ROLES = {
+    0x3798D8: {"consumer": "+0x16848c", "table": "vm-dispatch-0",
+               "index": "w9 & 0x3f"},
+    0x3798E0: {"consumer": "+0x168570", "table": "vm-dispatch-1",
+               "index": "(w21 >> 6) & 0x3f"},
+    0x3798E8: {"consumer": "+0x16ba18", "table": "vm-dispatch-2",
+               "index": "(w27 >> 6) & 0x3f"},
+    0x3798F0: {"consumer": "+0x16c37c", "table": "vm-dispatch-3",
+               "index": "(w26 >> 6) & 0x3f"},
+    0x3798F8: {"consumer": "+0x16cf90", "table": "vm-dispatch-4",
+               "index": "(w8 >> 22) & 0x1f"},
+}
 
 
 def _signed(value: int, bits: int) -> int:
@@ -237,6 +249,9 @@ def scan(library: Path) -> dict:
             "slot_store_candidate_count": len(slot_writes),
             "slot_access_candidates": slot_accesses,
             "slot_access_candidate_count": len(slot_accesses),
+            "slot_read_roles": {
+                hex(slot): role for slot, role in SLOT_READ_ROLES.items()
+            },
             "known_outer_loader_candidate": {
                 "entry_offset": hex(KNOWN_LOADER_CALLERS[0]),
                 "caller_offset": hex(KNOWN_LOADER_CALLERS[1]),

@@ -9548,6 +9548,9 @@ success 或 signer 输出。
 `R_AARCH64_RELATIVE` addend；没有发现相邻 `ADRP/(ADD)/STR` 形式直接写入这些
 slot 的静态候选。VM 入口则有五条直接 `ADRP #0x379000 → LDR X` 读取，PC 为
 `+0x16848c/+0x168570/+0x16ba18/+0x16c37c/+0x16cf90`，分别覆盖五个 slot。
+这五条读取随后都按各自编码字段索引 handler 表：slot0 为 `w9 & 0x3f`，
+slot1/2/3 分别为 `w21/w27/w26` 右移 6 位后的 6-bit，slot4 为 `w8` 右移
+22 位后的 5-bit；这确认了 slot 是五组 VM dispatch base，而不是普通数据全局。
 
 扫描保留 39 个 loader-like PLT 调用点。其中 `+0x184ad4` 被 `+0x18a314` 调用，
 路径静态包含 `dlopen`、`munmap` 和 `mmap`；另外还有 `dlsym/dlclose/calloc` 等

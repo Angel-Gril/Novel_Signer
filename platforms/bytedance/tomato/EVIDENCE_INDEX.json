@@ -9073,6 +9073,13 @@
     "slot_store_candidate_count": 0,
     "slot_access_candidate_count": 5,
     "slot_access_pcs": ["+0x16848c", "+0x168570", "+0x16ba18", "+0x16c37c", "+0x16cf90"],
+    "slot_read_roles": {
+      "0x3798d8": {"consumer": "+0x16848c", "table": "vm-dispatch-0", "index": "w9 & 0x3f"},
+      "0x3798e0": {"consumer": "+0x168570", "table": "vm-dispatch-1", "index": "(w21 >> 6) & 0x3f"},
+      "0x3798e8": {"consumer": "+0x16ba18", "table": "vm-dispatch-2", "index": "(w27 >> 6) & 0x3f"},
+      "0x3798f0": {"consumer": "+0x16c37c", "table": "vm-dispatch-3", "index": "(w26 >> 6) & 0x3f"},
+      "0x3798f8": {"consumer": "+0x16cf90", "table": "vm-dispatch-4", "index": "(w8 >> 22) & 0x1f"}
+    },
     "bootstrap_request_executed_candidate": false,
     "runtime_table_owner_recovered": false,
     "runtime_table_content_reconstructed": false,
