@@ -8413,8 +8413,14 @@
     "evidence_label": "Fresh normal Java facade to child dispatcher to owning request VM handoff",
     "native_Python_controls": 4,
     "rollback_guards": 8,
-    "image_bases": ["0x122c0000", "0x775c205000"],
-    "property_profiles": ["absent", "sdk_30"],
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
     "return_offset": "0xffb78",
     "steps_each": 2583,
     "callbacks_each": 115,
@@ -8503,8 +8509,14 @@
     "path": "evidence/vm9_request_allocator_handoff_fresh_20261024.json",
     "evidence_label": "Fresh owning allocator request handoff continuation",
     "python_handoff_controls": 4,
-    "image_bases": ["0x122c0000", "0x775c205000"],
-    "property_profiles": ["absent", "sdk_30"],
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
     "return_offset": "0xffb78",
     "low_base_steps": 957,
     "low_base_callbacks": 26,
@@ -8531,8 +8543,14 @@
     "fresh_rerun_verified": true,
     "byte_identical_to_rerun_of": true,
     "python_handoff_controls": 4,
-    "image_bases": ["0x122c0000", "0x775c205000"],
-    "property_profiles": ["absent", "sdk_30"],
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
     "owning_allocator_session_used": true,
     "owning_request_vm_entry_used": true,
     "actual_jni_environment_acquisition_high_base": true,
@@ -8547,7 +8565,11 @@
     "path": "evidence/vm9_signer_boundary_audit_20261024.json",
     "evidence_label": "Public outer/request standalone-signer boundary audit",
     "handoff_case_count": 4,
-    "composition_path": ["+0x17b8f8", "+0x27dd04", "+0x2830c4"],
+    "composition_path": [
+      "+0x17b8f8",
+      "+0x27dd04",
+      "+0x2830c4"
+    ],
     "production_entries_inspected": 6,
     "missing_boundaries": [
       "outer_constructor",
@@ -8863,8 +8885,14 @@
     "evidence_label": "Fresh normal Java facade to child dispatcher to owning request VM handoff with persisted callback ledger",
     "native_Python_controls": 4,
     "rollback_guards": 8,
-    "image_bases": ["0x122c0000", "0x775c205000"],
-    "property_profiles": ["absent", "sdk_30"],
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "property_profiles": [
+      "absent",
+      "sdk_30"
+    ],
     "return_offset": "0xffb78",
     "steps_each": 2583,
     "callbacks_each": 115,
@@ -8881,5 +8909,28 @@
     "live_Android_JVM_verified": false,
     "complete_physical_ABI_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_request_native_dispatch_preflight_fresh_20261025": {
+    "path": "evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json",
+    "evidence_label": "Fresh native child-to-owning-request dispatch preflight",
+    "controls": 2,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "entry_offset": "0x27dd04",
+    "callback_target_offset": "0x2830c4",
+    "native_dispatch_entry_reached": true,
+    "vm_entry_offset": "0x168324",
+    "dispatch_table_read_offset": "0x170308",
+    "first_native_runtime_table_gap": "image+0x13bb8f0",
+    "fresh_elf_guest_pages": true,
+    "native_snapshot_input": false,
+    "pages_unchanged_after_failed_native_probe": true,
+    "whole_native_differential_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "live_Android_JVM_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Both fresh native probes stop at the relocated VM dispatch table before callback execution; no runtime table was synthesized."
   }
 }

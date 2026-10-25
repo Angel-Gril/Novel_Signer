@@ -5966,3 +5966,16 @@ VM 生成并写入 diagnostic scope；首尾 wrapper/target、参数地址和四
 Android JVM、fresh standalone signer 和线上 acceptance 仍未验证。
 
 证据：[callback-ledger handoff](evidence/vm9_java_request_handoff_fresh_20261025.json)。
+
+## 2026-10-25：fresh native child→owning request dispatch preflight
+
+复用已闭合的 fresh receiver/tree/iterator/mutex fixture，把 callback pair 的
+synthetic host target 改为真实 `+0x2830c4`，直接执行 native `+0x27dd04`。
+两个 image base 均进入真实 owning request VM `+0x2830c4 → +0x168324`，在
+`+0x170308` 的 VM dispatch-table load 停止；`R_AARCH64_RELATIVE` slot
+`image+0x3798d8` 指向 `image+0x13bb8f0`，该运行时表不在 fresh main PT_LOAD
+pages 中。失败前 guest pages 保持不变，未调用 synthetic callback。
+
+这确认了 whole-request native differential 的第一项真实 bootstrap 缺口，未合成
+runtime table，也未把停止误报为 callback 成功。证据见
+[evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json](evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json)。

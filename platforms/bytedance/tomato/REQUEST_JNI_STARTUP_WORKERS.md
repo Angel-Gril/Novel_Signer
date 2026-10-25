@@ -9432,3 +9432,16 @@ python -B platforms/bytedance/tomato/python/verify_vm9_java_request_handoff_fres
   --library <private-libmetasec.so> --libc <matching-libc.so> `
   --output platforms/bytedance/tomato/evidence/vm9_java_request_handoff_fresh_20261025.json
 ```
+
+## 6.272 Fresh native child-to-owning request dispatch preflight（2026-10-25 Asia/Shanghai）
+
+复用 request dispatch 的 fresh receiver/tree/iterator/mutex 页面，将 callback pair
+改为真实 `+0x2830c4`，直接运行 native `+0x27dd04`。两个 image base 都进入
+`+0x2830c4 → +0x168324`，随后在 VM opcode dispatch 的 `+0x170308` 停止。
+`+0x3798d8` 的 relative relocation 指向 `image+0x13bb8f0`，但该运行时表不在
+fresh main PT_LOAD 页面中；失败前页面逐字节保持不变，synthetic callback 次数为 0。
+
+该结果是 whole-request native differential 的 bootstrap 缺口证据。运行时 dispatch
+表属于 outer/bootstrap 状态，当前没有从 Python VM 或 native snapshot 推断/补写。
+因此仍不宣称完整 request return、physical ABI、真实 JVM、fresh standalone signer
+或线上 header acceptance。

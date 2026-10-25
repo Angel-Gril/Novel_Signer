@@ -977,3 +977,10 @@ callback ABI entries with first/last wrapper and target. This is continuation me
 from the current Python VM, not a native snapshot or whole-request differential; JNI,
 physical ABI, live JVM, fresh standalone signing and online acceptance remain open.
 See [callback-ledger handoff](evidence/vm9_java_request_handoff_fresh_20261025.json).
+
+The fresh native child-to-request preflight now reaches the real `+0x2830c4` owning
+entry and VM `+0x168324` at both image bases. It stops at `+0x170308` because the
+relocated dispatch table at `image+0x13bb8f0` is outside the fresh main PT_LOAD pages;
+no runtime table was synthesized and pages remain unchanged. This is the first native
+whole-request bootstrap gap, not a completed differential or signer result. See
+[evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json](evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json).
