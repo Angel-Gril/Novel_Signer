@@ -55,6 +55,12 @@ native differential、live Android JVM、fresh signing 和 online header accepta
 differential、fresh signing 与线上验收未完成。见
 [allocator handoff rerun](evidence/vm9_request_allocator_handoff_rerun_20261025.json)。
 
+继续重跑 Java facade service：两基址共 22 项 native/Python controls、15 项回滚，
+覆盖 normal/NULL/error、duplicate/three-pair headers 与 cleanup。当前输出增加了
+旧 formal JSON 未包含的 source/TDD/cumulative metadata，因此不宣称 byte-identical；
+request 仍为 synthetic provider，whole-request native differential、live JVM、fresh
+signing 和线上验收未完成。见 [facade rerun](evidence/vm9_java_request_facade_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层

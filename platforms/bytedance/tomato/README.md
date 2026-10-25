@@ -63,6 +63,13 @@ This remains a Python composition with synthetic request input/JNI providers and
 does not establish whole-request native differential or fresh signing. See the
 [allocator handoff rerun](evidence/vm9_request_allocator_handoff_rerun_20261025.json).
 
+The Java facade service was rerun too: 22 native/Python controls and 15 rollback
+guards cover both image bases, normal/NULL/error inputs, duplicate and three-pair
+headers, and cleanup. The current output adds source/TDD/cumulative metadata that
+was absent from the 2026-10-20 formal JSON, so byte identity is not claimed. The
+request remains a synthetic provider boundary; whole-request native differential,
+live JVM, fresh signing and online acceptance remain open. See the [facade rerun](evidence/vm9_java_request_facade_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**

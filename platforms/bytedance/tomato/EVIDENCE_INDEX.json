@@ -8109,6 +8109,24 @@
     "historical_native_groups_not_replayed": true,
     "native_snapshot_input": false
   },
+  "vm9_java_request_facade_rerun_20261025": {
+    "evidence_file": "evidence/vm9_java_request_facade_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_java_request_facade_fresh_20261020.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_java_request_facade_fresh_20261020.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 22,
+    "rollback_guards": 15,
+    "original_normal_Java_facade_verified": true,
+    "synthetic_JNI_and_virtual_request": true,
+    "actual_request_VM_integration_verified": false,
+    "fresh_complete_standalone_signer_verified": false,
+    "whole_request_native_differential_verified": false,
+    "live_Android_JVM_verified": false,
+    "comparison_note": "Fresh 22/15 controls pass; current rerun includes the verifier's source/TDD/cumulative metadata absent from the 2026-10-20 formal JSON, so byte identity is not claimed."
+  },
   "vm9_request_dispatch_fresh_20261024": {
     "path": "evidence/vm9_request_dispatch_fresh_20261024.json",
     "evidence_label": "Fresh child request dispatcher rerun",

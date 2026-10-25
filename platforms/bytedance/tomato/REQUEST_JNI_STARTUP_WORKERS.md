@@ -62,6 +62,13 @@ Python composition 与 synthetic request/JNI provider，不等同于 whole-reque
 differential、fresh signer 或线上 acceptance。见
 [allocator handoff rerun](evidence/vm9_request_allocator_handoff_rerun_20261025.json)。
 
+随后重跑 Java facade service：两基址共 22 项 native/Python controls、15 项 rollback
+guards，覆盖 normal/NULL/error、重复/三对 headers 及 cleanup。由于当前 verifier 增加了
+2026-10-20 formal JSON 没有的 source/TDD/cumulative metadata，本轮明确不宣称
+byte-identical；request 仍为 synthetic provider，不能替代 whole-request native
+differential、live JVM、fresh signer 或线上 acceptance。见
+[facade rerun](evidence/vm9_java_request_facade_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
