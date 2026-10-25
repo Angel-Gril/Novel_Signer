@@ -1,0 +1,345 @@
+{
+  "red_cases": [],
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "normal",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "relocated_stack",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "patterned_stack",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "wide_saved_words",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "TLS_frame_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "TLS_saved_FP_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "TLS_saved_X19_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "TLS_saved_X28_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "TLS_saved_LR_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_saved_words",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "normal",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "relocated_stack",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "patterned_stack",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wide_saved_words",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "TLS_frame_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "TLS_saved_FP_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "TLS_saved_X19_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "TLS_saved_X28_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "TLS_saved_LR_alias",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_saved_words",
+      "steps": 31,
+      "original_selected_slot_generic_second_caller_returned": true,
+      "all_seven_physical_return_values_equal": true,
+      "complete_declared_guest_and_caller_stack_bytes_equal": true,
+      "physical_X0_is_descriptor_callback": true,
+      "no_allocation_or_services": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "underflow_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "wide_image",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "wide_thread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "wrong_callback",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "missing_frame",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "missing_TLS",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "canary_mismatch",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "tagged_caller_LR",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "invalid_stack_type",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "wrong_exit_pc",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "wrong_exit_word",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "wrong_exit_target",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "short_registers",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    },
+    {
+      "case": "invalid_continue_option",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "module_image_base_restored": true
+    }
+  ],
+  "native_Python_controls": 20,
+  "rollback_guards": 15,
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "whole_second_native_differential_verified": false,
+  "complete_physical_ABI_verified": false,
+  "complete_signer_verified": false
+}

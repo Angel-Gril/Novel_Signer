@@ -74,6 +74,18 @@ differential、live JVM、fresh signer 或线上 acceptance。见
 assignment、shared mutex effects 均匹配。actual request VM、fresh standalone signer
 与线上 acceptance 仍未验证。见 [dispatch rerun](evidence/vm9_request_dispatch_rerun_20261025.json)。
 
+随后重跑 selected-slot second VM return component：两基址×10 stack/TLS layouts 共
+20 项 native/Python cases、15 项 rollback guards，七个 physical return values、
+caller stack 与 TLS restoration 全部匹配。当前脚本未重放 2026-10-19 formal JSON
+后续的 constructed/owning control，因此本轮不宣称 byte-identical。见
+[second-return rerun](evidence/vm9_request_second_return_rerun_20261025.json)。
+
+继续重跑 second-VM shared-reader callback component：18 项 native/Python cases、11 项
+rollback guards，reader counts、packed alias、cross-page boundary 与 process-shared
+mutex transitions 在两基址均通过。当前脚本未重放 formal evidence 的 owning callback/
+constructed-second metadata，本轮不宣称 byte-identical。见
+[second-reader rerun](evidence/vm9_request_second_reader_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

@@ -76,6 +76,19 @@ effects are byte-identical to the 2026-10-24 formal evidence across both image
 bases. The actual request VM and standalone signer remain separate boundaries.
 See the [dispatch rerun](evidence/vm9_request_dispatch_rerun_20261025.json).
 
+The selected-slot second VM return component was rerun from fresh ELF pages as
+well: 20 native/Python return cases and 15 rollback guards pass across both image
+bases and ten stack/TLS layouts. The seven physical return values, caller stack
+and TLS restoration all match. The current verifier does not replay the later
+constructed/owning control included in the 2026-10-19 formal JSON, so this is a
+component rerun without a byte-identity claim. See the [second-return rerun](evidence/vm9_request_second_return_rerun_20261025.json).
+
+The second-VM shared-reader callback component was rerun next: 18 native/Python
+cases and 11 rollback guards cover reader counts, packed aliases, cross-page
+boundaries and process-shared mutex transitions at both bases. The current run
+does not replay the later owning callback/constructed-second metadata in the
+formal evidence, so byte identity is not claimed. See the [second-reader rerun](evidence/vm9_request_second_reader_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**

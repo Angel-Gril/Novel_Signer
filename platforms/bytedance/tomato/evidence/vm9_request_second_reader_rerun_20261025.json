@@ -1,0 +1,313 @@
+{
+  "schema": "vm9-request-second-reader-fresh-v1",
+  "evidence_date": "2026-10-15",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "zero",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "seven",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "near_limit",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "last_reader",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "shared_mutex",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_count",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_count_alias",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "packed_pointer_alias",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "zero",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "seven",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "near_limit",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "last_reader",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "shared_mutex",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_count",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_count_alias",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "packed_pointer_alias",
+      "native_instructions": 94,
+      "actual_wrapper": "0x2885e0",
+      "actual_reader": "0x32a444",
+      "original_wrapper_and_reader_returned": true,
+      "all_declared_guest_bytes_equal": true,
+      "reader_count_increment_and_mutex_restore_equal": true,
+      "two_actual_mutex_transitions_equal": true,
+      "no_allocation_or_JNI_services": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "wrong_wrapper",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_packed",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_receiver",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_count",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "saturated_readers",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "writer_count",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "mutex_locked",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "mutex_contended",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "recursive_mutex",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "unaligned_mutex",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "accepted_native_controls_not_repeated": true,
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "complete_child_vm_verified": false,
+  "complete_second_vm_verified": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "native_Python_controls": 18,
+  "rollback_guards": 11
+}

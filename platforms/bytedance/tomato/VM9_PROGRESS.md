@@ -66,6 +66,18 @@ evidence 逐字节一致；callback/fallback route、reference assignment 和 sh
 effects 在两基址均匹配。actual request VM、fresh standalone signer 与线上验收仍为
 独立未完成边界。见 [dispatch rerun](evidence/vm9_request_dispatch_rerun_20261025.json)。
 
+继续重跑 selected-slot second VM return component：两基址×10 stack/TLS layouts 共
+20 项 native/Python cases、15 项回滚通过；七个 physical return values、caller stack
+和 TLS restoration 均匹配。当前 verifier 未重放 2026-10-19 formal JSON 后续的
+constructed/owning control，因此不宣称 byte-identical。见
+[second-return rerun](evidence/vm9_request_second_return_rerun_20261025.json)。
+
+随后重跑 second-VM shared-reader callback component：18 项 native/Python cases、11
+项回滚，覆盖 reader counts、packed alias、cross-page boundary 和 process-shared
+mutex transitions，两基址均通过。当前脚本未重放 formal evidence 的 owning callback/
+constructed-second metadata，因此不宣称 byte-identical。见
+[second-reader rerun](evidence/vm9_request_second_reader_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层
