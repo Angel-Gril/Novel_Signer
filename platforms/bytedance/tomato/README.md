@@ -90,6 +90,13 @@ is not claimed. This covers cold/decoded-key/warm singleton state behavior and
 failure guards; complete state memory, live JVM and fresh signing remain open.
 See the [state-service rerun](evidence/vm9_state_service_rerun_20261025.json).
 
+The state diagnostic enter/leave wrappers were rerun independently as well: 36
+controls and 8 rollback guards pass across both image bases. The current verifier
+uses a reorganized schema without the formal cumulative/provenance fields, so
+byte identity is not claimed. Allocation remains an explicit provider boundary;
+full state/request memory and signer output remain open. See the
+[state-diagnostics rerun](evidence/vm9_state_diagnostics_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

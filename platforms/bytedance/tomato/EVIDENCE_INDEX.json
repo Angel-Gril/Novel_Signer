@@ -8692,5 +8692,23 @@
     "comparison_note": "Fresh state-service rerun reproduces every case and guard; current verifier omits formal cumulative/provenance fields, so byte identity is not claimed.",
     "live_Android_JVM_verified": false,
     "fresh_input_signer_output_verified": false
+  },
+  "vm9_state_diagnostics_rerun_20261025": {
+    "evidence_file": "evidence/vm9_state_diagnostics_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_state_diagnostics_fresh_20261020.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_state_diagnostics_fresh_20261020.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 36,
+    "rollback_guards": 8,
+    "paired_enter_leave_cases": 36,
+    "native_snapshot_input": false,
+    "historical_native_groups_replayed": false,
+    "synthetic_allocation_service": true,
+    "complete_state_or_request_memory_equivalence_verified": false,
+    "complete_signer_verified": false,
+    "comparison_note": "Fresh diagnostic enter/leave wrappers reproduce 36 controls and 8 guards; current verifier schema differs from the formal cumulative/provenance schema, so byte identity is not claimed."
   }
 }

@@ -9290,3 +9290,13 @@ not claimed. Complete state memory, live Android JVM and fresh standalone signin
 remain open.
 
 Evidence: [state service](evidence/vm9_state_service_rerun_20261025.json).
+
+## 2026-10-25：state diagnostic enter/leave fresh rerun
+
+The diagnostic enter/leave wrappers were rerun from fresh pages at both image
+bases. Thirty-six wrapper controls and eight rollback guards pass. The current
+verifier uses a reorganized schema without the formal cumulative/provenance
+metadata, so byte identity is not claimed. Allocation remains an explicit
+provider boundary; full state/request memory and signer output remain open.
+
+Evidence: [state diagnostics](evidence/vm9_state_diagnostics_rerun_20261025.json).

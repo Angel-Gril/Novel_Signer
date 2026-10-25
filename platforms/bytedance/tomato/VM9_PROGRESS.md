@@ -81,6 +81,12 @@ verifier 没有重放旧 formal evidence 的 constructed outer/second metadata�
 memory、live JVM 与 fresh signer 仍未完成。见
 [state-service rerun](evidence/vm9_state_service_rerun_20261025.json)。
 
+继续重跑 state diagnostic enter/leave wrappers：两基址共 36 项 controls、8 项 rollback
+guards 通过。当前 verifier 使用重组后的 schema，没有 formal cumulative/provenance
+字段，因此不宣称逐字节一致；allocation 仍是显式 provider，完整 state/request
+memory 与 signer output 仍未完成。见
+[state-diagnostics rerun](evidence/vm9_state_diagnostics_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

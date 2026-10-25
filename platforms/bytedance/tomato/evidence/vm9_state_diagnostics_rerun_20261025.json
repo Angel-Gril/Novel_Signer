@@ -1,0 +1,279 @@
+{
+  "schema": "vm9-state-diagnostics-fresh/v1",
+  "native_Python_controls": 36,
+  "paired_enter_leave_cases": 18,
+  "new_refusal_or_page_rollback_guards": 8,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "cold_zero",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 620,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cold_last",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 620,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cold_high_bits",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 620,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cold_cross_page",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 620,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_no_table",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 405,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_missing_entry",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 319,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_existing",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 163,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_nested",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 157,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "warm_saturated",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 111,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold_zero",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 620,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold_last",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 620,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold_high_bits",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 620,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cold_cross_page",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 620,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_no_table",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 405,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_missing_entry",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 319,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_existing",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 163,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_nested",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 157,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "warm_saturated",
+      "original_state_enter_and_leave_wrappers_returned": true,
+      "both_original_diagnostic_bodies_executed": true,
+      "scope_padding_preserved": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "explicit_opt_in_used": true,
+      "native_instructions": 111,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unmapped_object",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effect_rollback_verified": false
+    },
+    {
+      "case": "busy_guard",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effect_rollback_verified": false
+    },
+    {
+      "case": "global_contention",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effect_rollback_verified": false
+    },
+    {
+      "case": "entry_contention",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effect_rollback_verified": false
+    },
+    {
+      "case": "allocation_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effect_rollback_verified": false
+    },
+    {
+      "case": "unmapped_table",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effect_rollback_verified": false
+    },
+    {
+      "case": "missing_thread_pointer",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effect_rollback_verified": false
+    },
+    {
+      "case": "invalid_scope",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effect_rollback_verified": false
+    }
+  ],
+  "allocation_service_is_synthetic": true,
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "full_state_or_request_memory_equivalence_verified": false,
+  "complete_signer_verified": false
+}
