@@ -144,6 +144,15 @@ The current component report is kept separate from the older aggregate evidence;
 it does not claim byte identity, full request callback composition, live JVM or
 fresh signer output. See the [request tree-reference rerun](evidence/vm9_request_tree_reference_rerun_20261025.json).
 
+The request-object constructor and clock/reference boundary was rerun from fresh
+ELF/Python state: 60 native/Python controls, 48 rollback guards and one request
+entry check pass across both image bases. It covers cold/warm, length and time
+edges, direct/null reference ownership, wrapper tails, provider failures and the
+owning request entry. The current verifier adds 14 entry guards relative to the
+formal aggregate, so byte identity is not claimed; native snapshots, physical
+spill equivalence, whole-request differential, live JVM and fresh signing remain
+open. See the [request-object rerun](evidence/vm9_request_object_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

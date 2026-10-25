@@ -124,6 +124,14 @@ output 和 alias guard。该报告保持为独立 component schema，不宣称�
 一致，也不等同于完整 request callback、live JVM 或 fresh signer。见
 [request tree-reference rerun](evidence/vm9_request_tree_reference_rerun_20261025.json)。
 
+随后重跑 request-object constructor/clock/reference boundary：两基址共 **60 项
+native/Python controls、48 项 rollback guards**，另有 **1 项 request-entry check**。
+覆盖 cold/warm、长度/时间边界、direct/null ownership、wrapper tail、provider failure
+及 owning request entry。当前输出比 formal aggregate 多 14 项 entry guards，因此不宣称
+逐字节一致；未使用 native snapshot，physical spill、whole-request differential、live
+JVM、fresh signing 与线上验收仍未完成。见
+[request-object rerun](evidence/vm9_request_object_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole
