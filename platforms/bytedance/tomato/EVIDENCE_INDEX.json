@@ -8583,5 +8583,43 @@
     "fresh_input_signer_output_verified": false,
     "current_online_header_matrix_verified": false,
     "comparison_note": "Fresh 10-case native boundary passes; rerun includes additional allocation/publication trace fields absent from the 2026-10-06 formal JSON, so byte identity is not claimed."
+  },
+  "vm9_environment_service_scope_rerun_20261025": {
+    "evidence_file": "evidence/vm9_environment_service_scope_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_environment_service_scope_fresh_20261021.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_environment_service_scope_fresh_20261021.py",
+    "schema": "vm9-environment-service-scope-fresh/v1",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 36,
+    "new_refusal_or_page_rollback_guards": 6,
+    "native_snapshot_input": false,
+    "historical_native_groups_replayed": false,
+    "complete_state_request_or_signer_verified": false,
+    "comparison_note": "Fresh service-scope rerun reproduces all 36 case outcomes and 6 guards; current verifier output lacks the formal cumulative/provenance metadata, so byte identity is not claimed.",
+    "live_Android_JVM_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "live_server_matrix_verified": false
+  },
+  "vm9_environment_release_scope_rerun_20261025": {
+    "evidence_file": "evidence/vm9_environment_release_scope_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_environment_release_scope_fresh_20261021.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_environment_release_scope_fresh_20261021.py",
+    "schema": "vm9-environment-release-scope-fresh/v1",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 38,
+    "new_refusal_or_page_rollback_guards": 7,
+    "native_snapshot_input": false,
+    "historical_native_groups_replayed": false,
+    "complete_state_request_or_signer_verified": false,
+    "comparison_note": "Fresh release-scope rerun reproduces all 38 case outcomes and 7 guards; current verifier output lacks the formal cumulative/provenance metadata, so byte identity is not claimed.",
+    "live_Android_JVM_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "live_server_matrix_verified": false
   }
 }

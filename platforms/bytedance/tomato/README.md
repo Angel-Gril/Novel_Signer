@@ -60,6 +60,13 @@ dispatch journals. GuestOS mapping rollback is also byte-identical with 4 contro
 and 3 guards. These verify owner-side transactions and do not claim real OS
 mapping or live JVM behavior. See the [provider rollback rerun](evidence/vm9_provider_effect_rollback_rerun_20261025.json) and [GuestOS rollback rerun](evidence/vm9_guest_os_effect_rollback_rerun_20261025.json).
 
+The environment-service and environment-release scopes were rerun from fresh
+state as well. They reproduce 36/6 and 38/7 native/Python case/guard outcomes,
+respectively. The current verifiers omit the formal cumulative/provenance
+metadata, so these records intentionally do not claim byte identity. They still
+use the explicit allocator/TLS/JNI services and do not establish a live JVM,
+complete request state or fresh signer. See the [service-scope rerun](evidence/vm9_environment_service_scope_rerun_20261025.json) and [release-scope rerun](evidence/vm9_environment_release_scope_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

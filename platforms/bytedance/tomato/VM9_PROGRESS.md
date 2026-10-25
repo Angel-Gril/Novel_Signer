@@ -53,6 +53,13 @@ evidence 逐字节一致，覆盖 facade/owning-request/child-dispatch nested jo
 GuestOS mapping rollback 也逐字节一致（4 controls、3 guards）；这只验证 owner-side
 transaction，不宣称真实 OS mapping 或 live JVM。见 [provider rollback rerun](evidence/vm9_provider_effect_rollback_rerun_20261025.json) 与 [GuestOS rollback rerun](evidence/vm9_guest_os_effect_rollback_rerun_20261025.json)。
 
+随后重跑 environment-service 与 environment-release scope。前者复现 **36/6**，后者
+复现 **38/7** 的全部 case/guard 结果；当前 verifier 没有输出 formal evidence 的
+cumulative/provenance metadata，因此只记录 fresh rerun，不宣称逐字节一致。两项仍
+使用显式 allocator/TLS/JNI service，live JVM、完整 request state 与 fresh signer
+仍未验证。见 [service-scope rerun](evidence/vm9_environment_service_scope_rerun_20261025.json)
+与 [release-scope rerun](evidence/vm9_environment_release_scope_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

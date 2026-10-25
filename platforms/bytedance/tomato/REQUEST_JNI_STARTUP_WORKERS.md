@@ -9249,3 +9249,16 @@ python -B platforms/bytedance/tomato/python/verify_vm9_signer_boundary_audit_202
 \n
 \n
 \n
+## 2026-10-25：environment service/release fresh rerun
+
+The environment-service and environment-release bounded controls were rerun from
+fresh ELF/Python state. Service scope reproduced 36 native/Python cases and 6
+refusal/rollback guards; release scope reproduced 38 cases and 7 guards. The
+current verifier schemas do not emit the older formal cumulative/provenance
+metadata, so the evidence records preserve the counts and every case outcome
+without claiming byte identity. Both remain explicit allocator/TLS/JNI-provider
+boundaries; live Android JVM, complete request state and fresh standalone signer
+remain open.
+
+Evidence: [service scope](evidence/vm9_environment_service_scope_rerun_20261025.json)
+and [release scope](evidence/vm9_environment_release_scope_rerun_20261025.json).
