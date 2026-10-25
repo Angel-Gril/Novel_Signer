@@ -1009,3 +1009,19 @@ LDR X` reads at `+0x16848c`, `+0x168570`, `+0x16ba18`, `+0x16c37c` and
 `+0x184ad4`, called by `+0x18a314`, whose path includes `dlopen`, `munmap` and
 `mmap`; the same-CPU bootstrap/request run did not execute it. This is a lead
 for the outer loader, not a recovered table owner. See [static owner scan](evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json).
+
+An opt-in unidbg replay of the historical successful HookMain signer command now
+observes the entire `0x13600000-0x13800000` range with read/write hooks. The run
+reaches `DONE` and emits `X-Argus`, `X-Gorgon`, `X-Helios`, `X-Khronos`,
+`X-Ladon` and `X-Medusa`, but records zero accesses to that range. This keeps the
+old `x13=0x1367b8f0` log value separate from proof that this signer path created or
+consumed the relocated table; no page or handler was synthesized. See
+[unidbg runtime-table watcher](evidence/vm9_unidbg_runtime_table_watch_fresh_20261026.json).
+
+A fresh native continuation probe now binds the URL reference in its actual two-word
+shape (`char*` plus refcount pointer) and freezes the clock provider. Both image bases
+pass the former `+0x170308`/guest-`0xc` stop, reach 45,679 instructions and 285 VM
+handlers, and make no runtime-table page read. The next boundary is the existing
+callback-object trampoline at `+0x2858a8`: object field 0 is NULL and `+0x2858b4`
+branches to zero. No callback vtable, dispatch page or signer output was synthesized.
+See [URL continuation evidence](evidence/vm9_request_url_pointer_continuation_fresh_20261026.json).

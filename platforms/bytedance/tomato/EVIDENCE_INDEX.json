@@ -9097,5 +9097,42 @@
     "whole_request_native_success": false,
     "fresh_signer_output_verified": false,
     "comparison_note": "The whole .text scan finds no short ADRP/(ADD)/STR sequence targeting any of the five relocation slots. It does find loader-like callsites, including +0x184ad4 -> dlopen and its munmap/mmap sequence, but the same-CPU bootstrap/request probe did not execute this candidate. This is a static outer-loader lead, not proof of runtime-table ownership."
+  },
+  "vm9_unidbg_runtime_table_watch_fresh_20261026": {
+    "path": "evidence/vm9_unidbg_runtime_table_watch_fresh_20261026.json",
+    "verifier": "python/verify_vm9_unidbg_runtime_table_watch_20261026.py",
+    "evidence_label": "Opt-in unidbg external runtime-page watcher on historical-success signer replay",
+    "watch_range": ["0x13600000", "0x13800000"],
+    "external_runtime_table_event_count": 0,
+    "first_access_dump_present": false,
+    "signer_rounds": 1,
+    "headers_observed": ["X-Argus", "X-Gorgon", "X-Helios", "X-Khronos", "X-Ladon", "X-Medusa"],
+    "headers_are_unidbg_output": true,
+    "runtime_table_owner_recovered": false,
+    "runtime_table_content_reconstructed": false,
+    "synthetic_dispatch_table_used": false,
+    "native_snapshot_input": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "The historical-success HookMain replay reached DONE and emitted all six expected seven-god header names, but the watcher saw no read or write in 0x13600000-0x13800000. Old x13=0x1367b8f0 observations therefore do not prove that this run created or consumed the relocated runtime table."
+  },
+  "vm9_request_url_pointer_continuation_fresh_20261026": {
+    "path": "evidence/vm9_request_url_pointer_continuation_fresh_20261026.json",
+    "verifier": "python/verify_vm9_request_url_pointer_continuation_20261026.py",
+    "evidence_label": "Fresh native request continuation with a real-format URL reference and frozen clock",
+    "image_bases": ["0x122c0000", "0x775c205000"],
+    "url_reference_words": "char* plus refcount pointer",
+    "url_byte_length": 107,
+    "native_instructions_observed_each": 45679,
+    "vm_handler_event_count_each": 285,
+    "clock_gettime_calls_each": 1,
+    "runtime_table_read_count_each": 0,
+    "prior_stop_cleared": "+0x170308 read at guest address 0xc",
+    "next_stop": "+0x2858b4 br x3 with callback-object field 0 equal to NULL",
+    "runtime_table_content_reconstructed": false,
+    "synthetic_dispatch_table_used": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Supplying the actual two-word URL reference moves both fresh native runs beyond the former +0x170308 stop and through the clock import. The existing callback-object trampoline at +0x2858a8 then loads a NULL target from object 0x7000e948 and stops at +0x2858b4; no callback vtable or dispatch page was synthesized."
   }
 }

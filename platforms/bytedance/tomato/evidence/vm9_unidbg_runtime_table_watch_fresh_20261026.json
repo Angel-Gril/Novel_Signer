@@ -1,0 +1,44 @@
+{
+  "schema": "vm9-unidbg-runtime-table-watch-fresh-20261026-v1",
+  "evidence_date": "2026-10-26",
+  "capture": {
+    "artifact_directory": "C:\\AI\\6\\_trials\\runtime_table_watch_20261025",
+    "watch_property": "runtimetablewatch=true",
+    "watch_range": [
+      "0x13600000",
+      "0x13800000"
+    ],
+    "first_dump_range": [
+      "0x1367a000",
+      "0x1367f000"
+    ],
+    "watch_log": "vm9_runtimetable_watch.ndjson",
+    "watch_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run_log_sha256": "601a5223df739cad7887aaffa194571333b54a273370081bdb42beef36c31e0e",
+    "rounds_sha256": "ae16a921f82e9db3ad15570d2ca3016aaa16c0c838f319ab10d25af855c9a88e",
+    "first_access_dump_present": false
+  },
+  "external_runtime_table_events": [],
+  "external_runtime_table_event_count": 0,
+  "external_runtime_table_event_limit": 20000,
+  "signer_output": {
+    "round_count": 1,
+    "headers_observed": [
+      "X-Argus",
+      "X-Gorgon",
+      "X-Helios",
+      "X-Khronos",
+      "X-Ladon",
+      "X-Medusa"
+    ],
+    "headers_are_unidbg_output": true
+  },
+  "runtime_table_owner_recovered": false,
+  "runtime_table_content_reconstructed": false,
+  "synthetic_dispatch_table_used": false,
+  "native_snapshot_input": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "The historical-success HookMain replay reached DONE and emitted all six expected seven-god header names, but the opt-in read/write watcher saw zero accesses in 0x13600000-0x13800000. The x13 value observed in old logs therefore cannot be promoted to evidence that this run created or read the relocated runtime table. No page or handler was synthesized."
+}

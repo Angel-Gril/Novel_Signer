@@ -6089,3 +6089,32 @@ reference（`G+0x1800`），所以当前最终零值不仅能归因到 VM 的 `+
 
 证据：[outer owner static scan](evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json)，
 脚本：`python/verify_vm9_outer_runtime_owner_static_scan_20261025.py`。
+
+## 2026-10-26：历史成功 unidbg 路径外部页观察
+
+在历史成功的 `HookMain` signer 命令上加入默认关闭的
+`runtimetablewatch=true` 观察器，覆盖 `0x13600000-0x13800000` 的真实读写，
+并在首次访问时保存 `0x1367a000-0x1367f000`。该次运行使用固定 ELF、原有
+冻结时间和同一请求 URL，正常到达 `DONE`，输出 `X-Argus/X-Gorgon/X-Helios/
+X-Khronos/X-Ladon/X-Medusa`；观察日志为 **0 个读写事件**，没有首次访问 dump。
+
+因此旧日志中的 `x13=0x1367b8f0` 只能说明一个历史寄存器值，不能说明这次成功
+样本创建或读取了重定位 runtime table。没有合成页面、handler 或 relocation
+内容；这仍是 unidbg 输出，不是 fresh standalone signer、whole-native differential
+或线上 header acceptance。证据见
+[unidbg runtime-table watcher](evidence/vm9_unidbg_runtime_table_watch_fresh_20261026.json)，
+复现校验见 [verify_vm9_unidbg_runtime_table_watch_20261026.py](python/verify_vm9_unidbg_runtime_table_watch_20261026.py)。
+
+## 2026-10-26：非空 URL reference 推进 request VM
+
+只读 continuation probe 按 native 两字布局给 `G+0x1800` 写入 URL `char*` 与
+refcount pointer，并固定 clock provider。两个 image base 都从 945 条推进到
+45679 条，完成 285 个 VM handler、经过一次 `clock_gettime`，仍无外部 runtime
+table read；因此 `+0x170308` 的 `read 0xc` 已确认是空 URL fixture 的边界，而非
+runtime table 读失败。
+
+路径随后在 `+0x2858a8` 的 callback-object trampoline 停止：对象
+`0x7000e948` field 0 为 NULL，`+0x2858b4` 执行 `br x3` 到零。没有注入 vtable、
+handler 或 signer 输出。证据见
+[URL continuation](evidence/vm9_request_url_pointer_continuation_fresh_20261026.json)，
+复现脚本为 [verify_vm9_request_url_pointer_continuation_20261026.py](python/verify_vm9_request_url_pointer_continuation_20261026.py)。

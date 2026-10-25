@@ -1,0 +1,162 @@
+{
+  "schema": "vm9-request-url-pointer-continuation-fresh-20261026-v1",
+  "evidence_date": "2026-10-26",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "url_fixture": {
+    "format": "NUL-terminated URL bytes plus native two-word reference",
+    "byte_length": 107,
+    "sha256": "3b79bc2d96ca3a15aa16a3c206683c029384b661c9c3bd188b7354d2816d91fd",
+    "pointer_word_address": "0x70001d00",
+    "refcount_word_address": "0x70001d80"
+  },
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "outcome": "stopped",
+      "error": "UcError: Invalid memory fetch (UC_ERR_FETCH_UNMAPPED)",
+      "native_instructions_observed": 45679,
+      "vm_handler_event_count": 285,
+      "clock_gettime_calls": 1,
+      "runtime_table_reads": 0,
+      "first_relocation_slot_read": {
+        "kind": "relocation_slot_read",
+        "pc": "0x16848c",
+        "address": "0x126398d8",
+        "value": "f0b8671300000000"
+      },
+      "callback_object_trace": [
+        {
+          "pc_offset": "0x2858a8",
+          "x0": "0x7000e948",
+          "x1": "0x7000d500",
+          "x2": "0x1232e000",
+          "x3": "0x1232e000",
+          "x8": "0x125458a8",
+          "object_bytes": "0000000000000000b0e900700000000078eb00700000000018000000000000004014551200000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858ac",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x1232e000",
+          "x3": "0x1232e000",
+          "x8": "0x7000e9b0",
+          "object_bytes": "0000000000000000b0e900700000000078eb00700000000018000000000000004014551200000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b0",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x1232e000",
+          "x8": "0x7000e9b0",
+          "object_bytes": "0000000000000000b0e900700000000078eb00700000000018000000000000004014551200000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b4",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x0",
+          "x8": "0x7000e9b0",
+          "object_bytes": "0000000000000000b0e900700000000078eb00700000000018000000000000004014551200000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b8",
+          "x0": "0x7000e9b0",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x0",
+          "x8": "0x7000e9b0",
+          "object_bytes": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
+        }
+      ],
+      "callback_object_final_observation": {
+        "pc_offset": "0x2858b8",
+        "x0": "0x7000e9b0",
+        "x1": "0x7000eb78",
+        "x2": "0x18",
+        "x3": "0x0",
+        "x8": "0x7000e9b0",
+        "object_bytes": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
+      }
+    },
+    {
+      "image_base": "0x775c205000",
+      "outcome": "stopped",
+      "error": "UcError: Invalid memory fetch (UC_ERR_FETCH_UNMAPPED)",
+      "native_instructions_observed": 45679,
+      "vm_handler_event_count": 285,
+      "clock_gettime_calls": 1,
+      "runtime_table_reads": 0,
+      "first_relocation_slot_read": {
+        "kind": "relocation_slot_read",
+        "pc": "0x16848c",
+        "address": "0x775c57e8d8",
+        "value": "f0085c5d77000000"
+      },
+      "callback_object_trace": [
+        {
+          "pc_offset": "0x2858a8",
+          "x0": "0x7000e948",
+          "x1": "0x7000d500",
+          "x2": "0x775c273000",
+          "x3": "0x775c273000",
+          "x8": "0x775c48a8a8",
+          "object_bytes": "0000000000000000b0e900700000000078eb00700000000018000000000000004064495c77000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858ac",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x775c273000",
+          "x3": "0x775c273000",
+          "x8": "0x7000e9b0",
+          "object_bytes": "0000000000000000b0e900700000000078eb00700000000018000000000000004064495c77000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b0",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x775c273000",
+          "x8": "0x7000e9b0",
+          "object_bytes": "0000000000000000b0e900700000000078eb00700000000018000000000000004064495c77000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b4",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x0",
+          "x8": "0x7000e9b0",
+          "object_bytes": "0000000000000000b0e900700000000078eb00700000000018000000000000004064495c77000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b8",
+          "x0": "0x7000e9b0",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x0",
+          "x8": "0x7000e9b0",
+          "object_bytes": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
+        }
+      ],
+      "callback_object_final_observation": {
+        "pc_offset": "0x2858b8",
+        "x0": "0x7000e9b0",
+        "x1": "0x7000eb78",
+        "x2": "0x18",
+        "x3": "0x0",
+        "x8": "0x7000e9b0",
+        "object_bytes": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
+      }
+    }
+  ],
+  "runtime_table_content_reconstructed": false,
+  "synthetic_dispatch_table_used": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "Binding the URL reference moves both image bases beyond the prior +0x170308 read-at-0xc stop. The replay reaches the clock import and then the existing callback-object trampoline at +0x2858a8; its object field 0 remains NULL, so +0x2858b4 branches to zero. No callback vtable, dispatch page, or signer result was synthesized."
+}

@@ -9565,3 +9565,34 @@ slot1/2/3 分别为 `w21/w27/w26` 右移 6 位后的 6-bit，slot4 为 `w8` 右�
 
 证据：`evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json`；
 脚本：`python/verify_vm9_outer_runtime_owner_static_scan_20261025.py`。
+
+## 6.280 Historical-success unidbg runtime-page watcher（2026-10-26 Asia/Shanghai）
+
+在历史成功的 `HookMain` signer 命令上启用默认关闭的
+`runtimetablewatch=true`，对 `0x13600000-0x13800000` 安装真实读写观察，并在
+首次访问时保存 `0x1367a000-0x1367f000`。运行使用固定 ELF、冻结时间和原有
+请求 URL，正常到达 `DONE`，输出六个七神 header 名称；watcher 记录 0 个读写事件，
+也没有首次访问 dump。
+
+这只证明该 replay 没有触碰观察范围，不能把旧日志里的 `x13=0x1367b8f0` 当作
+runtime-table 创建或消费证据。没有合成页面、handler 或 relocation 内容；输出仍是
+unidbg 结果，不是 fresh standalone signer、whole-native differential 或线上验收。
+
+证据：`evidence/vm9_unidbg_runtime_table_watch_fresh_20261026.json`；
+脚本：`python/verify_vm9_unidbg_runtime_table_watch_20261026.py`。
+
+## 6.281 URL reference continuation（2026-10-26 Asia/Shanghai）
+
+为验证 `+0x170308` 的零值是否只是空 URL fixture，新增只读 native continuation
+probe。`G+0x1800` 按实际对象布局写入两个 word：NUL 结尾 URL 的 `char*` 和
+独立 refcount 指针；同时固定 `clock_gettime` 返回。两个 image base 均从原来的
+945 条指令推进到 **45679 条**，记录 **285 个 VM handler**，经过一次 clock import，
+并且仍没有 runtime-table page read。
+
+继续路径在现有 callback-object trampoline `+0x2858a8` 汇合。对象
+`0x7000e948` 的 field 0 仍为 NULL，`+0x2858b4` 的 `br x3` 因此跳到零而停止。
+这定位了 URL 缺失之后的下一边界，但没有合成 callback vtable、dispatch table 或
+签名结果；仍不等同于 whole-request differential、fresh standalone signer 或线上验收。
+
+证据：`evidence/vm9_request_url_pointer_continuation_fresh_20261026.json`；
+脚本：`python/verify_vm9_request_url_pointer_continuation_20261026.py`。
