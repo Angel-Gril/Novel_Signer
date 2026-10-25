@@ -935,6 +935,14 @@ def _execute_request_vm_impl(pages, inputs, vm_module, seconds, nanoseconds, *, 
                 whole_native_request_equivalence_verified=False,
                 request_transaction_committed_to_supplied_pages=True)
             staged.commit()
+            # Keep the owning callback trace with the completed diagnostic
+            # record.  This is fresh interpreter evidence, not a native
+            # snapshot; it lets continuation work identify the next physical
+            # owner without reconstructing the VM from an opaque step count.
+            diagnostic_scope['request_callback_ledger'] = [dict(
+                wrapper_offset=hex(wrapper), target_offset=hex(target),
+                argument_address=argument, words=list(words))
+                for wrapper, target, argument, words in ledger]
             diagnostic_scope['request_vm_return'] = result
             return staged, frame, vm, ledger, decoded
         except Exception as exc:

@@ -970,3 +970,10 @@ The outer startup caller now passes four fresh-input controls (86 steps, 16 allo
 lookup 控制使用 native 生成 root。另 82 个独立 XOR prefix 控制和 8 个回滚通过，
 仍停在 reader 前。Python factory / 完整 bootstrap 对照仍 0，真实 OS
 线程与独立签名链仍待完成。详见 [后续报告](REQUEST_JNI_STARTUP_WORKERS.md)。
+
+The 2026-10-25 owning-request rerun now persists the fresh VM callback ledger in its
+transaction diagnostic scope: each of four facade→child→owning-VM cases records 115
+callback ABI entries with first/last wrapper and target. This is continuation metadata
+from the current Python VM, not a native snapshot or whole-request differential; JNI,
+physical ABI, live JVM, fresh standalone signing and online acceptance remain open.
+See [callback-ledger handoff](evidence/vm9_java_request_handoff_fresh_20261025.json).

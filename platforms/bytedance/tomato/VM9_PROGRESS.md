@@ -5955,3 +5955,14 @@ sentinel，event callback与此synthetic VM模型返回；request页提交，rec
 匹配caller sentinel，不把VMExit统一视为成功。physical caller epilogue/X0
 ABI、全原生request、真实URL/headers/JNI和fresh Medusa仍未通过。
 详见 [REQUEST_EVENT_EMISSION.md](REQUEST_EVENT_EMISSION.md)。
+
+## 2026-10-25：owning request callback ledger continuation
+
+在完整 Python handoff 返回路径中持久化本次 VM 的 callback ledger。四项 fresh
+facade→child→owning request controls 均记录 115 个 callback，ledger 由当前 staged
+VM 生成并写入 diagnostic scope；首尾 wrapper/target、参数地址和四个 ABI words
+可供下一次 callback continuation 直接定位。该 ledger 不是 native snapshot，也没有
+把 Python trace 提升为 whole-native differential；JNI/JavaVM、physical ABI、真实
+Android JVM、fresh standalone signer 和线上 acceptance 仍未验证。
+
+证据：[callback-ledger handoff](evidence/vm9_java_request_handoff_fresh_20261025.json)。

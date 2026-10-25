@@ -9412,3 +9412,23 @@ alias profiles and diagnostic lock effects. The case-level output differs from
 the formal aggregate schema, so byte identity is not claimed.
 
 Evidence: [inline reference](evidence/vm9_inline_reference_scope_rerun_20261025.json).
+
+## 6.271 Owning request callback ledger（2026-10-25 Asia/Shanghai）
+
+在 `+17b8f8 → +27dd04 → +2830c4` 的四项 fresh Python handoff 中，request VM 完成
+返回时现在把同一 staged VM 产生的 callback ledger 写入 diagnostic scope。每项记录
+115 个 callback，包含 wrapper/target、argument 地址和四个 ABI words；证据文件为
+`evidence/vm9_java_request_handoff_fresh_20261025.json`。这为后续 continuation
+提供稳定的当前输入边界，且不读取 native snapshot。
+
+该改动只增加可审计 trace metadata，不宣称 native callback body、whole-request
+native differential、真实 Android JVM、完整 physical ABI、fresh standalone signer
+或线上 header acceptance。
+
+复现：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_java_request_handoff_fresh_20261024.py `
+  --library <private-libmetasec.so> --libc <matching-libc.so> `
+  --output platforms/bytedance/tomato/evidence/vm9_java_request_handoff_fresh_20261025.json
+```

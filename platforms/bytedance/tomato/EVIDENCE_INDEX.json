@@ -8857,5 +8857,29 @@
     "whole_request_native_differential_verified": false,
     "complete_signer_verified": false,
     "comparison_note": "Fresh request tree-destruction rerun passes 32 controls, 32 guards and one request-entry check; the current output adds five entry guards relative to the formal aggregate, so byte identity is not claimed."
+  },
+  "vm9_java_request_handoff_fresh_20261025": {
+    "path": "evidence/vm9_java_request_handoff_fresh_20261025.json",
+    "evidence_label": "Fresh normal Java facade to child dispatcher to owning request VM handoff with persisted callback ledger",
+    "native_Python_controls": 4,
+    "rollback_guards": 8,
+    "image_bases": ["0x122c0000", "0x775c205000"],
+    "property_profiles": ["absent", "sdk_30"],
+    "return_offset": "0xffb78",
+    "steps_each": 2583,
+    "callbacks_each": 115,
+    "callback_ledger_persisted": true,
+    "callback_ledger_count_each": 115,
+    "normal_java_facade_entry_used": true,
+    "child_dispatcher_entry_used": true,
+    "owning_request_vm_entry_used": true,
+    "owning_allocator_session_used": true,
+    "synthetic_JNI_and_JavaVM": true,
+    "native_snapshot_input": false,
+    "whole_native_differential_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "live_Android_JVM_verified": false,
+    "complete_physical_ABI_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

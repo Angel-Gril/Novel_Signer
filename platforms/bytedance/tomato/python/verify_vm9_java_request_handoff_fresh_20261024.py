@@ -228,6 +228,12 @@ def case(library, libc, image, label, property_value, vm_module):
             request_published_mapping_count=publication['allocator_mapping_count'],
             duplicate_request_publication_rejected=duplicate_publication_rejected,
             stop_bytecode_offset=vm_return.get('bytecode_offset'),
+            request_callback_ledger_count=len(diagnostic_scope.get('request_callback_ledger', ())),
+            request_callback_ledger_sha256=hashlib.sha256(json.dumps(
+                diagnostic_scope.get('request_callback_ledger', ()),
+                sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+            request_callback_ledger_first=diagnostic_scope.get('request_callback_ledger', [None])[0],
+            request_callback_ledger_last=diagnostic_scope.get('request_callback_ledger', [None])[-1],
             boundary_wrapper_offset='0x285fb4', boundary_target_offset='0x28dc38',
             actual_jvm_used=False, actual_os_threads_created=False,
             whole_handoff_native_differential_verified=False,
@@ -260,7 +266,7 @@ def main():
         for label, value in (('absent', None), ('sdk_30', b'30')):
             rows.append(case(args.library, args.libc, image, label, value, vm_full))
             print('request owning allocator', hex(image), label, 'PASS', flush=True)
-    report = dict(schema='vm9-java-request-handoff-fresh-python-v2', evidence_date='2026-10-25',
+    report = dict(schema='vm9-java-request-handoff-fresh-python-v3', evidence_date='2026-10-25',
         sample_sha256=oracle.LIBRARY_SHA256, libc_sha256=worker.LIBC_SHA256,
         controls=len(rows), rollback_guards=len(rows) * 2, cases=rows, fresh_input_signer_output_verified=False,
         complete_python_medusa=False, current_online_header_matrix_verified=False,
