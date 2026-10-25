@@ -9508,3 +9508,16 @@ producer；两基址仍各记录 283 条 handler 语义事件。
 启动会提供相同输入，也未闭合 VM code、完整 dispatch table、whole-request native
 返回、fresh signer 或线上验收。证据：`evidence/vm9_request_runtime_table_owner_fresh_20261025.json`；
 脚本：`python/verify_vm9_request_runtime_table_owner_20261025.py`。
+
+## 6.276 零 operand 的 native 对象来源（2026-10-25 Asia/Shanghai）
+
+fresh owner probe 继续追踪 `0x7000ee38` 的内容来源：`+0x15f5a8` 执行
+`stp xzr,xzr` 清零目标，`+0x15f5bc/+0x15f5c4` 随后从源地址
+`0x70001800/0x70001808` 复制两个零字段。该源地址对应当前
+`dispatch.fixture` 的 URL reference（`G+0x1800`），因此最终 `+0x16f974` 读到
+零的上游输入已定位为 fresh direct-dispatch fixture 的空 URL reference。
+
+这是对当前合成输入的因果归因，不是对真实 Java/JNI URL 内容的结论；完整启动输入、
+VM code/dispatch table、whole-request return、fresh signer 与线上验收仍未完成。
+证据：`evidence/vm9_request_runtime_table_owner_fresh_20261025.json`；脚本：
+`python/verify_vm9_request_runtime_table_owner_20261025.py`。

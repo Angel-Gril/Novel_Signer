@@ -6045,3 +6045,17 @@ frame operand 来源，并与两组 283-handler 序列一致。
 写入前旧值；实际值以 frame-store `written_value` 和后续 workspace 读取为准。
 证据：[runtime table owner probe](evidence/vm9_request_runtime_table_owner_fresh_20261025.json)，
 复现脚本：`python/verify_vm9_request_runtime_table_owner_20261025.py`。
+
+## 2026-10-25：零 operand 的 native 对象来源（fresh）
+
+继续沿 `0x7000ee38` 追踪到对象 helper：`+0x15f5a8` 先将该 16 字节对象清零，
+随后 `+0x15f5bc/+0x15f5c4` 从 `0x70001800` 和 `0x70001808` 复制源字段；两字段
+在本次 fresh fixture 中均为零。`0x70001800` 正是 `dispatch.fixture` 的 URL
+reference（`G+0x1800`），所以当前最终零值不仅能归因到 VM 的 `+0x16f974`，还
+能追溯到 fresh direct-dispatch 输入没有提供 URL reference 内容。该证据解释了
+为什么对象 pointer 已正确产生而其目标内容仍为零。
+
+这闭合的是当前合成 fixture 的输入来源，不代表真实 Java/JNI URL 对象应为空，
+也没有恢复真实启动输入、完整 VM code/dispatch table 或 signer。证据同一份
+[runtime table owner probe](evidence/vm9_request_runtime_table_owner_fresh_20261025.json)，
+复现脚本：`python/verify_vm9_request_runtime_table_owner_20261025.py`。

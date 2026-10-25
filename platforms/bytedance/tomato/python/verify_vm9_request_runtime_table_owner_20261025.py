@@ -261,6 +261,8 @@ def run(library: Path, libc: Path, image: int):
                 source_slot = None
                 source_value = None
                 base_slot = None
+                source_address = None
+                source_bytes = None
                 if offset == 0x171268:
                     address = (int(registers["x17"], 16) +
                                int(registers["x16"], 16)) & ((1 << 64) - 1)
@@ -274,9 +276,13 @@ def run(library: Path, libc: Path, image: int):
                 elif offset == 0x15F5BC:
                     address = int(registers["x20"], 16)
                     written_value = registers["x8"]
+                    source_address = int(registers["x19"], 16)
+                    source_bytes = _read_word(cpu, source_address, 8)
                 elif offset == 0x15F5C4:
                     address = int(registers["x20"], 16) + 8
                     written_value = registers["x8"]
+                    source_address = int(registers["x19"], 16) + 8
+                    source_bytes = _read_word(cpu, source_address, 8)
                 elif offset == 0x162884:
                     address = int(registers["x20"], 16)
                     written_value = "0x0"
@@ -291,7 +297,10 @@ def run(library: Path, libc: Path, image: int):
                             address=hex(address), written_value=written_value,
                             previous_value=_read_word(cpu, address, 8),
                             registers=registers, source_slot=source_slot,
-                            source_value=source_value, base_slot=base_slot)
+                            source_value=source_value, base_slot=base_slot,
+                            source_address=(hex(source_address)
+                                            if source_address is not None else None),
+                            source_bytes=source_bytes)
             if offset == 0x16848C:
                 # +168324 derives the physical VM frame from the caller's
                 # stack input.  x28 is the 32-slot backing array and x19 is
@@ -466,6 +475,14 @@ def run(library: Path, libc: Path, image: int):
     targets = [event for event in events if event["kind"] == "dispatch_target_before_read"]
     handler_values = [event for event in events if event["kind"] == "runtime_handler_value"]
     imports_seen = [event for event in events if event["kind"] == "import_call"]
+    zero_operand_initializers = [event for event in events
+                                 if event["kind"] == "vm_operand_store_semantics"
+                                 and event["pc"] in ("0x15f5a8", "0x15f5bc",
+                                                      "0x15f5c4", "0x162884",
+                                                      "0x162898", "0x1628a0")]
+    zero_operand_source = next((event for event in zero_operand_initializers
+                                if event["pc"] == "0x15f5bc"
+                                and event["address"] == "0x7000ee38"), None)
     return {
         "image_base": hex(image),
         "outcome": outcome,
@@ -495,6 +512,24 @@ def run(library: Path, libc: Path, image: int):
         "vm_operand_writes": operand_writes,
         "vm_operand_store_semantics": [event for event in events
                                         if event["kind"] == "vm_operand_store_semantics"],
+        "vm_zero_operand_initializers": [event for event in events
+                                          if event["kind"] == "vm_operand_store_semantics"
+                                          and event["pc"] in ("0x15f5a8", "0x15f5bc",
+                                                               "0x15f5c4", "0x162884",
+                                                               "0x162898", "0x1628a0")],
+        "vm_zero_operand_source": {
+            "target_address": "0x7000ee38",
+            "initializer_pc": "0x15f5a8",
+            "copy_pc": zero_operand_source["pc"] if zero_operand_source else None,
+            "source_address": zero_operand_source.get("source_address")
+            if zero_operand_source else None,
+            "source_bytes": zero_operand_source.get("source_bytes")
+            if zero_operand_source else None,
+            "fixture_role": ("dispatch.fixture URL reference (G+0x1800)"
+                              if zero_operand_source
+                              and zero_operand_source.get("source_address") == hex(dispatch.G + 0x1800)
+                              else None),
+        },
         "vm_frame_operand_writers": [event for event in events
                                       if event["kind"] == "vm_operand_store_semantics"
                                       and event["pc"] in ("0x2830ec", "0x283100", "0x28310c")],
@@ -537,7 +572,7 @@ def main():
         raise SystemExit(f"unexpected native sample {digest}")
     rows = [run(args.library, args.libc, image) for image in BASES]
     report = {
-        "schema": "vm9-request-runtime-table-owner-fresh-20261025-v7",
+        "schema": "vm9-request-runtime-table-owner-fresh-20261025-v9",
         "evidence_date": "2026-10-25",
         "sample_sha256": LIBRARY_SHA256,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),

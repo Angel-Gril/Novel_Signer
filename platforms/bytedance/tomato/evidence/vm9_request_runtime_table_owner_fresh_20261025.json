@@ -1,5 +1,5 @@
 {
-  "schema": "vm9-request-runtime-table-owner-fresh-20261025-v7",
+  "schema": "vm9-request-runtime-table-owner-fresh-20261025-v9",
   "evidence_date": "2026-10-25",
   "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
@@ -19547,7 +19547,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19571,7 +19573,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": "0x70001800",
+          "source_bytes": "0000000000000000"
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19595,7 +19599,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": "0x70001808",
+          "source_bytes": "0000000000000000"
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19619,7 +19625,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19643,7 +19651,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19667,7 +19677,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19759,7 +19771,9 @@
           },
           "source_slot": 2,
           "source_value": "0x13381408",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19783,7 +19797,9 @@
           },
           "source_slot": 2,
           "source_value": "0x133813f8",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19807,7 +19823,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13092e38",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19831,7 +19849,9 @@
           },
           "source_slot": 1,
           "source_value": "0x133813fc",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19855,7 +19875,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13092c68",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19879,7 +19901,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13092e44",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19903,7 +19927,9 @@
           },
           "source_slot": 1,
           "source_value": "0x133813f0",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19927,7 +19953,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13092c60",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19951,7 +19979,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13010444",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19975,9 +20005,177 @@
           },
           "source_slot": 1,
           "source_value": "0x7000ee38",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         }
       ],
+      "vm_zero_operand_initializers": [
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x15f5a8",
+          "address": "0x7000ee38",
+          "written_value": "0x0",
+          "previous_value": "a5a5a5a5a5a5a5a5",
+          "registers": {
+            "x8": "0xa5a5a5a5a5a5a5a5",
+            "x9": "0xa36cec69",
+            "x10": "0x1253e5f4",
+            "x13": "0x1253e5f4",
+            "x14": "0x0",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0xb8db8055",
+            "x19": "0x70001800",
+            "x20": "0x7000ee38",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x15f5bc",
+          "address": "0x7000ee38",
+          "written_value": "0x0",
+          "previous_value": "0000000000000000",
+          "registers": {
+            "x8": "0x0",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x0",
+            "x13": "0x1253e5f4",
+            "x14": "0x0",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0xb8db8055",
+            "x19": "0x70001800",
+            "x20": "0x7000ee38",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": "0x70001800",
+          "source_bytes": "0000000000000000"
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x15f5c4",
+          "address": "0x7000ee40",
+          "written_value": "0x0",
+          "previous_value": "0000000000000000",
+          "registers": {
+            "x8": "0x0",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x0",
+            "x13": "0x1253e5f4",
+            "x14": "0x0",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0xb8db8055",
+            "x19": "0x70001800",
+            "x20": "0x7000ee38",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": "0x70001808",
+          "source_bytes": "0000000000000000"
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x162884",
+          "address": "0x7000ee28",
+          "written_value": "0x0",
+          "previous_value": "a5a5a5a5a5a5a5a5",
+          "registers": {
+            "x8": "0xa5a5a5a5a5a5a5a5",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x7000360c",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0x0",
+            "x19": "0x70001900",
+            "x20": "0x7000ee28",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x162898",
+          "address": "0x7000ee28",
+          "written_value": "0x70002000",
+          "previous_value": "0000000000000000",
+          "registers": {
+            "x8": "0x70002000",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0x0",
+            "x19": "0x70001900",
+            "x20": "0x7000ee28",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x1628a0",
+          "address": "0x7000ee30",
+          "written_value": "0x70001b00",
+          "previous_value": "0000000000000000",
+          "registers": {
+            "x8": "0x70001b00",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0x0",
+            "x19": "0x70001900",
+            "x20": "0x7000ee28",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
+        }
+      ],
+      "vm_zero_operand_source": {
+        "target_address": "0x7000ee38",
+        "initializer_pc": "0x15f5a8",
+        "copy_pc": "0x15f5bc",
+        "source_address": "0x70001800",
+        "source_bytes": "0000000000000000",
+        "fixture_role": "dispatch.fixture URL reference (G+0x1800)"
+      },
       "vm_frame_operand_writers": [
         {
           "kind": "vm_operand_store_semantics",
@@ -20070,7 +20268,9 @@
         },
         "source_slot": 1,
         "source_value": "0x7000ee38",
-        "base_slot": 29
+        "base_slot": 29,
+        "source_address": null,
+        "source_bytes": null
       },
       "vm_slot_1_pointer_producer": {
         "kind": "vm_handler_semantics",
@@ -38059,7 +38259,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -38257,7 +38459,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": "0x70001800",
+          "source_bytes": "0000000000000000"
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -38281,7 +38485,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": "0x70001808",
+          "source_bytes": "0000000000000000"
         },
         {
           "kind": "import_call",
@@ -38353,7 +38559,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -38551,7 +38759,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -38575,7 +38785,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "import_call",
@@ -43883,7 +44095,9 @@
           },
           "source_slot": 2,
           "source_value": "0x13381408",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -44031,7 +44245,9 @@
           },
           "source_slot": 2,
           "source_value": "0x133813f8",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -65722,7 +65938,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13092e38",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -65870,7 +66088,9 @@
           },
           "source_slot": 1,
           "source_value": "0x133813fc",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -66018,7 +66238,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13092c68",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -66166,7 +66388,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13092e44",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -66314,7 +66538,9 @@
           },
           "source_slot": 1,
           "source_value": "0x133813f0",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -66462,7 +66688,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13092c60",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -66610,7 +66838,9 @@
           },
           "source_slot": 1,
           "source_value": "0x13010444",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -67587,7 +67817,9 @@
           },
           "source_slot": 1,
           "source_value": "0x7000ee38",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -95063,7 +95295,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95087,7 +95321,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": "0x70001800",
+          "source_bytes": "0000000000000000"
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95111,7 +95347,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": "0x70001808",
+          "source_bytes": "0000000000000000"
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95135,7 +95373,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95159,7 +95399,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95183,7 +95425,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95275,7 +95519,9 @@
           },
           "source_slot": 2,
           "source_value": "0x775d2c6408",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95299,7 +95545,9 @@
           },
           "source_slot": 2,
           "source_value": "0x775d2c63f8",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95323,7 +95571,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cfd7e38",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95347,7 +95597,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775d2c63fc",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95371,7 +95623,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cfd7c68",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95395,7 +95649,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cfd7e44",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95419,7 +95675,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775d2c63f0",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95443,7 +95701,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cfd7c60",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95467,7 +95727,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cf55444",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -95491,9 +95753,177 @@
           },
           "source_slot": 1,
           "source_value": "0x7000ee38",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         }
       ],
+      "vm_zero_operand_initializers": [
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x15f5a8",
+          "address": "0x7000ee38",
+          "written_value": "0x0",
+          "previous_value": "a5a5a5a5a5a5a5a5",
+          "registers": {
+            "x8": "0xa5a5a5a5a5a5a5a5",
+            "x9": "0xa36cec69",
+            "x10": "0x775c4835f4",
+            "x13": "0x775c4835f4",
+            "x14": "0x0",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0xb8db8055",
+            "x19": "0x70001800",
+            "x20": "0x7000ee38",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x15f5bc",
+          "address": "0x7000ee38",
+          "written_value": "0x0",
+          "previous_value": "0000000000000000",
+          "registers": {
+            "x8": "0x0",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x0",
+            "x13": "0x775c4835f4",
+            "x14": "0x0",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0xb8db8055",
+            "x19": "0x70001800",
+            "x20": "0x7000ee38",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": "0x70001800",
+          "source_bytes": "0000000000000000"
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x15f5c4",
+          "address": "0x7000ee40",
+          "written_value": "0x0",
+          "previous_value": "0000000000000000",
+          "registers": {
+            "x8": "0x0",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x0",
+            "x13": "0x775c4835f4",
+            "x14": "0x0",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0xb8db8055",
+            "x19": "0x70001800",
+            "x20": "0x7000ee38",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": "0x70001808",
+          "source_bytes": "0000000000000000"
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x162884",
+          "address": "0x7000ee28",
+          "written_value": "0x0",
+          "previous_value": "a5a5a5a5a5a5a5a5",
+          "registers": {
+            "x8": "0xa5a5a5a5a5a5a5a5",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x7000360c",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0x0",
+            "x19": "0x70001900",
+            "x20": "0x7000ee28",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x162898",
+          "address": "0x7000ee28",
+          "written_value": "0x70002000",
+          "previous_value": "0000000000000000",
+          "registers": {
+            "x8": "0x70002000",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0x0",
+            "x19": "0x70001900",
+            "x20": "0x7000ee28",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
+        },
+        {
+          "kind": "vm_operand_store_semantics",
+          "pc": "0x1628a0",
+          "address": "0x7000ee30",
+          "written_value": "0x70001b00",
+          "previous_value": "0000000000000000",
+          "registers": {
+            "x8": "0x70001b00",
+            "x9": "0xa5a5a5a5a5a5a5a5",
+            "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x15": "0xbbbf07ea",
+            "x16": "0xb9b635f0",
+            "x17": "0x0",
+            "x19": "0x70001900",
+            "x20": "0x7000ee28",
+            "x21": "0x70003000",
+            "x28": "0xc19e4ae5"
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
+        }
+      ],
+      "vm_zero_operand_source": {
+        "target_address": "0x7000ee38",
+        "initializer_pc": "0x15f5a8",
+        "copy_pc": "0x15f5bc",
+        "source_address": "0x70001800",
+        "source_bytes": "0000000000000000",
+        "fixture_role": "dispatch.fixture URL reference (G+0x1800)"
+      },
       "vm_frame_operand_writers": [
         {
           "kind": "vm_operand_store_semantics",
@@ -95586,7 +96016,9 @@
         },
         "source_slot": 1,
         "source_value": "0x7000ee38",
-        "base_slot": 29
+        "base_slot": 29,
+        "source_address": null,
+        "source_bytes": null
       },
       "vm_slot_1_pointer_producer": {
         "kind": "vm_handler_semantics",
@@ -113575,7 +114007,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -113773,7 +114207,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": "0x70001800",
+          "source_bytes": "0000000000000000"
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -113797,7 +114233,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": "0x70001808",
+          "source_bytes": "0000000000000000"
         },
         {
           "kind": "import_call",
@@ -113869,7 +114307,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -114067,7 +114507,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -114091,7 +114533,9 @@
           },
           "source_slot": null,
           "source_value": null,
-          "base_slot": null
+          "base_slot": null,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "import_call",
@@ -119399,7 +119843,9 @@
           },
           "source_slot": 2,
           "source_value": "0x775d2c6408",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -119547,7 +119993,9 @@
           },
           "source_slot": 2,
           "source_value": "0x775d2c63f8",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -141238,7 +141686,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cfd7e38",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -141386,7 +141836,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775d2c63fc",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -141534,7 +141986,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cfd7c68",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -141682,7 +142136,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cfd7e44",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -141830,7 +142286,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775d2c63f0",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -141978,7 +142436,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cfd7c60",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -142126,7 +142586,9 @@
           },
           "source_slot": 1,
           "source_value": "0x775cf55444",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
@@ -143103,7 +143565,9 @@
           },
           "source_slot": 1,
           "source_value": "0x7000ee38",
-          "base_slot": 29
+          "base_slot": 29,
+          "source_address": null,
+          "source_bytes": null
         },
         {
           "kind": "memory_write",
