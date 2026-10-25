@@ -42,6 +42,12 @@ constructor、matching-libc allocator 与 publication/JNI ledger，未创建 hos
 因此不宣称 byte-identical；Python outer、current Medusa、standalone signer 与线上
 header acceptance 仍未验证。见 [outer native rerun](evidence/vm9_outer_signer_native_rerun_20261025.json)。
 
+随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
+absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
+2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole
+native differential、live Android JVM、fresh signing 和 online header acceptance
+仍未验证。见 [handoff rerun](evidence/vm9_java_request_handoff_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层

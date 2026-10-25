@@ -49,6 +49,12 @@ JVM。由于新 verifier 输出增加了旧 formal JSON 不含的 allocation/pub
 signer 与线上 header acceptance 仍未验证。见
 [outer native rerun](evidence/vm9_outer_signer_native_rerun_20261025.json)。
 
+同一工作区继续重跑 normal Java facade → child dispatcher → owning request VM handoff：
+两基址×absent/SDK-30 共 4 项、8 项 rollback guards，与 2026-10-24 正式 JSON
+逐字节一致；每项 2583 VM steps、115 callbacks。该组合仍使用 synthetic JNI/JavaVM
+和 request input，不能计为 whole-native differential、live Android JVM、fresh signer
+或线上 header acceptance。见 [handoff rerun](evidence/vm9_java_request_handoff_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

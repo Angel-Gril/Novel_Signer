@@ -48,6 +48,13 @@ fields compared with the 2026-10-06 formal JSON, so byte identity is not claimed
 Python outer construction, current Medusa, standalone signing and online header
 acceptance remain unverified. See the [outer native rerun](evidence/vm9_outer_signer_native_rerun_20261025.json).
 
+The normal Java facade → child dispatcher → owning request VM handoff was rerun
+from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
+byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115
+callbacks per case. It still uses synthetic JNI/JavaVM and request inputs, so it
+does not establish whole-native differential, live Android JVM, fresh signing or
+online header acceptance. See the [handoff rerun](evidence/vm9_java_request_handoff_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**

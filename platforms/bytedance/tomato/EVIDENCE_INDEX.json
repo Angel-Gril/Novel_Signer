@@ -8190,6 +8190,26 @@
     "online_header_acceptance_verified": false,
     "external_provider_mapping_rollback_verified": false
   },
+  "vm9_java_request_handoff_rerun_20261025": {
+    "evidence_file": "evidence/vm9_java_request_handoff_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_java_request_handoff_fresh_20261024.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_java_request_handoff_fresh_20261024.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": true,
+    "native_Python_controls": 4,
+    "rollback_guards": 8,
+    "normal_java_facade_entry_used": true,
+    "child_dispatcher_entry_used": true,
+    "owning_request_vm_entry_used": true,
+    "owning_allocator_session_used": true,
+    "synthetic_JNI_and_JavaVM": true,
+    "whole_native_differential_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "live_Android_JVM_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_provider_effect_rollback_20261024": {
     "path": "evidence/vm9_provider_effect_rollback_20261024.json",
     "evidence_label": "Explicit provider effect rollback rerun",
