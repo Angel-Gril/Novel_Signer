@@ -8932,5 +8932,43 @@
     "live_Android_JVM_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "Both fresh native probes stop at the relocated VM dispatch table before callback execution; no runtime table was synthesized."
+  },
+  "vm9_request_runtime_table_owner_fresh_20261025": {
+    "path": "evidence/vm9_request_runtime_table_owner_fresh_20261025.json",
+    "evidence_label": "Read-only native request VM relocation-slot and effective-handler owner probe",
+    "controls": 2,
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "entry_offset": "0x27dd04",
+    "callback_target_offset": "0x2830c4",
+    "vm_entry_offset": "0x168324",
+    "relocation_slot_offset": "0x3798d8",
+    "relocation_slot_values": [
+      "image+0x13bb8f0",
+      "image+0x13bb8f0"
+    ],
+    "five_slot_targets": [
+      "image+0x13bb8f0",
+      "image+0x13bbaf0",
+      "image+0x13bbcf0",
+      "image+0x13bbe18",
+      "image+0x13bb7f0"
+    ],
+    "constructor_and_jni_slot_writes": 0,
+    "request_slot_writes": 0,
+    "external_runtime_table_reads": 0,
+    "effective_handler_reads_observed": true,
+    "failed_native_pc": "0x170308",
+    "failed_guest_read": "0xc",
+    "canary_mapping_is_observation_only": true,
+    "synthetic_dispatch_table_used": false,
+    "native_snapshot_input": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_signer_output_verified": false,
+    "live_Android_JVM_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Both bases load the same external relocation pointer, then derive effective handler addresses in fresh main-image pages; no write to the five slots or external-table read occurred. The direct request probe still stops at +0x170308 on guest VM workspace read 0xc, so the owner and content source remain unresolved."
   }
 }

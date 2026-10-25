@@ -5979,3 +5979,20 @@ pages 中。失败前 guest pages 保持不变，未调用 synthetic callback。
 这确认了 whole-request native differential 的第一项真实 bootstrap 缺口，未合成
 runtime table，也未把停止误报为 callback 成功。证据见
 [evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json](evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json)。
+
+## 2026-10-25：request VM relocation owner probe（只读）
+
+新增两项 native owner probe，直接沿 `+0x27dd04 → +0x2830c4 → +0x168324`
+运行，并在 `+0x3798d8` 等五个 relocation slot、所有 import、分配、native
+memory read/write 和 unmapped 访问处记录事件。两个 image base 都加载同一个
+`image+0x13bb8f0` relocation pointer；当前 probe 没有观察到 constructor/JNI 或
+request 对五个 slot 的写入，也没有对外部 `image+0x13bb000` canary 页的实际读写。
+
+进一步记录到 VM 会用该 pointer 经过地址运算得到 fresh main-image 内的有效
+handler 读取地址，随后仍在 `+0x170308` 对 guest VM workspace 地址 `0xc`
+失败。也就是说，现阶段不能把 slot pointer 直接等同于已读出的外部 dispatch
+table；slot owner 与其内容来源仍未闭合。canary 只用于观察映射，未填充任何
+handler，也没有把这次失败当作 request 返回或 signer 输出。
+
+证据：[runtime table owner probe](evidence/vm9_request_runtime_table_owner_fresh_20261025.json)
+及其 verifier `python/verify_vm9_request_runtime_table_owner_20261025.py`。

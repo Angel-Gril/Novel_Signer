@@ -1,0 +1,1590 @@
+{
+  "schema": "vm9-request-runtime-table-owner-fresh-20261025-v1",
+  "evidence_date": "2026-10-25",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "outcome": "stopped",
+      "error": "UcError: Invalid memory read (UC_ERR_READ_UNMAPPED)",
+      "native_instructions_observed": 43129,
+      "runtime_table_pointer_slots": [
+        "0x126398d8",
+        "0x126398e0",
+        "0x126398e8",
+        "0x126398f0",
+        "0x126398f8"
+      ],
+      "relocation_slot_initial_values": {
+        "0x126398d8": "f0b8671300000000",
+        "0x126398e0": "f0ba671300000000",
+        "0x126398e8": "f0bc671300000000",
+        "0x126398f0": "18be671300000000",
+        "0x126398f8": "f0b7671300000000"
+      },
+      "runtime_table_addresses": [
+        "0x1367b8f0",
+        "0x1367baf0",
+        "0x1367bcf0",
+        "0x1367be18",
+        "0x1367b7f0"
+      ],
+      "runtime_table_page_canary_mapped": true,
+      "runtime_table_canary_value": "a5a5a5a5a5a5a5a5",
+      "slot_or_table_writes": [],
+      "runtime_table_reads": [],
+      "external_runtime_table_reads": [],
+      "import_calls": [
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70001208",
+            "0x70001800",
+            "0x70001900",
+            "0x138",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70001208",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x0",
+            "0x1",
+            "0x0",
+            "0x0",
+            "0x1"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347fd0",
+          "name": "malloc",
+          "registers": [
+            "0x4",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x0",
+            "0x5cfc993a",
+            "0x1253df50",
+            "0x5",
+            "0xd"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x70002000",
+            "0x4001",
+            "0x70003100",
+            "0x0",
+            "0x4001"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        }
+      ],
+      "pthread_create_calls": [],
+      "mmap_calls": [],
+      "calloc_calls": [],
+      "malloc_calls": [
+        {
+          "kind": "malloc",
+          "pc": "0x347fd0",
+          "size": 4
+        }
+      ],
+      "first_runtime_table_read": null,
+      "first_external_runtime_table_read": null,
+      "first_relocation_slot_read": {
+        "kind": "relocation_slot_read",
+        "pc": "0x16848c",
+        "address": "0x126398d8",
+        "value": "f0b8671300000000"
+      },
+      "relocation_slot_loaded": {
+        "kind": "relocation_slot_loaded",
+        "pc": "0x168490",
+        "value": "0x1367b8f0"
+      },
+      "dispatch_target_before_failed_read": {
+        "kind": "dispatch_target_before_read",
+        "pc": "0x170308",
+        "value": "0x7000d668"
+      },
+      "first_effective_handler_value": {
+        "kind": "runtime_handler_value",
+        "pc": "0x1684bc",
+        "address": "0x1260cfe0",
+        "value": "9515461200000000"
+      },
+      "slot_write_observed": false,
+      "synthetic_dispatch_table_used": false,
+      "whole_request_native_differential_verified": false,
+      "fresh_signer_output_verified": false,
+      "events": [
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x27dd04",
+          "registers": [
+            "0x70001100",
+            "0x70001800",
+            "0x70001900",
+            "0x138",
+            "0x0",
+            "0x0"
+          ],
+          "vm_registers": {
+            "x8": "0x70001a00",
+            "x9": "0x0",
+            "x10": "0x0",
+            "x11": "0x0",
+            "x12": "0x0",
+            "x13": "0x0",
+            "x14": "0x0",
+            "x19": "0x0",
+            "x20": "0x0",
+            "x23": "0x0",
+            "x28": "0x0"
+          }
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70001208",
+            "0x70001800",
+            "0x70001900",
+            "0x138",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70001208",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x0",
+            "0x1",
+            "0x0",
+            "0x0",
+            "0x1"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347fd0",
+          "name": "malloc",
+          "registers": [
+            "0x4",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "malloc",
+          "pc": "0x347fd0",
+          "size": 4
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x0",
+            "0x5cfc993a",
+            "0x1253df50",
+            "0x5",
+            "0xd"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x70002000",
+            "0x4001",
+            "0x70003100",
+            "0x0",
+            "0x4001"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x2830c4",
+          "registers": [
+            "0x7000ee38",
+            "0x7000ee28",
+            "0x138",
+            "0x101",
+            "0x0",
+            "0x4001"
+          ],
+          "vm_registers": {
+            "x8": "0x7000ee48",
+            "x9": "0x125430c4",
+            "x10": "0x7000360c",
+            "x11": "0x4000",
+            "x12": "0x4001",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x19": "0x1253e744",
+            "x20": "0xa5a5a5a5",
+            "x23": "0x1253defc",
+            "x28": "0xc19e4ae5"
+          }
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x168324",
+          "registers": [
+            "0x123b7720",
+            "0x7000d668",
+            "0x1261e230",
+            "0x1261e690",
+            "0x7000d690",
+            "0x4001"
+          ],
+          "vm_registers": {
+            "x8": "0x7000ed70",
+            "x9": "0x1254587c",
+            "x10": "0x7000360c",
+            "x11": "0x4000",
+            "x12": "0x4001",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x19": "0x70003000",
+            "x20": "0xa5a5a5a5",
+            "x23": "0x1253defc",
+            "x28": "0xc19e4ae5"
+          }
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x16848c",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1261e230",
+            "0x1261e690",
+            "0xf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x7000d570",
+            "x9": "0xef7b000f",
+            "x10": "0x7000d500",
+            "x11": "0x104",
+            "x12": "0xa061440a061440",
+            "x13": "0xa061440a061440",
+            "x14": "0x7000ec78",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "relocation_slot_read",
+          "pc": "0x16848c",
+          "address": "0x126398d8",
+          "value": "f0b8671300000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x168490",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1261e230",
+            "0x1261e690",
+            "0xf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x7000d570",
+            "x9": "0xef7b000f",
+            "x10": "0x1367b8f0",
+            "x11": "0x104",
+            "x12": "0xa061440a061440",
+            "x13": "0xa061440a061440",
+            "x14": "0x7000ec78",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "relocation_slot_loaded",
+          "pc": "0x168490",
+          "value": "0x1367b8f0"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x1684bc",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1261e690",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x7000d570",
+            "x9": "0xf",
+            "x10": "0x1260cf68",
+            "x11": "0x7000ec68",
+            "x12": "0xa061440a061440",
+            "x13": "0xa061440a061440",
+            "x14": "0x7000ec78",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x1684bc",
+          "address": "0x1260cfe0"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x1684bc",
+          "address": "0x1260cfe0",
+          "value": "9515461200000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1232e000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x123b7e08",
+            "x9": "0x18",
+            "x10": "0x7000d668",
+            "x11": "0x18",
+            "x12": "0x7000d560",
+            "x13": "0x4",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x7000d668"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x17033c",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1232e000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x1260d018",
+            "x9": "0x33dc5",
+            "x10": "0x1367b8f0",
+            "x11": "0x18",
+            "x12": "0x7000d560",
+            "x13": "0x4",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x17033c",
+          "address": "0x1260d018"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x17033c",
+          "address": "0x1260d018",
+          "value": "355d461200000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1232e000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x123b7e28",
+            "x9": "0x0",
+            "x10": "0x126a0d64",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x12",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x126a0d64"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x17033c",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1232e000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x1260cff0",
+            "x9": "0x33dc5",
+            "x10": "0x1367b8f0",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x12",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x17033c",
+          "address": "0x1260cff0"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x17033c",
+          "address": "0x1260cff0",
+          "value": "21c3451200000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1232e000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x123b7ec8",
+            "x9": "0x0",
+            "x10": "0x126a0d94",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x1",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x126a0d94"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x17033c",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1232e000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x1260cff0",
+            "x9": "0x33dc5",
+            "x10": "0x1367b8f0",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x1",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x17033c",
+          "address": "0x1260cff0"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x17033c",
+          "address": "0x1260cff0",
+          "value": "21c3451200000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1232e000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x123b7f54",
+            "x9": "0x0",
+            "x10": "0x126a0f74",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x12",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x126a0f74"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x17033c",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1232e000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x1260cff0",
+            "x9": "0x33dc5",
+            "x10": "0x1367b8f0",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x12",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x17033c",
+          "address": "0x1260cff0"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x17033c",
+          "address": "0x1260cff0",
+          "value": "21c3451200000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x1254587c",
+            "0x7000d500",
+            "0x1232e000",
+            "0x1232e000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x123b7fd0",
+            "x9": "0xc",
+            "x10": "0x0",
+            "x11": "0xc",
+            "x12": "0x7000d560",
+            "x13": "0x1",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x12639000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x0"
+        },
+        {
+          "kind": "unmapped",
+          "pc": "0x170308",
+          "access": 19,
+          "address": "0xc",
+          "size": 4,
+          "value": "0x0"
+        }
+      ]
+    },
+    {
+      "image_base": "0x775c205000",
+      "outcome": "stopped",
+      "error": "UcError: Invalid memory read (UC_ERR_READ_UNMAPPED)",
+      "native_instructions_observed": 43129,
+      "runtime_table_pointer_slots": [
+        "0x775c57e8d8",
+        "0x775c57e8e0",
+        "0x775c57e8e8",
+        "0x775c57e8f0",
+        "0x775c57e8f8"
+      ],
+      "relocation_slot_initial_values": {
+        "0x775c57e8d8": "f0085c5d77000000",
+        "0x775c57e8e0": "f00a5c5d77000000",
+        "0x775c57e8e8": "f00c5c5d77000000",
+        "0x775c57e8f0": "180e5c5d77000000",
+        "0x775c57e8f8": "f0075c5d77000000"
+      },
+      "runtime_table_addresses": [
+        "0x775d5c08f0",
+        "0x775d5c0af0",
+        "0x775d5c0cf0",
+        "0x775d5c0e18",
+        "0x775d5c07f0"
+      ],
+      "runtime_table_page_canary_mapped": true,
+      "runtime_table_canary_value": "a5a5a5a5a5a5a5a5",
+      "slot_or_table_writes": [],
+      "runtime_table_reads": [],
+      "external_runtime_table_reads": [],
+      "import_calls": [
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70001208",
+            "0x70001800",
+            "0x70001900",
+            "0x138",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70001208",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x0",
+            "0x1",
+            "0x0",
+            "0x0",
+            "0x1"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347fd0",
+          "name": "malloc",
+          "registers": [
+            "0x4",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x0",
+            "0x5cfc993a",
+            "0x775c482f50",
+            "0x5",
+            "0xd"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x70002000",
+            "0x4001",
+            "0x70003100",
+            "0x0",
+            "0x4001"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        }
+      ],
+      "pthread_create_calls": [],
+      "mmap_calls": [],
+      "calloc_calls": [],
+      "malloc_calls": [
+        {
+          "kind": "malloc",
+          "pc": "0x347fd0",
+          "size": 4
+        }
+      ],
+      "first_runtime_table_read": null,
+      "first_external_runtime_table_read": null,
+      "first_relocation_slot_read": {
+        "kind": "relocation_slot_read",
+        "pc": "0x16848c",
+        "address": "0x775c57e8d8",
+        "value": "f0085c5d77000000"
+      },
+      "relocation_slot_loaded": {
+        "kind": "relocation_slot_loaded",
+        "pc": "0x168490",
+        "value": "0x775d5c08f0"
+      },
+      "dispatch_target_before_failed_read": {
+        "kind": "dispatch_target_before_read",
+        "pc": "0x170308",
+        "value": "0x7000d668"
+      },
+      "first_effective_handler_value": {
+        "kind": "runtime_handler_value",
+        "pc": "0x1684bc",
+        "address": "0x775c551fe0",
+        "value": "95653a5c77000000"
+      },
+      "slot_write_observed": false,
+      "synthetic_dispatch_table_used": false,
+      "whole_request_native_differential_verified": false,
+      "fresh_signer_output_verified": false,
+      "events": [
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x27dd04",
+          "registers": [
+            "0x70001100",
+            "0x70001800",
+            "0x70001900",
+            "0x138",
+            "0x0",
+            "0x0"
+          ],
+          "vm_registers": {
+            "x8": "0x70001a00",
+            "x9": "0x0",
+            "x10": "0x0",
+            "x11": "0x0",
+            "x12": "0x0",
+            "x13": "0x0",
+            "x14": "0x0",
+            "x19": "0x0",
+            "x20": "0x0",
+            "x23": "0x0",
+            "x28": "0x0"
+          }
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70001208",
+            "0x70001800",
+            "0x70001900",
+            "0x138",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70001208",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x0",
+            "0x1",
+            "0x0",
+            "0x0",
+            "0x1"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347fd0",
+          "name": "malloc",
+          "registers": [
+            "0x4",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "malloc",
+          "pc": "0x347fd0",
+          "size": 4
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x0",
+            "0x5cfc993a",
+            "0x775c482f50",
+            "0x5",
+            "0xd"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f00",
+          "name": "pthread_mutex_lock",
+          "registers": [
+            "0x70003608",
+            "0x70002000",
+            "0x4001",
+            "0x70003100",
+            "0x0",
+            "0x4001"
+          ]
+        },
+        {
+          "kind": "import_call",
+          "pc": "0x347f10",
+          "name": "pthread_mutex_unlock",
+          "registers": [
+            "0x70003608",
+            "0x70003000",
+            "0x4000",
+            "0x70003100",
+            "0x7000360c",
+            "0x0"
+          ]
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x2830c4",
+          "registers": [
+            "0x7000ee38",
+            "0x7000ee28",
+            "0x138",
+            "0x101",
+            "0x0",
+            "0x4001"
+          ],
+          "vm_registers": {
+            "x8": "0x7000ee48",
+            "x9": "0x775c4880c4",
+            "x10": "0x7000360c",
+            "x11": "0x4000",
+            "x12": "0x4001",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x19": "0x775c483744",
+            "x20": "0xa5a5a5a5",
+            "x23": "0x775c482efc",
+            "x28": "0xc19e4ae5"
+          }
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x168324",
+          "registers": [
+            "0x775c2fc720",
+            "0x7000d668",
+            "0x775c563230",
+            "0x775c563690",
+            "0x7000d690",
+            "0x4001"
+          ],
+          "vm_registers": {
+            "x8": "0x7000ed70",
+            "x9": "0x775c48a87c",
+            "x10": "0x7000360c",
+            "x11": "0x4000",
+            "x12": "0x4001",
+            "x13": "0x0",
+            "x14": "0x1",
+            "x19": "0x70003000",
+            "x20": "0xa5a5a5a5",
+            "x23": "0x775c482efc",
+            "x28": "0xc19e4ae5"
+          }
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x16848c",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c563230",
+            "0x775c563690",
+            "0xf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x7000d570",
+            "x9": "0xef7b000f",
+            "x10": "0x7000d500",
+            "x11": "0x104",
+            "x12": "0xa061400a021440",
+            "x13": "0xa061440a061440",
+            "x14": "0x7000ec78",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "relocation_slot_read",
+          "pc": "0x16848c",
+          "address": "0x775c57e8d8",
+          "value": "f0085c5d77000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x168490",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c563230",
+            "0x775c563690",
+            "0xf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x7000d570",
+            "x9": "0xef7b000f",
+            "x10": "0x775d5c08f0",
+            "x11": "0x104",
+            "x12": "0xa061400a021440",
+            "x13": "0xa061440a061440",
+            "x14": "0x7000ec78",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "relocation_slot_loaded",
+          "pc": "0x168490",
+          "value": "0x775d5c08f0"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x1684bc",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c563690",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x7000d570",
+            "x9": "0xf",
+            "x10": "0x775c551f68",
+            "x11": "0x7000ec68",
+            "x12": "0xa061400a021440",
+            "x13": "0xa061440a061440",
+            "x14": "0x7000ec78",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x1684bc",
+          "address": "0x775c551fe0"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x1684bc",
+          "address": "0x775c551fe0",
+          "value": "95653a5c77000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c273000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x775c2fce08",
+            "x9": "0x18",
+            "x10": "0x7000d668",
+            "x11": "0x18",
+            "x12": "0x7000d560",
+            "x13": "0x4",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x7000d668"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x17033c",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c273000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x775c552018",
+            "x9": "0x33dc5",
+            "x10": "0x775d5c08f0",
+            "x11": "0x18",
+            "x12": "0x7000d560",
+            "x13": "0x4",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x17033c",
+          "address": "0x775c552018"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x17033c",
+          "address": "0x775c552018",
+          "value": "35ad3a5c77000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c273000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x775c2fce28",
+            "x9": "0x0",
+            "x10": "0x775c5e5d64",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x12",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x775c5e5d64"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x17033c",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c273000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x775c551ff0",
+            "x9": "0x33dc5",
+            "x10": "0x775d5c08f0",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x12",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x17033c",
+          "address": "0x775c551ff0"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x17033c",
+          "address": "0x775c551ff0",
+          "value": "21133a5c77000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c273000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x775c2fcec8",
+            "x9": "0x0",
+            "x10": "0x775c5e5d94",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x1",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x775c5e5d94"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x17033c",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c273000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x775c551ff0",
+            "x9": "0x33dc5",
+            "x10": "0x775d5c08f0",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x1",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x17033c",
+          "address": "0x775c551ff0"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x17033c",
+          "address": "0x775c551ff0",
+          "value": "21133a5c77000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c273000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x775c2fcf54",
+            "x9": "0x0",
+            "x10": "0x775c5e5f74",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x12",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x775c5e5f74"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x17033c",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c273000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x775c551ff0",
+            "x9": "0x33dc5",
+            "x10": "0x775d5c08f0",
+            "x11": "0x0",
+            "x12": "0x7000d560",
+            "x13": "0x12",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "runtime_handler_target_before_read",
+          "pc": "0x17033c",
+          "address": "0x775c551ff0"
+        },
+        {
+          "kind": "runtime_handler_value",
+          "pc": "0x17033c",
+          "address": "0x775c551ff0",
+          "value": "21133a5c77000000"
+        },
+        {
+          "kind": "dispatch_instruction",
+          "pc": "0x170308",
+          "registers": [
+            "0x775c48a87c",
+            "0x7000d500",
+            "0x775c273000",
+            "0x775c273000",
+            "0xff5f9ebbf5fe033c",
+            "0xa061440a061440"
+          ],
+          "vm_registers": {
+            "x8": "0x775c2fcfd0",
+            "x9": "0xc",
+            "x10": "0x0",
+            "x11": "0xc",
+            "x12": "0x7000d560",
+            "x13": "0x1",
+            "x14": "0x1",
+            "x19": "0x7000ec50",
+            "x20": "0x775c57e000",
+            "x23": "0x7000d540",
+            "x28": "0x7000ec58"
+          }
+        },
+        {
+          "kind": "dispatch_target_before_read",
+          "pc": "0x170308",
+          "value": "0x0"
+        },
+        {
+          "kind": "unmapped",
+          "pc": "0x170308",
+          "access": 19,
+          "address": "0xc",
+          "size": 4,
+          "value": "0x0"
+        }
+      ]
+    }
+  ],
+  "canary_mapping_is_observation_only": true,
+  "runtime_table_content_reconstructed": false,
+  "synthetic_dispatch_table_used": false,
+  "limitations": [
+    "The unresolved runtime page is filled with a canary solely to observe native reads and writes.",
+    "A canary read is a stop condition, not evidence of a valid handler or completed request.",
+    "No signer output, whole-request native differential, live JVM or online acceptance is claimed."
+  ]
+}

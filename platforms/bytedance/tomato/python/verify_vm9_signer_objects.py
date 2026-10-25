@@ -12,7 +12,8 @@ import json
 from pathlib import Path
 
 from elftools.elf.elffile import ELFFile
-from unicorn import Uc, UC_ARCH_ARM64, UC_MODE_ARM, UC_HOOK_CODE, UC_HOOK_INTR, UC_HOOK_MEM_WRITE
+from unicorn import (Uc, UC_ARCH_ARM64, UC_MODE_ARM, UC_HOOK_CODE, UC_HOOK_INTR,
+                     UC_HOOK_MEM_READ, UC_HOOK_MEM_WRITE, UC_HOOK_MEM_UNMAPPED)
 from unicorn.arm64_const import (
     UC_ARM64_REG_PC, UC_ARM64_REG_SP, UC_ARM64_REG_X0, UC_ARM64_REG_X1,
     UC_ARM64_REG_X2, UC_ARM64_REG_X3, UC_ARM64_REG_X4, UC_ARM64_REG_X30,
@@ -89,7 +90,8 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            instruction_observer=None, syscall_handler=None, malloc_handler=None,
            memory_write_observer=None, code_hook_ranges=None, real_malloc=False,
            real_recursive_mutexes=False, real_diagnostics=False, real_jni_acquisition=False,
-           real_jni_dispatch=False, map_extra_input_pages=False):
+           real_jni_dispatch=False, map_extra_input_pages=False,
+           memory_read_observer=None, unmapped_observer=None):
     if type(map_extra_input_pages) is not bool:
         raise ValueError("extra input page mapping must be boolean")
     if real_malloc and (libc is None or malloc_handler is not None or allocation_effect is not None):
@@ -313,6 +315,14 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
     if memory_write_observer:
         cpu.hook_add(UC_HOOK_MEM_WRITE,
             lambda cpu, access, address, size, value, user: memory_write_observer(cpu, address, size))
+    if memory_read_observer:
+        cpu.hook_add(UC_HOOK_MEM_READ,
+            lambda cpu, access, address, size, value, user: memory_read_observer(cpu, address, size))
+    if unmapped_observer:
+        def unmapped(cpu, access, address, size, value, user):
+            unmapped_observer(cpu, access, address, size, value)
+            return False
+        cpu.hook_add(UC_HOOK_MEM_UNMAPPED, unmapped)
     if syscall_handler:
         def interrupt(cpu, number, user):
             if number != 2:

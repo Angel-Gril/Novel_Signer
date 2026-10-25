@@ -9445,3 +9445,19 @@ fresh main PT_LOAD 页面中；失败前页面逐字节保持不变，synthetic 
 表属于 outer/bootstrap 状态，当前没有从 Python VM 或 native snapshot 推断/补写。
 因此仍不宣称完整 request return、physical ABI、真实 JVM、fresh standalone signer
 或线上 header acceptance。
+
+## 6.273 Runtime dispatch owner read-only probe（2026-10-25 Asia/Shanghai）
+
+为区分 relocation pointer 与实际 runtime table 内容，新增独立只读 probe，沿真实
+`+27dd04 → +2830c4 → +168324` 执行，记录五个 relocation slot、imports、malloc、
+native memory read/write 和 unmapped 事件。两个 image base 都从
+`image+0x3798d8` 读取 `image+0x13bb8f0`；constructor/JNI 和 request 路径均未写入
+这些 slot，也未读到外部 `image+0x13bb000` canary 页。
+
+`+16848c/+1684bc` 和 `+17033c` 的寄存器/地址记录表明，VM 对 pointer 做地址运算后
+会在 fresh main-image 内读取若干有效 handler word；最终仍在 `+170308` 访问 guest
+VM workspace 地址 `0xc` 并失败。probe 没有填充 handler、没有合成 dispatch table，
+因此 slot owner 与表内容来源仍未闭合。
+
+证据：`evidence/vm9_request_runtime_table_owner_fresh_20261025.json`；复现脚本：
+`python/verify_vm9_request_runtime_table_owner_20261025.py`。
