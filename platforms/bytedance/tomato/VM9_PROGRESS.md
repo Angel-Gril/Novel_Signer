@@ -97,6 +97,13 @@ guards，覆盖 count/null/alias profiles 与 diagnostic lock effects。当前 c
 输出与 formal aggregate schema 不同，因此不宣称逐字节一致。见
 [inline-reference rerun](evidence/vm9_inline_reference_scope_rerun_20261025.json)。
 
+随后重跑 environment assignment scope：两基址共 **28 项 native/Python controls、8 项
+rollback guards**，覆盖 cold/warm diagnostics 下的 empty、one、text、long、count-wrap
+和 high-output assignment。当前 verifier 只输出 case-level 结果，没有 formal
+cumulative/provenance metadata，因此不宣称逐字节一致；allocation/TLS/JNI 仍是显式
+provider，完整 environment memory、live Android JVM、fresh signing 与线上验收仍未完成。
+见 [environment-assignment rerun](evidence/vm9_environment_assignment_scope_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

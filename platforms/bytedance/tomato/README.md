@@ -109,6 +109,15 @@ profiles and diagnostic lock effects. The case-level output differs from the
 formal aggregate schema, so byte identity is not claimed. See the
 [inline-reference rerun](evidence/vm9_inline_reference_scope_rerun_20261025.json).
 
+The environment assignment scope was rerun from fresh ELF/Python state as well:
+28 native/Python controls and 8 rollback guards pass across both image bases,
+covering empty, single, text, long, count-wrap and high-output assignments in
+cold and warm diagnostics. The verifier records case-level outcomes without the
+formal cumulative/provenance metadata, so byte identity is not claimed. The
+allocation/TLS/JNI services remain explicit providers; complete environment
+memory, live Android JVM, fresh signing and online header acceptance remain open.
+See the [environment-assignment rerun](evidence/vm9_environment_assignment_scope_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

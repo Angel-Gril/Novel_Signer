@@ -1,0 +1,397 @@
+{
+  "schema": "vm9-environment-assignment-scope-fresh/v1",
+  "native_Python_controls": 28,
+  "new_refusal_or_page_rollback_guards": 8,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "text",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "long",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "count_zero",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "count_wrap",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high_output",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "empty",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "one",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "text",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "long",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "count_zero",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "count_wrap",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "high_output",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "text",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "long",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "count_zero",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "count_wrap",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high_output",
+      "warm_diagnostics": false,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "empty",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "one",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "text",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "long",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "count_zero",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "count_wrap",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "high_output",
+      "warm_diagnostics": true,
+      "original_environment_prefix_reached_25EF1C": true,
+      "all_guest_payload_and_library_pages_equal": true,
+      "scope_bytes_equal": true,
+      "allocation_and_lock_effects_equal": true,
+      "Python_prefix_pages_unpublished": true,
+      "native_snapshot_input": false,
+      "full_environment_cleanup_verified": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "invalid_provider",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "provider_raises",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "provider_writes_then_raises",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "unmapped_output",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "unaligned_assignment_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "unmapped_assignment_scope",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "diagnostic_guard_wait",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "counter_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    }
+  ],
+  "allocation_provider_is_synthetic": true,
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "full_state_request_or_signer_verified": false
+}

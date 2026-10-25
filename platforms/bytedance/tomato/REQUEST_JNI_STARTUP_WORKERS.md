@@ -142,6 +142,20 @@ canary 与 provider failures 在两基址均通过。formal JSON 的 TDD/ownersh
 未由该 verifier 输出，本轮不宣称 byte-identical。见
 [caller-return rerun](evidence/vm9_request_caller_return_rerun_20261025.json)。
 
+## 6.272 2026-10-25 environment assignment scope fresh rerun
+
+在 pinned `libmetasec_ml_71332.so` 与 matching libc 上重新执行 environment
+assignment scope。两 image base、cold/warm diagnostics 及 empty/one/text/long/
+count-zero/count-wrap/high-output profiles 共 **28 项 native/Python controls、8 项
+rollback guards** 全部通过；guest payload/library pages、scope bytes、allocation/
+lock effects 与 Python unpublished-page 事务状态保持一致。
+
+当前 verifier 只输出 case-level schema，没有 formal cumulative/provenance metadata，
+因此不宣称与旧 aggregate JSON 逐字节一致。`native_snapshot_input=false`，但
+allocation/TLS/JNI 仍是显式 provider；完整 environment/request memory、live Android
+JVM、fresh standalone signer 与线上 header acceptance 继续未验证。证据见
+[environment assignment rerun](evidence/vm9_environment_assignment_scope_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
