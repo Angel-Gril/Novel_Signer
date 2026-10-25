@@ -101,6 +101,11 @@ byte-identical。见 [configuration-set rerun](evidence/vm9_request_configuratio
 request control 未由该 guard-only verifier 重放，本轮不宣称 byte-identical。见
 [second-services rerun](evidence/vm9_request_second_services_rerun_20261025.json)。
 
+随后重跑 JNI header-input conversion component：52 项 controls、22 项 rollback guards，
+覆盖 normal/cold diagnostics、NULL/length/exception、重复 keys 与 multi-pair headers，
+两基址均通过。formal evidence 另含 tree-release/roundtrip 旧批次及 cumulative metadata，
+本轮不宣称 byte-identical。见 [header-input rerun](evidence/vm9_jni_header_input_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

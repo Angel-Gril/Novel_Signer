@@ -93,6 +93,12 @@ byte-identical。见 [configuration-set rerun](evidence/vm9_request_configuratio
 request control 未由该 guard-only verifier 重放，因此不宣称 byte-identical。见
 [second-services rerun](evidence/vm9_request_second_services_rerun_20261025.json)。
 
+随后重跑 JNI header-input conversion component：52 项 controls、22 项回滚，覆盖
+normal/cold diagnostics、NULL/length/exception、duplicate keys 与 multi-pair headers，
+两基址均通过。formal evidence 还包含 tree-release/roundtrip 旧批次和 cumulative
+metadata，本轮不宣称 byte-identical。见
+[header-input rerun](evidence/vm9_jni_header_input_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层

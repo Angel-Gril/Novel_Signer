@@ -8247,6 +8247,23 @@
     "complete_signer_verified": false,
     "comparison_note": "Fresh second-service validation passes all 30 early rejection guards. The formal JSON also contains one constructed request control and cumulative metadata not emitted by this guard-only verifier, so byte identity is not claimed."
   },
+  "vm9_jni_header_input_rerun_20261025": {
+    "evidence_file": "evidence/vm9_jni_header_input_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_jni_header_input_fresh_20261020.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_jni_header_input_fresh_20261020.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_component_controls": 52,
+    "rollback_guards": 22,
+    "synthetic_JNI_services": true,
+    "actual_Java_facade_verified": false,
+    "native_snapshot_input": false,
+    "whole_request_native_differential_verified": false,
+    "complete_second_vm_verified": false,
+    "comparison_note": "Fresh header-input conversion component passes 52/22. The formal JSON includes prior tree-release/roundtrip batches and cumulative metadata not emitted by this verifier, so byte identity is not claimed."
+  },
   "vm9_request_caller_return_fresh_20261024": {
     "path": "evidence/vm9_request_caller_return_fresh_20261024.json",
     "evidence_label": "Fresh request caller return rerun",

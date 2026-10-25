@@ -106,6 +106,12 @@ formal evidence includes a separate constructed request control that this
 guard-only verifier does not replay, so byte identity is not claimed. See the
 [second-services rerun](evidence/vm9_request_second_services_rerun_20261025.json).
 
+The JNI header-input conversion component was rerun next: 52 native/Python cases
+and 22 rollback guards cover normal, cold diagnostics, NULL/length/exception
+paths, duplicate keys and multi-pair headers at both bases. The formal evidence
+also contains earlier tree-release/roundtrip batches and cumulative metadata
+outside this verifier, so byte identity is not claimed. See the [header-input rerun](evidence/vm9_jni_header_input_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**
