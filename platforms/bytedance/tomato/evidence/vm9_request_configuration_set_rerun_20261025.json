@@ -1,0 +1,1048 @@
+{
+  "component": "Outer configuration setter wrapper",
+  "native_Python_controls": 38,
+  "rollback_guards": 64,
+  "cases": [
+    {
+      "case": "insert",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "insert_left",
+      "image_base": "0x122c0000",
+      "steps": 1681,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "insert_right",
+      "image_base": "0x122c0000",
+      "steps": 1624,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "balanced_insert",
+      "image_base": "0x122c0000",
+      "steps": 2056,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1029,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "empty",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "binary",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "embedded_NUL",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "NUL_equivalent",
+      "image_base": "0x122c0000",
+      "steps": 1153,
+      "native_stack_bytes": 448,
+      "declared_range_count": 1010,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 1,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "replace_zero",
+      "image_base": "0x122c0000",
+      "steps": 1289,
+      "native_stack_bytes": 448,
+      "declared_range_count": 1010,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 1,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "replace_high",
+      "image_base": "0x122c0000",
+      "steps": 1289,
+      "native_stack_bytes": 448,
+      "declared_range_count": 1010,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 1,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "replace_uint32",
+      "image_base": "0x122c0000",
+      "steps": 1289,
+      "native_stack_bytes": 448,
+      "declared_range_count": 1010,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 1,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "cross_key",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "cross_payload",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "cross_packed",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "zero_stack_padding",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "different_stack_padding",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "live_padding",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "live_key_after_allocate",
+      "image_base": "0x122c0000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "NULL_clone_payload",
+      "image_base": "0x122c0000",
+      "steps": 1359,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1025,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "insert",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "insert_left",
+      "image_base": "0x775c205000",
+      "steps": 1681,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "insert_right",
+      "image_base": "0x775c205000",
+      "steps": 1624,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "balanced_insert",
+      "image_base": "0x775c205000",
+      "steps": 2056,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1029,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "empty",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "binary",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "embedded_NUL",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "NUL_equivalent",
+      "image_base": "0x775c205000",
+      "steps": 1153,
+      "native_stack_bytes": 448,
+      "declared_range_count": 1010,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 1,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "replace_zero",
+      "image_base": "0x775c205000",
+      "steps": 1289,
+      "native_stack_bytes": 448,
+      "declared_range_count": 1010,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 1,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "replace_high",
+      "image_base": "0x775c205000",
+      "steps": 1289,
+      "native_stack_bytes": 448,
+      "declared_range_count": 1010,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 1,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "replace_uint32",
+      "image_base": "0x775c205000",
+      "steps": 1289,
+      "native_stack_bytes": 448,
+      "declared_range_count": 1010,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 1,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "cross_key",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "cross_payload",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "cross_packed",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "zero_stack_padding",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "different_stack_padding",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "live_padding",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "live_key_after_allocate",
+      "image_base": "0x775c205000",
+      "steps": 1365,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1027,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    },
+    {
+      "case": "NULL_clone_payload",
+      "image_base": "0x775c205000",
+      "steps": 1359,
+      "native_stack_bytes": 496,
+      "declared_range_count": 1025,
+      "original_wrapper_and_setter_returned": true,
+      "guest_image_TLS_and_native_nonstack_write_bytes_equal": true,
+      "defined_guard_and_canary_equal": true,
+      "ordered_allocator_TLS_wake_and_prefree_bytes_equal": true,
+      "packed_inputs_and_padding_preserved": true,
+      "packed_u32_result_equal": true,
+      "allocation_count": 6,
+      "free_count": 1,
+      "native_snapshot_input": false,
+      "physical_X0_compared": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "packed_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "packed_wrap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "packed_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "packed_result_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "wrong_target",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "registry_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "registry_wrap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "registry_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_wrap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "payload_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "payload_wrap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "payload_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "negative_length",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "tree_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_byte_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "invalid_node_bound",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "stack_unaligned",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "stack_wrap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "stack_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "thread_wrap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "thread_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "packed_spill",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "registry_spill",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_spill",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "payload_spill",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "registry_packed_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_registry_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "key_packed_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "payload_packed_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "payload_key_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "payload_registry_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "payload_TLS_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "registry_TLS_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_allocate",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_free",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_get_tls",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_initialize_registry",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "missing_broadcast",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_NULL_scope",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_NULL_key",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_NULL_value",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_NULL_pair",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_NULL_node",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_invalid",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_wrap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_unmapped",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_packed_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_registry_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_key_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_payload_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_TLS_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_spill",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "allocation_live_alias",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "provider_changes_packed",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "provider_failure",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "canary_change",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "TLS_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "active_readers",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "multiple_TLS_keys",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "contended_mutex",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "case": "wake_error",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "native_snapshot_input": false,
+  "verifier_sha256": "fa3c8d180a5fbc555be85637e0d9b0cfb4e0dbf9efb902dde3441ef08d177991",
+  "synthetic_allocation_services": true,
+  "warm_TLS_component_boundary": true,
+  "complete_signer_verified": false,
+  "physical_ABI_verified": false,
+  "external_effect_rollback_verified": false
+}

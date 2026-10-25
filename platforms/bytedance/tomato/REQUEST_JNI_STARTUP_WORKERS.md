@@ -91,6 +91,11 @@ release counts、alias、cross-page boundary 与 mutex transitions 在两基址�
 owning/constructed second entry 未由该 component 脚本重放，因此不宣称 byte-identical。
 见 [reader-release rerun](evidence/vm9_request_second_reader_release_rerun_20261025.json)。
 
+随后重跑 outer configuration setter component：38 项 controls、64 项 rollback guards，
+覆盖 insert/replacement、alias、padding 与 failure paths，两基址均通过；formal
+evidence 的 owning/constructed-second metadata 未由该 component 脚本重放，本轮不宣称
+byte-identical。见 [configuration-set rerun](evidence/vm9_request_configuration_set_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

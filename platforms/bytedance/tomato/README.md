@@ -94,6 +94,12 @@ rollback guards cover release counts, aliases, cross-page boundaries and mutex
 transitions at both bases. The later owning/constructed second entry remains
 outside this component rerun, so byte identity is not claimed. See the [reader-release rerun](evidence/vm9_request_second_reader_release_rerun_20261025.json).
 
+The outer configuration setter component was rerun too: 38 native/Python cases
+and 64 rollback guards cover inserts, replacements, aliases, padding and failure
+paths at both bases. The later owning/constructed-second metadata in the formal
+evidence is outside this component script, so byte identity is not claimed. See
+the [configuration-set rerun](evidence/vm9_request_configuration_set_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**

@@ -83,6 +83,11 @@ counts、alias、cross-page boundary 与 mutex transitions，两基址通过；o
 constructed second entry 仍未由该 component 脚本重放，因此不宣称 byte-identical。
 见 [reader-release rerun](evidence/vm9_request_second_reader_release_rerun_20261025.json)。
 
+继续重跑 outer configuration setter component：38 项 controls、64 项回滚，覆盖
+insert/replacement、alias、padding 与 failure paths，两基址通过。formal evidence
+中的 owning/constructed-second metadata 未由该 component 脚本重放，因此不宣称
+byte-identical。见 [configuration-set rerun](evidence/vm9_request_configuration_set_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层
