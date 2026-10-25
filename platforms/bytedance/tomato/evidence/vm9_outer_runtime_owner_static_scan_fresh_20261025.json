@@ -563,6 +563,128 @@
     "slot_store_observed": false,
     "interpretation": "custom DSO mapping/replacement path; runtime-table ownership remains unproven"
   },
+  "loader_opcode_facts": [
+    {
+      "offset": "0x184af4",
+      "mnemonic": "mov",
+      "operands": "w1, #2"
+    },
+    {
+      "offset": "0x184afc",
+      "mnemonic": "mov",
+      "operands": "x20, x0"
+    },
+    {
+      "offset": "0x184b04",
+      "mnemonic": "bl",
+      "operands": "#0x348060"
+    },
+    {
+      "offset": "0x184b28",
+      "mnemonic": "cbz",
+      "operands": "x0, #0x184d34"
+    },
+    {
+      "offset": "0x184b30",
+      "mnemonic": "mov",
+      "operands": "x19, x0"
+    },
+    {
+      "offset": "0x184c60",
+      "mnemonic": "ldp",
+      "operands": "x22, x8, [x0]"
+    },
+    {
+      "offset": "0x184c68",
+      "mnemonic": "mov",
+      "operands": "w3, #0x22"
+    },
+    {
+      "offset": "0x184c6c",
+      "mnemonic": "ldr",
+      "operands": "w9, [x0, #0x10]"
+    },
+    {
+      "offset": "0x184c70",
+      "mnemonic": "mov",
+      "operands": "x0, xzr"
+    },
+    {
+      "offset": "0x184c74",
+      "mnemonic": "mov",
+      "operands": "w4, #-1"
+    },
+    {
+      "offset": "0x184c78",
+      "mnemonic": "mov",
+      "operands": "x5, xzr"
+    },
+    {
+      "offset": "0x184c7c",
+      "mnemonic": "sub",
+      "operands": "x20, x8, x22"
+    },
+    {
+      "offset": "0x184c80",
+      "mnemonic": "orr",
+      "operands": "w2, w9, #2"
+    },
+    {
+      "offset": "0x184c84",
+      "mnemonic": "mov",
+      "operands": "x1, x20"
+    },
+    {
+      "offset": "0x184c8c",
+      "mnemonic": "cmn",
+      "operands": "x0, #1"
+    },
+    {
+      "offset": "0x184cac",
+      "mnemonic": "bl",
+      "operands": "#0x348070"
+    },
+    {
+      "offset": "0x184cc0",
+      "mnemonic": "mov",
+      "operands": "w3, #0x22"
+    },
+    {
+      "offset": "0x184cc4",
+      "mnemonic": "mov",
+      "operands": "w4, #-1"
+    },
+    {
+      "offset": "0x184ccc",
+      "mnemonic": "orr",
+      "operands": "w2, w8, #2"
+    },
+    {
+      "offset": "0x184cd0",
+      "mnemonic": "bl",
+      "operands": "#0x348080"
+    },
+    {
+      "offset": "0x184cd8",
+      "mnemonic": "b.ne",
+      "operands": "#0x184d70"
+    },
+    {
+      "offset": "0x184ce8",
+      "mnemonic": "bl",
+      "operands": "#0x276b9c"
+    },
+    {
+      "offset": "0x184d18",
+      "mnemonic": "bl",
+      "operands": "#0x348070"
+    },
+    {
+      "offset": "0x184d90",
+      "mnemonic": "bl",
+      "operands": "#0x348090"
+    }
+  ],
   "runtime_table_owner_recovered": false,
   "runtime_table_content_reconstructed": false,
   "whole_request_native_success": false,

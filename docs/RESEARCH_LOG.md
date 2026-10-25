@@ -495,6 +495,16 @@ memcpy PLT and then records one unserviced unmapped stop. This remains a native
 continuation boundary, not a whole-request differential, fresh standalone signer, or
 online acceptance result.
 
+## 2026-10-26：outer loader candidate opcode closure
+
+The static owner inventory now asserts 24 decoded instructions in the candidate
+`+0x18a314 → +0x184ad4` loader path. The bytes confirm `x0=path`, `dlopen(path, 2)`,
+the loaded span `[x22, x8)` and `x20=x8-x22`, anonymous syscall 222, old mapping
+`munmap`, `MAP_FIXED` replacement `mmap`, two segment copies, temporary `munmap`, and
+`dlclose`. The scan still finds no direct writer for the five runtime relocation slots;
+this closes the candidate's static contract only and does not prove execution, table
+ownership, handler contents, or signer output.
+
 \n
 
 \n

@@ -9088,6 +9088,8 @@
       "old_mapping_munmap_pc": "+0x184cac",
       "temporary_mapping_munmap_pc": "+0x184d18",
       "dlclose_pc": "+0x184d90",
+      "opcode_fact_count": 24,
+      "success_path_contract": "x0=path -> dlopen(path,2); loaded span [x22,x8) -> length x20; anonymous syscall 222; munmap old; mmap MAP_FIXED old; copy replacement; temporary munmap; dlclose",
       "slot_store_observed": false,
       "interpretation": "custom DSO mapping/replacement path; runtime-table ownership remains unproven"
     },

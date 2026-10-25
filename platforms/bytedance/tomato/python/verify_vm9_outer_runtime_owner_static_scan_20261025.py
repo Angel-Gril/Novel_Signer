@@ -174,6 +174,22 @@ def _word_at(words: list[int], text_base: int, address: int) -> int:
     return words[index]
 
 
+def _instruction_fact(data: bytes, text_base: int, address: int) -> dict:
+    """Decode one candidate-loader instruction for a static audit record."""
+    offset = address - text_base
+    md = Cs(CS_ARCH_ARM64, CS_MODE_ARM)
+    md.detail = False
+    instructions = list(md.disasm(data[offset:offset + 4], address, count=1))
+    if len(instructions) != 1:
+        raise ValueError(f"cannot decode loader instruction at {address:#x}")
+    instruction = instructions[0]
+    return {
+        "offset": hex(address),
+        "mnemonic": instruction.mnemonic,
+        "operands": instruction.op_str,
+    }
+
+
 def scan(library: Path) -> dict:
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -281,6 +297,45 @@ def scan(library: Path) -> dict:
         assert imports[_bl_target(_word_at(word_list, text_base, 0x184D18), 0x184D18)] == "munmap"
         assert imports[_bl_target(_word_at(word_list, text_base, 0x184D90), 0x184D90)] == "dlclose"
         assert _word_at(word_list, text_base, 0x271D9C) == 0xD103A400
+        loader_opcode_facts = [
+            _instruction_fact(data, text_base, address)
+            for address in (
+                0x184AF4, 0x184AFC, 0x184B04, 0x184B28, 0x184B30,
+                0x184C60, 0x184C68, 0x184C6C, 0x184C70, 0x184C74, 0x184C78,
+                0x184C7C, 0x184C80, 0x184C84, 0x184C8C, 0x184CAC,
+                0x184CC0, 0x184CC4, 0x184CCC, 0x184CD0, 0x184CD8,
+                0x184CE8, 0x184D18,
+                0x184D90,
+            )
+        ]
+        expected_facts = {
+            ("0x184af4", "mov", "w1, #2"),
+            ("0x184afc", "mov", "x20, x0"),
+            ("0x184b28", "cbz", "x0, #0x184d34"),
+            ("0x184b30", "mov", "x19, x0"),
+            ("0x184c60", "ldp", "x22, x8, [x0]"),
+            ("0x184c68", "mov", "w3, #0x22"),
+            ("0x184c6c", "ldr", "w9, [x0, #0x10]"),
+            ("0x184c70", "mov", "x0, xzr"),
+            ("0x184c74", "mov", "w4, #-1"),
+            ("0x184c78", "mov", "x5, xzr"),
+            ("0x184c7c", "sub", "x20, x8, x22"),
+            ("0x184c80", "orr", "w2, w9, #2"),
+            ("0x184c84", "mov", "x1, x20"),
+            ("0x184c8c", "cmn", "x0, #1"),
+            ("0x184cc0", "mov", "w3, #0x22"),
+            ("0x184cc4", "mov", "w4, #-1"),
+            ("0x184ccc", "orr", "w2, w8, #2"),
+            ("0x184cd8", "b.ne", "#0x184d70"),
+            ("0x184ce8", "bl", "#0x276b9c"),
+            ("0x184d18", "bl", "#0x348070"),
+            ("0x184d90", "bl", "#0x348090"),
+        }
+        actual_facts = {(fact["offset"].lower(), fact["mnemonic"], fact["operands"])
+                        for fact in loader_opcode_facts}
+        if not expected_facts <= actual_facts:
+            missing = sorted(expected_facts - actual_facts)
+            raise AssertionError(f"loader opcode facts changed: {missing}")
         return {
             "schema": "vm9-outer-runtime-owner-static-scan-fresh-20261025-v1",
             "evidence_date": "2026-10-25",
@@ -320,6 +375,7 @@ def scan(library: Path) -> dict:
                 "interpretation": "loader-like outer candidate only; no runtime-table ownership proven",
             },
             "outer_loader_sequence": outer_sequence,
+            "loader_opcode_facts": loader_opcode_facts,
             "runtime_table_owner_recovered": False,
             "runtime_table_content_reconstructed": False,
             "whole_request_native_success": False,
