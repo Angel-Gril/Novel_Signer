@@ -8791,5 +8791,20 @@
     "actual_matching_libc_diagnostic_locks": true,
     "complete_signer_verified": false,
     "comparison_note": "Fresh SHA-1 hexadecimal scope rerun passes 64 controls and 8 guards; current case-level output differs from the formal aggregate metadata, so byte identity is not claimed."
+  },
+  "vm9_request_tree_reference_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_tree_reference_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_tree_reference_fresh_20261007.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_tree_reference_fresh_20261007.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 8,
+    "rollback_guards": 1,
+    "native_snapshot_input": false,
+    "historical_native_groups_replayed": false,
+    "complete_request_or_signer_verified": false,
+    "comparison_note": "Fresh request x8 tree-reference constructor rerun passes 8 controls and one unmapped-output rejection; current report is a component-level schema and does not claim byte identity or complete request signing."
   }
 }

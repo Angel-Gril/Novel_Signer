@@ -184,6 +184,18 @@ diagnostic locks 仍是显式 provider，物理 spill、完整 state/request mem
 JVM、fresh standalone signer 与线上 header acceptance 继续未验证。证据见
 [SHA-1 hex rerun](evidence/vm9_sha1_hex_scope_rerun_20261025.json)。
 
+## 6.275 2026-10-25 request x8 tree-reference constructor fresh rerun
+
+使用 pinned `libmetasec_ml_71332.so` 重新执行 `+0x25c324` request x8 tree-reference
+constructor。两 image base、四个 output placement（普通、跨页和与分配容器相邻的
+地址）共 **8 项 native/Python controls** 通过，分配序列均为 `[40, 40, 40, 4]`，另有
+1 项 unmapped-output rejection，失败前页面保持不变。
+
+本轮没有使用 native snapshot 或历史 native group；allocator 是该 component 的显式
+non-reusing service。当前 case-level report 不宣称与旧 aggregate JSON 逐字节一致，也不
+证明完整 request callback、physical ABI、live Android JVM、fresh standalone signer 或
+线上 header acceptance。证据见 [request tree-reference rerun](evidence/vm9_request_tree_reference_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

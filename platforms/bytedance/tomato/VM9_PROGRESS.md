@@ -118,6 +118,12 @@ diagnostics、边界长度、`0xffffffff` flag 与高地址栈共 **64 项 nativ
 仍是显式 provider，完整 state/request memory、live JVM、fresh signing 与线上验收仍未完成。
 见 [SHA-1 hex rerun](evidence/vm9_sha1_hex_scope_rerun_20261025.json)。
 
+随后重跑 request x8 tree-reference constructor：两基址×四个 output placement 共 **8 项
+native/Python controls** 与 **1 项 unmapped-output rejection** 通过，覆盖 cross-page
+output 和 alias guard。该报告保持为独立 component schema，不宣称与旧 aggregate 逐字
+一致，也不等同于完整 request callback、live JVM 或 fresh signer。见
+[request tree-reference rerun](evidence/vm9_request_tree_reference_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

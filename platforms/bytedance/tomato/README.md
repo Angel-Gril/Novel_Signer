@@ -137,6 +137,13 @@ scoped digest/reference component with explicit allocator and diagnostic-lock
 providers, not complete state memory, a live JVM, fresh signing or online
 acceptance. See the [SHA-1 hex rerun](evidence/vm9_sha1_hex_scope_rerun_20261025.json).
 
+The request x8 tree-reference constructor was rerun from fresh ELF/Python pages:
+8 native/Python controls and one unmapped-output rejection pass across both image
+bases and four output placements, including cross-page output and alias guards.
+The current component report is kept separate from the older aggregate evidence;
+it does not claim byte identity, full request callback composition, live JVM or
+fresh signer output. See the [request tree-reference rerun](evidence/vm9_request_tree_reference_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115
