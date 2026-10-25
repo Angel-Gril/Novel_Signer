@@ -88,6 +88,11 @@ insert/replacement、alias、padding 与 failure paths，两基址通过。forma
 中的 owning/constructed-second metadata 未由该 component 脚本重放，因此不宣称
 byte-identical。见 [configuration-set rerun](evidence/vm9_request_configuration_set_rerun_20261025.json)。
 
+随后重跑 public second-VM service guard suite：30 项 early provider rejection 全部
+通过，guest pages 与 provider effects 均保持不变。formal evidence 的 constructed
+request control 未由该 guard-only verifier 重放，因此不宣称 byte-identical。见
+[second-services rerun](evidence/vm9_request_second_services_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层

@@ -96,6 +96,11 @@ owning/constructed second entry 未由该 component 脚本重放，因此不宣�
 evidence 的 owning/constructed-second metadata 未由该 component 脚本重放，本轮不宣称
 byte-identical。见 [configuration-set rerun](evidence/vm9_request_configuration_set_rerun_20261025.json)。
 
+随后重跑 public second-VM service guard suite：30 项 early provider rejection 全部
+通过，guest pages 与 provider effects 均未改变；formal evidence 的 constructed
+request control 未由该 guard-only verifier 重放，本轮不宣称 byte-identical。见
+[second-services rerun](evidence/vm9_request_second_services_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

@@ -1,0 +1,192 @@
+{
+  "component": "Public request second VM service contract",
+  "rollback_guards": 30,
+  "native_Python_controls": 0,
+  "negative_cases": [
+    {
+      "case": "file_type_bool",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_type_list",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_type_tuple",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_type_int",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_missing_fopen",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_noncallable_fopen",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_missing_fread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_noncallable_fread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_missing_fclose",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_noncallable_fclose",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "file_unknown_service",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "mutex_type_bool",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "mutex_type_list",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "mutex_type_tuple",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "mutex_type_int",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "mutex_missing_pthread_mutex_lock",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_lock_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_lock_boolean",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_lock_negative",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_lock_wrap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_lock_unaligned",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_lock_string",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "mutex_missing_pthread_mutex_unlock",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_unlock_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_unlock_boolean",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_unlock_negative",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_unlock_wrap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_unlock_unaligned",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "pthread_mutex_unlock_string",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    },
+    {
+      "case": "mutex_unknown_import",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "no_guest_or_provider_effect": true
+    }
+  ],
+  "no_native_groups_replayed": true,
+  "verifier_sha256": "4bb88ba47667bd539175b01256efb1e68c291e7bd960242aa32f4f40e1dad60e",
+  "owner_sha256": "eb21ab32db1192c37f54f2457f2508c5b4d5d63bf482e536fa46b40aebfb578f",
+  "whole_request_native_differential_verified": false,
+  "complete_signer_verified": false
+}

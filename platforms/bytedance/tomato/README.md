@@ -100,6 +100,12 @@ paths at both bases. The later owning/constructed-second metadata in the formal
 evidence is outside this component script, so byte identity is not claimed. See
 the [configuration-set rerun](evidence/vm9_request_configuration_set_rerun_20261025.json).
 
+The public second-VM service contract guard suite also passes fresh: all 30 early
+provider rejection checks leave guest pages and provider effects unchanged. The
+formal evidence includes a separate constructed request control that this
+guard-only verifier does not replay, so byte identity is not claimed. See the
+[second-services rerun](evidence/vm9_request_second_services_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**
