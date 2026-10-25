@@ -8246,6 +8246,27 @@
     "complete_python_medusa": false,
     "live_server_matrix_verified": false
   },
+  "vm9_request_allocator_handoff_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_allocator_handoff_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_allocator_handoff_fresh_20261024.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_allocator_handoff_fresh_20261007.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": true,
+    "python_handoff_controls": 4,
+    "image_bases": ["0x122c0000", "0x775c205000"],
+    "property_profiles": ["absent", "sdk_30"],
+    "owning_allocator_session_used": true,
+    "owning_request_vm_entry_used": true,
+    "actual_jni_environment_acquisition_high_base": true,
+    "actual_request_cleanup_high_base": true,
+    "native_snapshot_input": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "live_Android_JVM_verified": false,
+    "live_server_matrix_verified": false
+  },
   "vm9_signer_boundary_audit_20261024": {
     "path": "evidence/vm9_signer_boundary_audit_20261024.json",
     "evidence_label": "Public outer/request standalone-signer boundary audit",

@@ -55,6 +55,13 @@ signer 与线上 header acceptance 仍未验证。见
 和 request input，不能计为 whole-native differential、live Android JVM、fresh signer
 或线上 header acceptance。见 [handoff rerun](evidence/vm9_java_request_handoff_rerun_20261025.json)。
 
+随后重跑 owning allocator → request VM continuation：两基址×absent/SDK-30 共 4 项，
+与 2026-10-24 正式 JSON 逐字节一致；低基址 957 VM steps/26 callbacks，高基址
+2475 steps/105 callbacks，且 high-base JNI acquisition 与 cleanup 均执行。该轮仍是
+Python composition 与 synthetic request/JNI provider，不等同于 whole-request native
+differential、fresh signer 或线上 acceptance。见
+[allocator handoff rerun](evidence/vm9_request_allocator_handoff_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

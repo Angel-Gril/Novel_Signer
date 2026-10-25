@@ -48,6 +48,13 @@ absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一�
 native differential、live Android JVM、fresh signing 和 online header acceptance
 仍未验证。见 [handoff rerun](evidence/vm9_java_request_handoff_rerun_20261025.json)。
 
+继续重跑 owning allocator → request VM continuation：两基址×absent/SDK-30 共 4 项
+与 2026-10-24 formal evidence 逐字节一致；低基址 957 steps/26 callbacks，高基址
+2475 steps/105 callbacks，并保持 high-base JNI acquisition 与 request cleanup。
+仍是 Python composition，synthetic request/JNI provider，whole-request native
+differential、fresh signing 与线上验收未完成。见
+[allocator handoff rerun](evidence/vm9_request_allocator_handoff_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层

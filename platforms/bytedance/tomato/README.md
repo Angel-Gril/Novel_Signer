@@ -55,6 +55,14 @@ callbacks per case. It still uses synthetic JNI/JavaVM and request inputs, so it
 does not establish whole-native differential, live Android JVM, fresh signing or
 online header acceptance. See the [handoff rerun](evidence/vm9_java_request_handoff_rerun_20261025.json).
 
+The owning allocator → request VM continuation was rerun next. Four absent/SDK-30
+cases across both image bases are byte-identical to the 2026-10-24 formal evidence;
+the low-base cases return after 957 VM steps/26 callbacks and the high-base cases
+after 2,475 steps/105 callbacks, including high-base JNI acquisition and cleanup.
+This remains a Python composition with synthetic request input/JNI providers and
+does not establish whole-request native differential or fresh signing. See the
+[allocator handoff rerun](evidence/vm9_request_allocator_handoff_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**
