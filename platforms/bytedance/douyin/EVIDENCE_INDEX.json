@@ -5,9 +5,27 @@
   "source_review": {
     "repository": "cv-cat/DouYin_Spider",
     "commit": "d151f9c2980abc304c1ae4918c2272675cd9e4c2",
-    "review_date": "2026-10-24",
+    "review_date": "2026-10-26",
     "evidence_level": "static_community",
-    "live_requests_verified": false
+    "live_requests_verified": false,
+    "source_tree_file_count": 121,
+    "current_head_rechecked": true,
+    "web_interface_families": [
+      "aweme detail/post/profile/comment/search/follow/favorite/feed/notice",
+      "webcast room/linkmic/ranklist/chat/like REST",
+      "webcast protobuf WebSocket PushFrame/Response",
+      "imapi conversation and message endpoints",
+      "passport login/challenge/ticket-guard certificate",
+      "creator media publish plus ImageX/VOD upload gateways"
+    ],
+    "web_signing_and_session_layers": [
+      "a_bogus",
+      "live X-Bogus helper",
+      "x-secsdk-web-signature",
+      "x-tt-session-dtrait",
+      "msToken/ttwid/UIFID/web_sign_token cookies"
+    ],
+    "traditional_app_seven_god_generators_found": false
   },
   "verified_live_requests": [],
   "generations": {
