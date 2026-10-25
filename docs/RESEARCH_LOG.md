@@ -505,6 +505,14 @@ the loaded span `[x22, x8)` and `x20=x8-x22`, anonymous syscall 222, old mapping
 this closes the candidate's static contract only and does not prove execution, table
 ownership, handler contents, or signer output.
 
+The bounded synthetic branch diagnostic then executed that candidate through its return
+at `+0x184dd0`. It supplied synthetic descriptor, mapping, handle, and callback semantics;
+the run recorded 86 allocation events, 102 ledger events, the expected mmap/mprotect/file
+syscall family, and no writes to the five relocation slots. This is control-flow evidence
+only. It does not recover the Android linker input or runtime-table owner and is kept
+separate from signer evidence. See
+`platforms/bytedance/tomato/evidence/vm9_outer_loader_synthetic_branch_diagnostic_20261026.json`.
+
 \n
 
 \n

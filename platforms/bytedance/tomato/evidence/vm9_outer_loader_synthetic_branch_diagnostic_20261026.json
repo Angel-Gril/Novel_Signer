@@ -1,0 +1,40 @@
+{
+  "schema": "vm9-outer-loader-synthetic-branch-diagnostic-20261026-v1",
+  "evidence_date": "2026-10-26",
+  "evidence_label": "Bounded diagnostic of the statically identified outer loader branch",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "entry_offset": "+0x184ad4",
+  "caller_offset": "+0x18a314",
+  "synthetic_inputs": {
+    "dlopen_handle": true,
+    "descriptor_bounds": true,
+    "anonymous_mmap": true,
+    "callback_methods": true,
+    "external_span": "one-page synthetic descriptor span",
+    "input_path": "redacted NUL-terminated path"
+  },
+  "success_branch": {
+    "returned": true,
+    "return_value": "0x1",
+    "stop_offset": "+0x184dd0",
+    "dlopen_calls": 1,
+    "dlclose_calls": 1,
+    "free_calls": 18,
+    "pthread_once_calls": 4,
+    "pthread_key_create_calls": 5,
+    "pthread_getspecific_calls": 94,
+    "pthread_setspecific_calls": 6,
+    "allocation_events": 86,
+    "ledger_events": 102
+  },
+  "syscall_numbers": [222, 226, 56, 80, 226, 226, 63, 57, 222],
+  "external_page_write_count": 4096,
+  "runtime_slot_write_count": 0,
+  "runtime_table_owner_recovered": false,
+  "runtime_table_content_reconstructed": false,
+  "whole_request_native_success": false,
+  "fresh_signer_output_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "The native candidate reaches its replacement-mapping cleanup and return when all loader, descriptor, mapping, and callback semantics are supplied by synthetic host hooks. The run establishes a bounded control-flow contract only; it does not identify the real Android linker input, runtime-table owner, handler contents, or signer output.",
+  "reproduction_boundary": "Temporary probe outside the repository; no raw trace or synthetic mapping is used as production signer evidence."
+}
