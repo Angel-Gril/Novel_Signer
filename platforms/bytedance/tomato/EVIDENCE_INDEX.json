@@ -8710,5 +8710,21 @@
     "complete_state_or_request_memory_equivalence_verified": false,
     "complete_signer_verified": false,
     "comparison_note": "Fresh diagnostic enter/leave wrappers reproduce 36 controls and 8 guards; current verifier schema differs from the formal cumulative/provenance schema, so byte identity is not claimed."
+  },
+  "vm9_state_prefix_reference_rerun_20261025": {
+    "evidence_file": "evidence/vm9_state_prefix_reference_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_state_prefix_reference_fresh_20261020.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_state_prefix_reference_fresh_20261020.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 16,
+    "rollback_guards": 8,
+    "native_snapshot_input": false,
+    "historical_native_groups_replayed": false,
+    "allocation_provider_is_synthetic": true,
+    "full_state_request_or_signer_verified": false,
+    "comparison_note": "Fresh scoped-reference prefix rerun passes 16 cases and 8 guards; current case-level output does not reproduce the formal aggregate-only schema, so byte identity is not claimed."
   }
 }

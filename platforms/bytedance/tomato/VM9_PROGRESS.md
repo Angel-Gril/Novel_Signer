@@ -87,6 +87,11 @@ guards 通过。当前 verifier 使用重组后的 schema，没有 formal cumula
 memory 与 signer output 仍未完成。见
 [state-diagnostics rerun](evidence/vm9_state_diagnostics_rerun_20261025.json)。
 
+随后重跑 state prefix scoped-reference constructor：两基址共 16 项 controls、8 项
+rollback guards，通过分配/锁顺序与 provider failure rollback。当前 case-level schema
+与旧 formal aggregate-only JSON 不同，因此不宣称逐字节一致。见
+[state-prefix reference rerun](evidence/vm9_state_prefix_reference_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

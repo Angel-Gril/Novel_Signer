@@ -9300,3 +9300,13 @@ metadata, so byte identity is not claimed. Allocation remains an explicit
 provider boundary; full state/request memory and signer output remain open.
 
 Evidence: [state diagnostics](evidence/vm9_state_diagnostics_rerun_20261025.json).
+
+## 2026-10-25：state prefix scoped-reference fresh rerun
+
+The state prefix and scoped string-reference constructor were rerun from fresh
+state at both image bases. Sixteen controls and eight rollback guards pass,
+including allocation/lock ordering and provider failure rollback. The current
+case-level schema differs from the older aggregate formal JSON, so byte identity
+is not claimed.
+
+Evidence: [state prefix reference](evidence/vm9_state_prefix_reference_rerun_20261025.json).
