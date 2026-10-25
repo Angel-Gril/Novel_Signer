@@ -116,6 +116,12 @@ detach、object reset 与 matching-libc free 均通过；formal files 的 owning
 [environment rerun](evidence/vm9_request_child_environment_rerun_20261025.json) 与
 [cleanup rerun](evidence/vm9_request_child_cleanup_rerun_20261025.json)。
 
+继续重跑 request caller-return/entry verifier：16 项 caller-return cases、1 项
+request-VM boundary、26 项回滚，覆盖 callback clobber、stack/TLS restoration、
+canary 与 provider failures，两基址通过。formal JSON 的 TDD/ownership metadata
+未由该 verifier 输出，因此不宣称 byte-identical。见
+[caller-return rerun](evidence/vm9_request_caller_return_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层

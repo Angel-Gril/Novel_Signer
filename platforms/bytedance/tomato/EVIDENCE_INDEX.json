@@ -8329,6 +8329,24 @@
     "whole_child_native_differential_verified": false,
     "comparison_note": "Fresh child-cleanup component cases pass 16/7. Formal JSON includes an additional owning callback and source metadata not emitted by this cleanup-only verifier, so byte identity is not claimed."
   },
+  "vm9_request_caller_return_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_caller_return_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_caller_return_fresh_20261012.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_caller_return_fresh_20261012.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 16,
+    "request_VM_boundary_controls": 1,
+    "rollback_guards": 26,
+    "caller_epilogue_and_request_entry_verified": true,
+    "native_snapshot_input": false,
+    "whole_request_native_differential_verified": false,
+    "complete_physical_ABI_verified": false,
+    "fresh_signer_output_verified": false,
+    "comparison_note": "Fresh caller-return batch passes 16 cases, one request-entry control and 26 guards. Formal JSON contains additional TDD/ownership metadata not emitted by this verifier, so byte identity is not claimed."
+  },
   "vm9_request_caller_return_fresh_20261024": {
     "path": "evidence/vm9_request_caller_return_fresh_20261024.json",
     "evidence_label": "Fresh request caller return rerun",

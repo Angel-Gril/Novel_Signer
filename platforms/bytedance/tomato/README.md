@@ -129,6 +129,12 @@ covering GetEnv ownership, temporary attach/detach, object reset and matching-li
 free. The formal files include later owning callbacks and metadata outside these
 wrapper-only runs, so byte identity is not claimed. See the [environment rerun](evidence/vm9_request_child_environment_rerun_20261025.json) and [cleanup rerun](evidence/vm9_request_child_cleanup_rerun_20261025.json).
 
+The request caller-return/entry verifier also passes fresh: 16 caller-return
+cases, one request-VM boundary control and 26 rollback guards cover callback
+clobber, stack/TLS restoration, canaries and provider failures at both bases.
+Formal JSON includes additional TDD/ownership metadata outside this verifier, so
+byte identity is not claimed. See the [caller-return rerun](evidence/vm9_request_caller_return_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**

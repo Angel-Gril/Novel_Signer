@@ -123,6 +123,12 @@ attach/detach、object reset 与 matching-libc free 均通过；formal files 的
 [environment rerun](evidence/vm9_request_child_environment_rerun_20261025.json) 与
 [cleanup rerun](evidence/vm9_request_child_cleanup_rerun_20261025.json)。
 
+随后重跑 request caller-return/entry verifier：16 项 caller-return cases、1 项
+request-VM boundary、26 项 rollback guards，callback clobber、stack/TLS restoration、
+canary 与 provider failures 在两基址均通过。formal JSON 的 TDD/ownership metadata
+未由该 verifier 输出，本轮不宣称 byte-identical。见
+[caller-return rerun](evidence/vm9_request_caller_return_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
