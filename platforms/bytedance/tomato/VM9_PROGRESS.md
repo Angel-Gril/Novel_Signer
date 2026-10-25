@@ -10,8 +10,10 @@
 `222/226/56/80/226/226/63/57/222`，外部 synthetic page 有 **4096** 次写入，
 五个 runtime relocation slot 仍为 **0** 次写入。
 
-其中 `+0x25c4dc/+0x25c4e4/+0x25c480` 的 vector begin/end/size helper 是 native
-实际执行的；其余 linker、descriptor、mapping 和 callback 语义都是 synthetic，不能据此认定 runtime-table owner、表内容、whole
+其中 `+0x25c4dc/+0x25c4e4/+0x25c480` 的 vector begin/end/size helper 以及
+`+0x184d34/+0x184d38/+0x187780` callback thunk 是 native 实际执行的；选择这些
+thunk 的 object fields 仍由 synthetic 输入提供，linker、descriptor、mapping 和
+handle 语义也仍是 synthetic，不能据此认定 runtime-table owner、表内容、whole
 request 或 signer 输出已经恢复。该诊断单独记录在
 [outer-loader synthetic diagnostic](evidence/vm9_outer_loader_synthetic_branch_diagnostic_20261026.json)。
 
