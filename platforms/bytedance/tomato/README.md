@@ -984,3 +984,11 @@ relocated dispatch table at `image+0x13bb8f0` is outside the fresh main PT_LOAD 
 no runtime table was synthesized and pages remain unchanged. This is the first native
 whole-request bootstrap gap, not a completed differential or signer result. See
 [evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json](evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json).
+
+The follow-up native owner probe records 283 VM handler events at both image bases and
+the four owning-frame operand stores at `+0x2830ec/+0x283100/+0x28310c`. It also traces
+the final zero operand: `+0x15f5a8` clears `0x7000ee38`, then `+0x15f5bc/+0x15f5c4`
+copy the zeroed source at `G+0x1800`, the current direct-dispatch fixture's empty URL
+reference. This attributes the observed zero to the fresh fixture input while leaving
+the real bootstrap dispatch table, Android/JNI startup, full signer and online
+acceptance unresolved. See [runtime-table owner evidence](evidence/vm9_request_runtime_table_owner_fresh_20261025.json).
