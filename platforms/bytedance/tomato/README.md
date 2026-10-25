@@ -161,6 +161,14 @@ failures. The current verifier adds 11 entry guards relative to the formal
 aggregate, so byte identity is not claimed; physical spills, whole-request
 differential, live JVM and fresh signing remain open. See the [request-tree rerun](evidence/vm9_request_tree_rerun_20261025.json).
 
+The request tree local/delete destruction boundary was rerun from fresh pages:
+32 native/Python controls, 32 rollback guards and one request-entry check pass
+across both image bases, covering empty/raw/string nodes, balanced and descending
+trees, direct/wrapper paths and free/provider failures. The current verifier adds
+five entry guards relative to the formal aggregate, so byte identity is not
+claimed; physical spills, whole-request differential, live JVM and fresh signing
+remain open. See the [tree-destruction rerun](evidence/vm9_request_tree_destroy_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

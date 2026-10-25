@@ -8840,5 +8840,22 @@
     "whole_request_native_differential_verified": false,
     "complete_signer_verified": false,
     "comparison_note": "Fresh configuration-tree/iterator rerun passes 24 controls, 24 guards and one request-entry check; the current output adds 11 entry guards relative to the formal aggregate, so byte identity is not claimed."
+  },
+  "vm9_request_tree_destroy_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_tree_destroy_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_tree_destroy_fresh_20261012.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_tree_destroy_fresh_20261012.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 32,
+    "rollback_guards": 32,
+    "request_entry_checks": 1,
+    "native_snapshot_input": false,
+    "physical_register_spills_verified": false,
+    "whole_request_native_differential_verified": false,
+    "complete_signer_verified": false,
+    "comparison_note": "Fresh request tree-destruction rerun passes 32 controls, 32 guards and one request-entry check; the current output adds five entry guards relative to the formal aggregate, so byte identity is not claimed."
   }
 }
