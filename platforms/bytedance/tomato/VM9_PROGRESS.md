@@ -1,5 +1,60 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-25 Asia/Shanghai：timed transfer 与完整 executor worker schedule fresh rerun
+
+在完成 follow-up callback 重跑后，先重跑 timed poll/queue 组合。两基址、两个
+startup 分支共 **4 项 fresh native/Python controls、20 项回滚**通过，11502 项
+allocation/free、checksum VM 8606106、lookup VM 301、15 callbacks、GetEnv 2/JNI 0、
+两段 image VM、wrapper/task 清理和空队列均匹配；结果与
+2026-10-11 正式 JSON 逐字节一致。该项仍使用显式 poll/queue driver，完整 worker
+wait cycle 尚未由这份证据单独声明。见 [timed-cycle rerun](evidence/vm9_jni_timed_cycle_rerun_20261025.json)。
+
+随后重跑完整 cooperative executor worker schedule。两基址、两个 startup 分支共
+**4 项 fresh native/Python controls、23 项回滚**通过，并与正式 JSON 逐字节一致：
+三条 worker 的 wait counts 为 **3、1、2**，共 **6 次 futex wait / 9 次 scheduler
+step**，返回和退出顺序均为 **1、2、0**；timed follow-up、两段 image VM 和清理
+继续匹配。该 schedule 使用 guest/Python provider，没有创建 host worker thread；
+live JVM/OS、live Java string conversion、fresh Medusa、standalone signer 与线上
+验收仍未完成。见 [worker-schedule rerun](evidence/vm9_jni_worker_schedule_rerun_20261025.json)。
+
+随后重跑 initialized live Java lookup：48 项 native/Python controls、11 项回滚，
+与正式证据逐字节一致。warm encoded SDK getter、Java array/byte 提取、MD5 string
+构造、reference cleanup 和异常/NULL 分支均匹配；JNI/JavaVM 仍为显式 synthetic
+provider，因此 live Android JVM、cold initializer、fresh Medusa 与 standalone
+signer 仍未验证。见 [live-lookup rerun](evidence/vm9_jni_live_lookup_rerun_20261025.json)。
+
+继续重跑 cold receiver initializer 与 complete SDK lookup：92 项 controls、6 项
+回滚，跨两个 image base 与正式 2026-10-12 evidence 逐字节一致。cold SDK property
+转换、receiver/class/global 初始化、完整 lookup continuation 以及 NULL/exception
+分支均通过；provider 仍为 synthetic，live Android JVM、fresh Medusa 与 standalone
+signer 仍未验证。见 [initializer rerun](evidence/vm9_live_initializer_rerun_20261025.json)。
+
+另外重跑 delayed live-provider boundary：evaluator、callable 和 worker-entry 共
+8 项 controls、16 项回滚通过。当前 verifier 的 case schema/order 已相对旧 formal
+JSON 重组，因此只记录 fresh controls，不宣称逐字节一致；仍为有限 synthetic
+Android provider，尚未证明 live 三 worker、真实 JVM 或 signer 输出。见
+[delayed-provider rerun](evidence/vm9_live_delayed_providers_rerun_20261025.json)。
+
+## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
+
+按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层
+组合：factory 通过 **26 项 native/Python、38 项回滚**，含两个基址的 **2 个
+完整实际 ELF module**（278 descriptors、109066 runtime instructions）；attached
+segment/custom AST 通过 **406 项 native/Python、36 项回滚**，含 **2 个完整实际
+ELF module**、12 项实际 custom payload。两份 rerun JSON 与 2026-10-11 正式证据
+逐字节一致，未使用 native snapshot。
+
+这确认实际 AST 已经接入 factory/parse/root/cleanup 组合边界；它仍是 fresh ELF
+组件对照，不等同于完整 B VM、whole-native request、fresh Medusa 或 standalone
+signer。最新证据见 [factory rerun](evidence/vm9_alternative_factory_composition_rerun_20261025.json)
+与 [reader AST rerun](evidence/vm9_alternative_ast_module_segments_custom_rerun_20261025.json)。
+
+随后重跑完整 JNI/bootstrap 组合：两个 image base、两个 conditional startup 分支共
+**4 项 fresh native/Python controls、38 项回滚**通过；13 个 ELF constructors、JNI
+OnLoad、JavaVM/JNI、conditional startup 和入口 SP 恢复均保持一致，结果与 2026-10-11
+正式证据逐字节一致。worker body、真实 JVM/OS 并发、fresh Medusa、standalone signer
+和线上验收仍未验证。见 [JNI/bootstrap rerun](evidence/vm9_jni_complete_bootstrap_rerun_20261025.json)。
+
 在进入 fresh standalone signer 前新增只读 public-boundary audit。审计锁定
 `construct_default_outer`、`run_elf_constructors`、`+17b8f8`、`+27dd04` 和
 `+2830c4` 五个生产入口，确认当前 normal facade 调用链和四项 handoff case 的
@@ -8,6 +63,22 @@
 因此 standalone signer 仍为 false，下一步继续恢复真实 provider 输入与 native
 output differential。见
 [signer boundary audit](evidence/vm9_signer_boundary_audit_20261024.json)。
+
+随后重跑 JNI 后的两个实际 worker 与 guest exit：两基址、两个 startup 分支共 **4 项
+native/Python controls、28 项回滚**通过；两个 worker 的 TLS/key generation、等待、
+自然返回和 joinable guest pthread exit 均一致，结果与正式证据逐字节一致。第三个请求
+worker、finalizer callback、真实 OS 线程和 signer 仍未完成。见 [worker rerun](evidence/vm9_jni_requested_workers_rerun_20261025.json)。
+
+再重跑完整 finalizer worker：4 项完整 native/Python controls、4 项 copied probe、47 项
+回滚全部通过，并与正式 JSON 逐字节一致；两基址、两 startup 分支的三条 worker、三次
+guest exit 和 finalizer queue 状态保持一致。下一步进入实际 delayed follow-up callback。
+见 [finalizer rerun](evidence/vm9_jni_finalizer_worker_rerun_20261025.json)。
+
+随后重跑实际 delayed follow-up callback：两基址、两个 startup 分支共 **4 项完整
+native/Python controls、22 项回滚**通过；三条 worker/guest exit、delayed callable
+两段 image VM、Java unavailable 分支、配置发布与 cleanup 均与正式证据逐字节一致。
+完整 timed executor poll、live Java string conversion、fresh Medusa 和 standalone
+signer 仍未完成。见 [follow-up rerun](evidence/vm9_jni_followup_rerun_20261025.json)。
 
 新增 facade service 的 nested provider journal 回归：`+17b8f8`、`+27dd04` 和
 `+2830c4` 现在有直接入口级 forwarding 证明；provider rollback 批次更新为

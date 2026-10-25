@@ -1,0 +1,427 @@
+{
+  "schema": "vm9-jni-finalizer-worker-fresh-v1",
+  "evidence_date": "2026-10-11",
+  "evidence_timezone": "Asia/Shanghai",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "native_Python_same_full_JNI_three_worker_controls": 4,
+  "copied_probe_controls": 4,
+  "rollback_controls": 47,
+  "pre_change_native_RED_controls": 2,
+  "complete_loader_JNI_all_three_workers_and_joinable_guest_exit_verified": true,
+  "native_input_snapshot_used": false,
+  "private_names_or_payloads_published": false,
+  "actual_host_threads_or_exit_used": false,
+  "timed_followup_callback_executed": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "cases": [
+    {
+      "base": "0x122c0000",
+      "switch_word": "0x0",
+      "constructors": 13,
+      "executed_workers": 3,
+      "guest_exits": 3,
+      "worker_waits": 3,
+      "allocation_free_effect_count": 11483,
+      "image_VM_steps": 6435,
+      "probe_result": 1,
+      "natural_same_execution_loader_JNI_all_worker_returns_verified": true,
+      "all_surviving_guest_heap_image_libc_pages_match": true,
+      "all_ordered_service_groups_match": true,
+      "original_temporary_copied_code_executed": true,
+      "actual_finalizer_JNI_and_TLS_destructor_match": true,
+      "first_delayed_followup_task_and_deque_match": true,
+      "complete_joinable_guest_pthread_exit_match": true,
+      "native_snapshot_input": false,
+      "physical_stack_and_thread_output_scratch_compared": false,
+      "module_registration_allocation_interleaving_compared": false
+    },
+    {
+      "base": "0x122c0000",
+      "switch_word": "0x200",
+      "constructors": 13,
+      "executed_workers": 3,
+      "guest_exits": 3,
+      "worker_waits": 3,
+      "allocation_free_effect_count": 11483,
+      "image_VM_steps": 6435,
+      "probe_result": 1,
+      "natural_same_execution_loader_JNI_all_worker_returns_verified": true,
+      "all_surviving_guest_heap_image_libc_pages_match": true,
+      "all_ordered_service_groups_match": true,
+      "original_temporary_copied_code_executed": true,
+      "actual_finalizer_JNI_and_TLS_destructor_match": true,
+      "first_delayed_followup_task_and_deque_match": true,
+      "complete_joinable_guest_pthread_exit_match": true,
+      "native_snapshot_input": false,
+      "physical_stack_and_thread_output_scratch_compared": false,
+      "module_registration_allocation_interleaving_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "switch_word": "0x0",
+      "constructors": 13,
+      "executed_workers": 3,
+      "guest_exits": 3,
+      "worker_waits": 3,
+      "allocation_free_effect_count": 11483,
+      "image_VM_steps": 6435,
+      "probe_result": 1,
+      "natural_same_execution_loader_JNI_all_worker_returns_verified": true,
+      "all_surviving_guest_heap_image_libc_pages_match": true,
+      "all_ordered_service_groups_match": true,
+      "original_temporary_copied_code_executed": true,
+      "actual_finalizer_JNI_and_TLS_destructor_match": true,
+      "first_delayed_followup_task_and_deque_match": true,
+      "complete_joinable_guest_pthread_exit_match": true,
+      "native_snapshot_input": false,
+      "physical_stack_and_thread_output_scratch_compared": false,
+      "module_registration_allocation_interleaving_compared": false
+    },
+    {
+      "base": "0x775c205000",
+      "switch_word": "0x200",
+      "constructors": 13,
+      "executed_workers": 3,
+      "guest_exits": 3,
+      "worker_waits": 3,
+      "allocation_free_effect_count": 11483,
+      "image_VM_steps": 6435,
+      "probe_result": 1,
+      "natural_same_execution_loader_JNI_all_worker_returns_verified": true,
+      "all_surviving_guest_heap_image_libc_pages_match": true,
+      "all_ordered_service_groups_match": true,
+      "original_temporary_copied_code_executed": true,
+      "actual_finalizer_JNI_and_TLS_destructor_match": true,
+      "first_delayed_followup_task_and_deque_match": true,
+      "complete_joinable_guest_pthread_exit_match": true,
+      "native_snapshot_input": false,
+      "physical_stack_and_thread_output_scratch_compared": false,
+      "module_registration_allocation_interleaving_compared": false
+    }
+  ],
+  "copied_probe_cases": [
+    {
+      "base": "0x122c0000",
+      "cold_page_size_cache": false,
+      "probe_result": 1,
+      "original_copied_code_executed_and_returned": true,
+      "surviving_pages_match": true,
+      "ordered_raw_system_effects_and_SP_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "base": "0x122c0000",
+      "cold_page_size_cache": true,
+      "probe_result": 1,
+      "original_copied_code_executed_and_returned": true,
+      "surviving_pages_match": true,
+      "ordered_raw_system_effects_and_SP_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "base": "0x775c205000",
+      "cold_page_size_cache": false,
+      "probe_result": 1,
+      "original_copied_code_executed_and_returned": true,
+      "surviving_pages_match": true,
+      "ordered_raw_system_effects_and_SP_match": true,
+      "native_snapshot_input": false
+    },
+    {
+      "base": "0x775c205000",
+      "cold_page_size_cache": true,
+      "probe_result": 1,
+      "original_copied_code_executed_and_returned": true,
+      "surviving_pages_match": true,
+      "ordered_raw_system_effects_and_SP_match": true,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "label": "missing_allocate",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_free",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_create_key",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_set_specific",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_get_tls",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_read_clock",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_clock",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_futex",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_broadcast",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_initialize_registry",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_register_destructor",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_invoke_javavm",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_invoke_jni",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_system",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_signal_condition",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_get_libc_tls",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_os_call",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "unaligned_image",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "unaligned_libc",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "unaligned_argument",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "unaligned_SP",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "unaligned_TP",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "zero_tid",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "boolean_tid",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "unknown_entry",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "missing_VM",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "zero_iterations",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "zero_VM_budget",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "exhausted_VM_budget",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "NULL_allocation",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "failed_specific",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "late_exit_failure",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "failed_controller_signal",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "file_present",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "successful_sigaction",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "NULL_system_result",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "boolean_system_result",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "mmap_failed",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "mmap_unaligned",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "mmap_overlap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "failed_prctl",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "failed_sleep",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "failed_munmap",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "detached_thread",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "copied_code_changed",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "unknown_image_VM_table",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "label": "invalid_page_size",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    }
+  ]
+}

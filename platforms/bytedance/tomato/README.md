@@ -1,5 +1,60 @@
 # Tomato / Fanqie (ByteDance)
 
+The 2026-10-25 timed-transfer rerun is byte-identical to the 2026-10-11 formal
+evidence: 4 complete native/Python controls and 20 rollback guards cover both
+ELF bases and both startup branches, including poll-to-queue transfer, wrapper
+and task cleanup, two image VMs and the empty-queue boundary. The rerun still
+uses an explicit poll/queue driver; a complete cooperative executor wait cycle,
+live Java string conversion, fresh Medusa, standalone signing and online
+acceptance remain open. See the [timed-cycle rerun](evidence/vm9_jni_timed_cycle_rerun_20261025.json).
+
+The following fresh rerun now covers the complete cooperative executor worker
+schedule: 4 native/Python controls and 23 rollback guards are byte-identical to
+the formal result across both ELF bases and both startup branches. Three workers
+wait and exit in order `1,2,0` (wait counts `3,1,2`, six futex waits and nine
+scheduler steps), then the timed follow-up runs and is cleaned up. This remains
+a guest/Python schedule with no host threads; live JVM/OS providers, live Java
+string conversion, fresh Medusa, standalone signing and online acceptance remain
+open. See the [worker-schedule rerun](evidence/vm9_jni_worker_schedule_rerun_20261025.json).
+
+The initialized live Java lookup was also rerun from fresh ELF state: 48 native/
+Python controls and 11 rollback guards are byte-identical to the formal result.
+It covers warm encoded-SDK lookup, byte-array extraction, MD5 string construction,
+reference-count cleanup and the unavailable/exception branches. JNI and JavaVM
+remain explicit synthetic providers, so this is not evidence of a live Android
+JVM or a complete current Medusa signer. See the [live-lookup rerun](evidence/vm9_jni_live_lookup_rerun_20261025.json).
+
+The cold receiver initializer and complete SDK lookup also have a fresh rerun:
+92 native/Python controls and 6 rollback guards match the 2026-10-12 formal
+evidence byte-for-byte across both image bases. This covers cold SDK property
+conversion, receiver/class/global setup, complete lookup continuation and
+initializer exception/NULL branches; JNI/JavaVM/property services remain
+synthetic and do not establish a live Android JVM or current Medusa signer. See
+the [initializer rerun](evidence/vm9_live_initializer_rerun_20261025.json).
+
+The delayed live-provider boundary was rerun as well: 8 controls (evaluator,
+callable and worker-entry) and 16 rollback guards pass from fresh ELF state. The
+current verifier emits a reorganized case schema/order compared with the older
+formal JSON, so this result is recorded as a fresh control rerun without a
+byte-identity claim. It still uses finite synthetic Android providers and does
+not establish a live three-worker schedule, live JVM or signer output. See the
+[delayed-provider rerun](evidence/vm9_live_delayed_providers_rerun_20261025.json).
+
+2026-10-25 fresh rerun confirms that the actual reader AST is connected through
+the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
+guards** and attached segment/custom AST **406 controls / 36 rollback guards**
+pass at both ELF bases, including two complete actual modules. The rerun JSON is
+byte-identical to the prior formal evidence and uses no native snapshot. This is
+still component evidence; the complete request, fresh Medusa, standalone signer,
+live JVM and online acceptance remain open. See the [factory rerun](evidence/vm9_alternative_factory_composition_rerun_20261025.json)
+and [reader AST rerun](evidence/vm9_alternative_ast_module_segments_custom_rerun_20261025.json).
+
+The complete JNI/bootstrap fresh rerun also passes 4 native/Python controls and 38
+rollback guards at both image bases and both conditional startup branches. It is
+byte-identical to the formal evidence and still does not claim worker bodies, a live
+JVM/OS, fresh Medusa, standalone signing, or online acceptance. See the
+[JNI/bootstrap rerun](evidence/vm9_jni_complete_bootstrap_rerun_20261025.json).
+
 Fresh standalone signer 前的 public-boundary audit 已完成：当前生产入口锁定为
 `construct_default_outer`、`run_elf_constructors` 和 `+17b8f8 → +27dd04 → +2830c4`。
 四项 handoff 仍使用 synthetic JNI/JavaVM；request pages 现在由 owning outer
@@ -316,11 +371,24 @@ Fresh ELF mapping/linking and all thirteen constructors now compose through comp
 
 The complete ELF/JNI execution now continues into the executor and actual A/B initialization queue workers, with separate thread TLS and full joinable guest exit. Four native/Python controls and 28 rollback guards pass, including all surviving pages and ordered service groups. The third finalizer queue and independent signer remain unfinished. See the [full JNI worker report](REQUEST_JNI_STARTUP_WORKERS.md#670-完整-jni-后的两条-worker-与-guest-退出清理2026-10-11-asiashanghai).
 
+The 2026-10-25 worker rerun is byte-identical to the formal evidence: 4 controls and 28 rollback guards pass at both bases and both startup branches. The third worker, finalizer callback, live OS threads and standalone signer remain open. See [worker rerun](evidence/vm9_jni_requested_workers_rerun_20261025.json).
+
+The complete finalizer-worker rerun is also byte-identical: 4 full controls, 4 copied
+probes and 47 rollback guards pass across both bases and startup branches. The next
+boundary is the delayed follow-up callback; standalone signing remains open. See the
+[finalizer rerun](evidence/vm9_jni_finalizer_worker_rerun_20261025.json).
+
 The first delayed JNI follow-up submission now preserves the native callable, deadline and executor deque, with 8 submission controls, 24 callable controls and 25 rollback guards. Both older callable regression files are byte-identical. The full finalizer worker and independent signer remain unfinished. See the [timed submission report](REQUEST_JNI_STARTUP_WORKERS.md#671-jni-finalizer-的首条延时任务提交2026-10-11-asiashanghai).
 
 The complete JNI execution now runs all three requested workers and full joinable guest exit. Four complete native/Python controls, four actual copied-probe controls and 47 rollback guards pass; all surviving pages and ordered service groups match. Complete timed queue dispatch and the independent signer remain unfinished. See the [complete finalizer report](REQUEST_JNI_STARTUP_WORKERS.md#672-jni-finalizer-完整-worker-与-guest-退出2026-10-11-asiashanghai).
 
 The actual delayed JNI callable now executes both guest image VMs, the unavailable Java object path, configuration publication and owning cleanup. Four fresh complete native/Python controls and 22 page rollback guards pass. Complete timed queue dispatch, live Java string conversion and the independent signer remain unfinished. See the [actual delayed callback report](REQUEST_JNI_STARTUP_WORKERS.md#673-实际延时-jni-callable-与两段-image-vm2026-10-11-asiashanghai).
+
+The 2026-10-25 delayed-follow-up rerun is byte-identical to the formal evidence: 4 full
+controls and 22 rollback guards pass at both bases and startup branches, including both
+image VMs, the unavailable Java path, publication and cleanup. Full timed polling, live
+Java string conversion, fresh Medusa and standalone signing remain open. See the
+[follow-up rerun](evidence/vm9_jni_followup_rerun_20261025.json).
 
 Actual timed polling now transfers the owned follow-up into the drained queue and frees its wrapper/task. Four fresh complete native/Python controls, 20 page rollback guards and shared callable regressions pass. The complete executor worker wait cycle, live Java string conversion and independent signer remain unfinished. See the [timed transfer report](REQUEST_JNI_STARTUP_WORKERS.md#674-实际-timed-poll转交与-queue-清理2026-10-11-asiashanghai).
 

@@ -1,5 +1,46 @@
 # 原始 JNI 返回、同次 worker 析构与 B factory / descriptor 发布
 
+## 6.271 2026-10-25 fresh rerun：timed transfer 与完整 executor worker schedule
+
+当前 pinned `libmetasec_ml_71332.so` 与 matching libc 上，timed poll/queue 证据已
+重新执行：两基址×A/B 共 **4 项 fresh 完整 native/Python 对照、20 项页面回滚**，
+与 `vm9_jni_timed_cycle_fresh_20261011.json` 逐字节一致。该轮覆盖实际 due-task
+转交、wrapper/task free、两段 image VM、空队列和配置 cleanup；仍明确使用
+显式 poll/queue driver，因此不能把它单独计为完整 executor wait cycle。
+
+紧接着完整 cooperative worker schedule 也已重新执行：两基址×A/B 共 **4 项
+fresh 完整对照、23 项页面回滚**，与 `vm9_jni_worker_schedule_fresh_20261011.json`
+逐字节一致。三条 worker 的 wait counts 为 3/1/2，六次 futex wait 后以 1/2/0
+顺序自然返回并完成 guest joinable exit，executor 到期任务继续执行 follow-up 并
+清空 queue。该层仍使用 guest/Python provider，没有 host worker thread 或 live JVM；
+live Java string conversion、fresh Medusa、standalone signer 与线上 acceptance
+继续未验证。
+
+证据：
+
+- [timed-cycle rerun](evidence/vm9_jni_timed_cycle_rerun_20261025.json)
+- [worker-schedule rerun](evidence/vm9_jni_worker_schedule_rerun_20261025.json)
+
+同一 pinned ELF 上又完成 initialized live Java lookup 的 fresh rerun：48 项
+native/Python controls、11 项 rollback guards 与 2026-10-11 正式 JSON 逐字节一致。
+该层实际执行 warm encoded-SDK lookup、Java array/byte 转换、MD5 string 构造、
+reference cleanup 以及 NULL/exception 分支；JNI/JavaVM 仍由显式 synthetic provider
+提供，因此不能计为 live Android JVM 或完整 signer 证据。见
+[live-lookup rerun](evidence/vm9_jni_live_lookup_rerun_20261025.json)。
+
+随后完成 cold receiver initializer 与 complete SDK lookup 的 fresh rerun：两基址
+共 92 项 native/Python controls、6 项 rollback guards，与 2026-10-12 正式 JSON
+逐字节一致。该轮恢复 cold SDK property conversion、receiver/class/global 初始化、
+完整 lookup continuation 及异常/NULL 分支；property/JNI/JavaVM 仍是显式 synthetic
+provider，不能计为 live Android JVM 或 current Medusa signer。见
+[initializer rerun](evidence/vm9_live_initializer_rerun_20261025.json)。
+
+同轮继续重跑 delayed live-provider boundary：evaluator、callable、worker-entry
+共 8 项 controls、16 项 rollback guards 全部通过。由于当前 verifier 输出的 case
+schema/order 已相对 2026-10-12 formal JSON 重组，本轮明确不宣称 byte-identical；
+它仍仅提供有限 synthetic Android services，不能替代 live 三 worker、真实 JVM 或
+fresh signer。见 [delayed-provider rerun](evidence/vm9_live_delayed_providers_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
@@ -2798,6 +2839,16 @@ stack/TLS/OS，未执行真实分配器。constructor 的 121 项 publication、
 完整 bootstrap、独立 signer、新鲜输出与线上验收仍待完成。
 不发布名称或 payload。见 [factory 组合证据](evidence/vm9_alternative_factory_composition_fresh_20261011.json)。
 
+### 6.53a factory/reader AST fresh rerun（2026-10-25 Asia/Shanghai）
+
+使用当前 pinned ELF 与 matching libc 重跑 6.41/6.53 的正式 verifier：factory
+为 **26 项 native/Python、38 项回滚**，attached segment/custom AST 为 **406 项
+native/Python、36 项回滚**；两组都覆盖两个基址和两个完整实际 ELF module，且
+两份 rerun JSON 与原正式证据逐字节一致。该批次确认实际 AST 已贯通 factory 的
+parse/root/cleanup 输入链，未使用 native snapshot；不会把它扩展解释成完整 B VM、
+request signer、fresh Medusa、真实 JVM 或线上验收。见 [factory rerun](evidence/vm9_alternative_factory_composition_rerun_20261025.json)
+和 [reader AST rerun](evidence/vm9_alternative_ast_module_segments_custom_rerun_20261025.json)。
+
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_alternative_factory_composition_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc "$env:TOMATO_LIBC" --output <factory-composition-evidence.json>
 ```
@@ -3302,6 +3353,15 @@ python -B platforms/bytedance/tomato/python/verify_vm9_jni_complete_bootstrap_20
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_finalizer_callable_20261011.py --library "$env:TOMATO_LIBMETASEC" --output <finalizer-callable-evidence.json>
 ```
 
+### 6.69a complete JNI/bootstrap fresh rerun（2026-10-25 Asia/Shanghai）
+
+使用当前 pinned ELF 与 matching libc 重跑 6.69 verifier：两个 image base、两个
+conditional startup 分支共 **4 项 native/Python controls、38 项回滚检查**通过，
+覆盖 13 个 constructors、JNI_OnLoad、JavaVM/JNI、conditional startup 和自然入口
+SP 恢复。rerun JSON 与 2026-10-11 正式证据逐字节一致且未使用 native snapshot；
+worker body、真实 JVM/OS 并发、fresh Medusa、standalone signer 与线上验收仍保持
+未验证。见 [JNI/bootstrap rerun](evidence/vm9_jni_complete_bootstrap_rerun_20261025.json)。
+
 ## 6.70 完整 JNI 后的两条 worker 与 guest 退出清理（2026-10-11 Asia/Shanghai）
 
 `vm9_jni_workers.run_requested_worker` 消费JNI/startup实际发布的thread
@@ -3332,6 +3392,22 @@ JNI一共请求三条worker；本节完整组合其中executor和第一条初始
 第二queue仍保留JNI finalizer callable，实际callback与其延时后续任务
 尚未在Python组合。独立signer、fresh输出及线上验收仍未完成。
 见 [完整worker证据](evidence/vm9_jni_requested_workers_fresh_20261011.json)。
+
+### 6.72a finalizer worker fresh rerun（2026-10-25 Asia/Shanghai）
+
+重跑 6.72 verifier 通过 **4 项完整 native/Python controls、4 项 copied probe、47 项
+回滚检查**；两基址、两个 startup 分支的三条 worker、三次 guest exit 和 finalizer
+queue 状态均一致，rerun JSON 与 2026-10-11 正式证据逐字节一致且未使用 native
+snapshot。下一步为 delayed follow-up callback；fresh Medusa、standalone signer 和
+线上验收仍未验证。见 [finalizer rerun](evidence/vm9_jni_finalizer_worker_rerun_20261025.json)。
+
+### 6.70a JNI worker fresh rerun（2026-10-25 Asia/Shanghai）
+
+重跑 6.70 verifier 通过两基址、两个 startup 分支共 **4 项 native/Python controls、
+28 项回滚检查**；两个实际 worker 的 TLS/key generation、等待、自然返回和 joinable
+guest exit 均与原生一致，rerun JSON 与 2026-10-11 正式证据逐字节一致且未使用 native
+snapshot。第三个请求 worker、finalizer callback、真实 OS 线程、fresh Medusa、
+standalone signer 和线上验收仍未验证。见 [worker rerun](evidence/vm9_jni_requested_workers_rerun_20261025.json)。
 
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_requested_workers_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <jni-workers-evidence.json>
@@ -3429,6 +3505,15 @@ guest 页面回滚不能撤销它们。完整独立 signer、fresh 签名和线�
 系统服务按有效 ABI 参数比较；`close` 未使用的尾部寄存器不属于参数契约。
 私有 ELF、bytecode、常量文本和诊断快照不进入公开仓库。
 见 [延时回调证据](evidence/vm9_jni_followup_fresh_20261011.json)。
+
+### 6.73a delayed follow-up fresh rerun（2026-10-25 Asia/Shanghai）
+
+重跑 6.73 verifier 通过两基址、两个 startup 分支共 **4 项完整 native/Python
+controls、22 项回滚检查**；三条 worker/guest exit、delayed callable 的两段 image
+VM、Java unavailable 分支、配置发布和 owning cleanup 均保持一致，rerun JSON 与
+2026-10-11 正式证据逐字节一致且未使用 native snapshot。完整 timed executor poll、
+live Java string conversion、fresh Medusa、standalone signer 和线上验收仍未验证。
+见 [follow-up rerun](evidence/vm9_jni_followup_rerun_20261025.json)。
 
 ```powershell
 python -B platforms/bytedance/tomato/python/verify_vm9_jni_followup_20261011.py --library "$env:TOMATO_LIBMETASEC" --libc <matching-libc.so> --output <followup-evidence.json>
