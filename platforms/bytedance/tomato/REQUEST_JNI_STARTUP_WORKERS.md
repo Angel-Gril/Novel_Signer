@@ -9596,3 +9596,19 @@ probe。`G+0x1800` 按实际对象布局写入两个 word：NUL 结尾 URL 的 `
 
 证据：`evidence/vm9_request_url_pointer_continuation_fresh_20261026.json`；
 脚本：`python/verify_vm9_request_url_pointer_continuation_20261026.py`。
+
+## 6.282 same-CPU callback → memcpy import continuation（2026-10-26 Asia/Shanghai）
+
+在同一只已完成 JNI/bootstrap 的 Unicorn CPU 上继续 URL-bearing request。回调对象
+field 0 的真实目标确认是 ELF `image+0x347f60` 的 `memcpy` PLT；探针只实现
+标准 `(dest, src, size)` 字节复制并通过真实 `x30` 返回，同时保留 bootstrap 已安装的
+matching-libc/import hooks。两个 image base 均执行 **99927** 条 native 指令、记录
+**194** 个 import 事件并回到 oracle STOP；输出 reference 的两个 word 均为非零，且
+外部 runtime-table 页面没有读写。
+
+这证明 callback/import continuation 和 native return 边界已推进到 STOP，但尚未做
+whole-request native differential，也没有把输出当作 fresh standalone signer 或线上
+header acceptance。没有写入 synthetic callback vtable 或 runtime dispatch table。
+
+证据：`evidence/vm9_bootstrap_request_memcpy_continuation_fresh_20261026.json`；
+脚本：`python/verify_vm9_bootstrap_request_memcpy_continuation_20261026.py`。

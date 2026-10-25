@@ -1,0 +1,211 @@
+{
+  "schema": "vm9-bootstrap-request-url-continuation-fresh-20261026-v1",
+  "evidence_date": "2026-10-26",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "url_fixture": {
+    "format": "NUL-terminated URL bytes plus native two-word reference",
+    "byte_length": 107,
+    "sha256": "3b79bc2d96ca3a15aa16a3c206683c029384b661c9c3bd188b7354d2816d91fd",
+    "pointer_word_address": "0x70001d00",
+    "refcount_word_address": "0x70001d80"
+  },
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "bootstrap_stack": "0x781ff000",
+      "bootstrap_native_completed": true,
+      "bootstrap_JNI_return_asserted": true,
+      "same_cpu_request_continuation": true,
+      "outcome": "stopped",
+      "error": "UcError: Invalid memory fetch (UC_ERR_FETCH_UNMAPPED)",
+      "stop_pc": "0x0",
+      "stop_pc_offset": "-0x122c0000",
+      "native_instructions_observed": 434059,
+      "vm_handler_event_count": 3091,
+      "vm_handler_counts": {
+        "0x171268": 902,
+        "0x16f974": 1183,
+        "0x16e254": 21,
+        "0x16e41c": 28,
+        "0x1692fc": 498,
+        "0x17030c": 71,
+        "0x16db74": 388
+      },
+      "clock_gettime_calls": 0,
+      "flags_before_request": "01000000726f756e6466000001000000726f756e64000000010000007472756e63660000010000007472756e6300000001000000666d696e6600000001000000",
+      "flags_after_request": "01000000726f756e6466000001000000726f756e64000000010000007472756e63660000010000007472756e6300000001000000666d696e6600000001000000",
+      "flag_reads": [],
+      "flag_writes": [],
+      "runtime_table_reads": [],
+      "runtime_table_writes": [],
+      "callback_object_trace": [
+        {
+          "pc_offset": "0x2858a8",
+          "x0": "0x7000e948",
+          "x1": "0x7000d500",
+          "x2": "0x1232e000",
+          "x3": "0x1232e000",
+          "x8": "0x125458a8",
+          "object_bytes": "607f601200000000b0e900700000000078eb00700000000018000000000000004014551200000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858ac",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x1232e000",
+          "x3": "0x1232e000",
+          "x8": "0x7000e9b0",
+          "object_bytes": "607f601200000000b0e900700000000078eb00700000000018000000000000004014551200000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b0",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x1232e000",
+          "x8": "0x7000e9b0",
+          "object_bytes": "607f601200000000b0e900700000000078eb00700000000018000000000000004014551200000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b4",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x12607f60",
+          "x8": "0x7000e9b0",
+          "object_bytes": "607f601200000000b0e900700000000078eb00700000000018000000000000004014551200000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b8",
+          "x0": "0x7000e9b0",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x12607f60",
+          "x8": "0x7000e9b0",
+          "object_bytes": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
+        }
+      ],
+      "unmapped_events": [
+        {
+          "pc": "-0x122c0000",
+          "access": 21,
+          "address": "0x0",
+          "size": 4,
+          "value": "0x0"
+        }
+      ],
+      "url_reference_words": "char* plus refcount pointer",
+      "url_byte_length": 107,
+      "synthetic_dispatch_table_used": false,
+      "synthetic_callback_vtable_used": false,
+      "runtime_table_content_reconstructed": false,
+      "whole_request_native_success": false,
+      "fresh_standalone_signer_verified": false,
+      "online_header_acceptance_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "bootstrap_stack": "0x781fe380",
+      "bootstrap_native_completed": true,
+      "bootstrap_JNI_return_asserted": true,
+      "same_cpu_request_continuation": true,
+      "outcome": "stopped",
+      "error": "UcError: Invalid memory fetch (UC_ERR_FETCH_UNMAPPED)",
+      "stop_pc": "0x0",
+      "stop_pc_offset": "-0x775c205000",
+      "native_instructions_observed": 434197,
+      "vm_handler_event_count": 3091,
+      "vm_handler_counts": {
+        "0x171268": 902,
+        "0x16f974": 1183,
+        "0x16e254": 21,
+        "0x16e41c": 28,
+        "0x1692fc": 498,
+        "0x17030c": 71,
+        "0x16db74": 388
+      },
+      "clock_gettime_calls": 0,
+      "flags_before_request": "01000000726f756e6466000001000000726f756e64000000010000007472756e63660000010000007472756e6300000001000000666d696e6600000001000000",
+      "flags_after_request": "01000000726f756e6466000001000000726f756e64000000010000007472756e63660000010000007472756e6300000001000000666d696e6600000001000000",
+      "flag_reads": [],
+      "flag_writes": [],
+      "runtime_table_reads": [],
+      "runtime_table_writes": [],
+      "callback_object_trace": [
+        {
+          "pc_offset": "0x2858a8",
+          "x0": "0x7000e948",
+          "x1": "0x7000d500",
+          "x2": "0x775c273000",
+          "x3": "0x775c273000",
+          "x8": "0x775c48a8a8",
+          "object_bytes": "60cf545c77000000b0e900700000000078eb00700000000018000000000000004064495c77000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858ac",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x775c273000",
+          "x3": "0x775c273000",
+          "x8": "0x7000e9b0",
+          "object_bytes": "60cf545c77000000b0e900700000000078eb00700000000018000000000000004064495c77000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b0",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x775c273000",
+          "x8": "0x7000e9b0",
+          "object_bytes": "60cf545c77000000b0e900700000000078eb00700000000018000000000000004064495c77000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b4",
+          "x0": "0x7000e948",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x775c54cf60",
+          "x8": "0x7000e9b0",
+          "object_bytes": "60cf545c77000000b0e900700000000078eb00700000000018000000000000004064495c77000000a8e9007000000000"
+        },
+        {
+          "pc_offset": "0x2858b8",
+          "x0": "0x7000e9b0",
+          "x1": "0x7000eb78",
+          "x2": "0x18",
+          "x3": "0x775c54cf60",
+          "x8": "0x7000e9b0",
+          "object_bytes": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        }
+      ],
+      "unmapped_events": [
+        {
+          "pc": "-0x775c205000",
+          "access": 21,
+          "address": "0x0",
+          "size": 4,
+          "value": "0x0"
+        }
+      ],
+      "url_reference_words": "char* plus refcount pointer",
+      "url_byte_length": 107,
+      "synthetic_dispatch_table_used": false,
+      "synthetic_callback_vtable_used": false,
+      "runtime_table_content_reconstructed": false,
+      "whole_request_native_success": false,
+      "fresh_standalone_signer_verified": false,
+      "online_header_acceptance_verified": false
+    }
+  ],
+  "same_unicorn_cpu_bootstrap_to_request_verified": true,
+  "catalog_lazy_cache_preserved": true,
+  "runtime_table_owner_recovered": false,
+  "runtime_table_content_reconstructed": false,
+  "synthetic_dispatch_table_used": false,
+  "synthetic_callback_vtable_used": false,
+  "whole_request_native_success": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "comparison_note": "The same CPU that completed the real JNI/bootstrap sequence keeps the lazy builtin cache bytes before request entry. The actual two-word URL reference then advances the request beyond the empty-URL boundary; the next stop is recorded from native memory observation. No callback vtable, runtime dispatch page, or signer output is synthesized."
+}

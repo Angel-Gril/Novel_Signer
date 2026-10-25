@@ -6118,3 +6118,17 @@ runtime table 读失败。
 handler 或 signer 输出。证据见
 [URL continuation](evidence/vm9_request_url_pointer_continuation_fresh_20261026.json)，
 复现脚本为 [verify_vm9_request_url_pointer_continuation_20261026.py](python/verify_vm9_request_url_pointer_continuation_20261026.py)。
+
+## 2026-10-26：真实 callback 的 memcpy import continuation
+
+在同一只完成 JNI/bootstrap 的 Unicorn CPU 上继续非空 URL request。callback object
+field 0 指向真实 ELF `image+0x347f60` memcpy PLT；探针执行标准三参数字节复制并
+通过 `x30` 返回，保留原 bootstrap 已安装的 import hooks。两个 image base 均执行
+**99927** 条 native 指令、记录 **194** 个 import 事件并回到 oracle STOP；输出
+reference 两个 word 均非零，runtime-table canary 页面仍无读写。
+
+这是 native continuation/return 边界的推进，不是 whole-request differential、fresh
+standalone signer 或线上验收，也没有合成 callback vtable/dispatch table。证据见
+[memcpy continuation](evidence/vm9_bootstrap_request_memcpy_continuation_fresh_20261026.json)，
+复现脚本为
+[verify_vm9_bootstrap_request_memcpy_continuation_20261026.py](python/verify_vm9_bootstrap_request_memcpy_continuation_20261026.py)。

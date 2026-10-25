@@ -1025,3 +1025,11 @@ handlers, and make no runtime-table page read. The next boundary is the existing
 callback-object trampoline at `+0x2858a8`: object field 0 is NULL and `+0x2858b4`
 branches to zero. No callback vtable, dispatch page or signer output was synthesized.
 See [URL continuation evidence](evidence/vm9_request_url_pointer_continuation_fresh_20261026.json).
+
+The next same-CPU continuation preserves the completed JNI/bootstrap import hooks and
+follows the real callback object into the ELF `memcpy` PLT at `image+0x347f60`.
+Both image bases execute 99,927 native instructions, observe 194 import entries,
+return to the oracle STOP, and publish a nonzero output reference without any
+runtime-table page access. This is a native continuation/return observation; the
+whole-request differential, fresh standalone signer, and online acceptance remain
+open. See [memcpy continuation evidence](evidence/vm9_bootstrap_request_memcpy_continuation_fresh_20261026.json).
