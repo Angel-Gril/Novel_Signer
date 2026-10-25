@@ -89,6 +89,11 @@ boundaries and process-shared mutex transitions at both bases. The current run
 does not replay the later owning callback/constructed-second metadata in the
 formal evidence, so byte identity is not claimed. See the [second-reader rerun](evidence/vm9_request_second_reader_rerun_20261025.json).
 
+The matching shared-reader release component also passes fresh: 18 cases and 12
+rollback guards cover release counts, aliases, cross-page boundaries and mutex
+transitions at both bases. The later owning/constructed second entry remains
+outside this component rerun, so byte identity is not claimed. See the [reader-release rerun](evidence/vm9_request_second_reader_release_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**

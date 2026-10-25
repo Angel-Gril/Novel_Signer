@@ -86,6 +86,11 @@ mutex transitions 在两基址均通过。当前脚本未重放 formal evidence 
 constructed-second metadata，本轮不宣称 byte-identical。见
 [second-reader rerun](evidence/vm9_request_second_reader_rerun_20261025.json)。
 
+同轮重跑 shared-reader release component：18 项 cases、12 项 rollback guards，
+release counts、alias、cross-page boundary 与 mutex transitions 在两基址均通过；
+owning/constructed second entry 未由该 component 脚本重放，因此不宣称 byte-identical。
+见 [reader-release rerun](evidence/vm9_request_second_reader_release_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

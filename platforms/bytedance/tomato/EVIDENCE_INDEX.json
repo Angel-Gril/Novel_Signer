@@ -8195,6 +8195,23 @@
     "complete_physical_ABI_verified": false,
     "comparison_note": "Fresh second-reader component batch passes 18/11. The formal JSON includes later owning callback/constructed-second metadata not emitted by this verifier, so byte identity is not claimed."
   },
+  "vm9_request_second_reader_release_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_second_reader_release_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_second_reader_release_fresh_20261015.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_second_reader_release_fresh_20261015.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_component_controls": 18,
+    "rollback_guards": 12,
+    "reader_release_and_mutex_transitions_equal": true,
+    "native_snapshot_input": false,
+    "owning_callback_and_constructed_second_entry_replayed": false,
+    "whole_second_native_differential_verified": false,
+    "complete_physical_ABI_verified": false,
+    "comparison_note": "Fresh second-reader release component batch passes 18/12. The formal JSON includes later owning callback/constructed-second metadata not emitted by this verifier, so byte identity is not claimed."
+  },
   "vm9_request_caller_return_fresh_20261024": {
     "path": "evidence/vm9_request_caller_return_fresh_20261024.json",
     "evidence_label": "Fresh request caller return rerun",

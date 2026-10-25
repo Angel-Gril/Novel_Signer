@@ -78,6 +78,11 @@ mutex transitions，两基址均通过。当前脚本未重放 formal evidence �
 constructed-second metadata，因此不宣称 byte-identical。见
 [second-reader rerun](evidence/vm9_request_second_reader_rerun_20261025.json)。
 
+同轮重跑 shared-reader release component：18 项 cases、12 项回滚，覆盖 release
+counts、alias、cross-page boundary 与 mutex transitions，两基址通过；owning/
+constructed second entry 仍未由该 component 脚本重放，因此不宣称 byte-identical。
+见 [reader-release rerun](evidence/vm9_request_second_reader_release_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层
