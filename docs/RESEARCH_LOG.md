@@ -515,6 +515,11 @@ only. It does not recover the Android linker input or runtime-table owner and is
 separate from signer evidence. See
 `platforms/bytedance/tomato/evidence/vm9_outer_loader_synthetic_branch_diagnostic_20261026.json`.
 
+With a full `0x400000` descriptor span and the same sample ELF as the synthetic external
+payload, the real bulk-copy helper repeated at `+0x276c74…+0x276c88` until the 300000
+instruction bound. No relocation slot was written. This negative control shows that the
+main sample ELF cannot stand in for the custom DSO payload expected by this loader.
+
 \n
 
 \n

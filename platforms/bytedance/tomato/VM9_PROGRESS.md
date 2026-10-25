@@ -17,6 +17,11 @@ handle 语义也仍是 synthetic，不能据此认定 runtime-table owner、表�
 request 或 signer 输出已经恢复。该诊断单独记录在
 [outer-loader synthetic diagnostic](evidence/vm9_outer_loader_synthetic_branch_diagnostic_20261026.json)。
 
+同一探针把 descriptor span 扩到完整 `0x400000`，并让当前 sample ELF 充当外部
+payload；native 在 `+0x276c74…+0x276c88` bulk-copy loop 重复至 300000 条指令
+预算，仍没有写五个 relocation slot。这个负结果说明当前主 ELF 不能替代真实 custom
+DSO payload，继续伪造该 mapping 不会闭合 runtime-table owner。
+
 ## 2026-10-25 Asia/Shanghai：timed transfer 与完整 executor worker schedule fresh rerun
 
 在完成 follow-up callback 重跑后，先重跑 timed poll/queue 组合。两基址、两个

@@ -9223,6 +9223,15 @@
     "whole_request_native_success": false,
     "fresh_signer_output_verified": false,
     "online_header_acceptance_verified": false,
+    "full_span_probe": {
+      "descriptor_span": "0x400000",
+      "external_payload": "same sample ELF mapped at synthetic external base",
+      "outcome": "instruction-limit stop",
+      "instruction_limit": 300000,
+      "last_native_offsets": ["+0x276c74", "+0x276c78", "+0x276c7c", "+0x276c80", "+0x276c84", "+0x276c88"],
+      "runtime_slot_write_count": 0,
+      "interpretation": "The same sample ELF is not a substitute for the external custom payload: the bulk-copy helper repeats without reaching cleanup."
+    },
     "comparison_note": "The candidate reaches its mapping, cleanup, and return path with native vector helpers and callback thunks, but the object fields selecting those thunks and the loader, descriptor, mapping, and handle boundaries remain synthetic. This records control flow and cleanup order; it is not evidence of the real linker input, runtime-table owner, handler contents, or signer output."
   }
 }
