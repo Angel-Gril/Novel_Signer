@@ -9071,6 +9071,8 @@
     "loader_like_imports": ["dlopen", "dlsym", "dlclose", "mmap", "munmap", "calloc", "pthread_create", "pthread_join", "pthread_key_create", "pthread_getspecific", "pthread_setspecific", "dl_iterate_phdr", "syscall"],
     "known_loader_candidate": "+0x184ad4 called by +0x18a314; static sequence includes dlopen, munmap and mmap",
     "slot_store_candidate_count": 0,
+    "slot_access_candidate_count": 5,
+    "slot_access_pcs": ["+0x16848c", "+0x168570", "+0x16ba18", "+0x16c37c", "+0x16cf90"],
     "bootstrap_request_executed_candidate": false,
     "runtime_table_owner_recovered": false,
     "runtime_table_content_reconstructed": false,

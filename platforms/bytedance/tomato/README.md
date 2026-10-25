@@ -1003,7 +1003,9 @@ claiming a recovered dispatch table, whole-request success or signer output.
 See [same-CPU runtime-owner spike](evidence/vm9_bootstrap_request_runtime_owner_spike_fresh_20261025.json).
 
 The follow-up whole-text owner scan finds no short `ADRP/(ADD)/STR` writer for
-the five relocation slots. It does identify a loader-like static candidate at
+the five relocation slots, while the VM entry has five direct `ADRP #0x379000 →
+LDR X` reads at `+0x16848c`, `+0x168570`, `+0x16ba18`, `+0x16c37c` and
+`+0x16cf90`. It also identifies a loader-like static candidate at
 `+0x184ad4`, called by `+0x18a314`, whose path includes `dlopen`, `munmap` and
 `mmap`; the same-CPU bootstrap/request run did not execute it. This is a lead
 for the outer loader, not a recovered table owner. See [static owner scan](evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json).

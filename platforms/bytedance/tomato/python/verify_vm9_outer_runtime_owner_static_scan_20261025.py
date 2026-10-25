@@ -101,6 +101,42 @@ def _local_slot_store(words: list[int], index: int, address: int) -> tuple[int, 
     return None
 
 
+def _local_slot_accesses(words: list[int], index: int, address: int) -> list[dict]:
+    """Find direct ADRP-page references to one of the relocation slots.
+
+    The VM dispatch entry reads these slots through a long but fixed sequence
+    between ADRP and LDR.  A short same-register window is enough to retain the
+    actual five reads without treating arbitrary obfuscated register arithmetic
+    as a slot access.  This is still a static candidate inventory: it does not
+    prove that the surrounding VM path executes.
+    """
+    direct = _adrp_target(words[index], address)
+    if direct is None or direct[1] != 0x379000:
+        return []
+    base_register, page = direct
+    accesses = []
+    for lookahead in range(index + 1, min(index + 33, len(words))):
+        access = _store_target(words[lookahead], {base_register: page})
+        if access is None:
+            continue
+        _, target, width = access
+        if target not in SLOT_OFFSETS:
+            continue
+        word = words[lookahead]
+        # STR and LDR share the address form; retain only the LDR direction
+        # for this inventory.  The five known words are 64-bit LDR X variants.
+        if word & 0x00400000:
+            accesses.append({
+                "pc": hex(address + (lookahead - index) * 4),
+                "slot": hex(target),
+                "kind": "ldr",
+                "width": width,
+                "adrp_pc": hex(address),
+                "adrp_register": base_register,
+            })
+    return accesses
+
+
 def _plt_imports(elf: ELFFile) -> dict[int, str]:
     dynamic = elf.get_section_by_name(".dynsym")
     relocs = elf.get_section_by_name(".rela.plt")
@@ -144,6 +180,7 @@ def scan(library: Path) -> dict:
 
         import_calls = []
         slot_writes = []
+        slot_accesses = []
         words = struct.iter_unpack("<I", data[: len(data) - len(data) % 4])
         word_list = [word for (word,) in words]
         for index, word in enumerate(word_list):
@@ -161,6 +198,7 @@ def scan(library: Path) -> dict:
             if local_store is not None:
                 slot, width = local_store
                 slot_writes.append({"pc": hex(address), "slot": hex(slot), "width": width})
+            slot_accesses.extend(_local_slot_accesses(word_list, index, address))
 
         # Keep only deterministic, human-reviewable import inventory.  The
         # static text contains obfuscated data islands, so a direct BL hit is
@@ -197,6 +235,8 @@ def scan(library: Path) -> dict:
             "all_loader_import_callsites": import_calls,
             "slot_store_candidates": slot_writes,
             "slot_store_candidate_count": len(slot_writes),
+            "slot_access_candidates": slot_accesses,
+            "slot_access_candidate_count": len(slot_accesses),
             "known_outer_loader_candidate": {
                 "entry_offset": hex(KNOWN_LOADER_CALLERS[0]),
                 "caller_offset": hex(KNOWN_LOADER_CALLERS[1]),
@@ -215,6 +255,7 @@ def scan(library: Path) -> dict:
             "runtime_table_content_reconstructed": False,
             "whole_request_native_success": False,
             "fresh_signer_output_verified": False,
+            "comparison_note": "The whole .text scan finds five direct ADRP #0x379000 -> LDR X reads of the relocation slots, but no short ADRP/(ADD)/STR writer. It also finds loader-like callsites, including +0x184ad4 -> dlopen and its munmap/mmap sequence; the same-CPU bootstrap/request probe did not execute this candidate. This is a static outer-loader lead, not proof of runtime-table ownership.",
             "limitations": [
                 "The text has obfuscated code/data islands; BL and store hits are static candidates.",
                 "The static scan does not execute the outer loader or inspect a live Android linker.",
@@ -233,6 +274,10 @@ def main() -> None:
         raise SystemExit("unexpected native sample")
     assert set(report["relative_slots"]) == {hex(value) for value in SLOT_OFFSETS}
     assert report["slot_store_candidate_count"] == 0
+    assert report["slot_access_candidate_count"] == 5
+    assert {row["slot"] for row in report["slot_access_candidates"]} == {
+        hex(value) for value in SLOT_OFFSETS
+    }
     assert any(row["pc"] == "0x184b04" and row["import"] == "dlopen"
                for row in report["all_loader_import_callsites"])
     assert any(row["pc"] == "0x184cd0" and row["import"] == "mmap"

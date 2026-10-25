@@ -391,6 +391,49 @@
   ],
   "slot_store_candidates": [],
   "slot_store_candidate_count": 0,
+  "slot_access_candidates": [
+    {
+      "pc": "0x16848c",
+      "slot": "0x3798d8",
+      "kind": "ldr",
+      "width": 8,
+      "adrp_pc": "0x168410",
+      "adrp_register": 20
+    },
+    {
+      "pc": "0x168570",
+      "slot": "0x3798e0",
+      "kind": "ldr",
+      "width": 8,
+      "adrp_pc": "0x168560",
+      "adrp_register": 9
+    },
+    {
+      "pc": "0x16ba18",
+      "slot": "0x3798e8",
+      "kind": "ldr",
+      "width": 8,
+      "adrp_pc": "0x16ba08",
+      "adrp_register": 9
+    },
+    {
+      "pc": "0x16c37c",
+      "slot": "0x3798f0",
+      "kind": "ldr",
+      "width": 8,
+      "adrp_pc": "0x16c36c",
+      "adrp_register": 9
+    },
+    {
+      "pc": "0x16cf90",
+      "slot": "0x3798f8",
+      "kind": "ldr",
+      "width": 8,
+      "adrp_pc": "0x16cf7c",
+      "adrp_register": 9
+    }
+  ],
+  "slot_access_candidate_count": 5,
   "known_outer_loader_candidate": {
     "entry_offset": "0x184ad4",
     "caller_offset": "0x18a314",
@@ -409,6 +452,7 @@
   "runtime_table_content_reconstructed": false,
   "whole_request_native_success": false,
   "fresh_signer_output_verified": false,
+  "comparison_note": "The whole .text scan finds five direct ADRP #0x379000 -> LDR X reads of the relocation slots, but no short ADRP/(ADD)/STR writer. It also finds loader-like callsites, including +0x184ad4 -> dlopen and its munmap/mmap sequence; the same-CPU bootstrap/request probe did not execute this candidate. This is a static outer-loader lead, not proof of runtime-table ownership.",
   "limitations": [
     "The text has obfuscated code/data islands; BL and store hits are static candidates.",
     "The static scan does not execute the outer loader or inspect a live Android linker.",
