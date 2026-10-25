@@ -9310,3 +9310,12 @@ case-level schema differs from the older aggregate formal JSON, so byte identity
 is not claimed.
 
 Evidence: [state prefix reference](evidence/vm9_state_prefix_reference_rerun_20261025.json).
+
+## 2026-10-25：inline shared-reference fresh rerun
+
+The inline shared-reference getter was rerun from fresh state at both image
+bases. Thirty-six controls and eight rollback guards pass, covering count/null/
+alias profiles and diagnostic lock effects. The case-level output differs from
+the formal aggregate schema, so byte identity is not claimed.
+
+Evidence: [inline reference](evidence/vm9_inline_reference_scope_rerun_20261025.json).

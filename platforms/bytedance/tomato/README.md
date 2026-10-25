@@ -103,6 +103,12 @@ including allocation/lock order and provider-failure rollback. Its current
 case-level schema differs from the older aggregate formal JSON, so byte identity
 is not claimed. See the [state-prefix reference rerun](evidence/vm9_state_prefix_reference_rerun_20261025.json).
 
+The inline shared-reference getter was rerun from fresh state too: 36 controls
+and 8 rollback guards pass across both image bases, including count/null/alias
+profiles and diagnostic lock effects. The case-level output differs from the
+formal aggregate schema, so byte identity is not claimed. See the
+[inline-reference rerun](evidence/vm9_inline_reference_scope_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

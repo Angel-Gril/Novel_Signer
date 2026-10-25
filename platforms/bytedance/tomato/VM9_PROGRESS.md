@@ -92,6 +92,11 @@ rollback guards，通过分配/锁顺序与 provider failure rollback。当前 c
 与旧 formal aggregate-only JSON 不同，因此不宣称逐字节一致。见
 [state-prefix reference rerun](evidence/vm9_state_prefix_reference_rerun_20261025.json)。
 
+同一轮继续重跑 inline shared-reference getter：两基址共 36 项 controls、8 项 rollback
+guards，覆盖 count/null/alias profiles 与 diagnostic lock effects。当前 case-level
+输出与 formal aggregate schema 不同，因此不宣称逐字节一致。见
+[inline-reference rerun](evidence/vm9_inline_reference_scope_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole
