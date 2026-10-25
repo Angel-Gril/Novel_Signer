@@ -151,141 +151,87 @@ def run(library: Path, libc: Path, image: int) -> dict:
     cpu.reg_write(arm.UC_ARM64_REG_X30, oracle.STOP)
     cpu.mem_write(request["thread_pointer"] + 0x28, CANARY[:8])
 
-    events = []
     handler_counts = Counter()
-    callback_trace = []
-    import_trace = []
-    tail_trace = []
-    runtime_reads = []
-    runtime_writes = []
-    flag_reads = []
-    flag_writes = []
-    unmapped = []
+    callback_target_offsets = []
+    callback_event_count = 0
+    import_name_counts = Counter()
+    memcpy_calls = []
+    javavm_getenv_calls = 0
+    runtime_read_count = 0
+    runtime_write_count = 0
+    flag_read_count = 0
+    flag_write_count = 0
+    unmapped_count = 0
     instruction_count = 0
 
     def code_hook(c, address, _size, _user):
-        nonlocal instruction_count
+        nonlocal instruction_count, callback_event_count
         instruction_count += 1
-        if len(tail_trace) >= 256:
-            tail_trace.pop(0)
-        tail_trace.append({
-            "pc_offset": hex(address - image),
-            "x0": hex(c.reg_read(arm.UC_ARM64_REG_X0)),
-            "x1": hex(c.reg_read(arm.UC_ARM64_REG_X1)),
-            "x2": hex(c.reg_read(arm.UC_ARM64_REG_X2)),
-            "x3": hex(c.reg_read(arm.UC_ARM64_REG_X3)),
-            "x30": hex(c.reg_read(arm.UC_ARM64_REG_X30)),
-        })
         offset = address - image
         if offset in VM_HANDLERS:
             handler_counts[hex(offset)] += 1
         if offset in CALLBACK_TRAMPOLINE:
-            row = {
-                "pc_offset": hex(offset),
-                "x0": hex(c.reg_read(arm.UC_ARM64_REG_X0)),
-                "x1": hex(c.reg_read(arm.UC_ARM64_REG_X1)),
-                "x2": hex(c.reg_read(arm.UC_ARM64_REG_X2)),
-                "x3": hex(c.reg_read(arm.UC_ARM64_REG_X3)),
-                "x8": hex(c.reg_read(arm.UC_ARM64_REG_X8)),
-                "x30": hex(c.reg_read(arm.UC_ARM64_REG_X30)),
-            }
-            object_address = c.reg_read(arm.UC_ARM64_REG_X0)
-            try:
-                row["object_bytes"] = bytes(c.mem_read(object_address, 0x30)).hex()
-            except Exception:
-                row["object_bytes"] = None
-            callback_trace.append(row)
+            callback_event_count += 1
+            if offset == 0x2858B4:
+                target = c.reg_read(arm.UC_ARM64_REG_X3)
+                if image <= target < image + 0x400000:
+                    callback_target_offsets.append(hex(target - image))
+                else:
+                    callback_target_offsets.append(None)
 
     def import_hook(c, address, _size, _user):
+        nonlocal javavm_getenv_calls
         if address == cold.acquisition.GET:
-            row = {
-                "pc_offset": hex(address - image),
-                "name": "JavaVM.GetEnv",
-                "x0": hex(c.reg_read(arm.UC_ARM64_REG_X0)),
-                "x1": hex(c.reg_read(arm.UC_ARM64_REG_X1)),
-                "x2": hex(c.reg_read(arm.UC_ARM64_REG_X2)),
-                "x30": hex(c.reg_read(arm.UC_ARM64_REG_X30)),
-            }
+            javavm_getenv_calls += 1
+            import_name_counts["JavaVM.GetEnv"] += 1
             assert c.reg_read(arm.UC_ARM64_REG_X0) == cold.acquisition.VM
             assert c.reg_read(arm.UC_ARM64_REG_X2) == 0x10006
             output = c.reg_read(arm.UC_ARM64_REG_X1)
             c.mem_write(output, cold.ENV.to_bytes(8, "little"))
             c.reg_write(arm.UC_ARM64_REG_X0, 0)
             c.reg_write(arm.UC_ARM64_REG_PC, c.reg_read(arm.UC_ARM64_REG_X30))
-            row["environment"] = hex(cold.ENV)
-            row["status"] = 0
-            row["returned_pc"] = hex(c.reg_read(arm.UC_ARM64_REG_PC))
-            import_trace.append(row)
             return
         offset = address - image
         name = IMPORT_NAMES.get(offset)
         if name is None:
             return
-        row = {
-            "pc_offset": hex(offset),
-            "name": name,
-            "x0": hex(c.reg_read(arm.UC_ARM64_REG_X0)),
-            "x1": hex(c.reg_read(arm.UC_ARM64_REG_X1)),
-            "x2": hex(c.reg_read(arm.UC_ARM64_REG_X2)),
-            "x3": hex(c.reg_read(arm.UC_ARM64_REG_X3)),
-            "x30": hex(c.reg_read(arm.UC_ARM64_REG_X30)),
-        }
-        import_trace.append(row)
+        import_name_counts[name] += 1
         if name != "memcpy":
             if name in ("vsnprintf", "memchr", "__strlen_chk"):
                 target = libc_exports.get(name)
                 if target is None:
                     raise RuntimeError("matching libc lacks vsnprintf")
                 c.reg_write(arm.UC_ARM64_REG_PC, target)
-                row["redirected_to"] = hex(target)
             return
         target = c.reg_read(arm.UC_ARM64_REG_X0)
         source = c.reg_read(arm.UC_ARM64_REG_X1)
         width = c.reg_read(arm.UC_ARM64_REG_X2)
+        memcpy_calls.append({
+            "destination": hex(target),
+            "source": hex(source),
+            "size": width,
+        })
         c.mem_write(target, bytes(c.mem_read(source, width)))
         c.reg_write(arm.UC_ARM64_REG_X0, target)
         c.reg_write(arm.UC_ARM64_REG_PC, c.reg_read(arm.UC_ARM64_REG_X30))
-        row.update({
-            "copy_destination": hex(target),
-            "copy_source": hex(source),
-            "copy_size": width,
-            "returned_pc": hex(c.reg_read(arm.UC_ARM64_REG_PC)),
-        })
 
     def read_hook(c, _access, address, size, _value, _user):
-        pc = c.reg_read(arm.UC_ARM64_REG_PC) - image
+        nonlocal runtime_read_count, flag_read_count
         if table_start <= address < table_end:
-            runtime_reads.append({
-                "pc": hex(pc), "address": hex(address), "size": size,
-                "value": bytes(c.mem_read(address, size)).hex(),
-            })
+            runtime_read_count += 1
         if flag_range <= address < flag_range + 0x40:
-            flag_reads.append({
-                "pc": hex(pc), "address": hex(address), "size": size,
-                "value": bytes(c.mem_read(address, size)).hex(),
-            })
+            flag_read_count += 1
 
     def write_hook(c, _access, address, size, value, _user):
-        pc = c.reg_read(arm.UC_ARM64_REG_PC) - image
+        nonlocal runtime_write_count, flag_write_count
         if table_start <= address < table_end:
-            runtime_writes.append({
-                "pc": hex(pc), "address": hex(address), "size": size,
-                "value": hex(value),
-            })
+            runtime_write_count += 1
         if flag_range <= address < flag_range + 0x40:
-            flag_writes.append({
-                "pc": hex(pc), "address": hex(address), "size": size,
-                "value": hex(value),
-            })
+            flag_write_count += 1
 
     def unmapped_hook(c, access, address, size, value, _user):
-        unmapped.append({
-            "pc": hex(c.reg_read(arm.UC_ARM64_REG_PC) - image),
-            "access": access,
-            "address": hex(address),
-            "size": size,
-            "value": hex(value),
-        })
+        nonlocal unmapped_count
+        unmapped_count += 1
 
     cpu.hook_add(UC_HOOK_CODE, code_hook,
                  begin=image + 0x15DB00, end=image + 0x347E64)
@@ -308,6 +254,8 @@ def run(library: Path, libc: Path, image: int) -> dict:
     pc = cpu.reg_read(arm.UC_ARM64_REG_PC)
     output_address = request["output_reference_address"]
     output_words = bytes(cpu.mem_read(output_address, 16))
+    flags_after = bytes(cpu.mem_read(flag_range, 0x40))
+    import_count = sum(import_name_counts.values())
     return {
         "image_base": hex(image),
         "bootstrap_stack": hex(bootstrap_stack),
@@ -322,22 +270,26 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "returned_x0": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
         "returned_x8": hex(cpu.reg_read(arm.UC_ARM64_REG_X8)),
         "output_reference_address": hex(output_address),
-        "output_reference_words": output_words.hex(),
         "output_reference_nonzero": any(output_words),
         "native_instructions_observed": instruction_count,
         "vm_handler_event_count": sum(handler_counts.values()),
         "vm_handler_counts": dict(handler_counts),
+        "native_import_event_count": import_count,
+        "import_name_counts": dict(sorted(import_name_counts.items())),
+        "memcpy_call_count": len(memcpy_calls),
+        "first_memcpy_args": memcpy_calls[0] if memcpy_calls else None,
+        "javavm_getenv_call_count": javavm_getenv_calls,
         "clock_gettime_calls": sum(event[0] == "clock_gettime" for event in service.events),
-        "flags_before_request": flags_before,
-        "flags_after_request": bytes(cpu.mem_read(flag_range, 0x40)).hex(),
-        "flag_reads": flag_reads,
-        "flag_writes": flag_writes,
-        "runtime_table_reads": runtime_reads,
-        "runtime_table_writes": runtime_writes,
-        "callback_object_trace": callback_trace,
-        "import_trace": import_trace,
-        "tail_trace": tail_trace,
-        "unmapped_events": unmapped,
+        "flags_before_nonzero": any(bytes.fromhex(flags_before)),
+        "flags_after_nonzero": any(flags_after),
+        "flags_unchanged": bytes.fromhex(flags_before) == flags_after,
+        "flag_read_count": flag_read_count,
+        "flag_write_count": flag_write_count,
+        "runtime_table_read_count": runtime_read_count,
+        "runtime_table_write_count": runtime_write_count,
+        "callback_event_count": callback_event_count,
+        "callback_target_offsets": sorted(set(callback_target_offsets), key=lambda x: str(x)),
+        "unmapped_event_count": unmapped_count,
         "url_reference_words": "char* plus refcount pointer",
         "url_byte_length": len(URL),
         "synthetic_dispatch_table_used": False,
@@ -346,12 +298,8 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "whole_request_native_success": False,
         "fresh_standalone_signer_verified": False,
         "online_header_acceptance_verified": False,
-        "real_memcpy_import_service_used": any(
-            event["name"] == "memcpy" for event in import_trace
-        ),
-        "real_javavm_getenv_provider_used": any(
-            event["name"] == "JavaVM.GetEnv" for event in import_trace
-        ),
+        "real_memcpy_import_service_used": bool(memcpy_calls),
+        "real_javavm_getenv_provider_used": bool(javavm_getenv_calls),
         "bootstrap_native_import_hooks_preserved": True,
     }
 
@@ -366,7 +314,7 @@ def main() -> None:
         raise SystemExit("unexpected native sample")
     rows = [run(args.library, args.libc, image) for image in BASES]
     evidence = {
-        "schema": "vm9-bootstrap-request-memcpy-continuation-fresh-20261026-v1",
+        "schema": "vm9-bootstrap-request-memcpy-continuation-fresh-20261026-v2",
         "evidence_date": "2026-10-26",
         "sample_sha256": hashlib.sha256(args.library.read_bytes()).hexdigest(),
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
@@ -380,7 +328,7 @@ def main() -> None:
         "cases": rows,
         "same_unicorn_cpu_bootstrap_to_request_verified": True,
         "catalog_lazy_cache_preserved": all(
-            row["flags_before_request"] != "00" * 0x40 for row in rows
+            row["flags_before_nonzero"] for row in rows
         ),
         "runtime_table_owner_recovered": False,
         "runtime_table_content_reconstructed": False,
@@ -395,6 +343,7 @@ def main() -> None:
         "real_javavm_getenv_provider_used": all(
             row["real_javavm_getenv_provider_used"] for row in rows
         ),
+        "callback_target_offsets_each": [row["callback_target_offsets"] for row in rows],
         "request_reached_oracle_stop_all": all(
             row["request_reached_oracle_stop"] for row in rows
         ),
