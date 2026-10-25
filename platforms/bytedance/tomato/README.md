@@ -127,6 +127,16 @@ used; the allocator, diagnostics and JNI-adjacent services remain explicit
 providers, and complete state/request memory, live JVM, fresh signing and online
 acceptance remain open. See the [state final-reference rerun](evidence/vm9_state_final_reference_scope_rerun_20261025.json).
 
+The SHA-1 hexadecimal reference scope was rerun from fresh ELF/Python state:
+64 native/Python controls and 8 rollback guards pass across both image bases,
+helper/state-wrapper paths, cold/warm diagnostics, boundary lengths, the
+`0xffffffff` flag and a high-address stack. The current case-level output
+differs from the formal aggregate metadata, so byte identity is not claimed;
+native snapshots and historical native groups were not used. This remains a
+scoped digest/reference component with explicit allocator and diagnostic-lock
+providers, not complete state memory, a live JVM, fresh signing or online
+acceptance. See the [SHA-1 hex rerun](evidence/vm9_sha1_hex_scope_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

@@ -111,6 +111,13 @@ guards** 通过。当前 case-level 输出与 formal aggregate metadata 不同�
 相邻服务仍是显式 provider，完整 state/request memory、live JVM、fresh signing 与线上
 验收仍未完成。见 [state final-reference rerun](evidence/vm9_state_final_reference_scope_rerun_20261025.json)。
 
+随后重跑 SHA-1 hexadecimal reference scope：两基址、helper/state wrapper、cold/warm
+diagnostics、边界长度、`0xffffffff` flag 与高地址栈共 **64 项 native/Python controls、8
+项 rollback guards** 通过。当前 case-level 输出与 formal aggregate metadata 不同，因此
+不宣称逐字节一致；未使用 native snapshot 或历史 native group，allocator/diagnostic lock
+仍是显式 provider，完整 state/request memory、live JVM、fresh signing 与线上验收仍未完成。
+见 [SHA-1 hex rerun](evidence/vm9_sha1_hex_scope_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

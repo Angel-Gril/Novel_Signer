@@ -169,6 +169,21 @@ diagnostic 与 JNI 相邻服务仍是显式 provider，完整 state/request memo
 JVM、fresh standalone signer 与线上 header acceptance 继续未验证。证据见
 [state final-reference rerun](evidence/vm9_state_final_reference_scope_rerun_20261025.json)。
 
+## 6.274 2026-10-25 SHA-1 hexadecimal reference scope fresh rerun
+
+使用 pinned `libmetasec_ml_71332.so` 与 matching libc 重新执行 SHA-1 hexadecimal
+digest/reference scope。两 image base、helper 与 state wrapper、cold/warm diagnostic
+locks、empty/binary/padding/two-block/block/cross-page/flag/high-stack profiles 共
+**64 项 native/Python controls、8 项 rollback guards** 全部通过；完整 digest scratch、
+temporary pair、scope snapshots、guest/image pages、allocation/free、锁/gettid 顺序与
+prefree 字节按当前 verifier 断言保持一致。
+
+当前输出是 case-level schema，与 2026-10-21 formal aggregate JSON 不同，因此不宣称
+byte-identical。`native_snapshot_input=false` 且未重放历史 native group；allocator 与
+diagnostic locks 仍是显式 provider，物理 spill、完整 state/request memory、live Android
+JVM、fresh standalone signer 与线上 header acceptance 继续未验证。证据见
+[SHA-1 hex rerun](evidence/vm9_sha1_hex_scope_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

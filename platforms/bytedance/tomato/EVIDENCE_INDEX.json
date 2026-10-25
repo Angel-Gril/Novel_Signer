@@ -8774,5 +8774,22 @@
     "synthetic_allocator": true,
     "complete_state_memory_or_signer_verified": false,
     "comparison_note": "Fresh state final-reference rerun passes 20 controls and 4 guards; current case-level output differs from the formal aggregate metadata, so byte identity is not claimed."
+  },
+  "vm9_sha1_hex_scope_rerun_20261025": {
+    "evidence_file": "evidence/vm9_sha1_hex_scope_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_sha1_hex_scope_fresh_20261021.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_sha1_hex_scope_fresh_20261021.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 64,
+    "rollback_guards": 8,
+    "native_snapshot_input": false,
+    "historical_native_groups_replayed": false,
+    "synthetic_allocator": true,
+    "actual_matching_libc_diagnostic_locks": true,
+    "complete_signer_verified": false,
+    "comparison_note": "Fresh SHA-1 hexadecimal scope rerun passes 64 controls and 8 guards; current case-level output differs from the formal aggregate metadata, so byte identity is not claimed."
   }
 }
