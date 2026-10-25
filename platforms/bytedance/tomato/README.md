@@ -1001,3 +1001,9 @@ calloc` creator call occurs, and both runs stop at `+0x170308` on guest address
 `0xc`. This closes the current outer/bootstrap creator search boundary without
 claiming a recovered dispatch table, whole-request success or signer output.
 See [same-CPU runtime-owner spike](evidence/vm9_bootstrap_request_runtime_owner_spike_fresh_20261025.json).
+
+The follow-up whole-text owner scan finds no short `ADRP/(ADD)/STR` writer for
+the five relocation slots. It does identify a loader-like static candidate at
+`+0x184ad4`, called by `+0x18a314`, whose path includes `dlopen`, `munmap` and
+`mmap`; the same-CPU bootstrap/request run did not execute it. This is a lead
+for the outer loader, not a recovered table owner. See [static owner scan](evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json).

@@ -1,0 +1,417 @@
+{
+  "schema": "vm9-outer-runtime-owner-static-scan-fresh-20261025-v1",
+  "evidence_date": "2026-10-25",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "text": {
+    "address": "0x15db00",
+    "size": 2007908
+  },
+  "init_array": {
+    "address": "0x374ce0",
+    "size": 104,
+    "relative_relocations": [
+      {
+        "slot": "0x374ce0",
+        "type": 1027,
+        "addend": "0x17319c"
+      },
+      {
+        "slot": "0x374ce8",
+        "type": 1027,
+        "addend": "0x299b30"
+      },
+      {
+        "slot": "0x374cf0",
+        "type": 1027,
+        "addend": "0x29c518"
+      },
+      {
+        "slot": "0x374cf8",
+        "type": 1027,
+        "addend": "0x29ecac"
+      },
+      {
+        "slot": "0x374d00",
+        "type": 1027,
+        "addend": "0x2a1ac0"
+      },
+      {
+        "slot": "0x374d08",
+        "type": 1027,
+        "addend": "0x2a2d40"
+      },
+      {
+        "slot": "0x374d10",
+        "type": 1027,
+        "addend": "0x15db50"
+      },
+      {
+        "slot": "0x374d18",
+        "type": 1027,
+        "addend": "0x180d28"
+      },
+      {
+        "slot": "0x374d20",
+        "type": 1027,
+        "addend": "0x1834e4"
+      },
+      {
+        "slot": "0x374d28",
+        "type": 1027,
+        "addend": "0x2679f0"
+      },
+      {
+        "slot": "0x374d30",
+        "type": 1027,
+        "addend": "0x271940"
+      },
+      {
+        "slot": "0x374d38",
+        "type": 1027,
+        "addend": "0x28300c"
+      },
+      {
+        "slot": "0x374d40",
+        "type": 1027,
+        "addend": "0x343a84"
+      }
+    ]
+  },
+  "relative_slots": {
+    "0x3798d8": {
+      "type": 1027,
+      "addend": "0x13bb8f0",
+      "symbol_index": 0,
+      "symbol": ""
+    },
+    "0x3798e0": {
+      "type": 1027,
+      "addend": "0x13bbaf0",
+      "symbol_index": 0,
+      "symbol": ""
+    },
+    "0x3798e8": {
+      "type": 1027,
+      "addend": "0x13bbcf0",
+      "symbol_index": 0,
+      "symbol": ""
+    },
+    "0x3798f0": {
+      "type": 1027,
+      "addend": "0x13bbe18",
+      "symbol_index": 0,
+      "symbol": ""
+    },
+    "0x3798f8": {
+      "type": 1027,
+      "addend": "0x13bb7f0",
+      "symbol_index": 0,
+      "symbol": ""
+    }
+  },
+  "slot_offsets": [
+    "0x3798d8",
+    "0x3798e0",
+    "0x3798e8",
+    "0x3798f0",
+    "0x3798f8"
+  ],
+  "table_addends": [
+    "0x13bb8f0",
+    "0x13bbaf0",
+    "0x13bbcf0",
+    "0x13bbe18",
+    "0x13bb7f0"
+  ],
+  "external_table_page_offset": "0x13bb000",
+  "loader_import_callsites": [
+    {
+      "pc": "0x184504",
+      "target": "0x348000",
+      "import": "pthread_create"
+    },
+    {
+      "pc": "0x184b04",
+      "target": "0x348060",
+      "import": "dlopen"
+    },
+    {
+      "pc": "0x184cac",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x184cd0",
+      "target": "0x348080",
+      "import": "mmap"
+    },
+    {
+      "pc": "0x184d18",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x184d7c",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x184d88",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x18a6d8",
+      "target": "0x348050",
+      "import": "dlsym"
+    },
+    {
+      "pc": "0x18a990",
+      "target": "0x348060",
+      "import": "dlopen"
+    },
+    {
+      "pc": "0x18d390",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x1dba34",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x2029f4",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x204790",
+      "target": "0x348050",
+      "import": "dlsym"
+    }
+  ],
+  "all_loader_import_callsite_count": 39,
+  "all_loader_import_callsites": [
+    {
+      "pc": "0x184504",
+      "target": "0x348000",
+      "import": "pthread_create"
+    },
+    {
+      "pc": "0x184b04",
+      "target": "0x348060",
+      "import": "dlopen"
+    },
+    {
+      "pc": "0x184cac",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x184cd0",
+      "target": "0x348080",
+      "import": "mmap"
+    },
+    {
+      "pc": "0x184d18",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x184d7c",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x184d88",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x184d90",
+      "target": "0x348090",
+      "import": "dlclose"
+    },
+    {
+      "pc": "0x18a6d8",
+      "target": "0x348050",
+      "import": "dlsym"
+    },
+    {
+      "pc": "0x18a990",
+      "target": "0x348060",
+      "import": "dlopen"
+    },
+    {
+      "pc": "0x18d318",
+      "target": "0x348090",
+      "import": "dlclose"
+    },
+    {
+      "pc": "0x18d390",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x1d69e8",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x1d6a38",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x1dba34",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x201e30",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x201eb0",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x2029f4",
+      "target": "0x348070",
+      "import": "munmap"
+    },
+    {
+      "pc": "0x202b84",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x204790",
+      "target": "0x348050",
+      "import": "dlsym"
+    },
+    {
+      "pc": "0x245a80",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x24cf4c",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x24cf6c",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x24cff4",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x266a14",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x2700f4",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x2ea8dc",
+      "target": "0x3482b0",
+      "import": "calloc"
+    },
+    {
+      "pc": "0x326098",
+      "target": "0x348000",
+      "import": "pthread_create"
+    },
+    {
+      "pc": "0x32cc14",
+      "target": "0x348610",
+      "import": "pthread_join"
+    },
+    {
+      "pc": "0x32ccd0",
+      "target": "0x348620",
+      "import": "pthread_key_create"
+    },
+    {
+      "pc": "0x32d3ec",
+      "target": "0x348310",
+      "import": "syscall"
+    },
+    {
+      "pc": "0x32d444",
+      "target": "0x348310",
+      "import": "syscall"
+    },
+    {
+      "pc": "0x3426c4",
+      "target": "0x348580",
+      "import": "pthread_setspecific"
+    },
+    {
+      "pc": "0x3427a8",
+      "target": "0x348620",
+      "import": "pthread_key_create"
+    },
+    {
+      "pc": "0x3437a8",
+      "target": "0x3485d0",
+      "import": "pthread_getspecific"
+    },
+    {
+      "pc": "0x343854",
+      "target": "0x3485d0",
+      "import": "pthread_getspecific"
+    },
+    {
+      "pc": "0x3438a0",
+      "target": "0x348580",
+      "import": "pthread_setspecific"
+    },
+    {
+      "pc": "0x343998",
+      "target": "0x348620",
+      "import": "pthread_key_create"
+    },
+    {
+      "pc": "0x344fe0",
+      "target": "0x3486f0",
+      "import": "dl_iterate_phdr"
+    }
+  ],
+  "slot_store_candidates": [],
+  "slot_store_candidate_count": 0,
+  "known_outer_loader_candidate": {
+    "entry_offset": "0x184ad4",
+    "caller_offset": "0x18a314",
+    "observed_static_sequence": [
+      "+0x18a314 -> +0x184ad4",
+      "+0x184ad4 -> dlopen(path, RTLD_NOW)",
+      "+0x184cac -> munmap",
+      "+0x184cd0 -> mmap",
+      "+0x184d18 -> munmap"
+    ],
+    "table_slot_store_observed": false,
+    "executed_in_same_cpu_bootstrap_request_spike": false,
+    "interpretation": "loader-like outer candidate only; no runtime-table ownership proven"
+  },
+  "runtime_table_owner_recovered": false,
+  "runtime_table_content_reconstructed": false,
+  "whole_request_native_success": false,
+  "fresh_signer_output_verified": false,
+  "limitations": [
+    "The text has obfuscated code/data islands; BL and store hits are static candidates.",
+    "The static scan does not execute the outer loader or inspect a live Android linker.",
+    "No dispatch handler addresses or table bytes are inferred from relocation addends."
+  ]
+}

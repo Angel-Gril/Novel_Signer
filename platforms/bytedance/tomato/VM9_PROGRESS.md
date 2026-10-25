@@ -6073,3 +6073,14 @@ reference（`G+0x1800`），所以当前最终零值不仅能归因到 VM 的 `+
 也没有恢复真实启动输入、完整 VM code/dispatch table 或 signer。证据同一份
 [runtime table owner probe](evidence/vm9_request_runtime_table_owner_fresh_20261025.json)，
 复现脚本：`python/verify_vm9_request_runtime_table_owner_20261025.py`。
+
+## 2026-10-25：outer runtime owner 静态 inventory
+
+对真实样本的整个 `.text` 扫描五个 relocation slot 的短地址链写入，未发现
+相邻 `ADRP/(ADD)/STR` 形式的 slot writer。另记录 39 个 loader-like PLT 调用点；
+其中 `+0x184ad4` 由 `+0x18a314` 调用，静态路径包含 `dlopen`、`munmap` 和
+`mmap`，是当前最具体的 outer-loader 线索。same-CPU bootstrap→request 运行没有
+进入该候选，因此它仍不是已确认的 dispatch-table owner。
+
+证据：[outer owner static scan](evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json)，
+脚本：`python/verify_vm9_outer_runtime_owner_static_scan_20261025.py`。

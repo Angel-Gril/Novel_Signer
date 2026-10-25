@@ -9539,3 +9539,19 @@ success 或 signer 输出。
 
 证据：`evidence/vm9_bootstrap_request_runtime_owner_spike_fresh_20261025.json`；
 脚本：`python/verify_vm9_bootstrap_request_runtime_owner_spike_20261025.py`。
+
+## 6.279 Outer runtime owner static inventory（2026-10-25 Asia/Shanghai）
+
+对当前 `libmetasec_ml_71332.so` 的完整 `.text` 做了只读调用点和短地址链扫描。
+五个 request relocation slot（`+0x3798d8/+0x3798e0/+0x3798e8/+0x3798f0/+0x3798f8`）
+仍分别带有 `+0x13bb8f0/+0x13bbaf0/+0x13bbcf0/+0x13bbe18/+0x13bb7f0` 的
+`R_AARCH64_RELATIVE` addend；没有发现相邻 `ADRP/(ADD)/STR` 形式直接写入这些
+slot 的静态候选。
+
+扫描保留 39 个 loader-like PLT 调用点。其中 `+0x184ad4` 被 `+0x18a314` 调用，
+路径静态包含 `dlopen`、`munmap` 和 `mmap`；另外还有 `dlsym/dlclose/calloc` 等
+调用点。该候选不在同次完整 `.init_array`/JNI/bootstrap→request 运行中执行，
+所以只能作为 outer loader 线索，不能据此宣称它拥有 dispatch table。
+
+证据：`evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json`；
+脚本：`python/verify_vm9_outer_runtime_owner_static_scan_20261025.py`。

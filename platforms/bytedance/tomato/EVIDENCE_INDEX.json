@@ -9057,5 +9057,25 @@
     "whole_request_native_success": false,
     "fresh_signer_output_verified": false,
     "comparison_note": "The complete 13-entry init_array/JNI bootstrap and the real owning request VM were continued on the same Unicorn CPU at both image bases. The two external runtime pages were canary mapped only for observation; the request stopped on guest address 0xc before any external-table read or write. No mmap/mprotect/munmap/calloc creator call occurred, so this composition does not identify the outer/runtime owner."
+  },
+  "vm9_outer_runtime_owner_static_scan_fresh_20261025": {
+    "path": "evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json",
+    "verifier": "python/verify_vm9_outer_runtime_owner_static_scan_20261025.py",
+    "evidence_label": "Whole-text outer loader import and relocation-slot writer inventory",
+    "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "text_size": 2007908,
+    "init_array_relative_relocations": 13,
+    "relative_runtime_slots": 5,
+    "external_table_page_offset": "0x13bb000",
+    "loader_import_callsite_count": 39,
+    "loader_like_imports": ["dlopen", "dlsym", "dlclose", "mmap", "munmap", "calloc", "pthread_create", "pthread_join", "pthread_key_create", "pthread_getspecific", "pthread_setspecific", "dl_iterate_phdr", "syscall"],
+    "known_loader_candidate": "+0x184ad4 called by +0x18a314; static sequence includes dlopen, munmap and mmap",
+    "slot_store_candidate_count": 0,
+    "bootstrap_request_executed_candidate": false,
+    "runtime_table_owner_recovered": false,
+    "runtime_table_content_reconstructed": false,
+    "whole_request_native_success": false,
+    "fresh_signer_output_verified": false,
+    "comparison_note": "The whole .text scan finds no short ADRP/(ADD)/STR sequence targeting any of the five relocation slots. It does find loader-like callsites, including +0x184ad4 -> dlopen and its munmap/mmap sequence, but the same-CPU bootstrap/request probe did not execute this candidate. This is a static outer-loader lead, not proof of runtime-table ownership."
   }
 }
