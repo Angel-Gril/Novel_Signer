@@ -1,0 +1,499 @@
+{
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "constructor",
+      "operation": "construct",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "constructor_cross_page",
+      "operation": "construct",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "begin_empty",
+      "operation": "begin",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "begin_nonempty",
+      "operation": "begin",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "end_empty",
+      "operation": "end",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "end_nonempty",
+      "operation": "end",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "constructor",
+      "operation": "construct",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "constructor_cross_page",
+      "operation": "construct",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "begin_empty",
+      "operation": "begin",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "begin_nonempty",
+      "operation": "begin",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "end_empty",
+      "operation": "end",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "end_nonempty",
+      "operation": "end",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "equal",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "different_nodes",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "different_tables",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_words",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "full_uint64",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "unmapped_tables_not_loaded",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "equal",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "different_nodes",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "different_tables",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_words",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "full_uint64",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "unmapped_tables_not_loaded",
+      "operation": "compare",
+      "original_wrapper_returned": true,
+      "packed_ABI_full_guest_payload_and_ELF_pages_match": true,
+      "allocator_order_and_heap_match": true,
+      "iterator_pair_matches": true,
+      "native_snapshot_input": false,
+      "table_load_short_circuited": true
+    }
+  ],
+  "negative_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_descriptor",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_allocation",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "missing_controller",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "invalid_iterator_position",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_descriptor",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_allocation",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "missing_controller",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "invalid_iterator_position",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "missing_JNI",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "JNI_provider_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "missing_counter_TLS",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "counter_TLS_provider_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "NULL_header_reference",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "missing_exit_service",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "exit_provider_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "fill_allocator_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "missing_fold_singleton",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "fold_singleton_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "tree_free_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "object_free_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "final_free_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "tree_delete_free_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "scoped_tree_allocator_exception",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "external_effects_rolled_back": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "entry": "request_VM",
+      "case": "caller_canary_mismatch",
+      "rejected": true,
+      "existing_pages_unchanged": true,
+      "new_allocator_mapping_pages": 64,
+      "allocator_provider_mappings_rolled_back": false,
+      "external_effects_rolled_back": false
+    }
+  ],
+  "request_entry_cases": [
+    {
+      "image_base": "0x775c205000",
+      "case": "JNI_connected",
+      "request_vm_steps": 2475,
+      "actual_request_callback_and_evaluator_executed": true,
+      "owning_TLS_allocator_and_JavaVM_used": true,
+      "explicit_NULL_FindClass_input": true,
+      "evaluator_completed": true,
+      "actual_scope_cleanup_completed": true,
+      "actual_request_byte_gate_completed": true,
+      "actual_request_object_constructed": true,
+      "actual_NULL_reference_counter_released": true,
+      "actual_request_counter_completed": true,
+      "owning_TLS_registry_and_broadcast_used": true,
+      "valid_empty_header_container_input": true,
+      "actual_tree_and_iterators_completed": true,
+      "iterator_comparison_completed": true,
+      "unresolved_process_atexit_import": false,
+      "actual_process_atexit_registration_completed": true,
+      "actual_fill_string_constructor_completed": true,
+      "actual_tree_lookup_completed": true,
+      "actual_NULL_safe_cstring_lengths_completed": true,
+      "actual_guest_table_folded_comparisons_completed": true,
+      "owning_fold_singleton_used": true,
+      "actual_tree_size_and_string_value_replacement_completed": true,
+      "actual_iterator_pair_clone_and_advance_completed": true,
+      "request_VM_budget": 4000,
+      "actual_local_tree_destructor_completed": true,
+      "original_dangling_controller_word_preserved": true,
+      "actual_request_object_destructor_completed": true,
+      "actual_final_free_completed": true,
+      "actual_deleting_tree_destructor_completed": true,
+      "event_emission_branch_taken": false,
+      "callbacks_completed": 105,
+      "vm_exit_offset": "0xffb78",
+      "caller_sentinel_matches": true,
+      "request_transaction_committed_to_supplied_pages": true,
+      "request_VM_returned": true,
+      "physical_caller_epilogue_completed": true,
+      "modeled_native_X0_is_callback_sentinel": true,
+      "full_native_request_return_verified": false,
+      "full_request_returned": false,
+      "whole_handoff_native_differential_verified": false
+    }
+  ],
+  "native_Python_controls": 24,
+  "rollback_guards": 24,
+  "native_input_snapshot_used": false,
+  "physical_register_spills_verified": false,
+  "live_Android_JVM_verified": false,
+  "whole_request_native_differential_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false
+}

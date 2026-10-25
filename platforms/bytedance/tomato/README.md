@@ -153,6 +153,14 @@ formal aggregate, so byte identity is not claimed; native snapshots, physical
 spill equivalence, whole-request differential, live JVM and fresh signing remain
 open. See the [request-object rerun](evidence/vm9_request_object_rerun_20261025.json).
 
+The request configuration-tree and iterator boundary was rerun from fresh
+ELF/Python pages: 24 native/Python controls, 24 rollback guards and one request
+entry check pass across both image bases. It covers construct/begin/end,
+iterator comparison, cross-page output, alias/NULL words and tree-provider
+failures. The current verifier adds 11 entry guards relative to the formal
+aggregate, so byte identity is not claimed; physical spills, whole-request
+differential, live JVM and fresh signing remain open. See the [request-tree rerun](evidence/vm9_request_tree_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

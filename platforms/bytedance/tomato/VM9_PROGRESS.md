@@ -132,6 +132,13 @@ native/Python controls、48 项 rollback guards**，另有 **1 项 request-entry
 JVM、fresh signing 与线上验收仍未完成。见
 [request-object rerun](evidence/vm9_request_object_rerun_20261025.json)。
 
+随后重跑 request configuration-tree/iterator boundary：两基址共 **24 项 native/Python
+controls、24 项 rollback guards**，另有 **1 项 request-entry check**，覆盖 construct/
+begin/end、iterator compare、cross-page、alias/NULL words 与 tree-provider failures。
+当前输出比 formal aggregate 多 11 项 entry guards，因此不宣称逐字节一致；physical
+spills、whole-request differential、live JVM、fresh signing 与线上验收仍未完成。见
+[request-tree rerun](evidence/vm9_request_tree_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

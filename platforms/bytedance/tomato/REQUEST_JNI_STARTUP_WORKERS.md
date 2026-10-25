@@ -209,6 +209,19 @@ length/time edge、direct/null reference、wrapper tail 与 provider-failure pro
 whole-request native differential、live Android JVM/OS、fresh standalone signer 与线上
 header acceptance 继续未验证。证据见 [request-object rerun](evidence/vm9_request_object_rerun_20261025.json)。
 
+## 6.277 2026-10-25 request configuration-tree/iterator fresh rerun
+
+在 pinned `libmetasec_ml_71332.so` 与 matching libc 上重跑 configuration-tree
+constructor、begin/end iterator、iterator comparison 及 owning request entry。两 image
+base 共 **24 项 native/Python controls、24 项 rollback guards**，另有 **1 项 request-entry
+check** 全部通过；cross-page、alias/NULL words、iterator mismatch 和 tree-provider
+failure 均保持回滚。
+
+当前 verifier 比 2026-10-12 formal aggregate 多出 11 项 request-entry guards，因此不
+宣称 byte-identical。`native_snapshot_input=false`，但 physical register spills、
+whole-request native differential、live Android JVM/OS、fresh standalone signer 与线上
+header acceptance 继续未验证。证据见 [request-tree rerun](evidence/vm9_request_tree_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
