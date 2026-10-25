@@ -9521,3 +9521,21 @@ fresh owner probe 继续追踪 `0x7000ee38` 的内容来源：`+0x15f5a8` 执行
 VM code/dispatch table、whole-request return、fresh signer 与线上验收仍未完成。
 证据：`evidence/vm9_request_runtime_table_owner_fresh_20261025.json`；脚本：
 `python/verify_vm9_request_runtime_table_owner_20261025.py`。
+
+## 6.278 same-CPU bootstrap → request runtime-table creator spike（2026-10-25 Asia/Shanghai）
+
+为确认外部 runtime table 是否由已恢复的启动链创建，新增只读 feasibility
+probe：同一 Unicorn CPU 先自然执行完整 13 项 `.init_array`、JNI_OnLoad 与
+条件 startup，再仅覆盖 fresh request fixture 的显式 guest 输入，继续真实
+`+0x27dd04 → +0x2830c4 → +0x168324`。两个 image base 均进入 owning request VM，
+并在 `+0x170308` 对 `0xc` 的 guest read 停止。
+
+外部 `image+0x13bb000` 两页只映射 `0xA5` canary 以观察访问；两次运行均无
+runtime-table read/write，bootstrap→request 期间没有 `mmap`、`mprotect`、
+`munmap` 或 `calloc` 调用。`pthread_create` 记录到的调用属于已经恢复的
+startup worker 服务，不能视为 runtime-table creator。因而外部表仍归属于尚未
+恢复的 outer/bootstrap/runtime state；本探针没有合成表、没有产生 request
+success 或 signer 输出。
+
+证据：`evidence/vm9_bootstrap_request_runtime_owner_spike_fresh_20261025.json`；
+脚本：`python/verify_vm9_bootstrap_request_runtime_owner_spike_20261025.py`。

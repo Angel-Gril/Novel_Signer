@@ -6046,6 +6046,20 @@ frame operand 来源，并与两组 283-handler 序列一致。
 证据：[runtime table owner probe](evidence/vm9_request_runtime_table_owner_fresh_20261025.json)，
 复现脚本：`python/verify_vm9_request_runtime_table_owner_20261025.py`。
 
+## 2026-10-25：same-CPU bootstrap → request runtime-table creator spike
+
+新增只读 feasibility probe，在同一 Unicorn CPU 上先执行完整 13 项
+`.init_array`/JNI bootstrap，再覆盖 fresh request 输入并继续真实
+`+0x27dd04 → +0x2830c4 → +0x168324`。两个 image base 都进入 owning VM，
+随后在 `+0x170308` 对 guest 地址 `0xc` 停止；两页 canary runtime region
+没有读写，bootstrap→request 期间也没有 `mmap/mprotect/munmap/calloc` creator
+调用（`pthread_create` 仅是已恢复 startup worker 服务）。
+
+这说明当前组合执行仍未到达外部 dispatch table 内容读取，外部表 owner 仍在
+更外层 loader/runtime state；不能把 canary、relocation pointer 或这次停止当成
+真实表内容、请求成功或 signer。证据：[same-CPU runtime-owner spike](evidence/vm9_bootstrap_request_runtime_owner_spike_fresh_20261025.json)，
+脚本：`python/verify_vm9_bootstrap_request_runtime_owner_spike_20261025.py`。
+
 ## 2026-10-25：零 operand 的 native 对象来源（fresh）
 
 继续沿 `0x7000ee38` 追踪到对象 helper：`+0x15f5a8` 先将该 16 字节对象清零，

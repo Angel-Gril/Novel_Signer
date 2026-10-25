@@ -9032,5 +9032,30 @@
     "live_Android_JVM_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "Both bases load the same external relocation pointer and record the same 283-handler sequence. The owning frame stores at +0x2830ec write 0x7000ee48 to 0x7000d668 and 0x7000ee38 to 0x7000d670; +0x283100 writes 0x138 to 0x7000d680; +0x28310c writes 0x7000ee28 to 0x7000d678. The native object helper +0x15f5a8 first zero-initializes 0x7000ee38, then +0x15f5bc/+0x15f5c4 copy the zeroed 16-byte source at 0x70001800 (the dispatch.fixture URL reference, G+0x1800) into it. The VM first produces pointer 0x7000ee38 in slot 1 from slot 4 plus offset 0x8 at +0x16f974, and later produces the same pointer in slot 18 from slot 29 plus offset 0x6f8; native +0x171268 copies slot 1 through 0x7000df38. The final +0x16f974 loads zero from 0x7000ee38 into slot 1, and +0x170308 forms target 0x0 plus offset 0xc before stopping on guest read 0xc. Memory-write events retain pre-store snapshots, while handler written_value and the post-store workspace snapshot establish the result. No write to the five relocation slots or external-table read occurred; the VM program/workspace input and complete dispatch-table owner remain unresolved."
+  },
+  "vm9_bootstrap_request_runtime_owner_spike_fresh_20261025": {
+    "schema": "vm9-bootstrap-request-runtime-owner-spike-fresh-20261025-v1",
+    "evidence": "evidence/vm9_bootstrap_request_runtime_owner_spike_fresh_20261025.json",
+    "verifier": "python/verify_vm9_bootstrap_request_runtime_owner_spike_20261025.py",
+    "same_unicorn_cpu_bootstrap_to_request_verified": true,
+    "cases": 2,
+    "external_runtime_table_creator_found": false,
+    "runtime_table_reads_each": 0,
+    "runtime_table_writes_each": 0,
+    "request_entry_each": "+0x27dd04 -> +0x2830c4 -> +0x168324",
+    "failed_native_pc_each": "+0x170308",
+    "failed_guest_read_each": "0xc",
+    "creator_imports_each": {
+      "mmap": 0,
+      "mprotect": 0,
+      "munmap": 0,
+      "calloc": 0,
+      "pthread_create": 3
+    },
+    "synthetic_dispatch_table_used": false,
+    "runtime_table_content_reconstructed": false,
+    "whole_request_native_success": false,
+    "fresh_signer_output_verified": false,
+    "comparison_note": "The complete 13-entry init_array/JNI bootstrap and the real owning request VM were continued on the same Unicorn CPU at both image bases. The two external runtime pages were canary mapped only for observation; the request stopped on guest address 0xc before any external-table read or write. No mmap/mprotect/munmap/calloc creator call occurred, so this composition does not identify the outer/runtime owner."
   }
 }

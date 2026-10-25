@@ -992,3 +992,12 @@ copy the zeroed source at `G+0x1800`, the current direct-dispatch fixture's empt
 reference. This attributes the observed zero to the fresh fixture input while leaving
 the real bootstrap dispatch table, Android/JNI startup, full signer and online
 acceptance unresolved. See [runtime-table owner evidence](evidence/vm9_request_runtime_table_owner_fresh_20261025.json).
+
+The same-CPU bootstrap-to-request spike now continues the complete 13-entry
+`init_array`/JNI bootstrap into the real `+0x27dd04 → +0x2830c4 → +0x168324`
+request path at both image bases. The external runtime pages are canary mapped
+only for observation: neither page is read or written, no `mmap/mprotect/munmap/
+calloc` creator call occurs, and both runs stop at `+0x170308` on guest address
+`0xc`. This closes the current outer/bootstrap creator search boundary without
+claiming a recovered dispatch table, whole-request success or signer output.
+See [same-CPU runtime-owner spike](evidence/vm9_bootstrap_request_runtime_owner_spike_fresh_20261025.json).
