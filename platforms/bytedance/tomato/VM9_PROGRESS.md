@@ -60,6 +60,14 @@ cumulative/provenance metadata，因此只记录 fresh rerun，不宣称逐字�
 仍未验证。见 [service-scope rerun](evidence/vm9_environment_service_scope_rerun_20261025.json)
 与 [release-scope rerun](evidence/vm9_environment_release_scope_rerun_20261025.json)。
 
+随后重跑 stack-evaluator/request-entry boundary：78 项 evaluator controls、34 项
+rollback guards 通过；owning request entry 到达 `+0xffb78`，共 2475 steps/105
+callbacks，并完成 JNI environment、空 header tree、计数器、清理和 caller sentinel
+返回。当前输出比 2026-10-12 formal JSON 多 14 项 guard 和更深的 request-entry
+字段，因此不宣称逐字节一致；request/JNI 仍是 synthetic provider，whole-native
+request、live JVM 与 fresh signer 仍未完成。见
+[stack-evaluator rerun](evidence/vm9_request_stack_evaluator_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

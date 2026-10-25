@@ -67,6 +67,14 @@ metadata, so these records intentionally do not claim byte identity. They still
 use the explicit allocator/TLS/JNI services and do not establish a live JVM,
 complete request state or fresh signer. See the [service-scope rerun](evidence/vm9_environment_service_scope_rerun_20261025.json) and [release-scope rerun](evidence/vm9_environment_release_scope_rerun_20261025.json).
 
+The stack-evaluator/request-entry boundary was rerun from fresh state too: 78
+evaluator controls and 34 rollback guards pass, and the owning request entry
+reaches `+0xffb78` after 2,475 VM steps and 105 callbacks. The current output adds
+14 guards and a deeper request-entry record than the 2026-10-12 formal JSON, so
+byte identity is not claimed. The request/JNI services remain synthetic and do
+not establish whole-native request equivalence, a live JVM or a fresh signer.
+See the [stack-evaluator rerun](evidence/vm9_request_stack_evaluator_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

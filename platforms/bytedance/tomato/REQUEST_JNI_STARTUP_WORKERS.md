@@ -9241,14 +9241,6 @@ python -B platforms/bytedance/tomato/python/verify_vm9_signer_boundary_audit_202
 结果见 `evidence/vm9_signer_boundary_audit_20261024.json`；handoff fresh evidence
 已更新为 schema `vm9-java-request-handoff-fresh-python-v2`。
 
-\n
-\n
-\n
-\n
-\n
-\n
-\n
-\n
 ## 2026-10-25：environment service/release fresh rerun
 
 The environment-service and environment-release bounded controls were rerun from
@@ -9262,3 +9254,16 @@ remain open.
 
 Evidence: [service scope](evidence/vm9_environment_service_scope_rerun_20261025.json)
 and [release scope](evidence/vm9_environment_release_scope_rerun_20261025.json).
+
+## 2026-10-25：stack evaluator and request-entry fresh rerun
+
+The fresh stack-evaluator batch passes 78 native/Python controls and 34 rollback
+guards. Its owning request-entry continuation reaches +0xffb78 after 2,475 VM
+steps and 105 callbacks, including JNI environment acquisition, empty-header tree
+construction, counter/atexit registration, cleanup and the caller sentinel return.
+The current output contains 14 additional guards and a deeper request-entry record
+than the 2026-10-12 formal JSON, so byte identity is not claimed. Request/JNI
+providers remain synthetic; whole-native request equivalence, live Android JVM and
+fresh standalone signer remain open.
+
+Evidence: [stack evaluator rerun](evidence/vm9_request_stack_evaluator_rerun_20261025.json).
