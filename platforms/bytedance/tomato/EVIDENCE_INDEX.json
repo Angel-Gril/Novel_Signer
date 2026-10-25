@@ -8642,5 +8642,37 @@
     "fresh_input_signer_output_verified": false,
     "live_Android_JVM_verified": false,
     "comparison_note": "Fresh evaluator cases pass; current output adds 14 guards and a completed owning request entry continuation absent from the 2026-10-12 formal JSON, so byte identity is not claimed."
+  },
+  "vm9_request_287474_vm_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_287474_vm_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_287474_vm_fresh_20261013.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_287474_vm_fresh_20261013.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 20,
+    "rollback_guards": 8,
+    "native_snapshot_input": false,
+    "constructed_second_metadata_replayed": false,
+    "complete_second_vm_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "comparison_note": "Fresh frame/prefix outcomes reproduce 20 controls and 8 guards; current verifier omits the formal constructed-second metadata, so byte identity is not claimed."
+  },
+  "vm9_request_token_vm_rerun_20261025": {
+    "evidence_file": "evidence/vm9_request_token_vm_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_request_token_vm_fresh_20261013.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_request_token_vm_fresh_20261013.py",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_Python_controls": 20,
+    "rollback_guards": 8,
+    "native_snapshot_input": false,
+    "constructed_outer_metadata_replayed": false,
+    "complete_token_vm_verified": false,
+    "fresh_input_signer_output_verified": false,
+    "comparison_note": "Fresh token frame/prefix outcomes reproduce 20 controls and 8 guards; current verifier omits the formal constructed outer/nested metadata, so byte identity is not claimed."
   }
 }

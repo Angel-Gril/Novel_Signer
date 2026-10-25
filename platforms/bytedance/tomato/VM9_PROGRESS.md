@@ -68,6 +68,13 @@ callbacks，并完成 JNI environment、空 header tree、计数器、清理和 
 request、live JVM 与 fresh signer 仍未完成。见
 [stack-evaluator rerun](evidence/vm9_request_stack_evaluator_rerun_20261025.json)。
 
+同时重跑 +287474 second VM 与 +287500 token VM 的 caller/prefix component：两项各
+20 项 controls、8 项 rollback guards，在两个 image base 均通过。当前 component
+verifier 没有重放旧 formal evidence 的 constructed outer/second metadata，因此不
+宣称逐字节一致；完整 second/token VM return、whole-request equivalence 与 signing
+仍未完成。见 [second-VM rerun](evidence/vm9_request_287474_vm_rerun_20261025.json)
+与 [token-VM rerun](evidence/vm9_request_token_vm_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

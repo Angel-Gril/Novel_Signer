@@ -75,6 +75,14 @@ byte identity is not claimed. The request/JNI services remain synthetic and do
 not establish whole-native request equivalence, a live JVM or a fresh signer.
 See the [stack-evaluator rerun](evidence/vm9_request_stack_evaluator_rerun_20261025.json).
 
+The second request VM and nested token VM caller/prefix components were also
+rerun from fresh ELF pages. Each produces 20 controls and 8 rollback guards at
+both image bases. The current component verifiers omit the older constructed
+outer/second metadata, so byte identity is not claimed; full second/token VM
+returns, whole-request equivalence and signing remain open. See the
+[second-VM rerun](evidence/vm9_request_287474_vm_rerun_20261025.json) and
+[token-VM rerun](evidence/vm9_request_token_vm_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115

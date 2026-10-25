@@ -1,0 +1,308 @@
+{
+  "schema": "vm9-request-token-vm-fresh-v1",
+  "evidence_date": "2026-10-13",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "frame_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "normal",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "NULL_object",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_object",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "wide_saved_words",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "relocated_stack",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "TLS_spill_alias",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "patterned_stack",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "normal",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "NULL_object",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_object",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "wide_saved_words",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "relocated_stack",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "TLS_spill_alias",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "patterned_stack",
+      "original_prelude_reached": true,
+      "complete_caller_frame_and_all_32_backing_words_equal": true,
+      "five_VM_arguments_and_physical_dispatch_registers_equal": true,
+      "saved_registers_and_live_TLS_canary_equal": true,
+      "untouched_guest_bytes_equal": true,
+      "native_snapshot_input": false,
+      "vm_body_not_executed": true
+    }
+  ],
+  "prefix_cases": [
+    {
+      "image_base": "0x122c0000",
+      "case": "normal",
+      "original_random_boundary_reached": true,
+      "steps": 179,
+      "stop_bytecode_offset": "0x118838",
+      "boundary_wrapper_offset": "0x288b08",
+      "boundary_target_offset": "0x26cc8c",
+      "callback_ledger_and_descriptor_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "both_decoded_constant_ranges_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_token_vm_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "cross_page_object",
+      "original_random_boundary_reached": true,
+      "steps": 179,
+      "stop_bytecode_offset": "0x118838",
+      "boundary_wrapper_offset": "0x288b08",
+      "boundary_target_offset": "0x26cc8c",
+      "callback_ledger_and_descriptor_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "both_decoded_constant_ranges_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_token_vm_verified": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "case": "patterned_stack",
+      "original_random_boundary_reached": true,
+      "steps": 179,
+      "stop_bytecode_offset": "0x118838",
+      "boundary_wrapper_offset": "0x288b08",
+      "boundary_target_offset": "0x26cc8c",
+      "callback_ledger_and_descriptor_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "both_decoded_constant_ranges_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_token_vm_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "normal",
+      "original_random_boundary_reached": true,
+      "steps": 179,
+      "stop_bytecode_offset": "0x118838",
+      "boundary_wrapper_offset": "0x288b08",
+      "boundary_target_offset": "0x26cc8c",
+      "callback_ledger_and_descriptor_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "both_decoded_constant_ranges_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_token_vm_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "cross_page_object",
+      "original_random_boundary_reached": true,
+      "steps": 179,
+      "stop_bytecode_offset": "0x118838",
+      "boundary_wrapper_offset": "0x288b08",
+      "boundary_target_offset": "0x26cc8c",
+      "callback_ledger_and_descriptor_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "both_decoded_constant_ranges_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_token_vm_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "case": "patterned_stack",
+      "original_random_boundary_reached": true,
+      "steps": 179,
+      "stop_bytecode_offset": "0x118838",
+      "boundary_wrapper_offset": "0x288b08",
+      "boundary_target_offset": "0x26cc8c",
+      "callback_ledger_and_descriptor_equal": true,
+      "all_32_virtual_registers_equal": true,
+      "both_decoded_constant_ranges_equal": true,
+      "supplied_pages_unchanged": true,
+      "native_snapshot_input": false,
+      "complete_token_vm_verified": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "underflow_stack",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "tagged_return",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "wide_object",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "negative_image",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_TLS",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_frame",
+      "rejected": true,
+      "all_pages_unchanged": true
+    },
+    {
+      "case": "missing_bytecode",
+      "rejected": true,
+      "all_pages_unchanged": true
+    }
+  ],
+  "native_snapshot_input": false,
+  "private_names_or_payloads_published": false,
+  "whole_request_native_differential_verified": false,
+  "actual_URL_header_JNI_conversion_verified": false,
+  "live_Android_JVM_verified": false,
+  "complete_python_medusa": false,
+  "fresh_signer_output_verified": false,
+  "live_server_matrix_verified": false,
+  "whole_physical_stack_bytes_compared": false,
+  "allocator_provider_mapping_rollback_verified": false,
+  "complete_token_vm_verified": false,
+  "native_Python_controls": 20,
+  "rollback_guards": 8
+}

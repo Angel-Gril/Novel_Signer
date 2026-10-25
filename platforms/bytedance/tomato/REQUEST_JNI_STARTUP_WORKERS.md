@@ -9267,3 +9267,15 @@ providers remain synthetic; whole-native request equivalence, live Android JVM a
 fresh standalone signer remain open.
 
 Evidence: [stack evaluator rerun](evidence/vm9_request_stack_evaluator_rerun_20261025.json).
+
+## 2026-10-25：second/token VM caller fresh rerun
+
+The `+0x287474` second-VM and `+0x287500` nested token-VM caller/prefix
+components were rerun from fresh ELF pages. Each passes 20 native/Python controls
+and 8 rollback guards across both image bases. The component verifiers do not
+replay the older constructed outer/second metadata, so byte identity is not
+claimed. Full second/token VM returns, whole-request native differential, live
+JVM and fresh signing remain open.
+
+Evidence: [second VM](evidence/vm9_request_287474_vm_rerun_20261025.json) and
+[token VM](evidence/vm9_request_token_vm_rerun_20261025.json).
