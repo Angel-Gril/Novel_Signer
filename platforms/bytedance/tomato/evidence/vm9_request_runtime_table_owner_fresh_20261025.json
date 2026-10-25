@@ -1,5 +1,5 @@
 {
-  "schema": "vm9-request-runtime-table-owner-fresh-20261025-v5",
+  "schema": "vm9-request-runtime-table-owner-fresh-20261025-v6",
   "evidence_date": "2026-10-25",
   "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
@@ -19506,6 +19506,8 @@
             "x8": "0xa5a5a5a5a5a5a5a5",
             "x9": "0xa36cec69",
             "x10": "0x1253e5f4",
+            "x13": "0x1253e5f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -19513,7 +19515,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19525,6 +19530,8 @@
             "x8": "0x0",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x1253e5f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -19532,7 +19539,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19544,6 +19554,8 @@
             "x8": "0x0",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x1253e5f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -19551,7 +19563,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19563,6 +19578,8 @@
             "x8": "0xa5a5a5a5a5a5a5a5",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x7000360c",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -19570,7 +19587,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19582,6 +19602,8 @@
             "x8": "0x70002000",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -19589,7 +19611,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19601,6 +19626,8 @@
             "x8": "0x70001b00",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -19608,7 +19635,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19620,6 +19650,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b785c",
+            "x13": "0x1d",
+            "x14": "0x2",
             "x15": "0x13381408",
             "x16": "0x6e0",
             "x17": "0x7000d840",
@@ -19627,7 +19659,10 @@
             "x20": "0x12639000",
             "x21": "0x1",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 2,
+          "source_value": "0x13381408",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19639,6 +19674,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7864",
+            "x13": "0x1d",
+            "x14": "0x2",
             "x15": "0x133813f8",
             "x16": "0x6d8",
             "x17": "0x7000d840",
@@ -19646,7 +19683,10 @@
             "x20": "0x12639000",
             "x21": "0x1",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 2,
+          "source_value": "0x133813f8",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19658,6 +19698,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7dc0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13092e38",
             "x16": "0x718",
             "x17": "0x7000d840",
@@ -19665,7 +19707,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13092e38",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19677,6 +19722,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7dc8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x133813fc",
             "x16": "0x710",
             "x17": "0x7000d840",
@@ -19684,7 +19731,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x133813fc",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19696,6 +19746,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7dd0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13092c68",
             "x16": "0x708",
             "x17": "0x7000d840",
@@ -19703,7 +19755,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13092c68",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19715,6 +19770,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7dd8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13092e44",
             "x16": "0x6d0",
             "x17": "0x7000d840",
@@ -19722,7 +19779,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13092e44",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19734,6 +19794,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7de0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x133813f0",
             "x16": "0x6c8",
             "x17": "0x7000d840",
@@ -19741,7 +19803,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x133813f0",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19753,6 +19818,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7de8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13092c60",
             "x16": "0x6c0",
             "x17": "0x7000d840",
@@ -19760,7 +19827,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13092c60",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19772,6 +19842,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7df0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13010444",
             "x16": "0x738",
             "x17": "0x7000d840",
@@ -19779,7 +19851,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13010444",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -19791,6 +19866,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7e20",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x7000ee38",
             "x16": "0x6f8",
             "x17": "0x7000d840",
@@ -19798,7 +19875,10 @@
             "x20": "0x12639000",
             "x21": "0x5641391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x7000ee38",
+          "base_slot": 29
         }
       ],
       "vm_operand_pointer_writer": {
@@ -19811,6 +19891,8 @@
           "x8": "0xa061440a061440",
           "x9": "0x18",
           "x10": "0x123b7e20",
+          "x13": "0x1d",
+          "x14": "0x1",
           "x15": "0x7000ee38",
           "x16": "0x6f8",
           "x17": "0x7000d840",
@@ -19818,6 +19900,83 @@
           "x20": "0x12639000",
           "x21": "0x5641391",
           "x28": "0x7000ec58"
+        },
+        "source_slot": 1,
+        "source_value": "0x7000ee38",
+        "base_slot": 29
+      },
+      "vm_slot_1_pointer_producer": {
+        "kind": "vm_handler_semantics",
+        "pc": "0x16f974",
+        "operation": "load_indexed_signed_offset",
+        "opcode_from_x21": "0x5641391",
+        "opcode_at_cursor": "0x9000218",
+        "cursor_address": "0x7000ec50",
+        "cursor_pointer": "0x123b7e18",
+        "registers": {
+          "x8": "0x123b7e18",
+          "x9": "0x7000ee38",
+          "x10": "0x4",
+          "x11": "0x8",
+          "x12": "0x7000d668",
+          "x13": "0x8",
+          "x14": "0x1",
+          "x15": "0x7000ee28",
+          "x19": "0x7000ec50",
+          "x21": "0x5641391",
+          "x28": "0x7000ec58"
+        },
+        "written_value": "0x7000ee38",
+        "decoded": {
+          "source_indices": [
+            4
+          ],
+          "destination_index": 1,
+          "source_values": [
+            "0x7000d668"
+          ],
+          "destination_before": "0x7000ee28",
+          "result": "0x7000ee38",
+          "signed_offset": "0x8",
+          "operand_address": "0x7000d670",
+          "operand_value": "38ee007000000000"
+        }
+      },
+      "vm_slot_18_pointer_producer": {
+        "kind": "vm_handler_semantics",
+        "pc": "0x16f974",
+        "operation": "load_indexed_signed_offset",
+        "opcode_from_x21": "0x5421391",
+        "opcode_at_cursor": "0x93770e18",
+        "cursor_address": "0x7000ec50",
+        "cursor_pointer": "0x123b7fc8",
+        "registers": {
+          "x8": "0x123b7fc8",
+          "x9": "0x7000ee38",
+          "x10": "0x1d",
+          "x11": "0x6f8",
+          "x12": "0x7000d840",
+          "x13": "0x6f8",
+          "x14": "0x12",
+          "x15": "0x125458e0",
+          "x19": "0x7000ec50",
+          "x21": "0x5421391",
+          "x28": "0x7000ec58"
+        },
+        "written_value": "0x7000ee38",
+        "decoded": {
+          "source_indices": [
+            29
+          ],
+          "destination_index": 18,
+          "source_values": [
+            "0x7000d840"
+          ],
+          "destination_before": "0x126a0f74",
+          "result": "0x7000ee38",
+          "signed_offset": "0x6f8",
+          "operand_address": "0x7000df38",
+          "operand_value": "38ee007000000000"
         }
       },
       "vm_handler_semantics": [
@@ -37721,6 +37880,8 @@
             "x8": "0xa5a5a5a5a5a5a5a5",
             "x9": "0xa36cec69",
             "x10": "0x1253e5f4",
+            "x13": "0x1253e5f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -37728,7 +37889,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "memory_write",
@@ -37914,6 +38078,8 @@
             "x8": "0x0",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x1253e5f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -37921,7 +38087,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -37933,6 +38102,8 @@
             "x8": "0x0",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x1253e5f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -37940,7 +38111,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "import_call",
@@ -38000,6 +38174,8 @@
             "x8": "0xa5a5a5a5a5a5a5a5",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x7000360c",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -38007,7 +38183,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "memory_write",
@@ -38193,6 +38372,8 @@
             "x8": "0x70002000",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -38200,7 +38381,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -38212,6 +38396,8 @@
             "x8": "0x70001b00",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -38219,7 +38405,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "import_call",
@@ -43446,6 +43635,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b785c",
+            "x13": "0x1d",
+            "x14": "0x2",
             "x15": "0x13381408",
             "x16": "0x6e0",
             "x17": "0x7000d840",
@@ -43453,7 +43644,10 @@
             "x20": "0x12639000",
             "x21": "0x1",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 2,
+          "source_value": "0x13381408",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -43589,6 +43783,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7864",
+            "x13": "0x1d",
+            "x14": "0x2",
             "x15": "0x133813f8",
             "x16": "0x6d8",
             "x17": "0x7000d840",
@@ -43596,7 +43792,10 @@
             "x20": "0x12639000",
             "x21": "0x1",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 2,
+          "source_value": "0x133813f8",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -65275,6 +65474,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7dc0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13092e38",
             "x16": "0x718",
             "x17": "0x7000d840",
@@ -65282,7 +65483,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13092e38",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -65418,6 +65622,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7dc8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x133813fc",
             "x16": "0x710",
             "x17": "0x7000d840",
@@ -65425,7 +65631,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x133813fc",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -65561,6 +65770,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7dd0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13092c68",
             "x16": "0x708",
             "x17": "0x7000d840",
@@ -65568,7 +65779,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13092c68",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -65704,6 +65918,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7dd8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13092e44",
             "x16": "0x6d0",
             "x17": "0x7000d840",
@@ -65711,7 +65927,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13092e44",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -65847,6 +66066,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7de0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x133813f0",
             "x16": "0x6c8",
             "x17": "0x7000d840",
@@ -65854,7 +66075,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x133813f0",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -65990,6 +66214,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7de8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13092c60",
             "x16": "0x6c0",
             "x17": "0x7000d840",
@@ -65997,7 +66223,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13092c60",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -66133,6 +66362,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7df0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x13010444",
             "x16": "0x738",
             "x17": "0x7000d840",
@@ -66140,7 +66371,10 @@
             "x20": "0x12639000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x13010444",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -67105,6 +67339,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x123b7e20",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x7000ee38",
             "x16": "0x6f8",
             "x17": "0x7000d840",
@@ -67112,7 +67348,10 @@
             "x20": "0x12639000",
             "x21": "0x5641391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x7000ee38",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -94547,6 +94786,8 @@
             "x8": "0xa5a5a5a5a5a5a5a5",
             "x9": "0xa36cec69",
             "x10": "0x775c4835f4",
+            "x13": "0x775c4835f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -94554,7 +94795,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94566,6 +94810,8 @@
             "x8": "0x0",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x775c4835f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -94573,7 +94819,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94585,6 +94834,8 @@
             "x8": "0x0",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x775c4835f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -94592,7 +94843,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94604,6 +94858,8 @@
             "x8": "0xa5a5a5a5a5a5a5a5",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x7000360c",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -94611,7 +94867,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94623,6 +94882,8 @@
             "x8": "0x70002000",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -94630,7 +94891,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94642,6 +94906,8 @@
             "x8": "0x70001b00",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -94649,7 +94915,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94661,6 +94930,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fc85c",
+            "x13": "0x1d",
+            "x14": "0x2",
             "x15": "0x775d2c6408",
             "x16": "0x6e0",
             "x17": "0x7000d840",
@@ -94668,7 +94939,10 @@
             "x20": "0x775c57e000",
             "x21": "0x1",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 2,
+          "source_value": "0x775d2c6408",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94680,6 +94954,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fc864",
+            "x13": "0x1d",
+            "x14": "0x2",
             "x15": "0x775d2c63f8",
             "x16": "0x6d8",
             "x17": "0x7000d840",
@@ -94687,7 +94963,10 @@
             "x20": "0x775c57e000",
             "x21": "0x1",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 2,
+          "source_value": "0x775d2c63f8",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94699,6 +94978,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdc0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cfd7e38",
             "x16": "0x718",
             "x17": "0x7000d840",
@@ -94706,7 +94987,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cfd7e38",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94718,6 +95002,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdc8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775d2c63fc",
             "x16": "0x710",
             "x17": "0x7000d840",
@@ -94725,7 +95011,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775d2c63fc",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94737,6 +95026,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdd0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cfd7c68",
             "x16": "0x708",
             "x17": "0x7000d840",
@@ -94744,7 +95035,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cfd7c68",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94756,6 +95050,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdd8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cfd7e44",
             "x16": "0x6d0",
             "x17": "0x7000d840",
@@ -94763,7 +95059,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cfd7e44",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94775,6 +95074,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcde0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775d2c63f0",
             "x16": "0x6c8",
             "x17": "0x7000d840",
@@ -94782,7 +95083,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775d2c63f0",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94794,6 +95098,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcde8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cfd7c60",
             "x16": "0x6c0",
             "x17": "0x7000d840",
@@ -94801,7 +95107,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cfd7c60",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94813,6 +95122,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdf0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cf55444",
             "x16": "0x738",
             "x17": "0x7000d840",
@@ -94820,7 +95131,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cf55444",
+          "base_slot": 29
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -94832,6 +95146,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fce20",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x7000ee38",
             "x16": "0x6f8",
             "x17": "0x7000d840",
@@ -94839,7 +95155,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5641391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x7000ee38",
+          "base_slot": 29
         }
       ],
       "vm_operand_pointer_writer": {
@@ -94852,6 +95171,8 @@
           "x8": "0xa061440a061440",
           "x9": "0x18",
           "x10": "0x775c2fce20",
+          "x13": "0x1d",
+          "x14": "0x1",
           "x15": "0x7000ee38",
           "x16": "0x6f8",
           "x17": "0x7000d840",
@@ -94859,6 +95180,83 @@
           "x20": "0x775c57e000",
           "x21": "0x5641391",
           "x28": "0x7000ec58"
+        },
+        "source_slot": 1,
+        "source_value": "0x7000ee38",
+        "base_slot": 29
+      },
+      "vm_slot_1_pointer_producer": {
+        "kind": "vm_handler_semantics",
+        "pc": "0x16f974",
+        "operation": "load_indexed_signed_offset",
+        "opcode_from_x21": "0x5641391",
+        "opcode_at_cursor": "0x9000218",
+        "cursor_address": "0x7000ec50",
+        "cursor_pointer": "0x775c2fce18",
+        "registers": {
+          "x8": "0x775c2fce18",
+          "x9": "0x7000ee38",
+          "x10": "0x4",
+          "x11": "0x8",
+          "x12": "0x7000d668",
+          "x13": "0x8",
+          "x14": "0x1",
+          "x15": "0x7000ee28",
+          "x19": "0x7000ec50",
+          "x21": "0x5641391",
+          "x28": "0x7000ec58"
+        },
+        "written_value": "0x7000ee38",
+        "decoded": {
+          "source_indices": [
+            4
+          ],
+          "destination_index": 1,
+          "source_values": [
+            "0x7000d668"
+          ],
+          "destination_before": "0x7000ee28",
+          "result": "0x7000ee38",
+          "signed_offset": "0x8",
+          "operand_address": "0x7000d670",
+          "operand_value": "38ee007000000000"
+        }
+      },
+      "vm_slot_18_pointer_producer": {
+        "kind": "vm_handler_semantics",
+        "pc": "0x16f974",
+        "operation": "load_indexed_signed_offset",
+        "opcode_from_x21": "0x5421391",
+        "opcode_at_cursor": "0x93770e18",
+        "cursor_address": "0x7000ec50",
+        "cursor_pointer": "0x775c2fcfc8",
+        "registers": {
+          "x8": "0x775c2fcfc8",
+          "x9": "0x7000ee38",
+          "x10": "0x1d",
+          "x11": "0x6f8",
+          "x12": "0x7000d840",
+          "x13": "0x6f8",
+          "x14": "0x12",
+          "x15": "0x775c48a8e0",
+          "x19": "0x7000ec50",
+          "x21": "0x5421391",
+          "x28": "0x7000ec58"
+        },
+        "written_value": "0x7000ee38",
+        "decoded": {
+          "source_indices": [
+            29
+          ],
+          "destination_index": 18,
+          "source_values": [
+            "0x7000d840"
+          ],
+          "destination_before": "0x775c5e5f74",
+          "result": "0x7000ee38",
+          "signed_offset": "0x6f8",
+          "operand_address": "0x7000df38",
+          "operand_value": "38ee007000000000"
         }
       },
       "vm_handler_semantics": [
@@ -112762,6 +113160,8 @@
             "x8": "0xa5a5a5a5a5a5a5a5",
             "x9": "0xa36cec69",
             "x10": "0x775c4835f4",
+            "x13": "0x775c4835f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -112769,7 +113169,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "memory_write",
@@ -112955,6 +113358,8 @@
             "x8": "0x0",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x775c4835f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -112962,7 +113367,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -112974,6 +113382,8 @@
             "x8": "0x0",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x775c4835f4",
+            "x14": "0x0",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0xb8db8055",
@@ -112981,7 +113391,10 @@
             "x20": "0x7000ee38",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "import_call",
@@ -113041,6 +113454,8 @@
             "x8": "0xa5a5a5a5a5a5a5a5",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x7000360c",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -113048,7 +113463,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "memory_write",
@@ -113234,6 +113652,8 @@
             "x8": "0x70002000",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -113241,7 +113661,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "vm_operand_store_semantics",
@@ -113253,6 +113676,8 @@
             "x8": "0x70001b00",
             "x9": "0xa5a5a5a5a5a5a5a5",
             "x10": "0x0",
+            "x13": "0x0",
+            "x14": "0x1",
             "x15": "0xbbbf07ea",
             "x16": "0xb9b635f0",
             "x17": "0x0",
@@ -113260,7 +113685,10 @@
             "x20": "0x7000ee28",
             "x21": "0x70003000",
             "x28": "0xc19e4ae5"
-          }
+          },
+          "source_slot": null,
+          "source_value": null,
+          "base_slot": null
         },
         {
           "kind": "import_call",
@@ -118487,6 +118915,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fc85c",
+            "x13": "0x1d",
+            "x14": "0x2",
             "x15": "0x775d2c6408",
             "x16": "0x6e0",
             "x17": "0x7000d840",
@@ -118494,7 +118924,10 @@
             "x20": "0x775c57e000",
             "x21": "0x1",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 2,
+          "source_value": "0x775d2c6408",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -118630,6 +119063,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fc864",
+            "x13": "0x1d",
+            "x14": "0x2",
             "x15": "0x775d2c63f8",
             "x16": "0x6d8",
             "x17": "0x7000d840",
@@ -118637,7 +119072,10 @@
             "x20": "0x775c57e000",
             "x21": "0x1",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 2,
+          "source_value": "0x775d2c63f8",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -140316,6 +140754,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdc0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cfd7e38",
             "x16": "0x718",
             "x17": "0x7000d840",
@@ -140323,7 +140763,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cfd7e38",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -140459,6 +140902,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdc8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775d2c63fc",
             "x16": "0x710",
             "x17": "0x7000d840",
@@ -140466,7 +140911,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775d2c63fc",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -140602,6 +141050,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdd0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cfd7c68",
             "x16": "0x708",
             "x17": "0x7000d840",
@@ -140609,7 +141059,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cfd7c68",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -140745,6 +141198,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdd8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cfd7e44",
             "x16": "0x6d0",
             "x17": "0x7000d840",
@@ -140752,7 +141207,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cfd7e44",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -140888,6 +141346,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcde0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775d2c63f0",
             "x16": "0x6c8",
             "x17": "0x7000d840",
@@ -140895,7 +141355,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775d2c63f0",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -141031,6 +141494,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcde8",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cfd7c60",
             "x16": "0x6c0",
             "x17": "0x7000d840",
@@ -141038,7 +141503,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cfd7c60",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -141174,6 +141642,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fcdf0",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x775cf55444",
             "x16": "0x738",
             "x17": "0x7000d840",
@@ -141181,7 +141651,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5621391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x775cf55444",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",
@@ -142146,6 +142619,8 @@
             "x8": "0xa061440a061440",
             "x9": "0x18",
             "x10": "0x775c2fce20",
+            "x13": "0x1d",
+            "x14": "0x1",
             "x15": "0x7000ee38",
             "x16": "0x6f8",
             "x17": "0x7000d840",
@@ -142153,7 +142628,10 @@
             "x20": "0x775c57e000",
             "x21": "0x5641391",
             "x28": "0x7000ec58"
-          }
+          },
+          "source_slot": 1,
+          "source_value": "0x7000ee38",
+          "base_slot": 29
         },
         {
           "kind": "memory_write",

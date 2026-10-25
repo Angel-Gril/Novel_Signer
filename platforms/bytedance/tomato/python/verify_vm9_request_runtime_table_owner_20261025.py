@@ -237,11 +237,17 @@ def run(library: Path, libc: Path, image: int):
                 _handler_semantics(cpu, offset)
             if offset in VM_OPERAND_STORE_PCS:
                 registers = {f"x{index}": hex(cpu.reg_read(getattr(arm, f"UC_ARM64_REG_X{index}")))
-                             for index in (8, 9, 10, 15, 16, 17, 19, 20, 21, 28)}
+                             for index in (8, 9, 10, 13, 14, 15, 16, 17, 19, 20, 21, 28)}
+                source_slot = None
+                source_value = None
+                base_slot = None
                 if offset == 0x171268:
                     address = (int(registers["x17"], 16) +
                                int(registers["x16"], 16)) & ((1 << 64) - 1)
                     written_value = registers["x15"]
+                    source_slot = int(registers["x14"], 16) & 0x1F
+                    base_slot = int(registers["x13"], 16) & 0x1F
+                    source_value = _slot_value(cpu, source_slot)
                 elif offset == 0x15F5A8:
                     address = int(registers["x20"], 16)
                     written_value = "0x0"
@@ -264,7 +270,8 @@ def run(library: Path, libc: Path, image: int):
                     _record("vm_operand_store_semantics", pc=hex(offset),
                             address=hex(address), written_value=written_value,
                             previous_value=_read_word(cpu, address, 8),
-                            registers=registers)
+                            registers=registers, source_slot=source_slot,
+                            source_value=source_value, base_slot=base_slot)
             if offset == 0x16848C:
                 # +168324 derives the physical VM frame from the caller's
                 # stack input.  x28 is the 32-slot backing array and x19 is
@@ -422,6 +429,12 @@ def run(library: Path, libc: Path, image: int):
     register_writes = [event for event in events if event["kind"] == "vm_register_write"]
     handler_semantics = [event for event in events
                          if event["kind"] == "vm_handler_semantics"]
+    slot_1_pointer_producer = next((event for event in handler_semantics
+                                    if event["decoded"].get("destination_index") == 1
+                                    and event.get("written_value") == "0x7000ee38"), None)
+    slot_18_pointer_producer = next((event for event in handler_semantics
+                                     if event["decoded"].get("destination_index") == 18
+                                     and event.get("written_value") == "0x7000ee38"), None)
     slot_1_zero_results = [event for event in handler_semantics
                            if event["decoded"].get("destination_index") == 1
                            and event.get("written_value") == "0x0"]
@@ -466,6 +479,8 @@ def run(library: Path, libc: Path, image: int):
                                             if event["kind"] == "vm_operand_store_semantics"
                                             and event["address"] == "0x7000df38"
                                             and event["written_value"] == "0x7000ee38"), None),
+        "vm_slot_1_pointer_producer": slot_1_pointer_producer,
+        "vm_slot_18_pointer_producer": slot_18_pointer_producer,
         "vm_handler_semantics": handler_semantics,
         "last_vm_handler_semantics": next((event for event in reversed(events)
                                             if event["kind"] == "vm_handler_semantics"), None),
@@ -499,7 +514,7 @@ def main():
         raise SystemExit(f"unexpected native sample {digest}")
     rows = [run(args.library, args.libc, image) for image in BASES]
     report = {
-        "schema": "vm9-request-runtime-table-owner-fresh-20261025-v5",
+        "schema": "vm9-request-runtime-table-owner-fresh-20261025-v6",
         "evidence_date": "2026-10-25",
         "sample_sha256": LIBRARY_SHA256,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),

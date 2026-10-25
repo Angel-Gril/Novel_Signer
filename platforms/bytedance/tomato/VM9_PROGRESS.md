@@ -6025,3 +6025,8 @@ canary。随后 `+0x16f974` 读取 `0x7000df38` 得到该指针，再从
 
 这定位了 fresh workspace 中零值 operand 的 native 构造点，但没有说明真实
 启动路径为何产生同样的 workspace 内容，也没有恢复 VM code、完整表或 signer。
+
+同一事件序列还显示 pointer 的两个 VM producer：`+0x16f974` 从 slot 4 的
+`0x7000d668+0x8` 得到 `0x7000ee38` 写 slot 1，稍后从 slot 29 的
+`0x7000d840+0x6f8`（`0x7000df38`）得到同一值写 slot 18。随后
+`+0x171268` 把 slot 1 复制到 `0x7000df38`，最终 slot 18 参与零偏移加载。

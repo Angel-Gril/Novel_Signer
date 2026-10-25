@@ -9483,6 +9483,12 @@ VM 的 `+0x16f974` 从 `0x7000df38` 读出这个指针，再对 `0x7000ee38` 做
 加载。这个链条仍只覆盖当前 fresh workspace；它没有证明该 workspace 在
 真实 Android/JNI 启动中应由哪些输入产生。
 
+更早的 VM 生产点也已留痕：同一个 `+0x16f974` 先从 slot 4 的
+`0x7000d668 + 0x8` 读出 `0x7000ee38` 写入 slot 1，再从 slot 29 的
+`0x7000d840 + 0x6f8`（即 `0x7000df38`）读出同一指针写入 slot 18。因而
+当前 fresh 链条同时覆盖 slot 1/slot 18 的 pointer producer、native copy 和
+最终零值加载。
+
 这只是 VM 程序运行中寄存器值的因果证据；缺失的 VM code/workspace 输入、
 完整 dispatch table、whole-request native differential、真实 Android JVM、
 fresh standalone signer 和线上验收仍未完成。证据：
