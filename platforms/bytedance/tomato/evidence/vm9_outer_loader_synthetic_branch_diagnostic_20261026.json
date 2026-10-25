@@ -13,6 +13,11 @@
     "external_span": "one-page synthetic descriptor span",
     "input_path": "redacted NUL-terminated path"
   },
+  "native_helpers_executed": [
+    "+0x25c4dc vector-begin",
+    "+0x25c4e4 vector-end",
+    "+0x25c480 vector-size"
+  ],
   "success_branch": {
     "returned": true,
     "return_value": "0x1",
@@ -35,6 +40,6 @@
   "whole_request_native_success": false,
   "fresh_signer_output_verified": false,
   "online_header_acceptance_verified": false,
-  "interpretation": "The native candidate reaches its replacement-mapping cleanup and return when all loader, descriptor, mapping, and callback semantics are supplied by synthetic host hooks. The run establishes a bounded control-flow contract only; it does not identify the real Android linker input, runtime-table owner, handler contents, or signer output.",
+  "interpretation": "The native candidate reaches its replacement-mapping cleanup and return with the vector begin/end/size helpers executing natively, while loader, descriptor, mapping, handle, and callback semantics remain synthetic. The run establishes a bounded control-flow contract only; it does not identify the real Android linker input, runtime-table owner, handler contents, or signer output.",
   "reproduction_boundary": "Temporary probe outside the repository; no raw trace or synthetic mapping is used as production signer evidence."
 }

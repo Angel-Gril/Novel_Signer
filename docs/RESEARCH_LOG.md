@@ -506,7 +506,8 @@ this closes the candidate's static contract only and does not prove execution, t
 ownership, handler contents, or signer output.
 
 The bounded synthetic branch diagnostic then executed that candidate through its return
-at `+0x184dd0`. It supplied synthetic descriptor, mapping, handle, and callback semantics;
+at `+0x184dd0`. Its vector begin/end/size helpers ran natively, while descriptor,
+mapping, handle, and callback semantics were supplied synthetically;
 the run recorded 86 allocation events, 102 ledger events, the expected mmap/mprotect/file
 syscall family, and no writes to the five relocation slots. This is control-flow evidence
 only. It does not recover the Android linker input or runtime-table owner and is kept
