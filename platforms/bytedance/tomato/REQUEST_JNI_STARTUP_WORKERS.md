@@ -9461,3 +9461,30 @@ VM workspace 地址 `0xc` 并失败。probe 没有填充 handler、没有合成 
 
 证据：`evidence/vm9_request_runtime_table_owner_fresh_20261025.json`；复现脚本：
 `python/verify_vm9_request_runtime_table_owner_20261025.py`。
+
+## 6.274 VM handler semantics for the final workspace failure（2026-10-25 Asia/Shanghai）
+
+在 runtime-table owner probe 中加入六个关键 handler 的逐次语义记录，保留
+opcode 候选、源/目的虚拟寄存器、目的旧值、结果和间接操作地址。两个 image
+base 均得到 283 条 handler 事件；两组的 handler 顺序和最终寄存器状态一致。
+
+最终 slot 1 的零结果来源已观察到：`+0x16f974` 的
+`load_indexed_signed_offset` 从源 slot 18 取得指针 `0x7000ee38`，偏移为 0，
+读取到零并将结果写入目的 slot 1。之后 `+0x170308` 看到 `x10=0`、`x11=0xc`，
+执行 `ldrsw x9,[x10,x11]`，在地址 `0xc` 触发 unmapped read。此前对
+`+0x1692fc` 是最终零值来源的推断已被这次 fresh handler 记录修正。
+
+内存写回调保留的是 store 前目的地址快照；实际写入结果由 handler 的
+`written_value` 和随后的 workspace 快照共同确认。
+
+同一 fresh 运行还记录到该零地址的上游构造：native `+0x171268` 将
+`0x7000ee38` 写入 `0x7000df38`（两基址相同，写入前为 canary）。随后
+VM 的 `+0x16f974` 从 `0x7000df38` 读出这个指针，再对 `0x7000ee38` 做零偏移
+加载。这个链条仍只覆盖当前 fresh workspace；它没有证明该 workspace 在
+真实 Android/JNI 启动中应由哪些输入产生。
+
+这只是 VM 程序运行中寄存器值的因果证据；缺失的 VM code/workspace 输入、
+完整 dispatch table、whole-request native differential、真实 Android JVM、
+fresh standalone signer 和线上验收仍未完成。证据：
+`evidence/vm9_request_runtime_table_owner_fresh_20261025.json`；脚本：
+`python/verify_vm9_request_runtime_table_owner_20261025.py`。

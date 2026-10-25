@@ -5996,3 +5996,32 @@ handler，也没有把这次失败当作 request 返回或 signer 输出。
 
 证据：[runtime table owner probe](evidence/vm9_request_runtime_table_owner_fresh_20261025.json)
 及其 verifier `python/verify_vm9_request_runtime_table_owner_20261025.py`。
+
+## 2026-10-25：VM handler 语义与失败寄存器来源（fresh）
+
+在同一只读 probe 中增加六类关键 handler 的 opcode/寄存器语义记录：
+`+0x1692fc`（64 位加法）、`+0x16db74`（有符号 32 位立即数加法）、
+`+0x16e254`/`+0x16e41c`（值物化）、`+0x16f974`（带有符号偏移加载）和
+`+0x17030c`（有符号 word 加载）。两个 image base 各记录 283 次 handler
+语义事件，结果逐次显示相同的 VM workspace 布局。
+
+失败前最后一次 slot 1 零结果不是外部 dispatch table 写入，而是
+`+0x16f974`：源 slot 为 18，目的 slot 为 1，偏移为 0，实际操作地址为
+`0x7000ee38`，该地址的 8 字节值为零，因此 slot 1 被写成 `0x0`。随后
+`+0x170308` 使用 `x10=0` 与 `x11=0xc`，形成 guest read `0xc` 并停止。
+这闭合了“零值由哪个 VM 操作产生”的当前边界，但没有恢复 VM 程序、缺失
+workspace 输入或 dispatch table 内容，也没有把 canary/handler 观察当作签名成功。
+
+证据仍为 [runtime table owner probe](evidence/vm9_request_runtime_table_owner_fresh_20261025.json)，
+复现脚本为 `python/verify_vm9_request_runtime_table_owner_20261025.py`。
+
+## 2026-10-25：零值 operand 的上游 native 写入（fresh）
+
+继续沿同一次观察窗口追踪 `0x7000ee38` 的指针来源，发现 native
+`+0x171268` 将 `0x7000ee38` 写入 `0x7000df38`，两基址的写入前内容均为
+canary。随后 `+0x16f974` 读取 `0x7000df38` 得到该指针，再从
+`0x7000ee38` 读取零并把零结果写入 VM slot 1。由此当前链条为
+`+0x171268 → 0x7000df38 → +0x16f974 → slot1=0 → +0x170308 → read 0xc`。
+
+这定位了 fresh workspace 中零值 operand 的 native 构造点，但没有说明真实
+启动路径为何产生同样的 workspace 内容，也没有恢复 VM code、完整表或 signer。

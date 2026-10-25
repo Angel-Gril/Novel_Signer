@@ -8935,7 +8935,8 @@
   },
   "vm9_request_runtime_table_owner_fresh_20261025": {
     "path": "evidence/vm9_request_runtime_table_owner_fresh_20261025.json",
-    "evidence_label": "Read-only native request VM relocation-slot and effective-handler owner probe",
+    "evidence_label": "Read-only native request VM relocation-slot, effective-handler and final register-value owner probe",
+    "schema": "vm9-request-runtime-table-owner-fresh-20261025-v5",
     "controls": 2,
     "image_bases": [
       "0x122c0000",
@@ -8960,6 +8961,34 @@
     "request_slot_writes": 0,
     "external_runtime_table_reads": 0,
     "effective_handler_reads_observed": true,
+    "vm_handler_semantics_events_each": 283,
+    "vm_operand_store_semantics_each": 16,
+    "vm_handler_offsets": [
+      "0x1692fc",
+      "0x16db74",
+      "0x16e254",
+      "0x16e41c",
+      "0x16f974",
+      "0x17030c"
+    ],
+    "slot_1_zero_results_each": 4,
+    "operand_pointer_writer_each": {
+      "pc": "0x171268",
+      "address": "0x7000df38",
+      "written_value": "0x7000ee38",
+      "previous_value": "a5a5a5a5a5a5a5a5"
+    },
+    "final_slot_1_zero_producer": {
+      "pc": "0x16f974",
+      "operation": "load_indexed_signed_offset",
+      "source_slot": 18,
+      "destination_slot": 1,
+      "signed_offset": "0x0",
+      "operand_address": "0x7000ee38",
+      "operand_value": "0000000000000000"
+    },
+    "final_slot_1_value": "0x0",
+    "final_dispatch_target": "0x0",
     "failed_native_pc": "0x170308",
     "failed_guest_read": "0xc",
     "canary_mapping_is_observation_only": true,
@@ -8969,6 +8998,6 @@
     "fresh_signer_output_verified": false,
     "live_Android_JVM_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "Both bases load the same external relocation pointer, then derive effective handler addresses in fresh main-image pages; no write to the five slots or external-table read occurred. The direct request probe still stops at +0x170308 on guest VM workspace read 0xc, so the owner and content source remain unresolved."
+    "comparison_note": "Both bases load the same external relocation pointer and record the same 283-handler sequence. Native +0x171268 writes the pointer 0x7000ee38 to guest operand field 0x7000df38; +0x16f974 then loads zero from 0x7000ee38 into slot 1, and +0x170308 forms target 0x0 plus offset 0xc before stopping on guest read 0xc. Memory-write events retain pre-store snapshots, while handler written_value and the post-store workspace snapshot establish the result. No write to the five relocation slots or external-table read occurred; the VM program/workspace input and complete dispatch-table owner remain unresolved."
   }
 }
