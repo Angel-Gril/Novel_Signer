@@ -99,6 +99,16 @@ normal/cold diagnostics、NULL/length/exception、duplicate keys 与 multi-pair 
 metadata，本轮不宣称 byte-identical。见
 [header-input rerun](evidence/vm9_jni_header_input_rerun_20261025.json)。
 
+继续重跑 cached-class/header-array component：42 项 controls、42 项回滚，覆盖 class
+retention、ordered Java array values、string conversion 与 provider failures，两基址
+通过。formal JSON 的 strict-TDD/pre-change metadata 未由该 verifier 输出，因此不
+宣称 byte-identical。见 [header-array rerun](evidence/vm9_jni_header_array_rerun_20261025.json)。
+
+继续重跑 cold String-class lookup/promotion component：24 项 controls、16 项回滚，
+覆盖 NULL/exception、global/weak 与 mutex publication paths，两基址通过。formal
+JSON 的 constructed-request/source metadata 未由该 verifier 输出，因此不宣称
+byte-identical。见 [header-class rerun](evidence/vm9_jni_header_class_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层

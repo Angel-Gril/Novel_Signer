@@ -112,6 +112,17 @@ paths, duplicate keys and multi-pair headers at both bases. The formal evidence
 also contains earlier tree-release/roundtrip batches and cumulative metadata
 outside this verifier, so byte identity is not claimed. See the [header-input rerun](evidence/vm9_jni_header_input_rerun_20261025.json).
 
+The cached-class/header-array component also passes fresh: 42 native/Python cases
+and 42 rollback guards across both bases, including class retention, ordered
+Java array values, string conversion and provider failures. The formal JSON adds
+strict-TDD/pre-change metadata absent from this verifier, so byte identity is
+not claimed. See the [header-array rerun](evidence/vm9_jni_header_array_rerun_20261025.json).
+
+The cold String-class lookup/promotion component passes 24 native/Python cases and
+16 rollback guards across both bases, including NULL/exception, global/weak and
+mutex publication paths. The formal JSON includes constructed-request and source
+metadata outside this verifier, so byte identity is not claimed. See the [header-class rerun](evidence/vm9_jni_header_class_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**

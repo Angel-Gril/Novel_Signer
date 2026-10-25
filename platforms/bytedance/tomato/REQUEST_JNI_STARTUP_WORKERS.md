@@ -106,6 +106,16 @@ request control 未由该 guard-only verifier 重放，本轮不宣称 byte-iden
 两基址均通过。formal evidence 另含 tree-release/roundtrip 旧批次及 cumulative metadata，
 本轮不宣称 byte-identical。见 [header-input rerun](evidence/vm9_jni_header_input_rerun_20261025.json)。
 
+随后重跑 cached-class/header-array component：42 项 controls、42 项 rollback guards，
+class retention、ordered Java array values、string conversion 与 provider failures 在
+两基址均通过。formal JSON 的 strict-TDD/pre-change metadata 未由该 verifier 输出，
+本轮不宣称 byte-identical。见 [header-array rerun](evidence/vm9_jni_header_array_rerun_20261025.json)。
+
+随后重跑 cold String-class lookup/promotion component：24 项 controls、16 项 rollback
+guards，NULL/exception、global/weak 与 mutex publication paths 在两基址均通过。formal
+JSON 的 constructed-request/source metadata 未由该 verifier 输出，本轮不宣称
+byte-identical。见 [header-class rerun](evidence/vm9_jni_header_class_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
