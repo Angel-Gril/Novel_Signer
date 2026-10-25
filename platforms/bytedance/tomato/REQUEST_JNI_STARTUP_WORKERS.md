@@ -156,6 +156,19 @@ allocation/TLS/JNI 仍是显式 provider；完整 environment/request memory、l
 JVM、fresh standalone signer 与线上 header acceptance 继续未验证。证据见
 [environment assignment rerun](evidence/vm9_environment_assignment_scope_rerun_20261025.json)。
 
+## 6.273 2026-10-25 state final-reference scope fresh rerun
+
+使用 pinned `libmetasec_ml_71332.so` 与 matching libc 重新执行 state final-reference
+scope。两 image base 的 direct reference lifecycle、cold/decoded-key final constructor
+共 **20 项 native/Python controls、4 项 rollback guards** 全部通过；guest/image/TLS、
+return、scope 与 allocation/free/diagnostic effects 按当前 verifier 的 case 断言保持一致。
+
+当前输出是 case-level schema，与 2026-10-21 formal aggregate JSON 不同，因此不宣称
+byte-identical。`native_snapshot_input=false` 且未重放历史 native group；allocator、
+diagnostic 与 JNI 相邻服务仍是显式 provider，完整 state/request memory、live Android
+JVM、fresh standalone signer 与线上 header acceptance 继续未验证。证据见
+[state final-reference rerun](evidence/vm9_state_final_reference_scope_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。

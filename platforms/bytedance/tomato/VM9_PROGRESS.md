@@ -104,6 +104,13 @@ cumulative/provenance metadata，因此不宣称逐字节一致；allocation/TLS
 provider，完整 environment memory、live Android JVM、fresh signing 与线上验收仍未完成。
 见 [environment-assignment rerun](evidence/vm9_environment_assignment_scope_rerun_20261025.json)。
 
+随后重跑 state final-reference scope：两基址的 direct reference lifecycle 与
+cold/decoded-key final constructor 共 **20 项 native/Python controls、4 项 rollback
+guards** 通过。当前 case-level 输出与 formal aggregate metadata 不同，因此不宣称
+逐字节一致；没有使用 native snapshot 或历史 native group，allocator/diagnostic/JNI
+相邻服务仍是显式 provider，完整 state/request memory、live JVM、fresh signing 与线上
+验收仍未完成。见 [state final-reference rerun](evidence/vm9_state_final_reference_scope_rerun_20261025.json)。
+
 随后重跑 normal Java facade → child dispatcher → owning request VM handoff：4 项
 absent/SDK-30 cases、8 项回滚，与 2026-10-24 formal evidence 逐字节一致；每项
 2583 VM steps、115 callbacks。JNI/JavaVM 与 request input 仍为 synthetic，whole

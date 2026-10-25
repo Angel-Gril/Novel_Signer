@@ -1,0 +1,268 @@
+{
+  "schema": "vm9-state-final-reference-scope-fresh/v1",
+  "native_Python_controls": 20,
+  "new_refusal_or_page_rollback_guards": 4,
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct25728C",
+      "warm_locks": false,
+      "NULL_object": false,
+      "dirty_padding": false,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct25728C",
+      "warm_locks": false,
+      "NULL_object": false,
+      "dirty_padding": true,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct25728C",
+      "warm_locks": false,
+      "NULL_object": true,
+      "dirty_padding": false,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct25728C",
+      "warm_locks": false,
+      "NULL_object": true,
+      "dirty_padding": true,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct25728C",
+      "warm_locks": true,
+      "NULL_object": false,
+      "dirty_padding": false,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct25728C",
+      "warm_locks": true,
+      "NULL_object": false,
+      "dirty_padding": true,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct25728C",
+      "warm_locks": true,
+      "NULL_object": true,
+      "dirty_padding": false,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "direct25728C",
+      "warm_locks": true,
+      "NULL_object": true,
+      "dirty_padding": true,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct25728C",
+      "warm_locks": false,
+      "NULL_object": false,
+      "dirty_padding": false,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct25728C",
+      "warm_locks": false,
+      "NULL_object": false,
+      "dirty_padding": true,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct25728C",
+      "warm_locks": false,
+      "NULL_object": true,
+      "dirty_padding": false,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct25728C",
+      "warm_locks": false,
+      "NULL_object": true,
+      "dirty_padding": true,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct25728C",
+      "warm_locks": true,
+      "NULL_object": false,
+      "dirty_padding": false,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct25728C",
+      "warm_locks": true,
+      "NULL_object": false,
+      "dirty_padding": true,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct25728C",
+      "warm_locks": true,
+      "NULL_object": true,
+      "dirty_padding": false,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "direct25728C",
+      "warm_locks": true,
+      "NULL_object": true,
+      "dirty_padding": true,
+      "original_returned": true,
+      "all_guest_image_and_full24_scope_equal": true,
+      "ordered_allocation_locks_equal": true,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "factory26A3AC",
+      "case": "cold",
+      "original_returned": true,
+      "final_constructor_entry_stack_offset": -96,
+      "final_live24byte_scope_equal": true,
+      "complete_guest_image_TLS_return_and_allocation_free_effects_equal": true,
+      "diagnostic_table_all_buckets_warm": true,
+      "all_diagnostic_table_pages_equal": true,
+      "other_state_scope_bytes_compared": false,
+      "physical_spills_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "kind": "factory26A3AC",
+      "case": "decoded_key",
+      "original_returned": true,
+      "final_constructor_entry_stack_offset": -96,
+      "final_live24byte_scope_equal": true,
+      "complete_guest_image_TLS_return_and_allocation_free_effects_equal": true,
+      "diagnostic_table_all_buckets_warm": true,
+      "all_diagnostic_table_pages_equal": true,
+      "other_state_scope_bytes_compared": false,
+      "physical_spills_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "factory26A3AC",
+      "case": "cold",
+      "original_returned": true,
+      "final_constructor_entry_stack_offset": -96,
+      "final_live24byte_scope_equal": true,
+      "complete_guest_image_TLS_return_and_allocation_free_effects_equal": true,
+      "diagnostic_table_all_buckets_warm": true,
+      "all_diagnostic_table_pages_equal": true,
+      "other_state_scope_bytes_compared": false,
+      "physical_spills_compared": false,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "kind": "factory26A3AC",
+      "case": "decoded_key",
+      "original_returned": true,
+      "final_constructor_entry_stack_offset": -96,
+      "final_live24byte_scope_equal": true,
+      "complete_guest_image_TLS_return_and_allocation_free_effects_equal": true,
+      "diagnostic_table_all_buckets_warm": true,
+      "all_diagnostic_table_pages_equal": true,
+      "other_state_scope_bytes_compared": false,
+      "physical_spills_compared": false,
+      "native_snapshot_input": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "scope_writes_then_raises",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "unmapped_scope",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "counter_NULL",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    },
+    {
+      "case": "unaligned_stack",
+      "rejected": true,
+      "all_pages_unchanged": true,
+      "provider_effect_rollback_verified": false
+    }
+  ],
+  "native_snapshot_input": false,
+  "historical_native_groups_replayed": false,
+  "complete_state_memory_or_signer_verified": false
+}

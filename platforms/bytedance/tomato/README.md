@@ -118,6 +118,15 @@ allocation/TLS/JNI services remain explicit providers; complete environment
 memory, live Android JVM, fresh signing and online header acceptance remain open.
 See the [environment-assignment rerun](evidence/vm9_environment_assignment_scope_rerun_20261025.json).
 
+The state final-reference scope was rerun from fresh ELF/Python state too: 20
+native/Python controls and 4 rollback guards pass across both image bases,
+covering direct reference lifecycles and the cold/decoded-key final constructor.
+The current case-level output differs from the formal aggregate metadata, so
+byte identity is not claimed. No native snapshot or historical native group was
+used; the allocator, diagnostics and JNI-adjacent services remain explicit
+providers, and complete state/request memory, live JVM, fresh signing and online
+acceptance remain open. See the [state final-reference rerun](evidence/vm9_state_final_reference_scope_rerun_20261025.json).
+
 The normal Java facade → child dispatcher → owning request VM handoff was rerun
 from fresh state as well. All 4 absent/SDK-30 cases and 8 rollback guards are
 byte-identical to the 2026-10-24 formal evidence, with 2,583 VM steps and 115
