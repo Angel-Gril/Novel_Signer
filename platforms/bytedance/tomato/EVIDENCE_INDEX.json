@@ -8246,5 +8246,25 @@
     "publication_owner": "vm9_outer_allocator.ActualAllocatorSession.publish_request_state",
     "published_request_state_verified": true,
     "duplicate_publication_rejected": true
+  },
+  "vm9_outer_signer_native_rerun_20261025": {
+    "evidence_file": "evidence/vm9_outer_signer_native_rerun_20261025.json",
+    "rerun_of": "evidence/vm9_outer_signer_native_20261006.json",
+    "report": "REQUEST_JNI_STARTUP_WORKERS.md",
+    "verifier": "python/verify_vm9_outer_signer_native.py",
+    "schema": "vm9-outer-signer-native-control-v1",
+    "evidence_date": "2026-10-25",
+    "fresh_rerun_verified": true,
+    "byte_identical_to_rerun_of": false,
+    "native_controls": 10,
+    "native_input_snapshot_used": false,
+    "actual_os_threads_created": false,
+    "jvm_used": false,
+    "explicit_virtual_os_and_jni": true,
+    "python_outer_constructor_verified": false,
+    "complete_python_medusa": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false,
+    "comparison_note": "Fresh 10-case native boundary passes; rerun includes additional allocation/publication trace fields absent from the 2026-10-06 formal JSON, so byte identity is not claimed."
   }
 }

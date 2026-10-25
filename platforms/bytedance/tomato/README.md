@@ -40,6 +40,14 @@ byte-identity claim. It still uses finite synthetic Android providers and does
 not establish a live three-worker schedule, live JVM or signer output. See the
 [delayed-provider rerun](evidence/vm9_live_delayed_providers_rerun_20261025.json).
 
+The fresh native outer signer-boundary control now passes all 10 cases (two image
+bases, four property profiles and two relocated-input cases). It executes the
+current outer getter/constructor, matching-libc allocator and publication/JNI
+ledger with no host threads or JVM. The rerun adds allocation/publication trace
+fields compared with the 2026-10-06 formal JSON, so byte identity is not claimed;
+Python outer construction, current Medusa, standalone signing and online header
+acceptance remain unverified. See the [outer native rerun](evidence/vm9_outer_signer_native_rerun_20261025.json).
+
 2026-10-25 fresh rerun confirms that the actual reader AST is connected through
 the factory/parse/root/cleanup composition: factory **26 controls / 38 rollback
 guards** and attached segment/custom AST **406 controls / 36 rollback guards**

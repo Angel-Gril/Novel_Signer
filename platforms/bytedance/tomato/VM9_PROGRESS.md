@@ -35,6 +35,13 @@ JSON 重组，因此只记录 fresh controls，不宣称逐字节一致；仍为
 Android provider，尚未证明 live 三 worker、真实 JVM 或 signer 输出。见
 [delayed-provider rerun](evidence/vm9_live_delayed_providers_rerun_20261025.json)。
 
+最后重跑当前 native outer signer-boundary control：两基址、四个 property profile
+和两组 relocated input 共 **10 项 native controls**通过，执行 outer getter/
+constructor、matching-libc allocator 与 publication/JNI ledger，未创建 host thread
+或 JVM。当前 rerun 增加了旧 formal JSON 没有的 allocation/publication trace 字段，
+因此不宣称 byte-identical；Python outer、current Medusa、standalone signer 与线上
+header acceptance 仍未验证。见 [outer native rerun](evidence/vm9_outer_signer_native_rerun_20261025.json)。
+
 ## 2026-10-25 Asia/Shanghai：B reader AST/factory fresh rerun
 
 按当前 pinned `libmetasec_ml_71332.so` 与 matching libc 重跑 B reader 的两层

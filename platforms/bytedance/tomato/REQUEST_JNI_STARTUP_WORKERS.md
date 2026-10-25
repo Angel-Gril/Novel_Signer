@@ -41,6 +41,14 @@ schema/order 已相对 2026-10-12 formal JSON 重组，本轮明确不宣称 byt
 它仍仅提供有限 synthetic Android services，不能替代 live 三 worker、真实 JVM 或
 fresh signer。见 [delayed-provider rerun](evidence/vm9_live_delayed_providers_rerun_20261025.json)。
 
+随后重跑 native outer signer-boundary control：两基址×四 property profiles 加两组
+relocated input 共 10 项 fresh native controls 全部通过，执行当前 outer getter/
+constructor、matching-libc allocator 和 publication/JNI ledger；没有 host thread 或
+JVM。由于新 verifier 输出增加了旧 formal JSON 不含的 allocation/publication trace
+字段，本轮明确不宣称 byte-identical；Python outer、current Medusa、standalone
+signer 与线上 header acceptance 仍未验证。见
+[outer native rerun](evidence/vm9_outer_signer_native_rerun_20261025.json)。
+
 记录日期：2026-10-07 UTC。文件名沿用本机试验标签 `20261008`；标签不是新增的 UTC 日期。
 2026-10-08 UTC 追加 reader u32 原语的 258 个差分与 7 个回滚控制，见第 6.1 节。
 2026-10-09 Asia/Shanghai 追加实际 AST/清理的 308 个差分与 54 个回滚，见第 6.12 节。
