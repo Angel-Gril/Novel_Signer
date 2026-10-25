@@ -475,6 +475,94 @@
     "executed_in_same_cpu_bootstrap_request_spike": false,
     "interpretation": "loader-like outer candidate only; no runtime-table ownership proven"
   },
+  "outer_loader_sequence": {
+    "entry": "+0x184ad4",
+    "caller": "+0x18a314",
+    "dlopen": {
+      "pc": "+0x184b04",
+      "import": "dlopen",
+      "arguments": [
+        "x0=incoming path pointer",
+        "x1=RTLD_NOW (2)"
+      ]
+    },
+    "loaded_span": {
+      "base_register": "x22",
+      "end_register": "x8",
+      "length_register": "x20",
+      "length_expression": "x20 = x8 - x22"
+    },
+    "anonymous_mmap_syscall": {
+      "pc": "+0x184c7c",
+      "helper": "+0x27295c -> +0x271d9c",
+      "syscall_number": 222,
+      "arguments": [
+        "addr=0",
+        "length=x20",
+        "prot=w9|2",
+        "flags=0x22",
+        "fd=-1",
+        "offset=0"
+      ]
+    },
+    "discard_old_mapping": {
+      "pc": "+0x184cac",
+      "import": "munmap",
+      "arguments": [
+        "addr=x22",
+        "length=x20"
+      ]
+    },
+    "replacement_mmap": {
+      "pc": "+0x184cd0",
+      "import": "mmap",
+      "arguments": [
+        "addr=x22",
+        "length=x20",
+        "prot=w8|2",
+        "flags=0x22",
+        "fd=-1",
+        "offset=0"
+      ]
+    },
+    "segment_copy": [
+      {
+        "pc": "+0x184ca0",
+        "helper": "+0x276b9c",
+        "arguments": [
+          "dst=x21",
+          "src=x22",
+          "length=x20"
+        ]
+      },
+      {
+        "pc": "+0x184ce8",
+        "helper": "+0x276b9c",
+        "arguments": [
+          "dst=x22",
+          "src=x21",
+          "length=x20"
+        ]
+      }
+    ],
+    "temporary_unmap": {
+      "pc": "+0x184d18",
+      "import": "munmap",
+      "arguments": [
+        "addr=x21",
+        "length=x20"
+      ]
+    },
+    "dlclose": {
+      "pc": "+0x184d90",
+      "import": "dlclose",
+      "arguments": [
+        "handle=x19"
+      ]
+    },
+    "slot_store_observed": false,
+    "interpretation": "custom DSO mapping/replacement path; runtime-table ownership remains unproven"
+  },
   "runtime_table_owner_recovered": false,
   "runtime_table_content_reconstructed": false,
   "whole_request_native_success": false,

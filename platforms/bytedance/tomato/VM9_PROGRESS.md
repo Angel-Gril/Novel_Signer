@@ -6082,7 +6082,9 @@ reference（`G+0x1800`），所以当前最终零值不仅能归因到 VM 的 `+
 读取五个 slot；后续索引分别为 `w9 & 0x3f`、`(w21/w27/w26 >> 6) & 0x3f` 和
 `(w8 >> 22) & 0x1f`，对应五组 VM dispatch base。另记录 39 个 loader-like PLT 调用点；
 其中 `+0x184ad4` 由 `+0x18a314` 调用，静态路径包含 `dlopen`、`munmap` 和
-`mmap`，是当前最具体的 outer-loader 线索。same-CPU bootstrap→request 运行没有
+`mmap`；其内部还经 `+0x27295c → +0x271d9c` 发起 syscall 222 的匿名映射，
+再释放旧映射、重映射并复制段、`dlclose`，是当前最具体的自定义 DSO
+映射/替换线索。same-CPU bootstrap→request 运行没有
 进入该候选，因此它仍不是已确认的 dispatch-table owner。
 
 证据：[outer owner static scan](evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json)，

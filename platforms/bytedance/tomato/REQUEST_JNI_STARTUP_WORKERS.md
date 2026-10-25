@@ -9557,5 +9557,11 @@ slot1/2/3 分别为 `w21/w27/w26` 右移 6 位后的 6-bit，slot4 为 `w8` 右�
 调用点。该候选不在同次完整 `.init_array`/JNI/bootstrap→request 运行中执行，
 所以只能作为 outer loader 线索，不能据此宣称它拥有 dispatch table。
 
+进一步的指令级静态序列显示：`+0x184c7c` 经 `+0x27295c → +0x271d9c → svc`
+发起 AArch64 syscall 222（匿名 `mmap`），随后 `+0x184cac` 释放旧映射，
+`+0x184cd0` 重新 `mmap` 并由 `+0x276b9c` 复制段，`+0x184d18` 释放临时映射，
+最后 `+0x184d90` `dlclose`。这确认它是自定义 DSO 映射/替换路径；五个 slot
+仍未观察到 writer，runtime-table owner 仍未闭合。
+
 证据：`evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json`；
 脚本：`python/verify_vm9_outer_runtime_owner_static_scan_20261025.py`。

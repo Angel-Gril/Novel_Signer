@@ -9080,6 +9080,17 @@
       "0x3798f0": {"consumer": "+0x16c37c", "table": "vm-dispatch-3", "index": "(w26 >> 6) & 0x3f"},
       "0x3798f8": {"consumer": "+0x16cf90", "table": "vm-dispatch-4", "index": "(w8 >> 22) & 0x1f"}
     },
+    "outer_loader_sequence": {
+      "entry": "+0x184ad4",
+      "caller": "+0x18a314",
+      "anonymous_mmap_syscall_number": 222,
+      "replacement_mmap_pc": "+0x184cd0",
+      "old_mapping_munmap_pc": "+0x184cac",
+      "temporary_mapping_munmap_pc": "+0x184d18",
+      "dlclose_pc": "+0x184d90",
+      "slot_store_observed": false,
+      "interpretation": "custom DSO mapping/replacement path; runtime-table ownership remains unproven"
+    },
     "bootstrap_request_executed_candidate": false,
     "runtime_table_owner_recovered": false,
     "runtime_table_content_reconstructed": false,

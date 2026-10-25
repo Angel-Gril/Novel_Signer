@@ -169,6 +169,11 @@ def _bl_target(word: int, address: int) -> int | None:
     return address + (_signed(word & 0x03FFFFFF, 26) << 2)
 
 
+def _word_at(words: list[int], text_base: int, address: int) -> int:
+    index = (address - text_base) // 4
+    return words[index]
+
+
 def scan(library: Path) -> dict:
     with library.open("rb") as stream:
         elf = ELFFile(stream)
@@ -228,6 +233,54 @@ def scan(library: Path) -> dict:
             for relocation in elf.get_section_by_name(".rela.dyn").iter_relocations()
             if init_array["sh_addr"] <= relocation["r_offset"] < init_array["sh_addr"] + init_array["sh_size"]
         ]
+        outer_sequence = {
+            "entry": "+0x184ad4",
+            "caller": "+0x18a314",
+            "dlopen": {
+                "pc": "+0x184b04",
+                "import": "dlopen",
+                "arguments": ["x0=incoming path pointer", "x1=RTLD_NOW (2)"],
+            },
+            "loaded_span": {
+                "base_register": "x22",
+                "end_register": "x8",
+                "length_register": "x20",
+                "length_expression": "x20 = x8 - x22",
+            },
+            "anonymous_mmap_syscall": {
+                "pc": "+0x184c7c",
+                "helper": "+0x27295c -> +0x271d9c",
+                "syscall_number": 222,
+                "arguments": ["addr=0", "length=x20", "prot=w9|2",
+                               "flags=0x22", "fd=-1", "offset=0"],
+            },
+            "discard_old_mapping": {"pc": "+0x184cac", "import": "munmap",
+                                     "arguments": ["addr=x22", "length=x20"]},
+            "replacement_mmap": {
+                "pc": "+0x184cd0",
+                "import": "mmap",
+                "arguments": ["addr=x22", "length=x20", "prot=w8|2",
+                               "flags=0x22", "fd=-1", "offset=0"],
+            },
+            "segment_copy": [
+                {"pc": "+0x184ca0", "helper": "+0x276b9c",
+                 "arguments": ["dst=x21", "src=x22", "length=x20"]},
+                {"pc": "+0x184ce8", "helper": "+0x276b9c",
+                 "arguments": ["dst=x22", "src=x21", "length=x20"]},
+            ],
+            "temporary_unmap": {"pc": "+0x184d18", "import": "munmap",
+                                 "arguments": ["addr=x21", "length=x20"]},
+            "dlclose": {"pc": "+0x184d90", "import": "dlclose",
+                         "arguments": ["handle=x19"]},
+            "slot_store_observed": False,
+            "interpretation": "custom DSO mapping/replacement path; runtime-table ownership remains unproven",
+        }
+        assert imports[_bl_target(_word_at(word_list, text_base, 0x184B04), 0x184B04)] == "dlopen"
+        assert imports[_bl_target(_word_at(word_list, text_base, 0x184CAC), 0x184CAC)] == "munmap"
+        assert imports[_bl_target(_word_at(word_list, text_base, 0x184CD0), 0x184CD0)] == "mmap"
+        assert imports[_bl_target(_word_at(word_list, text_base, 0x184D18), 0x184D18)] == "munmap"
+        assert imports[_bl_target(_word_at(word_list, text_base, 0x184D90), 0x184D90)] == "dlclose"
+        assert _word_at(word_list, text_base, 0x271D9C) == 0xD103A400
         return {
             "schema": "vm9-outer-runtime-owner-static-scan-fresh-20261025-v1",
             "evidence_date": "2026-10-25",
@@ -266,6 +319,7 @@ def scan(library: Path) -> dict:
                 "executed_in_same_cpu_bootstrap_request_spike": False,
                 "interpretation": "loader-like outer candidate only; no runtime-table ownership proven",
             },
+            "outer_loader_sequence": outer_sequence,
             "runtime_table_owner_recovered": False,
             "runtime_table_content_reconstructed": False,
             "whole_request_native_success": False,
