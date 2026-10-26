@@ -1,5 +1,18 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-10-26 correction: the five supposed external VM dispatch pointers are
+encoded ELF pointers. Native arithmetic adds `-0x106e988`, resolving them to
+five file-backed `.data.rel.ro` tables at `+0x34cf68`, `+0x34d168`, `+0x34d368`,
+`+0x34d490` and `+0x34ce68`; handler words then subtract the live `0x33dc5` frame
+bias. All **234 entries / 468 native selector controls** pass at both bases.
+Four bootstrap/request runs observe **1,191 verified table loads and branches
+each**; removing the external canary pages preserves every dispatch event and
+the combined SHA-256 of all **6,168 other physical pages**. This supersedes the missing-external-table
+owner hypothesis below. The continuation visits the first two tables; the
+all-five selector controls stop before handler bodies. Whole-request differential,
+fresh standalone Medusa/signing and online acceptance remain open. See
+[encoded dispatch-table evidence](evidence/vm9_dispatch_table_encoding_fresh_20261026.json).
+
 The 2026-10-25 timed-transfer rerun is byte-identical to the 2026-10-11 formal
 evidence: 4 complete native/Python controls and 20 rollback guards cover both
 ELF bases and both startup branches, including poll-to-queue transfer, wrapper
@@ -978,20 +991,21 @@ from the current Python VM, not a native snapshot or whole-request differential;
 physical ABI, live JVM, fresh standalone signing and online acceptance remain open.
 See [callback-ledger handoff](evidence/vm9_java_request_handoff_fresh_20261025.json).
 
-The fresh native child-to-request preflight now reaches the real `+0x2830c4` owning
-entry and VM `+0x168324` at both image bases. It stops at `+0x170308` because the
-relocated dispatch table at `image+0x13bb8f0` is outside the fresh main PT_LOAD pages;
-no runtime table was synthesized and pages remain unchanged. This is the first native
-whole-request bootstrap gap, not a completed differential or signer result. See
+The historical native child-to-request preflight reaches the real `+0x2830c4` owning
+entry and VM `+0x168324` at both image bases. Its `+0x170308` stop is caused by the
+fixture's empty URL reference. The out-of-image `image+0x13bb8f0` value is an encoded
+pointer corrected to an ELF-backed table before use, as verified above; it is not
+evidence of a missing external table. No runtime table was synthesized and the failed
+probe preserves its inputs. This remains a preflight, not a whole-request differential. See
 [evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json](evidence/vm9_request_native_dispatch_preflight_fresh_20261025.json).
 
 The follow-up native owner probe records 283 VM handler events at both image bases and
 the four owning-frame operand stores at `+0x2830ec/+0x283100/+0x28310c`. It also traces
 the final zero operand: `+0x15f5a8` clears `0x7000ee38`, then `+0x15f5bc/+0x15f5c4`
 copy the zeroed source at `G+0x1800`, the current direct-dispatch fixture's empty URL
-reference. This attributes the observed zero to the fresh fixture input while leaving
-the real bootstrap dispatch table, Android/JNI startup, full signer and online
-acceptance unresolved. See [runtime-table owner evidence](evidence/vm9_request_runtime_table_owner_fresh_20261025.json).
+reference. This attributes the observed zero to the fresh fixture input. Dispatch-table
+provenance is now closed by the encoding evidence above; live Android/JNI, full signer and online
+acceptance remain unresolved. See [runtime-table owner evidence](evidence/vm9_request_runtime_table_owner_fresh_20261025.json).
 
 The same-CPU bootstrap-to-request spike now continues the complete 13-entry
 `init_array`/JNI bootstrap into the real `+0x27dd04 → +0x2830c4 → +0x168324`
@@ -1044,8 +1058,9 @@ member. Native writer provenance is therefore closed, while invocation and the
 runtime path value remain unobserved. The adjacent vtable slot `0x34db50` points to
 `+0x189cbc`, which consumes `+0x40` as a callable, so the field role is not uniquely
 identified as a path string. This is static constructor/vtable evidence only;
-the custom mapping, runtime table, whole-request signer, and online acceptance
-remain unresolved. See [loader vtable constructor evidence](evidence/vm9_loader_vtable_constructor_fresh_20261026.json).
+the custom mapping, whole-request signer, and online acceptance remain unresolved.
+This loader candidate is not required to supply the five ELF-backed VM tables
+resolved above. See [loader vtable constructor evidence](evidence/vm9_loader_vtable_constructor_fresh_20261026.json).
 
 
 同一轮新增 callback-object 生命周期观察。两个 image base 的 native VM 都在
@@ -1066,5 +1081,5 @@ owner、fresh signer 或线上验收。见
 `+0x16db74` 等 VM handler 入口捕获了 backing `0x7000ec58` 的 slot 3 历史；
 两基址均能在该历史中找到随后写入 field 0 的 target，且 store 读取的 source
 word 与写入值逐项一致。这个 source-slot provenance 已闭合到 VM register file，
-但只覆盖当前 continuation；完整 VM program、外部 dispatch-table owner 和 signer
-输出继续保持未恢复。
+但只覆盖当前 continuation；完整 VM program 和 signer 输出继续保持未恢复。
+五张 dispatch table 的 ELF 来源已由页首链接的 encoding 证据单独闭合。

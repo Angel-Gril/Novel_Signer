@@ -1,5 +1,39 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-26：纠正 external runtime-table owner 假设
+
+五个 relocation slot 中的 `image+0x13bb...` 值是编码指针。原生
+`+0x1683f4..+0x1684ac` 的 mask/OR/XOR 地址运算得到修正量
+`0xfffffffffef91678`（`-0x106e988`），对应的真实表依次位于 ELF
+`.data.rel.ro` 的 `+0x34cf68/+0x34d168/+0x34d368/+0x34d490/+0x34ce68`。
+这些表含 `64/64/37/37/32` 个连续 relative relocation，共 234 项；表值减去
+live frame bias `0x33dc5` 后得到 native handler。现有
+`vm9_request_dispatcher.py` / `vm9_request_nested.py` 已包含同类修正运算，
+本批不修改生产 VM，也不合成 table、handler、vtable 或 snapshot 输入。
+
+两个基址共 **468 项 native selector controls** 通过，逐项执行真实选择指令，
+在 handler body 前停止。另 **4 次 fresh bootstrap/request continuation** 在有/无
+外部 canary 页时各观察到 **1,191 次 table load + 实际 BR destination**，其中
+table 0 为 1,032 次、table 1 为 159 次；这条 continuation 未走 table 2/3/4。
+每个读取值与独立 ELF PT_LOAD/relative relocation 输入一致。移除 canary 后，
+dispatch ledger 和 continuation 返回结果完全一致，其余 **6,168 个物理页**的
+完整地址/字节流 SHA-256 一致；request 观察期内五个 relocation slot 无 native
+writer，五张表也无 native 修改。
+
+bootstrap 已执行过部分 VM block，因此新增 memory hook 后清理 Unicorn translation
+cache；否则会漏记旧 block 的读事件。早期未清理的诊断中两次日志相差一项，
+尽管所有页面与返回一致；正式证据保留完整重跑事件，不用不完整 ledger 宣称相等。
+
+这替代下方历史记录中的“外部表 owner/五个 slot 的 runtime writer 缺失”推断：
+这些 slot/table 由 ELF relocation loader 提供，本 continuation 无需外部 dispatch
+mapping。loader candidate 的实际调用与 custom mapping 仍未验证，但不再作为这
+五张表的前置阻塞项。下一主线是 fresh whole-request native/Python 差分、完整
+callback graph 与真实输入/provider 组合；完整 Medusa、独立 signer、live JVM/OS
+全 ABI、线上验收与 Rust 下载链仍未完成。
+
+证据：[dispatch encoding](evidence/vm9_dispatch_table_encoding_fresh_20261026.json)；
+复现：[verifier](python/verify_vm9_dispatch_table_encoding_20261026.py)。
+
 ## 2026-10-25 Asia/Shanghai：timed transfer 与完整 executor worker schedule fresh rerun
 
 在完成 follow-up callback 重跑后，先重跑 timed poll/queue 组合。两基址、两个

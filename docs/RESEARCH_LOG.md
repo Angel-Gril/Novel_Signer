@@ -3,6 +3,18 @@
 Chronological record of the Tomato / ByteDance signer work. Each entry states what was
 reproduced, how many controls / negatives / rollback checks passed, and links the detailed
 report. Moved verbatim out of the README; wording, numbers and links are unchanged.
+
+2026-10-26：纠正五个 dispatch relocation slot 的 external-owner 推断。
+真实原生地址修正 `-0x106e988` 把编码 addend 指向 `.data.rel.ro` 的五张表，
+共 234 项 ELF relative relocation；handler word 减去 live `0x33dc5` bias。
+两基址 **468 项 native selector controls** 与 **4 次 bootstrap/request runs**
+通过；每次完整观察 1,191 次 table load/BR，有无外部 canary 页时，ledger、返回和
+其余 6,168 个物理页的完整地址/字节流 SHA-256 一致。正式观察在新增 hook 后清理 Unicorn translation cache，
+避免漏记 bootstrap 已翻译的 block。现有生产 dispatcher/nested owner 已有同类
+运算，无生产代码修改、native snapshot 或 table/vtable 合成。这移除这些表的
+“缺少外部 owner/writer”阻塞，未完成 whole-request 差分、fresh signer、live JVM
+或线上验收。见 [dispatch encoding evidence](../platforms/bytedance/tomato/evidence/vm9_dispatch_table_encoding_fresh_20261026.json)。
+
 2026-10-24：重跑 fresh ELF outer signer native 边界。两个 image base、四种 SDK
 property profile、重定位 stack/mapping 共 **10 项 native controls** 通过；root flag、
 singleton/configuration、child/handler callback pair、recursive publication mutex、warm

@@ -8931,7 +8931,9 @@
     "fresh_input_signer_output_verified": false,
     "live_Android_JVM_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "Both fresh native probes stop at the relocated VM dispatch table before callback execution; no runtime table was synthesized."
+    "comparison_note": "Both fresh native probes stop at the relocated VM dispatch table before callback execution; no runtime table was synthesized.",
+    "dispatch_pointer_hypothesis_superseded_by": "vm9_dispatch_table_encoding_fresh_20261026",
+    "current_dispatch_pointer_qualification": "The out-of-image addends are encoded ELF pointers. Native correction resolves five file-backed .data.rel.ro tables; the prior missing-external-owner/writer inference is superseded. Historical observations and other limitations remain unchanged."
   },
   "vm9_request_runtime_table_owner_fresh_20261025": {
     "path": "evidence/vm9_request_runtime_table_owner_fresh_20261025.json",
@@ -9031,7 +9033,9 @@
     "fresh_signer_output_verified": false,
     "live_Android_JVM_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "Both bases load the same external relocation pointer and record the same 283-handler sequence. The owning frame stores at +0x2830ec write 0x7000ee48 to 0x7000d668 and 0x7000ee38 to 0x7000d670; +0x283100 writes 0x138 to 0x7000d680; +0x28310c writes 0x7000ee28 to 0x7000d678. The native object helper +0x15f5a8 first zero-initializes 0x7000ee38, then +0x15f5bc/+0x15f5c4 copy the zeroed 16-byte source at 0x70001800 (the dispatch.fixture URL reference, G+0x1800) into it. The VM first produces pointer 0x7000ee38 in slot 1 from slot 4 plus offset 0x8 at +0x16f974, and later produces the same pointer in slot 18 from slot 29 plus offset 0x6f8; native +0x171268 copies slot 1 through 0x7000df38. The final +0x16f974 loads zero from 0x7000ee38 into slot 1, and +0x170308 forms target 0x0 plus offset 0xc before stopping on guest read 0xc. Memory-write events retain pre-store snapshots, while handler written_value and the post-store workspace snapshot establish the result. No write to the five relocation slots or external-table read occurred; the VM program/workspace input and complete dispatch-table owner remain unresolved."
+    "comparison_note": "Both bases load the same external relocation pointer and record the same 283-handler sequence. The owning frame stores at +0x2830ec write 0x7000ee48 to 0x7000d668 and 0x7000ee38 to 0x7000d670; +0x283100 writes 0x138 to 0x7000d680; +0x28310c writes 0x7000ee28 to 0x7000d678. The native object helper +0x15f5a8 first zero-initializes 0x7000ee38, then +0x15f5bc/+0x15f5c4 copy the zeroed 16-byte source at 0x70001800 (the dispatch.fixture URL reference, G+0x1800) into it. The VM first produces pointer 0x7000ee38 in slot 1 from slot 4 plus offset 0x8 at +0x16f974, and later produces the same pointer in slot 18 from slot 29 plus offset 0x6f8; native +0x171268 copies slot 1 through 0x7000df38. The final +0x16f974 loads zero from 0x7000ee38 into slot 1, and +0x170308 forms target 0x0 plus offset 0xc before stopping on guest read 0xc. Memory-write events retain pre-store snapshots, while handler written_value and the post-store workspace snapshot establish the result. No write to the five relocation slots or external-table read occurred; the VM program/workspace input and complete dispatch-table owner remain unresolved.",
+    "dispatch_pointer_hypothesis_superseded_by": "vm9_dispatch_table_encoding_fresh_20261026",
+    "current_dispatch_pointer_qualification": "The out-of-image addends are encoded ELF pointers. Native correction resolves five file-backed .data.rel.ro tables; the prior missing-external-owner/writer inference is superseded. Historical observations and other limitations remain unchanged."
   },
   "vm9_bootstrap_request_runtime_owner_spike_fresh_20261025": {
     "schema": "vm9-bootstrap-request-runtime-owner-spike-fresh-20261025-v1",
@@ -9056,7 +9060,9 @@
     "runtime_table_content_reconstructed": false,
     "whole_request_native_success": false,
     "fresh_signer_output_verified": false,
-    "comparison_note": "The complete 13-entry init_array/JNI bootstrap and the real owning request VM were continued on the same Unicorn CPU at both image bases. The two external runtime pages were canary mapped only for observation; the request stopped on guest address 0xc before any external-table read or write. No mmap/mprotect/munmap/calloc creator call occurred, so this composition does not identify the outer/runtime owner."
+    "comparison_note": "The complete 13-entry init_array/JNI bootstrap and the real owning request VM were continued on the same Unicorn CPU at both image bases. The two external runtime pages were canary mapped only for observation; the request stopped on guest address 0xc before any external-table read or write. No mmap/mprotect/munmap/calloc creator call occurred, so this composition does not identify the outer/runtime owner.",
+    "dispatch_pointer_hypothesis_superseded_by": "vm9_dispatch_table_encoding_fresh_20261026",
+    "current_dispatch_pointer_qualification": "The out-of-image addends are encoded ELF pointers. Native correction resolves five file-backed .data.rel.ro tables; the prior missing-external-owner/writer inference is superseded. Historical observations and other limitations remain unchanged."
   },
   "vm9_outer_runtime_owner_static_scan_fresh_20261025": {
     "path": "evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json",
@@ -9142,7 +9148,9 @@
     "runtime_table_content_reconstructed": false,
     "whole_request_native_success": false,
     "fresh_signer_output_verified": false,
-    "comparison_note": "The whole .text scan finds no short ADRP/(ADD)/STR sequence targeting any of the five relocation slots. It does find loader-like callsites, including +0x184ad4 -> dlopen and its munmap/mmap sequence, but the same-CPU bootstrap/request probe did not execute this candidate. This is a static outer-loader lead, not proof of runtime-table ownership."
+    "comparison_note": "The whole .text scan finds no short ADRP/(ADD)/STR sequence targeting any of the five relocation slots. It does find loader-like callsites, including +0x184ad4 -> dlopen and its munmap/mmap sequence, but the same-CPU bootstrap/request probe did not execute this candidate. This is a static outer-loader lead, not proof of runtime-table ownership.",
+    "dispatch_pointer_hypothesis_superseded_by": "vm9_dispatch_table_encoding_fresh_20261026",
+    "current_dispatch_pointer_qualification": "The out-of-image addends are encoded ELF pointers. Native correction resolves five file-backed .data.rel.ro tables; the prior missing-external-owner/writer inference is superseded. Historical observations and other limitations remain unchanged."
   },
   "vm9_unidbg_runtime_table_watch_fresh_20261026": {
     "path": "evidence/vm9_unidbg_runtime_table_watch_fresh_20261026.json",
@@ -9170,7 +9178,9 @@
     "native_snapshot_input": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "The historical-success HookMain replay reached DONE and emitted all six expected seven-god header names, but the watcher saw no read or write in 0x13600000-0x13800000. Old x13=0x1367b8f0 observations therefore do not prove that this run created or consumed the relocated runtime table."
+    "comparison_note": "The historical-success HookMain replay reached DONE and emitted all six expected seven-god header names, but the watcher saw no read or write in 0x13600000-0x13800000. Old x13=0x1367b8f0 observations therefore do not prove that this run created or consumed the relocated runtime table.",
+    "dispatch_pointer_hypothesis_superseded_by": "vm9_dispatch_table_encoding_fresh_20261026",
+    "current_dispatch_pointer_qualification": "The out-of-image addends are encoded ELF pointers. Native correction resolves five file-backed .data.rel.ro tables; the prior missing-external-owner/writer inference is superseded. Historical observations and other limitations remain unchanged."
   },
   "vm9_request_url_pointer_continuation_fresh_20261026": {
     "path": "evidence/vm9_request_url_pointer_continuation_fresh_20261026.json",
@@ -9298,7 +9308,9 @@
     "whole_request_native_success": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "The pinned DSO is byte-identical to the arm64-v8a base-APK entry. p3.java and h.java prove normal and APK/split fallback loading, but do not identify the external custom mapping or VM runtime-table owner."
+    "comparison_note": "The pinned DSO is byte-identical to the arm64-v8a base-APK entry. p3.java and h.java prove normal and APK/split fallback loading, but do not identify the external custom mapping or VM runtime-table owner.",
+    "dispatch_pointer_hypothesis_superseded_by": "vm9_dispatch_table_encoding_fresh_20261026",
+    "current_dispatch_pointer_qualification": "The out-of-image addends are encoded ELF pointers. Native correction resolves five file-backed .data.rel.ro tables; the prior missing-external-owner/writer inference is superseded. Historical observations and other limitations remain unchanged."
   },
   "vm9_loader_vtable_constructor_fresh_20261026": {
     "path": "evidence/vm9_loader_vtable_constructor_fresh_20261026.json",
@@ -9332,7 +9344,9 @@
     "whole_request_native_success": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "The relocated 0x34db18 slot is a real vtable entry for +0x189eac, and +0x18ceb0 allocates/constructs the same final-vtable object. Its constructor does not write the +0x40 field later consumed by +0x18a310, but the same vtable's 0x34db48 slot points to +0x188ac0, whose static dataflow writes that field. Adjacent slot 0x34db50 points to +0x189cbc, which consumes +0x40 as a callable, so the field role is not uniquely identified as a path string. Writer provenance is closed; invocation, runtime path, custom mapping and runtime-table ownership remain unresolved."
+    "comparison_note": "The relocated 0x34db18 slot is a real vtable entry for +0x189eac, and +0x18ceb0 allocates/constructs the same final-vtable object. Its constructor does not write the +0x40 field later consumed by +0x18a310, but the same vtable's 0x34db48 slot points to +0x188ac0, whose static dataflow writes that field. Adjacent slot 0x34db50 points to +0x189cbc, which consumes +0x40 as a callable, so the field role is not uniquely identified as a path string. Writer provenance is closed; invocation, runtime path, custom mapping and runtime-table ownership remain unresolved.",
+    "dispatch_pointer_hypothesis_superseded_by": "vm9_dispatch_table_encoding_fresh_20261026",
+    "current_dispatch_pointer_qualification": "The out-of-image addends are encoded ELF pointers. Native correction resolves five file-backed .data.rel.ro tables; the prior missing-external-owner/writer inference is superseded. Historical observations and other limitations remain unchanged."
   },
   "vm9_bootstrap_request_callback_object_trace_fresh_20261026": {
     "path": "evidence/vm9_bootstrap_request_callback_object_trace_fresh_20261026.json",
@@ -9411,6 +9425,69 @@
       true
     ],
     "callback_object_field0_value_derived_from_vm_slot3": true,
-    "callback_object_field0_writer_register_contract": "destination=x17+x16; written_value=x15; source_slot=x14&0x1f; base_slot=x13&0x1f"
+    "callback_object_field0_writer_register_contract": "destination=x17+x16; written_value=x15; source_slot=x14&0x1f; base_slot=x13&0x1f",
+    "dispatch_pointer_hypothesis_superseded_by": "vm9_dispatch_table_encoding_fresh_20261026",
+    "current_dispatch_pointer_qualification": "The out-of-image addends are encoded ELF pointers. Native correction resolves five file-backed .data.rel.ro tables; the prior missing-external-owner/writer inference is superseded. Historical observations and other limitations remain unchanged."
+  },
+  "vm9_dispatch_table_encoding_fresh_20261026": {
+    "path": "evidence/vm9_dispatch_table_encoding_fresh_20261026.json",
+    "verifier": "python/verify_vm9_dispatch_table_encoding_20261026.py",
+    "schema": "vm9-dispatch-table-encoding-fresh-20261026-v1",
+    "evidence_label": "Encoded VM dispatch-pointer provenance and no-external-mapping native controls",
+    "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "decoded_table_offsets": [
+      "0x34cf68",
+      "0x34d168",
+      "0x34d368",
+      "0x34d490",
+      "0x34ce68"
+    ],
+    "table_entry_counts": [
+      64,
+      64,
+      37,
+      37,
+      32
+    ],
+    "address_correction": "-0x106e988",
+    "handler_bias": "0x33dc5",
+    "static_decoded_entries": 234,
+    "native_selector_controls": 468,
+    "fresh_bootstrap_request_runs": 4,
+    "dispatch_loads_and_branches_each": 1191,
+    "continuation_table_load_counts": {
+      "0x34cf68": 1032,
+      "0x34d168": 159
+    },
+    "physical_pages_equal_without_external_canary_each": 6168,
+    "canary_absence_controls": [
+      {
+        "image_base": "0x122c0000",
+        "dispatch_events_equal": true,
+        "continuation_results_equal": true,
+        "all_noncanary_physical_pages_equal": true
+      },
+      {
+        "image_base": "0x775c205000",
+        "dispatch_events_equal": true,
+        "continuation_results_equal": true,
+        "all_noncanary_physical_pages_equal": true
+      }
+    ],
+    "relocation_slot_native_writers_observed": 0,
+    "encoded_dispatch_pointer_provenance_closed": true,
+    "external_dispatch_mapping_required_for_this_continuation": false,
+    "observation_only": true,
+    "native_snapshot_input": false,
+    "synthetic_dispatch_table_used": false,
+    "synthetic_callback_vtable_used": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "The five out-of-image relocation addends are encoded pointers. Native arithmetic corrects them to file-backed .data.rel.ro tables; each loaded relocated word is decoded by subtracting the live frame bias before BR. No separate runtime writer or external mapping is needed for these five tables in this continuation. This supersedes the earlier missing-external-owner hypothesis. The continuation visits tables 0 and 1; all-five selector controls stop before handler bodies. All native table loads match independently relocated ELF bytes, and removing both external canary pages preserves the complete event ledger, return results and all other physical pages."
   }
 }
