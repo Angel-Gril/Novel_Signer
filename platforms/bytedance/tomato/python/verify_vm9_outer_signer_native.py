@@ -65,7 +65,7 @@ def bind_native_imports(library, libc, redirect, imports):
     return exports
 
 
-def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None, terminal_observer=None, execution_observer=None, constructor_counter=None):
+def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None, terminal_observer=None, execution_observer=None, constructor_counter=None, terminal_continuation=None, continuation_host_imports=None, continuation_references=(), continuation_reference_types=None, unmapped_observer=None, continuation_memory_write_observer=None, continuation_memory_read_observer=None, continuation_syscall_observer=None):
     pages, sdk_name = fresh(library, libc, image, property_value)
     if canary is not None: _w(pages, root_fixture.TLS + 0x28, canary)
     if constructor_counter is not None:
@@ -81,6 +81,8 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
 
     def u(cpu, address, width=8): return int.from_bytes(cpu.mem_read(address, width), 'little')
     def observe_memory_write(cpu, address, size):
+        if continuation_memory_write_observer is not None:
+            continuation_memory_write_observer(cpu, address, size)
         interesting = (image + 0x3E07C0 <= address < image + 0x3E0900)
         if interesting:
             value = bytes(cpu.mem_read(address, size))
@@ -267,7 +269,10 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
             assert address % 4096 == 0 and length > 0 and length % 4096 == 0 and advice == 4
             assert any(rec.base <= address and address + length <= rec.end for rec in environment.os.mappings)
             environment.calls.append(['madvise', address, length, advice]); return 0
-        return environment.syscall(cpu, number, observed)
+        result = environment.syscall(cpu, number, observed)
+        if continuation_syscall_observer is not None:
+            continuation_syscall_observer(cpu, number, result)
+        return result
 
     def returned(cpu):
         assert not pending
@@ -299,6 +304,15 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
                               free_sequence=free_sequence,
                               allocator_events=allocator_events)
         state.update(returned=True, wrapper=wrapper, cold_counts=dict(counts), cold_services=dict(services))
+        if terminal_continuation is not None:
+            redirected = terminal_continuation(
+                cpu, wrapper=wrapper, root=root,
+                allocation_sequence=allocation_sequence,
+                free_sequence=free_sequence,
+                allocator_events=allocator_events)
+            if redirected:
+                state['continued_after_cold_return'] = True
+                return
         # Re-enter the actual warm getter; no native output is input to Python.
         cpu.reg_write(UC_ARM64_REG_X30, io.CONTINUE)
         cpu.reg_write(UC_ARM64_REG_PC, image + 0x1658E4)
@@ -307,32 +321,45 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
         0x3481A0: lambda cpu: root_fixture.TLS + 0x100, 0x348250: property_find,
         0x348260: property_read, io.CONTINUE - image: returned}
     bind_native_imports(library, libc, redirect, imports)
+    if continuation_host_imports:
+        for offset, handler in continuation_host_imports.items():
+            if offset in imports:
+                raise ValueError(f'continuation host import overlaps native import: {hex(offset)}')
+            imports[offset] = handler
     initial = {key: value for key, value in io.inputs(pages).items()
         if not h.STACK <= key << 12 < h.STACK + h.STACK_BYTES
         and not h.WORKERS[0] <= key << 12 < h.WORKERS[-1] + 0x2000}
+    reference_values = (io.GUEST + 0x8000, io.GUEST + 0x8010, *continuation_references)
+    reference_types = {io.GUEST + 0x8000: 2, io.GUEST + 0x8010: 3,
+                       **(continuation_reference_types or {})}
     try:
-        _, _, allocations, ledger = oracle.native(library, image, 0x1658E4, [], initial,
-            references=(io.GUEST + 0x8000, io.GUEST + 0x8010), env=io.GUEST + 0x7800,
-            ref_types={io.GUEST + 0x8000: 2, io.GUEST + 0x8010: 3}, libc=libc, real_malloc=True,
+            _, _, allocations, ledger = oracle.native(library, image, 0x1658E4, [], initial,
+            references=reference_values, env=io.GUEST + 0x7800,
+            ref_types=reference_types, libc=libc, real_malloc=True,
             real_mutexes=True, real_recursive_mutexes=True, real_singletons=True, thread_id=137,
             host_imports=imports, syscall_handler=syscall, instruction_observer=observe, memory_write_observer=observe_memory_write,
+            memory_read_observer=continuation_memory_read_observer,
             extra_registers={UC_ARM64_REG_SP: stack_address, UC_ARM64_REG_TPIDR_EL0: root_fixture.TLS,
-                UC_ARM64_REG_X30: io.CONTINUE}, instruction_limit=10000000)
+                UC_ARM64_REG_X30: io.CONTINUE}, instruction_limit=10000000,
+            unmapped_observer=unmapped_observer)
     except Exception:
         print('outer native control failed at', hex(state['last_pc'] - image), 'counts', dict(counts), flush=True)
         raise
     assert state['returned'] and not allocations and state['booted']
+    if terminal_continuation is None:
+        assert counts == {'malloc': 310, 'free': 115, 'gc': 1, 'flush': 3}
+        assert entries['0x1658e4'] == 2 and all(entries[hex(offset)] == (2 if offset == 0x27D0C4 else 1) for offset in ENTRIES[1:])
     root = returned_graph.pop('root')
     invokes = [item for item in ledger if item[0] == 'invoke']
-    assert invokes == [['invoke', tag, 0, root, 0, 0] for tag in (0x2000001, 0x2000002)]
+    expected_outer_invokes = [['invoke', tag, 0, root, 0, 0] for tag in (0x2000001, 0x2000002)]
+    assert invokes[:2] == expected_outer_invokes
     references = [item for item in ledger if item[0] in ('get_type', 'delete')]
-    assert references == [['get_type', io.GUEST + 0x7800, io.GUEST + 0x8000],
+    expected_outer_references = [['get_type', io.GUEST + 0x7800, io.GUEST + 0x8000],
         ['delete', 'global', io.GUEST + 0x7800, io.GUEST + 0x8000],
         ['get_type', io.GUEST + 0x7800, io.GUEST + 0x8010],
         ['delete', 'weak_global', io.GUEST + 0x7800, io.GUEST + 0x8010]]
+    assert references[:4] == expected_outer_references
     assert [entry - image for _, entry, _ in virtual_threads] == [0x326A2C, 0x3260A4, 0x3260A4]
-    assert counts == {'malloc': 310, 'free': 115, 'gc': 1, 'flush': 3}
-    assert entries['0x1658e4'] == 2 and all(entries[hex(offset)] == (2 if offset == 0x27D0C4 else 1) for offset in ENTRIES[1:])
     return dict(image_base=hex(image), function_offset='0x1658e4', native_outer_getter_returned=True,
         actual_allocator_counts=dict(counts), actual_entry_counts=dict(entries), **root_inputs, **returned_graph,
         virtual_thread_entry_offsets=[hex(entry - image) for _, entry, _ in virtual_threads],

@@ -1,5 +1,28 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-27：真实 outer child → normal facade 的同 CPU continuation
+
+扩展 native outer verifier，在 cold outer getter 返回点保留同一个 Unicorn
+CPU，读取真实 `root+0x18` child 后直接进入 normal facade `+0x17b8f8`。两种
+image base 的 provenance 相同：child vtable 为 `image+0x35d5f0`，
+`vtable+0x20` 为 `image+0x27dd04`，child callback pair 首项为
+`image+0x2830c4`。这次没有注入 receiver/tree 或 dispatch table。
+
+两边都观察到真实 child ABI `+0x27dd04`，随后进入 owning VM `+0x2830c4` 和
+native VM `+0x168324`；facade 的 x0/x1/x2/x3/x8 与同一 outer child 以及新的
+URL/header fixture 关联。运行在 `+0x2859dc` 的 descriptor branch 停止：
+`x0=0x13708000`、`x3=0`，下一条 `br x3` 因未知 callback target 触发
+`UC_ERR_FETCH_UNMAPPED`。这关闭了真实 child provenance、facade 输入 ABI 和
+同 CPU continuation 到 callback descriptor 的边界，但没有 facade cleanup/return，
+也没有签名输出。
+
+JNI、URL/header 和继续分配仍是显式 fixture provider；native outer 的 libc
+malloc/free 与 facade 分支共用同一 CPU，但没有宣称 whole-request native/Python
+差分、live JVM、fresh standalone signer 或线上 header acceptance。
+
+证据：[真实 outer child facade](evidence/vm9_native_outer_facade_actual_child_20261027.json)；
+复现：[verifier](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
+
 ## 2026-10-26：normal fixture facade 的 receiver/vtable/target provenance
 
 未修改 synthetic receiver 虚表的 fresh native facade 运行记录了完整读取链：
@@ -6334,3 +6357,22 @@ callback vtable，确认的是这个 continuation 的 target-field writer 与 co
 并将 slot 3 的值写入 field 0；slot 3 值与 `image+0x347f60` 一致。这个结果把
 target 从常量猜测推进到当前 VM slot dataflow 证据，但没有恢复完整 VM code、五组
 外部 dispatch table 或 signer。
+
+## 2026-10-27：actual outer child descriptor provenance
+
+继续复用同一只 Unicorn CPU，把真实 outer cold getter 返回的 `root+0x18`
+child 送入正常 facade，并在 `+0x2859cc..+0x2859dc` 的 descriptor bridge
+保留寄存器、读写和 syscall ledger。两个 image base 都闭合出相同的参数写入：
+`+0x171268` 用 `x15=0` 写 argument object `0x7000e738+0x00`，再用
+`x15=0x13708000` 写 `0x7000e738+0x08`；随后 `+0x2859cc` 原样加载这两个
+字段，`+0x2859dc` 对该 descriptor 执行 `br x3`。
+
+`0x13708000` 位于 native syscall 222 返回的匿名零填充映射
+`0x13700000..0x13740000` 的 `+0x8000`。在该 descriptor 的 `+0x00`、
+`+0x08` 或其周边观察不到 target-field 写入；停止时 0x100 字节窗口全为零，
+因此 `x3=0` 是当前 fresh continuation 的真实状态，不是 verifier 注入的 callback
+target。该轮仍停在 `+0x2859dc`，没有 cleanup/return、whole-request
+native/Python differential、fresh standalone signer 或线上 header 验收。
+
+证据：[actual child descriptor probe](evidence/vm9_native_outer_facade_actual_child_20261027.json)，
+复现脚本：[verify_vm9_native_outer_facade_actual_child_20261027.py](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
