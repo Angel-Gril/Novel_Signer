@@ -1,0 +1,151 @@
+{
+  "schema": "vm9-dso-java-loader-provenance-20261027-v2",
+  "evidence_label": "Real APK native-library provenance and Java loader boundary",
+  "apk": {
+    "basename": "fq_7xz.apk",
+    "size": 135258081,
+    "sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "library_entries": [
+      {
+        "entry": "lib/arm64-v8a/libmetasec_ml.so",
+        "abi": "arm64-v8a",
+        "compressed_size": 1251827,
+        "uncompressed_size": 3971808,
+        "sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+        "matches_supplied_dso": true
+      }
+    ]
+  },
+  "supplied_dso": {
+    "basename": "libmetasec_ml_71332.so",
+    "size": 3971808,
+    "sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "expected_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "matches_expected": true
+  },
+  "java_sources": {
+    "loader": {
+      "basename": "p3.java",
+      "sha256": "729abfba6a9ea624380bb94741d75b4e97693c78fd5060a727fc6d194672dd70",
+      "features": {
+        "system_load_library": true,
+        "system_load_absolute_path": true,
+        "application_source_dir": false,
+        "split_source_dirs": false,
+        "abi_directory_pattern": false,
+        "supported_abis": false,
+        "zip_entry_lookup": false,
+        "private_lib_directory": true,
+        "safe_extract_path_check": false,
+        "all_required_features": true
+      }
+    },
+    "apk_scanner": {
+      "basename": "h.java",
+      "sha256": "a1b83441de11259d6d2ec7a7910159ff5bf6b43d6294cf0797238e3ad1b4680b",
+      "features": {
+        "system_load_library": false,
+        "system_load_absolute_path": false,
+        "application_source_dir": true,
+        "split_source_dirs": true,
+        "abi_directory_pattern": true,
+        "supported_abis": false,
+        "zip_entry_lookup": true,
+        "private_lib_directory": false,
+        "safe_extract_path_check": true,
+        "all_required_features": true
+      }
+    },
+    "abi_provider": {
+      "basename": "o4.java",
+      "sha256": "677474247fca7242189520d4008503af1621d06207aa4ae60f301516f4d54bda",
+      "features": {
+        "system_load_library": false,
+        "system_load_absolute_path": false,
+        "application_source_dir": false,
+        "split_source_dirs": false,
+        "abi_directory_pattern": false,
+        "supported_abis": true,
+        "zip_entry_lookup": false,
+        "private_lib_directory": false,
+        "safe_extract_path_check": false,
+        "all_required_features": true
+      }
+    },
+    "core": {
+      "basename": "g.java",
+      "sha256": "0d7aca0a0646097813d804afffe7ca4df1feb30b71e8774063e817df2b40a4e1",
+      "features": {
+        "system_load_library": false,
+        "system_load_absolute_path": false,
+        "application_source_dir": false,
+        "split_source_dirs": false,
+        "abi_directory_pattern": false,
+        "supported_abis": false,
+        "zip_entry_lookup": false,
+        "private_lib_directory": false,
+        "safe_extract_path_check": false,
+        "all_required_features": true
+      },
+      "handoff": {
+        "application_context_handoff": true,
+        "native_library_name_selected": true
+      }
+    },
+    "native_loader_entry": {
+      "basename": "n3.java",
+      "sha256": "92803002b26b0e07d59bb0c7ca7532bbdb84e48de5be0904783b54d64b7a8921",
+      "features": {
+        "system_load_library": false,
+        "system_load_absolute_path": false,
+        "application_source_dir": false,
+        "split_source_dirs": false,
+        "abi_directory_pattern": false,
+        "supported_abis": false,
+        "zip_entry_lookup": false,
+        "private_lib_directory": false,
+        "safe_extract_path_check": false,
+        "all_required_features": true
+      },
+      "handoff": {
+        "p3_loader_constructed": true,
+        "delegates_to_p3": true
+      }
+    },
+    "native_entry": {
+      "basename": "j2.java",
+      "sha256": "a1960a55cce50d935b7ebba1e7c2e33b861ff7d3bc8cb36c95d5ec7b20c2a661",
+      "features": {
+        "system_load_library": false,
+        "system_load_absolute_path": false,
+        "application_source_dir": false,
+        "split_source_dirs": false,
+        "abi_directory_pattern": false,
+        "supported_abis": false,
+        "zip_entry_lookup": false,
+        "private_lib_directory": false,
+        "safe_extract_path_check": false,
+        "all_required_features": true
+      },
+      "handoff": {
+        "core_initializes_loader": true,
+        "native_entry_publishes_after_load": true
+      }
+    }
+  },
+  "provenance_conclusion": {
+    "apk_entry_found": true,
+    "matching_apk_entry_found": true,
+    "source_sha256_matches_expected": true,
+    "real_library_source_closed": true,
+    "java_to_native_loader_handoff_closed": true,
+    "external_custom_mapping_source_closed": false,
+    "runtime_table_owner_recovered": false,
+    "synthetic_loader_executed": false,
+    "synthetic_dispatch_table_used": false,
+    "whole_request_native_success": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "The supplied libmetasec_ml.so is byte-identical to the arm64-v8a entry in the base APK. The Java sources close the init-to-loader handoff through g.c, n3.a and p3.a, including the normal loadLibrary path and the APK/split-ABI extraction fallback. This still does not prove that the native +0x184ad4 custom mapper executed or identify the descriptor callback/runtime-table owner."
+}

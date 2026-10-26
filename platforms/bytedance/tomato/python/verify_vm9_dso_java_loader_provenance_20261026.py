@@ -2,8 +2,10 @@
 
 This is a read-only provenance check.  It hashes the supplied APK and DSO,
 finds the ABI-qualified ``libmetasec_ml.so`` entry, and checks the decompiled
-loader sources for the two load paths used by the app:
+loader sources for the complete Java handoff and its two load paths:
 
+* ``MSManagerUtils.init`` reaches ``g.c`` and ``n3.a``;
+* ``n3.a`` constructs ``p3`` and enters its loader;
 * ``System.loadLibrary(name)`` first;
 * extraction from ``ApplicationInfo.sourceDir`` and split APKs, followed by
   ``System.load(private_lib_path)`` after an ABI-qualified ZIP lookup.
@@ -56,12 +58,23 @@ def source_features(path: Path, required: tuple[str, ...] = ()) -> dict[str, boo
     return checks
 
 
-def verify(apk: Path, dso: Path, p3: Path, loader: Path, abi_source: Path | None) -> dict:
+def verify(
+    apk: Path,
+    dso: Path,
+    p3: Path,
+    loader: Path,
+    abi_source: Path | None,
+    core: Path | None = None,
+    native_loader: Path | None = None,
+    entry: Path | None = None,
+) -> dict:
     if not apk.is_file():
         raise FileNotFoundError(apk)
     if not dso.is_file():
         raise FileNotFoundError(dso)
-    for source in (p3, loader):
+    for source in (p3, loader, core, native_loader, entry):
+        if source is None:
+            continue
         if not source.is_file():
             raise FileNotFoundError(source)
 
@@ -93,9 +106,35 @@ def verify(apk: Path, dso: Path, p3: Path, loader: Path, abi_source: Path | None
         "application_source_dir", "split_source_dirs", "abi_directory_pattern", "zip_entry_lookup",
     ))
     abi_features = source_features(abi_source, ("supported_abis",)) if abi_source else {}
+    core_features = source_features(core) if core else {}
+    native_loader_features = source_features(native_loader) if native_loader else {}
+    entry_features = source_features(entry) if entry else {}
+    core_handoff = {
+        "application_context_handoff": bool(core_features)
+        and "n3.a(applicationContext, str)" in core.read_text(encoding="utf-8"),
+        "native_library_name_selected": bool(core_features)
+        and 'c(context, "metasec_ml")' in core.read_text(encoding="utf-8"),
+    }
+    native_loader_handoff = {
+        "p3_loader_constructed": bool(native_loader_features)
+        and "new p3().a(context, str)" in native_loader.read_text(encoding="utf-8"),
+        "delegates_to_p3": bool(native_loader_features)
+        and "new p3()" in native_loader.read_text(encoding="utf-8"),
+    }
+    entry_handoff = {
+        "core_initializes_loader": bool(entry_features)
+        and "g.c(context, LIBNAME)" in entry.read_text(encoding="utf-8"),
+        "native_entry_publishes_after_load": bool(entry_features)
+        and "y2.a(83886081" in entry.read_text(encoding="utf-8"),
+    }
     matching_entries = [row for row in entries if row["matches_supplied_dso"]]
+    java_handoff_closed = (
+        all(core_handoff.values())
+        and all(native_loader_handoff.values())
+        and all(entry_handoff.values())
+    )
     return {
-        "schema": "vm9-dso-java-loader-provenance-20261026-v1",
+        "schema": "vm9-dso-java-loader-provenance-20261027-v2",
         "evidence_label": "Real APK native-library provenance and Java loader boundary",
         "apk": {
             "basename": apk.name,
@@ -115,6 +154,17 @@ def verify(apk: Path, dso: Path, p3: Path, loader: Path, abi_source: Path | None
             "apk_scanner": {"basename": loader.name, "sha256": sha256_file(loader), "features": loader_features},
             "abi_provider": ({"basename": abi_source.name, "sha256": sha256_file(abi_source), "features": abi_features}
                              if abi_source else None),
+            "core": ({"basename": core.name, "sha256": sha256_file(core),
+                       "features": core_features, "handoff": core_handoff}
+                      if core else None),
+            "native_loader_entry": ({"basename": native_loader.name,
+                                      "sha256": sha256_file(native_loader),
+                                      "features": native_loader_features,
+                                      "handoff": native_loader_handoff}
+                                     if native_loader else None),
+            "native_entry": ({"basename": entry.name, "sha256": sha256_file(entry),
+                               "features": entry_features, "handoff": entry_handoff}
+                              if entry else None),
         },
         "provenance_conclusion": {
             "apk_entry_found": bool(entries),
@@ -129,6 +179,7 @@ def verify(apk: Path, dso: Path, p3: Path, loader: Path, abi_source: Path | None
                     "application_source_dir", "split_source_dirs", "zip_entry_lookup"
                 )
             ),
+            "java_to_native_loader_handoff_closed": java_handoff_closed,
             "external_custom_mapping_source_closed": False,
             "runtime_table_owner_recovered": False,
             "synthetic_loader_executed": False,
@@ -139,10 +190,11 @@ def verify(apk: Path, dso: Path, p3: Path, loader: Path, abi_source: Path | None
         },
         "interpretation": (
             "The supplied libmetasec_ml.so is byte-identical to the arm64-v8a "
-            "entry in the base APK. The Java code proves the normal loadLibrary "
-            "path and the APK/split-ABI extraction fallback, but it does not prove "
-            "that the external runtime dispatch table is another APK library or "
-            "identify its runtime owner."
+            "entry in the base APK. The Java sources close the init-to-loader handoff "
+            "through g.c, n3.a and p3.a, including the normal loadLibrary path and "
+            "the APK/split-ABI extraction fallback. This still does not prove that "
+            "the native +0x184ad4 custom mapper executed or identify the descriptor "
+            "callback/runtime-table owner."
         ),
     }
 
@@ -154,15 +206,28 @@ def main() -> None:
     parser.add_argument("--p3-source", type=Path, required=True)
     parser.add_argument("--loader-source", type=Path, required=True)
     parser.add_argument("--abi-source", type=Path)
+    parser.add_argument("--core-source", type=Path)
+    parser.add_argument("--native-loader-source", type=Path)
+    parser.add_argument("--entry-source", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    result = verify(args.apk, args.dso, args.p3_source, args.loader_source, args.abi_source)
+    result = verify(
+        args.apk,
+        args.dso,
+        args.p3_source,
+        args.loader_source,
+        args.abi_source,
+        args.core_source,
+        args.native_loader_source,
+        args.entry_source,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({
         "library_entries": len(result["apk"]["library_entries"]),
         "matching_entries": sum(row["matches_supplied_dso"] for row in result["apk"]["library_entries"]),
         "real_library_source_closed": result["provenance_conclusion"]["real_library_source_closed"],
+        "java_to_native_loader_handoff_closed": result["provenance_conclusion"]["java_to_native_loader_handoff_closed"],
         "runtime_table_owner_recovered": result["provenance_conclusion"]["runtime_table_owner_recovered"],
         "output": str(args.output),
     }, ensure_ascii=False))

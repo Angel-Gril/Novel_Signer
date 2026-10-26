@@ -6380,3 +6380,20 @@ signer 或线上 header 验收。
 
 证据：[actual child descriptor probe](evidence/vm9_native_outer_facade_actual_child_20261027.json)，
 复现脚本：[verify_vm9_native_outer_facade_actual_child_20261027.py](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
+
+## 2026-10-27：APK Java → native loader handoff provenance
+
+补齐 APK 侧 `MSManagerUtils.init → g.c → n3.a → p3.a` 的真实调用链检查。
+`g.c` 将应用上下文和 `metasec_ml` 交给 `n3.a`，`n3.a` 构造 `p3`，随后
+`p3` 先走 `System.loadLibrary(name)`；失败时由 `h` 扫描
+`ApplicationInfo.sourceDir` 与 `splitSourceDirs` 的 ABI-qualified ZIP entry，
+解压到私有 `lib` 目录并调用 `System.load(absolutePath)`。固定 APK 的
+`lib/arm64-v8a/libmetasec_ml.so` 与 pinned DSO 仍逐字节一致。
+
+这闭合的是 Java 侧真实库来源和进入 native loader 的 handoff；它没有证明
+native `+0x184ad4` 自定义 mapper 在本次启动执行，也没有填充
+`0x13700000` descriptor、恢复 callback target 或定位 runtime-table owner。
+因此 `+0x2859dc` 的零 target 停止和完整 signer 状态不变。
+
+证据：[APK Java loader handoff](evidence/vm9_dso_java_loader_provenance_fresh_20261027.json)，
+复现脚本：[verify_vm9_dso_java_loader_provenance_20261026.py](python/verify_vm9_dso_java_loader_provenance_20261026.py)。

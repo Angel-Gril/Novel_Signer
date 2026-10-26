@@ -9312,6 +9312,34 @@
     "dispatch_pointer_hypothesis_superseded_by": "vm9_dispatch_table_encoding_fresh_20261026",
     "current_dispatch_pointer_qualification": "The out-of-image addends are encoded ELF pointers. Native correction resolves five file-backed .data.rel.ro tables; the prior missing-external-owner/writer inference is superseded. Historical observations and other limitations remain unchanged."
   },
+  "vm9_dso_java_loader_provenance_fresh_20261027": {
+    "path": "evidence/vm9_dso_java_loader_provenance_fresh_20261027.json",
+    "verifier": "python/verify_vm9_dso_java_loader_provenance_20261026.py",
+    "schema": "vm9-dso-java-loader-provenance-20261027-v2",
+    "evidence_label": "APK DSO provenance and Java-to-native loader handoff",
+    "apk_basename": "fq_7xz.apk",
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "apk_library_entry": "lib/arm64-v8a/libmetasec_ml.so",
+    "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "apk_entry_matches_supplied_dso": true,
+    "java_handoff_chain": [
+      "MSManagerUtils.init -> g.c",
+      "g.c -> n3.a(applicationContext, str)",
+      "n3.a -> new p3().a(context, str)",
+      "p3.a -> System.loadLibrary(name)",
+      "p3 fallback -> APK/split ABI ZIP lookup -> System.load(private lib path)"
+    ],
+    "java_to_native_loader_handoff_closed": true,
+    "real_library_source_closed": true,
+    "external_custom_mapping_source_closed": false,
+    "runtime_table_owner_recovered": false,
+    "synthetic_loader_executed": false,
+    "synthetic_dispatch_table_used": false,
+    "whole_request_native_success": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "The pinned DSO is byte-identical to the arm64-v8a base-APK entry, and the decompiled init chain closes g.c -> n3.a -> p3.a through both Java load paths. This proves Java-side library provenance only; it does not prove native +0x184ad4 execution, descriptor target population, or runtime-table ownership."
+  },
   "vm9_loader_vtable_constructor_fresh_20261026": {
     "path": "evidence/vm9_loader_vtable_constructor_fresh_20261026.json",
     "verifier": "python/verify_vm9_loader_vtable_constructor_20261026.py",

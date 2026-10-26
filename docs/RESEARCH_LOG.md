@@ -587,3 +587,17 @@ the loaded span `[x22, x8)` and `x20=x8-x22`, anonymous syscall 222, old mapping
 `dlclose`. The scan still finds no direct writer for the five runtime relocation slots;
 this closes the candidate's static contract only and does not prove execution, table
 ownership, handler contents, or signer output.
+
+## 2026-10-27：APK Java-to-native loader handoff provenance
+
+The APK-side init chain is now checked through `MSManagerUtils.init -> g.c -> n3.a -> p3.a`.
+`p3` first uses `System.loadLibrary(name)` and, on failure, the `h` extractor scans
+`ApplicationInfo.sourceDir` and `splitSourceDirs` for the ABI-qualified entry before
+calling `System.load` on the private `lib` path. The pinned DSO remains byte-identical
+to `lib/arm64-v8a/libmetasec_ml.so` in the fixed APK.
+
+This closes Java library provenance and the handoff into the native loader. It does not
+show native `+0x184ad4` execution, populate the `0x13700000` descriptor mapping, or
+identify the callback/runtime-table owner. The fresh child continuation therefore still
+stops at `+0x2859dc` with `x3=0`; whole-request differential, standalone signer, and
+online acceptance remain open. See [APK Java loader handoff](../platforms/bytedance/tomato/evidence/vm9_dso_java_loader_provenance_fresh_20261027.json).
