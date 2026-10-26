@@ -11,11 +11,13 @@ Same-CPU bootstrap continuation (2026-10-26): after matching the accepted
 one-node tree shape and reusing the bootstrap-owned mapped stack, a fresh native
 bootstrap CPU executes facade `+0x17b8f8`, injected child `+0x27dd04`, owning VM
 `+0x2830c4` and VM `+0x168324` on both bases, then returns to oracle STOP after
-7,751 native instructions. The native callback reaches the real `memcpy` PLT
-five times; no runtime-table page is read or written and no unmapped access is
-observed. The receiver/tree, child target, JNI providers and URL/header remain
-explicit probe inputs, so this continuation does not establish the normal target,
-whole-request differential or signer output. See [evidence](evidence/vm9_native_bootstrap_java_facade_child_20261026.json) and [verifier](python/verify_vm9_native_bootstrap_java_facade_child_20261026.py).
+7,751 native instructions. The observed child ABI is `x0=receiver`, converted
+stack references in `x1/x2`, `x3=0x138`, and an output reference in `x8`; facade
+epilogue `+0x17baa0/+0x17bac0` both execute. The native callback reaches the real
+`memcpy` PLT five times; no runtime-table page is read or written and no unmapped
+access is observed. The receiver/tree, child target, JNI providers and URL/header
+remain explicit probe inputs, so this continuation does not establish the normal
+target, whole-request differential or signer output. See [evidence](evidence/vm9_native_bootstrap_java_facade_child_20261026.json) and [verifier](python/verify_vm9_native_bootstrap_java_facade_child_20261026.py).
 
 Artificial child continuation (2026-10-26): with bounded synthetic receiver/mutex/tree fields, both bases execute injected `+0x27dd04` for 11,617 native instructions and return `x0=0` at `+0x17bac0`. The target and providers are verifier fixture state; zero is not signer output or normal facade handoff evidence. See [continuation evidence](evidence/vm9_java_facade_injected_child_continuation_20261026.json) and [verifier](python/verify_vm9_java_facade_injected_child_continuation_20261026.py).
 

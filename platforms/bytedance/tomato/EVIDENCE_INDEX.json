@@ -9665,6 +9665,7 @@
   "vm9_native_bootstrap_java_facade_child_20261026": {
     "path": "evidence/vm9_native_bootstrap_java_facade_child_20261026.json",
     "verifier": "python/verify_vm9_native_bootstrap_java_facade_child_20261026.py",
+    "schema": "vm9-native-bootstrap-java-facade-child-probe-20261026-v2",
     "evidence_label": "Same-CPU native bootstrap through Java facade, child and owning VM boundary",
     "image_bases": [
       "0x122c0000",
@@ -9687,11 +9688,16 @@
     "oracle_stop_return_each": true,
     "normal_facade_entry_used": true,
     "normal_facade_child_target_injected": true,
+    "bootstrap_owned_stack_reused": true,
+    "accepted_one_node_tree_shape_reused": true,
+    "oracle_stop_return_each": true,
     "synthetic_receiver_tree_used": true,
     "native_bootstrap_same_cpu": true,
     "whole_request_native_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "A fresh native bootstrap CPU continued through facade +0x17b8f8, the deliberately installed receiver target +0x27dd04, owning VM +0x2830c4 and native VM +0x168324 on both bases. After matching the accepted one-node tree shape and reusing the bootstrap-owned mapped stack, each case returned to oracle STOP after 7,751 native instructions and reached the real memcpy PLT five times; no runtime-table page or unmapped address was touched. The receiver/tree, child target and providers remain explicit probe inputs, so oracle STOP/x0=0 is continuation evidence rather than normal-target, whole-request or signer evidence."
+    "child_entry_abi_each": "x0=receiver; x1/x2=converted stack references; x3=0x138; x8=stack output reference",
+    "facade_epilogue_markers_each": ["0x17baa0", "0x17bac0"],
+    "comparison_note": "A fresh native bootstrap CPU continued through facade +0x17b8f8, the deliberately installed receiver target +0x27dd04, owning VM +0x2830c4 and native VM +0x168324 on both bases. After matching the accepted one-node tree shape and reusing the bootstrap-owned mapped stack, each case returned to oracle STOP after 7,751 native instructions and reached the real memcpy PLT five times; both facade epilogue markers were observed, and no runtime-table page or unmapped address was touched. The receiver/tree, child target and providers remain explicit probe inputs, so oracle STOP/x0=0 is continuation evidence rather than normal-target, whole-request or signer evidence."
   }
 }

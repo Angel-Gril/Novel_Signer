@@ -18,10 +18,12 @@ differential、standalone signer 与线上接受均未验证。
 在 fresh native bootstrap 完成后，复用同一 Unicorn CPU 进入 facade `+0x17b8f8`，
 再到人工安装的 child target `+0x27dd04`、owning VM `+0x2830c4` 和 VM
 `+0x168324`。修正为已接受的一节点树布局并复用 bootstrap-owned mapped stack 后，
-两个基址各执行 7,751 条 native 指令并返回 oracle STOP；native callback object
-到达真实 `+0x347f60` memcpy PLT 五次，runtime-table canary 页读写均为零，未观察
-unmapped。child target、receiver/tree、JNI provider 和 URL/header 仍是显式 probe 输入，
-oracle STOP 与 x0=0 只证明 continuation 返回，不能计为 normal target、whole-request
+两个基址各执行 7,751 条 native 指令并返回 oracle STOP；child ABI 为
+`x0=receiver`、`x1/x2=转换后的栈引用`、`x3=0x138`、`x8=栈上的 output reference`，
+facade epilogue `+0x17baa0/+0x17bac0` 均执行。native callback object 到达真实
+`+0x347f60` memcpy PLT 五次，runtime-table canary 页读写均为零，未观察 unmapped。
+child target、receiver/tree、JNI provider 和 URL/header 仍是显式 probe 输入，oracle
+STOP 与 x0=0 只证明 continuation 返回，不能计为 normal target、whole-request
 differential 或 signer 输出。
 
 证据：[same-CPU facade child](evidence/vm9_native_bootstrap_java_facade_child_20261026.json)；

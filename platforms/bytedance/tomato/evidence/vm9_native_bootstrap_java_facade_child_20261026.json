@@ -1,5 +1,5 @@
 {
-  "schema": "vm9-native-bootstrap-java-facade-child-probe-20261026-v1",
+  "schema": "vm9-native-bootstrap-java-facade-child-probe-20261026-v2",
   "evidence_date": "2026-10-26",
   "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
@@ -10,6 +10,8 @@
       "error": null,
       "stop_pc": "0x7000f000",
       "stop_pc_offset": "0x5dd4f000",
+      "returned_x0": "0x0",
+      "returned_x8": "0xa5a5a5a5a5a5a5a5",
       "request_reached_oracle_stop": true,
       "bounded_instruction_limit": false,
       "native_instructions_observed": 7751,
@@ -109,8 +111,32 @@
           "x2": "0x781fef68",
           "x3": "0x138",
           "x8": "0x781fef88"
+        },
+        {
+          "pc": "0x17baa0",
+          "x0": "0x0",
+          "x1": "0x780f0088",
+          "x2": "0x4001",
+          "x3": "0x7000c000",
+          "x8": "0xa5a5a5a5a5a5a5a5"
+        },
+        {
+          "pc": "0x17bac0",
+          "x0": "0x0",
+          "x1": "0x780f0088",
+          "x2": "0x4001",
+          "x3": "0x7000c000",
+          "x8": "0xa5a5a5a5a5a5a5a5"
         }
       ],
+      "child_entry": {
+        "x0": "0x70003000",
+        "x1": "0x781fef78",
+        "x2": "0x781fef68",
+        "x3": "0x138",
+        "x8": "0x781fef88",
+        "sp": "0x781fef50"
+      },
       "jni_import_count": 0,
       "runtime_table_read_count": 0,
       "runtime_table_write_count": 0,
@@ -141,6 +167,8 @@
       "error": null,
       "stop_pc": "0x7000f000",
       "stop_pc_offset": "-0x76ec1f6000",
+      "returned_x0": "0x0",
+      "returned_x8": "0xffffffffffffffff",
       "request_reached_oracle_stop": true,
       "bounded_instruction_limit": false,
       "native_instructions_observed": 7751,
@@ -240,8 +268,32 @@
           "x2": "0x781fe2e8",
           "x3": "0x138",
           "x8": "0x781fe308"
+        },
+        {
+          "pc": "0x17baa0",
+          "x0": "0x0",
+          "x1": "0x780f0088",
+          "x2": "0x4001",
+          "x3": "0x7000c000",
+          "x8": "0xffffffffffffffff"
+        },
+        {
+          "pc": "0x17bac0",
+          "x0": "0x0",
+          "x1": "0x780f0088",
+          "x2": "0x4001",
+          "x3": "0x7000c000",
+          "x8": "0xffffffffffffffff"
         }
       ],
+      "child_entry": {
+        "x0": "0x70003000",
+        "x1": "0x781fe2f8",
+        "x2": "0x781fe2e8",
+        "x3": "0x138",
+        "x8": "0x781fe308",
+        "sp": "0x781fe2d0"
+      },
       "jni_import_count": 0,
       "runtime_table_read_count": 0,
       "runtime_table_write_count": 0,
@@ -275,5 +327,7 @@
   "whole_request_native_differential_verified": false,
   "fresh_standalone_signer_verified": false,
   "online_header_acceptance_verified": false,
-  "interpretation": "Same-CPU native bootstrap is followed by facade +0x17b8f8 with a deliberately injected child vtable target +0x27dd04. After matching the accepted one-node tree shape and reusing the bootstrap-owned mapped stack, both bases execute the child/owning VM path and return to the oracle STOP after 7,751 native instructions, reaching the real memcpy PLT five times with no unmapped access. The child target, receiver/tree, JNI providers and URL/header inputs remain explicit probe state; oracle STOP and x0=0 are continuation evidence only, not signer output."
+  "bootstrap_owned_stack_reused": true,
+  "accepted_one_node_tree_shape_reused": true,
+  "interpretation": "Same-CPU native bootstrap is followed by facade +0x17b8f8 with a deliberately injected child vtable target +0x27dd04. The accepted one-node receiver/tree shape and bootstrap-owned mapped stack let both bases execute the child/owning VM path to oracle STOP; child-entry registers and facade epilogue markers are recorded. JNI conversion, child target, receiver/tree and URL/header inputs remain explicit probe state, so STOP/x0=0 is continuation evidence only and not signer output."
 }

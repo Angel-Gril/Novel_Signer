@@ -110,16 +110,27 @@ def run(library, libc, image):
 
     markers = []
     imports = []
+    child_entry = None
     reads = writes = 0
     unmapped = []
     instructions = 0
     def code(c, address, _size, _user):
-        nonlocal instructions
+        nonlocal instructions, child_entry
         instructions += 1
         offset = address - image
+        if offset == 0x27DD04 and child_entry is None:
+            child_entry = {
+                'x0': hex(c.reg_read(arm.UC_ARM64_REG_X0)),
+                'x1': hex(c.reg_read(arm.UC_ARM64_REG_X1)),
+                'x2': hex(c.reg_read(arm.UC_ARM64_REG_X2)),
+                'x3': hex(c.reg_read(arm.UC_ARM64_REG_X3)),
+                'x8': hex(c.reg_read(arm.UC_ARM64_REG_X8)),
+                'sp': hex(c.reg_read(arm.UC_ARM64_REG_SP)),
+            }
         if offset in (0x17B8F8, 0x26FC94, 0x26FE2C, 0x25C324,
                       0x27DD04, 0x2830C4, 0x168324,
-                      0x170308, 0x2858A8, 0x2858B4, 0x347F60):
+                      0x170308, 0x2858A8, 0x2858B4, 0x347F60,
+                      0x17BAA0, 0x17BAC0):
             markers.append({'pc': hex(offset), 'x0': hex(c.reg_read(arm.UC_ARM64_REG_X0)),
                             'x1': hex(c.reg_read(arm.UC_ARM64_REG_X1)),
                             'x2': hex(c.reg_read(arm.UC_ARM64_REG_X2)),
@@ -160,10 +171,13 @@ def run(library, libc, image):
     return {
         'image_base': hex(image), 'outcome': outcome, 'error': error,
         'stop_pc': hex(pc), 'stop_pc_offset': hex(pc - image),
+        'returned_x0': hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+        'returned_x8': hex(cpu.reg_read(arm.UC_ARM64_REG_X8)),
         'request_reached_oracle_stop': pc == oracle.STOP,
         'bounded_instruction_limit': pc != oracle.STOP and error is None,
         'native_instructions_observed': instructions,
-        'markers': markers, 'jni_import_count': len(imports),
+        'markers': markers, 'child_entry': child_entry,
+        'jni_import_count': len(imports),
         'runtime_table_read_count': reads, 'runtime_table_write_count': writes,
         'unmapped_events': unmapped,
         'synthetic_dispatch_table_used': False,
@@ -192,7 +206,7 @@ def main():
     ap.add_argument('--libc', type=Path, required=True); ap.add_argument('--output', type=Path, required=True)
     a = ap.parse_args(); assert hashlib.sha256(a.library.read_bytes()).hexdigest() == oracle.LIBRARY_SHA256
     rows = [run(a.library, a.libc, image) for image in BASES]
-    out = {'schema': 'vm9-native-bootstrap-java-facade-child-probe-20261026-v1',
+    out = {'schema': 'vm9-native-bootstrap-java-facade-child-probe-20261026-v2',
            'evidence_date': '2026-10-26',
            'sample_sha256': oracle.LIBRARY_SHA256,
            'matching_libc_sha256': hashlib.sha256(a.libc.read_bytes()).hexdigest(),
@@ -204,7 +218,9 @@ def main():
            'whole_request_native_differential_verified': False,
            'fresh_standalone_signer_verified': False,
            'online_header_acceptance_verified': False,
-           'interpretation': 'Same-CPU native bootstrap is followed by facade +0x17b8f8 with a deliberately injected child vtable target +0x27dd04. JNI conversion and bootstrap state are native on the same CPU; the child target field and receiver tree are still explicit probe inputs. Any unresolved stop is recorded without synthesizing a dispatch table or signer output.'}
+           'bootstrap_owned_stack_reused': True,
+           'accepted_one_node_tree_shape_reused': True,
+           'interpretation': 'Same-CPU native bootstrap is followed by facade +0x17b8f8 with a deliberately injected child vtable target +0x27dd04. The accepted one-node receiver/tree shape and bootstrap-owned mapped stack let both bases execute the child/owning VM path to oracle STOP; child-entry registers and facade epilogue markers are recorded. JNI conversion, child target, receiver/tree and URL/header inputs remain explicit probe state, so STOP/x0=0 is continuation evidence only and not signer output.'}
     a.output.write_text(json.dumps(out, indent=2) + '\n', encoding='utf-8')
     print('facade bootstrap probe', len(rows), 'cases')
 if __name__ == '__main__': main()

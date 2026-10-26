@@ -1,5 +1,12 @@
 # Checkpoint log
 
+2026-10-26：同一 probe 进一步记录 child ABI 与 facade cleanup。两基址的 child
+入口均为 `x0=receiver`、`x1/x2=转换后的栈引用`、`x3=0x138`、`x8=栈上的 output
+reference`；owning VM 返回后执行 `+0x17baa0/+0x17bac0` facade epilogue，最终到
+oracle STOP，仍为 7,751 条 native 指令、5 次真实 memcpy、无 runtime-table 读写和
+无 unmapped。target/tree/provider/input 仍是显式 fixture，不能把该返回当作 signer
+输出或 normal target 证据。见 [same-CPU facade child evidence](../platforms/bytedance/tomato/evidence/vm9_native_bootstrap_java_facade_child_20261026.json)。
+
 2026-10-26：记录 normal facade fixture 的 receiver/vtable/target 读取 provenance。
 未改写 synthetic receiver 虚表的 fresh native facade 在两个 image base 都依次读取
 `facade+0x18 → receiver+0 → vtable+0x20`，PC 偏移为 `+0x17b9e4`、`+0x17ba24`、
@@ -557,7 +564,7 @@ second-VM token append tail 与 Base64 tail callbacks 也加入同一 opt-in 边
 second-VM allocated-printf callback 也加入同一 opt-in 边界；provider 失败时 staged
 guest 页面和外部 allocator ledger 一起回滚。
 
-\n
+
 
 ## 2026-10-26：request continuation evidence redaction and callback target correction
 
@@ -580,21 +587,3 @@ the loaded span `[x22, x8)` and `x20=x8-x22`, anonymous syscall 222, old mapping
 `dlclose`. The scan still finds no direct writer for the five runtime relocation slots;
 this closes the candidate's static contract only and does not prove execution, table
 ownership, handler contents, or signer output.
-
-\n
-
-\n
-
-\n
-
-\n
-
-\n
-
-\n
-
-\n
-
-\n
-
-\n
