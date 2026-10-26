@@ -1,0 +1,3403 @@
+{
+  "schema": "vm9-request-output-reference-fresh-20261026-v1",
+  "evidence_date": "2026-10-26",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "static": {
+    "native_instructions": [
+      {
+        "offset": "0x16aa48",
+        "bytes": "00013fd6",
+        "mnemonic": "blr",
+        "operands": "x8"
+      },
+      {
+        "offset": "0x27e804",
+        "bytes": "680200f9",
+        "mnemonic": "str",
+        "operands": "x8, [x19]"
+      },
+      {
+        "offset": "0x27e80c",
+        "bytes": "680600f9",
+        "mnemonic": "str",
+        "operands": "x8, [x19, #8]"
+      }
+    ],
+    "status_bytecode": {
+      "offset": "0xf858c",
+      "word": "0x7f60f97b",
+      "opcode": 59,
+      "source_slot": 0,
+      "destination_slot": 2,
+      "signed_immediate": -5
+    }
+  },
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "continuation": {
+        "image_base": "0x122c0000",
+        "bootstrap_stack": "0x781ff000",
+        "bootstrap_native_completed": true,
+        "bootstrap_JNI_return_asserted": true,
+        "same_cpu_request_continuation": true,
+        "outcome": "returned",
+        "error": null,
+        "stop_pc": "0x7000f000",
+        "stop_pc_offset": "0x5dd4f000",
+        "request_reached_oracle_stop": true,
+        "returned_x0": "0x0",
+        "returned_x8": "0xa5a5a5a5a5a5a5a5",
+        "output_reference_address": "0x70001a00",
+        "output_reference_nonzero": true,
+        "native_instructions_observed": 99927,
+        "vm_handler_event_count": 842,
+        "vm_handler_counts": {
+          "0x171268": 358,
+          "0x16f974": 379,
+          "0x16e254": 9,
+          "0x16e41c": 13,
+          "0x1692fc": 56,
+          "0x17030c": 14,
+          "0x16db74": 13
+        },
+        "native_import_event_count": 194,
+        "import_name_counts": {
+          "__strlen_chk": 75,
+          "clock_gettime": 2,
+          "free": 17,
+          "malloc": 33,
+          "memchr": 26,
+          "memcpy": 30,
+          "pthread_cond_broadcast": 1,
+          "strlen": 9,
+          "vsnprintf": 1
+        },
+        "memcpy_call_count": 30,
+        "first_memcpy_args": {
+          "destination": "0x7000e9b0",
+          "source": "0x7000eb78",
+          "size": 24
+        },
+        "javavm_getenv_call_count": 0,
+        "clock_gettime_calls": 0,
+        "flags_before_nonzero": true,
+        "flags_after_nonzero": true,
+        "flags_unchanged": true,
+        "flag_read_count": 0,
+        "flag_write_count": 0,
+        "runtime_table_read_count": 0,
+        "runtime_table_write_count": 0,
+        "callback_event_count": 5,
+        "callback_target_offsets": [
+          "0x347f60"
+        ],
+        "unmapped_event_count": 0,
+        "url_reference_words": "char* plus refcount pointer",
+        "url_byte_length": 107,
+        "synthetic_dispatch_table_used": false,
+        "synthetic_callback_vtable_used": false,
+        "runtime_table_content_reconstructed": false,
+        "whole_request_native_success": false,
+        "fresh_standalone_signer_verified": false,
+        "online_header_acceptance_verified": false,
+        "real_memcpy_import_service_used": true,
+        "real_javavm_getenv_provider_used": false,
+        "bootstrap_native_import_hooks_preserved": true
+      },
+      "request_entry": {
+        "x0": "0x7000ee38",
+        "x1": "0x7000ee28",
+        "x2": "0x138",
+        "x3": "0x101",
+        "x8": "0x7000ee48",
+        "stack_address": "0x7000eda0"
+      },
+      "output_tree": {
+        "reference_address": "0x70001a00",
+        "container_address": "0x795a1de0",
+        "counter_address": "0x795a1ea0",
+        "counter_value": 1,
+        "container_vtable_offset": "0x35b7c0",
+        "controller_address": "0x795a1e10",
+        "sentinel_address": "0x795a1e40",
+        "node_count": 1,
+        "nodes": [
+          {
+            "node_address": "0x795a1f70",
+            "pair_address": "0x795a1f60",
+            "key": {
+              "object_address": "0x795a1f30",
+              "vtable_offset": "0x34f5f8",
+              "capacity": 10,
+              "length": 9,
+              "payload_address": "0x795a1f50",
+              "payload_sha256": "9e2c282a5acb19fac981b33a24cd31062a88d979a46591504412660d79299084"
+            },
+            "value": {
+              "object_address": "0x795a1eb0",
+              "vtable_offset": "0x34f5f8",
+              "capacity": 8,
+              "length": 3,
+              "payload_address": "0x795a1ed0",
+              "payload_sha256": "22b61695c146a02ab879cbaa36e90fc7ee8b9d696d5c0405029d1eecfaceb5ee"
+            }
+          }
+        ],
+        "parent_links_count_order_and_extrema_valid": true
+      },
+      "output_reference_writes": [
+        {
+          "pc_offset": "0x163e04",
+          "address": "0x70001a00",
+          "size": 8,
+          "value": "0x0"
+        },
+        {
+          "pc_offset": "0x163e04",
+          "address": "0x70001a08",
+          "size": 8,
+          "value": "0x0"
+        },
+        {
+          "pc_offset": "0x163e14",
+          "address": "0x70001a00",
+          "size": 8,
+          "value": "0x0"
+        },
+        {
+          "pc_offset": "0x163e20",
+          "address": "0x70001a08",
+          "size": 8,
+          "value": "0x795a1dd0"
+        },
+        {
+          "pc_offset": "0x166ef8",
+          "address": "0x70001a08",
+          "size": 8,
+          "value": "0x0"
+        },
+        {
+          "pc_offset": "0x27e804",
+          "address": "0x70001a00",
+          "size": 8,
+          "value": "0x795a1de0"
+        },
+        {
+          "pc_offset": "0x27e80c",
+          "address": "0x70001a08",
+          "size": 8,
+          "value": "0x795a1ea0"
+        }
+      ],
+      "callback_ledger": [
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x12427e54",
+            "0x123b2600",
+            "0x126a0d50",
+            "0x123b28e0"
+          ],
+          "bytecode_pc_offset": "0xf7e84"
+        },
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x12427e54",
+            "0x123b2620",
+            "0x126a0d70",
+            "0x123b28b0"
+          ],
+          "bytecode_pc_offset": "0xf7f08"
+        },
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x12427e54",
+            "0x123b2764",
+            "0x126a0f68",
+            "0x123b2780"
+          ],
+          "bytecode_pc_offset": "0xf7fa0"
+        },
+        {
+          "wrapper_offset": "0x28589c",
+          "target_offset": "0x291440",
+          "argument_address": "0x7000e968",
+          "words": [
+            "0x12551440",
+            "0x7000e9a8",
+            "0x12427e54",
+            "0x123b2764"
+          ],
+          "bytecode_pc_offset": "0xf7ffc"
+        },
+        {
+          "wrapper_offset": "0x2858a8",
+          "target_offset": "0x347f60",
+          "argument_address": "0x7000e948",
+          "words": [
+            "0x12607f60",
+            "0x7000e9b0",
+            "0x7000eb78",
+            "0x18"
+          ],
+          "bytecode_pc_offset": "0xf8044"
+        },
+        {
+          "wrapper_offset": "0x2858bc",
+          "target_offset": "0x25c324",
+          "argument_address": "0x7000e938",
+          "words": [
+            "0x1251c324",
+            "0x7000e9d0",
+            "0x12607f60",
+            "0x7000e9b0"
+          ],
+          "bytecode_pc_offset": "0xf8078"
+        },
+        {
+          "wrapper_offset": "0x2858d0",
+          "target_offset": "0x26c858",
+          "argument_address": "0x7000e920",
+          "words": [
+            "0x1252c858",
+            "0x7000eb78",
+            "0x70006000",
+            "0x1251c324"
+          ],
+          "bytecode_pc_offset": "0xf80a8"
+        },
+        {
+          "wrapper_offset": "0x2858e0",
+          "target_offset": "0x26c9d0",
+          "argument_address": "0x7000e910",
+          "words": [
+            "0x1252c9d0",
+            "0x7000eb78",
+            "0x1252c858",
+            "0x7000eb78"
+          ],
+          "bytecode_pc_offset": "0xf80f4"
+        },
+        {
+          "wrapper_offset": "0x2858d0",
+          "target_offset": "0x26c858",
+          "argument_address": "0x7000e920",
+          "words": [
+            "0x1252c858",
+            "0x7000eb78",
+            "0x70006000",
+            "0x1251c324"
+          ],
+          "bytecode_pc_offset": "0xf8178"
+        },
+        {
+          "wrapper_offset": "0x2858e0",
+          "target_offset": "0x26c9d0",
+          "argument_address": "0x7000e910",
+          "words": [
+            "0x1252c9d0",
+            "0x7000eb78",
+            "0x1252c858",
+            "0x7000eb78"
+          ],
+          "bytecode_pc_offset": "0xf82cc"
+        },
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x12427e54",
+            "0x123b2680",
+            "0x126a0e10",
+            "0x123b2864"
+          ],
+          "bytecode_pc_offset": "0xf8338"
+        },
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x12427e54",
+            "0x123b2688",
+            "0x126a0e1c",
+            "0x123b2858"
+          ],
+          "bytecode_pc_offset": "0xf8390"
+        },
+        {
+          "wrapper_offset": "0x285928",
+          "target_offset": "0x32a1f0",
+          "argument_address": "0x7000e8b8",
+          "words": [
+            "0x125ea1f0",
+            "0x18",
+            "0xa5a5a5a5a5a5a5a5",
+            "0xa5a5a5a5a5a5a5a5"
+          ],
+          "bytecode_pc_offset": "0xf83cc"
+        },
+        {
+          "wrapper_offset": "0x28591c",
+          "target_offset": "0x2481ac",
+          "argument_address": "0x7000e8d0",
+          "words": [
+            "0x125081ac",
+            "0x795a1eb0",
+            "0xa5a5a5a5a5a5a5a5",
+            "0xa5a5a5a5a5a5a5a5"
+          ],
+          "bytecode_pc_offset": "0xf83f4"
+        },
+        {
+          "wrapper_offset": "0x285978",
+          "target_offset": "0x256ed4",
+          "argument_address": "0x7000e868",
+          "words": [
+            "0x12516ed4",
+            "0x7000eb78",
+            "0x795a07c0",
+            "0xa5a5a5a5a5a5a5a5"
+          ],
+          "bytecode_pc_offset": "0xf8580"
+        },
+        {
+          "wrapper_offset": "0x25705c",
+          "target_offset": "0x32a444",
+          "argument_address": "0x7000d310",
+          "words": [
+            "0x125ea444",
+            "0x795a0848",
+            "0x7000ec58",
+            "0x0"
+          ],
+          "bytecode_pc_offset": "0x99094"
+        },
+        {
+          "wrapper_offset": "0x257068",
+          "target_offset": "0x2483e0",
+          "argument_address": "0x7000d2f8",
+          "words": [
+            "0x125083e0",
+            "0x7000eb78",
+            "0x795a08d8",
+            "0x125ea444"
+          ],
+          "bytecode_pc_offset": "0x990c8"
+        },
+        {
+          "wrapper_offset": "0x25705c",
+          "target_offset": "0x32a4fc",
+          "argument_address": "0x7000d310",
+          "words": [
+            "0x125ea4fc",
+            "0x795a0848",
+            "0x7000ec58",
+            "0x0"
+          ],
+          "bytecode_pc_offset": "0x990f8"
+        },
+        {
+          "wrapper_offset": "0x285990",
+          "target_offset": "0x248908",
+          "argument_address": "0x7000e840",
+          "words": [
+            "0x12508908",
+            "0x795a1eb0",
+            "0x126a0e10",
+            "0xa5a5a5a5fffffffb"
+          ],
+          "bytecode_pc_offset": "0xf85b4",
+          "string_argument_address": "0x795a1ee0"
+        },
+        {
+          "wrapper_offset": "0x28591c",
+          "target_offset": "0x2484b8",
+          "argument_address": "0x7000e8d0",
+          "words": [
+            "0x125084b8",
+            "0x7000eb78",
+            "0xa5a5a5a5a5a5a5a5",
+            "0xa5a5a5a5a5a5a5a5"
+          ],
+          "bytecode_pc_offset": "0xf85d0"
+        },
+        {
+          "wrapper_offset": "0x285928",
+          "target_offset": "0x32a1f0",
+          "argument_address": "0x7000e8b8",
+          "words": [
+            "0x125ea1f0",
+            "0x18",
+            "0x795a1eb0",
+            "0x125084b8"
+          ],
+          "bytecode_pc_offset": "0xf85ec"
+        },
+        {
+          "wrapper_offset": "0x2859a8",
+          "target_offset": "0x248344",
+          "argument_address": "0x7000e828",
+          "words": [
+            "0x12508344",
+            "0x795a1f30",
+            "0x126a0e1c",
+            "0x12508908"
+          ],
+          "bytecode_pc_offset": "0xf8614"
+        },
+        {
+          "wrapper_offset": "0x2859b8",
+          "target_offset": "0x25bf3c",
+          "argument_address": "0x7000e808",
+          "words": [
+            "0x1251bf3c",
+            "0x795a1de0",
+            "0x795a1f30",
+            "0x795a1eb0"
+          ],
+          "bytecode_pc_offset": "0xf863c"
+        },
+        {
+          "wrapper_offset": "0x2858d0",
+          "target_offset": "0x26c858",
+          "argument_address": "0x7000e920",
+          "words": [
+            "0x1252c858",
+            "0x7000eb78",
+            "0x795a1de0",
+            "0x1251c324"
+          ],
+          "bytecode_pc_offset": "0xf8674"
+        },
+        {
+          "wrapper_offset": "0x2858e0",
+          "target_offset": "0x26c9d0",
+          "argument_address": "0x7000e910",
+          "words": [
+            "0x1252c9d0",
+            "0x7000eb78",
+            "0x1252c858",
+            "0x7000eb78"
+          ],
+          "bytecode_pc_offset": "0xf86b4"
+        },
+        {
+          "wrapper_offset": "0x2858d0",
+          "target_offset": "0x26c858",
+          "argument_address": "0x7000e920",
+          "words": [
+            "0x1252c858",
+            "0x7000eb78",
+            "0x795a1de0",
+            "0x1251c324"
+          ],
+          "bytecode_pc_offset": "0xffa24"
+        },
+        {
+          "wrapper_offset": "0x2858e0",
+          "target_offset": "0x26c9d0",
+          "argument_address": "0x7000e910",
+          "words": [
+            "0x1252c9d0",
+            "0x7000eb78",
+            "0x1252c858",
+            "0x7000eb78"
+          ],
+          "bytecode_pc_offset": "0xffaac"
+        },
+        {
+          "wrapper_offset": "0x285f60",
+          "target_offset": "0x2914d0",
+          "argument_address": "0x7000e210",
+          "words": [
+            "0x125514d0",
+            "0x7000e9a8",
+            "0xa5a5a5a5a5a5a5a5",
+            "0xa5a5a5a5a5a5a5a5"
+          ],
+          "bytecode_pc_offset": "0xffae0"
+        },
+        {
+          "wrapper_offset": "0x285fb4",
+          "target_offset": "0x28dc38",
+          "argument_address": "0x7000e1a0",
+          "words": [
+            "0x1254dc38",
+            "0x0",
+            "0x0",
+            "0x0"
+          ],
+          "bytecode_pc_offset": "0xffb48"
+        }
+      ],
+      "format_calls": [
+        {
+          "object_address": "0x795a1eb0",
+          "format_hex": "25647c2573",
+          "signed_int32": -5,
+          "string_argument_length": 0
+        }
+      ],
+      "tree_insertions": [
+        {
+          "container_address": "0x795a1de0",
+          "key": {
+            "object_address": "0x795a1f30",
+            "vtable_offset": "0x34f5f8",
+            "capacity": 10,
+            "length": 9,
+            "payload_address": "0x795a1f50",
+            "payload_sha256": "9e2c282a5acb19fac981b33a24cd31062a88d979a46591504412660d79299084"
+          },
+          "value": {
+            "object_address": "0x795a1eb0",
+            "vtable_offset": "0x34f5f8",
+            "capacity": 8,
+            "length": 3,
+            "payload_address": "0x795a1ed0",
+            "payload_sha256": "22b61695c146a02ab879cbaa36e90fc7ee8b9d696d5c0405029d1eecfaceb5ee"
+          },
+          "known_diagnostic_key": "X-Neptune"
+        }
+      ],
+      "negative_status_writes": [
+        {
+          "pc_offset": "0x16db74",
+          "address": "0x7000ec68",
+          "size": 8,
+          "value": "0xfffffffffffffffb",
+          "recent_vm_handlers": [
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x990f8",
+              "instruction_word": "0x67e0c91",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16a8e4",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x990f8",
+              "instruction_word": "0x67e0c91",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16e714",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x990fc",
+              "instruction_word": "0x88d",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99124",
+              "instruction_word": "0x83620018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99128",
+              "instruction_word": "0x8b620218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9912c",
+              "instruction_word": "0x93620418",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99130",
+              "instruction_word": "0x9b620618",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99134",
+              "instruction_word": "0xa3630018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99138",
+              "instruction_word": "0xab630218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9913c",
+              "instruction_word": "0xb3630418",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99140",
+              "instruction_word": "0xbb630618",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99144",
+              "instruction_word": "0xf3640018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99148",
+              "instruction_word": "0xfb640218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9914c",
+              "instruction_word": "0x837a240f",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16a974",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x172440",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8584",
+              "instruction_word": "0x894a0218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8588",
+              "instruction_word": "0x934a000f",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16da60",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf858c",
+              "instruction_word": "0x7f60f97b",
+              "backing_address": "0x7000ec58"
+            }
+          ],
+          "status_origin": {
+            "bytecode_offset": "0xf858c",
+            "source_slot": 0,
+            "source_value": 0,
+            "destination_slot": 2,
+            "signed_immediate": -5,
+            "native_result": -5,
+            "recent_root_vm_handlers": [
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8384",
+                "instruction_word": "0x934a4e0f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12427e54",
+                  "0x123b2688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8388",
+                "instruction_word": "0xa35a0a18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12427e54",
+                  "0x123b2688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf838c",
+                "instruction_word": "0x5c19b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12427e54",
+                  "0x123b2688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a8e4",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8390",
+                "instruction_word": "0x67e0c91",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12427e54",
+                  "0x123b2688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16e158",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8394",
+                "instruction_word": "0x647107f4",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12427e54",
+                  "0x123b2688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16e32c",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8398",
+                "instruction_word": "0x860f470",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0xffffffffff310000",
+                  "0x123b2688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x1692cc",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf839c",
+                "instruction_word": "0x430391",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0xffffffffff31fa20",
+                  "0x123b2688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16aa88",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83a0",
+                "instruction_word": "0x351",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x126a0e28",
+                  "0x123b2688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16da60",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83a4",
+                "instruction_word": "0x20013b",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x126a0e28",
+                  "0x123b2688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171f70",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83a8",
+                "instruction_word": "0x10020016",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x126a0e28",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83ac",
+                "instruction_word": "0xab601018",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x126a0e28",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83b0",
+                "instruction_word": "0x89450418",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x126a0e28",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83b4",
+                "instruction_word": "0x20060f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125ea1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83b8",
+                "instruction_word": "0x8360211a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125ea1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83bc",
+                "instruction_word": "0x8b58191a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125ea1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83c0",
+                "instruction_word": "0x934a1e0f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125ea1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83c4",
+                "instruction_word": "0x5004b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125ea1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83c8",
+                "instruction_word": "0x5c19b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125ea1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a8e4",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83cc",
+                "instruction_word": "0x67e0c91",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125ea1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83d0",
+                "instruction_word": "0x89420418",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125ea1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83d4",
+                "instruction_word": "0x5012b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83d8",
+                "instruction_word": "0xa3642218",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83dc",
+                "instruction_word": "0xa378211a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83e0",
+                "instruction_word": "0x8b50211a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83e4",
+                "instruction_word": "0x934a240f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83e8",
+                "instruction_word": "0x8b7f0e18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83ec",
+                "instruction_word": "0x4404b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83f0",
+                "instruction_word": "0x5c19b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a8e4",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83f4",
+                "instruction_word": "0x67e0c91",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16ff7c",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83f8",
+                "instruction_word": "0x8b80003d",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x125081ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16aa88",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83fc",
+                "instruction_word": "0x351",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x1",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16e080",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8400",
+                "instruction_word": "0x411035",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x1",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16ef24",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8404",
+                "instruction_word": "0x4c401014",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x1",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8554",
+                "instruction_word": "0x894b0218",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x1",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8558",
+                "instruction_word": "0x93590c18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf855c",
+                "instruction_word": "0x10800018",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x12691550",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8560",
+                "instruction_word": "0x10800018",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07b0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8564",
+                "instruction_word": "0x9358091a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8568",
+                "instruction_word": "0xf37f0c18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf856c",
+                "instruction_word": "0xf370091a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8570",
+                "instruction_word": "0x8b48091a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8574",
+                "instruction_word": "0x934a0a0f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8578",
+                "instruction_word": "0xa3570a18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf857c",
+                "instruction_word": "0x5c19b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a8e4",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8580",
+                "instruction_word": "0x67e0c91",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8584",
+                "instruction_word": "0x894a0218",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12516ed4",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8588",
+                "instruction_word": "0x934a000f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12508908",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16da60",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf858c",
+                "instruction_word": "0x7f60f97b",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x12508908",
+                  "0x795a07c0",
+                  "0x1"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "pc_offset": "0x17208c",
+          "address": "0x7000e858",
+          "size": 4,
+          "value": "0xfffffffb",
+          "recent_vm_handlers": [
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99124",
+              "instruction_word": "0x83620018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99128",
+              "instruction_word": "0x8b620218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9912c",
+              "instruction_word": "0x93620418",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99130",
+              "instruction_word": "0x9b620618",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99134",
+              "instruction_word": "0xa3630018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99138",
+              "instruction_word": "0xab630218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9913c",
+              "instruction_word": "0xb3630418",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99140",
+              "instruction_word": "0xbb630618",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99144",
+              "instruction_word": "0xf3640018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99148",
+              "instruction_word": "0xfb640218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9914c",
+              "instruction_word": "0x837a240f",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16a974",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x172440",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8584",
+              "instruction_word": "0x894a0218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8588",
+              "instruction_word": "0x934a000f",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16da60",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf858c",
+              "instruction_word": "0x7f60f97b",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8590",
+              "instruction_word": "0x9b5a2218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8594",
+              "instruction_word": "0x9b40091a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171f70",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8598",
+              "instruction_word": "0x901ac116",
+              "backing_address": "0x7000ec58"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x248938",
+          "address": "0x7000d440",
+          "size": 8,
+          "value": "0xfffffffb",
+          "recent_vm_handlers": [
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99148",
+              "instruction_word": "0xfb640218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9914c",
+              "instruction_word": "0x837a240f",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16a974",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x172440",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8584",
+              "instruction_word": "0x894a0218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8588",
+              "instruction_word": "0x934a000f",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16da60",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf858c",
+              "instruction_word": "0x7f60f97b",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8590",
+              "instruction_word": "0x9b5a2218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8594",
+              "instruction_word": "0x9b40091a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171f70",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8598",
+              "instruction_word": "0x901ac116",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf859c",
+              "instruction_word": "0x93580a18",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85a0",
+              "instruction_word": "0x9350011a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85a4",
+              "instruction_word": "0xa368011a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85a8",
+              "instruction_word": "0x8b40011a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85ac",
+              "instruction_word": "0xa3570c18",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85b0",
+              "instruction_word": "0x5c19b11",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16a5a8",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85b0",
+              "instruction_word": "0x5c19b11",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85b4",
+              "instruction_word": "0x67e0c91",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16a8e4",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85b4",
+              "instruction_word": "0x67e0c91",
+              "backing_address": "0x7000ec58"
+            }
+          ]
+        }
+      ],
+      "negative_status_gate": {
+        "load_bytecode_offset": "0xf83f8",
+        "source_address": "0x12691558",
+        "source_image_offset": "0x3d1558",
+        "source_byte": 1,
+        "branch_bytecode_offset": "0xf8404",
+        "masked_r1": 1,
+        "r0": 0,
+        "taken_destination_observed": "0xf8554"
+      },
+      "guard_before_native_bootstrap_hex": "0000000000000000",
+      "native_registry_guard_writes": [
+        {
+          "pc": "0x125ed454",
+          "pc_offset": "0x32d454",
+          "caller_address": "0x125ed448",
+          "caller_offset": "0x32d448",
+          "address_offset": "0x3d155c",
+          "size": 4,
+          "value": "0x89"
+        },
+        {
+          "pc": "0x125ed458",
+          "pc_offset": "0x32d458",
+          "caller_address": "0x125ed448",
+          "caller_offset": "0x32d448",
+          "address_offset": "0x3d1559",
+          "size": 1,
+          "value": "0x2"
+        },
+        {
+          "pc": "0x125ed514",
+          "pc_offset": "0x32d514",
+          "caller_address": "0x1241e714",
+          "caller_offset": "0x15e714",
+          "address_offset": "0x3d1558",
+          "size": 1,
+          "value": "0x1"
+        },
+        {
+          "pc": "0x125ed52c",
+          "pc_offset": "0x32d52c",
+          "caller_address": "0x125ed524",
+          "caller_offset": "0x32d524",
+          "address_offset": "0x3d1559",
+          "size": 1,
+          "value": "0x1"
+        }
+      ],
+      "output_tree_and_refcount_allocations_known": true,
+      "formatted_value_is_inserted_value_and_returned_value": true,
+      "known_diagnostic_key": "X-Neptune",
+      "only_diagnostic_header_returned": true,
+      "requested_signer_headers_generated": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "continuation": {
+        "image_base": "0x775c205000",
+        "bootstrap_stack": "0x781fe380",
+        "bootstrap_native_completed": true,
+        "bootstrap_JNI_return_asserted": true,
+        "same_cpu_request_continuation": true,
+        "outcome": "returned",
+        "error": null,
+        "stop_pc": "0x7000f000",
+        "stop_pc_offset": "-0x76ec1f6000",
+        "request_reached_oracle_stop": true,
+        "returned_x0": "0x0",
+        "returned_x8": "0xa5a5a5a5a5a5a5a5",
+        "output_reference_address": "0x70001a00",
+        "output_reference_nonzero": true,
+        "native_instructions_observed": 99927,
+        "vm_handler_event_count": 842,
+        "vm_handler_counts": {
+          "0x171268": 358,
+          "0x16f974": 379,
+          "0x16e254": 9,
+          "0x16e41c": 13,
+          "0x1692fc": 56,
+          "0x17030c": 14,
+          "0x16db74": 13
+        },
+        "native_import_event_count": 194,
+        "import_name_counts": {
+          "__strlen_chk": 75,
+          "clock_gettime": 2,
+          "free": 17,
+          "malloc": 33,
+          "memchr": 26,
+          "memcpy": 30,
+          "pthread_cond_broadcast": 1,
+          "strlen": 9,
+          "vsnprintf": 1
+        },
+        "memcpy_call_count": 30,
+        "first_memcpy_args": {
+          "destination": "0x7000e9b0",
+          "source": "0x7000eb78",
+          "size": 24
+        },
+        "javavm_getenv_call_count": 0,
+        "clock_gettime_calls": 0,
+        "flags_before_nonzero": true,
+        "flags_after_nonzero": true,
+        "flags_unchanged": true,
+        "flag_read_count": 0,
+        "flag_write_count": 0,
+        "runtime_table_read_count": 0,
+        "runtime_table_write_count": 0,
+        "callback_event_count": 5,
+        "callback_target_offsets": [
+          "0x347f60"
+        ],
+        "unmapped_event_count": 0,
+        "url_reference_words": "char* plus refcount pointer",
+        "url_byte_length": 107,
+        "synthetic_dispatch_table_used": false,
+        "synthetic_callback_vtable_used": false,
+        "runtime_table_content_reconstructed": false,
+        "whole_request_native_success": false,
+        "fresh_standalone_signer_verified": false,
+        "online_header_acceptance_verified": false,
+        "real_memcpy_import_service_used": true,
+        "real_javavm_getenv_provider_used": false,
+        "bootstrap_native_import_hooks_preserved": true
+      },
+      "request_entry": {
+        "x0": "0x7000ee38",
+        "x1": "0x7000ee28",
+        "x2": "0x138",
+        "x3": "0x101",
+        "x8": "0x7000ee48",
+        "stack_address": "0x7000eda0"
+      },
+      "output_tree": {
+        "reference_address": "0x70001a00",
+        "container_address": "0x795a29e0",
+        "counter_address": "0x795a2aa0",
+        "counter_value": 1,
+        "container_vtable_offset": "0x35b7c0",
+        "controller_address": "0x795a2a10",
+        "sentinel_address": "0x795a2a40",
+        "node_count": 1,
+        "nodes": [
+          {
+            "node_address": "0x795a2b70",
+            "pair_address": "0x795a2b60",
+            "key": {
+              "object_address": "0x795a2b30",
+              "vtable_offset": "0x34f5f8",
+              "capacity": 10,
+              "length": 9,
+              "payload_address": "0x795a2b50",
+              "payload_sha256": "9e2c282a5acb19fac981b33a24cd31062a88d979a46591504412660d79299084"
+            },
+            "value": {
+              "object_address": "0x795a2ab0",
+              "vtable_offset": "0x34f5f8",
+              "capacity": 8,
+              "length": 3,
+              "payload_address": "0x795a2ad0",
+              "payload_sha256": "22b61695c146a02ab879cbaa36e90fc7ee8b9d696d5c0405029d1eecfaceb5ee"
+            }
+          }
+        ],
+        "parent_links_count_order_and_extrema_valid": true
+      },
+      "output_reference_writes": [
+        {
+          "pc_offset": "0x163e04",
+          "address": "0x70001a00",
+          "size": 8,
+          "value": "0x0"
+        },
+        {
+          "pc_offset": "0x163e04",
+          "address": "0x70001a08",
+          "size": 8,
+          "value": "0x0"
+        },
+        {
+          "pc_offset": "0x163e14",
+          "address": "0x70001a00",
+          "size": 8,
+          "value": "0x0"
+        },
+        {
+          "pc_offset": "0x163e20",
+          "address": "0x70001a08",
+          "size": 8,
+          "value": "0x795a29d0"
+        },
+        {
+          "pc_offset": "0x166ef8",
+          "address": "0x70001a08",
+          "size": 8,
+          "value": "0x0"
+        },
+        {
+          "pc_offset": "0x27e804",
+          "address": "0x70001a00",
+          "size": 8,
+          "value": "0x795a29e0"
+        },
+        {
+          "pc_offset": "0x27e80c",
+          "address": "0x70001a08",
+          "size": 8,
+          "value": "0x795a2aa0"
+        }
+      ],
+      "callback_ledger": [
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x775c36ce54",
+            "0x775c2f7600",
+            "0x775c5e5d50",
+            "0x775c2f78e0"
+          ],
+          "bytecode_pc_offset": "0xf7e84"
+        },
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x775c36ce54",
+            "0x775c2f7620",
+            "0x775c5e5d70",
+            "0x775c2f78b0"
+          ],
+          "bytecode_pc_offset": "0xf7f08"
+        },
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x775c36ce54",
+            "0x775c2f7764",
+            "0x775c5e5f68",
+            "0x775c2f7780"
+          ],
+          "bytecode_pc_offset": "0xf7fa0"
+        },
+        {
+          "wrapper_offset": "0x28589c",
+          "target_offset": "0x291440",
+          "argument_address": "0x7000e968",
+          "words": [
+            "0x775c496440",
+            "0x7000e9a8",
+            "0x775c36ce54",
+            "0x775c2f7764"
+          ],
+          "bytecode_pc_offset": "0xf7ffc"
+        },
+        {
+          "wrapper_offset": "0x2858a8",
+          "target_offset": "0x347f60",
+          "argument_address": "0x7000e948",
+          "words": [
+            "0x775c54cf60",
+            "0x7000e9b0",
+            "0x7000eb78",
+            "0x18"
+          ],
+          "bytecode_pc_offset": "0xf8044"
+        },
+        {
+          "wrapper_offset": "0x2858bc",
+          "target_offset": "0x25c324",
+          "argument_address": "0x7000e938",
+          "words": [
+            "0x775c461324",
+            "0x7000e9d0",
+            "0x775c54cf60",
+            "0x7000e9b0"
+          ],
+          "bytecode_pc_offset": "0xf8078"
+        },
+        {
+          "wrapper_offset": "0x2858d0",
+          "target_offset": "0x26c858",
+          "argument_address": "0x7000e920",
+          "words": [
+            "0x775c471858",
+            "0x7000eb78",
+            "0x70006000",
+            "0x775c461324"
+          ],
+          "bytecode_pc_offset": "0xf80a8"
+        },
+        {
+          "wrapper_offset": "0x2858e0",
+          "target_offset": "0x26c9d0",
+          "argument_address": "0x7000e910",
+          "words": [
+            "0x775c4719d0",
+            "0x7000eb78",
+            "0x775c471858",
+            "0x7000eb78"
+          ],
+          "bytecode_pc_offset": "0xf80f4"
+        },
+        {
+          "wrapper_offset": "0x2858d0",
+          "target_offset": "0x26c858",
+          "argument_address": "0x7000e920",
+          "words": [
+            "0x775c471858",
+            "0x7000eb78",
+            "0x70006000",
+            "0x775c461324"
+          ],
+          "bytecode_pc_offset": "0xf8178"
+        },
+        {
+          "wrapper_offset": "0x2858e0",
+          "target_offset": "0x26c9d0",
+          "argument_address": "0x7000e910",
+          "words": [
+            "0x775c4719d0",
+            "0x7000eb78",
+            "0x775c471858",
+            "0x7000eb78"
+          ],
+          "bytecode_pc_offset": "0xf82cc"
+        },
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x775c36ce54",
+            "0x775c2f7680",
+            "0x775c5e5e10",
+            "0x775c2f7864"
+          ],
+          "bytecode_pc_offset": "0xf8338"
+        },
+        {
+          "wrapper_offset": "0x285888",
+          "target_offset": "0x167e54",
+          "argument_address": "0x7000e978",
+          "words": [
+            "0x775c36ce54",
+            "0x775c2f7688",
+            "0x775c5e5e1c",
+            "0x775c2f7858"
+          ],
+          "bytecode_pc_offset": "0xf8390"
+        },
+        {
+          "wrapper_offset": "0x285928",
+          "target_offset": "0x32a1f0",
+          "argument_address": "0x7000e8b8",
+          "words": [
+            "0x775c52f1f0",
+            "0x18",
+            "0xffffffffffffffff",
+            "0xffffffffffffffff"
+          ],
+          "bytecode_pc_offset": "0xf83cc"
+        },
+        {
+          "wrapper_offset": "0x28591c",
+          "target_offset": "0x2481ac",
+          "argument_address": "0x7000e8d0",
+          "words": [
+            "0x775c44d1ac",
+            "0x795a2ab0",
+            "0xffffffffffffffff",
+            "0xffffffffffffffff"
+          ],
+          "bytecode_pc_offset": "0xf83f4"
+        },
+        {
+          "wrapper_offset": "0x285978",
+          "target_offset": "0x256ed4",
+          "argument_address": "0x7000e868",
+          "words": [
+            "0x775c45bed4",
+            "0x7000eb78",
+            "0x795a13c0",
+            "0xffffffffffffffff"
+          ],
+          "bytecode_pc_offset": "0xf8580"
+        },
+        {
+          "wrapper_offset": "0x25705c",
+          "target_offset": "0x32a444",
+          "argument_address": "0x7000d310",
+          "words": [
+            "0x775c52f444",
+            "0x795a1448",
+            "0x7000ec58",
+            "0x0"
+          ],
+          "bytecode_pc_offset": "0x99094"
+        },
+        {
+          "wrapper_offset": "0x257068",
+          "target_offset": "0x2483e0",
+          "argument_address": "0x7000d2f8",
+          "words": [
+            "0x775c44d3e0",
+            "0x7000eb78",
+            "0x795a14d8",
+            "0x775c52f444"
+          ],
+          "bytecode_pc_offset": "0x990c8"
+        },
+        {
+          "wrapper_offset": "0x25705c",
+          "target_offset": "0x32a4fc",
+          "argument_address": "0x7000d310",
+          "words": [
+            "0x775c52f4fc",
+            "0x795a1448",
+            "0x7000ec58",
+            "0x0"
+          ],
+          "bytecode_pc_offset": "0x990f8"
+        },
+        {
+          "wrapper_offset": "0x285990",
+          "target_offset": "0x248908",
+          "argument_address": "0x7000e840",
+          "words": [
+            "0x775c44d908",
+            "0x795a2ab0",
+            "0x775c5e5e10",
+            "0xfffffffffffffffb"
+          ],
+          "bytecode_pc_offset": "0xf85b4",
+          "string_argument_address": "0x795a2ae0"
+        },
+        {
+          "wrapper_offset": "0x28591c",
+          "target_offset": "0x2484b8",
+          "argument_address": "0x7000e8d0",
+          "words": [
+            "0x775c44d4b8",
+            "0x7000eb78",
+            "0xffffffffffffffff",
+            "0xffffffffffffffff"
+          ],
+          "bytecode_pc_offset": "0xf85d0"
+        },
+        {
+          "wrapper_offset": "0x285928",
+          "target_offset": "0x32a1f0",
+          "argument_address": "0x7000e8b8",
+          "words": [
+            "0x775c52f1f0",
+            "0x18",
+            "0x795a2ab0",
+            "0x775c44d4b8"
+          ],
+          "bytecode_pc_offset": "0xf85ec"
+        },
+        {
+          "wrapper_offset": "0x2859a8",
+          "target_offset": "0x248344",
+          "argument_address": "0x7000e828",
+          "words": [
+            "0x775c44d344",
+            "0x795a2b30",
+            "0x775c5e5e1c",
+            "0x775c44d908"
+          ],
+          "bytecode_pc_offset": "0xf8614"
+        },
+        {
+          "wrapper_offset": "0x2859b8",
+          "target_offset": "0x25bf3c",
+          "argument_address": "0x7000e808",
+          "words": [
+            "0x775c460f3c",
+            "0x795a29e0",
+            "0x795a2b30",
+            "0x795a2ab0"
+          ],
+          "bytecode_pc_offset": "0xf863c"
+        },
+        {
+          "wrapper_offset": "0x2858d0",
+          "target_offset": "0x26c858",
+          "argument_address": "0x7000e920",
+          "words": [
+            "0x775c471858",
+            "0x7000eb78",
+            "0x795a29e0",
+            "0x775c461324"
+          ],
+          "bytecode_pc_offset": "0xf8674"
+        },
+        {
+          "wrapper_offset": "0x2858e0",
+          "target_offset": "0x26c9d0",
+          "argument_address": "0x7000e910",
+          "words": [
+            "0x775c4719d0",
+            "0x7000eb78",
+            "0x775c471858",
+            "0x7000eb78"
+          ],
+          "bytecode_pc_offset": "0xf86b4"
+        },
+        {
+          "wrapper_offset": "0x2858d0",
+          "target_offset": "0x26c858",
+          "argument_address": "0x7000e920",
+          "words": [
+            "0x775c471858",
+            "0x7000eb78",
+            "0x795a29e0",
+            "0x775c461324"
+          ],
+          "bytecode_pc_offset": "0xffa24"
+        },
+        {
+          "wrapper_offset": "0x2858e0",
+          "target_offset": "0x26c9d0",
+          "argument_address": "0x7000e910",
+          "words": [
+            "0x775c4719d0",
+            "0x7000eb78",
+            "0x775c471858",
+            "0x7000eb78"
+          ],
+          "bytecode_pc_offset": "0xffaac"
+        },
+        {
+          "wrapper_offset": "0x285f60",
+          "target_offset": "0x2914d0",
+          "argument_address": "0x7000e210",
+          "words": [
+            "0x775c4964d0",
+            "0x7000e9a8",
+            "0xffffffffffffffff",
+            "0xffffffffffffffff"
+          ],
+          "bytecode_pc_offset": "0xffae0"
+        },
+        {
+          "wrapper_offset": "0x285fb4",
+          "target_offset": "0x28dc38",
+          "argument_address": "0x7000e1a0",
+          "words": [
+            "0x775c492c38",
+            "0x0",
+            "0x0",
+            "0x0"
+          ],
+          "bytecode_pc_offset": "0xffb48"
+        }
+      ],
+      "format_calls": [
+        {
+          "object_address": "0x795a2ab0",
+          "format_hex": "25647c2573",
+          "signed_int32": -5,
+          "string_argument_length": 0
+        }
+      ],
+      "tree_insertions": [
+        {
+          "container_address": "0x795a29e0",
+          "key": {
+            "object_address": "0x795a2b30",
+            "vtable_offset": "0x34f5f8",
+            "capacity": 10,
+            "length": 9,
+            "payload_address": "0x795a2b50",
+            "payload_sha256": "9e2c282a5acb19fac981b33a24cd31062a88d979a46591504412660d79299084"
+          },
+          "value": {
+            "object_address": "0x795a2ab0",
+            "vtable_offset": "0x34f5f8",
+            "capacity": 8,
+            "length": 3,
+            "payload_address": "0x795a2ad0",
+            "payload_sha256": "22b61695c146a02ab879cbaa36e90fc7ee8b9d696d5c0405029d1eecfaceb5ee"
+          },
+          "known_diagnostic_key": "X-Neptune"
+        }
+      ],
+      "negative_status_writes": [
+        {
+          "pc_offset": "0x16db74",
+          "address": "0x7000ec68",
+          "size": 8,
+          "value": "0xfffffffffffffffb",
+          "recent_vm_handlers": [
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x990f8",
+              "instruction_word": "0x67e0c91",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16a8e4",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x990f8",
+              "instruction_word": "0x67e0c91",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16e714",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x990fc",
+              "instruction_word": "0x88d",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99124",
+              "instruction_word": "0x83620018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99128",
+              "instruction_word": "0x8b620218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9912c",
+              "instruction_word": "0x93620418",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99130",
+              "instruction_word": "0x9b620618",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99134",
+              "instruction_word": "0xa3630018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99138",
+              "instruction_word": "0xab630218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9913c",
+              "instruction_word": "0xb3630418",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99140",
+              "instruction_word": "0xbb630618",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99144",
+              "instruction_word": "0xf3640018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99148",
+              "instruction_word": "0xfb640218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9914c",
+              "instruction_word": "0x837a240f",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16a974",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x172440",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8584",
+              "instruction_word": "0x894a0218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8588",
+              "instruction_word": "0x934a000f",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16da60",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf858c",
+              "instruction_word": "0x7f60f97b",
+              "backing_address": "0x7000ec58"
+            }
+          ],
+          "status_origin": {
+            "bytecode_offset": "0xf858c",
+            "source_slot": 0,
+            "source_value": 0,
+            "destination_slot": 2,
+            "signed_immediate": -5,
+            "native_result": -5,
+            "recent_root_vm_handlers": [
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8384",
+                "instruction_word": "0x934a4e0f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c36ce54",
+                  "0x775c2f7688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8388",
+                "instruction_word": "0xa35a0a18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c36ce54",
+                  "0x775c2f7688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf838c",
+                "instruction_word": "0x5c19b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c36ce54",
+                  "0x775c2f7688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a8e4",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8390",
+                "instruction_word": "0x67e0c91",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c36ce54",
+                  "0x775c2f7688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16e158",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8394",
+                "instruction_word": "0x647107f4",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c36ce54",
+                  "0x775c2f7688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16e32c",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8398",
+                "instruction_word": "0x860f470",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0xffffffffff310000",
+                  "0x775c2f7688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x1692cc",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf839c",
+                "instruction_word": "0x430391",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0xffffffffff31fa20",
+                  "0x775c2f7688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16aa88",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83a0",
+                "instruction_word": "0x351",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c5e5e28",
+                  "0x775c2f7688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16da60",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83a4",
+                "instruction_word": "0x20013b",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c5e5e28",
+                  "0x775c2f7688",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171f70",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83a8",
+                "instruction_word": "0x10020016",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c5e5e28",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83ac",
+                "instruction_word": "0xab601018",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c5e5e28",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83b0",
+                "instruction_word": "0x89450418",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c5e5e28",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83b4",
+                "instruction_word": "0x20060f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c52f1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83b8",
+                "instruction_word": "0x8360211a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c52f1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83bc",
+                "instruction_word": "0x8b58191a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c52f1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83c0",
+                "instruction_word": "0x934a1e0f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c52f1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83c4",
+                "instruction_word": "0x5004b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c52f1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83c8",
+                "instruction_word": "0x5c19b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c52f1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a8e4",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83cc",
+                "instruction_word": "0x67e0c91",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c52f1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83d0",
+                "instruction_word": "0x89420418",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c52f1f0",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83d4",
+                "instruction_word": "0x5012b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83d8",
+                "instruction_word": "0xa3642218",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83dc",
+                "instruction_word": "0xa378211a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83e0",
+                "instruction_word": "0x8b50211a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83e4",
+                "instruction_word": "0x934a240f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83e8",
+                "instruction_word": "0x8b7f0e18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83ec",
+                "instruction_word": "0x4404b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83f0",
+                "instruction_word": "0x5c19b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a8e4",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83f4",
+                "instruction_word": "0x67e0c91",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16ff7c",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83f8",
+                "instruction_word": "0x8b80003d",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d1ac",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16aa88",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf83fc",
+                "instruction_word": "0x351",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x1",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16e080",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8400",
+                "instruction_word": "0x411035",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x1",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16ef24",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8404",
+                "instruction_word": "0x4c401014",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x1",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8554",
+                "instruction_word": "0x894b0218",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x1",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8558",
+                "instruction_word": "0x93590c18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x1",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf855c",
+                "instruction_word": "0x10800018",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x775c5d6550",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8560",
+                "instruction_word": "0x10800018",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13b0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8564",
+                "instruction_word": "0x9358091a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8568",
+                "instruction_word": "0xf37f0c18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf856c",
+                "instruction_word": "0xf370091a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x171138",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8570",
+                "instruction_word": "0x8b48091a",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8574",
+                "instruction_word": "0x934a0a0f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8578",
+                "instruction_word": "0xa3570a18",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a5a8",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf857c",
+                "instruction_word": "0x5c19b11",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16a8e4",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8580",
+                "instruction_word": "0x67e0c91",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16f8e0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8584",
+                "instruction_word": "0x894a0218",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c45bed4",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16d7d0",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf8588",
+                "instruction_word": "0x934a000f",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d908",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              },
+              {
+                "handler_offset": "0x16da60",
+                "bytecode_pc_slot": "0x7000ec50",
+                "bytecode_pc_offset": "0xf858c",
+                "instruction_word": "0x7f60f97b",
+                "backing_address": "0x7000ec58",
+                "first_four_virtual_registers": [
+                  "0x0",
+                  "0x775c44d908",
+                  "0x795a13c0",
+                  "0x1"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "pc_offset": "0x17208c",
+          "address": "0x7000e858",
+          "size": 4,
+          "value": "0xfffffffb",
+          "recent_vm_handlers": [
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99124",
+              "instruction_word": "0x83620018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99128",
+              "instruction_word": "0x8b620218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9912c",
+              "instruction_word": "0x93620418",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99130",
+              "instruction_word": "0x9b620618",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99134",
+              "instruction_word": "0xa3630018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99138",
+              "instruction_word": "0xab630218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9913c",
+              "instruction_word": "0xb3630418",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99140",
+              "instruction_word": "0xbb630618",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99144",
+              "instruction_word": "0xf3640018",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99148",
+              "instruction_word": "0xfb640218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9914c",
+              "instruction_word": "0x837a240f",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16a974",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x172440",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8584",
+              "instruction_word": "0x894a0218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8588",
+              "instruction_word": "0x934a000f",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16da60",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf858c",
+              "instruction_word": "0x7f60f97b",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8590",
+              "instruction_word": "0x9b5a2218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8594",
+              "instruction_word": "0x9b40091a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171f70",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8598",
+              "instruction_word": "0x901ac116",
+              "backing_address": "0x7000ec58"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x248938",
+          "address": "0x7000d440",
+          "size": 8,
+          "value": "0xfffffffb",
+          "recent_vm_handlers": [
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99148",
+              "instruction_word": "0xfb640218",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x9914c",
+              "instruction_word": "0x837a240f",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16a974",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x172440",
+              "bytecode_pc_slot": "0x7000d380",
+              "bytecode_pc_offset": "0x99150",
+              "instruction_word": "0x7c00791",
+              "backing_address": "0x7000d388"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8584",
+              "instruction_word": "0x894a0218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16d7d0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8588",
+              "instruction_word": "0x934a000f",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16da60",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf858c",
+              "instruction_word": "0x7f60f97b",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8590",
+              "instruction_word": "0x9b5a2218",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8594",
+              "instruction_word": "0x9b40091a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171f70",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf8598",
+              "instruction_word": "0x901ac116",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf859c",
+              "instruction_word": "0x93580a18",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85a0",
+              "instruction_word": "0x9350011a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85a4",
+              "instruction_word": "0xa368011a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x171138",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85a8",
+              "instruction_word": "0x8b40011a",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16f8e0",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85ac",
+              "instruction_word": "0xa3570c18",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85b0",
+              "instruction_word": "0x5c19b11",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16a5a8",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85b0",
+              "instruction_word": "0x5c19b11",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16855c",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85b4",
+              "instruction_word": "0x67e0c91",
+              "backing_address": "0x7000ec58"
+            },
+            {
+              "handler_offset": "0x16a8e4",
+              "bytecode_pc_slot": "0x7000ec50",
+              "bytecode_pc_offset": "0xf85b4",
+              "instruction_word": "0x67e0c91",
+              "backing_address": "0x7000ec58"
+            }
+          ]
+        }
+      ],
+      "negative_status_gate": {
+        "load_bytecode_offset": "0xf83f8",
+        "source_address": "0x775c5d6558",
+        "source_image_offset": "0x3d1558",
+        "source_byte": 1,
+        "branch_bytecode_offset": "0xf8404",
+        "masked_r1": 1,
+        "r0": 0,
+        "taken_destination_observed": "0xf8554"
+      },
+      "guard_before_native_bootstrap_hex": "0000000000000000",
+      "native_registry_guard_writes": [
+        {
+          "pc": "0x775c532454",
+          "pc_offset": "0x32d454",
+          "caller_address": "0x775c532448",
+          "caller_offset": "0x32d448",
+          "address_offset": "0x3d155c",
+          "size": 4,
+          "value": "0x1"
+        },
+        {
+          "pc": "0x775c532458",
+          "pc_offset": "0x32d458",
+          "caller_address": "0x775c532448",
+          "caller_offset": "0x32d448",
+          "address_offset": "0x3d1559",
+          "size": 1,
+          "value": "0x2"
+        },
+        {
+          "pc": "0x775c532514",
+          "pc_offset": "0x32d514",
+          "caller_address": "0x775c363714",
+          "caller_offset": "0x15e714",
+          "address_offset": "0x3d1558",
+          "size": 1,
+          "value": "0x1"
+        },
+        {
+          "pc": "0x775c53252c",
+          "pc_offset": "0x32d52c",
+          "caller_address": "0x775c532524",
+          "caller_offset": "0x32d524",
+          "address_offset": "0x3d1559",
+          "size": 1,
+          "value": "0x1"
+        }
+      ],
+      "output_tree_and_refcount_allocations_known": true,
+      "formatted_value_is_inserted_value_and_returned_value": true,
+      "known_diagnostic_key": "X-Neptune",
+      "only_diagnostic_header_returned": true,
+      "requested_signer_headers_generated": false
+    }
+  ],
+  "fresh_native_continuations": 2,
+  "observation_only": true,
+  "translation_cache_flushed_after_observer_install": true,
+  "external_dispatch_canary_pages_mapped": false,
+  "native_snapshot_input": false,
+  "python_model_initialized_from_native": false,
+  "synthetic_dispatch_table_used": false,
+  "synthetic_callback_vtable_used": false,
+  "output_reference_valid_tree_verified": true,
+  "fresh_standalone_signer_verified": false,
+  "whole_request_native_differential_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "The continuation returns an allocated owning configuration-tree reference with counter one. Its sole X-Neptune entry is constructed by the signed-int32/C-string formatter with status -5 and an empty string; no other signer header is returned. Bytecode +f8404 takes the +f8554 branch because the registry guard +3d1558 has low bit one, then +f858c produces status -5. Nonzero output and native return do not establish signing.",
+  "limitations": [
+    "Request, JNI and OS/import providers remain the parent's explicit synthetic fixture.",
+    "The status producer is observed; the business meaning of -5 is not inferred.",
+    "Payloads are retained as lengths/hashes, not live headers or identifiers.",
+    "No Python whole-request differential, live JVM or online acceptance is claimed."
+  ]
+}

@@ -9655,3 +9655,20 @@ python -B platforms/bytedance/tomato/python/verify_vm9_native_outer_facade_actua
   --library C:\AI\6\libmetasec_ml_71332.so --libc C:\AI\6\_vlibc.so `
   --output platforms/bytedance/tomato/evidence/vm9_native_outer_facade_actual_child_20261027.json
 ```
+
+## 6.285 native request output reference rerun（2026-10-27 Asia/Shanghai）
+
+重跑现有 observation-only output-reference verifier，fresh bootstrap/request continuation
+在两基址均回到 oracle STOP，并解析出 owning configuration-tree reference：counter 为
+1、树中只有 `X-Neptune` 一项，格式化值为 signed `-5` 与空字符串，native 写回
+`+0x27e804/+0x27e80c` 的 container/counter 与树遍历一致。该批没有把 native tree
+初始化 Python model，也没有合成 dispatch/vtable；它确认 request VM 的输出引用和
+清理边界可观察，但当前仍不是 facade→request 的 whole-native differential。
+
+证据：`evidence/vm9_request_output_reference_20261027_rerun.json`；脚本：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_request_output_reference_20261026.py `
+  --library C:\AI\6\libmetasec_ml_71332.so --libc C:\AI\6\_vlibc.so `
+  --output platforms/bytedance/tomato/evidence/vm9_request_output_reference_20261027_rerun.json
+```
