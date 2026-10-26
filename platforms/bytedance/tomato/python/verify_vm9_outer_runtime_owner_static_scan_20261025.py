@@ -293,9 +293,16 @@ def scan(library: Path) -> dict:
         }
         path_argument_facts = [
             _instruction_fact(data, text_base, address)
-            for address in (0x18A30C, 0x18A310, 0x18A314)
+            for address in (
+                0x189ECC, 0x18A008, 0x18AB1C, 0x18AB20,
+                0x18A30C, 0x18A310, 0x18A314,
+            )
         ]
         expected_path_facts = {
+            ("0x189ecc", "stp", "x0, x1, [x29, #-0xd8]"),
+            ("0x18a008", "sub", "x23, x29, #0x40"),
+            ("0x18ab1c", "ldur", "x8, [x29, #-0xd8]"),
+            ("0x18ab20", "str", "x8, [x23, #0x20]"),
             ("0x18a30c", "ldr", "x8, [x23, #0x20]"),
             ("0x18a310", "ldr", "x0, [x8, #0x40]"),
             ("0x18a314", "bl", "#0x184ad4"),
@@ -395,10 +402,14 @@ def scan(library: Path) -> dict:
             "loader_path_argument_provenance": {
                 "callsite": "+0x18a314",
                 "instruction_facts": path_argument_facts,
-                "equivalent_dataflow": "x0 = *(*(x23 + 0x20) + 0x40)",
+                "equivalent_dataflow": "x0 = *(initial_x0 + 0x40)",
+                "initial_argument_register": "x0",
+                "initial_argument_saved_at": "[x29 - 0xd8]",
+                "local_frame_register": "x23 = x29 - 0x40",
+                "initial_argument_published_at": "[x23 + 0x20]",
                 "object_field_offset": "0x40",
                 "base_object_register": "x23",
-                "base_object_source": "caller-provided state; static owner unresolved",
+                "base_object_source": "initial caller x0 saved and reloaded into local frame; external object constructor unresolved",
                 "path_value_runtime_observed": False,
                 "interpretation": "The candidate loader receives the path from an object field; this does not identify the object constructor or prove the candidate executes.",
             },

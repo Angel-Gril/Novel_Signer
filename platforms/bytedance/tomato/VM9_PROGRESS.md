@@ -6093,6 +6093,13 @@ reference（`G+0x1800`），所以当前最终零值不仅能归因到 VM 的 `+
 path field 的 native 入口边界；`x23` 对象的构造者、实际 path 值和 loader
 执行时机仍未由静态证据闭合。
 
+进一步把这条链向函数入口展开：`+0x189ecc` 保存初始 `x0` 到
+`[x29-0xd8]`，`+0x18a008` 建立 `x23=x29-0x40`，`+0x18ab1c/+0x18ab20`
+将保存的初始 `x0` 发布到 `[x23+0x20]`，因此候选 loader 的 path 参数可化为
+`x0 = *(initial_x0 + 0x40)`。这仍是静态寄存器/栈数据流，不是运行时 path
+值观察，也没有证明 `+0x184ad4` 在真实 Android 启动中执行；外部对象构造者、
+custom mapping 和 runtime-table owner 继续保持未闭合。
+
 证据：[outer owner static scan](evidence/vm9_outer_runtime_owner_static_scan_fresh_20261025.json)，
 脚本：`python/verify_vm9_outer_runtime_owner_static_scan_20261025.py`。
 

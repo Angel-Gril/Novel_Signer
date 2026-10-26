@@ -567,6 +567,26 @@
     "callsite": "+0x18a314",
     "instruction_facts": [
       {
+        "offset": "0x189ecc",
+        "mnemonic": "stp",
+        "operands": "x0, x1, [x29, #-0xd8]"
+      },
+      {
+        "offset": "0x18a008",
+        "mnemonic": "sub",
+        "operands": "x23, x29, #0x40"
+      },
+      {
+        "offset": "0x18ab1c",
+        "mnemonic": "ldur",
+        "operands": "x8, [x29, #-0xd8]"
+      },
+      {
+        "offset": "0x18ab20",
+        "mnemonic": "str",
+        "operands": "x8, [x23, #0x20]"
+      },
+      {
         "offset": "0x18a30c",
         "mnemonic": "ldr",
         "operands": "x8, [x23, #0x20]"
@@ -582,10 +602,14 @@
         "operands": "#0x184ad4"
       }
     ],
-    "equivalent_dataflow": "x0 = *(*(x23 + 0x20) + 0x40)",
+    "equivalent_dataflow": "x0 = *(initial_x0 + 0x40)",
+    "initial_argument_register": "x0",
+    "initial_argument_saved_at": "[x29 - 0xd8]",
+    "local_frame_register": "x23 = x29 - 0x40",
+    "initial_argument_published_at": "[x23 + 0x20]",
     "object_field_offset": "0x40",
     "base_object_register": "x23",
-    "base_object_source": "caller-provided state; static owner unresolved",
+    "base_object_source": "initial caller x0 saved and reloaded into local frame; external object constructor unresolved",
     "path_value_runtime_observed": false,
     "interpretation": "The candidate loader receives the path from an object field; this does not identify the object constructor or prove the candidate executes."
   },
