@@ -9705,7 +9705,7 @@
   "vm9_native_outer_facade_actual_child_20261027": {
     "path": "evidence/vm9_native_outer_facade_actual_child_20261027.json",
     "verifier": "python/verify_vm9_native_outer_facade_actual_child_20261027.py",
-    "schema": "vm9-native-outer-facade-actual-child-20261027-v2",
+    "schema": "vm9-native-outer-facade-actual-child-20261027-v3",
     "evidence_label": "Same-CPU native outer real child into normal Java facade",
     "image_bases": [
       "0x122c0000",
@@ -9742,11 +9742,21 @@
       "descriptor_offset": "0x8000",
       "target_field_writer_observed": false
     },
+    "source_slot_writer_offset": "0x16e118",
+    "source_slot_writer_each": {
+      "instruction": "str x9, [x28, x12, lsl #3]",
+      "workspace_base": "0x7000eba8",
+      "source_slot": 1,
+      "source_address": "0x7000ebb0",
+      "x12": "0x1",
+      "x9": "0x0",
+      "observed_each_image_base": true
+    },
     "unmapped_fetch_boundary_each": true,
     "normal_facade_child_handoff_verified": false,
     "whole_request_native_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "The native outer cold getter returns a real root+0x18 child on the same CPU. Its vtable and callback pair target are checked before entering the normal facade and observing +0x27dd04, +0x2830c4 and +0x168324. At +0x171268 the native VM writes x15=0 into the descriptor argument field +0x00 and x15=0x13708000 into +0x08. That object is at offset +0x8000 in a fresh 0x40000 anonymous mmap at 0x13700000; no write to its target field was observed. Both bases therefore stop at +0x2859dc because x3 remains zero and the next br x3 is unmapped. URL/header/JNI services remain explicit fixture providers; no cleanup/return or signer output is claimed."
+    "comparison_note": "The native outer cold getter returns a real root+0x18 child on the same CPU. Its vtable and callback pair target are checked before entering the normal facade and observing +0x27dd04, +0x2830c4 and +0x168324. At +0x171268 the native VM writes x15=0 into the descriptor argument field +0x00 and x15=0x13708000 into +0x08. That object is at offset +0x8000 in a fresh 0x40000 anonymous mmap at 0x13700000; no write to its target field was observed. The final source slot is then written by the VM handler at +0x16e118 with x28=0x7000eba8, x12=1 and x9=0 on both image bases. Both bases therefore stop at +0x2859dc because x3 remains zero and the next br x3 is unmapped. URL/header/JNI services remain explicit fixture providers; no cleanup/return or signer output is claimed."
   }
 }

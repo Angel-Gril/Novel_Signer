@@ -74,6 +74,10 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "argument_object_read_events": [],
         "syscall_mmap_events": [],
         "argument_store_events": [],
+        "vm_source_slot_events": [],
+        "vm_workspace_write_events": [],
+        "vm_backing_write_events": [],
+        "vm_workspace_snapshots": [],
         "descriptor_snapshot": None,
         "continuation_allocations": [],
         "continuation_allocator_events": [],
@@ -91,6 +95,20 @@ def run(library: Path, libc: Path, image: int) -> dict:
     }
 
     def execution_observer(cpu, pc):
+        pending = state.pop("pending_vm_writes", [])
+        for event in pending:
+            try:
+                value_after_write = bytes(cpu.mem_read(
+                    int(event["address"], 16), event["size"])).hex()
+                event["value_after_write"] = value_after_write
+                workspace_index = event.get("workspace_event_index")
+                if workspace_index is not None:
+                    state["vm_workspace_write_events"][workspace_index][
+                        "value_after_write"] = value_after_write
+            except Exception:
+                event["value_after_write"] = None
+            if len(state["vm_backing_write_events"]) < 1024:
+                state["vm_backing_write_events"].append(event)
         offset = pc - image
         state["last_pc_offset"] = hex(offset)
         state["native_instructions"] += 1
@@ -100,6 +118,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
             state["memcpy_import_count"] += 1
             return
         if offset in (FACADE_ENTRY, CHILD_ENTRY, OWNING_VM, 0x168324,
+                      0x16848C, 0x2830EC, 0x283100, 0x28310C,
                       0x171268, 0x2858BC, 0x2859CC, 0x2859D0,
                       0x2859D4, 0x2859D8, 0x2859DC, 0x347F00, 0x347F10):
             row = {
@@ -116,10 +135,45 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 x15 = cpu.reg_read(arm.UC_ARM64_REG_X15)
                 x16 = cpu.reg_read(arm.UC_ARM64_REG_X16)
                 x17 = cpu.reg_read(arm.UC_ARM64_REG_X17)
+                x13 = cpu.reg_read(arm.UC_ARM64_REG_X13)
+                x14 = cpu.reg_read(arm.UC_ARM64_REG_X14)
+                x28 = cpu.reg_read(arm.UC_ARM64_REG_X28)
                 row.update(x15=hex(x15), x16=hex(x16), x17=hex(x17),
+                           x13=hex(x13), x14=hex(x14), x28=hex(x28),
                            store_address=hex(x17 + x16), store_value=hex(x15))
+                source_slot = x14 & 0x1F
+                try:
+                    source_value = int.from_bytes(bytes(cpu.mem_read(
+                        x28 + source_slot * 8, 8)), "little")
+                except Exception:
+                    source_value = None
+                row.update(source_slot=source_slot,
+                           base_slot=x13 & 0x1F,
+                           source_value=(hex(source_value)
+                                         if source_value is not None else None),
+                           source_address=hex(x28 + source_slot * 8))
+                state["vm_source_slot_events"].append(dict(row))
                 if 0x7000e700 <= x17 + x16 < 0x7000e780:
                     state["argument_store_events"].append(row.copy())
+            elif offset == 0x16848C:
+                x28 = cpu.reg_read(arm.UC_ARM64_REG_X28)
+                try:
+                    words = [int.from_bytes(bytes(cpu.mem_read(x28 + i * 8, 8)), "little")
+                             for i in range(32)]
+                except Exception:
+                    words = None
+                state["vm_workspace_snapshots"].append({
+                    "pc_offset": hex(offset), "backing": hex(x28),
+                    "words": [hex(value) for value in words] if words is not None else None,
+                    "cursor": hex(cpu.reg_read(arm.UC_ARM64_REG_X19)),
+                })
+            elif offset in (0x2830EC, 0x283100, 0x28310C):
+                row["frame_registers"] = {
+                    name: hex(cpu.reg_read(getattr(arm, name)))
+                    for name in ("UC_ARM64_REG_X0", "UC_ARM64_REG_X1",
+                                 "UC_ARM64_REG_X2", "UC_ARM64_REG_X3",
+                                 "UC_ARM64_REG_X8", "UC_ARM64_REG_SP")
+                }
             if offset in (0x347F00, 0x347F10):
                 row["mutex_target"] = row["x0"]
             if offset != 0x171268 or (
@@ -186,6 +240,48 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 "value_after_write": value,
                 "pc_offset": hex(cpu.reg_read(arm.UC_ARM64_REG_PC) - image),
             })
+        # The VM may temporarily repurpose X28 while writing its physical
+        # backing array, so use the bounded final workspace neighborhood as
+        # the observation window instead of trusting X28 at the write hook.
+        if 0x7000eb00 <= address and address + size <= 0x7000ed00:
+            x28 = cpu.reg_read(arm.UC_ARM64_REG_X28)
+            slot = ((address - x28) // 8
+                    if (x28 & 7) == 0 and x28 <= address
+                    and address + size <= x28 + 32 * 8 else None)
+            try:
+                value_at_hook = bytes(cpu.mem_read(address, size)).hex()
+            except Exception:
+                value_at_hook = None
+            workspace_index = None
+            if len(state["vm_workspace_write_events"]) < 4096:
+                workspace_index = len(state["vm_workspace_write_events"])
+                state["vm_workspace_write_events"].append({
+                    "address": hex(address), "size": size,
+                    "value_at_hook": value_at_hook,
+                    "value_after_write": None,
+                    "pc": hex(cpu.reg_read(arm.UC_ARM64_REG_PC)),
+                    "pc_offset": hex(cpu.reg_read(arm.UC_ARM64_REG_PC) - image),
+                    "x8": hex(cpu.reg_read(arm.UC_ARM64_REG_X8)),
+                    "x9": hex(cpu.reg_read(arm.UC_ARM64_REG_X9)),
+                    "x10": hex(cpu.reg_read(arm.UC_ARM64_REG_X10)),
+                    "x11": hex(cpu.reg_read(arm.UC_ARM64_REG_X11)),
+                    "x12": hex(cpu.reg_read(arm.UC_ARM64_REG_X12)),
+                    "x13": hex(cpu.reg_read(arm.UC_ARM64_REG_X13)),
+                    "x14": hex(cpu.reg_read(arm.UC_ARM64_REG_X14)),
+                    "x28_at_write": hex(x28),
+                })
+            if len(state.get("pending_vm_writes", ())) < 512:
+                try:
+                    previous = bytes(cpu.mem_read(address, size)).hex()
+                except Exception:
+                    previous = None
+                state.setdefault("pending_vm_writes", []).append({
+                    "address": hex(address), "size": size, "slot": slot,
+                    "previous_value": previous,
+                    "workspace_event_index": workspace_index,
+                    "pc_offset": hex(cpu.reg_read(arm.UC_ARM64_REG_PC) - image),
+                    "x28_at_write": hex(x28),
+                })
 
     def descriptor_read_observer(cpu, address, size):
         if 0x13708000 <= address < 0x13708100 and len(state["descriptor_read_events"]) < 512:
@@ -327,6 +423,33 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "argument_object_write_events": state["argument_object_write_events"],
         "argument_object_read_events": state["argument_object_read_events"],
         "argument_store_events": state["argument_store_events"],
+        "vm_source_slot_events": [
+            event for event in state["vm_source_slot_events"]
+            if 0x7000e700 <= int(event["store_address"], 16) < 0x7000e780
+        ],
+        "vm_source_slot_writer_events": [
+            {
+                "pc": event["pc"],
+                "pc_offset": event["pc_offset"],
+                "instruction": "str x9, [x28, x12, lsl #3]",
+                "destination": event["address"],
+                "x28": event["x28_at_write"],
+                "x12": event["x12"],
+                "x9": event["x9"],
+                "x8": event["x8"],
+            }
+            for event in state["vm_workspace_write_events"]
+            if state["vm_source_slot_events"] and
+            int(event["address"], 16) == int(
+                state["vm_source_slot_events"][-1]["source_address"], 16)
+            and event["pc_offset"] == "0x16e118"
+            and event["x12"] == "0x1"
+            and event["x9"] == "0x0"
+        ],
+        "vm_workspace_snapshots": (
+            [state["vm_workspace_snapshots"][-1]]
+            if state["vm_workspace_snapshots"] else []
+        ),
         "syscall_mmap_events": state["syscall_mmap_events"],
         "continuation_allocations": state["continuation_allocations"],
         "continuation_allocator_events": state["continuation_allocator_events"],
@@ -356,7 +479,7 @@ def main() -> None:
     assert digest == oracle.LIBRARY_SHA256, digest
     rows = [run(args.library, args.libc, image) for image in BASES]
     report = {
-        "schema": "vm9-native-outer-facade-actual-child-20261027-v2",
+        "schema": "vm9-native-outer-facade-actual-child-20261027-v3",
         "evidence_date": "2026-10-27",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
@@ -376,8 +499,11 @@ def main() -> None:
             "URL/header/JNI services remain explicit fixture providers.  At the "
             "descriptor stop, +0x171268 writes x15=0x13708000 into the argument "
             "+0x08 and clears +0x00; the object is in a fresh zero-filled mmap "
-            "and has no observed target-field writer.  A return or STOP therefore "
-            "records continuation only, never signer output."
+            "and the final source slot is written by the VM handler at image+0x16e118: "
+            "the observed store has x28=0x7000eba8, x12=1 and x9=0 on both image "
+            "bases.  This is handler provenance, not a missing-input or injected "
+            "callback target.  A return or STOP therefore records continuation only, "
+            "never signer output."
         ),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

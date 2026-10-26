@@ -6371,8 +6371,12 @@ child 送入正常 facade，并在 `+0x2859cc..+0x2859dc` 的 descriptor bridge
 `0x13700000..0x13740000` 的 `+0x8000`。在该 descriptor 的 `+0x00`、
 `+0x08` 或其周边观察不到 target-field 写入；停止时 0x100 字节窗口全为零，
 因此 `x3=0` 是当前 fresh continuation 的真实状态，不是 verifier 注入的 callback
-target。该轮仍停在 `+0x2859dc`，没有 cleanup/return、whole-request
-native/Python differential、fresh standalone signer 或线上 header 验收。
+target。进一步收窄 workspace 写入后，两个基址都在 `image+0x16e118` 观察到
+`str x9, [x28, x12, lsl #3]`，当时 `x28=0x7000eba8`、`x12=1`、`x9=0`，
+正好写入最终 source slot `0x7000ebb0`；这闭合了 slot 1 的 VM-handler provenance，
+不把它解释成 fixture 保持零、缺失输入或 target 注入。该轮仍停在 `+0x2859dc`，
+没有 cleanup/return、whole-request native/Python differential、fresh standalone
+signer 或线上 header 验收。
 
 证据：[actual child descriptor probe](evidence/vm9_native_outer_facade_actual_child_20261027.json)，
 复现脚本：[verify_vm9_native_outer_facade_actual_child_20261027.py](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
