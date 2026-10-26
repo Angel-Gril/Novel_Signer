@@ -9068,7 +9068,21 @@
     "relative_runtime_slots": 5,
     "external_table_page_offset": "0x13bb000",
     "loader_import_callsite_count": 39,
-    "loader_like_imports": ["dlopen", "dlsym", "dlclose", "mmap", "munmap", "calloc", "pthread_create", "pthread_join", "pthread_key_create", "pthread_getspecific", "pthread_setspecific", "dl_iterate_phdr", "syscall"],
+    "loader_like_imports": [
+      "dlopen",
+      "dlsym",
+      "dlclose",
+      "mmap",
+      "munmap",
+      "calloc",
+      "pthread_create",
+      "pthread_join",
+      "pthread_key_create",
+      "pthread_getspecific",
+      "pthread_setspecific",
+      "dl_iterate_phdr",
+      "syscall"
+    ],
     "known_loader_candidate": "+0x184ad4 called by +0x18a314; static sequence includes dlopen, munmap and mmap",
     "loader_path_argument_dataflow": "initial x0 -> [x29-0xd8] at +0x189ecc -> [x23+0x20] at +0x18ab20 with x23=x29-0x40 -> x0=*(*(x23+0x20)+0x40) at +0x18a30c/+0x18a310 before +0x18a314",
     "loader_path_argument_initial_register": "x0",
@@ -9076,13 +9090,39 @@
     "loader_path_object_owner_recovered": false,
     "slot_store_candidate_count": 0,
     "slot_access_candidate_count": 5,
-    "slot_access_pcs": ["+0x16848c", "+0x168570", "+0x16ba18", "+0x16c37c", "+0x16cf90"],
+    "slot_access_pcs": [
+      "+0x16848c",
+      "+0x168570",
+      "+0x16ba18",
+      "+0x16c37c",
+      "+0x16cf90"
+    ],
     "slot_read_roles": {
-      "0x3798d8": {"consumer": "+0x16848c", "table": "vm-dispatch-0", "index": "w9 & 0x3f"},
-      "0x3798e0": {"consumer": "+0x168570", "table": "vm-dispatch-1", "index": "(w21 >> 6) & 0x3f"},
-      "0x3798e8": {"consumer": "+0x16ba18", "table": "vm-dispatch-2", "index": "(w27 >> 6) & 0x3f"},
-      "0x3798f0": {"consumer": "+0x16c37c", "table": "vm-dispatch-3", "index": "(w26 >> 6) & 0x3f"},
-      "0x3798f8": {"consumer": "+0x16cf90", "table": "vm-dispatch-4", "index": "(w8 >> 22) & 0x1f"}
+      "0x3798d8": {
+        "consumer": "+0x16848c",
+        "table": "vm-dispatch-0",
+        "index": "w9 & 0x3f"
+      },
+      "0x3798e0": {
+        "consumer": "+0x168570",
+        "table": "vm-dispatch-1",
+        "index": "(w21 >> 6) & 0x3f"
+      },
+      "0x3798e8": {
+        "consumer": "+0x16ba18",
+        "table": "vm-dispatch-2",
+        "index": "(w27 >> 6) & 0x3f"
+      },
+      "0x3798f0": {
+        "consumer": "+0x16c37c",
+        "table": "vm-dispatch-3",
+        "index": "(w26 >> 6) & 0x3f"
+      },
+      "0x3798f8": {
+        "consumer": "+0x16cf90",
+        "table": "vm-dispatch-4",
+        "index": "(w8 >> 22) & 0x1f"
+      }
     },
     "outer_loader_sequence": {
       "entry": "+0x184ad4",
@@ -9108,11 +9148,21 @@
     "path": "evidence/vm9_unidbg_runtime_table_watch_fresh_20261026.json",
     "verifier": "python/verify_vm9_unidbg_runtime_table_watch_20261026.py",
     "evidence_label": "Opt-in unidbg external runtime-page watcher on historical-success signer replay",
-    "watch_range": ["0x13600000", "0x13800000"],
+    "watch_range": [
+      "0x13600000",
+      "0x13800000"
+    ],
     "external_runtime_table_event_count": 0,
     "first_access_dump_present": false,
     "signer_rounds": 1,
-    "headers_observed": ["X-Argus", "X-Gorgon", "X-Helios", "X-Khronos", "X-Ladon", "X-Medusa"],
+    "headers_observed": [
+      "X-Argus",
+      "X-Gorgon",
+      "X-Helios",
+      "X-Khronos",
+      "X-Ladon",
+      "X-Medusa"
+    ],
     "headers_are_unidbg_output": true,
     "runtime_table_owner_recovered": false,
     "runtime_table_content_reconstructed": false,
@@ -9126,7 +9176,10 @@
     "path": "evidence/vm9_request_url_pointer_continuation_fresh_20261026.json",
     "verifier": "python/verify_vm9_request_url_pointer_continuation_20261026.py",
     "evidence_label": "Fresh native request continuation with a real-format URL reference and frozen clock",
-    "image_bases": ["0x122c0000", "0x775c205000"],
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
     "url_reference_words": "char* plus refcount pointer",
     "url_byte_length": 107,
     "native_instructions_observed_each": 45679,
@@ -9145,14 +9198,27 @@
     "path": "evidence/vm9_bootstrap_request_url_continuation_fresh_20261026.json",
     "verifier": "python/verify_vm9_bootstrap_request_url_continuation_20261026.py",
     "evidence_label": "Same-CPU bootstrap request continuation with native URL reference",
-    "image_bases": ["0x122c0000", "0x775c205000"],
-    "native_instructions_observed_each": [434059, 434197],
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "native_instructions_observed_each": [
+      434059,
+      434197
+    ],
     "vm_handler_event_count_each": 3091,
     "url_reference_words": "char* plus refcount pointer",
     "url_byte_length": 107,
     "runtime_table_reads_each": 0,
     "runtime_table_writes_each": 0,
-    "callback_target_offsets_each": [["0x347f60"], ["0x347f60"]],
+    "callback_target_offsets_each": [
+      [
+        "0x347f60"
+      ],
+      [
+        "0x347f60"
+      ]
+    ],
     "callback_event_count_each": 5,
     "unmapped_event_count_each": 1,
     "next_stop": "+0x2858b4 loads callback-object field 0 as image+0x347f60 memcpy PLT; the unserviced PLT path then faults",
@@ -9168,7 +9234,10 @@
     "path": "evidence/vm9_bootstrap_request_memcpy_continuation_fresh_20261026.json",
     "verifier": "python/verify_vm9_bootstrap_request_memcpy_continuation_20261026.py",
     "evidence_label": "Same-CPU bootstrap request continuation through real memcpy PLT",
-    "image_bases": ["0x122c0000", "0x775c205000"],
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
     "native_instructions_observed_each": 99927,
     "native_import_events_each": 194,
     "import_name_counts_each": {
@@ -9184,7 +9253,14 @@
     },
     "memcpy_call_count_each": 30,
     "first_memcpy_size_each": 24,
-    "callback_target_offsets_each": [["0x347f60"], ["0x347f60"]],
+    "callback_target_offsets_each": [
+      [
+        "0x347f60"
+      ],
+      [
+        "0x347f60"
+      ]
+    ],
     "callback_event_count_each": 5,
     "request_reached_oracle_stop_each": true,
     "output_reference_nonzero_each": true,
@@ -9209,7 +9285,11 @@
     "apk_library_entry": "lib/arm64-v8a/libmetasec_ml.so",
     "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
     "apk_entry_matches_supplied_dso": true,
-    "java_loader_paths": ["System.loadLibrary(name)", "APK/split ABI ZIP lookup and extraction", "System.load(private lib path)"],
+    "java_loader_paths": [
+      "System.loadLibrary(name)",
+      "APK/split ABI ZIP lookup and extraction",
+      "System.load(private lib path)"
+    ],
     "real_library_source_closed": true,
     "external_custom_mapping_source_closed": false,
     "runtime_table_owner_recovered": false,
@@ -9230,7 +9310,9 @@
     "method_addend": "0x189eac",
     "constructor": "0x18ceb0",
     "constructor_allocation_size": "0xb8",
-    "constructor_direct_callers": ["0x18ba00"],
+    "constructor_direct_callers": [
+      "0x18ba00"
+    ],
     "path_field_offset": "0x40",
     "path_field_written_by_constructor": false,
     "path_writer_vtable_slot": "0x34db48",
@@ -9251,5 +9333,56 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The relocated 0x34db18 slot is a real vtable entry for +0x189eac, and +0x18ceb0 allocates/constructs the same final-vtable object. Its constructor does not write the +0x40 field later consumed by +0x18a310, but the same vtable's 0x34db48 slot points to +0x188ac0, whose static dataflow writes that field. Adjacent slot 0x34db50 points to +0x189cbc, which consumes +0x40 as a callable, so the field role is not uniquely identified as a path string. Writer provenance is closed; invocation, runtime path, custom mapping and runtime-table ownership remain unresolved."
+  },
+  "vm9_bootstrap_request_callback_object_trace_fresh_20261026": {
+    "path": "evidence/vm9_bootstrap_request_callback_object_trace_fresh_20261026.json",
+    "verifier": "python/verify_vm9_bootstrap_request_callback_object_trace_20261026.py",
+    "evidence_label": "Same-CPU native callback-object field lifecycle and target-writer provenance",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "wrapper_offsets": [
+      "+0x2858a8",
+      "+0x2858ac",
+      "+0x2858b0",
+      "+0x2858b4",
+      "+0x2858b8"
+    ],
+    "native_guest_write_window": [
+      "0x7000e900",
+      "0x7000ea20"
+    ],
+    "callback_object_address": "0x7000e948",
+    "callback_object_field0_writer_pc": "+0x171268",
+    "callback_object_field0_writer_target": "image+0x347f60",
+    "callback_object_field0_writer_target_match_each": true,
+    "callback_object_field0_writer_provenance_closed": true,
+    "callback_wrapper_trace_count_each": 5,
+    "real_memcpy_import_service_used_each": true,
+    "request_reached_oracle_stop_each": true,
+    "runtime_table_reads_each": 0,
+    "runtime_table_writes_each": 0,
+    "synthetic_callback_vtable_used": false,
+    "synthetic_dispatch_table_used": false,
+    "whole_request_native_success": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "On the same Unicorn CPU that completed JNI/bootstrap, native VM stores at +0x171268 populate callback object 0x7000e948 field 0 with image+0x347f60 for both bases. The five-instruction +0x2858a8 bridge then reads that target and the real memcpy continuation returns to the oracle STOP. This closes target-field writer provenance for this continuation only; it does not recover the callback object graph for the full signer, external runtime-table owner, standalone signer or online acceptance.",
+    "callback_object_field0_vm_store_pc": "+0x171268",
+    "callback_object_field0_source_slot_each": [
+      3,
+      3
+    ],
+    "callback_object_field0_base_slot_each": [
+      29,
+      29
+    ],
+    "callback_object_field0_source_value_is_target_each": [
+      true,
+      true
+    ],
+    "callback_object_field0_value_derived_from_vm_slot3": true,
+    "callback_object_field0_writer_register_contract": "destination=x17+x16; written_value=x15; source_slot=x14&0x1f; base_slot=x13&0x1f"
   }
 }

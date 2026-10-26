@@ -6182,3 +6182,22 @@ table、whole-request native differential、fresh signer 和线上验收仍未�
 槽 `0x34db50 -> +0x189cbc` 还把同一 `+0x40` 当作 callable 消费，因此不能仅按偏移
 把字段唯一命名为 path string；没有合成表、path 或 callback。证据：[loader vtable constructor](evidence/vm9_loader_vtable_constructor_fresh_20261026.json)，
 脚本：[verify_vm9_loader_vtable_constructor_20261026.py](python/verify_vm9_loader_vtable_constructor_20261026.py)。
+
+
+## 2026-10-26：callback-object field writer provenance
+
+在同一只完成 JNI/bootstrap 的 Unicorn CPU 上继续 URL-bearing request，并保留真实
+`memcpy` PLT 服务。两个 image base 都观察到 native VM 的 `+0x171268` 向
+`0x7000e948` callback object field 0 写入 `image+0x347f60`；随后
+`+0x2858a8/+0x2858ac/+0x2858b0/+0x2858b4/+0x2858b8` 五条桥接指令读取该
+target，memcpy 完成后回到 oracle STOP。该轮没有写入 runtime dispatch page 或
+callback vtable，确认的是这个 continuation 的 target-field writer 与 consumer
+闭环，不是完整 signer callback-object graph、runtime-table owner、fresh signer 或
+线上验收。证据见 [callback-object trace](evidence/vm9_bootstrap_request_callback_object_trace_fresh_20261026.json)，
+复现脚本为 [verify_vm9_bootstrap_request_callback_object_trace_20261026.py](python/verify_vm9_bootstrap_request_callback_object_trace_20261026.py)。
+
+该 writer 的 VM store ABI 也已记录：两个基址均由 `+0x171268` 使用 source slot
+`x14&0x1f = 3`、base slot `x13&0x1f = 29`，以 `x17+x16` 指向 callback object，
+并将 slot 3 的值写入 field 0；slot 3 值与 `image+0x347f60` 一致。这个结果把
+target 从常量猜测推进到当前 VM slot dataflow 证据，但没有恢复完整 VM code、五组
+外部 dispatch table 或 signer。

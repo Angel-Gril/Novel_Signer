@@ -1046,3 +1046,21 @@ runtime path value remain unobserved. The adjacent vtable slot `0x34db50` points
 identified as a path string. This is static constructor/vtable evidence only;
 the custom mapping, runtime table, whole-request signer, and online acceptance
 remain unresolved. See [loader vtable constructor evidence](evidence/vm9_loader_vtable_constructor_fresh_20261026.json).
+
+
+同一轮新增 callback-object 生命周期观察。两个 image base 的 native VM 都在
+`+0x171268` 向对象 `0x7000e948` 的 field 0 写入真实
+`image+0x347f60` memcpy PLT；随后 `+0x2858a8..b8` 五条桥接指令读取该
+target，标准三参数 memcpy 服务完成后回到 oracle STOP。该证据把这个
+continuation 的 target-field writer provenance 从“只看到消费”推进到“看到
+原生写入与消费”，但不等同于完整 signer callback-object graph、runtime-table
+owner、fresh signer 或线上验收。见
+[callback-object trace](evidence/vm9_bootstrap_request_callback_object_trace_fresh_20261026.json)，
+复现脚本为
+[verify_vm9_bootstrap_request_callback_object_trace_20261026.py](python/verify_vm9_bootstrap_request_callback_object_trace_20261026.py)。
+
+该 writer 不是直接的固定常量写入：`+0x171268` 的 store ABI 在两个基址都使用
+`x14&0x1f = 3` 作为 source slot、`x13&0x1f = 29` 作为 base slot，目标地址为
+`x17+x16 = 0x7000e948`，写入值来自 slot 3，且与 `image+0x347f60` 相同。该
+寄存器/slot 记录仍只覆盖当前 continuation；完整 VM program、外部 dispatch-table
+owner 和 signer 输出继续保持未恢复。
