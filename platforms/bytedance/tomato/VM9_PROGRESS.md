@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-26：人工 child continuation 到 native return
+
+在上一条 facade ABI 探针的 synthetic receiver 上补齐最小 receiver/mutex/tree 字段，
+让注入的 `image+0x27dd04` 真正执行。两个基址均执行 11,617 条 native 指令，
+返回 `x0=0`，最后位于 facade epilogue `+0x17bac0`；未观察 unmapped 访问。
+该 child target、输入对象和 provider 都是人工 fixture，零返回不是 signer 输出，
+因此不计作 normal facade handoff、whole-request differential 或签名成功。
+
+证据：[child continuation](evidence/vm9_java_facade_injected_child_continuation_20261026.json)；
+复现：[verifier](python/verify_vm9_java_facade_injected_child_continuation_20261026.py)。
+
+
 ## 2026-10-26：native facade 到 child 的 ABI 边界观察
 
 在 fresh ELF native `+0x17b8f8` facade 上，独立探针只把 synthetic receiver

@@ -1,5 +1,8 @@
 # Tomato / Fanqie (ByteDance)
 
+Artificial child continuation (2026-10-26): with bounded synthetic receiver/mutex/tree fields, both bases execute injected `+0x27dd04` for 11,617 native instructions and return `x0=0` at `+0x17bac0`. The target and providers are verifier fixture state; zero is not signer output or normal facade handoff evidence. See [continuation evidence](evidence/vm9_java_facade_injected_child_continuation_20261026.json) and [verifier](python/verify_vm9_java_facade_injected_child_continuation_20261026.py).
+
+
 Injected child-entry ABI observation (2026-10-26): fresh native `+0x17b8f8`
 reaches an explicitly injected `image+0x27dd04` virtual target on both bases.
 The observed ABI is `x0=receiver`, `x1=url reference`, `x2=header reference`,

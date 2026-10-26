@@ -1,0 +1,123 @@
+{
+  "schema": "vm9-java-facade-injected-child-continuation-20261026-v1",
+  "evidence_date": "2026-10-26",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "facade_entry_offset": "0x17b8f8",
+      "injected_virtual_target_offset": "0x27dd04",
+      "target_slot_address": "0x1261d610",
+      "outcome": "child_entry_observed_and_continued",
+      "error": null,
+      "returned_x0": "0x0",
+      "native_instructions_observed": 11617,
+      "last_pc_offset": "0x17bac0",
+      "unmapped_events": [],
+      "observed_offsets": [
+        "0x17b8f8",
+        "0x27dd04"
+      ],
+      "child_entry": {
+        "x0": "0x70001400",
+        "x1": "0x7000ee78",
+        "x2": "0x7000ee68",
+        "x3": "0x138",
+        "x8": "0x7000ee88",
+        "sp": "0x7000ee50",
+        "x30": "0x1243ba44",
+        "stack_delta_from_facade_fixture": 176,
+        "url_reference_words": [
+          "0x70004020",
+          "0x70004080"
+        ],
+        "header_reference_words": [
+          "0x70004090",
+          "0x70004150"
+        ],
+        "output_reference_words": [
+          "0xa5a5a5a5a5a5a5a5",
+          "0xa5a5a5a5a5a5a5a5"
+        ]
+      },
+      "synthetic_virtual_target_injected": true,
+      "child_instruction_executed": true,
+      "native_snapshot_input": false,
+      "normal_facade_child_handoff_verified": false,
+      "whole_request_native_differential_verified": false,
+      "fresh_standalone_signer_verified": false,
+      "online_header_acceptance_verified": false,
+      "child_returned_zero": true,
+      "child_stop_pc_offset": "0x17bac0"
+    },
+    {
+      "image_base": "0x775c205000",
+      "facade_entry_offset": "0x17b8f8",
+      "injected_virtual_target_offset": "0x27dd04",
+      "target_slot_address": "0x775c562610",
+      "outcome": "child_entry_observed_and_continued",
+      "error": null,
+      "returned_x0": "0x0",
+      "native_instructions_observed": 11617,
+      "last_pc_offset": "0x17bac0",
+      "unmapped_events": [],
+      "observed_offsets": [
+        "0x17b8f8",
+        "0x27dd04"
+      ],
+      "child_entry": {
+        "x0": "0x70001400",
+        "x1": "0x7000ee78",
+        "x2": "0x7000ee68",
+        "x3": "0x138",
+        "x8": "0x7000ee88",
+        "sp": "0x7000ee50",
+        "x30": "0x775c380a44",
+        "stack_delta_from_facade_fixture": 176,
+        "url_reference_words": [
+          "0x70004020",
+          "0x70004080"
+        ],
+        "header_reference_words": [
+          "0x70004090",
+          "0x70004150"
+        ],
+        "output_reference_words": [
+          "0xa5a5a5a5a5a5a5a5",
+          "0xa5a5a5a5a5a5a5a5"
+        ]
+      },
+      "synthetic_virtual_target_injected": true,
+      "child_instruction_executed": true,
+      "native_snapshot_input": false,
+      "normal_facade_child_handoff_verified": false,
+      "whole_request_native_differential_verified": false,
+      "fresh_standalone_signer_verified": false,
+      "online_header_acceptance_verified": false,
+      "child_returned_zero": true,
+      "child_stop_pc_offset": "0x17bac0"
+    }
+  ],
+  "fresh_native_cases": 2,
+  "observation_only": true,
+  "synthetic_virtual_target_injected": true,
+  "child_instruction_executed": true,
+  "native_snapshot_input": false,
+  "normal_facade_child_handoff_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "Fresh native +0x17b8f8 reaches the injected image+0x27dd04 slot on both bases and executes the child to a native return of zero, stopping at the facade epilogue boundary +0x17bac0. The receiver/virtual target and child input fields are synthetic fixture mutations; no signer output or normal facade routing is claimed.",
+  "limitations": [
+    "The virtual target slot and child receiver/tree fields are deliberately supplied by the verifier.",
+    "JNI, allocator, diagnostics and URL/header objects remain explicit fixture providers.",
+    "The child return zero is not a signer result; no output tree, signer header or online acceptance is claimed."
+  ],
+  "child_returned_zero_each": true,
+  "child_stop_pc_each": [
+    "0x17bac0",
+    "0x17bac0"
+  ],
+  "child_completed_native_return_each": true
+}

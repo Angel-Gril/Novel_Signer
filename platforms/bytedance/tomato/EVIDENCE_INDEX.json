@@ -9607,5 +9607,29 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "Fresh native +0x17b8f8 reaches the deliberately injected image+0x27dd04 slot on both bases and exposes the child ABI before execution. The receiver and virtual target are synthetic fixture state; this does not establish the normal target, child completion or signing."
+  },
+  "vm9_java_facade_injected_child_continuation_20261026": {
+    "path": "evidence/vm9_java_facade_injected_child_continuation_20261026.json",
+    "verifier": "python/verify_vm9_java_facade_injected_child_continuation_20261026.py",
+    "evidence_label": "Native child continuation after artificial facade target injection",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "facade_entry_offset": "0x17b8f8",
+    "injected_virtual_target_offset": "0x27dd04",
+    "native_instruction_count_each": 11617,
+    "child_returned_zero_each": true,
+    "child_stop_pc_each": [
+      "0x17bac0",
+      "0x17bac0"
+    ],
+    "synthetic_virtual_target_injected": true,
+    "child_instruction_executed": true,
+    "normal_facade_child_handoff_verified": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Supplying bounded synthetic receiver/mutex/tree fields lets both bases execute injected +27dd04 to a zero native return at +17bac0. This is an artificial child continuation; zero return is not signer output and does not establish normal facade routing."
   }
 }

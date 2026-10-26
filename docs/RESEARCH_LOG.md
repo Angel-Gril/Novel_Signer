@@ -1,5 +1,13 @@
 # Checkpoint log
 
+2026-10-26：人工 facade child continuation 执行到 native return。
+在 synthetic receiver 上补齐有限 mutex/tree 字段后，两个基址的注入 `+0x27dd04`
+各执行 11,617 条 native 指令，在 `+0x17bac0` 返回 `x0=0`，没有 unmapped
+访问。target、输入对象和 provider 均为 verifier fixture；零返回不是 signer 输出，
+不计作 normal facade handoff 或 whole-request differential。见
+[child continuation evidence](../platforms/bytedance/tomato/evidence/vm9_java_facade_injected_child_continuation_20261026.json)。
+
+
 2026-10-26：补齐 native facade→child 的人工 target ABI 观察。
 独立 fresh ELF probe 在 `+0x17b8f8` 执行期间将 synthetic receiver 的虚表 `+0x20`
 改为 `image+0x27dd04`，两个基址均在 child 第一条指令前到达目标；入口寄存器为
