@@ -72,6 +72,8 @@
           "x8": "0xa5a5a5a5a5a5a5a5"
         }
       ],
+      "native_chain_writes": [],
+      "fixture_chain_initializer": "verify_vm9_java_request_facade_fresh_20261020.fixture",
       "request_call": {
         "args": [
           "0x70001400",
@@ -170,6 +172,8 @@
           "x8": "0xa5a5a5a5a5a5a5a5"
         }
       ],
+      "native_chain_writes": [],
+      "fixture_chain_initializer": "verify_vm9_java_request_facade_fresh_20261020.fixture",
       "request_call": {
         "args": [
           "0x70001400",
@@ -208,7 +212,7 @@
   "whole_request_native_differential_verified": false,
   "fresh_standalone_signer_verified": false,
   "online_header_acceptance_verified": false,
-  "interpretation": "The untouched facade fixture's native path loads facade+0x18, then receiver+0 and vtable+0x20 before invoking the explicit request service. This closes only fixture-path load provenance; it does not establish a real Java receiver, child dispatcher, request VM, or signer output.",
+  "interpretation": "The untouched facade fixture's native path loads facade+0x18, then receiver+0 and vtable+0x20 before invoking the explicit request service. No native instruction writes those chain fields during the call; their values originate in the explicit facade.fixture provider. This closes only fixture-path load provenance; it does not establish a real Java receiver, child dispatcher, request VM, or signer output.",
   "limitations": [
     "JNI, receiver object, vtable and request target are explicit fixture providers.",
     "The request service is synthetic and the actual request VM is not executed.",

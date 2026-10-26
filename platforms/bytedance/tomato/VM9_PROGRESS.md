@@ -5,7 +5,8 @@
 未修改 synthetic receiver 虚表的 fresh native facade 运行记录了完整读取链：
 `facade+0x18 → receiver+0 → vtable+0x20`，对应 PC 偏移分别为
 `+0x17b9e4`、`+0x17ba24`、`+0x17ba38`，两个 image base 一致，随后调用显式
-request service。该证据只闭合 fixture-path 的读取 provenance；receiver、vtable、
+request service；调用期间没有 native 对这三个 chain field 的写入，它们来自
+`facade.fixture` 的显式 provider。该证据只闭合 fixture-path 的读取 provenance；receiver、vtable、
 JNI provider 和 request service 仍是 synthetic，normal child handoff、whole-request
 differential、standalone signer 与线上接受均未验证。
 

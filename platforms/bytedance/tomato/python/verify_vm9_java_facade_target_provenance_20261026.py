@@ -144,6 +144,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
     assert all(event["value"] == hex(value) for event, value in zip(
         [event for event in events if event["kind"] == "read"],
         (receiver, vtable, expected_target))), events
+    assert not [event for event in events if event["kind"] == "write"], events
     assert call["args"] is not None and call["args"][0] == hex(receiver)
     assert call["args"][3] == hex(0x138) and int(call["args"][1], 16) != 0
     assert int(call["args"][2], 16) != 0 and int(call["args"][4], 16) != 0
@@ -156,6 +157,8 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "vtable_address": hex(vtable), "target_slot_address": hex(target_slot),
         "expected_request_target": hex(expected_target), "initial_watched_values": values,
         "load_store_events": events, "instruction_markers": instructions,
+        "native_chain_writes": [],
+        "fixture_chain_initializer": "verify_vm9_java_request_facade_fresh_20261020.fixture",
         "request_call": call, "service_requests": service.requests,
         "returned_x0": hex(returned) if returned is not None else None,
         "error": error, "unmapped_events": unmapped,
@@ -188,7 +191,7 @@ def main() -> None:
         "whole_request_native_differential_verified": False,
         "fresh_standalone_signer_verified": False,
         "online_header_acceptance_verified": False,
-        "interpretation": "The untouched facade fixture's native path loads facade+0x18, then receiver+0 and vtable+0x20 before invoking the explicit request service. This closes only fixture-path load provenance; it does not establish a real Java receiver, child dispatcher, request VM, or signer output.",
+        "interpretation": "The untouched facade fixture's native path loads facade+0x18, then receiver+0 and vtable+0x20 before invoking the explicit request service. No native instruction writes those chain fields during the call; their values originate in the explicit facade.fixture provider. This closes only fixture-path load provenance; it does not establish a real Java receiver, child dispatcher, request VM, or signer output.",
         "limitations": [
             "JNI, receiver object, vtable and request target are explicit fixture providers.",
             "The request service is synthetic and the actual request VM is not executed.",

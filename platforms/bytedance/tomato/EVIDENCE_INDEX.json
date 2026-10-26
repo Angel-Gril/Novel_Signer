@@ -9651,6 +9651,8 @@
       "0x17ba24",
       "0x17ba38"
     ],
+    "native_chain_writes_each": [],
+    "fixture_chain_initializer": "verify_vm9_java_request_facade_fresh_20261020.fixture",
     "request_target_each": "0x7000fc00",
     "synthetic_virtual_request_service": true,
     "synthetic_virtual_target_injected": false,
@@ -9658,6 +9660,6 @@
     "whole_request_native_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "The untouched facade fixture records the native load chain from facade+0x18 through receiver vtable and slot +0x20 on both image bases before invoking the explicit request service. This closes fixture-path provenance only; the receiver, vtable and request service remain synthetic and the real child/request VM is not executed."
+    "comparison_note": "The untouched facade fixture records the native load chain from facade+0x18 through receiver vtable and slot +0x20 on both image bases before invoking the explicit request service. No native write to those chain fields occurs; their values come from the explicit facade.fixture provider. This closes fixture-path provenance only; the receiver, vtable and request service remain synthetic and the real child/request VM is not executed."
   }
 }
