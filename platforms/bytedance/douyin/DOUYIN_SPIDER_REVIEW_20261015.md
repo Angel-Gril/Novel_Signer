@@ -1,9 +1,9 @@
 # DouYin_Spider 接口与现有七神研究对照
 
-分析日期：2026-10-15 Asia/Shanghai。对象为
-[`cv-cat/DouYin_Spider`，提交 `fc8b9c2490a9561265425c26058290f01c064eda`](https://github.com/cv-cat/DouYin_Spider/tree/fc8b9c2490a9561265425c26058290f01c064eda)。
-本次读取22个相关源码/说明文件，检查接口、签名调用和会话依赖；未运行其登录、
-采集或写操作，未进行线上接口验收。下文的“有实现”只描述该提交源码。
+当前复核日期：2026-10-27 Asia/Shanghai。对象为上游 HEAD
+[`cv-cat/DouYin_Spider`，提交 `d151f9c2980abc304c1ae4918c2272675cd9e4c2`](https://github.com/cv-cat/DouYin_Spider/tree/d151f9c2980abc304c1ae4918c2272675cd9e4c2)。
+本次按 HEAD 重新读取 121 个源码/说明文件，检查接口、签名调用和会话依赖；未运行其登录、
+采集或写操作，未进行线上接口验收。下文的“有实现”只描述该提交。
 
 ## 结论
 
