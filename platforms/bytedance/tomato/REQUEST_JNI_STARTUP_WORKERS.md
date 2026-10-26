@@ -9631,3 +9631,27 @@ constructor 的观察写入没有覆盖 `+0x40`。同一 `0x34db08` vtable 的 `
 创建 runtime table、合成 callback 或声明 signer 成功。证据：
 `evidence/vm9_loader_vtable_constructor_fresh_20261026.json`；脚本：
 `python/verify_vm9_loader_vtable_constructor_20261026.py`。
+
+## 6.284 same-CPU native outer → actual child → normal facade return（2026-10-27 Asia/Shanghai）
+
+在同一只 Unicorn CPU 上保留 outer getter 产生的真实 child、vtable 和 callback
+pair，继续进入 normal Java facade `+0x17b8f8`。本轮把 verifier 的 main-image
+undefined-import resolver 从 `memset` 扩展到真实 ELF 的 `__cxa_atexit` relocation；
+两基址的 `+0x382cd8` 均由 matching libc 解析到 `0x51075254`，没有写入合成
+callback target。VM handler `+0x171268` 随后把该 target 写进 packed field 0，
+`+0x285b7c/+0x285b8c` 完成真实注册调用。
+
+两基址均真实进入 owning request VM `+0x2830c4`，执行 **913567** 条 native 指令，
+完成 **59** 次显式 JNI provider 事件，并从 facade epilogue `+0x17bac0` 返回
+`G+0x1e10` Java result handle。新增证据字段确认 `actual_facade_return_verified`、
+`real_request_vm_entry_used`、`real_cxa_atexit_relocation_used` 均为 true；
+`whole_request_native_differential_verified`、真实 Android JVM、fresh standalone signer
+和线上 header acceptance 仍保持 false，因为 JNI/Java provider 仍是显式 fixture。
+
+证据：`evidence/vm9_native_outer_facade_actual_child_20261027.json`；脚本：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_native_outer_facade_actual_child_20261027.py `
+  --library C:\AI\6\libmetasec_ml_71332.so --libc C:\AI\6\_vlibc.so `
+  --output platforms/bytedance/tomato/evidence/vm9_native_outer_facade_actual_child_20261027.json
+```

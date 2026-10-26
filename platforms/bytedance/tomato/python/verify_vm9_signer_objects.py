@@ -91,7 +91,8 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
            memory_write_observer=None, code_hook_ranges=None, real_malloc=False,
            real_recursive_mutexes=False, real_diagnostics=False, real_jni_acquisition=False,
            real_jni_dispatch=False, map_extra_input_pages=False,
-           memory_read_observer=None, unmapped_observer=None):
+           memory_read_observer=None, unmapped_observer=None,
+           main_import_names=(), main_import_observer=None):
     if type(map_extra_input_pages) is not bool:
         raise ValueError("extra input page mapping must be boolean")
     if real_malloc and (libc is None or malloc_handler is not None or allocation_effect is not None):
@@ -120,6 +121,7 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
     libc_base = 0x51000000
     mutex_entries = {}
     malloc_entry = None
+    libc_exports = {}
     if libc:
         with libc.open("rb") as stream:
             elf = ELFFile(stream)
@@ -134,6 +136,8 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
             for section in elf.iter_sections():
                 if section["sh_type"] in ("SHT_SYMTAB", "SHT_DYNSYM"):
                     for symbol in section.iter_symbols():
+                        if symbol["st_value"] and symbol["st_shndx"] != "SHN_UNDEF":
+                            libc_exports.setdefault(symbol.name, symbol["st_value"])
                         if symbol.name == "malloc" and symbol["st_value"] and symbol["st_shndx"] != "SHN_UNDEF":
                             malloc_entry = libc_base + symbol["st_value"]
                         if symbol.name in ("pthread_mutex_init", "pthread_mutex_lock", "pthread_mutex_unlock",
@@ -170,6 +174,39 @@ def native(library, base, function, arguments, pages, *, references=(), env=0,
     for page, data in pages.items():
         if not GUEST <= page << 12 < GUEST + GUEST_SIZE:
             cpu.mem_write(page << 12, bytes(data))
+    # A caller may opt into a small, explicit subset of the dynamic linker's
+    # undefined main-image relocations.  Apply these after copying fresh input
+    # pages: the page fixture contains the file bytes and would otherwise
+    # overwrite the resolved GOT value.  Relative relocations remain handled
+    # above as before; this path is intentionally opt-in and observable.
+    requested_main_imports = frozenset(main_import_names)
+    if requested_main_imports:
+        if libc is None:
+            raise ValueError("main import relocation resolution requires matching libc")
+        with library.open("rb") as stream:
+            elf = ELFFile(stream)
+            for section in elf.iter_sections():
+                if section["sh_type"] != "SHT_RELA":
+                    continue
+                symbols = elf.get_section(section["sh_link"])
+                for relocation in section.iter_relocations():
+                    if relocation["r_info_type"] not in (257, 1025, 1026):
+                        continue
+                    symbol = symbols.get_symbol(relocation["r_info_sym"])
+                    if symbol.name not in requested_main_imports:
+                        continue
+                    if symbol["st_shndx"] != "SHN_UNDEF":
+                        target = base + symbol["st_value"] + relocation["r_addend"]
+                    else:
+                        if symbol.name not in libc_exports:
+                            raise RefillUnsupported(
+                                f"matching libc export is missing: {symbol.name}")
+                        target = libc_base + libc_exports[symbol.name] + relocation["r_addend"]
+                    address = base + relocation["r_offset"]
+                    cpu.mem_write(address, target.to_bytes(8, "little"))
+                    if main_import_observer is not None:
+                        main_import_observer(symbol.name, relocation["r_info_type"],
+                                             address, target)
     cpu.reg_write(UC_ARM64_REG_SP, GUEST + 0xEF00)
     cpu.reg_write(UC_ARM64_REG_X30, STOP)
     cpu.reg_write(UC_ARM64_REG_TPIDR_EL0, GUEST + 0xD000)

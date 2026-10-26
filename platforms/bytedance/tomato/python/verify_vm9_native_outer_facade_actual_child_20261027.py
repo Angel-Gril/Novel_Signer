@@ -25,10 +25,41 @@ G = headers.G
 FACADE_ENTRY = 0x17B8F8
 CHILD_ENTRY = 0x27DD04
 OWNING_VM = 0x2830C4
+JNI_FIND_CLASS = G + 0xF800
+JNI_METHOD_LOOKUP = G + 0xF810
+JNI_EXCEPTION_CHECK = G + 0xF830
+JNI_VARIADIC_CALL = G + 0xF850
+JNI_METHOD_LOOKUP_108 = G + 0xF870
+JNI_ARRAY_ACCESS = G + 0xF890
+JNI_ARRAY_LENGTH = G + 0xF8B0
+JNI_ARRAY_ELEMENT = G + 0xF8D0
+JNI_STRING_ACCESS = G + 0xF8F0
+JNI_STRING_RELEASE = G + 0xF910
+JNI_HANDLE_CALL = G + 0xF930
+
+VM_HANDLER_OPS = {
+    0x1692FC: "add64",
+    0x16DB74: "add_signed32_immediate",
+    0x16E254: "materialize_signed_immediate",
+    0x16E41C: "materialize_bitwise_value",
+    0x16F974: "load_indexed_signed_offset",
+    0x17030C: "load_signed_word_indexed",
+}
+VM_SOURCE_STORE = 0x16E118
 
 
 def _u(cpu, address, width=8):
     return int.from_bytes(bytes(cpu.mem_read(address, width)), "little")
+
+
+def _json_safe(value):
+    if isinstance(value, bytes):
+        return value.hex()
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    return value
 
 
 def _overlay_guest(cpu, pages):
@@ -75,12 +106,22 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "syscall_mmap_events": [],
         "argument_store_events": [],
         "vm_source_slot_events": [],
+        "vm_handler_trace": [],
         "vm_workspace_write_events": [],
         "vm_backing_write_events": [],
         "vm_workspace_snapshots": [],
         "descriptor_snapshot": None,
         "continuation_allocations": [],
         "continuation_allocator_events": [],
+        "main_import_relocations": [],
+        "main_import_write_events": [],
+        "continuation_jni_calls": [],
+        "helper_object_events": [],
+        "helper_object_write_events": [],
+        "helper_stack_write_events": [],
+        "facade_return_registers": None,
+        "facade_dispatch_events": [],
+        "request_vm_entry_events": [],
         "unmapped": [],
     }
     markers = []
@@ -93,6 +134,154 @@ def run(library: Path, libc: Path, image: int) -> dict:
         offset: handler for offset, handler in service.imports(image).items()
         if abs(offset) > 0x10000000
     }
+
+    def install_handle(cpu, pointer):
+        cpu.mem_write(pointer, JNI_HANDLE_CALL.to_bytes(8, "little"))
+        cpu.mem_write(pointer + 8, (0).to_bytes(8, "little"))
+        cpu.mem_write(pointer + 0x10, (0).to_bytes(8, "little"))
+        cpu.mem_write(pointer + 0x18, (0).to_bytes(8, "little"))
+        cpu.mem_write(pointer + 0x20, (0).to_bytes(8, "little"))
+
+    def find_class(cpu):
+        install_handle(cpu, G + 0x9800)
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x30",
+            "operation": "FindClass",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "name": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "result": hex(G + 0x9800),
+        })
+        return G + 0x9800
+
+    def method_lookup(cpu):
+        install_handle(cpu, G + 0x9810)
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x388",
+            "operation": "JNI_method_lookup_or_call",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "receiver": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "arg2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+            "arg3": hex(cpu.reg_read(arm.UC_ARM64_REG_X3)),
+            "result": hex(G + 0x9810),
+        })
+        return G + 0x9810
+
+    def exception_check(cpu):
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x720",
+            "operation": "ExceptionCheck",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "result": "0x0",
+        })
+        return 0
+
+    def variadic_call(cpu):
+        install_handle(cpu, G + 0x9820)
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x398",
+            "operation": "JNI_variadic_call",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "arg1": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "arg2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+            "arg3": hex(cpu.reg_read(arm.UC_ARM64_REG_X3)),
+            "result": hex(G + 0x9820),
+        })
+        return G + 0x9820
+
+    def method_lookup_108(cpu):
+        install_handle(cpu, G + 0x9830)
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x108",
+            "operation": "JNI_method_lookup_108",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "receiver": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "arg2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+            "arg3": hex(cpu.reg_read(arm.UC_ARM64_REG_X3)),
+            "result": hex(G + 0x9830),
+        })
+        return G + 0x9830
+
+    def array_access(cpu):
+        install_handle(cpu, G + 0x9840)
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x118",
+            "operation": "JNI_array_or_string_access",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "arg1": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "arg2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+            "arg3": hex(cpu.reg_read(arm.UC_ARM64_REG_X3)),
+            "result": hex(G + 0x9840),
+        })
+        return G + 0x9840
+
+    def array_length(cpu):
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x558",
+            "operation": "GetArrayLength",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "array": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "result": "0x3",
+        })
+        return 3
+
+    def array_element(cpu):
+        index = cpu.reg_read(arm.UC_ARM64_REG_X2)
+        install_handle(cpu, G + 0x9850 + (index & 0xF) * 0x10)
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x568",
+            "operation": "GetObjectArrayElement",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "array": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "index": index,
+            "result": hex(G + 0x9850 + (index & 0xF) * 0x10),
+        })
+        return G + 0x9850 + (index & 0xF) * 0x10
+
+    def string_access(cpu):
+        install_handle(cpu, G + 0x9860)
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x548",
+            "operation": "JNI_string_access",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "string": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "arg2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+            "result": hex(G + 0x9860),
+        })
+        return G + 0x9860
+
+    def string_release(cpu):
+        state["continuation_jni_calls"].append({
+            "slot_offset": "0x550",
+            "operation": "JNI_string_release",
+            "env": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "string": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "chars": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+            "result": "0x0",
+        })
+        return 0
+
+    def handle_call(cpu):
+        state["continuation_jni_calls"].append({
+            "slot_offset": "object-vtable",
+            "operation": "JNI_handle_method",
+            "receiver": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+            "arg1": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+            "arg2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+            "result": "0x0",
+        })
+        return 0
+
+    continuation_imports[JNI_FIND_CLASS - image] = find_class
+    continuation_imports[JNI_METHOD_LOOKUP - image] = method_lookup
+    continuation_imports[JNI_EXCEPTION_CHECK - image] = exception_check
+    continuation_imports[JNI_VARIADIC_CALL - image] = variadic_call
+    continuation_imports[JNI_METHOD_LOOKUP_108 - image] = method_lookup_108
+    continuation_imports[JNI_ARRAY_ACCESS - image] = array_access
+    continuation_imports[JNI_ARRAY_LENGTH - image] = array_length
+    continuation_imports[JNI_ARRAY_ELEMENT - image] = array_element
+    continuation_imports[JNI_STRING_ACCESS - image] = string_access
+    continuation_imports[JNI_STRING_RELEASE - image] = string_release
+    continuation_imports[JNI_HANDLE_CALL - image] = handle_call
 
     def execution_observer(cpu, pc):
         pending = state.pop("pending_vm_writes", [])
@@ -114,13 +303,130 @@ def run(library: Path, libc: Path, image: int) -> dict:
         state["native_instructions"] += 1
         if state["facade_started"]:
             state["facade_instructions"] += 1
+        if state["facade_started"] and offset in VM_HANDLER_OPS:
+            x = {index: cpu.reg_read(getattr(arm, f"UC_ARM64_REG_X{index}"))
+                 for index in (8, 9, 10, 11, 12, 13, 14, 15, 19, 21, 28)}
+            backing = x[28]
+
+            def slot_value(index):
+                if not 0 <= index < 32:
+                    return None
+                try:
+                    return int.from_bytes(bytes(cpu.mem_read(backing + index * 8, 8)), "little")
+                except Exception:
+                    return None
+
+            def read_word(address, width=8):
+                try:
+                    return bytes(cpu.mem_read(address, width)).hex()
+                except Exception:
+                    return None
+
+            opcode = x[21] & 0xFFFFFFFF
+            if offset == 0x1692FC:
+                source_indices = [(opcode >> 12) & 0x1F, (opcode >> 22) & 0x1F]
+                destination = (opcode >> 17) & 0x1F
+                decoded = {
+                    "source_indices": source_indices,
+                    "destination_index": destination,
+                    "source_values": [slot_value(index) for index in source_indices],
+                    "destination_before": slot_value(destination),
+                    "result": hex(x[10]),
+                }
+            elif offset == 0x16DB74:
+                source = x[11] & 0x1F
+                destination = x[15] & 0x1F
+                decoded = {
+                    "source_indices": [source],
+                    "destination_index": destination,
+                    "source_values": [slot_value(source)],
+                    "destination_before": slot_value(destination),
+                    "result": hex(x[10]),
+                    "immediate_delta": hex((x[10] - x[11]) & ((1 << 64) - 1)),
+                }
+            elif offset == 0x16E254:
+                destination = x[13] & 0x1F
+                decoded = {
+                    "source_indices": [], "destination_index": destination,
+                    "source_values": [], "destination_before": slot_value(destination),
+                    "result": hex(x[15]),
+                }
+            elif offset == 0x16E41C:
+                destination = x[10] & 0x1F
+                decoded = {
+                    "source_indices": [], "destination_index": destination,
+                    "source_values": [], "destination_before": slot_value(destination),
+                    "result": hex(x[14]),
+                }
+            elif offset == 0x16F974:
+                source = x[10] & 0x1F
+                destination = x[14] & 0x1F
+                operand_address = (x[12] + x[13]) & ((1 << 64) - 1)
+                decoded = {
+                    "source_indices": [source], "destination_index": destination,
+                    "source_values": [slot_value(source)],
+                    "destination_before": slot_value(destination),
+                    "result": hex(x[9]),
+                    "signed_offset": hex(x[13] & ((1 << 64) - 1)),
+                    "operand_address": hex(operand_address),
+                    "operand_value": read_word(operand_address),
+                }
+            else:
+                source = x[13] & 0x1F
+                destination = x[14] & 0x1F
+                signed_offset = x[11] if x[11] < (1 << 63) else x[11] - (1 << 64)
+                operand_address = (x[10] + signed_offset) & ((1 << 64) - 1)
+                decoded = {
+                    "source_indices": [source], "destination_index": destination,
+                    "source_values": [slot_value(source)],
+                    "destination_before": slot_value(destination),
+                    "result": hex(x[9]),
+                    "signed_offset": hex(x[11] & ((1 << 64) - 1)),
+                    "operand_address": hex(operand_address),
+                    "operand_value": read_word(operand_address, 4),
+                }
+            if len(state["vm_handler_trace"]) < 1024:
+                state["vm_handler_trace"].append({
+                    "pc_offset": hex(offset),
+                    "operation": VM_HANDLER_OPS[offset],
+                    "registers": {f"x{index}": hex(value) for index, value in x.items()},
+                    "decoded": decoded,
+                })
+        elif state["facade_started"] and offset == VM_SOURCE_STORE:
+            x28 = cpu.reg_read(arm.UC_ARM64_REG_X28)
+            x12 = cpu.reg_read(arm.UC_ARM64_REG_X12)
+            destination = x28 + x12 * 8
+            previous = None
+            try:
+                previous = bytes(cpu.mem_read(destination, 8)).hex()
+            except Exception:
+                pass
+            if len(state["vm_handler_trace"]) < 1024:
+                state["vm_handler_trace"].append({
+                    "pc_offset": hex(offset), "operation": "store_indexed",
+                    "registers": {
+                        f"x{index}": hex(cpu.reg_read(getattr(arm, f"UC_ARM64_REG_X{index}")))
+                        for index in (9, 12, 28)
+                    },
+                    "decoded": {
+                        "destination_address": hex(destination),
+                        "destination_slot": x12,
+                        "value": hex(cpu.reg_read(arm.UC_ARM64_REG_X9)),
+                        "previous_value": previous,
+                    },
+                })
         if offset == 0x347F60:
             state["memcpy_import_count"] += 1
             return
         if offset in (FACADE_ENTRY, CHILD_ENTRY, OWNING_VM, 0x168324,
                       0x16848C, 0x2830EC, 0x283100, 0x28310C,
                       0x171268, 0x2858BC, 0x2859CC, 0x2859D0,
-                      0x2859D4, 0x2859D8, 0x2859DC, 0x347F00, 0x347F10):
+                      0x2859D4, 0x2859D8, 0x2859DC, 0x16AA4C,
+                      0x285B80, 0x285B84, 0x285B88, 0x285B8C,
+                      0x17BA24, 0x17BA38, 0x17BA40, 0x17BAA0, 0x17BAC0,
+                      0x28B700, 0x28B704, 0x28B70C, 0x28B710,
+                      0x28B718, 0x28B71C, 0x28B724, 0x28B72C,
+                      0x28B734, 0x28B73C, 0x347F00, 0x347F10):
             row = {
                 "pc_offset": hex(offset),
                 "x0": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
@@ -131,6 +437,33 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 "sp": hex(cpu.reg_read(arm.UC_ARM64_REG_SP)),
                 "x30": hex(cpu.reg_read(arm.UC_ARM64_REG_X30)),
             }
+            if offset in (0x285B80, 0x285B84, 0x285B88, 0x285B8C):
+                pointer = cpu.reg_read(arm.UC_ARM64_REG_X0)
+                try:
+                    raw = bytes(cpu.mem_read(pointer, 0x30))
+                    row["object_address"] = hex(pointer)
+                    row["object_bytes_0x30"] = raw.hex()
+                    row["object_words"] = [
+                        hex(int.from_bytes(raw[index:index + 8], "little"))
+                        for index in range(0, len(raw), 8)
+                    ]
+                except Exception as exc:
+                    row["object_address"] = hex(pointer)
+                    row["object_error"] = f"{type(exc).__name__}: {exc}"
+                state["helper_object_events"].append(dict(row))
+            if offset in (0x17BA24, 0x17BA38, 0x17BA40):
+                row.update(
+                    x9=hex(cpu.reg_read(arm.UC_ARM64_REG_X9)),
+                    x21=hex(cpu.reg_read(arm.UC_ARM64_REG_X21)),
+                )
+                state["facade_dispatch_events"].append(dict(row))
+            if offset in (0x2830C4, 0x2830EC, 0x283100, 0x28310C):
+                row.update(
+                    x8=hex(cpu.reg_read(arm.UC_ARM64_REG_X8)),
+                    x19=hex(cpu.reg_read(arm.UC_ARM64_REG_X19)),
+                    x28=hex(cpu.reg_read(arm.UC_ARM64_REG_X28)),
+                )
+                state["request_vm_entry_events"].append(dict(row))
             if offset == 0x171268:
                 x15 = cpu.reg_read(arm.UC_ARM64_REG_X15)
                 x16 = cpu.reg_read(arm.UC_ARM64_REG_X16)
@@ -191,6 +524,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 state["facade_return"] = "epilogue_17baa0"
             elif offset == 0x17BAC0:
                 state["facade_return"] = "epilogue_17bac0"
+                state["facade_return_registers"] = dict(row)
             elif offset == 0x2859DC:
                 dispatch_object = cpu.reg_read(arm.UC_ARM64_REG_X0)
                 try:
@@ -216,6 +550,54 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 }
 
     def descriptor_write_observer(cpu, address, size):
+        helper_address = image + 0x2484B8
+        if (len(state["helper_object_write_events"]) < 128
+                and address <= helper_address < address + size):
+            try:
+                value = bytes(cpu.mem_read(helper_address, 0x30)).hex()
+            except Exception:
+                value = None
+            state["helper_object_write_events"].append({
+                "address": hex(helper_address),
+                "value_after_write": value,
+                "pc_offset": hex(cpu.reg_read(arm.UC_ARM64_REG_PC) - image),
+                "write_address": hex(address),
+                "write_size": size,
+            })
+        helper_stack = 0x7000E560
+        helper_stack_end = helper_stack + 0x20
+        if (len(state["helper_stack_write_events"]) < 256
+                and address < helper_stack_end and address + size > helper_stack):
+            try:
+                value = bytes(cpu.mem_read(helper_stack, 0x20)).hex()
+            except Exception:
+                value = None
+            state["helper_stack_write_events"].append({
+                "pc_offset": hex(cpu.reg_read(arm.UC_ARM64_REG_PC) - image),
+                "write_address": hex(address),
+                "write_size": size,
+                "value_after_write": value,
+                "x15": hex(cpu.reg_read(arm.UC_ARM64_REG_X15)),
+                "x16": hex(cpu.reg_read(arm.UC_ARM64_REG_X16)),
+                "x17": hex(cpu.reg_read(arm.UC_ARM64_REG_X17)),
+                "x13": hex(cpu.reg_read(arm.UC_ARM64_REG_X13)),
+                "x14": hex(cpu.reg_read(arm.UC_ARM64_REG_X14)),
+                "x28": hex(cpu.reg_read(arm.UC_ARM64_REG_X28)),
+            })
+        got_address = image + 0x382C80
+        if (len(state["main_import_write_events"]) < 128
+                and address <= got_address < address + size):
+            try:
+                value = bytes(cpu.mem_read(got_address, 8)).hex()
+            except Exception:
+                value = None
+            state["main_import_write_events"].append({
+                "address": hex(got_address),
+                "value_after_write": value,
+                "pc_offset": hex(cpu.reg_read(arm.UC_ARM64_REG_PC) - image),
+                "write_address": hex(address),
+                "write_size": size,
+            })
         # The stop object is a heap allocation in the 0x1370xxxx range.  Keep
         # the bounded write ledger for that page and retain the native PC;
         # this is provenance evidence, not an injected callback target.
@@ -335,6 +717,16 @@ def run(library: Path, libc: Path, image: int) -> dict:
         cpu.mem_write(image + 0x3D1570, ((1 << 64) - 1).to_bytes(8, "little"))
         cpu.mem_write(image + 0x3D1578, (0).to_bytes(8, "little"))
         cpu.mem_write(image + 0x3DF110, (facade.CLASS).to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x30, JNI_FIND_CLASS.to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x388, JNI_METHOD_LOOKUP.to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x720, JNI_EXCEPTION_CHECK.to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x398, JNI_VARIADIC_CALL.to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x108, JNI_METHOD_LOOKUP_108.to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x118, JNI_ARRAY_ACCESS.to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x558, JNI_ARRAY_LENGTH.to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x568, JNI_ARRAY_ELEMENT.to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x548, JNI_STRING_ACCESS.to_bytes(8, "little"))
+        cpu.mem_write(G + 0xB000 + 0x550, JNI_STRING_RELEASE.to_bytes(8, "little"))
         cpu.mem_write(facade.FACADE + 0x18, child.to_bytes(8, "little"))
         cpu.reg_write(arm.UC_ARM64_REG_X0, arguments["environment_pointer"])
         cpu.reg_write(arm.UC_ARM64_REG_X1, arguments["facade_address"])
@@ -368,6 +760,16 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 "sp": hex(cpu.reg_read(arm.UC_ARM64_REG_SP)),
             })
 
+    def main_import_observer(name, kind, address, target):
+        state["main_import_relocations"].append({
+            "symbol": name,
+            "relocation_type": kind,
+            "address": hex(address),
+            "address_offset": hex(address - image),
+            "target": hex(target),
+            "target_libc_offset": hex(target - 0x51000000),
+        })
+
     error = None
     result = None
     try:
@@ -385,12 +787,31 @@ def run(library: Path, libc: Path, image: int) -> dict:
             continuation_memory_write_observer=descriptor_write_observer,
             continuation_memory_read_observer=descriptor_read_observer,
             continuation_syscall_observer=syscall_observer,
+            continuation_main_import_names=("memset", "__cxa_atexit"),
+            continuation_main_import_observer=main_import_observer,
             unmapped_observer=unmapped,
         )
     except Exception as exc:
         error = f"{type(exc).__name__}: {exc}"
 
     child_entry = state["child_entry"]
+    cxa_relocations = [
+        event for event in state["main_import_relocations"]
+        if event["symbol"] == "__cxa_atexit"
+    ]
+    cxa_target = next(
+        (event["target"] for event in cxa_relocations
+         if event["address_offset"] == "0x382cd8"),
+        None,
+    )
+    facade_return_value = (
+        state["facade_return_registers"]["x0"]
+        if state["facade_return_registers"] is not None else None
+    )
+    actual_facade_return_verified = (
+        state["facade_return"] == "epilogue_17bac0"
+        and facade_return_value == hex(G + 0x1E10)
+    )
     return {
         "image_base": hex(image),
         "outer_function_offset": "0x1658e4",
@@ -412,6 +833,17 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "child_entry": child_entry,
         "owning_vm_entry": state["owning_vm_entry"],
         "facade_return": state["facade_return"],
+        "facade_return_registers": state["facade_return_registers"],
+        "facade_dispatch_events": state["facade_dispatch_events"],
+        "request_vm_entry_events": state["request_vm_entry_events"],
+        "actual_facade_return_verified": actual_facade_return_verified,
+        "real_request_vm_entry_used": bool(state["request_vm_entry_events"]),
+        "real_cxa_atexit_relocation_used": cxa_target is not None,
+        "real_cxa_atexit_target": cxa_target,
+        "facade_jni_event_count": len(getattr(service, "events", ())),
+        "facade_service_events": _json_safe(list(getattr(service, "events", ()))),
+        "facade_service_requests": _json_safe(list(getattr(service, "requests", ()))),
+        "facade_service_elements": _json_safe(list(getattr(service, "elements", ()))),
         "last_pc_offset": state["last_pc_offset"],
         "native_instructions_observed": state["native_instructions"],
         "facade_instructions_observed": state["facade_instructions"],
@@ -446,6 +878,42 @@ def run(library: Path, libc: Path, image: int) -> dict:
             and event["x12"] == "0x1"
             and event["x9"] == "0x0"
         ],
+        "vm_handler_trace_tail": state["vm_handler_trace"][-96:],
+        "vm_final_zero_source": next(
+            (
+                event for event in reversed(state["vm_handler_trace"])
+                if event["operation"] == "load_indexed_signed_offset"
+                and event["decoded"].get("destination_index") == 1
+                and event["decoded"].get("result") == "0x0"
+            ),
+            None,
+        ),
+        "vm_final_zero_source_global_offset": (
+            hex(
+                int(
+                    next(
+                        (
+                            event for event in reversed(state["vm_handler_trace"])
+                            if event["operation"] == "load_indexed_signed_offset"
+                            and event["decoded"].get("destination_index") == 1
+                            and event["decoded"].get("result") == "0x0"
+                        ),
+                        {"decoded": {"operand_address": None}},
+                    )["decoded"]["operand_address"],
+                    16,
+                ) - image
+            )
+            if next(
+                (
+                    event for event in reversed(state["vm_handler_trace"])
+                    if event["operation"] == "load_indexed_signed_offset"
+                    and event["decoded"].get("destination_index") == 1
+                    and event["decoded"].get("result") == "0x0"
+                ),
+                {"decoded": {"operand_address": None}},
+            )["decoded"].get("operand_address")
+            else None
+        ),
         "vm_workspace_snapshots": (
             [state["vm_workspace_snapshots"][-1]]
             if state["vm_workspace_snapshots"] else []
@@ -453,6 +921,12 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "syscall_mmap_events": state["syscall_mmap_events"],
         "continuation_allocations": state["continuation_allocations"],
         "continuation_allocator_events": state["continuation_allocator_events"],
+        "main_import_relocations": state["main_import_relocations"],
+        "main_import_write_events": state["main_import_write_events"],
+        "continuation_jni_calls": state["continuation_jni_calls"],
+        "helper_object_events": state["helper_object_events"],
+        "helper_object_write_events": state["helper_object_write_events"],
+        "helper_stack_write_events": state["helper_stack_write_events"],
         "markers": markers,
         "unmapped_events": state["unmapped"],
         "native_outer_result": result,
@@ -479,13 +953,22 @@ def main() -> None:
     assert digest == oracle.LIBRARY_SHA256, digest
     rows = [run(args.library, args.libc, image) for image in BASES]
     report = {
-        "schema": "vm9-native-outer-facade-actual-child-20261027-v3",
+        "schema": "vm9-native-outer-facade-actual-child-20261027-v4",
         "evidence_date": "2026-10-27",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
         "cases": rows,
         "same_cpu_native_outer_to_facade": True,
         "real_outer_child_receiver_used": True,
+        "actual_facade_return_verified": all(
+            case["actual_facade_return_verified"] for case in rows
+        ),
+        "real_request_vm_entry_used": all(
+            case["real_request_vm_entry_used"] for case in rows
+        ),
+        "real_cxa_atexit_relocation_used": all(
+            case["real_cxa_atexit_relocation_used"] for case in rows
+        ),
         "synthetic_receiver_tree_used": False,
         "synthetic_jni_provider_used": True,
         "normal_facade_entry_used": True,
@@ -501,9 +984,15 @@ def main() -> None:
             "+0x08 and clears +0x00; the object is in a fresh zero-filled mmap "
             "and the final source slot is written by the VM handler at image+0x16e118: "
             "the observed store has x28=0x7000eba8, x12=1 and x9=0 on both image "
-            "bases.  This is handler provenance, not a missing-input or injected "
-            "callback target.  A return or STOP therefore records continuation only, "
-            "never signer output."
+            "bases.  The preceding VM load now resolves the image-relative +0x382c80 "
+            "R_AARCH64_ABS64 memset GOT slot through the matching libc relocation "
+            "and records that target; without this explicit dynamic-linker step the "
+            "slot remains zero.  The real request VM entry +0x2830c4 then completes "
+            "and the facade returns the native Java result handle at +0x17bac0. "
+            "JNI/Java services remain synthetic providers, so this verifies the "
+            "native continuation and return boundary only; it does not claim a "
+            "live JVM, whole-request differential, standalone signer, or online "
+            "acceptance."
         ),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

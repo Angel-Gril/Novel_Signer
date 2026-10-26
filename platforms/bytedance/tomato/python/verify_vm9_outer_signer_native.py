@@ -65,7 +65,7 @@ def bind_native_imports(library, libc, redirect, imports):
     return exports
 
 
-def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None, terminal_observer=None, execution_observer=None, constructor_counter=None, terminal_continuation=None, continuation_host_imports=None, continuation_references=(), continuation_reference_types=None, unmapped_observer=None, continuation_memory_write_observer=None, continuation_memory_read_observer=None, continuation_syscall_observer=None):
+def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_address=None, canary=None, trace=None, terminal_observer=None, execution_observer=None, constructor_counter=None, terminal_continuation=None, continuation_host_imports=None, continuation_references=(), continuation_reference_types=None, unmapped_observer=None, continuation_memory_write_observer=None, continuation_memory_read_observer=None, continuation_syscall_observer=None, continuation_main_import_names=(), continuation_main_import_observer=None):
     pages, sdk_name = fresh(library, libc, image, property_value)
     if canary is not None: _w(pages, root_fixture.TLS + 0x28, canary)
     if constructor_counter is not None:
@@ -339,6 +339,8 @@ def case(library, libc, image, property_value, *, stack_address=h.TOP, mapping_a
             real_mutexes=True, real_recursive_mutexes=True, real_singletons=True, thread_id=137,
             host_imports=imports, syscall_handler=syscall, instruction_observer=observe, memory_write_observer=observe_memory_write,
             memory_read_observer=continuation_memory_read_observer,
+            main_import_names=continuation_main_import_names,
+            main_import_observer=continuation_main_import_observer,
             extra_registers={UC_ARM64_REG_SP: stack_address, UC_ARM64_REG_TPIDR_EL0: root_fixture.TLS,
                 UC_ARM64_REG_X30: io.CONTINUE}, instruction_limit=10000000,
             unmapped_observer=unmapped_observer)
