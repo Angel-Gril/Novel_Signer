@@ -15,6 +15,13 @@ getter reuse 和 JNI/destructor publication ledger 均符合原生。该运行�
 Cookie wire 顺序、creator `msToken`、passport 二次验证和直播 protobuf 仍是
 **Static only** Web 会话/传输证据；源码没有发现六/七神 App header 生成器，
 Douyin `verified_live_requests` 仍为空。见 [DouYin_Spider review](../platforms/bytedance/douyin/DOUYIN_SPIDER_REVIEW_20261015.md)。
+2026-10-26：callback-object continuation 的 writer 观察升级为 source-slot provenance。
+修订探针在 VM handler 入口先捕获 register-file backing，再记录 `+0x171268` 的
+store。两个 image base 都确认 backing `0x7000ec58` 的 slot 3 经过多次 VM 写入，
+目标对象 field 0 的 store 使用 `x14&0x1f=3`，读取值与写入值逐项一致，并在
+slot-3 历史中找到最终的 `image+0x347f60` memcpy PLT target。该结果闭合了当前
+continuation 内的 VM slot 来源，不等同于完整 runtime-table owner、whole-request
+差分、fresh signer 或线上验收。见 [callback-object trace](../platforms/bytedance/tomato/evidence/vm9_bootstrap_request_callback_object_trace_fresh_20261026.json)。
 2026-10-24：新增显式 provider-effect rollback journal。`EffectJournal` 为
 allocator/JNI/OS provider 提供可嵌套 checkpoint、逆序 undo 和外层提交边界；native
 service bridge 可选恢复 provider undo 与 live CPU 页面，owning request VM 可在异常时

@@ -50,6 +50,8 @@ def run(library: Path, libc: Path, image: int) -> dict:
     traces: list[dict] = []
     writes: list[dict] = []
     vm_store_events: list[dict] = []
+    vm_backings: set[int] = set()
+    vm_register_writes: list[dict] = []
     holder: dict[str, object] = {}
     original_native = continuation.bootstrap.native
 
@@ -60,6 +62,15 @@ def run(library: Path, libc: Path, image: int) -> dict:
 
         def code_hook(c, address, _size, _user):
             offset = address - image_base
+            # The VM register file is live before the target-field store.  The
+            # previous version learned x28 only at +0x171268, so all slot
+            # producers that ran earlier were silently missed.  Capture the
+            # backing on every known VM handler entry instead; this remains an
+            # observation-only ledger and does not alter execution.
+            if offset in continuation.VM_HANDLERS:
+                backing = c.reg_read(arm.UC_ARM64_REG_X28)
+                if GUEST_TRACE_LO - 0x1000 <= backing < GUEST_TRACE_HI + 0x1000:
+                    vm_backings.add(backing)
             if offset == 0x171268:
                 x13 = c.reg_read(arm.UC_ARM64_REG_X13)
                 x14 = c.reg_read(arm.UC_ARM64_REG_X14)
@@ -67,6 +78,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 x16 = c.reg_read(arm.UC_ARM64_REG_X16)
                 x17 = c.reg_read(arm.UC_ARM64_REG_X17)
                 x28 = c.reg_read(arm.UC_ARM64_REG_X28)
+                vm_backings.add(x28)
                 destination = (x17 + x16) & ((1 << 64) - 1)
                 if GUEST_TRACE_LO <= destination < GUEST_TRACE_HI:
                     source_slot = x14 & 0x1F
@@ -116,6 +128,25 @@ def run(library: Path, libc: Path, image: int) -> dict:
                     "value": hex(value),
                     "previous_bytes": _read(c, address, size),
                 })
+            # A libc import can write into the same guest stack range while
+            # servicing the request.  Keep this ledger limited to stores
+            # issued by the relocated native image, so a host/import write is
+            # never presented as a VM-slot producer.
+            pc = c.reg_read(arm.UC_ARM64_REG_PC)
+            if not image_base <= pc < image_base + 0x400000:
+                return
+            for backing in vm_backings:
+                if backing <= address < backing + 32 * 8:
+                    delta = address - backing
+                    vm_register_writes.append({
+                        "pc_offset": hex(c.reg_read(arm.UC_ARM64_REG_PC) - image_base),
+                        "address": hex(address),
+                        "backing": hex(backing),
+                        "slot": delta // 8 if delta >= 0 else -1,
+                        "size": size,
+                        "value": hex(value),
+                        "previous_bytes": _read(c, address, size),
+                    })
 
         cpu.hook_add(UC_HOOK_CODE, code_hook)
         cpu.hook_add(UC_HOOK_MEM_WRITE, write_hook)
@@ -157,6 +188,32 @@ def run(library: Path, libc: Path, image: int) -> dict:
         and int(event["value"], 16) == expected_target
     ]
     object_addresses_hex = {hex(address) for address in object_addresses}
+    target_slot_keys = {
+        (int(event["registers"]["x28"], 16), event["source_slot"])
+        for event in vm_store_events
+        if event["destination_address"] in object_addresses_hex
+    }
+    target_source_history = [
+        event for event in vm_register_writes
+        if (int(event["backing"], 16), event["slot"]) in target_slot_keys
+    ]
+    target_store_events = [
+        event for event in vm_store_events
+        if event["destination_address"] in object_addresses_hex
+    ]
+    source_value_matches = [
+        int.from_bytes(bytes.fromhex(event["source_value"]), "little")
+        == int(event["written_value"], 16)
+        for event in target_store_events
+    ]
+    source_history_values = [
+        int(event["value"], 16) for event in target_source_history
+    ]
+    target_value = int(target_store_events[-1]["written_value"], 16) if target_store_events else None
+    target_history_indices = [
+        index for index, value in enumerate(source_history_values)
+        if target_value is not None and value == target_value
+    ]
     return {
         "image_base": result["image_base"],
         "continuation_result": result,
@@ -165,10 +222,24 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "native_guest_writes": writes,
         "native_guest_write_count": len(writes),
         "vm_store_events": vm_store_events,
-        "callback_object_field0_vm_store_events": [
-            event for event in vm_store_events
-            if event["destination_address"] in object_addresses_hex
+        "vm_register_writes": vm_register_writes,
+        "callback_object_field0_source_slot3_writes": [
+            event for event in vm_register_writes if event["slot"] == 3
         ],
+        "callback_object_field0_source_history": target_source_history,
+        "callback_object_field0_source_history_values": [hex(value) for value in source_history_values],
+        "callback_object_field0_source_history_final": (
+            hex(source_history_values[-1]) if source_history_values else None
+        ),
+        "callback_object_field0_source_value_matches_store": bool(source_value_matches) and all(source_value_matches),
+        "callback_object_field0_source_history_contains_target": (
+            target_value is not None and target_value in source_history_values
+        ),
+        "callback_object_field0_source_history_target_indices": target_history_indices,
+        "callback_object_field0_source_history_target_value": (
+            hex(target_value) if target_value is not None else None
+        ),
+        "callback_object_field0_vm_store_events": target_store_events,
         "post_object_snapshots": post_objects,
         "branch_field_0_values_at_2858b4": field0_values,
         "branch_field_0_nonzero_at_2858b4": any(
@@ -184,6 +255,13 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "callback_object_field0_writer_target": hex(expected_target),
         "callback_object_field0_writer_target_match": bool(target_writes),
         "callback_object_field0_writer_provenance_closed": bool(target_writes),
+        "callback_object_field0_source_provenance_closed": (
+            bool(target_store_events)
+            and bool(source_history_values)
+            and bool(source_value_matches)
+            and all(source_value_matches)
+            and target_value in source_history_values
+        ),
     }
 
 
@@ -198,7 +276,7 @@ def main() -> None:
         raise SystemExit(f"unexpected native sample {digest}")
     rows = [run(args.library, args.libc, image) for image in continuation.BASES]
     report = {
-        "schema": "vm9-bootstrap-request-callback-object-trace-fresh-20261026-v1",
+        "schema": "vm9-bootstrap-request-callback-object-trace-fresh-20261026-v2",
         "evidence_date": "2026-10-26",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),

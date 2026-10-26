@@ -9368,7 +9368,7 @@
     "whole_request_native_success": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "On the same Unicorn CPU that completed JNI/bootstrap, native VM stores at +0x171268 populate callback object 0x7000e948 field 0 with image+0x347f60 for both bases. The five-instruction +0x2858a8 bridge then reads that target and the real memcpy continuation returns to the oracle STOP. This closes target-field writer provenance for this continuation only; it does not recover the callback object graph for the full signer, external runtime-table owner, standalone signer or online acceptance.",
+    "comparison_note": "On the same Unicorn CPU that completed JNI/bootstrap, native VM stores at +0x171268 populate callback object 0x7000e948 field 0 with image+0x347f60 for both bases. The revised ledger captures backing 0x7000ec58 slot 3 before the store; each store source word matches x15 and the target occurs in the slot-3 history. The five-instruction +0x2858a8 bridge then reads that target and the real memcpy continuation returns to the oracle STOP. This closes target-field and VM-source provenance for this continuation only; it does not recover the callback object graph for the full signer, external runtime-table owner, standalone signer or online acceptance.",
     "callback_object_field0_vm_store_pc": "+0x171268",
     "callback_object_field0_source_slot_each": [
       3,
@@ -9379,6 +9379,34 @@
       29
     ],
     "callback_object_field0_source_value_is_target_each": [
+      true,
+      true
+    ],
+    "callback_object_field0_source_history_length_each": [
+      14,
+      14
+    ],
+    "callback_object_field0_source_history_final_each": [
+      "0x0",
+      "0x0"
+    ],
+    "callback_object_field0_source_history_target_value_each": [
+      "0x12607f60",
+      "0x775c54cf60"
+    ],
+    "callback_object_field0_source_history_target_indices_each": [
+      [
+        8
+      ],
+      [
+        8
+      ]
+    ],
+    "callback_object_field0_source_value_matches_store_each": [
+      true,
+      true
+    ],
+    "callback_object_field0_source_provenance_closed_each": [
       true,
       true
     ],

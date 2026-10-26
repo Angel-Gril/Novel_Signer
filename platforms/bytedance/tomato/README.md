@@ -1062,5 +1062,9 @@ owner、fresh signer 或线上验收。见
 该 writer 不是直接的固定常量写入：`+0x171268` 的 store ABI 在两个基址都使用
 `x14&0x1f = 3` 作为 source slot、`x13&0x1f = 29` 作为 base slot，目标地址为
 `x17+x16 = 0x7000e948`，写入值来自 slot 3，且与 `image+0x347f60` 相同。该
-寄存器/slot 记录仍只覆盖当前 continuation；完整 VM program、外部 dispatch-table
-owner 和 signer 输出继续保持未恢复。
+寄存器/slot 记录的修订版还在 `+0x16f974`、`+0x1692fc`、`+0x16d8a4`、
+`+0x16db74` 等 VM handler 入口捕获了 backing `0x7000ec58` 的 slot 3 历史；
+两基址均能在该历史中找到随后写入 field 0 的 target，且 store 读取的 source
+word 与写入值逐项一致。这个 source-slot provenance 已闭合到 VM register file，
+但只覆盖当前 continuation；完整 VM program、外部 dispatch-table owner 和 signer
+输出继续保持未恢复。
