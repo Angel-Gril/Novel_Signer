@@ -6178,6 +6178,7 @@ mapping/table owner。没有执行 synthetic loader 或写入 dispatch table。�
 `0x34db48` 槽，确认它指向 `+0x188ac0`；该方法从初始对象的 `+0x30` 成员和
 辅助输入计算值，并在 `+0x189184` 写入 `[object+0x40]`。因此 native writer
 provenance 已闭合，但该虚调用是否发生、运行时 path 值、custom DSO mapping、runtime
-table、whole-request native differential、fresh signer 和线上验收仍未闭合；没有合成
-表、path 或 callback。证据：[loader vtable constructor](evidence/vm9_loader_vtable_constructor_fresh_20261026.json)，
+table、whole-request native differential、fresh signer 和线上验收仍未闭合。相邻 vtable
+槽 `0x34db50 -> +0x189cbc` 还把同一 `+0x40` 当作 callable 消费，因此不能仅按偏移
+把字段唯一命名为 path string；没有合成表、path 或 callback。证据：[loader vtable constructor](evidence/vm9_loader_vtable_constructor_fresh_20261026.json)，
 脚本：[verify_vm9_loader_vtable_constructor_20261026.py](python/verify_vm9_loader_vtable_constructor_20261026.py)。

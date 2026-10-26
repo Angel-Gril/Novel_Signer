@@ -9235,17 +9235,21 @@
     "path_field_written_by_constructor": false,
     "path_writer_vtable_slot": "0x34db48",
     "path_writer_addend": "0x188ac0",
+    "field_consumer_vtable_slot": "0x34db50",
+    "field_consumer_addend": "0x189cbc",
     "path_field_written_by_same_vtable_method": true,
+    "path_field_has_alternate_consumer": true,
     "vtable_method_provenance_closed": true,
     "constructor_provenance_closed": true,
     "path_field_constructor_provenance_closed": false,
     "path_field_vtable_writer_provenance_closed": true,
     "path_field_writer_invocation_verified": false,
+    "path_field_role_uniquely_identified": false,
     "runtime_table_owner_recovered": false,
     "runtime_table_content_reconstructed": false,
     "whole_request_native_success": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "The relocated 0x34db18 slot is a real vtable entry for +0x189eac, and +0x18ceb0 allocates/constructs the same final-vtable object. Its constructor does not write the +0x40 path field later consumed by +0x18a310, but the same vtable's 0x34db48 slot points to +0x188ac0, whose static dataflow writes that field. Writer provenance is closed; invocation, runtime path, custom mapping and runtime-table ownership remain unresolved."
+    "comparison_note": "The relocated 0x34db18 slot is a real vtable entry for +0x189eac, and +0x18ceb0 allocates/constructs the same final-vtable object. Its constructor does not write the +0x40 field later consumed by +0x18a310, but the same vtable's 0x34db48 slot points to +0x188ac0, whose static dataflow writes that field. Adjacent slot 0x34db50 points to +0x189cbc, which consumes +0x40 as a callable, so the field role is not uniquely identified as a path string. Writer provenance is closed; invocation, runtime path, custom mapping and runtime-table ownership remain unresolved."
   }
 }

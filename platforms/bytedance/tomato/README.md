@@ -1041,6 +1041,8 @@ constructor does not write the `+0x40` path field consumed by `+0x18a310`. The s
 vtable's `0x34db48` slot points to `+0x188ac0`, whose static dataflow writes
 `str x8,[x10,#0x40]` after deriving a value from the initial object's `+0x30`
 member. Native writer provenance is therefore closed, while invocation and the
-runtime path value remain unobserved. This is static constructor/vtable evidence only;
+runtime path value remain unobserved. The adjacent vtable slot `0x34db50` points to
+`+0x189cbc`, which consumes `+0x40` as a callable, so the field role is not uniquely
+identified as a path string. This is static constructor/vtable evidence only;
 the custom mapping, runtime table, whole-request signer, and online acceptance
 remain unresolved. See [loader vtable constructor evidence](evidence/vm9_loader_vtable_constructor_fresh_20261026.json).

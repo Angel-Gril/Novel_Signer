@@ -25,6 +25,8 @@ V_SLOT = 0x34DB18
 METHOD = 0x189EAC
 PATH_WRITER_SLOT = 0x34DB48
 PATH_WRITER = 0x188AC0
+FIELD_CONSUMER_SLOT = 0x34DB50
+FIELD_CONSUMER = 0x189CBC
 CONSTRUCTOR = 0x18CEB0
 ALLOC_CALLER = 0x18B9F0
 ALLOCATOR = 0x32A1F0
@@ -98,6 +100,14 @@ def verify(library: Path) -> dict:
             raise AssertionError("missing relocated path-writer slot")
         if path_writer_relocation["addend"] != hex(PATH_WRITER):
             raise AssertionError(f"unexpected path-writer slot: {path_writer_relocation}")
+        field_consumer_relocation = next(
+            (row for row in neighboring_relocations if row["offset"] == hex(FIELD_CONSUMER_SLOT)),
+            None,
+        )
+        if field_consumer_relocation is None or field_consumer_relocation["type"] != 1027:
+            raise AssertionError("missing relocated field-consumer slot")
+        if field_consumer_relocation["addend"] != hex(FIELD_CONSUMER):
+            raise AssertionError(f"unexpected field-consumer slot: {field_consumer_relocation}")
 
         instructions = {
             hex(address): _decode(data, text_base, address)
@@ -132,6 +142,11 @@ def verify(library: Path) -> dict:
                 0x189174,
                 0x189178,
                 0x189184,
+                0x189CBC,
+                0x189CC4,
+                0x189CC8,
+                0x189CCC,
+                0x189CD0,
                 0x184AF4,
                 0x184AFC,
                 0x184B04,
@@ -173,6 +188,11 @@ def verify(library: Path) -> dict:
             ("0x189174", "ldur", "x10, [x29, #-0x20]"),
             ("0x189178", "add", "x8, x8, x9"),
             ("0x189184", "str", "x8, [x10, #0x40]"),
+            ("0x189cbc", "stp", "x29, x30, [sp, #-0x10]!"),
+            ("0x189cc4", "add", "x8, x0, #0x10"),
+            ("0x189cc8", "ldr", "x9, [x0, #0x40]"),
+            ("0x189ccc", "mov", "x0, x8"),
+            ("0x189cd0", "blr", "x9"),
             ("0x184af4", "mov", "w1, #2"),
             ("0x184afc", "mov", "x20, x0"),
             ("0x184b04", "bl", "#0x348060"),
@@ -193,7 +213,7 @@ def verify(library: Path) -> dict:
             raise AssertionError(f"unexpected direct constructor callers: {constructor_callers}")
 
         return {
-            "schema": "vm9-loader-vtable-constructor-fresh-20261026-v2",
+            "schema": "vm9-loader-vtable-constructor-fresh-20261026-v3",
             "evidence_date": "2026-10-26",
             "sample_sha256": hashlib.sha256(library.read_bytes()).hexdigest(),
             "vtable": {
@@ -202,6 +222,8 @@ def verify(library: Path) -> dict:
                 "method_addend": hex(METHOD),
                 "path_writer_slot": hex(PATH_WRITER_SLOT),
                 "path_writer_addend": hex(PATH_WRITER),
+                "field_consumer_slot": hex(FIELD_CONSUMER_SLOT),
+                "field_consumer_addend": hex(FIELD_CONSUMER),
                 "slot_relocation": vtable_relocation,
                 "neighboring_relocations": sorted(neighboring_relocations, key=lambda row: int(row["offset"], 16)),
             },
@@ -219,6 +241,11 @@ def verify(library: Path) -> dict:
                 "path_field_offset": hex(0x40),
                 "path_field_written_by_constructor": False,
                 "path_field_written_by_same_vtable_method": True,
+                "path_field_has_alternate_consumer": True,
+                "alternate_consumer_dataflow": (
+                    "+0x189cbc reads [object+0x40] as a callable and invokes it "
+                    "with object+0x10"
+                ),
                 "path_writer_dataflow": (
                     "initial x0 -> [x29-0xe0] -> [x29-0x20] -> x10; "
                     "x8 = *(initial x0 + 0x30) + *([x29-0x28]); "
@@ -242,7 +269,9 @@ def verify(library: Path) -> dict:
                 "also exposes +0x188ac0 at slot +0x40, and that "
                 "method writes the +0x40 field after deriving a value from the "
                 "initial object's +0x30 member and a secondary input. This closes "
-                "the native writer provenance, but not invocation or runtime path."
+                "the native writer provenance, but +0x189cbc also consumes +0x40 "
+                "as a callable. The field's state/role is therefore not uniquely "
+                "identified as a path string; invocation and runtime path remain open."
             ),
             "conclusions": {
                 "vtable_method_provenance_closed": True,
@@ -250,6 +279,7 @@ def verify(library: Path) -> dict:
                 "path_field_constructor_provenance_closed": False,
                 "path_field_vtable_writer_provenance_closed": True,
                 "path_field_writer_invocation_verified": False,
+                "path_field_role_uniquely_identified": False,
                 "runtime_table_owner_recovered": False,
                 "runtime_table_content_reconstructed": False,
                 "whole_request_native_success": False,

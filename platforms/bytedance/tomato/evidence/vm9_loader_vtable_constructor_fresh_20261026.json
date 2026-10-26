@@ -1,5 +1,5 @@
 {
-  "schema": "vm9-loader-vtable-constructor-fresh-20261026-v2",
+  "schema": "vm9-loader-vtable-constructor-fresh-20261026-v3",
   "evidence_date": "2026-10-26",
   "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "vtable": {
@@ -8,6 +8,8 @@
     "method_addend": "0x189eac",
     "path_writer_slot": "0x34db48",
     "path_writer_addend": "0x188ac0",
+    "field_consumer_slot": "0x34db50",
+    "field_consumer_addend": "0x189cbc",
     "slot_relocation": {
       "offset": "0x34db18",
       "type": 1027,
@@ -81,6 +83,8 @@
     "path_field_offset": "0x40",
     "path_field_written_by_constructor": false,
     "path_field_written_by_same_vtable_method": true,
+    "path_field_has_alternate_consumer": true,
+    "alternate_consumer_dataflow": "+0x189cbc reads [object+0x40] as a callable and invokes it with object+0x10",
     "path_writer_dataflow": "initial x0 -> [x29-0xe0] -> [x29-0x20] -> x10; x8 = *(initial x0 + 0x30) + *([x29-0x28]); str x8,[x10 + 0x40]"
   },
   "loader_method": {
@@ -91,13 +95,14 @@
     "path_field_offset": "0x40",
     "runtime_path_observed": false
   },
-  "interpretation": "The relocated 0x34db18 slot is a real vtable entry for +0x189eac. The native code also contains a real 0xb8-byte allocation and +0x18ceb0 constructor that installs the same final vtable and initializes an inner +0x30 member. The constructor does not write the +0x40 path field later read by +0x18a310. The same vtable also exposes +0x188ac0 at slot +0x40, and that method writes the +0x40 field after deriving a value from the initial object's +0x30 member and a secondary input. This closes the native writer provenance, but not invocation or runtime path.",
+  "interpretation": "The relocated 0x34db18 slot is a real vtable entry for +0x189eac. The native code also contains a real 0xb8-byte allocation and +0x18ceb0 constructor that installs the same final vtable and initializes an inner +0x30 member. The constructor does not write the +0x40 path field later read by +0x18a310. The same vtable also exposes +0x188ac0 at slot +0x40, and that method writes the +0x40 field after deriving a value from the initial object's +0x30 member and a secondary input. This closes the native writer provenance, but +0x189cbc also consumes +0x40 as a callable. The field's state/role is therefore not uniquely identified as a path string; invocation and runtime path remain open.",
   "conclusions": {
     "vtable_method_provenance_closed": true,
     "constructor_provenance_closed": true,
     "path_field_constructor_provenance_closed": false,
     "path_field_vtable_writer_provenance_closed": true,
     "path_field_writer_invocation_verified": false,
+    "path_field_role_uniquely_identified": false,
     "runtime_table_owner_recovered": false,
     "runtime_table_content_reconstructed": false,
     "whole_request_native_success": false,
@@ -259,6 +264,31 @@
       "address": "0x189184",
       "mnemonic": "str",
       "operands": "x8, [x10, #0x40]"
+    },
+    {
+      "address": "0x189cbc",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #-0x10]!"
+    },
+    {
+      "address": "0x189cc4",
+      "mnemonic": "add",
+      "operands": "x8, x0, #0x10"
+    },
+    {
+      "address": "0x189cc8",
+      "mnemonic": "ldr",
+      "operands": "x9, [x0, #0x40]"
+    },
+    {
+      "address": "0x189ccc",
+      "mnemonic": "mov",
+      "operands": "x0, x8"
+    },
+    {
+      "address": "0x189cd0",
+      "mnemonic": "blr",
+      "operands": "x9"
     },
     {
       "address": "0x184af4",

@@ -9626,7 +9626,8 @@ constructor 的观察写入没有覆盖 `+0x40`。同一 `0x34db08` vtable 的 `
 重定位到 `+0x188ac0`；该虚方法沿 `initial x0 -> [x29-0xe0] -> [x29-0x20]`
 恢复对象，在 `+0x189184` 执行 `str x8,[x10,#0x40]`，其中写入值来自对象
 `+0x30` 成员与辅助输入。因此 native writer provenance 已闭合，但 constructor
-本身仍不写该字段，且虚调用/运行时 path 尚未观察。没有执行 loader、读取真实 path、
+本身仍不写该字段；相邻 `0x34db50 -> +0x189cbc` 还把 `+0x40` 当作 callable
+消费，字段 role 不能唯一解释为 path string，且虚调用/运行时 path 尚未观察。没有执行 loader、读取真实 path、
 创建 runtime table、合成 callback 或声明 signer 成功。证据：
 `evidence/vm9_loader_vtable_constructor_fresh_20261026.json`；脚本：
 `python/verify_vm9_loader_vtable_constructor_20261026.py`。
