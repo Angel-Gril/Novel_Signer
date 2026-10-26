@@ -1,5 +1,13 @@
 # Checkpoint log
 
+2026-10-26：记录 normal facade fixture 的 receiver/vtable/target 读取 provenance。
+未改写 synthetic receiver 虚表的 fresh native facade 在两个 image base 都依次读取
+`facade+0x18 → receiver+0 → vtable+0x20`，PC 偏移为 `+0x17b9e4`、`+0x17ba24`、
+`+0x17ba38`，随后调用显式 request service。该结果只闭合 fixture-path 的 native
+读取链；receiver、vtable、JNI/provider 和 request service 仍是 synthetic，normal
+child handoff、whole-request differential、standalone signer 与线上接受保持未验证。
+见 [facade target provenance evidence](../platforms/bytedance/tomato/evidence/vm9_java_facade_target_provenance_20261026.json)。
+
 2026-10-26：人工 facade child continuation 执行到 native return。
 在 synthetic receiver 上补齐有限 mutex/tree 字段后，两个基址的注入 `+0x27dd04`
 各执行 11,617 条 native 指令，在 `+0x17bac0` 返回 `x0=0`，没有 unmapped

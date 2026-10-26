@@ -1,0 +1,217 @@
+{
+  "schema": "vm9-java-facade-target-provenance-20261026-v1",
+  "evidence_date": "2026-10-26",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "facade_entry_offset": "0x17b8f8",
+      "receiver_field_address": "0x70001318",
+      "receiver_address": "0x70001400",
+      "vtable_address": "0x70001500",
+      "target_slot_address": "0x70001520",
+      "expected_request_target": "0x7000fc00",
+      "initial_watched_values": {
+        "facade.receiver_field": "0x70001400",
+        "receiver.vtable": "0x70001500",
+        "receiver.vtable.target_slot": "0x7000fc00"
+      },
+      "load_store_events": [
+        {
+          "kind": "read",
+          "field": "facade.receiver_field",
+          "address": "0x70001318",
+          "size": 8,
+          "pc": "0x1243b9e4",
+          "pc_offset": "0x17b9e4",
+          "value": "0x70001400"
+        },
+        {
+          "kind": "read",
+          "field": "receiver.vtable",
+          "address": "0x70001400",
+          "size": 8,
+          "pc": "0x1243ba24",
+          "pc_offset": "0x17ba24",
+          "value": "0x70001500"
+        },
+        {
+          "kind": "read",
+          "field": "receiver.vtable.target_slot",
+          "address": "0x70001520",
+          "size": 8,
+          "pc": "0x1243ba38",
+          "pc_offset": "0x17ba38",
+          "value": "0x7000fc00"
+        }
+      ],
+      "instruction_markers": [
+        {
+          "pc": "0x1243b8f8",
+          "pc_offset": "0x17b8f8",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x8": "0x0"
+        },
+        {
+          "pc": "0x7000fc00",
+          "pc_offset": "0x5dd4fc00",
+          "x0": "0x70001400",
+          "x1": "0x7000ee78",
+          "x2": "0x7000ee68",
+          "x8": "0x7000ee88"
+        },
+        {
+          "pc": "0x1243bac0",
+          "pc_offset": "0x17bac0",
+          "x0": "0x70001e10",
+          "x1": "0x70004058",
+          "x2": "0x4001",
+          "x8": "0xa5a5a5a5a5a5a5a5"
+        }
+      ],
+      "request_call": {
+        "args": [
+          "0x70001400",
+          "0x7000ee78",
+          "0x7000ee68",
+          "0x138",
+          "0x7000ee88"
+        ],
+        "pc_offset": "0x5dd4fc00",
+        "pc": 1879112704
+      },
+      "service_requests": [
+        [
+          1879053312,
+          1879109240,
+          1879109224,
+          312,
+          1879109256
+        ]
+      ],
+      "returned_x0": "0x70001e10",
+      "error": null,
+      "unmapped_events": [],
+      "synthetic_virtual_request_service": true,
+      "synthetic_virtual_target_injected": false,
+      "normal_facade_child_handoff_verified": false,
+      "whole_request_native_differential_verified": false,
+      "fresh_standalone_signer_verified": false,
+      "online_header_acceptance_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "facade_entry_offset": "0x17b8f8",
+      "receiver_field_address": "0x70001318",
+      "receiver_address": "0x70001400",
+      "vtable_address": "0x70001500",
+      "target_slot_address": "0x70001520",
+      "expected_request_target": "0x7000fc00",
+      "initial_watched_values": {
+        "facade.receiver_field": "0x70001400",
+        "receiver.vtable": "0x70001500",
+        "receiver.vtable.target_slot": "0x7000fc00"
+      },
+      "load_store_events": [
+        {
+          "kind": "read",
+          "field": "facade.receiver_field",
+          "address": "0x70001318",
+          "size": 8,
+          "pc": "0x775c3809e4",
+          "pc_offset": "0x17b9e4",
+          "value": "0x70001400"
+        },
+        {
+          "kind": "read",
+          "field": "receiver.vtable",
+          "address": "0x70001400",
+          "size": 8,
+          "pc": "0x775c380a24",
+          "pc_offset": "0x17ba24",
+          "value": "0x70001500"
+        },
+        {
+          "kind": "read",
+          "field": "receiver.vtable.target_slot",
+          "address": "0x70001520",
+          "size": 8,
+          "pc": "0x775c380a38",
+          "pc_offset": "0x17ba38",
+          "value": "0x7000fc00"
+        }
+      ],
+      "instruction_markers": [
+        {
+          "pc": "0x775c3808f8",
+          "pc_offset": "0x17b8f8",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x8": "0x0"
+        },
+        {
+          "pc": "0x7000fc00",
+          "pc_offset": "-0x76ec1f5400",
+          "x0": "0x70001400",
+          "x1": "0x7000ee78",
+          "x2": "0x7000ee68",
+          "x8": "0x7000ee88"
+        },
+        {
+          "pc": "0x775c380ac0",
+          "pc_offset": "0x17bac0",
+          "x0": "0x70001e10",
+          "x1": "0x70004058",
+          "x2": "0x4001",
+          "x8": "0xa5a5a5a5a5a5a5a5"
+        }
+      ],
+      "request_call": {
+        "args": [
+          "0x70001400",
+          "0x7000ee78",
+          "0x7000ee68",
+          "0x138",
+          "0x7000ee88"
+        ],
+        "pc_offset": "-0x76ec1f5400",
+        "pc": 1879112704
+      },
+      "service_requests": [
+        [
+          1879053312,
+          1879109240,
+          1879109224,
+          312,
+          1879109256
+        ]
+      ],
+      "returned_x0": "0x70001e10",
+      "error": null,
+      "unmapped_events": [],
+      "synthetic_virtual_request_service": true,
+      "synthetic_virtual_target_injected": false,
+      "normal_facade_child_handoff_verified": false,
+      "whole_request_native_differential_verified": false,
+      "fresh_standalone_signer_verified": false,
+      "online_header_acceptance_verified": false
+    }
+  ],
+  "fresh_native_cases": 2,
+  "synthetic_virtual_request_service": true,
+  "synthetic_virtual_target_injected": false,
+  "normal_facade_child_handoff_verified": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "The untouched facade fixture's native path loads facade+0x18, then receiver+0 and vtable+0x20 before invoking the explicit request service. This closes only fixture-path load provenance; it does not establish a real Java receiver, child dispatcher, request VM, or signer output.",
+  "limitations": [
+    "JNI, receiver object, vtable and request target are explicit fixture providers.",
+    "The request service is synthetic and the actual request VM is not executed.",
+    "No online header acceptance or standalone signer result is claimed."
+  ]
+}

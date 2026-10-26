@@ -1,5 +1,12 @@
 # Tomato / Fanqie (ByteDance)
 
+Facade target provenance (2026-10-26): an untouched native facade fixture records
+the load chain `facade+0x18 → receiver+0 → vtable+0x20` at `+0x17b9e4`,
+`+0x17ba24`, and `+0x17ba38` on both image bases before invoking its explicit
+request service. The receiver, vtable, JNI providers and request service remain
+synthetic, so this closes fixture-path provenance only; normal child handoff,
+whole-request differential and signing remain unverified. See [evidence](evidence/vm9_java_facade_target_provenance_20261026.json) and [verifier](python/verify_vm9_java_facade_target_provenance_20261026.py).
+
 Artificial child continuation (2026-10-26): with bounded synthetic receiver/mutex/tree fields, both bases execute injected `+0x27dd04` for 11,617 native instructions and return `x0=0` at `+0x17bac0`. The target and providers are verifier fixture state; zero is not signer output or normal facade handoff evidence. See [continuation evidence](evidence/vm9_java_facade_injected_child_continuation_20261026.json) and [verifier](python/verify_vm9_java_facade_injected_child_continuation_20261026.py).
 
 

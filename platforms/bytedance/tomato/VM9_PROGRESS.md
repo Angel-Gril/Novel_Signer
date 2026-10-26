@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-26：normal fixture facade 的 receiver/vtable/target provenance
+
+未修改 synthetic receiver 虚表的 fresh native facade 运行记录了完整读取链：
+`facade+0x18 → receiver+0 → vtable+0x20`，对应 PC 偏移分别为
+`+0x17b9e4`、`+0x17ba24`、`+0x17ba38`，两个 image base 一致，随后调用显式
+request service。该证据只闭合 fixture-path 的读取 provenance；receiver、vtable、
+JNI provider 和 request service 仍是 synthetic，normal child handoff、whole-request
+differential、standalone signer 与线上接受均未验证。
+
+证据：[facade target provenance](evidence/vm9_java_facade_target_provenance_20261026.json)；
+复现：[verifier](python/verify_vm9_java_facade_target_provenance_20261026.py)。
+
 ## 2026-10-26：人工 child continuation 到 native return
 
 在上一条 facade ABI 探针的 synthetic receiver 上补齐最小 receiver/mutex/tree 字段，
