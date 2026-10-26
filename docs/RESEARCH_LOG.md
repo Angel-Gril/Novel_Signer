@@ -1,8 +1,30 @@
 # Checkpoint log
 
+2026-10-26：完成 registry guard reset 的独立观察分支。
+在两个 fresh native bootstrap 返回后，仅将 `image+0x3d1558` 从 native 写入后的
+`01010000…` 清为零，再进入真实 `+0x27dd04`；request 观察到 source low bit 为 0，
+但仍到达 `+0xf8554`，`+0xf858c` 仍产生 -5，最后仍返回一节点 `X-Neptune`
+诊断树（value `-5|`）。两基址均完整返回；callback ledger 为 37，较正常 guard=1
+continuation 的 29 项增加 8 项，故不能作正常路径等价或 signer 成功证据。实验只改写
+一个 guard，未合成 table/vtable/snapshot，也未产生七神 header；guard 业务含义、
+whole-request Python 差分、fresh signer 与线上验签仍未完成。见
+[guard-reset evidence](../platforms/bytedance/tomato/evidence/vm9_request_output_reference_guard_reset_20261026.json)。
+
+
 Chronological record of the Tomato / ByteDance signer work. Each entry states what was
 reproduced, how many controls / negatives / rollback checks passed, and links the detailed
 report. Moved verbatim out of the README; wording, numbers and links are unchanged.
+
+2026-10-26：验证 bootstrap/request 的 output reference 实际内容。
+两个基址各 1 次 fresh native continuation 返回合法 owning configuration tree、
+counter 1，但树中只有 X-Neptune；原始 formatter 使用 signed status -5 和空 C string，
+并非完整签名输出。native guard 从零经 `+0x32d514`（caller `+0x15e714`）置一，
+request bytecode `+0xf8404` 因 `+0x3d1558` 低位为 1 跳至 `+0xf8554`，
+`+0xf858c` 产生 -5。格式化、树插入与最终 pair 写入的对象/长度/hash 均闭合；
+每次记录 29 个完整 VM callbacks。两组 continuation metadata 与上一份 dispatch-table
+evidence 一致。无生产 owner、guard、callback/table 或 snapshot 输入改动；guard 的
+业务含义、whole-request Python 差分、fresh signer 与线上验签仍未完成。见
+[output-reference evidence](../platforms/bytedance/tomato/evidence/vm9_request_output_reference_fresh_20261026.json)。
 
 2026-10-26：纠正五个 dispatch relocation slot 的 external-owner 推断。
 真实原生地址修正 `-0x106e988` 把编码 addend 指向 `.data.rel.ro` 的五张表，

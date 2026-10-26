@@ -1,5 +1,29 @@
 # Tomato / Fanqie (ByteDance)
 
+Guard-reset observation (2026-10-26): an independent probe cleared only
+`image+0x3d1558` after native bootstrap. Both bases then read low bit zero but
+still reached `+0xf8554`, produced status `-5`, and returned only the same
+one-node `X-Neptune` diagnostic tree (`-5|`). The artificial branch had 37
+callbacks versus 29 on the normal guard=1 continuation, so it is not normal-path
+equivalence or signer-success evidence. See [guard-reset evidence](evidence/vm9_request_output_reference_guard_reset_20261026.json)
+and [verifier](python/verify_vm9_request_output_reference_guard_reset_20261026.py).
+
+
+2026-10-26 output qualification: two fresh bootstrap/request continuations
+return a valid owning configuration-tree reference (vtable `+0x35b7c0`, counter
+one), containing only **X-Neptune**. Its value is formatted from signed status
+`-5` and an empty C string; no other signer header is returned. Bytecode
+`+0xf83f8/+0xf8404` reads registry guard `+0x3d1558` and takes the branch to
+`+0xf8554`; `+0xf858c` then produces `-5`. The guard starts at zero and is set
+to one by native `+0x32d514`, returning to the existing registry getter at
+`+0x15e714`, during bootstrap. Each complete callback ledger has 29 entries,
+including the nested getter. Both continuation result records remain identical
+to the previous dispatch-table evidence. This closes the output's structure
+and immediate provenance; the guard's role in this request path, actual facade
+inputs, whole-request Python equivalence and usable signing remain open. See
+[output-reference evidence](evidence/vm9_request_output_reference_fresh_20261026.json)
+and its [verifier](python/verify_vm9_request_output_reference_20261026.py).
+
 2026-10-26 correction: the five supposed external VM dispatch pointers are
 encoded ELF pointers. Native arithmetic adds `-0x106e988`, resolving them to
 five file-backed `.data.rel.ro` tables at `+0x34cf68`, `+0x34d168`, `+0x34d368`,

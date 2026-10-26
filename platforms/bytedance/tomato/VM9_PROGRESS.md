@@ -1,5 +1,49 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-26：guard-reset 人工状态分支观察
+
+独立探针在 native bootstrap 返回后只清零 `image+0x3d1558`，随后继续进入真实
+`+0x27dd04`。两个基址都读到 source low bit 0，却仍观测到 `+0xf8554`，
+`+0xf858c` 仍得到 -5，最终返回合法的一节点 `X-Neptune` 诊断树，value 仍为
+`-5|`；没有生成其他 signer header。该人工分支每次有 37 个 callback（正常 guard=1
+continuation 为 29 个），因此只说明这个 guard reset 没有打开可见 signer 分支，
+不能宣称正常路径等价、签名成功或业务含义。
+
+证据：[guard-reset](evidence/vm9_request_output_reference_guard_reset_20261026.json)；
+复现：[verifier](python/verify_vm9_request_output_reference_guard_reset_20261026.py)。
+
+
+## 2026-10-26：确认 native output reference 为单项诊断树
+
+两个基址的 fresh bootstrap/request continuation 均返回合法 owning tree：
+container vtable 为 `+0x35b7c0`，40-byte container 与 4-byte counter 分配可追溯，
+counter 为 1；controller/sentinel、节点父子指针、计数、排序和首尾节点均通过检查。
+树内只有 **X-Neptune**，value 由 `%d|%s` 使用 `-5` 和空字符串生成；格式化对象、
+`+0x25bf3c` 插入对象与最终返回节点的地址、长度和 payload hash 逐项相同。
+output pair 的最终 native writers 为 `+0x27e804/+0x27e80c`。这说明返回对象有效，
+同时明确本 fixture 没有生成其他签名头；不能把“返回且非零”作为 signer 成功证据。
+
+状态来源也已串起：bytecode `+0xf83f8` 读取 `image+0x3d1558` 的低字节，
+`+0xf8404` 在其低位为 1 时跳到 `+0xf8554`，随后 `+0xf858c` 的原始 word
+`0x7f60f97b` 执行 `R2 = sext32(R0)-5`。native 观察确认 R0 为 0、R2 为 -5，
+之后经过 packed int32 参数与原始 formatter 写入 value。该地址属于已有 registry
+getter 的 guard：从 fresh ELF 的全零值开始，bootstrap 原始 `+0x32d514` 写入 1，
+其 caller 为 `+0x15e714`；四条 guard 写事件完整保留，没有改写 guard 或请求分支。
+
+正式结果为 **2 次 fresh native continuation**，不计入 native/Python 差分或 rollback
+数量。新增 observer 在 bootstrap 前安装 guard hook，在 request 前清理 translation
+cache；每次记录 29 个完整 VM callback（含 nested getter），无外部 canary mapping。
+两个 continuation 的全部返回 metadata 与上一份 dispatch-table evidence 完全一致。
+证据只发布 synthetic payload 的长度/hash、静态 header 名和 guest 地址，不发布实际
+URL、完整 header value、设备字段或 native snapshot。生产 owner 未修改。
+
+下一步应核对真实 Java facade/constructed child 的输入和该 registry guard 在请求中的
+角色。guard 的业务含义、fresh whole-request native/Python 差分、完整 callback/provider
+组合、独立 Medusa/signer、live JVM 与线上验签仍未完成。
+
+证据：[output reference](evidence/vm9_request_output_reference_fresh_20261026.json)；
+复现：[verifier](python/verify_vm9_request_output_reference_20261026.py)。
+
 ## 2026-10-26：纠正 external runtime-table owner 假设
 
 五个 relocation slot 中的 `image+0x13bb...` 值是编码指针。原生

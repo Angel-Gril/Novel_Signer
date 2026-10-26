@@ -9489,5 +9489,96 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The five out-of-image relocation addends are encoded pointers. Native arithmetic corrects them to file-backed .data.rel.ro tables; each loaded relocated word is decoded by subtracting the live frame bias before BR. No separate runtime writer or external mapping is needed for these five tables in this continuation. This supersedes the earlier missing-external-owner hypothesis. The continuation visits tables 0 and 1; all-five selector controls stop before handler bodies. All native table loads match independently relocated ELF bytes, and removing both external canary pages preserves the complete event ledger, return results and all other physical pages."
+  },
+  "vm9_request_output_reference_fresh_20261026": {
+    "path": "evidence/vm9_request_output_reference_fresh_20261026.json",
+    "verifier": "python/verify_vm9_request_output_reference_20261026.py",
+    "schema": "vm9-request-output-reference-fresh-20261026-v1",
+    "evidence_label": "Fresh native output-tree structure and diagnostic status provenance",
+    "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "fresh_native_continuations": 2,
+    "native_Python_controls": 0,
+    "rollback_guards": 0,
+    "output_tree_vtable_offset": "0x35b7c0",
+    "output_tree_nodes_each": 1,
+    "output_counter_each": 1,
+    "known_diagnostic_key": "X-Neptune",
+    "diagnostic_status": -5,
+    "diagnostic_string_argument_length": 0,
+    "callback_ledger_entries_each": 29,
+    "native_guard_writes_each": 4,
+    "guard_offset": "0x3d1558",
+    "guard_initial_value": 0,
+    "guard_release_writer_offset": "0x32d514",
+    "guard_release_caller_offset": "0x15e714",
+    "gate_branch_offset": "0xf8404",
+    "gate_taken_destination": "0xf8554",
+    "status_bytecode_offset": "0xf858c",
+    "final_output_pair_writer_offsets": [
+      "0x27e804",
+      "0x27e80c"
+    ],
+    "continuation_results_match_prior_dispatch_evidence": true,
+    "observation_only": true,
+    "native_snapshot_input": false,
+    "external_dispatch_canary_pages_mapped": false,
+    "synthetic_dispatch_table_used": false,
+    "synthetic_callback_vtable_used": false,
+    "output_reference_valid_tree_verified": true,
+    "only_diagnostic_header_returned": true,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Native bootstrap sets the existing registry guard to one. The request reads its low bit, branches to the diagnostic path, formats signed status -5 with an empty string and returns a one-node X-Neptune tree. The returned reference and tree are valid, but this fixture does not generate other signer headers. Guard business meaning, actual facade inputs, Python whole-request equivalence and usable signing remain unverified."
+  },
+  "vm9_request_output_reference_guard_reset_20261026": {
+    "path": "evidence/vm9_request_output_reference_guard_reset_20261026.json",
+    "verifier": "python/verify_vm9_request_output_reference_guard_reset_20261026.py",
+    "evidence_label": "Artificial post-bootstrap registry-guard reset observation",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "guard_offset": "0x3d1558",
+    "guard_reset_timing": "after native bootstrap, before +0x27dd04",
+    "guard_before_each": [
+      "0101000089000000",
+      "0101000001000000"
+    ],
+    "guard_after_each": "0000000000000000",
+    "reset_branch_source_low_bit_each": [
+      0,
+      0
+    ],
+    "taken_destination_each": [
+      "0xf8554",
+      "0xf8554"
+    ],
+    "callback_ledger_entries_each": [
+      37,
+      37
+    ],
+    "output_tree_nodes_each": [
+      1,
+      1
+    ],
+    "diagnostic_key_each": [
+      "X-Neptune",
+      "X-Neptune"
+    ],
+    "diagnostic_status_each": [
+      -5,
+      -5
+    ],
+    "normal_signer_evidence": false,
+    "guard_reset_experiment": true,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Clearing the registry guard after bootstrap changes the observed source low bit from one to zero but does not change the measured +0xf8554 destination or produce requested signer headers. The ledger grows from the normal 29 to 37 callbacks; this is an artificial state branch and is not normal signer evidence."
   }
 }
