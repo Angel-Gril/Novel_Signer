@@ -6163,3 +6163,21 @@ mapping/table owner。没有执行 synthetic loader 或写入 dispatch table。�
 [DSO/Java provenance](evidence/vm9_dso_java_loader_provenance_fresh_20261026.json)，
 复现脚本为
 [verify_vm9_dso_java_loader_provenance_20261026.py](python/verify_vm9_dso_java_loader_provenance_20261026.py)。
+
+## 2026-10-26：outer loader vtable 与 constructor provenance
+
+对真实 ELF 的 `.rela.dyn` 与 `.text` 做了只读交叉校验：`0x34db08` vtable 的
+`0x34db18` 槽是 `R_AARCH64_RELATIVE`，addend 精确为 `+0x189eac`；该方法内部
+在 `+0x18a30c/+0x18a310` 读取初始对象的 `+0x40` 字段，再把它传给
+`+0x184ad4`。同一 DSO 的 `+0x18ceb0` 真实 constructor 由 `0xb8` 分配路径进入，
+先安装临时 `0x34db68` vtable，再安装最终 `0x34db08` vtable，并初始化
+`+0x30` inner member。
+
+该 constructor 的可观察写入覆盖 `+0x0/+0x8/+0x10/+0x48/+0x58/+0x60/+0x68`，
+没有写入 loader 后续消费的 `+0x40` path field。进一步核对同一 vtable 的
+`0x34db48` 槽，确认它指向 `+0x188ac0`；该方法从初始对象的 `+0x30` 成员和
+辅助输入计算值，并在 `+0x189184` 写入 `[object+0x40]`。因此 native writer
+provenance 已闭合，但该虚调用是否发生、运行时 path 值、custom DSO mapping、runtime
+table、whole-request native differential、fresh signer 和线上验收仍未闭合；没有合成
+表、path 或 callback。证据：[loader vtable constructor](evidence/vm9_loader_vtable_constructor_fresh_20261026.json)，
+脚本：[verify_vm9_loader_vtable_constructor_20261026.py](python/verify_vm9_loader_vtable_constructor_20261026.py)。

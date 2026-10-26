@@ -1033,3 +1033,14 @@ return to the oracle STOP, and publish a nonzero output reference without any
 runtime-table page access. This is a native continuation/return observation; the
 whole-request differential, fresh standalone signer, and online acceptance remain
 open. See [memcpy continuation evidence](evidence/vm9_bootstrap_request_memcpy_continuation_fresh_20261026.json).
+
+The next static owner probe closes the native provenance of the loader-like method:
+relocation `0x34db18` in vtable `0x34db08` points to `+0x189eac`, and the real
+`+0x18ceb0` constructor allocates `0xb8` bytes and installs that vtable. The
+constructor does not write the `+0x40` path field consumed by `+0x18a310`. The same
+vtable's `0x34db48` slot points to `+0x188ac0`, whose static dataflow writes
+`str x8,[x10,#0x40]` after deriving a value from the initial object's `+0x30`
+member. Native writer provenance is therefore closed, while invocation and the
+runtime path value remain unobserved. This is static constructor/vtable evidence only;
+the custom mapping, runtime table, whole-request signer, and online acceptance
+remain unresolved. See [loader vtable constructor evidence](evidence/vm9_loader_vtable_constructor_fresh_20261026.json).

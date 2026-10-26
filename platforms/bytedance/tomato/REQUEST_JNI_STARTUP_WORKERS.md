@@ -9612,3 +9612,21 @@ header acceptance。没有写入 synthetic callback vtable 或 runtime dispatch 
 
 证据：`evidence/vm9_bootstrap_request_memcpy_continuation_fresh_20261026.json`；
 脚本：`python/verify_vm9_bootstrap_request_memcpy_continuation_20261026.py`。
+
+## 6.283 Outer loader vtable/constructor provenance（2026-10-26 Asia/Shanghai）
+
+新增只读 ELF verifier，沿 `.rela.dyn`、vtable 和 constructor 指令做交叉校验。
+`0x34db08` vtable 的 `0x34db18` 槽为 `R_AARCH64_RELATIVE(addend=0x189eac)`，
+所以 `+0x189eac` 是真实 vtable method；其 `+0x18a30c/+0x18a310` 链把初始
+对象的 `+0x40` 字段传给 `+0x184ad4`。真实 `+0x18ceb0` constructor 由
+`mov w0,#0xb8 → bl +0x32a1f0` 的分配路径进入，安装临时 `0x34db68`、最终
+`0x34db08` vtable，并调用 `+0x2481ac` 初始化 `+0x30` inner member。
+
+constructor 的观察写入没有覆盖 `+0x40`。同一 `0x34db08` vtable 的 `0x34db48` 槽
+重定位到 `+0x188ac0`；该虚方法沿 `initial x0 -> [x29-0xe0] -> [x29-0x20]`
+恢复对象，在 `+0x189184` 执行 `str x8,[x10,#0x40]`，其中写入值来自对象
+`+0x30` 成员与辅助输入。因此 native writer provenance 已闭合，但 constructor
+本身仍不写该字段，且虚调用/运行时 path 尚未观察。没有执行 loader、读取真实 path、
+创建 runtime table、合成 callback 或声明 signer 成功。证据：
+`evidence/vm9_loader_vtable_constructor_fresh_20261026.json`；脚本：
+`python/verify_vm9_loader_vtable_constructor_20261026.py`。

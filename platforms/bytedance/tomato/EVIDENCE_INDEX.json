@@ -9199,8 +9199,8 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The same Unicorn CPU completes bootstrap and then continues the URL-bearing request through the actual callback object's image+0x347f60 memcpy PLT. The preserved bootstrap oracle handles the existing matching-libc/import boundaries; both bases return to the oracle STOP with a nonzero output reference and no runtime-table page access. This is a native return/continuation observation, not a whole-request differential, fresh standalone signer, or online acceptance result."
-  }
-  ,"vm9_dso_java_loader_provenance_fresh_20261026": {
+  },
+  "vm9_dso_java_loader_provenance_fresh_20261026": {
     "path": "evidence/vm9_dso_java_loader_provenance_fresh_20261026.json",
     "verifier": "python/verify_vm9_dso_java_loader_provenance_20261026.py",
     "evidence_label": "Real APK native-library provenance and Java loader boundary",
@@ -9219,5 +9219,33 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The pinned DSO is byte-identical to the arm64-v8a base-APK entry. p3.java and h.java prove normal and APK/split fallback loading, but do not identify the external custom mapping or VM runtime-table owner."
+  },
+  "vm9_loader_vtable_constructor_fresh_20261026": {
+    "path": "evidence/vm9_loader_vtable_constructor_fresh_20261026.json",
+    "verifier": "python/verify_vm9_loader_vtable_constructor_20261026.py",
+    "evidence_label": "Outer loader vtable method and constructor provenance",
+    "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "vtable_base": "0x34db08",
+    "vtable_method_slot": "0x34db18",
+    "method_addend": "0x189eac",
+    "constructor": "0x18ceb0",
+    "constructor_allocation_size": "0xb8",
+    "constructor_direct_callers": ["0x18ba00"],
+    "path_field_offset": "0x40",
+    "path_field_written_by_constructor": false,
+    "path_writer_vtable_slot": "0x34db48",
+    "path_writer_addend": "0x188ac0",
+    "path_field_written_by_same_vtable_method": true,
+    "vtable_method_provenance_closed": true,
+    "constructor_provenance_closed": true,
+    "path_field_constructor_provenance_closed": false,
+    "path_field_vtable_writer_provenance_closed": true,
+    "path_field_writer_invocation_verified": false,
+    "runtime_table_owner_recovered": false,
+    "runtime_table_content_reconstructed": false,
+    "whole_request_native_success": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "The relocated 0x34db18 slot is a real vtable entry for +0x189eac, and +0x18ceb0 allocates/constructs the same final-vtable object. Its constructor does not write the +0x40 path field later consumed by +0x18a310, but the same vtable's 0x34db48 slot points to +0x188ac0, whose static dataflow writes that field. Writer provenance is closed; invocation, runtime path, custom mapping and runtime-table ownership remain unresolved."
   }
 }

@@ -1,0 +1,304 @@
+{
+  "schema": "vm9-loader-vtable-constructor-fresh-20261026-v2",
+  "evidence_date": "2026-10-26",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "vtable": {
+    "base": "0x34db08",
+    "method_slot": "0x34db18",
+    "method_addend": "0x189eac",
+    "path_writer_slot": "0x34db48",
+    "path_writer_addend": "0x188ac0",
+    "slot_relocation": {
+      "offset": "0x34db18",
+      "type": 1027,
+      "addend": "0x189eac",
+      "symbol_index": 0
+    },
+    "neighboring_relocations": [
+      {
+        "offset": "0x34db08",
+        "type": 1027,
+        "addend": "0x18d2f4"
+      },
+      {
+        "offset": "0x34db10",
+        "type": 1027,
+        "addend": "0x18d344"
+      },
+      {
+        "offset": "0x34db18",
+        "type": 1027,
+        "addend": "0x189eac"
+      },
+      {
+        "offset": "0x34db20",
+        "type": 1027,
+        "addend": "0x18ad6c"
+      },
+      {
+        "offset": "0x34db38",
+        "type": 1027,
+        "addend": "0x18d368"
+      },
+      {
+        "offset": "0x34db40",
+        "type": 1027,
+        "addend": "0x18d3a4"
+      },
+      {
+        "offset": "0x34db48",
+        "type": 1027,
+        "addend": "0x188ac0"
+      },
+      {
+        "offset": "0x34db50",
+        "type": 1027,
+        "addend": "0x189cbc"
+      }
+    ]
+  },
+  "constructor_path": {
+    "allocation_callsite": "0x18b9f0",
+    "allocation_size": "0xb8",
+    "allocator": "0x32a1f0",
+    "constructor": "0x18ceb0",
+    "direct_constructor_callers": [
+      "0x18ba00"
+    ],
+    "constructor_vtable_sequence": [
+      "temporary base vtable 0x34db68 -> +0x18d4d8",
+      "final object vtable 0x34db08 -> +0x2481ac inner member constructor"
+    ],
+    "initialized_fields_observed": [
+      "+0x0 vtable",
+      "+0x8",
+      "+0x10",
+      "+0x48",
+      "+0x58",
+      "+0x60",
+      "+0x68"
+    ],
+    "path_field_offset": "0x40",
+    "path_field_written_by_constructor": false,
+    "path_field_written_by_same_vtable_method": true,
+    "path_writer_dataflow": "initial x0 -> [x29-0xe0] -> [x29-0x20] -> x10; x8 = *(initial x0 + 0x30) + *([x29-0x28]); str x8,[x10 + 0x40]"
+  },
+  "loader_method": {
+    "entry": "0x189eac",
+    "callsite": "0x18a314",
+    "helper": "0x184ad4",
+    "path_dataflow": "initial x0 -> [x29-0xd8] -> [x23+0x20] -> x0=[x0+0x40]",
+    "path_field_offset": "0x40",
+    "runtime_path_observed": false
+  },
+  "interpretation": "The relocated 0x34db18 slot is a real vtable entry for +0x189eac. The native code also contains a real 0xb8-byte allocation and +0x18ceb0 constructor that installs the same final vtable and initializes an inner +0x30 member. The constructor does not write the +0x40 path field later read by +0x18a310. The same vtable also exposes +0x188ac0 at slot +0x40, and that method writes the +0x40 field after deriving a value from the initial object's +0x30 member and a secondary input. This closes the native writer provenance, but not invocation or runtime path.",
+  "conclusions": {
+    "vtable_method_provenance_closed": true,
+    "constructor_provenance_closed": true,
+    "path_field_constructor_provenance_closed": false,
+    "path_field_vtable_writer_provenance_closed": true,
+    "path_field_writer_invocation_verified": false,
+    "runtime_table_owner_recovered": false,
+    "runtime_table_content_reconstructed": false,
+    "whole_request_native_success": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "limitations": [
+    "This is static ELF evidence; it does not execute the constructor or Java loader.",
+    "The method is reached through a relocated vtable slot, so no direct BL caller is expected.",
+    "No path string, external runtime dispatch page, handler, callback vtable, or signer output is inferred."
+  ],
+  "instructions": [
+    {
+      "address": "0x18b9f0",
+      "mnemonic": "mov",
+      "operands": "w0, #0xb8"
+    },
+    {
+      "address": "0x18b9fc",
+      "mnemonic": "mov",
+      "operands": "x21, x0"
+    },
+    {
+      "address": "0x18ba00",
+      "mnemonic": "bl",
+      "operands": "#0x18ceb0"
+    },
+    {
+      "address": "0x18ba04",
+      "mnemonic": "ldr",
+      "operands": "x0, [x25, #0x30]"
+    },
+    {
+      "address": "0x18ceb0",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #-0x30]!"
+    },
+    {
+      "address": "0x18cf10",
+      "mnemonic": "adrp",
+      "operands": "x8, #0x34d000"
+    },
+    {
+      "address": "0x18cf14",
+      "mnemonic": "add",
+      "operands": "x0, x19, #0x10"
+    },
+    {
+      "address": "0x18cf20",
+      "mnemonic": "str",
+      "operands": "x8, [x19]"
+    },
+    {
+      "address": "0x18cf24",
+      "mnemonic": "bl",
+      "operands": "#0x18d4d8"
+    },
+    {
+      "address": "0x18cf28",
+      "mnemonic": "adrp",
+      "operands": "x8, #0x34d000"
+    },
+    {
+      "address": "0x18cf2c",
+      "mnemonic": "add",
+      "operands": "x0, x19, #0x30"
+    },
+    {
+      "address": "0x18cf30",
+      "mnemonic": "add",
+      "operands": "x8, x8, #0xb08"
+    },
+    {
+      "address": "0x18cf34",
+      "mnemonic": "str",
+      "operands": "x8, [x19]"
+    },
+    {
+      "address": "0x18cf38",
+      "mnemonic": "bl",
+      "operands": "#0x2481ac"
+    },
+    {
+      "address": "0x18cf48",
+      "mnemonic": "stp",
+      "operands": "xzr, xzr, [x19, #0x48]"
+    },
+    {
+      "address": "0x18cf50",
+      "mnemonic": "add",
+      "operands": "x21, x19, #0x68"
+    },
+    {
+      "address": "0x18cf54",
+      "mnemonic": "str",
+      "operands": "x1, [x19, #0x60]"
+    },
+    {
+      "address": "0x18a30c",
+      "mnemonic": "ldr",
+      "operands": "x8, [x23, #0x20]"
+    },
+    {
+      "address": "0x18a310",
+      "mnemonic": "ldr",
+      "operands": "x0, [x8, #0x40]"
+    },
+    {
+      "address": "0x18a314",
+      "mnemonic": "bl",
+      "operands": "#0x184ad4"
+    },
+    {
+      "address": "0x188ac0",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #-0x60]!"
+    },
+    {
+      "address": "0x189040",
+      "mnemonic": "ldur",
+      "operands": "x8, [x29, #-0xe0]"
+    },
+    {
+      "address": "0x189054",
+      "mnemonic": "stur",
+      "operands": "x8, [x29, #-0x20]"
+    },
+    {
+      "address": "0x189164",
+      "mnemonic": "ldur",
+      "operands": "x8, [x29, #-0x20]"
+    },
+    {
+      "address": "0x189168",
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x30]"
+    },
+    {
+      "address": "0x18916c",
+      "mnemonic": "ldur",
+      "operands": "x9, [x29, #-0x28]"
+    },
+    {
+      "address": "0x189170",
+      "mnemonic": "ldr",
+      "operands": "x9, [x9]"
+    },
+    {
+      "address": "0x189174",
+      "mnemonic": "ldur",
+      "operands": "x10, [x29, #-0x20]"
+    },
+    {
+      "address": "0x189178",
+      "mnemonic": "add",
+      "operands": "x8, x8, x9"
+    },
+    {
+      "address": "0x189184",
+      "mnemonic": "str",
+      "operands": "x8, [x10, #0x40]"
+    },
+    {
+      "address": "0x184af4",
+      "mnemonic": "mov",
+      "operands": "w1, #2"
+    },
+    {
+      "address": "0x184afc",
+      "mnemonic": "mov",
+      "operands": "x20, x0"
+    },
+    {
+      "address": "0x184b04",
+      "mnemonic": "bl",
+      "operands": "#0x348060"
+    },
+    {
+      "address": "0x2481ac",
+      "mnemonic": "stp",
+      "operands": "x29, x30, [sp, #-0x20]!"
+    },
+    {
+      "address": "0x2481cc",
+      "mnemonic": "str",
+      "operands": "x9, [x0]"
+    },
+    {
+      "address": "0x2481d0",
+      "mnemonic": "str",
+      "operands": "d0, [x0, #8]"
+    },
+    {
+      "address": "0x2481d4",
+      "mnemonic": "mov",
+      "operands": "w0, #8"
+    },
+    {
+      "address": "0x2481dc",
+      "mnemonic": "str",
+      "operands": "x0, [x19, #0x10]"
+    }
+  ]
+}
