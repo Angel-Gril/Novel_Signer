@@ -7,13 +7,15 @@ request service; no native write to those chain fields occurs during the call.
 The receiver, vtable, JNI providers and request service remain synthetic, so this closes fixture-path provenance only; normal child handoff,
 whole-request differential and signing remain unverified. See [evidence](evidence/vm9_java_facade_target_provenance_20261026.json) and [verifier](python/verify_vm9_java_facade_target_provenance_20261026.py).
 
-Same-CPU bootstrap continuation (2026-10-26): a fresh native bootstrap CPU then
-executes facade `+0x17b8f8`, injected child `+0x27dd04`, owning VM `+0x2830c4`
-and VM `+0x168324` on both bases. The native callback reaches the real `memcpy`
-PLT after 174,529 instructions; no runtime-table page is read or written. The
-receiver/tree and child target remain explicit probe inputs and the run is
-bounded before oracle STOP, so normal target, whole-request and signer output
-remain unverified. See [evidence](evidence/vm9_native_bootstrap_java_facade_child_20261026.json) and [verifier](python/verify_vm9_native_bootstrap_java_facade_child_20261026.py).
+Same-CPU bootstrap continuation (2026-10-26): after matching the accepted
+one-node tree shape and reusing the bootstrap-owned mapped stack, a fresh native
+bootstrap CPU executes facade `+0x17b8f8`, injected child `+0x27dd04`, owning VM
+`+0x2830c4` and VM `+0x168324` on both bases, then returns to oracle STOP after
+7,751 native instructions. The native callback reaches the real `memcpy` PLT
+five times; no runtime-table page is read or written and no unmapped access is
+observed. The receiver/tree, child target, JNI providers and URL/header remain
+explicit probe inputs, so this continuation does not establish the normal target,
+whole-request differential or signer output. See [evidence](evidence/vm9_native_bootstrap_java_facade_child_20261026.json) and [verifier](python/verify_vm9_native_bootstrap_java_facade_child_20261026.py).
 
 Artificial child continuation (2026-10-26): with bounded synthetic receiver/mutex/tree fields, both bases execute injected `+0x27dd04` for 11,617 native instructions and return `x0=0` at `+0x17bac0`. The target and providers are verifier fixture state; zero is not signer output or normal facade handoff evidence. See [continuation evidence](evidence/vm9_java_facade_injected_child_continuation_20261026.json) and [verifier](python/verify_vm9_java_facade_injected_child_continuation_20261026.py).
 

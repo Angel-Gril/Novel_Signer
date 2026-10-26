@@ -63,10 +63,13 @@ def run(library, libc, image):
         (receiver + 0x20, fallback),
         (container, image + 0x35B828), (container + 0x20, control),
         (control, sentinel), (control + 8, 1),
-        (sentinel, 1), (sentinel + 8, node),
-        (sentinel + 0x10, node), (sentinel + 0x18, node),
-        (node, 1), (node + 8, sentinel), (node + 0x18, 0),
-        (node + 0x20, pair), (pair, image + 0x2830C4), (pair + 8, context),
+        # Match the accepted one-node dispatch tree shape.  The pair context
+        # is the native 0x101 selector, not an arbitrary guest pointer.
+        (sentinel, 1), (sentinel + 8, 0),
+        (sentinel + 0x10, sentinel), (sentinel + 0x18, sentinel),
+        (node, 1), (node + 8, sentinel), (node + 0x10, 0),
+        (node + 0x18, 0), (node + 0x20, pair),
+        (pair, image + 0x2830C4), (pair + 8, 0x101),
         (fallback, 0), (fallback + 8, context),
         (image + 0x35D5F0 + 0x20, image + 0x27DD04),
     ):
@@ -142,7 +145,9 @@ def run(library, libc, image):
     cpu.reg_write(arm.UC_ARM64_REG_X1, G + 0x1300)
     cpu.reg_write(arm.UC_ARM64_REG_X2, facade_args['url_reference'])
     cpu.reg_write(arm.UC_ARM64_REG_X3, facade_args['header_array_reference'])
-    cpu.reg_write(arm.UC_ARM64_REG_SP, headers.SP)
+    # Reuse the bootstrap-owned mapped stack; the facade scratch objects remain
+    # in G memory and must not overlap the native spill frame.
+    cpu.reg_write(arm.UC_ARM64_REG_SP, stack)
     cpu.reg_write(arm.UC_ARM64_REG_X30, oracle.STOP)
     outcome, error = 'returned', None
     try:
