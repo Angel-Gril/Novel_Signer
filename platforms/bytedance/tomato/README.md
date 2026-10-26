@@ -1,5 +1,14 @@
 # Tomato / Fanqie (ByteDance)
 
+Injected child-entry ABI observation (2026-10-26): fresh native `+0x17b8f8`
+reaches an explicitly injected `image+0x27dd04` virtual target on both bases.
+The observed ABI is `x0=receiver`, `x1=url reference`, `x2=header reference`,
+`x3=0x138`, `x8=output reference`, with a `0xb0` stack delta. Execution stops
+before the child; the target and providers are synthetic fixture state, so this
+does not establish normal facade routing or signing. See [evidence](evidence/vm9_java_facade_injected_child_entry_20261026.json)
+and [verifier](python/verify_vm9_java_facade_injected_child_entry_20261026.py).
+
+
 Guard-reset observation (2026-10-26): an independent probe cleared only
 `image+0x3d1558` after native bootstrap. Both bases then read low bit zero but
 still reached `+0xf8554`, produced status `-5`, and returned only the same

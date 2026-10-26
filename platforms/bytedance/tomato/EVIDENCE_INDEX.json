@@ -9580,5 +9580,32 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "Clearing the registry guard after bootstrap changes the observed source low bit from one to zero but does not change the measured +0xf8554 destination or produce requested signer headers. The ledger grows from the normal 29 to 37 callbacks; this is an artificial state branch and is not normal signer evidence."
+  },
+  "vm9_java_facade_injected_child_entry_20261026": {
+    "path": "evidence/vm9_java_facade_injected_child_entry_20261026.json",
+    "verifier": "python/verify_vm9_java_facade_injected_child_entry_20261026.py",
+    "evidence_label": "Native Java-facade ABI at deliberately injected child target",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "facade_entry_offset": "0x17b8f8",
+    "injected_virtual_target_offset": "0x27dd04",
+    "native_instruction_count_each": 8686,
+    "child_entry_abi_each": {
+      "x0": "receiver",
+      "x1": "url_reference",
+      "x2": "header_reference",
+      "x3": "0x138",
+      "x8": "output_reference",
+      "stack_delta": "0xb0"
+    },
+    "child_instruction_executed": false,
+    "synthetic_virtual_target_injected": true,
+    "normal_facade_child_handoff_verified": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Fresh native +0x17b8f8 reaches the deliberately injected image+0x27dd04 slot on both bases and exposes the child ABI before execution. The receiver and virtual target are synthetic fixture state; this does not establish the normal target, child completion or signing."
   }
 }

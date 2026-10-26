@@ -1,5 +1,14 @@
 # Checkpoint log
 
+2026-10-26：补齐 native facade→child 的人工 target ABI 观察。
+独立 fresh ELF probe 在 `+0x17b8f8` 执行期间将 synthetic receiver 的虚表 `+0x20`
+改为 `image+0x27dd04`，两个基址均在 child 第一条指令前到达目标；入口寄存器为
+`x0` receiver、`x1` URL reference、`x2` header reference、`x3=0x138`、`x8` output
+reference，stack delta 为 `0xb0`。child 未执行，故不计作 normal facade handoff、
+whole-request differential 或 signer 成功；JNI/allocator/input 仍为显式 fixture。见
+[injected child-entry evidence](../platforms/bytedance/tomato/evidence/vm9_java_facade_injected_child_entry_20261026.json)。
+
+
 2026-10-26：完成 registry guard reset 的独立观察分支。
 在两个 fresh native bootstrap 返回后，仅将 `image+0x3d1558` 从 native 写入后的
 `01010000…` 清为零，再进入真实 `+0x27dd04`；request 观察到 source low bit 为 0，

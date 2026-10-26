@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-26：native facade 到 child 的 ABI 边界观察
+
+在 fresh ELF native `+0x17b8f8` facade 上，独立探针只把 synthetic receiver
+虚表 `+0x20` 改为 `image+0x27dd04`，并在 child 第一条指令前停止。两个基址
+均到达 child，入口 ABI 为 `x0=receiver`、`x1=url reference`、`x2=header
+reference`、`x3=0x138`、`x8=output reference`，child stack 相对 facade fixture
+为 `0xb0`。child 没有执行，JNI/allocator/URL/header 仍是显式 fixture；因此这只
+闭合人工 target 注入下的寄存器边界，不能证明 normal facade target、whole-request
+differential 或签名成功。
+
+证据：[injected child-entry](evidence/vm9_java_facade_injected_child_entry_20261026.json)；
+复现：[verifier](python/verify_vm9_java_facade_injected_child_entry_20261026.py)。
+
+
 ## 2026-10-26：guard-reset 人工状态分支观察
 
 独立探针在 native bootstrap 返回后只清零 `image+0x3d1558`，随后继续进入真实
