@@ -13,6 +13,19 @@ differential、standalone signer 与线上接受均未验证。
 证据：[facade target provenance](evidence/vm9_java_facade_target_provenance_20261026.json)；
 复现：[verifier](python/verify_vm9_java_facade_target_provenance_20261026.py)。
 
+## 2026-10-26：same-CPU bootstrap → facade → child → owning VM continuation
+
+在 fresh native bootstrap 完成后，复用同一 Unicorn CPU 进入 facade `+0x17b8f8`，
+再到人工安装的 child target `+0x27dd04`、owning VM `+0x2830c4` 和 VM
+`+0x168324`。两个基址都执行 174,529 条 native 指令；native callback object
+随后到达真实 `+0x347f60` memcpy PLT，runtime-table canary 页读写均为零，未观察
+unmapped。运行在 180,000 条指令处有界停止，未到 oracle STOP；receiver/tree 和
+child target 仍是显式 probe 输入，因此只推进同 CPU continuation 边界，不能计为
+normal target、whole-request differential 或 signer 输出。
+
+证据：[same-CPU facade child](evidence/vm9_native_bootstrap_java_facade_child_20261026.json)；
+复现：[verifier](python/verify_vm9_native_bootstrap_java_facade_child_20261026.py)。
+
 ## 2026-10-26：人工 child continuation 到 native return
 
 在上一条 facade ABI 探针的 synthetic receiver 上补齐最小 receiver/mutex/tree 字段，

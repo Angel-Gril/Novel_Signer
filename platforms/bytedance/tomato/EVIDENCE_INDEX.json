@@ -9661,5 +9661,36 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The untouched facade fixture records the native load chain from facade+0x18 through receiver vtable and slot +0x20 on both image bases before invoking the explicit request service. No native write to those chain fields occurs; their values come from the explicit facade.fixture provider. This closes fixture-path provenance only; the receiver, vtable and request service remain synthetic and the real child/request VM is not executed."
+  },
+  "vm9_native_bootstrap_java_facade_child_20261026": {
+    "path": "evidence/vm9_native_bootstrap_java_facade_child_20261026.json",
+    "verifier": "python/verify_vm9_native_bootstrap_java_facade_child_20261026.py",
+    "evidence_label": "Same-CPU native bootstrap through Java facade, child and owning VM boundary",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "facade_entry_offset": "0x17b8f8",
+    "child_entry_offset": "0x27dd04",
+    "owning_vm_entry_offset": "0x2830c4",
+    "native_vm_entry_offset": "0x168324",
+    "native_instruction_count_each": 174529,
+    "native_facade_conversion_helpers_each": [
+      "0x26fe2c",
+      "0x26fc94",
+      "0x25c324"
+    ],
+    "real_memcpy_import_continuation_each": true,
+    "runtime_table_read_count_each": 0,
+    "runtime_table_write_count_each": 0,
+    "bounded_instruction_limit_each": true,
+    "normal_facade_entry_used": true,
+    "normal_facade_child_target_injected": true,
+    "synthetic_receiver_tree_used": true,
+    "native_bootstrap_same_cpu": true,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "A fresh native bootstrap CPU continued through facade +0x17b8f8, the deliberately installed receiver target +0x27dd04, owning VM +0x2830c4 and native VM +0x168324 on both bases. The native callback object reached the real memcpy PLT; no runtime-table page was touched. The receiver/tree and child target are explicit probe inputs, and the run is bounded before oracle STOP, so this is a same-CPU continuation boundary rather than normal-target, whole-request or signer evidence."
   }
 }

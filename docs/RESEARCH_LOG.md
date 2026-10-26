@@ -9,6 +9,14 @@ field，它们来自 `facade.fixture` provider。该结果只闭合 fixture-path
 child handoff、whole-request differential、standalone signer 与线上接受保持未验证。
 见 [facade target provenance evidence](../platforms/bytedance/tomato/evidence/vm9_java_facade_target_provenance_20261026.json)。
 
+2026-10-26：在同一 fresh native bootstrap CPU 上继续 Java facade 到 owning VM。
+两个 image base 均执行 facade `+0x17b8f8`、人工安装的 child `+0x27dd04`、owning
+VM `+0x2830c4` 和 VM `+0x168324`，共 174,529 条 native 指令；callback object
+随后进入真实 `+0x347f60` memcpy PLT，runtime-table canary 无读写、无 unmapped。
+运行在 180,000 条指令处有界停止，未到 oracle STOP；receiver/tree 与 child target
+仍是显式 probe 输入，因此不计为 normal target、whole-request differential 或 signer
+输出。见 [same-CPU facade child evidence](../platforms/bytedance/tomato/evidence/vm9_native_bootstrap_java_facade_child_20261026.json)。
+
 2026-10-26：人工 facade child continuation 执行到 native return。
 在 synthetic receiver 上补齐有限 mutex/tree 字段后，两个基址的注入 `+0x27dd04`
 各执行 11,617 条 native 指令，在 `+0x17bac0` 返回 `x0=0`，没有 unmapped
