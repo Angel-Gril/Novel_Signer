@@ -88,6 +88,16 @@ FORMATTER_TRACE_OFFSETS = frozenset((
     0xF83F8, 0xF8400, 0xF8404, 0xF8554, 0xF858C,
 ))
 
+# The object published at receiver+0x20 is a pair whose second word points at
+# the request-context address point image+0x35dc50.  Keep the complete known
+# address-point neighborhood in the dynamic ledger.  These are observation
+# points only: no slot is interpreted as a signer result or substituted into
+# the Python model.
+REQUEST_CONTEXT_CONSUMER_OFFSETS = frozenset((
+    0x284F00, 0x284F74, 0x284F98, 0x285054,
+    0x28315C, 0x283748, 0x28508C, 0x285094, 0x28509C,
+))
+
 
 def _u(cpu, address, width=8):
     return int.from_bytes(bytes(cpu.mem_read(address, width)), "little")
@@ -238,6 +248,113 @@ def verify_vector_publication(case: dict) -> dict:
             )}
 
 
+def _decode_request_context_consumers(library: Path) -> dict:
+    """Decode the address-point slots and their small native bodies.
+
+    The relocation addends identify the functions without using a dynamic
+    object snapshot.  The body checks are deliberately narrow and only state
+    pointer/callback plumbing; they do not assign business meaning to the
+    context fields.
+    """
+    expected_slots = {
+        0x58: 0x28508C,
+        0x60: 0x285094,
+        0x68: 0x28509C,
+    }
+    expected_bodies = {
+        0x28508C: (("add", "x0, x0, #0x40"),
+                   ("b", "#0x19eff8")),
+        0x285094: (("add", "x0, x0, #0x30"),
+                   ("b", "#0x28522c")),
+        0x28509C: (("adrp", "x0, #0x283000"),
+                   ("add", "x0, x0, #0xc4"),
+                   ("ret", "")),
+    }
+    with library.open("rb") as stream:
+        elf = ELFFile(stream)
+        text = elf.get_section_by_name(".text")
+        data, start = text.data(), text["sh_addr"]
+        decoder = Cs(CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN)
+        relocations = {
+            relocation["r_offset"]: relocation["r_addend"]
+            for section in elf.iter_sections()
+            if section["sh_type"] == "SHT_RELA"
+            for relocation in section.iter_relocations()
+            if relocation["r_offset"] in {
+                0x35DC50 + slot for slot in expected_slots
+            }
+        }
+        rows = []
+        for slot, target in expected_slots.items():
+            address = 0x35DC50 + slot
+            if relocations.get(address) != target:
+                raise AssertionError((hex(address), relocations.get(address), hex(target)))
+            instructions = list(decoder.disasm(
+                data[target - start:target - start + len(expected_bodies[target]) * 4],
+                target))
+            actual = tuple((instruction.mnemonic, instruction.op_str)
+                           for instruction in instructions)
+            if actual != expected_bodies[target]:
+                raise AssertionError((hex(target), expected_bodies[target], actual))
+            rows.append({
+                "slot_offset": hex(slot),
+                "vtable_address_offset": hex(address),
+                "target_offset": hex(target),
+                "relocation_type": "R_AARCH64_RELATIVE",
+                "instructions": [
+                    {"offset": hex(instruction.address),
+                     "bytes": instruction.bytes.hex(),
+                     "mnemonic": instruction.mnemonic,
+                     "operands": instruction.op_str}
+                    for instruction in instructions
+                ],
+            })
+    return {
+        "address_point_offset": "0x35dc50",
+        "slots": rows,
+        "interpretation": (
+            "The +0x58 and +0x60 slots derive this context's two internal "
+            "subobject addresses; +0x68 returns image+0x2830c4 for callback "
+            "publication. This is object plumbing only, not signer state."
+        ),
+    }
+
+
+def verify_request_context_consumers(case: dict) -> dict:
+    """Join dynamic virtual calls to the published context object."""
+    image = int(case["image_base"], 16)
+    context = int(case["owning_vm_entry"]["x3"], 16)
+    events = case["request_context_consumer_events"]
+    expected = ("0x28508c", "0x285094", "0x28509c")
+    observed = tuple(event["pc_offset"] for event in events)
+    checks = {
+        "exact_context_consumer_sequence": observed == expected,
+        "all_calls_receive_published_context": bool(events) and all(
+            int(event["x0"], 16) == context for event in events),
+        "callers_are_outer_graph_publication": tuple(
+            int(event["x30"], 16) - image for event in events
+        ) == (0x27CD48, 0x27CD74, 0x27CD90),
+        "callback_target_call_is_last": (
+            events[-1]["pc_offset"] == "0x28509c"
+            and int(case["native_vector_checkpoints"][-2]["registers"]["x0"], 16)
+            == image + OWNING_VM
+        ),
+    }
+    if not all(checks.values()):
+        raise AssertionError({key: value for key, value in checks.items() if not value})
+    return {
+        "verified": True,
+        "checks": checks,
+        "context_address": hex(context),
+        "events": events,
+        "interpretation": (
+            "The final outer graph calls the context's +0x58, +0x60 and +0x68 "
+            "virtual slots in order. The last slot supplies +0x2830c4, after "
+            "which the pair writer publishes that callable with this context."
+        ),
+    }
+
+
 def _decode_formatter_bytecode(library: Path) -> dict:
     """Decode the two formatter-producing OP59 words from the pinned ELF."""
     raw = library.read_bytes()
@@ -361,6 +478,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "facade_stack_write_events": [],
         "request_vm_entry_events": [],
         "request_abi_events": [],
+        "request_context_consumer_events": [],
         "unmapped": [],
     }
     markers = []
@@ -548,6 +666,38 @@ def run(library: Path, libc: Path, image: int) -> dict:
         offset = pc - image
         state["last_pc_offset"] = hex(offset)
         state["native_instructions"] += 1
+        if offset in REQUEST_CONTEXT_CONSUMER_OFFSETS:
+            # Capture only a bounded object window.  The request-context
+            # address is resolved later from the published pair; recording
+            # raw registers here avoids assigning a semantic type to x0.
+            event = {
+                "pc_offset": hex(offset),
+                "instruction_ordinal": state["native_instructions"],
+                "x0": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+                "x1": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+                "x2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+                "x3": hex(cpu.reg_read(arm.UC_ARM64_REG_X3)),
+                "x8": hex(cpu.reg_read(arm.UC_ARM64_REG_X8)),
+                "x19": hex(cpu.reg_read(arm.UC_ARM64_REG_X19)),
+                "x20": hex(cpu.reg_read(arm.UC_ARM64_REG_X20)),
+                "x21": hex(cpu.reg_read(arm.UC_ARM64_REG_X21)),
+                "x30": hex(cpu.reg_read(arm.UC_ARM64_REG_X30)),
+                "sp": hex(cpu.reg_read(arm.UC_ARM64_REG_SP)),
+            }
+            pointer = cpu.reg_read(arm.UC_ARM64_REG_X0)
+            try:
+                event["x0_words_0_15"] = [
+                    hex(_u(cpu, pointer + index * 8)) for index in range(16)
+                ]
+            except Exception:
+                event["x0_words_0_15"] = None
+            try:
+                event["x0_vtable_word_0"] = hex(_u(cpu, pointer))
+                event["x0_plus_0x30"] = hex(_u(cpu, pointer + 0x30))
+            except Exception:
+                event["x0_vtable_word_0"] = None
+                event["x0_plus_0x30"] = None
+            state["request_context_consumer_events"].append(event)
         if offset == 0x32A210:
             pointer = cpu.reg_read(arm.UC_ARM64_REG_X0)
             if pointer in {start for start, _width, _name in VECTOR_WATCH_RANGES}:
@@ -1528,8 +1678,10 @@ def run(library: Path, libc: Path, image: int) -> dict:
             event for event in state["request_abi_events"]
             if event.get("facade_started")
         ],
+        "request_context_consumer_events": state["request_context_consumer_events"],
     }
     vector_publication_provenance = verify_vector_publication(vector_case)
+    context_consumer_provenance = verify_request_context_consumers(vector_case)
     return {
         "image_base": hex(image),
         "outer_function_offset": "0x1658e4",
@@ -1564,6 +1716,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "facade_stack_write_events": state["facade_stack_write_events"],
         "request_vm_entry_events": state["request_vm_entry_events"],
         "request_abi_events": state["request_abi_events"],
+        "request_context_consumer_events": state["request_context_consumer_events"],
         "request_abi_facade_events": [
             event for event in state["request_abi_events"]
             if event.get("facade_started")
@@ -1665,6 +1818,8 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "vector_writer_provenance": vector_writer_provenance,
         "vector_writer_provenance_verified": vector_writer_provenance_verified,
         "vector_publication_provenance": vector_publication_provenance,
+        "request_context_consumer_provenance": context_consumer_provenance,
+        "request_context_consumer_events": state["request_context_consumer_events"],
         "markers": markers,
         "unmapped_events": state["unmapped"],
         "native_outer_result": result,
@@ -1689,9 +1844,10 @@ def main() -> None:
     args = parser.parse_args()
     digest = hashlib.sha256(args.library.read_bytes()).hexdigest()
     assert digest == oracle.LIBRARY_SHA256, digest
+    context_consumers_static = _decode_request_context_consumers(args.library)
     rows = [run(args.library, args.libc, image) for image in BASES]
     report = {
-        "schema": "vm9-native-outer-facade-actual-child-20261028-v7",
+        "schema": "vm9-native-outer-facade-actual-child-20261028-v8",
         "evidence_date": "2026-10-28",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
@@ -1710,6 +1866,11 @@ def main() -> None:
         "vector_publication_provenance_verified": all(
             case["vector_publication_provenance"]["verified"] for case in rows
         ),
+        "request_context_consumer_provenance_verified": all(
+            case["request_context_consumer_provenance"]["verified"]
+            for case in rows
+        ),
+        "request_context_consumers_static": context_consumers_static,
         "real_request_vm_entry_used": all(
             case["real_request_vm_entry_used"] for case in rows
         ),

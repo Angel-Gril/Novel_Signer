@@ -9703,6 +9703,32 @@ false。
 `evidence/vm9_native_outer_facade_actual_child_20261027.json`、
 `python/verify_vm9_native_outer_facade_actual_child_20261027.py`。
 
+## 6.288 request context 虚表消费者与 pair publication（2026-10-28 Asia/Shanghai）
+
+在同一轮 actual outer child → normal facade continuation 中增加窄范围 request
+context consumer ledger。两个 image base 都观察到真实 context `0x136d6100`
+依次执行三个虚表槽：`+0x58 -> +0x28508c`、`+0x60 -> +0x285094`、
+`+0x68 -> +0x28509c`。三个调用的 caller 分别为 outer graph 的
+`+0x27cd48/+0x27cd74/+0x27cd90`，每次 `x0` 都是同一个 128-byte context；最后
+一个槽返回 `image+0x2830c4`，紧接着 `+0x27cd94` 将该 callable 与 context 发布到
+16-byte callback pair。
+
+独立 ELF 解码确认 `.rela.dyn` 的 `+0x35dca8/+0x35dcb0/+0x35dcb8` 分别指向这
+三个函数；函数体对应 `this+0x40`、`this+0x30` 和 `image+0x2830c4`。因此现在
+可以把 context 的 callback publication provenance 闭合到真实虚表消费者。`+0x30`
+与 `+0x40` 只记录为两个内部 reference subobject，仍不能解释为 Java array、七神
+header 或 signer 业务结果。生产模型未修改，whole-request native differential、
+真实 JVM、fresh standalone signer 与线上 header acceptance 仍未完成。
+
+证据：`evidence/vm9_native_outer_facade_context_consumers_20261028.json`；
+复现脚本：
+
+```powershell
+python -B platforms/bytedance/tomato/python/verify_vm9_native_outer_facade_actual_child_20261027.py `
+  --library C:\AI\6\libmetasec_ml_71332.so --libc C:\AI\6\_vlibc.so `
+  --output platforms/bytedance/tomato/evidence/vm9_native_outer_facade_context_consumers_20261028.json
+```
+
 ## 6.287 formatter bytecode source-slot closure（2026-10-27 Asia/Shanghai）
 
 对两个 `%d|%s` formatter 调用点做了真实 ELF 静态解码，并在同一轮 actual-child

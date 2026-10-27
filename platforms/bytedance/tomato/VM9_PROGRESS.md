@@ -1,5 +1,32 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-28：request context 虚表消费者与 callback pair 发布闭合
+
+在上一轮 actual outer child → normal facade 的同 CPU continuation 上增加窄范围
+consumer ledger，并在两个 image base fresh 重跑。实际发布的 `0x136d6100`（128
+字节 native request context）被 outer graph 依次以同一个 `x0` 调用：
+
+```text
+context vtable +0x58 → +0x28508c → this +0x40 → +0x19eff8
+context vtable +0x60 → +0x285094 → this +0x30 → +0x28522c
+context vtable +0x68 → +0x28509c → image+0x2830c4
+```
+
+三个调用的真实 caller 分别为 `+0x27cd48`、`+0x27cd74`、`+0x27cd90`；最后一个
+返回 `+0x2830c4`，随后由 `+0x27cd94` 将 callable 与同一个 context 写入 16 字节
+callback pair。ELF `.rela.dyn` 的 `+0x35dca8/+0x35dcb0/+0x35dcb8` 分别重定位到
+这三个函数，函数体静态指令也逐条通过。两个基址的动态序列、对象地址、caller
+和 pair publication 均一致。
+
+这闭合了 request context 从真实构造对象到 pair callback publication 的对象级
+provenance；`+0x30/+0x40` 目前只称为两个内部 reference subobject，不能把它们
+解释成 Java array、六个七神 header 或 signer 结果。尚未修改生产对象模型，也未
+宣称 whole-request native differential、真实 JVM、fresh standalone signer 或线上
+header acceptance。
+
+证据：[context consumers](evidence/vm9_native_outer_facade_context_consumers_20261028.json)；
+复现：[verifier](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
+
 ## 2026-10-27：真实 outer child → normal facade 的同 CPU continuation
 
 扩展 native outer verifier，在 cold outer getter 返回点保留同一个 Unicorn

@@ -9963,5 +9963,66 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The rerun traces initial +0x27dd04 x3=0x138 and the +0x27e470 load from [0x70002400+0x08], observed at +0x27e474 as x3=0x101, before +0x2830c4. This is the independent continuation input producer, not a signer status."
+  },
+  "vm9_native_outer_facade_context_consumers_20261028": {
+    "path": "evidence/vm9_native_outer_facade_context_consumers_20261028.json",
+    "verifier": "python/verify_vm9_native_outer_facade_actual_child_20261027.py",
+    "schema": "vm9-native-outer-facade-actual-child-20261028-v8",
+    "evidence_label": "Actual request-context vtable consumer and callback-pair publication provenance",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "request_context_address_each": "0x136d6100",
+    "request_context_width": 128,
+    "consumer_sequence_each": [
+      "0x28508c",
+      "0x285094",
+      "0x28509c"
+    ],
+    "consumer_slots": [
+      "0x58",
+      "0x60",
+      "0x68"
+    ],
+    "consumer_callers_each": [
+      "0x27cd48",
+      "0x27cd74",
+      "0x27cd90"
+    ],
+    "consumer_field_derivations": {
+      "0x28508c": "this + 0x40 -> 0x19eff8",
+      "0x285094": "this + 0x30 -> 0x28522c",
+      "0x28509c": "image + 0x2830c4"
+    },
+    "static_vtable_relocations": [
+      {
+        "address_offset": "0x35dca8",
+        "slot_offset": "0x58",
+        "addend": "0x28508c",
+        "type": "R_AARCH64_RELATIVE"
+      },
+      {
+        "address_offset": "0x35dcb0",
+        "slot_offset": "0x60",
+        "addend": "0x285094",
+        "type": "R_AARCH64_RELATIVE"
+      },
+      {
+        "address_offset": "0x35dcb8",
+        "slot_offset": "0x68",
+        "addend": "0x28509c",
+        "type": "R_AARCH64_RELATIVE"
+      }
+    ],
+    "request_context_consumer_provenance_verified": true,
+    "vector_publication_provenance_verified": true,
+    "same_cpu_native_outer_to_facade": true,
+    "synthetic_receiver_tree_used": false,
+    "synthetic_jni_provider_used": true,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Both image bases call the three measured request-context virtual slots in the same outer-graph order. The final +0x68 slot returns image+0x2830c4 and +0x27cd94 publishes that callable with the same context. The +0x30/+0x40 values remain internal reference subobjects; no Java-array, seven-gods-header or signer-result interpretation is claimed."
   }
 }
