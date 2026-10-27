@@ -1,0 +1,95 @@
+{
+  "schema": "vm9-request-context-reference-members-20261028-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 8,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 8,
+      "object_reference_members_verified": true
+    }
+  ],
+  "native_controls": 6,
+  "rollback_guards": [
+    {
+      "label": "null_object",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    },
+    {
+      "label": "null_reference_30",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    },
+    {
+      "label": "null_reference_40",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    }
+  ],
+  "object_reference_members_verified": true,
+  "signer_result_interpretation": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "comparison_note": "The service_refs handler's explicit +0x30/+0x40 callback-reference copies match the measured +0x285094/+0x28508c native bodies on both image bases. The helper preserves native reference-count updates and does not infer Java or signer semantics."
+}

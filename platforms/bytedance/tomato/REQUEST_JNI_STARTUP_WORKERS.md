@@ -9729,6 +9729,23 @@ python -B platforms/bytedance/tomato/python/verify_vm9_native_outer_facade_actua
   --output platforms/bytedance/tomato/evidence/vm9_native_outer_facade_context_consumers_20261028.json
 ```
 
+## 6.289 handler callback reference member composition（2026-10-28 Asia/Shanghai）
+
+在 context consumer 证据基础上恢复一个独立、可回滚的对象装配 helper：
+`vm9_objects.bind_signer_handler_reference_members`。它把明确提供的两个 reference
+wrapper 复制到 128-byte `service_refs` handler 的 `+0x30` 与 `+0x40`，对应 native
+`+0x285094` 与 `+0x28508c`；helper 保留 native 的指针复制、计数指针复制和 32 位
+计数增加行为，不触碰 `+0x50/+0x60` service fields。
+
+新的 direct differential verifier 在两个 image base 上按 native 顺序执行
+`+0x28508c → +0x285094`，constructor page、完整 reference member page 和分配
+序列均一致，并通过 3 个非法/null 输入的 page rollback guards。该项只证明
+native object composition，不能把这些 reference 解释成 Java array、七神 header 或
+signer 结果。
+
+证据：`evidence/vm9_request_context_references_20261028.json`；
+复现脚本：`python/verify_vm9_request_context_references_20261028.py`。
+
 ## 6.287 formatter bytecode source-slot closure（2026-10-27 Asia/Shanghai）
 
 对两个 `%d|%s` formatter 调用点做了真实 ELF 静态解码，并在同一轮 actual-child

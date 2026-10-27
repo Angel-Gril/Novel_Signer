@@ -10024,5 +10024,35 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "Both image bases call the three measured request-context virtual slots in the same outer-graph order. The final +0x68 slot returns image+0x2830c4 and +0x27cd94 publishes that callable with the same context. The +0x30/+0x40 values remain internal reference subobjects; no Java-array, seven-gods-header or signer-result interpretation is claimed."
+  },
+  "vm9_request_context_references_20261028": {
+    "path": "evidence/vm9_request_context_references_20261028.json",
+    "verifier": "python/verify_vm9_request_context_references_20261028.py",
+    "schema": "vm9-request-context-reference-members-20261028-v1",
+    "evidence_label": "Native/Python request-context callback-reference member composition",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "handler_vtable_offset": "0x35dc50",
+    "constructor_offset": "0x263fb8",
+    "native_virtual_copy_order": [
+      "0x28508c",
+      "0x285094"
+    ],
+    "native_destination_member_order": [
+      "+0x40",
+      "+0x30"
+    ],
+    "native_controls": 6,
+    "rollback_guards": 3,
+    "constructor_memory_match_each": true,
+    "publication_memory_match_each": true,
+    "object_reference_members_verified": true,
+    "signer_result_interpretation": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "The explicit Python helper matches the native +0x28508c/+0x285094 reference-wrapper copies after the measured service_refs constructor, including count updates and rollback on invalid pointers. The fields remain object-level callback references with no Java-array, seven-gods-header or signer-result interpretation."
   }
 }

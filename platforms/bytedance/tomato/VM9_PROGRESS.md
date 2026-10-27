@@ -27,6 +27,22 @@ header acceptance。
 证据：[context consumers](evidence/vm9_native_outer_facade_context_consumers_20261028.json)；
 复现：[verifier](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
 
+## 2026-10-28：恢复 handler 的两个 callback reference member 复制
+
+在已闭合的 consumer provenance 上增加最小对象装配 owner：
+`bind_signer_handler_reference_members`。它按 native 顺序复现
+`+0x28508c`（复制到 handler `+0x40`）和 `+0x285094`（复制到 `+0x30`），保留
+reference wrapper 的指针、计数指针和 32 位计数增加行为；service_refs 原有
+`+0x50/+0x60` 构造保持不变。
+
+两个 image base 的 constructor、两次 virtual copy 的完整 guest page 对照和分配
+顺序均通过；3 个 NULL/非法指针事务回滚也通过。该 helper 只恢复 native object
+reference composition，没有把字段解释成 Java array、七神 header、signer 状态或
+业务结果。
+
+证据：[context reference members](evidence/vm9_request_context_references_20261028.json)；
+复现：[verifier](python/verify_vm9_request_context_references_20261028.py)。
+
 ## 2026-10-27：真实 outer child → normal facade 的同 CPU continuation
 
 扩展 native outer verifier，在 cold outer getter 返回点保留同一个 Unicorn

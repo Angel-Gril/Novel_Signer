@@ -3062,6 +3062,32 @@ def construct_signer_handler(
     transaction.commit()
 
 
+def bind_signer_handler_reference_members(
+    pages, *, object_address: int, reference_30: int, reference_40: int,
+) -> None:
+    """Publish the two callback-reference members of a 128-byte handler.
+
+    The measured ``service_refs`` constructor initializes its service fields at
+    ``+0x50`` and ``+0x60``.  The outer signer graph subsequently calls the
+    derived virtual slots ``+0x60`` and ``+0x58``; those slots copy explicit
+    reference wrappers into ``+0x30`` and ``+0x40`` respectively.  Keep the
+    source wrappers caller-owned so the operation has the same reference-count
+    and alias behaviour as the native copy helpers.
+
+    This function only assembles object references.  It does not infer a
+    callback target, signer state, Java value, or header result.
+    """
+    if (type(object_address) is not int or object_address <= 0
+            or type(reference_30) is not int or reference_30 <= 0
+            or type(reference_40) is not int or reference_40 <= 0):
+        raise RefillUnsupported("handler reference members require guest pointers")
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, object_address, 0x80)
+    _copy_reference_wrapper(transaction, object_address + 0x30, reference_30)
+    _copy_reference_wrapper(transaction, object_address + 0x40, reference_40)
+    transaction.commit()
+
+
 def bind_signer_child_callback(
     pages, *, child_address: int, handler_address: int, image_base: int, kind: str,
 ) -> int:
