@@ -1,5 +1,15 @@
 # Tomato / Fanqie (ByteDance)
 
+JNI registration provenance (2026-10-28): the pinned ELF exports `JNI_OnLoad` at
+`+0x27b41c`; its one-entry `JNINativeMethod` stores `image+0x26e684` and calls
+the JNIEnv function-table slot `+0xb8` (`RegisterNatives`). The Java `r4` callsite
+supplies signing tag `0x3000001` to the same native declaration, and a bounded
+unidbg capture reports class `ms/bd/c/m`, the exact signature and the
+`+0x26e684` lookup. This closes JNI entry ownership and tag provenance only;
+the JNI provider, live Android JVM, whole-request differential, fresh signer and
+online acceptance remain unverified. See [evidence](evidence/vm9_jni_registration_provenance_20261028.json)
+and [verifier](python/verify_vm9_jni_registration_provenance_20261028.py).
+
 Facade target provenance (2026-10-26): an untouched native facade fixture records
 the load chain `facade+0x18 → receiver+0 → vtable+0x20` at `+0x17b9e4`,
 `+0x17ba24`, and `+0x17ba38` on both image bases before invoking its explicit

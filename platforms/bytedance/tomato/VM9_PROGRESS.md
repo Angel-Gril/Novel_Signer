@@ -1,5 +1,22 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-28：JNI 注册与 signing tag 归属闭合
+
+新增只读 ELF/Java/受限捕获 verifier。pinned `libmetasec_ml_71332.so` 的动态符号
+表确认 `JNI_OnLoad=+0x27b41c`；注册路径静态构造一个 `JNINativeMethod`，把
+`image+0x26e684` 写入函数指针槽，并通过 JNIEnv 函数表 `+0xb8` 调用
+`RegisterNatives`。`r4.onCallToAddSecurityFactor` 的 Java 代码明确以
+`tag=0x3000001` 调用 `y2.a(int,int,long,String,Object)`，同一入口的参数重排
+也逐条由原始指令验证。
+
+现有 bounded unidbg 捕获只提取注册类、签名、入口和 tag 标记，不写入 URL、header、
+设备标识或返回值；六个标记全部命中。该轮闭合的是 JNI entry ownership 和 signing
+tag provenance，不等同于 actual JNI provider、真实 Android JVM、whole-request
+native/Python differential、fresh standalone signer 或线上 acceptance。
+
+证据：[JNI registration provenance](evidence/vm9_jni_registration_provenance_20261028.json)；
+复现：[verifier](python/verify_vm9_jni_registration_provenance_20261028.py)。
+
 ## 2026-10-28：actual facade JNI/cleanup semantic boundary
 
 在真实 outer child → normal facade 的同 CPU continuation 上增加阶段化

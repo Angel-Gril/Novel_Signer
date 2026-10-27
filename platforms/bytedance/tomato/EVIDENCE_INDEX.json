@@ -10109,5 +10109,27 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The real outer child reaches the normal facade and native request VM on one CPU at both bases. Pointer-stripped JNI operation shape and returned-array cardinality match an independently generated Python facade fixture. The native phase ledger reaches a free terminal event. The native request VM uses a different internal allocation graph from the Python request provider, so allocator byte/sequence equality and whole-request differential remain unverified; no returned value is interpreted as a seven-gods signer result."
+  },
+  "vm9_jni_registration_provenance_20261028": {
+    "path": "evidence/vm9_jni_registration_provenance_20261028.json",
+    "verifier": "python/verify_vm9_jni_registration_provenance_20261028.py",
+    "schema": "vm9-jni-registration-provenance-20261028-v1",
+    "evidence_label": "JNI_OnLoad RegisterNatives entry and signing-tag provenance",
+    "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "jni_onload_offset": "0x27b41c",
+    "register_callsite": "0x26e514",
+    "registered_class": "ms/bd/c/m",
+    "registered_signature": "a(IIJLjava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;",
+    "entry_offset": "0x26e684",
+    "signing_tag": "0x3000001",
+    "bounded_capture_markers": 6,
+    "jni_entry_ownership_verified": true,
+    "signing_tag_to_entry_verified": true,
+    "actual_jni_provider_verified": false,
+    "live_android_jvm_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "The pinned ELF and Java sources close the dynamic RegisterNatives entry and the public signing tag. The bounded unidbg capture supplies only registration/signature/offset markers; payloads and returned headers are omitted. This does not establish a live Android JVM, actual provider semantics, whole-request differential or signer acceptance."
   }
 }

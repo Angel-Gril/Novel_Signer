@@ -1,0 +1,129 @@
+{
+  "schema": "vm9-jni-registration-provenance-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "evidence_label": "JNI_OnLoad RegisterNatives entry and signing-tag provenance",
+  "elf": {
+    "sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "jni_onload_export": {
+      "offset": "0x27b41c",
+      "count": 1
+    },
+    "entry_offset": "0x26e684",
+    "register_callsite": "0x26e514",
+    "register_method_table_slot": "0xb8",
+    "register_count": 1,
+    "instruction_facts": {
+      "0x26e684": {
+        "mnemonic": "mov",
+        "operands": "x1, x0"
+      },
+      "0x26e688": {
+        "mnemonic": "mov",
+        "operands": "w0, w2"
+      },
+      "0x26e68c": {
+        "mnemonic": "mov",
+        "operands": "w2, w3"
+      },
+      "0x26e690": {
+        "mnemonic": "mov",
+        "operands": "x3, x4"
+      },
+      "0x26e694": {
+        "mnemonic": "mov",
+        "operands": "x4, x5"
+      },
+      "0x26e698": {
+        "mnemonic": "mov",
+        "operands": "x5, x6"
+      },
+      "0x26e4f8": {
+        "mnemonic": "mov",
+        "operands": "w3, #1"
+      },
+      "0x26e500": {
+        "mnemonic": "ldr",
+        "operands": "x8, [x9, #0x6b8]"
+      },
+      "0x26e504": {
+        "mnemonic": "adrp",
+        "operands": "x9, #0x26e000"
+      },
+      "0x26e508": {
+        "mnemonic": "add",
+        "operands": "x9, x9, #0x684"
+      },
+      "0x26e50c": {
+        "mnemonic": "str",
+        "operands": "x9, [x21, #0x10]"
+      },
+      "0x26e514": {
+        "mnemonic": "ldr",
+        "operands": "x8, [x19]"
+      },
+      "0x26e518": {
+        "mnemonic": "mov",
+        "operands": "x0, x19"
+      },
+      "0x26e51c": {
+        "mnemonic": "mov",
+        "operands": "x1, x24"
+      },
+      "0x26e520": {
+        "mnemonic": "ldr",
+        "operands": "x8, [x8, #0xb8]"
+      },
+      "0x26e524": {
+        "mnemonic": "blr",
+        "operands": "x8"
+      }
+    }
+  },
+  "java_sources": {
+    "r4": {
+      "basename": "r4.java",
+      "sha256": "b3334993de362c69f3d27e116f300121261732fa166c9c34c7a03739ab451b00"
+    },
+    "y2": {
+      "basename": "y2.java",
+      "sha256": "ca64388c288171fabc9f646f081aba007780492d7855c8eb08d8b93145fe6d1d"
+    },
+    "signing_tag": "0x3000001",
+    "tag_callsite_verified": true,
+    "native_declaration_verified": true,
+    "input_roles": {
+      "tag": "int i",
+      "type": "int i2",
+      "handle": "long j",
+      "url": "String str",
+      "extra": "Object obj (String[] header pairs at signing callsite)"
+    }
+  },
+  "bounded_capture": {
+    "basename": "run_arrbuild.txt",
+    "sha256": "c3212ea44325960ebd371c04e88a68afbda19afe5c5fe150e1a3bde0850af47e",
+    "markers": {
+      "jni_onload_started": true,
+      "jni_onload_completed": true,
+      "register_natives": true,
+      "registered_signature": true,
+      "native_entry_lookup": true,
+      "signing_tag_observed": true
+    },
+    "capture_scope": "bounded unidbg registration/signing markers; payloads omitted"
+  },
+  "provenance_conclusion": {
+    "jni_onload_export_verified": true,
+    "register_natives_site_verified": true,
+    "registered_class_verified": true,
+    "registered_signature_verified": true,
+    "entry_offset_verified": true,
+    "signing_tag_to_entry_verified": true,
+    "actual_jni_provider_verified": false,
+    "live_android_jvm_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "The pinned ELF exports JNI_OnLoad at +0x27b41c. Its registration path constructs one JNINativeMethod whose function pointer is image+0x26e684 and calls the JNIEnv function-table slot +0xb8 (RegisterNatives). The Java r4 callsite supplies tag 0x3000001 and the same URL/header-pair argument shape. The bounded unidbg capture independently reports class ms/bd/c/m, the exact native signature and the +0x26e684 entry. This closes JNI entry ownership and tag provenance only; providers, live JVM behavior, whole-request equivalence and signer acceptance remain open."
+}
