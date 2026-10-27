@@ -1,0 +1,1102 @@
+{
+  "schema": "vm9-native-facade-cleanup-semantics-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "native_facade_return": "0x70001e10",
+      "python_facade_return": "0x70001e10",
+      "native_jni_event_shape": [
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1384
+        ],
+        [
+          "JNI",
+          1384
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "NewObjectArray",
+          2
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "SetObjectArrayElement",
+          0
+        ],
+        [
+          "SetObjectArrayElement",
+          1
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ]
+      ],
+      "python_jni_event_shape": [
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1384
+        ],
+        [
+          "JNI",
+          1384
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "NewObjectArray",
+          2
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "SetObjectArrayElement",
+          0
+        ],
+        [
+          "SetObjectArrayElement",
+          1
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ]
+      ],
+      "native_output_element_count": 2,
+      "native_output_element_lengths": [
+        9,
+        12
+      ],
+      "python_output_element_count": 2,
+      "python_output_element_lengths": [
+        3,
+        5
+      ],
+      "native_facade_phase_lifecycle": {
+        "allocation_event_count": 111,
+        "free_event_count": 97,
+        "allocation_size_histogram": {
+          "4": 16,
+          "6": 3,
+          "8": 8,
+          "9": 2,
+          "10": 4,
+          "13": 1,
+          "14": 1,
+          "16": 13,
+          "17": 1,
+          "20": 2,
+          "23": 1,
+          "24": 13,
+          "32": 6,
+          "33": 2,
+          "39": 1,
+          "40": 17,
+          "48": 1,
+          "64": 4,
+          "128": 5,
+          "160": 1,
+          "192": 1,
+          "256": 4,
+          "384": 1,
+          "512": 2,
+          "1024": 1
+        },
+        "last_event_kind": "free",
+        "phase_allocation_pointer_count": 69,
+        "phase_freed_pointer_count": 51,
+        "phase_active_pointer_count": 18,
+        "preexisting_pointer_frees": 3
+      },
+      "python_facade_cleanup_observation": {
+        "allocation_calls": 54,
+        "free_calls": 25,
+        "active_blocks_after_return": 4
+      },
+      "native_actual_outer_child_used": true,
+      "native_request_vm_entry_used": true,
+      "native_facade_return_verified": true,
+      "native_unmapped_event_count": 0,
+      "semantic_jni_sequence_equal": true,
+      "output_cardinality_equal": true,
+      "native_python_allocator_sequence_equal": false,
+      "whole_request_native_python_differential_verified": false,
+      "fresh_standalone_signer_verified": false,
+      "online_header_acceptance_verified": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "native_facade_return": "0x70001e10",
+      "python_facade_return": "0x70001e10",
+      "native_jni_event_shape": [
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1384
+        ],
+        [
+          "JNI",
+          1384
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "NewObjectArray",
+          2
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "SetObjectArrayElement",
+          0
+        ],
+        [
+          "SetObjectArrayElement",
+          1
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ]
+      ],
+      "python_jni_event_shape": [
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1384
+        ],
+        [
+          "JNI",
+          1384
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          208
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          248
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          264
+        ],
+        [
+          "JNI",
+          280
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1368
+        ],
+        [
+          "JNI",
+          1600
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "NewObjectArray",
+          2
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "JNI",
+          1336
+        ],
+        [
+          "JNI",
+          1824
+        ],
+        [
+          "SetObjectArrayElement",
+          0
+        ],
+        [
+          "SetObjectArrayElement",
+          1
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ],
+        [
+          "JNI",
+          1856
+        ],
+        [
+          "JNI",
+          184
+        ]
+      ],
+      "native_output_element_count": 2,
+      "native_output_element_lengths": [
+        9,
+        12
+      ],
+      "python_output_element_count": 2,
+      "python_output_element_lengths": [
+        3,
+        5
+      ],
+      "native_facade_phase_lifecycle": {
+        "allocation_event_count": 111,
+        "free_event_count": 97,
+        "allocation_size_histogram": {
+          "4": 16,
+          "6": 3,
+          "8": 8,
+          "9": 2,
+          "10": 4,
+          "13": 1,
+          "14": 1,
+          "16": 13,
+          "17": 1,
+          "20": 2,
+          "23": 1,
+          "24": 13,
+          "32": 6,
+          "33": 2,
+          "39": 1,
+          "40": 17,
+          "48": 1,
+          "64": 4,
+          "128": 5,
+          "160": 1,
+          "192": 1,
+          "256": 4,
+          "384": 1,
+          "512": 2,
+          "1024": 1
+        },
+        "last_event_kind": "free",
+        "phase_allocation_pointer_count": 69,
+        "phase_freed_pointer_count": 51,
+        "phase_active_pointer_count": 18,
+        "preexisting_pointer_frees": 3
+      },
+      "python_facade_cleanup_observation": {
+        "allocation_calls": 54,
+        "free_calls": 25,
+        "active_blocks_after_return": 4
+      },
+      "native_actual_outer_child_used": true,
+      "native_request_vm_entry_used": true,
+      "native_facade_return_verified": true,
+      "native_unmapped_event_count": 0,
+      "semantic_jni_sequence_equal": true,
+      "output_cardinality_equal": true,
+      "native_python_allocator_sequence_equal": false,
+      "whole_request_native_python_differential_verified": false,
+      "fresh_standalone_signer_verified": false,
+      "online_header_acceptance_verified": false
+    }
+  ],
+  "native_controls": 2,
+  "semantic_jni_sequence_equal_each": true,
+  "output_cardinality_equal_each": true,
+  "native_python_allocator_sequence_equal": false,
+  "native_input_snapshot_used": false,
+  "synthetic_jni_provider_used": true,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "The actual cold outer child reaches the normal facade and native request VM on the same CPU at both image bases. Its JNI operation shape and returned-array cardinality match an independently constructed Python facade fixture after pointer/handle values are removed. The native phase ledger also reaches a free terminal event. The real request VM allocates a different internal graph from the Python provider, so allocator byte/sequence equality and whole-request native/Python equality remain explicitly unverified; no header value is interpreted as a seven-gods signer result."
+}

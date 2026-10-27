@@ -10088,5 +10088,26 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "Both image bases expose the same cold outer root dependency fields, child vtable/callback pairs, handler vtables, and non-null callback and service reference members. Root +0x00 remains observed untouched state; this closes object-graph provenance only and does not identify a Java array, seven-gods header, or signer result."
+  },
+  "vm9_native_facade_cleanup_semantics_20261028": {
+    "path": "evidence/vm9_native_facade_cleanup_semantics_20261028.json",
+    "verifier": "python/verify_vm9_native_facade_cleanup_semantics_20261028.py",
+    "schema": "vm9-native-facade-cleanup-semantics-20261028-v1",
+    "evidence_label": "Native outer-child facade semantic JNI and cleanup boundary",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "native_controls": 2,
+    "semantic_jni_sequence_equal_each": true,
+    "output_cardinality_equal_each": true,
+    "native_facade_phase_last_event": "free",
+    "native_python_allocator_sequence_equal": false,
+    "native_input_snapshot_used": false,
+    "synthetic_jni_provider_used": true,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "The real outer child reaches the normal facade and native request VM on one CPU at both bases. Pointer-stripped JNI operation shape and returned-array cardinality match an independently generated Python facade fixture. The native phase ledger reaches a free terminal event. The native request VM uses a different internal allocation graph from the Python request provider, so allocator byte/sequence equality and whole-request differential remain unverified; no returned value is interpreted as a seven-gods signer result."
   }
 }

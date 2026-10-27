@@ -1144,3 +1144,12 @@ returned root/child/handler relationships at both image bases, including the cal
 service reference members. It does not feed native bytes into Python or claim seven-gods
 headers, signer output, live JVM behavior, or online acceptance. See [evidence](evidence/vm9_outer_graph_object_provenance_20261028.json)
 and [verifier](python/verify_vm9_outer_graph_object_provenance_20261028.py).
+
+The actual outer child now has a narrow facade cleanup check on the same CPU. At both
+image bases, pointer-stripped JNI operation shape and returned-array cardinality match
+an independently generated Python facade fixture, and the native facade allocation phase
+ends with a free event. The native request VM still uses a different internal
+allocation graph, so this does not claim whole-request native/Python equality, a fresh
+standalone signer, live JVM behavior, or online header acceptance. See [facade cleanup
+semantics](evidence/vm9_native_facade_cleanup_semantics_20261028.json) and
+[verifier](python/verify_vm9_native_facade_cleanup_semantics_20261028.py).

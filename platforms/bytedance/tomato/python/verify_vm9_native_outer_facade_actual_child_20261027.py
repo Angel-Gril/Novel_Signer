@@ -453,6 +453,12 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "descriptor_snapshot": None,
         "continuation_allocations": [],
         "continuation_allocator_events": [],
+        "facade_allocation_sequence": [],
+        "facade_allocator_events": [],
+        "facade_allocation_start": None,
+        "facade_allocator_event_start": None,
+        "_allocator_events_ref": None,
+        "_allocation_sequence_ref": None,
         "main_import_relocations": [],
         "main_import_write_events": [],
         "continuation_jni_calls": [],
@@ -1484,8 +1490,19 @@ def run(library: Path, libc: Path, image: int) -> dict:
         # The outer cold return is the join point.  Keep the allocator ledger
         # available even if the following facade later stops at an unresolved
         # descriptor branch.
-        state["continuation_allocations"] = list(_unused.get("allocation_sequence", ()))
-        state["continuation_allocator_events"] = list(_unused.get("allocator_events", ()))
+        # Keep a live reference as the facade executes.  The outer oracle
+        # passes these lists by reference, so copying here would silently
+        # omit every malloc/free performed after the cold outer return.
+        state["_allocation_sequence_ref"] = _unused.get("allocation_sequence")
+        state["_allocator_events_ref"] = _unused.get("allocator_events")
+        state["facade_allocation_start"] = len(
+            state["_allocation_sequence_ref"] or ())
+        state["facade_allocator_event_start"] = len(
+            state["_allocator_events_ref"] or ())
+        state["continuation_allocations"] = list(
+            state["_allocation_sequence_ref"] or ())
+        state["continuation_allocator_events"] = list(
+            state["_allocator_events_ref"] or ())
         if vtable != image + 0x35D5F0 or target != image + CHILD_ENTRY:
             raise AssertionError(("outer child vtable/target", hex(vtable), hex(target)))
         if pair_target != image + OWNING_VM:
@@ -1577,6 +1594,21 @@ def run(library: Path, libc: Path, image: int) -> dict:
         )
     except Exception as exc:
         error = f"{type(exc).__name__}: {exc}"
+
+    # The continuation lists are owned by verify_vm9_outer_signer_native and
+    # continue growing while the facade is active.  Refresh the public copy
+    # only after the native run has reached a terminal point, and expose a
+    # semantic phase slice for the cleanup verifier below.
+    if state["_allocation_sequence_ref"] is not None:
+        state["continuation_allocations"] = list(state["_allocation_sequence_ref"])
+        start = state["facade_allocation_start"]
+        state["facade_allocation_sequence"] = list(
+            state["_allocation_sequence_ref"][start:])
+    if state["_allocator_events_ref"] is not None:
+        state["continuation_allocator_events"] = list(state["_allocator_events_ref"])
+        start = state["facade_allocator_event_start"]
+        state["facade_allocator_events"] = list(
+            state["_allocator_events_ref"][start:])
 
     child_entry = state["child_entry"]
     cxa_relocations = [
@@ -1806,6 +1838,10 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "syscall_mmap_events": state["syscall_mmap_events"],
         "continuation_allocations": state["continuation_allocations"],
         "continuation_allocator_events": state["continuation_allocator_events"],
+        "facade_allocation_sequence": state["facade_allocation_sequence"],
+        "facade_allocator_events": state["facade_allocator_events"],
+        "facade_allocation_start": state["facade_allocation_start"],
+        "facade_allocator_event_start": state["facade_allocator_event_start"],
         "main_import_relocations": state["main_import_relocations"],
         "main_import_write_events": state["main_import_write_events"],
         "continuation_jni_calls": state["continuation_jni_calls"],

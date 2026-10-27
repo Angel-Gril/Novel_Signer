@@ -1,5 +1,21 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-28：actual facade JNI/cleanup semantic boundary
+
+在真实 outer child → normal facade 的同 CPU continuation 上增加阶段化
+malloc/free 账本，并用独立生成的 Python facade fixture 做语义对照。两个
+image base 均通过：native facade 返回句柄与 Python facade 返回句柄相同，
+去除指针/句柄后的 JNI slot 与 object-array 操作序列逐项相同，返回数组元素
+数量均为 2；native facade 阶段的 111 次分配、97 次释放最终以 free 事件
+收尾。Python fixture 仍只由独立输入生成，未读取 native 对象字节。
+
+这次只关闭 facade 的 JNI 操作形状、返回基数和 cleanup 终止边界。真实 request
+VM 的内部对象图与 Python request provider 的分配图不同，因此没有宣称分配
+序列/字节等价、whole-request native/Python differential、fresh standalone
+signer、真实 JVM 或线上 header acceptance；输出内容仍不解释为七神 signer
+结果。证据：[facade cleanup semantics](evidence/vm9_native_facade_cleanup_semantics_20261028.json)；
+复现：[verifier](python/verify_vm9_native_facade_cleanup_semantics_20261028.py)。
+
 ## 2026-10-28：cold outer graph object provenance
 
 新增只读 native provenance verifier，在两个 image base 的 cold outer getter 返回点检查
