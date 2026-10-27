@@ -9798,6 +9798,22 @@
       {"bytecode_offset": "0xfb548", "signed_value": -7, "time": "50:51:59"},
       {"bytecode_offset": "0xfefbc", "signed_value": -11, "time": "50:51:59"}
     ],
+    "formatter_bytecode_static": {
+      "encoding": "OP59: R[d] = sext32(R[s]) + sext16(imm16)",
+      "source_register": "R0",
+      "destination_register": "R2",
+      "candidates": [
+        {"bytecode_offset": "0xfb520", "instruction_word": "0x7f20f97b", "signed_immediate": -7, "format_call_offset": "0xfb548"},
+        {"bytecode_offset": "0xfef94", "instruction_word": "0x7ea0f97b", "signed_immediate": -11, "format_call_offset": "0xfefbc"}
+      ],
+      "interpretation": "Both candidates consume virtual slot R0 and differ only in the embedded signed immediate; the formatter receives the resulting R2 value."
+    },
+    "formatter_dynamic_source_each": {
+      "slot_0_at_both_candidates": "0x0",
+      "time_string_slot": "R3",
+      "time_string": "50:51:59",
+      "window_events_captured_each": true
+    },
     "facade_native_tree_kept_value": -11,
     "whole_request_native_differential_verified": false,
     "fresh_standalone_signer_verified": false,

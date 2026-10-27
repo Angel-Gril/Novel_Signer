@@ -6421,3 +6421,20 @@ fixture 提供，因此 whole-request native differential、真实 Android JVM�
 standalone signer 和线上 header acceptance 仍未验证。证据：
 [vm9_native_outer_facade_actual_child_20261027.json](evidence/vm9_native_outer_facade_actual_child_20261027.json)；
 脚本：[verify_vm9_native_outer_facade_actual_child_20261027.py](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
+
+## 2026-10-27：formatter bytecode source-slot closure
+
+对两个 `%d|%s` formatter 调用点做了真实 ELF 静态解码，并在同一轮 actual-child
+continuation 中保存 formatter 前后的 VM 游标、字节码字和 32 个虚拟槽。`image+0xfb520`
+的 `0x7f20f97b` 是 `OP59`：`R2 = sext32(R0) - 7`，随后在 `image+0xfb548`
+调用 formatter；`image+0xfef94` 的 `0x7ea0f97b` 是同一操作但立即数为 `-11`，
+随后在 `image+0xfefbc` 调用 formatter。两个 image base 都观察到候选点的 `R0=0`，
+时间字符串由 `R3` 指向的同一 `50:51:59` 缓冲区提供；因此 `-7/-11` 差异来自
+字节码路径内嵌的有符号立即数，不是 Java array、JNI 转换或外部输入槽差异。
+
+动态窗口只保留候选窗口内去重后的 VM 游标事件，完整槽数组仍在证据 JSON 中保存；
+它用于复核槽来源，不把 `-11` 解释为已闭合的 signer 语义。最终树继续保留
+`-11|50:51:59`，与独立 `-5|` output-reference continuation 的状态差异仍未闭合。
+证据和复现脚本仍为：
+[vm9_native_outer_facade_actual_child_20261027.json](evidence/vm9_native_outer_facade_actual_child_20261027.json)；
+脚本：[verify_vm9_native_outer_facade_actual_child_20261027.py](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。

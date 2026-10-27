@@ -47,6 +47,27 @@ VM_HANDLER_OPS = {
 }
 VM_SOURCE_STORE = 0x16E118
 
+FORMATTER_WINDOWS = {
+    0xFB548: {
+        "window_start": 0xFB480,
+        "window_end": 0xFB590,
+        "immediate_offset": 0xFB520,
+        "signed_value": -7,
+        "format_call_offset": 0xFB548,
+    },
+    0xFEFBC: {
+        "window_start": 0xFEF00,
+        "window_end": 0xFF000,
+        "immediate_offset": 0xFEF94,
+        "signed_value": -11,
+        "format_call_offset": 0xFEFBC,
+    },
+}
+FORMATTER_TRACE_OFFSETS = frozenset((
+    0xFB520, 0xFB548,
+    0xFEF94, 0xFEFBC,
+))
+
 
 def _u(cpu, address, width=8):
     return int.from_bytes(bytes(cpu.mem_read(address, width)), "little")
@@ -126,6 +147,8 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "facade_format_events": [],
         "facade_native_format_summary": [],
         "facade_tree_insert_events": [],
+        "vm_bytecode_window_events": [],
+        "last_vm_bytecode_window_pc": None,
         "facade_stack_write_events": [],
         "request_vm_entry_events": [],
         "unmapped": [],
@@ -309,6 +332,33 @@ def run(library: Path, libc: Path, image: int) -> dict:
         state["native_instructions"] += 1
         if state["facade_started"]:
             state["facade_instructions"] += 1
+            # The native VM keeps its current bytecode PC through x19.  Keep
+            # a bounded, narrow trace around the two formatter candidates so
+            # the source-slot claim is independently reproducible.  x19 is a
+            # normal native register outside the VM, so invalid/unmapped
+            # values are deliberately ignored.
+            if len(state["vm_bytecode_window_events"]) < 512:
+                try:
+                    cursor = cpu.reg_read(arm.UC_ARM64_REG_X19)
+                    bytecode_pc = _u(cpu, cursor)
+                    bytecode_offset = bytecode_pc - image
+                    if (bytecode_offset in FORMATTER_TRACE_OFFSETS
+                            and bytecode_pc != state["last_vm_bytecode_window_pc"]):
+                        state["last_vm_bytecode_window_pc"] = bytecode_pc
+                        slots = [
+                            hex(_u(cpu, cpu.reg_read(arm.UC_ARM64_REG_X28) + index * 8))
+                            for index in range(32)
+                        ]
+                        state["vm_bytecode_window_events"].append({
+                            "native_pc_offset": hex(offset),
+                            "bytecode_offset": hex(bytecode_offset),
+                            "bytecode_word": hex(_u(cpu, bytecode_pc, 4)),
+                            "cursor": hex(cursor),
+                            "backing": hex(cpu.reg_read(arm.UC_ARM64_REG_X28)),
+                            "slots_0_31": slots,
+                        })
+                except Exception:
+                    pass
         if state["facade_started"] and offset in VM_HANDLER_OPS:
             x = {index: cpu.reg_read(getattr(arm, f"UC_ARM64_REG_X{index}"))
                  for index in (8, 9, 10, 11, 12, 13, 14, 15, 19, 21, 28)}
@@ -626,6 +676,10 @@ def run(library: Path, libc: Path, image: int) -> dict:
                                 cpu, cpu.reg_read(arm.UC_ARM64_REG_X19))),
                             "vm_bytecode_offset": hex(_u(
                                 cpu, cpu.reg_read(arm.UC_ARM64_REG_X19)) - image),
+                            "vm_register_slots_0_15": [
+                                hex(_u(cpu, cpu.reg_read(arm.UC_ARM64_REG_X28) + index * 8))
+                                for index in range(16)
+                            ],
                         })
                 except Exception:
                     pass
@@ -1054,6 +1108,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "facade_format_events": state["facade_format_events"],
         "facade_native_format_summary": state["facade_native_format_summary"],
         "facade_tree_insert_events": state["facade_tree_insert_events"],
+        "vm_bytecode_window_events": state["vm_bytecode_window_events"],
         "facade_stack_write_events": state["facade_stack_write_events"],
         "request_vm_entry_events": state["request_vm_entry_events"],
         "actual_facade_return_verified": actual_facade_return_verified,
@@ -1198,6 +1253,31 @@ def main() -> None:
         "whole_request_native_differential_verified": False,
         "fresh_standalone_signer_verified": False,
         "online_header_acceptance_verified": False,
+        "formatter_bytecode_static": {
+            "encoding": "OP59: R[d] = sext32(R[s]) + sext16(imm16)",
+            "source_register": "R0",
+            "destination_register": "R2",
+            "candidates": [
+                {
+                    "bytecode_offset": hex(offset),
+                    "instruction_word": hex(word),
+                    "operation": "OP59",
+                    "source_register": "R0",
+                    "destination_register": "R2",
+                    "signed_immediate": signed_value,
+                    "format_call_offset": hex(call_offset),
+                }
+                for offset, word, signed_value, call_offset in (
+                    (0xFB520, 0x7F20F97B, -7, 0xFB548),
+                    (0xFEF94, 0x7EA0F97B, -11, 0xFEFBC),
+                )
+            ],
+            "interpretation": (
+                "Both candidates consume virtual slot R0 and differ only in the "
+                "embedded signed immediate; the formatter receives the resulting "
+                "R2 value."
+            ),
+        },
         "interpretation": (
             "The outer getter's actual first child is retained on the same Unicorn "
             "CPU and used as the normal facade receiver.  The child vtable and "
