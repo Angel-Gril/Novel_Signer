@@ -1,0 +1,71 @@
+{
+  "schema": "vm9-fresh-unidbg-signer-replay-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "harness": {
+    "runtime": "unidbg Unicorn2",
+    "entry": "+0x26e684 via JNI_OnLoad/RegisterNatives",
+    "java_call_tag": "0x3000001",
+    "frozen_timestamp_ms": 1790261111000,
+    "input": {
+      "length": 98,
+      "sha256": "cfe08ad73eb40c817ba9089f898bdb9050658623e1229b2461018a84e479d461"
+    },
+    "source_hashes": {
+      "library": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "cpp_library": "6760e8b9953361968ee8f34ae40ef68bd3b47aa7ba37ef1dcf8902c07d0dc036",
+      "apk": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+      "signer_script": "07cf3dea309a7de92e9331bf087460835779c40b7ed79f957c6fbc07c124f444",
+      "hook_source": "7b40cfe77a969dd04a5bbca35d0f16e8a9d8544fb912c2b952f05a2ed2930fc9",
+      "hook_class": "a06f4111f16a613f773773f5d83c99f0d7ad01146e449819f2c333671bbbdb9e",
+      "rounds": "42fec4a3d9d05b4810e95231bb72efb6e91c5f74f9105312b7aeffe47e41f6c2",
+      "status": "9677eef0fb6fc9a80d04bcef89efa10b992e076814e6d3232422eaadc85bdb3a"
+    }
+  },
+  "header_names": [
+    "X-Argus",
+    "X-Gorgon",
+    "X-Helios",
+    "X-Khronos",
+    "X-Ladon",
+    "X-Medusa"
+  ],
+  "header_observations": {
+    "X-Argus": {
+      "length": 8,
+      "sha256": "5b2d4f404ad271b0d2076d595275fe33a753ddb230771371f2e7641675f1ae39"
+    },
+    "X-Gorgon": {
+      "length": 52,
+      "sha256": "386c9d062ca691d9fb50985c9d0cb65fc409fe6c44862aa8c1fb2363fd7c451b"
+    },
+    "X-Helios": {
+      "length": 48,
+      "sha256": "5e6442b54588c07b67f4a3cd50414cff613c0d46a374a06082f7509eb3ccf236"
+    },
+    "X-Khronos": {
+      "length": 10,
+      "sha256": "e3268a2f8d58d9067de1901b051eac05a5d46a8154afaef3d7c885aaca87fc14"
+    },
+    "X-Ladon": {
+      "length": 8,
+      "sha256": "6566c899afc4190c62c453fce732c51ebe9a131f3ccbde5f9b75eb485f4dc473"
+    },
+    "X-Medusa": {
+      "length": 1072,
+      "sha256": "3beaff42efba25a4a7f568e631dc380c1f4ac8fd04e3b5d817457595505f762b"
+    }
+  },
+  "khronos_seconds": 1790261111,
+  "native_vm_replay_completed": true,
+  "jni_registration_marker_verified": true,
+  "six_header_shape_verified": true,
+  "frame_sign_dynamic_capture_verified": false,
+  "synthetic_jni_provider_used": true,
+  "actual_jni_provider_verified": false,
+  "live_android_jvm_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "A fresh isolated unidbg run loaded the pinned native ELF, executed JNI_OnLoad/RegisterNatives and the real native signing tag 0x3000001, and returned all six expected header names with a frozen-time X-Khronos. Header values are reduced to length and SHA-256 here. The harness still supplies explicit Java/OS callbacks, so this is native replay evidence rather than live Android-JVM provider or whole-request differential proof. The frameSign tag was not invoked."
+}

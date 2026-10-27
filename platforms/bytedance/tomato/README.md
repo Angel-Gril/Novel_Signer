@@ -1,15 +1,33 @@
 # Tomato / Fanqie (ByteDance)
 
+Fresh unidbg replay (2026-10-28): an isolated Unicorn2 `HookMain` run loaded the
+pinned `libmetasec_ml_71332.so`, executed `JNI_OnLoad`/`RegisterNatives` and the
+native signing tag `0x3000001`, then returned all six expected header names with
+a frozen-time `X-Khronos`. The evidence stores only value lengths and SHA-256
+digests. This harness still supplies explicit Java/OS callbacks, so it is a
+fresh native replay boundary; it does not prove a live Android JVM/provider,
+whole-request native/Python equality, a non-null `frameSign` result, or online
+acceptance. See [evidence](evidence/vm9_fresh_unidbg_signer_replay_20261028.json)
+and [verifier](python/verify_vm9_fresh_unidbg_signer_replay_20261028.py).
+
+The dedicated dynamic `frameSign` probe now reaches the same registered entry
+with tag `0x200000A` after the signing setup, then hits a unidbg
+write-protected-memory failure and returns `null`. This proves tag routing only;
+it does not prove the frameSign map or an actual Android-JNI provider. See [probe evidence](evidence/vm9_frame_sign_dynamic_probe_20261028.json)
+and [verifier](python/verify_vm9_frame_sign_dynamic_probe_20261028.py).
+
 JNI registration provenance (2026-10-28): the pinned ELF exports `JNI_OnLoad` at
 `+0x27b41c`; its one-entry `JNINativeMethod` stores `image+0x26e684` and calls
 the JNIEnv function-table slot `+0xb8` (`RegisterNatives`). The Java `r4` callsite
 supplies signing tag `0x3000001`, while `core.c.frameSign` supplies `0x200000A`,
 to the same native declaration. A bounded unidbg capture reports class `ms/bd/c/m`,
-the exact signature and the `+0x26e684` lookup; it contains no dynamic `frameSign`
-marker. This closes JNI entry ownership and Java-to-entry tag provenance only;
-the JNI provider, live Android JVM, whole-request differential, fresh signer and
-online acceptance remain unverified. See [evidence](evidence/vm9_jni_registration_provenance_20261028.json)
-and [verifier](python/verify_vm9_jni_registration_provenance_20261028.py).
+the exact signature and the `+0x26e684` lookup; the separate dynamic probe now
+records one `0x200000A` marker, a write-protected-memory failure, and a null return. This closes JNI entry ownership
+and dynamic tag routing only; the JNI provider, live Android JVM, frameSign map,
+whole-request differential and online acceptance remain unverified. See
+[evidence](evidence/vm9_jni_registration_provenance_20261028.json),
+[frameSign probe](evidence/vm9_frame_sign_dynamic_probe_20261028.json) and
+[verifier](python/verify_vm9_jni_registration_provenance_20261028.py).
 
 Facade target provenance (2026-10-26): an untouched native facade fixture records
 the load chain `facade+0x18 → receiver+0 → vtable+0x20` at `+0x17b9e4`,

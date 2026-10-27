@@ -1,5 +1,25 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-28：fresh unidbg native six-header replay
+
+使用现有 `HookMain` 做了一次独立、固定时间的 fresh Unicorn2 重放。运行加载 pinned
+`libmetasec_ml_71332.so`，实际经过 `JNI_OnLoad`/`RegisterNatives` 和 native
+`0x3000001` signing tag，返回 `X-Argus`、`X-Gorgon`、`X-Helios`、`X-Khronos`、
+`X-Ladon`、`X-Medusa` 六个键；证据仅保留输入和 header value 的长度/SHA-256，
+不保留 URL 或 header 原文。
+
+该轮把“fresh native replay”从旧日志推进为当前可重放证据，但 HookMain 仍提供显式
+unidbg Java/OS callbacks，因此不把它升级为 actual JNI provider、真实 Android JVM、
+whole-request native/Python differential、非空 `frameSign` 结果或线上验签；正式
+`fresh_standalone_signer_verified` 仍保持 false。证据：[fresh unidbg replay](evidence/vm9_fresh_unidbg_signer_replay_20261028.json)；复现：[verifier](python/verify_vm9_fresh_unidbg_signer_replay_20261028.py)。
+
+同一 native handle 的隔离单变量 probe 随后调用静态确认的 `0x200000A` tag，动态日志
+命中一次 `MS.a tag=0x200000a`，随后在 unidbg mutex 路径触发
+`UC_ERR_WRITE_PROT`，调用返回类型为 `null`。这证明 frameSign 的动态 tag 路由已到达
+`+0x26e684`，也定位出当前 provider 的写保护失败边界；没有证明 `String[]` map、
+actual JNI provider 或真实 Android JVM。证据：[frameSign dynamic probe](evidence/vm9_frame_sign_dynamic_probe_20261028.json)；
+复现：[verifier](python/verify_vm9_frame_sign_dynamic_probe_20261028.py)。
+
 ## 2026-10-28：JNI 注册与 signing tag 归属闭合
 
 新增只读 ELF/Java/受限捕获 verifier。pinned `libmetasec_ml_71332.so` 的动态符号
@@ -11,9 +31,9 @@
 同一入口的参数重排逐条由原始指令验证。
 
 现有 bounded unidbg 捕获只提取注册类、签名、入口和 `0x3000001` 标记，不写入 URL、
-header、设备标识或返回值；六个标记全部命中。`0x200000A` 当前只有 Java 静态调用链
-证据，没有动态捕获标记。该轮闭合的是 JNI entry ownership 和 Java-to-entry tag
-provenance，不等同于 actual JNI provider、真实 Android JVM、whole-request
+header、设备标识或返回值；六个标记全部命中。单独的 frameSign probe 已补充动态
+`0x200000A` 路由标记，但随后写保护失败并返回为空，因此该轮闭合的是 JNI entry ownership 和动态 tag
+routing，不等同于 actual JNI provider、真实 Android JVM、frameSign map、whole-request
 native/Python differential、fresh standalone signer 或线上 acceptance。
 
 证据：[JNI registration provenance](evidence/vm9_jni_registration_provenance_20261028.json)；

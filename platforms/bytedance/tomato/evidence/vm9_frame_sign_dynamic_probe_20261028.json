@@ -1,0 +1,61 @@
+{
+  "schema": "vm9-frame-sign-dynamic-probe-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "jni_entry": "+0x26e684",
+  "signing_setup_tag": "0x3000001",
+  "frame_sign_tag": "0x200000a",
+  "frame_sign_marker_count": 1,
+  "frame_sign_dynamic_capture_verified": true,
+  "frame_sign_result_verified": false,
+  "frame_sign_result_kind": "null",
+  "frame_sign_failure_kind": "unidbg_write_protected_memory",
+  "frame_sign_failure_marker_verified": true,
+  "signing_setup_six_header_shape_verified": true,
+  "signing_setup_header_observations": {
+    "X-Argus": {
+      "length": 8,
+      "sha256": "5b2d4f404ad271b0d2076d595275fe33a753ddb230771371f2e7641675f1ae39"
+    },
+    "X-Gorgon": {
+      "length": 52,
+      "sha256": "386c9d062ca691d9fb50985c9d0cb65fc409fe6c44862aa8c1fb2363fd7c451b"
+    },
+    "X-Helios": {
+      "length": 48,
+      "sha256": "5e6442b54588c07b67f4a3cd50414cff613c0d46a374a06082f7509eb3ccf236"
+    },
+    "X-Khronos": {
+      "length": 10,
+      "sha256": "e3268a2f8d58d9067de1901b051eac05a5d46a8154afaef3d7c885aaca87fc14"
+    },
+    "X-Ladon": {
+      "length": 8,
+      "sha256": "6566c899afc4190c62c453fce732c51ebe9a131f3ccbde5f9b75eb485f4dc473"
+    },
+    "X-Medusa": {
+      "length": 1072,
+      "sha256": "3beaff42efba25a4a7f568e631dc380c1f4ac8fd04e3b5d817457595505f762b"
+    }
+  },
+  "signing_setup_input": {
+    "length": 98,
+    "sha256": "cfe08ad73eb40c817ba9089f898bdb9050658623e1229b2461018a84e479d461"
+  },
+  "signing_setup_khronos_seconds": 1790261111,
+  "source_hashes": {
+    "library": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "hook_source": "7b40cfe77a969dd04a5bbca35d0f16e8a9d8544fb912c2b952f05a2ed2930fc9",
+    "frame_source": "0151375232a0e59a7148fea31b24837905a077634d7b72428d545e717f0db134",
+    "frame_class": "079390110617554f2182e88a5ed17dd7b6725cd6ad4b0092d0abbad24567034f",
+    "frame_log": "4814ba37f8278f10de74a129e5d135e2563f53b58be77a451168eeea6bd7ba33",
+    "sign_rounds": "f6c626d5620e08e8213f5fb121c834f325194645e0865a73c465d220ce2bd222"
+  },
+  "synthetic_jni_provider_used": true,
+  "actual_jni_provider_verified": false,
+  "live_android_jvm_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "The dedicated unidbg probe reaches the same dynamically registered native entry with frameSign tag 0x200000A after a successful 0x3000001 setup. The call reaches a unidbg write-protected-memory failure and the harness returns null, so the marker proves dynamic routing only; it does not prove a frameSign map, actual Android-JNI provider behavior, a live JVM, whole-request equivalence, standalone acceptance, or online header validation."
+}

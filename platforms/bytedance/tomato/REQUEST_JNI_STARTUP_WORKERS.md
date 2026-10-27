@@ -9800,3 +9800,33 @@ fixture 相同；去掉指针和 JNI handle 后，59 项 JNI slot/object-array �
 
 证据：`evidence/vm9_native_facade_cleanup_semantics_20261028.json`；复现脚本：
 `python/verify_vm9_native_facade_cleanup_semantics_20261028.py`。
+
+## 6.292 fresh unidbg native six-header replay（2026-10-28 Asia/Shanghai）
+
+使用现有 `HookMain` 在隔离的 Unicorn2 进程中固定时间重放 pinned ELF。运行日志确认
+经过 `JNI_OnLoad`、`RegisterNatives` 和 `+0x26e684` native entry；签名调用使用
+`0x3000001`，返回数组包含六个预期键：`X-Argus`、`X-Gorgon`、`X-Helios`、
+`X-Khronos`、`X-Ladon`、`X-Medusa`。`X-Khronos` 与冻结秒数一致，X-Medusa 也通过
+base64/长度检查。正式证据只保存输入和各值的长度/SHA-256，不保存 URL 或 header 原文。
+
+这不是 live Android JVM 的 provider 结果：HookMain 的 Java/OS 回调仍是显式 unidbg
+实现，`frameSign` (`0x200000A`) 没有被调用。因此本轮只新增
+`native_vm_replay_completed` 和 `six_header_shape_verified`，正式
+`fresh_standalone_signer_verified`、actual JNI provider、whole-request differential、
+online acceptance 均保持 false。证据：
+`evidence/vm9_fresh_unidbg_signer_replay_20261028.json`；复现脚本：
+`python/verify_vm9_fresh_unidbg_signer_replay_20261028.py`。
+
+## 6.293 dynamic frameSign tag probe（2026-10-28 Asia/Shanghai）
+
+在 6.292 的同一 native handle 上做隔离单变量调用，把 Java 静态确认的
+`0x200000A` 作为第二次 `MS.a` 调用 tag。日志命中一次
+`MS.a tag=0x200000a`，说明动态注册入口 `+0x26e684` 确实接收到了 frameSign
+路径；随后在 unidbg mutex 路径触发 `UC_ERR_WRITE_PROT`，当前 provider 返回类型为
+`null`，没有得到 `String[]` 键值数组。
+
+本轮只把动态 tag routing 标为 verified，`frame_sign_result_verified`、actual
+JNI provider、真实 Android JVM、whole-request differential、fresh standalone
+signer 和线上验签都保持 false。证据：
+`evidence/vm9_frame_sign_dynamic_probe_20261028.json`；复现脚本：
+`python/verify_vm9_frame_sign_dynamic_probe_20261028.py`。
