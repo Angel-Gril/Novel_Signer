@@ -1,0 +1,101 @@
+{
+  "schema": "vm9-frame-sign-handle2-result-dynamic-probe-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "jni_entry": "+0x26e684",
+  "signing_setup_tag": "0x3000001",
+  "handle2_source_tag": "0x4000002",
+  "frame_sign_tag": "0x200000a",
+  "frame_sign_handle": "0x128a3000",
+  "callback1_signer_handle": "0x1296a4a0",
+  "handle2_selected_for_frame_sign": true,
+  "frame_sign_dynamic_capture_verified": true,
+  "frame_sign_result_verified": true,
+  "frame_sign_result_length": 10,
+  "frame_sign_result_keys": [
+    "frametype",
+    "lid",
+    "signinfo",
+    "signvalue",
+    "signversion"
+  ],
+  "frame_sign_result_observations": {
+    "frametype": {
+      "length": 1,
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    "lid": {
+      "length": 10,
+      "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+    },
+    "signinfo": {
+      "length": 224,
+      "sha256": "f40760e5df3b901d0b9c61c9436db707c98a0157839929ecb93f6858566439bc"
+    },
+    "signvalue": {
+      "length": 64,
+      "sha256": "c7abb13bebcb7f63ead72e1e52267b305037d28953ae684ead6821926fb3fa0f"
+    },
+    "signversion": {
+      "length": 3,
+      "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+    }
+  },
+  "signing_setup_six_header_shape_verified": true,
+  "signing_setup_header_names": [
+    "X-Argus",
+    "X-Gorgon",
+    "X-Helios",
+    "X-Khronos",
+    "X-Ladon",
+    "X-Medusa"
+  ],
+  "signing_setup_header_observations": {
+    "X-Argus": {
+      "length": 8,
+      "sha256": "69fb31432038d0a100ea5688dcde625143c1db0cae36c5297a13393ff6c868b6"
+    },
+    "X-Gorgon": {
+      "length": 52,
+      "sha256": "0ffd472ba71446a212bb1bc88a3dbcdab968aec80a520aa7bc7ed546932835d8"
+    },
+    "X-Helios": {
+      "length": 48,
+      "sha256": "c43e61fa271ff27dfd24db9bcef210fd0f31ffdd0e5ee6c0d896dfefe4009cf1"
+    },
+    "X-Khronos": {
+      "length": 10,
+      "sha256": "8e4bb44969743d6f54722a6b6167bae996cc350ab803170f51c2a133c930e26c"
+    },
+    "X-Ladon": {
+      "length": 8,
+      "sha256": "1b3deb5fb7fa2fd4d17dc94693178ce82916fc0b52fc0abcea375192ced035f4"
+    },
+    "X-Medusa": {
+      "length": 1076,
+      "sha256": "3a3875308882da1ccf8a2f28d6a6feb9b3af91bdc5ab4a00ae300b5769441902"
+    }
+  },
+  "signing_setup_khronos_seconds": 1793136546,
+  "static_java_contract_verified": {
+    "core_c_frame_sign_stores_handle_in_this_a": true,
+    "core_c_frame_sign_tag": "0x200000a",
+    "core_g_handle_source_tag": "0x4000002",
+    "core_g_passes_handle_to_core_c": true
+  },
+  "synthetic_jni_provider_used": true,
+  "actual_jni_provider_verified": false,
+  "live_android_jvm_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "source_hashes": {
+    "library": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "hook_source": "0ec14dfe7d812fd911ca099f27c1bd74580f4cd9ef23beb5c52997658a86f5c0",
+    "run_log": "5f00747efc839ef91bcfc5e203cfe9b355b83830f18ff0e1a2b0bba38b4e37a9",
+    "rounds": "c527ca35ba2cca01b397e47025e8f3fbd1e1620eabfdf25eb911a623ceef18a4",
+    "core_c_java": "fb143c74d7b82731af3b5833c93b06d5884e4aba20163dd54b330e09ee48c46a",
+    "core_g_java": "0d7aca0a0646097813d804afffe7ca4df1feb30b71e8774063e817df2b40a4e1"
+  },
+  "interpretation": "The fresh isolated unidbg capture obtains handle2 from tag 0x4000002 and selects that handle for the 0x200000A frameSign call. Static core.g.java passes the same 0x4000002 result into core.c, and core.c stores it as this.a before calling the frameSign tag. With handle2, the native entry returns a non-null String[] of length 10 containing frametype/lid/signinfo/signvalue/signversion; only lengths and SHA-256 digests are published. The callback-1 signer handle is therefore the wrong frameSign input. Explicit Java/OS callbacks remain in the harness, so live Android-JVM, actual JNI provider, whole-request differential, standalone signer and online acceptance remain unverified."
+}

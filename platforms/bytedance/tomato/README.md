@@ -24,6 +24,18 @@ it is not the signer handle. No vtable or owner replacement was synthesized;
 `frameSign` remains `null` in this harness. See [owner evidence](evidence/vm9_frame_sign_owner_dynamic_probe_20261028.json)
 and [verifier](python/verify_vm9_frame_sign_owner_dynamic_probe_20261028.py).
 
+The handle2 follow-up changes only the frameSign input variable: tag `0x4000002`
+returns `0x128a3000`, and the isolated probe passes that handle to tag `0x200000A`.
+The native call now returns a `String[]` of length 10 with the five pairs
+`frametype`, `lid`, `signinfo`, `signvalue`, and `signversion`; the evidence keeps
+only lengths and SHA-256 digests. JADX confirms `core.g` obtains the `0x4000002`
+handle and passes it to `core.c`, whose `this.a` is used by `frameSign`. The
+callback-1 signer handle is therefore the wrong frameSign input. This remains a
+fresh unidbg native continuation with explicit Java/OS callbacks; live Android
+JVM/provider behavior, whole-request differential, standalone signing, and online
+acceptance are still unverified. See [handle2 result evidence](evidence/vm9_frame_sign_handle2_result_dynamic_probe_20261028.json)
+and [verifier](python/verify_vm9_frame_sign_handle2_result_dynamic_probe_20261028.py).
+
 JNI registration provenance (2026-10-28): the pinned ELF exports `JNI_OnLoad` at
 `+0x27b41c`; its one-entry `JNINativeMethod` stores `image+0x26e684` and calls
 the JNIEnv function-table slot `+0xb8` (`RegisterNatives`). The Java `r4` callsite

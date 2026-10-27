@@ -28,6 +28,27 @@ actual JNI provider 或真实 Android JVM。证据：[frameSign dynamic probe](e
 合成 vtable、改写字段或修改生产 signer，`frameSign` 仍返回 `null`。证据：[frameSign owner writer](evidence/vm9_frame_sign_owner_dynamic_probe_20261028.json)；
 复现：[verifier](python/verify_vm9_frame_sign_owner_dynamic_probe_20261028.py)。
 
+## 2026-10-28：用 `0x4000002` handle2 恢复结构化 frameSign 返回
+
+保持其他输入不变，只把 frameSign 的 handle 从 callback-1 捕获的
+`0x1296a4a0` 换成 `0x4000002` 返回的 `0x128a3000`。日志确认先执行
+`MS.a tag=0x4000002`，随后以 `handle=0x128a3000` 调用 `0x200000A`；这次没有
+`UC_ERR_WRITE_PROT`，native 返回数组长度为 10。数组五组键值为
+`frametype`、`lid`、`signinfo`、`signvalue`、`signversion`，其中 `signinfo`
+长度 224、`signvalue` 长度 64；证据只保存这些长度和 SHA-256，不保存 URL、完整
+header 或完整签名值。
+
+JADX 静态源码与动态选择一致：`core.g` 以 `0x4000002` 取得 `Long` 并传入
+`new core.c(..., handle2)`，`core.c.this.a` 保存该句柄，`frameSign` 再以
+`0x200000A` 调用同一 native JNI 声明。因此 callback-1 signer handle 是错误的
+frameSign 输入，handle2 才是当前 Java 生命周期使用的句柄。该结果仍是带显式
+Java/OS callbacks 的 fresh unidbg native continuation，不闭合 live Android JVM、
+actual JNI provider、whole-request native/Python differential、fresh standalone
+signer 或线上验签，也没有修改生产 signer。
+
+证据：[handle2 frameSign result](evidence/vm9_frame_sign_handle2_result_dynamic_probe_20261028.json)；
+复现：[verifier](python/verify_vm9_frame_sign_handle2_result_dynamic_probe_20261028.py)。
+
 ## 2026-10-28：JNI 注册与 signing tag 归属闭合
 
 新增只读 ELF/Java/受限捕获 verifier。pinned `libmetasec_ml_71332.so` 的动态符号

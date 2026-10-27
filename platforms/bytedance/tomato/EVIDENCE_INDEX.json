@@ -10214,5 +10214,42 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The fresh read-only capture closes the writer provenance for the current signer handle +0x48 field at +0x25bf14. It does not justify rewriting that field, synthesizing a vtable, claiming a frameSign map, or promoting the unidbg six-header replay to a standalone or online signer."
+  },
+  "vm9_frame_sign_handle2_result_dynamic_probe_20261028": {
+    "path": "evidence/vm9_frame_sign_handle2_result_dynamic_probe_20261028.json",
+    "verifier": "python/verify_vm9_frame_sign_handle2_result_dynamic_probe_20261028.py",
+    "schema": "vm9-frame-sign-handle2-result-dynamic-probe-20261028-v1",
+    "evidence_label": "Structured frameSign result with the 0x4000002 handle2",
+    "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "jni_entry": "+0x26e684",
+    "signing_setup_tag": "0x3000001",
+    "handle2_source_tag": "0x4000002",
+    "frame_sign_tag": "0x200000a",
+    "frame_sign_handle": "0x128a3000",
+    "callback1_signer_handle": "0x1296a4a0",
+    "handle2_selected_for_frame_sign": true,
+    "frame_sign_dynamic_capture_verified": true,
+    "frame_sign_result_verified": true,
+    "frame_sign_result_length": 10,
+    "frame_sign_result_keys": [
+      "frametype",
+      "lid",
+      "signinfo",
+      "signvalue",
+      "signversion"
+    ],
+    "signinfo_length": 224,
+    "signinfo_sha256": "f40760e5df3b901d0b9c61c9436db707c98a0157839929ecb93f6858566439bc",
+    "signvalue_length": 64,
+    "signvalue_sha256": "c7abb13bebcb7f63ead72e1e52267b305037d28953ae684ead6821926fb3fa0f",
+    "signing_setup_six_header_shape_verified": true,
+    "static_java_contract_verified": true,
+    "synthetic_jni_provider_used": true,
+    "actual_jni_provider_verified": false,
+    "live_android_jvm_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "A fresh isolated unidbg capture obtains handle2 from tag 0x4000002 and passes it to frameSign tag 0x200000A; the native call returns a non-null length-10 String[] with the five observed key names. Static core.g/core.c sources agree with this handle lifecycle. Only lengths and SHA-256 digests are retained. Explicit Java/OS callbacks remain, so live Android-JVM/provider behavior, whole-request differential, standalone signing and online acceptance remain unverified; the callback-1 signer handle is the wrong frameSign input."
   }
 }
