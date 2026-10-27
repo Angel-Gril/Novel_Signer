@@ -9783,3 +9783,20 @@ fresh standalone signer 与线上 header acceptance 仍保持未验证。
 
 证据：`evidence/vm9_outer_graph_object_provenance_20261028.json`；复现脚本：
 `python/verify_vm9_outer_graph_object_provenance_20261028.py`。
+
+## 6.291 actual facade JNI/cleanup semantic boundary（2026-10-28 Asia/Shanghai）
+
+在 actual outer child → normal facade 的同 CPU continuation 中保留 live allocator
+引用，避免 cold outer 返回时复制账本导致 facade 阶段的分配/释放被截断。两个
+image base fresh 重跑均通过：native facade 返回句柄与独立生成的 Python facade
+fixture 相同；去掉指针和 JNI handle 后，59 项 JNI slot/object-array 操作序列逐项
+一致；native 与 Python 的返回数组元素数量均为 2。native facade 阶段记录 111 次
+分配、97 次释放，账本最后一个事件为 free。
+
+本项只关闭 facade 的 JNI 操作形状、返回基数和 cleanup 终止边界。真实 request VM
+与 Python request provider 的内部对象图不同，分配字节/序列没有宣称等价，也没有
+提升为 whole-request native/Python differential、fresh standalone signer、真实 JVM
+或线上 header acceptance；输出内容仍不解释为七神 signer 结果。
+
+证据：`evidence/vm9_native_facade_cleanup_semantics_20261028.json`；复现脚本：
+`python/verify_vm9_native_facade_cleanup_semantics_20261028.py`。
