@@ -6498,3 +6498,22 @@ standalone signer 和线上验签仍未闭合。
 本轮只闭合对象分配与 native writer provenance；没有把对象字段解释成 signer 业务语义，
 whole-request native differential、真实 Android JVM/JNI、fresh standalone signer 和线上 header
 验收仍未闭合。
+
+## 2026-10-28：vector publication 与最终分配 epoch
+
+把地址历史按最后一次 `+0x32a210` operator-new 分配切开后，两个 image base 都闭合了
+最终对象的发布链：16 字节 callback pair `0x136d70d0` 的最终分配由 caller
+`+0x27d15c` 触发，128 字节 request context `0x136d6100` 的最终分配由 caller
+`+0x27ccec` 触发；最终 epoch 内 pair 只有 `+0x27cd94` 的两次 8-byte store，
+随后 `+0x27cd98` 读回 `[callable=+0x2830c4, context=0x136d6100]`。
+
+ELF 静态检查确认 `+0x27cd94` 是 `stp x0, x19, [x8]`，`+0x27e69c/+0x27e6a0`
+从 receiver+0x20 的 pair 取出 context，context vtable 的 `R_AARCH64_RELATIVE`
+槽 `0x375050` 指向 `+0x35dc50`。动态检查在两个基址均通过：最终 pair store、
+context vtable writer `+0x263fe4`、facade consumer `+0x27e6a4` 和 wrapper 输入全部一致。
+因此 `0x136d6100` 当前应称为 native request context；它不是 Java array 或 signer
+header 的语义证明。
+
+新增的 `vector_publication_provenance` 与静态证据包含在
+[vector writer evidence](evidence/vm9_native_outer_facade_vector_writer_20261028.json)；
+这仍是对象生命周期/ABI provenance，不是六个七神 header 的完整生成或线上验签。

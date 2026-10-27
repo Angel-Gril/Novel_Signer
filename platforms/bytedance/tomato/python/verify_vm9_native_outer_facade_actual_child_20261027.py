@@ -12,6 +12,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from capstone import CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN, Cs
+from elftools.elf.elffile import ELFFile
 from unicorn import arm64_const as arm
 
 import verify_vm9_java_request_facade_fresh_20261020 as facade
@@ -21,6 +23,10 @@ import verify_vm9_signer_objects as oracle
 
 
 BASES = (0x122C0000, 0x775C205000)
+VECTOR_WATCH_RANGES = (
+    (0x136D70D0, 16, "callback_pair_address_history"),
+    (0x136D6100, 128, "request_context_address_history"),
+)
 G = headers.G
 FACADE_ENTRY = 0x17B8F8
 CHILD_ENTRY = 0x27DD04
@@ -95,6 +101,141 @@ def _json_safe(value):
     if isinstance(value, (list, tuple)):
         return [_json_safe(item) for item in value]
     return value
+
+
+def _decode_vector_publication(library: Path) -> dict:
+    """Check actual ELF stores and the derived context's vtable relocation."""
+    expected = {
+        0x1A03E8: ("str", "x8, [x19]"),
+        0x263FE4: ("str", "x8, [x19]"),
+        0x27CD90: ("ldr", "x8, [x20, #0x20]"),
+        0x27CD94: ("stp", "x0, x19, [x8]"),
+        0x27E69C: ("ldr", "x8, [x8, #0x20]"),
+        0x27E6A0: ("ldr", "x3, [x8, #8]"),
+    }
+    rows = []
+    with library.open("rb") as stream:
+        elf = ELFFile(stream)
+        text = elf.get_section_by_name(".text")
+        data, start = text.data(), text["sh_addr"]
+        decoder = Cs(CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN)
+        for offset, operands in expected.items():
+            instruction = next(decoder.disasm(
+                data[offset - start:offset - start + 4], offset))
+            actual = instruction.mnemonic, instruction.op_str
+            if actual != operands:
+                raise AssertionError((hex(offset), operands, actual))
+            rows.append({"pc_offset": hex(offset), "bytes": instruction.bytes.hex(),
+                         "mnemonic": instruction.mnemonic,
+                         "operands": instruction.op_str})
+        relocations = [
+            relocation for section in elf.iter_sections()
+            if section["sh_type"] == "SHT_RELA"
+            for relocation in section.iter_relocations()
+            if relocation["r_offset"] == 0x375050
+        ]
+        if (len(relocations) != 1 or relocations[0]["r_info_type"] != 1027
+                or relocations[0]["r_addend"] != 0x35DC40):
+            raise AssertionError("request-context vtable relocation changed")
+    return {
+        "source": "pinned ELF .text and relocation sections",
+        "instructions": rows,
+        "request_context_vtable_relocation": {
+            "offset": "0x375050", "type": "R_AARCH64_RELATIVE",
+            "addend": "0x35dc40", "address_point_offset": "0x35dc50",
+        },
+        "interpretation": (
+            "The 16-byte receiver+0x20 object is a callback pair containing "
+            "a callable and its context. Its +0x08 is a polymorphic native "
+            "request context, not evidence of a Java header array."
+        ),
+    }
+
+
+def verify_vector_publication(case: dict) -> dict:
+    """Join final allocation epochs, native stores and the facade consumer.
+
+    Address-history events before the final allocation are deliberately excluded.
+    Missing evidence is a failed proof; a nonempty address ledger is insufficient.
+    """
+    image = int(case["image_base"], 16)
+    pair = int(case["outer_graph"]["outer_pair"], 16)
+    context = int(case["owning_vm_entry"]["x3"], 16)
+    checkpoints = case["native_vector_checkpoints"]
+    publication = next(event for event in checkpoints
+                       if event["pc_offset"] == "0x27cd94")
+    published = next(event for event in checkpoints
+                     if event["pc_offset"] == "0x27cd98")
+    consumer = next(event for event in case["request_abi_facade_events"]
+                    if event["pc_offset"] == "0x27e6a4")
+    epochs = {}
+    for name, address, width in (("callback_pair", pair, 16),
+                                  ("request_context", context, 128)):
+        allocation = max(
+            (event for event in case["native_vector_new_events"]
+             if int(event["address"], 16) == address
+             and event["instruction_ordinal"] < publication["instruction_ordinal"]),
+            key=lambda event: event["instruction_ordinal"],
+        )
+        if allocation["size"] != width:
+            raise AssertionError((name, "final allocation size", allocation))
+        writes = [
+            event for event in case["native_vector_write_events"]
+            if int(event["address"], 16) < address + width
+            and int(event["address"], 16) + event["size"] > address
+            and event["instruction_ordinal"] >= allocation["instruction_ordinal"]
+            and event["instruction_ordinal"] < consumer["instruction_ordinal"]
+        ]
+        if not writes or any(event["value_after_write"] is None for event in writes):
+            raise AssertionError((name, "missing committed writes"))
+        epochs[name] = {"allocation": allocation, "write_count": len(writes),
+                        "writes": writes}
+
+    pair_writes = epochs["callback_pair"]["writes"]
+    expected_words = [hex(image + OWNING_VM), hex(context)]
+    checks = {
+        "publication_registers_match": (
+            publication["registers"]["x8"] == hex(pair)
+            and publication["registers"]["x0"] == expected_words[0]
+            and publication["registers"]["x19"] == expected_words[1]),
+        "published_pair_matches_consumer": (
+            published["pair_words"] == expected_words
+            and consumer["native_header_vector_object"] == hex(pair)
+            and consumer["native_header_vector_words"][:2] == expected_words),
+        "final_pair_stores_match": (
+            len(pair_writes) == 2 and all(
+                event["pc_offset"] == "0x27cd94"
+                and event["observation_kind"] == "native_instruction_pre_write_hook"
+                and event["size"] == 8
+                and int(event["address"], 16) == pair + index * 8
+                and int.from_bytes(bytes.fromhex(event["value_after_write"]), "little")
+                == int(expected_words[index], 16)
+                for index, event in enumerate(pair_writes))),
+        "derived_context_vtable_matches": (
+            published["context_words"][0] == hex(image + 0x35DC50)
+            and consumer["request_context_words"][0] == hex(image + 0x35DC50)),
+        "request_context_reaches_wrapper": consumer["x3"] == hex(context),
+    }
+    context_vptr_writes = [
+        event for event in epochs["request_context"]["writes"]
+        if int(event["address"], 16) == context and event["size"] == 8
+    ]
+    checks["derived_context_vtable_writer_matches"] = bool(context_vptr_writes) and (
+        context_vptr_writes[-1]["pc_offset"] == "0x263fe4"
+        and int.from_bytes(bytes.fromhex(
+            context_vptr_writes[-1]["value_after_write"]), "little") == image + 0x35DC50
+    )
+    if not all(checks.values()):
+        raise AssertionError({key: value for key, value in checks.items() if not value})
+    return {"verified": True, "checks": checks, "final_allocation_epochs": epochs,
+            "publication": publication, "published": published,
+            "callback_pair_words": expected_words,
+            "request_context_vtable_offset": "0x35dc50",
+            "interpretation": (
+                "Only writes since the final operator-new allocation are attributed "
+                "to these objects. Earlier same-address writes belong to reused "
+                "storage. The pair holds callable +0x2830c4 and native context."
+            )}
 
 
 def _decode_formatter_bytecode(library: Path) -> dict:
@@ -201,12 +342,13 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "helper_object_events": [],
         "helper_object_write_events": [],
         "helper_stack_write_events": [],
-        # Native writes to the two actual vector objects are kept separately
-        # from the broad allocator ledger.  The write hook fires before the
-        # instruction commits, so each event is completed on the next native
-        # instruction through ``pending_vector_writes`` below.
+        # Keep address histories across allocator reuse. Native instruction
+        # hooks are pre-write; imported memcpy/memmove notifications are after
+        # their explicit host service. Both are completed at the next PC.
         "native_vector_write_events": [],
         "pending_vector_writes": [],
+        "native_vector_new_events": [],
+        "native_vector_checkpoints": [],
         "facade_return_registers": None,
         "facade_dispatch_events": [],
         "facade_stack_snapshots": [],
@@ -406,6 +548,39 @@ def run(library: Path, libc: Path, image: int) -> dict:
         offset = pc - image
         state["last_pc_offset"] = hex(offset)
         state["native_instructions"] += 1
+        if offset == 0x32A210:
+            pointer = cpu.reg_read(arm.UC_ARM64_REG_X0)
+            if pointer in {start for start, _width, _name in VECTOR_WATCH_RANGES}:
+                sp = cpu.reg_read(arm.UC_ARM64_REG_SP)
+                state["native_vector_new_events"].append({
+                    "address": hex(pointer),
+                    "size": cpu.reg_read(arm.UC_ARM64_REG_X19),
+                    "pc_offset": hex(offset),
+                    "operator_new_caller_offset": hex(_u(cpu, sp + 8) - image),
+                    "instruction_ordinal": state["native_instructions"],
+                })
+        if offset in (0x27CD94, 0x27CD98):
+            if offset == 0x27CD94:
+                pair_pointer = cpu.reg_read(arm.UC_ARM64_REG_X8)
+                context_pointer = cpu.reg_read(arm.UC_ARM64_REG_X19)
+            else:
+                before = state["native_vector_checkpoints"][-1]
+                pair_pointer = int(before["pair_address"], 16)
+                context_pointer = int(before["context_address"], 16)
+            state["native_vector_checkpoints"].append({
+                "pc_offset": hex(offset),
+                "instruction_ordinal": state["native_instructions"],
+                "pair_address": hex(pair_pointer),
+                "pair_words": [hex(_u(cpu, pair_pointer + index * 8))
+                               for index in range(2)],
+                "context_address": hex(context_pointer),
+                "context_words": [hex(_u(cpu, context_pointer + index * 8))
+                                  for index in range(16)],
+                "registers": {
+                    f"x{index}": hex(cpu.reg_read(getattr(arm, f"UC_ARM64_REG_X{index}")))
+                    for index in (0, 8, 19, 20, 28)
+                },
+            })
         if state["facade_started"]:
             state["facade_instructions"] += 1
             # The native VM keeps its current bytecode PC through x19.  Keep
@@ -774,6 +949,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 state["request_vm_entry_events"].append(dict(row))
             if offset in REQUEST_ABI_OFFSETS:
                 abi = dict(row)
+                abi["instruction_ordinal"] = state["native_instructions"]
                 abi["facade_started"] = state["facade_started"]
                 if offset in (0x27E660, 0x27E668, 0x27E674,
                               0x27E688, 0x27E694, 0x27E698,
@@ -796,6 +972,11 @@ def run(library: Path, libc: Path, image: int) -> dict:
                             hex(_u(cpu, native_array + displacement))
                             for displacement in (0, 8, 0x10, 0x18)
                         ]
+                        context_pointer = _u(cpu, native_array + 8)
+                        abi["request_context_words"] = [
+                            hex(_u(cpu, context_pointer + index * 8)) for index in range(16)
+                        ]
+                        abi["object_role"] = "callback_pair_and_polymorphic_request_context"
                     except Exception:
                         abi["native_header_vector_words"] = None
                     abi["header_pointer_source"] = "*(receiver+0x20)+0x08"
@@ -938,11 +1119,8 @@ def run(library: Path, libc: Path, image: int) -> dict:
         # published the dynamic object graph; final classification below uses
         # the observed pair/x3 values instead of treating these constants as
         # semantic identifiers.
-        vector_ranges = (
-            (0x136d70d0, 0x136d70e0, "vector_object_candidate"),
-            (0x136d6100, 0x136d6180, "header_vector_candidate"),
-        )
-        for start, end, target in vector_ranges:
+        for start, width, target in VECTOR_WATCH_RANGES:
+            end = start + width
             overlap_start = max(address, start)
             overlap_end = min(address + size, end)
             if overlap_start < overlap_end and len(state["native_vector_write_events"]) < 512:
@@ -962,12 +1140,23 @@ def run(library: Path, libc: Path, image: int) -> dict:
                     "value_after_write": None,
                     "pc": hex(cpu.reg_read(arm.UC_ARM64_REG_PC)),
                     "pc_offset": hex(pc_offset),
+                    "instruction_ordinal": state["native_instructions"],
+                    "observation_kind": (
+                        "host_copy_service_post_write_notification"
+                        if pc_offset in (0x347F60, 0x348410)
+                        else "native_instruction_pre_write_hook"
+                    ),
                     "facade_started": state["facade_started"],
                     "x0": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
                     "x1": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
                     "x2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
                     "x3": hex(cpu.reg_read(arm.UC_ARM64_REG_X3)),
                     "x8": hex(cpu.reg_read(arm.UC_ARM64_REG_X8)),
+                    "writer_registers": {
+                        f"x{index}": hex(cpu.reg_read(
+                            getattr(arm, f"UC_ARM64_REG_X{index}")))
+                        for index in (9, 10, 19, 20, 21, 22, 24, 25, 28)
+                    },
                 }
                 state["native_vector_write_events"].append(event)
                 if len(state["pending_vector_writes"]) < 512:
@@ -1328,6 +1517,19 @@ def run(library: Path, libc: Path, image: int) -> dict:
         and row["write_events"]
         for row in vector_writer_provenance.values()
     )
+    vector_case = {
+        "image_base": hex(image),
+        "outer_graph": {"outer_pair": hex(vector_object_address)},
+        "owning_vm_entry": state["owning_vm_entry"],
+        "native_vector_checkpoints": state["native_vector_checkpoints"],
+        "native_vector_new_events": state["native_vector_new_events"],
+        "native_vector_write_events": state["native_vector_write_events"],
+        "request_abi_facade_events": [
+            event for event in state["request_abi_events"]
+            if event.get("facade_started")
+        ],
+    }
+    vector_publication_provenance = verify_vector_publication(vector_case)
     return {
         "image_base": hex(image),
         "outer_function_offset": "0x1658e4",
@@ -1458,8 +1660,11 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "helper_object_write_events": state["helper_object_write_events"],
         "helper_stack_write_events": state["helper_stack_write_events"],
         "native_vector_write_events": state["native_vector_write_events"],
+        "native_vector_new_events": state["native_vector_new_events"],
+        "native_vector_checkpoints": state["native_vector_checkpoints"],
         "vector_writer_provenance": vector_writer_provenance,
         "vector_writer_provenance_verified": vector_writer_provenance_verified,
+        "vector_publication_provenance": vector_publication_provenance,
         "markers": markers,
         "unmapped_events": state["unmapped"],
         "native_outer_result": result,
@@ -1502,6 +1707,9 @@ def main() -> None:
         "vector_writer_provenance_verified": all(
             case["vector_writer_provenance_verified"] for case in rows
         ),
+        "vector_publication_provenance_verified": all(
+            case["vector_publication_provenance"]["verified"] for case in rows
+        ),
         "real_request_vm_entry_used": all(
             case["real_request_vm_entry_used"] for case in rows
         ),
@@ -1515,6 +1723,7 @@ def main() -> None:
         "fresh_standalone_signer_verified": False,
         "online_header_acceptance_verified": False,
         "formatter_bytecode_static": _decode_formatter_bytecode(args.library),
+        "vector_publication_static": _decode_vector_publication(args.library),
         "formatter_path_observed_offsets_each": [
             sorted({
                 event["bytecode_offset"]

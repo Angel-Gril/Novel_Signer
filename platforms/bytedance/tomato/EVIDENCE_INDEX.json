@@ -9871,6 +9871,18 @@
     "vector_object_width": 16,
     "header_vector_address_each": "0x136d6100",
     "header_vector_width": 128,
+    "final_allocation_epoch_each": {
+      "callback_pair": {
+        "size": 16,
+        "operator_new_caller_offset": "0x27d15c",
+        "post_allocation_write_count": 2
+      },
+      "request_context": {
+        "size": 128,
+        "operator_new_caller_offset": "0x27ccec",
+        "post_allocation_write_count": 30
+      }
+    },
     "vector_object_write_count_each": 32,
     "header_vector_write_count_each": 50,
     "vector_object_allocation_source_each": [
@@ -9884,11 +9896,24 @@
       "0x32a210"
     ],
     "vector_writer_provenance_verified": true,
+    "vector_publication_static_offsets": [
+      "0x1a03e8",
+      "0x263fe4",
+      "0x27cd94",
+      "0x27e69c",
+      "0x27e6a0"
+    ],
+    "request_context_vtable_relocation": {
+      "relocation_offset": "0x375050",
+      "addend": "0x35dc40",
+      "address_point_offset": "0x35dc50"
+    },
+    "vector_publication_provenance_verified": true,
     "writes_facade_started_each": false,
     "whole_request_native_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "The same-CPU continuation records native write-hook events overlapping the dynamically observed 16-byte vector object and 128-byte header vector, then joins them to the allocator ledger by address. Both image bases show the same object addresses, write counts, and allocation-source PCs. This is provenance evidence only; field semantics and the six signer headers remain open."
+    "comparison_note": "The same-CPU continuation records native write-hook events overlapping the dynamically observed 16-byte callback pair and 128-byte request context, joins them to the allocator ledger by address, and separates the final allocation epoch from reused storage. Both image bases pass the +0x27cd94 pair publication, +0x263fe4 context-vtable writer, +0x27e6a4 facade consumer and +0x2830c4 wrapper checks. This is ABI/lifecycle provenance only; field semantics and the six signer headers remain open."
   },
   "vm9_request_entry_abi_provenance_20261027": {
     "path": "evidence/vm9_request_entry_abi_provenance_20261027.json",
