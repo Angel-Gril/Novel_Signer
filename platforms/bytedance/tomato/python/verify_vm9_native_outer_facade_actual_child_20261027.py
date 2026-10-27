@@ -83,6 +83,53 @@ def _json_safe(value):
     return value
 
 
+def _decode_formatter_bytecode(library: Path) -> dict:
+    """Decode the two formatter-producing OP59 words from the pinned ELF."""
+    raw = library.read_bytes()
+    candidates = []
+    for offset, call_offset in ((0xFB520, 0xFB548), (0xFEF94, 0xFEFBC)):
+        word = int.from_bytes(raw[offset:offset + 4], "little")
+        if (word & 0x3F) != 59:
+            raise AssertionError(f"formatter source {offset:#x} is not OP59")
+        source = ((word >> 17) & 0x0F) | ((word >> 27) & 0x10)
+        destination = ((word >> 7) & 0x0F) | ((word >> 12) & 0x10)
+        immediate = (
+            ((word >> 21) & 0x1F)
+            | (((word >> 11) & 1) << 5)
+            | (((word >> 12) & 1) << 6)
+            | (((word >> 13) & 1) << 7)
+            | (((word >> 14) & 1) << 8)
+            | (((word >> 15) & 1) << 9)
+            | (((word >> 26) & 1) << 10)
+            | (((word >> 27) & 1) << 11)
+            | (((word >> 28) & 1) << 12)
+            | (((word >> 29) & 1) << 13)
+            | (((word >> 30) & 1) << 14)
+            | (((word >> 6) & 1) << 15)
+        )
+        signed = immediate - 0x10000 if immediate & 0x8000 else immediate
+        candidates.append({
+            "bytecode_offset": hex(offset),
+            "instruction_word": hex(word),
+            "operation": "OP59",
+            "source_register": f"R{source}",
+            "destination_register": f"R{destination}",
+            "signed_immediate": signed,
+            "format_call_offset": hex(call_offset),
+        })
+    return {
+        "encoding": "OP59: R[d] = sext32(R[s]) + sext16(imm16)",
+        "source_register": "R0",
+        "destination_register": "R2",
+        "candidates": candidates,
+        "interpretation": (
+            "Both candidates consume virtual slot R0 and differ only in the "
+            "embedded signed immediate; the formatter receives the resulting "
+            "R2 value."
+        ),
+    }
+
+
 def _overlay_guest(cpu, pages):
     """Copy fixture bytes into the already mapped guest without its canary."""
     for page, data in pages.items():
@@ -1253,31 +1300,7 @@ def main() -> None:
         "whole_request_native_differential_verified": False,
         "fresh_standalone_signer_verified": False,
         "online_header_acceptance_verified": False,
-        "formatter_bytecode_static": {
-            "encoding": "OP59: R[d] = sext32(R[s]) + sext16(imm16)",
-            "source_register": "R0",
-            "destination_register": "R2",
-            "candidates": [
-                {
-                    "bytecode_offset": hex(offset),
-                    "instruction_word": hex(word),
-                    "operation": "OP59",
-                    "source_register": "R0",
-                    "destination_register": "R2",
-                    "signed_immediate": signed_value,
-                    "format_call_offset": hex(call_offset),
-                }
-                for offset, word, signed_value, call_offset in (
-                    (0xFB520, 0x7F20F97B, -7, 0xFB548),
-                    (0xFEF94, 0x7EA0F97B, -11, 0xFEFBC),
-                )
-            ],
-            "interpretation": (
-                "Both candidates consume virtual slot R0 and differ only in the "
-                "embedded signed immediate; the formatter receives the resulting "
-                "R2 value."
-            ),
-        },
+        "formatter_bytecode_static": _decode_formatter_bytecode(args.library),
         "interpretation": (
             "The outer getter's actual first child is retained on the same Unicorn "
             "CPU and used as the normal facade receiver.  The child vtable and "
