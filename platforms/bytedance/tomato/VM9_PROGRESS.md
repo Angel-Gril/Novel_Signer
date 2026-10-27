@@ -20,6 +20,14 @@ whole-request native/Python differential、非空 `frameSign` 结果或线上验
 actual JNI provider 或真实 Android JVM。证据：[frameSign dynamic probe](evidence/vm9_frame_sign_dynamic_probe_20261028.json)；
 复现：[verifier](python/verify_vm9_frame_sign_dynamic_probe_20261028.py)。
 
+随后增加只读 owner writer probe。fresh unidbg 日志在 `0x4000001` 初始化期间观察到
+`+0x25bf14` 向当前 handle `0x1296a4a0+0x48` 写入 `0x12448a94`；签名 round 前后
+该字段字节保持不变。静态候选 `+0x15dbc4/+0x15dc60` 确实命中，但它操作的是
+`0x128a3000`，并把自己的 `+0x48` 写成 `0x1296a170`，不是当前 signer handle。
+因此真实 writer 已闭合，阻断点收窄为 owner 字段指向 image 内可执行地址；本轮没有
+合成 vtable、改写字段或修改生产 signer，`frameSign` 仍返回 `null`。证据：[frameSign owner writer](evidence/vm9_frame_sign_owner_dynamic_probe_20261028.json)；
+复现：[verifier](python/verify_vm9_frame_sign_owner_dynamic_probe_20261028.py)。
+
 ## 2026-10-28：JNI 注册与 signing tag 归属闭合
 
 新增只读 ELF/Java/受限捕获 verifier。pinned `libmetasec_ml_71332.so` 的动态符号

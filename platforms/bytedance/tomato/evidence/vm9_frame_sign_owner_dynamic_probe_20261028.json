@@ -1,0 +1,49 @@
+{
+  "schema": "vm9-frame-sign-owner-dynamic-probe-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "jni_entry": "+0x26e684",
+  "signing_setup_tag": "0x3000001",
+  "frame_sign_tag": "0x200000a",
+  "handle": "0x1296a4a0",
+  "handle_field_offset": "0x48",
+  "handle_field_address": "0x1296a4e8",
+  "handle_field_value": "0x12448a94",
+  "handle_field_writer": {
+    "pc": "+0x25bf14",
+    "tag": "0x4000001",
+    "sequence": 31,
+    "value_is_executable_image_address": true,
+    "static_member_store_pc": "+0x25bf30",
+    "static_member_store_bytes": "090d00f9",
+    "static_member_store_disassembly": "str x9, [x8, #0x18]"
+  },
+  "handle_field_snapshot_unchanged_across_sign": true,
+  "candidate_constructor": {
+    "entry": "+0x15dbc4",
+    "field_store": "+0x15dc60",
+    "observed_object": "0x128a3000",
+    "observed_value": "0x1296a170",
+    "is_signer_handle": false
+  },
+  "frame_sign_dynamic_capture_verified": true,
+  "frame_sign_result_verified": false,
+  "frame_sign_result_kind": "null",
+  "frame_sign_failure_kind": "unidbg_write_protected_memory",
+  "orchestrator_entry_29ccd4_hit": false,
+  "vm_branch_entry_29cf58_hit": false,
+  "signing_setup_six_header_shape_verified": true,
+  "synthetic_jni_provider_used": true,
+  "actual_jni_provider_verified": false,
+  "live_android_jvm_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "source_hashes": {
+    "library": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "hook_source": "538a75f6d87af95086a6a6541ffba43de43f805daf904ad6f5003b4ca526df8c",
+    "run_log": "b1b055e5ad962ee773c26130390b5130f734b05361655434cacbb06b5727512e",
+    "rounds": "30684d9235278fcef4b14614c8b9766d8a7530a86d8c28704d416c4657a92edf"
+  },
+  "interpretation": "The fresh unidbg capture observes the actual setup path writing the current signer handle's +0x48 field at +0x25bf14 during tag 0x4000001. The field contains 0x12448a94, an image-relative executable address, and remains unchanged across the six-header signing round. The nearby +0x15dbc4/+0x15dc60 constructor writes a different object, so it is not the current signer handle. frameSign still reaches the registered 0x200000A entry but fails in unidbg and returns null; no vtable or owner replacement was synthesized."
+}

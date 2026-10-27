@@ -16,6 +16,14 @@ write-protected-memory failure and returns `null`. This proves tag routing only;
 it does not prove the frameSign map or an actual Android-JNI provider. See [probe evidence](evidence/vm9_frame_sign_dynamic_probe_20261028.json)
 and [verifier](python/verify_vm9_frame_sign_dynamic_probe_20261028.py).
 
+The follow-up read-only owner probe traces the current signer handle (`+0x48`) back
+to its native writer: tag `0x4000001` at `+0x25bf14` stores `0x12448a94` into
+`0x1296a4a0+0x48`, and the field remains unchanged across the six-header signing
+round. The nearby `+0x15dbc4/+0x15dc60` constructor writes a different object, so
+it is not the signer handle. No vtable or owner replacement was synthesized;
+`frameSign` remains `null` in this harness. See [owner evidence](evidence/vm9_frame_sign_owner_dynamic_probe_20261028.json)
+and [verifier](python/verify_vm9_frame_sign_owner_dynamic_probe_20261028.py).
+
 JNI registration provenance (2026-10-28): the pinned ELF exports `JNI_OnLoad` at
 `+0x27b41c`; its one-entry `JNINativeMethod` stores `image+0x26e684` and calls
 the JNIEnv function-table slot `+0xb8` (`RegisterNatives`). The Java `r4` callsite
