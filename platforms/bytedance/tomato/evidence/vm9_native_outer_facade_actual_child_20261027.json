@@ -63,6 +63,59 @@
         "sp": "0x7000ef00",
         "x30": "0x7000f000"
       },
+      "facade_result_source": {
+        "pc_offset": "0x17ba6c",
+        "x0": "0x70001e10",
+        "x1": "0x7000edc0",
+        "x2": "0x7000f490",
+        "x3": "0x70001f10",
+        "x8": "0xa5a5a5a5a5a5a5a5",
+        "sp": "0x7000ee50",
+        "x30": "0x1243ba6c",
+        "stack_words": [
+          {
+            "offset": "0x0",
+            "value": "0xa5a5a5a5a5a5a5a5"
+          },
+          {
+            "offset": "0x8",
+            "value": "0x13705270"
+          },
+          {
+            "offset": "0x10",
+            "value": "0x13702058"
+          },
+          {
+            "offset": "0x18",
+            "value": "0x13705000"
+          },
+          {
+            "offset": "0x20",
+            "value": "0x13702000"
+          },
+          {
+            "offset": "0x28",
+            "value": "0x13704000"
+          },
+          {
+            "offset": "0x30",
+            "value": "0x13702008"
+          },
+          {
+            "offset": "0x38",
+            "value": "0x13705270"
+          },
+          {
+            "offset": "0x40",
+            "value": "0x13702058"
+          },
+          {
+            "offset": "0x48",
+            "value": "0x13705000"
+          }
+        ]
+      },
+      "facade_result_source_verified": true,
       "facade_dispatch_events": [
         {
           "pc_offset": "0x17ba24",
@@ -99,6 +152,1430 @@
           "x30": "0x1243ba24",
           "x9": "0x1253dd04",
           "x21": "0x136d36f0"
+        }
+      ],
+      "facade_stack_snapshots": [
+        {
+          "pc_offset": "0x17ba44",
+          "x0": "0x0",
+          "x1": "0x136da328",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba44",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x10",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba60",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba60",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba68",
+          "x0": "0x70002000",
+          "x1": "0x7000ee58",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba60",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba6c",
+          "x0": "0x70001e10",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba70",
+          "x0": "0x70001e10",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba74",
+          "x0": "0x7000ee58",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba7c",
+          "x0": "0x7000ee88",
+          "x1": "0x13705270",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba78",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba84",
+          "x0": "0x7000ee98",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba80",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba8c",
+          "x0": "0x7000eea8",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba88",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x0"
+            }
+          ]
+        }
+      ],
+      "facade_native_object_snapshots": [
+        {
+          "pc_offset": "0x17ba68",
+          "reference_address": "0x13705270",
+          "reference_words": [
+            "0x1261b7c0",
+            "0x12442d6c",
+            "0x12442d6c",
+            "0x12448a94"
+          ],
+          "container_words": [
+            "0x1251c01c",
+            "0x1251c12c",
+            "0x1251c228",
+            "0x0",
+            "0x0",
+            "0x1251c3d0",
+            "0x1251c45c",
+            "0x0"
+          ],
+          "stack_reference_objects": {
+            "0x8": {
+              "address": "0x13705270",
+              "words": [
+                "0x1261b7c0",
+                "0x12442d6c",
+                "0x12442d6c",
+                "0x12448a94",
+                "0x137052a0",
+                "0x0",
+                "0x137052d0",
+                "0x1",
+                "0x12448a94",
+                "0x1250b560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300"
+              ]
+            },
+            "0x18": {
+              "address": "0x13705000",
+              "words": [
+                "0x1261b7c0",
+                "0x12442d6c",
+                "0x12442d6c",
+                "0x12448a94",
+                "0x13705030",
+                "0x0",
+                "0x13705060",
+                "0x1",
+                "0x12448a94",
+                "0x1250b560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705090",
+                "0x13705090",
+                "0x13705090"
+              ]
+            },
+            "0x28": {
+              "address": "0x13704000",
+              "words": [
+                "0x1260f5f8",
+                "0xd0000000e",
+                "0x13703010",
+                "0x0",
+                "0x12528cf0",
+                "0x13705188",
+                "0x0",
+                "0x6c6c615f6b",
+                "0x2c303a223178227b",
+                "0x2c33313a22327822",
+                "0x2c31323a22337822",
+                "0x7d303a22347822",
+                "0x1260f5f8",
+                "0x300000004",
+                "0x13702010",
+                "0x0"
+              ]
+            },
+            "0x38": {
+              "address": "0x13705270",
+              "words": [
+                "0x1261b7c0",
+                "0x12442d6c",
+                "0x12442d6c",
+                "0x12448a94",
+                "0x137052a0",
+                "0x0",
+                "0x137052d0",
+                "0x1",
+                "0x12448a94",
+                "0x1250b560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300"
+              ]
+            }
+          },
+          "native_object_graph": {
+            "0x20": {
+              "address": "0x137052a0",
+              "words": [
+                "0x137052d0",
+                "0x1",
+                "0x12448a94",
+                "0x1250b560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300",
+                "0x0",
+                "0x0"
+              ]
+            },
+            "0x30": {
+              "address": "0x137052d0",
+              "words": [
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300",
+                "0x0",
+                "0x0",
+                "0x1",
+                "0x137052d0",
+                "0x0",
+                "0x0",
+                "0x13703090",
+                "0x0"
+              ]
+            },
+            "0x38": {
+              "address": "0x1",
+              "words": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
+            },
+            "0x48": {
+              "address": "0x1250b560",
+              "words": [
+                "0xd65f03c0f9400020",
+                "0xa9037bfdd10143ff",
+                "0xa9044ff49100c3fd",
+                "0xf9401688d53bd054",
+                "0xf9402008f81f83a8",
+                "0xa9008fe2a90187e0",
+                "0xf9401c08b4000288",
+                "0xf9402048b4000248",
+                "0xf9401c48b4000208",
+                "0x910023e0b40001c8",
+                "0xd63f0100910063e1",
+                "0xf9401688aa0003f3"
+              ]
+            }
+          },
+          "native_tree_summary": {
+            "container_address": "0x13705270",
+            "controller_address": "0x137052a0",
+            "sentinel_address": "0x137052d0",
+            "node_count": 1,
+            "root_address": "0x13705300",
+            "controller_words": [
+              "0x137052d0",
+              "0x1",
+              "0x12448a94",
+              "0x1250b560",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x13705300"
+            ],
+            "sentinel_words": [
+              "0x0",
+              "0x13705300",
+              "0x13705300",
+              "0x13705300",
+              "0x0",
+              "0x0",
+              "0x1",
+              "0x137052d0",
+              "0x0",
+              "0x0"
+            ],
+            "root_words": [
+              "0x1",
+              "0x137052d0",
+              "0x0",
+              "0x0",
+              "0x13703090",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x0"
+            ],
+            "pair_address": "0x13703090",
+            "pair_words": [
+              "0x13704180",
+              "0x137041a0",
+              "0x6e757470654e2d58",
+              "0x390065",
+              "0x353a30357c31312d",
+              "0x39353a31",
+              "0xc00000020",
+              "0x137041c0"
+            ],
+            "pair_object_words": {
+              "key": {
+                "address": "0x13704180",
+                "words": [
+                  "0x1260f5f8",
+                  "0x90000000a",
+                  "0x13703080",
+                  "0x0",
+                  "0x1260f5f8",
+                  "0xc00000010",
+                  "0x137030d0",
+                  "0x0"
+                ],
+                "capacity": 10,
+                "length": 9,
+                "payload_address": "0x13703080",
+                "payload_hex": "582d4e657074756e65"
+              },
+              "value": {
+                "address": "0x137041a0",
+                "words": [
+                  "0x1260f5f8",
+                  "0xc00000010",
+                  "0x137030d0",
+                  "0x0",
+                  "0x1260f5f8",
+                  "0xffffff2300000000",
+                  "0x0",
+                  "0x0"
+                ],
+                "capacity": 16,
+                "length": 12,
+                "payload_address": "0x137030d0",
+                "payload_hex": "2d31317c35303a35313a3539"
+              }
+            }
+          },
+          "native_object_snapshot": true
+        },
+        {
+          "pc_offset": "0x17ba6c",
+          "reference_address": "0x13705270",
+          "reference_words": [
+            "0x1261b7c0",
+            "0x12442d6c",
+            "0x12442d6c",
+            "0x12448a94"
+          ],
+          "container_words": [
+            "0x1251c01c",
+            "0x1251c12c",
+            "0x1251c228",
+            "0x0",
+            "0x0",
+            "0x1251c3d0",
+            "0x1251c45c",
+            "0x0"
+          ],
+          "stack_reference_objects": {
+            "0x8": {
+              "address": "0x13705270",
+              "words": [
+                "0x1261b7c0",
+                "0x12442d6c",
+                "0x12442d6c",
+                "0x12448a94",
+                "0x137052a0",
+                "0x0",
+                "0x137052d0",
+                "0x1",
+                "0x12448a94",
+                "0x1250b560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300"
+              ]
+            },
+            "0x18": {
+              "address": "0x13705000",
+              "words": [
+                "0x1261b7c0",
+                "0x12442d6c",
+                "0x12442d6c",
+                "0x12448a94",
+                "0x13705030",
+                "0x0",
+                "0x13705060",
+                "0x1",
+                "0x12448a94",
+                "0x1250b560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705090",
+                "0x13705090",
+                "0x13705090"
+              ]
+            },
+            "0x28": {
+              "address": "0x13704000",
+              "words": [
+                "0x1260f5f8",
+                "0xd0000000e",
+                "0x13703010",
+                "0x0",
+                "0x12528cf0",
+                "0x13705188",
+                "0x0",
+                "0x6c6c615f6b",
+                "0x2c303a223178227b",
+                "0x2c33313a22327822",
+                "0x2c31323a22337822",
+                "0x7d303a22347822",
+                "0x1260f5f8",
+                "0x300000004",
+                "0x13702010",
+                "0x0"
+              ]
+            },
+            "0x38": {
+              "address": "0x13705270",
+              "words": [
+                "0x1261b7c0",
+                "0x12442d6c",
+                "0x12442d6c",
+                "0x12448a94",
+                "0x137052a0",
+                "0x0",
+                "0x137052d0",
+                "0x1",
+                "0x12448a94",
+                "0x1250b560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300"
+              ]
+            }
+          },
+          "native_object_graph": {
+            "0x20": {
+              "address": "0x137052a0",
+              "words": [
+                "0x137052d0",
+                "0x1",
+                "0x12448a94",
+                "0x1250b560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300",
+                "0x0",
+                "0x0"
+              ]
+            },
+            "0x30": {
+              "address": "0x137052d0",
+              "words": [
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300",
+                "0x0",
+                "0x0",
+                "0x1",
+                "0x137052d0",
+                "0x0",
+                "0x0",
+                "0x13703090",
+                "0x0"
+              ]
+            },
+            "0x38": {
+              "address": "0x1",
+              "words": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
+            },
+            "0x48": {
+              "address": "0x1250b560",
+              "words": [
+                "0xd65f03c0f9400020",
+                "0xa9037bfdd10143ff",
+                "0xa9044ff49100c3fd",
+                "0xf9401688d53bd054",
+                "0xf9402008f81f83a8",
+                "0xa9008fe2a90187e0",
+                "0xf9401c08b4000288",
+                "0xf9402048b4000248",
+                "0xf9401c48b4000208",
+                "0x910023e0b40001c8",
+                "0xd63f0100910063e1",
+                "0xf9401688aa0003f3"
+              ]
+            }
+          },
+          "native_tree_summary": {
+            "container_address": "0x13705270",
+            "controller_address": "0x137052a0",
+            "sentinel_address": "0x137052d0",
+            "node_count": 1,
+            "root_address": "0x13705300",
+            "controller_words": [
+              "0x137052d0",
+              "0x1",
+              "0x12448a94",
+              "0x1250b560",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x13705300"
+            ],
+            "sentinel_words": [
+              "0x0",
+              "0x13705300",
+              "0x13705300",
+              "0x13705300",
+              "0x0",
+              "0x0",
+              "0x1",
+              "0x137052d0",
+              "0x0",
+              "0x0"
+            ],
+            "root_words": [
+              "0x1",
+              "0x137052d0",
+              "0x0",
+              "0x0",
+              "0x13703090",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x0"
+            ],
+            "pair_address": "0x13703090",
+            "pair_words": [
+              "0x13704180",
+              "0x137041a0",
+              "0x6e757470654e2d58",
+              "0x390065",
+              "0x353a30357c31312d",
+              "0x39353a31",
+              "0xc00000020",
+              "0x137041c0"
+            ],
+            "pair_object_words": {
+              "key": {
+                "address": "0x13704180",
+                "words": [
+                  "0x1260f5f8",
+                  "0x90000000a",
+                  "0x13703080",
+                  "0x0",
+                  "0x1260f5f8",
+                  "0xc00000010",
+                  "0x137030d0",
+                  "0x0"
+                ],
+                "capacity": 10,
+                "length": 9,
+                "payload_address": "0x13703080",
+                "payload_hex": "582d4e657074756e65"
+              },
+              "value": {
+                "address": "0x137041a0",
+                "words": [
+                  "0x1260f5f8",
+                  "0xc00000010",
+                  "0x137030d0",
+                  "0x0",
+                  "0x1260f5f8",
+                  "0xffffff2300000000",
+                  "0x0",
+                  "0x0"
+                ],
+                "capacity": 16,
+                "length": 12,
+                "payload_address": "0x137030d0",
+                "payload_hex": "2d31317c35303a35313a3539"
+              }
+            }
+          },
+          "native_object_snapshot": true
+        }
+      ],
+      "facade_stack_write_events": [
+        {
+          "address": "0x7000eec0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b8fc",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eec8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b8fc",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eed0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b904",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eed8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b904",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eee0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b908",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eee8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b908",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eef0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b90c",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eef8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b90c",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eeb8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b930",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eea8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x1651e8",
+          "x0": "0x7000eea8",
+          "x1": "0x7000ede0",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000eeb0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x1651e8",
+          "x0": "0x7000eea8",
+          "x1": "0x7000ede0",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000eea8",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x1651fc",
+          "x0": "0x0",
+          "x1": "0x13704000",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000eeb0",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x165204",
+          "x0": "0x0",
+          "x1": "0x13704000",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000ee98",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x270048",
+          "x0": "0x7000ee98",
+          "x1": "0x7000edd8",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000eea0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x270048",
+          "x0": "0x7000ee98",
+          "x1": "0x7000edd8",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee98",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x27005c",
+          "x0": "0x0",
+          "x1": "0x13705000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000eea0",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x270064",
+          "x0": "0x0",
+          "x1": "0x13705000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee78",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x15f5a8",
+          "x0": "0x7000ee78",
+          "x1": "0x7000eea8",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee80",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x15f5a8",
+          "x0": "0x7000ee78",
+          "x1": "0x7000eea8",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee78",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x15f5bc",
+          "x0": "0x0",
+          "x1": "0x13704000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee80",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x15f5c4",
+          "x0": "0x0",
+          "x1": "0x13704000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee68",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x162884",
+          "x0": "0x7000ee68",
+          "x1": "0x7000ee98",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee70",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x162884",
+          "x0": "0x7000ee68",
+          "x1": "0x7000ee98",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee68",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x162898",
+          "x0": "0x0",
+          "x1": "0x13705000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee70",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x1628a0",
+          "x0": "0x0",
+          "x1": "0x13705000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee88",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x163e04",
+          "x0": "0x7000ee88",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x163e04",
+          "x0": "0x7000ee88",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee88",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x163e14",
+          "x0": "0x4",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x163e20",
+          "x0": "0x13702020",
+          "x1": "0x0",
+          "x2": "0x4",
+          "x3": "0x3"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "2020701300000000",
+          "pc_offset": "0x166ef8",
+          "x0": "0x0",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000ee88",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x27e804",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x27e80c",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000ee58",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x162884",
+          "x0": "0x7000ee58",
+          "x1": "0x7000ee88",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee60",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x162884",
+          "x0": "0x7000ee58",
+          "x1": "0x7000ee88",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee58",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x162898",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee60",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x1628a0",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "5820701300000000",
+          "pc_offset": "0x166ef8",
+          "x0": "0x13705270",
+          "x1": "0x6",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000ee88",
+          "size": 8,
+          "value_after_write": "7052701300000000",
+          "pc_offset": "0x166f0c",
+          "x0": "0x136c4280",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000eea0",
+          "size": 8,
+          "value_after_write": "0020701300000000",
+          "pc_offset": "0x166ef8",
+          "x0": "0x13705000",
+          "x1": "0x7",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000ee98",
+          "size": 8,
+          "value_after_write": "0050701300000000",
+          "pc_offset": "0x166f0c",
+          "x0": "0x136c4280",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000eeb0",
+          "size": 8,
+          "value_after_write": "0820701300000000",
+          "pc_offset": "0x166ea4",
+          "x0": "0x13704000",
+          "x1": "0x6",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000eea8",
+          "size": 8,
+          "value_after_write": "0040701300000000",
+          "pc_offset": "0x166eb8",
+          "x0": "0x136c4240",
+          "x1": "0x7",
+          "x2": "0x8",
+          "x3": "0x4"
         }
       ],
       "request_vm_entry_events": [
@@ -16105,6 +17582,474 @@
           "sp": "0x7000ecc0",
           "x30": "0x125e9f78",
           "mutex_target": "0x136da328"
+        },
+        {
+          "pc_offset": "0x17ba44",
+          "x0": "0x0",
+          "x1": "0x136da328",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba44",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x10",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba60",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba60",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba68",
+          "x0": "0x70002000",
+          "x1": "0x7000ee58",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba60",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba6c",
+          "x0": "0x70001e10",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba70",
+          "x0": "0x70001e10",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba74",
+          "x0": "0x7000ee58",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba7c",
+          "x0": "0x7000ee88",
+          "x1": "0x13705270",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba78",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba84",
+          "x0": "0x7000ee98",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba80",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba8c",
+          "x0": "0x7000eea8",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x1243ba88",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x0"
+            }
+          ]
         },
         {
           "pc_offset": "0x17baa0",
@@ -41217,6 +43162,59 @@
         "sp": "0x7000ef00",
         "x30": "0x7000f000"
       },
+      "facade_result_source": {
+        "pc_offset": "0x17ba6c",
+        "x0": "0x70001e10",
+        "x1": "0x7000edc0",
+        "x2": "0x7000f490",
+        "x3": "0x70001f10",
+        "x8": "0xa5a5a5a5a5a5a5a5",
+        "sp": "0x7000ee50",
+        "x30": "0x775c380a6c",
+        "stack_words": [
+          {
+            "offset": "0x0",
+            "value": "0xa5a5a5a5a5a5a5a5"
+          },
+          {
+            "offset": "0x8",
+            "value": "0x13705270"
+          },
+          {
+            "offset": "0x10",
+            "value": "0x13702058"
+          },
+          {
+            "offset": "0x18",
+            "value": "0x13705000"
+          },
+          {
+            "offset": "0x20",
+            "value": "0x13702000"
+          },
+          {
+            "offset": "0x28",
+            "value": "0x13704000"
+          },
+          {
+            "offset": "0x30",
+            "value": "0x13702008"
+          },
+          {
+            "offset": "0x38",
+            "value": "0x13705270"
+          },
+          {
+            "offset": "0x40",
+            "value": "0x13702058"
+          },
+          {
+            "offset": "0x48",
+            "value": "0x13705000"
+          }
+        ]
+      },
+      "facade_result_source_verified": true,
       "facade_dispatch_events": [
         {
           "pc_offset": "0x17ba24",
@@ -41253,6 +43251,1430 @@
           "x30": "0x775c380a24",
           "x9": "0x775c482d04",
           "x21": "0x136d36f0"
+        }
+      ],
+      "facade_stack_snapshots": [
+        {
+          "pc_offset": "0x17ba44",
+          "x0": "0x0",
+          "x1": "0x136da328",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a44",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x10",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba60",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a60",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba68",
+          "x0": "0x70002000",
+          "x1": "0x7000ee58",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a60",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba6c",
+          "x0": "0x70001e10",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba70",
+          "x0": "0x70001e10",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba74",
+          "x0": "0x7000ee58",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba7c",
+          "x0": "0x7000ee88",
+          "x1": "0x13705270",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a78",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba84",
+          "x0": "0x7000ee98",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a80",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba8c",
+          "x0": "0x7000eea8",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a88",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x0"
+            }
+          ]
+        }
+      ],
+      "facade_native_object_snapshots": [
+        {
+          "pc_offset": "0x17ba68",
+          "reference_address": "0x13705270",
+          "reference_words": [
+            "0x775c5607c0",
+            "0x775c387d6c",
+            "0x775c387d6c",
+            "0x775c38da94"
+          ],
+          "container_words": [
+            "0x775c46101c",
+            "0x775c46112c",
+            "0x775c461228",
+            "0x0",
+            "0x0",
+            "0x775c4613d0",
+            "0x775c46145c",
+            "0x0"
+          ],
+          "stack_reference_objects": {
+            "0x8": {
+              "address": "0x13705270",
+              "words": [
+                "0x775c5607c0",
+                "0x775c387d6c",
+                "0x775c387d6c",
+                "0x775c38da94",
+                "0x137052a0",
+                "0x0",
+                "0x137052d0",
+                "0x1",
+                "0x775c38da94",
+                "0x775c450560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300"
+              ]
+            },
+            "0x18": {
+              "address": "0x13705000",
+              "words": [
+                "0x775c5607c0",
+                "0x775c387d6c",
+                "0x775c387d6c",
+                "0x775c38da94",
+                "0x13705030",
+                "0x0",
+                "0x13705060",
+                "0x1",
+                "0x775c38da94",
+                "0x775c450560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705090",
+                "0x13705090",
+                "0x13705090"
+              ]
+            },
+            "0x28": {
+              "address": "0x13704000",
+              "words": [
+                "0x775c5545f8",
+                "0xd0000000e",
+                "0x13703010",
+                "0x0",
+                "0x775c46dcf0",
+                "0x13705188",
+                "0x0",
+                "0x6c6c615f6b",
+                "0x2c303a223178227b",
+                "0x2c33313a22327822",
+                "0x2c31323a22337822",
+                "0x7d303a22347822",
+                "0x775c5545f8",
+                "0x300000004",
+                "0x13702010",
+                "0x0"
+              ]
+            },
+            "0x38": {
+              "address": "0x13705270",
+              "words": [
+                "0x775c5607c0",
+                "0x775c387d6c",
+                "0x775c387d6c",
+                "0x775c38da94",
+                "0x137052a0",
+                "0x0",
+                "0x137052d0",
+                "0x1",
+                "0x775c38da94",
+                "0x775c450560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300"
+              ]
+            }
+          },
+          "native_object_graph": {
+            "0x20": {
+              "address": "0x137052a0",
+              "words": [
+                "0x137052d0",
+                "0x1",
+                "0x775c38da94",
+                "0x775c450560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300",
+                "0x0",
+                "0x0"
+              ]
+            },
+            "0x30": {
+              "address": "0x137052d0",
+              "words": [
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300",
+                "0x0",
+                "0x0",
+                "0x1",
+                "0x137052d0",
+                "0x0",
+                "0x0",
+                "0x13703090",
+                "0x0"
+              ]
+            },
+            "0x38": {
+              "address": "0x1",
+              "words": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
+            },
+            "0x48": {
+              "address": "0x775c450560",
+              "words": [
+                "0xd65f03c0f9400020",
+                "0xa9037bfdd10143ff",
+                "0xa9044ff49100c3fd",
+                "0xf9401688d53bd054",
+                "0xf9402008f81f83a8",
+                "0xa9008fe2a90187e0",
+                "0xf9401c08b4000288",
+                "0xf9402048b4000248",
+                "0xf9401c48b4000208",
+                "0x910023e0b40001c8",
+                "0xd63f0100910063e1",
+                "0xf9401688aa0003f3"
+              ]
+            }
+          },
+          "native_tree_summary": {
+            "container_address": "0x13705270",
+            "controller_address": "0x137052a0",
+            "sentinel_address": "0x137052d0",
+            "node_count": 1,
+            "root_address": "0x13705300",
+            "controller_words": [
+              "0x137052d0",
+              "0x1",
+              "0x775c38da94",
+              "0x775c450560",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x13705300"
+            ],
+            "sentinel_words": [
+              "0x0",
+              "0x13705300",
+              "0x13705300",
+              "0x13705300",
+              "0x0",
+              "0x0",
+              "0x1",
+              "0x137052d0",
+              "0x0",
+              "0x0"
+            ],
+            "root_words": [
+              "0x1",
+              "0x137052d0",
+              "0x0",
+              "0x0",
+              "0x13703090",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x0"
+            ],
+            "pair_address": "0x13703090",
+            "pair_words": [
+              "0x13704180",
+              "0x137041a0",
+              "0x6e757470654e2d58",
+              "0x390065",
+              "0x353a30357c31312d",
+              "0x39353a31",
+              "0xc00000020",
+              "0x137041c0"
+            ],
+            "pair_object_words": {
+              "key": {
+                "address": "0x13704180",
+                "words": [
+                  "0x775c5545f8",
+                  "0x90000000a",
+                  "0x13703080",
+                  "0x0",
+                  "0x775c5545f8",
+                  "0xc00000010",
+                  "0x137030d0",
+                  "0x0"
+                ],
+                "capacity": 10,
+                "length": 9,
+                "payload_address": "0x13703080",
+                "payload_hex": "582d4e657074756e65"
+              },
+              "value": {
+                "address": "0x137041a0",
+                "words": [
+                  "0x775c5545f8",
+                  "0xc00000010",
+                  "0x137030d0",
+                  "0x0",
+                  "0x775c5545f8",
+                  "0xffffff2300000000",
+                  "0x0",
+                  "0x0"
+                ],
+                "capacity": 16,
+                "length": 12,
+                "payload_address": "0x137030d0",
+                "payload_hex": "2d31317c35303a35313a3539"
+              }
+            }
+          },
+          "native_object_snapshot": true
+        },
+        {
+          "pc_offset": "0x17ba6c",
+          "reference_address": "0x13705270",
+          "reference_words": [
+            "0x775c5607c0",
+            "0x775c387d6c",
+            "0x775c387d6c",
+            "0x775c38da94"
+          ],
+          "container_words": [
+            "0x775c46101c",
+            "0x775c46112c",
+            "0x775c461228",
+            "0x0",
+            "0x0",
+            "0x775c4613d0",
+            "0x775c46145c",
+            "0x0"
+          ],
+          "stack_reference_objects": {
+            "0x8": {
+              "address": "0x13705270",
+              "words": [
+                "0x775c5607c0",
+                "0x775c387d6c",
+                "0x775c387d6c",
+                "0x775c38da94",
+                "0x137052a0",
+                "0x0",
+                "0x137052d0",
+                "0x1",
+                "0x775c38da94",
+                "0x775c450560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300"
+              ]
+            },
+            "0x18": {
+              "address": "0x13705000",
+              "words": [
+                "0x775c5607c0",
+                "0x775c387d6c",
+                "0x775c387d6c",
+                "0x775c38da94",
+                "0x13705030",
+                "0x0",
+                "0x13705060",
+                "0x1",
+                "0x775c38da94",
+                "0x775c450560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705090",
+                "0x13705090",
+                "0x13705090"
+              ]
+            },
+            "0x28": {
+              "address": "0x13704000",
+              "words": [
+                "0x775c5545f8",
+                "0xd0000000e",
+                "0x13703010",
+                "0x0",
+                "0x775c46dcf0",
+                "0x13705188",
+                "0x0",
+                "0x6c6c615f6b",
+                "0x2c303a223178227b",
+                "0x2c33313a22327822",
+                "0x2c31323a22337822",
+                "0x7d303a22347822",
+                "0x775c5545f8",
+                "0x300000004",
+                "0x13702010",
+                "0x0"
+              ]
+            },
+            "0x38": {
+              "address": "0x13705270",
+              "words": [
+                "0x775c5607c0",
+                "0x775c387d6c",
+                "0x775c387d6c",
+                "0x775c38da94",
+                "0x137052a0",
+                "0x0",
+                "0x137052d0",
+                "0x1",
+                "0x775c38da94",
+                "0x775c450560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300"
+              ]
+            }
+          },
+          "native_object_graph": {
+            "0x20": {
+              "address": "0x137052a0",
+              "words": [
+                "0x137052d0",
+                "0x1",
+                "0x775c38da94",
+                "0x775c450560",
+                "0x0",
+                "0x0",
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300",
+                "0x0",
+                "0x0"
+              ]
+            },
+            "0x30": {
+              "address": "0x137052d0",
+              "words": [
+                "0x0",
+                "0x13705300",
+                "0x13705300",
+                "0x13705300",
+                "0x0",
+                "0x0",
+                "0x1",
+                "0x137052d0",
+                "0x0",
+                "0x0",
+                "0x13703090",
+                "0x0"
+              ]
+            },
+            "0x38": {
+              "address": "0x1",
+              "words": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
+            },
+            "0x48": {
+              "address": "0x775c450560",
+              "words": [
+                "0xd65f03c0f9400020",
+                "0xa9037bfdd10143ff",
+                "0xa9044ff49100c3fd",
+                "0xf9401688d53bd054",
+                "0xf9402008f81f83a8",
+                "0xa9008fe2a90187e0",
+                "0xf9401c08b4000288",
+                "0xf9402048b4000248",
+                "0xf9401c48b4000208",
+                "0x910023e0b40001c8",
+                "0xd63f0100910063e1",
+                "0xf9401688aa0003f3"
+              ]
+            }
+          },
+          "native_tree_summary": {
+            "container_address": "0x13705270",
+            "controller_address": "0x137052a0",
+            "sentinel_address": "0x137052d0",
+            "node_count": 1,
+            "root_address": "0x13705300",
+            "controller_words": [
+              "0x137052d0",
+              "0x1",
+              "0x775c38da94",
+              "0x775c450560",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x13705300"
+            ],
+            "sentinel_words": [
+              "0x0",
+              "0x13705300",
+              "0x13705300",
+              "0x13705300",
+              "0x0",
+              "0x0",
+              "0x1",
+              "0x137052d0",
+              "0x0",
+              "0x0"
+            ],
+            "root_words": [
+              "0x1",
+              "0x137052d0",
+              "0x0",
+              "0x0",
+              "0x13703090",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x0",
+              "0x0"
+            ],
+            "pair_address": "0x13703090",
+            "pair_words": [
+              "0x13704180",
+              "0x137041a0",
+              "0x6e757470654e2d58",
+              "0x390065",
+              "0x353a30357c31312d",
+              "0x39353a31",
+              "0xc00000020",
+              "0x137041c0"
+            ],
+            "pair_object_words": {
+              "key": {
+                "address": "0x13704180",
+                "words": [
+                  "0x775c5545f8",
+                  "0x90000000a",
+                  "0x13703080",
+                  "0x0",
+                  "0x775c5545f8",
+                  "0xc00000010",
+                  "0x137030d0",
+                  "0x0"
+                ],
+                "capacity": 10,
+                "length": 9,
+                "payload_address": "0x13703080",
+                "payload_hex": "582d4e657074756e65"
+              },
+              "value": {
+                "address": "0x137041a0",
+                "words": [
+                  "0x775c5545f8",
+                  "0xc00000010",
+                  "0x137030d0",
+                  "0x0",
+                  "0x775c5545f8",
+                  "0xffffff2300000000",
+                  "0x0",
+                  "0x0"
+                ],
+                "capacity": 16,
+                "length": 12,
+                "payload_address": "0x137030d0",
+                "payload_hex": "2d31317c35303a35313a3539"
+              }
+            }
+          },
+          "native_object_snapshot": true
+        }
+      ],
+      "facade_stack_write_events": [
+        {
+          "address": "0x7000eec0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b8fc",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eec8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b8fc",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eed0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b904",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eed8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b904",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eee0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b908",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eee8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b908",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eef0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b90c",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eef8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b90c",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eeb8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x17b930",
+          "x0": "0x70002000",
+          "x1": "0x70001300",
+          "x2": "0x70001902",
+          "x3": "0x70001800"
+        },
+        {
+          "address": "0x7000eea8",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x1651e8",
+          "x0": "0x7000eea8",
+          "x1": "0x7000ede0",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000eeb0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x1651e8",
+          "x0": "0x7000eea8",
+          "x1": "0x7000ede0",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000eea8",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x1651fc",
+          "x0": "0x0",
+          "x1": "0x13704000",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000eeb0",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x165204",
+          "x0": "0x0",
+          "x1": "0x13704000",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000ee98",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x270048",
+          "x0": "0x7000ee98",
+          "x1": "0x7000edd8",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000eea0",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x270048",
+          "x0": "0x7000ee98",
+          "x1": "0x7000edd8",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee98",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x27005c",
+          "x0": "0x0",
+          "x1": "0x13705000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000eea0",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x270064",
+          "x0": "0x0",
+          "x1": "0x13705000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee78",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x15f5a8",
+          "x0": "0x7000ee78",
+          "x1": "0x7000eea8",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee80",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x15f5a8",
+          "x0": "0x7000ee78",
+          "x1": "0x7000eea8",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee78",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x15f5bc",
+          "x0": "0x0",
+          "x1": "0x13704000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee80",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x15f5c4",
+          "x0": "0x0",
+          "x1": "0x13704000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee68",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x162884",
+          "x0": "0x7000ee68",
+          "x1": "0x7000ee98",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee70",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x162884",
+          "x0": "0x7000ee68",
+          "x1": "0x7000ee98",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee68",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x162898",
+          "x0": "0x0",
+          "x1": "0x13705000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee70",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x1628a0",
+          "x0": "0x0",
+          "x1": "0x13705000",
+          "x2": "0x8",
+          "x3": "0x4"
+        },
+        {
+          "address": "0x7000ee88",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x163e04",
+          "x0": "0x7000ee88",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x163e04",
+          "x0": "0x7000ee88",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee88",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x163e14",
+          "x0": "0x4",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x163e20",
+          "x0": "0x13702020",
+          "x1": "0x0",
+          "x2": "0x4",
+          "x3": "0x3"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "2020701300000000",
+          "pc_offset": "0x166ef8",
+          "x0": "0x0",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000ee88",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x27e804",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x27e80c",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000ee58",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x162884",
+          "x0": "0x7000ee58",
+          "x1": "0x7000ee88",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee60",
+          "size": 8,
+          "value_after_write": "a5a5a5a5a5a5a5a5",
+          "pc_offset": "0x162884",
+          "x0": "0x7000ee58",
+          "x1": "0x7000ee88",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee58",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x162898",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee60",
+          "size": 8,
+          "value_after_write": "0000000000000000",
+          "pc_offset": "0x1628a0",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x1",
+          "x3": "0x0"
+        },
+        {
+          "address": "0x7000ee90",
+          "size": 8,
+          "value_after_write": "5820701300000000",
+          "pc_offset": "0x166ef8",
+          "x0": "0x13705270",
+          "x1": "0x6",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000ee88",
+          "size": 8,
+          "value_after_write": "7052701300000000",
+          "pc_offset": "0x166f0c",
+          "x0": "0x136c4280",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000eea0",
+          "size": 8,
+          "value_after_write": "0020701300000000",
+          "pc_offset": "0x166ef8",
+          "x0": "0x13705000",
+          "x1": "0x7",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000ee98",
+          "size": 8,
+          "value_after_write": "0050701300000000",
+          "pc_offset": "0x166f0c",
+          "x0": "0x136c4280",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20"
+        },
+        {
+          "address": "0x7000eeb0",
+          "size": 8,
+          "value_after_write": "0820701300000000",
+          "pc_offset": "0x166ea4",
+          "x0": "0x13704000",
+          "x1": "0x6",
+          "x2": "0x8",
+          "x3": "0x2"
+        },
+        {
+          "address": "0x7000eea8",
+          "size": 8,
+          "value_after_write": "0040701300000000",
+          "pc_offset": "0x166eb8",
+          "x0": "0x136c4240",
+          "x1": "0x7",
+          "x2": "0x8",
+          "x3": "0x4"
         }
       ],
       "request_vm_entry_events": [
@@ -57259,6 +60681,474 @@
           "sp": "0x7000ecc0",
           "x30": "0x775c52ef78",
           "mutex_target": "0x136da328"
+        },
+        {
+          "pc_offset": "0x17ba44",
+          "x0": "0x0",
+          "x1": "0x136da328",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a44",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x10",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba60",
+          "x0": "0x0",
+          "x1": "0x13705270",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a60",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba68",
+          "x0": "0x70002000",
+          "x1": "0x7000ee58",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a60",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba6c",
+          "x0": "0x70001e10",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba70",
+          "x0": "0x70001e10",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba74",
+          "x0": "0x7000ee58",
+          "x1": "0x7000edc0",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a6c",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba7c",
+          "x0": "0x7000ee88",
+          "x1": "0x13705270",
+          "x2": "0x7000f490",
+          "x3": "0x70001f10",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a78",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba84",
+          "x0": "0x7000ee98",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a80",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x13705000"
+            }
+          ]
+        },
+        {
+          "pc_offset": "0x17ba8c",
+          "x0": "0x7000eea8",
+          "x1": "0x5",
+          "x2": "0x0",
+          "x3": "0x20",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "sp": "0x7000ee50",
+          "x30": "0x775c380a88",
+          "stack_words": [
+            {
+              "offset": "0x0",
+              "value": "0xa5a5a5a5a5a5a5a5"
+            },
+            {
+              "offset": "0x8",
+              "value": "0x13705270"
+            },
+            {
+              "offset": "0x10",
+              "value": "0x13702058"
+            },
+            {
+              "offset": "0x18",
+              "value": "0x13705000"
+            },
+            {
+              "offset": "0x20",
+              "value": "0x13702000"
+            },
+            {
+              "offset": "0x28",
+              "value": "0x13704000"
+            },
+            {
+              "offset": "0x30",
+              "value": "0x13702008"
+            },
+            {
+              "offset": "0x38",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x40",
+              "value": "0x0"
+            },
+            {
+              "offset": "0x48",
+              "value": "0x0"
+            }
+          ]
         },
         {
           "pc_offset": "0x17baa0",
@@ -82316,6 +86206,7 @@
   "same_cpu_native_outer_to_facade": true,
   "real_outer_child_receiver_used": true,
   "actual_facade_return_verified": true,
+  "facade_result_source_verified": true,
   "real_request_vm_entry_used": true,
   "real_cxa_atexit_relocation_used": true,
   "synthetic_receiver_tree_used": false,
@@ -82324,5 +86215,5 @@
   "whole_request_native_differential_verified": false,
   "fresh_standalone_signer_verified": false,
   "online_header_acceptance_verified": false,
-  "interpretation": "The outer getter's actual first child is retained on the same Unicorn CPU and used as the normal facade receiver.  The child vtable and callback pair provenance are checked before entering +0x17b8f8; URL/header/JNI services remain explicit fixture providers.  At the descriptor stop, +0x171268 writes x15=0x13708000 into the argument +0x08 and clears +0x00; the object is in a fresh zero-filled mmap and the final source slot is written by the VM handler at image+0x16e118: the observed store has x28=0x7000eba8, x12=1 and x9=0 on both image bases.  The preceding VM load now resolves the image-relative +0x382c80 R_AARCH64_ABS64 memset GOT slot through the matching libc relocation and records that target; without this explicit dynamic-linker step the slot remains zero.  The real request VM entry +0x2830c4 then completes and the facade returns the native Java result handle at +0x17bac0. JNI/Java services remain synthetic providers, so this verifies the native continuation and return boundary only; it does not claim a live JVM, whole-request differential, standalone signer, or online acceptance."
+  "interpretation": "The outer getter's actual first child is retained on the same Unicorn CPU and used as the normal facade receiver.  The child vtable and callback pair provenance are checked before entering +0x17b8f8; URL/header/JNI services remain explicit fixture providers.  At the descriptor stop, +0x171268 writes x15=0x13708000 into the argument +0x08 and clears +0x00; the object is in a fresh zero-filled mmap and the final source slot is written by the VM handler at image+0x16e118: the observed store has x28=0x7000eba8, x12=1 and x9=0 on both image bases.  The preceding VM load now resolves the image-relative +0x382c80 R_AARCH64_ABS64 memset GOT slot through the matching libc relocation and records that target; without this explicit dynamic-linker step the slot remains zero.  The real request VM entry +0x2830c4 then completes and the facade returns the native Java result handle at +0x17bac0. JNI/Java services remain synthetic providers, so this verifies the native continuation and return boundary only.  At +0x17ba6c the native request call returns G+0x1e10 in x0, which is copied into x19 and reaches the +0x17bac0 epilogue unchanged; this links the observed facade result to the native call return rather than a Python-side snapshot.  It does not claim a live JVM, whole-request differential, standalone signer, or online acceptance."
 }

@@ -9672,3 +9672,28 @@ python -B platforms/bytedance/tomato/python/verify_vm9_request_output_reference_
   --library C:\AI\6\libmetasec_ml_71332.so --libc C:\AI\6\_vlibc.so `
   --output platforms/bytedance/tomato/evidence/vm9_request_output_reference_20261027_rerun.json
 ```
+
+## 6.286 native facade result-source ledger（2026-10-27 Asia/Shanghai）
+
+在同一轮 actual-child continuation 中增加返回前栈快照和写入过滤：只保留
+facade 已开始、PC 位于主 ELF、且落在最终 facade frame `0x7000ee50..0x7000ef00`
+的写入，排除 outer bootstrap、libc 和深层 allocator frame 噪声。两基址均保留
+42 条相关写入；`+0x27e804/+0x27e80c` 的 native 清理写入、`+0x17ba68` 的
+调用参数和 `+0x17ba6c` 的返回值都出现在同一 ledger 中。
+
+同一 native facade frame 的对象图快照还直接解析出一个配置树节点：counter 为 1，
+key 为 `X-Neptune`，value 为 `-11|50:51:59`。这与独立 observation-only
+output-reference continuation 的 `X-Neptune -> -5|` 不同，说明两条 continuation
+当前使用的输入/guard/状态语义尚未闭合；该差异保留为下一步 whole-request
+differential 的定位证据，不能将任一路径的树当作完整 signer 输出。
+
+`+0x17ba6c` 的 native call 返回 `G+0x1e10`，随后 `+0x17ba70` 将结果继续放入
+facade 返回寄存器，`+0x17bac0` 返回值逐字节一致；新增
+`facade_result_source_verified=true`。这把 result handle 的来源闭合到 native
+request call，不依赖 Python snapshot。JNI/Java provider 仍是显式 fixture，
+`whole_request_native_differential_verified`、真实 JVM、fresh signer 和线上验签仍为
+false。
+
+证据和复现脚本仍为：
+`evidence/vm9_native_outer_facade_actual_child_20261027.json`、
+`python/verify_vm9_native_outer_facade_actual_child_20261027.py`。

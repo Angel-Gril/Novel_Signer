@@ -9733,7 +9733,7 @@
   "vm9_native_outer_facade_actual_child_20261027": {
     "path": "evidence/vm9_native_outer_facade_actual_child_20261027.json",
     "verifier": "python/verify_vm9_native_outer_facade_actual_child_20261027.py",
-    "schema": "vm9-native-outer-facade-actual-child-20261027-v3",
+    "schema": "vm9-native-outer-facade-actual-child-20261027-v4",
     "evidence_label": "Same-CPU native outer real child into normal Java facade",
     "image_bases": [
       "0x122c0000",
@@ -9755,8 +9755,8 @@
     "facade_child_observed_each": true,
     "owning_vm_observed_each": true,
     "native_vm_observed_each": true,
-    "facade_returned_each": false,
-    "stop_boundary_each": "0x2859dc -> br x3 with x3=0",
+    "facade_returned_each": true,
+    "stop_boundary_each": "0x17bac0 epilogue -> x0=G+0x1e10",
     "descriptor_argument_writer_offset": "0x171268",
     "descriptor_argument_writer_each": {
       "field_0": "x15=0 written to argument+0x00",
@@ -9780,11 +9780,23 @@
       "x9": "0x0",
       "observed_each_image_base": true
     },
-    "unmapped_fetch_boundary_each": true,
-    "normal_facade_child_handoff_verified": false,
+    "unmapped_fetch_boundary_each": false,
+    "normal_facade_child_handoff_verified": true,
+    "actual_facade_return_verified": true,
+    "facade_result_source_verified": true,
+    "real_request_vm_entry_used": true,
+    "real_cxa_atexit_relocation_used": true,
+    "real_cxa_atexit_target": "0x51075254",
+    "facade_native_tree_each": {
+      "counter": 1,
+      "key": "X-Neptune",
+      "value": "-11|50:51:59"
+    },
+    "independent_output_reference_tree_value": "-5|",
+    "facade_output_tree_semantics_closed": false,
     "whole_request_native_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "comparison_note": "The native outer cold getter returns a real root+0x18 child on the same CPU. Its vtable and callback pair target are checked before entering the normal facade and observing +0x27dd04, +0x2830c4 and +0x168324. At +0x171268 the native VM writes x15=0 into the descriptor argument field +0x00 and x15=0x13708000 into +0x08. That object is at offset +0x8000 in a fresh 0x40000 anonymous mmap at 0x13700000; no write to its target field was observed. The final source slot is then written by the VM handler at +0x16e118 with x28=0x7000eba8, x12=1 and x9=0 on both image bases. Both bases therefore stop at +0x2859dc because x3 remains zero and the next br x3 is unmapped. URL/header/JNI services remain explicit fixture providers; no cleanup/return or signer output is claimed."
+    "comparison_note": "The native outer cold getter returns a real root+0x18 child on the same CPU. Its vtable and callback pair target are checked before entering the normal facade and observing +0x27dd04, +0x2830c4 and +0x168324. The matching-libc relocation resolver supplies the real __cxa_atexit target at image+0x382cd8, allowing the VM registration path to complete. Both bases enter the owning request VM, return G+0x1e10 from the native call at +0x17ba6c, and reach the +0x17bac0 epilogue unchanged. The final-frame stack ledger is restricted to main-image PCs and the facade result temporaries; URL/header/JNI services remain explicit fixture providers, so whole-request differential, live JVM and signer/online acceptance remain open."
   }
 }

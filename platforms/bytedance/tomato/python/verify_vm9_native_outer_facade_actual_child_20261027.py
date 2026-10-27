@@ -121,6 +121,9 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "helper_stack_write_events": [],
         "facade_return_registers": None,
         "facade_dispatch_events": [],
+        "facade_stack_snapshots": [],
+        "facade_native_object_snapshots": [],
+        "facade_stack_write_events": [],
         "request_vm_entry_events": [],
         "unmapped": [],
     }
@@ -423,7 +426,9 @@ def run(library: Path, libc: Path, image: int) -> dict:
                       0x171268, 0x2858BC, 0x2859CC, 0x2859D0,
                       0x2859D4, 0x2859D8, 0x2859DC, 0x16AA4C,
                       0x285B80, 0x285B84, 0x285B88, 0x285B8C,
-                      0x17BA24, 0x17BA38, 0x17BA40, 0x17BAA0, 0x17BAC0,
+                      0x17BA24, 0x17BA38, 0x17BA40, 0x17BA44, 0x17BA60,
+                      0x17BA68, 0x17BA6C, 0x17BA70, 0x17BA74, 0x17BA7C, 0x17BA84,
+                      0x17BA8C, 0x17BAA0, 0x17BAC0,
                       0x28B700, 0x28B704, 0x28B70C, 0x28B710,
                       0x28B718, 0x28B71C, 0x28B724, 0x28B72C,
                       0x28B734, 0x28B73C, 0x347F00, 0x347F10):
@@ -457,6 +462,118 @@ def run(library: Path, libc: Path, image: int) -> dict:
                     x21=hex(cpu.reg_read(arm.UC_ARM64_REG_X21)),
                 )
                 state["facade_dispatch_events"].append(dict(row))
+            if offset in (0x17BA44, 0x17BA60, 0x17BA68, 0x17BA6C, 0x17BA70,
+                          0x17BA74, 0x17BA7C, 0x17BA84, 0x17BA8C):
+                sp = cpu.reg_read(arm.UC_ARM64_REG_SP)
+                row["stack_words"] = []
+                for displacement in range(0, 0x50, 8):
+                    try:
+                        row["stack_words"].append({
+                            "offset": hex(displacement),
+                            "value": hex(_u(cpu, sp + displacement)),
+                        })
+                    except Exception:
+                        row["stack_words"].append({
+                            "offset": hex(displacement), "value": None,
+                        })
+                state["facade_stack_snapshots"].append(dict(row))
+                if offset in (0x17BA68, 0x17BA6C):
+                    reference = _u(cpu, sp + 8)
+                    tree_row = {"pc_offset": hex(offset),
+                                "reference_address": hex(reference)}
+                    try:
+                        tree_row["reference_words"] = [
+                            hex(_u(cpu, reference + index * 8))
+                            for index in range(4)
+                        ]
+                        container = _u(cpu, reference)
+                        tree_row["container_words"] = [
+                            hex(_u(cpu, container + index * 8))
+                            for index in range(8)
+                        ] if container else []
+                        tree_row["stack_reference_objects"] = {}
+                        for displacement in (8, 0x18, 0x28, 0x38):
+                            pointer = _u(cpu, sp + displacement)
+                            words = []
+                            if pointer:
+                                for index in range(16):
+                                    try:
+                                        words.append(hex(_u(cpu, pointer + index * 8)))
+                                    except Exception:
+                                        words.append(None)
+                            tree_row["stack_reference_objects"][hex(displacement)] = {
+                                "address": hex(pointer), "words": words,
+                            }
+                        graph = {}
+                        for displacement in (0x20, 0x28, 0x30, 0x38,
+                                              0x48, 0x50, 0x58, 0x60):
+                            pointer = _u(cpu, reference + displacement)
+                            if pointer:
+                                words = []
+                                for index in range(12):
+                                    try:
+                                        words.append(hex(_u(cpu, pointer + index * 8)))
+                                    except Exception:
+                                        words.append(None)
+                                graph[hex(displacement)] = {
+                                    "address": hex(pointer), "words": words,
+                                }
+                        tree_row["native_object_graph"] = graph
+                        controller = _u(cpu, reference + 0x20)
+                        sentinel = _u(cpu, controller) if controller else 0
+                        root = _u(cpu, sentinel + 8) if sentinel else 0
+                        tree_row["native_tree_summary"] = {
+                            "container_address": hex(reference),
+                            "controller_address": hex(controller),
+                            "sentinel_address": hex(sentinel),
+                            "node_count": _u(cpu, controller + 8, 4) if controller else 0,
+                            "root_address": hex(root),
+                            "controller_words": [hex(_u(cpu, controller + index * 8))
+                                                  for index in range(8)] if controller else [],
+                            "sentinel_words": [hex(_u(cpu, sentinel + index * 8))
+                                                for index in range(10)] if sentinel else [],
+                            "root_words": [hex(_u(cpu, root + index * 8))
+                                           for index in range(10)] if root else [],
+                        }
+                        pair = _u(cpu, root + 0x20) if root else 0
+                        tree_row["native_tree_summary"]["pair_address"] = hex(pair)
+                        tree_row["native_tree_summary"]["pair_words"] = (
+                            [hex(_u(cpu, pair + index * 8)) for index in range(8)]
+                            if pair else []
+                        )
+                        tree_row["native_tree_summary"]["pair_object_words"] = {}
+                        for label, pointer in (("key", _u(cpu, pair) if pair else 0),
+                                                ("value", _u(cpu, pair + 8) if pair else 0)):
+                            words = []
+                            if pointer:
+                                for index in range(8):
+                                    try:
+                                        words.append(hex(_u(cpu, pointer + index * 8)))
+                                    except Exception:
+                                        words.append(None)
+                            tree_row["native_tree_summary"]["pair_object_words"][label] = {
+                                "address": hex(pointer), "words": words,
+                            }
+                            if pointer:
+                                header = _u(cpu, pointer + 8)
+                                capacity = header & 0xFFFFFFFF
+                                length = (header >> 32) & 0xFFFFFFFF
+                                payload = _u(cpu, pointer + 16)
+                                tree_row["native_tree_summary"]["pair_object_words"][label].update(
+                                    capacity=capacity, length=length,
+                                    payload_address=hex(payload),
+                                    payload_hex=bytes(cpu.mem_read(payload, length)).hex()
+                                    if payload and length <= 4096 else None,
+                                )
+                        # The normal facade keeps native configuration objects
+                        # on its own continuation frame.  They are not the
+                        # output-reference wrapper used by the observation-only
+                        # request runner, so record their vtables/links without
+                        # applying that runner's stricter reference contract.
+                        tree_row["native_object_snapshot"] = True
+                    except Exception as exc:
+                        tree_row["error"] = f"{type(exc).__name__}: {exc}"
+                    state["facade_native_object_snapshots"].append(tree_row)
             if offset in (0x2830C4, 0x2830EC, 0x283100, 0x28310C):
                 row.update(
                     x8=hex(cpu.reg_read(arm.UC_ARM64_REG_X8)),
@@ -550,6 +667,35 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 }
 
     def descriptor_write_observer(cpu, address, size):
+        # Keep this ledger inside the actual facade/request continuation.  The
+        # same memory window is used by the outer bootstrap and by matching
+        # libc, so address filtering alone records mostly pre-facade noise.
+        # Code-hook offsets are relative to the selected main-image base;
+        # negative offsets identify the second case's libc/outer mappings.
+        pc_offset = cpu.reg_read(arm.UC_ARM64_REG_PC) - image
+        in_main_image = 0 <= pc_offset < 0x400000
+        in_facade_window = state["facade_started"] and state["facade_return"] is None
+        # The final facade frame is anchored at SP=0x7000ee50 and its
+        # temporaries/result references occupy this upper stack range.  Lower
+        # addresses belong to nested request helpers; retaining them adds
+        # allocator-frame churn without helping identify +0x17bac0's value.
+        if (len(state["facade_stack_write_events"]) < 128
+                and in_main_image and in_facade_window
+                and 0x7000EE50 <= address < 0x7000EF00
+                and address + size <= 0x7000EF00):
+            try:
+                value = bytes(cpu.mem_read(address, size)).hex()
+            except Exception:
+                value = None
+            state["facade_stack_write_events"].append({
+                "address": hex(address), "size": size,
+                "value_after_write": value,
+                "pc_offset": hex(pc_offset),
+                "x0": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+                "x1": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+                "x2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+                "x3": hex(cpu.reg_read(arm.UC_ARM64_REG_X3)),
+            })
         helper_address = image + 0x2484B8
         if (len(state["helper_object_write_events"]) < 128
                 and address <= helper_address < address + size):
@@ -808,6 +954,15 @@ def run(library: Path, libc: Path, image: int) -> dict:
         state["facade_return_registers"]["x0"]
         if state["facade_return_registers"] is not None else None
     )
+    facade_result_source = next(
+        (row for row in state["facade_stack_snapshots"]
+         if row["pc_offset"] == "0x17ba6c"),
+        None,
+    )
+    facade_result_source_verified = (
+        facade_result_source is not None
+        and facade_result_source["x0"] == facade_return_value
+    )
     actual_facade_return_verified = (
         state["facade_return"] == "epilogue_17bac0"
         and facade_return_value == hex(G + 0x1E10)
@@ -834,7 +989,12 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "owning_vm_entry": state["owning_vm_entry"],
         "facade_return": state["facade_return"],
         "facade_return_registers": state["facade_return_registers"],
+        "facade_result_source": facade_result_source,
+        "facade_result_source_verified": facade_result_source_verified,
         "facade_dispatch_events": state["facade_dispatch_events"],
+        "facade_stack_snapshots": state["facade_stack_snapshots"],
+        "facade_native_object_snapshots": state["facade_native_object_snapshots"],
+        "facade_stack_write_events": state["facade_stack_write_events"],
         "request_vm_entry_events": state["request_vm_entry_events"],
         "actual_facade_return_verified": actual_facade_return_verified,
         "real_request_vm_entry_used": bool(state["request_vm_entry_events"]),
@@ -963,6 +1123,9 @@ def main() -> None:
         "actual_facade_return_verified": all(
             case["actual_facade_return_verified"] for case in rows
         ),
+        "facade_result_source_verified": all(
+            case["facade_result_source_verified"] for case in rows
+        ),
         "real_request_vm_entry_used": all(
             case["real_request_vm_entry_used"] for case in rows
         ),
@@ -990,7 +1153,11 @@ def main() -> None:
             "slot remains zero.  The real request VM entry +0x2830c4 then completes "
             "and the facade returns the native Java result handle at +0x17bac0. "
             "JNI/Java services remain synthetic providers, so this verifies the "
-            "native continuation and return boundary only; it does not claim a "
+            "native continuation and return boundary only.  At +0x17ba6c the "
+            "native request call returns G+0x1e10 in x0, which is copied into "
+            "x19 and reaches the +0x17bac0 epilogue unchanged; this links the "
+            "observed facade result to the native call return rather than a "
+            "Python-side snapshot.  It does not claim a "
             "live JVM, whole-request differential, standalone signer, or online "
             "acceptance."
         ),

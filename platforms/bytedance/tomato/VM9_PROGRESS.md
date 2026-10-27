@@ -6397,3 +6397,23 @@ native `+0x184ad4` 自定义 mapper 在本次启动执行，也没有填充
 
 证据：[APK Java loader handoff](evidence/vm9_dso_java_loader_provenance_fresh_20261027.json)，
 复现脚本：[verify_vm9_dso_java_loader_provenance_20261026.py](python/verify_vm9_dso_java_loader_provenance_20261026.py)。
+
+## 2026-10-27：native facade result-source ledger
+
+actual-child continuation 现在保留最终 facade frame 的受限栈写入 ledger：仅记录
+facade 启动后、主 ELF PC、`0x7000ee50..0x7000ef00` result 临时区，两个 image base
+各 42 条，已排除 outer/libc/深层 allocator 噪声。`+0x17ba6c` 的 native request
+call 返回 `G+0x1e10`，该值在 `+0x17bac0` epilogue 保持不变；证据字段
+`facade_result_source_verified` 为 true。`+0x27e804/+0x27e80c` 的 native
+清理写入也在同一 ledger 中。
+
+native facade frame 的对象图快照直接解析出一个配置树节点：counter=1，
+`X-Neptune -> -11|50:51:59`。独立 observation-only output-reference continuation
+则是 `X-Neptune -> -5|`；两条 continuation 的输入/guard/状态语义尚未闭合，
+所以该差异只作为 whole-request differential 的定位证据，不能作为 signer 输出。
+
+这闭合了 native result handle 的来源和 facade 返回边界，但 JNI/Java 仍由显式
+fixture 提供，因此 whole-request native differential、真实 Android JVM、fresh
+standalone signer 和线上 header acceptance 仍未验证。证据：
+[vm9_native_outer_facade_actual_child_20261027.json](evidence/vm9_native_outer_facade_actual_child_20261027.json)；
+脚本：[verify_vm9_native_outer_facade_actual_child_20261027.py](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
