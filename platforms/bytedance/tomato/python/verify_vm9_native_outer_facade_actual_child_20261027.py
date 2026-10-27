@@ -66,6 +66,8 @@ FORMATTER_WINDOWS = {
 FORMATTER_TRACE_OFFSETS = frozenset((
     0xFB520, 0xFB548,
     0xFEF94, 0xFEFBC,
+    0xFB5DC, 0xFEE00,
+    0xF83F8, 0xF8400, 0xF8404, 0xF8554, 0xF858C,
 ))
 
 
@@ -1301,6 +1303,13 @@ def main() -> None:
         "fresh_standalone_signer_verified": False,
         "online_header_acceptance_verified": False,
         "formatter_bytecode_static": _decode_formatter_bytecode(args.library),
+        "formatter_path_observed_offsets_each": [
+            sorted({
+                event["bytecode_offset"]
+                for event in case["vm_bytecode_window_events"]
+            })
+            for case in rows
+        ],
         "interpretation": (
             "The outer getter's actual first child is retained on the same Unicorn "
             "CPU and used as the normal facade receiver.  The child vtable and "

@@ -6433,7 +6433,11 @@ continuation 中保存 formatter 前后的 VM 游标、字节码字和 32 个虚
 字节码路径内嵌的有符号立即数，不是 Java array、JNI 转换或外部输入槽差异。
 
 动态窗口只保留候选窗口内去重后的 VM 游标事件，完整槽数组仍在证据 JSON 中保存；
-它用于复核槽来源，不把 `-11` 解释为已闭合的 signer 语义。最终树继续保留
+实际-facade 路径的游标顺序为 `0xfb520 → 0xfb548 → 0xfb5dc → 0xfee00 →
+0xfef94 → 0xfefbc`，因此 `-7` 与 `-11` 是同一次 continuation 中先后生成的
+两个值，并非两个输入槽的二选一分支。独立 output-reference 的 `-5` 仍在
+`0xf8404 → 0xf8554 → 0xf858c` guard 路径；该 guard 路径没有出现在 actual-facade
+轨迹中。它用于复核槽来源，不把 `-11` 解释为已闭合的 signer 语义。最终树继续保留
 `-11|50:51:59`，与独立 `-5|` output-reference continuation 的状态差异仍未闭合。
 证据和复现脚本仍为：
 [vm9_native_outer_facade_actual_child_20261027.json](evidence/vm9_native_outer_facade_actual_child_20261027.json)；

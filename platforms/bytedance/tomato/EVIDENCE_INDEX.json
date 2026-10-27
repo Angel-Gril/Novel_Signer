@@ -9814,6 +9814,11 @@
       "time_string": "50:51:59",
       "window_events_captured_each": true
     },
+    "formatter_path_observed_offsets_each": [
+      ["0xfb520", "0xfb548", "0xfb5dc", "0xfee00", "0xfef94", "0xfefbc"],
+      ["0xfb520", "0xfb548", "0xfb5dc", "0xfee00", "0xfef94", "0xfefbc"]
+    ],
+    "formatter_path_transition": "0xfb5dc -> 0xfee00 -> 0xfef94; guard path 0xf8404/0xf8554/0xf858c is absent from this actual-facade continuation",
     "facade_native_tree_kept_value": -11,
     "whole_request_native_differential_verified": false,
     "fresh_standalone_signer_verified": false,
