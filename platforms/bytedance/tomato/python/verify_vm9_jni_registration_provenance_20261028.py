@@ -1,4 +1,4 @@
-"""Verify the JNI registration and Java tag-to-entry provenance boundary.
+"""Verify JNI registration and Java tag-to-entry provenance boundaries.
 
 This is a read-only provenance check.  It combines pinned ELF instruction
 facts with the decompiled Java call sites and a bounded historical unidbg
@@ -6,9 +6,9 @@ capture.  The capture is used only for registration/class/signature/offset
 markers; request URLs, headers, identifiers and returned values are never
 copied into the evidence record.
 
-The result closes ownership of the JNI entry function and the public signing
-tag.  It does not claim a live Android JVM, a complete request differential,
-or a fresh signer result.
+The result closes ownership of the JNI entry function and static Java provenance
+for the public signing and frameSign tags. It does not claim a live Android JVM,
+a complete request differential, or a fresh signer result.
 """
 from __future__ import annotations
 
@@ -29,6 +29,7 @@ REGISTER_CALLSITE = 0x26E514
 REGISTER_METHOD_SLOT = 0xB8
 REGISTER_COUNT = 1
 TAG_SIGN = 0x3000001
+TAG_FRAME_SIGN = 0x200000A
 SIGNATURE = "a(IIJLjava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;"
 
 
@@ -126,9 +127,10 @@ def verify_elf(library: Path) -> dict:
     }
 
 
-def verify_sources(r4: Path, y2: Path) -> dict:
+def verify_sources(r4: Path, y2: Path, core: Path) -> dict:
     r4_text = r4.read_text(encoding="utf-8")
     y2_text = y2.read_text(encoding="utf-8")
+    core_text = core.read_text(encoding="utf-8")
     required_r4 = (
         "onCallToAddSecurityFactor",
         "y2.a(50331649, 0, this.a.a, str",
@@ -137,15 +139,25 @@ def verify_sources(r4: Path, y2: Path) -> dict:
     required_y2 = (
         "public static native Object a(int i, int i2, long j, String str, Object obj);",
     )
+    required_core = (
+        "public final java.util.Map frameSign(java.lang.String str, int i)",
+        "java.lang.String[] strArr = (java.lang.String[]) ms.bd.c.y2.a(33554442, i, this.a, str, (java.lang.Object) null);",
+        "if ((strArr instanceof java.lang.String[]) && strArr.length % 2 == 0)",
+    )
     if any(fragment not in r4_text for fragment in required_r4):
         raise AssertionError("r4 signing callsite changed")
     if any(fragment not in y2_text for fragment in required_y2):
         raise AssertionError("y2 native declaration changed")
+    if any(fragment not in core_text for fragment in required_core):
+        raise AssertionError("core frameSign callsite changed")
     return {
         "r4": {"basename": r4.name, "sha256": sha256_file(r4)},
         "y2": {"basename": y2.name, "sha256": sha256_file(y2)},
+        "core": {"basename": core.name, "sha256": sha256_file(core)},
         "signing_tag": hex(TAG_SIGN),
         "tag_callsite_verified": True,
+        "frame_sign_tag": hex(TAG_FRAME_SIGN),
+        "frame_sign_callsite_verified": True,
         "native_declaration_verified": True,
         "input_roles": {
             "tag": "int i",
@@ -153,6 +165,14 @@ def verify_sources(r4: Path, y2: Path) -> dict:
             "handle": "long j",
             "url": "String str",
             "extra": "Object obj (String[] header pairs at signing callsite)",
+            "frame_sign": {
+                "tag": "0x200000a",
+                "type": "int i",
+                "handle": "long this.a",
+                "url": "String str",
+                "extra": "null Object",
+                "return": "String[] key/value pairs converted to Map",
+            },
         },
     }
 
@@ -181,14 +201,14 @@ def verify_capture(capture: Path) -> dict:
     }
 
 
-def verify(library: Path, r4: Path, y2: Path, capture: Path) -> dict:
+def verify(library: Path, r4: Path, y2: Path, core: Path, capture: Path) -> dict:
     elf = verify_elf(library)
-    sources = verify_sources(r4, y2)
+    sources = verify_sources(r4, y2, core)
     dynamic = verify_capture(capture)
     return {
-        "schema": "vm9-jni-registration-provenance-20261028-v1",
+        "schema": "vm9-jni-registration-provenance-20261028-v2",
         "evidence_date": "2026-10-28",
-        "evidence_label": "JNI_OnLoad RegisterNatives entry and signing-tag provenance",
+        "evidence_label": "JNI_OnLoad RegisterNatives entry and Java tag provenance",
         "elf": elf,
         "java_sources": sources,
         "bounded_capture": dynamic,
@@ -199,6 +219,8 @@ def verify(library: Path, r4: Path, y2: Path, capture: Path) -> dict:
             "registered_signature_verified": True,
             "entry_offset_verified": True,
             "signing_tag_to_entry_verified": True,
+            "frame_sign_tag_to_entry_verified": True,
+            "frame_sign_dynamic_capture_verified": False,
             "actual_jni_provider_verified": False,
             "live_android_jvm_verified": False,
             "whole_request_native_python_differential_verified": False,
@@ -210,9 +232,12 @@ def verify(library: Path, r4: Path, y2: Path, capture: Path) -> dict:
             "constructs one JNINativeMethod whose function pointer is image+0x26e684 "
             "and calls the JNIEnv function-table slot +0xb8 (RegisterNatives). The "
             "Java r4 callsite supplies tag 0x3000001 and the same URL/header-pair "
-            "argument shape. The bounded unidbg capture independently reports class "
+            "argument shape; core.c.frameSign supplies tag 0x200000a to the same "
+            "native declaration and converts a String[] key/value result to a Map. "
+            "The bounded unidbg capture independently reports class "
             "ms/bd/c/m, the exact native signature and the +0x26e684 entry. This closes "
-            "JNI entry ownership and tag provenance only; providers, live JVM behavior, "
+            "JNI entry ownership and Java-to-entry tag provenance only; the frameSign "
+            "tag has no dynamic marker in this capture. Providers, live JVM behavior, "
             "whole-request equivalence and signer acceptance remain open."
         ),
     }
@@ -223,16 +248,18 @@ def main() -> None:
     parser.add_argument("--library", type=Path, required=True)
     parser.add_argument("--r4-source", type=Path, required=True)
     parser.add_argument("--y2-source", type=Path, required=True)
+    parser.add_argument("--core-source", type=Path, required=True)
     parser.add_argument("--capture-log", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    report = verify(args.library, args.r4_source, args.y2_source, args.capture_log)
+    report = verify(args.library, args.r4_source, args.y2_source, args.core_source, args.capture_log)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({
         "entry_offset": report["elf"]["entry_offset"],
         "jni_onload": report["elf"]["jni_onload_export"]["offset"],
         "signing_tag": report["java_sources"]["signing_tag"],
+        "frame_sign_tag": report["java_sources"]["frame_sign_tag"],
         "capture_markers": sum(report["bounded_capture"]["markers"].values()),
         "output": str(args.output),
     }, ensure_ascii=False))

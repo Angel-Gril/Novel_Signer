@@ -6,12 +6,14 @@
 表确认 `JNI_OnLoad=+0x27b41c`；注册路径静态构造一个 `JNINativeMethod`，把
 `image+0x26e684` 写入函数指针槽，并通过 JNIEnv 函数表 `+0xb8` 调用
 `RegisterNatives`。`r4.onCallToAddSecurityFactor` 的 Java 代码明确以
-`tag=0x3000001` 调用 `y2.a(int,int,long,String,Object)`，同一入口的参数重排
-也逐条由原始指令验证。
+`tag=0x3000001` 调用 `y2.a(int,int,long,String,Object)`；`core.c.frameSign`
+也明确以 `tag=0x200000A` 调用同一声明，并把 `String[]` 键值对转换为 `Map`。
+同一入口的参数重排逐条由原始指令验证。
 
-现有 bounded unidbg 捕获只提取注册类、签名、入口和 tag 标记，不写入 URL、header、
-设备标识或返回值；六个标记全部命中。该轮闭合的是 JNI entry ownership 和 signing
-tag provenance，不等同于 actual JNI provider、真实 Android JVM、whole-request
+现有 bounded unidbg 捕获只提取注册类、签名、入口和 `0x3000001` 标记，不写入 URL、
+header、设备标识或返回值；六个标记全部命中。`0x200000A` 当前只有 Java 静态调用链
+证据，没有动态捕获标记。该轮闭合的是 JNI entry ownership 和 Java-to-entry tag
+provenance，不等同于 actual JNI provider、真实 Android JVM、whole-request
 native/Python differential、fresh standalone signer 或线上 acceptance。
 
 证据：[JNI registration provenance](evidence/vm9_jni_registration_provenance_20261028.json)；

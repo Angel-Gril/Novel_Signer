@@ -3,9 +3,10 @@
 JNI registration provenance (2026-10-28): the pinned ELF exports `JNI_OnLoad` at
 `+0x27b41c`; its one-entry `JNINativeMethod` stores `image+0x26e684` and calls
 the JNIEnv function-table slot `+0xb8` (`RegisterNatives`). The Java `r4` callsite
-supplies signing tag `0x3000001` to the same native declaration, and a bounded
-unidbg capture reports class `ms/bd/c/m`, the exact signature and the
-`+0x26e684` lookup. This closes JNI entry ownership and tag provenance only;
+supplies signing tag `0x3000001`, while `core.c.frameSign` supplies `0x200000A`,
+to the same native declaration. A bounded unidbg capture reports class `ms/bd/c/m`,
+the exact signature and the `+0x26e684` lookup; it contains no dynamic `frameSign`
+marker. This closes JNI entry ownership and Java-to-entry tag provenance only;
 the JNI provider, live Android JVM, whole-request differential, fresh signer and
 online acceptance remain unverified. See [evidence](evidence/vm9_jni_registration_provenance_20261028.json)
 and [verifier](python/verify_vm9_jni_registration_provenance_20261028.py).

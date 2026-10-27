@@ -1,7 +1,7 @@
 {
-  "schema": "vm9-jni-registration-provenance-20261028-v1",
+  "schema": "vm9-jni-registration-provenance-20261028-v2",
   "evidence_date": "2026-10-28",
-  "evidence_label": "JNI_OnLoad RegisterNatives entry and signing-tag provenance",
+  "evidence_label": "JNI_OnLoad RegisterNatives entry and Java tag provenance",
   "elf": {
     "sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
     "jni_onload_export": {
@@ -88,15 +88,29 @@
       "basename": "y2.java",
       "sha256": "ca64388c288171fabc9f646f081aba007780492d7855c8eb08d8b93145fe6d1d"
     },
+    "core": {
+      "basename": "c.java",
+      "sha256": "fb143c74d7b82731af3b5833c93b06d5884e4aba20163dd54b330e09ee48c46a"
+    },
     "signing_tag": "0x3000001",
     "tag_callsite_verified": true,
+    "frame_sign_tag": "0x200000a",
+    "frame_sign_callsite_verified": true,
     "native_declaration_verified": true,
     "input_roles": {
       "tag": "int i",
       "type": "int i2",
       "handle": "long j",
       "url": "String str",
-      "extra": "Object obj (String[] header pairs at signing callsite)"
+      "extra": "Object obj (String[] header pairs at signing callsite)",
+      "frame_sign": {
+        "tag": "0x200000a",
+        "type": "int i",
+        "handle": "long this.a",
+        "url": "String str",
+        "extra": "null Object",
+        "return": "String[] key/value pairs converted to Map"
+      }
     }
   },
   "bounded_capture": {
@@ -119,11 +133,13 @@
     "registered_signature_verified": true,
     "entry_offset_verified": true,
     "signing_tag_to_entry_verified": true,
+    "frame_sign_tag_to_entry_verified": true,
+    "frame_sign_dynamic_capture_verified": false,
     "actual_jni_provider_verified": false,
     "live_android_jvm_verified": false,
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
   },
-  "interpretation": "The pinned ELF exports JNI_OnLoad at +0x27b41c. Its registration path constructs one JNINativeMethod whose function pointer is image+0x26e684 and calls the JNIEnv function-table slot +0xb8 (RegisterNatives). The Java r4 callsite supplies tag 0x3000001 and the same URL/header-pair argument shape. The bounded unidbg capture independently reports class ms/bd/c/m, the exact native signature and the +0x26e684 entry. This closes JNI entry ownership and tag provenance only; providers, live JVM behavior, whole-request equivalence and signer acceptance remain open."
+  "interpretation": "The pinned ELF exports JNI_OnLoad at +0x27b41c. Its registration path constructs one JNINativeMethod whose function pointer is image+0x26e684 and calls the JNIEnv function-table slot +0xb8 (RegisterNatives). The Java r4 callsite supplies tag 0x3000001 and the same URL/header-pair argument shape; core.c.frameSign supplies tag 0x200000a to the same native declaration and converts a String[] key/value result to a Map. The bounded unidbg capture independently reports class ms/bd/c/m, the exact native signature and the +0x26e684 entry. This closes JNI entry ownership and Java-to-entry tag provenance only; the frameSign tag has no dynamic marker in this capture. Providers, live JVM behavior, whole-request equivalence and signer acceptance remain open."
 }
