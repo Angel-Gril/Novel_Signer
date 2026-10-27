@@ -9884,5 +9884,27 @@
     "online_requests_performed": false,
     "seven_gods_signer_recovered": false,
     "interpretation": "Reference project covers a_bogus, bd-ticket-guard, x-tt-session-dtrait, x-secsdk-web-signature, and legacy live X-Bogus; it does not provide the six native seven-gods headers."
+  },
+  "vm9_request_output_reference_20261027_rerun": {
+    "path": "evidence/vm9_request_output_reference_20261027_rerun.json",
+    "verifier": "python/verify_vm9_request_output_reference_20261026.py",
+    "schema": "vm9-request-output-reference-fresh-20261026-v2",
+    "evidence_label": "Fresh output-reference rerun with request ABI/x3 transition trace",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "request_abi_trace_each": true,
+    "x3_transition_trace_each": true,
+    "output_reference_x3_producer_offset": "0x27e470",
+    "output_reference_x3_producer_observed_pc": "0x27e474",
+    "output_reference_x3_source": "[0x70002400+0x08] = 0x101",
+    "diagnostic_status": -5,
+    "output_tree_nodes_each": 1,
+    "output_reference_valid_tree_verified": true,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "The rerun traces initial +0x27dd04 x3=0x138 and the +0x27e470 load from [0x70002400+0x08], observed at +0x27e474 as x3=0x101, before +0x2830c4. This is the independent continuation input producer, not a signer status."
   }
 }

@@ -42,6 +42,12 @@
         "operands": "x3, [x8, #8]"
       },
       {
+        "offset": "0x27e470",
+        "bytes": "030540f9",
+        "mnemonic": "ldr",
+        "operands": "x3, [x8, #8]"
+      },
+      {
         "offset": "0x27e6a8",
         "bytes": "20013fd6",
         "mnemonic": "blr",
@@ -143,6 +149,144 @@
         "x2": "0x138",
         "x3": "0x101",
         "x8": "0x7000ee48",
+        "x3_producer_offset": "0x27e470",
+        "x3_producer_source_address": "0x70002408",
+        "x3_producer_source_value": "0x101",
+        "x3_transition_trace": [
+          {
+            "pc_offset": "0x27dd50",
+            "event": "tracking_start",
+            "x3": "0x138",
+            "x0": "0x70001100",
+            "x1": "0x70001800",
+            "x2": "0x70001900",
+            "x8": "0xa5a5a5a5a5a5a5a5",
+            "x30": "0x7000f000"
+          },
+          {
+            "pc_offset": "0x329f4c",
+            "event": "x3_changed",
+            "previous_x3": "0x138",
+            "x3": "0x0",
+            "x0": "0x0",
+            "x1": "0x0",
+            "x2": "0x0",
+            "x8": "0x1",
+            "x30": "0x125e9f4c"
+          },
+          {
+            "pc_offset": "0x26c94c",
+            "event": "x3_changed",
+            "previous_x3": "0x0",
+            "x3": "0x1",
+            "x0": "0x0",
+            "x1": "0xffffffffffffffff",
+            "x2": "0x0",
+            "x8": "0xa5a5a5a5a5a5a5a5",
+            "x30": "0x1252c94c"
+          },
+          {
+            "pc_offset": "0x26c964",
+            "event": "x3_changed",
+            "previous_x3": "0x1",
+            "x3": "0x70003100",
+            "x0": "0x0",
+            "x1": "0x70003000",
+            "x2": "0x4000",
+            "x8": "0x4000",
+            "x30": "0x1252c964"
+          },
+          {
+            "pc_offset": "0x27de60",
+            "event": "x3_changed",
+            "previous_x3": "0x70003100",
+            "x3": "0x1253d000",
+            "x0": "0x12641b20",
+            "x1": "0x534b",
+            "x2": "0x993a",
+            "x8": "0xf",
+            "x30": "0xbe03"
+          },
+          {
+            "pc_offset": "0x27de9c",
+            "event": "x3_changed",
+            "previous_x3": "0x1253d000",
+            "x3": "0x1253df50",
+            "x0": "0x12641b20",
+            "x1": "0xa16e534b",
+            "x2": "0x5cfc993a",
+            "x8": "0xf",
+            "x30": "0xaf33be03"
+          },
+          {
+            "pc_offset": "0x27dfb0",
+            "event": "x3_changed",
+            "previous_x3": "0x1253df50",
+            "x3": "0x1253d000",
+            "x0": "0x0",
+            "x1": "0x534b",
+            "x2": "0x5cfc993a",
+            "x8": "0x356",
+            "x30": "0x1253dfa0"
+          },
+          {
+            "pc_offset": "0x27dfe0",
+            "event": "x3_changed",
+            "previous_x3": "0x1253d000",
+            "x3": "0x1253df50",
+            "x0": "0x0",
+            "x1": "0xa16e534b",
+            "x2": "0x993a",
+            "x8": "0x57020356",
+            "x30": "0xbe03"
+          },
+          {
+            "pc_offset": "0x27e1b4",
+            "event": "x3_changed",
+            "previous_x3": "0x1253df50",
+            "x3": "0x1253d000",
+            "x0": "0x70002400",
+            "x1": "0x12641b20",
+            "x2": "0x70002200",
+            "x8": "0x125430c4",
+            "x30": "0x1253e19c"
+          },
+          {
+            "pc_offset": "0x27e200",
+            "event": "x3_changed",
+            "previous_x3": "0x1253d000",
+            "x3": "0x1253df50",
+            "x0": "0x70002400",
+            "x1": "0x534b",
+            "x2": "0x993a",
+            "x8": "0x1f4",
+            "x30": "0xbe03"
+          },
+          {
+            "pc_offset": "0x26c964",
+            "event": "x3_changed",
+            "previous_x3": "0x1253df50",
+            "x3": "0x70003100",
+            "x0": "0x0",
+            "x1": "0x70003000",
+            "x2": "0x4000",
+            "x8": "0x4000",
+            "x30": "0x1252c964"
+          },
+          {
+            "pc_offset": "0x27e474",
+            "event": "x3_changed",
+            "previous_x3": "0x70003100",
+            "x3": "0x101",
+            "x0": "0x7000ee38",
+            "x1": "0x7000ee28",
+            "x2": "0x138",
+            "x8": "0x70002400",
+            "x30": "0x1253e45c",
+            "source_address": "0x70002408",
+            "source_value": "0x101"
+          }
+        ],
         "semantic_note": "independent output-reference continuation supplies x3=0x101 at the same VM wrapper entry"
       }
     },
@@ -194,6 +338,144 @@
         "x2": "0x138",
         "x3": "0x101",
         "x8": "0x7000ee48",
+        "x3_producer_offset": "0x27e470",
+        "x3_producer_source_address": "0x70002408",
+        "x3_producer_source_value": "0x101",
+        "x3_transition_trace": [
+          {
+            "pc_offset": "0x27dd50",
+            "event": "tracking_start",
+            "x3": "0x138",
+            "x0": "0x70001100",
+            "x1": "0x70001800",
+            "x2": "0x70001900",
+            "x8": "0xa5a5a5a5a5a5a5a5",
+            "x30": "0x7000f000"
+          },
+          {
+            "pc_offset": "0x329f4c",
+            "event": "x3_changed",
+            "previous_x3": "0x138",
+            "x3": "0x0",
+            "x0": "0x0",
+            "x1": "0x0",
+            "x2": "0x0",
+            "x8": "0x1",
+            "x30": "0x775c52ef4c"
+          },
+          {
+            "pc_offset": "0x26c94c",
+            "event": "x3_changed",
+            "previous_x3": "0x0",
+            "x3": "0x1",
+            "x0": "0x0",
+            "x1": "0xffffffffffffffff",
+            "x2": "0x0",
+            "x8": "0xa5a5a5a5a5a5a5a5",
+            "x30": "0x775c47194c"
+          },
+          {
+            "pc_offset": "0x26c964",
+            "event": "x3_changed",
+            "previous_x3": "0x1",
+            "x3": "0x70003100",
+            "x0": "0x0",
+            "x1": "0x70003000",
+            "x2": "0x4000",
+            "x8": "0x4000",
+            "x30": "0x775c471964"
+          },
+          {
+            "pc_offset": "0x27de60",
+            "event": "x3_changed",
+            "previous_x3": "0x70003100",
+            "x3": "0x775c482000",
+            "x0": "0x775c586b20",
+            "x1": "0x534b",
+            "x2": "0x993a",
+            "x8": "0xf",
+            "x30": "0xbe03"
+          },
+          {
+            "pc_offset": "0x27de9c",
+            "event": "x3_changed",
+            "previous_x3": "0x775c482000",
+            "x3": "0x775c482f50",
+            "x0": "0x775c586b20",
+            "x1": "0xa16e534b",
+            "x2": "0x5cfc993a",
+            "x8": "0xf",
+            "x30": "0xaf33be03"
+          },
+          {
+            "pc_offset": "0x27dfb0",
+            "event": "x3_changed",
+            "previous_x3": "0x775c482f50",
+            "x3": "0x775c482000",
+            "x0": "0x0",
+            "x1": "0x534b",
+            "x2": "0x5cfc993a",
+            "x8": "0x356",
+            "x30": "0x775c482fa0"
+          },
+          {
+            "pc_offset": "0x27dfe0",
+            "event": "x3_changed",
+            "previous_x3": "0x775c482000",
+            "x3": "0x775c482f50",
+            "x0": "0x0",
+            "x1": "0xa16e534b",
+            "x2": "0x993a",
+            "x8": "0x57020356",
+            "x30": "0xbe03"
+          },
+          {
+            "pc_offset": "0x27e1b4",
+            "event": "x3_changed",
+            "previous_x3": "0x775c482f50",
+            "x3": "0x775c482000",
+            "x0": "0x70002400",
+            "x1": "0x775c586b20",
+            "x2": "0x70002200",
+            "x8": "0x775c4880c4",
+            "x30": "0x775c48319c"
+          },
+          {
+            "pc_offset": "0x27e200",
+            "event": "x3_changed",
+            "previous_x3": "0x775c482000",
+            "x3": "0x775c482f50",
+            "x0": "0x70002400",
+            "x1": "0x534b",
+            "x2": "0x993a",
+            "x8": "0x1f4",
+            "x30": "0xbe03"
+          },
+          {
+            "pc_offset": "0x26c964",
+            "event": "x3_changed",
+            "previous_x3": "0x775c482f50",
+            "x3": "0x70003100",
+            "x0": "0x0",
+            "x1": "0x70003000",
+            "x2": "0x4000",
+            "x8": "0x4000",
+            "x30": "0x775c471964"
+          },
+          {
+            "pc_offset": "0x27e474",
+            "event": "x3_changed",
+            "previous_x3": "0x70003100",
+            "x3": "0x101",
+            "x0": "0x7000ee38",
+            "x1": "0x7000ee28",
+            "x2": "0x138",
+            "x8": "0x70002400",
+            "x30": "0x775c48345c",
+            "source_address": "0x70002408",
+            "source_value": "0x101"
+          }
+        ],
         "semantic_note": "independent output-reference continuation supplies x3=0x101 at the same VM wrapper entry"
       }
     }
@@ -201,9 +483,12 @@
   "same_wrapper_entry_observed": true,
   "facade_x3_is_native_header_pointer": true,
   "output_reference_x3_is_0x101": true,
+  "output_reference_x3_producer_offset": "0x27e470",
+  "output_reference_x3_producer_observed_pc": "0x27e474",
+  "output_reference_x3_source": "[0x70002400+0x08] = 0x101",
   "x3_roles_are_equivalent": false,
   "whole_request_native_differential_verified": false,
   "fresh_standalone_signer_verified": false,
   "online_header_acceptance_verified": false,
-  "interpretation": "The normal facade's +0x27e6a8 caller loads x3 from the native header vector object at receiver+0x20, then +0x2830c4 saves that value at argument-array offset +0x20 before entering +0x168324.  The VM's direct x3 register is a separate image-relative constant, while its user argument remains in the packed array.  The independent output-reference continuation reaches the same +0x2830c4 wrapper with x3=0x101, so its x3 is a different input role.  This explains why the -5 guard path cannot be selected by treating 0x101 as the facade header-vector pointer; it does not close signer semantics."
+  "interpretation": "The normal facade's +0x27e6a8 caller loads x3 from the native header vector object at receiver+0x20, then +0x2830c4 saves that value at argument-array offset +0x20 before entering +0x168324.  The VM's direct x3 register is a separate image-relative constant, while its user argument remains in the packed array.  The independent output-reference continuation first loads x3 from [0x70002400+0x08] at +0x27e470 (observed on the following PC +0x27e474), yielding 0x101 before reaching the same +0x2830c4 wrapper.  Its x3 is therefore a different input role.  This explains why the -5 guard path cannot be selected by treating 0x101 as the facade header-vector pointer; it does not close signer semantics."
 }

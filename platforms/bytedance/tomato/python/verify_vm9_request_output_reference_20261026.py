@@ -145,6 +145,16 @@ def static_evidence(library):
 def run(library, libc, image, handlers):
     original_native, original_count = continuation.bootstrap.native, continuation.TABLE_PAGE_COUNT
     holder, callbacks, output_writes, status_writes, insertions, formats = {}, [], [], [], [], []
+    x3_transition_trace = []
+    x3_tracking = {"active": False, "last": None}
+    request_abi_trace = []
+    request_abi_offsets = frozenset((
+        0x27DD04, 0x27DD24, 0x27DD50, 0x27DD70, 0x27DD80,
+        0x27DD84, 0x27DDB0, 0x27E660, 0x27E664, 0x27E668,
+        0x27E674, 0x27E688, 0x27E694, 0x27E698, 0x27E69C,
+        0x27E6A0, 0x27E6A4, 0x27E6A8, 0x2830C4, 0x283100,
+        0x28310C, 0x283114, 0x283130, 0x168324,
+    ))
     history = deque(maxlen=20)
     root_history = deque(maxlen=48)
     guard_writes = []
@@ -176,6 +186,53 @@ def run(library, libc, image, handlers):
 
         def code(c, address, _size, _user):
             offset = address - image
+            if offset == 0x27DD50:
+                x3_tracking["active"] = True
+                x3_tracking["last"] = _reg(c, 3)
+                x3_transition_trace.append({
+                    "pc_offset": hex(offset), "event": "tracking_start",
+                    "x3": hex(_reg(c, 3)), "x0": hex(_reg(c, 0)),
+                    "x1": hex(_reg(c, 1)), "x2": hex(_reg(c, 2)),
+                    "x8": hex(_reg(c, 8)), "x30": hex(_reg(c, 30)),
+                })
+            elif x3_tracking["active"]:
+                current = _reg(c, 3)
+                if current != x3_tracking["last"] and len(x3_transition_trace) < 256:
+                    x3_transition_trace.append({
+                        "pc_offset": hex(offset), "event": "x3_changed",
+                        "previous_x3": hex(x3_tracking["last"]),
+                        "x3": hex(current), "x0": hex(_reg(c, 0)),
+                        "x1": hex(_reg(c, 1)), "x2": hex(_reg(c, 2)),
+                        "x8": hex(_reg(c, 8)), "x30": hex(_reg(c, 30)),
+                    })
+                    x3_tracking["last"] = current
+                    if offset == 0x27E474:
+                        try:
+                            x8 = _reg(c, 8)
+                            x3_transition_trace[-1]["source_address"] = hex(x8 + 8)
+                            x3_transition_trace[-1]["source_value"] = hex(_u(c, x8 + 8))
+                        except Exception:
+                            x3_transition_trace[-1]["source_address"] = None
+                            x3_transition_trace[-1]["source_value"] = None
+                if offset == 0x2830C4:
+                    x3_tracking["active"] = False
+            if offset in request_abi_offsets and len(request_abi_trace) < 512:
+                row = {
+                    "pc_offset": hex(offset),
+                    "x0": hex(_reg(c, 0)), "x1": hex(_reg(c, 1)),
+                    "x2": hex(_reg(c, 2)), "x3": hex(_reg(c, 3)),
+                    "x8": hex(_reg(c, 8)), "x30": hex(_reg(c, 30)),
+                    "sp": hex(c.reg_read(arm.UC_ARM64_REG_SP)),
+                }
+                try:
+                    sp = c.reg_read(arm.UC_ARM64_REG_SP)
+                    row["stack_words"] = {
+                        hex(displacement): hex(_u(c, sp + displacement))
+                        for displacement in (8, 0x18, 0x1C, 0x20, 0x28, 0x38)
+                    }
+                except Exception:
+                    row["stack_words"] = None
+                request_abi_trace.append(row)
             if offset in handlers:
                 # Native x19 addresses the current bytecode-PC slot, rather
                 # than containing the bytecode PC itself.
@@ -297,6 +354,8 @@ def run(library, libc, image, handlers):
     assert holder["guard_before_native_bootstrap"] == bytes(8).hex() and guard_writes
     return {"image_base": hex(image), "continuation": result,
             "request_entry": holder["request_entry"], "output_tree": tree,
+            "request_abi_trace": request_abi_trace,
+            "x3_transition_trace": x3_transition_trace,
             "output_reference_writes": output_writes, "callback_ledger": callbacks,
             "format_calls": formats, "tree_insertions": insertions,
             "negative_status_writes": status_writes,
@@ -325,8 +384,8 @@ def main():
     for image in continuation.BASES:
         cases.append(run(args.library, args.libc, image, handlers))
         print("native output reference", hex(image), "valid tree; one diagnostic entry", flush=True)
-    report = {"schema": "vm9-request-output-reference-fresh-20261026-v1",
-              "evidence_date": "2026-10-26", "sample_sha256": oracle.LIBRARY_SHA256,
+    report = {"schema": "vm9-request-output-reference-fresh-20261026-v2",
+              "evidence_date": "2026-10-28", "sample_sha256": oracle.LIBRARY_SHA256,
               "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
               "static": static, "cases": cases,
               "fresh_native_continuations": len(cases), "observation_only": True,
@@ -338,6 +397,16 @@ def main():
               "fresh_standalone_signer_verified": False,
               "whole_request_native_differential_verified": False,
               "online_header_acceptance_verified": False,
+              "request_abi_trace_each": [
+                  {"image_base": case["image_base"],
+                   "trace": case["request_abi_trace"]}
+                  for case in cases
+              ],
+              "x3_transition_trace_each": [
+                  {"image_base": case["image_base"],
+                   "trace": case["x3_transition_trace"]}
+                  for case in cases
+              ],
               "interpretation": "The continuation returns an allocated owning configuration-tree "
                   "reference with counter one. Its sole X-Neptune entry is constructed by the "
                   "signed-int32/C-string formatter with status -5 and an empty string; no other "

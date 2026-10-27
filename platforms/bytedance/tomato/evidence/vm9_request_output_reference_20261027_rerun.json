@@ -1,6 +1,6 @@
 {
-  "schema": "vm9-request-output-reference-fresh-20261026-v1",
-  "evidence_date": "2026-10-26",
+  "schema": "vm9-request-output-reference-fresh-20261026-v2",
+  "evidence_date": "2026-10-28",
   "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
   "static": {
@@ -147,6 +147,377 @@
         ],
         "parent_links_count_order_and_extrema_valid": true
       },
+      "request_abi_trace": [
+        {
+          "pc_offset": "0x27dd04",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0x70001a00",
+          "x30": "0x7000f000",
+          "sp": "0x7000ef00",
+          "stack_words": {
+            "0x8": "0xa5a5a5a5a5a5a5a5",
+            "0x18": "0xa5a5a5a5a5a5a5a5",
+            "0x1c": "0xa5a5a5a5a5a5a5a5",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x27dd24",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0x70001a00",
+          "x30": "0x7000f000",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0xa5a5a5a5a5a5a5a5",
+            "0x18": "0xa5a5a5a5a5a5a5a5",
+            "0x1c": "0xa5a5a5a5a5a5a5a5",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x27dd50",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x7000f000",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138a5a5a5a5",
+            "0x1c": "0xa5a5a5a500000138",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x27dd70",
+          "x0": "0x0",
+          "x1": "0x70001208",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x1253dd6c",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138a5a5a5a5",
+            "0x1c": "0xa5a5a5a500000138",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0x70001100"
+          }
+        },
+        {
+          "pc_offset": "0x27dd80",
+          "x0": "0x70001a00",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x1253dd6c",
+          "sp": "0x7000ed60",
+          "stack_words": {
+            "0x8": "0x0",
+            "0x18": "0x70001200",
+            "0x1c": "0x7000eea000000000",
+            "0x20": "0x7000eea0",
+            "0x28": "0x1253dd6c",
+            "0x38": "0x1253dd6c"
+          }
+        },
+        {
+          "pc_offset": "0x27dd84",
+          "x0": "0x70001a00",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x1253dd6c",
+          "sp": "0x7000ed60",
+          "stack_words": {
+            "0x8": "0x0",
+            "0x18": "0x70001200",
+            "0x1c": "0x7000eea000000000",
+            "0x20": "0x7000eea0",
+            "0x28": "0x1253dd6c",
+            "0x38": "0x1253dd6c"
+          }
+        },
+        {
+          "pc_offset": "0x2830c4",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x3": "0x101",
+          "x8": "0x7000ee48",
+          "x30": "0x1253e47c",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138a5a5a5a5",
+            "0x1c": "0x125430c400000138",
+            "0x20": "0x125430c4",
+            "0x28": "0x70001a00",
+            "0x38": "0x70001100"
+          }
+        },
+        {
+          "pc_offset": "0x283100",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x1253e47c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0xa5a5a5a5a5a5a5a5",
+            "0x1c": "0xa5a5a5a5a5a5a5a5",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x28310c",
+          "x0": "0x123b7000",
+          "x1": "0x7000ee28",
+          "x2": "0x1261e000",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x1253e47c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0xa5a5a5a5a5a5a5a5",
+            "0x1c": "0x138a5a5a5a5",
+            "0x20": "0xa5a5a5a500000138",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x283114",
+          "x0": "0x123b7720",
+          "x1": "0x7000ee28",
+          "x2": "0x1261e000",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x1253e47c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xa5a5a5a500000138",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x283130",
+          "x0": "0x123b7720",
+          "x1": "0x7000d668",
+          "x2": "0x1261e230",
+          "x3": "0x1261e690",
+          "x8": "0x7000ed70",
+          "x30": "0x1253e47c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xa5a5a5a500000138",
+            "0x28": "0x101",
+            "0x38": "0x7000ed70"
+          }
+        },
+        {
+          "pc_offset": "0x168324",
+          "x0": "0x123b7720",
+          "x1": "0x7000d668",
+          "x2": "0x1261e230",
+          "x3": "0x1261e690",
+          "x8": "0x7000ed70",
+          "x30": "0x12543134",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xa5a5a5a500000138",
+            "0x28": "0x101",
+            "0x38": "0x7000ed70"
+          }
+        },
+        {
+          "pc_offset": "0x168324",
+          "x0": "0x12359020",
+          "x1": "0x7000d120",
+          "x2": "0x1261b650",
+          "x3": "0x1261b660",
+          "x8": "0x12517050",
+          "x30": "0x12516f34",
+          "sp": "0x7000d120",
+          "stack_words": {
+            "0x8": "0x795a07c0",
+            "0x18": "0x7000d4a0",
+            "0x1c": "0x1254598800000000",
+            "0x20": "0x12545988",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        }
+      ],
+      "x3_transition_trace": [
+        {
+          "pc_offset": "0x27dd50",
+          "event": "tracking_start",
+          "x3": "0x138",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x7000f000"
+        },
+        {
+          "pc_offset": "0x329f4c",
+          "event": "x3_changed",
+          "previous_x3": "0x138",
+          "x3": "0x0",
+          "x0": "0x0",
+          "x1": "0x0",
+          "x2": "0x0",
+          "x8": "0x1",
+          "x30": "0x125e9f4c"
+        },
+        {
+          "pc_offset": "0x26c94c",
+          "event": "x3_changed",
+          "previous_x3": "0x0",
+          "x3": "0x1",
+          "x0": "0x0",
+          "x1": "0xffffffffffffffff",
+          "x2": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x1252c94c"
+        },
+        {
+          "pc_offset": "0x26c964",
+          "event": "x3_changed",
+          "previous_x3": "0x1",
+          "x3": "0x70003100",
+          "x0": "0x0",
+          "x1": "0x70003000",
+          "x2": "0x4000",
+          "x8": "0x4000",
+          "x30": "0x1252c964"
+        },
+        {
+          "pc_offset": "0x27de60",
+          "event": "x3_changed",
+          "previous_x3": "0x70003100",
+          "x3": "0x1253d000",
+          "x0": "0x12641b20",
+          "x1": "0x534b",
+          "x2": "0x993a",
+          "x8": "0xf",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x27de9c",
+          "event": "x3_changed",
+          "previous_x3": "0x1253d000",
+          "x3": "0x1253df50",
+          "x0": "0x12641b20",
+          "x1": "0xa16e534b",
+          "x2": "0x5cfc993a",
+          "x8": "0xf",
+          "x30": "0xaf33be03"
+        },
+        {
+          "pc_offset": "0x27dfb0",
+          "event": "x3_changed",
+          "previous_x3": "0x1253df50",
+          "x3": "0x1253d000",
+          "x0": "0x0",
+          "x1": "0x534b",
+          "x2": "0x5cfc993a",
+          "x8": "0x356",
+          "x30": "0x1253dfa0"
+        },
+        {
+          "pc_offset": "0x27dfe0",
+          "event": "x3_changed",
+          "previous_x3": "0x1253d000",
+          "x3": "0x1253df50",
+          "x0": "0x0",
+          "x1": "0xa16e534b",
+          "x2": "0x993a",
+          "x8": "0x57020356",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x27e1b4",
+          "event": "x3_changed",
+          "previous_x3": "0x1253df50",
+          "x3": "0x1253d000",
+          "x0": "0x70002400",
+          "x1": "0x12641b20",
+          "x2": "0x70002200",
+          "x8": "0x125430c4",
+          "x30": "0x1253e19c"
+        },
+        {
+          "pc_offset": "0x27e200",
+          "event": "x3_changed",
+          "previous_x3": "0x1253d000",
+          "x3": "0x1253df50",
+          "x0": "0x70002400",
+          "x1": "0x534b",
+          "x2": "0x993a",
+          "x8": "0x1f4",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x26c964",
+          "event": "x3_changed",
+          "previous_x3": "0x1253df50",
+          "x3": "0x70003100",
+          "x0": "0x0",
+          "x1": "0x70003000",
+          "x2": "0x4000",
+          "x8": "0x4000",
+          "x30": "0x1252c964"
+        },
+        {
+          "pc_offset": "0x27e474",
+          "event": "x3_changed",
+          "previous_x3": "0x70003100",
+          "x3": "0x101",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x8": "0x70002400",
+          "x30": "0x1253e45c",
+          "source_address": "0x70002408",
+          "source_value": "0x101"
+        }
+      ],
       "output_reference_writes": [
         {
           "pc_offset": "0x163e04",
@@ -1820,6 +2191,377 @@
         ],
         "parent_links_count_order_and_extrema_valid": true
       },
+      "request_abi_trace": [
+        {
+          "pc_offset": "0x27dd04",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0x70001a00",
+          "x30": "0x7000f000",
+          "sp": "0x7000ef00",
+          "stack_words": {
+            "0x8": "0xffffffffffffffff",
+            "0x18": "0xffffffffffffffff",
+            "0x1c": "0xffffffffffffffff",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x27dd24",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0x70001a00",
+          "x30": "0x7000f000",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0xffffffffffffffff",
+            "0x18": "0xffffffffffffffff",
+            "0x1c": "0xffffffffffffffff",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x27dd50",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x7000f000",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138ffffffff",
+            "0x1c": "0xffffffff00000138",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x27dd70",
+          "x0": "0x0",
+          "x1": "0x70001208",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x775c482d6c",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138ffffffff",
+            "0x1c": "0xffffffff00000138",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0x70001100"
+          }
+        },
+        {
+          "pc_offset": "0x27dd80",
+          "x0": "0x70001a00",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x775c482d6c",
+          "sp": "0x7000ed60",
+          "stack_words": {
+            "0x8": "0x0",
+            "0x18": "0x70001200",
+            "0x1c": "0x7000eea000000000",
+            "0x20": "0x7000eea0",
+            "0x28": "0x775c482d6c",
+            "0x38": "0x775c482d6c"
+          }
+        },
+        {
+          "pc_offset": "0x27dd84",
+          "x0": "0x70001a00",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x775c482d6c",
+          "sp": "0x7000ed60",
+          "stack_words": {
+            "0x8": "0x0",
+            "0x18": "0x70001200",
+            "0x1c": "0x7000eea000000000",
+            "0x20": "0x7000eea0",
+            "0x28": "0x775c482d6c",
+            "0x38": "0x775c482d6c"
+          }
+        },
+        {
+          "pc_offset": "0x2830c4",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x3": "0x101",
+          "x8": "0x7000ee48",
+          "x30": "0x775c48347c",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138ffffffff",
+            "0x1c": "0x5c4880c400000138",
+            "0x20": "0x775c4880c4",
+            "0x28": "0x70001a00",
+            "0x38": "0x70001100"
+          }
+        },
+        {
+          "pc_offset": "0x283100",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x775c48347c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0xffffffffffffffff",
+            "0x1c": "0xffffffffffffffff",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x28310c",
+          "x0": "0x775c2fc000",
+          "x1": "0x7000ee28",
+          "x2": "0x775c563000",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x775c48347c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0xffffffffffffffff",
+            "0x1c": "0x138ffffffff",
+            "0x20": "0xffffffff00000138",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x283114",
+          "x0": "0x775c2fc720",
+          "x1": "0x7000ee28",
+          "x2": "0x775c563000",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x775c48347c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xffffffff00000138",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x283130",
+          "x0": "0x775c2fc720",
+          "x1": "0x7000d668",
+          "x2": "0x775c563230",
+          "x3": "0x775c563690",
+          "x8": "0x7000ed70",
+          "x30": "0x775c48347c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xffffffff00000138",
+            "0x28": "0x101",
+            "0x38": "0x7000ed70"
+          }
+        },
+        {
+          "pc_offset": "0x168324",
+          "x0": "0x775c2fc720",
+          "x1": "0x7000d668",
+          "x2": "0x775c563230",
+          "x3": "0x775c563690",
+          "x8": "0x7000ed70",
+          "x30": "0x775c488134",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xffffffff00000138",
+            "0x28": "0x101",
+            "0x38": "0x7000ed70"
+          }
+        },
+        {
+          "pc_offset": "0x168324",
+          "x0": "0x775c29e020",
+          "x1": "0x7000d120",
+          "x2": "0x775c560650",
+          "x3": "0x775c560660",
+          "x8": "0x775c45c050",
+          "x30": "0x775c45bf34",
+          "sp": "0x7000d120",
+          "stack_words": {
+            "0x8": "0x795a13c0",
+            "0x18": "0x7000d4a0",
+            "0x1c": "0x5c48a98800000000",
+            "0x20": "0x775c48a988",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        }
+      ],
+      "x3_transition_trace": [
+        {
+          "pc_offset": "0x27dd50",
+          "event": "tracking_start",
+          "x3": "0x138",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x7000f000"
+        },
+        {
+          "pc_offset": "0x329f4c",
+          "event": "x3_changed",
+          "previous_x3": "0x138",
+          "x3": "0x0",
+          "x0": "0x0",
+          "x1": "0x0",
+          "x2": "0x0",
+          "x8": "0x1",
+          "x30": "0x775c52ef4c"
+        },
+        {
+          "pc_offset": "0x26c94c",
+          "event": "x3_changed",
+          "previous_x3": "0x0",
+          "x3": "0x1",
+          "x0": "0x0",
+          "x1": "0xffffffffffffffff",
+          "x2": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x775c47194c"
+        },
+        {
+          "pc_offset": "0x26c964",
+          "event": "x3_changed",
+          "previous_x3": "0x1",
+          "x3": "0x70003100",
+          "x0": "0x0",
+          "x1": "0x70003000",
+          "x2": "0x4000",
+          "x8": "0x4000",
+          "x30": "0x775c471964"
+        },
+        {
+          "pc_offset": "0x27de60",
+          "event": "x3_changed",
+          "previous_x3": "0x70003100",
+          "x3": "0x775c482000",
+          "x0": "0x775c586b20",
+          "x1": "0x534b",
+          "x2": "0x993a",
+          "x8": "0xf",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x27de9c",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482000",
+          "x3": "0x775c482f50",
+          "x0": "0x775c586b20",
+          "x1": "0xa16e534b",
+          "x2": "0x5cfc993a",
+          "x8": "0xf",
+          "x30": "0xaf33be03"
+        },
+        {
+          "pc_offset": "0x27dfb0",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482f50",
+          "x3": "0x775c482000",
+          "x0": "0x0",
+          "x1": "0x534b",
+          "x2": "0x5cfc993a",
+          "x8": "0x356",
+          "x30": "0x775c482fa0"
+        },
+        {
+          "pc_offset": "0x27dfe0",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482000",
+          "x3": "0x775c482f50",
+          "x0": "0x0",
+          "x1": "0xa16e534b",
+          "x2": "0x993a",
+          "x8": "0x57020356",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x27e1b4",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482f50",
+          "x3": "0x775c482000",
+          "x0": "0x70002400",
+          "x1": "0x775c586b20",
+          "x2": "0x70002200",
+          "x8": "0x775c4880c4",
+          "x30": "0x775c48319c"
+        },
+        {
+          "pc_offset": "0x27e200",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482000",
+          "x3": "0x775c482f50",
+          "x0": "0x70002400",
+          "x1": "0x534b",
+          "x2": "0x993a",
+          "x8": "0x1f4",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x26c964",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482f50",
+          "x3": "0x70003100",
+          "x0": "0x0",
+          "x1": "0x70003000",
+          "x2": "0x4000",
+          "x8": "0x4000",
+          "x30": "0x775c471964"
+        },
+        {
+          "pc_offset": "0x27e474",
+          "event": "x3_changed",
+          "previous_x3": "0x70003100",
+          "x3": "0x101",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x8": "0x70002400",
+          "x30": "0x775c48345c",
+          "source_address": "0x70002408",
+          "source_value": "0x101"
+        }
+      ],
       "output_reference_writes": [
         {
           "pc_offset": "0x163e04",
@@ -3393,6 +4135,764 @@
   "fresh_standalone_signer_verified": false,
   "whole_request_native_differential_verified": false,
   "online_header_acceptance_verified": false,
+  "request_abi_trace_each": [
+    {
+      "image_base": "0x122c0000",
+      "trace": [
+        {
+          "pc_offset": "0x27dd04",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0x70001a00",
+          "x30": "0x7000f000",
+          "sp": "0x7000ef00",
+          "stack_words": {
+            "0x8": "0xa5a5a5a5a5a5a5a5",
+            "0x18": "0xa5a5a5a5a5a5a5a5",
+            "0x1c": "0xa5a5a5a5a5a5a5a5",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x27dd24",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0x70001a00",
+          "x30": "0x7000f000",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0xa5a5a5a5a5a5a5a5",
+            "0x18": "0xa5a5a5a5a5a5a5a5",
+            "0x1c": "0xa5a5a5a5a5a5a5a5",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x27dd50",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x7000f000",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138a5a5a5a5",
+            "0x1c": "0xa5a5a5a500000138",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x27dd70",
+          "x0": "0x0",
+          "x1": "0x70001208",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x1253dd6c",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138a5a5a5a5",
+            "0x1c": "0xa5a5a5a500000138",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0x70001100"
+          }
+        },
+        {
+          "pc_offset": "0x27dd80",
+          "x0": "0x70001a00",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x1253dd6c",
+          "sp": "0x7000ed60",
+          "stack_words": {
+            "0x8": "0x0",
+            "0x18": "0x70001200",
+            "0x1c": "0x7000eea000000000",
+            "0x20": "0x7000eea0",
+            "0x28": "0x1253dd6c",
+            "0x38": "0x1253dd6c"
+          }
+        },
+        {
+          "pc_offset": "0x27dd84",
+          "x0": "0x70001a00",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x1253dd6c",
+          "sp": "0x7000ed60",
+          "stack_words": {
+            "0x8": "0x0",
+            "0x18": "0x70001200",
+            "0x1c": "0x7000eea000000000",
+            "0x20": "0x7000eea0",
+            "0x28": "0x1253dd6c",
+            "0x38": "0x1253dd6c"
+          }
+        },
+        {
+          "pc_offset": "0x2830c4",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x3": "0x101",
+          "x8": "0x7000ee48",
+          "x30": "0x1253e47c",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138a5a5a5a5",
+            "0x1c": "0x125430c400000138",
+            "0x20": "0x125430c4",
+            "0x28": "0x70001a00",
+            "0x38": "0x70001100"
+          }
+        },
+        {
+          "pc_offset": "0x283100",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x1253e47c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0xa5a5a5a5a5a5a5a5",
+            "0x1c": "0xa5a5a5a5a5a5a5a5",
+            "0x20": "0xa5a5a5a5a5a5a5a5",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x28310c",
+          "x0": "0x123b7000",
+          "x1": "0x7000ee28",
+          "x2": "0x1261e000",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x1253e47c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0xa5a5a5a5a5a5a5a5",
+            "0x1c": "0x138a5a5a5a5",
+            "0x20": "0xa5a5a5a500000138",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x283114",
+          "x0": "0x123b7720",
+          "x1": "0x7000ee28",
+          "x2": "0x1261e000",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x1253e47c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xa5a5a5a500000138",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        },
+        {
+          "pc_offset": "0x283130",
+          "x0": "0x123b7720",
+          "x1": "0x7000d668",
+          "x2": "0x1261e230",
+          "x3": "0x1261e690",
+          "x8": "0x7000ed70",
+          "x30": "0x1253e47c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xa5a5a5a500000138",
+            "0x28": "0x101",
+            "0x38": "0x7000ed70"
+          }
+        },
+        {
+          "pc_offset": "0x168324",
+          "x0": "0x123b7720",
+          "x1": "0x7000d668",
+          "x2": "0x1261e230",
+          "x3": "0x1261e690",
+          "x8": "0x7000ed70",
+          "x30": "0x12543134",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xa5a5a5a500000138",
+            "0x28": "0x101",
+            "0x38": "0x7000ed70"
+          }
+        },
+        {
+          "pc_offset": "0x168324",
+          "x0": "0x12359020",
+          "x1": "0x7000d120",
+          "x2": "0x1261b650",
+          "x3": "0x1261b660",
+          "x8": "0x12517050",
+          "x30": "0x12516f34",
+          "sp": "0x7000d120",
+          "stack_words": {
+            "0x8": "0x795a07c0",
+            "0x18": "0x7000d4a0",
+            "0x1c": "0x1254598800000000",
+            "0x20": "0x12545988",
+            "0x28": "0xa5a5a5a5a5a5a5a5",
+            "0x38": "0xa5a5a5a5a5a5a5a5"
+          }
+        }
+      ]
+    },
+    {
+      "image_base": "0x775c205000",
+      "trace": [
+        {
+          "pc_offset": "0x27dd04",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0x70001a00",
+          "x30": "0x7000f000",
+          "sp": "0x7000ef00",
+          "stack_words": {
+            "0x8": "0xffffffffffffffff",
+            "0x18": "0xffffffffffffffff",
+            "0x1c": "0xffffffffffffffff",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x27dd24",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0x70001a00",
+          "x30": "0x7000f000",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0xffffffffffffffff",
+            "0x18": "0xffffffffffffffff",
+            "0x1c": "0xffffffffffffffff",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x27dd50",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x3": "0x138",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x7000f000",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138ffffffff",
+            "0x1c": "0xffffffff00000138",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x27dd70",
+          "x0": "0x0",
+          "x1": "0x70001208",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x775c482d6c",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138ffffffff",
+            "0x1c": "0xffffffff00000138",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0x70001100"
+          }
+        },
+        {
+          "pc_offset": "0x27dd80",
+          "x0": "0x70001a00",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x775c482d6c",
+          "sp": "0x7000ed60",
+          "stack_words": {
+            "0x8": "0x0",
+            "0x18": "0x70001200",
+            "0x1c": "0x7000eea000000000",
+            "0x20": "0x7000eea0",
+            "0x28": "0x775c482d6c",
+            "0x38": "0x775c482d6c"
+          }
+        },
+        {
+          "pc_offset": "0x27dd84",
+          "x0": "0x70001a00",
+          "x1": "0x0",
+          "x2": "0x1",
+          "x3": "0x0",
+          "x8": "0x1",
+          "x30": "0x775c482d6c",
+          "sp": "0x7000ed60",
+          "stack_words": {
+            "0x8": "0x0",
+            "0x18": "0x70001200",
+            "0x1c": "0x7000eea000000000",
+            "0x20": "0x7000eea0",
+            "0x28": "0x775c482d6c",
+            "0x38": "0x775c482d6c"
+          }
+        },
+        {
+          "pc_offset": "0x2830c4",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x3": "0x101",
+          "x8": "0x7000ee48",
+          "x30": "0x775c48347c",
+          "sp": "0x7000eda0",
+          "stack_words": {
+            "0x8": "0x70001800",
+            "0x18": "0x138ffffffff",
+            "0x1c": "0x5c4880c400000138",
+            "0x20": "0x775c4880c4",
+            "0x28": "0x70001a00",
+            "0x38": "0x70001100"
+          }
+        },
+        {
+          "pc_offset": "0x283100",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x775c48347c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0xffffffffffffffff",
+            "0x1c": "0xffffffffffffffff",
+            "0x20": "0xffffffffffffffff",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x28310c",
+          "x0": "0x775c2fc000",
+          "x1": "0x7000ee28",
+          "x2": "0x775c563000",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x775c48347c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0xffffffffffffffff",
+            "0x1c": "0x138ffffffff",
+            "0x20": "0xffffffff00000138",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x283114",
+          "x0": "0x775c2fc720",
+          "x1": "0x7000ee28",
+          "x2": "0x775c563000",
+          "x3": "0x101",
+          "x8": "0x7000ed70",
+          "x30": "0x775c48347c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xffffffff00000138",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        },
+        {
+          "pc_offset": "0x283130",
+          "x0": "0x775c2fc720",
+          "x1": "0x7000d668",
+          "x2": "0x775c563230",
+          "x3": "0x775c563690",
+          "x8": "0x7000ed70",
+          "x30": "0x775c48347c",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xffffffff00000138",
+            "0x28": "0x101",
+            "0x38": "0x7000ed70"
+          }
+        },
+        {
+          "pc_offset": "0x168324",
+          "x0": "0x775c2fc720",
+          "x1": "0x7000d668",
+          "x2": "0x775c563230",
+          "x3": "0x775c563690",
+          "x8": "0x7000ed70",
+          "x30": "0x775c488134",
+          "sp": "0x7000d660",
+          "stack_words": {
+            "0x8": "0x7000ee48",
+            "0x18": "0x7000ee28",
+            "0x1c": "0x13800000000",
+            "0x20": "0xffffffff00000138",
+            "0x28": "0x101",
+            "0x38": "0x7000ed70"
+          }
+        },
+        {
+          "pc_offset": "0x168324",
+          "x0": "0x775c29e020",
+          "x1": "0x7000d120",
+          "x2": "0x775c560650",
+          "x3": "0x775c560660",
+          "x8": "0x775c45c050",
+          "x30": "0x775c45bf34",
+          "sp": "0x7000d120",
+          "stack_words": {
+            "0x8": "0x795a13c0",
+            "0x18": "0x7000d4a0",
+            "0x1c": "0x5c48a98800000000",
+            "0x20": "0x775c48a988",
+            "0x28": "0xffffffffffffffff",
+            "0x38": "0xffffffffffffffff"
+          }
+        }
+      ]
+    }
+  ],
+  "x3_transition_trace_each": [
+    {
+      "image_base": "0x122c0000",
+      "trace": [
+        {
+          "pc_offset": "0x27dd50",
+          "event": "tracking_start",
+          "x3": "0x138",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x7000f000"
+        },
+        {
+          "pc_offset": "0x329f4c",
+          "event": "x3_changed",
+          "previous_x3": "0x138",
+          "x3": "0x0",
+          "x0": "0x0",
+          "x1": "0x0",
+          "x2": "0x0",
+          "x8": "0x1",
+          "x30": "0x125e9f4c"
+        },
+        {
+          "pc_offset": "0x26c94c",
+          "event": "x3_changed",
+          "previous_x3": "0x0",
+          "x3": "0x1",
+          "x0": "0x0",
+          "x1": "0xffffffffffffffff",
+          "x2": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x1252c94c"
+        },
+        {
+          "pc_offset": "0x26c964",
+          "event": "x3_changed",
+          "previous_x3": "0x1",
+          "x3": "0x70003100",
+          "x0": "0x0",
+          "x1": "0x70003000",
+          "x2": "0x4000",
+          "x8": "0x4000",
+          "x30": "0x1252c964"
+        },
+        {
+          "pc_offset": "0x27de60",
+          "event": "x3_changed",
+          "previous_x3": "0x70003100",
+          "x3": "0x1253d000",
+          "x0": "0x12641b20",
+          "x1": "0x534b",
+          "x2": "0x993a",
+          "x8": "0xf",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x27de9c",
+          "event": "x3_changed",
+          "previous_x3": "0x1253d000",
+          "x3": "0x1253df50",
+          "x0": "0x12641b20",
+          "x1": "0xa16e534b",
+          "x2": "0x5cfc993a",
+          "x8": "0xf",
+          "x30": "0xaf33be03"
+        },
+        {
+          "pc_offset": "0x27dfb0",
+          "event": "x3_changed",
+          "previous_x3": "0x1253df50",
+          "x3": "0x1253d000",
+          "x0": "0x0",
+          "x1": "0x534b",
+          "x2": "0x5cfc993a",
+          "x8": "0x356",
+          "x30": "0x1253dfa0"
+        },
+        {
+          "pc_offset": "0x27dfe0",
+          "event": "x3_changed",
+          "previous_x3": "0x1253d000",
+          "x3": "0x1253df50",
+          "x0": "0x0",
+          "x1": "0xa16e534b",
+          "x2": "0x993a",
+          "x8": "0x57020356",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x27e1b4",
+          "event": "x3_changed",
+          "previous_x3": "0x1253df50",
+          "x3": "0x1253d000",
+          "x0": "0x70002400",
+          "x1": "0x12641b20",
+          "x2": "0x70002200",
+          "x8": "0x125430c4",
+          "x30": "0x1253e19c"
+        },
+        {
+          "pc_offset": "0x27e200",
+          "event": "x3_changed",
+          "previous_x3": "0x1253d000",
+          "x3": "0x1253df50",
+          "x0": "0x70002400",
+          "x1": "0x534b",
+          "x2": "0x993a",
+          "x8": "0x1f4",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x26c964",
+          "event": "x3_changed",
+          "previous_x3": "0x1253df50",
+          "x3": "0x70003100",
+          "x0": "0x0",
+          "x1": "0x70003000",
+          "x2": "0x4000",
+          "x8": "0x4000",
+          "x30": "0x1252c964"
+        },
+        {
+          "pc_offset": "0x27e474",
+          "event": "x3_changed",
+          "previous_x3": "0x70003100",
+          "x3": "0x101",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x8": "0x70002400",
+          "x30": "0x1253e45c",
+          "source_address": "0x70002408",
+          "source_value": "0x101"
+        }
+      ]
+    },
+    {
+      "image_base": "0x775c205000",
+      "trace": [
+        {
+          "pc_offset": "0x27dd50",
+          "event": "tracking_start",
+          "x3": "0x138",
+          "x0": "0x70001100",
+          "x1": "0x70001800",
+          "x2": "0x70001900",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x7000f000"
+        },
+        {
+          "pc_offset": "0x329f4c",
+          "event": "x3_changed",
+          "previous_x3": "0x138",
+          "x3": "0x0",
+          "x0": "0x0",
+          "x1": "0x0",
+          "x2": "0x0",
+          "x8": "0x1",
+          "x30": "0x775c52ef4c"
+        },
+        {
+          "pc_offset": "0x26c94c",
+          "event": "x3_changed",
+          "previous_x3": "0x0",
+          "x3": "0x1",
+          "x0": "0x0",
+          "x1": "0xffffffffffffffff",
+          "x2": "0x0",
+          "x8": "0xa5a5a5a5a5a5a5a5",
+          "x30": "0x775c47194c"
+        },
+        {
+          "pc_offset": "0x26c964",
+          "event": "x3_changed",
+          "previous_x3": "0x1",
+          "x3": "0x70003100",
+          "x0": "0x0",
+          "x1": "0x70003000",
+          "x2": "0x4000",
+          "x8": "0x4000",
+          "x30": "0x775c471964"
+        },
+        {
+          "pc_offset": "0x27de60",
+          "event": "x3_changed",
+          "previous_x3": "0x70003100",
+          "x3": "0x775c482000",
+          "x0": "0x775c586b20",
+          "x1": "0x534b",
+          "x2": "0x993a",
+          "x8": "0xf",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x27de9c",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482000",
+          "x3": "0x775c482f50",
+          "x0": "0x775c586b20",
+          "x1": "0xa16e534b",
+          "x2": "0x5cfc993a",
+          "x8": "0xf",
+          "x30": "0xaf33be03"
+        },
+        {
+          "pc_offset": "0x27dfb0",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482f50",
+          "x3": "0x775c482000",
+          "x0": "0x0",
+          "x1": "0x534b",
+          "x2": "0x5cfc993a",
+          "x8": "0x356",
+          "x30": "0x775c482fa0"
+        },
+        {
+          "pc_offset": "0x27dfe0",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482000",
+          "x3": "0x775c482f50",
+          "x0": "0x0",
+          "x1": "0xa16e534b",
+          "x2": "0x993a",
+          "x8": "0x57020356",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x27e1b4",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482f50",
+          "x3": "0x775c482000",
+          "x0": "0x70002400",
+          "x1": "0x775c586b20",
+          "x2": "0x70002200",
+          "x8": "0x775c4880c4",
+          "x30": "0x775c48319c"
+        },
+        {
+          "pc_offset": "0x27e200",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482000",
+          "x3": "0x775c482f50",
+          "x0": "0x70002400",
+          "x1": "0x534b",
+          "x2": "0x993a",
+          "x8": "0x1f4",
+          "x30": "0xbe03"
+        },
+        {
+          "pc_offset": "0x26c964",
+          "event": "x3_changed",
+          "previous_x3": "0x775c482f50",
+          "x3": "0x70003100",
+          "x0": "0x0",
+          "x1": "0x70003000",
+          "x2": "0x4000",
+          "x8": "0x4000",
+          "x30": "0x775c471964"
+        },
+        {
+          "pc_offset": "0x27e474",
+          "event": "x3_changed",
+          "previous_x3": "0x70003100",
+          "x3": "0x101",
+          "x0": "0x7000ee38",
+          "x1": "0x7000ee28",
+          "x2": "0x138",
+          "x8": "0x70002400",
+          "x30": "0x775c48345c",
+          "source_address": "0x70002408",
+          "source_value": "0x101"
+        }
+      ]
+    }
+  ],
   "interpretation": "The continuation returns an allocated owning configuration-tree reference with counter one. Its sole X-Neptune entry is constructed by the signed-int32/C-string formatter with status -5 and an empty string; no other signer header is returned. Bytecode +f8404 takes the +f8554 branch because the registry guard +3d1558 has low bit one, then +f858c produces status -5. Nonzero output and native return do not establish signing.",
   "limitations": [
     "Request, JNI and OS/import providers remain the parent's explicit synthetic fixture.",

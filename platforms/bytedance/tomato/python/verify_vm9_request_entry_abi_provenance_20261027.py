@@ -34,6 +34,7 @@ STATIC_EXPECTED = {
     0x27E694: ("ldr", "w2, [sp, #0x1c]"),
     0x27E69C: ("ldr", "x8, [x8, #0x20]"),
     0x27E6A0: ("ldr", "x3, [x8, #8]"),
+    0x27E470: ("ldr", "x3, [x8, #8]"),
     0x27E6A8: ("blr", "x9"),
     0x2830EC: ("stp", "x8, x0, [sp, #8]"),
     0x283100: ("str", "w2, [sp, #0x20]"),
@@ -118,6 +119,14 @@ def _reference_case(case: dict, image: int) -> dict:
     entry = case["request_entry"]
     if entry["x2"] != "0x138" or entry["x3"] != "0x101":
         raise AssertionError(("output-reference entry", entry))
+    transition = next(
+        row for row in case["x3_transition_trace"]
+        if row["pc_offset"] == "0x27e474"
+    )
+    if transition["x3"] != "0x101":
+        raise AssertionError(("output-reference x3 producer", transition))
+    if transition.get("source_value") != "0x101":
+        raise AssertionError(("output-reference x3 source", transition))
     return {
         "image_base": hex(image),
         "entry_offset": "0x2830c4",
@@ -126,6 +135,10 @@ def _reference_case(case: dict, image: int) -> dict:
         "x2": entry["x2"],
         "x3": entry["x3"],
         "x8": entry["x8"],
+        "x3_producer_offset": "0x27e470",
+        "x3_producer_source_address": transition.get("source_address"),
+        "x3_producer_source_value": transition.get("source_value"),
+        "x3_transition_trace": case["x3_transition_trace"],
         "semantic_note": "independent output-reference continuation supplies x3=0x101 at the same VM wrapper entry",
     }
 
@@ -161,6 +174,9 @@ def main() -> None:
         "same_wrapper_entry_observed": True,
         "facade_x3_is_native_header_pointer": True,
         "output_reference_x3_is_0x101": True,
+        "output_reference_x3_producer_offset": "0x27e470",
+        "output_reference_x3_producer_observed_pc": "0x27e474",
+        "output_reference_x3_source": "[0x70002400+0x08] = 0x101",
         "x3_roles_are_equivalent": False,
         "whole_request_native_differential_verified": False,
         "fresh_standalone_signer_verified": False,
@@ -171,8 +187,10 @@ def main() -> None:
             "argument-array offset +0x20 before entering +0x168324.  The VM's "
             "direct x3 register is a separate image-relative constant, while its "
             "user argument remains in the packed array.  The independent "
-            "output-reference continuation reaches the same +0x2830c4 wrapper with "
-            "x3=0x101, so its x3 is a different input role.  This explains why "
+            "output-reference continuation first loads x3 from [0x70002400+0x08] "
+            "at +0x27e470 (observed on the following PC +0x27e474), yielding 0x101 "
+            "before reaching the same +0x2830c4 wrapper.  Its x3 is therefore a "
+            "different input role.  This explains why "
             "the -5 guard path cannot be selected by treating 0x101 as the facade "
             "header-vector pointer; it does not close signer semantics."
         ),

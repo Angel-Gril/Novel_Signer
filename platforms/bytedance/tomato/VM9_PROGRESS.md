@@ -6461,3 +6461,21 @@ whole-request native differential、真实 Android JVM、fresh standalone signer
 
 证据：[request entry ABI provenance](evidence/vm9_request_entry_abi_provenance_20261027.json)，
 复现脚本：[verify_vm9_request_entry_abi_provenance_20261027.py](python/verify_vm9_request_entry_abi_provenance_20261027.py)。
+
+
+## 2026-10-28：独立 output-reference 的 x3 生产者闭合
+
+在 fresh output-reference continuation 中从 `+0x27dd50` 开始记录 x3 变化，确认
+初始 request ABI 为 `x0=0x70001100`、`x1=0x70001800`、`x2=0x70001900`、
+`x3=0x138`。后续在 `+0x27e470` 执行 `ldr x3, [x8,#8]`（下一条观测 PC 为
+`+0x27e474`），当时 `x8=0x70002400`，读取 `[0x70002400+0x08]=0x101`，随后
+`+0x2830c4` 入口保持 `x3=0x101`。两基址的动态轨迹一致。
+
+这说明独立 `-5` guard continuation 的 `0x101` 是其 request 对象字段产生的输入，
+不是 facade native header-vector、也不是 `-5` 的输出值；normal facade 则在
+`+0x27e6a0/+0x27e6a4` 从真实 header-vector 取得 `x3=0x136d6100`。ABI 差异的
+上游生产者已定位，但完整 signer 语义、whole-request differential、真实 JVM、
+standalone signer 和线上验签仍未闭合。
+
+证据：[output-reference rerun](evidence/vm9_request_output_reference_20261027_rerun.json)、
+[request entry ABI provenance](evidence/vm9_request_entry_abi_provenance_20261027.json)。
