@@ -9733,7 +9733,7 @@
   "vm9_native_outer_facade_actual_child_20261027": {
     "path": "evidence/vm9_native_outer_facade_actual_child_20261027.json",
     "verifier": "python/verify_vm9_native_outer_facade_actual_child_20261027.py",
-    "schema": "vm9-native-outer-facade-actual-child-20261027-v5",
+    "schema": "vm9-native-outer-facade-actual-child-20261027-v6",
     "evidence_label": "Same-CPU native outer real child into normal Java facade",
     "image_bases": [
       "0x122c0000",
@@ -9795,16 +9795,34 @@
     "independent_output_reference_tree_value": "-5|",
     "facade_output_tree_semantics_closed": false,
     "facade_native_formatter_candidates": [
-      {"bytecode_offset": "0xfb548", "signed_value": -7, "time": "50:51:59"},
-      {"bytecode_offset": "0xfefbc", "signed_value": -11, "time": "50:51:59"}
+      {
+        "bytecode_offset": "0xfb548",
+        "signed_value": -7,
+        "time": "50:51:59"
+      },
+      {
+        "bytecode_offset": "0xfefbc",
+        "signed_value": -11,
+        "time": "50:51:59"
+      }
     ],
     "formatter_bytecode_static": {
       "encoding": "OP59: R[d] = sext32(R[s]) + sext16(imm16)",
       "source_register": "R0",
       "destination_register": "R2",
       "candidates": [
-        {"bytecode_offset": "0xfb520", "instruction_word": "0x7f20f97b", "signed_immediate": -7, "format_call_offset": "0xfb548"},
-        {"bytecode_offset": "0xfef94", "instruction_word": "0x7ea0f97b", "signed_immediate": -11, "format_call_offset": "0xfefbc"}
+        {
+          "bytecode_offset": "0xfb520",
+          "instruction_word": "0x7f20f97b",
+          "signed_immediate": -7,
+          "format_call_offset": "0xfb548"
+        },
+        {
+          "bytecode_offset": "0xfef94",
+          "instruction_word": "0x7ea0f97b",
+          "signed_immediate": -11,
+          "format_call_offset": "0xfefbc"
+        }
       ],
       "interpretation": "Both candidates consume virtual slot R0 and differ only in the embedded signed immediate; the formatter receives the resulting R2 value."
     },
@@ -9815,14 +9833,56 @@
       "window_events_captured_each": true
     },
     "formatter_path_observed_offsets_each": [
-      ["0xfb520", "0xfb548", "0xfb5dc", "0xfee00", "0xfef94", "0xfefbc"],
-      ["0xfb520", "0xfb548", "0xfb5dc", "0xfee00", "0xfef94", "0xfefbc"]
+      [
+        "0xfb520",
+        "0xfb548",
+        "0xfb5dc",
+        "0xfee00",
+        "0xfef94",
+        "0xfefbc"
+      ],
+      [
+        "0xfb520",
+        "0xfb548",
+        "0xfb5dc",
+        "0xfee00",
+        "0xfef94",
+        "0xfefbc"
+      ]
     ],
     "formatter_path_transition": "0xfb5dc -> 0xfee00 -> 0xfef94; guard path 0xf8404/0xf8554/0xf858c is absent from this actual-facade continuation",
+    "request_abi_provenance_verifier": "python/verify_vm9_request_entry_abi_provenance_20261027.py",
     "facade_native_tree_kept_value": -11,
     "whole_request_native_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "The native outer cold getter returns a real root+0x18 child on the same CPU. Its vtable and callback pair target are checked before entering the normal facade and observing +0x27dd04, +0x2830c4 and +0x168324. The matching-libc relocation resolver supplies the real __cxa_atexit target at image+0x382cd8, allowing the VM registration path to complete. Both bases enter the owning request VM, return G+0x1e10 from the native call at +0x17ba6c, and reach the +0x17bac0 epilogue unchanged. The final-frame stack ledger is restricted to main-image PCs and the facade result temporaries; URL/header/JNI services remain explicit fixture providers, so whole-request differential, live JVM and signer/online acceptance remain open."
+  },
+  "vm9_request_entry_abi_provenance_20261027": {
+    "path": "evidence/vm9_request_entry_abi_provenance_20261027.json",
+    "verifier": "python/verify_vm9_request_entry_abi_provenance_20261027.py",
+    "schema": "vm9-request-entry-abi-provenance-20261027-v1",
+    "evidence_label": "Facade versus independent output-reference request entry ABI",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "same_wrapper_entry_observed": true,
+    "facade_x3_is_native_header_pointer": true,
+    "output_reference_x3_is_0x101": true,
+    "x3_roles_are_equivalent": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Static and dynamic evidence ties facade x3 to *(receiver+0x20)+0x08, then to argument-array offset +0x20 before +0x168324. The independent output-reference continuation reaches the same +0x2830c4 wrapper with x3=0x101. This is an input-role difference, not a signer result."
+  },
+  "douyin_spider_interface_analysis_20261028": {
+    "path": "DOUYIN_SPIDER_INTERFACE_ANALYSIS_20261028.md",
+    "evidence_label": "Local static comparison of DouYin_Spider web/creator/live request layers",
+    "source": "C:\\AI\\6\\_external_DouYin_Spider",
+    "source_commit": "d151f9c",
+    "online_requests_performed": false,
+    "seven_gods_signer_recovered": false,
+    "interpretation": "Reference project covers a_bogus, bd-ticket-guard, x-tt-session-dtrait, x-secsdk-web-signature, and legacy live X-Bogus; it does not provide the six native seven-gods headers."
   }
 }

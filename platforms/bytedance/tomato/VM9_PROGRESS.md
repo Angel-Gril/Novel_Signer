@@ -6442,3 +6442,22 @@ continuation 中保存 formatter 前后的 VM 游标、字节码字和 32 个虚
 证据和复现脚本仍为：
 [vm9_native_outer_facade_actual_child_20261027.json](evidence/vm9_native_outer_facade_actual_child_20261027.json)；
 脚本：[verify_vm9_native_outer_facade_actual_child_20261027.py](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
+
+
+## 2026-10-28：request entry ABI provenance closure
+
+新增只读 ABI verifier，按真实 ELF 指令和 actual-child 动态 ledger 对照同一个
+`+0x2830c4` wrapper 的两种入口。normal Java facade 在 `+0x27e6a8` 先从
+`*(receiver+0x20)+0x08` 取 native header-vector 指针；本轮动态值为
+`0x136d6100`，随后 `+0x283130` 将它放入 VM argument array 的 `+0x20`，再进入
+`+0x168324`。`+0x168324` 的直接 `x3` 是独立的 image-relative dispatch 常量，
+用户输入仍在 packed argument array 的 word 4。
+
+独立 output-reference continuation 也到达 `+0x2830c4`，但入口 `x3=0x101`，
+因此不能把 `0x101` 解释为 facade 的 header-vector 或把 `-5` guard 结果归因于
+同一输入。该差异闭合的是 request ABI/provenance 入口，不是 signer 业务语义；
+whole-request native differential、真实 Android JVM、fresh standalone signer 和
+线上 header acceptance 仍未验证。
+
+证据：[request entry ABI provenance](evidence/vm9_request_entry_abi_provenance_20261027.json)，
+复现脚本：[verify_vm9_request_entry_abi_provenance_20261027.py](python/verify_vm9_request_entry_abi_provenance_20261027.py)。

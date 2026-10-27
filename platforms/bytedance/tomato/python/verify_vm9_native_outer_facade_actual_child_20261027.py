@@ -47,6 +47,18 @@ VM_HANDLER_OPS = {
 }
 VM_SOURCE_STORE = 0x16E118
 
+# The normal Java facade does not pass its native header vector as the VM's
+# direct ``x3`` register.  The caller first loads it from the receiver's
+# ``+0x20`` field and ``+0x08`` element, then the JNI entry wrapper packs that
+# value into the argument array consumed by +0x168324.  Keep these bridge PCs
+# in the dynamic ledger so the two continuation ABIs can be compared without
+# guessing from the final tree value.
+REQUEST_ABI_OFFSETS = frozenset((
+    0x27E660, 0x27E668, 0x27E674, 0x27E688, 0x27E694,
+    0x27E698, 0x27E69C, 0x27E6A0, 0x27E6A4, 0x27E6A8,
+    0x2830C4, 0x283130, 0x168324,
+))
+
 FORMATTER_WINDOWS = {
     0xFB548: {
         "window_start": 0xFB480,
@@ -200,6 +212,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "last_vm_bytecode_window_pc": None,
         "facade_stack_write_events": [],
         "request_vm_entry_events": [],
+        "request_abi_events": [],
         "unmapped": [],
     }
     markers = []
@@ -524,7 +537,11 @@ def run(library: Path, libc: Path, image: int) -> dict:
             state["memcpy_import_count"] += 1
             return
         if offset in (FACADE_ENTRY, CHILD_ENTRY, OWNING_VM, 0x168324,
+                      0x27E660, 0x27E668, 0x27E674, 0x27E688,
+                      0x27E694, 0x27E698, 0x27E69C, 0x27E6A0,
+                      0x27E6A4, 0x27E6A8,
                       0x16848C, 0x2830EC, 0x283100, 0x28310C,
+                      0x283130,
                       0x171268, 0x2858BC, 0x2859CC, 0x2859D0,
                       0x2859D4, 0x2859D8, 0x2859DC, 0x16AA4C,
                       0x285B80, 0x285B84, 0x285B88, 0x285B8C,
@@ -741,6 +758,73 @@ def run(library: Path, libc: Path, image: int) -> dict:
                     x28=hex(cpu.reg_read(arm.UC_ARM64_REG_X28)),
                 )
                 state["request_vm_entry_events"].append(dict(row))
+            if offset in REQUEST_ABI_OFFSETS:
+                abi = dict(row)
+                abi["facade_started"] = state["facade_started"]
+                if offset in (0x27E660, 0x27E668, 0x27E674,
+                              0x27E688, 0x27E694, 0x27E698,
+                              0x27E69C, 0x27E6A0, 0x27E6A4,
+                              0x27E6A8):
+                    sp = cpu.reg_read(arm.UC_ARM64_REG_SP)
+                    try:
+                        abi["stack_words"] = {
+                            hex(displacement): hex(_u(cpu, sp + displacement))
+                            for displacement in (8, 0x10, 0x18, 0x1C, 0x20,
+                                                 0x28, 0x38, 0x40)
+                        }
+                    except Exception:
+                        abi["stack_words"] = None
+                if offset == 0x27E6A4:
+                    native_array = cpu.reg_read(arm.UC_ARM64_REG_X8)
+                    abi["native_header_vector_object"] = hex(native_array)
+                    try:
+                        abi["native_header_vector_words"] = [
+                            hex(_u(cpu, native_array + displacement))
+                            for displacement in (0, 8, 0x10, 0x18)
+                        ]
+                    except Exception:
+                        abi["native_header_vector_words"] = None
+                    abi["header_pointer_source"] = "*(receiver+0x20)+0x08"
+                    abi["request_target"] = hex(cpu.reg_read(arm.UC_ARM64_REG_X9))
+                if offset == 0x283130:
+                    argument_base = cpu.reg_read(arm.UC_ARM64_REG_X1)
+                    abi["vm_argument_base"] = hex(argument_base)
+                    try:
+                        abi["vm_argument_words"] = [
+                            hex(_u(cpu, argument_base + index * 8))
+                            for index in range(8)
+                        ]
+                    except Exception:
+                        abi["vm_argument_words"] = None
+                    abi["packed_x3_argument_offset"] = "0x20"
+                    try:
+                        abi["packed_x3_argument_value"] = hex(_u(cpu, argument_base + 0x20))
+                    except Exception:
+                        abi["packed_x3_argument_value"] = None
+                    abi["packed_x3_argument_source"] = "caller x3 saved at [wrapper_sp+0x28]"
+                if offset == 0x168324:
+                    argument_base = cpu.reg_read(arm.UC_ARM64_REG_X1)
+                    abi["vm_argument_base"] = hex(argument_base)
+                    try:
+                        abi["vm_argument_words"] = [
+                            hex(_u(cpu, argument_base + index * 8))
+                            for index in range(8)
+                        ]
+                    except Exception:
+                        abi["vm_argument_words"] = None
+                    try:
+                        packed_x3 = _u(cpu, argument_base + 0x20)
+                    except Exception:
+                        packed_x3 = None
+                    abi["packed_x3_argument_value"] = (
+                        hex(packed_x3) if packed_x3 is not None else None
+                    )
+                    abi["direct_vm_x3_value"] = row["x3"]
+                    abi["direct_vm_x3_is_packed_constant"] = (
+                        packed_x3 is not None
+                        and cpu.reg_read(arm.UC_ARM64_REG_X3) != packed_x3
+                    )
+                state["request_abi_events"].append(abi)
             if offset == 0x171268:
                 x15 = cpu.reg_read(arm.UC_ARM64_REG_X15)
                 x16 = cpu.reg_read(arm.UC_ARM64_REG_X16)
@@ -1160,6 +1244,11 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "vm_bytecode_window_events": state["vm_bytecode_window_events"],
         "facade_stack_write_events": state["facade_stack_write_events"],
         "request_vm_entry_events": state["request_vm_entry_events"],
+        "request_abi_events": state["request_abi_events"],
+        "request_abi_facade_events": [
+            event for event in state["request_abi_events"]
+            if event.get("facade_started")
+        ],
         "actual_facade_return_verified": actual_facade_return_verified,
         "real_request_vm_entry_used": bool(state["request_vm_entry_events"]),
         "real_cxa_atexit_relocation_used": cxa_target is not None,
@@ -1277,7 +1366,7 @@ def main() -> None:
     assert digest == oracle.LIBRARY_SHA256, digest
     rows = [run(args.library, args.libc, image) for image in BASES]
     report = {
-        "schema": "vm9-native-outer-facade-actual-child-20261027-v5",
+        "schema": "vm9-native-outer-facade-actual-child-20261027-v6",
         "evidence_date": "2026-10-27",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),

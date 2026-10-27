@@ -1,0 +1,209 @@
+{
+  "schema": "vm9-request-entry-abi-provenance-20261027-v1",
+  "evidence_date": "2026-10-27",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "static": {
+    "source": "pinned ELF .text",
+    "instructions": [
+      {
+        "offset": "0x27e660",
+        "bytes": "e81f40f9",
+        "mnemonic": "ldr",
+        "operands": "x8, [sp, #0x38]"
+      },
+      {
+        "offset": "0x27e664",
+        "bytes": "e0e30191",
+        "mnemonic": "add",
+        "operands": "x0, sp, #0x78"
+      },
+      {
+        "offset": "0x27e668",
+        "bytes": "e10740f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [sp, #8]"
+      },
+      {
+        "offset": "0x27e694",
+        "bytes": "e21f40b9",
+        "mnemonic": "ldr",
+        "operands": "w2, [sp, #0x1c]"
+      },
+      {
+        "offset": "0x27e69c",
+        "bytes": "081140f9",
+        "mnemonic": "ldr",
+        "operands": "x8, [x8, #0x20]"
+      },
+      {
+        "offset": "0x27e6a0",
+        "bytes": "030540f9",
+        "mnemonic": "ldr",
+        "operands": "x3, [x8, #8]"
+      },
+      {
+        "offset": "0x27e6a8",
+        "bytes": "20013fd6",
+        "mnemonic": "blr",
+        "operands": "x9"
+      },
+      {
+        "offset": "0x2830ec",
+        "bytes": "e88300a9",
+        "mnemonic": "stp",
+        "operands": "x8, x0, [sp, #8]"
+      },
+      {
+        "offset": "0x283100",
+        "bytes": "e22300b9",
+        "mnemonic": "str",
+        "operands": "w2, [sp, #0x20]"
+      },
+      {
+        "offset": "0x28310c",
+        "bytes": "e10f00f9",
+        "mnemonic": "str",
+        "operands": "x1, [sp, #0x18]"
+      },
+      {
+        "offset": "0x283114",
+        "bytes": "e3a702a9",
+        "mnemonic": "stp",
+        "operands": "x3, x9, [sp, #0x28]"
+      },
+      {
+        "offset": "0x283130",
+        "bytes": "7d94fb97",
+        "mnemonic": "bl",
+        "operands": "#0x168324"
+      },
+      {
+        "offset": "0x168324",
+        "bytes": "fd7bbaa9",
+        "mnemonic": "stp",
+        "operands": "x29, x30, [sp, #-0x60]!"
+      },
+      {
+        "offset": "0x168464",
+        "bytes": "038231a9",
+        "mnemonic": "stp",
+        "operands": "x3, x0, [x16, #-0xe8]"
+      }
+    ],
+    "facade_x3_source": "*(receiver+0x20)+0x08",
+    "wrapper_pack_offset": "0x20",
+    "vm_direct_x3_role": "constant code/data pointer; user x3 is read from packed argument array"
+  },
+  "cases": [
+    {
+      "actual_facade": {
+        "image_base": "0x122c0000",
+        "facade_caller_offset": "0x27e6a8",
+        "facade_request_target": "0x125430c4",
+        "facade_mode_x2": "0x138",
+        "facade_native_header_vector_object": "0x136d70d0",
+        "facade_native_header_vector_words": [
+          "0x125430c4",
+          "0x136d6100",
+          "0x136f3000",
+          "0x136d81d8"
+        ],
+        "facade_x3_header_pointer": "0x136d6100",
+        "wrapper_argument_base": "0x7000d5b8",
+        "wrapper_argument_words": [
+          "0x7000ed98",
+          "0x7000ed68",
+          "0x7000ed58",
+          "0x138",
+          "0x136d6100",
+          "0x1254587c",
+          "0x7000ecc0",
+          "0x1253e6ac"
+        ],
+        "wrapper_packed_x3": "0x136d6100",
+        "vm_argument_words": [
+          "0x7000ed98",
+          "0x7000ed68",
+          "0x7000ed58",
+          "0x138",
+          "0x136d6100",
+          "0x1254587c",
+          "0x7000ecc0",
+          "0x1253e6ac"
+        ],
+        "vm_direct_x3": "0x1261e690",
+        "vm_direct_x3_is_packed_constant": true,
+        "source_and_pack_match": true
+      },
+      "independent_output_reference": {
+        "image_base": "0x122c0000",
+        "entry_offset": "0x2830c4",
+        "x0": "0x7000ee38",
+        "x1": "0x7000ee28",
+        "x2": "0x138",
+        "x3": "0x101",
+        "x8": "0x7000ee48",
+        "semantic_note": "independent output-reference continuation supplies x3=0x101 at the same VM wrapper entry"
+      }
+    },
+    {
+      "actual_facade": {
+        "image_base": "0x775c205000",
+        "facade_caller_offset": "0x27e6a8",
+        "facade_request_target": "0x775c4880c4",
+        "facade_mode_x2": "0x138",
+        "facade_native_header_vector_object": "0x136d70d0",
+        "facade_native_header_vector_words": [
+          "0x775c4880c4",
+          "0x136d6100",
+          "0x136f3000",
+          "0x136d81d8"
+        ],
+        "facade_x3_header_pointer": "0x136d6100",
+        "wrapper_argument_base": "0x7000d5b8",
+        "wrapper_argument_words": [
+          "0x7000ed98",
+          "0x7000ed68",
+          "0x7000ed58",
+          "0x138",
+          "0x136d6100",
+          "0x775c48a87c",
+          "0x7000ecc0",
+          "0x775c4836ac"
+        ],
+        "wrapper_packed_x3": "0x136d6100",
+        "vm_argument_words": [
+          "0x7000ed98",
+          "0x7000ed68",
+          "0x7000ed58",
+          "0x138",
+          "0x136d6100",
+          "0x775c48a87c",
+          "0x7000ecc0",
+          "0x775c4836ac"
+        ],
+        "vm_direct_x3": "0x775c563690",
+        "vm_direct_x3_is_packed_constant": true,
+        "source_and_pack_match": true
+      },
+      "independent_output_reference": {
+        "image_base": "0x775c205000",
+        "entry_offset": "0x2830c4",
+        "x0": "0x7000ee38",
+        "x1": "0x7000ee28",
+        "x2": "0x138",
+        "x3": "0x101",
+        "x8": "0x7000ee48",
+        "semantic_note": "independent output-reference continuation supplies x3=0x101 at the same VM wrapper entry"
+      }
+    }
+  ],
+  "same_wrapper_entry_observed": true,
+  "facade_x3_is_native_header_pointer": true,
+  "output_reference_x3_is_0x101": true,
+  "x3_roles_are_equivalent": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "The normal facade's +0x27e6a8 caller loads x3 from the native header vector object at receiver+0x20, then +0x2830c4 saves that value at argument-array offset +0x20 before entering +0x168324.  The VM's direct x3 register is a separate image-relative constant, while its user argument remains in the packed array.  The independent output-reference continuation reaches the same +0x2830c4 wrapper with x3=0x101, so its x3 is a different input role.  This explains why the -5 guard path cannot be selected by treating 0x101 as the facade header-vector pointer; it does not close signer semantics."
+}
