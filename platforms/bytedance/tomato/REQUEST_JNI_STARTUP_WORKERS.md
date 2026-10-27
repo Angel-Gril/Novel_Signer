@@ -9766,3 +9766,20 @@ continuation 中保存 formatter 前后的 VM 游标、字节码字和 32 个虚
 证据和复现脚本仍为：
 `evidence/vm9_native_outer_facade_actual_child_20261027.json`、
 `python/verify_vm9_native_outer_facade_actual_child_20261027.py`。
+
+## 6.290 cold outer graph object provenance（2026-10-28 Asia/Shanghai）
+
+新增只读 native verifier，在 `+0x1658e4` cold outer getter 返回点对两个 image base
+检查同一 root 的 `+0x18/+0x20` 依赖字段、child vtable/callback pair 和 handler
+vtable。两边均得到 `root+0x18 -> image+0x2830c4`、`root+0x20 -> image+0x289190`，
+child vtable 为 `image+0x35d5f0`，handler vtable 分别为 `image+0x35dc50` 和
+`image+0x35f7e0`；`service_refs` handler 的 callback reference `+0x30/+0x40`
+及 service reference `+0x50/+0x60` 均非空且跨基址一致。
+
+该项只证明 cold outer object graph 的 native provenance。root `+0x00` 保留为观察到的
+未写入字段；没有用 native snapshot 初始化 Python，也没有把 reference member 解读成
+Java array、七神 header 或 signer 结果。whole-request native differential、真实 JVM、
+fresh standalone signer 与线上 header acceptance 仍保持未验证。
+
+证据：`evidence/vm9_outer_graph_object_provenance_20261028.json`；复现脚本：
+`python/verify_vm9_outer_graph_object_provenance_20261028.py`。

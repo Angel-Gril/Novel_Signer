@@ -1138,3 +1138,9 @@ owner、fresh signer 或线上验收。见
 word 与写入值逐项一致。这个 source-slot provenance 已闭合到 VM register file，
 但只覆盖当前 continuation；完整 VM program 和 signer 输出继续保持未恢复。
 五张 dispatch table 的 ELF 来源已由页首链接的 encoding 证据单独闭合。
+
+Cold outer graph provenance (2026-10-28): a read-only native verifier now checks the
+returned root/child/handler relationships at both image bases, including the callback and
+service reference members. It does not feed native bytes into Python or claim seven-gods
+headers, signer output, live JVM behavior, or online acceptance. See [evidence](evidence/vm9_outer_graph_object_provenance_20261028.json)
+and [verifier](python/verify_vm9_outer_graph_object_provenance_20261028.py).

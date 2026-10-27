@@ -1,0 +1,247 @@
+{
+  "schema": "vm9-outer-graph-object-provenance-20261028-v1",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "outer_function_offset": "0x1658e4",
+      "root_and_children_verified": true,
+      "root_address": "0x136d3030",
+      "root_words": [
+        "0x0",
+        "0x136e0140",
+        "0x136d80f0",
+        "0x136d36f0",
+        "0x136d3750"
+      ],
+      "children": [
+        {
+          "root_field_offset": "0x18",
+          "child_address": "0x136d36f0",
+          "child_vtable_offset": "0x35d5f0",
+          "child_words": [
+            "0x1261d5f0",
+            "0x136da320",
+            "0x136d3480",
+            "0x136d8138",
+            "0x136d70d0"
+          ],
+          "callback_pair_address": "0x136d70d0",
+          "callback_target_offset": "0x2830c4",
+          "handler_address": "0x136d6100",
+          "handler_vtable_offset": "0x35dc50",
+          "handler_words_0x80_or_0xe8": [
+            "0x1261dc50",
+            "0x0",
+            "0x136d81b0",
+            "0x0",
+            "0x136d81b8",
+            "0x136d3840",
+            "0x136d36f0",
+            "0x136d81f0",
+            "0x136d8190",
+            "0x136d8128",
+            "0x136f3000",
+            "0x136d81d8",
+            "0x136d81e0",
+            "0x136d81e8",
+            "0x0",
+            "0x0"
+          ],
+          "callback_reference_members": {
+            "+0x30": [
+              "0x136d36f0",
+              "0x136d81f0"
+            ],
+            "+0x40": [
+              "0x136d8190",
+              "0x136d8128"
+            ]
+          },
+          "service_reference_members": {
+            "+0x50": [
+              "0x136f3000",
+              "0x136d81d8"
+            ],
+            "+0x60": [
+              "0x136d81e0",
+              "0x136d81e8"
+            ]
+          }
+        },
+        {
+          "root_field_offset": "0x20",
+          "child_address": "0x136d3750",
+          "child_vtable_offset": "0x35d5f0",
+          "child_words": [
+            "0x1261d5f0",
+            "0x136da3c0",
+            "0x136d3780",
+            "0x136d8130",
+            "0x136d7100"
+          ],
+          "callback_pair_address": "0x136d7100",
+          "callback_target_offset": "0x289190",
+          "handler_address": "0x136e5200",
+          "handler_vtable_offset": "0x35f7e0",
+          "handler_words_0x80_or_0xe8": [
+            "0x1261f7e0",
+            "0x0",
+            "0x136d8188",
+            "0x0",
+            "0x136d81a0",
+            "0x136d3810",
+            "0x136d3750",
+            "0x136d81a8",
+            "0x136d8190",
+            "0x136d8128",
+            "0x1260d838",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        }
+      ]
+    },
+    {
+      "image_base": "0x775c205000",
+      "outer_function_offset": "0x1658e4",
+      "root_and_children_verified": true,
+      "root_address": "0x136d3030",
+      "root_words": [
+        "0x0",
+        "0x136e0140",
+        "0x136d80f0",
+        "0x136d36f0",
+        "0x136d3750"
+      ],
+      "children": [
+        {
+          "root_field_offset": "0x18",
+          "child_address": "0x136d36f0",
+          "child_vtable_offset": "0x35d5f0",
+          "child_words": [
+            "0x775c5625f0",
+            "0x136da320",
+            "0x136d3480",
+            "0x136d8138",
+            "0x136d70d0"
+          ],
+          "callback_pair_address": "0x136d70d0",
+          "callback_target_offset": "0x2830c4",
+          "handler_address": "0x136d6100",
+          "handler_vtable_offset": "0x35dc50",
+          "handler_words_0x80_or_0xe8": [
+            "0x775c562c50",
+            "0x0",
+            "0x136d81b0",
+            "0x0",
+            "0x136d81b8",
+            "0x136d3840",
+            "0x136d36f0",
+            "0x136d81f0",
+            "0x136d8190",
+            "0x136d8128",
+            "0x136f3000",
+            "0x136d81d8",
+            "0x136d81e0",
+            "0x136d81e8",
+            "0x0",
+            "0x0"
+          ],
+          "callback_reference_members": {
+            "+0x30": [
+              "0x136d36f0",
+              "0x136d81f0"
+            ],
+            "+0x40": [
+              "0x136d8190",
+              "0x136d8128"
+            ]
+          },
+          "service_reference_members": {
+            "+0x50": [
+              "0x136f3000",
+              "0x136d81d8"
+            ],
+            "+0x60": [
+              "0x136d81e0",
+              "0x136d81e8"
+            ]
+          }
+        },
+        {
+          "root_field_offset": "0x20",
+          "child_address": "0x136d3750",
+          "child_vtable_offset": "0x35d5f0",
+          "child_words": [
+            "0x775c5625f0",
+            "0x136da3c0",
+            "0x136d3780",
+            "0x136d8130",
+            "0x136d7100"
+          ],
+          "callback_pair_address": "0x136d7100",
+          "callback_target_offset": "0x289190",
+          "handler_address": "0x136e5200",
+          "handler_vtable_offset": "0x35f7e0",
+          "handler_words_0x80_or_0xe8": [
+            "0x775c5647e0",
+            "0x0",
+            "0x136d8188",
+            "0x0",
+            "0x136d81a0",
+            "0x136d3810",
+            "0x136d3750",
+            "0x136d81a8",
+            "0x136d8190",
+            "0x136d8128",
+            "0x775c552838",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0",
+            "0x0"
+          ]
+        }
+      ]
+    }
+  ],
+  "fresh_native_controls": 2,
+  "root_and_children_verified": true,
+  "native_snapshot_used_as_python_input": false,
+  "signer_result_interpretation": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "comparison_note": "At cold outer getter return, both image bases expose the same 40-byte root dependency fields, child vtable/target pairs, and derived handler vtables. The service_refs handler contains non-null callback and service reference members. Root +0x00 remains an observed untouched field, not a synthesized clearing rule."
+}

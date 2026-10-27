@@ -1,5 +1,23 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-28：cold outer graph object provenance
+
+新增只读 native provenance verifier，在两个 image base 的 cold outer getter 返回点检查
+同一个 root 的依赖字段、两个 child 的虚表与 callback pair，以及各自 handler 的虚表。
+`root+0x18` 指向 `image+0x2830c4` child，`root+0x20` 指向 `image+0x289190`
+child；两者的 child vtable 都是 `image+0x35d5f0`，handler vtable 分别为
+`image+0x35dc50` 与 `image+0x35f7e0`。`service_refs` handler 的 `+0x30/+0x40`
+callback reference members 和 `+0x50/+0x60` service reference members 均为非空，
+并且两个基址的对象关系一致。
+
+该 verifier 只读取 native 返回对象图，不把 native bytes 作为 Python 输入，也不把这些
+成员解释成 Java array、七神 header 或 signer 结果；`root+0x00` 保持观察到的未写入状态。
+因此这次闭合的是 cold outer graph 的对象级 provenance，whole-request native differential、
+真实 JVM、fresh standalone signer 和线上 header acceptance 仍未完成。
+
+证据：[outer graph object provenance](evidence/vm9_outer_graph_object_provenance_20261028.json)；
+复现：[verifier](python/verify_vm9_outer_graph_object_provenance_20261028.py)。
+
 ## 2026-10-28：request context 虚表消费者与 callback pair 发布闭合
 
 在上一轮 actual outer child → normal facade 的同 CPU continuation 上增加窄范围

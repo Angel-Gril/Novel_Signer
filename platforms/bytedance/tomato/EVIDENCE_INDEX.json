@@ -10055,4 +10055,38 @@
     "online_header_acceptance_verified": false,
     "comparison_note": "The explicit Python helper matches the native +0x28508c/+0x285094 reference-wrapper copies after the measured service_refs constructor, including count updates and rollback on invalid pointers. The fields remain object-level callback references with no Java-array, seven-gods-header or signer-result interpretation."
   }
+,
+  "vm9_outer_graph_object_provenance_20261028": {
+    "path": "evidence/vm9_outer_graph_object_provenance_20261028.json",
+    "verifier": "python/verify_vm9_outer_graph_object_provenance_20261028.py",
+    "schema": "vm9-outer-graph-object-provenance-20261028-v1",
+    "evidence_label": "Cold native outer graph root/child/handler object provenance",
+    "image_bases": [
+      "0x122c0000",
+      "0x775c205000"
+    ],
+    "outer_function_offset": "0x1658e4",
+    "root_fields_verified": [
+      "+0x18",
+      "+0x20"
+    ],
+    "child_vtable_offset": "0x35d5f0",
+    "callback_target_offsets": [
+      "0x2830c4",
+      "0x289190"
+    ],
+    "handler_vtable_offsets": [
+      "0x35dc50",
+      "0x35f7e0"
+    ],
+    "service_refs_reference_members_verified": true,
+    "root_and_children_verified": true,
+    "fresh_native_controls": 2,
+    "native_snapshot_used_as_python_input": false,
+    "signer_result_interpretation": false,
+    "whole_request_native_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Both image bases expose the same cold outer root dependency fields, child vtable/callback pairs, handler vtables, and non-null callback and service reference members. Root +0x00 remains observed untouched state; this closes object-graph provenance only and does not identify a Java array, seven-gods header, or signer result."
+  }
 }
