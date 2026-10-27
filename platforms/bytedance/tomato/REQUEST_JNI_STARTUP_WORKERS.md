@@ -9687,6 +9687,11 @@ output-reference continuation 的 `X-Neptune -> -5|` 不同，说明两条 conti
 当前使用的输入/guard/状态语义尚未闭合；该差异保留为下一步 whole-request
 differential 的定位证据，不能将任一路径的树当作完整 signer 输出。
 
+native formatter ledger 进一步显示，`%d|%s` 的两个值分别来自 VM bytecode
+`image+0xfb548`（`-7`）和 `image+0xfefbc`（`-11`），两次都使用同一时间字符串
+`50:51:59`；插入树时只保留后一个 `-11`。这把差异缩小到 request VM 的状态/字节码
+路径，而不是 Java array 转换或 cleanup 阶段。
+
 `+0x17ba6c` 的 native call 返回 `G+0x1e10`，随后 `+0x17ba70` 将结果继续放入
 facade 返回寄存器，`+0x17bac0` 返回值逐字节一致；新增
 `facade_result_source_verified=true`。这把 result handle 的来源闭合到 native

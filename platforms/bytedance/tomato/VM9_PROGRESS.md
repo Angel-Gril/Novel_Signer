@@ -6412,6 +6412,10 @@ native facade frame 的对象图快照直接解析出一个配置树节点：cou
 则是 `X-Neptune -> -5|`；两条 continuation 的输入/guard/状态语义尚未闭合，
 所以该差异只作为 whole-request differential 的定位证据，不能作为 signer 输出。
 
+formatter ledger 将两个候选值定位到 request VM bytecode：`image+0xfb548` 产生
+`-7`，`image+0xfefbc` 产生 `-11`，二者共享 `50:51:59` 时间字符串，最终树只
+保留 `-11`。差异位于 VM 状态/字节码路径，不在 Java array 转换或 cleanup。
+
 这闭合了 native result handle 的来源和 facade 返回边界，但 JNI/Java 仍由显式
 fixture 提供，因此 whole-request native differential、真实 Android JVM、fresh
 standalone signer 和线上 header acceptance 仍未验证。证据：

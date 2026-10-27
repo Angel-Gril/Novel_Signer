@@ -123,6 +123,9 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "facade_dispatch_events": [],
         "facade_stack_snapshots": [],
         "facade_native_object_snapshots": [],
+        "facade_format_events": [],
+        "facade_native_format_summary": [],
+        "facade_tree_insert_events": [],
         "facade_stack_write_events": [],
         "request_vm_entry_events": [],
         "unmapped": [],
@@ -429,6 +432,7 @@ def run(library: Path, libc: Path, image: int) -> dict:
                       0x17BA24, 0x17BA38, 0x17BA40, 0x17BA44, 0x17BA60,
                       0x17BA68, 0x17BA6C, 0x17BA70, 0x17BA74, 0x17BA7C, 0x17BA84,
                       0x17BA8C, 0x17BAA0, 0x17BAC0,
+                      0x248908, 0x25BF3C,
                       0x28B700, 0x28B704, 0x28B70C, 0x28B710,
                       0x28B718, 0x28B71C, 0x28B724, 0x28B72C,
                       0x28B734, 0x28B73C, 0x347F00, 0x347F10):
@@ -574,6 +578,59 @@ def run(library: Path, libc: Path, image: int) -> dict:
                     except Exception as exc:
                         tree_row["error"] = f"{type(exc).__name__}: {exc}"
                     state["facade_native_object_snapshots"].append(tree_row)
+            if offset == 0x248908:
+                row["format_object"] = row["x0"]
+                row["format_argument"] = row["x2"]
+                row["format_string_address"] = row["x3"]
+                try:
+                    fmt = bytearray()
+                    pointer = cpu.reg_read(arm.UC_ARM64_REG_X1)
+                    for index in range(256):
+                        byte = bytes(cpu.mem_read(pointer + index, 1))
+                        if byte == b"\0":
+                            break
+                        fmt.extend(byte)
+                    row["format_hex"] = bytes(fmt).hex()
+                except Exception:
+                    row["format_hex"] = None
+                try:
+                    pointer = cpu.reg_read(arm.UC_ARM64_REG_X3)
+                    string = bytearray()
+                    for index in range(256):
+                        byte = bytes(cpu.mem_read(pointer + index, 1))
+                        if byte == b"\0":
+                            break
+                        string.extend(byte)
+                    row["format_string_hex"] = bytes(string).hex()
+                except Exception:
+                    row["format_string_hex"] = None
+                state["facade_format_events"].append(dict(row))
+                try:
+                    signed = cpu.reg_read(arm.UC_ARM64_REG_X2) & 0xFFFFFFFF
+                    signed = signed - (1 << 32) if signed & 0x80000000 else signed
+                    fmt_raw = bytes.fromhex(row["format_hex"] or "")
+                    string_raw = bytes.fromhex(row["format_string_hex"] or "")
+                    fmt_raw = fmt_raw.split(b"\0", 1)[0]
+                    string_raw = string_raw.split(b"\0", 1)[0]
+                    if fmt_raw == b"%d|%s":
+                        state["facade_native_format_summary"].append({
+                            "object_address": row["x0"],
+                            "signed_int32": signed,
+                            "format": fmt_raw.decode("ascii"),
+                            "string_hex": string_raw.hex(),
+                            "string": string_raw.decode("utf-8", "backslashreplace"),
+                            "caller_offset": hex(cpu.reg_read(arm.UC_ARM64_REG_X30) - image),
+                            "vm_backing": hex(cpu.reg_read(arm.UC_ARM64_REG_X28)),
+                            "vm_pc_slot": hex(cpu.reg_read(arm.UC_ARM64_REG_X19)),
+                            "vm_bytecode_pc": hex(_u(
+                                cpu, cpu.reg_read(arm.UC_ARM64_REG_X19))),
+                            "vm_bytecode_offset": hex(_u(
+                                cpu, cpu.reg_read(arm.UC_ARM64_REG_X19)) - image),
+                        })
+                except Exception:
+                    pass
+            if offset == 0x25BF3C:
+                state["facade_tree_insert_events"].append(dict(row))
             if offset in (0x2830C4, 0x2830EC, 0x283100, 0x28310C):
                 row.update(
                     x8=hex(cpu.reg_read(arm.UC_ARM64_REG_X8)),
@@ -994,6 +1051,9 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "facade_dispatch_events": state["facade_dispatch_events"],
         "facade_stack_snapshots": state["facade_stack_snapshots"],
         "facade_native_object_snapshots": state["facade_native_object_snapshots"],
+        "facade_format_events": state["facade_format_events"],
+        "facade_native_format_summary": state["facade_native_format_summary"],
+        "facade_tree_insert_events": state["facade_tree_insert_events"],
         "facade_stack_write_events": state["facade_stack_write_events"],
         "request_vm_entry_events": state["request_vm_entry_events"],
         "actual_facade_return_verified": actual_facade_return_verified,
@@ -1113,7 +1173,7 @@ def main() -> None:
     assert digest == oracle.LIBRARY_SHA256, digest
     rows = [run(args.library, args.libc, image) for image in BASES]
     report = {
-        "schema": "vm9-native-outer-facade-actual-child-20261027-v4",
+        "schema": "vm9-native-outer-facade-actual-child-20261027-v5",
         "evidence_date": "2026-10-27",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),

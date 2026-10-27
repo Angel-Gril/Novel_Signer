@@ -9733,7 +9733,7 @@
   "vm9_native_outer_facade_actual_child_20261027": {
     "path": "evidence/vm9_native_outer_facade_actual_child_20261027.json",
     "verifier": "python/verify_vm9_native_outer_facade_actual_child_20261027.py",
-    "schema": "vm9-native-outer-facade-actual-child-20261027-v4",
+    "schema": "vm9-native-outer-facade-actual-child-20261027-v5",
     "evidence_label": "Same-CPU native outer real child into normal Java facade",
     "image_bases": [
       "0x122c0000",
@@ -9794,6 +9794,11 @@
     },
     "independent_output_reference_tree_value": "-5|",
     "facade_output_tree_semantics_closed": false,
+    "facade_native_formatter_candidates": [
+      {"bytecode_offset": "0xfb548", "signed_value": -7, "time": "50:51:59"},
+      {"bytecode_offset": "0xfefbc", "signed_value": -11, "time": "50:51:59"}
+    ],
+    "facade_native_tree_kept_value": -11,
     "whole_request_native_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
