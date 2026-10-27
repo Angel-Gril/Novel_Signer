@@ -6479,3 +6479,22 @@ standalone signer 和线上验签仍未闭合。
 
 证据：[output-reference rerun](evidence/vm9_request_output_reference_20261027_rerun.json)、
 [request entry ABI provenance](evidence/vm9_request_entry_abi_provenance_20261027.json)。
+
+## 2026-10-28：actual vector object writer provenance
+
+在 actual outer child → normal facade 的同一只 Unicorn CPU 上新增受限 native memory-write ledger，
+对动态观测到的 16 字节 vector object `0x136d70d0` 与 128 字节 header-vector
+`0x136d6100` 记录写入地址、覆盖范围、写入前/后字节、绝对 PC、image-relative PC
+和入口寄存器。两个 image base 的轨迹均闭合：vector object 记录 32 次写入，header-vector
+记录 50 次写入；两对象都能与 continuation allocator ledger 的同址分配事件连接，分配
+来源包含 `+0x246988`，并在后续复用路径出现 `+0x2548dc`、`+0x246a78` 和
+`+0x32a210`。写入事件均发生在 facade 启动前，说明这些对象由 outer/初始化链构造，
+不是 facade 或 verifier 注入。
+
+证据见
+[vm9_native_outer_facade_vector_writer_20261028.json](evidence/vm9_native_outer_facade_vector_writer_20261028.json)，
+复现脚本仍为
+[verify_vm9_native_outer_facade_actual_child_20261027.py](python/verify_vm9_native_outer_facade_actual_child_20261027.py)。
+本轮只闭合对象分配与 native writer provenance；没有把对象字段解释成 signer 业务语义，
+whole-request native differential、真实 Android JVM/JNI、fresh standalone signer 和线上 header
+验收仍未闭合。

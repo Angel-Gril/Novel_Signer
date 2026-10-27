@@ -201,6 +201,12 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "helper_object_events": [],
         "helper_object_write_events": [],
         "helper_stack_write_events": [],
+        # Native writes to the two actual vector objects are kept separately
+        # from the broad allocator ledger.  The write hook fires before the
+        # instruction commits, so each event is completed on the next native
+        # instruction through ``pending_vector_writes`` below.
+        "native_vector_write_events": [],
+        "pending_vector_writes": [],
         "facade_return_registers": None,
         "facade_dispatch_events": [],
         "facade_stack_snapshots": [],
@@ -389,6 +395,14 @@ def run(library: Path, libc: Path, image: int) -> dict:
                 event["value_after_write"] = None
             if len(state["vm_backing_write_events"]) < 1024:
                 state["vm_backing_write_events"].append(event)
+        pending_vectors = state.pop("pending_vector_writes", [])
+        state["pending_vector_writes"] = []
+        for event in pending_vectors:
+            try:
+                event["value_after_write"] = bytes(cpu.mem_read(
+                    int(event["address"], 16), event["size"])).hex()
+            except Exception:
+                event["value_after_write"] = None
         offset = pc - image
         state["last_pc_offset"] = hex(offset)
         state["native_instructions"] += 1
@@ -918,6 +932,47 @@ def run(library: Path, libc: Path, image: int) -> dict:
         # negative offsets identify the second case's libc/outer mappings.
         pc_offset = cpu.reg_read(arm.UC_ARM64_REG_PC) - image
         in_main_image = 0 <= pc_offset < 0x400000
+        # The allocator gives the actual outer pair and header vector stable
+        # addresses in this fresh continuation.  Keep a narrow page window so
+        # we record the native writers before terminal_continuation has
+        # published the dynamic object graph; final classification below uses
+        # the observed pair/x3 values instead of treating these constants as
+        # semantic identifiers.
+        vector_ranges = (
+            (0x136d70d0, 0x136d70e0, "vector_object_candidate"),
+            (0x136d6100, 0x136d6180, "header_vector_candidate"),
+        )
+        for start, end, target in vector_ranges:
+            overlap_start = max(address, start)
+            overlap_end = min(address + size, end)
+            if overlap_start < overlap_end and len(state["native_vector_write_events"]) < 512:
+                try:
+                    value_at_hook = bytes(cpu.mem_read(address, size)).hex()
+                except Exception:
+                    value_at_hook = None
+                event = {
+                    "target_candidate": target,
+                    "address": hex(address),
+                    "size": size,
+                    "overlap": {
+                        "start": hex(overlap_start),
+                        "end": hex(overlap_end),
+                    },
+                    "value_at_hook": value_at_hook,
+                    "value_after_write": None,
+                    "pc": hex(cpu.reg_read(arm.UC_ARM64_REG_PC)),
+                    "pc_offset": hex(pc_offset),
+                    "facade_started": state["facade_started"],
+                    "x0": hex(cpu.reg_read(arm.UC_ARM64_REG_X0)),
+                    "x1": hex(cpu.reg_read(arm.UC_ARM64_REG_X1)),
+                    "x2": hex(cpu.reg_read(arm.UC_ARM64_REG_X2)),
+                    "x3": hex(cpu.reg_read(arm.UC_ARM64_REG_X3)),
+                    "x8": hex(cpu.reg_read(arm.UC_ARM64_REG_X8)),
+                }
+                state["native_vector_write_events"].append(event)
+                if len(state["pending_vector_writes"]) < 512:
+                    state["pending_vector_writes"].append(event)
+                break
         in_facade_window = state["facade_started"] and state["facade_return"] is None
         # The final facade frame is anchored at SP=0x7000ee50 and its
         # temporaries/result references occupy this upper stack range.  Lower
@@ -1211,6 +1266,68 @@ def run(library: Path, libc: Path, image: int) -> dict:
         state["facade_return"] == "epilogue_17bac0"
         and facade_return_value == hex(G + 0x1E10)
     )
+    vector_object_address = state["outer_pair"]
+    header_vector_address = None
+    if state["owning_vm_entry"] is not None:
+        try:
+            header_vector_address = int(state["owning_vm_entry"]["x3"], 16)
+        except (KeyError, TypeError, ValueError):
+            header_vector_address = None
+
+    def _overlap(event, start, width):
+        try:
+            address = int(event["address"], 16)
+            size = int(event["size"])
+        except (KeyError, TypeError, ValueError):
+            return False
+        return address < start + width and address + size > start
+
+    vector_object_writes = [
+        event for event in state["native_vector_write_events"]
+        if vector_object_address is not None
+        and _overlap(event, vector_object_address, 16)
+    ]
+    header_vector_writes = [
+        event for event in state["native_vector_write_events"]
+        if header_vector_address is not None
+        and _overlap(event, header_vector_address, 128)
+    ]
+
+    def _allocation_matches(address, minimum_size):
+        return [
+            {
+                "size": item[0],
+                "address": hex(item[1]),
+                "allocator_pc_offset": item[2],
+            }
+            for item in state["continuation_allocations"]
+            if len(item) >= 3 and item[1] == address and item[0] >= minimum_size
+        ]
+
+    vector_writer_provenance = {
+        "vector_object": {
+            "address": hex(vector_object_address) if vector_object_address is not None else None,
+            "width": 16,
+            "allocation_events": _allocation_matches(vector_object_address, 16)
+            if vector_object_address is not None else [],
+            "write_events": vector_object_writes,
+            "writer_pc_offsets": sorted({event["pc_offset"] for event in vector_object_writes}),
+        },
+        "header_vector": {
+            "address": hex(header_vector_address) if header_vector_address is not None else None,
+            "width": 128,
+            "allocation_events": _allocation_matches(header_vector_address, 128)
+            if header_vector_address is not None else [],
+            "write_events": header_vector_writes,
+            "writer_pc_offsets": sorted({event["pc_offset"] for event in header_vector_writes}),
+        },
+    }
+    vector_writer_provenance_verified = all(
+        row["address"] is not None
+        and row["allocation_events"]
+        and row["write_events"]
+        for row in vector_writer_provenance.values()
+    )
     return {
         "image_base": hex(image),
         "outer_function_offset": "0x1658e4",
@@ -1340,6 +1457,9 @@ def run(library: Path, libc: Path, image: int) -> dict:
         "helper_object_events": state["helper_object_events"],
         "helper_object_write_events": state["helper_object_write_events"],
         "helper_stack_write_events": state["helper_stack_write_events"],
+        "native_vector_write_events": state["native_vector_write_events"],
+        "vector_writer_provenance": vector_writer_provenance,
+        "vector_writer_provenance_verified": vector_writer_provenance_verified,
         "markers": markers,
         "unmapped_events": state["unmapped"],
         "native_outer_result": result,
@@ -1366,8 +1486,8 @@ def main() -> None:
     assert digest == oracle.LIBRARY_SHA256, digest
     rows = [run(args.library, args.libc, image) for image in BASES]
     report = {
-        "schema": "vm9-native-outer-facade-actual-child-20261027-v6",
-        "evidence_date": "2026-10-27",
+        "schema": "vm9-native-outer-facade-actual-child-20261028-v7",
+        "evidence_date": "2026-10-28",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
         "cases": rows,
@@ -1378,6 +1498,9 @@ def main() -> None:
         ),
         "facade_result_source_verified": all(
             case["facade_result_source_verified"] for case in rows
+        ),
+        "vector_writer_provenance_verified": all(
+            case["vector_writer_provenance_verified"] for case in rows
         ),
         "real_request_vm_entry_used": all(
             case["real_request_vm_entry_used"] for case in rows
@@ -1418,7 +1541,11 @@ def main() -> None:
             "native request call returns G+0x1e10 in x0, which is copied into "
             "x19 and reaches the +0x17bac0 epilogue unchanged; this links the "
             "observed facade result to the native call return rather than a "
-            "Python-side snapshot.  It does not claim a "
+            "Python-side snapshot.  The same continuation also records native "
+            "write-hook events overlapping the dynamically observed 16-byte "
+            "vector object and 128-byte header vector, and joins those events "
+            "to the allocator ledger; the writer PC/value lists are provenance "
+            "only.  It does not claim a "
             "live JVM, whole-request differential, standalone signer, or online "
             "acceptance."
         ),
