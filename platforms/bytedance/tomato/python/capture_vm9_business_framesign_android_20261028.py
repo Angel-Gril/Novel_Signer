@@ -111,6 +111,16 @@ def choose_process(device: Any, package: str, pid: int | None) -> Any:
     raise RuntimeError(f"process not found: {package}")
 
 
+def attach_or_spawn(device: Any, package: str, pid: int | None, spawn: bool) -> tuple[Any, int | None]:
+    """Attach to an existing process or install hooks before a spawned launch."""
+    if not spawn:
+        return choose_process(device, package, pid), None
+    if pid is not None:
+        raise ValueError("--pid and --spawn cannot be combined")
+    spawned_pid = int(device.spawn([package]))
+    return device.attach(spawned_pid), spawned_pid
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--pid", type=int)
@@ -118,6 +128,11 @@ def main() -> int:
     parser.add_argument("--device", choices=("usb", "remote"), default="usb")
     parser.add_argument("--remote", default="127.0.0.1:27042")
     parser.add_argument("--duration", type=float, default=60.0)
+    parser.add_argument(
+        "--spawn",
+        action="store_true",
+        help="spawn the package suspended, install hooks, then resume it",
+    )
     args = parser.parse_args()
     try:
         import frida
@@ -127,7 +142,7 @@ def main() -> int:
         device = frida.get_usb_device(timeout=10)
     else:
         device = frida.get_device_manager().add_remote_device(args.remote)
-    session = choose_process(device, args.package, args.pid)
+    session, spawned_pid = attach_or_spawn(device, args.package, args.pid, args.spawn)
 
     def on_message(message: dict, _data: bytes | None) -> None:
         if message.get("type") == "send":
@@ -138,6 +153,9 @@ def main() -> int:
     script = session.create_script(JS)
     script.on("message", on_message)
     script.load()
+    if spawned_pid is not None:
+        device.resume(spawned_pid)
+        print(json.dumps({"event": "spawn_resumed", "pid": spawned_pid}, ensure_ascii=False), flush=True)
     try:
         time.sleep(max(0.0, args.duration))
     finally:

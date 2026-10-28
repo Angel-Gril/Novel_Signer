@@ -19,6 +19,24 @@ manifest 版本。业务 hook
 [版本边界证据](evidence/vm9_runtime_app_version_20261028.json)及
 [校验器](python/verify_vm9_runtime_app_version_20261028.py)。
 
+要重做普通请求的运行时捕获，先完全关闭模拟器，在
+`C:\\Users\\Admin\\.android\\avd\\travelstar_api.avd\\config.ini` 将
+`hw.ramSize` 提升到至少 `4096`、`vm.heapSize` 提升到 `512`，再冷启动并确认
+`adb shell cat /proc/meminfo` 的 `MemTotal` 已超过 3 GB；当前配置文件虽写有 2G，
+运行实例实际只有约 992 MB。启动后可用新的早期 hook 模式：
+
+```powershell
+Set-Location C:\\AI\\6\\_repo_stage\\platforms\\bytedance\\tomato
+python python/capture_vm9_business_framesign_android_20261028.py `
+  --device usb --package com.dragon.read --spawn --duration 180 `
+  | Tee-Object -FilePath .\\evidence\\runtime_business_capture_20261028.log
+```
+
+`--spawn` 会让 Frida 先挂起新进程、安装四个脱敏 hook，再恢复应用；随后在应用内
+进入会发起网络请求的页面。成功判据是日志先出现 `probe_ready` 和四个 `hooked`，
+随后出现 `cronetSecurityFactor` 或 `securityFactor`。另开终端保留
+`adb logcat` 中的 `lowmemory/lmkd/ActivityManager` 行，以区分请求未触发和进程被回收。
+
 对当前安装 APK 的 DEX 做了脱敏字符串存在性检查：`frameSign`、
 `onCallToAddSecurityFactor`、`MSManagerUtils`、`MSManager` 和 `CronetUrlRequest`
 均存在。这只能证明 7.2.5.32 仍包含相关接口名称，不能证明与 7.1.3.32 的方法体或
