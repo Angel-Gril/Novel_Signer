@@ -1,0 +1,103 @@
+{
+  "schema": "vm9-runtime-dex-string-presence-20261028-v1",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "apk_size": 135258081,
+  "installed_version": "7.2.5.32/72532",
+  "dex": [
+    {
+      "dex": "classes.dex",
+      "sha256": "4c842f3bff67e4b050aff44b92de063bd8514e631e49838a5e4759fb8aad0237",
+      "size": 7924336,
+      "strings": {
+        "frameSign": 2
+      }
+    },
+    {
+      "dex": "classes16.dex",
+      "sha256": "c0820f523bc429160614f3f056f1829fe68c173d715db4db3b05e3600d3557ea",
+      "size": 8008060,
+      "strings": {
+        "frameSign": 1,
+        "onCallToAddSecurityFactor": 1,
+        "MSManagerUtils": 4,
+        "MSManager": 5,
+        "CronetUrlRequest": 22
+      }
+    },
+    {
+      "dex": "classes17.dex",
+      "sha256": "c88f1daee04b1257ca0212b111561ae707775a0a1d8392e6c4e0211ed3c9681b",
+      "size": 8226640,
+      "strings": {
+        "onCallToAddSecurityFactor": 2,
+        "CronetUrlRequest": 2
+      }
+    },
+    {
+      "dex": "classes23.dex",
+      "sha256": "09c8cd146d8bb1bcf6a45583ea4820f67d869915c307b0a57209d11b2f4f47c4",
+      "size": 8040388,
+      "strings": {
+        "onCallToAddSecurityFactor": 1,
+        "MSManagerUtils": 3,
+        "MSManager": 4
+      }
+    },
+    {
+      "dex": "classes24.dex",
+      "sha256": "6e7311b1ef778b57bc649a496cc5a0bfa0df9cd343854d40f885ede3526cf6de",
+      "size": 8257352,
+      "strings": {
+        "frameSign": 1,
+        "MSManagerUtils": 6,
+        "MSManager": 7
+      }
+    },
+    {
+      "dex": "classes26.dex",
+      "sha256": "eb7cb6897a3f791b2835e226ef8882aafc9e428c65b6b842cd82f3dffe50a333",
+      "size": 8596392,
+      "strings": {
+        "onCallToAddSecurityFactor": 1
+      }
+    },
+    {
+      "dex": "classes3.dex",
+      "sha256": "d4e47c6ba774fa9fd503d335b2aa52d71da48d66ebacdf4576733e8f8f61c2f4",
+      "size": 8234720,
+      "strings": {
+        "MSManagerUtils": 1,
+        "MSManager": 2,
+        "CronetUrlRequest": 1
+      }
+    },
+    {
+      "dex": "classes4.dex",
+      "sha256": "575df27d76634747f710e0be7ae3084e5d12570fe4c1bf1d70935259a02cd19a",
+      "size": 8242084,
+      "strings": {
+        "MSManagerUtils": 1,
+        "MSManager": 2
+      }
+    },
+    {
+      "dex": "classes8.dex",
+      "sha256": "85416f5fdbbad3411a4d4c4bd03ab7ec346844ee281d7e31a10a5dfe367137d2",
+      "size": 8194544,
+      "strings": {
+        "MSManagerUtils": 1,
+        "MSManager": 2
+      }
+    },
+    {
+      "dex": "classes9.dex",
+      "sha256": "4c52098066241285817bcd1154c989f943e834564831b795242c9348d2d12171",
+      "size": 7693816,
+      "strings": {
+        "CronetUrlRequest": 1
+      }
+    }
+  ],
+  "raw_method_bodies_retained": false,
+  "interpretation": "The installed runtime contains the same frameSign, NetworkParams callback, MSManager and Cronet class-name strings as the pinned analysis family. This string-presence record does not claim byte-identical method bodies or tag routing for 7.2.5.32."
+}

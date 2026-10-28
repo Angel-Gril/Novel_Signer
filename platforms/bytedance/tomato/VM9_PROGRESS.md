@@ -6734,3 +6734,9 @@ signer 和 online header acceptance 仍为 false。证据：[业务链记录](ev
 7.1.3.32/71332。模拟器内存为约 992MB、无 swap，业务 hook 触发前进程被系统低内存
 回收，因此没有把该轮提升为业务请求运行时证据。见[版本证据](evidence/vm9_runtime_app_version_20261028.json)
 和[校验器](python/verify_vm9_runtime_app_version_20261028.py)。
+
+对设备当前 7.2.5.32 APK 的 27 个 DEX 做了轻量字符串存在性检查，确认
+`frameSign`、`onCallToAddSecurityFactor`、`MSManagerUtils`、`MSManager` 和
+`CronetUrlRequest` 仍在运行时材料中；未保留方法体或 token。该证据不把字符串存在性
+解释成 7.1.3.32 方法体、native tag 或完整请求兼容性证明。见[DEX 证据](evidence/vm9_runtime_dex_string_presence_20261028.json)
+和[校验器](python/verify_vm9_runtime_dex_string_presence_20261028.py)。

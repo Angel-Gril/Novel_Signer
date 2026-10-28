@@ -10364,5 +10364,16 @@
     "runtime_probe_status": "business_capture_blocked_by_low_memory_process_reclamation",
     "raw_headers_or_tokens_retained": false,
     "interpretation": "The live Android-JVM frameSign capture used the installed 7.2.5.32 process, while the pinned ELF/JADX native differential evidence uses 7.1.3.32; version-sensitive conclusions keep these boundaries separate."
+  },
+  "vm9_runtime_dex_string_presence_20261028": {
+    "path": "evidence/vm9_runtime_dex_string_presence_20261028.json",
+    "verifier": "python/verify_vm9_runtime_dex_string_presence_20261028.py",
+    "schema": "vm9-runtime-dex-string-presence-20261028-v1",
+    "evidence_label": "Installed 7.2.5.32 DEX string-presence check",
+    "installed_version": "7.2.5.32/72532",
+    "required_strings": ["frameSign", "onCallToAddSecurityFactor", "MSManagerUtils", "MSManager", "CronetUrlRequest"],
+    "raw_method_bodies_retained": false,
+    "method_body_equivalence_verified": false,
+    "interpretation": "The installed runtime contains the relevant class/method strings, but this lightweight APK check does not claim byte-identical method bodies or tag routing across versions."
   }
 }
