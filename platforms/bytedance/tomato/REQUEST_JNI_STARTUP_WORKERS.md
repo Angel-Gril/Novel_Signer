@@ -9880,3 +9880,7 @@ URL、header 或完整签名值；actual JNI provider、live Android JVM、whole
 native/Python differential、fresh standalone signer 和线上验签仍未闭合。证据：
 `evidence/vm9_frame_sign_handle2_url_dynamic_probe_20261028.json`；复现脚本：
 `python/verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py`。
+
+同一批三组 URL 运行的六神 setup 还显示：`X-Gorgon` 与 `X-Medusa` 摘要随 URL
+profile 改变，而 `X-Argus`、`X-Helios`、`X-Ladon` 和冻结的 `X-Khronos` 保持不变。
+这仍是脱敏的输入敏感性观察，不把任何一组值提升为线上验签结果。

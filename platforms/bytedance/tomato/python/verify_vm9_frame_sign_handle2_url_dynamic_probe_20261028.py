@@ -116,12 +116,22 @@ def verify(*, library: Path, hook_source: Path, logs: dict[str, Path], rounds: d
     signinfo_hashes = {row["signinfo"]["sha256"] for row in observations.values()}
     signvalue_hashes = {row["signvalue"]["sha256"] for row in observations.values()}
     input_hashes = {row["input"]["sha256"] for row in round_observations.values()}
+    header_hashes = {
+        name: {row["header_observations"][name]["sha256"]
+               for row in round_observations.values()}
+        for name in EXPECTED_HEADERS
+    }
     if len(input_hashes) != 3:
         raise AssertionError("controlled URL profiles are not distinct")
     if len(signinfo_hashes) < 2 or len(signvalue_hashes) != 3:
         raise AssertionError("URL sensitivity was not observed in both result fields")
     if len({row["khronos_seconds"] for row in round_observations.values()}) != 1:
         raise AssertionError("controlled timestamps differ")
+    if len(header_hashes["X-Gorgon"]) != 3 or len(header_hashes["X-Medusa"]) != 3:
+        raise AssertionError("URL sensitivity was not observed in X-Gorgon/X-Medusa")
+    for name in ("X-Argus", "X-Helios", "X-Ladon", "X-Khronos"):
+        if len(header_hashes[name]) != 1:
+            raise AssertionError(("unexpected controlled header drift", name, header_hashes[name]))
     report = {
         "schema": "vm9-frame-sign-handle2-url-dynamic-probe-20261028-v1",
         "evidence_date": "2026-10-28",
@@ -137,6 +147,9 @@ def verify(*, library: Path, hook_source: Path, logs: dict[str, Path], rounds: d
         "distinct_input_profiles_verified": True,
         "signinfo_sensitive_to_url": True,
         "signvalue_sensitive_to_url": True,
+        "x_gorgon_sensitive_to_url": True,
+        "x_medusa_sensitive_to_url": True,
+        "url_invariant_headers": ["X-Argus", "X-Helios", "X-Ladon", "X-Khronos"],
         "observations": observations,
         "round_observations": round_observations,
         "synthetic_jni_provider_used": True,
@@ -150,6 +163,8 @@ def verify(*, library: Path, hook_source: Path, logs: dict[str, Path], rounds: d
             "Three fresh isolated unidbg runs reuse handle2 and frameType 0 while varying "
             "only the redacted URL profile. Every run returns the same length-10 key/value "
             "shape; signinfo and signvalue both change across the distinct input profiles. "
+            "The same setup changes X-Gorgon and X-Medusa while X-Argus, X-Helios, "
+            "X-Ladon and frozen-time X-Khronos remain invariant. "
             "Explicit Java/OS callbacks remain in the harness, so this is native input "
             "sensitivity evidence rather than live Android-JVM/provider, whole-request "
             "differential, standalone signer or online acceptance proof."

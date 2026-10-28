@@ -23,6 +23,14 @@
   "distinct_input_profiles_verified": true,
   "signinfo_sensitive_to_url": true,
   "signvalue_sensitive_to_url": true,
+  "x_gorgon_sensitive_to_url": true,
+  "x_medusa_sensitive_to_url": true,
+  "url_invariant_headers": [
+    "X-Argus",
+    "X-Helios",
+    "X-Ladon",
+    "X-Khronos"
+  ],
   "observations": {
     "homepage": {
       "frame_type": 0,
@@ -247,5 +255,5 @@
     "run_log_search_route": "9552f6eeaf2f654295d6dc40bb45a402dda06e44b391b7ced043836fb38cb04f",
     "rounds_search_route": "e2c2bca25ea8938f91484419bf48d18851d1c6334ce5dcf1488c9256b7e31198"
   },
-  "interpretation": "Three fresh isolated unidbg runs reuse handle2 and frameType 0 while varying only the redacted URL profile. Every run returns the same length-10 key/value shape; signinfo and signvalue both change across the distinct input profiles. Explicit Java/OS callbacks remain in the harness, so this is native input sensitivity evidence rather than live Android-JVM/provider, whole-request differential, standalone signer or online acceptance proof."
+  "interpretation": "Three fresh isolated unidbg runs reuse handle2 and frameType 0 while varying only the redacted URL profile. Every run returns the same length-10 key/value shape; signinfo and signvalue both change across the distinct input profiles. The same setup changes X-Gorgon and X-Medusa while X-Argus, X-Helios, X-Ladon and frozen-time X-Khronos remain invariant. Explicit Java/OS callbacks remain in the harness, so this is native input sensitivity evidence rather than live Android-JVM/provider, whole-request differential, standalone signer or online acceptance proof."
 }

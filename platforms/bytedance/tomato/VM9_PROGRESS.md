@@ -71,7 +71,9 @@ native/Python differential、fresh standalone signer 和线上验签保持未验
 三组脱敏 URL profile：主页基线、带 query 变体和搜索路由。三次 fresh unidbg
 调用都返回长度 10 的相同五组键值结构；主页与 query 的 `signinfo` 长度均为
 224，搜索路由为 320，三组 `signvalue` 长度均为 64，且 `signinfo`/`signvalue`
-摘要都随 URL profile 改变。
+摘要都随 URL profile 改变。对应的六神 setup 中，`X-Gorgon` 与 `X-Medusa`
+摘要也随 URL 改变；`X-Argus`、`X-Helios`、`X-Ladon` 和冻结的 `X-Khronos`
+保持不变。
 
 这把 URL 输入敏感性定位到 native frameSign 的两个结果字段，同时保持键序、句柄
 和 frameType 不变。证据只保存 profile 的长度/摘要及返回值长度/摘要，不保存 URL、

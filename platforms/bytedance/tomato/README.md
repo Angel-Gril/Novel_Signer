@@ -46,7 +46,9 @@ and [verifier](python/verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028
 A controlled URL sweep with the same handle2 and `frameType=0` uses homepage,
 query-variant, and search-route inputs. All three calls keep the length-10 result
 shape; both `signinfo` and `signvalue` digests change with the URL profile. The
-inputs and values remain redacted to lengths and SHA-256 digests. This is still
+same sweep also changes `X-Gorgon` and `X-Medusa`, while `X-Argus`, `X-Helios`,
+`X-Ladon`, and frozen-time `X-Khronos` remain invariant in the controlled runs.
+The inputs and values remain redacted to lengths and SHA-256 digests. This is still
 isolated unidbg input-sensitivity evidence with explicit Java/OS callbacks. See
 [URL-sweep evidence](evidence/vm9_frame_sign_handle2_url_dynamic_probe_20261028.json)
 and [verifier](python/verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py).

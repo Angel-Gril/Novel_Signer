@@ -18,8 +18,10 @@ not a claim about frame semantics or standalone signing. See
 The URL sweep reuses handle2 and `frameType=0` across homepage, query-variant,
 and search-route profiles. The result shape stays fixed while both `signinfo`
 and `signvalue` digests change. URL and returned values are retained only as
-lengths and SHA-256 digests; this remains explicit-callback unidbg sensitivity
-evidence. See `verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py`.
+lengths and SHA-256 digests; the same run changes `X-Gorgon`/`X-Medusa` while
+the other four controlled header digests remain invariant. This remains
+explicit-callback unidbg sensitivity evidence. See
+`verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py`.
 
 `verify_vm9_signer_boundary_audit_20261024.py` now audits the public outer and
 request owners before standalone-signer work. It confirms the `+17b8f8 →
