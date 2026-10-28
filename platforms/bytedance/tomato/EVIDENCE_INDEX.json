@@ -10332,5 +10332,22 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "Three fresh isolated unidbg runs reuse handle2 and frameType 0 while varying only the redacted URL profile. Every run returns the same length-10 key/value shape; signinfo and signvalue both change across the distinct input profiles. The same setup changes X-Gorgon and X-Medusa while X-Argus, X-Helios, X-Ladon and frozen-time X-Khronos remain invariant. Explicit Java/OS callbacks remain, so this is native input sensitivity evidence rather than live Android-JVM/provider, whole-request differential, standalone signer or online acceptance proof."
+  },
+  "vm9_business_framesign_chain_20261028": {
+    "path": "evidence/vm9_business_framesign_chain_20261028.json",
+    "verifier": "python/verify_vm9_business_framesign_chain_20261028.py",
+    "schema": "vm9-business-framesign-chain-20261028-v1",
+    "evidence_label": "Static ordinary-request six-header path separated from live frameSign five-field API",
+    "package": "com.dragon.read",
+    "request_native_tag": "0x3000001",
+    "frame_sign_tag": "0x200000A",
+    "request_callback": "ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)",
+    "cronet_path": "CronetUrlRequest.addSecurityFactor -> CronetUrlRequestContext.o0 -> com.ttnet.org.chromium.net.w.a",
+    "separation_verified": true,
+    "business_frame_sign_call_observed": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "interpretation": "The ordinary Cronet/NetworkParams request path is statically routed to the six-header native tag 0x3000001. The real Android-JVM frameSign provider is a distinct 0x200000A five-field API and is not evidence that the ordinary request callback ran."
   }
 }

@@ -6712,3 +6712,19 @@ native/Python differential、fresh standalone signer 或线上验签。Frida 的
 `lib/arm64/libmetasec_ml.so` 的三段映射，确认了 ARM translation 下的实际 DSO 承载。
 证据：[vm9_actual_android_jvm_frame_sign_20261028.json](evidence/vm9_actual_android_jvm_frame_sign_20261028.json)，
 复现器：[verify_vm9_actual_android_jvm_frame_sign_20261028.py](python/verify_vm9_actual_android_jvm_frame_sign_20261028.py)。
+## 2026-10-28：普通业务请求与 live frameSign 的路径分离
+
+静态源码复核闭合了普通请求的调用方向：`s4.a(long)` 注册
+`NetworkParams.setAddSecurityFactorProcessCallback(r4)`；Cronet 的
+`addSecurityFactor(String,String[])` 将输入转成 map，经过
+`CronetUrlRequestContext.o0 -> com.ttnet.org.chromium.net.w.a`，最终落到
+`ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)`，再由同一 JNI 注册入口使用
+`0x3000001` 生成六个七神 header。`com.bytedance.mobsec.metasec.core.c.frameSign`
+则使用 `0x200000A` 返回五键 frameSign map，是独立 API。
+
+本轮在真实进程安装了 `MSManager.frameSign`、`r4.onCallToAddSecurityFactor` 和
+Cronet `addSecurityFactor` 的脱敏 hook；应用在业务请求触发前被模拟器的广播/生命周期
+路径终止，未记录到业务调用。因此只确认了静态 owner 与 tag 分离，未把手动 frameSign
+结果提升为普通请求结果；whole-request native/Python differential、fresh standalone
+signer 和 online header acceptance 仍为 false。证据：[业务链记录](evidence/vm9_business_framesign_chain_20261028.json)，
+[校验器](python/verify_vm9_business_framesign_chain_20261028.py)。

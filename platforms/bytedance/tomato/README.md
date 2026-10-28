@@ -1,5 +1,16 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-10-28 业务请求路径复核：普通 Cronet/NetworkParams 请求由
+`CronetUrlRequest.addSecurityFactor(String,String[]) -> CronetUrlRequestContext.o0`
+汇入 `com.ttnet.org.chromium.net.w.a`，应用侧回调是
+`ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)`，最终使用 JNI tag
+`0x3000001` 返回六个七神 header。真实 Android-JVM `MSManager.frameSign(String,int)`
+走的是独立的 JNI tag `0x200000A`，返回 `frametype/lid/signinfo/signvalue/signversion`
+五键结构；不能把后者当作普通请求已经运行的证据。本轮 hook 已安装但模拟器在业务请求
+触发前被系统生命周期/广播路径终止，因此 `business_frame_sign_call_observed=false`、
+完整请求差分和线上验签仍未验证。见 [业务链证据](evidence/vm9_business_framesign_chain_20261028.json)
+及[校验器](python/verify_vm9_business_framesign_chain_20261028.py)。
+
 Fresh unidbg replay (2026-10-28): an isolated Unicorn2 `HookMain` run loaded the
 pinned `libmetasec_ml_71332.so`, executed `JNI_OnLoad`/`RegisterNatives` and the
 native signing tag `0x3000001`, then returned all six expected header names with

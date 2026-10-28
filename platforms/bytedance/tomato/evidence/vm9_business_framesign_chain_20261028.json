@@ -1,0 +1,39 @@
+{
+  "schema": "vm9-business-framesign-chain-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "package": "com.dragon.read",
+  "static_chain": {
+    "startup_registration": "ms.bd.c.s4.a(long) -> NetworkParams.setAddSecurityFactorProcessCallback(r4)",
+    "request_callback": "ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)",
+    "request_native_tag": "0x3000001",
+    "request_native_entry": "+0x26e684",
+    "cronet_request": "CronetUrlRequest.addSecurityFactor(String,String[]) -> CronetUrlRequestContext.o0(String,Map)",
+    "cronet_context": "CronetUrlRequestContext.o0(String,Map) -> com.ttnet.org.chromium.net.w.a(String,Map)",
+    "frame_sign_api": "com.bytedance.mobsec.metasec.core.c.frameSign(String,int) -> ms.bd.c.y2.a(0x200000A,...)",
+    "frame_sign_result": ["frametype", "lid", "signinfo", "signvalue", "signversion"]
+  },
+  "separation_verified": true,
+  "business_frame_sign_call_observed": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "runtime_probe": {
+    "attach_hook_installed": true,
+    "hook_targets": [
+      "MSManager.frameSign(String,int)",
+      "ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)",
+      "CronetUrlRequest.addSecurityFactor(String,String[])"
+    ],
+    "observed_business_request": false,
+    "termination": "The emulator process was killed during normal startup by the host broadcast/lifecycle path before a business request could be triggered.",
+    "raw_urls_or_headers_retained": false
+  },
+  "source_hashes": {
+    "r4.java": "b3334993de362c69f3d27e116f300121261732fa166c9c34c7a03739ab451b00",
+    "s4.java": "805137ef6255765914ceff189bf859ab75c169efc5442b873dcf1bea9770152a",
+    "CronetUrlRequest.java": "7f4cb81b3e8a6c470bca8c33192670ec2c57da0a33f93cb0ee9cdeb492e7e2b2",
+    "CronetUrlRequestContext.java": "dee10f74172f56e60eabbd58cd5d92abd4f78c396f9605447a9fc4799697e553",
+    "core.c.java": "fb143c74d7b82731af3b5833c93b06d5884e4aba20163dd54b330e09ee48c46a"
+  },
+  "interpretation": "The ordinary Cronet/NetworkParams request path is statically routed to the six-header native tag 0x3000001. The real Android-JVM frameSign provider verified separately is a distinct 0x200000A five-field API; it must not be treated as proof that the ordinary request callback ran."
+}
