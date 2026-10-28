@@ -9896,7 +9896,8 @@ profile 改变，而 `X-Argus`、`X-Helios`、`X-Ladon` 和冻结的 `X-Khronos`
 
 这是当前主线第一条真实 Android-JVM/provider frameSign 证据，关闭了此前
 `live_android_jvm_verified=false` 的边界。模块过滤列表仍未出现独立命名的
-`libmetasec_ml.so`，因此 DSO 的实际承载和加载归属仍未确认。该结果不等于
+`libmetasec_ml.so`；Frida x86 侧看不到该 ARM 模块是 translation 层表现，不能据此
+判定未加载。该结果不等于
 whole-request native/Python differential、fresh standalone signer 或线上验签。
 证据：`evidence/vm9_actual_android_jvm_frame_sign_20261028.json`；复现脚本：
 `python/verify_vm9_actual_android_jvm_frame_sign_20261028.py`。

@@ -29,8 +29,9 @@ def digest(value: str) -> dict[str, object]:
     return {"length": len(value), "sha256": sha256_bytes(value.encode("utf-8"))}
 
 
-def load_capture(path: Path) -> tuple[dict, dict[str, dict]]:
+def load_capture(path: Path) -> tuple[dict, dict, dict[str, dict]]:
     provider = None
+    maps = None
     rows: dict[str, dict] = {}
     for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
         if not line.strip():
@@ -39,6 +40,8 @@ def load_capture(path: Path) -> tuple[dict, dict[str, dict]]:
         event = item.get("event")
         if event == "provider_ready":
             provider = item
+        elif event == "maps_probe":
+            maps = item
         elif event == "frame_sign":
             profile = item.get("profile")
             if profile in PROFILES:
@@ -49,12 +52,16 @@ def load_capture(path: Path) -> tuple[dict, dict[str, dict]]:
         raise AssertionError("missing provider_ready event")
     if set(rows) != set(PROFILES):
         raise AssertionError(("profiles", sorted(rows)))
-    return provider, rows
+    if maps is None or not isinstance(maps.get("metasec_maps_count"), int):
+        raise AssertionError("missing metasec maps probe")
+    if maps["metasec_maps_count"] < 1 or not maps.get("metasec_maps"):
+        raise AssertionError("libmetasec_ml.so was not observed in /proc/self/maps")
+    return provider, maps, rows
 
 
 def verify(*, capture: Path, x1_source: Path, manager_source: Path,
            core_source: Path, output: Path) -> dict:
-    provider, rows = load_capture(capture)
+    provider, maps, rows = load_capture(capture)
     if provider.get("package_name") != "com.dragon.read":
         raise AssertionError(("package", provider.get("package_name")))
     if provider.get("init_trigger") != "triggered":
@@ -64,8 +71,6 @@ def verify(*, capture: Path, x1_source: Path, manager_source: Path,
     if provider.get("manager_class") != "com.bytedance.mobsec.metasec.ml.MSManager":
         raise AssertionError(("manager_class", provider.get("manager_class")))
     modules = {item.get("name") for item in provider.get("modules", [])}
-    if "libmetasec_ml.so" in modules:
-        raise AssertionError("capture unexpectedly reports a direct libmetasec_ml.so module")
 
     observations = {}
     for profile in PROFILES:
@@ -127,7 +132,8 @@ def verify(*, capture: Path, x1_source: Path, manager_source: Path,
         "signvalue_sensitive_to_url": True,
         "observations": observations,
         "provider_modules_matching_filter": sorted(modules),
-        "direct_metasec_module_observed": False,
+        "direct_metasec_module_observed": True,
+        "metasec_maps_count": maps["metasec_maps_count"],
         "actual_jni_provider_verified": True,
         "live_android_jvm_verified": True,
         "whole_request_native_python_differential_verified": False,

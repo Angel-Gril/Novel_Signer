@@ -9959,11 +9959,12 @@
     "signvalue_sensitive_to_url": true,
     "actual_jni_provider_verified": true,
     "live_android_jvm_verified": true,
-    "direct_metasec_module_observed": false,
+    "direct_metasec_module_observed": true,
+    "metasec_maps_count": 3,
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
-    "interpretation": "The real running Tomato process initialized MSManager for app id 1967 and returned the five-key frameSign shape for three distinct URL profiles; signinfo and signvalue changed with the URL. The filtered module list did not expose a separately named libmetasec_ml.so, so DSO ownership remains open. This is live Android-JVM/provider evidence only, not whole-request differential, standalone signing, or online acceptance."
+    "interpretation": "The real running Tomato process initialized MSManager for app id 1967 and returned the five-key frameSign shape for three distinct URL profiles; signinfo and signvalue changed with the URL. The x86-side Frida module list exposes the translation-side libzyte.so, while the same process /proc/self/maps probe records three APK-arm64 libmetasec_ml.so mappings. This is live Android-JVM/provider evidence only, not whole-request differential, standalone signing, or online acceptance."
   },
   "vm9_request_output_reference_20261027_rerun": {
     "path": "evidence/vm9_request_output_reference_20261027_rerun.json",

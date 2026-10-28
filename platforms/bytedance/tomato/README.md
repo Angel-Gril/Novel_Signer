@@ -1226,8 +1226,9 @@ success and `MSManagerUtils.get("1967")` returns a live `MSManager`; reflective
 calls to `MSManager.frameSign(String,int)` return the five expected fields for
 three URL profiles, with both `signinfo` and `signvalue` changing with the URL.
 This is the first actual Android-JVM/provider frameSign evidence in this line.
-The device's module list still has no separately named `libmetasec_ml.so` (the
-filtered list includes `libzyte.so`), so native DSO ownership remains open. The
-result is not a whole-request native/Python differential, standalone signer, or
-online acceptance result. See [actual Android-JVM frameSign evidence](evidence/vm9_actual_android_jvm_frame_sign_20261028.json)
+The x86-side Frida module list only includes the translation-side `libzyte.so`,
+but the same process's `/proc/self/maps` contains three mappings of the APK's
+`lib/arm64/libmetasec_ml.so`; this explains the earlier apparent module gap.
+The result is not a whole-request native/Python differential, standalone signer,
+or online acceptance result. See [actual Android-JVM frameSign evidence](evidence/vm9_actual_android_jvm_frame_sign_20261028.json)
 and [verifier](python/verify_vm9_actual_android_jvm_frame_sign_20261028.py).

@@ -39,11 +39,11 @@
         },
         "signinfo": {
           "length": 192,
-          "sha256": "08e2d71f1194bc04da3b954741238dc35a381b48df4c5128e2b21ca0a369a463"
+          "sha256": "1b4a2b264f22c5ea1be1bda189d3578d326f03b9611974879e5c2f35b70d366c"
         },
         "signvalue": {
           "length": 64,
-          "sha256": "bb6733e415e7fc65edbb939615d19532c265f45f1dae95f6e72ce6d714d04d65"
+          "sha256": "0fdfd43c990739a205de07b14e6b9afd58a8e139dec1be91af929b65d21047d7"
         },
         "signversion": {
           "length": 3,
@@ -67,11 +67,11 @@
         },
         "signinfo": {
           "length": 224,
-          "sha256": "3c89ffaa2f61c6d38864a8ede1ab1d84fc751a5a83a10bad0db3c0363dd87aec"
+          "sha256": "9dc088024a2abfe1914f0e5d0d050781a62967fdf175031c7ac51741921b8129"
         },
         "signvalue": {
           "length": 64,
-          "sha256": "e0a9cc6d9117690a64e7a45ed3b230f2e78ccb009b9bc6880ee4b2e95d6dbb50"
+          "sha256": "37cc612e1681946e587c59ad1e93d6f03ff3e7aa232e3f2749a2078e19979efa"
         },
         "signversion": {
           "length": 3,
@@ -95,11 +95,11 @@
         },
         "signinfo": {
           "length": 224,
-          "sha256": "4235e1f305877084eb4731072d8d2b8cae21540407ca33e3aca1b4f9d50e1c9c"
+          "sha256": "193f2e6815801ad8c56fc307298a017f8845b2e95fbd0f2584dd07182a7e96e5"
         },
         "signvalue": {
           "length": 64,
-          "sha256": "dd86c68eabbd34f4e2f53537c26267a9cdab6e5ecd6f980ee3303f620b8104e0"
+          "sha256": "27c6d981dc3977162ca8a40bc3429cc0ba768184229ef893c165c9f9a582ef61"
         },
         "signversion": {
           "length": 3,
@@ -113,14 +113,15 @@
     "libcamera_metadata.so",
     "libzyte.so"
   ],
-  "direct_metasec_module_observed": false,
+  "direct_metasec_module_observed": true,
+  "metasec_maps_count": 3,
   "actual_jni_provider_verified": true,
   "live_android_jvm_verified": true,
   "whole_request_native_python_differential_verified": false,
   "fresh_standalone_signer_verified": false,
   "online_header_acceptance_verified": false,
   "source_hashes": {
-    "capture": "d7356611b2b9f012c3593442a8b94a5e445079deb8061915028f17ff7a3837de",
+    "capture": "fec63c5e70b5af3095d112a79fe002991236ec30eb0d99e5c967fa9a1502bbd3",
     "x1_source": "4d9127c8e4d21fc80d4d4f147f3d6a97524afd32939879ba1e9cba1ac741c81d",
     "manager_source": "b8683b47f334e1adc27d71b4b84a87eab39a168151155fbe4f948a501673bacf",
     "core_source": "fb143c74d7b82731af3b5833c93b06d5884e4aba20163dd54b330e09ee48c46a"

@@ -6707,7 +6707,8 @@ header 的语义证明。
 长度和 SHA-256，不保存 URL、签名原文或 token。
 
 这关闭了当前设备上的真实 Android-JVM/provider frameSign 边界，不能外推为 whole-request
-native/Python differential、fresh standalone signer 或线上验签。模块过滤列表仍未出现独立
-命名的 `libmetasec_ml.so`，只看到 `libzyte.so` 等，因此 DSO 承载/加载归属仍待确认。
+native/Python differential、fresh standalone signer 或线上验签。Frida 的 x86 侧模块过滤列表
+只看到翻译层 `libzyte.so`，但同一进程通过 `/proc/self/maps` 已观察到 APK 内
+`lib/arm64/libmetasec_ml.so` 的三段映射，确认了 ARM translation 下的实际 DSO 承载。
 证据：[vm9_actual_android_jvm_frame_sign_20261028.json](evidence/vm9_actual_android_jvm_frame_sign_20261028.json)，
 复现器：[verify_vm9_actual_android_jvm_frame_sign_20261028.py](python/verify_vm9_actual_android_jvm_frame_sign_20261028.py)。
