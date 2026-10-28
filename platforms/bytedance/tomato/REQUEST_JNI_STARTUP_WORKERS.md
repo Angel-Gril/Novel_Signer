@@ -9830,3 +9830,25 @@ JNI provider、真实 Android JVM、whole-request differential、fresh standalon
 signer 和线上验签都保持 false。证据：
 `evidence/vm9_frame_sign_dynamic_probe_20261028.json`；复现脚本：
 `python/verify_vm9_frame_sign_dynamic_probe_20261028.py`。
+
+## 6.294 frameSign handle2 structured result（2026-10-28 Asia/Shanghai）
+
+对 6.293 的失败边界做单变量修正：不改 ELF、JNI provider 或 owner 字段，只把
+frameSign 的 handle 从 callback-1 捕获的 `0x1296a4a0` 换成同一 Java 生命周期中
+由 `0x4000002` 返回的 `0x128a3000`。新日志先命中
+`MS.a tag=0x4000002`，随后以 `handle=0x128a3000` 调用 `0x200000A`；没有
+`UC_ERR_WRITE_PROT`，native 返回非空 `String[]`，长度为 10。
+
+返回数组按键值对排列，五组键名为 `frametype`、`lid`、`signinfo`、`signvalue`、
+`signversion`。本轮只发布结构、长度和 SHA-256：`signinfo` 长度 224，
+`signvalue` 长度 64；不发布 URL、完整六神 header 或完整 frame 签名值。JADX
+静态源码同时闭合句柄来源：`core.g` 以 `0x4000002` 获得 `Long` 并传入
+`new core.c(..., handle2)`，`core.c.this.a` 保存该句柄，`frameSign` 再以
+`0x200000A` 调用同一 native 声明。因此 callback-1 signer handle 是错误的
+frameSign 输入，handle2 才是当前 Java 生命周期的输入。
+
+该结果仍是显式 Java/OS callbacks 下的 fresh unidbg native continuation，不等同于
+actual JNI provider、live Android JVM、whole-request native/Python differential、
+fresh standalone signer 或线上验签。证据：
+`evidence/vm9_frame_sign_handle2_result_dynamic_probe_20261028.json`；复现脚本：
+`python/verify_vm9_frame_sign_handle2_result_dynamic_probe_20261028.py`。

@@ -1,5 +1,14 @@
 # Tomato Python material
 
+The fresh handle2 frameSign verifier records the first structured native
+`String[]` result: tag `0x4000002` returns the Java-lifecycle handle used by
+`core.c.frameSign` for tag `0x200000A`, producing ten entries across the five
+`frametype`/`lid`/`signinfo`/`signvalue`/`signversion` pairs. The evidence keeps
+only lengths and SHA-256 digests; explicit unidbg Java/OS callbacks remain, so
+live Android-JVM/provider behavior, whole-request differential, standalone
+signing, and online acceptance remain open. See
+`verify_vm9_frame_sign_handle2_result_dynamic_probe_20261028.py`.
+
 `verify_vm9_signer_boundary_audit_20261024.py` now audits the public outer and
 request owners before standalone-signer work. It confirms the `+17b8f8 →
 +27dd04 → +2830c4` composition while keeping synthetic JNI/JavaVM, live JVM/OS
