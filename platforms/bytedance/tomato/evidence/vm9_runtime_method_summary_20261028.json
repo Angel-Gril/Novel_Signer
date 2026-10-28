@@ -6,6 +6,9 @@
   "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
   "apk_size": 135258081,
   "pinned_research_version": "7.1.3.32/71332",
+  "pinned_apk_basename": "fq_7xz.apk",
+  "pinned_apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "pinned_apk_byte_identical": true,
   "classes": {
     "Lcom/ttnet/org/chromium/net/impl/CronetUrlRequest;": {
       "dex": "classes16.dex",
@@ -269,7 +272,7 @@
     }
   ],
   "raw_method_bodies_retained": false,
-  "method_body_identity_to_pinned": false,
+  "method_body_identity_to_pinned_apk": true,
   "business_request_runtime_call_observed": false,
-  "interpretation": "The installed 7.2.5.32 APK contains the selected callback, Cronet, frameSign, and startup methods with the recorded descriptors. Each code item is represented only by metadata and a SHA-256 digest. This proves installed-build method continuity and does not claim byte identity with the pinned 7.1.3.32 Java methods, a complete six-header signer, or an observed business request."
+  "interpretation": "The installed APK is byte-identical to the pinned fq_7xz.apk artifact, and the selected method summaries match that artifact. This closes artifact and selected-method continuity across the installed/pinned files; it does not resolve the separate research-version label or prove a complete six-header signer, an observed business request, or online acceptance."
 }

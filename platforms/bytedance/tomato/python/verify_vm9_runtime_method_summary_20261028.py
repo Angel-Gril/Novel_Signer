@@ -128,7 +128,7 @@ def extract(apk_path: Path) -> dict[str, object]:
     }
 
 
-def verify(record: Path, apk: Path | None = None) -> dict[str, object]:
+def verify(record: Path, apk: Path | None = None, pinned_apk: Path | None = None) -> dict[str, object]:
     data = json.loads(record.read_text(encoding="utf-8"))
     if data.get("schema") != "vm9-runtime-method-summary-20261028-v1":
         raise AssertionError("unexpected schema")
@@ -162,16 +162,51 @@ def verify(record: Path, apk: Path | None = None) -> dict[str, object]:
                 raw = archive.read(dex_item["name"])
                 if len(raw) != dex_item["size"] or sha256_bytes(raw) != dex_item["sha256"]:
                     raise AssertionError(("DEX digest mismatch", dex_item["name"]))
+    if pinned_apk is not None:
+        if sha256(pinned_apk) != data.get("pinned_apk_sha256"):
+            raise AssertionError("pinned APK digest mismatch")
+        if data.get("pinned_apk_byte_identical") is not True:
+            raise AssertionError("pinned APK is not marked byte-identical")
+        if data.get("method_body_identity_to_pinned_apk") is not True:
+            raise AssertionError("method identity to pinned APK is not marked")
     return data
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apk", type=Path, required=True)
+    parser.add_argument("--pinned-apk", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--verify", action="store_true")
     args = parser.parse_args()
     extracted = extract(args.apk)
+    pinned_sha = None
+    pinned_match = None
+    method_match = None
+    if args.pinned_apk is not None:
+        pinned_sha = sha256(args.pinned_apk)
+        pinned_match = pinned_sha == sha256(args.apk)
+        if not pinned_match:
+            raise AssertionError("installed APK and pinned APK artifacts differ")
+        # A byte-identical APK has byte-identical DEX and code items. Avoid a
+        # second full Androguard parse; if the artifacts ever differ, fail
+        # closed until an explicit two-artifact comparison is implemented.
+        method_match = True
+    interpretation = (
+        "The installed 7.2.5.32 APK contains the selected callback, Cronet, frameSign, "
+        "and startup methods with the recorded descriptors. Each code item is represented "
+        "only by metadata and a SHA-256 digest. This proves installed-build method "
+        "continuity and does not claim a complete six-header signer or an observed business "
+        "request."
+    )
+    if pinned_match:
+        interpretation = (
+            "The installed APK is byte-identical to the pinned fq_7xz.apk artifact, and "
+            "the selected method summaries match that artifact. This closes artifact and "
+            "selected-method continuity across the installed/pinned files; it does not "
+            "resolve the separate research-version label or prove a complete six-header "
+            "signer, an observed business request, or online acceptance."
+        )
     report = {
         "schema": "vm9-runtime-method-summary-20261028-v1",
         "evidence_date": "2026-10-28",
@@ -180,32 +215,30 @@ def main() -> int:
         "apk_sha256": sha256(args.apk),
         "apk_size": args.apk.stat().st_size,
         "pinned_research_version": "7.1.3.32/71332",
+        "pinned_apk_basename": args.pinned_apk.name if args.pinned_apk else None,
+        "pinned_apk_sha256": pinned_sha,
+        "pinned_apk_byte_identical": pinned_match,
         "classes": extracted["classes"],
         "target_dex": extracted["target_dex"],
         "dex_count": extracted["dex_count"],
         "dex": extracted["dex"],
         "raw_method_bodies_retained": False,
-        "method_body_identity_to_pinned": False,
+        "method_body_identity_to_pinned_apk": method_match,
         "business_request_runtime_call_observed": False,
-        "interpretation": (
-            "The installed 7.2.5.32 APK contains the selected callback, Cronet, "
-            "frameSign, and startup methods with the recorded descriptors. Each "
-            "code item is represented only by metadata and a SHA-256 digest. "
-            "This proves installed-build method continuity and does not claim "
-            "byte identity with the pinned 7.1.3.32 Java methods, a complete "
-            "six-header signer, or an observed business request."
-        ),
+        "interpretation": interpretation,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     if args.verify:
-        verify(args.output, args.apk)
+        verify(args.output, args.apk, args.pinned_apk)
     print(json.dumps({
         "schema": report["schema"],
         "installed_version": report["installed_version"],
         "dex_count": report["dex_count"],
         "target_classes": len(report["classes"]),
         "raw_method_bodies_retained": report["raw_method_bodies_retained"],
+        "pinned_apk_byte_identical": report["pinned_apk_byte_identical"],
+        "method_body_identity_to_pinned_apk": report["method_body_identity_to_pinned_apk"],
     }, ensure_ascii=False))
     return 0
 
