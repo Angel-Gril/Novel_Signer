@@ -43,6 +43,14 @@ sensitivity inside the native frameSign result; it remains an isolated unidbg
 continuation with explicit Java/OS callbacks. See [type-sweep evidence](evidence/vm9_frame_sign_handle2_types_dynamic_probe_20261028.json)
 and [verifier](python/verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028.py).
 
+A controlled URL sweep with the same handle2 and `frameType=0` uses homepage,
+query-variant, and search-route inputs. All three calls keep the length-10 result
+shape; both `signinfo` and `signvalue` digests change with the URL profile. The
+inputs and values remain redacted to lengths and SHA-256 digests. This is still
+isolated unidbg input-sensitivity evidence with explicit Java/OS callbacks. See
+[URL-sweep evidence](evidence/vm9_frame_sign_handle2_url_dynamic_probe_20261028.json)
+and [verifier](python/verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py).
+
 JNI registration provenance (2026-10-28): the pinned ELF exports `JNI_OnLoad` at
 `+0x27b41c`; its one-entry `JNINativeMethod` stores `image+0x26e684` and calls
 the JNIEnv function-table slot `+0xb8` (`RegisterNatives`). The Java `r4` callsite

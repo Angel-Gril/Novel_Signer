@@ -65,6 +65,21 @@ native/Python differential、fresh standalone signer 和线上验签保持未验
 证据：[frameType sweep](evidence/vm9_frame_sign_handle2_types_dynamic_probe_20261028.json)；
 复现：[verifier](python/verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028.py)。
 
+## 2026-10-28：handle2 frameType 0 的 URL 输入敏感性
+
+保持 `0x128a3000` handle2、`frameType=0`、冻结时间和显式 provider，只替换
+三组脱敏 URL profile：主页基线、带 query 变体和搜索路由。三次 fresh unidbg
+调用都返回长度 10 的相同五组键值结构；主页与 query 的 `signinfo` 长度均为
+224，搜索路由为 320，三组 `signvalue` 长度均为 64，且 `signinfo`/`signvalue`
+摘要都随 URL profile 改变。
+
+这把 URL 输入敏感性定位到 native frameSign 的两个结果字段，同时保持键序、句柄
+和 frameType 不变。证据只保存 profile 的长度/摘要及返回值长度/摘要，不保存 URL、
+header 或完整签名值；显式 Java/OS callbacks 仍在，因此 actual JNI provider、
+live Android JVM、whole-request native/Python differential、fresh standalone signer
+和线上验签继续未验证。证据：[URL sweep](evidence/vm9_frame_sign_handle2_url_dynamic_probe_20261028.json)；
+复现：[verifier](python/verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py)。
+
 ## 2026-10-28：JNI 注册与 signing tag 归属闭合
 
 新增只读 ELF/Java/受限捕获 verifier。pinned `libmetasec_ml_71332.so` 的动态符号

@@ -9866,3 +9866,17 @@ whole-request native/Python differential、fresh standalone signer 或线上验�
 证据只保存结构、长度和 SHA-256 摘要，不保存 URL、完整 header 或完整 frame 签名值。
 证据：`evidence/vm9_frame_sign_handle2_types_dynamic_probe_20261028.json`；复现脚本：
 `python/verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028.py`。
+
+## 6.296 frameSign URL input sensitivity（2026-10-28 Asia/Shanghai）
+
+保持 6.295 的 `0x128a3000` handle2、`frameType=0`、冻结时间和显式 Java/OS
+callbacks，只替换三组脱敏 URL profile：主页基线、带 query 变体和搜索路由。
+三次调用均返回长度 10 的相同五组键值结构；`signinfo` 与 `signvalue` 的摘要
+均随 URL profile 改变，键序和 `lid`/`signversion` 形状保持一致。
+
+本轮把输入敏感性定位到 native frameSign 的两个结果字段，不解释 URL 规范化或
+frame 业务语义。正式证据只保存 URL/profile 与返回值的长度和 SHA-256 摘要，不保存
+URL、header 或完整签名值；actual JNI provider、live Android JVM、whole-request
+native/Python differential、fresh standalone signer 和线上验签仍未闭合。证据：
+`evidence/vm9_frame_sign_handle2_url_dynamic_probe_20261028.json`；复现脚本：
+`python/verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py`。

@@ -1,0 +1,251 @@
+{
+  "schema": "vm9-frame-sign-handle2-url-dynamic-probe-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "handle2_source_tag": "0x4000002",
+  "frame_sign_tag": "0x200000a",
+  "frame_sign_handle": "0x128a3000",
+  "frame_type": 0,
+  "profiles": [
+    "homepage",
+    "query_variant",
+    "search_route"
+  ],
+  "all_frame_sign_results_verified": true,
+  "result_length": 10,
+  "result_keys": [
+    "frametype",
+    "lid",
+    "signinfo",
+    "signvalue",
+    "signversion"
+  ],
+  "distinct_input_profiles_verified": true,
+  "signinfo_sensitive_to_url": true,
+  "signvalue_sensitive_to_url": true,
+  "observations": {
+    "homepage": {
+      "frame_type": 0,
+      "result_length": 10,
+      "keys": [
+        "frametype",
+        "lid",
+        "signinfo",
+        "signvalue",
+        "signversion"
+      ],
+      "lid": {
+        "length": 10,
+        "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+      },
+      "signinfo": {
+        "length": 224,
+        "sha256": "f40760e5df3b901d0b9c61c9436db707c98a0157839929ecb93f6858566439bc"
+      },
+      "signvalue": {
+        "length": 64,
+        "sha256": "c7abb13bebcb7f63ead72e1e52267b305037d28953ae684ead6821926fb3fa0f"
+      },
+      "signversion": {
+        "length": 3,
+        "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+      }
+    },
+    "query_variant": {
+      "frame_type": 0,
+      "result_length": 10,
+      "keys": [
+        "frametype",
+        "lid",
+        "signinfo",
+        "signvalue",
+        "signversion"
+      ],
+      "lid": {
+        "length": 10,
+        "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+      },
+      "signinfo": {
+        "length": 224,
+        "sha256": "6879ec2129318a1dca9eb7f266c41a3826885a587227364558d624257ac9effc"
+      },
+      "signvalue": {
+        "length": 64,
+        "sha256": "003d38a44d94ecdae2e62310c4c0ce98bf4c48631cb492ab4126485ad8cdc57d"
+      },
+      "signversion": {
+        "length": 3,
+        "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+      }
+    },
+    "search_route": {
+      "frame_type": 0,
+      "result_length": 10,
+      "keys": [
+        "frametype",
+        "lid",
+        "signinfo",
+        "signvalue",
+        "signversion"
+      ],
+      "lid": {
+        "length": 10,
+        "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+      },
+      "signinfo": {
+        "length": 320,
+        "sha256": "88b88a774bd5b8c454a73eed54b6d151fd24b6db555429aaad01c5aeb2061b0f"
+      },
+      "signvalue": {
+        "length": 64,
+        "sha256": "1835b54b8911d9d9804392f6c64025b8b1acb967fc76ecaef98066eaca237984"
+      },
+      "signversion": {
+        "length": 3,
+        "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+      }
+    }
+  },
+  "round_observations": {
+    "homepage": {
+      "input": {
+        "length": 60,
+        "sha256": "bcfb66faa824a3bc0ed7db2a43f11fb5fcf84a0335f0a955c8836363e71ca0f3"
+      },
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "69fb31432038d0a100ea5688dcde625143c1db0cae36c5297a13393ff6c868b6"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "0ffd472ba71446a212bb1bc88a3dbcdab968aec80a520aa7bc7ed546932835d8"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "8fdc03e23e7f3b86636724f36c2f2e974915b3c90fb16d570834ed4521be8714"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "8e4bb44969743d6f54722a6b6167bae996cc350ab803170f51c2a133c930e26c"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "1b3deb5fb7fa2fd4d17dc94693178ce82916fc0b52fc0abcea375192ced035f4"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "9bf06c30b17fab10adc46ecb49c4245c7ee110ea8e94e6257e881df1ad777aa9"
+        }
+      },
+      "khronos_seconds": 1793136546
+    },
+    "query_variant": {
+      "input": {
+        "length": 65,
+        "sha256": "aa47e2c08d9890452637a916f534cf63f633e7d48d99ac705ff36b29e77ffc84"
+      },
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "69fb31432038d0a100ea5688dcde625143c1db0cae36c5297a13393ff6c868b6"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "968d534a2ccd10a2650cd522636e3f12cc76404bf87fb45beabcd70699cb642a"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "8fdc03e23e7f3b86636724f36c2f2e974915b3c90fb16d570834ed4521be8714"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "8e4bb44969743d6f54722a6b6167bae996cc350ab803170f51c2a133c930e26c"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "1b3deb5fb7fa2fd4d17dc94693178ce82916fc0b52fc0abcea375192ced035f4"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "001a33fe9a6e011beba6183b95fffe1dd82969ecfd88291b5d20f1e2a07bc8b7"
+        }
+      },
+      "khronos_seconds": 1793136546
+    },
+    "search_route": {
+      "input": {
+        "length": 117,
+        "sha256": "80b5246e93f07008acee5292e0b7ad1e9ff39aeab9bec5890de2d0b88d758671"
+      },
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "69fb31432038d0a100ea5688dcde625143c1db0cae36c5297a13393ff6c868b6"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "17c016a089a436a37f00eaa16003709827239dd0d9c4a24591088089224d9f8b"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "8fdc03e23e7f3b86636724f36c2f2e974915b3c90fb16d570834ed4521be8714"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "8e4bb44969743d6f54722a6b6167bae996cc350ab803170f51c2a133c930e26c"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "1b3deb5fb7fa2fd4d17dc94693178ce82916fc0b52fc0abcea375192ced035f4"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "1ea638e96c985aef9ec72ab9f760a3f526e1dd45162244a572f089281cb69685"
+        }
+      },
+      "khronos_seconds": 1793136546
+    }
+  },
+  "synthetic_jni_provider_used": true,
+  "actual_jni_provider_verified": false,
+  "live_android_jvm_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "source_hashes": {
+    "library": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "hook_source": "0ec14dfe7d812fd911ca099f27c1bd74580f4cd9ef23beb5c52997658a86f5c0",
+    "run_log_homepage": "a901a62d9f00d7a47537b8fa1f5aa266ce4794cb2f8a52cdee2bb248da57ac37",
+    "rounds_homepage": "a7462cf31d564470cd5643303ef0784fcc6e00fcbe7faf91174a6a09023618e6",
+    "run_log_query_variant": "46d929c99207c50c1adfba50d476126fd67ba48379cab884f723848a211128aa",
+    "rounds_query_variant": "242c4062722410a5a6a01c9a67ace8ba613fedd3e3d447dd3a1a101c3fcbf41e",
+    "run_log_search_route": "9552f6eeaf2f654295d6dc40bb45a402dda06e44b391b7ced043836fb38cb04f",
+    "rounds_search_route": "e2c2bca25ea8938f91484419bf48d18851d1c6334ce5dcf1488c9256b7e31198"
+  },
+  "interpretation": "Three fresh isolated unidbg runs reuse handle2 and frameType 0 while varying only the redacted URL profile. Every run returns the same length-10 key/value shape; signinfo and signvalue both change across the distinct input profiles. Explicit Java/OS callbacks remain in the harness, so this is native input sensitivity evidence rather than live Android-JVM/provider, whole-request differential, standalone signer or online acceptance proof."
+}

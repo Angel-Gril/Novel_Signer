@@ -10280,5 +10280,30 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "Four fresh isolated unidbg runs reuse handle2 and vary only frameType 0/1/2/3. Every native result has the same ten-entry shape and signinfo digest, while signvalue differs for all four types. This localizes controlled sensitivity inside the frameSign result only; explicit Java/OS callbacks remain and frame semantics, standalone signing and online acceptance are unverified."
+  },
+  "vm9_frame_sign_handle2_url_dynamic_probe_20261028": {
+    "path": "evidence/vm9_frame_sign_handle2_url_dynamic_probe_20261028.json",
+    "verifier": "python/verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py",
+    "schema": "vm9-frame-sign-handle2-url-dynamic-probe-20261028-v1",
+    "evidence_label": "FrameSign URL sensitivity with handle2 and frameType 0",
+    "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "handle2_source_tag": "0x4000002",
+    "frame_sign_tag": "0x200000a",
+    "frame_sign_handle": "0x128a3000",
+    "frame_type": 0,
+    "profiles": ["homepage", "query_variant", "search_route"],
+    "all_frame_sign_results_verified": true,
+    "result_length": 10,
+    "result_keys": ["frametype", "lid", "signinfo", "signvalue", "signversion"],
+    "distinct_input_profiles_verified": true,
+    "signinfo_sensitive_to_url": true,
+    "signvalue_sensitive_to_url": true,
+    "synthetic_jni_provider_used": true,
+    "actual_jni_provider_verified": false,
+    "live_android_jvm_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Three fresh isolated unidbg runs reuse handle2 and frameType 0 while varying only the redacted URL profile. Every run returns the same length-10 key/value shape; signinfo and signvalue both change across the distinct input profiles. Explicit Java/OS callbacks remain, so this is native input sensitivity evidence rather than live Android-JVM/provider, whole-request differential, standalone signer or online acceptance proof."
   }
 }

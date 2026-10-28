@@ -15,6 +15,12 @@ while all four `signvalue` digests differ. This is a bounded sensitivity result,
 not a claim about frame semantics or standalone signing. See
 `verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028.py`.
 
+The URL sweep reuses handle2 and `frameType=0` across homepage, query-variant,
+and search-route profiles. The result shape stays fixed while both `signinfo`
+and `signvalue` digests change. URL and returned values are retained only as
+lengths and SHA-256 digests; this remains explicit-callback unidbg sensitivity
+evidence. See `verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py`.
+
 `verify_vm9_signer_boundary_audit_20261024.py` now audits the public outer and
 request owners before standalone-signer work. It confirms the `+17b8f8 →
 +27dd04 → +2830c4` composition while keeping synthetic JNI/JavaVM, live JVM/OS
