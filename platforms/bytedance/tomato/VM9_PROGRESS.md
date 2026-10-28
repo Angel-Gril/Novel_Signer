@@ -6695,3 +6695,19 @@ header 的语义证明。
 新增的 `vector_publication_provenance` 与静态证据包含在
 [vector writer evidence](evidence/vm9_native_outer_facade_vector_writer_20261028.json)；
 这仍是对象生命周期/ABI provenance，不是六个七神 header 的完整生成或线上验签。
+
+## 2026-10-28：actual Android-JVM frameSign provider closure
+
+在正常运行的 `com.dragon.read` 进程上 attach，不使用 spawn，显式调用真实启动任务
+`x1.k(Application)`。同一次观察进入 `x1.l(Context)`，`MSManagerUtils.init` 返回成功，
+随后 `MSManagerUtils.get("1967")` 返回 `com.bytedance.mobsec.metasec.ml.MSManager`。
+通过 Java 反射调用该真实对象的 `frameSign(String,int)`，对三个脱敏 URL profile
+（homepage/detail/search，`frameType=0`）均得到五个键：`frametype`、`lid`、`signinfo`、
+`signvalue`、`signversion`。URL 摘要互异，`signinfo` 与 `signvalue` 摘要均互异；只保存
+长度和 SHA-256，不保存 URL、签名原文或 token。
+
+这关闭了当前设备上的真实 Android-JVM/provider frameSign 边界，不能外推为 whole-request
+native/Python differential、fresh standalone signer 或线上验签。模块过滤列表仍未出现独立
+命名的 `libmetasec_ml.so`，只看到 `libzyte.so` 等，因此 DSO 承载/加载归属仍待确认。
+证据：[vm9_actual_android_jvm_frame_sign_20261028.json](evidence/vm9_actual_android_jvm_frame_sign_20261028.json)，
+复现器：[verify_vm9_actual_android_jvm_frame_sign_20261028.py](python/verify_vm9_actual_android_jvm_frame_sign_20261028.py)。

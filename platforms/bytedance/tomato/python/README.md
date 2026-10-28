@@ -23,6 +23,17 @@ the other four controlled header digests remain invariant. This remains
 explicit-callback unidbg sensitivity evidence. See
 `verify_vm9_frame_sign_handle2_url_dynamic_probe_20261028.py`.
 
+The first attach-safe Android-JVM probe now reaches the real Tomato startup
+task `x1.k()` and its `MSManagerUtils.init()` call. The live process returns a
+real manager for app id `1967`; reflection then invokes
+`MSManager.frameSign(String,int)` for three distinct URL profiles. All calls
+return the five-key result shape, and both `signinfo` and `signvalue` change
+with the URL. The capture stores only lengths and SHA-256 digests. This closes
+the live Android-JVM/provider boundary for `frameSign`, but not the whole
+request native/Python differential, a fresh standalone signer, or online
+acceptance. See
+`verify_vm9_actual_android_jvm_frame_sign_20261028.py`.
+
 `verify_vm9_signer_boundary_audit_20261024.py` now audits the public outer and
 request owners before standalone-signer work. It confirms the `+17b8f8 →
 +27dd04 → +2830c4` composition while keeping synthetic JNI/JavaVM, live JVM/OS

@@ -1,0 +1,129 @@
+{
+  "schema": "vm9-actual-android-jvm-frame-sign-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "process_package": "com.dragon.read",
+  "manager_class": "com.bytedance.mobsec.metasec.ml.MSManager",
+  "init_path": "x1.k(Application) -> x1.l(Context) -> MSManagerUtils.init -> MSManagerUtils.get(1967)",
+  "frame_sign_method": "MSManager.frameSign(String,int) via the real Android JVM object",
+  "frame_type": 0,
+  "profiles": [
+    "homepage",
+    "detail",
+    "search"
+  ],
+  "result_keys": [
+    "frametype",
+    "lid",
+    "signinfo",
+    "signvalue",
+    "signversion"
+  ],
+  "result_cardinality": 5,
+  "distinct_url_profiles_verified": true,
+  "signinfo_sensitive_to_url": true,
+  "signvalue_sensitive_to_url": true,
+  "observations": {
+    "homepage": {
+      "url": {
+        "length": 49,
+        "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+      },
+      "fields": {
+        "frametype": {
+          "length": 1,
+          "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "lid": {
+          "length": 10,
+          "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+        },
+        "signinfo": {
+          "length": 192,
+          "sha256": "08e2d71f1194bc04da3b954741238dc35a381b48df4c5128e2b21ca0a369a463"
+        },
+        "signvalue": {
+          "length": 64,
+          "sha256": "bb6733e415e7fc65edbb939615d19532c265f45f1dae95f6e72ce6d714d04d65"
+        },
+        "signversion": {
+          "length": 3,
+          "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+        }
+      }
+    },
+    "detail": {
+      "url": {
+        "length": 61,
+        "sha256": "041bdfa2b461740dfa4a046c7ff3f0cc7b6304d22206ccecd3cdff5123ce09ee"
+      },
+      "fields": {
+        "frametype": {
+          "length": 1,
+          "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "lid": {
+          "length": 10,
+          "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+        },
+        "signinfo": {
+          "length": 224,
+          "sha256": "3c89ffaa2f61c6d38864a8ede1ab1d84fc751a5a83a10bad0db3c0363dd87aec"
+        },
+        "signvalue": {
+          "length": 64,
+          "sha256": "e0a9cc6d9117690a64e7a45ed3b230f2e78ccb009b9bc6880ee4b2e95d6dbb50"
+        },
+        "signversion": {
+          "length": 3,
+          "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+        }
+      }
+    },
+    "search": {
+      "url": {
+        "length": 65,
+        "sha256": "5f4be7dcfb196d4e1a274cb29a27ce73ec663935abdbc3fa778a02346d4eca7b"
+      },
+      "fields": {
+        "frametype": {
+          "length": 1,
+          "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "lid": {
+          "length": 10,
+          "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+        },
+        "signinfo": {
+          "length": 224,
+          "sha256": "4235e1f305877084eb4731072d8d2b8cae21540407ca33e3aca1b4f9d50e1c9c"
+        },
+        "signvalue": {
+          "length": 64,
+          "sha256": "dd86c68eabbd34f4e2f53537c26267a9cdab6e5ecd6f980ee3303f620b8104e0"
+        },
+        "signversion": {
+          "length": 3,
+          "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+        }
+      }
+    }
+  },
+  "provider_modules_matching_filter": [
+    "boot-ims-common.oat",
+    "libcamera_metadata.so",
+    "libzyte.so"
+  ],
+  "direct_metasec_module_observed": false,
+  "actual_jni_provider_verified": true,
+  "live_android_jvm_verified": true,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "source_hashes": {
+    "capture": "d7356611b2b9f012c3593442a8b94a5e445079deb8061915028f17ff7a3837de",
+    "x1_source": "4d9127c8e4d21fc80d4d4f147f3d6a97524afd32939879ba1e9cba1ac741c81d",
+    "manager_source": "b8683b47f334e1adc27d71b4b84a87eab39a168151155fbe4f948a501673bacf",
+    "core_source": "fb143c74d7b82731af3b5833c93b06d5884e4aba20163dd54b330e09ee48c46a"
+  },
+  "interpretation": "An attach-safe probe in the running com.dragon.read process invoked the app's real x1 initialization path. MSManagerUtils.init returned a live manager for app id 1967, and reflection invoked MSManager.frameSign(String,int) on that object for three distinct URL profiles. All calls returned the five-key result shape; both signinfo and signvalue changed with the URL. This closes the live Android-JVM/JNI frameSign boundary only. It is not a whole-request native/Python differential, standalone signer, or online acceptance result."
+}

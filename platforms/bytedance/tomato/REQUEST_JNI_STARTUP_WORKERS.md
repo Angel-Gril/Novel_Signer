@@ -9884,3 +9884,19 @@ native/Python differential、fresh standalone signer 和线上验签仍未闭合
 同一批三组 URL 运行的六神 setup 还显示：`X-Gorgon` 与 `X-Medusa` 摘要随 URL
 profile 改变，而 `X-Argus`、`X-Helios`、`X-Ladon` 和冻结的 `X-Khronos` 保持不变。
 这仍是脱敏的输入敏感性观察，不把任何一组值提升为线上验签结果。
+
+## 6.297 actual Android-JVM frameSign provider（2026-10-28 Asia/Shanghai）
+
+在正常运行的 `com.dragon.read` 进程上使用 attach-safe Frida 探针，显式调用真实
+`x1.k(Application)`，观察到 `x1.l(Context)`、`MSManagerUtils.init` 成功返回以及
+`MSManagerUtils.get("1967")` 返回真实 `com.bytedance.mobsec.metasec.ml.MSManager`。
+随后通过 Java 反射调用该对象的 `frameSign(String,int)`，对三组脱敏 URL profile
+和 `frameType=0` 均返回五个字段：`frametype`、`lid`、`signinfo`、`signvalue`、
+`signversion`；`signinfo` 与 `signvalue` 摘要均随 URL 改变。
+
+这是当前主线第一条真实 Android-JVM/provider frameSign 证据，关闭了此前
+`live_android_jvm_verified=false` 的边界。模块过滤列表仍未出现独立命名的
+`libmetasec_ml.so`，因此 DSO 的实际承载和加载归属仍未确认。该结果不等于
+whole-request native/Python differential、fresh standalone signer 或线上验签。
+证据：`evidence/vm9_actual_android_jvm_frame_sign_20261028.json`；复现脚本：
+`python/verify_vm9_actual_android_jvm_frame_sign_20261028.py`。
