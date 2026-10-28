@@ -1,0 +1,304 @@
+{
+  "schema": "vm9-frame-sign-handle2-types-dynamic-probe-20261028-v1",
+  "evidence_date": "2026-10-28",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "handle2_source_tag": "0x4000002",
+  "frame_sign_tag": "0x200000a",
+  "frame_sign_handle": "0x128a3000",
+  "frame_types": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "all_frame_sign_results_verified": true,
+  "result_length": 10,
+  "result_keys": [
+    "frametype",
+    "lid",
+    "signinfo",
+    "signvalue",
+    "signversion"
+  ],
+  "signinfo_invariant_across_types": true,
+  "signvalue_sensitive_to_frame_type": true,
+  "observations": {
+    "0": {
+      "frame_type": 0,
+      "result_length": 10,
+      "keys": [
+        "frametype",
+        "lid",
+        "signinfo",
+        "signvalue",
+        "signversion"
+      ],
+      "lid": {
+        "length": 10,
+        "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+      },
+      "signinfo": {
+        "length": 224,
+        "sha256": "f40760e5df3b901d0b9c61c9436db707c98a0157839929ecb93f6858566439bc"
+      },
+      "signvalue": {
+        "length": 64,
+        "sha256": "c7abb13bebcb7f63ead72e1e52267b305037d28953ae684ead6821926fb3fa0f"
+      },
+      "signversion": {
+        "length": 3,
+        "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+      }
+    },
+    "1": {
+      "frame_type": 1,
+      "result_length": 10,
+      "keys": [
+        "frametype",
+        "lid",
+        "signinfo",
+        "signvalue",
+        "signversion"
+      ],
+      "lid": {
+        "length": 10,
+        "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+      },
+      "signinfo": {
+        "length": 224,
+        "sha256": "f40760e5df3b901d0b9c61c9436db707c98a0157839929ecb93f6858566439bc"
+      },
+      "signvalue": {
+        "length": 64,
+        "sha256": "42d2804c9a33b2771bba2876290d309aeba7ada5db61cd9ddcdee72847d2c1e6"
+      },
+      "signversion": {
+        "length": 3,
+        "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+      }
+    },
+    "2": {
+      "frame_type": 2,
+      "result_length": 10,
+      "keys": [
+        "frametype",
+        "lid",
+        "signinfo",
+        "signvalue",
+        "signversion"
+      ],
+      "lid": {
+        "length": 10,
+        "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+      },
+      "signinfo": {
+        "length": 224,
+        "sha256": "f40760e5df3b901d0b9c61c9436db707c98a0157839929ecb93f6858566439bc"
+      },
+      "signvalue": {
+        "length": 64,
+        "sha256": "bbe62f16af3083744573e5cfece974d3a4fe6d2c9662f748c842b24e9b2461e6"
+      },
+      "signversion": {
+        "length": 3,
+        "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+      }
+    },
+    "3": {
+      "frame_type": 3,
+      "result_length": 10,
+      "keys": [
+        "frametype",
+        "lid",
+        "signinfo",
+        "signvalue",
+        "signversion"
+      ],
+      "lid": {
+        "length": 10,
+        "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+      },
+      "signinfo": {
+        "length": 224,
+        "sha256": "f40760e5df3b901d0b9c61c9436db707c98a0157839929ecb93f6858566439bc"
+      },
+      "signvalue": {
+        "length": 64,
+        "sha256": "a72bb199535f9c61c046fc92ed7a4df64c28a543bda4e2deb1b0a8014aef7ac9"
+      },
+      "signversion": {
+        "length": 3,
+        "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+      }
+    }
+  },
+  "round_observations": {
+    "0": {
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "69fb31432038d0a100ea5688dcde625143c1db0cae36c5297a13393ff6c868b6"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "0ffd472ba71446a212bb1bc88a3dbcdab968aec80a520aa7bc7ed546932835d8"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "c43e61fa271ff27dfd24db9bcef210fd0f31ffdd0e5ee6c0d896dfefe4009cf1"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "8e4bb44969743d6f54722a6b6167bae996cc350ab803170f51c2a133c930e26c"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "1b3deb5fb7fa2fd4d17dc94693178ce82916fc0b52fc0abcea375192ced035f4"
+        },
+        "X-Medusa": {
+          "length": 1076,
+          "sha256": "3a3875308882da1ccf8a2f28d6a6feb9b3af91bdc5ab4a00ae300b5769441902"
+        }
+      },
+      "khronos_seconds": 1793136546
+    },
+    "1": {
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "69fb31432038d0a100ea5688dcde625143c1db0cae36c5297a13393ff6c868b6"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "0ffd472ba71446a212bb1bc88a3dbcdab968aec80a520aa7bc7ed546932835d8"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "8fdc03e23e7f3b86636724f36c2f2e974915b3c90fb16d570834ed4521be8714"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "8e4bb44969743d6f54722a6b6167bae996cc350ab803170f51c2a133c930e26c"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "1b3deb5fb7fa2fd4d17dc94693178ce82916fc0b52fc0abcea375192ced035f4"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "9bf06c30b17fab10adc46ecb49c4245c7ee110ea8e94e6257e881df1ad777aa9"
+        }
+      },
+      "khronos_seconds": 1793136546
+    },
+    "2": {
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "69fb31432038d0a100ea5688dcde625143c1db0cae36c5297a13393ff6c868b6"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "0ffd472ba71446a212bb1bc88a3dbcdab968aec80a520aa7bc7ed546932835d8"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "8fdc03e23e7f3b86636724f36c2f2e974915b3c90fb16d570834ed4521be8714"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "8e4bb44969743d6f54722a6b6167bae996cc350ab803170f51c2a133c930e26c"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "1b3deb5fb7fa2fd4d17dc94693178ce82916fc0b52fc0abcea375192ced035f4"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "9bf06c30b17fab10adc46ecb49c4245c7ee110ea8e94e6257e881df1ad777aa9"
+        }
+      },
+      "khronos_seconds": 1793136546
+    },
+    "3": {
+      "header_names": [
+        "X-Argus",
+        "X-Gorgon",
+        "X-Helios",
+        "X-Khronos",
+        "X-Ladon",
+        "X-Medusa"
+      ],
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "69fb31432038d0a100ea5688dcde625143c1db0cae36c5297a13393ff6c868b6"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "0ffd472ba71446a212bb1bc88a3dbcdab968aec80a520aa7bc7ed546932835d8"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "8fdc03e23e7f3b86636724f36c2f2e974915b3c90fb16d570834ed4521be8714"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "8e4bb44969743d6f54722a6b6167bae996cc350ab803170f51c2a133c930e26c"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "1b3deb5fb7fa2fd4d17dc94693178ce82916fc0b52fc0abcea375192ced035f4"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "9bf06c30b17fab10adc46ecb49c4245c7ee110ea8e94e6257e881df1ad777aa9"
+        }
+      },
+      "khronos_seconds": 1793136546
+    }
+  },
+  "synthetic_jni_provider_used": true,
+  "actual_jni_provider_verified": false,
+  "live_android_jvm_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "source_hashes": {
+    "library": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "hook_source": "0ec14dfe7d812fd911ca099f27c1bd74580f4cd9ef23beb5c52997658a86f5c0",
+    "run_log_type0": "5f00747efc839ef91bcfc5e203cfe9b355b83830f18ff0e1a2b0bba38b4e37a9",
+    "rounds_type0": "c527ca35ba2cca01b397e47025e8f3fbd1e1620eabfdf25eb911a623ceef18a4",
+    "run_log_type1": "bab1cb94b1d2366d02d6db67359e272ae0cd8b927f3b14f86fe02d907c75edb6",
+    "rounds_type1": "a7462cf31d564470cd5643303ef0784fcc6e00fcbe7faf91174a6a09023618e6",
+    "run_log_type2": "d7565ad93c0e341c1bb19231f565281ecf27c7d99d0d7390580b097ee9094f19",
+    "rounds_type2": "a7462cf31d564470cd5643303ef0784fcc6e00fcbe7faf91174a6a09023618e6",
+    "run_log_type3": "dd232a3d37f8dd4b79e00fd983f8b4c7d996e35cbfcb7dca05813b4a5f851021",
+    "rounds_type3": "a7462cf31d564470cd5643303ef0784fcc6e00fcbe7faf91174a6a09023618e6"
+  },
+  "interpretation": "Four fresh isolated unidbg runs use the Java-lifecycle handle2 from tag 0x4000002 and call frameSign tag 0x200000A with frame types 0, 1, 2 and 3. Every run returns a length-10 String[] with the same five key names and the same signinfo digest, while each signvalue digest differs. This is native frame-type sensitivity evidence only; explicit Java/OS callbacks remain in the harness, so live Android-JVM/provider behavior, whole-request differential, standalone signing and online acceptance remain unverified."
+}

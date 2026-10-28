@@ -49,6 +49,22 @@ signer 或线上验签，也没有修改生产 signer。
 证据：[handle2 frameSign result](evidence/vm9_frame_sign_handle2_result_dynamic_probe_20261028.json)；
 复现：[verifier](python/verify_vm9_frame_sign_handle2_result_dynamic_probe_20261028.py)。
 
+## 2026-10-28：handle2 frameType 0/1/2/3 单变量敏感性
+
+复用同一 `0x128a3000` handle2、相同 URL、冻结时间和显式 provider，只改变
+`frameSign` 的第二个参数 `frameType`。四次 fresh unidbg 调用都返回长度 10 的同一
+五组键值结构；`signinfo` 长度 224 且四次 SHA-256 完全相同，`signvalue` 长度 64
+且四次摘要分别不同。四次均无 `UC_ERR_WRITE_PROT`。
+
+这证明 `frameType` 会进入 native frameSign 结果的 `signvalue` 分支，而不是只改变
+Java 数组外形；它没有证明该字段的业务含义、独立 signer 等价或线上验签。证据只
+保存键序、长度和摘要，不保存 URL、完整 header 或完整 frame 签名值。该轮仍是带显式
+Java/OS callbacks 的 native continuation，live Android JVM/provider、whole-request
+native/Python differential、fresh standalone signer 和线上验签保持未验证。
+
+证据：[frameType sweep](evidence/vm9_frame_sign_handle2_types_dynamic_probe_20261028.json)；
+复现：[verifier](python/verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028.py)。
+
 ## 2026-10-28：JNI 注册与 signing tag 归属闭合
 
 新增只读 ELF/Java/受限捕获 verifier。pinned `libmetasec_ml_71332.so` 的动态符号

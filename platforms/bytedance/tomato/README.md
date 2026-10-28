@@ -36,6 +36,13 @@ JVM/provider behavior, whole-request differential, standalone signing, and onlin
 acceptance are still unverified. See [handle2 result evidence](evidence/vm9_frame_sign_handle2_result_dynamic_probe_20261028.json)
 and [verifier](python/verify_vm9_frame_sign_handle2_result_dynamic_probe_20261028.py).
 
+A controlled `frameType` sweep using the same handle2 now covers types 0, 1, 2, and 3.
+All four calls return the same length-10 key/value shape and the same `signinfo`
+digest, while each `signvalue` digest is different. This establishes frame-type
+sensitivity inside the native frameSign result; it remains an isolated unidbg
+continuation with explicit Java/OS callbacks. See [type-sweep evidence](evidence/vm9_frame_sign_handle2_types_dynamic_probe_20261028.json)
+and [verifier](python/verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028.py).
+
 JNI registration provenance (2026-10-28): the pinned ELF exports `JNI_OnLoad` at
 `+0x27b41c`; its one-entry `JNINativeMethod` stores `image+0x26e684` and calls
 the JNIEnv function-table slot `+0xb8` (`RegisterNatives`). The Java `r4` callsite

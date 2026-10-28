@@ -10251,5 +10251,34 @@
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false,
     "comparison_note": "A fresh isolated unidbg capture obtains handle2 from tag 0x4000002 and passes it to frameSign tag 0x200000A; the native call returns a non-null length-10 String[] with the five observed key names. Static core.g/core.c sources agree with this handle lifecycle. Only lengths and SHA-256 digests are retained. Explicit Java/OS callbacks remain, so live Android-JVM/provider behavior, whole-request differential, standalone signing and online acceptance remain unverified; the callback-1 signer handle is the wrong frameSign input."
+  },
+  "vm9_frame_sign_handle2_types_dynamic_probe_20261028": {
+    "path": "evidence/vm9_frame_sign_handle2_types_dynamic_probe_20261028.json",
+    "verifier": "python/verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028.py",
+    "schema": "vm9-frame-sign-handle2-types-dynamic-probe-20261028-v1",
+    "evidence_label": "FrameSign frameType sensitivity with handle2",
+    "library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "handle2_source_tag": "0x4000002",
+    "frame_sign_tag": "0x200000a",
+    "frame_sign_handle": "0x128a3000",
+    "frame_types": [0, 1, 2, 3],
+    "all_frame_sign_results_verified": true,
+    "result_length": 10,
+    "result_keys": ["frametype", "lid", "signinfo", "signvalue", "signversion"],
+    "signinfo_invariant_across_types": true,
+    "signvalue_sensitive_to_frame_type": true,
+    "signvalue_sha256_by_type": {
+      "0": "c7abb13bebcb7f63ead72e1e52267b305037d28953ae684ead6821926fb3fa0f",
+      "1": "42d2804c9a33b2771bba2876290d309aeba7ada5db61cd9ddcdee72847d2c1e6",
+      "2": "bbe62f16af3083744573e5cfece974d3a4fe6d2c9662f748c842b24e9b2461e6",
+      "3": "a72bb199535f9c61c046fc92ed7a4df64c28a543bda4e2deb1b0a8014aef7ac9"
+    },
+    "synthetic_jni_provider_used": true,
+    "actual_jni_provider_verified": false,
+    "live_android_jvm_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false,
+    "comparison_note": "Four fresh isolated unidbg runs reuse handle2 and vary only frameType 0/1/2/3. Every native result has the same ten-entry shape and signinfo digest, while signvalue differs for all four types. This localizes controlled sensitivity inside the frameSign result only; explicit Java/OS callbacks remain and frame semantics, standalone signing and online acceptance are unverified."
   }
 }

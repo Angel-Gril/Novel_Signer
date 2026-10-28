@@ -9852,3 +9852,17 @@ actual JNI provider、live Android JVM、whole-request native/Python differentia
 fresh standalone signer 或线上验签。证据：
 `evidence/vm9_frame_sign_handle2_result_dynamic_probe_20261028.json`；复现脚本：
 `python/verify_vm9_frame_sign_handle2_result_dynamic_probe_20261028.py`。
+
+## 6.295 frameSign frameType sensitivity（2026-10-28 Asia/Shanghai）
+
+保持 6.294 的 handle2、URL、冻结时间和显式 Java/OS callbacks，只改变
+`frameType` 为 0、1、2、3。四次调用均返回长度 10 的相同五组键值结构；
+`signinfo` 长度 224 且四次摘要相同，`signvalue` 长度 64 且四次摘要分别不同。
+四次运行均未出现 `UC_ERR_WRITE_PROT`。
+
+这条单变量证据把差异定位在 native frameSign 的结果值，而不是数组形状或句柄选择。
+它不解释 `frameType` 的业务语义，也不提升为 actual JNI provider、live Android JVM、
+whole-request native/Python differential、fresh standalone signer 或线上验签。正式
+证据只保存结构、长度和 SHA-256 摘要，不保存 URL、完整 header 或完整 frame 签名值。
+证据：`evidence/vm9_frame_sign_handle2_types_dynamic_probe_20261028.json`；复现脚本：
+`python/verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028.py`。

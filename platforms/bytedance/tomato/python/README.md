@@ -9,6 +9,12 @@ live Android-JVM/provider behavior, whole-request differential, standalone
 signing, and online acceptance remain open. See
 `verify_vm9_frame_sign_handle2_result_dynamic_probe_20261028.py`.
 
+The follow-up type sweep reuses that handle2 and changes only `frameType` across
+0, 1, 2, and 3. The native result shape and `signinfo` digest stay invariant,
+while all four `signvalue` digests differ. This is a bounded sensitivity result,
+not a claim about frame semantics or standalone signing. See
+`verify_vm9_frame_sign_handle2_types_dynamic_probe_20261028.py`.
+
 `verify_vm9_signer_boundary_audit_20261024.py` now audits the public outer and
 request owners before standalone-signer work. It confirms the `+17b8f8 →
 +27dd04 → +2830c4` composition while keeping synthetic JNI/JavaVM, live JVM/OS
