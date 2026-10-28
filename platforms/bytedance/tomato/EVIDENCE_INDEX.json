@@ -9940,7 +9940,7 @@
     "source_commit": "d151f9c",
     "online_requests_performed": false,
     "seven_gods_signer_recovered": false,
-    "interpretation": "Reference project covers a_bogus, bd-ticket-guard, x-tt-session-dtrait, x-secsdk-web-signature, and legacy live X-Bogus; it does not provide the six native seven-gods headers."
+    "interpretation": "Reference project covers a_bogus, bd-ticket-guard, x-tt-session-dtrait, x-secsdk-web-signature, and legacy live X-Bogus; it does not provide the six native seven-gods headers. The separate actual Android-JVM frameSign probe confirms the Tomato native provider path, but no Web signer is equated with it."
   },
   "vm9_actual_android_jvm_frame_sign_20261028": {
     "path": "evidence/vm9_actual_android_jvm_frame_sign_20261028.json",

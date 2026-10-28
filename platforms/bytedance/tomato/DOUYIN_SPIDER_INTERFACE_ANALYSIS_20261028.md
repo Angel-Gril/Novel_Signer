@@ -44,9 +44,10 @@
 1. `aid`、host、pathname、query 字节序、时间戳、设备指纹、UIFID、msToken 和
    dtrait 都会影响服务端验收，这与我们在 native VM 中追踪的 request 输入边界一致。
 2. 参考项目把 `a_bogus`、`bd-ticket-guard`、`x-tt-session-dtrait` 分成独立 owner；
-   我们当前 ELF 证据只闭合了 native request VM 的 formatter/树返回路径，尚未把
-   这些 web 层材料送入真实 Android JVM/native signer。
-3. 本项目的 URL/API 成功不能证明 `libmetasec_ml` 已生成六个七神 header；现有
+   本轮已在真实 Android JVM 上单独闭合 `MSManager.frameSign(String,int)`，但还没有
+   把这些 Web 层材料接入同一次 Tomato whole-request/native differential。
+3. 本项目的 URL/API 成功不能证明 `libmetasec_ml` 已生成六个七神 header；当前实际
+   JVM probe 只证明了 `frameSign` 五键返回和 URL 敏感性，现有
    `vm9_native_outer_facade_actual_child_20261027.json` 仍明确标记
    `fresh_standalone_signer_verified=false` 和 `online_header_acceptance_verified=false`。
 
@@ -59,6 +60,17 @@
 - 当前 native differential 的下一项仍应是：在真实 facade/JNI 输入下记录同一请求的
   URL/header vector、时间戳和会话材料，然后对照 web 端最终请求；不要把 `-11`、`-5`
   或 `0x101` 解释成六个 header 的业务状态码。
+
+## 真实 JVM 复核后的结论
+
+2026-10-28 的 attach-safe 复核在正常 `com.dragon.read` 进程中执行真实
+`x1.k -> MSManagerUtils.init -> MSManagerUtils.get("1967")`，并调用真实
+`MSManager.frameSign(String,int)`。三组 URL 都返回 `frametype/lid/signinfo/signvalue/
+signversion` 五键结构，`signinfo` 与 `signvalue` 随 URL 改变；应用自身
+`/proc/self/maps` 同时确认 APK 内 `lib/arm64/libmetasec_ml.so` 已映射。这个结果把
+“七神 native provider 是否真的到达”从未验证推进到已验证，但仍没有把 Web 项目的
+`a_bogus`、`X-Bogus` 或 bd-ticket-guard 误认成七神算法，也没有证明完整请求或线上验签。
+详见 `evidence/vm9_actual_android_jvm_frame_sign_20261028.json`。
 
 ## 证据边界
 
