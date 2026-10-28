@@ -10377,5 +10377,35 @@
     "raw_method_bodies_retained": false,
     "method_body_equivalence_verified": false,
     "interpretation": "The installed runtime contains the relevant class/method strings and its embedded arm64 libmetasec_ml.so SHA-256 matches the pinned research DSO. This lightweight APK check still does not claim byte-identical Java method bodies or tag routing across versions."
+  },
+  "vm9_runtime_method_summary_20261028": {
+    "path": "evidence/vm9_runtime_method_summary_20261028.json",
+    "verifier": "python/verify_vm9_runtime_method_summary_20261028.py",
+    "schema": "vm9-runtime-method-summary-20261028-v1",
+    "evidence_label": "Installed 7.2.5.32 DEX method descriptors and redacted code-item digests",
+    "installed_version": "7.2.5.32/72532",
+    "pinned_research_version": "7.1.3.32/71332",
+    "dex_count": 27,
+    "target_classes": [
+      "Lms/bd/c/r4;",
+      "Lms/bd/c/s4;",
+      "Lcom/bytedance/mobsec/metasec/core/c;",
+      "Lcom/bytedance/mobsec/metasec/ml/MSManager;",
+      "Lcom/ttnet/org/chromium/net/impl/CronetUrlRequest;",
+      "Lcom/ttnet/org/chromium/net/impl/CronetUrlRequestContext;"
+    ],
+    "selected_methods": [
+      "r4.onCallToAddSecurityFactor(String,Map):Map",
+      "s4.a(long):void",
+      "core.c.frameSign(String,int):Map",
+      "MSManager.frameSign(String,int):Map",
+      "CronetUrlRequest.addSecurityFactor(String,String[]):String[]",
+      "CronetUrlRequestContext.addSecurityFactor(String,String[]):String[]",
+      "CronetUrlRequestContext.o0(String,Map):Map"
+    ],
+    "raw_method_bodies_retained": false,
+    "method_body_equivalence_verified": false,
+    "business_request_runtime_call_observed": false,
+    "interpretation": "The installed APK contains all selected callback, Cronet, startup and frameSign methods with the expected descriptors. Only method metadata and code-item SHA-256 digests are retained. This establishes installed-build method continuity; it does not claim byte-identical Java bodies, complete six-header signing or an observed business request."
   }
 }

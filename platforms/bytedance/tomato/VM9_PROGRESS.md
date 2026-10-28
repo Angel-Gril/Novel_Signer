@@ -6744,3 +6744,19 @@ signer 和 online header acceptance 仍为 false。证据：[业务链记录](ev
 同一 APK 的 `lib/arm64-v8a/libmetasec_ml.so` SHA-256 为
 `712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c`，与 pinned 研究 DSO
 一致。这关闭了 native DSO 文件版本差异这一项，但不替代 Java 请求回调的实际运行时捕获。
+
+## 2026-10-28：当前 APK 的方法级摘要
+
+在同一台设备上读取已安装的 7.2.5.32/72532 APK 的 27 个 DEX，使用 Androguard
+定位 `r4`、`s4`、`core.c`、`MSManager`、`CronetUrlRequest` 和
+`CronetUrlRequestContext`。七个关键方法均存在，descriptor 与 pinned JADX 研究链
+一致；`r4.onCallToAddSecurityFactor` 为 444 条指令，`core.c.frameSign` 为 73 条，
+`MSManager.frameSign` 为 7 条，Cronet 两个入口分别为 88/86 条。证据仅保留
+方法名、descriptor、寄存器/指令/代码项大小和代码项 SHA-256，不保留原始 DEX 方法体、
+反汇编、URL、header、token 或签名值。
+
+这把此前的字符串存在性检查推进到方法级连续性检查，但由于 pinned 7.1.3.32 的原始
+DEX 方法体没有作为可比输入保留，`method_body_equivalence_verified` 仍为 false；
+也没有因此提升 `business_request_runtime_call_observed`、whole-request differential、
+fresh standalone signer 或 online acceptance。证据：[runtime method summary](evidence/vm9_runtime_method_summary_20261028.json)，
+复现器：[verify_vm9_runtime_method_summary_20261028.py](python/verify_vm9_runtime_method_summary_20261028.py)。
