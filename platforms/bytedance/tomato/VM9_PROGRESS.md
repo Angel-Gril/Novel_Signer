@@ -6740,3 +6740,7 @@ signer 和 online header acceptance 仍为 false。证据：[业务链记录](ev
 `CronetUrlRequest` 仍在运行时材料中；未保留方法体或 token。该证据不把字符串存在性
 解释成 7.1.3.32 方法体、native tag 或完整请求兼容性证明。见[DEX 证据](evidence/vm9_runtime_dex_string_presence_20261028.json)
 和[校验器](python/verify_vm9_runtime_dex_string_presence_20261028.py)。
+
+同一 APK 的 `lib/arm64-v8a/libmetasec_ml.so` SHA-256 为
+`712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c`，与 pinned 研究 DSO
+一致。这关闭了 native DSO 文件版本差异这一项，但不替代 Java 请求回调的实际运行时捕获。

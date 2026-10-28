@@ -20,7 +20,8 @@
 对当前安装 APK 的 DEX 做了脱敏字符串存在性检查：`frameSign`、
 `onCallToAddSecurityFactor`、`MSManagerUtils`、`MSManager` 和 `CronetUrlRequest`
 均存在。这只能证明 7.2.5.32 仍包含相关接口名称，不能证明与 7.1.3.32 的方法体或
-native tag 完全一致。见[DEX 证据](evidence/vm9_runtime_dex_string_presence_20261028.json)
+native tag 完全一致；同时 APK 内 `lib/arm64-v8a/libmetasec_ml.so` 的 SHA-256 已与 pinned
+研究 DSO 相同。见[DEX/DSO 证据](evidence/vm9_runtime_dex_string_presence_20261028.json)
 及[校验器](python/verify_vm9_runtime_dex_string_presence_20261028.py)。
 
 Fresh unidbg replay (2026-10-28): an isolated Unicorn2 `HookMain` run loaded the

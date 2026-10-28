@@ -3,6 +3,13 @@
   "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
   "apk_size": 135258081,
   "installed_version": "7.2.5.32/72532",
+  "metasec_dso": {
+    "apk_path": "lib/arm64-v8a/libmetasec_ml.so",
+    "size": 3971808,
+    "sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "pinned_research_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "sha256_matches_pinned": true
+  },
   "dex": [
     {
       "dex": "classes.dex",

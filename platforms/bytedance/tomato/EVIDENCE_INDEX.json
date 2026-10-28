@@ -10371,9 +10371,11 @@
     "schema": "vm9-runtime-dex-string-presence-20261028-v1",
     "evidence_label": "Installed 7.2.5.32 DEX string-presence check",
     "installed_version": "7.2.5.32/72532",
+    "metasec_dso_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "metasec_dso_sha256_matches_pinned": true,
     "required_strings": ["frameSign", "onCallToAddSecurityFactor", "MSManagerUtils", "MSManager", "CronetUrlRequest"],
     "raw_method_bodies_retained": false,
     "method_body_equivalence_verified": false,
-    "interpretation": "The installed runtime contains the relevant class/method strings, but this lightweight APK check does not claim byte-identical method bodies or tag routing across versions."
+    "interpretation": "The installed runtime contains the relevant class/method strings and its embedded arm64 libmetasec_ml.so SHA-256 matches the pinned research DSO. This lightweight APK check still does not claim byte-identical Java method bodies or tag routing across versions."
   }
 }
