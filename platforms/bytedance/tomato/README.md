@@ -11,6 +11,12 @@
 完整请求差分和线上验签仍未验证。见 [业务链证据](evidence/vm9_business_framesign_chain_20261028.json)
 及[校验器](python/verify_vm9_business_framesign_chain_20261028.py)。
 
+运行环境边界也已记录：设备当前安装 `com.dragon.read` 7.2.5.32/72532，
+而 pinned ELF 与 JADX native differential 证据对应 7.1.3.32/71332；业务 hook
+在 992MB、无 swap 的模拟器上因低内存回收而未到达请求阶段。见
+[版本边界证据](evidence/vm9_runtime_app_version_20261028.json)及
+[校验器](python/verify_vm9_runtime_app_version_20261028.py)。
+
 Fresh unidbg replay (2026-10-28): an isolated Unicorn2 `HookMain` run loaded the
 pinned `libmetasec_ml_71332.so`, executed `JNI_OnLoad`/`RegisterNatives` and the
 native signing tag `0x3000001`, then returned all six expected header names with

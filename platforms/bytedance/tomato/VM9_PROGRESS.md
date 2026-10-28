@@ -6728,3 +6728,9 @@ Cronet `addSecurityFactor` 的脱敏 hook；应用在业务请求触发前被模
 结果提升为普通请求结果；whole-request native/Python differential、fresh standalone
 signer 和 online header acceptance 仍为 false。证据：[业务链记录](evidence/vm9_business_framesign_chain_20261028.json)，
 [校验器](python/verify_vm9_business_framesign_chain_20261028.py)。
+
+同日运行环境复核记录了版本边界：真实 Android-JVM frameSign 探针运行在设备已安装的
+7.2.5.32/72532；pinned ELF、JADX 源码和 native differential 研究基线为
+7.1.3.32/71332。模拟器内存为约 992MB、无 swap，业务 hook 触发前进程被系统低内存
+回收，因此没有把该轮提升为业务请求运行时证据。见[版本证据](evidence/vm9_runtime_app_version_20261028.json)
+和[校验器](python/verify_vm9_runtime_app_version_20261028.py)。
