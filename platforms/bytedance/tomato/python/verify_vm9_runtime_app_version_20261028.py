@@ -19,6 +19,12 @@ def main() -> int:
         raise AssertionError("installed runtime version changed")
     if (data.get("pinned_research_version_name"), data.get("pinned_research_version_code")) != ("7.1.3.32", 71332):
         raise AssertionError("pinned research version changed")
+    if data.get("pinned_apk_version_name") != "7.2.5.32" or data.get("pinned_apk_version_code") != 72532:
+        raise AssertionError("pinned APK manifest version changed")
+    if data.get("pinned_apk_sha256") != data.get("installed_apk_sha256"):
+        raise AssertionError("pinned APK is not the installed artifact")
+    if data.get("pinned_apk_matches_installed") is not True:
+        raise AssertionError("pinned APK identity is not confirmed")
     if data.get("raw_headers_or_tokens_retained"):
         raise AssertionError("record must remain redacted")
     print(json.dumps({

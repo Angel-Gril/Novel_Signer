@@ -53,6 +53,13 @@ def sha256(path: Path) -> str:
     return sha256_bytes(path.read_bytes())
 
 
+def apk_version(apk_path: Path) -> tuple[str, int]:
+    from androguard.core.apk import APK
+
+    info = APK(str(apk_path), skip_analysis=False).androidversion
+    return str(info["Name"]), int(info["Code"])
+
+
 def text(value: object) -> str:
     return value.decode() if isinstance(value, bytes) else str(value)
 
@@ -183,6 +190,8 @@ def main() -> int:
     pinned_sha = None
     pinned_match = None
     method_match = None
+    pinned_apk_version_name = None
+    pinned_apk_version_code = None
     if args.pinned_apk is not None:
         pinned_sha = sha256(args.pinned_apk)
         pinned_match = pinned_sha == sha256(args.apk)
@@ -192,6 +201,9 @@ def main() -> int:
         # second full Androguard parse; if the artifacts ever differ, fail
         # closed until an explicit two-artifact comparison is implemented.
         method_match = True
+        pinned_apk_version_name, pinned_apk_version_code = apk_version(args.pinned_apk)
+        if (pinned_apk_version_name, pinned_apk_version_code) != ("7.2.5.32", 72532):
+            raise AssertionError("unexpected pinned APK manifest version")
     interpretation = (
         "The installed 7.2.5.32 APK contains the selected callback, Cronet, frameSign, "
         "and startup methods with the recorded descriptors. Each code item is represented "
@@ -201,11 +213,12 @@ def main() -> int:
     )
     if pinned_match:
         interpretation = (
-            "The installed APK is byte-identical to the pinned fq_7xz.apk artifact, and "
-            "the selected method summaries match that artifact. This closes artifact and "
-            "selected-method continuity across the installed/pinned files; it does not "
-            "resolve the separate research-version label or prove a complete six-header "
-            "signer, an observed business request, or online acceptance."
+            "The installed APK is byte-identical to the pinned fq_7xz.apk artifact, whose "
+            "manifest is 7.2.5.32/72532, and the selected method summaries match that "
+            "artifact. The separate 7.1.3.32/71332 label belongs to the pinned ELF/JADX "
+            "native research baseline, not this APK manifest. This closes artifact and "
+            "selected-method continuity; it does not prove a complete six-header signer, "
+            "an observed business request, or online acceptance."
         )
     report = {
         "schema": "vm9-runtime-method-summary-20261028-v1",
@@ -218,6 +231,8 @@ def main() -> int:
         "pinned_apk_basename": args.pinned_apk.name if args.pinned_apk else None,
         "pinned_apk_sha256": pinned_sha,
         "pinned_apk_byte_identical": pinned_match,
+        "pinned_apk_version_name": pinned_apk_version_name,
+        "pinned_apk_version_code": pinned_apk_version_code,
         "classes": extracted["classes"],
         "target_dex": extracted["target_dex"],
         "dex_count": extracted["dex_count"],

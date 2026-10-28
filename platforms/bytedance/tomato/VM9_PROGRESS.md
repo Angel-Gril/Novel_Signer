@@ -6758,8 +6758,9 @@ signer 和 online header acceptance 仍为 false。证据：[业务链记录](ev
 随后把同一摘要对照仓库中的 `fq_7xz.apk`：两者 APK SHA-256 都是
 `95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd`，七个选定方法的
 descriptor、代码规模和代码项摘要全部一致。因此当前安装文件与这个 pinned APK artifact
-的 selected-method continuity 已闭合。`7.1.3.32/71332` 仍是 native/JADX 研究基线的
-来源标签，不能仅凭这个 APK 文件反推版本元数据，所以 `method_body_equivalence_verified`
-仍保持 false；`business_request_runtime_call_observed`、whole-request differential、
+的 selected-method continuity 已闭合；APK manifest 也明确是 `7.2.5.32/72532`。
+`7.1.3.32/71332` 是 pinned ELF/JADX native 研究基线的来源标签，不是这个 APK 的
+manifest 版本。`method_body_equivalence_verified`
+仍保持 false（它指跨研究基线的整体等价性）；`business_request_runtime_call_observed`、whole-request differential、
 fresh standalone signer 和 online acceptance 也没有提升。证据：[runtime method summary](evidence/vm9_runtime_method_summary_20261028.json)，
 复现器：[verify_vm9_runtime_method_summary_20261028.py](python/verify_vm9_runtime_method_summary_20261028.py)。

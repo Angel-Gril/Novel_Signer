@@ -9,6 +9,8 @@
   "pinned_apk_basename": "fq_7xz.apk",
   "pinned_apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
   "pinned_apk_byte_identical": true,
+  "pinned_apk_version_name": "7.2.5.32",
+  "pinned_apk_version_code": 72532,
   "classes": {
     "Lcom/ttnet/org/chromium/net/impl/CronetUrlRequest;": {
       "dex": "classes16.dex",
@@ -274,5 +276,5 @@
   "raw_method_bodies_retained": false,
   "method_body_identity_to_pinned_apk": true,
   "business_request_runtime_call_observed": false,
-  "interpretation": "The installed APK is byte-identical to the pinned fq_7xz.apk artifact, and the selected method summaries match that artifact. This closes artifact and selected-method continuity across the installed/pinned files; it does not resolve the separate research-version label or prove a complete six-header signer, an observed business request, or online acceptance."
+  "interpretation": "The installed APK is byte-identical to the pinned fq_7xz.apk artifact, whose manifest is 7.2.5.32/72532, and the selected method summaries match that artifact. The separate 7.1.3.32/71332 label belongs to the pinned ELF/JADX native research baseline, not this APK manifest. This closes artifact and selected-method continuity; it does not prove a complete six-header signer, an observed business request, or online acceptance."
 }
