@@ -34,6 +34,15 @@ request native/Python differential, a fresh standalone signer, or online
 acceptance. See
 `verify_vm9_actual_android_jvm_frame_sign_20261028.py`.
 
+For a live process, `capture_vm9_business_framesign_android_20261028.py`
+installs the same redacted hooks without triggering a request. It separates the
+ordinary `r4`/Cronet callback from the independent `MSManager.frameSign` API and
+emits only lengths and SHA-256 digests. Use it only with an already-running app:
+
+```powershell
+python -B platforms/bytedance/tomato/python/capture_vm9_business_framesign_android_20261028.py --pid <PID> --duration 60
+```
+
 `verify_vm9_signer_boundary_audit_20261024.py` now audits the public outer and
 request owners before standalone-signer work. It confirms the `+17b8f8 →
 +27dd04 → +2830c4` composition while keeping synthetic JNI/JavaVM, live JVM/OS
