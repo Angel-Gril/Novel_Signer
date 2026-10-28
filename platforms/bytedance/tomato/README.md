@@ -11,8 +11,10 @@
 完整请求差分和线上验签仍未验证。见 [业务链证据](evidence/vm9_business_framesign_chain_20261028.json)
 及[校验器](python/verify_vm9_business_framesign_chain_20261028.py)。
 
-运行环境边界也已记录：设备当前安装 `com.dragon.read` 7.2.5.32/72532，
-而 pinned ELF 与 JADX native differential 证据对应 7.1.3.32/71332；业务 hook
+运行环境边界也已记录：设备当前安装 `com.dragon.read` 7.2.5.32/72532，且
+pinned `fq_7xz.apk` artifact 的 manifest 与 SHA-256 均相同；7.1.3.32/71332
+是 pinned ELF 与 JADX native differential 研究基线的来源标签，不是该 APK 的
+manifest 版本。业务 hook
 在 992MB、无 swap 的模拟器上因低内存回收而未到达请求阶段。见
 [版本边界证据](evidence/vm9_runtime_app_version_20261028.json)及
 [校验器](python/verify_vm9_runtime_app_version_20261028.py)。
