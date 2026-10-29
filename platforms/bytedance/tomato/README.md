@@ -37,6 +37,26 @@ python python/capture_vm9_business_framesign_android_20261028.py `
 随后出现 `cronetSecurityFactor` 或 `securityFactor`。另开终端保留
 `adb logcat` 中的 `lowmemory/lmkd/ActivityManager` 行，以区分请求未触发和进程被回收。
 
+对于已内置 Frida Gadget 的重签观测包，Gadget 17.24.3 的脚本上下文不会自动提供
+`Java` 全局。可以把与 Gadget 同版本编译的 `frida-java-bridge` bundle 通过分块加载器
+传入；这只适用于观测包，不改变原版 APK 证据边界：
+
+```powershell
+$env:PYTHONPATH='C:\\AI\\6\\_frida243'
+python python/capture_vm9_business_framesign_android_20261028.py `
+  --device remote --remote 127.0.0.1:27042 --pid <pid> --duration 180 `
+  --bridge-js C:\\AI\\6\\frida-java-bridge_lazy.js
+```
+
+`--bridge-js` 会先加载小型 receiver，再按 50,000 字符发送 bridge 和业务 hook；日志中的
+`bridge_initialized`、`Java.available: true`（由 bridge 自身事件表示）以及五个 `hooked`
+事件只证明重签 Gadget 运行时已经具备 Java bridge。必须继续看到
+`cronetSecurityFactor`、`securityFactor` 或 `frameSign` 才能宣称对应业务回调实际运行。
+本轮在 2026-10-30 已验证 bridge 初始化和三个普通入口加两个 Context 入口的安装；
+阅读请求随后命中了重签包的“当前版本不安全”错误路径，尚未得到业务回调事件。
+这次观测的完整边界见
+[Gadget Java bridge evidence](evidence/vm9_gadget_java_bridge_20261030.json)。
+
 对当前安装 APK 的 DEX 做了脱敏字符串存在性检查：`frameSign`、
 `onCallToAddSecurityFactor`、`MSManagerUtils`、`MSManager` 和 `CronetUrlRequest`
 均存在。这只能证明 7.2.5.32 仍包含相关接口名称，不能证明与 7.1.3.32 的方法体或

@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
+from pathlib import Path
 from typing import Any
 
 
@@ -94,10 +95,30 @@ function install() {
         emit({event: 'hooked', target: 'CronetUrlRequestContext.addSecurityFactor'});
       });
     } catch (e) { emit({event: 'hook_error', target: 'CronetUrlRequestContext.addSecurityFactor', error: String(e)}); }
+    try {
+      var CtxO0 = Java.use('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext');
+      hookOnce(CtxO0, '__vm9_cronet_context_o0_hook', function() {
+        var f = CtxO0.o0.overload('java.lang.String', 'java.util.Map');
+        f.implementation = function(url, input) {
+          var result = f.call(this, url, input);
+          emit({event: 'cronetContextO0', url: digest(url), input: input ? mapSummary(input) : {count: 0}, result: result ? mapSummary(result) : {count: 0}});
+          return result;
+        };
+        emit({event: 'hooked', target: 'CronetUrlRequestContext.o0'});
+      });
+    } catch (e) { emit({event: 'hook_error', target: 'CronetUrlRequestContext.o0', error: String(e)}); }
   });
 }
-setInterval(install, 2000);
-install();
+setInterval(function () {
+  if (typeof Java !== 'undefined') {
+    try { install(); } catch (e) { emit({event: 'hook_error', target: 'install', error: String(e)}); }
+  }
+}, 2000);
+if (typeof Java !== 'undefined') {
+  install();
+} else {
+  emit({event: 'awaiting_java_bridge'});
+}
 emit({event: 'probe_ready', pid: Process.id});
 """
 
@@ -121,6 +142,62 @@ def attach_or_spawn(device: Any, package: str, pid: int | None, spawn: bool) -> 
     return device.attach(spawned_pid), spawned_pid
 
 
+def _load_source(bridge_js: Path | None, chunk_size: int) -> tuple[str, list[str]]:
+    """Build the probe source and split it for embedded Gadget transports.
+
+    Frida Gadget's embedded script transport is less tolerant of very large
+    source strings than frida-server.  The caller uses a tiny receiver script
+    and posts these chunks one at a time when ``--bridge-js`` is supplied.
+    """
+    source = JS
+    if bridge_js is not None:
+        source = bridge_js.read_text(encoding="utf-8") + "\n" + JS
+    return source, [source[i : i + chunk_size] for i in range(0, len(source), chunk_size)]
+
+
+def _load_script(session: Any, source: str, chunks: list[str], on_message: Any) -> Any:
+    if not chunks:
+        raise ValueError("probe source is empty")
+    if len(chunks) == 1:
+        script = session.create_script(source)
+        script.on("message", on_message)
+        script.load()
+        return script
+
+    receiver = """
+var __vm9_chunks = [];
+function __vm9_arm() {
+  recv('vm9_chunk', function (message) {
+    __vm9_chunks.push(message.payload);
+    send({event: 'chunk_ack', index: __vm9_chunks.length});
+    __vm9_arm();
+  });
+  recv('vm9_done', function () {
+    try { eval(__vm9_chunks.join('')); send({event: 'bridge_eval_done'}); }
+    catch (e) { send({event: 'bridge_eval_error', error: String(e), stack: e.stack}); }
+  });
+}
+__vm9_arm();
+"""
+    script = session.create_script(receiver)
+    script.on("message", on_message)
+    script.load()
+
+    def post_next(message: dict, _data: bytes | None = None) -> None:
+        payload = message.get("payload")
+        if not isinstance(payload, dict) or payload.get("event") != "chunk_ack":
+            return
+        index = int(payload["index"])
+        if index < len(chunks):
+            script.post({"type": "vm9_chunk", "payload": chunks[index]})
+        else:
+            script.post({"type": "vm9_done", "payload": ""})
+
+    script.on("message", post_next)
+    script.post({"type": "vm9_chunk", "payload": chunks[0]})
+    return script
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--pid", type=int)
@@ -128,6 +205,20 @@ def main() -> int:
     parser.add_argument("--device", choices=("usb", "remote"), default="usb")
     parser.add_argument("--remote", default="127.0.0.1:27042")
     parser.add_argument("--duration", type=float, default=60.0)
+    parser.add_argument(
+        "--bridge-js",
+        type=Path,
+        help=(
+            "compiled frida-java-bridge bundle; required for Frida Gadget "
+            "sessions where the built-in Java global is unavailable"
+        ),
+    )
+    parser.add_argument(
+        "--chunk-size",
+        type=int,
+        default=50000,
+        help="source chunk size for --bridge-js (default: 50000)",
+    )
     parser.add_argument(
         "--spawn",
         action="store_true",
@@ -150,9 +241,25 @@ def main() -> int:
         else:
             print(json.dumps({"event": "frida_message", "message": message}, ensure_ascii=False), flush=True)
 
-    script = session.create_script(JS)
-    script.on("message", on_message)
-    script.load()
+    if args.chunk_size < 4096:
+        raise SystemExit("--chunk-size must be at least 4096")
+    source, chunks = _load_source(args.bridge_js, args.chunk_size)
+
+    def forward_chunk_ack(message: dict, data: bytes | None) -> None:
+        if message.get("type") == "send":
+            payload = message.get("payload")
+            if isinstance(payload, dict) and payload.get("event") == "chunk_ack":
+                return
+        on_message(message, data)
+
+    script = _load_script(session, source, chunks, forward_chunk_ack)
+    print(
+        json.dumps(
+            {"event": "script_loaded", "source_length": len(source), "chunks": len(chunks)},
+            ensure_ascii=False,
+        ),
+        flush=True,
+    )
     if spawned_pid is not None:
         device.resume(spawned_pid)
         print(json.dumps({"event": "spawn_resumed", "pid": spawned_pid}, ensure_ascii=False), flush=True)

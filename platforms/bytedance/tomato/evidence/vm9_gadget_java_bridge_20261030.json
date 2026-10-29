@@ -1,0 +1,37 @@
+{
+  "evidence_label": "patched_signed_gadget_runtime_capture",
+  "capture_date": "2026-10-30",
+  "device": "SM-F900F Android 13 via frp-hat.com:13167",
+  "apk_sha256": "305166cd1b1b94b43a5f0e342ac683e67677605e56d9fec6caafe60bae8dc0e0",
+  "gadget": {
+    "version": "17.24.3",
+    "on_load": "resume",
+    "address": "127.0.0.1:27042"
+  },
+  "host_bridge": {
+    "package": "frida-java-bridge",
+    "version": "7.0.13",
+    "compiled_with": "frida-compile",
+    "java_available": true
+  },
+  "observed_events": [
+    "connected",
+    "attached",
+    "script_loaded",
+    "bridge_initialized",
+    "hooked MSManager.frameSign",
+    "hooked r4.onCallToAddSecurityFactor",
+    "hooked CronetUrlRequest.addSecurityFactor",
+    "hooked CronetUrlRequestContext.addSecurityFactor",
+    "hooked CronetUrlRequestContext.o0"
+  ],
+  "manual_frame_sign_invocation": {
+    "observed": true,
+    "note": "A direct call through MSManagerUtils.get(1967) reached a live MSManager object; this was an injected probe call, not a business request."
+  },
+  "business_request_runtime_call_observed": false,
+  "whole_request_native_python_differential_verified": false,
+  "online_header_acceptance_verified": false,
+  "limitation": "The re-signed build entered its current-version security error path while opening a reader page. The observed TextView.setText stack was ToastUtils.showCommonToast and DefaultFrameController error handling; no Cronet/securityFactor event was recorded.",
+  "control_failure": "Frida Gadget 17.24.3 on_load=wait reproduced a SIGSEGV inside libfrida-gadget.so before application code; this configuration is not used for evidence promotion."
+}

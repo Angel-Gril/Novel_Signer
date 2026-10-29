@@ -10417,5 +10417,14 @@
     "method_body_identity_to_pinned_apk": true,
     "business_request_runtime_call_observed": false,
     "interpretation": "The installed APK is byte-identical to the pinned fq_7xz.apk artifact, whose manifest is also 7.2.5.32/72532, and all selected method summaries match that artifact. The separate 7.1.3.32 research-version label belongs to the pinned ELF/JADX native baseline. Complete six-header signing and observed business-request execution remain unverified."
+  },
+  "vm9_gadget_java_bridge_20261030": {
+    "evidence_file": "evidence/vm9_gadget_java_bridge_20261030.json",
+    "verifier": "python/verify_vm9_gadget_java_bridge_20261030.py",
+    "status": "patched_signed_gadget_bridge_verified",
+    "business_request_runtime_call_observed": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false,
+    "interpretation": "Frida Gadget 17.24.3 with a same-generation frida-java-bridge bundle initialized Java and installed the five redacted observation hooks in the re-signed APK. The direct frameSign probe was manual; the reader request entered the re-signed build's current-version error path, so this does not close the ordinary Cronet business callback."
   }
 }
