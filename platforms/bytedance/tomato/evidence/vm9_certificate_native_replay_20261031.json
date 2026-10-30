@@ -1,0 +1,191 @@
+{
+  "schema": "vm9-certificate-native-replay-20261031-v1",
+  "harness_source_sha256": "7b40cfe77a969dd04a5bbca35d0f16e8a9d8544fb912c2b952f05a2ed2930fc9",
+  "isolated_source_sha256": "e02553f09c78c735fa553822f6eb87427578cf935d0413b056d4f792432f4ebc",
+  "isolated_hook_class_sha256": "8419fde9d189bf90cdfce46d9906975e72dde91fef03bd11ba8b3b85b6cdd171",
+  "classpath_file_sha256": "2cff8c0f040543d5d2a38bf52515a0ab43997967b23e546c93145ca235d2c4ee",
+  "identity_evidence_sha256": "0b6b0f37fc7c2536276c83586e954d4edc9dd945f9fec871e00ceca223eb5a9b",
+  "capture_source_sha256": "5167695ca17e066625a3ae509525d8db417717a9faabc6e9de1cd01ad6bf00f9",
+  "native_inputs_sha256": {
+    "SO_MAIN": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "SO_CPP": "6760e8b9953361968ee8f34ae40ef68bd3b47aa7ba37ef1dcf8902c07d0dc036",
+    "APK": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd"
+  },
+  "configured_certificates": {
+    "official_legacy": {
+      "length": 921,
+      "sha256": "c6bbd352ee9ccfbdec729ba9260d5fd8a48ca163379ff2c0d741dd2ec2bfd0d9"
+    },
+    "resigned": {
+      "length": 716,
+      "sha256": "56407d729c43d59cbcffce1c4b89c3d6b74ad23cc5e3868f6e4afab5e1cf18d3"
+    }
+  },
+  "input": {
+    "length": 60,
+    "sha256": "bcfb66faa824a3bc0ed7db2a43f11fb5fcf84a0335f0a955c8836363e71ca0f3"
+  },
+  "frozen_timestamp_ms": 1790261111000,
+  "emulated_pid": 11340,
+  "ab_switch": 2,
+  "fake_random": true,
+  "null_control_repeat_equal": true,
+  "runs": [
+    {
+      "label": "null_a",
+      "exit_code": 0,
+      "certificate_callback_markers": [],
+      "null_certificate_callback_count": 0,
+      "certificate_callback_count": 0,
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "5b2d4f404ad271b0d2076d595275fe33a753ddb230771371f2e7641675f1ae39"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "09878fa10b09e3ae95519f2cf418a6d186bc1ea850cc6115fe5437a6cd295e3e"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "5e6442b54588c07b67f4a3cd50414cff613c0d46a374a06082f7509eb3ccf236"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "e3268a2f8d58d9067de1901b051eac05a5d46a8154afaef3d7c885aaca87fc14"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "6566c899afc4190c62c453fce732c51ebe9a131f3ccbde5f9b75eb485f4dc473"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "a9c0c2767faca5fe4965c6fb3c3da5239e986b4866ded3eea1ddfe29aba76727"
+        }
+      },
+      "native_signing_tag_observed": true,
+      "native_run_completed": true
+    },
+    {
+      "label": "null_b",
+      "exit_code": 0,
+      "certificate_callback_markers": [],
+      "null_certificate_callback_count": 0,
+      "certificate_callback_count": 0,
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "5b2d4f404ad271b0d2076d595275fe33a753ddb230771371f2e7641675f1ae39"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "09878fa10b09e3ae95519f2cf418a6d186bc1ea850cc6115fe5437a6cd295e3e"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "5e6442b54588c07b67f4a3cd50414cff613c0d46a374a06082f7509eb3ccf236"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "e3268a2f8d58d9067de1901b051eac05a5d46a8154afaef3d7c885aaca87fc14"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "6566c899afc4190c62c453fce732c51ebe9a131f3ccbde5f9b75eb485f4dc473"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "a9c0c2767faca5fe4965c6fb3c3da5239e986b4866ded3eea1ddfe29aba76727"
+        }
+      },
+      "native_signing_tag_observed": true,
+      "native_run_completed": true
+    },
+    {
+      "label": "official_legacy",
+      "exit_code": 0,
+      "certificate_callback_markers": [],
+      "null_certificate_callback_count": 0,
+      "certificate_callback_count": 0,
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "5b2d4f404ad271b0d2076d595275fe33a753ddb230771371f2e7641675f1ae39"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "09878fa10b09e3ae95519f2cf418a6d186bc1ea850cc6115fe5437a6cd295e3e"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "5e6442b54588c07b67f4a3cd50414cff613c0d46a374a06082f7509eb3ccf236"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "e3268a2f8d58d9067de1901b051eac05a5d46a8154afaef3d7c885aaca87fc14"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "6566c899afc4190c62c453fce732c51ebe9a131f3ccbde5f9b75eb485f4dc473"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "a9c0c2767faca5fe4965c6fb3c3da5239e986b4866ded3eea1ddfe29aba76727"
+        }
+      },
+      "native_signing_tag_observed": true,
+      "native_run_completed": true
+    },
+    {
+      "label": "resigned",
+      "exit_code": 0,
+      "certificate_callback_markers": [],
+      "null_certificate_callback_count": 0,
+      "certificate_callback_count": 0,
+      "header_observations": {
+        "X-Argus": {
+          "length": 8,
+          "sha256": "5b2d4f404ad271b0d2076d595275fe33a753ddb230771371f2e7641675f1ae39"
+        },
+        "X-Gorgon": {
+          "length": 52,
+          "sha256": "09878fa10b09e3ae95519f2cf418a6d186bc1ea850cc6115fe5437a6cd295e3e"
+        },
+        "X-Helios": {
+          "length": 48,
+          "sha256": "5e6442b54588c07b67f4a3cd50414cff613c0d46a374a06082f7509eb3ccf236"
+        },
+        "X-Khronos": {
+          "length": 10,
+          "sha256": "e3268a2f8d58d9067de1901b051eac05a5d46a8154afaef3d7c885aaca87fc14"
+        },
+        "X-Ladon": {
+          "length": 8,
+          "sha256": "6566c899afc4190c62c453fce732c51ebe9a131f3ccbde5f9b75eb485f4dc473"
+        },
+        "X-Medusa": {
+          "length": 1072,
+          "sha256": "a9c0c2767faca5fe4965c6fb3c3da5239e986b4866ded3eea1ddfe29aba76727"
+        }
+      },
+      "native_signing_tag_observed": true,
+      "native_run_completed": true
+    }
+  ],
+  "output_differences_vs_null": {
+    "official_legacy": [],
+    "resigned": []
+  },
+  "certificate_input_delivery_verified": false,
+  "certificate_input_sensitivity_evaluated": false,
+  "fresh_rootfs_per_run": true,
+  "installed_harness_source_unchanged": true,
+  "temporary_artifacts_cleaned": true,
+  "target_app_modified": false,
+  "live_app_callback_observed": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "raw_urls_or_header_values_retained": false,
+  "boundary": "Offline native replay with explicit unidbg Java/OS callbacks and a fresh rootfs per run. Configured certificate bytes are delivered only if the native code requests callback 0x1000002. Zero callback events leave input sensitivity unevaluated, even when output digests are identical. No live application or server-acceptance conclusion follows."
+}

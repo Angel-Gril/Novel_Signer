@@ -1,5 +1,22 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-31：被动业务六头、证书轮换与纯重签阅读对照
+
+最新普通业务捕获已走通 OkHttp3 / NetworkParams 六头回调，观察到 HTTP 200、业务码
+110；这是 Gadget 观测包的结果，Cronet 运行和线上接受仍未验证。随后对不含 Gadget 的
+纯重签包做了同书同章 UI 对照：两种包均加载书城，纯重签阅读报版本不安全，恢复原版后
+同一章显示正文。纯重签包本轮没有响应码捕获，不能直接把它也记为 110。
+详见[运行时证据](evidence/vm9_networkparams_runtime_20261031.json)与
+[包身份和阅读对照](evidence/vm9_package_identity_control_20261031.json)。
+
+包管理器探针确认官方包 GET_SIGNATURES 的 921 字节旧证书 `c6bbd352…` 与当前
+signer `1a5a8913…` 不同；DEX 的 `s2.j` tag `0x1000002 -> s2.k` 使用旧接口。
+shell 探针不证明应用缓存、隐私包装器或真实 callback 返回值。四轮隔离 unidbg 重放
+均返回六头，但证书 callback 计数都是 0；配置不同证书的输出相同不能当作证书敏感性
+已验证。原版已恢复并校验 APK 身份。下一步定位真实业务中的证书读取触发条件，
+完整 signer、整请求 native/Python 差分和线上六头接受仍未完成。
+见[隔离证书回调观测](evidence/vm9_certificate_native_replay_20261031.json)。
+
 ## 2026-10-28：fresh unidbg native six-header replay
 
 使用现有 `HookMain` 做了一次独立、固定时间的 fresh Unicorn2 重放。运行加载 pinned

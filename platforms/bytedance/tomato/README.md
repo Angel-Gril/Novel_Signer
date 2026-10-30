@@ -26,6 +26,16 @@ python python/verify_vm9_package_identity_control_20261031.py
 # 如持有本地原版/对照包，可增加 --original-apk <path> --resigned-apk <path> 复核归档与 DEX 分支。
 ```
 
+同日增加[隔离 native 证书回调观测](python/capture_vm9_certificate_replay_20261031.py)：
+在临时副本中编译 `HookMain`，每轮使用独立 rootfs，固定 URL、时间、PID 与随机源。
+两次空证书基线，以及配置官方旧证书、测试证书的两轮都返回六头，输出摘要逐项一致；
+但四轮都没有调用 `0x1000002` 证书回调，配置的证书没有经该回调送入 native。
+因此证书输入敏感性仍未测得，不能把输出一致解释为“证书不影响签名”。
+原 harness 源码和 native 输入未改，原始签名输出只留在本次临时目录并已清理。
+见[四轮观测证据](evidence/vm9_certificate_native_replay_20261031.json)与
+[校验器](python/verify_vm9_certificate_replay_20261031.py)。下一步需定位真实业务中的证书读取触发条件，
+继续保留完整 signer、Cronet 运行和线上六头接受的未验证边界。
+
 2026-10-31 普通业务六头回调已在 8 GB 云手机上被动捕获：实际调用栈是
 `OkHttp3SecurityFactorInterceptor.intercept -> NetworkParams.tryAddSecurityFactor`
 `-> ms.bd.c.r4.onCallToAddSecurityFactor`，返回六个七神 header。签名事件与

@@ -15,3 +15,8 @@
 # Language statistics hints
 docs/RESEARCH_LOG.md      linguist-documentation
 platforms/**/evidence/**  linguist-generated
+
+# These source bytes are fingerprinted by the package-identity/replay evidence.
+platforms/bytedance/tomato/python/android/Vm9PackageIdentity.java text eol=lf
+platforms/bytedance/tomato/python/capture_vm9_package_identity_android_20261031.py text eol=lf
+platforms/bytedance/tomato/python/capture_vm9_certificate_replay_20261031.py text eol=lf
