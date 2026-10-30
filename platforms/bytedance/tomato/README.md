@@ -1,13 +1,26 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-10-31 普通业务六头回调已在 8 GB 云手机上被动捕获：实际调用栈是
+`OkHttp3SecurityFactorInterceptor.intercept -> NetworkParams.tryAddSecurityFactor`
+`-> ms.bd.c.r4.onCallToAddSecurityFactor`，返回六个七神 header。签名事件与
+`BookstoreTabResponse` 响应的 path SHA-256、线程号一致；完整路由指纹不同，
+未记录唯一请求 ID。响应为 HTTP `200`、业务码 `110 / ILLEGAL_ACCESS`，
+`NetReqUtil.assertRspDataOk` 构造异常，版本安全提示由反序列化后的业务码检查触发。
+原版 7.2.5.32 已实际显示第 1 章正文，重签 Gadget 包则在书城请求失败；本次不是
+同章节的单变量证书对照，尚不能确定 `110` 的具体触发输入。
+日志只保留 URL/路径/值的长度和 SHA-256、header 名、错误码及类/方法名。
+见[运行时证据](evidence/vm9_networkparams_runtime_20261031.json)与
+[校验器](python/verify_vm9_networkparams_runtime_20261031.py)。这证明普通业务回调已运行，
+Cronet 分支运行、完整 signer、整请求 native/Python 差分和线上六头接受仍未验证。
+
 2026-10-28 业务请求路径复核：普通 Cronet/NetworkParams 请求由
 `CronetUrlRequest.addSecurityFactor(String,String[]) -> CronetUrlRequestContext.o0`
 汇入 `com.ttnet.org.chromium.net.w.a`，应用侧回调是
 `ms.bd.c.r4.onCallToAddSecurityFactor(String,Map)`，最终使用 JNI tag
 `0x3000001` 返回六个七神 header。真实 Android-JVM `MSManager.frameSign(String,int)`
 走的是独立的 JNI tag `0x200000A`，返回 `frametype/lid/signinfo/signvalue/signversion`
-五键结构；不能把后者当作普通请求已经运行的证据。本轮 hook 已安装但模拟器在业务请求
-触发前被系统生命周期/广播路径终止，因此 `business_frame_sign_call_observed=false`、
+五键结构；不能把后者当作普通请求已经运行的证据。2026-10-28 的 hook 已安装但模拟器在业务请求
+触发前被系统生命周期/广播路径终止，该历史记录的 `business_frame_sign_call_observed=false`、
 完整请求差分和线上验签仍未验证。见 [业务链证据](evidence/vm9_business_framesign_chain_20261028.json)
 及[校验器](python/verify_vm9_business_framesign_chain_20261028.py)。
 
@@ -32,8 +45,9 @@ python python/capture_vm9_business_framesign_android_20261028.py `
   | Tee-Object -FilePath .\\evidence\\runtime_business_capture_20261028.log
 ```
 
-`--spawn` 会让 Frida 先挂起新进程、安装四个脱敏 hook，再恢复应用；随后在应用内
-进入会发起网络请求的页面。成功判据是日志先出现 `probe_ready` 和四个 `hooked`，
+`--spawn` 会让 Frida 先挂起新进程、加载五个脱敏 hook 的安装逻辑，再恢复应用；
+Java bridge 会在应用类加载器可用后安装 hook。随后在应用内
+进入会发起网络请求的页面。成功判据是日志先出现 `probe_ready` 和五个 `hooked`，
 随后出现 `cronetSecurityFactor` 或 `securityFactor`。另开终端保留
 `adb logcat` 中的 `lowmemory/lmkd/ActivityManager` 行，以区分请求未触发和进程被回收。
 
@@ -44,8 +58,9 @@ python python/capture_vm9_business_framesign_android_20261028.py `
 ```powershell
 $env:PYTHONPATH='C:\\AI\\6\\_frida243'
 python python/capture_vm9_business_framesign_android_20261028.py `
-  --device remote --remote 127.0.0.1:27042 --pid <pid> --duration 180 `
-  --bridge-js C:\\AI\\6\\frida-java-bridge_lazy.js
+  --device remote --remote 127.0.0.1:27042 --process-name Gadget --duration 120 `
+  --bridge-js C:\\AI\\6\\frida-java-bridge_lazy.js `
+  --diagnose-reader-errors --output C:\\AI\\6\\runtime_business_capture.jsonl
 ```
 
 `--bridge-js` 会先加载小型 receiver，再按 50,000 字符发送 bridge 和业务 hook；日志中的
@@ -56,6 +71,12 @@ python python/capture_vm9_business_framesign_android_20261028.py `
 阅读请求随后命中了重签包的“当前版本不安全”错误路径，尚未得到业务回调事件。
 这次观测的完整边界见
 [Gadget Java bridge evidence](evidence/vm9_gadget_java_bridge_20261030.json)。
+
+捕获器使用普通 JavaScript 状态记录安装结果，成功的 hook 不再重复安装，所有目标
+安装成功后停止重试。`--process-name` 精确匹配 Gadget 枚举名称；`--output` 只创建新文件，
+拒绝覆盖旧记录。`--diagnose-reader-errors` 额外记录签名调用栈、HTTP/业务码及错误构造栈。
+目标退出时立即结束捕获，脚本销毁也能完成连接和文件清理。主机回归使用
+`python python/verify_vm9_capture_lifecycle_20261031.py`，实际业务边界使用上述运行时证据校验器。
 
 对当前安装 APK 的 DEX 做了脱敏字符串存在性检查：`frameSign`、
 `onCallToAddSecurityFactor`、`MSManagerUtils`、`MSManager` 和 `CronetUrlRequest`

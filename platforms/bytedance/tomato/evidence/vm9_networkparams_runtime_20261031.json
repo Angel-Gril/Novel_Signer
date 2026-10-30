@@ -1,0 +1,668 @@
+{
+  "schema": "vm9-networkparams-runtime-20261031-v1",
+  "evidence_label": "re_signed_gadget_passive_business_request",
+  "session_date_label": "2026-10-31",
+  "package": {
+    "name": "com.dragon.read",
+    "version_name": "7.2.5.32",
+    "version_code": 72532
+  },
+  "device": {
+    "model": "SM-F900F",
+    "android_version": 13,
+    "abi": "arm64-v8a",
+    "root_available": false,
+    "ro_build_type": "user",
+    "ro_debuggable": 0,
+    "mem_total_kb": 8388608,
+    "mem_available_kb_at_check": 6984732
+  },
+  "artifacts": {
+    "official_apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "observed_apk_sha256": "305166cd1b1b94b43a5f0e342ac683e67677605e56d9fec6caafe60bae8dc0e0",
+    "gadget_version": "17.24.3",
+    "gadget_on_load": "resume",
+    "capture_source": "python/capture_vm9_business_framesign_android_20261028.py",
+    "capture_source_sha256": "62369b88971cd6db7a623800091870168db7b2c0c75637a593be5cf21d504235",
+    "local_jsonl_sha256": "05df5e04bbb0bf0c1bcd179d4e4d93c2ec1a3994e0d4b8193c9a5f0341773aaf"
+  },
+  "official_control": {
+    "actual_chapter_body_visually_observed": true,
+    "book_title": "请活到天明时分（骇夜：我在恐怖游戏里暴富）",
+    "chapter_number": 1,
+    "chapter_title": "这不是他的沙发",
+    "local_screen_basename": "_vm9_original_reader_success_20261031.png",
+    "local_screen_sha256": "a147f25e1655aa522c401a432b3e59c0a09e5f963576396bf741027016bfa3a6",
+    "local_ui_xml_sha256": "6441b3b9879596c14506dc3e9085846d2834e23de2380a882fa9831ef9cb1ebb",
+    "limitation": "Official chapter rendering was observed before switching builds. The re-signed fresh install failed at the book mall; this is not a same-chapter paired request or a single-variable certificate experiment.",
+    "restored_after_observation": true,
+    "restored_installed_apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "restored_installed_version_code": 72532,
+    "gadget_adb_forward_removed": true
+  },
+  "static_error_owner": {
+    "original_dex_entry": "classes13.dex",
+    "original_dex_sha256": "6d09745b8188f534fae704568f14dcfa333e0cbef9ef29366b57290d11dfe0be",
+    "class": "com.dragon.read.util.NetReqUtil",
+    "focused_jadx_source_sha256": "3538df0704d46328f3254878f54c7b353ed3ecc3ea296f509c383a08372f3834",
+    "assert_rsp_data_ok": "Reads response code/message; nonzero code constructs ErrorCodeException.",
+    "do_after_deserialization": "Classifies HTTP/business status; code 110 calls NsBaseNetworkDependImpl.assertIllegalAccess."
+  },
+  "business_security_factor_observed": true,
+  "transport_observed": "OkHttp3 -> NetworkParams.tryAddSecurityFactor -> ms.bd.c.r4.onCallToAddSecurityFactor",
+  "six_header_result_observed": true,
+  "response_correlation": "Matching path digest and thread id in a single synchronous OkHttp call; full route digests differ. No unique request ID is captured.",
+  "observed_http_status": 200,
+  "observed_business_code": 110,
+  "server_business_rejection_observed": true,
+  "exact_reason_for_business_code_110_identified": false,
+  "cronet_runtime_branch_observed": false,
+  "manual_frame_sign_invocation": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "raw_urls_or_header_values_retained": false,
+  "events": [
+    {
+      "event": "script_loaded",
+      "source_length": 452318,
+      "chunks": 10
+    },
+    {
+      "event": "awaiting_java_bridge"
+    },
+    {
+      "event": "probe_ready",
+      "pid": 1265904
+    },
+    {
+      "event": "bridge_eval_done"
+    },
+    {
+      "bridge_initialized": true,
+      "available": true
+    },
+    {
+      "event": "hooked",
+      "target": "MSManager.frameSign"
+    },
+    {
+      "event": "hooked",
+      "target": "ms.bd.c.r4.onCallToAddSecurityFactor"
+    },
+    {
+      "event": "hooked",
+      "target": "CronetUrlRequest.addSecurityFactor"
+    },
+    {
+      "event": "hooked",
+      "target": "CronetUrlRequestContext.addSecurityFactor"
+    },
+    {
+      "event": "hooked",
+      "target": "CronetUrlRequestContext.o0"
+    },
+    {
+      "event": "hooked",
+      "target": "resource_warning"
+    },
+    {
+      "event": "hooked",
+      "target": "response_deserialized"
+    },
+    {
+      "event": "hooked",
+      "target": "error_code_exception"
+    },
+    {
+      "event": "hooked",
+      "target": "reader_exception"
+    },
+    {
+      "event": "securityFactor",
+      "url": {
+        "length": 3077,
+        "sha256": "8ba4d93e2eee21f63e27448e376f89b2e7d87ba4a91fbd601811fab6e20470c5"
+      },
+      "route": {
+        "length": 74,
+        "sha256": "8275325afbdc84f8132012cc6118835c8f687a166357f9ea796ff1a010842bbe",
+        "path": {
+          "length": 31,
+          "sha256": "0913d1ab58cc3a26ea28275fcc5045b64f43ead64b53200ee61f8585ac847aa9"
+        }
+      },
+      "input": {
+        "count": 11,
+        "rows": [
+          {
+            "key": "accept-encoding",
+            "value": {
+              "length": 6,
+              "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+            }
+          },
+          {
+            "key": "authorization",
+            "value": {
+              "length": 8,
+              "sha256": "57a7adc8acdd27dbb3a7d33a577fbd9812557ca67e25202e4a789121fbd39bd6"
+            }
+          },
+          {
+            "key": "content-type",
+            "value": {
+              "length": 24,
+              "sha256": "9d17566efda5c59d2c8e7e7fbc39f1093f148780b2243d42ab1be2268c4353d6"
+            }
+          },
+          {
+            "key": "lc",
+            "value": {
+              "length": 5,
+              "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+            }
+          },
+          {
+            "key": "user-agent",
+            "value": {
+              "length": 106,
+              "sha256": "cdd212413265bc92295f7afb66f02a9be89895527c7004654aadbcde87f4f80d"
+            }
+          },
+          {
+            "key": "x-reading-request",
+            "value": {
+              "length": 26,
+              "sha256": "08d971a4c4c380f0bb81d406d127cd9de010248d2e998d03c58bfd1b0db12efa"
+            }
+          },
+          {
+            "key": "x-ss-req-ticket",
+            "value": {
+              "length": 15,
+              "sha256": "6df667ed3a7a45a0b64f4ab42480504c8473909830e59f3cbca5d2c68050e49f"
+            }
+          },
+          {
+            "key": "x-tt-store-region",
+            "value": {
+              "length": 7,
+              "sha256": "a11d0106f2c9279317bc36b60b1e3f8b32f810e87824e9167e74974ec0c8366c"
+            }
+          },
+          {
+            "key": "x-tt-store-region-src",
+            "value": {
+              "length": 5,
+              "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+            }
+          },
+          {
+            "key": "x-vc-bdturing-sdk-version",
+            "value": {
+              "length": 10,
+              "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+            }
+          },
+          {
+            "key": "x-xs-from-web",
+            "value": {
+              "length": 3,
+              "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+            }
+          }
+        ]
+      },
+      "result": {
+        "count": 6,
+        "rows": [
+          {
+            "key": "X-Argus",
+            "value": {
+              "length": 8,
+              "sha256": "26648cf56d0c368bcc27a280457fc58eb138bee3362615802758352e1ebcdb93"
+            }
+          },
+          {
+            "key": "X-Gorgon",
+            "value": {
+              "length": 52,
+              "sha256": "24356884c1f71c9549d0ea52c4eab5375aa30f07b0710c66ed81215e9ca5929f"
+            }
+          },
+          {
+            "key": "X-Helios",
+            "value": {
+              "length": 48,
+              "sha256": "c437d9ecc1e3db273220b128b742faedad719c0cf42f583c90b4d7246bf21a2a"
+            }
+          },
+          {
+            "key": "X-Khronos",
+            "value": {
+              "length": 10,
+              "sha256": "4dfa203eee3b8c51529ddcabdb9860e0cccd23b0f64f263a0072337152730967"
+            }
+          },
+          {
+            "key": "X-Ladon",
+            "value": {
+              "length": 8,
+              "sha256": "99baa4c09455eee3bcb45064262a265800e125b59e93d71194b5299300ff1039"
+            }
+          },
+          {
+            "key": "X-Medusa",
+            "value": {
+              "length": 1276,
+              "sha256": "59f23092e12e1a3e12ef9ec79f96cfc2c83699c015e54ebcc7593739124a6a6f"
+            }
+          }
+        ]
+      },
+      "context": {
+        "thread_id": 1265951,
+        "stack": [
+          {
+            "class": "ms.bd.c.r4",
+            "method": "onCallToAddSecurityFactor"
+          },
+          {
+            "class": "com.bytedance.frameworks.baselib.network.http.NetworkParams",
+            "method": "tryAddSecurityFactor"
+          },
+          {
+            "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+            "method": "intercept"
+          },
+          {
+            "class": "okhttp3.internal.http.RealInterceptorChain",
+            "method": "proceed"
+          },
+          {
+            "class": "okhttp3.internal.http.RealInterceptorChain",
+            "method": "proceed"
+          },
+          {
+            "class": "okhttp3.RealCall",
+            "method": "getResponseWithInterceptorChain"
+          },
+          {
+            "class": "okhttp3.RealCall",
+            "method": "execute"
+          },
+          {
+            "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+            "method": "p"
+          },
+          {
+            "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+            "method": "execute"
+          },
+          {
+            "class": "com.bytedance.retrofit2.CallServerInterceptor",
+            "method": "CallServerInterceptor__executeCall$___twin___"
+          },
+          {
+            "class": "com.bytedance.retrofit2.CallServerInterceptor",
+            "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+          },
+          {
+            "class": "com.bytedance.retrofit2.CallServerInterceptor",
+            "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+          },
+          {
+            "class": "com.bytedance.retrofit2.CallServerInterceptor",
+            "method": "executeCall"
+          },
+          {
+            "class": "com.bytedance.retrofit2.CallServerInterceptor",
+            "method": "intercept"
+          },
+          {
+            "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+            "method": "proceed"
+          },
+          {
+            "class": "y90.b",
+            "method": "intercept"
+          },
+          {
+            "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+            "method": "proceed"
+          },
+          {
+            "class": "com.bytedance.ug.sdk.luckydog.tokenunion.interceptor.TokenUnionInterceptor",
+            "method": "intercept"
+          },
+          {
+            "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+            "method": "proceed"
+          },
+          {
+            "class": "com.bytedance.bdturing.ttnet.a",
+            "method": "intercept"
+          },
+          {
+            "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+            "method": "proceed"
+          },
+          {
+            "class": "c13.a",
+            "method": "intercept"
+          },
+          {
+            "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+            "method": "proceed"
+          },
+          {
+            "class": "j24.f$a",
+            "method": "intercept"
+          }
+        ]
+      }
+    },
+    {
+      "event": "response_deserialized",
+      "url": {
+        "length": 1843,
+        "sha256": "564ae868ed24c58f3e27c21c045477657fed64c66f301f6d9756c776599d6ed9"
+      },
+      "route": {
+        "length": 57,
+        "sha256": "a422812f08a4b148bc7216c3587766b3c75cf2c93c21eafee650e88cf8ed3d31",
+        "path": {
+          "length": 31,
+          "sha256": "0913d1ab58cc3a26ea28275fcc5045b64f43ead64b53200ee61f8585ac847aa9"
+        }
+      },
+      "thread_id": 1265951,
+      "http_status": 200,
+      "business_code": 110,
+      "response_class": "com.dragon.read.pbrpc.BookstoreTabResponse",
+      "transport_error_class": null
+    },
+    {
+      "event": "version_warning_resource",
+      "resource_id": 2131104020
+    },
+    {
+      "event": "error_code_exception_created",
+      "code": 110,
+      "error_kind": "ILLEGAL_ACCESS",
+      "constructor_overload": 0,
+      "stack": [
+        {
+          "class": "com.dragon.read.util.NetReqUtil",
+          "method": "assertRspDataOk"
+        },
+        {
+          "class": "com.dragon.read.util.NetReqUtil",
+          "method": "assertRspDataOk"
+        },
+        {
+          "class": "com.dragon.read.util.NetReqUtil",
+          "method": "assertRspDataOk"
+        },
+        {
+          "class": "com.dragon.read.component.biz.impl.bookmall.y$t",
+          "method": "c"
+        },
+        {
+          "class": "com.dragon.read.component.biz.impl.bookmall.y$t",
+          "method": "apply"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.x0$a",
+          "method": "onNext"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.a0$a",
+          "method": "onNext"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.x0$a",
+          "method": "onNext"
+        },
+        {
+          "class": "io.reactivex.internal.observers.DeferredScalarDisposable",
+          "method": "complete"
+        },
+        {
+          "class": "io.reactivex.internal.operators.single.SingleToObservable$SingleToObservableObserver",
+          "method": "onSuccess"
+        },
+        {
+          "class": "com.ss.android.ugc.bytex.taskmonitor.proxy.rx.SingleCreateProxy$Emitter",
+          "method": "onSuccess"
+        },
+        {
+          "class": "c13.f",
+          "method": "d"
+        },
+        {
+          "class": "c13.f",
+          "method": "a"
+        },
+        {
+          "class": "c13.e",
+          "method": "subscribe"
+        },
+        {
+          "class": "com.ss.android.ugc.bytex.taskmonitor.proxy.rx.SingleCreateProxy",
+          "method": "doSubscribeActual"
+        },
+        {
+          "class": "com.ss.android.ugc.bytex.taskmonitor.proxy.rx.SingleCreateProxy",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Single",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.single.SingleToObservable",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.x0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.a0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.x0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.a0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.a0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.ObservableDoFinally",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.c1",
+          "method": "subscribeActual"
+        }
+      ]
+    },
+    {
+      "event": "error_code_exception_created",
+      "code": 110,
+      "error_kind": "ILLEGAL_ACCESS",
+      "constructor_overload": 0,
+      "stack": [
+        {
+          "class": "com.dragon.read.util.NetReqUtil",
+          "method": "assertRspDataOk"
+        },
+        {
+          "class": "com.dragon.read.util.NetReqUtil",
+          "method": "assertRspDataOk"
+        },
+        {
+          "class": "com.dragon.read.util.NetReqUtil",
+          "method": "assertRspDataOk"
+        },
+        {
+          "class": "com.dragon.read.component.biz.impl.bookmall.y$t",
+          "method": "c"
+        },
+        {
+          "class": "com.dragon.read.component.biz.impl.bookmall.y$t",
+          "method": "apply"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.x0$a",
+          "method": "onNext"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.a0$a",
+          "method": "onNext"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.x0$a",
+          "method": "onNext"
+        },
+        {
+          "class": "io.reactivex.internal.observers.DeferredScalarDisposable",
+          "method": "complete"
+        },
+        {
+          "class": "io.reactivex.internal.operators.single.SingleToObservable$SingleToObservableObserver",
+          "method": "onSuccess"
+        },
+        {
+          "class": "com.ss.android.ugc.bytex.taskmonitor.proxy.rx.SingleCreateProxy$Emitter",
+          "method": "onSuccess"
+        },
+        {
+          "class": "c13.f",
+          "method": "d"
+        },
+        {
+          "class": "c13.f",
+          "method": "a"
+        },
+        {
+          "class": "c13.e",
+          "method": "subscribe"
+        },
+        {
+          "class": "com.ss.android.ugc.bytex.taskmonitor.proxy.rx.SingleCreateProxy",
+          "method": "doSubscribeActual"
+        },
+        {
+          "class": "com.ss.android.ugc.bytex.taskmonitor.proxy.rx.SingleCreateProxy",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Single",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.single.SingleToObservable",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.x0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.a0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.x0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.a0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.a0",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.ObservableDoFinally",
+          "method": "subscribeActual"
+        },
+        {
+          "class": "io.reactivex.Observable",
+          "method": "subscribe"
+        },
+        {
+          "class": "io.reactivex.internal.operators.observable.c1",
+          "method": "subscribeActual"
+        }
+      ]
+    },
+    {
+      "event": "session_detached",
+      "reason": "application-requested"
+    }
+  ],
+  "next_boundary": "Preserve the official signing identity for the next runtime control, or identify which repackage/signing input causes the observed rejection. Do not hide the warning or change the server error to success."
+}

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import time
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +16,25 @@ from typing import Any
 JS = r"""
 'use strict';
 function emit(x) { try { send(x); } catch (_) {} }
+function signingContext() {
+  if (typeof vm9TraceSigning === 'undefined' || !vm9TraceSigning) return undefined;
+  try {
+    return {
+      thread_id: Process.getCurrentThreadId(),
+      stack: Java.backtrace({limit: 24}).frames.slice(0, 24).map(function(frame) {
+        return {class: frame.className, method: frame.methodName};
+      })
+    };
+  } catch (e) { return {error: String(e)}; }
+}
+function routeDigest(url) {
+  try {
+    var uri = Java.use('android.net.Uri').parse(String(url));
+    var summary = digest(String(uri.getScheme()) + '://' + String(uri.getHost()) + String(uri.getPath()));
+    summary.path = digest(String(uri.getPath()));
+    return summary;
+  } catch (e) { return {error: String(e)}; }
+}
 function digest(value) {
   try {
     var s = String(value);
@@ -30,7 +49,8 @@ function mapSummary(m) {
   var rows = [];
   try {
     var it = m.entrySet().iterator();
-    while (it.hasNext()) { var e = it.next(); rows.push({key: String(e.getKey()), value: digest(e.getValue())}); }
+    var Entry = Java.use('java.util.Map$Entry');
+    while (it.hasNext()) { var e = Java.cast(it.next(), Entry); rows.push({key: String(e.getKey()), value: digest(e.getValue())}); }
   } catch (e) { return {error: String(e)}; }
   rows.sort(function(a, b) { return a.key < b.key ? -1 : (a.key > b.key ? 1 : 0); });
   return {count: rows.length, rows: rows};
@@ -41,95 +61,263 @@ function arraySummary(a) {
   catch (e) { return {error: String(e)}; }
   return {count: rows.length, rows: rows};
 }
-function hookOnce(holder, name, install) {
-  try { if (!holder[name]) { install(); holder[name] = true; } }
-  catch (e) { emit({event: 'hook_error', target: name, error: String(e)}); }
+var hookState = Object.create(null);
+var installScheduled = false;
+var installTimer = null;
+var hookNames = [
+  'MSManager.frameSign',
+  'ms.bd.c.r4.onCallToAddSecurityFactor',
+  'CronetUrlRequest.addSecurityFactor',
+  'CronetUrlRequestContext.addSecurityFactor',
+  'CronetUrlRequestContext.o0'
+];
+function hookOnce(name, install) {
+  if (hookState[name] === 'installed') return;
+  try {
+    install();
+    hookState[name] = 'installed';
+    emit({event: 'hooked', target: name});
+  } catch (e) {
+    var error = String(e);
+    if (hookState[name] !== error) emit({event: 'hook_error', target: name, error: error});
+    hookState[name] = error;
+  }
+}
+function allHooksInstalled() {
+  for (var i = 0; i < hookNames.length; i++) {
+    if (hookState[hookNames[i]] !== 'installed') return false;
+  }
+  return true;
 }
 function install() {
-  Java.perform(function() {
-    try {
-      var M = Java.use('com.bytedance.mobsec.metasec.ml.MSManager');
-      hookOnce(M, '__vm9_frameSign_hook', function() {
-        var f = M.frameSign.overload('java.lang.String', 'int');
-        f.implementation = function(url, frameType) {
-          var result = f.call(this, url, frameType);
-          emit({event: 'frameSign', url: digest(url), frame_type: frameType, result: result ? mapSummary(result) : {count: 0}});
-          return result;
-        };
-        emit({event: 'hooked', target: 'MSManager.frameSign'});
-      });
-    } catch (e) { emit({event: 'hook_error', target: 'MSManager.frameSign', error: String(e)}); }
-    try {
-      var R = Java.use('ms.bd.c.r4');
-      hookOnce(R, '__vm9_security_factor_hook', function() {
-        var f = R.onCallToAddSecurityFactor.overload('java.lang.String', 'java.util.Map');
-        f.implementation = function(url, input) {
-          var result = f.call(this, url, input);
-          emit({event: 'securityFactor', url: digest(url), input: input ? mapSummary(input) : {count: 0}, result: result ? mapSummary(result) : {count: 0}});
-          return result;
-        };
-        emit({event: 'hooked', target: 'ms.bd.c.r4.onCallToAddSecurityFactor'});
-      });
-    } catch (e) { emit({event: 'hook_error', target: 'ms.bd.c.r4.onCallToAddSecurityFactor', error: String(e)}); }
-    try {
-      var C = Java.use('com.ttnet.org.chromium.net.impl.CronetUrlRequest');
-      hookOnce(C, '__vm9_cronet_security_factor_hook', function() {
-        var f = C.addSecurityFactor.overload('java.lang.String', '[Ljava.lang.String;');
-        f.implementation = function(url, input) {
-          var result = f.call(this, url, input);
-          emit({event: 'cronetSecurityFactor', url: digest(url), input: arraySummary(input), result: result ? arraySummary(result) : {count: 0}});
-          return result;
-        };
-        emit({event: 'hooked', target: 'CronetUrlRequest.addSecurityFactor'});
-      });
-    } catch (e) { emit({event: 'hook_error', target: 'CronetUrlRequest.addSecurityFactor', error: String(e)}); }
-    try {
-      var Ctx = Java.use('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext');
-      hookOnce(Ctx, '__vm9_cronet_context_security_factor_hook', function() {
-        var f = Ctx.addSecurityFactor.overload('java.lang.String', '[Ljava.lang.String;');
-        f.implementation = function(url, input) {
-          var result = f.call(this, url, input);
-          emit({event: 'cronetContextSecurityFactor', url: digest(url), input: arraySummary(input), result: result ? arraySummary(result) : {count: 0}});
-          return result;
-        };
-        emit({event: 'hooked', target: 'CronetUrlRequestContext.addSecurityFactor'});
-      });
-    } catch (e) { emit({event: 'hook_error', target: 'CronetUrlRequestContext.addSecurityFactor', error: String(e)}); }
-    try {
-      var CtxO0 = Java.use('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext');
-      hookOnce(CtxO0, '__vm9_cronet_context_o0_hook', function() {
-        var f = CtxO0.o0.overload('java.lang.String', 'java.util.Map');
-        f.implementation = function(url, input) {
-          var result = f.call(this, url, input);
-          emit({event: 'cronetContextO0', url: digest(url), input: input ? mapSummary(input) : {count: 0}, result: result ? mapSummary(result) : {count: 0}});
-          return result;
-        };
-        emit({event: 'hooked', target: 'CronetUrlRequestContext.o0'});
-      });
-    } catch (e) { emit({event: 'hook_error', target: 'CronetUrlRequestContext.o0', error: String(e)}); }
-  });
-}
-setInterval(function () {
-  if (typeof Java !== 'undefined') {
-    try { install(); } catch (e) { emit({event: 'hook_error', target: 'install', error: String(e)}); }
+  if (typeof Java === 'undefined' || installScheduled) return;
+  installScheduled = true;
+  try {
+    Java.perform(function() {
+      try {
+        hookOnce('MSManager.frameSign', function() {
+          var M = Java.use('com.bytedance.mobsec.metasec.ml.MSManager');
+          var f = M.frameSign.overload('java.lang.String', 'int');
+          f.implementation = function(url, frameType) {
+            var result = f.call(this, url, frameType);
+            emit({event: 'frameSign', url: digest(url), frame_type: frameType, result: result ? mapSummary(result) : {count: 0}});
+            return result;
+          };
+        });
+        hookOnce('ms.bd.c.r4.onCallToAddSecurityFactor', function() {
+          var R = Java.use('ms.bd.c.r4');
+          var f = R.onCallToAddSecurityFactor.overload('java.lang.String', 'java.util.Map');
+          f.implementation = function(url, input) {
+            var result = f.call(this, url, input);
+            emit({event: 'securityFactor', url: digest(url), route: routeDigest(url), input: input ? mapSummary(input) : {count: 0}, result: result ? mapSummary(result) : {count: 0}, context: signingContext()});
+            return result;
+          };
+        });
+        hookOnce('CronetUrlRequest.addSecurityFactor', function() {
+          var C = Java.use('com.ttnet.org.chromium.net.impl.CronetUrlRequest');
+          var f = C.addSecurityFactor.overload('java.lang.String', '[Ljava.lang.String;');
+          f.implementation = function(url, input) {
+            var result = f.call(this, url, input);
+            emit({event: 'cronetSecurityFactor', url: digest(url), input: arraySummary(input), result: result ? arraySummary(result) : {count: 0}});
+            return result;
+          };
+        });
+        hookOnce('CronetUrlRequestContext.addSecurityFactor', function() {
+          var Ctx = Java.use('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext');
+          var f = Ctx.addSecurityFactor.overload('java.lang.String', '[Ljava.lang.String;');
+          f.implementation = function(url, input) {
+            var result = f.call(this, url, input);
+            emit({event: 'cronetContextSecurityFactor', url: digest(url), input: arraySummary(input), result: result ? arraySummary(result) : {count: 0}});
+            return result;
+          };
+        });
+        hookOnce('CronetUrlRequestContext.o0', function() {
+          var CtxO0 = Java.use('com.ttnet.org.chromium.net.impl.CronetUrlRequestContext');
+          var f = CtxO0.o0.overload('java.lang.String', 'java.util.Map');
+          f.implementation = function(url, input) {
+            var result = f.call(this, url, input);
+            emit({event: 'cronetContextO0', url: digest(url), input: input ? mapSummary(input) : {count: 0}, result: result ? mapSummary(result) : {count: 0}});
+            return result;
+          };
+        });
+      } catch (e) {
+        emit({event: 'install_error', error: String(e)});
+      } finally {
+        installScheduled = false;
+        if (allHooksInstalled() && installTimer !== null) {
+          clearInterval(installTimer);
+          installTimer = null;
+        }
+      }
+    });
+  } catch (e) {
+    installScheduled = false;
+    emit({event: 'install_error', error: String(e)});
   }
-}, 2000);
-if (typeof Java !== 'undefined') {
-  install();
-} else {
-  emit({event: 'awaiting_java_bridge'});
 }
+installTimer = setInterval(install, 2000);
+if (typeof Java === 'undefined') emit({event: 'awaiting_java_bridge'});
+install();
 emit({event: 'probe_ready', pid: Process.id});
 """
 
+DIAGNOSTIC_JS = r"""
+'use strict';
+function diagnosticEmit(event) { try { send(event); } catch (_) {} }
+var diagnosticState = Object.create(null);
+var diagnosticScheduled = false;
+var diagnosticTimer = null;
+var diagnosticNames = ['resource_warning', 'error_code_exception', 'reader_exception', 'response_deserialized'];
+function diagnosticHook(name, install) {
+  if (diagnosticState[name] === 'installed') return;
+  try {
+    install();
+    diagnosticState[name] = 'installed';
+    diagnosticEmit({event: 'hooked', target: name});
+  } catch (e) {
+    var error = String(e);
+    if (diagnosticState[name] !== error) {
+      diagnosticEmit({event: 'hook_error', target: name, error: error});
+    }
+    diagnosticState[name] = error;
+  }
+}
+function stackRows(throwable) {
+  var rows = [];
+  try {
+    var frames = throwable.getStackTrace();
+    for (var i = 0; i < frames.length && i < 32; i++) {
+      var frame = frames[i];
+      rows.push({class: String(frame.getClassName()), method: String(frame.getMethodName())});
+    }
+  } catch (e) { return [{error: String(e)}]; }
+  return rows;
+}
+function installDiagnostics() {
+  if (typeof Java === 'undefined' || diagnosticScheduled) return;
+  diagnosticScheduled = true;
+  try {
+    Java.perform(function() {
+      try {
+        diagnosticHook('resource_warning', function() {
+          var Resources = Java.use('android.content.res.Resources');
+          var getString = Resources.getString.overload('int');
+          getString.implementation = function(id) {
+            var result = getString.call(this, id);
+            if (id === 2131104020) {
+              diagnosticEmit({event: 'version_warning_resource', resource_id: id});
+            }
+            return result;
+          };
+        });
+        diagnosticHook('response_deserialized', function() {
+          var NetReqUtil = Java.use('com.dragon.read.util.NetReqUtil');
+          var after = NetReqUtil.doAfterDeserialization.overload(
+            'java.lang.String', 'java.lang.Throwable', 'int', 'java.lang.Object', 'java.util.List');
+          after.implementation = function(url, error, status, response, headers) {
+            try {
+              diagnosticEmit({
+                event: 'response_deserialized',
+                url: digest(url),
+                route: routeDigest(url),
+                thread_id: Process.getCurrentThreadId(),
+                http_status: Number(status),
+                business_code: Number(NetReqUtil.parseResponseCode(response)),
+                response_class: response ? String(response.getClass().getName()) : null,
+                transport_error_class: error ? String(error.getClass().getName()) : null
+              });
+            } catch (_) {}
+            return after.call(this, url, error, status, response, headers);
+          };
+        });
+        diagnosticHook('error_code_exception', function() {
+          var ErrorCodeException = Java.use('com.dragon.read.base.http.exception.ErrorCodeException');
+          ErrorCodeException.$init.overloads.forEach(function(init, index) {
+            init.implementation = function() {
+              var result = init.apply(this, arguments);
+              try {
+                var code = Number(this.getCode());
+                var error = String(this.getError());
+                if (code === 110 || error.indexOf('ILLEGAL_ACCESS') >= 0) {
+                  diagnosticEmit({
+                    event: 'error_code_exception_created',
+                    code: code,
+                    error_kind: error.indexOf('ILLEGAL_ACCESS') >= 0 ? 'ILLEGAL_ACCESS' : 'redacted',
+                    constructor_overload: index,
+                    stack: stackRows(this)
+                  });
+                }
+              } catch (_) {}
+              return result;
+            };
+          });
+        });
+        diagnosticHook('reader_exception', function() {
+          var Controller = Java.use('com.dragon.reader.lib.support.DefaultFrameController');
+          Controller.O4.overloads.forEach(function(method, index) {
+            method.implementation = function() {
+              var rows = [];
+              for (var i = 0; i < arguments.length; i++) {
+                try {
+                  var value = arguments[i];
+                  if (!value || typeof value.getClass !== 'function') continue;
+                  var type = String(value.getClass().getName());
+                  if (type.indexOf('ReaderException') < 0) continue;
+                  var row = {class: type};
+                  value = Java.cast(value, Java.use(type));
+                  try {
+                    var code = value.getCode();
+                    row.code_name = String(code);
+                    row.code_value = Number(code.getCode());
+                  } catch (_) {}
+                  try {
+                    var cause = value.getThrowable();
+                    row.cause_class = String(cause.getClass().getName());
+                    row.cause_stack = stackRows(cause);
+                  } catch (_) {}
+                  rows.push(row);
+                } catch (_) {}
+              }
+              if (rows.length) {
+                diagnosticEmit({event: 'reader_exception_boundary', overload: index, errors: rows});
+              }
+              return method.apply(this, arguments);
+            };
+          });
+        });
+      } catch (e) {
+        diagnosticEmit({event: 'diagnostic_install_error', error: String(e)});
+      } finally {
+        diagnosticScheduled = false;
+        var installed = diagnosticNames.every(function(name) {
+          return diagnosticState[name] === 'installed';
+        });
+        if (installed && diagnosticTimer !== null) {
+          clearInterval(diagnosticTimer);
+          diagnosticTimer = null;
+        }
+      }
+    });
+  } catch (e) {
+    diagnosticScheduled = false;
+    diagnosticEmit({event: 'diagnostic_install_error', error: String(e)});
+  }
+}
+diagnosticTimer = setInterval(installDiagnostics, 2000);
+installDiagnostics();
+"""
 
-def choose_process(device: Any, package: str, pid: int | None) -> Any:
+
+def choose_process(
+    device: Any, package: str, pid: int | None, process_name: str | None = None
+) -> Any:
     if pid is not None:
         return device.attach(pid)
+    names = (process_name,) if process_name else (package, "番茄免费小说")
     for process in device.enumerate_processes():
-        if process.name in (package, "番茄免费小说"):
+        if process.name in names:
             return device.attach(process.pid)
-    raise RuntimeError(f"process not found: {package}")
+    raise RuntimeError(f"process not found: {process_name or package}")
 
 
 def attach_or_spawn(device: Any, package: str, pid: int | None, spawn: bool) -> tuple[Any, int | None]:
@@ -202,9 +390,23 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--pid", type=int)
     parser.add_argument("--package", default="com.dragon.read")
+    parser.add_argument(
+        "--process-name",
+        help="exact process name to attach; useful for an embedded Frida Gadget",
+    )
     parser.add_argument("--device", choices=("usb", "remote"), default="usb")
     parser.add_argument("--remote", default="127.0.0.1:27042")
     parser.add_argument("--duration", type=float, default=60.0)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="write the redacted JSONL capture to a new file",
+    )
+    parser.add_argument(
+        "--diagnose-reader-errors",
+        action="store_true",
+        help="record redacted reader error constructors and wrapper stacks",
+    )
     parser.add_argument(
         "--bridge-js",
         type=Path,
@@ -225,6 +427,19 @@ def main() -> int:
         help="spawn the package suspended, install hooks, then resume it",
     )
     args = parser.parse_args()
+    if args.chunk_size < 4096:
+        raise SystemExit("--chunk-size must be at least 4096")
+    if args.spawn and args.process_name:
+        parser.error("--process-name cannot be combined with --spawn")
+    if args.pid is not None and (args.spawn or args.process_name):
+        parser.error("--pid cannot be combined with --spawn or --process-name")
+    source, chunks = _load_source(args.bridge_js, args.chunk_size)
+    if args.diagnose_reader_errors:
+        source = "var vm9TraceSigning = true;\n" + source + "\n" + DIAGNOSTIC_JS
+        chunks = [
+            source[i : i + args.chunk_size]
+            for i in range(0, len(source), args.chunk_size)
+        ]
     try:
         import frida
     except ImportError as exc:  # pragma: no cover - environment dependent
@@ -233,40 +448,82 @@ def main() -> int:
         device = frida.get_usb_device(timeout=10)
     else:
         device = frida.get_device_manager().add_remote_device(args.remote)
-    session, spawned_pid = attach_or_spawn(device, args.package, args.pid, args.spawn)
+    if args.output is not None:
+        output_path = args.output.resolve()
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_file = output_path.open("x", encoding="utf-8", newline="\n")
+    else:
+        output_file = None
+    session = None
+    script = None
+    output_lock = threading.Lock()
+    stopped = threading.Event()
 
-    def on_message(message: dict, _data: bytes | None) -> None:
-        if message.get("type") == "send":
-            print(json.dumps(message.get("payload"), ensure_ascii=False), flush=True)
-        else:
-            print(json.dumps({"event": "frida_message", "message": message}, ensure_ascii=False), flush=True)
+    def record(payload: Any) -> None:
+        line = json.dumps(payload, ensure_ascii=False)
+        with output_lock:
+            print(line, flush=True)
+            if output_file is not None:
+                output_file.write(line + "\n")
+                output_file.flush()
 
-    if args.chunk_size < 4096:
-        raise SystemExit("--chunk-size must be at least 4096")
-    source, chunks = _load_source(args.bridge_js, args.chunk_size)
-
-    def forward_chunk_ack(message: dict, data: bytes | None) -> None:
-        if message.get("type") == "send":
-            payload = message.get("payload")
-            if isinstance(payload, dict) and payload.get("event") == "chunk_ack":
-                return
-        on_message(message, data)
-
-    script = _load_script(session, source, chunks, forward_chunk_ack)
-    print(
-        json.dumps(
-            {"event": "script_loaded", "source_length": len(source), "chunks": len(chunks)},
-            ensure_ascii=False,
-        ),
-        flush=True,
-    )
-    if spawned_pid is not None:
-        device.resume(spawned_pid)
-        print(json.dumps({"event": "spawn_resumed", "pid": spawned_pid}, ensure_ascii=False), flush=True)
     try:
-        time.sleep(max(0.0, args.duration))
+        if args.spawn:
+            session, spawned_pid = attach_or_spawn(
+                device, args.package, args.pid, args.spawn
+            )
+        else:
+            session, spawned_pid = choose_process(
+                device, args.package, args.pid, args.process_name
+            ), None
+
+        def on_detached(reason: str, _crash: Any = None) -> None:
+            record({"event": "session_detached", "reason": str(reason)})
+            stopped.set()
+
+        session.on("detached", on_detached)
+
+        def on_message(message: dict, _data: bytes | None) -> None:
+            if message.get("type") == "send":
+                record(message.get("payload"))
+            else:
+                record({"event": "frida_message", "message": message})
+
+        def forward_chunk_ack(message: dict, data: bytes | None) -> None:
+            if message.get("type") == "send":
+                payload = message.get("payload")
+                if isinstance(payload, dict) and payload.get("event") == "chunk_ack":
+                    return
+            on_message(message, data)
+
+        script = _load_script(session, source, chunks, forward_chunk_ack)
+        record({"event": "script_loaded", "source_length": len(source), "chunks": len(chunks)})
+        if spawned_pid is not None:
+            device.resume(spawned_pid)
+            record({"event": "spawn_resumed", "pid": spawned_pid})
+        stopped.wait(max(0.0, args.duration))
     finally:
-        session.detach()
+        try:
+            if script is not None:
+                try:
+                    script.unload()
+                except (frida.InvalidOperationError, frida.TransportError):
+                    pass  # An exited target has already destroyed the script.
+                finally:
+                    try:
+                        session.detach()
+                    except (frida.InvalidOperationError, frida.TransportError):
+                        pass
+            elif session is not None:
+                try:
+                    session.detach()
+                except (frida.InvalidOperationError, frida.TransportError):
+                    pass
+        finally:
+            with output_lock:
+                if output_file is not None:
+                    output_file.close()
+                    output_file = None
     return 0
 
 

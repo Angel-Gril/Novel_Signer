@@ -1,5 +1,13 @@
 # Tomato Python material
 
+The passive Android capture now observes a real six-header business callback
+through `OkHttp3SecurityFactorInterceptor -> NetworkParams -> r4`. Matching path
+digests and thread ids associate the signature and an HTTP 200 response with
+business code 110. The retained capture comes from a re-signed Gadget build;
+Cronet execution, standalone signing, whole-request Python/native equality,
+and online header acceptance remain unverified. See
+`verify_vm9_networkparams_runtime_20261031.py`.
+
 The fresh handle2 frameSign verifier records the first structured native
 `String[]` result: tag `0x4000002` returns the Java-lifecycle handle used by
 `core.c.frameSign` for tag `0x200000A`, producing ten entries across the five
@@ -37,11 +45,20 @@ acceptance. See
 For a live process, `capture_vm9_business_framesign_android_20261028.py`
 installs the same redacted hooks without triggering a request. It separates the
 ordinary `r4`/Cronet callback from the independent `MSManager.frameSign` API and
-emits only lengths and SHA-256 digests. Use it only with an already-running app:
+emits only lengths and SHA-256 digests. Attach to an already-running app:
 
 ```powershell
 python -B platforms/bytedance/tomato/python/capture_vm9_business_framesign_android_20261028.py --pid <PID> --duration 60
 ```
+
+For Gadget, use `--device remote --process-name Gadget --bridge-js <bundle>`.
+`--output <new.jsonl>` refuses overwrites. Optional `--diagnose-reader-errors`
+adds bounded class/method stacks, path fingerprints, HTTP/business response
+codes, and reader error constructors without retaining raw request values.
+Installed hooks survive retries without replacement; pending Java installation
+is deduplicated. The process detaches and closes its output on completion or
+target exit. `verify_vm9_capture_lifecycle_20261031.py` checks those host-side
+behaviors; it does not substitute for the passive Android evidence above.
 
 `verify_vm9_signer_boundary_audit_20261024.py` now audits the public outer and
 request owners before standalone-signer work. It confirms the `+17b8f8 →
