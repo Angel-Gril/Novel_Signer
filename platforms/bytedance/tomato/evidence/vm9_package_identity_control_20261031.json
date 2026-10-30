@@ -1,0 +1,229 @@
+{
+  "schema": "vm9-package-identity-control-20261031-v1",
+  "session_date_label": "2026-10-31",
+  "evidence_label": "unrooted_package_manager_probe_and_resign_only_same_chapter_ui_control",
+  "package_manager_observations": {
+    "official": {
+      "event": "package_identity",
+      "package": "com.dragon.read",
+      "sdk": 33,
+      "version_code": 72532,
+      "version_name": "7.2.5.32",
+      "debuggable": false,
+      "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+      "legacy_signatures": [
+        {
+          "length": 921,
+          "sha256": "c6bbd352ee9ccfbdec729ba9260d5fd8a48ca163379ff2c0d741dd2ec2bfd0d9"
+        }
+      ],
+      "current_signers": [
+        {
+          "length": 921,
+          "sha256": "1a5a89132e82ed5b9b2aa05cbf138b6a00096326cf90a1c17480aa0af1f0a163"
+        }
+      ],
+      "signing_history": [
+        {
+          "length": 921,
+          "sha256": "c6bbd352ee9ccfbdec729ba9260d5fd8a48ca163379ff2c0d741dd2ec2bfd0d9"
+        },
+        {
+          "length": 921,
+          "sha256": "1a5a89132e82ed5b9b2aa05cbf138b6a00096326cf90a1c17480aa0af1f0a163"
+        }
+      ],
+      "target_process_instrumented": false,
+      "probe_source_sha256": "3393165719b69d88f7cadf6509d7be3460bee74341657a4a30a6535a03380dff"
+    },
+    "resigned": {
+      "event": "package_identity",
+      "package": "com.dragon.read",
+      "sdk": 33,
+      "version_code": 72532,
+      "version_name": "7.2.5.32",
+      "debuggable": false,
+      "apk_sha256": "125f9633912e3e150afb8513bbba5c0161361b643378ef6e45fbc9aa383d3d20",
+      "legacy_signatures": [
+        {
+          "length": 716,
+          "sha256": "56407d729c43d59cbcffce1c4b89c3d6b74ad23cc5e3868f6e4afab5e1cf18d3"
+        }
+      ],
+      "current_signers": [
+        {
+          "length": 716,
+          "sha256": "56407d729c43d59cbcffce1c4b89c3d6b74ad23cc5e3868f6e4afab5e1cf18d3"
+        }
+      ],
+      "signing_history": [
+        {
+          "length": 716,
+          "sha256": "56407d729c43d59cbcffce1c4b89c3d6b74ad23cc5e3868f6e4afab5e1cf18d3"
+        }
+      ],
+      "target_process_instrumented": false,
+      "probe_source_sha256": "3393165719b69d88f7cadf6509d7be3460bee74341657a4a30a6535a03380dff"
+    },
+    "restored": {
+      "event": "package_identity",
+      "package": "com.dragon.read",
+      "sdk": 33,
+      "version_code": 72532,
+      "version_name": "7.2.5.32",
+      "debuggable": false,
+      "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+      "legacy_signatures": [
+        {
+          "length": 921,
+          "sha256": "c6bbd352ee9ccfbdec729ba9260d5fd8a48ca163379ff2c0d741dd2ec2bfd0d9"
+        }
+      ],
+      "current_signers": [
+        {
+          "length": 921,
+          "sha256": "1a5a89132e82ed5b9b2aa05cbf138b6a00096326cf90a1c17480aa0af1f0a163"
+        }
+      ],
+      "signing_history": [
+        {
+          "length": 921,
+          "sha256": "c6bbd352ee9ccfbdec729ba9260d5fd8a48ca163379ff2c0d741dd2ec2bfd0d9"
+        },
+        {
+          "length": 921,
+          "sha256": "1a5a89132e82ed5b9b2aa05cbf138b6a00096326cf90a1c17480aa0af1f0a163"
+        }
+      ],
+      "target_process_instrumented": false,
+      "probe_source_sha256": "3393165719b69d88f7cadf6509d7be3460bee74341657a4a30a6535a03380dff"
+    }
+  },
+  "package_manager_boundary": "The shell app_process helper queries PackageManager. It does not observe the target app callback, its cache or privacy wrapper at runtime.",
+  "archive_comparison": {
+    "original_entry_count": 21771,
+    "resigned_entry_count": 21771,
+    "added_entries": [
+      "META-INF/GADGET.RSA",
+      "META-INF/GADGET.SF"
+    ],
+    "removed_entries": [
+      "META-INF/BYTESIGN.RSA",
+      "META-INF/BYTESIGN.SF"
+    ],
+    "changed_common_entries": [],
+    "gadget_library_present": false,
+    "comparison_boundary": "Uncompressed ZIP entry names and contents; ZIP metadata and APK signing blocks are not equal."
+  },
+  "static_callback": {
+    "dex_entry": "classes16.dex",
+    "dex_sha256": "c0820f523bc429160614f3f056f1829fe68c173d715db4db3b05e3600d3557ea",
+    "dispatcher": "ms.bd.c.s2.j(IIJLjava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;",
+    "tag": "0x1000002",
+    "packed_switch_file_offset": "0x67fd9e",
+    "packed_switch_payload_file_offset": "0x6814bc",
+    "case_invoke_file_offset": "0x67fde8",
+    "case_invoke_raw_hex": "7701f4da2700",
+    "callee": "ms.bd.c.s2.k(String)",
+    "package_info_flags": 64,
+    "value_expression": "s2.h(packageManager, packageName, 64).signatures[0].toByteArray()",
+    "empty_name_uses_own_package": true,
+    "cache_wrapper": "s2.h -> l15.b PackageInfo cache / s2.f -> PackageManager.getPackageInfo",
+    "privacy_wrapper_present": true,
+    "whole_j_method_decode_verified": false,
+    "actual_app_callback_value_observed": false
+  },
+  "offline_pkcs7_crosscheck": {
+    "entry": "META-INF/BYTESIGN.RSA",
+    "container_length": 1415,
+    "container_sha256": "bd0ce9e07b89d30c76160fa1f0e598bca83afc98ae0f4c485680986d5e3d6b07",
+    "certificate_index": 0,
+    "certificate_length": 921,
+    "certificate_sha256": "c6bbd352ee9ccfbdec729ba9260d5fd8a48ca163379ff2c0d741dd2ec2bfd0d9",
+    "container_is_not_signature_to_byte_array": true
+  },
+  "behavior_control": {
+    "same_device": true,
+    "device_model": "SM-F900F",
+    "android_sdk": 33,
+    "both_fresh_installs": true,
+    "account_login_performed": false,
+    "network_proxy_on_android": false,
+    "official_bookstore_loaded": true,
+    "resigned_bookstore_loaded": true,
+    "same_book_and_chapter": true,
+    "book_title": "凡人修仙，炼气长生（叩问仙缘）",
+    "chapter_number": 1,
+    "chapter_title": "仙缘令",
+    "resigned_reader_warning": "当前版本不安全，请到正规应用市场下载",
+    "resigned_chapter_body_observed": false,
+    "restored_official_chapter_body_visually_observed": true,
+    "resigned_response_code_observed": null,
+    "gadget_or_frida_used_for_control": false,
+    "application_code_changed": false,
+    "limitation": "Sequential UI control with fresh app data, time and device-registration state; not an identical-request replay. The warning is observed, but no HTTP/business response code was captured for the resign-only build."
+  },
+  "local_visual_observations": {
+    "official_bookstore": {
+      "local_screen_basename": "official_bookstore_confirmed.png",
+      "screen_sha256": "eeb2cd69c161bb3a32ea3301d867173443308fb42c3271a9011c497d90dce662",
+      "local_ui_xml_basename": "official_bookstore_ui.xml",
+      "ui_xml_sha256": "67f11d2d88df90a01bde80bb7e3dc36d96224a03f593b3f1e465092de461a707",
+      "visually_reviewed": true
+    },
+    "resigned_bookstore": {
+      "local_screen_basename": "resigned_bookstore.png",
+      "screen_sha256": "709df1670d52204355b8c19cdc58f7f0ae0c03fbe3b9ee15f3f57034eb5b4488",
+      "local_ui_xml_basename": "resigned_bookstore_ui.xml",
+      "ui_xml_sha256": "c7939aa3ebfac73f9c195188fbd7e8bfbd08a165fc0fe2c3df00935373e58341",
+      "visually_reviewed": true
+    },
+    "resigned_reader": {
+      "local_screen_basename": "resigned_reader.png",
+      "screen_sha256": "f88e6c832f5e92dd3d5fa99d74ee846ac998eca821c30897adebe96551a7257a",
+      "local_ui_xml_basename": "resigned_reader_ui.xml",
+      "ui_xml_sha256": "6798adcc009d7f671105d2c685382f33d95644f5a726a0a633024df1de78f5cd",
+      "visually_reviewed": true
+    },
+    "restored_official_reader": {
+      "local_screen_basename": "official_reader_same_book.png",
+      "screen_sha256": "c0cb1f49ffe4689aedf1125de0abf970bbee812fbfba002e55fe1994bba856f1",
+      "local_ui_xml_basename": "official_reader_same_book_ui.xml",
+      "ui_xml_sha256": "9ab3cf810a144746b95cd64c806301a60ea1206216c136ecb86f658dadff4201",
+      "visually_reviewed": true
+    }
+  },
+  "cli_checks": {
+    "schema": "vm9-package-identity-cli-checks-v1",
+    "negative_cases": [
+      {
+        "case": "missing_package",
+        "exit_code": 1,
+        "stdout_empty": true
+      },
+      {
+        "case": "overwrite_refused",
+        "exit_code": 2,
+        "stdout_empty": true
+      },
+      {
+        "case": "invalid_package",
+        "exit_code": 2,
+        "stdout_empty": true
+      }
+    ],
+    "existing_output_unchanged": true,
+    "missing_package_output_absent": true,
+    "device_temporary_dex_cleaned": true,
+    "before_temp_count": 0,
+    "after_temp_count": 0,
+    "driver_source_sha256": "452ff6f6587ff204f8a1c446b74b925c2dafc0a03e270e6936e0931e0bbc67ef"
+  },
+  "certificate_bytes_are_unique_cause_verified": false,
+  "cronet_runtime_branch_observed": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_six_header_acceptance_verified": false,
+  "raw_requests_or_header_values_retained": false,
+  "interpretation": "Re-signing without injected code reproduces the reader warning for the same book/chapter that the restored official app renders. Both builds load bookstore lists, so a blanket bookstore failure is refuted. The SDK certificate read uses legacy GET_SIGNATURES, whose rotated-history result differs from the current signer. Certificate-dependent input is a lead; the unique rejection cause and exact response code remain unverified."
+}

@@ -1,5 +1,31 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-10-31 纯重签对照已完成：所有公共 ZIP 条目的解压内容相同，只有
+`META-INF/BYTESIGN.{RSA,SF}` 被替换为测试证书的签名条目，没有 Gadget。
+原版与纯重签包都加载出书城榜单；纯重签包在《凡人修仙，炼气长生》第 1 章
+“仙缘令”显示“当前版本不安全”，随后恢复原版，同一章节实际显示正文。
+这说明阅读错误可在无 Gadget 的情况下复现，但本轮未捕获纯重签包的 HTTP/业务码，
+不能直接等同于前次 Gadget 包的 `110`，也未证明证书字节是唯一触发条件。
+两次均为新安装，时间、设备注册状态和请求输入未完全固定。
+见[同章节对照证据](evidence/vm9_package_identity_control_20261031.json)与
+[校验器](python/verify_vm9_package_identity_control_20261031.py)。测试结束已恢复并核对原版 APK。
+
+新增[包身份探针](python/capture_vm9_package_identity_android_20261031.py)通过 shell
+`app_process` 查询 PackageManager，无需 root 或 Frida。Android 13 实测官方包的
+旧接口 `GET_SIGNATURES` 返回 921 字节、SHA-256 `c6bbd352…`；当前 signer 为
+`1a5a8913…`，签名历史包含两者。原版 DEX 的 `s2.j` 在 tag `0x1000002`
+调用 `s2.k`，经 `s2.h(...,64).signatures[0].toByteArray()` 返回旧接口证书；
+该分支已按字节核对，未声称完整恢复 `s2.j`。探针查询的是包管理器，未在应用内部
+观测其缓存、隐私包装器或真实 callback 返回值。旧证书 DER 与整个 PKCS#7 容器也不能混用。
+
+```powershell
+python python/capture_vm9_package_identity_android_20261031.py `
+  --serial <adb-serial> --android-jar <android-sdk>/platforms/android-35/android.jar `
+  --d8 <android-sdk>/build-tools/35.0.0/d8.bat --output <new-identity.json>
+python python/verify_vm9_package_identity_control_20261031.py
+# 如持有本地原版/对照包，可增加 --original-apk <path> --resigned-apk <path> 复核归档与 DEX 分支。
+```
+
 2026-10-31 普通业务六头回调已在 8 GB 云手机上被动捕获：实际调用栈是
 `OkHttp3SecurityFactorInterceptor.intercept -> NetworkParams.tryAddSecurityFactor`
 `-> ms.bd.c.r4.onCallToAddSecurityFactor`，返回六个七神 header。签名事件与
