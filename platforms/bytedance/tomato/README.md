@@ -36,6 +36,18 @@ python python/verify_vm9_package_identity_control_20261031.py
 [校验器](python/verify_vm9_certificate_replay_20261031.py)。下一步需定位真实业务中的证书读取触发条件，
 继续保留完整 signer、Cronet 运行和线上六头接受的未验证边界。
 
+随后在无 root 的云手机上运行含 Gadget 的观测包，并只观察、不替换证书返回值。
+真实栈为 `ms.bd.c.s2.j -> ms.bd.c.u2.a -> ms.bd.c.y2.b`，内部进入
+`ms.bd.c.s2.k` 后返回字节数组；一次运行还同时捕获了普通 OkHttp
+`NetworkParams.tryAddSecurityFactor -> ms.bd.c.r4.onCallToAddSecurityFactor`
+的六头结果。证书读取与六头回调的线程和调用没有一一对应，且不同应用状态下读取到的
+摘要长度出现 1057 与 716 两种，因此没有把它解释为唯一失败原因或线上验签结果。
+原始 JSONL 只留在主机临时文件，仓库证据保留长度、SHA-256、线程/栈和 header 名。
+见[真实证书读取运行时证据](evidence/vm9_certificate_runtime_20261031.json)、
+[归纳脚本](python/summarize_vm9_certificate_runtime_20261031.py)与
+[校验器](python/verify_vm9_certificate_runtime_20261031.py)。观测结束已卸载 Gadget 包，
+恢复官方 APK 并核对 `95889d1a…`，同时删除 adb forward。
+
 2026-10-31 普通业务六头回调已在 8 GB 云手机上被动捕获：实际调用栈是
 `OkHttp3SecurityFactorInterceptor.intercept -> NetworkParams.tryAddSecurityFactor`
 `-> ms.bd.c.r4.onCallToAddSecurityFactor`，返回六个七神 header。签名事件与

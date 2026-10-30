@@ -13,6 +13,119 @@ from pathlib import Path
 from typing import Any
 
 
+CERTIFICATE_JS = r"""
+'use strict';
+var certificateState = Object.create(null);
+var certificateScheduled = false;
+var certificateTimer = null;
+function certificateEmit(row) { try { send(row); } catch (_) {} }
+function certificateBytes(value) {
+  if (value === null) return {is_null: true};
+  var bytes = Java.cast(value, Java.use('[B'));
+  var length = Number(Java.use('java.lang.reflect.Array').getLength(bytes));
+  var md = Java.use('java.security.MessageDigest').getInstance('SHA-256');
+  var hash = md.digest.overload('[B').call(md, bytes), hex = '';
+  for (var i = 0; i < hash.length; i++) {
+    var b = hash[i]; if (b < 0) b += 256;
+    hex += ('0' + b.toString(16)).slice(-2);
+  }
+  return {is_null: false, length: length, sha256: hex};
+}
+function certificateName(value) {
+  if (value === null || value === undefined) return {is_null: true};
+  var s = String(value);
+  var md = Java.use('java.security.MessageDigest').getInstance('SHA-256');
+  var bytes = Java.use('java.lang.String').$new(s).getBytes('UTF-8');
+  var hash = md.digest(bytes), hex = '';
+  for (var i = 0; i < hash.length; i++) {
+    var b = hash[i]; if (b < 0) b += 256;
+    hex += ('0' + b.toString(16)).slice(-2);
+  }
+  return {is_null: false, length: s.length, sha256: hex};
+}
+function certificateContext() {
+  try {
+    return {thread_id: Process.getCurrentThreadId(),
+      stack: Java.backtrace({limit: 24}).frames.slice(0, 24).map(function(frame) {
+        return {class: frame.className, method: frame.methodName};
+      })};
+  } catch (_) { return {unavailable: true}; }
+}
+function certificateHook(name, install) {
+  if (certificateState[name] === 'installed') return;
+  try {
+    install(); certificateState[name] = 'installed';
+    certificateEmit({event: 'hooked', target: name});
+  } catch (e) {
+    var error = String(e);
+    if (certificateState[name] !== error) {
+      certificateEmit({event: 'certificate_hook_error', target: name, error: error});
+    }
+    certificateState[name] = error;
+  }
+}
+function observeCertificate(target, original, receiver, args, name) {
+  var context = certificateContext();
+  certificateEmit({event: 'certificate_read_enter', target: target, input: certificateName(name), context: context});
+  // Keep application exceptions and returned objects exactly as produced by the original.
+  var result;
+  try { result = original.apply(receiver, args); }
+  catch (error) {
+      certificateEmit({event: 'certificate_read_threw', target: target, input: certificateName(name), context: context});
+    throw error;
+  }
+  try {
+    certificateEmit({event: 'certificate_read_return', target: target,
+      input: certificateName(name), context: context, result: certificateBytes(result)});
+  } catch (_) {
+    certificateEmit({event: 'certificate_summary_error', target: target,
+      input: certificateName(name), context: context});
+  }
+  return result;
+}
+function installCertificateHooks() {
+  if (typeof Java === 'undefined' || certificateScheduled) return;
+  certificateScheduled = true;
+  try {
+    Java.perform(function() {
+      try {
+        certificateHook('ms.bd.c.s2.k', function() {
+          var S = Java.use('ms.bd.c.s2');
+          var k = S.k.overload('java.lang.String');
+          k.implementation = function(name) {
+            return observeCertificate('ms.bd.c.s2.k', function() {
+              return k.call(this, name);
+            }, this, [], name);
+          };
+        });
+        certificateHook('ms.bd.c.s2.j.certificate', function() {
+          var S = Java.use('ms.bd.c.s2');
+          var j = S.j.overload('int', 'int', 'long', 'java.lang.String', 'java.lang.Object');
+          j.implementation = function(tag, kind, handle, name, input) {
+            if (tag !== 16777218) return j.call(this, tag, kind, handle, name, input);
+            return observeCertificate('ms.bd.c.s2.j.certificate', function() {
+              return j.call(this, tag, kind, handle, name, input);
+            }, this, [], name);
+          };
+        });
+      } finally {
+        certificateScheduled = false;
+        if (certificateState['ms.bd.c.s2.k'] === 'installed' &&
+            certificateState['ms.bd.c.s2.j.certificate'] === 'installed' && certificateTimer !== null) {
+          clearInterval(certificateTimer); certificateTimer = null;
+        }
+      }
+    });
+  } catch (e) {
+    certificateScheduled = false;
+    certificateEmit({event: 'certificate_install_error', error: String(e)});
+  }
+}
+certificateTimer = setInterval(installCertificateHooks, 500);
+installCertificateHooks();
+"""
+
+
 JS = r"""
 'use strict';
 function emit(x) { try { send(x); } catch (_) {} }
@@ -403,6 +516,11 @@ def main() -> int:
         help="write the redacted JSONL capture to a new file",
     )
     parser.add_argument(
+        "--observe-certificate-inputs",
+        action="store_true",
+        help="observe certificate callback 0x1000002 without changing its return value",
+    )
+    parser.add_argument(
         "--diagnose-reader-errors",
         action="store_true",
         help="record redacted reader error constructors and wrapper stacks",
@@ -434,6 +552,9 @@ def main() -> int:
     if args.pid is not None and (args.spawn or args.process_name):
         parser.error("--pid cannot be combined with --spawn or --process-name")
     source, chunks = _load_source(args.bridge_js, args.chunk_size)
+    if args.observe_certificate_inputs:
+        source = source + "\n" + CERTIFICATE_JS
+        chunks = [source[i : i + args.chunk_size] for i in range(0, len(source), args.chunk_size)]
     if args.diagnose_reader_errors:
         source = "var vm9TraceSigning = true;\n" + source + "\n" + DIAGNOSTIC_JS
         chunks = [

@@ -17,6 +17,14 @@ shell 探针不证明应用缓存、隐私包装器或真实 callback 返回值�
 完整 signer、整请求 native/Python 差分和线上六头接受仍未完成。
 见[隔离证书回调观测](evidence/vm9_certificate_native_replay_20261031.json)。
 
+真实 Gadget 运行时观测补上了 callback 边界：`ms.bd.c.s2.j` 的证书分支进入
+`s2.k`，从 PackageManager 返回字节数组；输入参数和返回值只保留长度/SHA-256。
+同一批运行中另有一次普通 OkHttp 六头回调，但证书读取事件与六头事件线程不同，
+不能宣称它们是同一请求，也不能宣称证书字节是 110/版本提示的唯一原因。
+证书读到的摘要长度在运行状态间出现 1057 与 716；后者与测试 Gadget 签名证书一致，
+前者来源尚未闭合。观测包已卸载，官方 APK `95889d1a…` 恢复并通过包身份探针核对，
+adb forward 已清理。见[真实运行时证据](evidence/vm9_certificate_runtime_20261031.json)。
+
 ## 2026-10-28：fresh unidbg native six-header replay
 
 使用现有 `HookMain` 做了一次独立、固定时间的 fresh Unicorn2 重放。运行加载 pinned

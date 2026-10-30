@@ -1,0 +1,740 @@
+{
+  "schema": "vm9-certificate-runtime-evidence-20261031-v1",
+  "artifact": {
+    "package": "com.dragon.read",
+    "version_code": 72532,
+    "gadget_apk_sha256": "305166cd1b1b94b43a5f0e342ac683e67677605e56d9fec6caafe60bae8dc0e0",
+    "bridge_sha256": "64d858590ffcb961e6b66ff687cba9cdeb8ddf9111ed31d7b31af7ce1106dedf"
+  },
+  "capture_count": 2,
+  "captures": [
+    {
+      "capture_sha256": "3c5a567f04532aa628ba6ecde7bdde7859c55d2393a0fd81ba22e0200a33f3f4",
+      "capture_bytes": 44784,
+      "source_sha256": "62369b88971cd6db7a623800091870168db7b2c0c75637a593be5cf21d504235",
+      "event_counts": {
+        "script_loaded": 1,
+        "awaiting_java_bridge": 1,
+        "probe_ready": 1,
+        "bridge_eval_done": 1,
+        "hooked": 11,
+        "securityFactor": 1,
+        "response_deserialized": 73,
+        "certificate_read_enter": 4,
+        "certificate_read_return": 4,
+        "session_detached": 1
+      },
+      "hooked_targets": [
+        "CronetUrlRequest.addSecurityFactor",
+        "CronetUrlRequestContext.addSecurityFactor",
+        "CronetUrlRequestContext.o0",
+        "MSManager.frameSign",
+        "error_code_exception",
+        "ms.bd.c.r4.onCallToAddSecurityFactor",
+        "ms.bd.c.s2.j.certificate",
+        "ms.bd.c.s2.k",
+        "reader_exception",
+        "resource_warning",
+        "response_deserialized"
+      ],
+      "certificate_reads": {
+        "enter": [
+          {
+            "target": "ms.bd.c.s2.j.certificate",
+            "input": null,
+            "context": {
+              "thread_id": 1377252,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.k",
+            "input": null,
+            "context": {
+              "thread_id": 1377252,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "k"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.j.certificate",
+            "input": null,
+            "context": {
+              "thread_id": 1377252,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.k",
+            "input": null,
+            "context": {
+              "thread_id": 1377252,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "k"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            }
+          }
+        ],
+        "return": [
+          {
+            "target": "ms.bd.c.s2.k",
+            "input": null,
+            "context": {
+              "thread_id": 1377252,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "k"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            },
+            "result": {
+              "is_null": false,
+              "length": 1057,
+              "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.j.certificate",
+            "input": null,
+            "context": {
+              "thread_id": 1377252,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            },
+            "result": {
+              "is_null": false,
+              "length": 1057,
+              "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.k",
+            "input": null,
+            "context": {
+              "thread_id": 1377252,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "k"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            },
+            "result": {
+              "is_null": false,
+              "length": 716,
+              "sha256": "56407d729c43d59cbcffce1c4b89c3d6b74ad23cc5e3868f6e4afab5e1cf18d3"
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.j.certificate",
+            "input": null,
+            "context": {
+              "thread_id": 1377252,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            },
+            "result": {
+              "is_null": false,
+              "length": 716,
+              "sha256": "56407d729c43d59cbcffce1c4b89c3d6b74ad23cc5e3868f6e4afab5e1cf18d3"
+            }
+          }
+        ]
+      },
+      "six_header_calls": [
+        {
+          "url": {
+            "length": 2960,
+            "sha256": "5b9d87b4734f2ce03f5e98407ee8798bbb2ebfae8f577d038d0d2a1677ccb0fd"
+          },
+          "route": {
+            "length": 71,
+            "sha256": "ba78b84b2a07c9c7437e4cb504609bd76f6a982dc3ad96c5c888610b23fa2e2b",
+            "path": {
+              "length": 40,
+              "sha256": "418c5fc89b0a37c54c5661d2945f255b3ddda4bd34fbf115496449bead7911e3"
+            }
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "82d8807624663cb81c6d4c39b1a492dcf5ef688776613e6916e388d4397740b0"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "ffd5691ea257809f0038a9149c890daf10a80c0c7430c7fdae5b965f515d36a8"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "69fa3887eb82a3e50fb24c5edac62306e62f57b441ce0a11ca98dfd43628ffff"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "e6f44ff4f444f2f8ed54938b9247065a710bf7c78be5b34019fb3ad4f94d8e67"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "c754eecc3dbfb9cb3f221357d085000b5213d90ef490ea28b8385f9631606320"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1180,
+                  "sha256": "3990a7d6c1ed9fe34dabc8c680e1083687c17a7e1434355d01b0b0fa03fd080a"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 1377240,
+            "stack": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.NetworkParams",
+                "method": "tryAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "CallServerInterceptor__executeCall$___twin___"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "y90.b",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "ps4.o",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "i43.a",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "f24.e",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "f24.j",
+                "method": "intercept"
+              }
+            ]
+          }
+        }
+      ],
+      "terminal_event": {
+        "event": "session_detached",
+        "reason": "connection-terminated"
+      },
+      "raw_capture_retained_in_evidence": false
+    },
+    {
+      "capture_sha256": "c2ea43ec9b10c6300c893cbee0a0878c4344d256cc48b4f809836627c8da6284",
+      "capture_bytes": 18823,
+      "source_sha256": "96d63f010145cf0711837a45a282bd08f89617404830bcca139bd2e5a56fd0f5",
+      "event_counts": {
+        "script_loaded": 1,
+        "awaiting_java_bridge": 1,
+        "probe_ready": 1,
+        "bridge_eval_done": 1,
+        "hooked": 11,
+        "certificate_read_enter": 4,
+        "certificate_read_return": 4,
+        "response_deserialized": 28,
+        "session_detached": 1
+      },
+      "hooked_targets": [
+        "CronetUrlRequest.addSecurityFactor",
+        "CronetUrlRequestContext.addSecurityFactor",
+        "CronetUrlRequestContext.o0",
+        "MSManager.frameSign",
+        "error_code_exception",
+        "ms.bd.c.r4.onCallToAddSecurityFactor",
+        "ms.bd.c.s2.j.certificate",
+        "ms.bd.c.s2.k",
+        "reader_exception",
+        "resource_warning",
+        "response_deserialized"
+      ],
+      "certificate_reads": {
+        "enter": [
+          {
+            "target": "ms.bd.c.s2.j.certificate",
+            "input": {
+              "is_null": false,
+              "length": 7,
+              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+            },
+            "context": {
+              "thread_id": 1379342,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.k",
+            "input": {
+              "is_null": false,
+              "length": 7,
+              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+            },
+            "context": {
+              "thread_id": 1379342,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "k"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.j.certificate",
+            "input": {
+              "is_null": false,
+              "length": 7,
+              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+            },
+            "context": {
+              "thread_id": 1379342,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.k",
+            "input": {
+              "is_null": false,
+              "length": 7,
+              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+            },
+            "context": {
+              "thread_id": 1379342,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "k"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            }
+          }
+        ],
+        "return": [
+          {
+            "target": "ms.bd.c.s2.k",
+            "input": {
+              "is_null": false,
+              "length": 7,
+              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+            },
+            "context": {
+              "thread_id": 1379342,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "k"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            },
+            "result": {
+              "is_null": false,
+              "length": 1057,
+              "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.j.certificate",
+            "input": {
+              "is_null": false,
+              "length": 7,
+              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+            },
+            "context": {
+              "thread_id": 1379342,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            },
+            "result": {
+              "is_null": false,
+              "length": 1057,
+              "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.k",
+            "input": {
+              "is_null": false,
+              "length": 7,
+              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+            },
+            "context": {
+              "thread_id": 1379342,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "k"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            },
+            "result": {
+              "is_null": false,
+              "length": 1057,
+              "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+            }
+          },
+          {
+            "target": "ms.bd.c.s2.j.certificate",
+            "input": {
+              "is_null": false,
+              "length": 7,
+              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+            },
+            "context": {
+              "thread_id": 1379342,
+              "stack": [
+                {
+                  "class": "ms.bd.c.s2",
+                  "method": "j"
+                },
+                {
+                  "class": "ms.bd.c.u2",
+                  "method": "a"
+                },
+                {
+                  "class": "ms.bd.c.y2",
+                  "method": "b"
+                }
+              ]
+            },
+            "result": {
+              "is_null": false,
+              "length": 1057,
+              "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+            }
+          }
+        ]
+      },
+      "six_header_calls": [],
+      "terminal_event": {
+        "event": "session_detached",
+        "reason": "application-requested"
+      },
+      "raw_capture_retained_in_evidence": false
+    }
+  ],
+  "certificate_callback_observed": true,
+  "six_header_callback_observed": true,
+  "certificate_and_six_headers_same_call_correlated": false,
+  "certificate_value_is_unique_cause_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "cronet_runtime_branch_observed": false,
+  "online_header_acceptance_verified": false,
+  "raw_urls_or_header_values_retained": false,
+  "target_app_modified": false,
+  "interpretation": "The Gadget runtime entered ms.bd.c.s2.j and s2.k and returned byte arrays while a separate capture observed the six-header NetworkParams callback. Certificate reads and six-header calls are not correlated to one call/thread here; returned certificate lengths can vary across application state, so no unique-cause or online-acceptance claim is made."
+}

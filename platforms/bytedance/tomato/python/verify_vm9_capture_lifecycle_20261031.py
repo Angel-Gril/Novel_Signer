@@ -77,6 +77,76 @@ console.log(JSON.stringify({hook_count: 5, retry_without_replacement: true,
 """
 
 
+CERTIFICATE_CHECK = r"""
+const assert = require('node:assert/strict');
+const vm = require('node:vm');
+const crypto = require('node:crypto');
+const source = JSON.parse(require('node:fs').readFileSync(0, 'utf8')).source;
+const events = [], timers = new Map(), pending = [], assigned = new Map();
+let nextTimer = 1, result = [0, -128, -1, 10], thrown = null, kCalls = 0, jCalls = 0;
+const k = {call() { kCalls++; if (thrown) throw thrown; return result; }};
+const j = {call(_receiver, tag) { jCalls++; return tag === 16777218 ? k.implementation('') : 123; }};
+for (const [name, method] of [['k', k], ['j', j]]) {
+  Object.defineProperty(method, 'implementation', {set(value) {
+    assigned.set(name, (assigned.get(name) || 0) + 1); this.impl = value;
+  }, get() { return this.impl; }});
+}
+const S = {k: {overload() { return k; }}, j: {overload() { return j; }}};
+const context = vm.createContext({send(row) { events.push(row); },
+  Process: {getCurrentThreadId() { return 7; }},
+  setInterval(f) { const id = nextTimer++; timers.set(id, f); return id; },
+  clearInterval(id) { timers.delete(id); }});
+vm.runInContext(source, context);
+context.Java = {perform(f) { pending.push(f); }, cast(value) {
+  if (!Array.isArray(value)) throw Error('not bytes'); return value;
+}, backtrace() { return {frames: [{className: 'test.Owner', methodName: 'read'}]}; },
+use(name) {
+  if (name === 'ms.bd.c.s2') return S;
+  if (name === '[B') return {};
+  if (name === 'java.lang.reflect.Array') return {getLength(value) { return value.length; }};
+  if (name === 'java.lang.String') return {$new(value) { return {
+    getBytes() { return [...Buffer.from(String(value), 'utf8')]; }
+  }; }};
+  if (name === 'java.security.MessageDigest') return {getInstance() { const digest = bytes =>
+    [...crypto.createHash('sha256').update(Buffer.from(bytes)).digest()];
+    const method = bytes => digest(bytes); method.overload = () => ({call(_receiver, bytes) { return digest(bytes); }});
+    return {digest: method};
+  }};
+  throw Error('unexpected class: ' + name);
+}};
+const tick = [...timers.values()][0];
+tick(); tick(); assert.equal(pending.length, 1); pending.shift()();
+assert.equal(timers.size, 0);
+tick(); pending.shift()();
+assert.deepEqual([...assigned.values()], [1, 1]);
+const before = events.length;
+assert.equal(j.implementation(16777217, 0, 0, '', null), 123);
+assert.equal(events.length, before, 'non-certificate dispatch must remain unobserved');
+const actual = j.implementation(16777218, 0, 0, '', null);
+assert.equal(actual, result, 'return the exact original object');
+assert.equal(kCalls, 1); assert.equal(jCalls, 2);
+const rows = events.filter(row => row.event === 'certificate_read_return');
+assert.equal(rows.length, 2);
+for (const row of rows) {
+  assert.equal(row.result.length, 4);
+  assert.equal(row.result.sha256, crypto.createHash('sha256').update(Buffer.from(result)).digest('hex'));
+  assert.equal(row.context.thread_id, 7);
+  assert.deepEqual(Object.keys(row.result).sort(), ['is_null', 'length', 'sha256']);
+}
+result = null;
+assert.equal(k.implementation(''), null);
+assert.equal(events.at(-1).result.is_null, true);
+const error = Error('original exception'); thrown = error;
+assert.throws(() => k.implementation(''), actual => actual === error);
+assert.equal(events.at(-1).event, 'certificate_read_threw');
+thrown = null; result = {};
+assert.equal(k.implementation(''), result, 'observation errors must not alter the original result');
+assert.equal(events.at(-1).event, 'certificate_summary_error');
+console.log(JSON.stringify({binary_digest: true, exact_return_preserved: true,
+  original_exception_preserved: true, unrelated_tag_untouched: true, hook_deduplicated: true}));
+"""
+
+
 class Script:
     def __init__(self, fail_load: bool = False) -> None:
         self.fail_load = fail_load
@@ -129,10 +199,14 @@ def main() -> int:
     spec = importlib.util.spec_from_file_location("vm9_capture", SOURCE)
     capture = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(capture)
-    for source in (capture.JS, capture.DIAGNOSTIC_JS):
+    for source in (capture.JS, capture.DIAGNOSTIC_JS, capture.CERTIFICATE_JS):
         subprocess.run(["node", "--check"], input=source, text=True, check=True)
     result = subprocess.run(
         ["node", "-e", JS_CHECK], input=json.dumps({"source": capture.JS}),
+        text=True, check=True, capture_output=True,
+    )
+    certificate_result = subprocess.run(
+        ["node", "-e", CERTIFICATE_CHECK], input=json.dumps({"source": capture.CERTIFICATE_JS}),
         text=True, check=True, capture_output=True,
     )
     session = Session()
@@ -189,6 +263,7 @@ def main() -> int:
             assert exited_rows[0] == {"event": "session_detached", "reason": "process-terminated"}
     print(json.dumps({
         "status": "pass", "javascript": json.loads(result.stdout),
+        "certificate_observer": json.loads(certificate_result.stdout),
         "exact_process_selection": True, "jsonl_metadata": True,
         "overwrite_refused": True, "detach_after_load_failure": True,
         "target_exit_ends_capture": True, "destroyed_script_cleanup": True,
