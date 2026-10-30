@@ -42,7 +42,7 @@ public final class Vm9PackageIdentity {
     }
 
     private static void probe(String[] args) throws Exception {
-        if (args.length != 1 || !args[0].matches("[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+")) {
+        if (args.length != 1 || !args[0].matches("(?:android|[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+)")) {
             throw new IllegalArgumentException("one explicit package name is required");
         }
         Looper.prepareMainLooper();

@@ -27,6 +27,9 @@ def check_digest(row: dict) -> None:
 
 def check_name(row: dict | None) -> None:
     if row is None: return
+    if row.get("is_null") is True:
+        assert set(row) == {"is_null"}
+        return
     assert row.get("is_null") is False
     assert set(row) == {"is_null", "length", "sha256"}
     assert isinstance(row["length"], int) and row["length"] >= 0

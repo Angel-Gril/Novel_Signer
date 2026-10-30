@@ -1365,3 +1365,20 @@ but the same process's `/proc/self/maps` contains three mappings of the APK's
 The result is not a whole-request native/Python differential, standalone signer,
 or online acceptance result. See [actual Android-JVM frameSign evidence](evidence/vm9_actual_android_jvm_frame_sign_20261028.json)
 and [verifier](python/verify_vm9_actual_android_jvm_frame_sign_20261028.py).
+
+
+## 2026-10-31：证书读取来源与系统包对照
+
+恢复官方 7.2.5.32/72532 APK 后，在同一台未 root 设备上重新运行
+PackageManager 探针。com.dragon.read 的 APK 摘要仍为
+95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd，
+GET_SIGNATURES 返回 921 字节的历史证书，当前 signer 也是 921 字节但摘要不同。
+随后显式查询系统包 android：其证书为 1057 字节、摘要
+c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d，
+与 Gadget 运行时对 android 输入的 s2.k 返回完全一致；空输入回退自身包时仍返回
+716 字节的测试签名。证据仅保存包摘要、长度和 SHA-256，不保存证书原文。
+
+这闭合了 1057 字节证书的系统包来源，但没有证明它是阅读器安全提示的唯一原因，也没有提升
+Cronet 实际分支、整请求 native/Python 差分、独立 signer 或线上六头接受状态。见
+[package identity control](evidence/vm9_package_identity_control_20261031.json)、
+[certificate runtime evidence](evidence/vm9_certificate_runtime_20261031.json) 及对应校验器。

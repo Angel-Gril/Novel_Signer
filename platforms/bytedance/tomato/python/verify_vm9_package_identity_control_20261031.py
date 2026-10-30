@@ -45,6 +45,21 @@ def verify(record: dict) -> dict:
         assert row["signing_history"] == expected_history
         assert row["debuggable"] is False and row["target_process_instrumented"] is False
         assert row["probe_source_sha256"] == digest(ROOT / "python/android/Vm9PackageIdentity.java")
+    system = record["system_package_observations"]["android"]
+    assert system == {
+        "event": "package_identity",
+        "package": "android",
+        "sdk": 33,
+        "version_code": 33,
+        "version_name": "13",
+        "debuggable": False,
+        "apk_sha256": "9eaf067a1b163d662bd2bacc68a2816374d983931f7ef7dde0b1f3cc14f0ec93",
+        "legacy_signatures": [{"length": 1057, "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"}],
+        "current_signers": [{"length": 1057, "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"}],
+        "signing_history": [{"length": 1057, "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"}],
+        "target_process_instrumented": False,
+        "probe_source_sha256": digest(ROOT / "python/android/Vm9PackageIdentity.java"),
+    }
     comparison = record["archive_comparison"]
     assert comparison["original_entry_count"] == comparison["resigned_entry_count"] == 21771
     assert comparison["added_entries"] == ["META-INF/GADGET.RSA", "META-INF/GADGET.SF"]

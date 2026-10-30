@@ -434,8 +434,8 @@
       "raw_capture_retained_in_evidence": false
     },
     {
-      "capture_sha256": "c2ea43ec9b10c6300c893cbee0a0878c4344d256cc48b4f809836627c8da6284",
-      "capture_bytes": 18823,
+      "capture_sha256": "4a73b46f6b172e69eddf677101187380e075282c2d33dbfa10cd617485db5620",
+      "capture_bytes": 40600,
       "source_sha256": "96d63f010145cf0711837a45a282bd08f89617404830bcca139bd2e5a56fd0f5",
       "event_counts": {
         "script_loaded": 1,
@@ -443,9 +443,10 @@
         "probe_ready": 1,
         "bridge_eval_done": 1,
         "hooked": 11,
+        "securityFactor": 1,
+        "response_deserialized": 64,
         "certificate_read_enter": 4,
         "certificate_read_return": 4,
-        "response_deserialized": 28,
         "session_detached": 1
       },
       "hooked_targets": [
@@ -471,7 +472,7 @@
               "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
             },
             "context": {
-              "thread_id": 1379342,
+              "thread_id": 1392718,
               "stack": [
                 {
                   "class": "ms.bd.c.s2",
@@ -496,7 +497,7 @@
               "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
             },
             "context": {
-              "thread_id": 1379342,
+              "thread_id": 1392718,
               "stack": [
                 {
                   "class": "ms.bd.c.s2",
@@ -524,12 +525,10 @@
           {
             "target": "ms.bd.c.s2.j.certificate",
             "input": {
-              "is_null": false,
-              "length": 7,
-              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+              "is_null": true
             },
             "context": {
-              "thread_id": 1379342,
+              "thread_id": 1392718,
               "stack": [
                 {
                   "class": "ms.bd.c.s2",
@@ -549,12 +548,10 @@
           {
             "target": "ms.bd.c.s2.k",
             "input": {
-              "is_null": false,
-              "length": 7,
-              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+              "is_null": true
             },
             "context": {
-              "thread_id": 1379342,
+              "thread_id": 1392718,
               "stack": [
                 {
                   "class": "ms.bd.c.s2",
@@ -589,7 +586,7 @@
               "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
             },
             "context": {
-              "thread_id": 1379342,
+              "thread_id": 1392718,
               "stack": [
                 {
                   "class": "ms.bd.c.s2",
@@ -627,7 +624,7 @@
               "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
             },
             "context": {
-              "thread_id": 1379342,
+              "thread_id": 1392718,
               "stack": [
                 {
                   "class": "ms.bd.c.s2",
@@ -652,12 +649,10 @@
           {
             "target": "ms.bd.c.s2.k",
             "input": {
-              "is_null": false,
-              "length": 7,
-              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+              "is_null": true
             },
             "context": {
-              "thread_id": 1379342,
+              "thread_id": 1392718,
               "stack": [
                 {
                   "class": "ms.bd.c.s2",
@@ -683,19 +678,17 @@
             },
             "result": {
               "is_null": false,
-              "length": 1057,
-              "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+              "length": 716,
+              "sha256": "56407d729c43d59cbcffce1c4b89c3d6b74ad23cc5e3868f6e4afab5e1cf18d3"
             }
           },
           {
             "target": "ms.bd.c.s2.j.certificate",
             "input": {
-              "is_null": false,
-              "length": 7,
-              "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+              "is_null": true
             },
             "context": {
-              "thread_id": 1379342,
+              "thread_id": 1392718,
               "stack": [
                 {
                   "class": "ms.bd.c.s2",
@@ -713,16 +706,179 @@
             },
             "result": {
               "is_null": false,
-              "length": 1057,
-              "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+              "length": 716,
+              "sha256": "56407d729c43d59cbcffce1c4b89c3d6b74ad23cc5e3868f6e4afab5e1cf18d3"
             }
           }
         ]
       },
-      "six_header_calls": [],
+      "six_header_calls": [
+        {
+          "url": {
+            "length": 2960,
+            "sha256": "ef882f856c21b8d035157f0e4d5300790c48723425c0e2c062c5176b2bcf0756"
+          },
+          "route": {
+            "length": 71,
+            "sha256": "ba78b84b2a07c9c7437e4cb504609bd76f6a982dc3ad96c5c888610b23fa2e2b",
+            "path": {
+              "length": 40,
+              "sha256": "418c5fc89b0a37c54c5661d2945f255b3ddda4bd34fbf115496449bead7911e3"
+            }
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "7cc5ac467d1bd42ab230fa5dc9cd7cfd807b2e506b0958b637ada0312b5c0390"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "e2ab687a936788b6718bcb72065812f1804c40f7ff8065da050569a5c6e0c9f0"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "123710588e7ca0cc0b11a64dc5f8470fe798130ef9c1402959e2ea2eaed0f72d"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "3c1dbe95a35b1c095861fd6ea9e72e9ed90e8debd3024f3672e7e0163ea2cc73"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "64b3d741d42ed04122fdaafaadb5cdb879ae7a90c31e347eb091de254dc802b6"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1184,
+                  "sha256": "b7c3eba83b100b9eadc16c976d7da377ed5e1d54dd4d3a8040ce93e379191cd3"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 1392705,
+            "stack": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.NetworkParams",
+                "method": "tryAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "CallServerInterceptor__executeCall$___twin___"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "y90.b",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "ms.bd.c.l2$a",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "ps4.o",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "i43.a",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "f24.e",
+                "method": "intercept"
+              }
+            ]
+          }
+        }
+      ],
       "terminal_event": {
         "event": "session_detached",
-        "reason": "application-requested"
+        "reason": "connection-terminated"
       },
       "raw_capture_retained_in_evidence": false
     }

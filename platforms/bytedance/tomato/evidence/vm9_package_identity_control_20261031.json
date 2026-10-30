@@ -34,7 +34,7 @@
         }
       ],
       "target_process_instrumented": false,
-      "probe_source_sha256": "3393165719b69d88f7cadf6509d7be3460bee74341657a4a30a6535a03380dff"
+      "probe_source_sha256": "a3c54adef981f4be78419ece682eccce186c6a9c3f3f6141d04da9756a2ae94f"
     },
     "resigned": {
       "event": "package_identity",
@@ -63,7 +63,7 @@
         }
       ],
       "target_process_instrumented": false,
-      "probe_source_sha256": "3393165719b69d88f7cadf6509d7be3460bee74341657a4a30a6535a03380dff"
+      "probe_source_sha256": "a3c54adef981f4be78419ece682eccce186c6a9c3f3f6141d04da9756a2ae94f"
     },
     "restored": {
       "event": "package_identity",
@@ -96,7 +96,7 @@
         }
       ],
       "target_process_instrumented": false,
-      "probe_source_sha256": "3393165719b69d88f7cadf6509d7be3460bee74341657a4a30a6535a03380dff"
+      "probe_source_sha256": "a3c54adef981f4be78419ece682eccce186c6a9c3f3f6141d04da9756a2ae94f"
     }
   },
   "package_manager_boundary": "The shell app_process helper queries PackageManager. It does not observe the target app callback, its cache or privacy wrapper at runtime.",
@@ -217,7 +217,7 @@
     "device_temporary_dex_cleaned": true,
     "before_temp_count": 0,
     "after_temp_count": 0,
-    "driver_source_sha256": "452ff6f6587ff204f8a1c446b74b925c2dafc0a03e270e6936e0931e0bbc67ef"
+    "driver_source_sha256": "90455c276a091cd7c946aba7556f0274b3bec2da9f970b628f85aa3f75d53956"
   },
   "certificate_bytes_are_unique_cause_verified": false,
   "cronet_runtime_branch_observed": false,
@@ -225,5 +225,36 @@
   "fresh_standalone_signer_verified": false,
   "online_six_header_acceptance_verified": false,
   "raw_requests_or_header_values_retained": false,
-  "interpretation": "Re-signing without injected code reproduces the reader warning for the same book/chapter that the restored official app renders. Both builds load bookstore lists, so a blanket bookstore failure is refuted. The SDK certificate read uses legacy GET_SIGNATURES, whose rotated-history result differs from the current signer. Certificate-dependent input is a lead; the unique rejection cause and exact response code remain unverified."
+  "interpretation": "Re-signing without injected code reproduces the reader warning for the same book/chapter that the restored official app renders. Both builds load bookstore lists, so a blanket bookstore failure is refuted. The SDK certificate read uses legacy GET_SIGNATURES, whose rotated-history result differs from the current signer. Certificate-dependent input is a lead; the unique rejection cause and exact response code remain unverified.",
+  "system_package_observations": {
+    "android": {
+      "event": "package_identity",
+      "package": "android",
+      "sdk": 33,
+      "version_code": 33,
+      "version_name": "13",
+      "debuggable": false,
+      "apk_sha256": "9eaf067a1b163d662bd2bacc68a2816374d983931f7ef7dde0b1f3cc14f0ec93",
+      "legacy_signatures": [
+        {
+          "length": 1057,
+          "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+        }
+      ],
+      "current_signers": [
+        {
+          "length": 1057,
+          "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+        }
+      ],
+      "signing_history": [
+        {
+          "length": 1057,
+          "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+        }
+      ],
+      "target_process_instrumented": false,
+      "probe_source_sha256": "a3c54adef981f4be78419ece682eccce186c6a9c3f3f6141d04da9756a2ae94f"
+    }
+  }
 }

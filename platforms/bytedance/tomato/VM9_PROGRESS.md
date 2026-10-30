@@ -6789,3 +6789,19 @@ manifest 版本。`method_body_equivalence_verified`
 仍保持 false（它指跨研究基线的整体等价性）；`business_request_runtime_call_observed`、whole-request differential、
 fresh standalone signer 和 online acceptance 也没有提升。证据：[runtime method summary](evidence/vm9_runtime_method_summary_20261028.json)，
 复现器：[verify_vm9_runtime_method_summary_20261028.py](python/verify_vm9_runtime_method_summary_20261028.py)。
+
+
+## 2026-10-31：系统包证书来源闭合
+
+恢复官方 APK 后重新运行未 root PackageManager 探针，确认 com.dragon.read 的官方 APK
+摘要、921 字节历史证书和 921 字节当前 signer 与既有对照一致。新增显式 android 系统包
+查询：SDK 33/Android 13 的系统 APK 摘要为
+9eaf067a1b163d662bd2bacc68a2816374d983931f7ef7dde0b1f3cc14f0ec93，其 legacy/current/history
+证书均为 1057 字节、SHA-256 为
+c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d。该值与干净 Gadget
+运行中 s2.k("android") 的返回一致；s2.k(null) 仍回退目标自身包并返回 716 字节测试签名。
+
+本项只证明运行时返回值的包来源及旧证书轮换事实；证书是否是阅读器警告的唯一拒绝原因、
+Cronet 真实请求分支、完整独立 signer、整请求 native/Python 差分及线上六头接受仍为未验证。
+证据：[vm9_package_identity_control_20261031.json](evidence/vm9_package_identity_control_20261031.json)、
+[vm9_certificate_runtime_20261031.json](evidence/vm9_certificate_runtime_20261031.json)。

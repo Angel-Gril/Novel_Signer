@@ -57,7 +57,7 @@ def main() -> int:
     parser.add_argument("--d8", type=Path, required=True)
     parser.add_argument("--output", type=Path, help="new JSON evidence file; existing files are refused")
     args = parser.parse_args()
-    if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+", args.package):
+    if not re.fullmatch(r"(?:android|[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+)", args.package):
         parser.error("--package must be one explicit Android package name")
     if args.output is not None and args.output.exists():
         parser.error("--output already exists")
