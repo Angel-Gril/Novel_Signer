@@ -48,6 +48,17 @@ python python/verify_vm9_package_identity_control_20261031.py
 [校验器](python/verify_vm9_certificate_runtime_20261031.py)。观测结束已卸载 Gadget 包，
 恢复官方 APK 并核对 `95889d1a…`，同时删除 adb forward。
 
+同一远程云手机随后完成了新的静态 overlay UI follow-up。书城/搜索页面实际产生 3 次
+普通 `NetworkParams -> ms.bd.c.r4.onCallToAddSecurityFactor` 六头回调；每次均返回
+六个七神 header，长度仍为 Argus 8、Gorgon 52、Helios 48、Khronos 10、Ladon 8，
+Medusa 依请求变化。相同捕获窗口已安装并确认 Cronet 三个入口 hook，但
+`CronetUrlRequest.addSecurityFactor`、`CronetUrlRequestContext.addSecurityFactor`、
+`o0` 均为 0 次调用，因此这轮只闭合“该页面走 OkHttp 路径”的观察，不把 Cronet 分支
+标为已运行；证书读取与六头仍没有同请求关联。捕获结束已恢复官方 APK，重新核对官方
+摘要和 921 字节 signer，并清理 forward。见[follow-up 证据](evidence/vm9_networkparams_followup_20261031.json)、
+[归纳脚本](python/capture_vm9_networkparams_followup_20261031.py)与
+[校验器](python/verify_vm9_networkparams_followup_20261031.py)。
+
 2026-10-31 普通业务六头回调已在 8 GB 云手机上被动捕获：实际调用栈是
 `OkHttp3SecurityFactorInterceptor.intercept -> NetworkParams.tryAddSecurityFactor`
 `-> ms.bd.c.r4.onCallToAddSecurityFactor`，返回六个七神 header。签名事件与

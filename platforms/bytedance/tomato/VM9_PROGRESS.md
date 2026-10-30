@@ -6805,3 +6805,21 @@ c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d。该值与干�
 Cronet 真实请求分支、完整独立 signer、整请求 native/Python 差分及线上六头接受仍为未验证。
 证据：[vm9_package_identity_control_20261031.json](evidence/vm9_package_identity_control_20261031.json)、
 [vm9_certificate_runtime_20261031.json](evidence/vm9_certificate_runtime_20261031.json)。
+
+## 2026-10-31：远程设备 UI follow-up 的路径分离
+
+在新的远程云手机上使用已验证的静态 overlay Gadget 包，先安装完整 hook，再启动番茄
+书城并触发重试/搜索页面。两次独立捕获合计得到 3 次普通
+`NetworkParams -> ms.bd.c.r4.onCallToAddSecurityFactor` 调用；每次返回完整六头，
+长度为 Argus 8、Gorgon 52、Helios 48、Khronos 10、Ladon 8，Medusa 随请求变化。
+捕获同时成功安装 Cronet 三个入口 hook，但
+`CronetUrlRequest.addSecurityFactor`、`CronetUrlRequestContext.addSecurityFactor` 与
+`o0` 均未被该页面调用。该结果把本轮 UI 业务路径明确归类为 OkHttp/NetworkParams，
+不能外推为 Cronet 分支不存在，也不构成线上验签或完整 signer 证明。
+
+证书读取在其中一轮仍返回系统包证书摘要（1057 字节），但线程与六头回调不同，
+没有建立同请求关联。实验后卸载 Gadget、恢复官方 APK，包摘要仍为
+`95889d1a…`，当前 signer 与历史证书均为 921 字节，adb forward 已清理。
+证据：[vm9_networkparams_followup_20261031.json](evidence/vm9_networkparams_followup_20261031.json)，
+归纳脚本：[capture_vm9_networkparams_followup_20261031.py](python/capture_vm9_networkparams_followup_20261031.py)，
+校验器：[verify_vm9_networkparams_followup_20261031.py](python/verify_vm9_networkparams_followup_20261031.py)。

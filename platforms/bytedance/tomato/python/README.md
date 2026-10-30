@@ -8,6 +8,13 @@ Cronet execution, standalone signing, whole-request Python/native equality,
 and online header acceptance remain unverified. See
 `verify_vm9_networkparams_runtime_20261031.py`.
 
+The 2026-10-31 remote-device follow-up exercised the UI with the static overlay
+Gadget build. It recorded three additional ordinary `r4` six-header callbacks;
+the three Cronet entry hooks were installed but had zero calls in that page.
+The result is path-separation evidence, not Cronet or online-acceptance proof.
+See `capture_vm9_networkparams_followup_20261031.py` and
+`verify_vm9_networkparams_followup_20261031.py`.
+
 The fresh handle2 frameSign verifier records the first structured native
 `String[]` result: tag `0x4000002` returns the Java-lifecycle handle used by
 `core.c.frameSign` for tag `0x200000A`, producing ten entries across the five

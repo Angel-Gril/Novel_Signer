@@ -1,0 +1,525 @@
+{
+  "schema": "vm9-networkparams-followup-20261031-v1",
+  "artifact": {
+    "package": "com.dragon.read",
+    "version_code": 72532,
+    "gadget_apk_sha256": "305166cd1b1b94b43a5f0e342ac683e67677605e56d9fec6caafe60bae8dc0e0",
+    "bridge_sha256": "64d858590ffcb961e6b66ff687cba9cdeb8ddf9111ed31d7b31af7ce1106dedf"
+  },
+  "capture_count": 2,
+  "captures": [
+    {
+      "label": "k",
+      "capture_sha256": "3429b649810eb6904dc9d3d161c574da81e1626fe0e477b5903a47e2a2e044dd",
+      "capture_bytes": 37044,
+      "source_sha256": "6c0f6d0f57971d7f70e9ba20226a0830fd694a92bff376baab13542a219f51a8",
+      "event_counts": {
+        "script_loaded": 1,
+        "hooked": 11,
+        "probe_ready": 1,
+        "bridge_eval_done": 1,
+        "securityFactor": 1,
+        "response_deserialized": 60,
+        "certificate_read_enter": 2,
+        "certificate_read_return": 2,
+        "session_detached": 1
+      },
+      "hooked_targets": [
+        "CronetUrlRequest.addSecurityFactor",
+        "CronetUrlRequestContext.addSecurityFactor",
+        "CronetUrlRequestContext.o0",
+        "MSManager.frameSign",
+        "error_code_exception",
+        "ms.bd.c.r4.onCallToAddSecurityFactor",
+        "ms.bd.c.s2.j.certificate",
+        "ms.bd.c.s2.k",
+        "reader_exception",
+        "resource_warning",
+        "response_deserialized"
+      ],
+      "security_factor_calls": [
+        {
+          "url": {
+            "length": 2960,
+            "sha256": "e8e4997ad766bcfc19f5c181245e07f501a3165055899c59511559665743b33c"
+          },
+          "route": {
+            "length": 71,
+            "sha256": "ba78b84b2a07c9c7437e4cb504609bd76f6a982dc3ad96c5c888610b23fa2e2b",
+            "path": {
+              "length": 40,
+              "sha256": "418c5fc89b0a37c54c5661d2945f255b3ddda4bd34fbf115496449bead7911e3"
+            }
+          },
+          "input": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 106,
+                  "sha256": "cdd212413265bc92295f7afb66f02a9be89895527c7004654aadbcde87f4f80d"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "66eb8b70b51af0e61dacccb9cb51c4a8e1076733e79bec0c7bb695880a428c61"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "0e5e47c2433705d03b1bc4e735264f46ec47245830a5680a8a45f6b3fd427f55"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "5b3d0654db017604f97af519b97ee2b33dd8b3cdb81ff599fdd2fb6fb57f0489"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "a6c509de8ed9b21950cc492b0ef6f84c0374134c5071cfad2f1877e913340abd"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "e4ca181aeb6f766cefbff7380f4faf58edc7257532abc394d5d3a3177e9814a0"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "8bad6be53ef5d1e3b3521fc518eca42375002abac04fd53f87a974dbacf2e8f5"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "6adb37dca734a59a6863c0e90bc2c4c55ba10938b789b18014157ff2ee6282e9"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1176,
+                  "sha256": "b41bf5ac299df1168237b149548dc806b1d23ea0bf2d3c735486036bd2119109"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 1447802
+          }
+        }
+      ],
+      "certificate_returns": [
+        {
+          "target": "ms.bd.c.s2.k",
+          "input": {
+            "is_null": false,
+            "length": 7,
+            "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+          },
+          "context": {
+            "thread_id": 1447818
+          },
+          "result": {
+            "is_null": false,
+            "length": 1057,
+            "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+          }
+        },
+        {
+          "target": "ms.bd.c.s2.j.certificate",
+          "input": {
+            "is_null": false,
+            "length": 7,
+            "sha256": "f60ed56a9c8275894022fe5a7a1625c33bdb55b729bb4e38962af4d1613eda25"
+          },
+          "context": {
+            "thread_id": 1447818
+          },
+          "result": {
+            "is_null": false,
+            "length": 1057,
+            "sha256": "c3916f312e2cffe031498137ea9e9f6693902af5dde9ecf720f43adbe34a6c4d"
+          }
+        }
+      ],
+      "cronet_event_count": 0,
+      "terminal_event": {
+        "event": "session_detached",
+        "reason": "connection-terminated"
+      },
+      "raw_capture_retained_in_evidence": false
+    },
+    {
+      "label": "l",
+      "capture_sha256": "ee942045b0ee6a21e00b2554e13cdaa73949ce79ab2fb6fa851128dceadcbae2",
+      "capture_bytes": 5788,
+      "source_sha256": "86de590c7fcaadb0246896e84a984e66bd3eb241d2459f42ed5210865a46e167",
+      "event_counts": {
+        "script_loaded": 1,
+        "hooked": 7,
+        "probe_ready": 1,
+        "bridge_eval_done": 1,
+        "securityFactor": 2,
+        "session_detached": 1
+      },
+      "hooked_targets": [
+        "CronetUrlRequest.addSecurityFactor",
+        "CronetUrlRequestContext.addSecurityFactor",
+        "CronetUrlRequestContext.o0",
+        "MSManager.frameSign",
+        "ms.bd.c.r4.onCallToAddSecurityFactor",
+        "ms.bd.c.s2.j.certificate",
+        "ms.bd.c.s2.k"
+      ],
+      "security_factor_calls": [
+        {
+          "url": {
+            "length": 3074,
+            "sha256": "2ebaa7c0caa57f39bd965e58209935c75a90437c0cc1b1b71037473d93813f1c"
+          },
+          "route": {
+            "length": 74,
+            "sha256": "8275325afbdc84f8132012cc6118835c8f687a166357f9ea796ff1a010842bbe",
+            "path": {
+              "length": 31,
+              "sha256": "0913d1ab58cc3a26ea28275fcc5045b64f43ead64b53200ee61f8585ac847aa9"
+            }
+          },
+          "input": {
+            "count": 11,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "authorization",
+                "value": {
+                  "length": 8,
+                  "sha256": "57a7adc8acdd27dbb3a7d33a577fbd9812557ca67e25202e4a789121fbd39bd6"
+                }
+              },
+              {
+                "key": "content-type",
+                "value": {
+                  "length": 24,
+                  "sha256": "9d17566efda5c59d2c8e7e7fbc39f1093f148780b2243d42ab1be2268c4353d6"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 106,
+                  "sha256": "cdd212413265bc92295f7afb66f02a9be89895527c7004654aadbcde87f4f80d"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "05a642ac8b8ed3fba0ee2fe0abf0022eef63d635212bd0a87e9669593888b2e8"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "8ccc83a5b0a33b17553dff82daa0f4883cab3e868034cafc456886fc62cf16b4"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "a11d0106f2c9279317bc36b60b1e3f8b32f810e87824e9167e74974ec0c8366c"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "4aed800838a65e7f8c1be308c7271c939b751b25e403c1eaaa3fac91bcfe2d16"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "cf6492d40cdd29ec0d77b0689b9ece257cb1b69dc50a5ced5e849c7fadedfb14"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "c71e6f6607d7a58320f05550a98f026be5de3da601b090d37a56bde02cc74724"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "811c7d4e1c913441b9b6afe0b871f17b228494753429f7c1165152d98c4ea8df"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "db2dd3d901045a42e28fe503df68231dcc46d3f9b01835d0f57b9a8bee243257"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1288,
+                  "sha256": "b4e7b7be2ee8d9f6efc4c3c58c05225cf3668921b03e7289238afe1ecdf11d58"
+                }
+              }
+            ]
+          },
+          "context": null
+        },
+        {
+          "url": {
+            "length": 3074,
+            "sha256": "a07475094b9714f05866bb0be1961f559b7367bd60f32b2d3e1e5c451d49d9d5"
+          },
+          "route": {
+            "length": 74,
+            "sha256": "8275325afbdc84f8132012cc6118835c8f687a166357f9ea796ff1a010842bbe",
+            "path": {
+              "length": 31,
+              "sha256": "0913d1ab58cc3a26ea28275fcc5045b64f43ead64b53200ee61f8585ac847aa9"
+            }
+          },
+          "input": {
+            "count": 11,
+            "rows": [
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "authorization",
+                "value": {
+                  "length": 8,
+                  "sha256": "57a7adc8acdd27dbb3a7d33a577fbd9812557ca67e25202e4a789121fbd39bd6"
+                }
+              },
+              {
+                "key": "content-type",
+                "value": {
+                  "length": 24,
+                  "sha256": "9d17566efda5c59d2c8e7e7fbc39f1093f148780b2243d42ab1be2268c4353d6"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 106,
+                  "sha256": "cdd212413265bc92295f7afb66f02a9be89895527c7004654aadbcde87f4f80d"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "f2bdbbef68a7aa39493aa28678a79e2ee0709a8e34958a616112d2be92248d0f"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "09679c4dc42fd6d146850cea5cdfdaca708ba40cb3d83f013f5b98cf36e00654"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "a11d0106f2c9279317bc36b60b1e3f8b32f810e87824e9167e74974ec0c8366c"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "04529e75e486da8ee5c822127b51599388fc0d4e29e998fe6f718010f186c447"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "1a27f70e4f76e3cf597076bbc5552b08e0d40d30b82e9cdc63c30a61271ddfdb"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "64c4daf877bc0d9947daff4b783723a63423eea3cb8fdca5437555e4c1d1ef1e"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "a7c9025a4562c543309f835f6078c3b86e7e948caaaa7e9b6108b6ddd0842c2b"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "dee4992180ecd040d93b900fad7cd85dbe01722a90e1a923d350d1d54d85177f"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1284,
+                  "sha256": "f92159fff0b6459d60fc811f57d3a98eaec7fc7023aa2bc58a4bebaae4a46774"
+                }
+              }
+            ]
+          },
+          "context": null
+        }
+      ],
+      "certificate_returns": [],
+      "cronet_event_count": 0,
+      "terminal_event": {
+        "event": "session_detached",
+        "reason": "application-requested"
+      },
+      "raw_capture_retained_in_evidence": false
+    }
+  ],
+  "security_factor_callback_observed": true,
+  "six_header_call_count": 3,
+  "cronet_runtime_branch_observed": false,
+  "certificate_callback_observed": true,
+  "same_request_certificate_correlation_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "online_header_acceptance_verified": false,
+  "raw_urls_or_header_values_retained": false,
+  "target_app_modified": false,
+  "interpretation": "The static-overlay UI follow-up produced three ordinary NetworkParams/r4 six-header callbacks while Cronet addSecurityFactor/o0 remained uncalled in the exercised page. This confirms path separation for this observation window; it does not prove that the Cronet branch is absent from other features or that the headers were accepted online."
+}
