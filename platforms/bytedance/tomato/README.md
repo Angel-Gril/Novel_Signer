@@ -1,5 +1,14 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-01 新增[无 Java bridge 的 ART JNI 运行时探针](evidence/vm9_cronet_jni_runtime_20261101.json)。
+探针直接通过 `JNI_GetCreatedJavaVMs` 获取活动 `JNIEnv`，在 `GetMethodID`（0x108）和
+`CallObjectMethodV`（0x118）表项上安装脱敏 hook，只保留
+`addSecurityFactor(String,String[])` 的方法身份和事件计数。模拟器实测两项 hook
+均安装成功，但进程在低内存 splash 窗口结束前未产生该方法事件；这是有界负观测，
+不等同于 Cronet 分支不可达。重跑命令见
+`python/capture_vm9_cronet_jni_runtime_20261101.py`，输入校验见
+`python/verify_vm9_cronet_jni_runtime_20261101.py`。
+
 2026-10-31 对官方包内的 `lib/arm64-v8a/libsscronet.so` 做了窄 native 静态分析。
 两个独立站点分别通过 JNI 类加载器解析 `CronetUrlRequestContext` 与
 `CronetUrlRequest`，再用 JNI `GetMethodID`（函数表偏移 `0x108`）查找私有的

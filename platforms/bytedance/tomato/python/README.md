@@ -1,5 +1,23 @@
 # Tomato Python material
 
+The new `capture_vm9_cronet_jni_runtime_20261101.py` probe obtains a live
+ART `JNIEnv` through `JNI_GetCreatedJavaVMs`, then hooks the indirect
+`GetMethodID`/`CallObjectMethodV` table entries at `0x108`/`0x118`. It does not
+require the optional JavaScript Java bridge and retains only the
+`addSecurityFactor(String,String[])` method identity and event counts. A
+zero-call capture is a bounded negative window. Verify it with
+`verify_vm9_cronet_jni_runtime_20261101.py`; the 2026-11-01 emulator capture
+installed both hooks but terminated during the low-memory splash window, so
+the Cronet business branch remains unproven.
+
+```powershell
+python python/capture_vm9_cronet_jni_runtime_20261101.py `
+  --device remote --remote 127.0.0.1:27043 --adb-serial emulator-5554 `
+  --launch --duration 60 --output <new.jsonl>
+python python/verify_vm9_cronet_jni_runtime_20261101.py --capture <new.jsonl>
+```
+
+
 The 2026-10-31 native scan closes the static indirect boundary left by the
 27-DEX scan. `libsscronet.so` contains two AArch64 chains that resolve the
 Cronet request/context classes, call JNI `GetMethodID` for the private

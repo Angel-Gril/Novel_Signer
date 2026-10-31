@@ -1,0 +1,35 @@
+{
+  "schema": "vm9-cronet-jni-runtime-evidence-20261101-v1",
+  "capture_date": "2026-11-01",
+  "package": "com.dragon.read",
+  "version": "7.2.5.32/72532",
+  "device": {
+    "serial": "emulator-5554",
+    "android": "9 / sdk 28",
+    "abi": "x86_64 with arm64 native translation",
+    "mem_total_kb": 1016472,
+    "swap_total_kb": 0
+  },
+  "capture": {
+    "duration_seconds": 20,
+    "capture_sha256": "378b376ebf34e450017b78093d8291d8ae824e54182f9d429ccdba568b456233",
+    "event_counts": {
+      "get_env_handler": 1,
+      "jni_hooks_installed": 1,
+      "jni_table": 1,
+      "jni_vm_attached": 1,
+      "probe_ready": 1,
+      "script_loaded": 1,
+      "session_detached": 1
+    },
+    "terminal_reason": "process-terminated"
+  },
+  "jni_table_offsets": {
+    "GetMethodID": 264,
+    "CallObjectMethodV": 280
+  },
+  "cronet_runtime_branch_observed": false,
+  "bounded_negative": true,
+  "raw_capture_retained_in_evidence": false,
+  "interpretation": "The live ART JNIEnv table was obtained and both indirect JNI entries were hooked. No addSecurityFactor GetMethodID or CallObjectMethodV event occurred before the translated app process terminated. This is a bounded low-memory/splash-window negative observation; it does not show that the Cronet branch is unreachable or that online acceptance failed."
+}
