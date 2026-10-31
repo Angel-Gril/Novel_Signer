@@ -138,10 +138,12 @@ Java bridge 会在应用类加载器可用后安装 hook。随后在应用内
 $env:PYTHONPATH='C:\\AI\\6\\_frida243'
 python python/capture_vm9_business_framesign_android_20261028.py `
   --device remote --remote 127.0.0.1:27042 --process-name Gadget --duration 120 `
-  --bridge-js C:\\AI\\6\\frida-java-bridge_lazy.js `
+  --bridge-js C:\\AI\\6\\frida-java-bridge_compat.js `
   --diagnose-reader-errors --output C:\\AI\\6\\runtime_business_capture.jsonl
 ```
 
+`--bridge-js` 应传入可执行的同版本 bundle（例如 `frida-java-bridge_compat.js`）。某些
+本地导出文件名带有 `📦`/`✄` 三行打包元数据；捕获器会识别并剥离这一段，其他内容不作修改。
 `--bridge-js` 会先加载小型 receiver，再按 50,000 字符发送 bridge 和业务 hook；日志中的
 `bridge_initialized`、`Java.available: true`（由 bridge 自身事件表示）以及五个 `hooked`
 事件只证明重签 Gadget 运行时已经具备 Java bridge。必须继续看到

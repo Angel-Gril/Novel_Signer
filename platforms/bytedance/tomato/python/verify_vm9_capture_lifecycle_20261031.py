@@ -199,6 +199,14 @@ def main() -> int:
     spec = importlib.util.spec_from_file_location("vm9_capture", SOURCE)
     capture = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(capture)
+    with tempfile.TemporaryDirectory() as bridge_temp:
+        bridge_path = Path(bridge_temp) / "metadata_bridge.js"
+        bridge_path.write_text("📦\n/path/to/bundle/index.js\n✄\nvar bridgeReady = true;\n",
+                               encoding="utf-8")
+        normalized, _chunks = capture._load_source(bridge_path, 4096)
+        assert normalized.startswith("var bridgeReady = true;\n"), \
+            "known bridge packaging preamble must be removed"
+        assert "📦" not in normalized and "✄" not in normalized
     for source in (capture.JS, capture.DIAGNOSTIC_JS, capture.CERTIFICATE_JS):
         subprocess.run(["node", "--check"], input=source, text=True, check=True)
     result = subprocess.run(

@@ -452,7 +452,22 @@ def _load_source(bridge_js: Path | None, chunk_size: int) -> tuple[str, list[str
     """
     source = JS
     if bridge_js is not None:
-        source = bridge_js.read_text(encoding="utf-8") + "\n" + JS
+        bridge = bridge_js.read_text(encoding="utf-8")
+        # Some locally exported bridge bundles carry a three-line packaging
+        # preamble (a box glyph, an absolute source path and a scissors glyph)
+        # before the JavaScript.  It is metadata, not a JavaScript comment;
+        # feeding it to Frida produces ``SyntaxError: unexpected character``.
+        # Strip only that known preamble and leave all other bridge text intact.
+        lines = bridge.splitlines(keepends=True)
+        if lines and lines[0].lstrip("\ufeff").strip() == "📦":
+            marker = next(
+                (index for index, line in enumerate(lines[1:], start=1)
+                 if line.strip() == "✄"),
+                None,
+            )
+            if marker is not None:
+                bridge = "".join(lines[marker + 1 :])
+        source = bridge + "\n" + JS
     return source, [source[i : i + chunk_size] for i in range(0, len(source), chunk_size)]
 
 
