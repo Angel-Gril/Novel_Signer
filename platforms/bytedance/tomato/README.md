@@ -1,7 +1,5 @@
 # Tomato / Fanqie (ByteDance)
 
-外部 Web 协议对照见 [DouYin_Spider 边界分析](DOUYIN_SPIDER_COMPARISON_20261101.md)。
-
 2026-10-31 对官方包内的 `lib/arm64-v8a/libsscronet.so` 做了窄 native 静态分析。
 两个独立站点分别通过 JNI 类加载器解析 `CronetUrlRequestContext` 与
 `CronetUrlRequest`，再用 JNI `GetMethodID`（函数表偏移 `0x108`）查找私有的
