@@ -1,5 +1,15 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-10-31 对官方包内的 `lib/arm64-v8a/libsscronet.so` 做了窄 native 静态分析。
+两个独立站点分别通过 JNI 类加载器解析 `CronetUrlRequestContext` 与
+`CronetUrlRequest`，再用 JNI `GetMethodID`（函数表偏移 `0x108`）查找私有的
+`addSecurityFactor(String,String[])`，并进入 `CallObjectMethodV`（偏移 `0x118`）。
+这闭合了 DEX 扫描留下的 native/间接分发边界；它仍只是 ELF 静态证据，不证明这两个
+链路已经在业务页面运行，也不证明六头已被线上接受。证据保留 ELF 摘要、字符串偏移、
+函数地址和 JNI 表偏移，不保留 native 原始字节或完整指令文本。见[native JNI 边界证据](evidence/vm9_cronet_native_jni_boundary_20261031.json)、
+[扫描脚本](python/scan_vm9_cronet_native_jni_boundary_20261031.py)和
+[校验器](python/verify_vm9_cronet_native_jni_boundary_20261031.py)。
+
 2026-10-31 对官方 7.2.5.32/72532 APK 的 27 个 DEX 做了完整的直接调用扫描。
 `CronetUrlRequest.addSecurityFactor`、`CronetUrlRequestContext.addSecurityFactor` 和
 `CronetUrlRequestContext.o0` 在 Cronet 实现包外均没有 `invoke-*` 调用点；实现包内部

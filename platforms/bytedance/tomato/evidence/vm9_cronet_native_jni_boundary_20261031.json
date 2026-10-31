@@ -1,0 +1,137 @@
+{
+  "schema": "vm9-cronet-native-jni-boundary-20261031-v1",
+  "evidence_date": "2026-10-31",
+  "package": "com.dragon.read",
+  "version": "7.2.5.32/72532",
+  "artifact": {
+    "member": "lib/arm64-v8a/libsscronet.so",
+    "sha256": "ab0547460f1c06e5111b69826d2277f145aad4f79c7d2b7aea0356dcf25e49ac",
+    "size": 6192768,
+    "elf_class": 64,
+    "machine": "AArch64",
+    "type": "ET_DYN"
+  },
+  "sections": {
+    ".text": {
+      "address": 2015512,
+      "file_offset": 2015512,
+      "size": 4018720
+    },
+    ".rodata": {
+      "address": 453456,
+      "file_offset": 453456,
+      "size": 504768
+    }
+  },
+  "strings": {
+    "addSecurityFactor": {
+      "file_offset": 486675,
+      "virtual_address": 486675,
+      "length_without_nul": 17
+    },
+    "CronetUrlRequestContext": {
+      "file_offset": 680424,
+      "virtual_address": 680424,
+      "length_without_nul": 55
+    },
+    "CronetUrlRequest": {
+      "file_offset": 680588,
+      "virtual_address": 680588,
+      "length_without_nul": 48
+    },
+    "addSecurityFactor_signature": {
+      "file_offset": 618738,
+      "virtual_address": 618738,
+      "length_without_nul": 58
+    }
+  },
+  "string_refs": {
+    "addSecurityFactor": [
+      {
+        "adrp": 2044996,
+        "add": 2045000
+      },
+      {
+        "adrp": 2107188,
+        "add": 2107192
+      }
+    ],
+    "CronetUrlRequestContext": [
+      {
+        "adrp": 2060644,
+        "add": 2060648
+      }
+    ],
+    "CronetUrlRequest": [
+      {
+        "adrp": 2107508,
+        "add": 2107512
+      }
+    ],
+    "addSecurityFactor_signature": [
+      {
+        "adrp": 2045004,
+        "add": 2045008
+      },
+      {
+        "adrp": 2107196,
+        "add": 2107200
+      }
+    ]
+  },
+  "native_call_chains": {
+    "CronetUrlRequestContext.addSecurityFactor": {
+      "class_string": "CronetUrlRequestContext",
+      "class_resolver_call": 2044988,
+      "class_resolver_stub": 2060640,
+      "method_name": "addSecurityFactor",
+      "method_signature": "(Ljava/lang/String;[Ljava/lang/String;)[Ljava/lang/String;",
+      "method_lookup_call": 2045036,
+      "method_lookup_stub": 2031612,
+      "method_invoke_call": 2045060,
+      "method_invoke_stub": 2049708
+    },
+    "CronetUrlRequest.addSecurityFactor": {
+      "class_string": "CronetUrlRequest",
+      "class_resolver_call": 2107180,
+      "class_resolver_stub": 2107504,
+      "method_name": "addSecurityFactor",
+      "method_signature": "(Ljava/lang/String;[Ljava/lang/String;)[Ljava/lang/String;",
+      "method_lookup_call": 2107228,
+      "method_lookup_stub": 2031612,
+      "method_invoke_call": 2107252,
+      "method_invoke_stub": 2049708
+    }
+  },
+  "jni_functions": {
+    "JNI_OnLoad": {
+      "address": 2024996,
+      "dynamic_symbol": true
+    },
+    "JavaVM_GetEnv": {
+      "helper": 3289872,
+      "table_offset": 48,
+      "table_load": 3289944
+    },
+    "JNI_GetMethodID": {
+      "helper": 3289396,
+      "table_offset": 264,
+      "table_load": 3289452
+    },
+    "JNI_CallObjectMethodV": {
+      "helper": 2049708,
+      "table_offset": 280,
+      "table_load": 2049800
+    }
+  },
+  "dynamic_symbols": {
+    "jni_names": [
+      "JNI_OnLoad"
+    ],
+    "static_java_native_symbol_count": 0,
+    "register_natives_symbol_count": 0
+  },
+  "raw_native_bytes_retained": false,
+  "raw_instruction_text_retained": false,
+  "interpretation": "The AArch64 native library contains two indirect JNI call chains. Each chain obtains a Cronet implementation class, resolves the private addSecurityFactor method with JNI GetMethodID, and reaches the JNI CallObjectMethodV boundary using the recorded String/String[] signature. This establishes a native-to-private-Java dispatch boundary; it does not prove that either chain ran in the captured UI, that the returned headers were accepted online, or that a complete standalone signer exists."
+}

@@ -1,5 +1,15 @@
 # Tomato Python material
 
+The 2026-10-31 native scan closes the static indirect boundary left by the
+27-DEX scan. `libsscronet.so` contains two AArch64 chains that resolve the
+Cronet request/context classes, call JNI `GetMethodID` for the private
+`addSecurityFactor(String,String[])`, and reach JNI `CallObjectMethodV`.
+The evidence keeps only section/string offsets, helper addresses, JNI table
+offsets, and the ELF digest; it keeps no native bytes or full instruction text.
+This is static dispatch evidence, not proof of a live Cronet request or online
+header acceptance. See `scan_vm9_cronet_native_jni_boundary_20261031.py` and
+`verify_vm9_cronet_native_jni_boundary_20261031.py`.
+
 The passive Android capture now observes a real six-header business callback
 through `OkHttp3SecurityFactorInterceptor -> NetworkParams -> r4`. Matching path
 digests and thread ids associate the signature and an HTTP 200 response with

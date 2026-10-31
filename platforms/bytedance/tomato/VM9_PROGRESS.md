@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-31：Cronet native JNI 间接调用边界
+
+从官方 7.2.5.32/72532 APK 提取的 `libsscronet.so` 已完成窄范围 AArch64 分析。
+两个 native 站点分别 materialize `CronetUrlRequestContext` 和 `CronetUrlRequest` 类名，
+通过 `JNI GetMethodID` 表偏移 `0x108` 解析私有
+`addSecurityFactor(String,String[])`，再通过 `JNI CallObjectMethodV` 偏移 `0x118`
+调用。JNIEnv 由 JavaVM `GetEnv` 偏移 `0x30` 获取；ELF 只导出 `JNI_OnLoad`，没有
+可读的 `Java_*` 或 `RegisterNatives` 动态符号，因此这条路径是内部 native helper
+驱动的间接 JNI 调用，而不是静态 JNI 导出。该证据闭合了“DEX 外无直接调用者”的
+边界，但仍不证明真实业务运行时已命中、返回值已进入线上请求或完整 signer 已完成。
+证据：[native JNI 边界](evidence/vm9_cronet_native_jni_boundary_20261031.json)；
+复现与校验：[scan_vm9_cronet_native_jni_boundary_20261031.py](python/scan_vm9_cronet_native_jni_boundary_20261031.py)、
+[verify_vm9_cronet_native_jni_boundary_20261031.py](python/verify_vm9_cronet_native_jni_boundary_20261031.py)。
+
 ## 2026-10-31：Cronet 直接调用边界扫描
 
 对官方 7.2.5.32/72532 APK 的 27 个 DEX、约 146 万个方法做了脱敏指令扫描。
