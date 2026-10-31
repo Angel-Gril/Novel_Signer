@@ -1,0 +1,166 @@
+{
+  "schema": "vm9-cronet-static-callers-20261031-v1",
+  "evidence_date": "2026-10-31",
+  "package": "com.dragon.read",
+  "version": "7.2.5.32/72532",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "apk_size": 135258081,
+  "targets": {
+    "CronetUrlRequest.addSecurityFactor": "Lcom/ttnet/org/chromium/net/impl/CronetUrlRequest;->addSecurityFactor",
+    "CronetUrlRequestContext.addSecurityFactor": "Lcom/ttnet/org/chromium/net/impl/CronetUrlRequestContext;->addSecurityFactor",
+    "CronetUrlRequestContext.o0": "Lcom/ttnet/org/chromium/net/impl/CronetUrlRequestContext;->o0"
+  },
+  "implementation_package_excluded_from_business_counts": "Lcom/ttnet/org/chromium/net/impl/",
+  "dex_count": 27,
+  "dex": [
+    {
+      "name": "classes.dex",
+      "size": 7924336,
+      "sha256": "4c842f3bff67e4b050aff44b92de063bd8514e631e49838a5e4759fb8aad0237"
+    },
+    {
+      "name": "classes10.dex",
+      "size": 7786496,
+      "sha256": "3406f760eedbaadfd180c979fa5c6a1052207b77cdf94e9c2a3a4f883ee8d951"
+    },
+    {
+      "name": "classes11.dex",
+      "size": 7036776,
+      "sha256": "10017fba48ad41a33df07f2b481ce82f71c2e9addf37bf3e8d2274605cc7d449"
+    },
+    {
+      "name": "classes12.dex",
+      "size": 9104860,
+      "sha256": "710d38c5e5272bae2edca9e0e1d1d77a722baad28e500c48cc83489ac5126aa2"
+    },
+    {
+      "name": "classes13.dex",
+      "size": 8586748,
+      "sha256": "6d09745b8188f534fae704568f14dcfa333e0cbef9ef29366b57290d11dfe0be"
+    },
+    {
+      "name": "classes14.dex",
+      "size": 7930396,
+      "sha256": "c9722ecbf5c3105689027cb2e387f8c38edc025adec4ca53d981c31d226b85ec"
+    },
+    {
+      "name": "classes15.dex",
+      "size": 8500624,
+      "sha256": "281913a71c0d538c2c87cadf30c22040d1180fe9542fff4725dbf29b7179f8f2"
+    },
+    {
+      "name": "classes16.dex",
+      "size": 8008060,
+      "sha256": "c0820f523bc429160614f3f056f1829fe68c173d715db4db3b05e3600d3557ea"
+    },
+    {
+      "name": "classes17.dex",
+      "size": 8226640,
+      "sha256": "c88f1daee04b1257ca0212b111561ae707775a0a1d8392e6c4e0211ed3c9681b"
+    },
+    {
+      "name": "classes18.dex",
+      "size": 7576152,
+      "sha256": "74b25c4f522b577a17f1e360d34b4a097ced5692c25c8ff6346b1e930d687df6"
+    },
+    {
+      "name": "classes19.dex",
+      "size": 7662408,
+      "sha256": "5bcd26009607cdeedb20cd0f02e739197d5cc1c00e0ab1da8989d1eba446119b"
+    },
+    {
+      "name": "classes2.dex",
+      "size": 7454212,
+      "sha256": "5f278e3573e9fd0803852599304457344e8c7b416273d384a6dd8bb7dd6fd718"
+    },
+    {
+      "name": "classes20.dex",
+      "size": 1759884,
+      "sha256": "6b91a943925766beeffde21825c8be5644e6b1a21e4a5421e9ceaa22c2a63a26"
+    },
+    {
+      "name": "classes21.dex",
+      "size": 7904236,
+      "sha256": "207f80e188266765adfaa5e52c187c544d9a9d5f285cfcd4edc4e3a558cb1cf4"
+    },
+    {
+      "name": "classes22.dex",
+      "size": 8091892,
+      "sha256": "69d20c81f67786401d2141540801784db292c2cf8838197198e4788aea58276f"
+    },
+    {
+      "name": "classes23.dex",
+      "size": 8040388,
+      "sha256": "09c8cd146d8bb1bcf6a45583ea4820f67d869915c307b0a57209d11b2f4f47c4"
+    },
+    {
+      "name": "classes24.dex",
+      "size": 8257352,
+      "sha256": "6e7311b1ef778b57bc649a496cc5a0bfa0df9cd343854d40f885ede3526cf6de"
+    },
+    {
+      "name": "classes25.dex",
+      "size": 10928192,
+      "sha256": "277ccc49edd65e17d8704915797fff60e1f4f400ca4c06dde99d26ec31853b57"
+    },
+    {
+      "name": "classes26.dex",
+      "size": 8596392,
+      "sha256": "eb7cb6897a3f791b2835e226ef8882aafc9e428c65b6b842cd82f3dffe50a333"
+    },
+    {
+      "name": "classes27.dex",
+      "size": 7775452,
+      "sha256": "0b8a17266ec3ae894b20e388098998ef475e55b263b425cba52143451e2eef3f"
+    },
+    {
+      "name": "classes3.dex",
+      "size": 8234720,
+      "sha256": "d4e47c6ba774fa9fd503d335b2aa52d71da48d66ebacdf4576733e8f8f61c2f4"
+    },
+    {
+      "name": "classes4.dex",
+      "size": 8242084,
+      "sha256": "575df27d76634747f710e0be7ae3084e5d12570fe4c1bf1d70935259a02cd19a"
+    },
+    {
+      "name": "classes5.dex",
+      "size": 7965520,
+      "sha256": "3e82acfd3d6a184cd4cdd33c8a422380afacd8e39e2f1e6f6b6b1bf261fd67bb"
+    },
+    {
+      "name": "classes6.dex",
+      "size": 8266500,
+      "sha256": "2d82531942911e754845d058c4f2485f9aaf9b6f68a5f23313b938e9f352caca"
+    },
+    {
+      "name": "classes7.dex",
+      "size": 10105336,
+      "sha256": "9da58505d58eed8a285f59abce26b9377ae1e1f08f0682571ff4455063a8e118"
+    },
+    {
+      "name": "classes8.dex",
+      "size": 8194544,
+      "sha256": "85416f5fdbbad3411a4d4c4bd03ab7ec346844ee281d7e31a10a5dfe367137d2"
+    },
+    {
+      "name": "classes9.dex",
+      "size": 7693816,
+      "sha256": "4c52098066241285817bcd1154c989f943e834564831b795242c9348d2d12171"
+    }
+  ],
+  "method_count": 1469420,
+  "all_direct_call_counts": {
+    "CronetUrlRequest.addSecurityFactor": 0,
+    "CronetUrlRequestContext.addSecurityFactor": 0,
+    "CronetUrlRequestContext.o0": 2
+  },
+  "external_business_call_counts": {
+    "CronetUrlRequest.addSecurityFactor": 0,
+    "CronetUrlRequestContext.addSecurityFactor": 0,
+    "CronetUrlRequestContext.o0": 0
+  },
+  "raw_method_bodies_retained": false,
+  "raw_instruction_text_retained": false,
+  "interpretation": "Across all 27 DEX files, the selected Cronet security-factor methods have no direct invoke instructions from outside the Cronet implementation package. The only direct edges are the two implementation-level addSecurityFactor-to-o0 bridges. This points to native, reflection, or another indirect dispatch boundary; it does not prove that the Cronet path is unreachable at runtime."
+}

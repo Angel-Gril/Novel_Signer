@@ -1,5 +1,16 @@
 # Current VM9 progress checkpoint
 
+## 2026-10-31：Cronet 直接调用边界扫描
+
+对官方 7.2.5.32/72532 APK 的 27 个 DEX、约 146 万个方法做了脱敏指令扫描。
+`CronetUrlRequest.addSecurityFactor`、`CronetUrlRequestContext.addSecurityFactor` 和
+`CronetUrlRequestContext.o0` 在 `com.ttnet.org.chromium.net.impl` 包外的直接调用计数
+均为 0；实现包内只看到两条 `addSecurityFactor -> o0` 边。前两个方法的 DEX 访问级别
+为 `private`。这把静态定位边界收窄到 native/反射/其他间接分发，不能据此断言 Cronet
+运行时不可达。证据：[Cronet 静态调用扫描](evidence/vm9_cronet_static_callers_20261031.json)；
+复现与校验：[scan_vm9_cronet_static_callers_20261031.py](python/scan_vm9_cronet_static_callers_20261031.py)、
+[verify_vm9_cronet_static_callers_20261031.py](python/verify_vm9_cronet_static_callers_20261031.py)。
+
 ## 2026-10-31：被动业务六头、证书轮换与纯重签阅读对照
 
 最新普通业务捕获已走通 OkHttp3 / NetworkParams 六头回调，观察到 HTTP 200、业务码

@@ -1,5 +1,15 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-10-31 对官方 7.2.5.32/72532 APK 的 27 个 DEX 做了完整的直接调用扫描。
+`CronetUrlRequest.addSecurityFactor`、`CronetUrlRequestContext.addSecurityFactor` 和
+`CronetUrlRequestContext.o0` 在 Cronet 实现包外均没有 `invoke-*` 调用点；实现包内部
+只有两个 `addSecurityFactor -> o0` 桥接边。两个 `addSecurityFactor` 方法本身为
+`private`。因此业务入口必须经过 native、反射或其他间接分发，不能继续依赖普通 DEX
+调用者定位；这也解释了 UI 页面只命中 OkHttp/NetworkParams 时的结果。该扫描不证明
+Cronet 分支不可达或线上验签已通过。见[静态调用扫描证据](evidence/vm9_cronet_static_callers_20261031.json)、
+[扫描脚本](python/scan_vm9_cronet_static_callers_20261031.py)和
+[校验器](python/verify_vm9_cronet_static_callers_20261031.py)。
+
 2026-10-31 纯重签对照已完成：所有公共 ZIP 条目的解压内容相同，只有
 `META-INF/BYTESIGN.{RSA,SF}` 被替换为测试证书的签名条目，没有 Gadget。
 原版与纯重签包都加载出书城榜单；纯重签包在《凡人修仙，炼气长生》第 1 章

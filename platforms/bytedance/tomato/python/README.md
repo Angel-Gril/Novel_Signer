@@ -8,6 +8,13 @@ Cronet execution, standalone signing, whole-request Python/native equality,
 and online header acceptance remain unverified. See
 `verify_vm9_networkparams_runtime_20261031.py`.
 
+The 2026-10-31 DEX scan covers all 27 DEX files and records no direct business
+caller for the three selected Cronet security-factor methods. Only the two
+implementation-level `addSecurityFactor -> o0` edges are present; this points to
+an indirect native/reflection dispatch boundary and does not prove runtime
+unreachability. See `scan_vm9_cronet_static_callers_20261031.py` and
+`verify_vm9_cronet_static_callers_20261031.py`.
+
 The 2026-10-31 remote-device follow-up exercised the UI with the static overlay
 Gadget build. It recorded three additional ordinary `r4` six-header callbacks;
 the three Cronet entry hooks were installed but had zero calls in that page.
