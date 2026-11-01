@@ -10462,5 +10462,23 @@
     "cronet_runtime_branch_observed": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_request_context_assignment_20261102": {
+    "evidence_file": "evidence/vm9_request_context_assignment_20261102.json",
+    "verifier": "python/verify_vm9_request_context_references_20261028.py",
+    "schema": "vm9-request-context-reference-members-20261102-v2",
+    "supersedes_helper_behavior_claim": "vm9_request_context_references_20261028",
+    "native_python_cases": 26,
+    "native_controls": 78,
+    "rollback_guards": 8,
+    "outer_constructor_uses_assignment_helper": true,
+    "outer_graph_regression_verifier": "python/verify_vm9_outer_graph_fresh_20261007.py",
+    "outer_graph_regression_cases": 4,
+    "outer_graph_negative_controls": 4,
+    "final_owner_destruction_supported": false,
+    "diagnostic_scope_and_physical_stack_effects_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

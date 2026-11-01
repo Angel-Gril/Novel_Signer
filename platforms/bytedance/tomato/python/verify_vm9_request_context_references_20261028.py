@@ -1,4 +1,4 @@
-"""Differentially verify the two outer callback-reference member copies.
+"""Differentially verify the two outer callback-reference member assignments.
 
 The native ``service_refs`` handler constructor is already covered by
 ``verify_vm9_signer_objects``.  This probe continues from that exact object
@@ -19,6 +19,12 @@ import vm9_objects as objects
 BASES = (0x122C0000, 0x775C205000)
 GUEST = oracle.GUEST
 LIBRARY_SHA256 = oracle.LIBRARY_SHA256
+PROFILES = (
+    "fresh", "repeat", "same_payload_distinct_counters", "self_alias",
+    "source_40_alias_member_30", "source_30_alias_member_40", "swap_members",
+    "retained_replacement", "shared_counter", "increment_wrap",
+    "null_payload", "null_counter", "equal_pointee_unmapped_counter",
+)
 
 
 def _seed_reference(pages, source, count, payload=GUEST + 0x9300):
@@ -59,7 +65,49 @@ def _pages_with_memory(memory, refs):
     return pages
 
 
-def _run(library: Path, libc: Path, base: int) -> dict:
+def _assignment_inputs(pages, target, refs, profile):
+    source_30, source_40 = refs["reference_30"][0], refs["reference_40"][0]
+    if profile in ("repeat", "same_payload_distinct_counters", "self_alias",
+                   "equal_pointee_unmapped_counter",
+                   "source_40_alias_member_30", "source_30_alias_member_40",
+                   "swap_members", "retained_replacement", "shared_counter"):
+        for offset in (0x30, 0x40):
+            source = refs[f"reference_{offset:x}"][0]
+            oracle._write_span(pages, target + offset,
+                               oracle._read_span(pages, source, 16))
+    if profile == "same_payload_distinct_counters":
+        for offset in (0x30, 0x40):
+            _seed_reference(pages, target + offset, GUEST + 0x8840 + offset)
+    if profile in ("source_40_alias_member_30", "source_30_alias_member_40",
+                   "swap_members", "retained_replacement", "shared_counter"):
+        for offset in (0x30, 0x40):
+            counter = GUEST + 0x8840 + (0 if profile == "shared_counter" else offset)
+            _seed_reference(pages, target + offset, counter, GUEST + 0x9400 + offset)
+    if profile == "self_alias":
+        source_30, source_40 = target + 0x30, target + 0x40
+    elif profile == "source_40_alias_member_30":
+        source_40 = target + 0x30
+    elif profile == "source_30_alias_member_40":
+        source_30 = target + 0x40
+    elif profile == "swap_members":
+        source_30, source_40 = target + 0x40, target + 0x30
+    elif profile == "increment_wrap":
+        for name in ("reference_30", "reference_40"):
+            oracle._write_span(pages, refs[name][1], bytes.fromhex("ffffffff"))
+    elif profile == "null_payload":
+        for source in (source_30, source_40):
+            oracle._write_span(pages, source, bytes(8))
+    elif profile == "null_counter":
+        for source in (source_30, source_40):
+            oracle._write_span(pages, source + 8, bytes(8))
+    elif profile == "equal_pointee_unmapped_counter":
+        for source in (source_30, source_40, target + 0x30, target + 0x40):
+            oracle._write_span(pages, source + 8,
+                               (GUEST + 0x20000).to_bytes(8, "little"))
+    return source_30, source_40
+
+
+def _run(library: Path, libc: Path, base: int, profile="fresh") -> dict:
     target = GUEST + 0x1000
     native_input = oracle.fresh_pages()
     refs = _seed_case(native_input)
@@ -85,32 +133,35 @@ def _run(library: Path, libc: Path, base: int) -> dict:
             "native_allocations": native_allocations,
         })
 
+    native_pages = _pages_with_memory(native_constructor, refs)
+    source_30, source_40 = _assignment_inputs(native_pages, target, refs, profile)
+    model_30, model_40 = _assignment_inputs(model, target, model_refs, profile)
     # Native outer order is +0x58 (destination +0x40), then +0x60
     # (destination +0x30).  Each direct entry returns through its own helper;
     # feed the first result into the second fresh CPU to preserve both count
     # increments and the exact native writes.
     _, after_40, _, _ = oracle.native(
         library, base, 0x28508C,
-        [target, refs["reference_40"][0]],
-        _pages_with_memory(native_constructor, refs), libc=libc,
+        [target, source_40], native_pages, libc=libc,
     )
     _, after_both, _, _ = oracle.native(
         library, base, 0x285094,
-        [target, refs["reference_30"][0]],
+        [target, source_30],
         _pages_with_memory(after_40, refs), libc=libc,
     )
 
     objects.bind_signer_handler_reference_members(
         model, object_address=target,
-        reference_30=model_refs["reference_30"][0],
-        reference_40=model_refs["reference_40"][0],
+        reference_30=model_30, reference_40=model_40,
     )
     publication_match = oracle.flatten(model)[:0xA000] == after_both
     if not publication_match:
-        raise AssertionError({"base": hex(base), "publication_match": False})
+        raise AssertionError({"base": hex(base), "profile": profile,
+                              "publication_match": False})
 
     return {
         "image_base": hex(base),
+        "profile": profile,
         "handler_vtable_offset": "0x35dc50",
         "constructor_offset": "0x263fb8",
         "native_virtual_copy_order": ["0x28508c", "0x285094"],
@@ -118,16 +169,15 @@ def _run(library: Path, libc: Path, base: int) -> dict:
         "constructor_allocation_sequence": native_allocations,
         "constructor_memory_match": constructor_match,
         "publication_memory_match": publication_match,
-        "reference_30_count_after": 8,
-        "reference_40_count_after": 8,
+        "reference_30_count_after": int.from_bytes(
+            oracle._read_span(model, model_refs["reference_30"][1], 4), "little"),
+        "reference_40_count_after": int.from_bytes(
+            oracle._read_span(model, model_refs["reference_40"][1], 4), "little"),
         "object_reference_members_verified": True,
     }
 
 
 def _rollback_cases() -> list[dict]:
-    pages = oracle.fresh_pages()
-    refs = _seed_case(pages)
-    before = oracle.flatten(pages)
     rejected = []
     for label, changes in (
         ("null_object", {"object_address": 0}),
@@ -135,7 +185,8 @@ def _rollback_cases() -> list[dict]:
         ("null_reference_40", {"reference_40": 0}),
     ):
         current = oracle.fresh_pages()
-        _seed_case(current)
+        refs = _seed_case(current)
+        before = oracle.flatten(current)
         try:
             objects.bind_signer_handler_reference_members(
                 current,
@@ -143,12 +194,52 @@ def _rollback_cases() -> list[dict]:
                 reference_30=changes.get("reference_30", refs["reference_30"][0]),
                 reference_40=changes.get("reference_40", refs["reference_40"][0]),
             )
-        except Exception as exc:
+        except objects.RefillUnsupported as exc:
             rejected.append({"label": label, "exception": type(exc).__name__,
                              "rollback": oracle.flatten(current) == before})
         else:
             raise AssertionError(label)
-    assert len(rejected) == 3 and all(row["rollback"] for row in rejected)
+    # The first (+0x40) assignment succeeds before the second requires an
+    # unsupported destructor or reads an unmapped source. Neither may publish.
+    for count in (0, 1, 0x80000000, 0xFFFFFFFF):
+        current = oracle.fresh_pages()
+        refs = _seed_case(current)
+        target = GUEST + 0x1000
+        oracle._write_span(current, target, bytes(0x80))
+        old_counter = GUEST + 0x8880
+        _seed_reference(current, target + 0x30, old_counter, GUEST + 0x9440)
+        oracle._write_span(current, old_counter, count.to_bytes(4, "little"))
+        before = oracle.flatten(current)
+        try:
+            objects.bind_signer_handler_reference_members(
+                current, object_address=target,
+                reference_30=refs["reference_30"][0],
+                reference_40=refs["reference_40"][0],
+            )
+        except objects.RefillUnsupported as exc:
+            assert "final-owner destruction" in str(exc)
+            rejected.append({"label": f"late_destructor_{count:#x}",
+                             "exception": type(exc).__name__,
+                             "rollback": oracle.flatten(current) == before})
+        else:
+            raise AssertionError(("last-owner assignment was accepted", count))
+    current = oracle.fresh_pages()
+    refs = _seed_case(current)
+    target = GUEST + 0x1000
+    oracle._write_span(current, target, bytes(0x80))
+    before = oracle.flatten(current)
+    try:
+        objects.bind_signer_handler_reference_members(
+            current, object_address=target, reference_30=GUEST + 0x20000,
+            reference_40=refs["reference_40"][0],
+        )
+    except ValueError as exc:
+        rejected.append({"label": "late_unmapped_source",
+                         "exception": type(exc).__name__,
+                         "rollback": oracle.flatten(current) == before})
+    else:
+        raise AssertionError("unmapped assignment was accepted")
+    assert len(rejected) == 8 and all(row["rollback"] for row in rejected)
     return rejected
 
 
@@ -163,9 +254,10 @@ def main() -> None:
     digest = hashlib.sha256(args.library.read_bytes()).hexdigest()
     if digest != LIBRARY_SHA256:
         raise AssertionError(digest)
-    cases = [_run(args.library, args.libc, base) for base in BASES]
+    cases = [_run(args.library, args.libc, base, profile)
+             for base in BASES for profile in PROFILES]
     report = {
-        "schema": "vm9-request-context-reference-members-20261028-v1",
+        "schema": "vm9-request-context-reference-members-20261102-v2",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
         "cases": cases,
@@ -178,11 +270,16 @@ def main() -> None:
         "whole_request_native_differential_verified": False,
         "fresh_standalone_signer_verified": False,
         "online_header_acceptance_verified": False,
+        "native_output_used_as_model_input": False,
+        "diagnostic_scope_and_physical_stack_effects_verified": False,
+        "final_owner_destruction_supported": False,
         "comparison_note": (
             "The service_refs handler's explicit +0x30/+0x40 callback-reference "
-            "copies match the measured +0x285094/+0x28508c native bodies on both "
-            "image bases. The helper preserves native reference-count updates and "
-            "does not infer Java or signer semantics."
+            "assignments match +0x28508c then +0x285094 on both image bases, "
+            "including equal-pointee skips, retained releases, source/member "
+            "aliases and uint32 increments. Last-owner destruction refuses "
+            "without publishing either member. Diagnostic scopes and physical "
+            "stack writes remain excluded; no Java or signer semantics are inferred."
         ),
     }
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

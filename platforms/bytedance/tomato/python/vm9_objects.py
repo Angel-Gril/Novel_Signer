@@ -3065,14 +3065,18 @@ def construct_signer_handler(
 def bind_signer_handler_reference_members(
     pages, *, object_address: int, reference_30: int, reference_40: int,
 ) -> None:
-    """Publish the two callback-reference members of a 128-byte handler.
+    """Assign the two callback-reference members of a 128-byte handler.
 
     The measured ``service_refs`` constructor initializes its service fields at
     ``+0x50`` and ``+0x60``.  The outer signer graph subsequently calls the
-    derived virtual slots ``+0x60`` and ``+0x58``; those slots copy explicit
-    reference wrappers into ``+0x30`` and ``+0x40`` respectively.  Keep the
-    source wrappers caller-owned so the operation has the same reference-count
-    and alias behaviour as the native copy helpers.
+    derived virtual slots ``+0x58`` then ``+0x60``. They assign explicit
+    reference wrappers to ``+0x40`` then ``+0x30``, skipping equal pointees,
+    releasing retained old counts and incrementing the new counts. Keep the
+    source wrappers caller-owned, including when they alias these members.
+
+    Final-owner destruction requires type-specific cleanup services and is
+    rejected transactionally. Diagnostic scopes and physical stack writes are
+    outside this bounded object/reference contract.
 
     This function only assembles object references.  It does not infer a
     callback target, signer state, Java value, or header result.
@@ -3083,8 +3087,17 @@ def bind_signer_handler_reference_members(
         raise RefillUnsupported("handler reference members require guest pointers")
     transaction = _PageTransaction(pages)
     _read_span(transaction, object_address, 0x80)
-    _copy_reference_wrapper(transaction, object_address + 0x30, reference_30)
-    _copy_reference_wrapper(transaction, object_address + 0x40, reference_40)
+    for offset, source in ((0x40, reference_40), (0x30, reference_30)):
+        destination = object_address + offset
+        if _read_span(transaction, destination, 8) == _read_span(transaction, source, 8):
+            continue
+        counter = int.from_bytes(_read_span(transaction, destination + 8, 8), "little")
+        if counter:
+            count = int.from_bytes(_read_span(transaction, counter, 4), "little")
+            if not 1 < count <= 0x7FFF_FFFF:
+                raise RefillUnsupported("handler reference assignment requires final-owner destruction")
+            _write_span(transaction, counter, (count - 1).to_bytes(4, "little"))
+        _copy_reference_contents(transaction, destination, source)
     transaction.commit()
 
 

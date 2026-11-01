@@ -577,11 +577,10 @@ def construct_default_outer(
     objects.construct_reference_wrapper(
         pages, object_address=service_child_reference,
         referenced_address=child_a, allocate=allocate)
-    objects.copy_reference_wrapper(pages, object_address=handler_b + 0x30,
-                                   source_address=service_child_reference)
+    objects.bind_signer_handler_reference_members(
+        pages, object_address=handler_b,
+        reference_30=service_child_reference, reference_40=config_reference)
     _release_retained_reference(pages, service_child_reference)
-    objects.copy_reference_wrapper(pages, object_address=handler_b + 0x40,
-                                   source_address=config_reference)
     pair_b = objects.bind_signer_child_callback(
         pages, child_address=child_a, handler_address=handler_b,
         image_base=image_base, kind="service_refs")

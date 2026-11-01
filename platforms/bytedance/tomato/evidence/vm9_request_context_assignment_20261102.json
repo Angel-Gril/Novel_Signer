@@ -1,0 +1,917 @@
+{
+  "schema": "vm9-request-context-reference-members-20261102-v2",
+  "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+  "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+  "cases": [
+    {
+      "image_base": "0x122c0000",
+      "profile": "fresh",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 8,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "repeat",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "same_payload_distinct_counters",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "self_alias",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "source_40_alias_member_30",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "source_30_alias_member_40",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 9,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "swap_members",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "retained_replacement",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 8,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "shared_counter",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 8,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "increment_wrap",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 0,
+      "reference_40_count_after": 0,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "null_payload",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "null_counter",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "equal_pointee_unmapped_counter",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "fresh",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 8,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "repeat",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "same_payload_distinct_counters",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "self_alias",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "source_40_alias_member_30",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "source_30_alias_member_40",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 9,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "swap_members",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "retained_replacement",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 8,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "shared_counter",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 8,
+      "reference_40_count_after": 8,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "increment_wrap",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 0,
+      "reference_40_count_after": 0,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "null_payload",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "null_counter",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "equal_pointee_unmapped_counter",
+      "handler_vtable_offset": "0x35dc50",
+      "constructor_offset": "0x263fb8",
+      "native_virtual_copy_order": [
+        "0x28508c",
+        "0x285094"
+      ],
+      "native_destination_member_order": [
+        "+0x40",
+        "+0x30"
+      ],
+      "constructor_allocation_sequence": [
+        [
+          4,
+          1879064576
+        ],
+        [
+          4,
+          1879064592
+        ],
+        [
+          48,
+          1879064608
+        ]
+      ],
+      "constructor_memory_match": true,
+      "publication_memory_match": true,
+      "reference_30_count_after": 7,
+      "reference_40_count_after": 7,
+      "object_reference_members_verified": true
+    }
+  ],
+  "native_controls": 78,
+  "rollback_guards": [
+    {
+      "label": "null_object",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    },
+    {
+      "label": "null_reference_30",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    },
+    {
+      "label": "null_reference_40",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    },
+    {
+      "label": "late_destructor_0x0",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    },
+    {
+      "label": "late_destructor_0x1",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    },
+    {
+      "label": "late_destructor_0x80000000",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    },
+    {
+      "label": "late_destructor_0xffffffff",
+      "exception": "RefillUnsupported",
+      "rollback": true
+    },
+    {
+      "label": "late_unmapped_source",
+      "exception": "ValueError",
+      "rollback": true
+    }
+  ],
+  "object_reference_members_verified": true,
+  "signer_result_interpretation": false,
+  "whole_request_native_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "native_output_used_as_model_input": false,
+  "diagnostic_scope_and_physical_stack_effects_verified": false,
+  "final_owner_destruction_supported": false,
+  "comparison_note": "The service_refs handler's explicit +0x30/+0x40 callback-reference assignments match +0x28508c then +0x285094 on both image bases, including equal-pointee skips, retained releases, source/member aliases and uint32 increments. Last-owner destruction refuses without publishing either member. Diagnostic scopes and physical stack writes remain excluded; no Java or signer semantics are inferred."
+}
