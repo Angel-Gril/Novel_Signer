@@ -30,6 +30,10 @@ python python/capture_vm9_cronet_jni_runtime_20261101.py `
 attach；因此退出事件和清理失败都会进入校验器的错误检查。`--launch` 与
 `--spawn` 互斥，二者都只保留脱敏的方法身份和事件计数。
 
+如果 Frida 无权附加目标，或脚本加载失败，捕获器会写出脱敏的
+`attach_error`/`script_error` 事件并返回非零状态；校验器会拒绝这类记录，
+不会把权限失败误判成 Cronet 的有界负观测。
+
 
 The 2026-10-31 native scan closes the static indirect boundary left by the
 27-DEX scan. `libsscronet.so` contains two AArch64 chains that resolve the
