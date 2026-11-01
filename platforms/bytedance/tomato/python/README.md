@@ -17,6 +17,19 @@ python python/capture_vm9_cronet_jni_runtime_20261101.py `
 python python/verify_vm9_cronet_jni_runtime_20261101.py --capture <new.jsonl>
 ```
 
+当启动阶段进程很快退出或 PID 轮询存在竞态时，使用 `--spawn` 让 Frida
+先挂起进程、加载 hook 后再恢复：
+
+```powershell
+python python/capture_vm9_cronet_jni_runtime_20261101.py `
+  --device remote --remote 127.0.0.1:27043 --spawn `
+  --duration 60 --output <new.jsonl>
+```
+
+探针会在目标进程终止时立即结束等待，并在卸载脚本前清理当前线程的 JavaVM
+attach；因此退出事件和清理失败都会进入校验器的错误检查。`--launch` 与
+`--spawn` 互斥，二者都只保留脱敏的方法身份和事件计数。
+
 
 The 2026-10-31 native scan closes the static indirect boundary left by the
 27-DEX scan. `libsscronet.so` contains two AArch64 chains that resolve the

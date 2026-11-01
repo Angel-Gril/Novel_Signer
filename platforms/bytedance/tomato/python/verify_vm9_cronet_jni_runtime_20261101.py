@@ -22,6 +22,9 @@ ALLOWED_EVENTS = {
     "jni_created_vms_missing",
     "jni_vm_error",
     "jni_vm_attached",
+    "jni_vm_detached",
+    "jni_vm_detach_error",
+    "jni_attach_error",
     "jni_table",
     "jni_table_error",
     "jni_hooks_installed",
@@ -33,6 +36,15 @@ ALLOWED_EVENTS = {
     "frida_message",
 }
 POINTER = re.compile(r"^0x[0-9a-fA-F]+$")
+ERROR_EVENTS = {
+    "art_missing",
+    "get_env_handler_missing",
+    "jni_created_vms_missing",
+    "jni_vm_error",
+    "jni_attach_error",
+    "jni_table_error",
+    "jni_vm_detach_error",
+}
 
 
 def load(path: Path) -> list[dict]:
@@ -60,6 +72,11 @@ def verify(path: Path) -> dict[str, object]:
         raise AssertionError(f"unexpected event: {sorted(set(events) - ALLOWED_EVENTS)}")
     if "probe_ready" not in events or "script_loaded" not in events:
         raise AssertionError("probe did not load")
+    errors = sorted(set(events) & ERROR_EVENTS)
+    if errors:
+        raise AssertionError(f"probe reported errors: {errors}")
+    if events.count("jni_hooks_installed") != 1:
+        raise AssertionError("both JNI hooks were not installed exactly once")
 
     tables = [row for row in rows if row.get("event") == "jni_table"]
     if not tables:
@@ -68,7 +85,8 @@ def verify(path: Path) -> dict[str, object]:
         if table.get("table_offsets") != {"GetMethodID": 0x108, "CallObjectMethodV": 0x118}:
             raise AssertionError("unexpected JNI table offsets")
         for key in ("table", "get_method_id", "call_object_method_v"):
-            if not isinstance(table.get(key), str) or not POINTER.fullmatch(table[key]):
+            if (not isinstance(table.get(key), str) or
+                    not POINTER.fullmatch(table[key]) or table[key].lower() == "0x0"):
                 raise AssertionError(f"invalid pointer field: {key}")
 
     gets = [row for row in rows if row.get("event") == "jni_get_method_id"]
@@ -76,7 +94,8 @@ def verify(path: Path) -> dict[str, object]:
     for row in gets + calls:
         if row.get("name") != "addSecurityFactor" or row.get("sig") != EXPECTED_SIGNATURE:
             raise AssertionError("unexpected Cronet JNI method")
-        if not isinstance(row.get("method_id"), str) or not POINTER.fullmatch(row["method_id"]):
+        if (not isinstance(row.get("method_id"), str) or
+                not POINTER.fullmatch(row["method_id"]) or row["method_id"].lower() == "0x0"):
             raise AssertionError("invalid method id")
         if row.get("event") == "jni_call_object_method_v" and not isinstance(row.get("thread_id"), int):
             raise AssertionError("missing call thread id")

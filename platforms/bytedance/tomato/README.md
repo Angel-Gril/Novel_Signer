@@ -7,7 +7,9 @@
 均安装成功，但进程在低内存 splash 窗口结束前未产生该方法事件；这是有界负观测，
 不等同于 Cronet 分支不可达。重跑命令见
 `python/capture_vm9_cronet_jni_runtime_20261101.py`，输入校验见
-`python/verify_vm9_cronet_jni_runtime_20261101.py`。
+`python/verify_vm9_cronet_jni_runtime_20261101.py`。启动竞态时可使用探针的
+`--spawn`，它会先挂起进程再恢复；目标退出会立即结束捕获，并清理 JavaVM
+线程 attach。两种模式均不会保留 URL、header、证书或请求体。
 
 2026-10-31 对官方包内的 `lib/arm64-v8a/libsscronet.so` 做了窄 native 静态分析。
 两个独立站点分别通过 JNI 类加载器解析 `CronetUrlRequestContext` 与

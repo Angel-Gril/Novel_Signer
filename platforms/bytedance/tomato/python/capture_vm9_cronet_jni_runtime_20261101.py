@@ -21,7 +21,8 @@ from typing import Any
 
 PROBE_JS = r"""
 'use strict';
-var vm9State = {table: null, methods: Object.create(null)};
+var vm9State = {table: null, methods: Object.create(null), vm: null,
+  attached: false, timer: null};
 function emit(row) { try { send(row); } catch (_) {} }
 function readCString(p) {
   try { return p && !p.isNull() ? p.readUtf8String() : null; } catch (_) { return null; }
@@ -65,6 +66,35 @@ function installTable(env) {
     emit({event: 'jni_table_error', error: String(e)});
   }
 }
+function tryAttachCreatedVm() {
+  if (vm9State.table) return;
+  try {
+    var created = art && art.enumerateExports().filter(function (e) {
+      return e.name === 'JNI_GetCreatedJavaVMs';
+    })[0];
+    if (!created) return;
+    var vmOut = Memory.alloc(Process.pointerSize);
+    var countOut = Memory.alloc(4);
+    var getVms = new NativeFunction(created.address, 'int', ['pointer', 'int', 'pointer']);
+    if (getVms(vmOut, 1, countOut) !== 0 || countOut.readU32() === 0) return;
+    var vm = vmOut.readPointer();
+    var vmTable = vm.readPointer();
+    var attach = new NativeFunction(vmTable.add(0x20).readPointer(),
+      'int', ['pointer', 'pointer', 'pointer']);
+    var envOut = Memory.alloc(Process.pointerSize);
+    var status = attach(vm, envOut, ptr(0));
+    if (status !== 0 || envOut.readPointer().isNull()) {
+      emit({event: 'jni_attach_error', status: status});
+      return;
+    }
+    vm9State.vm = vm;
+    vm9State.attached = true;
+    installTable(envOut.readPointer());
+    emit({event: 'jni_vm_attached'});
+  } catch (e) {
+    emit({event: 'jni_vm_error', error: String(e)});
+  }
+}
 var art = Process.findModuleByName('libart.so');
 if (!art) {
   emit({event: 'art_missing'});
@@ -85,31 +115,36 @@ if (!art) {
   } else {
     emit({event: 'get_env_handler_missing'});
   }
-  try {
-    var created = art.enumerateExports().filter(function (e) {
-      return e.name === 'JNI_GetCreatedJavaVMs';
-    })[0];
-    if (created) {
-      var vmOut = Memory.alloc(Process.pointerSize);
-      var countOut = Memory.alloc(4);
-      var getVms = new NativeFunction(created.address, 'int', ['pointer', 'int', 'pointer']);
-      if (getVms(vmOut, 1, countOut) === 0 && countOut.readU32() > 0) {
-        var vm = vmOut.readPointer();
-        var vmTable = vm.readPointer();
-        var attach = new NativeFunction(vmTable.add(0x20).readPointer(),
-          'int', ['pointer', 'pointer', 'pointer']);
-        var envOut = Memory.alloc(Process.pointerSize);
-        attach(vm, envOut, ptr(0));
-        installTable(envOut.readPointer());
-        emit({event: 'jni_vm_attached'});
-      }
-    } else {
-      emit({event: 'jni_created_vms_missing'});
-    }
-  } catch (e) {
-    emit({event: 'jni_vm_error', error: String(e)});
-  }
+  tryAttachCreatedVm();
 }
+vm9State.timer = setInterval(function () {
+  if (vm9State.table && vm9State.timer !== null) {
+    clearInterval(vm9State.timer);
+    vm9State.timer = null;
+    return;
+  }
+  tryAttachCreatedVm();
+}, 250);
+rpc.exports = {
+  cleanup: function () {
+    if (vm9State.timer !== null) {
+      clearInterval(vm9State.timer);
+      vm9State.timer = null;
+    }
+    if (!vm9State.attached || !vm9State.vm) return;
+    try {
+      var vmTable = vm9State.vm.readPointer();
+      var detach = new NativeFunction(vmTable.add(0x28).readPointer(), 'int', ['pointer']);
+      var status = detach(vm9State.vm);
+      emit({event: 'jni_vm_detached', status: status});
+    } catch (e) {
+      emit({event: 'jni_vm_detach_error', error: String(e)});
+    } finally {
+      vm9State.attached = false;
+      vm9State.vm = null;
+    }
+  }
+};
 emit({event: 'probe_ready', pid: Process.id});
 """
 
@@ -155,7 +190,8 @@ def main() -> int:
     parser.add_argument("--device", choices=("usb", "remote"), default="usb")
     parser.add_argument("--remote", default="127.0.0.1:27042")
     parser.add_argument("--adb-serial", help="ADB serial used with --launch")
-    parser.add_argument("--launch", action="store_true", help="cold-launch before attaching")
+    parser.add_argument("--launch", action="store_true", help="cold-launch through ADB before attaching")
+    parser.add_argument("--spawn", action="store_true", help="spawn suspended, load hooks, then resume")
     parser.add_argument("--launch-timeout", type=float, default=30.0)
     parser.add_argument("--duration", type=float, default=60.0)
     parser.add_argument("--output", type=Path, required=True)
@@ -164,8 +200,10 @@ def main() -> int:
         parser.error("duration and launch-timeout must be positive")
     if args.launch and not args.adb_serial:
         parser.error("--adb-serial is required with --launch")
-    if args.launch and (args.pid is not None or args.process_name):
-        parser.error("--launch cannot be combined with --pid or --process-name")
+    if args.launch and (args.pid is not None or args.process_name or args.spawn):
+        parser.error("--launch cannot be combined with --pid, --process-name, or --spawn")
+    if args.spawn and (args.pid is not None or args.process_name):
+        parser.error("--spawn cannot be combined with --pid or --process-name")
     try:
         import frida
     except ImportError as exc:  # pragma: no cover - environment dependent
@@ -176,11 +214,16 @@ def main() -> int:
         if args.device == "usb"
         else frida.get_device_manager().add_remote_device(args.remote)
     )
-    pid = (
-        launch_and_find_pid(args.adb_serial, args.package, args.activity, args.launch_timeout)
-        if args.launch
-        else choose_process(device, args.package, args.pid, args.process_name)
-    )
+    spawned = False
+    if args.spawn:
+        pid = int(device.spawn([args.package]))
+        spawned = True
+    else:
+        pid = (
+            launch_and_find_pid(args.adb_serial, args.package, args.activity, args.launch_timeout)
+            if args.launch
+            else choose_process(device, args.package, args.pid, args.process_name)
+        )
     output = args.output.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     output_file = output.open("x", encoding="utf-8", newline="\n")
@@ -195,9 +238,13 @@ def main() -> int:
 
     session = None
     script = None
+    stopped = threading.Event()
     try:
         session = device.attach(pid)
-        session.on("detached", lambda reason, crash=None: record({"event": "session_detached", "reason": str(reason)}))
+        def on_detached(reason, crash=None):
+            record({"event": "session_detached", "reason": str(reason)})
+            stopped.set()
+        session.on("detached", on_detached)
 
         def on_message(message: dict, _data: bytes | None) -> None:
             if message.get("type") == "send":
@@ -209,8 +256,16 @@ def main() -> int:
         script.on("message", on_message)
         script.load()
         record({"event": "script_loaded", "pid": pid})
-        time.sleep(args.duration)
+        if spawned:
+            device.resume(pid)
+            record({"event": "spawn_resumed", "pid": pid})
+        stopped.wait(args.duration)
     finally:
+        if script is not None:
+            try:
+                script.exports_sync.cleanup()
+            except Exception:
+                pass
         if script is not None:
             try:
                 script.unload()
