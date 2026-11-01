@@ -25,6 +25,8 @@ ALLOWED_EVENTS = {
     "jni_vm_detached",
     "jni_vm_detach_error",
     "jni_attach_error",
+    "attach_error",
+    "script_error",
     "jni_table",
     "jni_table_error",
     "jni_hooks_installed",
@@ -45,6 +47,8 @@ ERROR_EVENTS = {
     "jni_attach_error",
     "jni_table_error",
     "jni_vm_detach_error",
+    "attach_error",
+    "script_error",
 }
 
 
@@ -71,15 +75,15 @@ def verify(path: Path) -> dict[str, object]:
     events = [row.get("event") for row in rows]
     if any(event not in ALLOWED_EVENTS for event in events):
         raise AssertionError(f"unexpected event: {sorted(set(events) - ALLOWED_EVENTS)}")
+    errors = sorted(set(events) & ERROR_EVENTS)
+    if errors:
+        raise AssertionError(f"probe reported errors: {errors}")
     if "probe_ready" not in events or "script_loaded" not in events:
         raise AssertionError("probe did not load")
     if events.count("spawn_resumed") > 1:
         raise AssertionError("spawn was resumed more than once")
     if "spawn_resumed" in events and events.index("spawn_resumed") < events.index("script_loaded"):
         raise AssertionError("spawn resumed before script load")
-    errors = sorted(set(events) & ERROR_EVENTS)
-    if errors:
-        raise AssertionError(f"probe reported errors: {errors}")
     if events.count("jni_hooks_installed") != 1:
         raise AssertionError("both JNI hooks were not installed exactly once")
 

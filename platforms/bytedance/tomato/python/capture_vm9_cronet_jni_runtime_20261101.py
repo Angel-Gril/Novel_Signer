@@ -251,7 +251,12 @@ def main() -> int:
     script = None
     stopped = threading.Event()
     try:
-        session = device.attach(pid)
+        try:
+            session = device.attach(pid)
+        except Exception as exc:
+            record({"event": "attach_error", "pid": pid,
+                    "error": f"{type(exc).__name__}: {exc}"})
+            return 2
         def on_detached(reason, crash=None):
             record({"event": "session_detached", "reason": str(reason)})
             stopped.set()
@@ -263,9 +268,14 @@ def main() -> int:
             else:
                 record({"event": "frida_message", "message": message})
 
-        script = session.create_script(PROBE_JS)
-        script.on("message", on_message)
-        script.load()
+        try:
+            script = session.create_script(PROBE_JS)
+            script.on("message", on_message)
+            script.load()
+        except Exception as exc:
+            record({"event": "script_error", "pid": pid,
+                    "error": f"{type(exc).__name__}: {exc}"})
+            raise
         record({"event": "script_loaded", "pid": pid})
         if spawned:
             device.resume(pid)
