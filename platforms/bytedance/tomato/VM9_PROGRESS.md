@@ -1,5 +1,26 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-02：书城恢复与缓存 method ID 观测补齐
+
+继续无 hook 等待后，官方原版实际进入书城；关闭系统界面 ANR 弹窗后可进入书籍
+详情页。此前的启动画面观察不能再解释为永久卡死。启动线程曾等待 ActivityManager
+Binder；同次系统栈采到 PMS 权限锁内的 `LdUtils.get_config_value -> String.split`，
+但后续采样没有停在同一方法，不能据此确认永久死锁或唯一根因。`app_xpt` 为
+34707 字节、525 行、最长 136 字节，无空字节或 UTF-8 错误，本轮未修改系统配置。
+
+被动热接入 120 秒正常清理，仍无目标事件；发现旧探针只能识别接入后解析的
+method ID，因此新增可选 `--resolve-cached-methods`，通过应用类加载器取得两个
+私有方法 ID。主动查找仅记 `jni_method_seed`，不计业务调用；JNI 异常和本地引用
+均清理，校验器拒绝不完整解析、未知/先于解析的调用及解析错误。
+真实热接入成功解析两项，90 秒窗口内书籍详情已显示，仍无目标调用，detach 返回 0。
+随后阅读尝试显示章节加载失败，没有 HTTP 状态或可读正文证据。
+
+完整 Java bridge 创建脚本时报 TransportError，应用进程仍存活。小型 JNI 路径
+正常完成；本轮 server/forward 已清理，保留原云手机 forward。下一步应区分 ARM
+转译的 JNI 观测边界与实际请求所用网络栈，避免继续重复相同零事件窗口。
+见[缓存 ID 捕获记录](evidence/vm9_cronet_jni_runtime_cached_20261102.json)。
+完整 signer、整请求 native/Python 差分和线上六头接受仍未完成。
+
 ## 2026-11-02：实际模拟器内存修复与 JNI 捕获生命周期
 
 已识别运行实例为 LDPlayer 9；其配置内存为 1024 MB，旧 AVD 配置与当前实例

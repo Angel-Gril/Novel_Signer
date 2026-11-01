@@ -1,0 +1,124 @@
+{
+  "schema": "vm9-cronet-jni-runtime-evidence-20261101-v1",
+  "capture_date": "2026-11-02",
+  "package": "com.dragon.read",
+  "version": "7.2.5.32/72532",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "device": {
+    "vendor": "LDPlayer 9",
+    "android": "9 / sdk 28",
+    "abi": "x86_64 with arm64 native translation",
+    "mem_total_kb": 2047104,
+    "frida_version": "17.24.3",
+    "frida_server_uid": 0
+  },
+  "capture": {
+    "mode": "warm PID attach with active cached-method resolution",
+    "configured_duration_seconds": 90,
+    "capture_sha256": "5828dcdc11d1b3d66d8ad050cd081c13e75033e075f3cefeef2646092e15b845",
+    "event_counts": {
+      "get_env_handler": 1,
+      "jni_hooks_installed": 1,
+      "jni_method_seed": 2,
+      "jni_seed_complete": 1,
+      "jni_table": 1,
+      "jni_vm_attached": 1,
+      "jni_vm_detached": 1,
+      "probe_ready": 1,
+      "script_loaded": 1,
+      "session_detached": 1
+    },
+    "terminal_reason": "application-requested",
+    "vm_detach_status": 0,
+    "process_alive_after_cleanup": true
+  },
+  "jni_table_offsets": {
+    "GetMethodID": 264,
+    "CallObjectMethodV": 280
+  },
+  "cached_method_ids_resolved": true,
+  "active_resolution_is_business_call": false,
+  "cronet_runtime_branch_observed": false,
+  "bounded_negative": true,
+  "controls": {
+    "passive_warm_attach": {
+      "configured_duration_seconds": 120,
+      "capture_sha256": "cfa48a10f307278024fdc5006c402aeef0f11f3f725c089b4ec9c3eccde43664",
+      "event_counts": {
+        "get_env_handler": 1,
+        "jni_hooks_installed": 1,
+        "jni_table": 1,
+        "jni_vm_attached": 1,
+        "jni_vm_detached": 1,
+        "probe_ready": 1,
+        "script_loaded": 1,
+        "session_detached": 1
+      },
+      "terminal_reason": "application-requested",
+      "vm_detach_status": 0,
+      "cached_method_ids_resolved": false
+    },
+    "official_apk_identity_rechecked": true,
+    "ui_observations": {
+      "no_hook_home_page_rendered": true,
+      "system_ui_anr_dialog_dismissed": true,
+      "book_detail_rendered_during_cached_capture": true,
+      "reader_attempt_after_capture": "chapter loading error; no readable chapter verified",
+      "http_status_observed": false
+    },
+    "full_java_bridge_attempt": {
+      "completed": false,
+      "failure_stage": "create_script",
+      "error_type": "TransportError",
+      "target_process_survived": true
+    },
+    "cleanup": {
+      "current_run_server_stopped": true,
+      "current_run_forward_removed": true,
+      "preexisting_cloud_forward_preserved": true
+    }
+  },
+  "startup_diagnostics": {
+    "app_main_stack": "IActivityManager.getRunningAppProcesses -> traffic initialization -> Application.onCreate",
+    "system_permission_contention_observed": true,
+    "one_lock_owner_stack": "Pattern.compileImpl -> String.split -> LdUtils.get_config_value -> PackageManagerService.checkUidPermission",
+    "later_stack_sample_same_hot_method_observed": false,
+    "permanent_deadlock_verified": false,
+    "config": {
+      "file_name": "app_xpt",
+      "sha256": "e84bc015049bdab0fa23e0a3a41f7374a05f845ce0d8d14f03f4d3cf415a5b99",
+      "bytes": 34707,
+      "lines": 525,
+      "longest_line_bytes": 136,
+      "nul_bytes": 0,
+      "utf8_decode_errors": 0,
+      "modified": false
+    },
+    "interpretation": "A transient system-service permission bottleneck was sampled. The app eventually rendered home without a hook or system configuration edits. This does not establish the sole cause of slow startup."
+  },
+  "local_screenshot_digests": {
+    "ld_boot_current_20261102.png": {
+      "sha256": "8e1066b18122fb3d46e4ef68422770cfcfb0a1bddf789f711bb6278a0a9199f8",
+      "bytes": 637080
+    },
+    "ld_home_dismiss_20261102.png": {
+      "sha256": "a297e592de27dfd1d59650062f1739c486be645eb4894aa915a7d58952dade2d",
+      "bytes": 898107
+    },
+    "ld_cached_trigger_20261102.png": {
+      "sha256": "cb02259d3f813bc140342e2d8b03dba34fcc1a66f07c21524d896944be5a7109",
+      "bytes": 323333
+    },
+    "ld_reading_after_20261102.png": {
+      "sha256": "a9f15b8ce120d77d3cf92d3b5be25074a43a6ed67684553cc4788bcd5457439a",
+      "bytes": 36344
+    }
+  },
+  "raw_capture_retained_in_evidence": false,
+  "raw_screenshots_retained": false,
+  "raw_system_configuration_retained": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "The unchanged official app eventually rendered home after a slow uninstrumented start; the system UI ANR dialog was dismissed. A passive warm capture completed 120 seconds. A second 90-second capture actively resolved both private method IDs through the application class loader, released its JNI local references, and observed zero passive lookup or target call events while the book detail page rendered. Active seed events prove observer coverage only. A later reader attempt displayed a chapter-loading error with no HTTP response evidence. ARM translation or a different request path remains unresolved. No standalone signer or online acceptance claim follows."
+}

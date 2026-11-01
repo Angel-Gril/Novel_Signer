@@ -5,8 +5,9 @@ The probe attaches to ART's ``JNI_GetCreatedJavaVMs`` and obtains one live
 ``CallObjectMethodV`` entries (0x108 and 0x118) and records only the private
 ``addSecurityFactor`` method name/signature, thread ids, and event counts.
 URLs, headers, certificates, request bodies, and native bytes are never
-retained.  A zero call count is a bounded observation, not proof that Cronet
-is unreachable.
+retained. Optional cached-method resolution uses the application class loader;
+its active lookups are labelled separately from passive business observations.
+A zero call count is not proof that Cronet is unreachable.
 """
 from __future__ import annotations
 
@@ -23,10 +24,78 @@ from typing import Any
 PROBE_JS = r"""
 'use strict';
 var vm9State = {table: null, methods: Object.create(null), vm: null,
-  attached: false, timer: null};
+  attached: false, timer: null, lookupThread: null};
 function emit(row) { try { send(row); } catch (_) {} }
 function readCString(p) {
   try { return p && !p.isNull() ? p.readUtf8String() : null; } catch (_) { return null; }
+}
+function resolveCachedMethods(env) {
+  var locals = [], step = 'initialization';
+  var table = env.readPointer();
+  function jni(index, result, args) {
+    return new NativeFunction(table.add(index * Process.pointerSize).readPointer(), result, args);
+  }
+  var exceptionCheck = jni(228, 'uchar', ['pointer']);
+  var exceptionClear = jni(17, 'void', ['pointer']);
+  var deleteLocalRef = jni(23, 'void', ['pointer', 'pointer']);
+  function checked(value, local) {
+    if (exceptionCheck(env)) {
+      exceptionClear(env);
+      throw new Error('Java exception during ' + step);
+    }
+    if (value.isNull()) throw new Error('null JNI result during ' + step);
+    if (local) locals.push(value);
+    return value;
+  }
+  try {
+    vm9State.lookupThread = Process.getCurrentThreadId();
+    var findClass = jni(6, 'pointer', ['pointer', 'pointer']);
+    var getMethod = jni(33, 'pointer', ['pointer', 'pointer', 'pointer', 'pointer']);
+    var getStaticMethod = jni(113, 'pointer', ['pointer', 'pointer', 'pointer', 'pointer']);
+    var callObjectA = jni(36, 'pointer', ['pointer', 'pointer', 'pointer', 'pointer']);
+    var callStaticObjectA = jni(116, 'pointer', ['pointer', 'pointer', 'pointer', 'pointer']);
+    var newString = jni(167, 'pointer', ['pointer', 'pointer']);
+    function klass(name) {
+      step = 'FindClass ' + name;
+      return checked(findClass(env, Memory.allocUtf8String(name)), true);
+    }
+    function method(owner, name, sig, isStatic) {
+      step = 'GetMethodID ' + name;
+      return checked((isStatic ? getStaticMethod : getMethod)(env, owner,
+        Memory.allocUtf8String(name), Memory.allocUtf8String(sig)), false);
+    }
+    var activityThread = klass('android/app/ActivityThread');
+    var currentApplication = method(activityThread, 'currentApplication',
+      '()Landroid/app/Application;', true);
+    step = 'currentApplication';
+    var app = checked(callStaticObjectA(env, activityThread, currentApplication, ptr(0)), true);
+    var context = klass('android/content/Context');
+    var getLoader = method(context, 'getClassLoader', '()Ljava/lang/ClassLoader;', false);
+    step = 'getClassLoader';
+    var loader = checked(callObjectA(env, app, getLoader, ptr(0)), true);
+    var loaderClass = klass('java/lang/ClassLoader');
+    var loadClass = method(loaderClass, 'loadClass', '(Ljava/lang/String;)Ljava/lang/Class;', false);
+    var signature = '(Ljava/lang/String;[Ljava/lang/String;)[Ljava/lang/String;';
+    ['CronetUrlRequest', 'CronetUrlRequestContext'].forEach(function (shortName) {
+      var name = 'com.ttnet.org.chromium.net.impl.' + shortName;
+      step = 'NewStringUTF ' + shortName;
+      var className = checked(newString(env, Memory.allocUtf8String(name)), true);
+      var args = Memory.alloc(8);
+      args.writePointer(className);
+      step = 'loadClass ' + shortName;
+      var targetClass = checked(callObjectA(env, loader, loadClass, args), true);
+      var id = method(targetClass, 'addSecurityFactor', signature, false);
+      vm9State.methods[String(id)] = {name: 'addSecurityFactor', sig: signature};
+      emit({event: 'jni_method_seed', method_id: String(id), name: 'addSecurityFactor',
+        sig: signature, class_name: name, thread_id: Process.getCurrentThreadId()});
+    });
+    emit({event: 'jni_seed_complete', method_count: 2});
+  } catch (e) {
+    emit({event: 'jni_seed_error', step: step, error: String(e)});
+  } finally {
+    locals.reverse().forEach(function (ref) { deleteLocalRef(env, ref); });
+    vm9State.lookupThread = null;
+  }
 }
 function installTable(env) {
   try {
@@ -42,10 +111,12 @@ function installTable(env) {
       get_method_id: String(getMethodID), call_object_method_v: String(callObjectMethodV)});
     Interceptor.attach(getMethodID, {
       onEnter: function (args) {
+        this.seedLookup = vm9State.lookupThread === Process.getCurrentThreadId();
         this.name = readCString(args[2]);
         this.sig = readCString(args[3]);
       },
       onLeave: function (retval) {
+        if (this.seedLookup) return;
         if (!this.name || this.name.indexOf('addSecurityFactor') < 0 || retval.isNull()) return;
         var methodId = String(retval);
         vm9State.methods[methodId] = {name: this.name, sig: this.sig};
@@ -92,6 +163,9 @@ function tryAttachCreatedVm() {
     vm9State.attached = true;
     installTable(envOut.readPointer());
     emit({event: 'jni_vm_attached'});
+    if (typeof VM9_RESOLVE_CACHED_METHODS !== 'undefined' && VM9_RESOLVE_CACHED_METHODS) {
+      resolveCachedMethods(envOut.readPointer());
+    }
   } catch (e) {
     emit({event: 'jni_vm_error', error: String(e)});
   }
@@ -211,6 +285,8 @@ def main() -> int:
     parser.add_argument("--adb-serial", help="exact Frida USB device id; also used by ADB with --launch")
     parser.add_argument("--launch", action="store_true", help="cold-launch through ADB before attaching")
     parser.add_argument("--spawn", action="store_true", help="spawn suspended, load hooks, then resume")
+    parser.add_argument("--resolve-cached-methods", action="store_true",
+                        help="resolve target method IDs through the application class loader for late attach")
     parser.add_argument("--launch-timeout", type=float, default=30.0)
     parser.add_argument("--duration", type=float, default=60.0)
     parser.add_argument("--output", type=Path, required=True)
@@ -224,6 +300,8 @@ def main() -> int:
         parser.error("--launch cannot be combined with --pid, --process-name, or --spawn")
     if args.spawn and (args.pid is not None or args.process_name):
         parser.error("--spawn cannot be combined with --pid or --process-name")
+    if args.resolve_cached_methods and (args.launch or args.spawn):
+        parser.error("--resolve-cached-methods requires an already initialized application")
     try:
         import frida
     except ImportError as exc:  # pragma: no cover - environment dependent
@@ -284,7 +362,8 @@ def main() -> int:
                 record({"event": "frida_message", "message": message})
 
         stage = "script"
-        script = session.create_script(PROBE_JS)
+        source = ("var VM9_RESOLVE_CACHED_METHODS = true;\n" if args.resolve_cached_methods else "") + PROBE_JS
+        script = session.create_script(source)
         script.on("message", on_message)
         script.load()
         record({"event": "script_loaded", "pid": pid})

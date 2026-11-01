@@ -36,6 +36,9 @@ ALLOWED_EVENTS = {
     "jni_table_error",
     "jni_hooks_installed",
     "jni_get_method_id",
+    "jni_method_seed",
+    "jni_seed_complete",
+    "jni_seed_error",
     "jni_call_object_method_v",
     "probe_ready",
     "script_loaded",
@@ -51,6 +54,7 @@ ERROR_EVENTS = {
     "jni_vm_error",
     "jni_attach_error",
     "jni_table_error",
+    "jni_seed_error",
     "jni_vm_detach_error",
     "attach_error",
     "script_error",
@@ -109,8 +113,9 @@ def verify(path: Path) -> dict[str, object]:
                 raise AssertionError(f"invalid pointer field: {key}")
 
     gets = [row for row in rows if row.get("event") == "jni_get_method_id"]
+    seeds = [row for row in rows if row.get("event") == "jni_method_seed"]
     calls = [row for row in rows if row.get("event") == "jni_call_object_method_v"]
-    for row in gets + calls:
+    for row in gets + seeds + calls:
         if row.get("name") != "addSecurityFactor" or row.get("sig") != EXPECTED_SIGNATURE:
             raise AssertionError("unexpected Cronet JNI method")
         if (not isinstance(row.get("method_id"), str) or
@@ -119,11 +124,34 @@ def verify(path: Path) -> dict[str, object]:
         if row.get("event") == "jni_call_object_method_v" and not isinstance(row.get("thread_id"), int):
             raise AssertionError("missing call thread id")
 
+    expected_classes = {
+        "com.ttnet.org.chromium.net.impl.CronetUrlRequest",
+        "com.ttnet.org.chromium.net.impl.CronetUrlRequestContext",
+    }
+    completions = [row for row in rows if row.get("event") == "jni_seed_complete"]
+    if seeds or completions:
+        if (len(seeds) != 2 or {row.get("class_name") for row in seeds} != expected_classes or
+                len({row["method_id"] for row in seeds}) != 2 or
+                len(completions) != 1 or completions[0].get("method_count") != 2):
+            raise AssertionError("incomplete cached-method resolution")
+    known_methods = set()
+    seen_seeds = 0
+    for row in rows:
+        event = row.get("event")
+        if event in ("jni_get_method_id", "jni_method_seed"):
+            known_methods.add(row["method_id"])
+            seen_seeds += event == "jni_method_seed"
+        elif event == "jni_seed_complete" and seen_seeds != 2:
+            raise AssertionError("cached-method completion preceded resolution")
+        elif event == "jni_call_object_method_v" and row["method_id"] not in known_methods:
+            raise AssertionError("call method id was not resolved before observation")
+
     counts = Counter(event for event in events if isinstance(event, str))
     return {
         "schema": "vm9-cronet-jni-runtime-20261101-v1",
         "event_counts": dict(sorted(counts.items())),
         "jni_table_observed": True,
+        "cached_method_ids_resolved": bool(completions),
         "cronet_runtime_branch_observed": bool(calls),
         "bounded_negative_if_zero": not bool(calls),
         "terminal_event": next((row for row in reversed(rows) if row.get("event") == "session_detached"), None),
@@ -148,6 +176,9 @@ def verify_record(capture: Path, record_path: Path) -> dict[str, object]:
         raise AssertionError("unexpected table offsets")
     if record.get("cronet_runtime_branch_observed") != summary["cronet_runtime_branch_observed"]:
         raise AssertionError("runtime verdict mismatch")
+    if ("cached_method_ids_resolved" in record and
+            record["cached_method_ids_resolved"] != summary["cached_method_ids_resolved"]):
+        raise AssertionError("cached-method resolution verdict mismatch")
     return record
 
 

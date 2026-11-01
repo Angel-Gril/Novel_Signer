@@ -6,9 +6,10 @@ ART `JNIEnv` through `JNI_GetCreatedJavaVMs`, then hooks the indirect
 require the optional JavaScript Java bridge and retains only the
 `addSecurityFactor(String,String[])` method identity and event counts. A
 zero-call capture is a bounded negative window. Verify it with
-`verify_vm9_cronet_jni_runtime_20261101.py`; the 2026-11-01 emulator capture
-installed both hooks but terminated during the low-memory splash window, so
-the Cronet business branch remains unproven.
+`verify_vm9_cronet_jni_runtime_20261101.py`. The earlier cold capture ended
+before a business page was verified; its termination cause remains unknown.
+The 2026-11-02 warm captures reached book detail, but still observed no target
+call. The Cronet business branch remains unproven.
 
 ```powershell
 python python/capture_vm9_cronet_jni_runtime_20261101.py `
@@ -16,6 +17,15 @@ python python/capture_vm9_cronet_jni_runtime_20261101.py `
   --launch --duration 60 --output <new.jsonl>
 python python/verify_vm9_cronet_jni_runtime_20261101.py --capture <new.jsonl>
 ```
+
+热接入时，native 可能已缓存 method ID。应用进入正常页面后可用
+`--pid <running-pid> --resolve-cached-methods`，通过应用 ClassLoader 主动解析
+两个目标 ID；不需要完整 Java bridge，也不调用签名方法。
+该选项不能与 `--launch` 或 `--spawn` 同用。主动解析可能加载/初始化目标类，
+因此为显式选项，记录为 `jni_method_seed`/`jni_seed_complete`；这两个事件不证明
+业务请求或签名执行。只有后续被动 `jni_call_object_method_v` 才计目标调用。
+解析错误、缺少任一方法、调用早于解析或 method ID 未知均被 verifier 拒绝。
+零事件仍需考虑实际网络栈及 ARM 转译边界，不能断言 Cronet 不可达。
 
 当启动阶段进程很快退出或 PID 轮询存在竞态时，使用 `--spawn` 让 Frida
 先挂起进程、加载 hook 后再恢复：

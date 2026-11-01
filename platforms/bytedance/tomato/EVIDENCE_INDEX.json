@@ -10442,5 +10442,14 @@
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_cronet_jni_runtime_cached_20261102": {
+    "evidence_file": "evidence/vm9_cronet_jni_runtime_cached_20261102.json",
+    "verifier": "python/verify_vm9_cronet_jni_runtime_20261101.py",
+    "status": "bounded_negative_after_cached_method_resolution",
+    "cached_method_ids_resolved": true,
+    "cronet_runtime_branch_observed": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

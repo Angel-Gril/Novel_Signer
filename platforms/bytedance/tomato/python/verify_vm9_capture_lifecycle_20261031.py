@@ -175,6 +175,7 @@ class Session:
         self.detached_callback = callback
 
     def create_script(self, _source):
+        self.script.source = _source
         return self.script
 
     def detach(self) -> None:
@@ -195,11 +196,92 @@ class Device:
         return self.session
 
 
+CRONET_CACHED_CHECK = r"""
+const assert = require('node:assert/strict'), vm = require('node:vm');
+const source = JSON.parse(require('node:fs').readFileSync(0, 'utf8')).source;
+function run(failLookup) {
+  const events = [], hooks = new Map(), deleted = [], allocated = [];
+  let exception = false, clears = 0;
+  class Pointer {
+    constructor(value) { this.value = value; }
+    add(offset) { return new Pointer(this.value + offset); }
+    readPointer() { return this.target || this; }
+    writePointer(value) { this.target = value; }
+    readUtf8String() { return this.value; }
+    isNull() { return this.value === 0; }
+    toString() { return String(this.value); }
+  }
+  const pointer = value => new Pointer(value);
+  const env = pointer(10000); env.target = pointer(0);
+  const functions = {
+    6: (_env, name) => pointer(name.value),
+    17: () => { exception = false; clears++; },
+    23: (_env, ref) => deleted.push(ref),
+    33: (_env, owner, name, sig) => {
+      if (failLookup && name.value === 'addSecurityFactor') {
+        exception = true; return pointer(0);
+      }
+      const result = pointer(name.value === 'addSecurityFactor'
+        ? owner.value.endsWith('Context') ? '0x22' : '0x11' : name.value);
+      const state = {};
+      hooks.get(264).onEnter.call(state, [env, owner, name, sig]);
+      hooks.get(264).onLeave.call(state, result);
+      return result;
+    },
+    36: (_env, _owner, method, args) => {
+      if (method.value === 'getClassLoader') return pointer('loader');
+      assert.equal(method.value, 'loadClass');
+      return pointer(args.target.value);
+    },
+    113: (_env, _owner, name) => pointer(name.value),
+    116: () => pointer('application'),
+    167: (_env, name) => { allocated.push(name); return name; },
+    228: () => exception ? 1 : 0
+  };
+  const context = vm.createContext({
+    send: event => events.push(event), ptr: pointer,
+    Process: {pointerSize: 8, getCurrentThreadId: () => 7, findModuleByName: () => null, id: 1},
+    Memory: {allocUtf8String: pointer, alloc: pointer},
+    NativeFunction: function (address) { return functions[address.value / 8]; },
+    Interceptor: {attach: (address, handlers) => hooks.set(address.value, handlers)},
+    setInterval: () => 1, clearInterval: () => {}, rpc: {exports: {}}
+  });
+  vm.runInContext(source, context);
+  context.installTable(env);
+  context.resolveCachedMethods(env);
+  assert.equal(events.filter(e => e.event === 'jni_get_method_id').length, 0,
+    'active lookups must not masquerade as passive lookups');
+  assert.equal(events.filter(e => e.event === 'jni_call_object_method_v').length, 0);
+  assert.equal(context.vm9State.lookupThread, null);
+  if (failLookup) {
+    assert.equal(events.filter(e => e.event === 'jni_seed_error').length, 1);
+    assert.equal(events.filter(e => e.event === 'jni_seed_complete').length, 0);
+    assert.equal(clears, 1); assert.equal(exception, false);
+    assert.equal(deleted.length, 7);
+  } else {
+    assert.equal(events.filter(e => e.event === 'jni_method_seed').length, 2);
+    assert.equal(events.filter(e => e.event === 'jni_seed_complete').length, 1);
+    assert.equal(deleted.length, 9);
+    hooks.get(280).onEnter([env, pointer('receiver'), pointer('0x11')]);
+    assert.equal(events.filter(e => e.event === 'jni_call_object_method_v').length, 1);
+    hooks.get(280).onEnter([env, pointer('receiver'), pointer('0x99')]);
+    assert.equal(events.filter(e => e.event === 'jni_call_object_method_v').length, 1);
+  }
+}
+run(false); run(true);
+process.stdout.write(JSON.stringify({cached_calls: true, lookup_separation: true,
+  local_refs_released: true, java_exception_cleared: true}));
+"""
+
+
 def check_cronet_lifecycle() -> dict:
     source = SOURCE.with_name("capture_vm9_cronet_jni_runtime_20261101.py")
     spec = importlib.util.spec_from_file_location("vm9_cronet_capture", source)
     capture = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(capture)
+    cached_check = subprocess.run(
+        ["node", "-e", CRONET_CACHED_CHECK], input=json.dumps({"source": capture.PROBE_JS}),
+        text=True, capture_output=True, check=True, timeout=20)
     session = Session()
     device = Device(session)
     selected = []
@@ -223,6 +305,13 @@ def check_cronet_lifecycle() -> dict:
         assert selected == ["emulator-5554"] and device.attached == [11]
         assert session.detached and session.script.unloaded
 
+        cached_output = Path(temp) / "cached-option.jsonl"
+        with patch.dict(sys.modules, {"frida": fake_frida}), \
+                patch.object(sys, "argv", argv[:-1] + [str(cached_output), "--resolve-cached-methods"]), \
+                contextlib.redirect_stdout(io.StringIO()):
+            assert capture.main() == 0
+        assert session.script.source.startswith("var VM9_RESOLVE_CACHED_METHODS = true;")
+
         output.write_text("existing evidence\n", encoding="utf-8")
         argv = [str(source), "--device", "remote", "--spawn",
                 "--duration", "0.001", "--output", str(output)]
@@ -241,6 +330,40 @@ def check_cronet_lifecycle() -> dict:
             "vm9_cronet_verifier", source.with_name("verify_vm9_cronet_jni_runtime_20261101.py"))
         verifier = importlib.util.module_from_spec(verifier_spec)
         verifier_spec.loader.exec_module(verifier)
+        base = [
+            {"event": "probe_ready"}, {"event": "script_loaded"},
+            {"event": "jni_hooks_installed"},
+            {"event": "jni_table", "table_offsets": {"GetMethodID": 264, "CallObjectMethodV": 280},
+             "table": "0x1", "get_method_id": "0x2", "call_object_method_v": "0x3"},
+        ]
+        seeds = [{"event": "jni_method_seed", "method_id": f"0x{index}",
+                  "name": "addSecurityFactor", "sig": verifier.EXPECTED_SIGNATURE,
+                  "class_name": name, "thread_id": 7}
+                 for index, name in enumerate((
+                     "com.ttnet.org.chromium.net.impl.CronetUrlRequest",
+                     "com.ttnet.org.chromium.net.impl.CronetUrlRequestContext"), 4)]
+        complete = {"event": "jni_seed_complete", "method_count": 2}
+        cached_path = Path(temp) / "cached.jsonl"
+        def write_rows(rows):
+            cached_path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+        write_rows(base + seeds + [complete])
+        summary = verifier.verify(cached_path)
+        assert summary["cached_method_ids_resolved"] and not summary["cronet_runtime_branch_observed"]
+        call = {"event": "jni_call_object_method_v", "method_id": "0x4",
+                "name": "addSecurityFactor", "sig": verifier.EXPECTED_SIGNATURE, "thread_id": 9}
+        write_rows(base + seeds + [complete, call])
+        assert verifier.verify(cached_path)["cronet_runtime_branch_observed"]
+        for invalid in (base + seeds[:1], base + seeds + [complete, {**call, "method_id": "0x99"}],
+                        base + [call] + seeds + [complete],
+                        base + [complete] + seeds,
+                        base + [{"event": "jni_seed_error"}]):
+            write_rows(invalid)
+            try:
+                verifier.verify(cached_path)
+            except AssertionError:
+                pass
+            else:
+                raise AssertionError("invalid cached-method evidence was accepted")
         for event, fail_stage in (("device_error", "device"), ("spawn_error", "spawn"),
                                   ("attach_error", "attach"), ("script_error", "script"),
                                   ("resume_error", "resume")):
@@ -279,7 +402,8 @@ def check_cronet_lifecycle() -> dict:
             else:
                 raise AssertionError("activity error returned as a successful launch")
     return {"exact_device_serial": True, "collision_before_spawn": True,
-            "structured_setup_errors": True, "failed_spawn_cleanup": True}
+            "structured_setup_errors": True, "failed_spawn_cleanup": True,
+            "cached_methods": json.loads(cached_check.stdout)}
 
 
 def main() -> int:

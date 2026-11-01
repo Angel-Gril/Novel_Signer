@@ -1,5 +1,13 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-02 后续无 hook 运行已进入书城；关闭系统界面 ANR 后可进入书籍详情。
+系统栈采到权限锁内厂商配置解析，但配置无巨行/乱码，未修改；唯一根因仍未确认。
+为覆盖启动时已缓存的 method ID，JNI 探针新增 `--resolve-cached-methods` 热接入选项。
+真实运行成功解析两个方法 ID，90 秒窗口正常清理，目标调用仍为 0；主动查找不会
+计作业务事件。随后阅读显示章节加载失败，无 HTTP/正文成功证据。下一步区分 ARM
+转译观测边界与请求所用网络栈；完整 signer 与线上接受仍未验证。
+见[热接入与缓存 ID 证据](evidence/vm9_cronet_jni_runtime_cached_20261102.json)。
+
 2026-11-02 已确认 `emulator-5554` 实际为 LDPlayer 9，实例配置原为 1024 MB；
 AVD 的 `travelstar_api.avd/config.ini` 不控制该实例。使用厂商 console 将该实例
 调整到 2048 MB 并重启后，设备实测 `MemTotal=2047104 kB`，官方 APK 摘要仍匹配。
