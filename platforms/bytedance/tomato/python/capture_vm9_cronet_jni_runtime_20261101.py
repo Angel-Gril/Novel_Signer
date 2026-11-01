@@ -214,19 +214,30 @@ def main() -> int:
         if args.device == "usb"
         else frida.get_device_manager().add_remote_device(args.remote)
     )
+    output = args.output.resolve()
+    output.parent.mkdir(parents=True, exist_ok=True)
     spawned = False
+    pid = None
+    resumed = True
     if args.spawn:
         pid = int(device.spawn([args.package]))
         spawned = True
+        resumed = False
     else:
         pid = (
             launch_and_find_pid(args.adb_serial, args.package, args.activity, args.launch_timeout)
             if args.launch
             else choose_process(device, args.package, args.pid, args.process_name)
         )
-    output = args.output.resolve()
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output_file = output.open("x", encoding="utf-8", newline="\n")
+    try:
+        output_file = output.open("x", encoding="utf-8", newline="\n")
+    except BaseException:
+        if spawned and not resumed:
+            try:
+                device.resume(pid)
+            except Exception:
+                pass
+        raise
     lock = threading.Lock()
 
     def record(payload: Any) -> None:
@@ -258,9 +269,15 @@ def main() -> int:
         record({"event": "script_loaded", "pid": pid})
         if spawned:
             device.resume(pid)
+            resumed = True
             record({"event": "spawn_resumed", "pid": pid})
         stopped.wait(args.duration)
     finally:
+        if spawned and not resumed:
+            try:
+                device.resume(pid)
+            except Exception:
+                pass
         if script is not None:
             try:
                 script.exports_sync.cleanup()

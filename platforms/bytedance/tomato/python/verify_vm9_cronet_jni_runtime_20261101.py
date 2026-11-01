@@ -32,6 +32,7 @@ ALLOWED_EVENTS = {
     "jni_call_object_method_v",
     "probe_ready",
     "script_loaded",
+    "spawn_resumed",
     "session_detached",
     "frida_message",
 }
@@ -72,6 +73,10 @@ def verify(path: Path) -> dict[str, object]:
         raise AssertionError(f"unexpected event: {sorted(set(events) - ALLOWED_EVENTS)}")
     if "probe_ready" not in events or "script_loaded" not in events:
         raise AssertionError("probe did not load")
+    if events.count("spawn_resumed") > 1:
+        raise AssertionError("spawn was resumed more than once")
+    if "spawn_resumed" in events and events.index("spawn_resumed") < events.index("script_loaded"):
+        raise AssertionError("spawn resumed before script load")
     errors = sorted(set(events) & ERROR_EVENTS)
     if errors:
         raise AssertionError(f"probe reported errors: {errors}")
