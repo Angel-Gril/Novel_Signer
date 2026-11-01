@@ -27,6 +27,11 @@ ALLOWED_EVENTS = {
     "jni_attach_error",
     "attach_error",
     "script_error",
+    "device_error",
+    "spawn_error",
+    "launch_error",
+    "process_error",
+    "resume_error",
     "jni_table",
     "jni_table_error",
     "jni_hooks_installed",
@@ -49,6 +54,11 @@ ERROR_EVENTS = {
     "jni_vm_detach_error",
     "attach_error",
     "script_error",
+    "device_error",
+    "spawn_error",
+    "launch_error",
+    "process_error",
+    "resume_error",
 }
 
 

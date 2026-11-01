@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import subprocess
 import threading
 import time
@@ -149,22 +150,40 @@ emit({event: 'probe_ready', pid: Process.id});
 """
 
 
-def adb(args: list[str], serial: str) -> str:
+def adb(args: list[str], serial: str, timeout: float = 10.0) -> str:
     result = subprocess.run(
         ["adb", "-s", serial, *args],
         capture_output=True,
         text=True,
         check=False,
+        timeout=timeout,
     )
+    if result.returncode:
+        raise RuntimeError(f"ADB command failed (exit {result.returncode})")
+    if any(line.startswith(("Error:", "Error type"))
+           for line in result.stderr.splitlines()):
+        raise RuntimeError("ADB command reported an error")
     return result.stdout.strip()
 
 
 def launch_and_find_pid(serial: str, package: str, activity: str, timeout: float) -> int:
-    adb(["shell", "am", "force-stop", package], serial)
-    adb(["shell", "am", "start", "-n", f"{package}/{activity}"], serial)
     deadline = time.monotonic() + timeout
+    def run(args: list[str]) -> str:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("ADB launch deadline exceeded")
+        return adb(args, serial, timeout=min(10.0, remaining))
+
+    run(["shell", "am", "force-stop", package])
+    launched = run(["shell", "am", "start", "-n", f"{package}/{activity}"])
+    if any(line.startswith(("Error:", "Error type")) for line in launched.splitlines()):
+        raise RuntimeError("ADB activity launch failed")
     while time.monotonic() < deadline:
-        raw = adb(["shell", "pidof", package], serial)
+        # pidof returns exit 1 until the process exists.
+        try:
+            raw = run(["shell", "pidof", package])
+        except RuntimeError:
+            raw = ""
         if raw:
             return int(raw.split()[0])
         time.sleep(0.05)
@@ -189,15 +208,16 @@ def main() -> int:
     parser.add_argument("--process-name")
     parser.add_argument("--device", choices=("usb", "remote"), default="usb")
     parser.add_argument("--remote", default="127.0.0.1:27042")
-    parser.add_argument("--adb-serial", help="ADB serial used with --launch")
+    parser.add_argument("--adb-serial", help="exact Frida USB device id; also used by ADB with --launch")
     parser.add_argument("--launch", action="store_true", help="cold-launch through ADB before attaching")
     parser.add_argument("--spawn", action="store_true", help="spawn suspended, load hooks, then resume")
     parser.add_argument("--launch-timeout", type=float, default=30.0)
     parser.add_argument("--duration", type=float, default=60.0)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    if args.duration <= 0 or args.launch_timeout <= 0:
-        parser.error("duration and launch-timeout must be positive")
+    if any(not math.isfinite(value) or value <= 0
+           for value in (args.duration, args.launch_timeout)):
+        parser.error("duration and launch-timeout must be finite and positive")
     if args.launch and not args.adb_serial:
         parser.error("--adb-serial is required with --launch")
     if args.launch and (args.pid is not None or args.process_name or args.spawn):
@@ -209,40 +229,20 @@ def main() -> int:
     except ImportError as exc:  # pragma: no cover - environment dependent
         raise SystemExit("frida is required for the runtime probe") from exc
 
-    device = (
-        frida.get_usb_device(timeout=10)
-        if args.device == "usb"
-        else frida.get_device_manager().add_remote_device(args.remote)
-    )
     output = args.output.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
+    output_file = output.open("x", encoding="utf-8", newline="\n")
+    device = None
     spawned = False
     pid = None
     resumed = True
-    if args.spawn:
-        pid = int(device.spawn([args.package]))
-        spawned = True
-        resumed = False
-    else:
-        pid = (
-            launch_and_find_pid(args.adb_serial, args.package, args.activity, args.launch_timeout)
-            if args.launch
-            else choose_process(device, args.package, args.pid, args.process_name)
-        )
-    try:
-        output_file = output.open("x", encoding="utf-8", newline="\n")
-    except BaseException:
-        if spawned and not resumed:
-            try:
-                device.resume(pid)
-            except Exception:
-                pass
-        raise
     lock = threading.Lock()
 
     def record(payload: Any) -> None:
         line = json.dumps(payload, ensure_ascii=False)
         with lock:
+            if output_file.closed:
+                return
             print(line, flush=True)
             output_file.write(line + "\n")
             output_file.flush()
@@ -250,13 +250,28 @@ def main() -> int:
     session = None
     script = None
     stopped = threading.Event()
+    stage = "device"
     try:
-        try:
-            session = device.attach(pid)
-        except Exception as exc:
-            record({"event": "attach_error", "pid": pid,
-                    "error": f"{type(exc).__name__}: {exc}"})
-            return 2
+        if args.device == "remote":
+            device = frida.get_device_manager().add_remote_device(args.remote)
+        elif args.adb_serial:
+            device = frida.get_device(args.adb_serial, timeout=10)
+        else:
+            device = frida.get_usb_device(timeout=10)
+        if args.spawn:
+            stage = "spawn"
+            pid = int(device.spawn([args.package]))
+            spawned = True
+            resumed = False
+        elif args.launch:
+            stage = "launch"
+            pid = launch_and_find_pid(
+                args.adb_serial, args.package, args.activity, args.launch_timeout)
+        else:
+            stage = "process"
+            pid = choose_process(device, args.package, args.pid, args.process_name)
+        stage = "attach"
+        session = device.attach(pid)
         def on_detached(reason, crash=None):
             record({"event": "session_detached", "reason": str(reason)})
             stopped.set()
@@ -268,20 +283,21 @@ def main() -> int:
             else:
                 record({"event": "frida_message", "message": message})
 
-        try:
-            script = session.create_script(PROBE_JS)
-            script.on("message", on_message)
-            script.load()
-        except Exception as exc:
-            record({"event": "script_error", "pid": pid,
-                    "error": f"{type(exc).__name__}: {exc}"})
-            raise
+        stage = "script"
+        script = session.create_script(PROBE_JS)
+        script.on("message", on_message)
+        script.load()
         record({"event": "script_loaded", "pid": pid})
         if spawned:
+            stage = "resume"
             device.resume(pid)
             resumed = True
             record({"event": "spawn_resumed", "pid": pid})
         stopped.wait(args.duration)
+    except Exception as exc:
+        record({"event": f"{stage}_error", "pid": pid,
+                "error": f"{type(exc).__name__}: {exc}"})
+        return 2
     finally:
         if spawned and not resumed:
             try:
@@ -303,7 +319,8 @@ def main() -> int:
                 session.detach()
             except Exception:
                 pass
-        output_file.close()
+        with lock:
+            output_file.close()
     return 0
 
 

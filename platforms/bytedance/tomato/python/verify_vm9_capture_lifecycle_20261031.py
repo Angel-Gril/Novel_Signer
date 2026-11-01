@@ -195,6 +195,93 @@ class Device:
         return self.session
 
 
+def check_cronet_lifecycle() -> dict:
+    source = SOURCE.with_name("capture_vm9_cronet_jni_runtime_20261101.py")
+    spec = importlib.util.spec_from_file_location("vm9_cronet_capture", source)
+    capture = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(capture)
+    session = Session()
+    device = Device(session)
+    selected = []
+    spawned = []
+    resumed = []
+    device.spawn = lambda _args: spawned.append(33) or 33
+    device.resume = resumed.append
+    fake_frida = SimpleNamespace(
+        get_device=lambda serial, timeout: selected.append(serial) or device,
+        get_usb_device=lambda **kwargs: (_ for _ in ()).throw(
+            AssertionError("explicit serial must not select an arbitrary USB device")),
+        get_device_manager=lambda: SimpleNamespace(add_remote_device=lambda _address: device),
+    )
+    with tempfile.TemporaryDirectory() as temp:
+        output = Path(temp) / "serial.jsonl"
+        argv = [str(source), "--adb-serial", "emulator-5554", "--pid", "11",
+                "--duration", "0.001", "--output", str(output)]
+        with patch.dict(sys.modules, {"frida": fake_frida}), \
+                patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()):
+            assert capture.main() == 0
+        assert selected == ["emulator-5554"] and device.attached == [11]
+        assert session.detached and session.script.unloaded
+
+        output.write_text("existing evidence\n", encoding="utf-8")
+        argv = [str(source), "--device", "remote", "--spawn",
+                "--duration", "0.001", "--output", str(output)]
+        with patch.dict(sys.modules, {"frida": fake_frida}), \
+                patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()):
+            try:
+                capture.main()
+            except FileExistsError:
+                pass
+            else:
+                raise AssertionError("existing evidence was overwritten")
+        assert not spawned, "output collision must be detected before spawning"
+        assert output.read_text(encoding="utf-8") == "existing evidence\n"
+
+        verifier_spec = importlib.util.spec_from_file_location(
+            "vm9_cronet_verifier", source.with_name("verify_vm9_cronet_jni_runtime_20261101.py"))
+        verifier = importlib.util.module_from_spec(verifier_spec)
+        verifier_spec.loader.exec_module(verifier)
+        for event, fail_stage in (("device_error", "device"), ("spawn_error", "spawn"),
+                                  ("attach_error", "attach"), ("script_error", "script"),
+                                  ("resume_error", "resume")):
+            session = Session(fail_load=fail_stage == "script")
+            device.session = session
+            def fail(*_args, **_kwargs):
+                raise RuntimeError("controlled failure")
+            device.spawn = fail if fail_stage == "spawn" else lambda _args: 33
+            device.resume = fail if fail_stage == "resume" else resumed.append
+            target = Path(temp) / f"{event}.jsonl"
+            argv[-1] = str(target)
+            resume_count = len(resumed)
+            with patch.dict(sys.modules, {"frida": fake_frida}), \
+                    patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()), \
+                    patch.object(fake_frida, "get_device_manager",
+                                 fail if fail_stage == "device" else fake_frida.get_device_manager), \
+                    patch.object(device, "attach", fail if fail_stage == "attach" else device.attach):
+                assert capture.main() == 2, event
+            rows = [json.loads(line) for line in target.read_text(encoding="utf-8").splitlines()]
+            assert sum(row.get("event") == event for row in rows) == 1, rows
+            try:
+                verifier.verify(target)
+            except AssertionError as error:
+                assert "probe reported errors" in str(error), str(error)
+            else:
+                raise AssertionError("setup failure was accepted as runtime evidence")
+            if fail_stage in ("script", "resume"):
+                assert session.detached and session.script.unloaded
+            if fail_stage in ("attach", "script"):
+                assert len(resumed) == resume_count + 1, "failed setup must release a suspended spawn"
+        with patch.object(capture, "adb", side_effect=["", "Error type 3\nError: Activity class does not exist."]):
+            try:
+                capture.launch_and_find_pid("serial", "example.app", ".Missing", 1)
+            except RuntimeError as error:
+                assert str(error) == "ADB activity launch failed"
+            else:
+                raise AssertionError("activity error returned as a successful launch")
+    return {"exact_device_serial": True, "collision_before_spawn": True,
+            "structured_setup_errors": True, "failed_spawn_cleanup": True}
+
+
 def main() -> int:
     spec = importlib.util.spec_from_file_location("vm9_capture", SOURCE)
     capture = importlib.util.module_from_spec(spec)
@@ -276,6 +363,7 @@ def main() -> int:
         "overwrite_refused": True, "detach_after_load_failure": True,
         "target_exit_ends_capture": True, "destroyed_script_cleanup": True,
         "evidence_boundary": "host regression only; Android business callback unverified",
+        "cronet_lifecycle": check_cronet_lifecycle(),
     }))
     return 0
 

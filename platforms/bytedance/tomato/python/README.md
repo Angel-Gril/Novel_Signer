@@ -33,6 +33,14 @@ attach；因此退出事件和清理失败都会进入校验器的错误检查�
 如果 Frida 无权附加目标，或脚本加载失败，捕获器会写出脱敏的
 `attach_error`/`script_error` 事件并返回非零状态；校验器会拒绝这类记录，
 不会把权限失败误判成 Cronet 的有界负观测。
+连接、进程查找、启动和恢复失败分别记录 `device_error`、`process_error`、
+`spawn_error`/`launch_error` 和 `resume_error`；ADB 启动和 PID 等待共用
+`--launch-timeout`，单次 ADB 调用最多等待 10 秒。
+
+同时连接多台 Android 时，USB 模式的 `--adb-serial` 也用于精确选择 Frida
+设备；例如 `--adb-serial emulator-5554 --pid <pid>`。省略序列号时保留 Frida
+默认 USB 选择行为；remote 模式仍以 `--remote` 为 Frida 连接目标。捕获器先独占
+创建输出文件，再连接设备或启动应用，因此已有文件会在产生设备副作用前拒绝。
 
 
 The 2026-10-31 native scan closes the static indirect boundary left by the
