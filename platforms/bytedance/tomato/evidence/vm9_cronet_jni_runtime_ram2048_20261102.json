@@ -1,0 +1,66 @@
+{
+  "schema": "vm9-cronet-jni-runtime-evidence-20261101-v1",
+  "capture_date": "2026-11-02",
+  "package": "com.dragon.read",
+  "version": "7.2.5.32/72532",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "device": {
+    "serial": "emulator-5554",
+    "vendor": "LDPlayer 9",
+    "instance_index": 0,
+    "android": "9 / sdk 28",
+    "abi": "x86_64 with arm64 native translation",
+    "memory_config_mb_before": 1024,
+    "memory_config_mb_after": 2048,
+    "mem_total_kb": 2047104,
+    "frida_version": "17.24.3",
+    "frida_server_uid": 0
+  },
+  "capture": {
+    "mode": "cold launch then PID attach",
+    "configured_duration_seconds": 90,
+    "capture_sha256": "d3ab7d3f2d25ce53b649e843a54c18cc41f4510a18c5a2e3bf86a1f91c07c8e1",
+    "event_counts": {
+      "get_env_handler": 1,
+      "jni_hooks_installed": 1,
+      "jni_table": 1,
+      "jni_vm_attached": 1,
+      "jni_vm_detached": 1,
+      "probe_ready": 1,
+      "script_loaded": 1,
+      "session_detached": 1
+    },
+    "terminal_reason": "application-requested",
+    "vm_detach_status": 0,
+    "process_alive_before_cleanup": true
+  },
+  "jni_table_offsets": {
+    "GetMethodID": 264,
+    "CallObjectMethodV": 280
+  },
+  "cronet_runtime_branch_observed": false,
+  "bounded_negative": true,
+  "controls": {
+    "no_hook_cold_launch": {
+      "main_activity_reported": true,
+      "two_screenshots_remain_on_splash": true,
+      "business_page_verified": false
+    },
+    "exact_usb_serial_capture": {
+      "duration_seconds": 3,
+      "capture_sha256": "e292609303097e698f4605cb257f7bfd7c46dc58b28fa2eb4ac42b9c05af28e3",
+      "vm_detach_status": 0
+    },
+    "java_bridge_stack_attempt": {
+      "completed": false,
+      "error_type": "TransportError",
+      "usable_main_thread_stack": false,
+      "subsequent_action": "force-stop target to release memory"
+    }
+  },
+  "raw_capture_retained_in_evidence": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "The running emulator is LDPlayer, not the separately configured AVD. Updating its actual instance from 1024 to 2048 MB changed measured MemTotal to 2047104 kB. Both JNI hooks installed and the configured 90-second wait completed with the process alive, followed by successful JavaVM cleanup. No target method event occurred. A no-hook cold launch also remained on the splash screen in two screenshots despite MainFragmentActivity being reported. No usable main-thread stack or business request was captured; startup stall cause, Cronet execution, whole-request differential, standalone signing and online acceptance remain unverified."
+}

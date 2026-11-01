@@ -1,0 +1,38 @@
+{
+  "schema": "vm9-cronet-jni-runtime-evidence-20261101-v1",
+  "capture_date": "2026-11-01",
+  "package": "com.dragon.read",
+  "version": "7.2.5.32/72532",
+  "device": {
+    "serial": "emulator-5554",
+    "android": "9 / sdk 28",
+    "abi": "x86_64 with arm64 native translation",
+    "mem_total_kb": 1016472,
+    "swap_total_kb": 0
+  },
+  "capture": {
+    "mode": "cold launch then immediate PID attach",
+    "configured_duration_seconds": 120,
+    "capture_sha256": "d9ce6a8046b21c6adb499b04bf971ae0c47c6c5823ac0eabfcfaacf2b0fbbbc6",
+    "event_counts": {
+      "get_env_handler": 1,
+      "jni_hooks_installed": 1,
+      "jni_table": 1,
+      "jni_vm_attached": 1,
+      "probe_ready": 1,
+      "script_loaded": 1,
+      "session_detached": 1
+    },
+    "terminal_reason": "process-terminated"
+  },
+  "jni_table_offsets": {
+    "GetMethodID": 264,
+    "CallObjectMethodV": 280
+  },
+  "cronet_runtime_branch_observed": false,
+  "bounded_negative": true,
+  "raw_capture_retained_in_evidence": false,
+  "interpretation": "Both live ART JNI hooks installed after a cold SplashActivity launch, and no target method event occurred before process-terminated. This capture has no same-PID kill-cause evidence. Later low-memory logs from restarted PIDs do not establish the cause for this process. This remains a bounded startup-window negative observation, with no Cronet reachability or online-acceptance conclusion.",
+  "review_date": "2026-11-02",
+  "termination_cause_verified": false
+}

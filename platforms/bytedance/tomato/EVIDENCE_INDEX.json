@@ -10426,5 +10426,21 @@
     "whole_request_native_python_differential_verified": false,
     "online_header_acceptance_verified": false,
     "interpretation": "Frida Gadget 17.24.3 with a same-generation frida-java-bridge bundle initialized Java and installed the five redacted observation hooks in the re-signed APK. The direct frameSign probe was manual; the reader request entered the re-signed build's current-version error path, so this does not close the ordinary Cronet business callback."
+  },
+  "vm9_cronet_jni_runtime_coldattach_20261102": {
+    "evidence_file": "evidence/vm9_cronet_jni_runtime_coldattach_20261102.json",
+    "verifier": "python/verify_vm9_cronet_jni_runtime_20261101.py",
+    "cronet_runtime_branch_observed": false,
+    "termination_cause_verified": false
+  },
+  "vm9_cronet_jni_runtime_ram2048_20261102": {
+    "evidence_file": "evidence/vm9_cronet_jni_runtime_ram2048_20261102.json",
+    "verifier": "python/verify_vm9_cronet_jni_runtime_20261101.py",
+    "status": "bounded_negative_with_normal_cleanup",
+    "mem_total_kb": 2047104,
+    "cronet_runtime_branch_observed": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

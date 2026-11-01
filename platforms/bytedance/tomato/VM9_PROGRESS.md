@@ -1,5 +1,26 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-02：实际模拟器内存修复与 JNI 捕获生命周期
+
+已识别运行实例为 LDPlayer 9；其配置内存为 1024 MB，旧 AVD 配置与当前实例
+无关。备份实例配置后，通过厂商 console 将内存调整为 2048 MB 并重启，设备
+实测 `MemTotal=2047104 kB`。官方 APK SHA-256 仍为 `95889d1a…`。
+root Frida 17.24.3 上的新捕获完成 90 秒等待、JavaVM detach 返回 0，进程未在
+此窗口退出；`addSecurityFactor` 方法解析/调用事件仍为 0。无 hook 冷启动
+对照的两张截图也停在启动画面，未证明请求成功或定位卡顿原因。
+
+捕获器修复了 `--adb-serial` 未参与 USB Frida 设备选择的问题，并把输出文件
+独占创建提前到设备操作之前。连接/进程查找/启动/恢复失败均写结构化错误、返回
+非零并被 verifier 拒绝；ADB 启动及 PID 轮询有共同截止时间。现有生命周期回归
+覆盖精确设备选择、输出冲突无启动副作用、失败释放挂起进程与错误证据拒绝；
+显式序列号 attach/正常清理及错误 CLI 入口均有实际运行检查。
+
+11 月 1 日冷启动捕获只能证明进程退出，未将该 PID 的退出与低内存信号关联，
+因此保留原因未知；不能用后续重启 PID 的日志补作同一次归因。见
+[冷接入记录](evidence/vm9_cronet_jni_runtime_coldattach_20261102.json)与
+[2 GB 记录](evidence/vm9_cronet_jni_runtime_ram2048_20261102.json)。
+Cronet 真实业务、整请求 native/Python 差分、独立 signer 与线上六头接受仍未验证。
+
 ## 2026-10-31：Cronet native JNI 间接调用边界
 
 从官方 7.2.5.32/72532 APK 提取的 `libsscronet.so` 已完成窄范围 AArch64 分析。

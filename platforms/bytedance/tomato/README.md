@@ -1,5 +1,15 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-02 已确认 `emulator-5554` 实际为 LDPlayer 9，实例配置原为 1024 MB；
+AVD 的 `travelstar_api.avd/config.ini` 不控制该实例。使用厂商 console 将该实例
+调整到 2048 MB 并重启后，设备实测 `MemTotal=2047104 kB`，官方 APK 摘要仍匹配。
+新的 JNI 捕获完成 90 秒等待并正常清理（`jni_vm_detached.status=0`），目标进程
+在捕获结束时仍存活，Cronet 方法事件仍为 0。无 hook 冷启动对照也在截图中停留
+启动画面；本轮没有可操作业务页或真实请求证据，不能据此判断 Cronet 不可达。
+见[2 GB 运行证据](evidence/vm9_cronet_jni_runtime_ram2048_20261102.json)。
+捕获器同时修复多设备 USB 选择：`--adb-serial` 现在精确选择 Frida 设备；输出
+冲突会在启动前拒绝，连接/启动/恢复错误会写出结构化事件并被校验器拒绝。
+
 2026-11-01 新增[无 Java bridge 的 ART JNI 运行时探针](evidence/vm9_cronet_jni_runtime_20261101.json)。
 探针直接通过 `JNI_GetCreatedJavaVMs` 获取活动 `JNIEnv`，在 `GetMethodID`（0x108）和
 `CallObjectMethodV`（0x118）表项上安装脱敏 hook，只保留
@@ -122,11 +132,12 @@ manifest 版本。业务 hook
 [版本边界证据](evidence/vm9_runtime_app_version_20261028.json)及
 [校验器](python/verify_vm9_runtime_app_version_20261028.py)。
 
-要重做普通请求的运行时捕获，先完全关闭模拟器，在
-`C:\\Users\\Admin\\.android\\avd\\travelstar_api.avd\\config.ini` 将
-`hw.ramSize` 提升到至少 `4096`、`vm.heapSize` 提升到 `512`，再冷启动并确认
-`adb shell cat /proc/meminfo` 的 `MemTotal` 已超过 3 GB；当前配置文件虽写有 2G，
-运行实例实际只有约 992 MB。启动后可用新的早期 hook 模式：
+要重做普通请求捕获，先确认运行实例所属厂商。当前 LDPlayer 9 的内存设置来自
+`vms/config/leidian0.config` 的 `advancedSettings.memorySize`，使用
+`dnconsole quit --index 0`、`dnconsole modify --index 0 --memory 2048`、
+`dnconsole launch --index 0` 调整后，必须核对设备 `/proc/meminfo`。
+仅修改 AVD 配置不会影响该实例；本轮已把设备实际内存从约 992 MB 提升到约 2 GB，
+但启动画面卡顿与业务请求尚未闭合。业务 hook 的早期接入示例：
 
 ```powershell
 Set-Location C:\\AI\\6\\_repo_stage\\platforms\\bytedance\\tomato
