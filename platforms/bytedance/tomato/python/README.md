@@ -1,5 +1,19 @@
 # Tomato Python material
 
+Official-app reader observation now has its own retained evidence verifier:
+`verify_vm9_official_okhttp_reader_20261102.py`. Seven Full/BatchFull responses
+have preceding six-header OkHttp callbacks with matching thread/path digests,
+HTTP 200 and business code 0. A later screenshot showed readable chapter text.
+This validates the built-in app path, not a standalone signer or header necessity.
+Use `--capture <first.jsonl> --capture <second.jsonl>` to additionally verify
+the source digests, event counts and selected events against local raw captures.
+
+The existing business probe's `--diagnose-reader-errors` now records up to six
+nested cause types/stacks, with cycle detection and no exception messages. Host
+checks cover these bounds; the next live run did not reproduce the reader error,
+so the nested-cause runtime behavior remains unverified. The existing chunked
+`--bridge-js` loader worked against the initialized official emulator process.
+
 The new `capture_vm9_cronet_jni_runtime_20261101.py` probe obtains a live
 ART `JNIEnv` through `JNI_GetCreatedJavaVMs`, then hooks the indirect
 `GetMethodID`/`CallObjectMethodV` table entries at `0x108`/`0x118`. It does not

@@ -1,0 +1,2405 @@
+{
+  "schema": "vm9-official-okhttp-reader-20261102-v1",
+  "capture_date": "2026-11-02",
+  "package": "com.dragon.read",
+  "version": "7.2.5.32/72532",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "device": {
+    "vendor": "LDPlayer 9",
+    "android": "9 / sdk 28",
+    "abi": "x86_64 with arm64 Houdini translation",
+    "mem_total_kb": 2047104,
+    "frida_version": "17.24.3",
+    "frida_server_uid": 0
+  },
+  "package_identity": "unchanged_official_apk",
+  "bridge_delivery": "10 acknowledged chunks using existing loader",
+  "runs": [
+    {
+      "label": "initial_read_errors",
+      "configured_duration_seconds": 180,
+      "capture_sha256": "66bf5c6cd32ccb247cf349457c0f09182aa76a8fe5e9096a18c4e15359be20b8",
+      "capture_event_counts": {
+        "bridge_eval_done": 1,
+        "hooked": 9,
+        "probe_ready": 1,
+        "reader_exception_boundary": 2,
+        "response_deserialized": 49,
+        "script_loaded": 1,
+        "securityFactor": 56,
+        "session_detached": 1
+      },
+      "selected_source_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        54,
+        89,
+        99,
+        100,
+        101,
+        110,
+        111,
+        112,
+        113,
+        114,
+        116,
+        118,
+        119
+      ],
+      "selected_events": [
+        {
+          "event": "script_loaded",
+          "source_length": 452251,
+          "chunks": 10
+        },
+        {
+          "event": "hooked",
+          "target": "MSManager.frameSign"
+        },
+        {
+          "event": "hooked",
+          "target": "ms.bd.c.r4.onCallToAddSecurityFactor"
+        },
+        {
+          "event": "hooked",
+          "target": "CronetUrlRequest.addSecurityFactor"
+        },
+        {
+          "event": "hooked",
+          "target": "CronetUrlRequestContext.addSecurityFactor"
+        },
+        {
+          "event": "hooked",
+          "target": "CronetUrlRequestContext.o0"
+        },
+        {
+          "event": "probe_ready",
+          "pid": 6239
+        },
+        {
+          "event": "hooked",
+          "target": "resource_warning"
+        },
+        {
+          "event": "hooked",
+          "target": "response_deserialized"
+        },
+        {
+          "event": "hooked",
+          "target": "error_code_exception"
+        },
+        {
+          "event": "hooked",
+          "target": "reader_exception"
+        },
+        {
+          "event": "bridge_eval_done"
+        },
+        {
+          "event": "securityFactor",
+          "url": {
+            "length": 745,
+            "sha256": "06bf2c28c14f1caccf7e0751190773499bc734d365d5e25451d4b2551091ea88"
+          },
+          "route": {
+            "length": 65,
+            "sha256": "edf6b7e6bf9854cd16b1b8f6374b2edd16b67a94e53d7b08fc9f04f73ef6a623",
+            "path": {
+              "length": 22,
+              "sha256": "d5b5e63bb37ee975a3f6d04d95cf5205afda740af80f594961f197a245c502aa"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "aa645285f3f88f3313a61983263dcaf2d027371f9e88380ac666f5750113d175"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "485f84f0f23112c285d379d2c3e172e74711eca60c02df02bcd5b0710063cee5"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "33f9eec288416d635db268578a619fd95e8a64defeaf2115295b8c4c1d57b738"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "a5f4671a66e78642efc34bc0a0dbf44e2005cb4d89e7610f52482d76d76e62ba"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "27041548305a09675f31e32c56e9b200e0d2814efcb1c2a36b479502a61592a2"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "5faf6ce0a16c244f3dc3bbc84f9a06c65863bdfbbb4de83ecb99a7c11b8e951c"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "e7b373bd7764c6adadb4e379bff757ea33a9d31cfddbae47fdfabef3087409b4"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "7952c4173b9145ff3b073a844541f8b26e8ec9c60694dc545a972ac917316ca8"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 6450,
+            "stack": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "CallServerInterceptor__executeCall$___twin___"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "y90.b",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.pitaya.bdcomponentimpl.network.RequestFeatureInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.LuckyDogActCommonInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.d",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.e",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.j",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              }
+            ]
+          }
+        },
+        {
+          "event": "response_deserialized",
+          "url": {
+            "length": 48,
+            "sha256": "b9708f30b61110843ff2bbb6e788f9ada89f0cc52120f18a931f220eccb7d2bd"
+          },
+          "route": {
+            "length": 48,
+            "sha256": "b9708f30b61110843ff2bbb6e788f9ada89f0cc52120f18a931f220eccb7d2bd",
+            "path": {
+              "length": 22,
+              "sha256": "d5b5e63bb37ee975a3f6d04d95cf5205afda740af80f594961f197a245c502aa"
+            }
+          },
+          "thread_id": 6450,
+          "http_status": 200,
+          "business_code": 0,
+          "response_class": "readersaas.com.dragon.read.saas.rpc.model.FullResponse",
+          "transport_error_class": null
+        },
+        {
+          "event": "reader_exception_boundary",
+          "overload": 0,
+          "errors": [
+            {
+              "class": "com.dragon.reader.lib.api.exception.ReaderException",
+              "code_name": "CHAPTER_CONTENT_ERROR",
+              "code_value": -1002,
+              "cause_class": "java.lang.RuntimeException",
+              "cause_stack": [
+                {
+                  "class": "io.reactivex.internal.util.ExceptionHelper",
+                  "method": "wrapOrThrow"
+                },
+                {
+                  "class": "io.reactivex.internal.observers.f",
+                  "method": "b"
+                },
+                {
+                  "class": "io.reactivex.Single",
+                  "method": "blockingGet"
+                },
+                {
+                  "class": "by4.r0",
+                  "method": "d1"
+                },
+                {
+                  "class": "com.dragon.reader.lib.datalevel.AbsBookProviderProxy",
+                  "method": "d1"
+                },
+                {
+                  "class": "by4.v1",
+                  "method": "e3"
+                },
+                {
+                  "class": "by4.v1",
+                  "method": "d1"
+                },
+                {
+                  "class": "com.dragon.reader.lib.datalevel.AbsBookProviderProxy",
+                  "method": "K1"
+                },
+                {
+                  "class": "jv5.n",
+                  "method": "m"
+                },
+                {
+                  "class": "jv5.n",
+                  "method": "e"
+                },
+                {
+                  "class": "jv5.m",
+                  "method": "call"
+                },
+                {
+                  "class": "io.reactivex.internal.operators.single.o",
+                  "method": "subscribeActual"
+                },
+                {
+                  "class": "io.reactivex.Single",
+                  "method": "subscribe"
+                },
+                {
+                  "class": "io.reactivex.internal.operators.single.SingleDoFinally",
+                  "method": "subscribeActual"
+                },
+                {
+                  "class": "io.reactivex.Single",
+                  "method": "subscribe"
+                },
+                {
+                  "class": "io.reactivex.internal.operators.single.SingleCache",
+                  "method": "subscribeActual"
+                },
+                {
+                  "class": "io.reactivex.Single",
+                  "method": "subscribe"
+                },
+                {
+                  "class": "io.reactivex.internal.operators.single.SingleSubscribeOn$SubscribeOnObserver",
+                  "method": "run"
+                },
+                {
+                  "class": "io.reactivex.internal.schedulers.ScheduledDirectTask",
+                  "method": "call"
+                },
+                {
+                  "class": "io.reactivex.internal.schedulers.ScheduledDirectTask",
+                  "method": "call"
+                },
+                {
+                  "class": "java.util.concurrent.FutureTask",
+                  "method": "run"
+                },
+                {
+                  "class": "java.util.concurrent.ThreadPoolExecutor",
+                  "method": "runWorker"
+                },
+                {
+                  "class": "java.util.concurrent.ThreadPoolExecutor$Worker",
+                  "method": "run"
+                },
+                {
+                  "class": "java.lang.Thread",
+                  "method": "run"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "event": "securityFactor",
+          "url": {
+            "length": 745,
+            "sha256": "5b4cdf92aad774add044d6b3d068b41301718a6e6b91c60f110317fb6ae72b99"
+          },
+          "route": {
+            "length": 65,
+            "sha256": "edf6b7e6bf9854cd16b1b8f6374b2edd16b67a94e53d7b08fc9f04f73ef6a623",
+            "path": {
+              "length": 22,
+              "sha256": "d5b5e63bb37ee975a3f6d04d95cf5205afda740af80f594961f197a245c502aa"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "fd837b6d3816c6002d84bb2cb959fe969b1bd525a1e8d003b22a0bb38bea5237"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "db7ac5a0d478bd5030585e607d5de06d2b1943f257871b8c7acfe8375a291909"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "69c8c6ac8156e437a25c5372fbffeb4ee03cfeb28c36af0a3eca8dd4f77d0fb6"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "4f2fb43707fee3acc84a79b742a362a026145ffc8e20742ed4f72660eb386791"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "1e82a46db695bc44697d387975f8cd19d654740e0ff1db3f1ac2d613bf0e6d93"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "31c30ad07258cefdca3f6948f2fa1db3dfc09527a0ae2a58649c45df04a76c42"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "8a79af8d4f66b4c0370e29a078be77ebd8d3325035290b3c524b8b4bc2033f15"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1288,
+                  "sha256": "684c2b16ab01c8abe275a23baa50ab9382ea62bea574b98ea21bf45733e68086"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 7038,
+            "stack": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "CallServerInterceptor__executeCall$___twin___"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "y90.b",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.pitaya.bdcomponentimpl.network.RequestFeatureInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.LuckyDogActCommonInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.d",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.e",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.j",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              }
+            ]
+          }
+        },
+        {
+          "event": "response_deserialized",
+          "url": {
+            "length": 48,
+            "sha256": "b9708f30b61110843ff2bbb6e788f9ada89f0cc52120f18a931f220eccb7d2bd"
+          },
+          "route": {
+            "length": 48,
+            "sha256": "b9708f30b61110843ff2bbb6e788f9ada89f0cc52120f18a931f220eccb7d2bd",
+            "path": {
+              "length": 22,
+              "sha256": "d5b5e63bb37ee975a3f6d04d95cf5205afda740af80f594961f197a245c502aa"
+            }
+          },
+          "thread_id": 7038,
+          "http_status": 200,
+          "business_code": 0,
+          "response_class": "readersaas.com.dragon.read.saas.rpc.model.FullResponse",
+          "transport_error_class": null
+        },
+        {
+          "event": "securityFactor",
+          "url": {
+            "length": 829,
+            "sha256": "f2318f99ee23749070174b27f6b2ed0b1bc163d9b08f161218f5332955625fce"
+          },
+          "route": {
+            "length": 71,
+            "sha256": "79dac4d176b0b3b6482b6689b1c89cb18217740886e87cacc5fd8426752e8005",
+            "path": {
+              "length": 28,
+              "sha256": "1c62d074adbe606bdae9f0857bdbe59347f0e24faa97d6c52d026647d27f750f"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "1c0fc7f9ed26a53107fb0f9d3cad195d226b6676bee10d0c7dcabbae9f3f65ef"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "25b3d4b3682161118f937c96471c8d1b33b65032d7461d5c115a48a4e4493c6c"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "d9945100fc9a1a3c10bb099c2ea8d6dd7171aecc983474e0e1782125f446e7e6"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "224bebb277859b98eb85b9871dd10eccdcff1b23cb52c16e011cccfa83dc449b"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "097c32c5b7d3b97607af3ac1034aa7cf56a13fd863a93ef83f481b9f4df6a322"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "7f13480f26e2bf87663701c7b82ab27bd96aa41b8d39731689dfd7b7718b2f7c"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "010c5d7f9618b715df103910debcf7b31016990e9bef1817765f53669131d082"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "ba9225d4a5ae1458856f47c7a16439c15cee9c605c0e34f257b26e6b696e618d"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 7267,
+            "stack": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "CallServerInterceptor__executeCall$___twin___"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "y90.b",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.pitaya.bdcomponentimpl.network.RequestFeatureInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.LuckyDogActCommonInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.d",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.e",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.j",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              }
+            ]
+          }
+        },
+        {
+          "event": "response_deserialized",
+          "url": {
+            "length": 54,
+            "sha256": "7deb6bc9ca0e101f92b0e40a04392dd8d891b1e4834443d92f8bc1de61a61a67"
+          },
+          "route": {
+            "length": 54,
+            "sha256": "7deb6bc9ca0e101f92b0e40a04392dd8d891b1e4834443d92f8bc1de61a61a67",
+            "path": {
+              "length": 28,
+              "sha256": "1c62d074adbe606bdae9f0857bdbe59347f0e24faa97d6c52d026647d27f750f"
+            }
+          },
+          "thread_id": 7267,
+          "http_status": 200,
+          "business_code": 0,
+          "response_class": "readersaas.com.dragon.read.saas.rpc.model.BatchFullResponse",
+          "transport_error_class": null
+        },
+        {
+          "event": "securityFactor",
+          "url": {
+            "length": 745,
+            "sha256": "5bf1ca082d8554e34e084d4cd60e01af9ed10f00dfb6d1713b39d1addad64b1c"
+          },
+          "route": {
+            "length": 65,
+            "sha256": "edf6b7e6bf9854cd16b1b8f6374b2edd16b67a94e53d7b08fc9f04f73ef6a623",
+            "path": {
+              "length": 22,
+              "sha256": "d5b5e63bb37ee975a3f6d04d95cf5205afda740af80f594961f197a245c502aa"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "47defbe2f3377fd25994dbfce5f81d063dafd6da1126c3e5505a5707356d9014"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "f1037674e256c91e7fae8c8354cb5bb63e2fafcfcb7624b790b5eb86fab2ea52"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "dc30981ca65340953dd4512a97625fc8d36e1b9f1babce6c2bf9ebd9d3ad8214"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "7b1bf425d563a0a6fc4042b808b98c1fb6d4a53e68908a737e194e81aa01b88c"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "d211d8c6b1c1c3905e1b9206acce60c5d92f59e9ca35103975a9885d9f4024b8"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "49fdaaf2b7b5f72ce4b1d807ade650feaa489c9d4c2d41e32a98bd92e00dcb7b"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "4f5538c223791b16287a69691d82771f9881ac2d886fccff8fa63e2eca9b639a"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1292,
+                  "sha256": "4dd229f2a7342d33be1d992ea9a558ce79ae94741b9b77d4cc8feb8b370a0a78"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 7050,
+            "stack": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "CallServerInterceptor__executeCall$___twin___"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "y90.b",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.pitaya.bdcomponentimpl.network.RequestFeatureInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.LuckyDogActCommonInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.d",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.e",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.j",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              }
+            ]
+          }
+        },
+        {
+          "event": "response_deserialized",
+          "url": {
+            "length": 48,
+            "sha256": "b9708f30b61110843ff2bbb6e788f9ada89f0cc52120f18a931f220eccb7d2bd"
+          },
+          "route": {
+            "length": 48,
+            "sha256": "b9708f30b61110843ff2bbb6e788f9ada89f0cc52120f18a931f220eccb7d2bd",
+            "path": {
+              "length": 22,
+              "sha256": "d5b5e63bb37ee975a3f6d04d95cf5205afda740af80f594961f197a245c502aa"
+            }
+          },
+          "thread_id": 7050,
+          "http_status": 200,
+          "business_code": 0,
+          "response_class": "readersaas.com.dragon.read.saas.rpc.model.FullResponse",
+          "transport_error_class": null
+        },
+        {
+          "event": "reader_exception_boundary",
+          "overload": 0,
+          "errors": [
+            {
+              "class": "com.dragon.reader.lib.api.exception.ReaderException",
+              "code_name": "CHAPTER_CONTENT_ERROR",
+              "code_value": -1002,
+              "cause_class": "java.lang.RuntimeException",
+              "cause_stack": [
+                {
+                  "class": "io.reactivex.internal.util.ExceptionHelper",
+                  "method": "wrapOrThrow"
+                },
+                {
+                  "class": "io.reactivex.internal.observers.f",
+                  "method": "b"
+                },
+                {
+                  "class": "io.reactivex.Single",
+                  "method": "blockingGet"
+                },
+                {
+                  "class": "by4.r0",
+                  "method": "d1"
+                },
+                {
+                  "class": "com.dragon.reader.lib.datalevel.AbsBookProviderProxy",
+                  "method": "d1"
+                },
+                {
+                  "class": "by4.v1",
+                  "method": "e3"
+                },
+                {
+                  "class": "by4.v1",
+                  "method": "d1"
+                },
+                {
+                  "class": "com.dragon.reader.lib.datalevel.AbsBookProviderProxy",
+                  "method": "K1"
+                },
+                {
+                  "class": "jv5.n",
+                  "method": "m"
+                },
+                {
+                  "class": "jv5.n",
+                  "method": "e"
+                },
+                {
+                  "class": "jv5.m",
+                  "method": "call"
+                },
+                {
+                  "class": "io.reactivex.internal.operators.single.o",
+                  "method": "subscribeActual"
+                },
+                {
+                  "class": "io.reactivex.Single",
+                  "method": "subscribe"
+                },
+                {
+                  "class": "io.reactivex.internal.operators.single.SingleDoFinally",
+                  "method": "subscribeActual"
+                },
+                {
+                  "class": "io.reactivex.Single",
+                  "method": "subscribe"
+                },
+                {
+                  "class": "io.reactivex.internal.operators.single.SingleCache",
+                  "method": "subscribeActual"
+                },
+                {
+                  "class": "io.reactivex.Single",
+                  "method": "subscribe"
+                },
+                {
+                  "class": "io.reactivex.internal.operators.single.SingleSubscribeOn$SubscribeOnObserver",
+                  "method": "run"
+                },
+                {
+                  "class": "io.reactivex.internal.schedulers.ScheduledDirectTask",
+                  "method": "call"
+                },
+                {
+                  "class": "io.reactivex.internal.schedulers.ScheduledDirectTask",
+                  "method": "call"
+                },
+                {
+                  "class": "java.util.concurrent.FutureTask",
+                  "method": "run"
+                },
+                {
+                  "class": "java.util.concurrent.ThreadPoolExecutor",
+                  "method": "runWorker"
+                },
+                {
+                  "class": "java.util.concurrent.ThreadPoolExecutor$Worker",
+                  "method": "run"
+                },
+                {
+                  "class": "java.lang.Thread",
+                  "method": "run"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "event": "securityFactor",
+          "url": {
+            "length": 763,
+            "sha256": "5328744699656fe77ce493360b7895a3ff1f892a8e9215b8d0c73a3ac05e78a9"
+          },
+          "route": {
+            "length": 71,
+            "sha256": "79dac4d176b0b3b6482b6689b1c89cb18217740886e87cacc5fd8426752e8005",
+            "path": {
+              "length": 28,
+              "sha256": "1c62d074adbe606bdae9f0857bdbe59347f0e24faa97d6c52d026647d27f750f"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 26,
+                  "sha256": "95040da3001733f7d875f4879e90e46d681390fe367b7cfa65a8f7505684343b"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "41035a8ff29c83fb5dcbbbf22f92c58823dccd95da5cc45ccd9b80f4b71b302c"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "a27ff66c04054d29f0c19e3648207eda6b32ff028592cfdfa29ba42dafdb00de"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "8d186e80b266966c8a5bb03a9fad812e6a2815ea2a3dcdcf38628583c3a52f28"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "94743811ba370f96225baff6d59bbdc09e3977b6e690dd1f21e46d6b955c7ab6"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "7020761f0e29f2022f13a9896a48c8aa21190e9267c25b334e9f98d8e84e93cf"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "234fb8396c6156b2ea798ed3e3ed97bf720090efdbb40bba51b4533c2d378b81"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1288,
+                  "sha256": "d3626072608e55bd0d4c4ad932f284b9e719af9636b88b00345df1ee66db4a98"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 6431,
+            "stack": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "CallServerInterceptor__executeCall$___twin___"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "y90.b",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.pitaya.bdcomponentimpl.network.RequestFeatureInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.LuckyDogActCommonInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.d",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.e",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.j",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              }
+            ]
+          }
+        },
+        {
+          "event": "response_deserialized",
+          "url": {
+            "length": 54,
+            "sha256": "7deb6bc9ca0e101f92b0e40a04392dd8d891b1e4834443d92f8bc1de61a61a67"
+          },
+          "route": {
+            "length": 54,
+            "sha256": "7deb6bc9ca0e101f92b0e40a04392dd8d891b1e4834443d92f8bc1de61a61a67",
+            "path": {
+              "length": 28,
+              "sha256": "1c62d074adbe606bdae9f0857bdbe59347f0e24faa97d6c52d026647d27f750f"
+            }
+          },
+          "thread_id": 6431,
+          "http_status": 200,
+          "business_code": 0,
+          "response_class": "readersaas.com.dragon.read.saas.rpc.model.BatchFullResponse",
+          "transport_error_class": null
+        },
+        {
+          "event": "session_detached",
+          "reason": "application-requested"
+        }
+      ],
+      "pairs": [
+        {
+          "signature_source_index": 54,
+          "response_source_index": 89
+        },
+        {
+          "signature_source_index": 100,
+          "response_source_index": 101
+        },
+        {
+          "signature_source_index": 110,
+          "response_source_index": 111
+        },
+        {
+          "signature_source_index": 112,
+          "response_source_index": 113
+        },
+        {
+          "signature_source_index": 116,
+          "response_source_index": 118
+        }
+      ],
+      "nested_cause_chain_observed": false
+    },
+    {
+      "label": "subsequent_readable_chapter",
+      "configured_duration_seconds": 120,
+      "capture_sha256": "2d307caccbe137ecff94f37f92afca11766ef666e543da1a70edbb022af0a362",
+      "capture_event_counts": {
+        "bridge_eval_done": 1,
+        "hooked": 9,
+        "probe_ready": 1,
+        "response_deserialized": 15,
+        "script_loaded": 1,
+        "securityFactor": 17,
+        "session_detached": 1
+      },
+      "selected_source_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        23,
+        26,
+        31,
+        33,
+        44
+      ],
+      "selected_events": [
+        {
+          "event": "script_loaded",
+          "source_length": 452876,
+          "chunks": 10
+        },
+        {
+          "event": "hooked",
+          "target": "MSManager.frameSign"
+        },
+        {
+          "event": "hooked",
+          "target": "ms.bd.c.r4.onCallToAddSecurityFactor"
+        },
+        {
+          "event": "hooked",
+          "target": "CronetUrlRequest.addSecurityFactor"
+        },
+        {
+          "event": "hooked",
+          "target": "CronetUrlRequestContext.addSecurityFactor"
+        },
+        {
+          "event": "hooked",
+          "target": "CronetUrlRequestContext.o0"
+        },
+        {
+          "event": "probe_ready",
+          "pid": 6239
+        },
+        {
+          "event": "hooked",
+          "target": "resource_warning"
+        },
+        {
+          "event": "hooked",
+          "target": "response_deserialized"
+        },
+        {
+          "event": "hooked",
+          "target": "error_code_exception"
+        },
+        {
+          "event": "hooked",
+          "target": "reader_exception"
+        },
+        {
+          "event": "bridge_eval_done"
+        },
+        {
+          "event": "securityFactor",
+          "url": {
+            "length": 745,
+            "sha256": "ddf84059b997bae5b7efa6cd07f55e1fe82341c76ea1f045d4f1e9e5a7d0229a"
+          },
+          "route": {
+            "length": 65,
+            "sha256": "edf6b7e6bf9854cd16b1b8f6374b2edd16b67a94e53d7b08fc9f04f73ef6a623",
+            "path": {
+              "length": 22,
+              "sha256": "d5b5e63bb37ee975a3f6d04d95cf5205afda740af80f594961f197a245c502aa"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "eb2fd783f3c4f762bab6b9e27317b0cbac841b1b0a0257cad1f8406245976031"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "e724dc997e7194c0e3af4a1a313625a6db4524cc55f448c695be57e882da6aac"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "d75e3400479701016c3ee18b69a93bde561735affcfcc872cef5811e9859987f"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "3c6b569b9f89f0f53374695fe60060000955b1c67410e63365a61d9430288e6d"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "ba1766c0d3a7e6de75038f33b1d71a013b25991a49fb584d8cf9c1985248a82f"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "eed23c6d4a2bc20e132247f4cd1f5b6c7b3a9283aaf1a1afe995debd3c9f9a08"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "1dc44e207ddc3f49525e019c2c62014c9863495d517d748e31395cb90ba59e6e"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1288,
+                  "sha256": "f669d35b52e7895fc10a3971e51da985ac1d8f1b9ad6554047b659083c8770de"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 6411,
+            "stack": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "CallServerInterceptor__executeCall$___twin___"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "y90.b",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.pitaya.bdcomponentimpl.network.RequestFeatureInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.LuckyDogActCommonInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.d",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.e",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.j",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              }
+            ]
+          }
+        },
+        {
+          "event": "securityFactor",
+          "url": {
+            "length": 763,
+            "sha256": "ff7605b34f3832dd7f6832d11bbd1bc61ab0dd8c4a47b91ec776ce685933bc31"
+          },
+          "route": {
+            "length": 71,
+            "sha256": "79dac4d176b0b3b6482b6689b1c89cb18217740886e87cacc5fd8426752e8005",
+            "path": {
+              "length": 28,
+              "sha256": "1c62d074adbe606bdae9f0857bdbe59347f0e24faa97d6c52d026647d27f750f"
+            }
+          },
+          "input": {
+            "count": 12,
+            "rows": [
+              {
+                "key": "accept",
+                "value": {
+                  "length": 56,
+                  "sha256": "54f4663d934b1e7b0f38dbbbc560a3524f5e7b13f0e2f963e7aede7eb94453a5"
+                }
+              },
+              {
+                "key": "accept-encoding",
+                "value": {
+                  "length": 6,
+                  "sha256": "77a48e934b1121e0f44e778795f7b42ff948c1ebc0ad77dcc39efc17eb3207ea"
+                }
+              },
+              {
+                "key": "lc",
+                "value": {
+                  "length": 5,
+                  "sha256": "d45d39f3996478609d46956d9f1c197532d82e79bab71d743148427b01e13cee"
+                }
+              },
+              {
+                "key": "passport-sdk-version",
+                "value": {
+                  "length": 9,
+                  "sha256": "233579061142a6090bcd896a4bd291e1e10ae190128fd571bd4c613e7bd20868"
+                }
+              },
+              {
+                "key": "sdk-version",
+                "value": {
+                  "length": 3,
+                  "sha256": "038966de9f6b9a901b20b4c6ca8b2a46009feebe031babc842d43690c0bc222b"
+                }
+              },
+              {
+                "key": "user-agent",
+                "value": {
+                  "length": 109,
+                  "sha256": "b5eabcac21a4c7c1df7eddc17ee53bb5916ad2a0f60889ab2e66bdaf91e09c33"
+                }
+              },
+              {
+                "key": "x-reading-request",
+                "value": {
+                  "length": 25,
+                  "sha256": "a85a25887321b38bf07b250a53335e48f2247ae0990cdeed8b0e2997f3b4611a"
+                }
+              },
+              {
+                "key": "x-ss-req-ticket",
+                "value": {
+                  "length": 15,
+                  "sha256": "fa8ed5653e424f52c8bcf19db4bcefb1227d8c4751545d00cb386c9623b1a963"
+                }
+              },
+              {
+                "key": "x-tt-store-region",
+                "value": {
+                  "length": 7,
+                  "sha256": "6a650a5a1b498f38633f2049b3ce18b1e524fb45cf80efcc65598368ddd02da8"
+                }
+              },
+              {
+                "key": "x-tt-store-region-src",
+                "value": {
+                  "length": 5,
+                  "sha256": "20d3db40c447c95fc5362642aa9ad94ef5b7d2bc559fa2c8eb91d2afe28c2e20"
+                }
+              },
+              {
+                "key": "x-vc-bdturing-sdk-version",
+                "value": {
+                  "length": 10,
+                  "sha256": "d8262db70c5b31b4918fd44ce36f2ea05eda49fbf2a43018ae91866163bba743"
+                }
+              },
+              {
+                "key": "x-xs-from-web",
+                "value": {
+                  "length": 3,
+                  "sha256": "d0bca111f8628137adc4c16f123496dcdd1d590d06cb5d9acd68b39fe656fb97"
+                }
+              }
+            ]
+          },
+          "result": {
+            "count": 6,
+            "rows": [
+              {
+                "key": "X-Argus",
+                "value": {
+                  "length": 8,
+                  "sha256": "f5a95072afa3f19e9fa6b7f307d18b217209df8b65aacb656af7718ba4bc782c"
+                }
+              },
+              {
+                "key": "X-Gorgon",
+                "value": {
+                  "length": 52,
+                  "sha256": "f33d687547dd2dbb7ac9039f9a26b9f39e670036c7a719cba8d6371df15ff298"
+                }
+              },
+              {
+                "key": "X-Helios",
+                "value": {
+                  "length": 48,
+                  "sha256": "d2ee36098de2156273cdb6bdf35d763517383af95c4f1f787caa23dda0a005ae"
+                }
+              },
+              {
+                "key": "X-Khronos",
+                "value": {
+                  "length": 10,
+                  "sha256": "c6edf60f386fd9935a91388ad78b6963af549392dbd25beb3aa43566e7a38d63"
+                }
+              },
+              {
+                "key": "X-Ladon",
+                "value": {
+                  "length": 8,
+                  "sha256": "b7998064982e015d5aa3f96290a3f15f5756b58b4c11d80ecfa0f85c4e8da6ad"
+                }
+              },
+              {
+                "key": "X-Medusa",
+                "value": {
+                  "length": 1288,
+                  "sha256": "18ef6e8af8d11cdc6a32ce31357c07551840ee891eddb222b9ae8d8a6caee053"
+                }
+              }
+            ]
+          },
+          "context": {
+            "thread_id": 6426,
+            "stack": [
+              {
+                "class": "ms.bd.c.r4",
+                "method": "onCallToAddSecurityFactor"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.OkHttp3SecurityFactorInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "okhttp3.internal.http.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "getResponseWithInterceptorChain"
+              },
+              {
+                "class": "okhttp3.RealCall",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.ok3.impl.b",
+                "method": "p"
+              },
+              {
+                "class": "com.bytedance.frameworks.baselib.network.http.impl.a",
+                "method": "execute"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "CallServerInterceptor__executeCall$___twin___"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_NetworkTrafficAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "com_bytedance_retrofit2_CallServerInterceptor_com_dragon_read_aop_RetrofitAop_executeCall"
+              },
+              {
+                "class": "com.bytedance.retrofit2.CallServerInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "y90.b",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.pitaya.bdcomponentimpl.network.RequestFeatureInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.LuckyDogActCommonInterceptor",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.d",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.e",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              },
+              {
+                "class": "com.bytedance.ug.sdk.luckydog.api.network.j",
+                "method": "intercept"
+              },
+              {
+                "class": "com.bytedance.retrofit2.intercept.RealInterceptorChain",
+                "method": "proceed"
+              }
+            ]
+          }
+        },
+        {
+          "event": "response_deserialized",
+          "url": {
+            "length": 48,
+            "sha256": "b9708f30b61110843ff2bbb6e788f9ada89f0cc52120f18a931f220eccb7d2bd"
+          },
+          "route": {
+            "length": 48,
+            "sha256": "b9708f30b61110843ff2bbb6e788f9ada89f0cc52120f18a931f220eccb7d2bd",
+            "path": {
+              "length": 22,
+              "sha256": "d5b5e63bb37ee975a3f6d04d95cf5205afda740af80f594961f197a245c502aa"
+            }
+          },
+          "thread_id": 6411,
+          "http_status": 200,
+          "business_code": 0,
+          "response_class": "readersaas.com.dragon.read.saas.rpc.model.FullResponse",
+          "transport_error_class": null
+        },
+        {
+          "event": "response_deserialized",
+          "url": {
+            "length": 54,
+            "sha256": "7deb6bc9ca0e101f92b0e40a04392dd8d891b1e4834443d92f8bc1de61a61a67"
+          },
+          "route": {
+            "length": 54,
+            "sha256": "7deb6bc9ca0e101f92b0e40a04392dd8d891b1e4834443d92f8bc1de61a61a67",
+            "path": {
+              "length": 28,
+              "sha256": "1c62d074adbe606bdae9f0857bdbe59347f0e24faa97d6c52d026647d27f750f"
+            }
+          },
+          "thread_id": 6426,
+          "http_status": 200,
+          "business_code": 0,
+          "response_class": "readersaas.com.dragon.read.saas.rpc.model.BatchFullResponse",
+          "transport_error_class": null
+        },
+        {
+          "event": "session_detached",
+          "reason": "application-requested"
+        }
+      ],
+      "pairs": [
+        {
+          "signature_source_index": 23,
+          "response_source_index": 31
+        },
+        {
+          "signature_source_index": 26,
+          "response_source_index": 33
+        }
+      ],
+      "nested_cause_chain_observed": false
+    }
+  ],
+  "jni_variants_control": {
+    "capture_sha256": "eaf3c16915701e1415bd5e5b19ad9af8acab8cd5e6f4688bb3fb3f1197cf0594",
+    "configured_duration_seconds": 100,
+    "sample_count": 10,
+    "last_sample_counts": {
+      "plain": 3556,
+      "V": 767,
+      "A": 3
+    },
+    "last_sample_target_counts": {
+      "plain": 0,
+      "V": 0,
+      "A": 0
+    },
+    "cached_target_method_ids_resolved": true,
+    "a_counts_include_active_class_loader_calls": true,
+    "vm_detach_status": 0,
+    "terminal_reason": "application-requested",
+    "interpretation": "Other JNI activity reaches plain and V entries; the active resolver also contributes A calls. Zero target counts do not establish universal coverage of translated guest JNI."
+  },
+  "ui_observations": {
+    "initial_chapter_loading_error": true,
+    "subsequent_chapter_body_visually_observed": true,
+    "screenshot_sha256": "8824f59de1c6be8fec12d8584ec45db62b92cd1d391c9e948f93b4efe50a82dc",
+    "screenshot_bytes": 132207,
+    "raw_screenshot_retained": false
+  },
+  "manual_frame_sign_invocation": false,
+  "builtin_signer_six_header_result_observed": true,
+  "official_app_http200_business0_observed": true,
+  "reader_failure_is_always_network_rejection": false,
+  "reader_failure_root_cause_identified": false,
+  "cronet_runtime_branch_observed": false,
+  "translated_jni_coverage_fully_verified": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "raw_urls_or_header_values_retained": false,
+  "raw_response_body_retained": false,
+  "cleanup": {
+    "current_run_servers_stopped": true,
+    "current_run_forward_removed": true,
+    "cloud_forward_preserved": true
+  },
+  "interpretation": "The unchanged official APK generated six headers through an OkHttp interceptor. Seven Full/BatchFull responses across two captures have preceding signatures with matching path digests and thread IDs, HTTP 200, business code 0 and no transport error. Two initial CHAPTER_CONTENT_ERROR/-1002 wrappers preceded a later run with visibly readable chapter content; the underlying cause was not identified and the nested-cause enhancement did not encounter another reader error. This demonstrates built-in app behavior only. It does not prove which headers are necessary, that Cronet ran, or that an independent signer is accepted."
+}

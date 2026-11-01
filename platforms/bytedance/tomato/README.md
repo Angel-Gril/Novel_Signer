@@ -1,5 +1,13 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-02 官方原版已通过分块 Java bridge 成功观测普通 OkHttp 阅读链。两轮捕获中
+七个 Full/BatchFull 响应与此前同线程/路径摘要的六头回调对应，均为 HTTP 200、
+业务码 0；随后截图显示可读正文。早先两次章节内容错误的根因仍未知。三个 Cronet
+Java hook 和 JNI 普通/V/A 对照均未命中目标，仍不能推断 Cronet 不可达。
+这验证的是应用内置 signer 的行为；完整独立 signer、整请求差分与独立六头线上接受
+仍未完成。见[官方阅读证据](evidence/vm9_official_okhttp_reader_20261102.json)及
+[校验器](python/verify_vm9_official_okhttp_reader_20261102.py)。
+
 2026-11-02 后续无 hook 运行已进入书城；关闭系统界面 ANR 后可进入书籍详情。
 系统栈采到权限锁内厂商配置解析，但配置无巨行/乱码，未修改；唯一根因仍未确认。
 为覆盖启动时已缓存的 method ID，JNI 探针新增 `--resolve-cached-methods` 热接入选项。

@@ -196,6 +196,38 @@ class Device:
         return self.session
 
 
+DIAGNOSTIC_CHECK = r"""
+const assert = require('node:assert/strict'), vm = require('node:vm');
+const source = JSON.parse(require('node:fs').readFileSync(0, 'utf8')).source;
+const context = vm.createContext({setInterval: () => 1, send: () => {}});
+vm.runInContext(source, context);
+function throwable(name, next) {
+  return {getClass: () => ({getName: () => name}), getCause: () => next,
+    getStackTrace: () => [{getClassName: () => 'Reader', getMethodName: () => 'decode'}]};
+}
+function make(name, next) {
+  const value = throwable(name, next); value.equals = other => other === value;
+  value.getMessage = () => { throw Error('messages may contain private content'); };
+  value.toString = value.getMessage; return value;
+}
+const root = make('DecodeException', null), wrapper = make('RuntimeException', root);
+const result = context.causeChain(wrapper);
+assert.deepEqual(Array.from(result.rows, row => row.class), ['RuntimeException', 'DecodeException']);
+assert.equal(result.terminal, 'complete');
+const cycle = make('Cycle', null); cycle.getCause = () => cycle;
+assert.equal(context.causeChain(cycle).terminal, 'cycle');
+let chain = null; for (let i = 0; i < 9; i++) chain = make('Wrapper', chain);
+assert.equal(context.causeChain(chain).rows.length, 6);
+assert.equal(context.causeChain(chain).terminal, 'limit');
+const broken = make('Broken', null); broken.getCause = () => { throw Error('unavailable'); };
+assert.equal(context.causeChain(broken).terminal, 'unavailable');
+assert.equal(context.causeChain(null).rows.length, 0);
+assert.ok(!JSON.stringify(result).includes('message'));
+process.stdout.write(JSON.stringify({nested_cause_types: true, cycle_and_depth_bounded: true,
+  exception_messages_omitted: true}));
+"""
+
+
 CRONET_CACHED_CHECK = r"""
 const assert = require('node:assert/strict'), vm = require('node:vm');
 const source = JSON.parse(require('node:fs').readFileSync(0, 'utf8')).source;
@@ -420,6 +452,9 @@ def main() -> int:
         assert "📦" not in normalized and "✄" not in normalized
     for source in (capture.JS, capture.DIAGNOSTIC_JS, capture.CERTIFICATE_JS):
         subprocess.run(["node", "--check"], input=source, text=True, check=True)
+    diagnostic_result = subprocess.run(
+        ["node", "-e", DIAGNOSTIC_CHECK], input=json.dumps({"source": capture.DIAGNOSTIC_JS}),
+        text=True, check=True, capture_output=True, timeout=20)
     result = subprocess.run(
         ["node", "-e", JS_CHECK], input=json.dumps({"source": capture.JS}),
         text=True, check=True, capture_output=True,
@@ -488,6 +523,7 @@ def main() -> int:
         "target_exit_ends_capture": True, "destroyed_script_cleanup": True,
         "evidence_boundary": "host regression only; Android business callback unverified",
         "cronet_lifecycle": check_cronet_lifecycle(),
+        "reader_diagnostics": json.loads(diagnostic_result.stdout),
     }))
     return 0
 

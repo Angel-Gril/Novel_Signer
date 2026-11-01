@@ -306,6 +306,20 @@ function stackRows(throwable) {
   } catch (e) { return [{error: String(e)}]; }
   return rows;
 }
+function causeChain(throwable) {
+  var rows = [], seen = [], current = throwable;
+  for (var depth = 0; current && depth < 6; depth++) {
+    try {
+      for (var i = 0; i < seen.length; i++) {
+        if (current.equals(seen[i])) return {rows: rows, terminal: 'cycle'};
+      }
+      seen.push(current);
+      rows.push({class: String(current.getClass().getName()), stack: stackRows(current)});
+      current = current.getCause();
+    } catch (_) { return {rows: rows, terminal: 'unavailable'}; }
+  }
+  return {rows: rows, terminal: current ? 'limit' : 'complete'};
+}
 function installDiagnostics() {
   if (typeof Java === 'undefined' || diagnosticScheduled) return;
   diagnosticScheduled = true;
@@ -387,6 +401,7 @@ function installDiagnostics() {
                     var cause = value.getThrowable();
                     row.cause_class = String(cause.getClass().getName());
                     row.cause_stack = stackRows(cause);
+                    row.cause_chain = causeChain(cause);
                   } catch (_) {}
                   rows.push(row);
                 } catch (_) {}

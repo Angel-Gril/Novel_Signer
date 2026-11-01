@@ -10451,5 +10451,16 @@
     "cronet_runtime_branch_observed": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_official_okhttp_reader_20261102": {
+    "evidence_file": "evidence/vm9_official_okhttp_reader_20261102.json",
+    "verifier": "python/verify_vm9_official_okhttp_reader_20261102.py",
+    "package_identity": "unchanged_official_apk",
+    "correlated_reader_responses": 7,
+    "official_app_http200_business0_observed": true,
+    "readable_chapter_visually_observed": true,
+    "cronet_runtime_branch_observed": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

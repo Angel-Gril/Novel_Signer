@@ -1,5 +1,29 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-02：官方原版 OkHttp 阅读响应与可读正文
+
+改用现有分块加载器传入 Java bridge 后，官方 APK 热接入成功；五个签名 hook 和
+四个阅读诊断 hook 均安装。两次捕获共观察到 73 次 `securityFactor`、64 次响应
+反序列化；其中七个 Full/BatchFull 响应各有此前同线程、同路径摘要的六头回调，
+调用栈包含 `OkHttp3SecurityFactorInterceptor`，响应均为 HTTP 200、业务码 0、
+transport error 为空。官方 APK SHA-256 在捕获后复核仍为 `95889d1a…`。
+
+第一轮有两次 `CHAPTER_CONTENT_ERROR/-1002`，最外层 cause 为 RuntimeException；
+第二轮翻章后截图已直接显示章节正文。因此先前“章节加载失败”不是本设备上的
+永久限制，也不能归因为统一的服务端签名拒绝。根因仍未知。诊断新增最多六层的
+异常类型/栈采集，限制循环与深度、不读取异常消息；新一轮未复现 ReaderException，
+故嵌套根因采集仅通过 host 回归，尚无实际错误样本。
+
+另做 100 秒 JNI 普通/V/A 三入口对照：末次样本计数 3556/767/3，目标计数均为 0；
+A 含主动类加载器调用。可证明 host JNI 入口有活动，不能证明所有 Houdini guest
+调用均被覆盖。业务观测没有命中三个 Cronet Java hook，因此先沿实际 OkHttp 路径
+推进，Cronet 是否可达继续保留未验证。完整 signer、整请求 native/Python 差分及
+独立输出线上接受仍未完成；内置 signer 的成功响应不替代这些验收。
+
+新增[官方阅读证据](evidence/vm9_official_okhttp_reader_20261102.json)及
+[校验器](python/verify_vm9_official_okhttp_reader_20261102.py)，保留七组脱敏关联，
+校验两份原始捕获摘要与选中事件、七项拒绝控制。所有本轮 server/forward 已清理。
+
 ## 2026-11-02：书城恢复与缓存 method ID 观测补齐
 
 继续无 hook 等待后，官方原版实际进入书城；关闭系统界面 ANR 弹窗后可进入书籍
