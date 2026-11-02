@@ -10633,5 +10633,24 @@
     "fresh_standalone_signer_verified": false,
     "whole_request_native_python_differential_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_framesign_standard_source_scope_20261103": {
+    "evidence_file": "evidence/vm9_framesign_standard_source_scope_20261103.json",
+    "verifier": "python/verify_vm9_framesign_standard_source_scope_20261103.py",
+    "schema": "vm9-framesign-standard-source-scope-20261103-v1",
+    "device_serial": "emulator-5554",
+    "process_id": 12886,
+    "app_version": "7.2.5.32/72532",
+    "input_profile": "homepage",
+    "thread_filtered_jni_calls": 2,
+    "clock_gettime_calls_per_sign_call": 1,
+    "clock_call_owner": "libc je_nstime_update allocator",
+    "standard_random_api_observed": false,
+    "dynamic_cause_identified": false,
+    "custom_random_source_excluded": false,
+    "direct_syscall_source_excluded": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：FrameSign 动态来源的标准 API 范围检查
+
+在 7.2.5.32/72532 的真实 Android `0x200000a` JNI 调用期间按 OS thread id 计数。两次
+同输入调用均各观察到一次 `clock_gettime`；该 hook 的返回地址为 emulator `libc.so+0xb308c`，
+经该设备 libc 的 ELF/PLT relocation 核对，调用点属于 jemalloc `je_nstime_update`，调用
+`clock_gettime` 时使用 clock id 6（`CLOCK_MONOTONIC_COARSE`），不归因给 signer。窗口内
+没有观察到 `getrandom`、`arc4random`、`rand`、`random`、`SecureRandom.nextBytes` 或 Java
+墙钟 API。与此同时 `signinfo/signvalue` 摘要仍逐次改变。
+
+这只排除了该次 thread-filtered 调用窗口中的这些标准导出 API；翻译环境无法展开 native
+backtrace，自定义 PRNG、直接 syscall、未挂钩来源及异步 provider 状态仍未排除。因此动态
+来源和 standalone signer 仍未闭合。证据：[标准 API 范围检查](evidence/vm9_framesign_standard_source_scope_20261103.json)
+及[校验器](python/verify_vm9_framesign_standard_source_scope_20261103.py)。
+
 ## 2026-11-03：同一 Android provider 的重复调用显示动态字段
 
 在 emulator-5554 上对已安装的 7.2.5.32/72532 官方 APK 做脱敏复核，APK SHA-256 与

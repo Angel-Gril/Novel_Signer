@@ -1,0 +1,103 @@
+{
+  "schema": "vm9-framesign-standard-source-scope-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "package": "com.dragon.read",
+  "app_version": "7.2.5.32/72532",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "device_serial": "emulator-5554",
+  "android": "9 / sdk 28",
+  "process_abi": "x86_64",
+  "native_translation": "arm64-v8a through libnb.so",
+  "process_id": 12886,
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "observation_boundary": {
+    "java_entry": "ms.bd.c.y2.a(int,int,long,String,Object)",
+    "tag": "0x200000a",
+    "thread_filtered": true,
+    "same_manager_instance_reused": true
+  },
+  "repeat_trials": [
+    {
+      "ordinal": 1,
+      "fields": [
+        {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+        {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+        {"key": "signinfo", "length": 192, "sha256": "977969b1e6dfc92e3e328e2cb8fd70662832bc3616bba39fdb3310411e12300b"},
+        {"key": "signvalue", "length": 64, "sha256": "e3eb4537427ff3968617c80b60acc17f549316c0d3dcaa5302eb3197c37c33e5"},
+        {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+      ],
+      "source_counts": {
+        "clock_gettime": 1,
+        "gettimeofday": 0,
+        "getrandom": 0,
+        "arc4random": 0,
+        "rand": 0,
+        "random": 0,
+        "java_nanoTime": 0,
+        "java_currentTimeMillis": 0,
+        "secureRandom_nextBytes": 0
+      }
+    },
+    {
+      "ordinal": 2,
+      "fields": [
+        {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+        {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+        {"key": "signinfo", "length": 192, "sha256": "26aadb025b09a360a845249619d3f9f19182d7c43b12b196974f8d3fe99d8e46"},
+        {"key": "signvalue", "length": 64, "sha256": "5c9bb2ee3f7a47ab58fd732918058c724cb022a3c562274f1526dd85a48c97d7"},
+        {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+      ],
+      "source_counts": {
+        "clock_gettime": 1,
+        "gettimeofday": 0,
+        "getrandom": 0,
+        "arc4random": 0,
+        "rand": 0,
+        "random": 0,
+        "java_nanoTime": 0,
+        "java_currentTimeMillis": 0,
+        "secureRandom_nextBytes": 0
+      }
+    }
+  ],
+  "clock_observation": {
+    "immediate_return_module": "libc.so",
+    "immediate_return_offset": "0xb308c",
+    "caller_function": "je_nstime_update",
+    "caller_function_offset": "0xb3070",
+    "call_instruction_offset": "0xb3087",
+    "plt_target_offset": "0x1a7a0",
+    "plt_target_symbol": "clock_gettime",
+    "clock_id": 6,
+    "clock_id_name": "CLOCK_MONOTONIC_COARSE",
+    "attributed_to_signer": false,
+    "native_backtrace_frames": 0
+  },
+  "source_artifacts": {
+    "device_libc_sha256": "78d745c10b5765230482dd19c73cbe66e567a34877194f0a393e73e4eac468f7",
+    "probe_sha256": "fc71df196bdcbd87b311e6684439ea506fa2d02a630f9d4ac3b12291b75990cf"
+  },
+  "raw_capture_retained": false,
+  "comparison": {
+    "same_input_digest": true,
+    "same_provider_instance": true,
+    "field_keys_and_lengths_match": true,
+    "frametype_lid_signversion_hashes_stable": true,
+    "signinfo_hash_changes_between_calls": true,
+    "signvalue_hash_changes_between_calls": true,
+    "clock_call_attributed_to_signer": false,
+    "standard_random_api_observed_on_signer_thread": false,
+    "custom_random_source_excluded": false,
+    "direct_syscall_source_excluded": false,
+    "dynamic_cause_identified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "Two same-input calls through the live 0x200000a JNI boundary changed signinfo and signvalue while preserving field keys and lengths. The only observed clock_gettime call in each thread-filtered JNI window returns into libc's jemalloc je_nstime_update function, whose PLT relocation is clock_gettime with clock id 6 (CLOCK_MONOTONIC_COARSE); it is allocator timing, not attributed to the signer. No hooked standard random API or Java time API ran on the signer thread. The translated emulator produced no unwindable native backtrace. Custom PRNGs, direct syscalls, unhooked APIs, and asynchronous/provider state remain untested, so the dynamic source is still unknown."
+}
