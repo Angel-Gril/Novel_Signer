@@ -10497,5 +10497,24 @@
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_request_context_child_cleanup_20261102": {
+    "evidence_file": "evidence/vm9_request_context_child_cleanup_20261102.json",
+    "verifier": "python/verify_vm9_request_context_references_20261028.py",
+    "schema": "vm9-request-context-reference-members-20261102-v4",
+    "assignment_cases": 26,
+    "reference_cleanup_cases": 16,
+    "child_cleanup_cases": 10,
+    "child_assignment_cases": 2,
+    "native_controls": 134,
+    "assignment_rollback_guards": 8,
+    "reference_cleanup_guards": 12,
+    "child_cleanup_guards": 10,
+    "empty_signer_child_cleanup_supported": true,
+    "child_cleanup_connected_to_reference_assignment": true,
+    "nonempty_signer_child_cleanup_supported": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

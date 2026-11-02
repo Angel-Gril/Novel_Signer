@@ -3109,9 +3109,13 @@ def bind_signer_handler_reference_members(
                 if pointer:
                     vtable = int.from_bytes(_read_span(transaction, pointer, 8), "little")
                     target = int.from_bytes(_read_span(transaction, vtable + 8, 8), "little")
-                    if target != _image_address(image_base, 0x1658D8):
+                    if target == _image_address(image_base, 0x1658D8):
+                        free(transaction, pointer)
+                    elif target == _image_address(image_base, 0x27E864):
+                        destroy_signer_child(transaction, child_address=pointer,
+                                              image_base=image_base, free=free)
+                    else:
                         raise RefillUnsupported("unrecovered handler reference deleting target")
-                    free(transaction, pointer)
                     _write_span(transaction, destination, bytes(8))
         _copy_reference_contents(transaction, destination, source)
     transaction.commit()
@@ -3142,3 +3146,76 @@ def bind_signer_child_callback(
     _write_span(transaction, pair, _word(_image_address(image_base, entry)) + _word(handler_address))
     transaction.commit()
     return pair
+
+
+def destroy_empty_signer_callback_container(
+    pages, *, container_address: int, image_base: int, free: Callable,
+) -> None:
+    """Release an empty ``+0x35b828`` callback container.
+
+    The measured child deleting body releases an empty callback container in
+    the order ``sentinel, controller, container``. Non-empty callback trees,
+    diagnostic scopes, and callback-specific pair destructors remain outside
+    this bounded owner and are rejected before any page is committed.
+    """
+    if (type(container_address) is not int or container_address <= 0
+            or type(image_base) is not int or not 0 < image_base < 1 << 64
+            or not callable(free)):
+        raise RefillUnsupported("callback-container cleanup requires guest pointers and free service")
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, container_address, 0x28)
+    if int.from_bytes(_read_span(transaction, container_address, 8), "little") != _image_address(image_base, 0x35B828):
+        raise RefillUnsupported("unrecovered callback-container vtable")
+    controller = int.from_bytes(_read_span(transaction, container_address + 0x20, 8), "little")
+    if not controller:
+        free(transaction, container_address)
+        transaction.commit()
+        return
+    _read_span(transaction, controller, 0x28)
+    sentinel = int.from_bytes(_read_span(transaction, controller, 8), "little")
+    count = int.from_bytes(_read_span(transaction, controller + 8, 8), "little")
+    if count:
+        raise RefillUnsupported("non-empty callback-container tree destructor is unrecovered")
+    if not sentinel:
+        raise RefillUnsupported("empty callback-container sentinel is missing")
+    _read_span(transaction, sentinel, 0x28)
+    free(transaction, sentinel)
+    free(transaction, controller)
+    free(transaction, container_address)
+    transaction.commit()
+
+
+def destroy_signer_child(
+    pages, *, child_address: int, image_base: int, free: Callable,
+) -> None:
+    """Release the measured ``+0x35d5f0`` child and its callback reference.
+
+    Native ``+0x27e864`` owns only the ``+0x10`` callback-container reference;
+    the mutex state at ``+0x08`` and callback pair at ``+0x20`` are borrowed.
+    Last-owner cleanup supports the measured empty callback container. The
+    complete non-empty tree and physical diagnostic stack remain refused.
+    """
+    if (type(child_address) is not int or child_address <= 0
+            or type(image_base) is not int or not 0 < image_base < 1 << 64
+            or not callable(free)):
+        raise RefillUnsupported("signer-child cleanup requires guest pointers and free service")
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, child_address, 0x28)
+    if int.from_bytes(_read_span(transaction, child_address, 8), "little") != _image_address(image_base, 0x35D5F0):
+        raise RefillUnsupported("unrecovered signer-child vtable")
+    reference = child_address + 0x10
+    counter = int.from_bytes(_read_span(transaction, reference + 8, 8), "little")
+    if counter:
+        count = int.from_bytes(_read_span(transaction, counter, 4), "little")
+        _write_span(transaction, counter, ((count - 1) & 0xFFFFFFFF).to_bytes(4, "little"))
+        if _s32(count) <= 1:
+            free(transaction, counter)
+            pointer = int.from_bytes(_read_span(transaction, reference, 8), "little")
+            _write_span(transaction, reference + 8, bytes(8))
+            if pointer:
+                destroy_empty_signer_callback_container(
+                    transaction, container_address=pointer,
+                    image_base=image_base, free=free)
+                _write_span(transaction, reference, bytes(8))
+    free(transaction, child_address)
+    transaction.commit()

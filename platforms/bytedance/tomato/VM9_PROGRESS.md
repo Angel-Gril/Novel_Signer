@@ -1,5 +1,22 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-02：子对象与空 callback container 析构接入
+
+恢复 `+0x27e864` 的 signer child 删除路径：先递减 child `+0x10` 引用计数，
+最后所有者释放计数并清空槽，再按原生顺序清理空 callback container 的
+`sentinel → controller → container`，最后释放 child。child 的 `+0x08` mutex
+状态和 `+0x20` callback pair 是借用字段，不在该删除体中释放。非空 callback
+树、未知 child/container 虚表和缺服务均保持拒绝。
+
+`bind_signer_handler_reference_members` 已将旧对象虚表 `+0x27e864` 接到该析构；
+未知删除目标仍拒绝。两基址共 10 组 child 直入口（空/NULL/保留/有符号边界）
+和 2 组引用替换触发 child 析构通过，完整 guest 窗口、释放顺序和释放前字节一致。
+与此前 26 组赋值、16 组配置引用清理合并，共 134 次原生执行；8 项赋值回滚、
+12 项引用清理拒绝、10 项 child 拒绝控制通过。外层对象图四组回归继续保持核心图
+和默认记录一致，旧 allocation 308 尾部差异仍保留。见[子对象清理证据](evidence/vm9_request_context_child_cleanup_20261102.json)。
+
+非空 callback 树的节点/回调析构、整请求差分、独立 signer 和线上六头接受仍未完成。
+
 ## 2026-11-02：配置引用的最后所有者清理
 
 `bind_signer_handler_reference_members` 新增显式 `image_base/free` 服务，支持空对象
