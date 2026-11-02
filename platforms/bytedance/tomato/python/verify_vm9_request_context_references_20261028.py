@@ -243,6 +243,112 @@ def _rollback_cases() -> list[dict]:
     return rejected
 
 
+def _cleanup_case(library, libc, base, profile, count):
+    from unicorn import arm64_const as arm
+
+    target = GUEST + 0x1000
+    original = oracle.fresh_pages()
+    refs = _seed_case(original)
+    oracle._write_span(original, target, bytes(0x80))
+    sizes = {}
+    for offset in (0x40, 0x30):
+        counter, payload = GUEST + 0x8900 + offset, GUEST + 0x9500 + offset
+        if profile == "null_old_object":
+            payload = 0
+        elif profile == "null_old_counter":
+            counter = 0
+        if payload:
+            oracle._write_span(original, payload,
+                               (base + objects.CONFIG_VTABLE_OFFSET).to_bytes(8, "little"))
+            sizes[payload] = 8
+        oracle._write_span(original, target + offset,
+                           payload.to_bytes(8, "little") + counter.to_bytes(8, "little"))
+        if counter:
+            oracle._write_span(original, counter, count.to_bytes(4, "little"))
+            sizes[counter] = 4
+    model = {k: bytearray(v) for k, v in original.items()}
+    model.update(oracle.image_pages(library, base))
+    expected, actual = [], []
+
+    def release(read, write, pointer, events):
+        width = sizes[pointer]
+        events.append((pointer, read(pointer, width)))
+        write(pointer, b"\xdd" * width)
+        # Model an allocator callback changing the still-live source wrapper.
+        if profile == "free_mutates_source" and pointer == GUEST + 0x8940:
+            write(refs["reference_40"][0], (GUEST + 0x9600).to_bytes(8, "little"))
+        if profile == "free_nulls_old_object" and pointer == GUEST + 0x8940:
+            write(target + 0x40, bytes(8))
+
+    def native_free(cpu):
+        release(lambda a, n: bytes(cpu.mem_read(a, n)), cpu.mem_write,
+                cpu.reg_read(arm.UC_ARM64_REG_X0), expected)
+        return 0
+
+    def model_free(pages, pointer):
+        release(lambda a, n: oracle._read_span(pages, a, n),
+                lambda a, raw: oracle._write_span(pages, a, raw), pointer, actual)
+
+    _, after_40, _, _ = oracle.native(
+        library, base, 0x28508C, [target, refs["reference_40"][0]],
+        original, libc=libc, host_imports={0x347FA0: native_free})
+    _, after_both, _, _ = oracle.native(
+        library, base, 0x285094, [target, refs["reference_30"][0]],
+        _pages_with_memory(after_40, refs), libc=libc,
+        host_imports={0x347FA0: native_free})
+    objects.bind_signer_handler_reference_members(
+        model, object_address=target, reference_30=refs["reference_30"][0],
+        reference_40=refs["reference_40"][0], image_base=base, free=model_free)
+    assert oracle.flatten(model)[:0xA000] == after_both, (hex(base), profile, "memory")
+    assert actual == expected, (hex(base), profile, "release order/pre-free bytes")
+    return dict(image_base=hex(base), profile=profile, original_count=count,
+                full_object_window_match=True, release_order_and_pre_free_bytes_match=True,
+                freed_blocks=len(actual), native_output_used_as_model_input=False)
+
+
+def _cleanup_guards(library, base):
+    rows = []
+    for label in ("missing_free", "missing_image", "unknown_destructor",
+                  "counter_free_failure", "object_free_failure",
+                  "second_member_failure"):
+        p = oracle.fresh_pages()
+        p.update(oracle.image_pages(library, base))
+        refs = _seed_case(p)
+        target = GUEST + 0x1000
+        oracle._write_span(p, target, bytes(0x80))
+        for offset in (0x40, 0x30):
+            counter, payload = GUEST + 0x8900 + offset, GUEST + 0x9500 + offset
+            _seed_reference(p, target + offset, counter, payload)
+            oracle._write_span(p, counter, (1).to_bytes(4, "little"))
+            table = 0x35D5F0 if label == "unknown_destructor" else objects.CONFIG_VTABLE_OFFSET
+            oracle._write_span(p, payload, (base + table).to_bytes(8, "little"))
+        effects = []
+        def free(tx, pointer):
+            effects.append(pointer)
+            oracle._write_span(tx, pointer, b"\xdd" * 4)
+            failed_pointer = {"counter_free_failure": GUEST + 0x8940,
+                              "object_free_failure": GUEST + 0x9540,
+                              "second_member_failure": GUEST + 0x9530}.get(label)
+            if pointer == failed_pointer:
+                raise objects.RefillUnsupported("injected handler cleanup failure")
+        before = {k: bytes(v) for k, v in p.items()}
+        try:
+            objects.bind_signer_handler_reference_members(
+                p, object_address=target, reference_30=refs["reference_30"][0],
+                reference_40=refs["reference_40"][0],
+                image_base=None if label == "missing_image" else base,
+                free=None if label == "missing_free" else free)
+        except objects.RefillUnsupported:
+            pass
+        else:
+            raise AssertionError(("cleanup guard accepted", label))
+        assert before == {k: bytes(v) for k, v in p.items()}, label
+        rows.append(dict(image_base=hex(base), profile=label, all_pages_unchanged=True,
+                         provider_effects_observed=len(effects),
+                         provider_effects_rolled_back=False))
+    return rows
+
+
 def main() -> None:
     import argparse
 
@@ -256,13 +362,22 @@ def main() -> None:
         raise AssertionError(digest)
     cases = [_run(args.library, args.libc, base, profile)
              for base in BASES for profile in PROFILES]
+    cleanup_cases = [_cleanup_case(args.library, args.libc, base, profile, count)
+                     for base in BASES for profile, count in (
+                         ("last_owner", 1), ("zero_count", 0),
+                         ("signed_min", 0x80000000), ("negative_count", 0xFFFFFFFF),
+                         ("null_old_object", 1), ("null_old_counter", 1),
+                         ("free_mutates_source", 1), ("free_nulls_old_object", 1))]
     report = {
-        "schema": "vm9-request-context-reference-members-20261102-v2",
+        "schema": "vm9-request-context-reference-members-20261102-v3",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
         "cases": cases,
-        "native_controls": len(cases) * 3,
+        "cleanup_cases": cleanup_cases,
+        "native_controls": len(cases) * 3 + len(cleanup_cases) * 2,
         "rollback_guards": _rollback_cases(),
+        "cleanup_guards": [row for base in BASES
+                           for row in _cleanup_guards(args.library, base)],
         "object_reference_members_verified": all(
             case["object_reference_members_verified"] for case in cases
         ),
@@ -272,18 +387,23 @@ def main() -> None:
         "online_header_acceptance_verified": False,
         "native_output_used_as_model_input": False,
         "diagnostic_scope_and_physical_stack_effects_verified": False,
-        "final_owner_destruction_supported": False,
+        "configuration_and_null_final_owner_cleanup_supported": True,
+        "arbitrary_final_owner_destruction_supported": False,
+        "external_free_effects_rolled_back": False,
         "comparison_note": (
             "The service_refs handler's explicit +0x30/+0x40 callback-reference "
             "assignments match +0x28508c then +0x285094 on both image bases, "
             "including equal-pointee skips, retained releases, source/member "
-            "aliases and uint32 increments. Last-owner destruction refuses "
-            "without publishing either member. Diagnostic scopes and physical "
+            "aliases and uint32 increments. Explicit image/free services support "
+            "configuration and NULL last-owner cleanup with native free order and "
+            "pre-free bytes. Unknown deleting targets refuse; external free-provider "
+            "effects are outside page rollback. Diagnostic scopes and physical "
             "stack writes remain excluded; no Java or signer semantics are inferred."
         ),
     }
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print("request-context reference members", len(cases), "native cases PASS", flush=True)
+    print("request-context reference members", len(cases), "assignment cases;",
+          len(cleanup_cases), "cleanup cases PASS", flush=True)
 
 
 if __name__ == "__main__":

@@ -3064,6 +3064,7 @@ def construct_signer_handler(
 
 def bind_signer_handler_reference_members(
     pages, *, object_address: int, reference_30: int, reference_40: int,
+    image_base: int | None = None, free: Callable | None = None,
 ) -> None:
     """Assign the two callback-reference members of a 128-byte handler.
 
@@ -3074,9 +3075,10 @@ def bind_signer_handler_reference_members(
     releasing retained old counts and incrementing the new counts. Keep the
     source wrappers caller-owned, including when they alias these members.
 
-    Final-owner destruction requires type-specific cleanup services and is
-    rejected transactionally. Diagnostic scopes and physical stack writes are
-    outside this bounded object/reference contract.
+    With explicit image_base/free services, final-owner cleanup supports NULL
+    objects and the configuration deleting target +0x1658d8. Other deleting
+    targets refuse. Page changes are transactional; external free-provider
+    effects, diagnostic scopes and physical stack writes are outside rollback.
 
     This function only assembles object references.  It does not infer a
     callback target, signer state, Java value, or header result.
@@ -3094,9 +3096,23 @@ def bind_signer_handler_reference_members(
         counter = int.from_bytes(_read_span(transaction, destination + 8, 8), "little")
         if counter:
             count = int.from_bytes(_read_span(transaction, counter, 4), "little")
-            if not 1 < count <= 0x7FFF_FFFF:
-                raise RefillUnsupported("handler reference assignment requires final-owner destruction")
-            _write_span(transaction, counter, (count - 1).to_bytes(4, "little"))
+            _write_span(transaction, counter, ((count - 1) & 0xFFFFFFFF).to_bytes(4, "little"))
+            if _s32(count) <= 1:
+                if (type(image_base) is not int or not 0 < image_base < 1 << 64
+                        or not callable(free)):
+                    raise RefillUnsupported("handler reference assignment requires final-owner destruction services")
+                free(transaction, counter)
+                # Native reloads the object after freeing its counter, then
+                # clears the counter slot before dispatching the destructor.
+                pointer = int.from_bytes(_read_span(transaction, destination, 8), "little")
+                _write_span(transaction, destination + 8, bytes(8))
+                if pointer:
+                    vtable = int.from_bytes(_read_span(transaction, pointer, 8), "little")
+                    target = int.from_bytes(_read_span(transaction, vtable + 8, 8), "little")
+                    if target != _image_address(image_base, 0x1658D8):
+                        raise RefillUnsupported("unrecovered handler reference deleting target")
+                    free(transaction, pointer)
+                    _write_span(transaction, destination, bytes(8))
         _copy_reference_contents(transaction, destination, source)
     transaction.commit()
 

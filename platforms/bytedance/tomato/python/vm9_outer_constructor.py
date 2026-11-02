@@ -579,7 +579,8 @@ def construct_default_outer(
         referenced_address=child_a, allocate=allocate)
     objects.bind_signer_handler_reference_members(
         pages, object_address=handler_b,
-        reference_30=service_child_reference, reference_40=config_reference)
+        reference_30=service_child_reference, reference_40=config_reference,
+        image_base=image_base, free=free)
     _release_retained_reference(pages, service_child_reference)
     pair_b = objects.bind_signer_child_callback(
         pages, child_address=child_a, handler_address=handler_b,

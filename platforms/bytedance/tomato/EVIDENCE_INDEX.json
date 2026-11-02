@@ -10480,5 +10480,22 @@
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_request_context_cleanup_20261102": {
+    "evidence_file": "evidence/vm9_request_context_cleanup_20261102.json",
+    "verifier": "python/verify_vm9_request_context_references_20261028.py",
+    "schema": "vm9-request-context-reference-members-20261102-v3",
+    "assignment_cases": 26,
+    "cleanup_cases": 16,
+    "native_controls": 110,
+    "rollback_and_rejection_guards": 20,
+    "outer_graph_regression_cases": 4,
+    "outer_graph_negative_controls": 4,
+    "configuration_and_null_final_owner_cleanup_supported": true,
+    "arbitrary_final_owner_destruction_supported": false,
+    "external_free_effects_rolled_back": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
   }
 }
