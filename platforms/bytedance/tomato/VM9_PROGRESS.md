@@ -64,6 +64,19 @@ SHA-256，未保存原始 URL/header，也没有把这两个有界阴性结果�
 需要改变业务触发路径；仅重复这两个窗口不会增加覆盖。整请求 native/Python 差分、独立
 signer 和线上验签仍未完成。
 
+## 2026-11-02：SearchActivity Cronet JNI follow-up
+
+冷启动官方 APK 后进入真实 `SearchActivity`，分别观察搜索建议/提交结果，以及社区、短剧、
+漫剧、漫画、听书、书籍和全文结果分类切换。两轮均在主 PID 27116 上安装 JNI hooks，主动
+解析两个缓存的 `addSecurityFactor(String,String[])` method ID，`JavaVM detach` 状态为 0，
+目标进程在清理后仍存活；两轮都没有观察到 `CallObjectMethodV` 业务调用。捕获仅保留方法
+身份、事件数量和摘要；原始 URL/header 与查询输入没有写入证据。
+
+搜索提交证据：[search result](evidence/vm9_cronet_jni_runtime_search_20261102.json)；
+结果分类证据：[search tabs](evidence/vm9_cronet_jni_runtime_search_tabs_20261102.json)。
+这些是搜索 UI 窗口的有界阴性结果，不证明 Cronet 在其他页面或其它配置下不可达。完整 signer、
+整请求 native/Python 差分和线上验签仍未完成。
+
 ## 2026-11-02：signer callback tree 析构接入
 
 恢复 `+0x27e864` 的 signer child 删除路径：最后所有者先释放引用计数，再清空
