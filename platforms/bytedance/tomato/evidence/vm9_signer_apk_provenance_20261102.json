@@ -24,9 +24,31 @@
   },
   "installed_apk_matches_pinned_artifact": true,
   "runtime_device_abi": "x86_64",
-  "runtime_mapped_library_identity_verified": false,
+  "runtime_mapping": {
+    "serial": "emulator-5554",
+    "package": "com.dragon.read",
+    "process_pid": 6239,
+    "package_pids_at_check": [
+      6239,
+      6512
+    ],
+    "device_os": "Android 9 / API 28",
+    "device_abi": "x86_64",
+    "mapped_elf_arch": "aarch64",
+    "translator_markers": [
+      "/system/lib64/libhoudini.so"
+    ],
+    "mapped_library_path": "/data/app/<same-install>/lib/arm64/libmetasec_ml.so",
+    "mapped_library_map_count": 3,
+    "mapped_library_permissions": "r--p/rw-p",
+    "mapped_library_file_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "installed_apk_path": "/data/app/<same-install>/base.apk",
+    "installed_apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "process_alive_after_hash_check": true
+  },
+  "runtime_mapped_library_identity_verified": true,
   "whole_request_native_python_differential_verified": false,
   "fresh_standalone_signer_verified": false,
   "online_header_acceptance_verified": false,
-  "interpretation": "The exact APK digest recorded for the installed 7.2.5.32 package was recomputed from fq_7xz.apk. Its sole libmetasec_ml.so entry is byte-identical to the pinned ELF used by the native signer replay. The old 7.1.3.32 label therefore describes a historical research-version label, not the APK identity of this signer sample. This proves artifact provenance, not which translated library mapping the running x86_64 process selected."
+  "interpretation": "The exact APK digest recorded for the installed 7.2.5.32 package was recomputed from fq_7xz.apk. Its sole libmetasec_ml.so entry is byte-identical to the pinned ELF used by the native signer replay. A live lib_map.py observation and device-side sha256sum tied the mapped arm64 library to the same APK install and confirmed its hash. The old 7.1.3.32 label therefore describes a historical research-version label, not this APK/native sample's identity. This establishes the backing-file identity for the observed translated process, not full signer equivalence or online acceptance."
 }

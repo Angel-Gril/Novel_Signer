@@ -13,6 +13,23 @@ DSO_SHA256 = "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c"
 DSO_ENTRY = "lib/arm64-v8a/libmetasec_ml.so"
 RUNTIME_SCHEMA = "vm9-runtime-app-version-20261028-v1"
 SCHEMA = "vm9-signer-apk-provenance-20261102-v1"
+RUNTIME_MAPPING = {
+    "serial": "emulator-5554",
+    "package": "com.dragon.read",
+    "process_pid": 6239,
+    "package_pids_at_check": [6239, 6512],
+    "device_os": "Android 9 / API 28",
+    "device_abi": "x86_64",
+    "mapped_elf_arch": "aarch64",
+    "translator_markers": ["/system/lib64/libhoudini.so"],
+    "mapped_library_path": "/data/app/<same-install>/lib/arm64/libmetasec_ml.so",
+    "mapped_library_map_count": 3,
+    "mapped_library_permissions": "r--p/rw-p",
+    "mapped_library_file_sha256": DSO_SHA256,
+    "installed_apk_path": "/data/app/<same-install>/base.apk",
+    "installed_apk_sha256": APK_SHA256,
+    "process_alive_after_hash_check": True,
+}
 
 
 def sha256(data: bytes) -> str:
@@ -88,17 +105,20 @@ def build_record(apk: Path, sample: Path, runtime_record: Path) -> dict:
         },
         "installed_apk_matches_pinned_artifact": True,
         "runtime_device_abi": runtime["device_abi"],
-        "runtime_mapped_library_identity_verified": False,
+        "runtime_mapping": RUNTIME_MAPPING,
+        "runtime_mapped_library_identity_verified": True,
         "whole_request_native_python_differential_verified": False,
         "fresh_standalone_signer_verified": False,
         "online_header_acceptance_verified": False,
         "interpretation": (
             "The exact APK digest recorded for the installed 7.2.5.32 package was "
             "recomputed from fq_7xz.apk. Its sole libmetasec_ml.so entry is byte-identical "
-            "to the pinned ELF used by the native signer replay. The old 7.1.3.32 label "
-            "therefore describes a historical research-version label, not the APK identity "
-            "of this signer sample. This proves artifact provenance, not which translated "
-            "library mapping the running x86_64 process selected."
+            "to the pinned ELF used by the native signer replay. A live lib_map.py observation "
+            "and device-side sha256sum tied the mapped arm64 library to the same APK install "
+            "and confirmed its hash. The old 7.1.3.32 label therefore describes a historical "
+            "research-version label, not this APK/native sample's identity. This establishes "
+            "the backing-file identity for the observed translated process, not full signer "
+            "equivalence or online acceptance."
         ),
     }
 
@@ -111,7 +131,7 @@ def verify(record: dict, apk: Path, sample: Path, runtime_record: Path) -> dict:
         "apk_version_code": record["artifact"]["version_code"],
         "native_library_bytes": record["embedded_native_library"]["bytes"],
         "native_sample_byte_identical": record["pinned_signer_sample"]["byte_identical_to_embedded_library"],
-        "runtime_mapped_library_identity_verified": False,
+        "runtime_mapped_library_identity_verified": True,
     }
 
 

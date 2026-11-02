@@ -10551,7 +10551,11 @@
     "native_library_entry": "lib/arm64-v8a/libmetasec_ml.so",
     "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
     "native_sample_byte_identical_to_apk_member": true,
-    "runtime_mapped_library_identity_verified": false,
+    "runtime_mapping_serial": "emulator-5554",
+    "runtime_mapped_library_arch": "aarch64",
+    "runtime_translation_marker": "/system/lib64/libhoudini.so",
+    "runtime_mapped_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "runtime_mapped_library_identity_verified": true,
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
