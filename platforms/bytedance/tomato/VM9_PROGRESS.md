@@ -1,5 +1,17 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：同一 Android provider 的重复调用显示动态字段
+
+在 emulator-5554 上对已安装的 7.2.5.32/72532 官方 APK 做脱敏复核，APK SHA-256 与
+pinned APK 相同。真实 `MSManager` 初始化后，在同一个 `Java.perform` 回调中对同一
+homepage 输入、同一 manager 连续调用两次 `frameSign(String,int)`。两次均返回相同的五个
+字段和长度；`frametype`、`lid`、`signversion` 摘要相同，但 `signinfo` 与 `signvalue` 的
+摘要均变化。这证明这两个字段在真实 provider 内存在逐次调用的动态分量，但本实验没有
+区分时钟、随机源、序列状态或其他 provider 可变状态。因而 Android 与可复现 unidbg
+输出的动态字段摘要差异，不能单独作为实现错误或等价性的判据。原始字段值未保存；证据：
+[重复调用摘要](evidence/vm9_framesign_repeat_call_state_20261103.json)及
+[校验器](python/verify_vm9_framesign_repeat_call_state_20261103.py)。
+
 ## 2026-11-03：同 URL 的 Android-JVM / unidbg frameSign 对照
 
 使用官方 `com.dragon.read` 主进程的真实 `MSManager.frameSign(String,int)`，通过显式 USB

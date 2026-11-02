@@ -1,0 +1,75 @@
+{
+  "schema": "vm9-framesign-repeat-call-state-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "package": "com.dragon.read",
+  "app_version": "7.2.5.32/72532",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "device_serial": "emulator-5554",
+  "android": "9 / sdk 28",
+  "abi": "x86_64 with arm64 native translation",
+  "frida_host_version": "17.24.3",
+  "process_id": 7169,
+  "provider": {
+    "manager_class": "com.bytedance.mobsec.metasec.ml.MSManager",
+    "method": "MSManager.frameSign(String,int)",
+    "init_trigger": "x1.k(Application)",
+    "same_manager_instance_reused": true,
+    "actual_jni_provider_verified": true,
+    "metasec_maps_count": 3
+  },
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "result_keys": [
+    "frametype",
+    "lid",
+    "signinfo",
+    "signvalue",
+    "signversion"
+  ],
+  "call_order": "Two consecutive reflection calls in one Java.perform callback using the same manager and input string.",
+  "repeat_trials": [
+    {
+      "ordinal": 1,
+      "fields": [
+        {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+        {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+        {"key": "signinfo", "length": 192, "sha256": "4c4855560925a648940bba005c38469226c89732eea54635cc418a114e8dd86d"},
+        {"key": "signvalue", "length": 64, "sha256": "9f490234ec084a779ce531806ec1c1225b44f4b7b32505143288011dc34b65c5"},
+        {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+      ]
+    },
+    {
+      "ordinal": 2,
+      "fields": [
+        {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+        {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+        {"key": "signinfo", "length": 192, "sha256": "9d46c593a0f1cfb6ff7362fb37d050e77c3ec2a2f057e4d5c2244f83fc6a5b86"},
+        {"key": "signvalue", "length": 64, "sha256": "54bc4b8b592c2350c195e980946ad04b4d32a4f5de0903227ac49a92adf5c843"},
+        {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+      ]
+    }
+  ],
+  "source_sha256": {
+    "probe": "4f0d3f9063bbca68f7820b7845993d564a715c8289639f69a9a3bf1a1d45a480",
+    "frida_java_bridge": "769b77aee5360f4cafb3d541810dda0aa6d97cad1eb3f3fa6285fa50c010b2cf"
+  },
+  "raw_capture_retained": false,
+  "comparison": {
+    "same_input_digest": true,
+    "same_provider_instance": true,
+    "field_keys_and_lengths_match": true,
+    "frametype_lid_signversion_hashes_stable": true,
+    "signinfo_hash_changes_between_calls": true,
+    "signvalue_hash_changes_between_calls": true,
+    "dynamic_field_lengths_stable": true,
+    "clock_random_provider_state_cause_identified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "Two consecutive calls on one live Android MSManager instance with the same homepage input returned the same five field names and lengths. frametype, lid and signversion hashes stayed constant; signinfo and signvalue hashes changed on both consecutive calls. This proves a per-invocation dynamic component exists in the live provider, but does not identify whether clock, randomness, sequence state, or another mutable provider input drives it. A mismatch against a repeatable unidbg output therefore cannot by itself establish an implementation error or equivalence."
+}

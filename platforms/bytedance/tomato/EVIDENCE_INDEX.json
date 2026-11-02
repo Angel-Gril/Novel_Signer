@@ -10616,5 +10616,22 @@
     "fresh_standalone_signer_verified": false,
     "whole_request_native_python_differential_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_framesign_repeat_call_state_20261103": {
+    "evidence_file": "evidence/vm9_framesign_repeat_call_state_20261103.json",
+    "verifier": "python/verify_vm9_framesign_repeat_call_state_20261103.py",
+    "schema": "vm9-framesign-repeat-call-state-20261103-v1",
+    "device_serial": "emulator-5554",
+    "process_id": 7169,
+    "app_version": "7.2.5.32/72532",
+    "input_profile": "homepage",
+    "same_live_provider_repeated": true,
+    "stable_field_hashes": ["frametype", "lid", "signversion"],
+    "per_call_dynamic_field_hashes": ["signinfo", "signvalue"],
+    "dynamic_cause_identified": false,
+    "raw_capture_retained": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
   }
 }
