@@ -81,7 +81,8 @@ def main():
                 0x246DD4, [destination, 0xE9], append, blocks=[(pointer, 48)],
                 failures=failures, inplace=inplace, check_result=True)
 
-        for entry, algorithm in ((0x25874C, "md5"), (0x258780, "sha1")):
+        for entry, algorithm in ((0x258A48, "sha256"), (0x25874C, "md5"), (0x258780, "sha1")):
+            print(json.dumps({"checking_algorithm": algorithm, "image_base": hex(base)}), flush=True)
             profiles = [("empty", b""), ("short", b"abc"), ("binary", bytes(range(64))),
                         ("multi_block", b"x" * 129), ("embedded_zero", b"a\0b\0c")]
             scenarios = [(label, data, flag, (), False, None, False)
@@ -146,7 +147,7 @@ def main():
             raise AssertionError(label + " accepted")
 
     for label, opts, drop in (
-        ("unknown_algorithm", {"algorithm": "sha256", "flag": 0}, None),
+        ("unknown_algorithm", {"algorithm": "sha512", "flag": 0}, None),
         ("negative_flag", {"algorithm": "md5", "flag": -1}, None),
         ("source_bound", {"algorithm": "md5", "flag": 0, "max_source_bytes": 2}, None),
         ("missing_payload", {"algorithm": "md5", "flag": 0}, (GUEST + 0x3000) >> 12),

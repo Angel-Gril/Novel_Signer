@@ -1,5 +1,10 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03 已在现有 `construct_digest_reference` 中补入 `+0x258a48` 的 SHA-256
+包装语义，支持原始 32 字节和 ELF 字母表十六进制输出。[新鲜差分证据](evidence/vm9_sha256_digest_reference_fresh_20261103.json)
+包含两个基址上的 62 项 SHA-256 对照；总计 204 项对照、5 项回滚检查通过，原有 142 项
+结果保持一致。SHA-256 的真实引用栈作用域、完整 signer 及线上验签仍未验证。
+
 2026-11-03 新增[FrameSign 原生缓冲区来源证据](evidence/vm9_framesign_result_buffer_provenance_20261103.json)
 及[校验器](python/verify_vm9_framesign_result_buffer_provenance_20261103.py)。两轮独立只读运行共
 8 次调用保持原有 A-B-A-B；实际分派进入 `+0x283748`，返回容器传入 `+0x271384`。

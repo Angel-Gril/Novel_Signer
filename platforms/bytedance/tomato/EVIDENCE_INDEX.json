@@ -1,5 +1,22 @@
 {
   "platform": "bytedance.tomato",
+  "vm9_sha256_digest_reference_fresh_20261103": {
+    "evidence_file": "evidence/vm9_sha256_digest_reference_fresh_20261103.json",
+    "verifier": "python/verify_vm9_parser_digests.py",
+    "model": "python/vm9_objects.py",
+    "schema": "vm9-sha256-digest-reference-fresh-20261103-v1",
+    "native_entry_offset": "0x258a48",
+    "sha256_differential_cases": 62,
+    "total_differential_cases": 204,
+    "negative_cases": 5,
+    "prior_differential_cases_unchanged": 142,
+    "prior_negative_cases_unchanged": 5,
+    "fresh_memory": true,
+    "captured_pages_used": false,
+    "jvm_used": false,
+    "scoped_sha256_lifecycle_verified": false,
+    "complete_standalone_signer_verified": false
+  },
   "vm9_framesign_result_buffer_provenance_20261103": {
     "evidence_file": "evidence/vm9_framesign_result_buffer_provenance_20261103.json",
     "verifier": "python/verify_vm9_framesign_result_buffer_provenance_20261103.py",

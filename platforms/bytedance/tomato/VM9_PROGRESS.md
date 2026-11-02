@@ -1,5 +1,23 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：SHA-256 摘要包装函数的 Python 语义
+
+从字段构造的静态上游定位到 `+0x258a48` 后，先复现 Python 模型在
+`sha256_empty_0` 拒绝算法的失败，再在现有 `construct_digest_reference` 中补入 SHA-256。
+原生 `+0x258a48` 与模型在两个加载基址上共通过 62 项新鲜合成输入对照，覆盖空串、
+二进制、内嵌零、多块输入、flag 0/1/2/3、分配失败、realloc、字母表/GOT 改写以及
+摘要计算后的源数据改写。原始输出为 32 字节，十六进制分支沿用实际 ELF 字母表。
+
+验证器比较完整观测 guest 区域、所有主映像输入页、分配器状态及效果调用顺序，未使用
+JVM 或捕获页。含旧用例总计 204 项差分和 5 项回滚检查通过；筛出的旧 142 项结果和
+5 项负对照与历史证据完全一致。SHA-256 真实引用栈作用域尚未实现，不能将该组件结果
+升级为 FrameSign 动态来源、独立 signer 或线上验签证明。运行本轮探针时还需正面证据
+确认业务路径与该包装函数的连接。
+
+证据：[SHA-256 digest reference](evidence/vm9_sha256_digest_reference_fresh_20261103.json)；
+复测：[native/Python verifier](python/verify_vm9_parser_digests.py)，参数为
+`--library <pinned ELF> --output <new local report>`。
+
 ## 2026-11-03：FrameSign 构造输入到 JNI 输出的缓冲区来源
 
 固定 49 字符 homepage 输入、前置一轮 setup、同一 handle 和四次调用序号，在两个全新

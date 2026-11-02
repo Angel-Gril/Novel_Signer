@@ -1620,7 +1620,7 @@ def construct_digest_reference(
     flag: int, image_base: int, allocate: Callable, reallocate: Callable, free: Callable,
     max_source_bytes: int = 0x100000, reference_lifecycle=None,
 ) -> int:
-    """Model +0x25874c (MD5) / +0x258780 (SHA-1) reference construction.
+    """Model +0x25874c MD5, +0x258780 SHA-1 and +0x258a48 SHA-256.
 
     Flag bit0 selects the guest ELF's hexadecimal alphabet; otherwise store
     raw bytes. Hex builds an empty string/count then reserves and appends
@@ -1630,7 +1630,7 @@ def construct_digest_reference(
     Return the referenced string pointer, not the native X0 return value.
     """
     _string_bound(max_source_bytes)
-    if algorithm not in ("md5", "sha1") or not isinstance(flag, int) or not 0 <= flag <= 0xFFFFFFFF:
+    if algorithm not in ("md5", "sha1", "sha256") or not isinstance(flag, int) or not 0 <= flag <= 0xFFFFFFFF:
         raise RefillUnsupported("unsupported digest algorithm or flag")
     transaction = _PageTransaction(pages)
     length = int.from_bytes(_read_span(transaction, source_object_address + 12, 4), "little")
