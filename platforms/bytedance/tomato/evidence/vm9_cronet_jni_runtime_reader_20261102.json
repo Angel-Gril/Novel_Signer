@@ -1,0 +1,48 @@
+{
+  "schema": "vm9-cronet-jni-runtime-evidence-20261101-v1",
+  "capture_date": "2026-11-02",
+  "package": "com.dragon.read",
+  "version": "7.2.5.32/72532",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "device": {
+    "serial": "emulator-5554",
+    "android": "9 / sdk 28",
+    "abi": "x86_64 with arm64 native translation",
+    "mem_total_kb": 2047104,
+    "frida_version": "17.24.3",
+    "frida_server_uid": 0
+  },
+  "capture": {
+    "mode": "warm PID attach during ReaderActivity preview paging and free-publication recommendation",
+    "configured_duration_seconds": 90,
+    "capture_sha256": "58cc6eefd356aeb746a8d8d74a6a7148851c76866f267a72ee3a986ba3be230e",
+    "event_counts": {
+      "get_env_handler": 1,
+      "jni_hooks_installed": 1,
+      "jni_method_seed": 2,
+      "jni_seed_complete": 1,
+      "jni_table": 1,
+      "jni_vm_attached": 1,
+      "jni_vm_detached": 1,
+      "probe_ready": 1,
+      "script_loaded": 1,
+      "session_detached": 1
+    },
+    "terminal_reason": "application-requested",
+    "vm_detach_status": 0,
+    "process_alive_after_cleanup": true
+  },
+  "jni_table_offsets": {
+    "GetMethodID": 264,
+    "CallObjectMethodV": 280
+  },
+  "cached_method_ids_resolved": true,
+  "active_resolution_is_business_call": false,
+  "cronet_runtime_branch_observed": false,
+  "bounded_negative": true,
+  "raw_capture_retained_in_evidence": false,
+  "whole_request_native_python_differential_verified": false,
+  "fresh_standalone_signer_verified": false,
+  "online_header_acceptance_verified": false,
+  "interpretation": "JNI hooks and cached-method resolution succeeded while paging through a ReaderActivity preview and opening a free-publication recommendation. No Cronet addSecurityFactor call was observed in this bounded window; the first title stopped at its copyright preview gate. This does not establish that the Cronet path is unreachable."
+}

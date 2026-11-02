@@ -77,6 +77,18 @@ signer 和线上验签仍未完成。
 这些是搜索 UI 窗口的有界阴性结果，不证明 Cronet 在其他页面或其它配置下不可达。完整 signer、
 整请求 native/Python 差分和线上验签仍未完成。
 
+## 2026-11-02：ReaderActivity Cronet JNI follow-up
+
+为改变前面 home/video/search 的触发路径，在 ReaderActivity 预览页启动 90 秒 JNI 观察，
+按模拟器实际 `720x1280` 尺寸翻页到版权预览门，再从应用内“免费出版物”推荐进入另一部
+作品的阅读入口。两个缓存 `addSecurityFactor(String,String[])` method ID 均成功解析，
+`JavaVM detach` 状态为 0，目标 PID 27116 清理后仍存活；窗口内未观察到
+`CallObjectMethodV` 业务调用。原始 URL、header、查询输入和正文均未保留。
+
+证据：[ReaderActivity capture](evidence/vm9_cronet_jni_runtime_reader_20261102.json)。
+原始 JSONL 保留在本机临时目录用于复核；该轮仍是路径有限的阴性结果，不证明 Cronet
+不可达，也不提升整请求 native/Python 差分、独立 signer 或线上验签状态。
+
 ## 2026-11-02：signer callback tree 析构接入
 
 恢复 `+0x27e864` 的 signer child 删除路径：最后所有者先释放引用计数，再清空
