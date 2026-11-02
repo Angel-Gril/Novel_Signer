@@ -1,5 +1,5 @@
 {
-  "schema": "vm9-request-context-reference-members-20261102-v4",
+  "schema": "vm9-request-context-reference-members-20261102-v6",
   "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
   "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
   "cases": [
@@ -1100,6 +1100,68 @@
       "native_snapshot_input": false
     }
   ],
+  "actual_child_cleanup_cases": [
+    {
+      "image_base": "0x122c0000",
+      "profile": "actual_empty_container",
+      "original_count": 1,
+      "full_guest_window_match": true,
+      "free_order_and_pre_free_bytes_match": true,
+      "freed_blocks": 5,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "actual_empty_container",
+      "original_count": 1,
+      "full_guest_window_match": true,
+      "free_order_and_pre_free_bytes_match": true,
+      "freed_blocks": 5,
+      "native_snapshot_input": false
+    }
+  ],
+  "nonempty_child_cleanup_cases": [
+    {
+      "image_base": "0x122c0000",
+      "profile": "nonempty_1",
+      "original_count": 1,
+      "tree_count": 1,
+      "full_guest_window_match": true,
+      "free_order_and_pre_free_bytes_match": true,
+      "freed_blocks": 7,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "nonempty_2",
+      "original_count": 1,
+      "tree_count": 2,
+      "full_guest_window_match": true,
+      "free_order_and_pre_free_bytes_match": true,
+      "freed_blocks": 9,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "nonempty_1",
+      "original_count": 1,
+      "tree_count": 1,
+      "full_guest_window_match": true,
+      "free_order_and_pre_free_bytes_match": true,
+      "freed_blocks": 7,
+      "native_snapshot_input": false
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "nonempty_2",
+      "original_count": 1,
+      "tree_count": 2,
+      "full_guest_window_match": true,
+      "free_order_and_pre_free_bytes_match": true,
+      "freed_blocks": 9,
+      "native_snapshot_input": false
+    }
+  ],
   "child_assignment_cases": [
     {
       "image_base": "0x122c0000",
@@ -1118,7 +1180,7 @@
       "native_snapshot_input": false
     }
   ],
-  "native_controls": 134,
+  "native_controls": 146,
   "rollback_guards": [
     {
       "label": "null_object",
@@ -1299,6 +1361,68 @@
       "all_pages_unchanged": true
     }
   ],
+  "nonempty_tree_cleanup_guards": [
+    {
+      "image_base": "0x122c0000",
+      "profile": "wrong_pair_cleanup_callback",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "missing_root_with_nonzero_count",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "node_count_mismatch",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "cyclic_tree",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    },
+    {
+      "image_base": "0x122c0000",
+      "profile": "max_nodes_exceeded",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "wrong_pair_cleanup_callback",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "missing_root_with_nonzero_count",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "node_count_mismatch",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "cyclic_tree",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    },
+    {
+      "image_base": "0x775c205000",
+      "profile": "max_nodes_exceeded",
+      "all_pages_unchanged": true,
+      "free_service_not_called": true
+    }
+  ],
   "object_reference_members_verified": true,
   "signer_result_interpretation": false,
   "whole_request_native_differential_verified": false,
@@ -1310,7 +1434,7 @@
   "arbitrary_final_owner_destruction_supported": false,
   "empty_signer_child_cleanup_supported": true,
   "child_cleanup_connected_to_reference_assignment": true,
-  "nonempty_signer_child_cleanup_supported": false,
+  "nonempty_signer_child_cleanup_supported": true,
   "external_free_effects_rolled_back": false,
-  "comparison_note": "The service_refs handler's explicit +0x30/+0x40 callback-reference assignments match +0x28508c then +0x285094 on both image bases, including equal-pointee skips, retained releases, source/member aliases and uint32 increments. Explicit image/free services support configuration and NULL last-owner cleanup with native free order and pre-free bytes. Unknown deleting targets refuse; external free-provider effects are outside page rollback. Diagnostic scopes and physical stack writes remain excluded; no Java or signer semantics are inferred."
+  "comparison_note": "The service_refs handler's explicit +0x30/+0x40 callback-reference assignments match +0x28508c then +0x285094 on both image bases, including equal-pointee skips, retained releases, source/member aliases and uint32 increments. Explicit image/free services support configuration and signer-child last-owner cleanup with native free order and pre-free bytes, including one- and two-node signer callback trees. Malformed trees, unsupported callbacks, and node-bound overruns refuse before any pair, tree-node, or container free call. Unknown deleting targets refuse; external free-provider effects are outside page rollback. Diagnostic scopes and physical stack writes remain excluded; no Java or signer semantics are inferred."
 }

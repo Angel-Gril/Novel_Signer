@@ -1,21 +1,24 @@
 # Current VM9 progress checkpoint
 
-## 2026-11-02：子对象与空 callback container 析构接入
+## 2026-11-02：signer callback tree 析构接入
 
-恢复 `+0x27e864` 的 signer child 删除路径：先递减 child `+0x10` 引用计数，
-最后所有者释放计数并清空槽，再按原生顺序清理空 callback container 的
-`sentinel → controller → container`，最后释放 child。child 的 `+0x08` mutex
-状态和 `+0x20` callback pair 是借用字段，不在该删除体中释放。非空 callback
-树、未知 child/container 虚表和缺服务均保持拒绝。
+恢复 `+0x27e864` 的 signer child 删除路径：最后所有者先释放引用计数，再清空
+`+0x10` 槽位；按原生顺序清理 callback pair、树节点、sentinel、controller、
+container，最后释放 child。非空树按 key 顺序释放 pair，并按原生实测的
+right-node-left 顺序释放节点。容器删除体先预检 pair 地址和整套节点释放顺序，再调用
+pair、节点、sentinel、controller、container 的 free 服务；损坏树、错误 pair 回调、
+计数/链接不符、循环及节点上限越界会在这些容器对象释放前拒绝。child 引用计数仍先按
+原生顺序释放；`+0x08` mutex 状态和 `+0x20` callback pair 是借用字段。
 
 `bind_signer_handler_reference_members` 已将旧对象虚表 `+0x27e864` 接到该析构；
-未知删除目标仍拒绝。两基址共 10 组 child 直入口（空/NULL/保留/有符号边界）
-和 2 组引用替换触发 child 析构通过，完整 guest 窗口、释放顺序和释放前字节一致。
-与此前 26 组赋值、16 组配置引用清理合并，共 134 次原生执行；8 项赋值回滚、
-12 项引用清理拒绝、10 项 child 拒绝控制通过。外层对象图四组回归继续保持核心图
-和默认记录一致，旧 allocation 308 尾部差异仍保留。见[子对象清理证据](evidence/vm9_request_context_child_cleanup_20261102.json)。
+未知删除目标仍拒绝。两个 image base 上共 26 组赋值、16 组引用清理、10 组 child
+清理、2 组实际空 child 清理、4 组非空树清理和 2 组引用替换对照通过，共 146 次
+原生执行；guest 窗口、释放顺序和释放前字节一致。8 项赋值回滚、12 项引用清理、
+10 项 child 拒绝及 10 项非空树回滚守卫通过，后者确认拒绝前页面不变且 free 服务未调用。
+外层对象图四组回归保持核心图和默认记录一致，旧 allocation 308 尾部差异仍保留。
+见[子对象清理证据](evidence/vm9_request_context_child_cleanup_20261102.json)。
 
-非空 callback 树的节点/回调析构、整请求差分、独立 signer 和线上六头接受仍未完成。
+完整 signer、整请求差分和 Cronet 六头线上接受仍未完成；官方真实阅读路径仍是 OkHttp。
 
 ## 2026-11-02：配置引用的最后所有者清理
 

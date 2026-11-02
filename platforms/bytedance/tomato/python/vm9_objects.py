@@ -3185,6 +3185,104 @@ def destroy_empty_signer_callback_container(
     transaction.commit()
 
 
+def destroy_signer_callback_container(
+    pages, *, container_address: int, image_base: int, free: Callable,
+    max_nodes: int = 4096,
+) -> None:
+    """Release a signer callback container with its non-empty RB tree.
+
+    Signer children use the deleting callback ``+0x27ec20`` for each 16-byte
+    callback pair.  The pair callbacks are visited in key order, then the
+    tree nodes are freed right-before-left (the native post-order clear),
+    followed by controller, sentinel and container.  This is deliberately
+    separate from the configuration-tree owner: that tree's ``+0x182d6c``
+    callback treats a pair as a string object and is not a signer ABI.
+    """
+    if (type(container_address) is not int or container_address <= 0
+            or type(image_base) is not int or not 0 < image_base < 1 << 64
+            or not callable(free) or type(max_nodes) is not int
+            or not 1 <= max_nodes <= 4096):
+        raise RefillUnsupported("signer callback-container cleanup requires bounded guest inputs")
+    transaction = _PageTransaction(pages)
+    _read_span(transaction, container_address, 0x28)
+    address = lambda offset: _image_address(image_base, offset)
+    if int.from_bytes(_read_span(transaction, container_address, 8), "little") != address(0x35B828):
+        raise RefillUnsupported("unrecovered signer callback-container vtable")
+    callback = int.from_bytes(_read_span(transaction, container_address + 8, 8), "little")
+    if callback != address(0x27EC20):
+        raise RefillUnsupported("unknown signer callback-pair cleanup target")
+    controller = int.from_bytes(_read_span(transaction, container_address + 0x20, 8), "little")
+    if not controller:
+        raise RefillUnsupported("signer callback-container controller is missing")
+    _read_span(transaction, controller, 0x28)
+    sentinel = int.from_bytes(_read_span(transaction, controller, 8), "little")
+    count = int.from_bytes(_read_span(transaction, controller + 8, 8), "little")
+    if not sentinel or count == 0:
+        raise RefillUnsupported("signer callback-container is not non-empty")
+    _read_span(transaction, sentinel, 0x28)
+    root = int.from_bytes(_read_span(transaction, sentinel + 8, 8), "little")
+    if not root:
+        raise RefillUnsupported("signer callback-container has a missing root")
+
+    def u64(pointer: int) -> int:
+        return int.from_bytes(_read_span(transaction, pointer, 8), "little")
+
+    # The native iterator invokes the pair deleting callback in sorted order.
+    pairs, discovered, stack = [], set(), []
+    node = root
+    while stack or node:
+        while node:
+            if (node == sentinel or node in discovered
+                    or len(discovered) >= max_nodes):
+                raise RefillUnsupported("signer callback pair traversal exceeds its bound")
+            discovered.add(node)
+            stack.append(node)
+            node = u64(node + 16)
+        node = stack.pop()
+        pairs.append(u64(node + 32))
+        node = u64(node + 24)
+
+    if len(discovered) != count:
+        raise RefillUnsupported("signer callback tree count does not match its links")
+    pair_seen = set()
+    for pair in pairs:
+        if not pair or pair in pair_seen:
+            raise RefillUnsupported("signer callback tree has a missing or aliased pair")
+        pair_seen.add(pair)
+        _read_span(transaction, pair, 16)
+
+    # Match the native clear body's right-before-left node destruction.
+    stack = [(root, False)]
+    cleared, clear_seen = [], set()
+    while stack:
+        node, after_right = stack.pop()
+        if not node:
+            continue
+        if not after_right:
+            if node in clear_seen or len(clear_seen) >= max_nodes:
+                raise RefillUnsupported("signer callback node traversal exceeds its bound")
+            clear_seen.add(node)
+            stack.append((node, True))
+            stack.append((u64(node + 24), False))
+        else:
+            cleared.append(node)
+            stack.append((u64(node + 16), False))
+    if len(cleared) != count:
+        raise RefillUnsupported("signer callback node count does not match its links")
+    for pair in pairs:
+        free(transaction, pair)
+    for node in cleared:
+        free(transaction, node)
+    _write_span(transaction, controller + 8, bytes(8))
+    _write_span(transaction, sentinel + 8, bytes(8))
+    _write_span(transaction, sentinel + 16, _word(sentinel))
+    _write_span(transaction, sentinel + 24, _word(sentinel))
+    free(transaction, sentinel)
+    free(transaction, controller)
+    free(transaction, container_address)
+    transaction.commit()
+
+
 def destroy_signer_child(
     pages, *, child_address: int, image_base: int, free: Callable,
 ) -> None:
@@ -3192,8 +3290,8 @@ def destroy_signer_child(
 
     Native ``+0x27e864`` owns only the ``+0x10`` callback-container reference;
     the mutex state at ``+0x08`` and callback pair at ``+0x20`` are borrowed.
-    Last-owner cleanup supports the measured empty callback container. The
-    complete non-empty tree and physical diagnostic stack remain refused.
+    Last-owner cleanup supports measured empty and signer callback containers.
+    Physical diagnostic stack effects remain outside this destructor.
     """
     if (type(child_address) is not int or child_address <= 0
             or type(image_base) is not int or not 0 < image_base < 1 << 64
@@ -3213,9 +3311,18 @@ def destroy_signer_child(
             pointer = int.from_bytes(_read_span(transaction, reference, 8), "little")
             _write_span(transaction, reference + 8, bytes(8))
             if pointer:
-                destroy_empty_signer_callback_container(
-                    transaction, container_address=pointer,
-                    image_base=image_base, free=free)
+                callback = int.from_bytes(_read_span(transaction, pointer + 8, 8), "little")
+                controller = int.from_bytes(_read_span(transaction, pointer + 0x20, 8), "little")
+                tree_count = (int.from_bytes(_read_span(transaction, controller + 8, 8), "little")
+                              if controller else 0)
+                if callback == _image_address(image_base, 0x27EC20) and tree_count:
+                    destroy_signer_callback_container(
+                        transaction, container_address=pointer,
+                        image_base=image_base, free=free)
+                else:
+                    destroy_empty_signer_callback_container(
+                        transaction, container_address=pointer,
+                        image_base=image_base, free=free)
                 _write_span(transaction, reference, bytes(8))
     free(transaction, child_address)
     transaction.commit()

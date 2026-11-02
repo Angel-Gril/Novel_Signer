@@ -415,6 +415,123 @@ def _child_cleanup_case(library, libc, base, profile, count):
                 freed_blocks=len(actual), native_snapshot_input=False)
 
 
+def _seed_nonempty_signer_child(pages, *, image_base, reference_count, tree_count):
+    child, container, controller, sentinel, counter = _seed_empty_child(
+        pages, image_base=image_base, count=reference_count)
+    oracle._write_span(
+        pages, container + 8,
+        (image_base + 0x27EC20).to_bytes(8, "little"),
+    )
+    oracle._write_span(
+        pages, container + 16,
+        (0).to_bytes(8, "little"),
+    )
+    oracle._write_span(
+        pages, container + 24,
+        (image_base + 0x17CD3C).to_bytes(8, "little"),
+    )
+    nodes = [GUEST + 0x6000 + i * 0x40 for i in range(tree_count)]
+    pairs = [GUEST + 0x7000 + i * 0x20 for i in range(tree_count)]
+    for index, node in enumerate(nodes):
+        parent = sentinel if index == 0 else nodes[index - 1]
+        right = nodes[index + 1] if index + 1 < tree_count else 0
+        for address, value in (
+                (node, 1), (node + 8, parent), (node + 16, 0),
+                (node + 24, right), (node + 32, pairs[index]),
+                (pairs[index], GUEST + 0x8000 + index * 0x20),
+                (pairs[index] + 8, 0x101 + index)):
+            oracle._write_span(pages, address, value.to_bytes(8, "little"))
+    oracle._write_span(pages, sentinel + 8, nodes[0].to_bytes(8, "little"))
+    oracle._write_span(pages, sentinel + 16, nodes[0].to_bytes(8, "little"))
+    oracle._write_span(pages, sentinel + 24,
+                       nodes[-1].to_bytes(8, "little"))
+    oracle._write_span(pages, controller + 8, tree_count.to_bytes(8, "little"))
+    return child, container, controller, sentinel, counter, nodes, pairs
+
+
+def _child_nonempty_cleanup_case(library, libc, base, tree_count):
+    from unicorn import arm64_const as arm
+
+    native_pages = oracle.fresh_pages()
+    child, container, controller, sentinel, counter, nodes, pairs = (
+        _seed_nonempty_signer_child(
+            native_pages, image_base=base, reference_count=1,
+            tree_count=tree_count))
+    model = {k: bytearray(v) for k, v in native_pages.items()}
+    model.update(oracle.image_pages(library, base))
+    expected, actual = [], []
+    sizes = {counter: 4, child: 0x28, container: 0x28,
+             controller: 0x28, sentinel: 0x28}
+    sizes.update({node: 0x28 for node in nodes})
+    sizes.update({pair: 0x10 for pair in pairs})
+
+    def native_free(cpu):
+        pointer = cpu.reg_read(arm.UC_ARM64_REG_X0)
+        expected.append((pointer, bytes(cpu.mem_read(pointer, sizes[pointer]))))
+        return 0
+
+    def model_free(pages, pointer):
+        actual.append((pointer, bytes(oracle._read_span(
+            pages, pointer, sizes[pointer]))))
+
+    _, memory, _, _ = oracle.native(
+        library, base, 0x27E864, [child], native_pages, libc=libc,
+        host_imports={0x347FA0: native_free}, instruction_limit=100000,
+        extra_registers={arm.UC_ARM64_REG_TPIDR_EL0: GUEST + 0xD000})
+    objects.destroy_signer_child(
+        model, child_address=child, image_base=base, free=model_free)
+    assert oracle.flatten(model)[:0xA000] == memory
+    assert actual == expected
+    return dict(image_base=hex(base), profile=f"nonempty_{tree_count}",
+                original_count=1, tree_count=tree_count,
+                full_guest_window_match=True,
+                free_order_and_pre_free_bytes_match=True,
+                freed_blocks=len(actual), native_snapshot_input=False)
+
+
+def _child_actual_empty_cleanup_case(library, libc, base):
+    from unicorn import arm64_const as arm
+
+    native_pages = oracle.fresh_pages()
+    native_pages.update(oracle.image_pages(library, base))
+    child = GUEST + 0x1000
+    allocator = oracle.Allocator()
+    layout = objects.construct_signer_child(
+        native_pages, object_address=child, image_base=base,
+        allocate=allocator.model)
+    model = {k: bytearray(v) for k, v in native_pages.items()}
+    expected, actual = [], []
+    controller = int.from_bytes(oracle._read_span(
+        native_pages, layout.container_address + 0x20, 8), "little")
+    sentinel = int.from_bytes(oracle._read_span(
+        native_pages, controller, 8), "little")
+    sizes = {layout.reference_count_address: 4, sentinel: 0x28,
+             controller: 0x28, layout.container_address: 0x28,
+             layout.state_address: 0x98, child: 0x28}
+
+    def native_free(cpu):
+        pointer = cpu.reg_read(arm.UC_ARM64_REG_X0)
+        expected.append((pointer, bytes(cpu.mem_read(pointer, sizes[pointer]))))
+        return 0
+
+    def model_free(pages, pointer):
+        actual.append((pointer, bytes(oracle._read_span(
+            pages, pointer, sizes[pointer]))))
+
+    _, memory, _, _ = oracle.native(
+        library, base, 0x27E864, [child], native_pages, libc=libc,
+        host_imports={0x347FA0: native_free}, instruction_limit=100000,
+        extra_registers={arm.UC_ARM64_REG_TPIDR_EL0: GUEST + 0xD000})
+    objects.destroy_signer_child(
+        model, child_address=child, image_base=base, free=model_free)
+    assert oracle.flatten(model)[:0xA000] == memory
+    assert actual == expected
+    return dict(image_base=hex(base), profile="actual_empty_container",
+                original_count=1, full_guest_window_match=True,
+                free_order_and_pre_free_bytes_match=True,
+                freed_blocks=len(actual), native_snapshot_input=False)
+
+
 def _child_cleanup_guards(library, base):
     rows = []
     for label in ("nonempty_tree", "wrong_child_vtable", "unknown_container_vtable",
@@ -442,6 +559,51 @@ def _child_cleanup_guards(library, base):
         assert before == {k: bytes(v) for k, v in pages.items()}, label
         rows.append(dict(image_base=hex(base), profile=label,
                          all_pages_unchanged=True))
+    return rows
+
+
+def _nonempty_tree_cleanup_guards(base):
+    rows = []
+    for label, tree_count in (
+            ("wrong_pair_cleanup_callback", 1),
+            ("missing_root_with_nonzero_count", 1),
+            ("node_count_mismatch", 2),
+            ("cyclic_tree", 1),
+            ("max_nodes_exceeded", 2)):
+        pages = oracle.fresh_pages()
+        _, container, controller, sentinel, _, nodes, _ = (
+            _seed_nonempty_signer_child(
+                pages, image_base=base, reference_count=1,
+                tree_count=tree_count))
+        max_nodes = 4096
+        if label == "wrong_pair_cleanup_callback":
+            oracle._write_span(pages, container + 8,
+                               (base + 0x182D6C).to_bytes(8, "little"))
+        elif label == "missing_root_with_nonzero_count":
+            oracle._write_span(pages, sentinel + 8, bytes(8))
+        elif label == "node_count_mismatch":
+            oracle._write_span(pages, controller + 8,
+                               (tree_count + 1).to_bytes(8, "little"))
+        elif label == "cyclic_tree":
+            oracle._write_span(pages, nodes[0] + 24,
+                               nodes[0].to_bytes(8, "little"))
+        elif label == "max_nodes_exceeded":
+            max_nodes = 1
+
+        before = {key: bytes(value) for key, value in pages.items()}
+        free_calls = []
+        try:
+            objects.destroy_signer_callback_container(
+                pages, container_address=container, image_base=base,
+                free=lambda *args: free_calls.append(args), max_nodes=max_nodes)
+        except (objects.RefillUnsupported, ValueError):
+            pass
+        else:
+            raise AssertionError(("nonempty-tree cleanup guard accepted", label))
+        assert before == {key: bytes(value) for key, value in pages.items()}, label
+        assert not free_calls, label
+        rows.append(dict(image_base=hex(base), profile=label,
+                         all_pages_unchanged=True, free_service_not_called=True))
     return rows
 
 
@@ -509,22 +671,35 @@ def main() -> None:
             ("empty_container", 1), ("null_container", 1),
             ("retained_container", 2), ("signed_min", 0x80000000),
             ("negative_count", 0xFFFFFFFF))]
+    actual_child_cleanup_cases = [_child_actual_empty_cleanup_case(
+        args.library, args.libc, base) for base in BASES]
+    nonempty_child_cleanup_cases = [_child_nonempty_cleanup_case(
+        args.library, args.libc, base, tree_count)
+        for base in BASES for tree_count in (1, 2)]
     child_assignment_cases = [_child_assignment_case(
         args.library, args.libc, base) for base in BASES]
     report = {
-        "schema": "vm9-request-context-reference-members-20261102-v4",
+        "schema": "vm9-request-context-reference-members-20261102-v6",
         "sample_sha256": digest,
         "matching_libc_sha256": hashlib.sha256(args.libc.read_bytes()).hexdigest(),
         "cases": cases,
         "cleanup_cases": cleanup_cases,
         "child_cleanup_cases": child_cleanup_cases,
+        "actual_child_cleanup_cases": actual_child_cleanup_cases,
+        "nonempty_child_cleanup_cases": nonempty_child_cleanup_cases,
         "child_assignment_cases": child_assignment_cases,
-        "native_controls": len(cases) * 3 + len(cleanup_cases) * 2 + len(child_cleanup_cases) * 2 + len(child_assignment_cases) * 2,
+        "native_controls": (len(cases) * 3 + len(cleanup_cases) * 2
+                            + len(child_cleanup_cases) * 2
+                            + len(actual_child_cleanup_cases) * 2
+                            + len(nonempty_child_cleanup_cases) * 2
+                            + len(child_assignment_cases) * 2),
         "rollback_guards": _rollback_cases(),
         "cleanup_guards": [row for base in BASES
                            for row in _cleanup_guards(args.library, base)],
         "child_cleanup_guards": [row for base in BASES
                                  for row in _child_cleanup_guards(args.library, base)],
+        "nonempty_tree_cleanup_guards": [row for base in BASES
+                                         for row in _nonempty_tree_cleanup_guards(base)],
         "object_reference_members_verified": all(
             case["object_reference_members_verified"] for case in cases
         ),
@@ -538,23 +713,26 @@ def main() -> None:
         "arbitrary_final_owner_destruction_supported": False,
         "empty_signer_child_cleanup_supported": True,
         "child_cleanup_connected_to_reference_assignment": True,
-        "nonempty_signer_child_cleanup_supported": False,
+        "nonempty_signer_child_cleanup_supported": True,
         "external_free_effects_rolled_back": False,
         "comparison_note": (
             "The service_refs handler's explicit +0x30/+0x40 callback-reference "
             "assignments match +0x28508c then +0x285094 on both image bases, "
             "including equal-pointee skips, retained releases, source/member "
             "aliases and uint32 increments. Explicit image/free services support "
-            "configuration and NULL last-owner cleanup with native free order and "
-            "pre-free bytes. Unknown deleting targets refuse; external free-provider "
-            "effects are outside page rollback. Diagnostic scopes and physical "
+            "configuration and signer-child last-owner cleanup with native free order "
+            "and pre-free bytes, including one- and two-node signer callback trees. "
+            "Malformed trees, unsupported callbacks, and node-bound overruns refuse "
+            "before any pair, tree-node, or container free call. Unknown deleting targets refuse; external "
+            "free-provider effects are outside page rollback. Diagnostic scopes and physical "
             "stack writes remain excluded; no Java or signer semantics are inferred."
         ),
     }
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print("request-context reference members", len(cases), "assignment cases;",
           len(cleanup_cases), "reference cleanup;", len(child_cleanup_cases),
-          "child cleanup cases PASS", flush=True)
+          "child cleanup cases;", len(report["nonempty_tree_cleanup_guards"]),
+          "nonempty-tree rollback guards PASS", flush=True)
 
 
 if __name__ == "__main__":
