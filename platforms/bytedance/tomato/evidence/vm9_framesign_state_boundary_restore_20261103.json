@@ -1,0 +1,593 @@
+{
+  "schema": "vm9-framesign-state-boundary-restore-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "package": "com.dragon.read",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "baseline_evidence": "evidence/vm9_framesign_same_input_four_call_cycle_20261103.json",
+  "unidbg": {
+    "version": "0.9.9",
+    "backend": "Unicorn2",
+    "frame_sign_tag": "0x200000a",
+    "handle_source_tag": "0x4000002",
+    "preceding_business_sign_rounds": 1,
+    "same_handle_within_run": true,
+    "fresh_rootfs_per_run": true,
+    "synthetic_jni_provider_used": true
+  },
+  "intervention": {
+    "offset_from_manager": 112,
+    "length": 16,
+    "capture_after_ordinal": 1,
+    "restore_before_ordinals": [
+      2,
+      3,
+      4
+    ],
+    "write_event_scope": "guest writes overlapping the selected 16 bytes",
+    "restore_execution_scope": "next instruction hook in metasec +0x1000..+0x3c9000, or JNI call return",
+    "libc_instruction_boundaries_hooked": false,
+    "continuous_write_suppression_verified": false,
+    "restored_bytes_object_ownership_verified": false
+  },
+  "paired_runs": {
+    "control": {
+      "local_run_name": "lifetime_control_4",
+      "source_sha256": "c74d4403e30894eda8cd8c0ad22e8e1128d4a22c93daaf44ed8ec12eebf7d72a",
+      "entry_class_sha256": "bfb5ca95e812e0bd3d1c673652ecb5ae2fc8b094afe3941ad4db74d0b42802d0",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "sanitized_log_sha256": "7ee739cd290c38677215d6921ebdf76758f6b15371bee683657c464e2a90b156",
+      "process_exit_code": 0,
+      "restore_enabled": false,
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "restore": null,
+          "write_sites": []
+        },
+        {
+          "ordinal": 2,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "restore": null,
+          "write_sites": []
+        },
+        {
+          "ordinal": 3,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "restore": null,
+          "write_sites": []
+        },
+        {
+          "ordinal": 4,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "restore": null,
+          "write_sites": []
+        }
+      ],
+      "saved_after_first_call": false,
+      "pre_call_restore_count": 0,
+      "allocator_coverage": {
+        "allocation_entry_events": 87,
+        "matched_allocation_returns": 78,
+        "free_entry_events": 51,
+        "manager_minus_hint": 0
+      }
+    },
+    "restored": {
+      "local_run_name": "lifetime_frozen_1",
+      "source_sha256": "c74d4403e30894eda8cd8c0ad22e8e1128d4a22c93daaf44ed8ec12eebf7d72a",
+      "entry_class_sha256": "bfb5ca95e812e0bd3d1c673652ecb5ae2fc8b094afe3941ad4db74d0b42802d0",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "sanitized_log_sha256": "6177130a11097c851a0af8ee09b4ce2ba57f4a5f61d513186ebde9cf5256a4a0",
+      "process_exit_code": 0,
+      "restore_enabled": true,
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "restore": null,
+          "write_sites": []
+        },
+        {
+          "ordinal": 2,
+          "result": "null",
+          "fields": [],
+          "restore": {
+            "write_events": 4,
+            "boundary_restores": 2,
+            "errors": 0,
+            "pending": false,
+            "final_bytes_equal_saved": true
+          },
+          "write_sites": [
+            {
+              "pc": "libc.so+0x1c148",
+              "lr": "metasec+0x2543f8",
+              "relative_offset": 0,
+              "size": 8,
+              "count": 1
+            },
+            {
+              "pc": "libc.so+0x1c148",
+              "lr": "metasec+0x2543f8",
+              "relative_offset": 8,
+              "size": 8,
+              "count": 2
+            },
+            {
+              "pc": "metasec+0x255110",
+              "lr": "metasec+0x2633e0",
+              "relative_offset": 0,
+              "size": 8,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "restore": {
+            "write_events": 0,
+            "boundary_restores": 0,
+            "errors": 0,
+            "pending": false,
+            "final_bytes_equal_saved": true
+          },
+          "write_sites": []
+        },
+        {
+          "ordinal": 4,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "f01f4ffcb6d14c956ff2b7aad557707d2578f1edffa0a9c978361a73ab6ea069"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "849f0a4076c1fe58c76738fef5af19e94553cbc4d4e29ea1be263370f5e7138e"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "restore": {
+            "write_events": 0,
+            "boundary_restores": 0,
+            "errors": 0,
+            "pending": false,
+            "final_bytes_equal_saved": true
+          },
+          "write_sites": []
+        }
+      ],
+      "saved_after_first_call": true,
+      "pre_call_restore_count": 3,
+      "allocator_coverage": {
+        "allocation_entry_events": 87,
+        "matched_allocation_returns": 78,
+        "free_entry_events": 51,
+        "manager_minus_hint": 0
+      }
+    }
+  },
+  "earlier_restore_reproductions": [
+    {
+      "local_run_name": "freeze_during_call_1",
+      "sanitized_log_sha256": "c35d50cb4688c61f57e0b28bbfdfe9c8365d965c6e0fa6069885f29be98357e3",
+      "source_revision_identity_available": false,
+      "result_sequence": [
+        "array10",
+        "null",
+        "array10",
+        "array10"
+      ],
+      "dynamic_digest_sequence": {
+        "signinfo": [
+          "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20",
+          null,
+          "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f",
+          "f01f4ffcb6d14c956ff2b7aad557707d2578f1edffa0a9c978361a73ab6ea069"
+        ],
+        "signvalue": [
+          "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c",
+          null,
+          "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8",
+          "849f0a4076c1fe58c76738fef5af19e94553cbc4d4e29ea1be263370f5e7138e"
+        ]
+      },
+      "second_call_write_events": 4,
+      "second_call_boundary_restores": 2
+    },
+    {
+      "local_run_name": "freeze_during_call_2",
+      "sanitized_log_sha256": "c35d50cb4688c61f57e0b28bbfdfe9c8365d965c6e0fa6069885f29be98357e3",
+      "source_revision_identity_available": false,
+      "result_sequence": [
+        "array10",
+        "null",
+        "array10",
+        "array10"
+      ],
+      "dynamic_digest_sequence": {
+        "signinfo": [
+          "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20",
+          null,
+          "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f",
+          "f01f4ffcb6d14c956ff2b7aad557707d2578f1edffa0a9c978361a73ab6ea069"
+        ],
+        "signvalue": [
+          "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c",
+          null,
+          "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8",
+          "849f0a4076c1fe58c76738fef5af19e94553cbc4d4e29ea1be263370f5e7138e"
+        ]
+      },
+      "second_call_write_events": 4,
+      "second_call_boundary_restores": 2
+    },
+    {
+      "local_run_name": "freeze_during_call_3",
+      "sanitized_log_sha256": "ebac4c09da8d61d7d256c5cfe83bc9820afb2060c58f61050dabd756956f88df",
+      "source_revision_identity_available": false,
+      "result_sequence": [
+        "array10",
+        "null",
+        "array10",
+        "array10"
+      ],
+      "dynamic_digest_sequence": {
+        "signinfo": [
+          "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20",
+          null,
+          "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f",
+          "f01f4ffcb6d14c956ff2b7aad557707d2578f1edffa0a9c978361a73ab6ea069"
+        ],
+        "signvalue": [
+          "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c",
+          null,
+          "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8",
+          "849f0a4076c1fe58c76738fef5af19e94553cbc4d4e29ea1be263370f5e7138e"
+        ]
+      },
+      "second_call_write_events": 4,
+      "second_call_boundary_restores": 2
+    },
+    {
+      "local_run_name": "freeze_during_call_4",
+      "sanitized_log_sha256": "80e3d20d3a56a2ce453d7d26ee58ce2c7efcd45fc6d51ca26b6b7ce73504a900",
+      "source_revision_identity_available": false,
+      "result_sequence": [
+        "array10",
+        "null",
+        "array10",
+        "array10"
+      ],
+      "dynamic_digest_sequence": {
+        "signinfo": [
+          "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20",
+          null,
+          "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f",
+          "f01f4ffcb6d14c956ff2b7aad557707d2578f1edffa0a9c978361a73ab6ea069"
+        ],
+        "signvalue": [
+          "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c",
+          null,
+          "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8",
+          "849f0a4076c1fe58c76738fef5af19e94553cbc4d4e29ea1be263370f5e7138e"
+        ]
+      },
+      "second_call_write_events": 4,
+      "second_call_boundary_restores": 2
+    }
+  ],
+  "static_analysis": {
+    "engine": "Capstone 5.0.7 + pyelftools PT_LOAD mapping",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x248258",
+        "file_offset": "0x248258",
+        "bytes_hex": "df4a3338",
+        "mnemonic": "strb",
+        "operands": "wzr, [x22, w19, uxtw]"
+      },
+      {
+        "image_offset": "0x2543e4",
+        "file_offset": "0x2543e4",
+        "bytes_hex": "cfce0394",
+        "mnemonic": "bl",
+        "operands": "#0x347f20"
+      },
+      {
+        "image_offset": "0x2543f4",
+        "file_offset": "0x2543f4",
+        "bytes_hex": "00013fd6",
+        "mnemonic": "blr",
+        "operands": "x8"
+      },
+      {
+        "image_offset": "0x255100",
+        "file_offset": "0x255100",
+        "bytes_hex": "170040f9",
+        "mnemonic": "ldr",
+        "operands": "x23, [x0]"
+      },
+      {
+        "image_offset": "0x255110",
+        "file_offset": "0x255110",
+        "bytes_hex": "1f8700f8",
+        "mnemonic": "str",
+        "operands": "xzr, [x24], #8"
+      },
+      {
+        "image_offset": "0x2551ac",
+        "file_offset": "0x2551ac",
+        "bytes_hex": "c8ffff97",
+        "mnemonic": "bl",
+        "operands": "#0x2550cc"
+      },
+      {
+        "image_offset": "0x2552fc",
+        "file_offset": "0x2552fc",
+        "bytes_hex": "828240a9",
+        "mnemonic": "ldp",
+        "operands": "x2, x0, [x20, #8]"
+      },
+      {
+        "image_offset": "0x255300",
+        "file_offset": "0x255300",
+        "bytes_hex": "e10313aa",
+        "mnemonic": "mov",
+        "operands": "x1, x19"
+      },
+      {
+        "image_offset": "0x25531c",
+        "file_offset": "0x25531c",
+        "bytes_hex": "40001fd6",
+        "mnemonic": "br",
+        "operands": "x2"
+      },
+      {
+        "image_offset": "0x2560a8",
+        "file_offset": "0x2560a8",
+        "bytes_hex": "09fcff17",
+        "mnemonic": "b",
+        "operands": "#0x2550cc"
+      },
+      {
+        "image_offset": "0x2633b8",
+        "file_offset": "0x2633b8",
+        "bytes_hex": "000440f9",
+        "mnemonic": "ldr",
+        "operands": "x0, [x0, #8]"
+      },
+      {
+        "image_offset": "0x2633c8",
+        "file_offset": "0x2633c8",
+        "bytes_hex": "37cbff17",
+        "mnemonic": "b",
+        "operands": "#0x2560a4"
+      },
+      {
+        "image_offset": "0x2633dc",
+        "file_offset": "0x2633dc",
+        "bytes_hex": "f5ffff97",
+        "mnemonic": "bl",
+        "operands": "#0x2633b0"
+      },
+      {
+        "image_offset": "0x2633ec",
+        "file_offset": "0x2633ec",
+        "bytes_hex": "9e1b0314",
+        "mnemonic": "b",
+        "operands": "#0x32a264"
+      },
+      {
+        "image_offset": "0x32a268",
+        "file_offset": "0x32a268",
+        "bytes_hex": "4e770014",
+        "mnemonic": "b",
+        "operands": "#0x347fa0"
+      }
+    ],
+    "observed_zero_store": "metasec+0x255110 stores xzr at x24 and post-increments by 8",
+    "cleanup_inference": "The 0x2550cc routine loads object descriptors, recurses at 0x2551ac, and invokes a terminal callback at 0x25531c. The observed LR 0x2633e0 belongs to a wrapper that eventually branches to the delete/free path. This supports a cleanup interpretation, not a signature-generation interpretation.",
+    "runtime_object_identity_verified": false
+  },
+  "comparison": {
+    "control_matches_prior_unidbg_four_calls": true,
+    "paired_first_call_matches": true,
+    "second_call_null_only_with_restore": true,
+    "subsequent_dynamic_digests_depart_from_control": true,
+    "mutation_affects_isolated_call_flow": true,
+    "direct_dynamic_source_identified": false,
+    "manager_extent_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_signature_values_retained": false,
+  "interpretation": "The paired isolated runs use identical harness and entry-class hashes. The read-only control preserves the prior A-B-A-B digests. Restoring manager-relative bytes +0x70..+0x7f before later calls and at subsequent metasec instruction boundaries yields array/null/array/array, with four overlapping write events coalesced into two restorations in call 2. All four earlier isolated restoration runs reproduced the same result and dynamic digests. This is an intervention-induced call-flow change, not proof of a continuously frozen region or direct signature-source attribution. The observed libc writes are not restored until execution re-enters the metasec hook range. Native static code includes a zero store in recursive object cleanup, while bounded allocation probes did not establish ownership or the manager extent. Do not transplant this restoration into production signing."
+}

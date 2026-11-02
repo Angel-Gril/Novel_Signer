@@ -1,5 +1,14 @@
 # Tomato Python material
 
+`verify_vm9_framesign_state_boundary_restore_20261103.py` checks the paired
+FrameSign boundary-restoration intervention against the existing four-call
+baseline and four earlier restoration runs. The control retains A-B-A-B; the
+intervention yields array/null/array/array. This does not identify the dynamic
+signature source or prove continuous suppression. Optional `--probe-dir` checks
+private sanitized logs and the paired harness/class hashes; `--elf` checks all
+15 static instruction records through the ELF PT_LOAD file/VA mapping. No raw
+signature values are needed or retained in the evidence.
+
 Official-app reader observation now has its own retained evidence verifier:
 `verify_vm9_official_okhttp_reader_20261102.py`. Seven Full/BatchFull responses
 have preceding six-header OkHttp callbacks with matching thread/path digests,

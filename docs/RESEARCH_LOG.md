@@ -1,5 +1,16 @@
 # Checkpoint log
 
+2026-11-03：FrameSign 状态区边界恢复实验完成同构建配对验证。相同 49 字符输入、
+handle2、一轮 setup 和每实例四次调用下，控制组保持既有 A-B-A-B；恢复组出现
+有效/空/有效/有效，后两次动态摘要偏离对照。此前四次独立实验复现同一序列。
+第二次调用观测到 4 个目标区间写事件、2 次边界恢复，返回时 16 字节与保存值相同；
+恢复器没有逐条覆盖 libc 指令，不能宣称完全冻结。`+0x255110` 的零写位于递归
+对象清理路径，15 条静态指令通过原 ELF 字节及 PT_LOAD 映射核对；manager 长度、
+该区间的对象归属和直接动态来源仍未知。生产 signer 未引入恢复操作。见
+[脱敏证据](../platforms/bytedance/tomato/evidence/vm9_framesign_state_boundary_restore_20261103.json)
+和[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_state_boundary_restore_20261103.py)。
+完整 signer、整请求 native/Python 差分和线上验签仍未完成。
+
 2026-10-26：同一 probe 进一步记录 child ABI 与 facade cleanup。两基址的 child
 入口均为 `x0=receiver`、`x1/x2=转换后的栈引用`、`x3=0x138`、`x8=栈上的 output
 reference`；owning VM 返回后执行 `+0x17baa0/+0x17bac0` facade epilogue，最终到

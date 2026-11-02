@@ -1,5 +1,20 @@
 {
   "platform": "bytedance.tomato",
+  "vm9_framesign_state_boundary_restore_20261103": {
+    "evidence_file": "evidence/vm9_framesign_state_boundary_restore_20261103.json",
+    "verifier": "python/verify_vm9_framesign_state_boundary_restore_20261103.py",
+    "schema": "vm9-framesign-state-boundary-restore-20261103-v1",
+    "paired_calls": 8,
+    "earlier_restore_reproduction_runs": 4,
+    "control_retains_prior_abab": true,
+    "restored_result_sequence": ["array10", "null", "array10", "array10"],
+    "static_instructions_checked": 15,
+    "continuous_write_suppression_verified": false,
+    "dynamic_source_identified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "generated_from": "ONLINE_VALIDATION_20260929.md, sanitized fresh trial summaries and the 2026-10-04 configuration tree, constructor, cipher and parser controls in the isolated workspace; independent fresh-ELF root factory/caller controls on 2026-10-04; independent startup caller, worker TLS/support prefixes and OP45 native controls in the isolated workspace (20261005 trial labels)",
   "redaction": "No raw URLs, request headers, device identifiers, UUIDs, tokens, per-session keys, or response bodies are included.",
   "live_chain": [

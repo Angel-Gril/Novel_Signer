@@ -1,5 +1,15 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03 对相同 49 字符输入完成 FrameSign 状态区边界恢复配对实验。关闭恢复时，
+四次结果保持此前 A-B-A-B 摘要；开启 `handle+0x70..+0x7f` 的调用前/目标库指令边界
+恢复时，结果为有效、空、有效、有效，第二次调用的 4 个重叠写事件合并为 2 次恢复。
+之前四次独立恢复实验也得到相同结果和动态摘要。写入归属收敛到 libc 路径与
+`metasec+0x255110` 的清理置零指令；静态字节不能证明该内存的运行时对象归属。
+恢复器没有覆盖 libc 内每条指令边界，分配探针也尚未确认 manager 长度，因此不能
+宣称全程冻结或已找到签名动态来源。此恢复操作只保留在私有探针中；完整 signer、
+整请求差分和线上接受仍未完成。见[边界恢复证据](evidence/vm9_framesign_state_boundary_restore_20261103.json)
+及[校验器](python/verify_vm9_framesign_state_boundary_restore_20261103.py)。
+
 2026-11-02 官方原版已通过分块 Java bridge 成功观测普通 OkHttp 阅读链。两轮捕获中
 七个 Full/BatchFull 响应与此前同线程/路径摘要的六头回调对应，均为 HTTP 200、
 业务码 0；随后截图显示可读正文。早先两次章节内容错误的根因仍未知。三个 Cronet
