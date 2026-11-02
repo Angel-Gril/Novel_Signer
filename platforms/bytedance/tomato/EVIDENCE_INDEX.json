@@ -10542,5 +10542,18 @@
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_signer_apk_provenance_20261102": {
+    "evidence_file": "evidence/vm9_signer_apk_provenance_20261102.json",
+    "verifier": "python/verify_vm9_signer_apk_provenance_20261102.py",
+    "installed_package_version_code": 72532,
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "native_library_entry": "lib/arm64-v8a/libmetasec_ml.so",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "native_sample_byte_identical_to_apk_member": true,
+    "runtime_mapped_library_identity_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

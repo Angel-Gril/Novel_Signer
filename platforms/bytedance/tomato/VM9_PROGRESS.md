@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-02：native signer ELF 与官方 APK 来源闭合
+
+对本机 `fq_7xz.apk` 重新计算 SHA-256，结果与已安装官方 7.2.5.32/72532 APK
+身份记录完全一致：`95889d1a…fbc04fd`。该 APK 唯一的
+`lib/arm64-v8a/libmetasec_ml.so` 为 3,971,808 字节、SHA-256
+`712384bd…fdd9269c`；与 unidbg signer replay 使用的 pinned ELF 完全一致。
+因此该 signer 样本确实来自 7.2.5.32 APK，旧的 7.1.3.32/71332 是历史研究版本
+标签，不是此 APK/native 样本的身份。复现见[APK/native provenance 校验器](python/verify_vm9_signer_apk_provenance_20261102.py)
+和[来源证据](evidence/vm9_signer_apk_provenance_20261102.json)。
+
+这闭合的是包内 native 样本来源；x86_64 运行进程实际选择的翻译库映射身份、整请求
+native/Python 差分、独立 signer 和线上验签仍未完成。
+
 ## 2026-11-02：官方 APK 的实际 r4 六头回调捕获
 
 Frida 17 的 bridge bundle 将 `bridge` 留在局部作用域；捕获器现在显式将其发布为
