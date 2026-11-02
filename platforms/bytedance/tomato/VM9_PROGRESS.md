@@ -89,6 +89,11 @@ signer 和线上验签仍未完成。
 原始 JSONL 保留在本机临时目录用于复核；该轮仍是路径有限的阴性结果，不证明 Cronet
 不可达，也不提升整请求 native/Python 差分、独立 signer 或线上验签状态。
 
+随后在应用内“免费出版物”打开另一部作品，并在 90 秒 JNI 窗口内翻到前言正文第 6 页。
+两个 method ID 解析成功、detach 正常，仍无 `CallObjectMethodV` 业务调用。正文在窗口内
+可见，但没有同时捕获普通请求回调，无法判断该页是本地缓存还是窗口内网络返回，因此不把
+它当成“发生过在线业务请求”的证据。详见[正文页 follow-up](evidence/vm9_cronet_jni_runtime_free_reader_20261102.json)。
+
 ## 2026-11-02：signer callback tree 析构接入
 
 恢复 `+0x27e864` 的 signer child 删除路径：最后所有者先释放引用计数，再清空
