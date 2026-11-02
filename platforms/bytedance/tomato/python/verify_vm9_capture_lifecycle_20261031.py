@@ -438,6 +438,71 @@ def check_cronet_lifecycle() -> dict:
             "cached_methods": json.loads(cached_check.stdout)}
 
 
+def check_business_capture_device_selection() -> dict:
+    spec = importlib.util.spec_from_file_location("vm9_business_capture", SOURCE)
+    capture = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(capture)
+
+    session = Session()
+    device = Device(session)
+    selected = []
+    usb_devices = [
+        SimpleNamespace(id="usb-device-a", type="usb"),
+        SimpleNamespace(id="usb-device-b", type="usb"),
+    ]
+    fake_frida = SimpleNamespace(
+        get_device=lambda serial, timeout: selected.append(serial) or device,
+        get_usb_device=lambda **kwargs: (_ for _ in ()).throw(
+            AssertionError("arbitrary USB selection is forbidden")),
+        get_device_manager=lambda: SimpleNamespace(
+            enumerate_devices=lambda: list(usb_devices),
+            add_remote_device=lambda _address: device,
+        ),
+        InvalidOperationError=LookupError,
+        TransportError=ConnectionError,
+    )
+
+    with tempfile.TemporaryDirectory() as temp:
+        output = Path(temp) / "serial.jsonl"
+        argv = [str(SOURCE), "--adb-serial", "usb-device-b", "--pid", "11",
+                "--duration", "0", "--output", str(output)]
+        with patch.dict(sys.modules, {"frida": fake_frida}), \
+                patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()):
+            assert capture.main() == 0
+        assert selected == ["usb-device-b"]
+        assert device.attached == [11]
+        assert session.detached and session.script.unloaded
+
+        ambiguous = Path(temp) / "ambiguous.jsonl"
+        argv = [str(SOURCE), "--pid", "11", "--duration", "0",
+                "--output", str(ambiguous)]
+        with patch.dict(sys.modules, {"frida": fake_frida}), \
+                patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
+            try:
+                capture.main()
+            except SystemExit as error:
+                assert error.code == 2
+            else:
+                raise AssertionError("ambiguous USB devices must require an explicit serial")
+        assert selected == ["usb-device-b"]
+        assert device.attached == [11]
+        assert not ambiguous.exists(), "ambiguous selection must fail before opening output"
+
+        usb_devices[:] = [usb_devices[1]]
+        single = Path(temp) / "single.jsonl"
+        argv = [str(SOURCE), "--pid", "11", "--duration", "0",
+                "--output", str(single)]
+        with patch.dict(sys.modules, {"frida": fake_frida}), \
+                patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()):
+            assert capture.main() == 0
+        assert selected == ["usb-device-b", "usb-device-b"]
+        assert device.attached == [11, 11]
+
+    return {"exact_serial_selection": True, "ambiguous_usb_rejected": True,
+            "single_usb_compatibility": True}
+
+
 def main() -> int:
     spec = importlib.util.spec_from_file_location("vm9_capture", SOURCE)
     capture = importlib.util.module_from_spec(spec)
@@ -534,6 +599,7 @@ def main() -> int:
         "target_exit_ends_capture": True, "destroyed_script_cleanup": True,
         "evidence_boundary": "host regression only; Android business callback unverified",
         "cronet_lifecycle": check_cronet_lifecycle(),
+        "business_capture_device_selection": check_business_capture_device_selection(),
         "reader_diagnostics": json.loads(diagnostic_result.stdout),
     }))
     return 0

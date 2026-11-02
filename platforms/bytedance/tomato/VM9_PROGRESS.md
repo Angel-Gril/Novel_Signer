@@ -50,6 +50,20 @@ Gorgon 52、Helios 48、Khronos 10、Ladon 8、Medusa 1284 字节。原始 URL �
 验签。详见[运行时捕获证据](evidence/vm9_networkparams_runtime_20261102.json)和
 [脱敏摘要校验器](python/verify_vm9_networkparams_runtime_20261102.py)。
 
+## 2026-11-02：home 与 video Cronet JNI follow-up
+
+在已渲染首页滚动和视频分类播放两个窗口分别运行 90 秒、45 秒 JNI 观察。两轮均成功
+安装 `GetMethodID`/`CallObjectMethodV` hooks，主动解析出两个缓存的
+`addSecurityFactor(String,String[])` method ID，JavaVM detach 状态为 0，目标进程在清理前
+仍存活；两个窗口都没有观察到 `CallObjectMethodV` 业务调用。各自只记录事件计数和
+SHA-256，未保存原始 URL/header，也没有把这两个有界阴性结果解释成 Cronet 不可达。
+
+首页滚动证据摘要：[home probe](evidence/vm9_cronet_jni_runtime_home_20261102.json)；
+视频分类证据摘要：[video probe](evidence/vm9_cronet_jni_runtime_video_20261102.json)。
+两份原始 JSONL 保留在本机临时目录用于复核，没有提交进仓库。下一次 Cronet 运行时实验
+需要改变业务触发路径；仅重复这两个窗口不会增加覆盖。整请求 native/Python 差分、独立
+signer 和线上验签仍未完成。
+
 ## 2026-11-02：signer callback tree 析构接入
 
 恢复 `+0x27e864` 的 signer child 删除路径：最后所有者先释放引用计数，再清空

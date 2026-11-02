@@ -142,6 +142,8 @@ emits only lengths and SHA-256 digests. Attach to an already-running app:
 python -B platforms/bytedance/tomato/python/capture_vm9_business_framesign_android_20261028.py --pid <PID> --duration 60
 ```
 
+When multiple USB devices are attached, add `--adb-serial <SERIAL>` to select the exact target. Without it, capture proceeds only when exactly one USB device is available.
+
 For Gadget, use `--device remote --process-name Gadget --bridge-js <bundle>`.
 `--output <new.jsonl>` refuses overwrites. Optional `--diagnose-reader-errors`
 adds bounded class/method stacks, path fingerprints, HTTP/business response

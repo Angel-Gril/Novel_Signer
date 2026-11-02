@@ -540,6 +540,10 @@ def main() -> int:
         help="exact process name to attach; useful for an embedded Frida Gadget",
     )
     parser.add_argument("--device", choices=("usb", "remote"), default="usb")
+    parser.add_argument(
+        "--adb-serial",
+        help="exact Frida USB device id; required when multiple USB devices are attached",
+    )
     parser.add_argument("--remote", default="127.0.0.1:27042")
     parser.add_argument("--duration", type=float, default=60.0)
     parser.add_argument(
@@ -583,6 +587,8 @@ def main() -> int:
         parser.error("--process-name cannot be combined with --spawn")
     if args.pid is not None and (args.spawn or args.process_name):
         parser.error("--pid cannot be combined with --spawn or --process-name")
+    if args.adb_serial is not None and args.device != "usb":
+        parser.error("--adb-serial can only be used with --device usb")
     source, chunks = _load_source(args.bridge_js, args.chunk_size)
     if args.observe_certificate_inputs:
         source = source + "\n" + CERTIFICATE_JS
@@ -598,7 +604,18 @@ def main() -> int:
     except ImportError as exc:  # pragma: no cover - environment dependent
         raise SystemExit("frida is required for the runtime probe") from exc
     if args.device == "usb":
-        device = frida.get_usb_device(timeout=10)
+        if args.adb_serial is not None:
+            device = frida.get_device(args.adb_serial, timeout=10)
+        else:
+            usb_devices = [
+                item for item in frida.get_device_manager().enumerate_devices()
+                if item.type == "usb"
+            ]
+            if len(usb_devices) != 1:
+                if not usb_devices:
+                    parser.error("no USB Frida device is attached")
+                parser.error("multiple USB Frida devices are attached; pass --adb-serial")
+            device = frida.get_device(usb_devices[0].id, timeout=10)
     else:
         device = frida.get_device_manager().add_remote_device(args.remote)
     if args.output is not None:
