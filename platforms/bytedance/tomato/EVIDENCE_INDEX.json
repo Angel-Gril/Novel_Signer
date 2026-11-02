@@ -10597,5 +10597,24 @@
     "complete_native_outer_state_equal": false,
     "fresh_input_signer_output_verified": false,
     "current_online_header_matrix_verified": false
+  },
+  "vm9_framesign_same_input_comparison_20261103": {
+    "evidence_file": "evidence/vm9_framesign_same_input_comparison_20261103.json",
+    "verifier": "python/verify_vm9_framesign_same_input_comparison_20261103.py",
+    "schema": "vm9-framesign-same-input-comparison-20261103-v1",
+    "device_serial": "emulator-5554",
+    "input_profile": "homepage",
+    "input_sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02",
+    "frame_sign_handle": "0x128a3000",
+    "same_input_verified": true,
+    "field_keys_and_lengths_match": true,
+    "unidbg_repeatable_across_two_fresh_runs": true,
+    "lid_hash_matches": true,
+    "signinfo_hash_matches": false,
+    "signvalue_hash_matches": false,
+    "clock_random_provider_alignment_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

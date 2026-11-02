@@ -1,5 +1,27 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：同 URL 的 Android-JVM / unidbg frameSign 对照
+
+使用官方 `com.dragon.read` 主进程的真实 `MSManager.frameSign(String,int)`，通过显式 USB
+Frida attach 与现场解析的主进程 PID，采集 homepage 固定输入；该调用返回五个结果字段，
+并在 `/proc/self/maps` 观察到三段 `libmetasec_ml.so` 映射。随后使用 path-aware
+`classes_path` unidbg 入口和 `0x4000002` 发布的 `handle2=0x128a3000`，以相同输入、
+`frameType=0` 运行两次 fresh 实例。两端输入长度和摘要一致；字段名及每个字段长度一致。
+`frametype`、`lid` 与 `signversion` 摘要相同，`signinfo` 与 `signvalue` 摘要不同；两个
+unidbg fresh 运行的五字段摘要完全相同，说明该 harness 默认状态下可复现。
+
+旧的通用 `classes_probe` 调用曾返回 null；复核发现它使用 callback-1 signer handle，
+而历史成功的 FrameSign 入口是 `src_path`/`classes_path` 并显式选择 handle2，因此该 null
+是 probe handle 不匹配，不作为 FrameSign 失败证据。历史 handle2 URL-sensitivity verifier
+也已在原三组 capture 上重跑通过。
+
+本轮 unidbg 在 `0x200000a` FrameSign 前会运行一次 `0x3000001` setup round；该特定输入的
+setup round 只返回 `X-Neptune`，不是六头业务请求证据。Android 与 unidbg 的时钟、随机源和
+provider state 未对齐，动态字段摘要差异尚未解释，因此同输入结构对照不构成 signer 等价、
+整请求差分或线上验签。原始 URL、签名字符串和 rounds 文件均未保留。详见
+[同 URL 对照证据](evidence/vm9_framesign_same_input_comparison_20261103.json)及
+[校验器](python/verify_vm9_framesign_same_input_comparison_20261103.py)。
+
 ## 2026-11-02：外层 constructor hash caller 与存储 fresh 复核
 
 用 pinned `libmetasec_ml.so` 与匹配 libc 重跑四组 outer graph（两个 image base ×

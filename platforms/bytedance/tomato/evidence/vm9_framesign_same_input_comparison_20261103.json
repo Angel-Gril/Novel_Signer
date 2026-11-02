@@ -1,0 +1,164 @@
+{
+  "schema": "vm9-framesign-same-input-comparison-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "package": "com.dragon.read",
+  "app_version": "7.2.5.32/72532",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "input": {
+    "profile": "homepage",
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "frame_type": 0,
+  "result_keys": [
+    "frametype",
+    "lid",
+    "signinfo",
+    "signvalue",
+    "signversion"
+  ],
+  "android_jvm": {
+    "device_serial": "emulator-5554",
+    "android": "9 / sdk 28",
+    "abi": "x86_64 with arm64 native translation",
+    "frida_host_version": "17.24.3",
+    "process_id": 27116,
+    "manager_class": "com.bytedance.mobsec.metasec.ml.MSManager",
+    "init_trigger": "x1.k(Application)",
+    "metasec_maps_count": 3,
+    "frame_sign_method": "MSManager.frameSign(String,int)",
+    "result_cardinality": 5,
+    "fields": [
+      {
+        "key": "frametype",
+        "length": 1,
+        "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+      },
+      {
+        "key": "lid",
+        "length": 10,
+        "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+      },
+      {
+        "key": "signinfo",
+        "length": 192,
+        "sha256": "330e639a73bccf3ef6ee5332461600401668c4f188e69969072e9020f883b24e"
+      },
+      {
+        "key": "signvalue",
+        "length": 64,
+        "sha256": "f3bb40600796a0ff8845431b35009b37efd9b3cbbb3ee14cda8c4106a903fc30"
+      },
+      {
+        "key": "signversion",
+        "length": 3,
+        "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+      }
+    ],
+    "actual_jni_provider_verified": true,
+    "raw_capture_retained": false,
+    "probe_source_sha256": "60386e2d9d362d8c00b46666297eb558cc35fc1a1389b403a2bf063bc199f0a5"
+  },
+  "unidbg": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "hook_source_sha256": "0ec14dfe7d812fd911ca099f27c1bd74580f4cd9ef23beb5c52997658a86f5c0",
+    "compiled_entry_sha256": "009063c7bb66af1a5a16573d9992b92ad6a4446bffa867d2abc17586db26a069",
+    "handle_source_tag": "0x4000002",
+    "frame_sign_tag": "0x200000a",
+    "frame_sign_handle": "0x128a3000",
+    "call_order": [
+      "0x3000001 setup round",
+      "0x200000a frameSign"
+    ],
+    "preceding_sign_round_headers": [
+      "X-Neptune"
+    ],
+    "repeat_trials": [
+      {
+        "result_length": 10,
+        "handle_source": "handle2",
+        "fields": [
+          {
+            "key": "frametype",
+            "length": 1,
+            "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+          },
+          {
+            "key": "lid",
+            "length": 10,
+            "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+          },
+          {
+            "key": "signinfo",
+            "length": 192,
+            "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+          },
+          {
+            "key": "signvalue",
+            "length": 64,
+            "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+          },
+          {
+            "key": "signversion",
+            "length": 3,
+            "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+          }
+        ]
+      },
+      {
+        "result_length": 10,
+        "handle_source": "handle2",
+        "fields": [
+          {
+            "key": "frametype",
+            "length": 1,
+            "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+          },
+          {
+            "key": "lid",
+            "length": 10,
+            "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+          },
+          {
+            "key": "signinfo",
+            "length": 192,
+            "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+          },
+          {
+            "key": "signvalue",
+            "length": 64,
+            "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+          },
+          {
+            "key": "signversion",
+            "length": 3,
+            "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+          }
+        ]
+      }
+    ],
+    "synthetic_jni_provider_used": true,
+    "raw_capture_retained": false
+  },
+  "comparison": {
+    "same_input_digest": true,
+    "same_frame_type": true,
+    "field_keys_match": true,
+    "field_lengths_match": true,
+    "equal_field_hashes": {
+      "frametype": true,
+      "lid": true,
+      "signinfo": false,
+      "signvalue": false,
+      "signversion": true
+    },
+    "unidbg_repeatable_across_two_fresh_runs": true,
+    "clock_alignment_verified": false,
+    "random_source_alignment_verified": false,
+    "provider_state_alignment_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "The live Android-JVM provider and the path-aware unidbg handle2 probe received the same redacted homepage input with frameType 0 and returned the same five field names and lengths. frametype, lid and signversion hashes match; signinfo and signvalue hashes differ. Two fresh unidbg runs are byte-stable at the digest level. The clock, random source and provider state are not aligned, so this establishes same-input shape and deterministic unidbg behavior only. The unidbg frameSign call follows a setup round that returned X-Neptune only; this is not a six-header request result or a standalone signer equivalence claim."
+}
