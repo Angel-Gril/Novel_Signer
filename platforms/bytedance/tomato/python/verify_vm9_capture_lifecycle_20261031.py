@@ -444,12 +444,23 @@ def main() -> int:
     spec.loader.exec_module(capture)
     with tempfile.TemporaryDirectory() as bridge_temp:
         bridge_path = Path(bridge_temp) / "metadata_bridge.js"
-        bridge_path.write_text("📦\n/path/to/bundle/index.js\n✄\nvar bridgeReady = true;\n",
+        bridge_path.write_text("📦\n/path/to/bundle/index.js\n✄\nvar bridge = {ready: true};\n",
                                encoding="utf-8")
-        normalized, _chunks = capture._load_source(bridge_path, 4096)
-        assert normalized.startswith("var bridgeReady = true;\n"), \
+        normalized, chunks = capture._load_source(bridge_path, 4096)
+        assert normalized.startswith("var bridge = {ready: true};\n"), \
             "known bridge packaging preamble must be removed"
         assert "📦" not in normalized and "✄" not in normalized
+        assert "".join(chunks) == normalized, "chunking must preserve the bridge export"
+        bridge_prefix = normalized[:normalized.index(capture.JS)]
+        bridge_check = subprocess.run(
+            ["node", "-e", "const vm=require('node:vm');"
+             "const c=vm.createContext({});"
+             "vm.runInContext(require('node:fs').readFileSync(0,'utf8'),c);"
+             "if(c.Java!==c.bridge||c.Java.ready!==true)process.exit(1);"],
+            input=bridge_prefix, text=True, check=True, capture_output=True,
+            timeout=20,
+        )
+        assert bridge_check.returncode == 0
     for source in (capture.JS, capture.DIAGNOSTIC_JS, capture.CERTIFICATE_JS):
         subprocess.run(["node", "--check"], input=source, text=True, check=True)
     diagnostic_result = subprocess.run(
