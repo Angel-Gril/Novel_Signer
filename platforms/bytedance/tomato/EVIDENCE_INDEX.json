@@ -10634,6 +10634,22 @@
     "whole_request_native_python_differential_verified": false,
     "online_header_acceptance_verified": false
   },
+  "vm9_framesign_unidbg_repeat_call_dynamics_20261103": {
+    "evidence_file": "evidence/vm9_framesign_unidbg_repeat_call_dynamics_20261103.json",
+    "verifier": "python/verify_vm9_framesign_unidbg_repeat_call_dynamics_20261103.py",
+    "schema": "vm9-framesign-unidbg-repeat-call-dynamics-20261103-v1",
+    "input_profile": "homepage_default",
+    "input_length": 60,
+    "input_sha256": "bcfb66faa824a3bc0ed7db2a43f11fb5fcf84a0335f0a955c8836363e71ca0f3",
+    "same_emulator_instance": true,
+    "stable_fields": ["frametype", "lid", "signversion"],
+    "dynamic_fields": ["signinfo", "signvalue"],
+    "dynamic_source_identified": false,
+    "raw_capture_retained": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_framesign_standard_source_scope_20261103": {
     "evidence_file": "evidence/vm9_framesign_standard_source_scope_20261103.json",
     "verifier": "python/verify_vm9_framesign_standard_source_scope_20261103.py",

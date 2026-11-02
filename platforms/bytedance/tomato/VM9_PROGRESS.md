@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：unidbg 同一实例的 FrameSign 重复调用动态字段
+
+使用 `classes_path` 基线入口的隔离副本，在一个 unidbg/Unicorn2 实例中以同一 handle、同一
+60 字符 homepage 默认输入连续调用两次 `0x200000a`；此前执行一轮 `0x3000001` setup。
+两次都返回相同五个字段及长度：frametype 1、lid 10、signinfo 224、signvalue 64、
+signversion 3。`frametype/lid/signversion` 摘要不变；`signinfo` 的 224 个字符中有 210 位
+变化，分成 15 段，`signvalue` 的 64 个字符中有 62 位变化，分成 3 段。长度保持不变。
+
+这说明 unidbg 同一实例内也存在逐次调用动态输出，差异不只出现在 Android provider；但该
+运行输入长 60，和前述 Android 对照的 49 字符 homepage 输入不同，不能据此主张两端输出
+等价或不等价。动态分量来源仍未识别；standalone signer、整请求 native/Python 差分和线上
+验签仍未完成。脱敏摘要与校验器：[unidbg repeat-call dynamics](evidence/vm9_framesign_unidbg_repeat_call_dynamics_20261103.json)、
+[verifier](python/verify_vm9_framesign_unidbg_repeat_call_dynamics_20261103.py)。
+
 ## 2026-11-03：FrameSign 动态来源的标准 API 范围检查
 
 在 7.2.5.32/72532 的真实 Android `0x200000a` JNI 调用期间按 OS thread id 计数。两次

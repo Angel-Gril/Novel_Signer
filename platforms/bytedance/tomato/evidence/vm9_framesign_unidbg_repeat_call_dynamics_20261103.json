@@ -1,0 +1,72 @@
+{
+  "schema": "vm9-framesign-unidbg-repeat-call-dynamics-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "package": "com.dragon.read",
+  "app_version": "7.2.5.32/72532",
+  "input": {
+    "profile": "homepage_default",
+    "frame_type": 0,
+    "length": 60,
+    "sha256": "bcfb66faa824a3bc0ed7db2a43f11fb5fcf84a0335f0a955c8836363e71ca0f3"
+  },
+  "unidbg": {
+    "version": "0.9.9",
+    "backend": "Unicorn2",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "original_harness_source_sha256": "0ec14dfe7d812fd911ca099f27c1bd74580f4cd9ef23beb5c52997658a86f5c0",
+    "redacted_probe_source_sha256": "0084d79b904103f9cbe5ac72a8135510457552a093a4d5031104b9f027832ab7",
+    "compiled_entry_sha256": "f23b54d4f06b08a5986fd1fb3e48760c28c2e0671f5c69eaf433dcb7fda5d153",
+    "handle_source_tag": "0x4000002",
+    "frame_sign_tag": "0x200000a",
+    "same_emulator_instance": true,
+    "same_handle_reused": true,
+    "preceding_business_sign_rounds": 1,
+    "repeat_trials": [
+      {
+        "ordinal": 1,
+        "result_length": 10,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 224, "sha256": "f40760e5df3b901d0b9c61c9436db707c98a0157839929ecb93f6858566439bc"},
+          {"key": "signvalue", "length": 64, "sha256": "c7abb13bebcb7f63ead72e1e52267b305037d28953ae684ead6821926fb3fa0f"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      },
+      {
+        "ordinal": 2,
+        "result_length": 10,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 224, "sha256": "94c8b59c1bfd5f1b9fb5ae15eb73e9c8b252a4e9caec18257f8d287fe453a884"},
+          {"key": "signvalue", "length": 64, "sha256": "12ed2081123dfbe3bd7b497307fea19033a4f3c930e633972fd4c69b64106735"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      }
+    ],
+    "field_differences": {
+      "frametype": {"same_length": true, "changed_chars": 0, "first": -1, "last": -1, "spans": 0, "common_prefix": 1, "common_suffix": 0},
+      "lid": {"same_length": true, "changed_chars": 0, "first": -1, "last": -1, "spans": 0, "common_prefix": 10, "common_suffix": 0},
+      "signinfo": {"same_length": true, "changed_chars": 210, "first": 0, "last": 223, "spans": 15, "common_prefix": 0, "common_suffix": 0},
+      "signvalue": {"same_length": true, "changed_chars": 62, "first": 0, "last": 63, "spans": 3, "common_prefix": 0, "common_suffix": 0},
+      "signversion": {"same_length": true, "changed_chars": 0, "first": -1, "last": -1, "spans": 0, "common_prefix": 3, "common_suffix": 0}
+    },
+    "synthetic_jni_provider_used": true,
+    "raw_capture_retained": false
+  },
+  "comparison": {
+    "same_input_for_both_calls": true,
+    "same_vm_and_handle": true,
+    "field_keys_and_lengths_stable": true,
+    "frametype_lid_signversion_hashes_stable": true,
+    "signinfo_hash_changes_between_calls": true,
+    "signvalue_hash_changes_between_calls": true,
+    "dynamic_source_identified": false,
+    "same_as_android_49_character_input": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "Two consecutive 0x200000a calls on one unidbg emulator instance, using the same handle and 60-character homepage input, returned the same five field names and lengths. frametype, lid and signversion stayed byte-stable at the digest level; signinfo and signvalue changed substantially while retaining their lengths. A single 0x3000001 setup round ran before the pair. This input is not the 49-character Android comparison input. The dynamic source remains unknown; this does not establish Android/unidbg equivalence, a standalone signer, whole-request differential, or online acceptance."
+}
