@@ -1,5 +1,22 @@
 {
   "platform": "bytedance.tomato",
+  "vm9_framesign_sha256_edge_20261103": {
+    "evidence_file": "evidence/vm9_framesign_sha256_edge_20261103.json",
+    "verifier": "python/verify_vm9_framesign_sha256_edge_20261103.py",
+    "schema": "vm9-framesign-sha256-edge-20261103-v1",
+    "independent_read_only_runs": 2,
+    "calls": 8,
+    "input_length": 252,
+    "signvalue_sha256_hex_relation_verified": true,
+    "baseline_abab_preserved": true,
+    "four_part_direct_concatenation_matches": false,
+    "preimage_composition_identified": false,
+    "signinfo_generation_identified": false,
+    "alternation_cause_identified": false,
+    "android_relation_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_sha256_digest_reference_fresh_20261103": {
     "evidence_file": "evidence/vm9_sha256_digest_reference_fresh_20261103.json",
     "verifier": "python/verify_vm9_parser_digests.py",

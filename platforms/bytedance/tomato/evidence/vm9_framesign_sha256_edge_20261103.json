@@ -1,0 +1,443 @@
+{
+  "schema": "vm9-framesign-sha256-edge-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "buffer_provenance_evidence": "evidence/vm9_framesign_result_buffer_provenance_20261103.json",
+  "digest_component_evidence": "evidence/vm9_sha256_digest_reference_fresh_20261103.json",
+  "probe": {
+    "source_relative_path": "result_sha256_components_probe/HookMain.java",
+    "source_sha256": "3601ba3d4e626301d11c9c209f096667bdfb29761a1c9efec99715a48c93dc2e",
+    "entry_class_sha256": "1ca342c4e712579dcceac3cffd490a35b504807cdf8a76fc818ade1fabb275b9",
+    "read_only_guest_observation": true,
+    "synthetic_jni_provider_used": true,
+    "fresh_rootfs_per_run": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "preimage_source": "caller_frame_minus_0x48_string_object_at_signvalue_constructor_store"
+  },
+  "runs": [
+    {
+      "local_run_name": "result_sha256_components_probe/run1",
+      "source_sha256": "3601ba3d4e626301d11c9c209f096667bdfb29761a1c9efec99715a48c93dc2e",
+      "entry_class_sha256": "1ca342c4e712579dcceac3cffd490a35b504807cdf8a76fc818ade1fabb275b9",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "4979f7f6c1e74b07dd0b97abee3cbba26041522b692dcde2da9751bde85d9229",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "sha256_edges": [
+        {
+          "ordinal": 1,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+        },
+        {
+          "ordinal": 2,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+        },
+        {
+          "ordinal": 3,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+        },
+        {
+          "ordinal": 4,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+        }
+      ]
+    },
+    {
+      "local_run_name": "result_sha256_components_probe/run2",
+      "source_sha256": "3601ba3d4e626301d11c9c209f096667bdfb29761a1c9efec99715a48c93dc2e",
+      "entry_class_sha256": "1ca342c4e712579dcceac3cffd490a35b504807cdf8a76fc818ade1fabb275b9",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "4979f7f6c1e74b07dd0b97abee3cbba26041522b692dcde2da9751bde85d9229",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "sha256_edges": [
+        {
+          "ordinal": 1,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+        },
+        {
+          "ordinal": 2,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+        },
+        {
+          "ordinal": 3,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+        },
+        {
+          "ordinal": 4,
+          "field": "signvalue",
+          "constructor_return": "metasec+0x284d3c",
+          "component_order": "none",
+          "input_length": 252,
+          "sha256_hex_matches": true,
+          "input_equals_signinfo": false,
+          "signinfo_source_observed": true,
+          "output_length": 64,
+          "output_sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+        }
+      ]
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x284ce8",
+        "file_offset": "0x284ce8",
+        "bytes_hex": "21008052",
+        "mnemonic": "mov",
+        "operands": "w1, #1"
+      },
+      {
+        "image_offset": "0x284cec",
+        "file_offset": "0x284cec",
+        "bytes_hex": "a0835bf8",
+        "mnemonic": "ldur",
+        "operands": "x0, [x29, #-0x48]"
+      },
+      {
+        "image_offset": "0x284cf4",
+        "file_offset": "0x284cf4",
+        "bytes_hex": "554fff97",
+        "mnemonic": "bl",
+        "operands": "#0x258a48"
+      },
+      {
+        "image_offset": "0x284d38",
+        "file_offset": "0x284d38",
+        "bytes_hex": "310dff97",
+        "mnemonic": "bl",
+        "operands": "#0x2481fc"
+      },
+      {
+        "image_offset": "0x258a80",
+        "file_offset": "0x258a80",
+        "bytes_hex": "ecb2ff97",
+        "mnemonic": "bl",
+        "operands": "#0x245630"
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "input_length": 252,
+    "signvalue_sha256_hex_relation_verified": true,
+    "baseline_abab_preserved": true,
+    "preimage_equals_signinfo": false,
+    "four_part_direct_concatenation_matches": false,
+    "preimage_composition_identified": false,
+    "signinfo_generation_identified": false,
+    "alternation_cause_identified": false,
+    "android_relation_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "preimage_digest_retained": false,
+  "interpretation": "For the fixed 49-character profile and frame type 0, eight calls in two read-only unidbg controls preserve every baseline output and constructor/conversion observation. At the signvalue constructor write, the caller-frame source object contains 252 bytes. SHA-256 of those bytes rendered as lowercase hexadecimal equals the constructor input and final signvalue. The preimage differs from signinfo and matches none of the 24 direct concatenations of URL, frametype, lid and signinfo, even though those lengths sum to 252. The preimage bytes and their digest were not retained because that digest could itself disclose the signature. Output fingerprints, lengths and comparison predicates are retained. Preimage composition, signinfo generation, alternation cause, Android relation, full independent signing and online acceptance remain unverified."
+}

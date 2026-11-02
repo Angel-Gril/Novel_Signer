@@ -1,5 +1,11 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03 已把 SHA-256 组件接回 FrameSign 的实际构造输入：[关系证据](evidence/vm9_framesign_sha256_edge_20261103.json)
+与[校验器](python/verify_vm9_framesign_sha256_edge_20261103.py)。固定 49 字符输入、frame type 0
+的两轮只读运行共 8 次调用，都满足 `signvalue = lowercase_hex(SHA256(252 字节输入))`，
+原五字段 A-B-A-B 保持不变。该输入不等于 signinfo，也不是 URL、frametype、lid、signinfo
+四段的任意直接拼接；完整输入组成、signinfo 生成及交替原因仍未闭合。未保留输入或其摘要。
+
 2026-11-03 已在现有 `construct_digest_reference` 中补入 `+0x258a48` 的 SHA-256
 包装语义，支持原始 32 字节和 ELF 字母表十六进制输出。[新鲜差分证据](evidence/vm9_sha256_digest_reference_fresh_20261103.json)
 包含两个基址上的 62 项 SHA-256 对照；总计 204 项对照、5 项回滚检查通过，原有 142 项

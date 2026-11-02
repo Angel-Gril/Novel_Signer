@@ -1,5 +1,23 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：FrameSign signvalue 的 SHA-256 输入关系
+
+在 `+0x248238` 已命中的构造写入处确认调用返回地址为 `+0x284d3c` 后，从调用者
+frame 的 `-0x48` 槽取得上游字符串对象，按其长度读取输入并重新计算 SHA-256。
+两轮独立只读运行共 8 次调用，输入均长 252 字节，生成的小写十六进制文本与该次
+构造输入及最终 signvalue 一致。新运行全部字段、构造来源、最后写入和 JNI 转换观测
+均与此前固定 49 字符/frame type 0 的 A-B-A-B 控制一致。另保留 5 条 pinned ELF
+指令，连接调用者的输入对象、flag 1、`+0x258a48` 和摘要入口 `+0x245630`。
+
+252 字节恰等于 URL、frametype、lid、signinfo 四段长度之和，但逐次穷举 24 种直接
+拼接顺序均不相等；长度相同不能证明组成相同。该输入也与 signinfo 本身不同。尚未
+识别完整组成、signinfo 生成过程和交替原因；这只验证当前 unidbg 配置下的关系，
+未验证 Android 上同样的关系、真实 SHA-256 引用作用域、独立 signer 或线上验签。
+
+未保留输入及其 SHA-256，因为后者本身可能就是签名。仅保留长度、比较结果和最终
+文本的摘要。证据：[SHA-256 edge](evidence/vm9_framesign_sha256_edge_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_sha256_edge_20261103.py)。
+
 ## 2026-11-03：SHA-256 摘要包装函数的 Python 语义
 
 从字段构造的静态上游定位到 `+0x258a48` 后，先复现 Python 模型在
