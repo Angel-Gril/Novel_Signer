@@ -1,5 +1,18 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：同一 49 字符输入下 Android / unidbg 四次调用对照
+
+使用相同 homepage 输入（长度 49、摘要与 Android 四调用证据一致），分别在真实 Android
+`MSManager` 和 unidbg 同一实例中连续调用四次 `frameSign`。两边五个字段的名称、长度完全
+一致；`frametype/lid/signversion` 的逐字段摘要也跨运行时相同。Android 和 unidbg 内部的
+`signinfo/signvalue` 都独立呈 A-B-A-B，但同一序号的动态摘要在两端均不相同。
+
+unidbg 前置一轮 `0x3000001` setup 并复用 `0x4000002` 来源 handle；Android 通过
+`x1.m().k(Application)` 初始化 provider。动态状态、时钟和随机源没有对齐，故相同输入下的
+序列形状一致仍不能证明 signer 等价，也不能把摘要差异判为实现错误。动态来源、独立 signer、
+整请求 native/Python 差分和线上验签仍未闭合。证据：[同输入四调用对照](evidence/vm9_framesign_same_input_four_call_cycle_20261103.json)
+及[验证器](python/verify_vm9_framesign_same_input_four_call_cycle_20261103.py)。
+
 ## 2026-11-03：Android FrameSign 四次调用确认 A-B-A-B 序列
 
 在 emulator-5554 的官方 7.2.5.32/72532 APK 上，对同一个真实 `MSManager` 实例和同一

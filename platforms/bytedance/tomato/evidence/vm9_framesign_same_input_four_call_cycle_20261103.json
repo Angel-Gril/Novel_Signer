@@ -1,0 +1,144 @@
+{
+  "schema": "vm9-framesign-same-input-four-call-cycle-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "package": "com.dragon.read",
+  "app_version": "7.2.5.32/72532",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "android": {
+    "evidence_file": "evidence/vm9_framesign_android_four_call_cycle_20261103.json",
+    "device_serial": "emulator-5554",
+    "process_id": 15163,
+    "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+    "method": "MSManager.frameSign(String,int)",
+    "same_manager_instance_reused": true,
+    "actual_jni_provider_verified": true,
+    "metasec_maps_count": 3,
+    "repeat_trials": [
+      {
+        "ordinal": 1,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 192, "sha256": "0215d3e1c3b69d87253d9d1e5ebc9297b23ee54e1112aee6f91462a4274eb7db"},
+          {"key": "signvalue", "length": 64, "sha256": "9746cc5163844e5743ac74ce473427fdb25b697ff1337ebcb439ebccf41f176c"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      },
+      {
+        "ordinal": 2,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 192, "sha256": "71f9862aaf62e7af4acdf31e5b13189ec68f25a45341335cdc98e501720353a1"},
+          {"key": "signvalue", "length": 64, "sha256": "04efc4d7fa78cbeed3db90520aa834da6f72d542aa118e25e61cae704e811caa"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      },
+      {
+        "ordinal": 3,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 192, "sha256": "0215d3e1c3b69d87253d9d1e5ebc9297b23ee54e1112aee6f91462a4274eb7db"},
+          {"key": "signvalue", "length": 64, "sha256": "9746cc5163844e5743ac74ce473427fdb25b697ff1337ebcb439ebccf41f176c"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      },
+      {
+        "ordinal": 4,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 192, "sha256": "71f9862aaf62e7af4acdf31e5b13189ec68f25a45341335cdc98e501720353a1"},
+          {"key": "signvalue", "length": 64, "sha256": "04efc4d7fa78cbeed3db90520aa834da6f72d542aa118e25e61cae704e811caa"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      }
+    ]
+  },
+  "unidbg": {
+    "version": "0.9.9",
+    "backend": "Unicorn2",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "original_harness_source_sha256": "0ec14dfe7d812fd911ca099f27c1bd74580f4cd9ef23beb5c52997658a86f5c0",
+    "redacted_probe_source_sha256": "0084d79b904103f9cbe5ac72a8135510457552a093a4d5031104b9f027832ab7",
+    "compiled_entry_sha256": "f23b54d4f06b08a5986fd1fb3e48760c28c2e0671f5c69eaf433dcb7fda5d153",
+    "handle_source_tag": "0x4000002",
+    "frame_sign_tag": "0x200000a",
+    "same_emulator_instance": true,
+    "same_handle_reused": true,
+    "preceding_business_sign_rounds": 1,
+    "fresh_isolated_rootfs": true,
+    "synthetic_jni_provider_used": true,
+    "repeat_trials": [
+      {
+        "ordinal": 1,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 192, "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"},
+          {"key": "signvalue", "length": 64, "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      },
+      {
+        "ordinal": 2,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 192, "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"},
+          {"key": "signvalue", "length": 64, "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      },
+      {
+        "ordinal": 3,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 192, "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"},
+          {"key": "signvalue", "length": 64, "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      },
+      {
+        "ordinal": 4,
+        "fields": [
+          {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+          {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+          {"key": "signinfo", "length": 192, "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"},
+          {"key": "signvalue", "length": 64, "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"},
+          {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+        ]
+      }
+    ]
+  },
+  "source_sha256": {
+    "android_probe": "16df18e61df43f29c8f800b4cc635b8ce7b87a1490a19c1a42448da55712a5e6",
+    "frida_java_bridge": "769b77aee5360f4cafb3d541810dda0aa6d97cad1eb3f3fa6285fa50c010b2cf",
+    "unidbg_original_harness": "0ec14dfe7d812fd911ca099f27c1bd74580f4cd9ef23beb5c52997658a86f5c0",
+    "unidbg_redacted_probe": "0084d79b904103f9cbe5ac72a8135510457552a093a4d5031104b9f027832ab7",
+    "unidbg_compiled_entry": "f23b54d4f06b08a5986fd1fb3e48760c28c2e0671f5c69eaf433dcb7fda5d153",
+    "native_library": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c"
+  },
+  "raw_capture_retained": false,
+  "comparison": {
+    "same_input_digest": true,
+    "field_keys_and_lengths_match": true,
+    "stable_field_hashes_match_across_runtimes": true,
+    "android_dynamic_fields_follow_abab": true,
+    "unidbg_dynamic_fields_follow_abab": true,
+    "dynamic_hashes_match_across_runtimes": false,
+    "dynamic_source_identified": false,
+    "clock_random_provider_state_aligned": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "Using the same 49-character homepage input, Android and unidbg returned the same five field names and lengths, with matching frametype, lid and signversion digests. Each runtime independently showed an A-B-A-B sequence in signinfo and signvalue, but the dynamic digests did not match at corresponding call ordinals. The unidbg run used one preceding 0x3000001 setup round while Android initialized MSManager through x1.m().k(Application); mutable provider state, clocks and random sources were not aligned. The observation does not identify the dynamic source or establish signer equivalence."
+}

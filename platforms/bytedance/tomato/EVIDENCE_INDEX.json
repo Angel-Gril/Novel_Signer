@@ -10653,6 +10653,25 @@
     "whole_request_native_python_differential_verified": false,
     "online_header_acceptance_verified": false
   },
+  "vm9_framesign_same_input_four_call_cycle_20261103": {
+    "evidence_file": "evidence/vm9_framesign_same_input_four_call_cycle_20261103.json",
+    "verifier": "python/verify_vm9_framesign_same_input_four_call_cycle_20261103.py",
+    "schema": "vm9-framesign-same-input-four-call-cycle-20261103-v1",
+    "input_profile": "homepage",
+    "input_length": 49,
+    "android_process_id": 15163,
+    "same_input_for_both_runtimes": true,
+    "call_count_per_runtime": 4,
+    "field_keys_and_lengths_match": true,
+    "stable_field_hashes_match_across_runtimes": true,
+    "both_dynamic_fields_follow_abab": true,
+    "dynamic_hashes_match_across_runtimes": false,
+    "dynamic_source_identified": false,
+    "raw_capture_retained": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_framesign_unidbg_repeat_call_dynamics_20261103": {
     "evidence_file": "evidence/vm9_framesign_unidbg_repeat_call_dynamics_20261103.json",
     "verifier": "python/verify_vm9_framesign_unidbg_repeat_call_dynamics_20261103.py",
