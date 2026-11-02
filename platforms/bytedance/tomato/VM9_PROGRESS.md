@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-02：外层 constructor hash caller 与存储 fresh 复核
+
+用 pinned `libmetasec_ml.so` 与匹配 libc 重跑四组 outer graph（两个 image base ×
+`absent`/`sdk_30`），另有四项拒绝/页面回滚控制。四组的 native hash caller 8 字节
+均与 Python zero-extended u32 相同；`image+0x3D1994` constructor hash input/result 窗口
+也全部逐字节匹配。旧 10 月记录中的高 4 字节差异由此被新 fresh 观测取代。
+
+returned core graph、默认 logger 记录语义和 allocation/free 顺序均匹配；唯一 live
+allocation mismatch 仍是 308，已知为四条短字符串中未使用的 padding。完整 native outer
+state、physical stack/ABI、fresh signer output 与线上 acceptance 仍未验证。证据：
+[outer graph fresh rerun](evidence/vm9_outer_graph_fresh_20261102.json)，SHA-256
+`f19a06b7071064b7a5889cc716290b8fd9a583ab43930757d640605969d394d3`；旧运行日期可通过
+verifier 的 `--evidence-date` 选项重现。
+
 ## 2026-11-02：native signer ELF 与官方 APK 来源闭合
 
 对本机 `fq_7xz.apk` 重新计算 SHA-256，结果与已安装官方 7.2.5.32/72532 APK

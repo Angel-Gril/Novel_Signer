@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+from datetime import date
 import hashlib
 import json
 import os
@@ -271,6 +272,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--library", type=Path, default=boundary.LIBRARY)
     parser.add_argument("--libc", type=Path, default=boundary.LIBC)
+    parser.add_argument("--evidence-date", type=date.fromisoformat,
+                        default=date.fromisoformat("2026-10-07"),
+                        help="date attached to the generated evidence record (YYYY-MM-DD)")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     assert hashlib.sha256(args.library.read_bytes()).hexdigest() == oracle.LIBRARY_SHA256
@@ -284,7 +288,8 @@ def main():
             rows.append(row)
             print("outer graph", hex(image), label, "core PASS; live differences",
                   [item["allocation_index"] for item in row["live_allocation_mismatches"]], flush=True)
-    report = dict(schema="vm9-outer-graph-fresh-differential-v1", evidence_date="2026-10-07",
+    report = dict(schema="vm9-outer-graph-fresh-differential-v1",
+                  evidence_date=args.evidence_date.isoformat(),
                   sample_sha256=oracle.LIBRARY_SHA256, libc_sha256=worker.LIBC_SHA256,
                   controls=len(rows), cases=rows,
                   negative_controls=negative_controls(args.library, args.libc),

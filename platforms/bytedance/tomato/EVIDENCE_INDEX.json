@@ -10561,5 +10561,22 @@
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_outer_graph_fresh_20261102": {
+    "evidence_file": "evidence/vm9_outer_graph_fresh_20261102.json",
+    "verifier": "python/verify_vm9_outer_graph_fresh_20261007.py",
+    "schema": "vm9-outer-graph-fresh-differential-v1",
+    "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "controls": 4,
+    "negative_controls": 4,
+    "native_hash_caller_zero_extended_u32_verified": true,
+    "constructor_hash_input_result_window_equal": true,
+    "returned_core_graph_equal": true,
+    "default_logger_record_semantics_equal": true,
+    "live_allocation_mismatch_indices": [308],
+    "complete_native_outer_state_equal": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false
   }
 }
