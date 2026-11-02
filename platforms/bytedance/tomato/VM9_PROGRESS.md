@@ -1,5 +1,19 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：Android FrameSign 四次调用确认 A-B-A-B 序列
+
+在 emulator-5554 的官方 7.2.5.32/72532 APK 上，对同一个真实 `MSManager` 实例和同一
+49 字符 homepage 输入，在一个 `Java.perform` 回调内连续调用四次精确匹配的
+`frameSign(String,int)` overload。五个字段和长度每次都相同；`frametype/lid/signversion`
+摘要保持稳定，`signinfo/signvalue` 摘要均为严格 A-B-A-B（第 1/3 次相同、第 2/4 次相同，
+两组不同）。三段 `libmetasec_ml.so` 映射确认调用落在实际 JNI provider 中。原始字段值未保存。
+
+这把 Android 侧的重复观测从两次扩展到四次，显示该运行中的输出有两步交替序列；交替状态
+来源仍未识别。unidbg 的 A-B-A-B 观测使用 60 字符输入，因此不能当作同输入的跨运行时
+复现或 signer 等价证据。完整 signer、整请求 native/Python 差分和线上验签仍未完成。详见
+[Android 四调用脱敏证据](evidence/vm9_framesign_android_four_call_cycle_20261103.json)及
+[验证器](python/verify_vm9_framesign_android_four_call_cycle_20261103.py)。
+
 ## 2026-11-03：unidbg 同一实例的 FrameSign 重复调用动态字段
 
 使用 `classes_path` 基线入口的隔离副本，在一个 unidbg/Unicorn2 实例中以同一 handle、同一

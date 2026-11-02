@@ -1,0 +1,96 @@
+{
+  "schema": "vm9-framesign-android-four-call-cycle-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "package": "com.dragon.read",
+  "app_version": "7.2.5.32/72532",
+  "apk_sha256": "95889d1a1ad0b11ed2451eedf0389516e1382640182026e82eb515e04fbc04fd",
+  "device_serial": "emulator-5554",
+  "android": "9 / sdk 28",
+  "abi": "x86_64 with arm64 native translation",
+  "frida_host_version": "17.24.3",
+  "process_id": 15163,
+  "provider": {
+    "manager_class": "com.bytedance.mobsec.metasec.ml.MSManager",
+    "method": "MSManager.frameSign(String,int)",
+    "overload_selection": "Reflection matched java.lang.String,int parameter types",
+    "init_trigger": "x1.m().k(Application)",
+    "same_manager_instance_reused": true,
+    "actual_jni_provider_verified": true,
+    "metasec_maps_count": 3
+  },
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "result_keys": [
+    "frametype",
+    "lid",
+    "signinfo",
+    "signvalue",
+    "signversion"
+  ],
+  "call_order": "Four consecutive reflection calls in one Java.perform callback using the same manager and input string.",
+  "repeat_trials": [
+    {
+      "ordinal": 1,
+      "fields": [
+        {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+        {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+        {"key": "signinfo", "length": 192, "sha256": "0215d3e1c3b69d87253d9d1e5ebc9297b23ee54e1112aee6f91462a4274eb7db"},
+        {"key": "signvalue", "length": 64, "sha256": "9746cc5163844e5743ac74ce473427fdb25b697ff1337ebcb439ebccf41f176c"},
+        {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+      ]
+    },
+    {
+      "ordinal": 2,
+      "fields": [
+        {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+        {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+        {"key": "signinfo", "length": 192, "sha256": "71f9862aaf62e7af4acdf31e5b13189ec68f25a45341335cdc98e501720353a1"},
+        {"key": "signvalue", "length": 64, "sha256": "04efc4d7fa78cbeed3db90520aa834da6f72d542aa118e25e61cae704e811caa"},
+        {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+      ]
+    },
+    {
+      "ordinal": 3,
+      "fields": [
+        {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+        {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+        {"key": "signinfo", "length": 192, "sha256": "0215d3e1c3b69d87253d9d1e5ebc9297b23ee54e1112aee6f91462a4274eb7db"},
+        {"key": "signvalue", "length": 64, "sha256": "9746cc5163844e5743ac74ce473427fdb25b697ff1337ebcb439ebccf41f176c"},
+        {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+      ]
+    },
+    {
+      "ordinal": 4,
+      "fields": [
+        {"key": "frametype", "length": 1, "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"},
+        {"key": "lid", "length": 10, "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"},
+        {"key": "signinfo", "length": 192, "sha256": "71f9862aaf62e7af4acdf31e5b13189ec68f25a45341335cdc98e501720353a1"},
+        {"key": "signvalue", "length": 64, "sha256": "04efc4d7fa78cbeed3db90520aa834da6f72d542aa118e25e61cae704e811caa"},
+        {"key": "signversion", "length": 3, "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"}
+      ]
+    }
+  ],
+  "source_sha256": {
+    "probe": "16df18e61df43f29c8f800b4cc635b8ce7b87a1490a19c1a42448da55712a5e6",
+    "frida_java_bridge": "769b77aee5360f4cafb3d541810dda0aa6d97cad1eb3f3fa6285fa50c010b2cf"
+  },
+  "raw_capture_retained": false,
+  "comparison": {
+    "same_input_for_all_calls": true,
+    "same_manager_instance": true,
+    "field_keys_and_lengths_match": true,
+    "frametype_lid_signversion_hashes_stable": true,
+    "signinfo_hash_follows_abab": true,
+    "signvalue_hash_follows_abab": true,
+    "dynamic_cause_identified": false,
+    "clock_random_provider_state_cause_identified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "interpretation": "Four consecutive calls on one live Android MSManager instance with the same homepage input returned the same five field names and lengths. frametype, lid and signversion hashes stayed constant. Both signinfo and signvalue followed a strict A-B-A-B digest sequence. The sequence source remains unknown. The unidbg repeat-call capture used a different 60-character input, so this observation does not establish cross-runtime equivalence."
+}

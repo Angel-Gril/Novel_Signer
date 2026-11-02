@@ -10634,6 +10634,25 @@
     "whole_request_native_python_differential_verified": false,
     "online_header_acceptance_verified": false
   },
+  "vm9_framesign_android_four_call_cycle_20261103": {
+    "evidence_file": "evidence/vm9_framesign_android_four_call_cycle_20261103.json",
+    "verifier": "python/verify_vm9_framesign_android_four_call_cycle_20261103.py",
+    "schema": "vm9-framesign-android-four-call-cycle-20261103-v1",
+    "device_serial": "emulator-5554",
+    "process_id": 15163,
+    "app_version": "7.2.5.32/72532",
+    "input_profile": "homepage",
+    "input_length": 49,
+    "same_live_provider_reused": true,
+    "call_count": 4,
+    "dynamic_fields_follow_abab": ["signinfo", "signvalue"],
+    "dynamic_cause_identified": false,
+    "raw_capture_retained": false,
+    "cross_runtime_equivalence_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_framesign_unidbg_repeat_call_dynamics_20261103": {
     "evidence_file": "evidence/vm9_framesign_unidbg_repeat_call_dynamics_20261103.json",
     "verifier": "python/verify_vm9_framesign_unidbg_repeat_call_dynamics_20261103.py",
