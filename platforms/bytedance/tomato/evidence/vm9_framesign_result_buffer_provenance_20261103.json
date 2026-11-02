@@ -1,0 +1,4508 @@
+{
+  "schema": "vm9-framesign-result-buffer-provenance-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "baseline_evidence": "evidence/vm9_framesign_same_input_four_call_cycle_20261103.json",
+  "probe": {
+    "source_relative_path": "result_constructor_write_probe/HookMain.java",
+    "source_sha256": "85ea2818b72f7a8dfc86781846c3cfde4e49d0e41141296fbd7dfff3101ea26f",
+    "entry_class_sha256": "5ef0b30e6780dd70f89ff3281f707465af8df89712b82cf7468fac1488af22e8",
+    "read_only_guest_observation": true,
+    "synthetic_jni_provider_used": true,
+    "fresh_rootfs_per_run": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "writer_tracking": "last_observed_guest_writer_per_byte",
+    "entry_hook_absence_is_execution_exclusion": false
+  },
+  "runs": [
+    {
+      "local_run_name": "result_constructor_write_probe/run1",
+      "source_sha256": "85ea2818b72f7a8dfc86781846c3cfde4e49d0e41141296fbd7dfff3101ea26f",
+      "entry_class_sha256": "5ef0b30e6780dd70f89ff3281f707465af8df89712b82cf7468fac1488af22e8",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "19c1c4c8eb6bf5547dfab0d8c0fad76453b03ec55f64e00ed9778457e9245002",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "dispatch": [
+            {
+              "pc": "metasec+0x164894",
+              "target": "metasec+0x163e58",
+              "result_slot_present": false
+            },
+            {
+              "pc": "metasec+0x164714",
+              "target": "metasec+0x283748",
+              "result_slot_present": true
+            }
+          ],
+          "collection": [
+            {
+              "pc": "metasec+0x164718",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x17b014",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x271384",
+              "result_present": true,
+              "shares_dispatch_result": true
+            }
+          ],
+          "pairs": [
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "conversions": [
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x26ff40",
+              "field": "none",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 5,
+              "sha256": "5cf1fa8d836a5e82ead36fb0854a6a68a4b8f7542038a346357d2424ddb60f5e"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "constructor_sources": [
+            {
+              "field": "lid",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284bc0,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signinfo",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x283f4c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signvalue",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284d3c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signversion",
+              "same_final_object": true,
+              "write_site": "metasec+0x248388",
+              "source_chain": "metasec+0x284b6c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6",
+              "source_digest_equal": true
+            }
+          ],
+          "last_writers": [
+            {
+              "field": "frametype",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 1,
+              "dropped": 0
+            },
+            {
+              "field": "frametype",
+              "region": "pointer_slot",
+              "writer": "metasec+0x2481dc",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 10,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 192,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 64,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 3,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248388",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "dispatch": [
+            {
+              "pc": "metasec+0x164894",
+              "target": "metasec+0x163e58",
+              "result_slot_present": false
+            },
+            {
+              "pc": "metasec+0x164714",
+              "target": "metasec+0x283748",
+              "result_slot_present": true
+            }
+          ],
+          "collection": [
+            {
+              "pc": "metasec+0x164718",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x17b014",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x271384",
+              "result_present": true,
+              "shares_dispatch_result": true
+            }
+          ],
+          "pairs": [
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "conversions": [
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x26ff40",
+              "field": "none",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 5,
+              "sha256": "5cf1fa8d836a5e82ead36fb0854a6a68a4b8f7542038a346357d2424ddb60f5e"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "constructor_sources": [
+            {
+              "field": "lid",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284bc0,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signinfo",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x283f4c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signvalue",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284d3c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signversion",
+              "same_final_object": true,
+              "write_site": "metasec+0x248388",
+              "source_chain": "metasec+0x284b6c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6",
+              "source_digest_equal": true
+            }
+          ],
+          "last_writers": [
+            {
+              "field": "frametype",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 1,
+              "dropped": 0
+            },
+            {
+              "field": "frametype",
+              "region": "pointer_slot",
+              "writer": "metasec+0x2481dc",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 10,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 192,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 64,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 3,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248388",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "dispatch": [
+            {
+              "pc": "metasec+0x164894",
+              "target": "metasec+0x163e58",
+              "result_slot_present": false
+            },
+            {
+              "pc": "metasec+0x164714",
+              "target": "metasec+0x283748",
+              "result_slot_present": true
+            }
+          ],
+          "collection": [
+            {
+              "pc": "metasec+0x164718",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x17b014",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x271384",
+              "result_present": true,
+              "shares_dispatch_result": true
+            }
+          ],
+          "pairs": [
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "conversions": [
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x26ff40",
+              "field": "none",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 5,
+              "sha256": "5cf1fa8d836a5e82ead36fb0854a6a68a4b8f7542038a346357d2424ddb60f5e"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "constructor_sources": [
+            {
+              "field": "lid",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284bc0,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signinfo",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x283f4c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signvalue",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284d3c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signversion",
+              "same_final_object": true,
+              "write_site": "metasec+0x248388",
+              "source_chain": "metasec+0x284b6c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6",
+              "source_digest_equal": true
+            }
+          ],
+          "last_writers": [
+            {
+              "field": "frametype",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 1,
+              "dropped": 0
+            },
+            {
+              "field": "frametype",
+              "region": "pointer_slot",
+              "writer": "metasec+0x2481dc",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 10,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 192,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 64,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 3,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248388",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "dispatch": [
+            {
+              "pc": "metasec+0x164894",
+              "target": "metasec+0x163e58",
+              "result_slot_present": false
+            },
+            {
+              "pc": "metasec+0x164714",
+              "target": "metasec+0x283748",
+              "result_slot_present": true
+            }
+          ],
+          "collection": [
+            {
+              "pc": "metasec+0x164718",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x17b014",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x271384",
+              "result_present": true,
+              "shares_dispatch_result": true
+            }
+          ],
+          "pairs": [
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "conversions": [
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x26ff40",
+              "field": "none",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 5,
+              "sha256": "5cf1fa8d836a5e82ead36fb0854a6a68a4b8f7542038a346357d2424ddb60f5e"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "constructor_sources": [
+            {
+              "field": "lid",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284bc0,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signinfo",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x283f4c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signvalue",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284d3c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signversion",
+              "same_final_object": true,
+              "write_site": "metasec+0x248388",
+              "source_chain": "metasec+0x284b6c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6",
+              "source_digest_equal": true
+            }
+          ],
+          "last_writers": [
+            {
+              "field": "frametype",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 1,
+              "dropped": 0
+            },
+            {
+              "field": "frametype",
+              "region": "pointer_slot",
+              "writer": "metasec+0x2481dc",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 10,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 192,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 64,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 3,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248388",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "local_run_name": "result_constructor_write_probe/run2",
+      "source_sha256": "85ea2818b72f7a8dfc86781846c3cfde4e49d0e41141296fbd7dfff3101ea26f",
+      "entry_class_sha256": "5ef0b30e6780dd70f89ff3281f707465af8df89712b82cf7468fac1488af22e8",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "19c1c4c8eb6bf5547dfab0d8c0fad76453b03ec55f64e00ed9778457e9245002",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "dispatch": [
+            {
+              "pc": "metasec+0x164894",
+              "target": "metasec+0x163e58",
+              "result_slot_present": false
+            },
+            {
+              "pc": "metasec+0x164714",
+              "target": "metasec+0x283748",
+              "result_slot_present": true
+            }
+          ],
+          "collection": [
+            {
+              "pc": "metasec+0x164718",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x17b014",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x271384",
+              "result_present": true,
+              "shares_dispatch_result": true
+            }
+          ],
+          "pairs": [
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "conversions": [
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x26ff40",
+              "field": "none",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 5,
+              "sha256": "5cf1fa8d836a5e82ead36fb0854a6a68a4b8f7542038a346357d2424ddb60f5e"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "constructor_sources": [
+            {
+              "field": "lid",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284bc0,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signinfo",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x283f4c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signvalue",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284d3c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signversion",
+              "same_final_object": true,
+              "write_site": "metasec+0x248388",
+              "source_chain": "metasec+0x284b6c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6",
+              "source_digest_equal": true
+            }
+          ],
+          "last_writers": [
+            {
+              "field": "frametype",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 1,
+              "dropped": 0
+            },
+            {
+              "field": "frametype",
+              "region": "pointer_slot",
+              "writer": "metasec+0x2481dc",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 10,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 192,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 64,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 3,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248388",
+              "writer_ordinal": 1,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "dispatch": [
+            {
+              "pc": "metasec+0x164894",
+              "target": "metasec+0x163e58",
+              "result_slot_present": false
+            },
+            {
+              "pc": "metasec+0x164714",
+              "target": "metasec+0x283748",
+              "result_slot_present": true
+            }
+          ],
+          "collection": [
+            {
+              "pc": "metasec+0x164718",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x17b014",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x271384",
+              "result_present": true,
+              "shares_dispatch_result": true
+            }
+          ],
+          "pairs": [
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "conversions": [
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x26ff40",
+              "field": "none",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 5,
+              "sha256": "5cf1fa8d836a5e82ead36fb0854a6a68a4b8f7542038a346357d2424ddb60f5e"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "constructor_sources": [
+            {
+              "field": "lid",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284bc0,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signinfo",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x283f4c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signvalue",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284d3c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signversion",
+              "same_final_object": true,
+              "write_site": "metasec+0x248388",
+              "source_chain": "metasec+0x284b6c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6",
+              "source_digest_equal": true
+            }
+          ],
+          "last_writers": [
+            {
+              "field": "frametype",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 1,
+              "dropped": 0
+            },
+            {
+              "field": "frametype",
+              "region": "pointer_slot",
+              "writer": "metasec+0x2481dc",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 10,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 192,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 64,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 3,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248388",
+              "writer_ordinal": 2,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "dispatch": [
+            {
+              "pc": "metasec+0x164894",
+              "target": "metasec+0x163e58",
+              "result_slot_present": false
+            },
+            {
+              "pc": "metasec+0x164714",
+              "target": "metasec+0x283748",
+              "result_slot_present": true
+            }
+          ],
+          "collection": [
+            {
+              "pc": "metasec+0x164718",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x17b014",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x271384",
+              "result_present": true,
+              "shares_dispatch_result": true
+            }
+          ],
+          "pairs": [
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "conversions": [
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x26ff40",
+              "field": "none",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 5,
+              "sha256": "5cf1fa8d836a5e82ead36fb0854a6a68a4b8f7542038a346357d2424ddb60f5e"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "constructor_sources": [
+            {
+              "field": "lid",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284bc0,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signinfo",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x283f4c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signvalue",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284d3c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signversion",
+              "same_final_object": true,
+              "write_site": "metasec+0x248388",
+              "source_chain": "metasec+0x284b6c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6",
+              "source_digest_equal": true
+            }
+          ],
+          "last_writers": [
+            {
+              "field": "frametype",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 1,
+              "dropped": 0
+            },
+            {
+              "field": "frametype",
+              "region": "pointer_slot",
+              "writer": "metasec+0x2481dc",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 10,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 192,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 64,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 3,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248388",
+              "writer_ordinal": 3,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "dispatch": [
+            {
+              "pc": "metasec+0x164894",
+              "target": "metasec+0x163e58",
+              "result_slot_present": false
+            },
+            {
+              "pc": "metasec+0x164714",
+              "target": "metasec+0x283748",
+              "result_slot_present": true
+            }
+          ],
+          "collection": [
+            {
+              "pc": "metasec+0x164718",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x17b014",
+              "result_present": true,
+              "shares_dispatch_result": false
+            },
+            {
+              "pc": "metasec+0x271384",
+              "result_present": true,
+              "shares_dispatch_result": true
+            }
+          ],
+          "pairs": [
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x2714e4",
+              "field": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "conversions": [
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x26ff40",
+              "field": "none",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 5,
+              "sha256": "5cf1fa8d836a5e82ead36fb0854a6a68a4b8f7542038a346357d2424ddb60f5e"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "3045fe1bafe576ab154021f3a8dc841102223169786b2d5677402244033a6076"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "frametype",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 3,
+              "sha256": "98fbb7ef60124ed0c3bb88f8cdf6cdaafb901fea5d9ae82ac5e000228c31e1e4"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "lid",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 8,
+              "sha256": "c56419e26e53eccfe315f276decd23e498a078fcd1fb05a15d7d7875023b3355"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signinfo",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 9,
+              "sha256": "54b4549af8168772f56d0b1edcfb5ee1d44a53d17f36adb68c21c9066b2adc82"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signvalue",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x2714f8",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "key",
+              "source_pointer_equal": false,
+              "source_bytes_equal": false,
+              "length": 11,
+              "sha256": "ed6593f719f850a68e3a23cfb371cb7dc8eab57ad45dc4e0dac37bf663ea8c87"
+            },
+            {
+              "pc": "metasec+0x270204",
+              "caller": "metasec+0x27150c",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": true,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "metasec+0x270184",
+              "caller": "metasec+0x270248",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            },
+            {
+              "pc": "outside_modules",
+              "caller": "metasec+0x2701cc",
+              "field": "signversion",
+              "role": "value",
+              "source_pointer_equal": false,
+              "source_bytes_equal": true,
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "constructor_sources": [
+            {
+              "field": "lid",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284bc0,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signinfo",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x283f4c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signvalue",
+              "same_final_object": true,
+              "write_site": "metasec+0x248238",
+              "source_chain": "metasec+0x284d3c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8",
+              "source_digest_equal": true
+            },
+            {
+              "field": "signversion",
+              "same_final_object": true,
+              "write_site": "metasec+0x248388",
+              "source_chain": "metasec+0x284b6c,metasec+0x164718,metasec+0x17b014,metasec+0x17713c,outside_modules",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6",
+              "source_digest_equal": true
+            }
+          ],
+          "last_writers": [
+            {
+              "field": "frametype",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 1,
+              "dropped": 0
+            },
+            {
+              "field": "frametype",
+              "region": "pointer_slot",
+              "writer": "metasec+0x2481dc",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 10,
+              "dropped": 0
+            },
+            {
+              "field": "lid",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 192,
+              "dropped": 0
+            },
+            {
+              "field": "signinfo",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 64,
+              "dropped": 0
+            },
+            {
+              "field": "signvalue",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248238",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "value",
+              "writer": "libc.so+0x1c148",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 3,
+              "dropped": 0
+            },
+            {
+              "field": "signversion",
+              "region": "pointer_slot",
+              "writer": "metasec+0x248388",
+              "writer_ordinal": 4,
+              "writer_tag": "0x200000a",
+              "covered_bytes": 8,
+              "dropped": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x16470c",
+        "file_offset": "0x16470c",
+        "bytes_hex": "092940f9",
+        "mnemonic": "ldr",
+        "operands": "x9, [x8, #0x50]"
+      },
+      {
+        "image_offset": "0x164714",
+        "file_offset": "0x164714",
+        "bytes_hex": "20013fd6",
+        "mnemonic": "blr",
+        "operands": "x9"
+      },
+      {
+        "image_offset": "0x17b010",
+        "file_offset": "0x17b010",
+        "bytes_hex": "06a5ff97",
+        "mnemonic": "bl",
+        "operands": "#0x164428"
+      },
+      {
+        "image_offset": "0x17b024",
+        "file_offset": "0x17b024",
+        "bytes_hex": "0e9eff97",
+        "mnemonic": "bl",
+        "operands": "#0x16285c"
+      },
+      {
+        "image_offset": "0x17b030",
+        "file_offset": "0x17b030",
+        "bytes_hex": "d5d80394",
+        "mnemonic": "bl",
+        "operands": "#0x271384"
+      },
+      {
+        "image_offset": "0x283f38",
+        "file_offset": "0x283f38",
+        "bytes_hex": "010940f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x8, #0x10]"
+      },
+      {
+        "image_offset": "0x283f44",
+        "file_offset": "0x283f44",
+        "bytes_hex": "020d40b9",
+        "mnemonic": "ldr",
+        "operands": "w2, [x8, #0xc]"
+      },
+      {
+        "image_offset": "0x283f48",
+        "file_offset": "0x283f48",
+        "bytes_hex": "ad10ff97",
+        "mnemonic": "bl",
+        "operands": "#0x2481fc"
+      },
+      {
+        "image_offset": "0x284d28",
+        "file_offset": "0x284d28",
+        "bytes_hex": "010940f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x8, #0x10]"
+      },
+      {
+        "image_offset": "0x284d34",
+        "file_offset": "0x284d34",
+        "bytes_hex": "020d40b9",
+        "mnemonic": "ldr",
+        "operands": "w2, [x8, #0xc]"
+      },
+      {
+        "image_offset": "0x284d38",
+        "file_offset": "0x284d38",
+        "bytes_hex": "310dff97",
+        "mnemonic": "bl",
+        "operands": "#0x2481fc"
+      },
+      {
+        "image_offset": "0x248238",
+        "file_offset": "0x248238",
+        "bytes_hex": "a00a00f9",
+        "mnemonic": "str",
+        "operands": "x0, [x21, #0x10]"
+      },
+      {
+        "image_offset": "0x24824c",
+        "file_offset": "0x24824c",
+        "bytes_hex": "e00316aa",
+        "mnemonic": "mov",
+        "operands": "x0, x22"
+      },
+      {
+        "image_offset": "0x248250",
+        "file_offset": "0x248250",
+        "bytes_hex": "e10314aa",
+        "mnemonic": "mov",
+        "operands": "x1, x20"
+      },
+      {
+        "image_offset": "0x248254",
+        "file_offset": "0x248254",
+        "bytes_hex": "43ff0394",
+        "mnemonic": "bl",
+        "operands": "#0x347f60"
+      },
+      {
+        "image_offset": "0x2714f0",
+        "file_offset": "0x2714f0",
+        "bytes_hex": "010940f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x8, #0x10]"
+      },
+      {
+        "image_offset": "0x2714f4",
+        "file_offset": "0x2714f4",
+        "bytes_hex": "44fbff97",
+        "mnemonic": "bl",
+        "operands": "#0x270204"
+      },
+      {
+        "image_offset": "0x271504",
+        "file_offset": "0x271504",
+        "bytes_hex": "010940f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x8, #0x10]"
+      },
+      {
+        "image_offset": "0x271508",
+        "file_offset": "0x271508",
+        "bytes_hex": "3ffbff97",
+        "mnemonic": "bl",
+        "operands": "#0x270204"
+      },
+      {
+        "image_offset": "0x270238",
+        "file_offset": "0x270238",
+        "bytes_hex": "50d6fb97",
+        "mnemonic": "bl",
+        "operands": "#0x165b78"
+      },
+      {
+        "image_offset": "0x270244",
+        "file_offset": "0x270244",
+        "bytes_hex": "c9ffff97",
+        "mnemonic": "bl",
+        "operands": "#0x270168"
+      },
+      {
+        "image_offset": "0x27017c",
+        "file_offset": "0x27017c",
+        "bytes_hex": "02000014",
+        "mnemonic": "b",
+        "operands": "#0x270184"
+      },
+      {
+        "image_offset": "0x2701c4",
+        "file_offset": "0x2701c4",
+        "bytes_hex": "089d42f9",
+        "mnemonic": "ldr",
+        "operands": "x8, [x8, #0x538]"
+      },
+      {
+        "image_offset": "0x2701c8",
+        "file_offset": "0x2701c8",
+        "bytes_hex": "00013fd6",
+        "mnemonic": "blr",
+        "operands": "x8"
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "fields_checked": 40,
+    "constructor_sources_checked": 32,
+    "dynamic_constructor_sources_checked": 16,
+    "value_conversion_stages_checked": 120,
+    "baseline_abab_preserved": true,
+    "dispatch_result_shared_with_jni_converter": true,
+    "dynamic_field_constructor_inputs_match_jni_results": true,
+    "upstream_dynamic_source_identified": false,
+    "cross_runtime_equality_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "interpretation": "Two independent read-only unidbg runs retain all baseline A-B-A-B field digests. The actual +0x164714 dispatch selects +0x283748 and its result is shared with +0x271384. Write observations associate final signinfo and signvalue objects with the +0x248238 constructor store, and caller return addresses +0x283f4c and +0x284d3c. The input bytes read at those stores have the same digests as the final object and the three conversion-stage digests. All final payload bytes have current-call guest writers, with no writer-cap drops. Earlier entry-hook probes did not report these final objects despite these positive write observations, so entry-hook absence cannot exclude execution. The constructor input provenance is observed; upstream generation, alternation cause, Android/native equality, standalone signing and online acceptance remain unverified."
+}

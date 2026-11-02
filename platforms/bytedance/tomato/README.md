@@ -1,5 +1,14 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03 新增[FrameSign 原生缓冲区来源证据](evidence/vm9_framesign_result_buffer_provenance_20261103.json)
+及[校验器](python/verify_vm9_framesign_result_buffer_provenance_20261103.py)。两轮独立只读运行共
+8 次调用保持原有 A-B-A-B；实际分派进入 `+0x283748`，返回容器传入 `+0x271384`。
+`signinfo`、`signvalue` 最终对象的构造写入点均为 `+0x248238`，对应调用返回地址分别为
+`+0x283f4c`、`+0x284d3c`。构造输入摘要、容器字段摘要和三阶段 JNI 转换摘要一致。
+当前调用内的逐字节写入记录覆盖全部字段，计数上限没有丢事件。入口 hook 曾漏报这些
+最终对象，因此未命中入口不能用来排除路径执行。上游生成、交替原因、独立 signer、
+整请求 native/Python 差分及线上验签仍未完成。
+
 2026-11-03 后续只读 allocator 回调追踪修正了下述恢复实验的内存归因：两轮独立
 运行共 8 次 FrameSign 调用，每次都在 `handle+0x70` 返回一块新的 `0x70` 字节
 对象，随后该指针进入 `+0x2550cc` 清理函数，输出保持原 A-B-A-B。被监视的

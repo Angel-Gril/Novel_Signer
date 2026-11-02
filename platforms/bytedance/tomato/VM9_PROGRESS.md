@@ -1,5 +1,28 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：FrameSign 构造输入到 JNI 输出的缓冲区来源
+
+固定 49 字符 homepage 输入、前置一轮 setup、同一 handle 和四次调用序号，在两个全新
+rootfs 中运行同一只读探针。8 次输出的全部字段摘要与既有 unidbg A-B-A-B 基线相同。
+`+0x164714` 实际分派目标为 `+0x283748`，返回容器与传入 `+0x271384` 的容器相同。
+五个原生字段逐项经过 `+0x270204 → +0x270184 → JNI NewStringUTF`：第一阶段使用
+容器字段的原指针，后两阶段使用副本，三个阶段的数据相同。
+
+逐字节最后写入记录进一步闭合了此前未命中的构造路径。`signinfo` 和 `signvalue` 的
+最终对象均在 `+0x248238` 写入数据指针，构造调用返回地址分别是 `+0x283f4c` 与
+`+0x284d3c`；构造输入摘要与最终字段摘要相同。`lid/signversion` 的构造输入也相同。
+合计验证 40 条字段转换链、32 条构造输入来源、120 个值转换阶段，以及 24 条 pinned
+ELF 指令。所有最终字段数据的最后写入都属于当前调用，写入记录未触及丢弃上限。
+
+早期仅观察入口的探针没有记录到这些最终对象，正面的写入证据已确认相关构造路径执行。
+因此“入口未命中”只能作为观测局限，不能排除运行路径；其原因仍未确认。这里闭合的是
+构造输入与 JNI 输出的来源关系，上游生成过程、A-B-A-B 状态来源、Android/unidbg 等价、
+独立 signer 和线上验签仍未验证。下一步从 `+0x283f48`、`+0x284d38` 的输入继续回溯，
+优先检查静态上游 `+0x26732c` 和 `+0x258a48`，并用实际写入或调用证据确认执行。
+
+证据：[result buffer provenance](evidence/vm9_framesign_result_buffer_provenance_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_result_buffer_provenance_20261103.py)。
+
 ## 2026-11-03：同一 49 字符输入下 Android / unidbg 四次调用对照
 
 使用相同 homepage 输入（长度 49、摘要与 Android 四调用证据一致），分别在真实 Android
