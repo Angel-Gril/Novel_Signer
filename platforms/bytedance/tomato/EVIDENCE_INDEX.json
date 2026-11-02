@@ -10520,5 +10520,27 @@
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false
+  },
+  "vm9_networkparams_runtime_20261102": {
+    "evidence_file": "evidence/vm9_networkparams_runtime_20261102.json",
+    "verifier": "python/verify_vm9_networkparams_runtime_20261102.py",
+    "package_identity": "unchanged_official_apk",
+    "trigger": "one next-chapter tap from ReaderActivity",
+    "security_factor_callback": "ms.bd.c.r4.onCallToAddSecurityFactor",
+    "security_factor_call_count": 18,
+    "observed_header_lengths": {
+      "X-Argus": 8,
+      "X-Gorgon": 52,
+      "X-Helios": 48,
+      "X-Khronos": 10,
+      "X-Ladon": 8,
+      "X-Medusa": 1284
+    },
+    "cronet_runtime_branch_observed": false,
+    "certificate_callback_observed": false,
+    "same_request_certificate_correlation_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "fresh_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
   }
 }

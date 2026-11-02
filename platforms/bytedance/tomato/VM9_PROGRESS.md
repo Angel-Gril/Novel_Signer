@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-02：官方 APK 的实际 r4 六头回调捕获
+
+Frida 17 的 bridge bundle 将 `bridge` 留在局部作用域；捕获器现在显式将其发布为
+`globalThis.Java`，使 Java bridge 初始化及 hook 安装完成。官方 `com.dragon.read`
+7.2.5.32/72532、Android 9 API 28、x86_64 模拟器中，单次翻章窗口捕获到
+`ms.bd.c.r4.onCallToAddSecurityFactor` 18 次，每次返回六个七神头：Argus 8、
+Gorgon 52、Helios 48、Khronos 10、Ladon 8、Medusa 1284 字节。原始 URL 与 header
+值未保留，仅记录摘要。
+
+同一窗口安装的 Cronet 与证书 hook 均无事件；这只是本次阅读动作的有界观测，不证明
+这些路径不可达，也没有建立证书读取与同一请求的关联。该结果补上官方 Android
+运行时的 `r4` provider 证据，不等于整请求 native/Python 差分、独立 signer 或线上
+验签。详见[运行时捕获证据](evidence/vm9_networkparams_runtime_20261102.json)和
+[脱敏摘要校验器](python/verify_vm9_networkparams_runtime_20261102.py)。
+
 ## 2026-11-02：signer callback tree 析构接入
 
 恢复 `+0x27e864` 的 signer child 删除路径：最后所有者先释放引用计数，再清空

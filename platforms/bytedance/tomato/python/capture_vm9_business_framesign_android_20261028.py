@@ -482,7 +482,9 @@ def _load_source(bridge_js: Path | None, chunk_size: int) -> tuple[str, list[str
             )
             if marker is not None:
                 bridge = "".join(lines[marker + 1 :])
-        source = bridge + "\n" + JS
+        source = (bridge + "\n"
+                  + "Object.defineProperty(globalThis,'Java',"
+                  + "{value:bridge,configurable:true});\n" + JS)
     return source, [source[i : i + chunk_size] for i in range(0, len(source), chunk_size)]
 
 
