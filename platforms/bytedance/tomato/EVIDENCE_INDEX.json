@@ -10517,6 +10517,8 @@
     "child_cleanup_connected_to_reference_assignment": true,
     "nonempty_signer_child_cleanup_supported": true,
     "malformed_tree_refused_before_free": true,
+    "fresh_rerun_20261102_sha256": "8b47caaa28041c2d456ac63976518331c3ecf8f97c8d6aaa421ed1044f83bbfa",
+    "fresh_rerun_byte_identical_to_committed_evidence": true,
     "whole_request_native_python_differential_verified": false,
     "fresh_standalone_signer_verified": false,
     "online_header_acceptance_verified": false

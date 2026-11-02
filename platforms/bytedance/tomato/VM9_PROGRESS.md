@@ -48,6 +48,11 @@ pair、节点、sentinel、controller、container 的 free 服务；损坏树、
 外层对象图四组回归保持核心图和默认记录一致，旧 allocation 308 尾部差异仍保留。
 见[子对象清理证据](evidence/vm9_request_context_child_cleanup_20261102.json)。
 
+本轮又用已验证的 matching libc 与 pinned ELF fresh 重跑同一 verifier：26 项赋值、
+16 项引用清理、10 项 child 清理、2 项空 child、4 项非空树清理及 36 项拒绝/回滚
+守卫全部通过。完整重建 JSON 与正式证据逐字节相同，SHA-256 为
+`8b47caaa28041c2d456ac63976518331c3ecf8f97c8d6aaa421ed1044f83bbfa`。
+
 完整 signer、整请求差分和 Cronet 六头线上接受仍未完成；官方真实阅读路径仍是 OkHttp。
 
 ## 2026-11-02：配置引用的最后所有者清理
