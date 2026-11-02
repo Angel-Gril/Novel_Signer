@@ -1,5 +1,13 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03 后续只读 allocator 回调追踪修正了下述恢复实验的内存归因：两轮独立
+运行共 8 次 FrameSign 调用，每次都在 `handle+0x70` 返回一块新的 `0x70` 字节
+对象，随后该指针进入 `+0x2550cc` 清理函数，输出保持原 A-B-A-B。被监视的
+16 字节实际覆盖这个每次调用的新对象开头，不能将其视为 manager 的持久状态。
+清理入口已观测，最终释放和 manager 完整边界仍未验证；签名动态来源继续保持
+未知。见[对象归属证据](evidence/vm9_framesign_watched_region_ownership_20261103.json)
+及[校验器](python/verify_vm9_framesign_watched_region_ownership_20261103.py)。
+
 2026-11-03 对相同 49 字符输入完成 FrameSign 状态区边界恢复配对实验。关闭恢复时，
 四次结果保持此前 A-B-A-B 摘要；开启 `handle+0x70..+0x7f` 的调用前/目标库指令边界
 恢复时，结果为有效、空、有效、有效，第二次调用的 4 个重叠写事件合并为 2 次恢复。

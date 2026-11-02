@@ -1,5 +1,21 @@
 {
   "platform": "bytedance.tomato",
+  "vm9_framesign_watched_region_ownership_20261103": {
+    "evidence_file": "evidence/vm9_framesign_watched_region_ownership_20261103.json",
+    "verifier": "python/verify_vm9_framesign_watched_region_ownership_20261103.py",
+    "schema": "vm9-framesign-watched-region-ownership-20261103-v1",
+    "independent_read_only_runs": 2,
+    "calls": 8,
+    "watched_bytes_in_per_call_object": true,
+    "allocation_request_size": 112,
+    "baseline_abab_preserved": true,
+    "persistent_manager_state_attribution_supported": false,
+    "deallocation_completion_verified": false,
+    "direct_dynamic_source_identified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
   "vm9_framesign_state_boundary_restore_20261103": {
     "evidence_file": "evidence/vm9_framesign_state_boundary_restore_20261103.json",
     "verifier": "python/verify_vm9_framesign_state_boundary_restore_20261103.py",

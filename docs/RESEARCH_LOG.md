@@ -1,5 +1,14 @@
 # Checkpoint log
 
+2026-11-03：后续 allocator 回调只读追踪修正恢复实验的对象归因。两轮独立运行、
+共 8 次调用中，`+0x25438c` 每次返回请求长度 `0x70`、位于 `handle+0x70` 的新
+对象；同地址进入 `+0x2550cc` 清理函数。监视区间是新对象的前 16 字节，
+不支持此前“manager 持久状态”的假设；恢复写入干扰临时对象，不能闭合动态
+签名来源。8 次输出均与原 A-B-A-B 对照相同。原 ELF 的 allocator 参数/返回
+路径另核对 7 条指令，最终释放和 manager 完整边界仍未验证。见
+[归属证据](../platforms/bytedance/tomato/evidence/vm9_framesign_watched_region_ownership_20261103.json)
+和[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_watched_region_ownership_20261103.py)。
+
 2026-11-03：FrameSign 状态区边界恢复实验完成同构建配对验证。相同 49 字符输入、
 handle2、一轮 setup 和每实例四次调用下，控制组保持既有 A-B-A-B；恢复组出现
 有效/空/有效/有效，后两次动态摘要偏离对照。此前四次独立实验复现同一序列。

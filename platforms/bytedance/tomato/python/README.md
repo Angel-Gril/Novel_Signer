@@ -1,5 +1,14 @@
 # Tomato Python material
 
+`verify_vm9_framesign_watched_region_ownership_20261103.py` checks the read-only
+follow-up: in two independent four-call runs, the watched bytes lie at the start
+of a new 112-byte callback allocation and the same pointer enters cleanup.
+The prior A-B-A-B digests remain unchanged. This corrects the unsupported
+persistent-manager-state attribution behind the restoration experiment.
+Optional `--probe-dir` verifies the separate private callback harness and logs;
+`--elf` verifies allocator argument/return instructions. Final deallocation and
+the direct dynamic signature source remain unverified.
+
 `verify_vm9_framesign_state_boundary_restore_20261103.py` checks the paired
 FrameSign boundary-restoration intervention against the existing four-call
 baseline and four earlier restoration runs. The control retains A-B-A-B; the

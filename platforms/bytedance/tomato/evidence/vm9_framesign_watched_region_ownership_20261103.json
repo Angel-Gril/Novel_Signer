@@ -1,0 +1,511 @@
+{
+  "schema": "vm9-framesign-watched-region-ownership-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "baseline_evidence": "evidence/vm9_framesign_same_input_four_call_cycle_20261103.json",
+  "restore_evidence": "evidence/vm9_framesign_state_boundary_restore_20261103.json",
+  "probe": {
+    "read_only_guest_observation": true,
+    "synthetic_jni_provider_used": true,
+    "fresh_rootfs_per_run": true,
+    "setup_rounds_per_run": 1,
+    "watch_relative_start": 112,
+    "watch_length": 16,
+    "callback_source_relative_path": "callback_lifetime_probe/HookMain.java",
+    "source_sha256": "a7738ec7b74d90f7713d442c0f80e74d6a290587333330ea2ed831ca6ee88dd6",
+    "entry_class_sha256": "4f9ef5f23c8e75974b5f78c7a8e0bface58390531aff4e38961b69dd34793522"
+  },
+  "runs": [
+    {
+      "local_run_name": "callback_lifetime_control_1",
+      "source_sha256": "a7738ec7b74d90f7713d442c0f80e74d6a290587333330ea2ed831ca6ee88dd6",
+      "entry_class_sha256": "4f9ef5f23c8e75974b5f78c7a8e0bface58390531aff4e38961b69dd34793522",
+      "sanitized_log_sha256": "35c91a5ea2975341293bc33d8275f1d0db5c6a1b03b489b1b26cabd0cca292dd",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "restore_enabled": false,
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "lifetime_events": [
+            {
+              "kind": "callback_alloc",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x25438c"
+            },
+            {
+              "kind": "cleanup_object",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x2550cc"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "lifetime_events": [
+            {
+              "kind": "callback_alloc",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x25438c"
+            },
+            {
+              "kind": "cleanup_object",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x2550cc"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "lifetime_events": [
+            {
+              "kind": "callback_alloc",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x25438c"
+            },
+            {
+              "kind": "cleanup_object",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x2550cc"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "lifetime_events": [
+            {
+              "kind": "callback_alloc",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x25438c"
+            },
+            {
+              "kind": "cleanup_object",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x2550cc"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "local_run_name": "callback_lifetime_control_2",
+      "source_sha256": "a7738ec7b74d90f7713d442c0f80e74d6a290587333330ea2ed831ca6ee88dd6",
+      "entry_class_sha256": "4f9ef5f23c8e75974b5f78c7a8e0bface58390531aff4e38961b69dd34793522",
+      "sanitized_log_sha256": "35c91a5ea2975341293bc33d8275f1d0db5c6a1b03b489b1b26cabd0cca292dd",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "restore_enabled": false,
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "lifetime_events": [
+            {
+              "kind": "callback_alloc",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x25438c"
+            },
+            {
+              "kind": "cleanup_object",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x2550cc"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "lifetime_events": [
+            {
+              "kind": "callback_alloc",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x25438c"
+            },
+            {
+              "kind": "cleanup_object",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x2550cc"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "lifetime_events": [
+            {
+              "kind": "callback_alloc",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x25438c"
+            },
+            {
+              "kind": "cleanup_object",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x2550cc"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "result": "array10",
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ],
+          "lifetime_events": [
+            {
+              "kind": "callback_alloc",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x25438c"
+            },
+            {
+              "kind": "cleanup_object",
+              "tag": "0x200000a",
+              "relative_start": 112,
+              "requested_size": 112,
+              "overlaps_watch": true,
+              "site": "metasec+0x2550cc"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x254364",
+        "file_offset": "0x254364",
+        "bytes_hex": "f60300aa",
+        "mnemonic": "mov",
+        "operands": "x22, x0"
+      },
+      {
+        "image_offset": "0x254378",
+        "file_offset": "0x254378",
+        "bytes_hex": "1c1c40f9",
+        "mnemonic": "ldr",
+        "operands": "x28, [x0, #0x38]"
+      },
+      {
+        "image_offset": "0x25437c",
+        "file_offset": "0x25437c",
+        "bytes_hex": "011440f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x0, #0x28]"
+      },
+      {
+        "image_offset": "0x254380",
+        "file_offset": "0x254380",
+        "bytes_hex": "680240f9",
+        "mnemonic": "ldr",
+        "operands": "x8, [x19]"
+      },
+      {
+        "image_offset": "0x254384",
+        "file_offset": "0x254384",
+        "bytes_hex": "600a40f9",
+        "mnemonic": "ldr",
+        "operands": "x0, [x19, #0x10]"
+      },
+      {
+        "image_offset": "0x254388",
+        "file_offset": "0x254388",
+        "bytes_hex": "00013fd6",
+        "mnemonic": "blr",
+        "operands": "x8"
+      },
+      {
+        "image_offset": "0x25438c",
+        "file_offset": "0x25438c",
+        "bytes_hex": "f50300aa",
+        "mnemonic": "mov",
+        "operands": "x21, x0"
+      }
+    ],
+    "allocator_call_contract": "x22 keeps the descriptor; x1 receives descriptor+0x28 before the indirect allocator call at +0x254388, and x0 is its returned pointer at +0x25438c."
+  },
+  "conclusions": {
+    "call_count": 8,
+    "per_call_new_allocation_at_watch_start": true,
+    "allocation_request_size": 112,
+    "watch_inside_returned_object": true,
+    "same_address_cleanup_entry_per_call": true,
+    "deallocation_completion_verified": false,
+    "read_only_probe_preserves_prior_abab": true,
+    "persistent_manager_state_attribution_supported": false,
+    "manager_extent_verified": false,
+    "direct_dynamic_source_identified": false,
+    "fresh_standalone_signer_verified": false,
+    "whole_request_native_python_differential_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "interpretation": "In two independent unmodified-guest runs, every FrameSign call observes the allocator callback return a new 112-byte object at manager-relative +0x70 and the same pointer enter the +0x2550cc cleanup routine. Each call retains the baseline five-field shape and A-B-A-B digests. The watched 16 bytes are the beginning of this per-call object, so referring to them as persistent manager state is unsupported. The earlier restoration experiment overwrote this object and cannot identify the source of signature alternation. Cleanup entry is observed; terminal deallocation, the manager extent, and the direct dynamic source remain unverified."
+}
