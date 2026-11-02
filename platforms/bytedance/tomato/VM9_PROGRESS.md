@@ -14,6 +14,12 @@ state、physical stack/ABI、fresh signer output 与线上 acceptance 仍未验�
 `f19a06b7071064b7a5889cc716290b8fd9a583ab43930757d640605969d394d3`；旧运行日期可通过
 verifier 的 `--evidence-date` 选项重现。
 
+独立 outer finalize verifier 也 fresh 重跑：10 组原生 hash component、6 组 constructor/
+publication integration 和 5 项拒绝控制全部通过；除日期外，输出与 10 月 24 日正式
+证据语义完全一致。高位 zero-extension、lazy formatter guard 与 publication/JNI ledger
+保持匹配，仍只有 allocation 308 padding 差异。证据：[outer finalize fresh rerun](evidence/vm9_outer_finalize_fresh_20261102.json)，
+SHA-256 `90ceb415aa8d1451cb3c26ec681d5ae607480cf0884128fa88739f32461ceb04`。
+
 ## 2026-11-02：native signer ELF 与官方 APK 来源闭合
 
 对本机 `fq_7xz.apk` 重新计算 SHA-256，结果与已安装官方 7.2.5.32/72532 APK

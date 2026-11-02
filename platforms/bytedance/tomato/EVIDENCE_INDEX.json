@@ -10578,5 +10578,24 @@
     "complete_native_outer_state_equal": false,
     "fresh_input_signer_output_verified": false,
     "current_online_header_matrix_verified": false
+  },
+  "vm9_outer_finalize_fresh_20261102": {
+    "evidence_file": "evidence/vm9_outer_finalize_fresh_20261102.json",
+    "verifier": "python/verify_vm9_outer_finalize_fresh_20261007.py",
+    "schema": "vm9-outer-finalize-fresh-differential-v1",
+    "sample_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "matching_libc_sha256": "d2376df6d2ac3e0213f85e3614c4c7ad1d28c84c44926058d5c1b95c855563db",
+    "hash_component_controls": 10,
+    "integration_controls": 6,
+    "negative_controls": 5,
+    "constructor_hash_generated_from_current_u32": true,
+    "caller_high_word_is_zero_extended": true,
+    "formatter_lazy_constants_and_guards_equal": true,
+    "publication_and_jni_service_ledger_equal": true,
+    "semantically_identical_to_20261024_evidence": true,
+    "live_allocation_mismatch_indices": [308],
+    "complete_native_outer_state_equal": false,
+    "fresh_input_signer_output_verified": false,
+    "current_online_header_matrix_verified": false
   }
 }

@@ -7,6 +7,7 @@ controls also check publication at its real place in the allocator transaction.
 from __future__ import annotations
 
 import argparse
+from datetime import date
 import hashlib
 import json
 import os
@@ -67,6 +68,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--library", type=Path, default=graph.boundary.LIBRARY)
     parser.add_argument("--libc", type=Path, default=graph.boundary.LIBC)
+    parser.add_argument("--evidence-date", type=date.fromisoformat,
+                        default=date.fromisoformat("2026-10-07"),
+                        help="date attached to the generated evidence record (YYYY-MM-DD)")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     assert hashlib.sha256(args.library.read_bytes()).hexdigest() == graph.oracle.LIBRARY_SHA256
@@ -91,7 +95,8 @@ def main():
             assert all(int(offset, 16) in padding for offset in row["live_allocation_mismatches"][0]["mismatch_offsets"])
             rows.append(row)
             print("outer finalization", hex(image), label, "PASS", flush=True)
-    report = dict(schema="vm9-outer-finalize-fresh-differential-v1", evidence_date="2026-10-07",
+    report = dict(schema="vm9-outer-finalize-fresh-differential-v1",
+        evidence_date=args.evidence_date.isoformat(),
         sample_sha256=graph.oracle.LIBRARY_SHA256, libc_sha256=graph.worker.LIBC_SHA256,
         integration_controls=len(rows), cases=rows, hash_component_controls=component_rows,
         negative_controls=negatives,
