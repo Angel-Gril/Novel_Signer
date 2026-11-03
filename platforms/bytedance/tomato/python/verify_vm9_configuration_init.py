@@ -101,6 +101,12 @@ def main():
                     entry=0x1A7E10;args_native=[OBJ,second,1]
                     op=lambda e,f:model.strings_equal(p,first_object=OBJ,second_object=second)
                 compare(base,f'{kind}_{len(a)}_{len(b)}_{declared}',p,entry,args_native,op,status=True)
+        for alias in ('self','shared_payload'):
+            p=fixture(args.library,base);second=OBJ if alias=='self' else OBJ+0x40
+            string_object(p,base,OBJ,b'abc')
+            if alias=='shared_payload':string_object(p,base,second,b'abc')
+            compare(base,'binary_'+alias+'_tiny_bound',p,0x1A7E10,[OBJ,second,1],
+                lambda e,f:model.strings_equal(p,first_object=OBJ,second_object=second,max_bytes=2),status=True)
         for kind in ('cstring','binary'):
             p=fixture(args.library,base);string_object(p,base,OBJ,b'',payload=0)
             string_object(p,base,OBJ+0x40,b'',payload=PAYLOAD+0x400)
@@ -158,11 +164,13 @@ def main():
             word(p,REF+0x28,REF+0x80);word(p,REF+0x80,REF+0xC0)
             word(p,REF+0xC0,REF+0xD0);word(p,REF+0xD0,REF+0xD0)
             if label=='unknown_iterator_table':word(p,base+0x381AB8+0x58,base+0x24B888)
+        if label=='equality_bound':
+            string_object(p,base,OBJ+0x80,b'abc',payload=PAYLOAD+0x400)
         before={k:bytes(v) for k,v in p.items()}
         try:
             if label=='unmapped_copy':model.copy_string_reference(p,destination_address=REF,source_address=GUEST+0x100000)
             elif label.startswith('iterator') or label=='unknown_iterator_table':model.publication_container_size(p,container_address=REF,image_base=base)
-            elif label=='equality_bound':model.strings_equal(p,first_object=OBJ+0x40,second_object=OBJ+0x40,max_bytes=2)
+            elif label=='equality_bound':model.strings_equal(p,first_object=OBJ+0x40,second_object=OBJ+0x80,max_bytes=2)
             else:model.release_parsed_reference(p,reference_address=REF,image_base=base,free=lambda pp,ptr:None)
         except (RefillUnsupported,ValueError):
             assert {k:bytes(v) for k,v in p.items()}==before,label+' page rollback'

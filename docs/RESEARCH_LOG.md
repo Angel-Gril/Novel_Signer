@@ -1,5 +1,10 @@
 # Checkpoint log
 
+2026-11-03：**Sample verified**，修正配置比较回归中 `equality_bound` 的过期夹具：
+长度上限负例改用不同 payload，另增加两个基址的同对象/共享 payload 原生对照。
+170 项差分、5 项回滚检查通过；原有 166 项结果与旧证据逐项一致，模型行为未修改。
+见[回归脚本](../platforms/bytedance/tomato/python/verify_vm9_configuration_init.py)。
+
 2026-11-03：**Sample verified**，两轮全新 rootfs 共 8 次调用闭合 FrameSign AES 材料的
 配置选择、Base64 解码、substring 拆分和实际加密关系。已有 Python Protobuf 模型
 使用 fresh ELF 描述符及实际查询键，从 263 字节消息的两个配置项中选出唯一匹配的
