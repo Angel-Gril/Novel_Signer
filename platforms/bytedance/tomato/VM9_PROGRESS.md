@@ -1,5 +1,33 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-03：signinfo 的 AES-CBC 末段与明文交替边界
+
+从此前实际 VM callback 记录定位到 `+0x2685fc → +0x259324`，直接读取本次调用的
+descriptor 参数，并仅在相同 dispatcher SP 的 `+0x16aa4c` 处读取返回，排除更深层的
+嵌套 callback 返回。当前固定 49 字符/frame type 0、前置一次 setup 的实际参数为
+93 字节明文、16 字节密钥、16 字节 IV、mode word 1。两轮全新 rootfs 共 8 次调用中，
+96 字节原生结果均与独立 Java `AES/CBC/PKCS5Padding` 相等，即 AES 块长 16 下的
+PKCS#7 填充。ECB 带填充候选及两个无填充候选均未匹配；93 字节不满足无填充块对齐。
+密文的小写十六进制文本与 `+0x283f4c` 的 192 字节 signinfo 构造输入逐字节一致，
+随后与最终字段/JNI 输出相同；大写文本不匹配。
+
+两轮分别进行全部 6 对跨调用比较，共 12 对：每轮的密钥与 IV 始终相同，明文及
+密文呈 A-B-A-B。两种明文在 `[0,89)` 的每个字节上都不同，末尾 4 字节相同。
+这把交替定位到加密前的输入差异，尚未证明该输入为何交替。未比较跨运行时或跨两轮
+的原始操作数，也未把它归因到时钟、随机源或持久 manager 状态。
+
+明文不是 JSON，未直接包含 URL、路径、lid 或所测 URL 摘要文本；这不能排除间接
+贡献。data/key 的正面构造写入元数据经过 `+0x267394 → +0x284c84`；IV 构造未观察到。
+本轮全部字段、构造来源、最后写入及 JNI 管线保持既有控制，先前完整 JSON 源串减长
+10 字节及 SHA-256 关系也保持。未修改 guest 状态，未保留明文、密钥、IV 或其摘要。
+
+当前只闭合固定输入的 AES→hex 末段；明文组成、密钥/IV 生成、交替根因、其他输入、
+Android 等价、独立 signer 与普通 Cronet 六头/线上验签仍未完成。下一步从
+`+0x268584 → +0x2481fc` 及其复制源回溯 93 字节明文，优先定位变化的前 89 字节。
+
+证据：[signinfo AES](evidence/vm9_framesign_signinfo_aes_20261103.json)；
+校验器：[verify](python/verify_vm9_framesign_signinfo_aes_20261103.py)。
+
 ## 2026-11-03：FrameSign 完整 JSON 源串与原生减长 10 字节
 
 此前 252 字节输入的候选格式比较失败，原因已定位到原生复制边界。实际完整源串是

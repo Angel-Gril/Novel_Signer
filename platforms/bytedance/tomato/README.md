@@ -1,5 +1,14 @@
 # Tomato / Fanqie (ByteDance)
 
+2026-11-03 已闭合当前固定输入下的 `signinfo` 加密末段：
+[AES 证据](evidence/vm9_framesign_signinfo_aes_20261103.json)与
+[校验器](python/verify_vm9_framesign_signinfo_aes_20261103.py)。实际 `+0x259324` 将
+93 字节明文、16 字节密钥及 16 字节 IV 按 AES-128-CBC/PKCS#7 生成 96 字节密文，
+其小写十六进制文本与 192 字节 signinfo 构造输入及最终 JNI 字段一致。两轮共 8 次
+调用保持此前完整控制。每轮内 6 对比较显示密钥与 IV 不变，明文和密文均呈 A-B-A-B；
+两种明文的差异恰在前 89 字节，末尾 4 字节相同。明文组成、密钥/IV 来源、交替根因、
+其他输入、Android 等价、完整 signer 和线上验签仍未闭合。未保留明文、密钥、IV 或其摘要。
+
 2026-11-03 已恢复固定 49 字符/frame type 0 的 FrameSign SHA-256 输入组成：
 [组成证据](evidence/vm9_framesign_preimage_composition_20261103.json)与
 [校验器](python/verify_vm9_framesign_preimage_composition_20261103.py)。原生完整源串是按

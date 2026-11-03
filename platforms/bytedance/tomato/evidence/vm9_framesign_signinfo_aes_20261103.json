@@ -1,0 +1,1442 @@
+{
+  "schema": "vm9-framesign-signinfo-aes-20261103-v1",
+  "evidence_date": "2026-11-03",
+  "input": {
+    "profile": "homepage",
+    "frame_type": 0,
+    "length": 49,
+    "sha256": "652d1fd0299450b54779193974db5f8dad3eb09c4732ae3d96f0a13c03307b02"
+  },
+  "parent_evidence": "evidence/vm9_framesign_preimage_composition_20261103.json",
+  "probe": {
+    "source_relative_path": "signinfo_aes_inputs_probe/HookMain.java",
+    "source_sha256": "e5b4d6851f2dcb5af65ce3df59521f80009f90d3c764f9f298f0337b8def6bd9",
+    "entry_class_sha256": "3163fd091b9807f4fe97bf42f52b5a51cf49e6777970e641a308b3ac342679d0",
+    "runner_sha256": "089802589feb5807e37fb6901bba91e097bc4f0bff459d7a1cb3e5ab8d46999d",
+    "read_only_guest_observation": true,
+    "synthetic_jni_provider_used": true,
+    "fresh_rootfs_per_run": true,
+    "setup_rounds_per_run": 1,
+    "restore_enabled": false,
+    "independent_cipher_provider": "javax.crypto.Cipher",
+    "return_observation_scope": "same_dispatcher_stack_pointer_after_callback",
+    "operand_comparison_scope": "within_each_four_call_run"
+  },
+  "runs": [
+    {
+      "local_run_name": "signinfo_aes_inputs_probe/run1",
+      "source_sha256": "e5b4d6851f2dcb5af65ce3df59521f80009f90d3c764f9f298f0337b8def6bd9",
+      "entry_class_sha256": "3163fd091b9807f4fe97bf42f52b5a51cf49e6777970e641a308b3ac342679d0",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "38413be2a879f58be9cde98796be3bc092a277944553a876fca12ac0accb80fd",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "aes_observations": [
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 1,
+          "role": "data",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248238",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 1,
+          "role": "key",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248388",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 1,
+          "role": "iv",
+          "constructor_observed": false,
+          "write_site": "unobserved",
+          "source_chain": "unobserved"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "url",
+          "length": 49,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "url_path",
+          "length": 25,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "lid",
+          "length": 10,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "md5_url_hex",
+          "length": 32,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "sha1_url_hex",
+          "length": 40,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "sha256_url_hex",
+          "length": 64,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_PARSE",
+          "ordinal": 1,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_SHAPE",
+          "ordinal": 1,
+          "length": 93,
+          "printable_ascii": 34,
+          "zero_bytes": 0
+        },
+        {
+          "event": "SIGNINFO_AES_CALL",
+          "ordinal": 1,
+          "wrapper": "metasec+0x2685fc",
+          "target": "metasec+0x259324",
+          "data_length": 93,
+          "key_length": 16,
+          "iv_length": 16,
+          "mode_present": true,
+          "mode_word": 1
+        },
+        {
+          "event": "SIGNINFO_AES_RETURN",
+          "ordinal": 1,
+          "output_length": 96,
+          "cbc_pkcs5_matches": true,
+          "ecb_pkcs5_matches": false,
+          "cbc_no_padding_matches": false,
+          "ecb_no_padding_matches": false
+        },
+        {
+          "event": "SIGNINFO_AES_LINK",
+          "ordinal": 1,
+          "constructor_return": "metasec+0x283f4c",
+          "aes_calls": 1,
+          "aes_returns": 1,
+          "ciphertext_length": 96,
+          "signinfo_length": 192,
+          "lowercase_hex_equal": true,
+          "uppercase_hex_equal": false
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 2,
+          "role": "data",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248238",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 2,
+          "role": "key",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248388",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 2,
+          "role": "iv",
+          "constructor_observed": false,
+          "write_site": "unobserved",
+          "source_chain": "unobserved"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "url",
+          "length": 49,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "url_path",
+          "length": 25,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "lid",
+          "length": 10,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "md5_url_hex",
+          "length": 32,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "sha1_url_hex",
+          "length": 40,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "sha256_url_hex",
+          "length": 64,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_PARSE",
+          "ordinal": 2,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_SHAPE",
+          "ordinal": 2,
+          "length": 93,
+          "printable_ascii": 29,
+          "zero_bytes": 0
+        },
+        {
+          "event": "SIGNINFO_AES_CALL",
+          "ordinal": 2,
+          "wrapper": "metasec+0x2685fc",
+          "target": "metasec+0x259324",
+          "data_length": 93,
+          "key_length": 16,
+          "iv_length": 16,
+          "mode_present": true,
+          "mode_word": 1
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 2,
+          "previous_ordinal": 1,
+          "plaintext_equal": false,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": false,
+          "changed_plaintext_bytes": 89,
+          "changed_plaintext_spans": "0:89"
+        },
+        {
+          "event": "SIGNINFO_AES_RETURN",
+          "ordinal": 2,
+          "output_length": 96,
+          "cbc_pkcs5_matches": true,
+          "ecb_pkcs5_matches": false,
+          "cbc_no_padding_matches": false,
+          "ecb_no_padding_matches": false
+        },
+        {
+          "event": "SIGNINFO_AES_LINK",
+          "ordinal": 2,
+          "constructor_return": "metasec+0x283f4c",
+          "aes_calls": 1,
+          "aes_returns": 1,
+          "ciphertext_length": 96,
+          "signinfo_length": 192,
+          "lowercase_hex_equal": true,
+          "uppercase_hex_equal": false
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 3,
+          "role": "data",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248238",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 3,
+          "role": "key",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248388",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 3,
+          "role": "iv",
+          "constructor_observed": false,
+          "write_site": "unobserved",
+          "source_chain": "unobserved"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "url",
+          "length": 49,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "url_path",
+          "length": 25,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "lid",
+          "length": 10,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "md5_url_hex",
+          "length": 32,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "sha1_url_hex",
+          "length": 40,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "sha256_url_hex",
+          "length": 64,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_PARSE",
+          "ordinal": 3,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_SHAPE",
+          "ordinal": 3,
+          "length": 93,
+          "printable_ascii": 34,
+          "zero_bytes": 0
+        },
+        {
+          "event": "SIGNINFO_AES_CALL",
+          "ordinal": 3,
+          "wrapper": "metasec+0x2685fc",
+          "target": "metasec+0x259324",
+          "data_length": 93,
+          "key_length": 16,
+          "iv_length": 16,
+          "mode_present": true,
+          "mode_word": 1
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 1,
+          "plaintext_equal": true,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": true,
+          "changed_plaintext_bytes": 0,
+          "changed_plaintext_spans": "none"
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 2,
+          "plaintext_equal": false,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": false,
+          "changed_plaintext_bytes": 89,
+          "changed_plaintext_spans": "0:89"
+        },
+        {
+          "event": "SIGNINFO_AES_RETURN",
+          "ordinal": 3,
+          "output_length": 96,
+          "cbc_pkcs5_matches": true,
+          "ecb_pkcs5_matches": false,
+          "cbc_no_padding_matches": false,
+          "ecb_no_padding_matches": false
+        },
+        {
+          "event": "SIGNINFO_AES_LINK",
+          "ordinal": 3,
+          "constructor_return": "metasec+0x283f4c",
+          "aes_calls": 1,
+          "aes_returns": 1,
+          "ciphertext_length": 96,
+          "signinfo_length": 192,
+          "lowercase_hex_equal": true,
+          "uppercase_hex_equal": false
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 4,
+          "role": "data",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248238",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 4,
+          "role": "key",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248388",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 4,
+          "role": "iv",
+          "constructor_observed": false,
+          "write_site": "unobserved",
+          "source_chain": "unobserved"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "url",
+          "length": 49,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "url_path",
+          "length": 25,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "lid",
+          "length": 10,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "md5_url_hex",
+          "length": 32,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "sha1_url_hex",
+          "length": 40,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "sha256_url_hex",
+          "length": 64,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_PARSE",
+          "ordinal": 4,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_SHAPE",
+          "ordinal": 4,
+          "length": 93,
+          "printable_ascii": 29,
+          "zero_bytes": 0
+        },
+        {
+          "event": "SIGNINFO_AES_CALL",
+          "ordinal": 4,
+          "wrapper": "metasec+0x2685fc",
+          "target": "metasec+0x259324",
+          "data_length": 93,
+          "key_length": 16,
+          "iv_length": 16,
+          "mode_present": true,
+          "mode_word": 1
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 1,
+          "plaintext_equal": false,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": false,
+          "changed_plaintext_bytes": 89,
+          "changed_plaintext_spans": "0:89"
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 2,
+          "plaintext_equal": true,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": true,
+          "changed_plaintext_bytes": 0,
+          "changed_plaintext_spans": "none"
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 3,
+          "plaintext_equal": false,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": false,
+          "changed_plaintext_bytes": 89,
+          "changed_plaintext_spans": "0:89"
+        },
+        {
+          "event": "SIGNINFO_AES_RETURN",
+          "ordinal": 4,
+          "output_length": 96,
+          "cbc_pkcs5_matches": true,
+          "ecb_pkcs5_matches": false,
+          "cbc_no_padding_matches": false,
+          "ecb_no_padding_matches": false
+        },
+        {
+          "event": "SIGNINFO_AES_LINK",
+          "ordinal": 4,
+          "constructor_return": "metasec+0x283f4c",
+          "aes_calls": 1,
+          "aes_returns": 1,
+          "ciphertext_length": 96,
+          "signinfo_length": 192,
+          "lowercase_hex_equal": true,
+          "uppercase_hex_equal": false
+        }
+      ]
+    },
+    {
+      "local_run_name": "signinfo_aes_inputs_probe/run2",
+      "source_sha256": "e5b4d6851f2dcb5af65ce3df59521f80009f90d3c764f9f298f0337b8def6bd9",
+      "entry_class_sha256": "3163fd091b9807f4fe97bf42f52b5a51cf49e6777970e641a308b3ac342679d0",
+      "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+      "process_exit_code": 0,
+      "sanitized_log_sha256": "38413be2a879f58be9cde98796be3bc092a277944553a876fca12ac0accb80fd",
+      "repeat_trials": [
+        {
+          "ordinal": 1,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "67c1db5e823c359b4f6ec8f64109374dcd34112b6fcb74c5627dc9ded08f9c20"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "02918a99283e2e59353a1efcb331f925a3741bfe363e89cde39a36884432dc9c"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "fields": [
+            {
+              "key": "frametype",
+              "length": 1,
+              "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+            },
+            {
+              "key": "lid",
+              "length": 10,
+              "sha256": "1c2dc1823d117981496c7886fd8f50928d5ab1ddb4b284202e1b64b8bba66182"
+            },
+            {
+              "key": "signinfo",
+              "length": 192,
+              "sha256": "c9a6fb104baf06e676e37af2446cb2989f74a4cd05970164b37b5514ccb6bc9f"
+            },
+            {
+              "key": "signvalue",
+              "length": 64,
+              "sha256": "d70f87a09329e8b54262db241cbc74951b2973ac7b81ea8ead6e220b7181eba8"
+            },
+            {
+              "key": "signversion",
+              "length": 3,
+              "sha256": "d0ff5974b6aa52cf562bea5921840c032a860a91a3512f7fe8f768f6bbe005f6"
+            }
+          ]
+        }
+      ],
+      "aes_observations": [
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 1,
+          "role": "data",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248238",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 1,
+          "role": "key",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248388",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 1,
+          "role": "iv",
+          "constructor_observed": false,
+          "write_site": "unobserved",
+          "source_chain": "unobserved"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "url",
+          "length": 49,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "url_path",
+          "length": 25,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "lid",
+          "length": 10,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "md5_url_hex",
+          "length": 32,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "sha1_url_hex",
+          "length": 40,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 1,
+          "label": "sha256_url_hex",
+          "length": 64,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_PARSE",
+          "ordinal": 1,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_SHAPE",
+          "ordinal": 1,
+          "length": 93,
+          "printable_ascii": 34,
+          "zero_bytes": 0
+        },
+        {
+          "event": "SIGNINFO_AES_CALL",
+          "ordinal": 1,
+          "wrapper": "metasec+0x2685fc",
+          "target": "metasec+0x259324",
+          "data_length": 93,
+          "key_length": 16,
+          "iv_length": 16,
+          "mode_present": true,
+          "mode_word": 1
+        },
+        {
+          "event": "SIGNINFO_AES_RETURN",
+          "ordinal": 1,
+          "output_length": 96,
+          "cbc_pkcs5_matches": true,
+          "ecb_pkcs5_matches": false,
+          "cbc_no_padding_matches": false,
+          "ecb_no_padding_matches": false
+        },
+        {
+          "event": "SIGNINFO_AES_LINK",
+          "ordinal": 1,
+          "constructor_return": "metasec+0x283f4c",
+          "aes_calls": 1,
+          "aes_returns": 1,
+          "ciphertext_length": 96,
+          "signinfo_length": 192,
+          "lowercase_hex_equal": true,
+          "uppercase_hex_equal": false
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 2,
+          "role": "data",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248238",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 2,
+          "role": "key",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248388",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 2,
+          "role": "iv",
+          "constructor_observed": false,
+          "write_site": "unobserved",
+          "source_chain": "unobserved"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "url",
+          "length": 49,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "url_path",
+          "length": 25,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "lid",
+          "length": 10,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "md5_url_hex",
+          "length": 32,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "sha1_url_hex",
+          "length": 40,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 2,
+          "label": "sha256_url_hex",
+          "length": 64,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_PARSE",
+          "ordinal": 2,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_SHAPE",
+          "ordinal": 2,
+          "length": 93,
+          "printable_ascii": 29,
+          "zero_bytes": 0
+        },
+        {
+          "event": "SIGNINFO_AES_CALL",
+          "ordinal": 2,
+          "wrapper": "metasec+0x2685fc",
+          "target": "metasec+0x259324",
+          "data_length": 93,
+          "key_length": 16,
+          "iv_length": 16,
+          "mode_present": true,
+          "mode_word": 1
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 2,
+          "previous_ordinal": 1,
+          "plaintext_equal": false,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": false,
+          "changed_plaintext_bytes": 89,
+          "changed_plaintext_spans": "0:89"
+        },
+        {
+          "event": "SIGNINFO_AES_RETURN",
+          "ordinal": 2,
+          "output_length": 96,
+          "cbc_pkcs5_matches": true,
+          "ecb_pkcs5_matches": false,
+          "cbc_no_padding_matches": false,
+          "ecb_no_padding_matches": false
+        },
+        {
+          "event": "SIGNINFO_AES_LINK",
+          "ordinal": 2,
+          "constructor_return": "metasec+0x283f4c",
+          "aes_calls": 1,
+          "aes_returns": 1,
+          "ciphertext_length": 96,
+          "signinfo_length": 192,
+          "lowercase_hex_equal": true,
+          "uppercase_hex_equal": false
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 3,
+          "role": "data",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248238",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 3,
+          "role": "key",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248388",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 3,
+          "role": "iv",
+          "constructor_observed": false,
+          "write_site": "unobserved",
+          "source_chain": "unobserved"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "url",
+          "length": 49,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "url_path",
+          "length": 25,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "lid",
+          "length": 10,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "md5_url_hex",
+          "length": 32,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "sha1_url_hex",
+          "length": 40,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 3,
+          "label": "sha256_url_hex",
+          "length": 64,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_PARSE",
+          "ordinal": 3,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_SHAPE",
+          "ordinal": 3,
+          "length": 93,
+          "printable_ascii": 34,
+          "zero_bytes": 0
+        },
+        {
+          "event": "SIGNINFO_AES_CALL",
+          "ordinal": 3,
+          "wrapper": "metasec+0x2685fc",
+          "target": "metasec+0x259324",
+          "data_length": 93,
+          "key_length": 16,
+          "iv_length": 16,
+          "mode_present": true,
+          "mode_word": 1
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 1,
+          "plaintext_equal": true,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": true,
+          "changed_plaintext_bytes": 0,
+          "changed_plaintext_spans": "none"
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 3,
+          "previous_ordinal": 2,
+          "plaintext_equal": false,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": false,
+          "changed_plaintext_bytes": 89,
+          "changed_plaintext_spans": "0:89"
+        },
+        {
+          "event": "SIGNINFO_AES_RETURN",
+          "ordinal": 3,
+          "output_length": 96,
+          "cbc_pkcs5_matches": true,
+          "ecb_pkcs5_matches": false,
+          "cbc_no_padding_matches": false,
+          "ecb_no_padding_matches": false
+        },
+        {
+          "event": "SIGNINFO_AES_LINK",
+          "ordinal": 3,
+          "constructor_return": "metasec+0x283f4c",
+          "aes_calls": 1,
+          "aes_returns": 1,
+          "ciphertext_length": 96,
+          "signinfo_length": 192,
+          "lowercase_hex_equal": true,
+          "uppercase_hex_equal": false
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 4,
+          "role": "data",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248238",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 4,
+          "role": "key",
+          "constructor_observed": true,
+          "write_site": "metasec+0x248388",
+          "source_chain": "metasec+0x16aa4c,metasec+0x267394,metasec+0x284c84,metasec+0x164718,metasec+0x17b014"
+        },
+        {
+          "event": "SIGNINFO_AES_SOURCE",
+          "ordinal": 4,
+          "role": "iv",
+          "constructor_observed": false,
+          "write_site": "unobserved",
+          "source_chain": "unobserved"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "url",
+          "length": 49,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "url_path",
+          "length": 25,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "lid",
+          "length": 10,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "md5_url_hex",
+          "length": 32,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "sha1_url_hex",
+          "length": 40,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_COMPONENT",
+          "ordinal": 4,
+          "label": "sha256_url_hex",
+          "length": 64,
+          "offsets": "none"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_PARSE",
+          "ordinal": 4,
+          "type": "parse_rejected"
+        },
+        {
+          "event": "SIGNINFO_PLAINTEXT_SHAPE",
+          "ordinal": 4,
+          "length": 93,
+          "printable_ascii": 29,
+          "zero_bytes": 0
+        },
+        {
+          "event": "SIGNINFO_AES_CALL",
+          "ordinal": 4,
+          "wrapper": "metasec+0x2685fc",
+          "target": "metasec+0x259324",
+          "data_length": 93,
+          "key_length": 16,
+          "iv_length": 16,
+          "mode_present": true,
+          "mode_word": 1
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 1,
+          "plaintext_equal": false,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": false,
+          "changed_plaintext_bytes": 89,
+          "changed_plaintext_spans": "0:89"
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 2,
+          "plaintext_equal": true,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": true,
+          "changed_plaintext_bytes": 0,
+          "changed_plaintext_spans": "none"
+        },
+        {
+          "event": "SIGNINFO_AES_COMPARE",
+          "ordinal": 4,
+          "previous_ordinal": 3,
+          "plaintext_equal": false,
+          "key_equal": true,
+          "iv_equal": true,
+          "ciphertext_equal": false,
+          "changed_plaintext_bytes": 89,
+          "changed_plaintext_spans": "0:89"
+        },
+        {
+          "event": "SIGNINFO_AES_RETURN",
+          "ordinal": 4,
+          "output_length": 96,
+          "cbc_pkcs5_matches": true,
+          "ecb_pkcs5_matches": false,
+          "cbc_no_padding_matches": false,
+          "ecb_no_padding_matches": false
+        },
+        {
+          "event": "SIGNINFO_AES_LINK",
+          "ordinal": 4,
+          "constructor_return": "metasec+0x283f4c",
+          "aes_calls": 1,
+          "aes_returns": 1,
+          "ciphertext_length": 96,
+          "signinfo_length": 192,
+          "lowercase_hex_equal": true,
+          "uppercase_hex_equal": false
+        }
+      ]
+    }
+  ],
+  "static_analysis": {
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "instructions": [
+      {
+        "image_offset": "0x267350",
+        "file_offset": "0x267350",
+        "bytes_hex": "e88300a9",
+        "mnemonic": "stp",
+        "operands": "x8, x0, [sp, #8]"
+      },
+      {
+        "image_offset": "0x267390",
+        "file_offset": "0x267390",
+        "bytes_hex": "e503fc97",
+        "mnemonic": "bl",
+        "operands": "#0x168324"
+      },
+      {
+        "image_offset": "0x16aa40",
+        "file_offset": "0x16aa40",
+        "bytes_hex": "080140f9",
+        "mnemonic": "ldr",
+        "operands": "x8, [x8]"
+      },
+      {
+        "image_offset": "0x16aa44",
+        "file_offset": "0x16aa44",
+        "bytes_hex": "200140f9",
+        "mnemonic": "ldr",
+        "operands": "x0, [x9]"
+      },
+      {
+        "image_offset": "0x16aa48",
+        "file_offset": "0x16aa48",
+        "bytes_hex": "00013fd6",
+        "mnemonic": "blr",
+        "operands": "x8"
+      },
+      {
+        "image_offset": "0x16aa4c",
+        "file_offset": "0x16aa4c",
+        "bytes_hex": "a50777a9",
+        "mnemonic": "ldp",
+        "operands": "x5, x1, [x29, #-0x90]"
+      },
+      {
+        "image_offset": "0x268600",
+        "file_offset": "0x268600",
+        "bytes_hex": "090441a9",
+        "mnemonic": "ldp",
+        "operands": "x9, x1, [x0, #0x10]"
+      },
+      {
+        "image_offset": "0x268604",
+        "file_offset": "0x268604",
+        "bytes_hex": "0a2040a9",
+        "mnemonic": "ldp",
+        "operands": "x10, x8, [x0]"
+      },
+      {
+        "image_offset": "0x268608",
+        "file_offset": "0x268608",
+        "bytes_hex": "020c42a9",
+        "mnemonic": "ldp",
+        "operands": "x2, x3, [x0, #0x20]"
+      },
+      {
+        "image_offset": "0x26860c",
+        "file_offset": "0x26860c",
+        "bytes_hex": "e00309aa",
+        "mnemonic": "mov",
+        "operands": "x0, x9"
+      },
+      {
+        "image_offset": "0x268610",
+        "file_offset": "0x268610",
+        "bytes_hex": "40013fd6",
+        "mnemonic": "blr",
+        "operands": "x10"
+      },
+      {
+        "image_offset": "0x268614",
+        "file_offset": "0x268614",
+        "bytes_hex": "fe0741f8",
+        "mnemonic": "ldr",
+        "operands": "x30, [sp], #0x10"
+      },
+      {
+        "image_offset": "0x283f34",
+        "file_offset": "0x283f34",
+        "bytes_hex": "080140f9",
+        "mnemonic": "ldr",
+        "operands": "x8, [x8]"
+      },
+      {
+        "image_offset": "0x283f38",
+        "file_offset": "0x283f38",
+        "bytes_hex": "010940f9",
+        "mnemonic": "ldr",
+        "operands": "x1, [x8, #0x10]"
+      },
+      {
+        "image_offset": "0x283f44",
+        "file_offset": "0x283f44",
+        "bytes_hex": "020d40b9",
+        "mnemonic": "ldr",
+        "operands": "w2, [x8, #0xc]"
+      },
+      {
+        "image_offset": "0x283f48",
+        "file_offset": "0x283f48",
+        "bytes_hex": "ad10ff97",
+        "mnemonic": "bl",
+        "operands": "#0x2481fc"
+      }
+    ]
+  },
+  "conclusions": {
+    "independent_runs": 2,
+    "calls": 8,
+    "algorithm": "AES-128-CBC",
+    "padding": "PKCS7",
+    "plaintext_length": 93,
+    "key_length": 16,
+    "iv_length": 16,
+    "ciphertext_length": 96,
+    "signinfo_length": 192,
+    "signinfo_is_lowercase_hex_ciphertext": true,
+    "independent_cipher_comparisons": 32,
+    "within_run_operand_comparisons": 12,
+    "key_and_iv_stable_within_each_run": true,
+    "plaintext_abab_within_each_run": true,
+    "different_plaintext_prefix_length": 89,
+    "common_plaintext_suffix_length": 4,
+    "baseline_full_pipeline_preserved": true,
+    "preimage_composition_control_preserved": true,
+    "plaintext_composition_identified": false,
+    "key_or_iv_generation_identified": false,
+    "alternation_root_cause_identified": false,
+    "general_input_equivalence_verified": false,
+    "android_equivalence_verified": false,
+    "complete_standalone_signer_verified": false,
+    "online_header_acceptance_verified": false
+  },
+  "raw_values_retained": false,
+  "operand_digests_retained": false,
+  "interpretation": "In two fresh-rootfs read-only unidbg runs of the fixed 49-character/frame-type-0 profile, the observed +0x2685fc descriptor targets +0x259324 with actual 93-byte data, 16-byte key, 16-byte IV and mode word 1. Its return is read only at the matching dispatcher stack pointer after the callback, excluding deeper nested returns. The native 96-byte result equals independent Java AES/CBC/PKCS5Padding encryption (PKCS7 for 16-byte AES blocks) of the observed operands. ECB with padding, CBC without padding and ECB without padding do not match. Lowercase hexadecimal of that ciphertext equals the actual 192-byte signinfo constructor input and final JNI field. All complete baseline field/constructor/writer/JNI observations and the preceding JSON-prefix/SHA-256 controls are preserved. Within EACH four-call run, all six operand-pair comparisons show a stable key and IV; plaintext and ciphertext follow A-B-A-B. The two distinct plaintexts differ at every byte of [0,89) and have the same final four bytes. No cross-run or Android operand equality is claimed. Plaintext is not JSON and contains none of the tested direct URL/path/lid/URL-digest components; this does not exclude their indirect contribution. Positive constructor metadata links data/key objects through +0x267394 and +0x284c84; IV construction is unobserved. Raw operands, keys, IVs, signatures, operand digests and private character masks are omitted from public evidence. Plaintext composition, key/IV generation, the cause of alternation, general-input equivalence, Android equality, independent signing and online acceptance remain unverified."
+}
