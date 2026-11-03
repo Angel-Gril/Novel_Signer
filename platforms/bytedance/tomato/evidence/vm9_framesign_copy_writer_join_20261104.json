@@ -1,0 +1,72 @@
+{
+  "schema": "vm9-framesign-copy-writer-join-20261104-v1",
+  "evidence_date": "2026-11-04",
+  "sample_scope": "single_fixed_synthetic_jni_initializer_call",
+  "probe": {
+    "id": "configuration_initializer_copy_provider_probe13g",
+    "source_sha256": "90f2bbbb384a3627a31b15a1ed37c7baa3542d3f60f19a1019157c0650080bbf",
+    "entry_class_sha256": "814d10f5ce9cb1298fdfca902745635d467071e3a187e1cfaacdf299a4c817f2",
+    "runner_sha256": "2157483741e1602e4126a6531180b0b91e8d914567b50b27d145cdcae5864c14",
+    "sanitized_log_sha256": "dee57f6fe05edf24667a383c57059241d1aaaa39b3a628644971e082b2734c78",
+    "native_library_sha256": "712384bd0e310fded0ae9b6441c2a264dd356dfaf1ef42d2ebc3c790fdd9269c",
+    "process_exit_code": 0,
+    "signature_result_length": 10,
+    "read_only_guest_observation": true
+  },
+  "misclassified_counter_correction": {
+    "fill_callsite_offset": "0x2482cc",
+    "fill_return_offset": "0x2482d0",
+    "fill_entry_events": 2,
+    "fill_lengths": {
+      "165": 1,
+      "263": 1
+    },
+    "actual_copy_callsite_offset": "0x248254",
+    "clone_copy_callsite_offset": "0x248430",
+    "copy_and_clone_entry_events": 0
+  },
+  "parser_reads": [
+    {
+      "role": "md5_piece_0_4",
+      "parser_writer_events": 4,
+      "store_address_matches": 4,
+      "source_operand_matches": 0,
+      "temporal_matches": 4,
+      "full_source_matches": 0,
+      "contiguous_source_registers": []
+    },
+    {
+      "role": "md5_piece_8_4",
+      "parser_writer_events": 4,
+      "store_address_matches": 4,
+      "source_operand_matches": 0,
+      "temporal_matches": 4,
+      "full_source_matches": 0,
+      "contiguous_source_registers": []
+    },
+    {
+      "role": "sha1_preimage_offset_4",
+      "parser_writer_events": 4,
+      "store_address_matches": 4,
+      "source_operand_matches": 0,
+      "temporal_matches": 4,
+      "full_source_matches": 0,
+      "contiguous_source_registers": []
+    }
+  ],
+  "provider_returns": 0,
+  "copy_chain": "none",
+  "raw_values_retained": false,
+  "pointers_retained": false,
+  "operand_digests_retained": false,
+  "plaintext_retained": false,
+  "conclusions": {
+    "parser_writer_site_identity_joined": true,
+    "parser_writer_address_and_order_joined": true,
+    "copy_source_pointer_joined": false,
+    "jni_string_provider_joined": false,
+    "complete_signer_verified": false,
+    "ordinary_cronet_header_chain_verified": false,
+    "online_header_acceptance_verified": false
+  }
+}

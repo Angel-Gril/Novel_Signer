@@ -1,5 +1,20 @@
 # Current VM9 progress checkpoint
 
+## 2026-11-04：parser writer identity joined; copy source remains unresolved
+
+单次固定合成初始化样本中，三个四字节 JSON parser 读段各自接到 4/4 个较早的
+实际写事件，写入地址与读取时序匹配。写指令上的源操作数未匹配，寄存器组也没有
+跨四字节连续的来源候选；当前 native copy/clone 入口观察为 0，JNI string provider
+返回仍为 0，来源账本保持 `copy_chain=none`。签名调用正常退出，结果长度仍为 10。
+
+同时更正 probe12/13 旧计数：长度 165 和 263 对应 `+0x2482cc` 的填充调用，返回
+`+0x2482d0`，不是 memcpy；真实 copy 入口 `+0x248254` 与 clone 入口 `+0x248430`
+在此 tag 下均未观察到。该结果只限当前合成 JNI 初始化样本，不证明原始 Android
+provider、完整 signer 或普通 Cronet 六头链。日志未保留指针、原始操作数或明文。
+
+证据：[copy writer join](evidence/vm9_framesign_copy_writer_join_20261104.json)；
+校验器：[verify](python/verify_vm9_framesign_copy_writer_join_20261104.py)。
+
 ## 2026-11-04：初始化 JSON 同时生成配置摘要字和编码配置
 
 **Sample verified**：两轮独立新 rootfs、8 次固定输入调用中，Python 从当前探针

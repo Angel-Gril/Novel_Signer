@@ -1,5 +1,15 @@
 # Checkpoint log
 
+2026-11-04：单次固定合成 JNI 初始化样本把三个四字节 JSON parser 读段接到各自
+4/4 个先前写事件，写入地址和时序相符；源操作数不匹配，寄存器组无连续四字节
+来源，native copy/clone 入口和 JNI string provider 返回均未观察到，来源账本仍为
+`copy_chain=none`。更正 probe12/13 的旧计数：165/263 是 `+0x2482cc` 填充调用，
+返回 `+0x2482d0`；`+0x248254`/`+0x248430` 的 copy/clone 入口计数为零。签名调用
+正常退出，结果长度 10。该结论限于合成样本，不证明原始 Android provider、完整
+signer 或 Cronet 六头链。未保留原始指针、操作数或明文。见
+[证据](../platforms/bytedance/tomato/evidence/vm9_framesign_copy_writer_join_20261104.json)
+和[校验器](../platforms/bytedance/tomato/python/verify_vm9_framesign_copy_writer_join_20261104.py)。
+
 2026-11-04：**Sample verified**，两轮独立新 rootfs、8 次固定输入调用中，Python
 从当前探针使用的合成 JNI 初始化 JSON 第 0 项生成四字节摘要字、第 3 项生成
 368 字节编码配置；两份捕获值只用于比较，生成配置 8 次均与原生输入相等，且
